@@ -8,6 +8,8 @@ from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.activity.roles import DOSSIER_RESPONSIBLE_ROLE
+from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
@@ -97,6 +99,13 @@ ACTIVITY_GROUPS = [
      'roles': [DOSSIER_RESPONSIBLE_ROLE],
      'activities': [
          'dossier-overdue',
+     ]},
+
+    {'id': 'workspace',
+     'roles': [TODO_RESPONSIBLE_ROLE, WORKSPACE_MEMBER_ROLE],
+     'activities': [
+         'todo-assigned',
+         'todo-modified'
      ]},
 ]
 
@@ -399,6 +408,9 @@ class NotificationSettingsForm(BrowserView):
 
     def tab_title_dossiers(self):
         return _('label_dossiers', default=u'Dossiers')
+
+    def tab_title_workspaces(self):
+        return _('label_workspaces', default=u'Workspaces')
 
     def show_disposition_tab(self):
         return api.user.has_permission('opengever.disposition: Add disposition')
