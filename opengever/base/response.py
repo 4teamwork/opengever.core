@@ -162,7 +162,7 @@ class IResponse(Interface):
     # Mime type of the response.
     mimetype = schema.TextLine(required=False)
 
-    relatedItems = RelationList(required=False)
+    related_items = RelationList(required=False)
 
 
 class Response(Persistent):
@@ -187,7 +187,7 @@ class Response(Persistent):
         self.mimetype = ''
         self.changes = PersistentList()
         self.added_object = PersistentList()
-        self.relatedItems = PersistentList()
+        self.related_items = PersistentList()
 
     def add_change(self, field_id, before, after, field_title=''):
         self.changes.append(PersistentDict(
@@ -196,6 +196,9 @@ class Response(Persistent):
             before=before,
             after=after
         ))
+
+    def add_related_item(self, relation):
+        self.related_items.append(relation)
 
 
 COMMENT_RESPONSE_TYPE = 'comment'

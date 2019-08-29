@@ -22,7 +22,7 @@ class TestTaskSerialization(IntegrationTestCase):
              u'creator': self.dossier_responsible.id,
              u'date': json_compatible(self.subtask.created()),
              u'date_of_completion': None,
-             u'relatedItems': [],
+             u'related_items': [],
              u'text': u'',
              u'transition': u'transition-add-subtask'},
             responses[0])
@@ -75,7 +75,7 @@ class TestTaskSerialization(IntegrationTestCase):
               u'creator': u'nicole.kohler',
               u'date': u'2016-08-31T10:07:33+00:00',
               u'date_of_completion': None,
-              u'relatedItems': [],
+              u'related_items': [],
               u'text': u'',
               u'transition': u'transition-add-document'}],
             browser.json['responses'])

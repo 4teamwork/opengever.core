@@ -210,11 +210,7 @@ class CompleteSuccessorTaskForm(Form):
                             RelationValue(int(doc_intid))]
 
                     # add response change entry for this relation
-                    if not response.relatedItems:
-                        response.relatedItems = [RelationValue(int(doc_intid))]
-                    else:
-                        response.relatedItems.append(
-                            RelationValue(int(doc_intid)))
+                    response.add_related_item(RelationValue(int(doc_intid)))
 
                     # set relation flag
                     doc._v__is_relation = True

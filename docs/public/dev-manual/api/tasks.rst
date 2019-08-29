@@ -344,7 +344,7 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
             "creator": "zopemaster",
             "created": "2019-05-21T13:57:42+00:00",
             "date_of_completion": null,
-            "relatedItems": [],
+            "related_items": [],
             "reminder_option": null,
             "text": "Lorem ipsum.",
             "transition": "task-commented"
@@ -357,7 +357,7 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
             "creator": "zopemaster",
             "created": "2019-05-21T14:02:01+00:00",
             "date_of_completion": null,
-            "relatedItems": [],
+            "related_items": [],
             "text": "Suspendisse faucibus, nunc et pellentesque egestas.",
             "transition": "task-transition-open-in-progress"
           },
