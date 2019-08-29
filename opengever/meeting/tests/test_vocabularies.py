@@ -2,10 +2,26 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
+from opengever.meeting.vocabulary import get_proposal_transitions_vocabulary
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
+
+
+class TestProposalTransitionsVocabulary(IntegrationTestCase):
+
+    def test_get_proposal_transitions_vocabulary_draft_proposal(self):
+        self.login(self.regular_user)
+        terms = get_proposal_transitions_vocabulary(self.draft_proposal)
+        self.assertItemsEqual(
+            ['proposal-transition-cancel'],
+            [term.value for term in terms])
+
+    def test_get_proposal_transitions_vocabulary_submitted_proposal(self):
+        self.login(self.regular_user)
+        terms = get_proposal_transitions_vocabulary(self.proposal)
+        self.assertItemsEqual([], [term.value for term in terms])
 
 
 class TestCommitteeVocabularies(IntegrationTestCase):
