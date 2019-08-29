@@ -717,7 +717,7 @@ form span.inputIcon:before {
   content: $schedule;
 }
 
-div.actionButtons .pending-submitted:before { content: $submit; }
+div.actionButtons .proposal-transition-submit:before { content: $submit; }
 div.actionButtons .held-closed:before { content: $close;}
 
 /* agenda_items actions */

@@ -2411,15 +2411,15 @@ readers do not read off random characters that represent icons */
 
 .gv-time:before, .actionButtons .modifyDeadline:before { content: ""; }
 
-.gv-reopen:before, .actionButtons .reopen:before, .actionButtons .reactivate:before, .actionButtons .cancelled-pending:before { content: ""; }
+.gv-reopen:before, .actionButtons .reopen:before, .actionButtons .reactivate:before, .actionButtons .proposal-transition-reactivate:before { content: ""; }
 
-.gv-submit:before, .actionButtons .pending-submitted:before { content: ""; }
+.gv-submit:before, .actionButtons .proposal-transition-submit:before { content: ""; }
 
 .gv-square-check:before, .actionButtons .complete:before { content: ""; }
 
 .gv-plus:before { content: ""; }
 
-.gv-cancel:before, .actionButtons .cancelled:before, .actionButtons .pending-cancelled:before { content: ""; }
+.gv-cancel:before, .actionButtons .cancelled:before, .actionButtons .proposal-transition-cancel:before { content: ""; }
 
 .gv-reassign:before, .actionButtons .reassign:before { content: ""; }
 
@@ -3092,7 +3092,7 @@ form span.inputIcon:before { font-family: 'opengever'; content: "x"; position: r
 
 #schedule_proposal span:before { content: ""; }
 
-div.actionButtons .pending-submitted:before { content: ""; }
+div.actionButtons .proposal-transition-submit:before { content: ""; }
 
 div.actionButtons .held-closed:before { content: ""; }
 
