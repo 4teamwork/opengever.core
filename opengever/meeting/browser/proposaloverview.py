@@ -8,10 +8,11 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal_transition_comment import ProposalTransitionCommentAddFormSQL
 from opengever.tabbedview import GeverTabMixin
+from opengever.webactions.interfaces import IWebActionsRenderer
+from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
 from zope.component import getMultiAdapter
-from opengever.webactions.interfaces import IWebActionsRenderer
 
 
 class OverviewBase(object):
@@ -95,6 +96,10 @@ class OverviewBase(object):
 
 
 class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
+
+    def transition_items(self):
+        wftool = api.portal.get_tool(name='portal_workflow')
+        return wftool.listActionInfos(object=self.context)
 
     def get_submitted_document(self, document):
         return SubmittedDocument.query.get_by_source(
