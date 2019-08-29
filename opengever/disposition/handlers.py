@@ -43,7 +43,6 @@ def disposition_added(context, event):
                 context.get_dossier_representations())
 
     DispositionAddedActivity(context, getRequest()).record()
-    context.register_watchers()
 
 
 def disposition_modified(context, event):
