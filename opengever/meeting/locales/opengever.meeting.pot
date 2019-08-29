@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-09 08:18+0000\n"
+"POT-Creation-Date: 2019-09-04 11:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -457,7 +457,6 @@ msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/meeting/model/meeting.py
-#: ./opengever/meeting/model/proposal.py
 msgid "cancel"
 msgstr ""
 
@@ -892,6 +891,7 @@ msgstr ""
 #. Default: "Comment"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 #: ./opengever/meeting/proposal_transition_comment.py
+#: ./opengever/meeting/proposaltransition.py
 msgid "label_comment"
 msgstr ""
 
@@ -1522,11 +1522,6 @@ msgstr ""
 msgid "msg_hold_meeting_dialog"
 msgstr ""
 
-#. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_inactive_committee_selected"
-msgstr ""
-
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"
@@ -1555,16 +1550,6 @@ msgstr ""
 #. Default: "Not all meetings are closed."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
 msgid "msg_pending_meetings"
-msgstr ""
-
-#. Default: "Proposal reactivated successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_reactivated"
-msgstr ""
-
-#. Default: "Proposal successfully submitted."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_submitted"
 msgstr ""
 
 #. Default: "The meeting can only be closed when all agenda items are decided."
@@ -1755,11 +1740,6 @@ msgstr ""
 msgid "protocol_excerpt"
 msgstr ""
 
-#. Default: "Reactivate"
-#: ./opengever/meeting/model/proposal.py
-msgid "reactivate"
-msgstr ""
-
 #. Default: "Reject"
 #: ./opengever/meeting/model/proposal.py
 msgid "reject"
@@ -1803,11 +1783,6 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "send email"
-msgstr ""
-
-#. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py
-msgid "submit"
 msgstr ""
 
 #. Default: "Submitted"
