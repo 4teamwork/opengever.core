@@ -10,4 +10,4 @@ class FooterViewlet(ViewletBase):
 
     @forever.memoize
     def get_gever_version(self):
-        return get_distribution('opengever.core').version
+        return '2019.3.4'
