@@ -242,7 +242,9 @@ body.template-view.portaltype-opengever-zug-digva-orderdossier,
 body.template-tabbed_view.portaltype-opengever-zug-komsko-skocase,
 body.template-view.portaltype-opengever-zug-komsko-skocase,
 body.template-tabbed_view.portaltype-opengever-zug-skakr-businesscasedossier,
-body.template-tabbedview.portaltype-opengever-zug-skakr-businesscasedossier {
+body.template-tabbedview.portaltype-opengever-zug-skakr-businesscasedossier,
+body.template-tabbed_view.portaltype-opengever-bl-licensingdossier,
+body.template-tabbedview.portaltype-opengever-bl-licensingdossier {
   @include heading-icon($dossier);
   @include watermark-icon($dossier);
 }
@@ -387,6 +389,7 @@ body.meeting-view{
   a#opengever-zug-digva-orderdossier,
   a#opengever-zug-komsko-skocase,
   a#opengever-zug-skakr-businesscasedossier,
+  a#opengever-bl-licensingdossier
   {
     &:before{
       content: $dossier;
@@ -623,6 +626,8 @@ body.meeting-view{
 .contenttype-opengever-zug-digva-orderdossier,
 .contenttype-opengever-zug-komsko-skocase,
 .contenttype-opengever-zug-skakr-businesscasedossier,
+.contenttype-opengever-bl-komsko-skocase,
+.contenttype-opengever-bl-licensingdossier,
 {
   &:before {
     content: $dossier;
