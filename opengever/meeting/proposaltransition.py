@@ -41,3 +41,15 @@ class ReactivateTransitionExtender(TransitionExtender):
         IHistory(self.context).append_record(
             u'reactivated', text=transition_params.get('text'))
         ProposalSqlSyncer(self.context, None).sync()
+
+
+@implementer(ITransitionExtender)
+@adapter(IProposal, IBrowserRequest)
+class SubmitTransitionExtender(TransitionExtender):
+
+    schemas = [IText, ]
+
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        # IHistory is created by `submit`
+        self.context.submit(text=transition_params.get('text'))
+        ProposalSqlSyncer(self.context, None).sync()

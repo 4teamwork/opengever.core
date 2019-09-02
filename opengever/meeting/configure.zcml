@@ -218,4 +218,9 @@
       name="proposal-transition-reactivate"
       />
 
+  <adapter
+      factory="opengever.meeting.proposaltransition.SubmitTransitionExtender"
+      name="proposal-transition-submit"
+      />
+
 </configure>
