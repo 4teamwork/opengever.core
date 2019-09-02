@@ -393,7 +393,7 @@ class ProposalBuilder(DexterityBuilder):
             '-officedocument.wordprocessingml.document')
 
         if self._transition:
-            obj.execute_transition(self._transition)
+            api.content.transition(obj, self._transition)
 
         super(ProposalBuilder, self).after_create(obj)
 
@@ -410,7 +410,7 @@ class ProposalBuilder(DexterityBuilder):
         return self.having(relatedItems=documents)
 
     def as_submitted(self):
-        self._transition = 'pending-submitted'
+        self._transition = 'proposal-transition-submit'
         return self
 
     def with_submitted(self):
