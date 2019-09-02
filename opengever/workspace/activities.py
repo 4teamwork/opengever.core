@@ -39,3 +39,50 @@ class ToDoAssignedActivity(BaseActivity):
             self.center.add_watcher_to_resource(
                 self.context, self.context.responsible,
                 TODO_RESPONSIBLE_ROLE)
+
+
+class ToDoModifiedBaseActivity(BaseActivity):
+    """Base class for ToDo modified activity.
+    """
+
+    kind = u'todo-modified'
+
+    @property
+    def description(self):
+        return {}
+
+
+class ToDoClosedActivity(ToDoModifiedBaseActivity):
+    """Activity representation for closing a todo.
+    """
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            _('label_todo_closed_activity', u'ToDo closed'))
+
+    @property
+    def summary(self):
+        user = Actor.lookup(self.actor_id)
+        msg = _(u'Closed by ${user}',
+                mapping={'user': user.get_label(with_principal=False)})
+
+        return self.translate_to_all_languages(msg)
+
+
+class ToDoReopenedActivity(ToDoModifiedBaseActivity):
+    """Activity representation for reopening a todo.
+    """
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            _('label_todo_reopened_activity', u'ToDo reopened'))
+
+    @property
+    def summary(self):
+        user = Actor.lookup(self.actor_id)
+        msg = _(u'Reopened by ${user}',
+                mapping={'user': user.get_label(with_principal=False)})
+
+        return self.translate_to_all_languages(msg)

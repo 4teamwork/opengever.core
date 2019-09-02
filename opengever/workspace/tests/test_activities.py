@@ -10,12 +10,12 @@ from unittest import skip
 import json
 
 
-class TestToDoNotifications(IntegrationTestCase):
+class TestToDoWatchers(IntegrationTestCase):
 
     features = ('activity', )
 
     def setUp(self):
-        super(TestToDoNotifications, self).setUp()
+        super(TestToDoWatchers, self).setUp()
         # Because the activity is not setup during creation of the fixture
         # there is no responsible set as watcher on the assigned_todo, which
         # we correct here
@@ -101,7 +101,12 @@ class TestToDoNotifications(IntegrationTestCase):
 
         self.assertEqual([], responsible_watchers)
 
-    def test_assigned_activity_is_recorded_when_a_todo_with_resonsible_is_created(self):
+
+class TestToDoActivities(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def test_assigned_activity_is_recorded_when_a_todo_with_responsible_is_created(self):
         self.login(self.workspace_owner)
         create(Builder('todo')
                .titled(u'Test ToDos')
@@ -140,4 +145,40 @@ class TestToDoNotifications(IntegrationTestCase):
             u'Assigned to {} by {}'.format(
                 responsible.get_label(with_principal=False),
                 user.get_label(with_principal=False)),
+            activity.summary)
+
+    @browsing
+    def test_closed_activity_is_recorded_when_a_todo_is_closed(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        browser.open(self.assigned_todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'completed': True}))
+
+        activity = Activity.query.one()
+        self.assertEquals('todo-modified', activity.kind)
+        self.assertEquals(u'ToDo closed', activity.label)
+        self.assertIsNone(activity.description)
+        self.assertEquals(u'Go live', activity.title)
+        user = ActorLookup(self.workspace_owner.getId()).lookup()
+        self.assertEquals(
+            u'Closed by {}'.format(user.get_label(with_principal=False)),
+            activity.summary)
+
+    @browsing
+    def test_reopened_activity_is_recorded_when_a_todo_is_reopened(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        browser.open(self.completed_todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'completed': False}))
+
+        activity = Activity.query.one()
+        self.assertEquals('todo-modified', activity.kind)
+        self.assertEquals(u'ToDo reopened', activity.label)
+        self.assertIsNone(activity.description)
+        self.assertEquals(u'Cleanup installation', activity.title)
+        user = ActorLookup(self.workspace_owner.getId()).lookup()
+        self.assertEquals(
+            u'Reopened by {}'.format(user.get_label(with_principal=False)),
             activity.summary)

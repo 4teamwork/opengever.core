@@ -1,6 +1,8 @@
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.workspace.activities import ToDoAssignedActivity
+from opengever.workspace.activities import ToDoClosedActivity
+from opengever.workspace.activities import ToDoReopenedActivity
 from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
@@ -75,3 +77,8 @@ def todo_modified(todo, event):
     if is_attribute_changed(event, "responsible", "IToDoSchema"):
         ToDoAssignedActivity(todo, getRequest()).record()
 
+    if is_attribute_changed(event, "completed", "IToDoSchema"):
+        if todo.completed:
+            ToDoClosedActivity(todo, getRequest()).record()
+        else:
+            ToDoReopenedActivity(todo, getRequest()).record()
