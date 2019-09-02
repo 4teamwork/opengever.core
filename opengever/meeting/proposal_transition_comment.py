@@ -163,9 +163,6 @@ class ProposalTransitionCommentAddFormSQL(form.AddForm, AutoExtensibleForm):
             return self.redirect()
 
     def is_valid_transition(self, transition_name):
-        if not api.user.has_permission('Modify portal content', obj=self.context):
-            return False
-
         return self.context.can_execute_transition(transition_name)
 
     def redirect(self, to_parent=False):

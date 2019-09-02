@@ -130,3 +130,13 @@ class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
 class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
     """
     """
+
+    def transition_items(self):
+        return []
+
+    def transitions(self):
+        if not api.user.has_permission('Modify portal content',
+                                       obj=self.context):
+            return []
+
+        return super(SubmittedProposalOverview, self).transitions()
