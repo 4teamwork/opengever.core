@@ -1,3 +1,5 @@
+from collective.z3cform.datagridfield import DataGridFieldFactory
+from collective.z3cform.datagridfield import DictRow
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.handlebars import prepare_handlebars_template
@@ -5,6 +7,7 @@ from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import FIRSTNAME_LENGTH
 from opengever.base.model import LASTNAME_LENGTH
 from opengever.contact import _
+from opengever.contact.models import Address
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
@@ -64,40 +67,8 @@ class PersonView(BrowserView):
         return self.latest_participations()
 
 
-class IPersonModel(model.Schema):
-    """Person model schema interface."""
+class IPhoneNumberRow(model.Schema):
 
-    salutation = schema.TextLine(
-        title=_(u"label_salutation", default=u"Salutation"),
-        max_length=CONTENT_TITLE_LENGTH,
-        required=False)
-
-    academic_title = schema.TextLine(
-        title=_(u"label_academic_title", default=u"Academic title"),
-        max_length=CONTENT_TITLE_LENGTH,
-        required=False)
-
-    firstname = schema.TextLine(
-        title=_(u"label_firstname", default=u"Firstname"),
-        max_length=FIRSTNAME_LENGTH,
-        required=True)
-
-    lastname = schema.TextLine(
-        title=_(u"label_lastname", default=u"Lastname"),
-        max_length=LASTNAME_LENGTH,
-        required=True)
-
-    description = schema.Text(
-        title=_(u'label_description', default=u'Description'),
-        required=False,
-        missing_value=u'',
-        default=u'',
-        )
-
-
-class IPhoneNumber(model.Schema):
-
-    # phone number
     label = schema.TextLine(
         title=_(u'label_phone_number_label', default=u'Label phone number'),
         required=False,
@@ -113,9 +84,8 @@ class IPhoneNumber(model.Schema):
     )
 
 
-class IMailAddress(model.Schema):
+class IMailAddressRow(model.Schema):
 
-    # phone number
     label = schema.TextLine(
         title=_(u'label_mail_address_label', default=u'Label mail address'),
         required=False,
@@ -131,11 +101,10 @@ class IMailAddress(model.Schema):
     )
 
 
-class IAddress(model.Schema):
+class IAddressRow(model.Schema):
 
-    # phone number
     label = schema.TextLine(
-        title=_(u'label_mail_address_label', default=u'Label mail address'),
+        title=_(u'label_address_label', default=u'Label address'),
         required=False,
         missing_value=u'',
         default=u'',
@@ -170,54 +139,86 @@ class IAddress(model.Schema):
     )
 
 
+class IPersonModel(model.Schema):
+    """Person model schema interface."""
+
+    salutation = schema.TextLine(
+        title=_(u"label_salutation", default=u"Salutation"),
+        max_length=CONTENT_TITLE_LENGTH,
+        required=False)
+
+    academic_title = schema.TextLine(
+        title=_(u"label_academic_title", default=u"Academic title"),
+        max_length=CONTENT_TITLE_LENGTH,
+        required=False)
+
+    firstname = schema.TextLine(
+        title=_(u"label_firstname", default=u"Firstname"),
+        max_length=FIRSTNAME_LENGTH,
+        required=True)
+
+    lastname = schema.TextLine(
+        title=_(u"label_lastname", default=u"Lastname"),
+        max_length=LASTNAME_LENGTH,
+        required=True)
+
+    description = schema.Text(
+        title=_(u'label_description', default=u'Description'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+        )
+
+    phone_numbers = schema.List(
+        title=_(u'label_phone_numbers', default=u'Phone numbers'),
+        required=False,
+        value_type=DictRow(title=u"tablerow", schema=IPhoneNumberRow))
+
+    mail_addresses = schema.List(
+        title=_(u'label_mail_addresses', default=u'Mail addresses'),
+        required=False,
+        value_type=DictRow(title=u"tablerow", schema=IMailAddressRow))
+
+    addresses = schema.List(
+        title=_(u'label_addresses', default=u'Addresses'),
+        required=False,
+        value_type=DictRow(title=u"tablerow", schema=IAddressRow))
+
+
 class AddPerson(ModelAddForm):
     schema = IPersonModel
     model_class = Person
-    additionalSchemata = (IPhoneNumber, IMailAddress, IAddress)
 
     label = _('Add Person', default=u'Add Person')
 
     def nextURL(self):
         return self._created_object.get_url()
 
+    def updateWidgets(self):
+        self.fields['phone_numbers'].widgetFactory = DataGridFieldFactory
+        self.fields['mail_addresses'].widgetFactory = DataGridFieldFactory
+        self.fields['addresses'].widgetFactory = DataGridFieldFactory
+        super(AddPerson, self).updateWidgets()
+
     def create(self, data):
         self.validate(data)
 
-        person_data = {}
-        for field_name in self.schema:
-            person_data[field_name] = data[field_name]
+        addresses = data.pop('addresses')
+        phone_numbers = data.pop('phone_numbers')
+        mail_addresses = data.pop('mail_addresses')
 
-        person = self.model_class(**person_data)
+        person = self.model_class(**data)
 
-        self.add_phone_number(data, person)
-        self.add_email_address(data, person)
-        self.add_address(data, person)
+        for address_data in addresses:
+            Address(contact=person, **address_data)
 
-        return person
-
-    def add_phone_number(self, data, person):
-        phone_data = {}
-        for field_name in IPhoneNumber:
-            phone_data[field_name] = data['IPhoneNumber.{}'.format(field_name)]
-
-        if phone_data.get('phone_number'):
+        for phone_data in phone_numbers:
             PhoneNumber(contact=person, **phone_data)
 
-    def add_email_address(self, data, person):
-        mail_data = {}
-        for field_name in IMailAddress:
-            mail_data[field_name] = data['IMailAddress.{}'.format(field_name)]
-
-        if mail_data.get('address'):
+        for mail_data in mail_addresses:
             MailAddress(contact=person, **mail_data)
 
-    def add_address(self, data, person):
-        address_data = {}
-        for field_name in IAddress:
-            address_data[field_name] = data['IAddress.{}'.format(field_name)]
-
-        if any(address_data.values()):
-            MailAddress(contact=person, **address_data)
+        return person
 
 
 class EditPerson(ModelEditForm):

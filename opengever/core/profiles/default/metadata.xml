@@ -28,5 +28,6 @@
     <dependency>profile-ftw.tokenauth:default</dependency>
     <dependency>profile-plone.app.theming:default</dependency>
     <dependency>profile-ftw.mobilenavigation:default</dependency>
+    <dependency>profile-collective.z3cform.datagridfield:default</dependency>
   </dependencies>
 </metadata>
