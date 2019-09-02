@@ -5,8 +5,10 @@ from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import FIRSTNAME_LENGTH
 from opengever.base.model import LASTNAME_LENGTH
 from opengever.contact import _
+from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
+from opengever.contact.models import PhoneNumber
 from opengever.contact.models.person import Person
 from opengever.ogds.base.actor import Actor
 from path import Path
@@ -93,14 +95,129 @@ class IPersonModel(model.Schema):
         )
 
 
+class IPhoneNumber(model.Schema):
+
+    # phone number
+    label = schema.TextLine(
+        title=_(u'label_phone_number_label', default=u'Label phone number'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+    phone_number = schema.TextLine(
+        title=_(u'label_phone_number', default=u'Phone number'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+
+class IMailAddress(model.Schema):
+
+    # phone number
+    label = schema.TextLine(
+        title=_(u'label_mail_address_label', default=u'Label mail address'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+    address = schema.TextLine(
+        title=_(u'label_mail_address', default=u'Mail address'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+
+class IAddress(model.Schema):
+
+    # phone number
+    label = schema.TextLine(
+        title=_(u'label_mail_address_label', default=u'Label mail address'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+    street = schema.Text(
+        title=_(u'label_street', default=u'Street'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+    zip_code = schema.TextLine(
+        title=_(u'label_zip_code', default=u'Zip code'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+    city = schema.TextLine(
+        title=_(u'label_city', default=u'City'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+    country = schema.TextLine(
+        title=_(u'label_country', default=u'Country'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+    )
+
+
 class AddPerson(ModelAddForm):
     schema = IPersonModel
     model_class = Person
+    additionalSchemata = (IPhoneNumber, IMailAddress, IAddress)
 
     label = _('Add Person', default=u'Add Person')
 
     def nextURL(self):
         return self._created_object.get_url()
+
+    def create(self, data):
+        self.validate(data)
+
+        person_data = {}
+        for field_name in self.schema:
+            person_data[field_name] = data[field_name]
+
+        person = self.model_class(**person_data)
+
+        self.add_phone_number(data, person)
+        self.add_email_address(data, person)
+        self.add_address(data, person)
+
+        return person
+
+    def add_phone_number(self, data, person):
+        phone_data = {}
+        for field_name in IPhoneNumber:
+            phone_data[field_name] = data['IPhoneNumber.{}'.format(field_name)]
+
+        if phone_data.get('phone_number'):
+            PhoneNumber(contact=person, **phone_data)
+
+    def add_email_address(self, data, person):
+        mail_data = {}
+        for field_name in IMailAddress:
+            mail_data[field_name] = data['IMailAddress.{}'.format(field_name)]
+
+        if mail_data.get('address'):
+            MailAddress(contact=person, **mail_data)
+
+    def add_address(self, data, person):
+        address_data = {}
+        for field_name in IAddress:
+            address_data[field_name] = data['IAddress.{}'.format(field_name)]
+
+        if any(address_data.values()):
+            MailAddress(contact=person, **address_data)
 
 
 class EditPerson(ModelEditForm):
