@@ -64,4 +64,28 @@
     <permission value="opengever.contact: Add team" />
   </action>
 
+  <action
+      action_id="add_person"
+      visible="True"
+      title="Person"
+      category="folder_factories"
+      url_expr="string:${object_url}/add-person"
+      icon_expr=""
+      condition_expr=""
+      i18n:domain="opengever.core">
+    <permission value="Add portal content" />
+  </action>
+
+  <action
+      action_id="add_organization"
+      visible="True"
+      title="Organization"
+      category="folder_factories"
+      url_expr="string:${object_url}/add-organization"
+      icon_expr=""
+      condition_expr=""
+      i18n:domain="opengever.core">
+    <permission value="Add portal content" />
+  </action>
+
 </object>

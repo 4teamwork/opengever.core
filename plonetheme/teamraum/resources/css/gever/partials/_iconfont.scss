@@ -490,6 +490,15 @@ body.meeting-view{
   content: $team;
 }
 
+#plone-contentmenu-factories dd.actionMenuContent a#add_person:before {
+  content: $contact;
+}
+
+#plone-contentmenu-factories dd.actionMenuContent a#add_organization:before {
+  content: fa-content($fa-var-building);
+  font-family: 'Font Awesome 5 Free';
+}
+
 
 /* @end */
 

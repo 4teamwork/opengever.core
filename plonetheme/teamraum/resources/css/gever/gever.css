@@ -2920,6 +2920,10 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 
 #plone-contentmenu-factories dd.actionMenuContent a#add_team:before { content: ""; }
 
+#plone-contentmenu-factories dd.actionMenuContent a#add_person:before { content: ""; }
+
+#plone-contentmenu-factories dd.actionMenuContent a#add_organization:before { content: "\f1ad"; font-family: 'Font Awesome 5 Free'; }
+
 /* @end */
 /* @group contenttype icons */
 [class*="contenttype-opengever-"], .contenttype-ftw-mail-mail { text-decoration: none; background-image: none; padding: 0; }
