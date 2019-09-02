@@ -213,4 +213,9 @@
       name="proposal-transition-cancel"
       />
 
+  <adapter
+      factory="opengever.meeting.proposaltransition.ReactivateTransitionExtender"
+      name="proposal-transition-reactivate"
+      />
+
 </configure>
