@@ -232,6 +232,7 @@ class PatchZ3CFormChangedField(MonkeyPatch):
                 assert any((
                     isinstance(context, QueryContext),
                     isinstance(context, RecordsProxy),
+                    isinstance(context, dict),
                     isinstance(context, ImplicitAcquisitionWrapper) and
                     isinstance(aq_base(context), dict),
                 ))
