@@ -119,6 +119,10 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
         return u'{}: {}'.format(label, transition)
 
     def redirect(self):
+        msg = _(u'msg_transition_successful',
+                default=u'Review state changed successfully.')
+        api.portal.show_message(msg, request=self.request, type='info')
+
         url = self.context.absolute_url()
         response = self.request.RESPONSE
         if response.status != 302:  # only redirect if not already redirecting

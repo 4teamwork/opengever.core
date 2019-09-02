@@ -1558,11 +1558,6 @@ msgstr "Es ist keine Vorlage für das Inhaltsverzeichnis konfiguriert, das Inhal
 msgid "msg_pending_meetings"
 msgstr "Nicht alle Sitzungen sind abgeschlossen."
 
-#. Default: "Proposal cancelled successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_cancelled"
-msgstr "Der Antrag wurde storniert."
-
 #. Default: "Proposal reactivated successfully."
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_proposal_reactivated"
@@ -1587,6 +1582,11 @@ msgstr "Es konnte nicht alle Dokumente in das PDF-Format konvertiert werden, des
 #: ./opengever/meeting/browser/views.py
 msgid "msg_successfully_deleted"
 msgstr "Das Objekt wurde erfolgreich gelöscht."
+
+#. Default: "Review state changed successfully."
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "msg_transition_successful"
+msgstr "Status erfolgreich geändert."
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py

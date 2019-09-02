@@ -714,10 +714,10 @@ class TestProposal(IntegrationTestCase):
         browser.click_on("Confirm")
 
         statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal cancelled successfully.')
+        statusmessages.assert_message('Review state changed successfully.')
 
         self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
-        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
+        self.assert_workflow_state('proposal-state-cancelled', self.draft_proposal)
 
     @browsing
     def test_proposal_can_be_reactivated(self, browser):

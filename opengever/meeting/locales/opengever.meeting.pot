@@ -1557,11 +1557,6 @@ msgstr ""
 msgid "msg_pending_meetings"
 msgstr ""
 
-#. Default: "Proposal cancelled successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_cancelled"
-msgstr ""
-
 #. Default: "Proposal reactivated successfully."
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_proposal_reactivated"
@@ -1585,6 +1580,11 @@ msgstr ""
 #. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py
 msgid "msg_successfully_deleted"
+msgstr ""
+
+#. Default: "Review state changed successfully."
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "msg_transition_successful"
 msgstr ""
 
 #. Default: "There are unscheduled proposals submitted to this committee."

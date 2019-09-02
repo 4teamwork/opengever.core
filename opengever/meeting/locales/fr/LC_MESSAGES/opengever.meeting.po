@@ -1560,11 +1560,6 @@ msgstr "Il n'y a pas de modèle configuré pour la table des matières; la table
 msgid "msg_pending_meetings"
 msgstr "Il y a des séances non clôturées."
 
-#. Default: "Proposal cancelled successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_cancelled"
-msgstr "Requête annulée avec succès."
-
 #. Default: "Proposal reactivated successfully."
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_proposal_reactivated"
@@ -1589,6 +1584,11 @@ msgstr "Puisque certains fichiers n'ont pas pu être converti en PDF, leur fichi
 #: ./opengever/meeting/browser/views.py
 msgid "msg_successfully_deleted"
 msgstr "L'objet a été supprimé avec succès."
+
+#. Default: "Review state changed successfully."
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "msg_transition_successful"
+msgstr "Statut modifié avec succès."
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
