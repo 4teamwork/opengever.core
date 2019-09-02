@@ -139,12 +139,14 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
                 {
                     'field_id': 'responsible',
                     'before': {u'token': u'beatrice.schrodinger', u'title': u'Schr\xf6dinger B\xe9atrice'},
-                    'after': {u'token': u'fridolin.hugentobler', u'title': u'Hugentobler Fridolin'}
+                    'after': {u'token': u'fridolin.hugentobler', u'title': u'Hugentobler Fridolin'},
+                    'field_title': '',
                 },
                 {
                     'field_id': 'title',
                     'before': 'before',
-                    'after': 'after'
+                    'after': 'after',
+                    'field_title': '',
                 }
             ],
             IResponseContainer(self.todo).list()[0].changes)

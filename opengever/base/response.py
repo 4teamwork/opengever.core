@@ -149,9 +149,10 @@ class Response(Persistent):
         self.text = ''
         self.changes = PersistentList()
 
-    def add_change(self, field_id, before, after):
+    def add_change(self, field_id, before, after, field_title=''):
         self.changes.append(PersistentDict(
             field_id=field_id,
+            field_title=field_title,  # Deprecated, only for the old gever-ui
             before=before,
             after=after
         ))

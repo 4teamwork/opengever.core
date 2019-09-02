@@ -58,6 +58,7 @@ class TestResponseGETSerialization(IntegrationTestCase):
                       'field_id': 'title',
                       'before': 'Foo',
                       'after': 'Bar',
+                      'field_title': '',
                   }
               ],
               u'creator': {

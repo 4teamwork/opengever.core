@@ -187,7 +187,8 @@ class TestAPISupportForTodo(IntegrationTestCase):
                 {
                     'field_id': 'title',
                     'before': u'Fix user login',
-                    'after': u'\xc4 new login'
+                    'after': u'\xc4 new login',
+                    'field_title': ''
                 }
             ],
             last_response.changes)
@@ -232,7 +233,8 @@ class TestAPISupportForTodo(IntegrationTestCase):
                 {
                     'field_id': '',
                     'before': u'',
-                    'after': u'Allgemeine Informationen'
+                    'after': u'Allgemeine Informationen',
+                    'field_title': ''
                 }
             ],
             response.changes)
@@ -243,7 +245,8 @@ class TestAPISupportForTodo(IntegrationTestCase):
                 {
                     'field_id': '',
                     'before': u'Allgemeine Informationen',
-                    'after': u'Projekteinf\xfchrung'
+                    'after': u'Projekteinf\xfchrung',
+                    'field_title': ''
                 }
             ],
             response.changes)
@@ -254,7 +257,8 @@ class TestAPISupportForTodo(IntegrationTestCase):
                 {
                     'field_id': '',
                     'before': u'Projekteinf\xfchrung',
-                    'after': u''
+                    'after': u'',
+                    'field_title': ''
                 }
             ],
             response.changes)
