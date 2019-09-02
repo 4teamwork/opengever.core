@@ -20,6 +20,7 @@ from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.utils import truncate_ellipsis
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.meeting.model import Proposal
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -271,15 +272,16 @@ class DossierContainer(Container):
         return bool(active_tasks)
 
     def has_active_proposals(self):
-        """Check if there are proposals inside the dossier, which
-        are not in an end state.
+        """Check if there are proposals inside the dossier, which are open.
         """
-        query = Proposal.query.active().by_container(
-            self,
-            get_current_admin_unit(),
+        active_proposals = api.content.find(
+            context=self,
+            depth=-1,
+            portal_type="opengever.meeting.proposal",
+            review_state=OPEN_PROPOSAL_STATES,
             )
 
-        return bool(query.count())
+        return bool(active_proposals)
 
     def is_all_checked_in(self):
         """Check if all documents in this path are checked in."""
