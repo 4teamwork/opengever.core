@@ -1,7 +1,30 @@
+from opengever.activity import notification_center
 from opengever.activity.base import BaseActivity
+from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
-from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+
+
+class WorkspaceWatcherManager(object):
+
+    def __init__(self, workspace):
+        self.center = notification_center()
+        self.workspace = workspace
+
+    def new_todo_added(self, todo):
+        self._update_responsible(todo)
+
+    def todo_responsible_modified(self, todo):
+        self._update_responsible(todo)
+
+    def _update_responsible(self, todo):
+        self.center.remove_watchers_from_resource_by_role(
+            todo, TODO_RESPONSIBLE_ROLE)
+
+        if todo.responsible is not None:
+            self.center.add_watcher_to_resource(
+                todo, todo.responsible,
+                TODO_RESPONSIBLE_ROLE)
 
 
 class ToDoAssignedActivity(BaseActivity):
@@ -30,15 +53,6 @@ class ToDoAssignedActivity(BaseActivity):
     @property
     def description(self):
         return {}
-
-    def before_recording(self):
-        self.center.remove_watchers_from_resource_by_role(
-            self.context, TODO_RESPONSIBLE_ROLE)
-
-        if self.context.responsible is not None:
-            self.center.add_watcher_to_resource(
-                self.context, self.context.responsible,
-                TODO_RESPONSIBLE_ROLE)
 
 
 class ToDoModifiedBaseActivity(BaseActivity):

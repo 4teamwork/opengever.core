@@ -4,6 +4,7 @@ from opengever.workspace.activities import ToDoAssignedActivity
 from opengever.workspace.activities import ToDoClosedActivity
 from opengever.workspace.activities import ToDoCommentedActivity
 from opengever.workspace.activities import ToDoReopenedActivity
+from opengever.workspace.activities import WorkspaceWatcherManager
 from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
@@ -67,6 +68,8 @@ def is_attribute_changed(event, attribute, schema):
 
 
 def todo_added(todo, event):
+    workspace = todo.get_containing_workspace()
+    WorkspaceWatcherManager(workspace).new_todo_added(todo)
     if todo.responsible is not None:
         ToDoAssignedActivity(todo, getRequest()).record()
 
@@ -76,6 +79,8 @@ def todo_modified(todo, event):
         return
 
     if is_attribute_changed(event, "responsible", "IToDoSchema"):
+        workspace = todo.get_containing_workspace()
+        WorkspaceWatcherManager(workspace).todo_responsible_modified(todo)
         ToDoAssignedActivity(todo, getRequest()).record()
 
     if is_attribute_changed(event, "completed", "IToDoSchema"):
