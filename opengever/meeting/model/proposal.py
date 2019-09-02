@@ -165,6 +165,11 @@ class Proposal(Base):
                    title=_('reactivate', default='Reactivate')),
         ])
 
+    # temporary mapping for plone workflow state to model workflow state
+    WORKFLOW_STATE_TO_SQL_STATE = {
+        'proposal-state-cancelled': 'cancelled'
+    }
+
     def __repr__(self):
         return "<Proposal {}@{}>".format(self.int_id, self.admin_unit_id)
 
@@ -188,6 +193,13 @@ class Proposal(Base):
             proposal.get_repository_folder_title())
         committee = Committee.get_one(
             oguid=Oguid.parse(proposal.committee_oguid))
+
+        # temporarily use mapping from plone workflow state to model workflow
+        # state
+        workflow_state = api.content.get_state(proposal)
+        new_sql_state = self.WORKFLOW_STATE_TO_SQL_STATE.get(workflow_state)
+        if new_sql_state:
+            self.workflow_state = new_sql_state
 
         self.committee = committee
         self.language = proposal.language
