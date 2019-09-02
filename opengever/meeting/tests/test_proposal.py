@@ -12,6 +12,8 @@ from ftw.testbrowser.pages import statusmessages
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.oguid import Oguid
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
+from opengever.meeting import CLOSED_PROPOSAL_STATES
+from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
@@ -31,6 +33,20 @@ from StringIO import StringIO
 from zc.relation.interfaces import ICatalog
 from zExceptions import Unauthorized
 from zope.component import getUtility
+
+
+class TestProposalStateGlobals(IntegrationTestCase):
+
+    def test_state_constants_cover_all_states(self):
+        self.login(self.manager)
+        all_states = OPEN_PROPOSAL_STATES + CLOSED_PROPOSAL_STATES
+
+        wftool = api.portal.get_tool('portal_workflow')
+        workflow = wftool.getWorkflowById('opengever_proposal_workflow')
+        self.assertItemsEqual(all_states, tuple(workflow.states),
+            "Workflow state global definitions and actually available "
+            "workflow states are unequal. You probably have added a new state"
+            "and now the module globals must be updated.")
 
 
 class TestProposalViewsDisabled(IntegrationTestCase):

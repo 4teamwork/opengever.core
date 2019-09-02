@@ -14,3 +14,15 @@ def is_meeting_feature_enabled():
 
     except (KeyError, AttributeError):
         return False
+
+
+OPEN_PROPOSAL_STATES = (
+    "proposal-state-active",
+    "proposal-state-scheduled",
+    "proposal-state-submitted",
+)
+
+CLOSED_PROPOSAL_STATES = (
+    "proposal-state-cancelled",
+    "proposal-state-decided",
+)
