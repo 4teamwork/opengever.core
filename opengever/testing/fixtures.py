@@ -1703,6 +1703,7 @@ class OpengeverContentFixture(object):
         self.decided_meeting.schedule_proposal(
             self.decided_proposal.load_model(),
             )
+        create_session().flush()  # trigger workflow state default
         for agenda_item in self.decided_meeting.agenda_items:
             agenda_item.close()
             if agenda_item.has_proposal:
