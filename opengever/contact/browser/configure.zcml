@@ -144,6 +144,13 @@
       />
 
   <browser:page
+      name="add-organization"
+      for="opengever.contact.interfaces.IContactFolder"
+      class=".organization.AddOrganization"
+      permission="opengever.contact.AddPerson"
+      />
+
+  <browser:page
       name="plone_layout"
       for="opengever.contact.interfaces.IPerson"
       permission="zope.Public"
