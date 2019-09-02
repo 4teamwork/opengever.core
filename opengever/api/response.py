@@ -1,6 +1,7 @@
+from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
-from opengever.base.response import CommentResponse
+from opengever.base.response import Response
 from opengever.ogds.base.actor import Actor
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldSerializer
@@ -106,7 +107,7 @@ class ResponsePost(Service):
         if not text:
             raise BadRequest("Property 'text' is required")
 
-        response = CommentResponse()
+        response = Response(COMMENT_RESPONSE_TYPE)
         response.text = text
         IResponseContainer(self.context).add(response)
 

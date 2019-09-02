@@ -139,13 +139,14 @@ class Response(Persistent):
 
     implements(IResponse)
 
-    response_type = 'default'
-
-    def __init__(self):
+    def __init__(self, response_type='default'):
         self.response_id = None
-        self.text = ''
+        self.response_type = response_type
+
         self.created = datetime.now()
         self.creator = api.user.get_current().id
+
+        self.text = ''
         self.changes = PersistentList()
 
     def add_change(self, field_id, before, after):
@@ -156,16 +157,9 @@ class Response(Persistent):
         ))
 
 
-class CommentResponse(Response):
-    response_type = 'comment'
-
-
-class SchemaFieldChangeResponse(Response):
-    response_type = 'schema_field'
-
-
-class MoveResponse(Response):
-    response_type = 'move'
+COMMENT_RESPONSE_TYPE = 'comment'
+SCHEMA_FIELD_CHANGE_RESPONSE_TYPE = 'schema_field'
+MOVE_RESPONSE_TYPE = 'move'
 
 
 class AutoResponseChangesTracker(object):
@@ -208,7 +202,7 @@ class AutoResponseChangesTracker(object):
         if not self.changes:
             return None
 
-        response = SchemaFieldChangeResponse()
+        response = Response(SCHEMA_FIELD_CHANGE_RESPONSE_TYPE)
         for key, value in self.changes.items():
             response.add_change(key, *value)
 

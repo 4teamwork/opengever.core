@@ -1,7 +1,8 @@
 from opengever.api.move import Move
 from opengever.base.response import AutoResponseChangesTracker
-from opengever.base.response import MoveResponse
 from opengever.base.response import IResponseContainer
+from opengever.base.response import MOVE_RESPONSE_TYPE
+from opengever.base.response import Response
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
 from plone.restapi.deserializer import json_body
@@ -47,7 +48,7 @@ class ToDoMove(Move):
             container_before = self.get_object(
                 self._parent_by_url(result.get('source')))
             container_after = self.context
-            response = MoveResponse()
+            response = Response(MOVE_RESPONSE_TYPE)
             response.add_change(
                 '',
                 self._get_changes_text(container_before),
