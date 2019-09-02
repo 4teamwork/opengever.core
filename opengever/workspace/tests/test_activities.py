@@ -182,3 +182,21 @@ class TestToDoActivities(IntegrationTestCase):
         self.assertEquals(
             u'Reopened by {}'.format(user.get_label(with_principal=False)),
             activity.summary)
+
+    @browsing
+    def test_commented_activity_is_recorded_when_a_todo_is_commented(self, browser):
+        self.login(self.workspace_member, browser)
+
+        url = '{}/@responses'.format(self.todo.absolute_url())
+        browser.open(url, method="POST", headers=self.api_headers,
+                     data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
+
+        activity = Activity.query.one()
+        self.assertEquals('todo-modified', activity.kind)
+        self.assertEquals(u'ToDo commented', activity.label)
+        self.assertIsNone(activity.description)
+        self.assertEquals('Fix user login', activity.title)
+        user = ActorLookup(self.workspace_member.getId()).lookup()
+        self.assertEquals(
+            u'Commented by {}'.format(user.get_label(with_principal=False)),
+            activity.summary)

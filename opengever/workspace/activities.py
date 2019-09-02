@@ -86,3 +86,24 @@ class ToDoReopenedActivity(ToDoModifiedBaseActivity):
                 mapping={'user': user.get_label(with_principal=False)})
 
         return self.translate_to_all_languages(msg)
+
+
+class ToDoCommentedActivity(ToDoModifiedBaseActivity):
+
+    def __init__(self, context, request, response_container, response):
+        super(ToDoCommentedActivity, self).__init__(context, request)
+        self.response_container = response_container
+        self.response = response
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            _('label_todo_commented_activity', u'ToDo commented'))
+
+    @property
+    def summary(self):
+        user = Actor.lookup(self.response.creator)
+        msg = _(u'Commented by ${user}',
+                mapping={'user': user.get_label(with_principal=False)})
+
+        return self.translate_to_all_languages(msg)

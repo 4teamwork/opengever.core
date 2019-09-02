@@ -2,6 +2,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.workspace.activities import ToDoAssignedActivity
 from opengever.workspace.activities import ToDoClosedActivity
+from opengever.workspace.activities import ToDoCommentedActivity
 from opengever.workspace.activities import ToDoReopenedActivity
 from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -82,3 +83,10 @@ def todo_modified(todo, event):
             ToDoClosedActivity(todo, getRequest()).record()
         else:
             ToDoReopenedActivity(todo, getRequest()).record()
+
+
+def response_added(todo, event):
+    ToDoCommentedActivity(todo,
+                          getRequest(),
+                          event.response_container,
+                          event.response).record()

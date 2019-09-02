@@ -46,6 +46,11 @@
       handler=".subscribers.todo_modified"
       />
 
+  <subscriber
+      for="opengever.workspace.interfaces.IToDo
+           opengever.base.response.IResponseAddedEvent"
+      handler=".subscribers.response_added"
+      />
 
   <utility
       factory=".vocabularies.RolesVocabulary"
