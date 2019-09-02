@@ -1,8 +1,11 @@
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.workspace.activities import ToDoAssignedActivity
 from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
+from zope.container.interfaces import IContainerModifiedEvent
+from zope.globalrequest import getRequest
 
 
 def assign_owner_role_on_creation(workspace, event):
@@ -44,3 +47,31 @@ def check_todo_add_preconditions(todo, event):
                 portal_type=todo.portal_type)
     if len(todos) >= TODO_NUMBER_LIMIT:
         raise ForbiddenByToDoLimit()
+
+
+def is_attribute_changed(event, attribute, schema):
+    """When modified throught the form, the attribute name is found
+    in the event attributes, whereas when done through the API,
+    the qualified name is used instead.
+    """
+    qualified = ".".join([schema, attribute])
+    attribute_names = set((qualified, attribute))
+    for desc in event.descriptions:
+        for attr in desc.attributes:
+            if attr in attribute_names:
+                return True
+    return False
+
+
+def todo_added(todo, event):
+    if todo.responsible is not None:
+        ToDoAssignedActivity(todo, getRequest()).record()
+
+
+def todo_modified(todo, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
+    if is_attribute_changed(event, "responsible", "IToDoSchema"):
+        ToDoAssignedActivity(todo, getRequest()).record()
+

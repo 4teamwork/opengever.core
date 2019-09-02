@@ -1,0 +1,143 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from opengever.activity import notification_center
+from opengever.activity.model import Activity
+from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.ogds.base.actor import ActorLookup
+from opengever.testing import IntegrationTestCase
+from unittest import skip
+import json
+
+
+class TestToDoNotifications(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def setUp(self):
+        super(TestToDoNotifications, self).setUp()
+        # Because the activity is not setup during creation of the fixture
+        # there is no responsible set as watcher on the assigned_todo, which
+        # we correct here
+        self.center = notification_center()
+
+        with self.login(self.workspace_member):
+            self.center.add_watcher_to_resource(self.assigned_todo,
+                                                self.assigned_todo.responsible,
+                                                TODO_RESPONSIBLE_ROLE)
+
+    def test_responsible_is_registered_as_watcher_when_todo_is_created(self):
+        self.login(self.workspace_owner)
+        todo = create(
+                    Builder('todo')
+                    .titled(u'Test ToDos')
+                    .having(responsible=self.workspace_member.getId())
+                    .within(self.workspace)
+                    )
+
+        resource = self.center.fetch_resource(todo)
+
+        responsible_watchers = [
+            sub.watcher.actorid for sub in resource.subscriptions
+            if sub.role == TODO_RESPONSIBLE_ROLE]
+
+        self.assertItemsEqual([self.workspace_member.getId()], responsible_watchers)
+
+    @browsing
+    def test_responsible_is_registered_as_watcher_when_todo_is_assigned(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        self.assertEqual(tuple(), self.center.get_watchers(self.todo))
+
+        # Assigning a responsible adds him as watcher
+        browser.open(self.todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'responsible': self.workspace_guest.getId()}))
+
+        subscriptions = self.center.fetch_resource(self.todo).subscriptions
+        responsible_watchers = [
+            sub.watcher.actorid for sub in subscriptions
+            if sub.role == TODO_RESPONSIBLE_ROLE]
+
+        self.assertItemsEqual([self.workspace_guest.getId()], responsible_watchers)
+
+    @browsing
+    def test_responsible_watcher_is_updated_when_todo_is_reassigned(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        subscriptions = self.center.fetch_resource(self.assigned_todo).subscriptions
+        responsible_watchers = [
+            sub.watcher.actorid for sub in subscriptions
+            if sub.role == TODO_RESPONSIBLE_ROLE]
+
+        self.assertItemsEqual([self.workspace_member.getId()], responsible_watchers)
+
+        # Reassigning a todo, replaces the responsible watcher.
+        browser.open(self.assigned_todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'responsible': self.workspace_guest.getId()}))
+
+        subscriptions = self.center.fetch_resource(self.assigned_todo).subscriptions
+        responsible_watchers = [
+            sub.watcher.actorid for sub in subscriptions
+            if sub.role == TODO_RESPONSIBLE_ROLE]
+
+        self.assertItemsEqual([self.workspace_guest.getId()], responsible_watchers)
+
+    @skip("This fails because of a but in plone.restapi, "
+          "see https://github.com/4teamwork/opengever.core/issues/5902")
+    @browsing
+    def test_responsible_watcher_is_updated_when_todo_is_unassigned(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        browser.open(self.assigned_todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'responsible': None}))
+
+        subscriptions = self.center.fetch_resource(self.assigned_todo).subscriptions
+        responsible_watchers = [
+            sub.watcher.actorid for sub in subscriptions
+            if sub.role == TODO_RESPONSIBLE_ROLE]
+
+        self.assertEqual([], responsible_watchers)
+
+    def test_assigned_activity_is_recorded_when_a_todo_with_resonsible_is_created(self):
+        self.login(self.workspace_owner)
+        create(Builder('todo')
+               .titled(u'Test ToDos')
+               .having(responsible=self.workspace_member.getId())
+               .within(self.workspace))
+
+        activity = Activity.query.one()
+        self.assertEquals('todo-assigned', activity.kind)
+        self.assertEquals(u'ToDo assigned', activity.label)
+        self.assertIsNone(activity.description)
+        self.assertEquals(u'Test ToDos', activity.title)
+        user = ActorLookup(self.workspace_owner.getId()).lookup()
+        responsible = ActorLookup(self.workspace_member.getId()).lookup()
+        self.assertEquals(
+            u'Assigned to {} by {}'.format(
+                responsible.get_label(with_principal=False),
+                user.get_label(with_principal=False)),
+            activity.summary)
+
+    @browsing
+    def test_assigned_activity_is_recorded_when_a_todo_is_reassigned(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        browser.open(self.assigned_todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'responsible': self.workspace_guest.getId()}))
+
+        activity = Activity.query.one()
+        self.assertEquals('todo-assigned', activity.kind)
+        self.assertEquals(u'ToDo assigned', activity.label)
+        self.assertIsNone(activity.description)
+        self.assertEquals(u'Go live', activity.title)
+        user = ActorLookup(self.workspace_owner.getId()).lookup()
+        responsible = ActorLookup(self.workspace_guest.getId()).lookup()
+        self.assertEquals(
+            u'Assigned to {} by {}'.format(
+                responsible.get_label(with_principal=False),
+                user.get_label(with_principal=False)),
+            activity.summary)

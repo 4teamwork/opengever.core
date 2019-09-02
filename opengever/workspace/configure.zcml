@@ -34,6 +34,19 @@
       handler=".subscribers.check_todo_add_preconditions"
       />
 
+  <subscriber
+      for="opengever.workspace.interfaces.IToDo
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.todo_added"
+      />
+
+  <subscriber
+      for="opengever.workspace.interfaces.IToDo
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.todo_modified"
+      />
+
+
   <utility
       factory=".vocabularies.RolesVocabulary"
       name="opengever.workspace.RolesVocabulary"
