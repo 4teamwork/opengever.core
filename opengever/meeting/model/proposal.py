@@ -66,17 +66,6 @@ class Reject(Transition):
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
-class Reactivate(Transition):
-
-    def execute(self, obj, model, text=None, **kwargs):
-        super(Reactivate, self).execute(obj, model)
-        model.reactivate(text)
-
-        msg = _(u'msg_proposal_reactivated',
-                default=u'Proposal reactivated successfully.')
-        api.portal.show_message(msg, request=getRequest(), type='info')
-
-
 class Proposal(Base):
     """Sql representation of a proposal."""
 
@@ -161,13 +150,12 @@ class Proposal(Base):
                    title=_('un-schedule', default='Remove from schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
-        Reactivate('cancelled', 'pending',
-                   title=_('reactivate', default='Reactivate')),
         ])
 
     # temporary mapping for plone workflow state to model workflow state
     WORKFLOW_STATE_TO_SQL_STATE = {
-        'proposal-state-cancelled': 'cancelled'
+        'proposal-state-cancelled': 'cancelled',
+        'proposal-state-active': 'pending',
     }
 
     def __repr__(self):
@@ -393,9 +381,6 @@ class Proposal(Base):
     def reopen(self, agenda_item):
         assert self.is_decided()
         IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
-
-    def reactivate(self, text=None):
-        IHistory(self.resolve_proposal()).append_record(u'reactivated', text=text)
 
     def decide(self, agenda_item):
         document = self.resolve_submitted_proposal().get_proposal_document()

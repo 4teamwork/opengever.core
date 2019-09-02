@@ -726,8 +726,12 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Reactivate')
+        browser.click_on("proposal-transition-reactivate")
         browser.click_on("Confirm")
+
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Review state changed successfully.')
+        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
 
     @browsing

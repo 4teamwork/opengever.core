@@ -235,10 +235,6 @@ class ProposalBase(object):
         return attributes
 
     def can_execute_transition(self, name):
-        if name != "cancelled-pending":
-            if not api.user.has_permission('Modify portal content', obj=self):
-                return False
-
         return self.workflow.can_execute_transition(self.load_model(), name)
 
     def execute_transition(self, name, text=None):
@@ -514,7 +510,7 @@ class Proposal(Container, ProposalBase):
     implements(IProposal)
 
     workflow = ProposalModel.workflow.with_visible_transitions(
-        ['pending-submitted', 'cancelled-pending'])
+        ['pending-submitted'])
 
     def load_model(self):
         oguid = Oguid.for_object(self)

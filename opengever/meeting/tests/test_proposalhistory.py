@@ -152,7 +152,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             expected_comments=u'Unn\xf6tig'
             )
         # reactivate proposal
-        browser.click_on("Reactivate")
+        browser.click_on("proposal-transition-reactivate")
         browser.fill({'Comment': u'N\xf6tig'}).submit()
         self.assert_proposal_history_records(
             u'Proposal reactivated by B\xe4rfuss K\xe4thi (kathi.barfuss)',
