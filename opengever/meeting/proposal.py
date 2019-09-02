@@ -509,8 +509,7 @@ class Proposal(Container, ProposalBase):
     """
     implements(IProposal)
 
-    workflow = ProposalModel.workflow.with_visible_transitions(
-        ['pending-submitted'])
+    workflow = ProposalModel.workflow.with_visible_transitions([])
 
     def load_model(self):
         oguid = Oguid.for_object(self)

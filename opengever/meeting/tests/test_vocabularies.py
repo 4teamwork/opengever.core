@@ -15,7 +15,7 @@ class TestProposalTransitionsVocabulary(IntegrationTestCase):
         self.login(self.regular_user)
         terms = get_proposal_transitions_vocabulary(self.draft_proposal)
         self.assertItemsEqual(
-            ['proposal-transition-cancel'],
+            ['proposal-transition-cancel', 'proposal-transition-submit'],
             [term.value for term in terms])
 
     def test_get_proposal_transitions_vocabulary_submitted_proposal(self):

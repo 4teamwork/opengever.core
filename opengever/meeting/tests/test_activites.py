@@ -352,7 +352,11 @@ class TestMeetingActivities(IntegrationTestCase):
         browser.find('Confirm').click()
 
     def submit_proposal(self, proposal, browser, comment=''):
-        self.execute_transition(proposal, 'pending-submitted', browser, comment)
+        browser.open(proposal)
+        browser.click_on('proposal-transition-submit ')
+        if comment:
+            browser.fill({'Comment': comment})
+        browser.click_on('Confirm')
         return self.lookup_submitted_proposal(proposal)
 
     def reject_proposal(self, proposal, browser, comment=''):

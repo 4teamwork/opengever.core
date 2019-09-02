@@ -549,11 +549,8 @@ class TestProposal(IntegrationTestCase):
         self.checkout_document(document)
         self.assertTrue(self.draft_proposal.contains_checked_out_documents())
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
-        browser.click_on("Confirm")
-        statusmessages.assert_message(
-            'Cannot change the state because the proposal'
-            ' contains checked out documents.')
+        button = browser.find("proposal-transition-submit")
+        self.assertFalse(button)
 
     def test_decide_not_allowed_when_documents_checked_out(self):
         """When deciding the proposal on the proposal model, the proposal
@@ -579,7 +576,7 @@ class TestProposal(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.set_related_items(self.draft_proposal, [self.mail_eml])
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
 
         self.login(self.committee_responsible)
@@ -599,7 +596,7 @@ class TestProposal(IntegrationTestCase):
         changed_title = u'\xc4nderung'
         self.draft_proposal.get_proposal_document().title = changed_title
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
         self.login(self.committee_responsible)
         # submitted proposal created
@@ -639,10 +636,10 @@ class TestProposal(IntegrationTestCase):
         self.assertIsNone(self.draft_proposal.date_of_submission)
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal successfully submitted.')
+        statusmessages.assert_message('Review state changed successfully.')
 
         self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
         self.assert_workflow_state('proposal-state-submitted', self.draft_proposal)
@@ -695,10 +692,10 @@ class TestProposal(IntegrationTestCase):
         proposal_model = self.draft_proposal.load_model()
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal successfully submitted.')
+        statusmessages.assert_message('Review state changed successfully.')
 
         self.assertEqual(u'Antrag f\xfcr Kreiselbau',
                          proposal_model.submitted_title)
@@ -743,14 +740,8 @@ class TestProposal(IntegrationTestCase):
 
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
-        browser.click_on("Confirm")
-
-        statusmessages.assert_message(
-            u'The selected committeee has been deactivated, the proposal '
-            u'could not been submitted.')
-        self.assertEqual(self.draft_proposal.absolute_url(), browser.url)
-        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
+        button = browser.find("proposal-transition-submit")
+        self.assertFalse(button)
 
     @browsing
     def test_resubmit_rejected_proposal_with_mail_attachments(self, browser):
@@ -759,7 +750,7 @@ class TestProposal(IntegrationTestCase):
                 self.as_relation_value(self.mail_eml))
 
             browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-            browser.click_on('Submit')
+            browser.click_on("proposal-transition-submit")
             browser.click_on('Confirm')
 
             submitted_proposal = self.draft_proposal.load_model().resolve_submitted_proposal()
@@ -771,10 +762,10 @@ class TestProposal(IntegrationTestCase):
 
         with self.login(self.dossier_responsible, browser):
             browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-            browser.click_on('Submit')
+            browser.click_on("proposal-transition-submit")
             browser.click_on('Confirm')
 
-            statusmessages.assert_message('Proposal successfully submitted.')
+            statusmessages.assert_message('Review state changed successfully.')
 
     @browsing
     def test_proposal_can_be_submitted_without_permission_on_commitee(self, browser):
@@ -784,11 +775,11 @@ class TestProposal(IntegrationTestCase):
             'View', self.draft_proposal.get_committee()))
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
         browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
         self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
         statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal successfully submitted.')
+        statusmessages.assert_message('Review state changed successfully.')
         self.assertEqual('proposal-state-submitted',
                          api.content.get_state(self.draft_proposal))
 
@@ -890,7 +881,8 @@ class TestProposal(IntegrationTestCase):
 
     def test_submit_document_updates_proposal_attachements(self):
         self.login(self.administrator)
-        self.draft_proposal.execute_transition('pending-submitted')
+        api.content.transition(
+            self.draft_proposal, 'proposal-transition-submit')
         self.assertEqual(0, len(IProposal(self.draft_proposal).relatedItems))
 
         self.draft_proposal.submit_additional_document(self.document)

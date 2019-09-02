@@ -36,28 +36,6 @@ from zope.globalrequest import getRequest
 MAX_TITLE_LENGTH = 256
 
 
-class Submit(Transition):
-
-    def execute(self, obj, model, text=None, **kwargs):
-        assert obj, 'submitting requires a plone context object.'
-
-        if not model.committee.is_active():
-            api.portal.show_message(
-                _(u'msg_inactive_committee_selected',
-                  default=u'The selected committeee has been deactivated, the'
-                  ' proposal could not been submitted.'),
-                request=getRequest(), type='error')
-            return getRequest().RESPONSE.redirect(obj.absolute_url())
-
-        super(Submit, self).execute(obj, model)
-        api.content.transition(obj=obj, transition='proposal-transition-submit')
-        obj.submit(text=text)
-
-        msg = _(u'msg_proposal_submitted',
-                default=u'Proposal successfully submitted.')
-        api.portal.show_message(msg, request=getRequest())
-
-
 class Reject(Transition):
 
     def execute(self, obj, model, text=None, **kwargs):
@@ -140,8 +118,6 @@ class Proposal(Base):
         STATE_DECIDED,
         STATE_CANCELLED,
         ], [
-        Submit('pending', 'submitted',
-               title=_('submit', default='Submit')),
         Reject('submitted', 'pending',
                title=_('reject', default='Reject')),
         Transition('submitted', 'scheduled',
@@ -154,8 +130,9 @@ class Proposal(Base):
 
     # temporary mapping for plone workflow state to model workflow state
     WORKFLOW_STATE_TO_SQL_STATE = {
-        'proposal-state-cancelled': 'cancelled',
         'proposal-state-active': 'pending',
+        'proposal-state-cancelled': 'cancelled',
+        'proposal-state-submitted': 'submitted',
     }
 
     def __repr__(self):

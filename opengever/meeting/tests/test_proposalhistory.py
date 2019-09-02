@@ -112,7 +112,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.open_overview(browser, self.draft_proposal)
         # submit proposal
-        browser.css('#pending-submitted').first.click()
+        browser.click_on('proposal-transition-submit')
         browser.fill({'Comment': u'Bitte \xfcbernehmen'}).submit()
         expected_history = u'Submitted by B\xe4rfuss K\xe4thi (kathi.barfuss)'
         expected_comment = u'Bitte \xfcbernehmen'
