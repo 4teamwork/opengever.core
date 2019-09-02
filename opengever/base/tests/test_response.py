@@ -12,14 +12,14 @@ class TestResponse(IntegrationTestCase):
 
     def test_creator_is_current_user(self):
         self.login(self.workspace_member)
-        response = Response('Bitte weiter abklaeren.')
+        response = Response()
 
         self.assertEqual(self.workspace_member.id, response.creator)
 
     def test_created_is_datetime_now(self):
         self.login(self.workspace_member)
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            response = Response('Bitte weiter abklaeren.')
+            response = Response()
 
         self.assertEqual(datetime(2016, 12, 9, 9, 40), response.created)
 
@@ -32,7 +32,7 @@ class TestResponseContainer(IntegrationTestCase):
         annotations = IAnnotations(self.todo)
         self.assertNotIn(ResponseContainer.ANNOTATION_KEY, annotations.keys())
 
-        response = Response('Bitte weiter abklaeren.')
+        response = Response()
         container = IResponseContainer(self.todo)
         container.add(response)
 
@@ -58,7 +58,7 @@ class TestResponseContainer(IntegrationTestCase):
 
         container = IResponseContainer(self.todo)
 
-        responses = [Response('2.'), Response('3.'), Response('1.')]
+        responses = [Response(), Response(), Response()]
         [container.add(response) for response in responses]
         self.assertEqual(responses, container.list())
 

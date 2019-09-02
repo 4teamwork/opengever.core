@@ -106,7 +106,8 @@ class ResponsePost(Service):
         if not text:
             raise BadRequest("Property 'text' is required")
 
-        response = CommentResponse(text)
+        response = CommentResponse()
+        response.text = text
         IResponseContainer(self.context).add(response)
 
         self.request.response.setStatus(201)

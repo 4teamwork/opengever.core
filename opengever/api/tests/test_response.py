@@ -27,12 +27,14 @@ class TestResponseGETSerialization(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(
-                Response('Ich bin hier anderer Meinung!'))
+            response = Response()
+            response.text = u'Ich bin hier anderer Meinung!'
+            IResponseContainer(self.todo).add(response)
 
         with freeze(datetime(2016, 12, 24, 8, 23)):
             with self.login(self.workspace_admin):
-                response = Response(u'Ok, Danke f\xfcr dein Feedback')
+                response = Response()
+                response.text = u'Ok, Danke f\xfcr dein Feedback'
                 response.add_change('title', 'Foo', 'Bar')
                 IResponseContainer(self.todo).add(response)
 
@@ -80,8 +82,9 @@ class TestResponseGET(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(
-                Response('Ich bin hier anderer Meinung!'))
+            response = Response()
+            response.text = u'Ich bin hier anderer Meinung!'
+            IResponseContainer(self.todo).add(response)
 
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
         browser.open(url, method="GET", headers=self.api_headers)
@@ -158,7 +161,7 @@ class TestResponsePatch(IntegrationTestCase):
         self.login(self.workspace_guest, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(Response('Test'))
+            IResponseContainer(self.todo).add(Response())
 
         with browser.expect_http_error(401):
             url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
@@ -170,7 +173,9 @@ class TestResponsePatch(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(Response('Test'))
+            response = Response()
+            response.text = 'Test'
+            IResponseContainer(self.todo).add(response)
 
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
         browser.open(url, method="PATCH", headers=self.api_headers,
@@ -187,7 +192,9 @@ class TestResponsePatch(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(Response('Test'))
+            response = Response()
+            response.text = 'Test'
+            IResponseContainer(self.todo).add(response)
 
         with browser.expect_http_error(400):
             url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())

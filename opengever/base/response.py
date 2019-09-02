@@ -141,9 +141,9 @@ class Response(Persistent):
 
     response_type = 'default'
 
-    def __init__(self, text=''):
+    def __init__(self):
         self.response_id = None
-        self.text = text
+        self.text = ''
         self.created = datetime.now()
         self.creator = api.user.get_current().id
         self.changes = PersistentList()
