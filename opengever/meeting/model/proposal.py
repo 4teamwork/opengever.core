@@ -140,10 +140,8 @@ class Proposal(Base):
 
     @classmethod
     def create_from(cls, proposal):
-        workflow_state = proposal.workflow.default_state.name
-
         model = cls(oguid=Oguid.for_object(proposal),
-                    workflow_state=workflow_state,
+                    workflow_state='pending',
                     physical_path=proposal.get_physical_path())
         model.sync_with_proposal(proposal)
         return model

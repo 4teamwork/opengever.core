@@ -17,12 +17,6 @@ from zope.component import getMultiAdapter
 
 class OverviewBase(object):
 
-    def transitions(self):
-        return self.context.get_transitions()
-
-    def transition_url(self, transition):
-        return ProposalTransitionCommentAddFormSQL.url_for(self.context, transition.name)
-
     def is_comment_allowed(self):
         return self.context.can_comment()
 
@@ -101,6 +95,9 @@ class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
         wftool = api.portal.get_tool(name='portal_workflow')
         return wftool.listActionInfos(object=self.context)
 
+    def transitions(self):
+        return []
+
     def get_submitted_document(self, document):
         return SubmittedDocument.query.get_by_source(
             self.context, document.getObject())
@@ -128,15 +125,17 @@ class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
 
 
 class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
-    """
-    """
 
-    def transition_items(self):
-        return []
+    def transition_url(self, transition):
+        return ProposalTransitionCommentAddFormSQL.url_for(
+            self.context, transition.name)
 
     def transitions(self):
         if not api.user.has_permission('Modify portal content',
                                        obj=self.context):
             return []
 
-        return super(SubmittedProposalOverview, self).transitions()
+        return self.context.get_transitions()
+
+    def transition_items(self):
+        return []

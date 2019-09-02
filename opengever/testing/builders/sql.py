@@ -344,7 +344,7 @@ class ProposalModelBuilder(SqlObjectBuilder):
         self.arguments['admin_unit_id'] = 'foo'
         self.arguments['int_id'] = 1234
         self.arguments['physical_path'] = '/bar'
-        self.arguments['workflow_state'] = Proposal.workflow.default_state.name
+        self.arguments['workflow_state'] = 'pending'
         self.arguments['dossier_reference_number'] = 'FD 1.2.3 / 1'
         self.arguments['language'] = 'en'
         self.arguments['repository_folder_title'] = 'Just a Repo-Folder'

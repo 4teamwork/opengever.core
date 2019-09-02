@@ -32,7 +32,6 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.trash.trash import ITrashed
 from plone import api
@@ -179,8 +178,6 @@ class ISubmittedProposal(IBaseProposal):
 
 class ProposalBase(object):
 
-    workflow = None
-
     def Title(self):
         return self.title.encode('utf-8')
 
@@ -235,21 +232,8 @@ class ProposalBase(object):
 
         return attributes
 
-    def can_execute_transition(self, name):
-        return self.workflow.can_execute_transition(self.load_model(), name)
-
-    def execute_transition(self, name, text=None):
-        self.workflow.execute_transition(self, self.load_model(), name, text=text)
-
-    def get_transitions(self):
-        return self.workflow.get_transitions(self.get_state())
-
     def get_state(self):
-        model = self.load_model()
-        if model:
-            return model.get_state()
-
-        return self.workflow.default_state
+        return self.load_model().get_state()
 
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name="portal_url")
@@ -324,6 +308,15 @@ class SubmittedProposal(ModelContainer, ProposalBase):
     implements(content_schema)
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['submitted-pending'])
+
+    def can_execute_transition(self, name):
+        return self.workflow.can_execute_transition(self.load_model(), name)
+
+    def execute_transition(self, name, text=None):
+        self.workflow.execute_transition(self, self.load_model(), name, text=text)
+
+    def get_transitions(self):
+        return self.workflow.get_transitions(self.get_state())
 
     def get_sync_admin_unit_id(self):
         return self.load_model().admin_unit_id
@@ -508,8 +501,6 @@ class Proposal(Container, ProposalBase):
 
     """
     implements(IProposal)
-
-    workflow = ProposalModel.workflow.with_visible_transitions([])
 
     def load_model(self):
         oguid = Oguid.for_object(self)
