@@ -1,3 +1,4 @@
+from collective.z3cform.datagridfield import BlockDataGridFieldFactory
 from collective.z3cform.datagridfield import DataGridFieldFactory
 from collective.z3cform.datagridfield import DictRow
 from opengever.base.browser.modelforms import ModelAddForm
@@ -110,7 +111,7 @@ class IAddressRow(model.Schema):
         default=u'',
     )
 
-    street = schema.Text(
+    street = schema.TextLine(
         title=_(u'label_street', default=u'Street'),
         required=False,
         missing_value=u'',
@@ -197,7 +198,7 @@ class AddPerson(ModelAddForm):
     def updateWidgets(self):
         self.fields['phone_numbers'].widgetFactory = DataGridFieldFactory
         self.fields['mail_addresses'].widgetFactory = DataGridFieldFactory
-        self.fields['addresses'].widgetFactory = DataGridFieldFactory
+        self.fields['addresses'].widgetFactory = BlockDataGridFieldFactory
         super(AddPerson, self).updateWidgets()
 
     def create(self, data):
