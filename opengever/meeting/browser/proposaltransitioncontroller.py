@@ -104,6 +104,18 @@ class ProposalTransitionController(BrowserView):
     def reactivate_action(self, transition):
         return self._addtransitioncomment_form_url(transition)
 
+    @guard('proposal-transition-submit')
+    def submit_guard(self):
+        return (
+            api.user.has_permission('Modify portal content', obj=self.context)
+            and not self.context.contains_checked_out_documents()
+            and self.context.has_active_committee()
+        )
+
+    @action('proposal-transition-submit')
+    def submit_action(self, transition):
+        return self._addtransitioncomment_form_url(transition)
+
     def _get_function_for_transition(self, type_, transition):
         """Returns the appropriate function (guard or action) for a
         transition.

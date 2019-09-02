@@ -545,6 +545,9 @@ class Proposal(Container, ProposalBase):
     def get_excerpt(self):
         return self.load_model().resolve_excerpt_document()
 
+    def has_active_committee(self):
+        return self.load_model().committee.is_active()
+
     def get_committee(self):
         return Oguid.parse(self.committee_oguid).resolve_object()
 

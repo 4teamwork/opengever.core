@@ -388,7 +388,12 @@
       trigger="USER"
       before_script=""
       after_script="">
+    <action
+        url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-submit"
+        category="workflow"
+        icon="">proposal-transition-submit</action>
     <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-submit')</guard-expression>
     </guard>
   </transition>
 
