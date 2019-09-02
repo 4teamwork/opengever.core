@@ -348,8 +348,12 @@
       trigger="USER"
       before_script=""
       after_script="">
-
+    <action
+        url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-reactivate"
+        category="workflow"
+        icon="">proposal-transition-reactivate</action>
     <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-reactivate')</guard-expression>
     </guard>
   </transition>
 
