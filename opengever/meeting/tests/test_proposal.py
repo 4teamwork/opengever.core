@@ -14,6 +14,7 @@ from opengever.base.oguid import Oguid
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting import CLOSED_PROPOSAL_STATES
 from opengever.meeting import OPEN_PROPOSAL_STATES
+from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
@@ -47,6 +48,13 @@ class TestProposalStateGlobals(IntegrationTestCase):
             "Workflow state global definitions and actually available "
             "workflow states are unequal. You probably have added a new state"
             "and now the module globals must be updated.")
+
+    def test_submitted_proposal_states_defined_in_workflow(self):
+        wftool = api.portal.get_tool('portal_workflow')
+        workflow = wftool.getWorkflowById('opengever_proposal_workflow')
+
+        self.assertTrue(all(state in tuple(workflow.states)
+                        for state in SUBMITTED_PROPOSAL_STATES))
 
 
 class TestProposalViewsDisabled(IntegrationTestCase):

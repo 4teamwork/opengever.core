@@ -26,3 +26,9 @@ CLOSED_PROPOSAL_STATES = (
     "proposal-state-cancelled",
     "proposal-state-decided",
 )
+
+SUBMITTED_PROPOSAL_STATES = (
+    "proposal-state-submitted",
+    "proposal-state-decided",
+    "proposal-state-scheduled",
+)

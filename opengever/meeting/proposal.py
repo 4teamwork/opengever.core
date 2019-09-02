@@ -16,6 +16,7 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
@@ -312,10 +313,6 @@ class ProposalBase(object):
         ProposalCommentedActivitiy(self, self.REQUEST).record()
         return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
 
-    def is_submitted(self):
-        model = self.load_model()
-        return model.is_submitted()
-
 
 class SubmittedProposal(ModelContainer, ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -340,6 +337,9 @@ class SubmittedProposal(ModelContainer, ProposalBase):
 
         """
         return self.load_model().is_editable_in_committee()
+
+    def is_submitted(self):
+        return True
 
     def can_comment(self):
         return api.user.has_permission('Modify portal content', obj=self)
@@ -531,6 +531,9 @@ class Proposal(Container, ProposalBase):
 
         """
         return self.load_model().is_editable_in_dossier()
+
+    def is_submitted(self):
+        return api.content.get_state(self) in SUBMITTED_PROPOSAL_STATES
 
     def can_comment(self):
         return api.user.has_permission('opengever.meeting: Add Proposal Comment', obj=self)
