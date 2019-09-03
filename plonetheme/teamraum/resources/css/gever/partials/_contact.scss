@@ -249,6 +249,48 @@ body.portaltype-opengever-contact-organization {
       }
 
     }
+  }
+}
+
+.template-add-person,
+.template-add-organization {
+
+  .datagridwidget-table-view {
+    width: auto;
+    border: 1px solid $gray-dark;
+    background: none repeat scroll 0 0 $gray-light;
+
+    .header {
+      font-weight: bold;
+      background: none repeat scroll 0 0 $gray-light;
+      color: $gray-darker;
+      padding: 2px;
+      font-size: 1em;
+      text-align: left;
+    }
+
+    .cell-1 {
+      width: 15em;
+      padding-right: 2em;
+    }
+
+    .cell-2 {
+      width: 20em;
+    }
+  }
+
+  .datagridwidget-table-view-block{
+    border: 1px solid $gray-dark;
+    background: none repeat scroll 0 0 $gray-light;
+
+    .label {
+      color: $gray-darker;
+      font-weight: bold;
+    }
+
+    .datagridwidget-row {
+      border-bottom: 1px solid $gray-dark;
+    }
 
   }
 }
