@@ -36,7 +36,7 @@
 
    .. py:attribute:: privacy_layer
 
-       :Feldname: :field-title:`Datenschutzstufe`
+       :Feldname: :field-title:`Datenschutz`
        :Datentyp: ``Choice``
        
        :Default: "privacy_layer_no"
