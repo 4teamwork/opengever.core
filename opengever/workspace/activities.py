@@ -5,6 +5,7 @@ from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from plone import api
 from zope.globalrequest import getRequest
 
 
@@ -36,6 +37,12 @@ class WorkspaceWatcherManager(object):
         for member in manager.get_participants():
             self.center.add_watcher_to_resource(
                 todo, member["userid"], WORKSPACE_MEMBER_ROLE)
+
+    def new_participant_added(self, participant, role):
+        catalog = api.portal.get_tool("portal_catalog")
+        todos = catalog(portal_type="opengever.workspace.todo")
+        for todo in todos:
+            self.center.add_watcher_to_resource(todo.getObject(), participant, role)
 
 
 class ToDoAssignedActivity(BaseActivity):

@@ -8,7 +8,9 @@ from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from opengever.workspace.participation.storage import IInvitationStorage
 from unittest import skip
+from zope.component import getUtility
 import json
 
 
@@ -120,6 +122,40 @@ class TestToDoWatchers(IntegrationTestCase):
             if sub.role == TODO_RESPONSIBLE_ROLE]
 
         self.assertEqual([], responsible_watchers)
+
+    @browsing
+    def test_new_workspace_member_is_watcher_on_all_todos(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+        my_invitations = browser.open(
+            self.portal.absolute_url() + '/@my-workspace-invitations',
+            method='GET',
+            headers=self.api_headers,
+            ).json
+
+        watcher = self.center.fetch_watcher(self.regular_user.getId())
+        self.assertIsNone(watcher)
+
+        # Accept invitation
+        browser.open(
+            my_invitations.get('items')[0].get('accept'),
+            method='POST',
+            headers=self.api_headers).json
+
+        watcher = self.center.fetch_watcher(self.regular_user.getId())
+        self.assertIsNotNone(watcher)
+
+        self.login(self.workspace_member, browser)
+        self.assertItemsEqual(
+            [self.todo, self.assigned_todo, self.completed_todo],
+            [resource.oguid.resolve_object() for resource in watcher.resources])
 
 
 class TestToDoActivities(IntegrationTestCase):

@@ -4,6 +4,7 @@ from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import PloneUserActor
 from opengever.workspace import _
 from opengever.workspace import is_workspace_feature_enabled
+from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -87,6 +88,9 @@ class MyWorkspaceInvitations(BrowserView):
                 invitation['recipient'], [invitation['role']], target)
             RoleAssignmentManager(target).add_or_update_assignment(assignment)
             self.storage().remove_invitation(invitation['iid'])
+
+            manager = WorkspaceWatcherManager(self.context)
+            manager.new_participant_added(invitation['recipient'], invitation['role'])
 
         return target
 
