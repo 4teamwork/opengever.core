@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Always raise when viewlet rendering errors occur during development. [deiferni]
 - Rename label and values of the privacy layer field. [phgross]
 - Prevent copy / paste of checked out documents. [njohner]
 - Bump ftw.solr to 2.6.1 to get fix path_depth handling. [phgross]

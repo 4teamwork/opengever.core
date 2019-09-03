@@ -9,6 +9,7 @@ from .default_values import PatchInvokeFactory
 from .default_values import PatchTransmogrifyDXSchemaUpdater
 from .default_values import PatchZ3CFormChangedField
 from .default_values import PatchZ3CFormWidgetUpdate
+from .development import PatchBaseOrderedViewletManagerExceptions
 from .exception_formatter import PatchExceptionFormatter
 from .extendedpathindex import PatchExtendedPathIndex
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
@@ -26,6 +27,7 @@ from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
 
 
+PatchBaseOrderedViewletManagerExceptions()()
 PatchBuilderCreate()()
 PatchExtendedPathIndex()()
 PatchCatalogToFilterTrashedDocs()()
