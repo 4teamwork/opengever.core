@@ -4,8 +4,10 @@ from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from unittest import skip
 import json
 
@@ -42,6 +44,24 @@ class TestToDoWatchers(IntegrationTestCase):
             if sub.role == TODO_RESPONSIBLE_ROLE]
 
         self.assertItemsEqual([self.workspace_member.getId()], responsible_watchers)
+
+    def test_workspace_users_are_registered_as_watcher_when_todo_is_created(self):
+        self.login(self.workspace_owner)
+        todo = create(
+                    Builder('todo')
+                    .titled(u'Test ToDos')
+                    .within(self.workspace)
+                    )
+
+        resource = self.center.fetch_resource(todo)
+
+        watchers = [
+            sub.watcher.actorid for sub in resource.subscriptions
+            if sub.role == WORKSPACE_MEMBER_ROLE]
+
+        participants = ManageParticipants(self.workspace, self.request).get_participants()
+        self.assertItemsEqual([participant["userid"] for participant in participants],
+                              watchers)
 
     @browsing
     def test_responsible_is_registered_as_watcher_when_todo_is_assigned(self, browser):

@@ -1,8 +1,11 @@
 from opengever.activity import notification_center
 from opengever.activity.base import BaseActivity
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
+from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from zope.globalrequest import getRequest
 
 
 class WorkspaceWatcherManager(object):
@@ -13,6 +16,7 @@ class WorkspaceWatcherManager(object):
 
     def new_todo_added(self, todo):
         self._update_responsible(todo)
+        self._add_all_workspace_users_as_watchers(todo)
 
     def todo_responsible_modified(self, todo):
         self._update_responsible(todo)
@@ -25,6 +29,13 @@ class WorkspaceWatcherManager(object):
             self.center.add_watcher_to_resource(
                 todo, todo.responsible,
                 TODO_RESPONSIBLE_ROLE)
+
+    def _add_all_workspace_users_as_watchers(self, todo):
+        manager = ManageParticipants(self.workspace, getRequest())
+
+        for member in manager.get_participants():
+            self.center.add_watcher_to_resource(
+                todo, member["userid"], WORKSPACE_MEMBER_ROLE)
 
 
 class ToDoAssignedActivity(BaseActivity):
