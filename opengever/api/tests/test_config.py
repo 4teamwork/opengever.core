@@ -42,6 +42,7 @@ class TestConfig(IntegrationTestCase):
             {
                 u'activity': False,
                 u'archival_file_conversion': False,
+                u'archival_file_conversion_blacklist': [],
                 u'changed_for_end_date': True,
                 u'contacts': False,
                 u'disposition_transport_filesystem': False,

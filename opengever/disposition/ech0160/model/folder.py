@@ -19,7 +19,8 @@ class Folder(object):
 
         for doc in dossier.documents.values():
             if doc.obj.archival_file:
-                self.files.append(File(toc, doc, doc.obj.archival_file))
+                if not doc.obj.is_archival_file_conversion_skipped():
+                    self.files.append(File(toc, doc, doc.obj.archival_file))
             if doc.obj.file:
                 self.files.append(File(toc, doc, doc.obj.file))
 

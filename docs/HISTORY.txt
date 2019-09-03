@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Rename label and values of the privacy layer field. [phgross]
+- Add configuration possibility, to blacklist mimetypes from archival conversion. [phgross]
 - Prevent copy / paste of checked out documents. [njohner]
 - Bump ftw.solr to 2.6.1 to get fix path_depth handling. [phgross]
 - Handle special characters in link to advanced search. [njohner]

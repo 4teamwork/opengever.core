@@ -15,6 +15,8 @@ from opengever.activity.hooks import insert_notification_defaults
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.document.archival_file import STATE_CONVERTED
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model.agendaitem import AgendaItem
@@ -639,6 +641,14 @@ class IntegrationTestCase(TestCase):
     def change_mail_data(self, mail, data):
         old_file = IMail(mail).message
         IMail(mail).message = NamedBlobFile(data=data, filename=old_file.filename)
+
+    def set_archival_file(self, document, data,
+                          filename=u'test.pdf',
+                          conversion_state=STATE_CONVERTED):
+
+        archival_file = NamedBlobFile(data=data, filename=u'test.pdf')
+        IDocumentMetadata(document).archival_file_state = conversion_state
+        IDocumentMetadata(document).archival_file = archival_file
 
     def agenda_item_url(self, agenda_item, endpoint):
         return '{}/agenda_items/{}/{}'.format(

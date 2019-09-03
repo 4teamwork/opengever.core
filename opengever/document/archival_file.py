@@ -35,6 +35,10 @@ class ArchivalFileConverter(object):
         self.document_intid = getUtility(IIntIds).getId(self.document)
 
     def trigger_conversion(self):
+        if self.document.is_archival_file_conversion_skipped():
+            self.set_state(STATE_FAILED_PERMANENTLY)
+            return
+
         if self.get_state() == STATE_MANUALLY_PROVIDED:
             return
 

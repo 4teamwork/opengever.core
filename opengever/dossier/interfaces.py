@@ -225,6 +225,13 @@ class IDossierResolveProperties(Interface):
         'conversion for each document, when a dossier gets resolved.',
         default=False)
 
+    archival_file_conversion_blacklist = schema.List(
+        title=u'Archival-file conversion blacklist - content types to ignore.',
+        description=u'List of lowered content types for which no Archival PDF'
+        ' should be generated',
+        missing_value=[],
+        default=[])
+
     resolver_name = schema.Choice(
         title=u"Dossier resolver name",
         vocabulary=u'opengever.dossier.ValidResolverNamesVocabulary',
