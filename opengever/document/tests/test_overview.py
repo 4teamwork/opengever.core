@@ -750,6 +750,16 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         )
 
     @browsing
+    def test_description_does_not_display_none_value(self, browser):
+        self.login(self.regular_user, browser)
+        self.document.description = None
+        browser.open(self.document, view='tabbedview_view-overview')
+        self.assertEqual(
+            u'',
+            browser.css('#form-widgets-IDocumentMetadata-description')[0].innerHTML,
+        )
+
+    @browsing
     def test_webactions_are_shown_in_overview(self, browser):
         self.login(self.regular_user, browser)
 
