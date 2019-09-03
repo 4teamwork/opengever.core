@@ -25,6 +25,27 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     simple_link_template = ViewPageTemplateFile('templates/simple_link.pt')
     documentish_types = ['opengever.document.document', 'ftw.mail.mail']
 
+    def __getattr__(self, name):
+        """
+        The original CatalogContentListingObject drops the aquistion
+        information, when getting the attribute from the object.
+        This lead to problems when accessing is_subdossier for example.
+
+        Customization can be removed as soon the bug gets fixed in
+        plone.app.contentlisting.
+        """
+
+        if name.startswith('_'):
+            raise AttributeError(name)
+        if hasattr(aq_base(self._brain), name):
+            return getattr(self._brain, name)
+        elif hasattr(aq_base(self.getObject()), name):
+            # Here we diverge from CatalogContentListingObject which
+            # returns getattr(aq_base(self.getObject()), name)
+            return getattr(self.getObject(), name)
+        else:
+            raise AttributeError(name)
+
     @property
     def is_document(self):
         return self._brain.portal_type == 'opengever.document.document'

@@ -127,6 +127,8 @@ FIELDS = {
     'filesize': ('filesize', filesize, 'filesize'),
     'has_sametype_children': ('has_sametype_children', 'has_sametype_children',
                               'has_sametype_children'),
+    'is_subdossier': ('is_subdossier', 'is_subdossier', 'is_subdossier'),
+    'is_subtask': ('is_subtask', 'is_subtask', 'is_subtask'),
     'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
     'keywords': ('Subject', 'Subject', 'Subject'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
@@ -290,7 +292,9 @@ class Listing(Service):
         for item in items[start:start + rows]:
             res['items'].append(create_list_item(item, columns))
 
-        facets = dict((field, dict((facet, {"count": count}) for facet, count in facets.items())) for field, facets in facet_counts.items())
+        facets = dict((field, dict((facet, {"count": count})
+                                   for facet, count in facets.items()))
+                      for field, facets in facet_counts.items())
         if facet_counts:
             for field, facets in facet_counts.items():
                 transform = FACET_TRANSFORMS.get(field)

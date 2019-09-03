@@ -146,6 +146,7 @@
     <field name="firstname" type="string" indexed="true" stored="false" />
     <field name="has_sametype_children" type="boolean" indexed="false" stored="true" />
     <field name="is_subdossier" type="boolean" indexed="true" stored="false" />
+    <field name="is_subtask" type="boolean" indexed="true" stored="false" />
     <field name="issuer" type="string" indexed="true" stored="false" />
     <field name="lastname" type="string" indexed="true" stored="false" />
     <field name="metadata" type="text" indexed="true" stored="true"/>

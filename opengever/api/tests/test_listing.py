@@ -324,6 +324,7 @@ class TestListingEndpoint(IntegrationTestCase):
             'columns=responsible_fullname',
             'columns=issuer_fullname',
             'columns=created',
+            'columns=is_subtask',
         ))
         view = '?'.join(('@listing', query_string))
         browser.open(self.dossier, view=view,
@@ -342,8 +343,37 @@ class TestListingEndpoint(IntegrationTestCase):
              u'deadline': u'2016-11-01',
              u'review_state_label': u'In Arbeit',
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
-             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1'},
+             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
+             u'is_subtask': False},
             item)
+
+    @browsing
+    def test_filter_by_is_subtask(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # all documents
+        view = ('@listing?name=tasks&'
+                'columns:list=title&columns:list=is_subtask')
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        all_tasks = browser.json['items']
+
+        # only subtasks
+        view = view + '&filters.is_subtask:record:list=true'
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        subtasks = browser.json['items']
+
+        self.assertTrue(len(all_tasks) > len(subtasks) > 0)
+        # Make sure that filtering by is_subtask filtered according to
+        # the is_subtask field
+        self.assertItemsEqual(
+            [item for item in all_tasks if item.get("is_subtask")], subtasks)
+
+        # Make sure that is_subtask is True for the expected objects.
+        expected_subtasks = (self.subtask, self.seq_subtask_1,
+                             self.seq_subtask_2, self.seq_subtask_3)
+        self.assertItemsEqual(
+            [subtask.absolute_url() for subtask in expected_subtasks],
+            [item.get("@id") for item in subtasks])
 
     @browsing
     def test_filter_by_file_extension(self, browser):
@@ -408,6 +438,34 @@ class TestListingEndpoint(IntegrationTestCase):
         self.assertItemsEqual(
             [u'2015', u'2016'],
             [item['title'] for item in browser.json['items']])
+
+    @browsing
+    def test_filter_by_is_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # all dossiers
+        view = '@listing?name=dossiers&columns:list=is_subdossier'
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        all_dossiers = browser.json['items']
+
+        # only subdossiers
+        view = view + '&filters.is_subdossier:record:list=true'
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        subdossiers = browser.json['items']
+
+        self.assertTrue(len(all_dossiers) > len(subdossiers) > 0)
+        # Make sure that filtering by is_subdossier filtered according to
+        # the is_subdossier field
+        self.assertItemsEqual(
+            [item for item in all_dossiers if item.get("is_subdossier")],
+            subdossiers)
+
+        # Make sure that is_subdossier is True for the expected objects.
+        expected_subdossiers = (self.subdossier, self.subsubdossier,
+                                self.subdossier2, self.resolvable_subdossier)
+        self.assertItemsEqual(
+            [subdossier.absolute_url() for subdossier in expected_subdossiers],
+            [item.get("@id") for item in subdossiers])
 
     @browsing
     def test_todos_listing(self, browser):
