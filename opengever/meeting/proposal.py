@@ -68,10 +68,6 @@ def default_title(context):
     return context.Title().decode('utf-8')
 
 
-class IProposalModel(Interface):
-    """Proposal model schema interface."""
-
-
 class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
 
