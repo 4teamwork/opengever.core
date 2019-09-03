@@ -187,10 +187,6 @@ class Proposal(Base):
     def get_state(self):
         return self.workflow.get_state(self.workflow_state)
 
-    def is_submitted(self):
-        submitted_states = (self.STATE_SUBMITTED, self.STATE_SCHEDULED, self.STATE_DECIDED)
-        return self.get_state() in submitted_states
-
     def execute_transition(self, name, text=None):
         self.workflow.execute_transition(None, self, name, text=text)
 
