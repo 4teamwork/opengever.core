@@ -12,6 +12,7 @@ from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
+from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 
 
@@ -89,7 +90,7 @@ class OverviewBase(object):
         return renderer()
 
 
-class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
+class ProposalOverview(OverviewBase, BrowserView, GeverTabMixin):
 
     def transition_items(self):
         wftool = api.portal.get_tool(name='portal_workflow')

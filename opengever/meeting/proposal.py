@@ -514,15 +514,6 @@ class Proposal(Container, ProposalBase):
     def get_sync_target_path(self):
         return self.load_model().submitted_physical_path
 
-    def is_editable(self):
-        """A proposal in a dossier is only editable while not submitted.
-
-        It will remain editable on the submitted side but with a different set
-        of editable attributes.
-
-        """
-        return self.load_model().is_editable_in_dossier()
-
     def is_submitted(self):
         return api.content.get_state(self) in SUBMITTED_PROPOSAL_STATES
 

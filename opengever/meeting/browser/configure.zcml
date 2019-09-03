@@ -64,7 +64,7 @@
   <browser:page
       for="opengever.meeting.proposal.IProposal"
       name="tabbed_view"
-      class="opengever.tabbedview.ModelProxyTabbedView"
+      class="opengever.tabbedview.GeverTabbedView"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
