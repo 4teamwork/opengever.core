@@ -22,18 +22,6 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-@provider(IContextSourceBinder)
-def get_transition_vocab(context):
-    transitions = []
-    for transition in context.get_transitions():
-        transitions.append(SimpleVocabulary.createTerm(
-            transition.name,
-            transition.name,
-            PMF(transition.name, default=transition.title)))
-
-    return SimpleVocabulary(transitions)
-
-
 class IProposalTransitionCommentFormSchema(Interface):
     """Schema-interface class for the proposal transition comment form
     """
@@ -41,21 +29,6 @@ class IProposalTransitionCommentFormSchema(Interface):
         title=_("label_transition", default="Transition"),
         source=get_proposal_transitions_vocabulary,
         required=True,
-        )
-
-    text = schema.Text(
-        title=_('label_comment', default="Comment"),
-        required=False,
-        )
-
-
-class IProposalTransitionCommentFormSchemaSQL(Interface):
-    """Schema-interface class for the proposal transition comment form
-    """
-    transition = schema.Choice(
-        title=_("label_transition", default="Transition"),
-        source=get_transition_vocab,
-        required=False,
         )
 
     text = schema.Text(
@@ -134,11 +107,38 @@ class ProposalTransitionCommentAddFormView(layout.FormWrapper):
     form = ProposalTransitionCommentAddForm
 
 
-class ProposalTransitionCommentAddFormSQL(form.AddForm, AutoExtensibleForm):
+@provider(IContextSourceBinder)
+def get_submitted_proposal_transition_vocab(context):
+    transitions = []
+    for transition in context.get_transitions():
+        transitions.append(SimpleVocabulary.createTerm(
+            transition.name,
+            transition.name,
+            PMF(transition.name, default=transition.title)))
+
+    return SimpleVocabulary(transitions)
+
+
+class ISubmittedProposalTransitionCommentFormSchema(Interface):
+    """Schema-interface class for the proposal transition comment form
+    """
+    transition = schema.Choice(
+        title=_("label_transition", default="Transition"),
+        source=get_submitted_proposal_transition_vocab,
+        required=False,
+        )
+
+    text = schema.Text(
+        title=_('label_comment', default="Comment"),
+        required=False,
+        )
+
+
+class SubmittedProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
 
     allow_prefill_from_GET_request = True  # XXX
 
-    fields = field.Fields(IProposalTransitionCommentFormSchemaSQL)
+    fields = field.Fields(ISubmittedProposalTransitionCommentFormSchema)
     # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
 
@@ -196,11 +196,11 @@ class ProposalTransitionCommentAddFormSQL(form.AddForm, AutoExtensibleForm):
         return self._transition
 
     def updateWidgets(self):
-        super(ProposalTransitionCommentAddFormSQL, self).updateWidgets()
+        super(SubmittedProposalTransitionCommentAddForm, self).updateWidgets()
         self.widgets['transition'].mode = HIDDEN_MODE
 
     def updateActions(self):
-        super(ProposalTransitionCommentAddFormSQL, self).updateActions()
+        super(SubmittedProposalTransitionCommentAddForm, self).updateActions()
         self.actions["save"].addClass("context")
 
     @button.buttonAndHandler(_(u'button_confirm', default='Confirm'),
@@ -221,9 +221,9 @@ class ProposalTransitionCommentAddFormSQL(form.AddForm, AutoExtensibleForm):
         return self.request.RESPONSE.redirect('.')
 
 
-class ProposalTransitionCommentAddFormViewSQL(layout.FormWrapper):
+class SubmittedProposalTransitionCommentAddFormView(layout.FormWrapper):
 
-    form = ProposalTransitionCommentAddFormSQL
+    form = SubmittedProposalTransitionCommentAddForm
 
 
 class IProposalCommentFormSchema(Interface):

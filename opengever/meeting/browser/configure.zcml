@@ -415,8 +415,8 @@
 
   <browser:page
       name="addtransitioncomment_sql"
-      class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormViewSQL"
-      for="opengever.meeting.proposal.IBaseProposal"
+      class="opengever.meeting.proposal_transition_comment.SubmittedProposalTransitionCommentAddFormView"
+      for="opengever.meeting.proposal.ISubmittedProposal"
       permission="cmf.AddPortalContent"
       />
 

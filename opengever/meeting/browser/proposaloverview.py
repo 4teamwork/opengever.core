@@ -6,7 +6,7 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.proposal_transition_comment import ProposalTransitionCommentAddFormSQL
+from opengever.meeting.proposal_transition_comment import SubmittedProposalTransitionCommentAddForm
 from opengever.tabbedview import GeverTabMixin
 from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
@@ -128,7 +128,7 @@ class ProposalOverview(OverviewBase, BrowserView, GeverTabMixin):
 class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
 
     def transition_url(self, transition):
-        return ProposalTransitionCommentAddFormSQL.url_for(
+        return SubmittedProposalTransitionCommentAddForm.url_for(
             self.context, transition.name)
 
     def transitions(self):
