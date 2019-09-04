@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-28 06:53+0000\n"
+"POT-Creation-Date: 2019-09-04 09:28+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,6 +212,11 @@ msgstr "Erinnerungen"
 #: ./opengever/activity/browser/settings.py
 msgid "label_tasks"
 msgstr "Aufgaben"
+
+#. Default: "Workspaces"
+#: ./opengever/activity/browser/settings.py
+msgid "label_workspaces"
+msgstr "Teamräume"
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/error_handling.py
@@ -433,6 +438,21 @@ msgstr "Auftragnehmer"
 msgid "title_daily_digest"
 msgstr "Tageszusammenfassung für ${username}"
 
+#. Default: "ToDo assigned"
+#: ./opengever/activity/__init__.py
+msgid "todo-assigned"
+msgstr "ToDo zugewiesen"
+
+#. Default: "ToDo modified"
+#: ./opengever/activity/__init__.py
+msgid "todo-modified"
+msgstr "ToDo modifiziert"
+
+#. Default: "ToDo responsible"
+#: ./opengever/activity/roles.py
+msgid "todo_responsible_role"
+msgstr "ToDo Verantwortlicher"
+
 #. Default: "Document added"
 #: ./opengever/activity/__init__.py
 msgid "transition-add-document"
@@ -442,3 +462,8 @@ msgstr "Dokument hinzugefügt"
 #: ./opengever/activity/__init__.py
 msgid "transition-add-subtask"
 msgstr "Unteraufgabe erstellt"
+
+#. Default: "Workspace member"
+#: ./opengever/activity/roles.py
+msgid "workspace_member_role"
+msgstr "Teamraum Mitglied"

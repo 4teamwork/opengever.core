@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-07-12 15:11+0000\n"
+"POT-Creation-Date: 2019-09-04 08:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,14 @@ msgstr ""
 #: ./opengever/workspace/participation/browser/participants_view.py
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Action"
+msgstr ""
+
+#: ./opengever/workspace/activities.py
+msgid "Closed by ${user}"
+msgstr ""
+
+#: ./opengever/workspace/activities.py
+msgid "Commented by ${user}"
 msgstr ""
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
@@ -64,6 +72,10 @@ msgstr ""
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Participant invited"
+msgstr ""
+
+#: ./opengever/workspace/activities.py
+msgid "Reopened by ${user}"
 msgstr ""
 
 #: ./opengever/workspace/participation/browser/participants_view.py
@@ -158,12 +170,33 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/workspace/browser/tabs.py
 #: ./opengever/workspace/todo.py
+#: ./opengever/workspace/todolist.py
 msgid "label_title"
 msgstr ""
 
 #. Default: "ToDo"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_todo"
+msgstr ""
+
+#. Default: "ToDo assigned"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_assigned_activity"
+msgstr ""
+
+#. Default: "ToDo closed"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_closed_activity"
+msgstr ""
+
+#. Default: "ToDo commented"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_commented_activity"
+msgstr ""
+
+#. Default: "ToDo reopened"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_reopened_activity"
 msgstr ""
 
 #. Default: "Trash"
@@ -174,6 +207,11 @@ msgstr ""
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
+msgstr ""
+
+#. Default: "Assigned to ${responsible} by ${user}"
+#: ./opengever/workspace/activities.py
+msgid "summary_todo_assigned_activity"
 msgstr ""
 
 #. Default: "Manage participation of ${workspace}"
