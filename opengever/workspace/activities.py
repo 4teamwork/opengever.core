@@ -1,3 +1,4 @@
+from Acquisition import aq_chain
 from opengever.activity import notification_center
 from opengever.activity.base import BaseActivity
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
@@ -43,6 +44,18 @@ class WorkspaceWatcherManager(object):
         todos = catalog(portal_type="opengever.workspace.todo")
         for todo in todos:
             self.center.add_watcher_to_resource(todo.getObject(), participant, role)
+
+    def participant_removed(self, participant):
+        """We remove all subscriptions for participant on objects that are in
+        self.workspace, as the participant is being removed from the workspace.
+        """
+        watcher = self.center.fetch_watcher(participant)
+        if watcher is None:
+            return
+        for subscription in watcher.subscriptions:
+            obj = subscription.resource.oguid.resolve_object()
+            if self.workspace in aq_chain(obj):
+                self.center.remove_watcher_from_resource(obj, participant, subscription.role)
 
 
 class ToDoAssignedActivity(BaseActivity):

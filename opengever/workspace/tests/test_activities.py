@@ -9,6 +9,7 @@ from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspace.participation.storage import IInvitationStorage
+from plone.protect import createToken
 from unittest import skip
 from zope.component import getUtility
 import json
@@ -156,6 +157,30 @@ class TestToDoWatchers(IntegrationTestCase):
         self.assertItemsEqual(
             [self.todo, self.assigned_todo, self.completed_todo],
             [resource.oguid.resolve_object() for resource in watcher.resources])
+
+    @browsing
+    def test_deleted_workspace_member_is_removed_as_watcher_from_all_todos(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        self.center.add_watcher_to_resource(self.todo,
+                                            self.workspace_member.getId(),
+                                            WORKSPACE_MEMBER_ROLE)
+
+        watcher = self.center.fetch_watcher(self.workspace_member.getId())
+        subscriptions = watcher.subscriptions
+        self.assertEqual(2, len(subscriptions))
+        expected = [(TODO_RESPONSIBLE_ROLE, self.assigned_todo),
+                    (WORKSPACE_MEMBER_ROLE, self.todo)]
+        actual = [(subscription.role, subscription.resource.oguid.resolve_object())
+                  for subscription in subscriptions]
+        self.assertItemsEqual(expected, actual)
+
+        browser.open(self.workspace.absolute_url() + '/manage-participants/delete',
+                     data={'token': self.workspace_member.getId(),
+                           'type': 'user',
+                           '_authenticator': createToken()})
+
+        self.center.session.refresh(watcher)
+        self.assertEqual([], watcher.subscriptions)
 
 
 class TestToDoActivities(IntegrationTestCase):
