@@ -5,10 +5,12 @@ from datetime import date
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.oguid import Oguid
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
 from plone import api
+import json
 
 
 class TestProposalSubmit(IntegrationTestCase):
@@ -17,22 +19,8 @@ class TestProposalSubmit(IntegrationTestCase):
         'meeting',
     )
 
-    @browsing
-    def test_proposal_submission_works_correctly(self, browser):
-        self.login(self.dossier_responsible, browser)
-        self.add_related_item(self.draft_proposal, self.document)
+    def _assert_proposal_submitted_correctly(self, browser):
         proposal_model = self.draft_proposal.load_model()
-        self.assertIsNone(proposal_model.submitted_physical_path)
-        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
-        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
-
-        self.assertIsNone(self.draft_proposal.date_of_submission)
-
-        browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-submit")
-        browser.click_on("Confirm")
-        statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Review state changed successfully.')
 
         self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
         self.assert_workflow_state('proposal-state-submitted', self.draft_proposal)
@@ -76,6 +64,47 @@ class TestProposalSubmit(IntegrationTestCase):
         self.assertEqual(
             self.document.absolute_url(),
             browser.css('.portalMessage.info a').first.get('href'))
+
+    @browsing
+    def test_api_proposal_submit_transition(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.add_related_item(self.draft_proposal, self.document)
+
+        data = {'text': 'Fertig!'}
+        url = '{}/@workflow/proposal-transition-submit'.format(
+            self.draft_proposal.absolute_url())
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        proposal_history = IHistory(self.draft_proposal)
+        proposal_submitted = list(proposal_history)[1]
+        self.assertEqual(u'Fertig!', proposal_submitted.text)
+        self.assertEqual(u'submitted', proposal_submitted.history_type)
+
+        doc_submitted = list(proposal_history)[0]
+        self.assertEqual(u'document_submitted', doc_submitted.history_type)
+
+        self._assert_proposal_submitted_correctly(browser)
+
+    @browsing
+    def test_proposal_submission_works_correctly(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.add_related_item(self.draft_proposal, self.document)
+
+        proposal_model = self.draft_proposal.load_model()
+        self.assertIsNone(proposal_model.submitted_physical_path)
+        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
+        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
+
+        self.assertIsNone(self.draft_proposal.date_of_submission)
+
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on("proposal-transition-submit")
+        browser.click_on("Confirm")
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Review state changed successfully.')
+
+        self._assert_proposal_submitted_correctly(browser)
 
     @browsing
     def test_proposal_can_not_be_submitted_when_committee_is_inactive(self, browser):
