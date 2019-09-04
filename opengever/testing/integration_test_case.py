@@ -102,7 +102,8 @@ class IntegrationTestCase(TestCase):
     features = ()
     api_headers = {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'}
+        'Content-Type': 'application/json',
+    }
 
     def setUp(self):
         super(IntegrationTestCase, self).setUp()

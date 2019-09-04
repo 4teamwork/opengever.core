@@ -10,11 +10,6 @@ import json
 
 class TestTransitionExtender(IntegrationTestCase):
 
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-
     def test_implements_interface(self):
         verifyClass(ITransitionExtender, TransitionExtender)
 

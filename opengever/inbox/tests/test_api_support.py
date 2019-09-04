@@ -11,11 +11,6 @@ import json
 
 class TestAPITransitions(IntegrationTestCase):
 
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-
     @browsing
     def test_close_forwarding(self, browser):
         self.login(self.secretariat_user, browser=browser)

@@ -9,11 +9,6 @@ import json
 
 class TestContentCreation(IntegrationTestCase):
 
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-
     def setUp(self):
         super(TestContentCreation, self).setUp()
         self.portal = self.layer['portal']

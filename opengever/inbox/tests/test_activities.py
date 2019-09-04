@@ -189,11 +189,6 @@ class TestForwardingActivitesIntegration(IntegrationTestCase):
 
     features = ('activity', )
 
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-
     @browsing
     def test_assign_to_dossier_open_successor_task(self, browser):
         self.login(self.secretariat_user, browser=browser)
