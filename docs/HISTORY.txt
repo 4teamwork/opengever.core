@@ -10,20 +10,16 @@ Changelog
 - Do no longer render `None` value in document description. [elioschmutz]
 - Prevent copy / paste of checked out documents. [njohner]
 - Add is_subdossier and is_subtask to listing endpoint. [njohner]
-- Bump ftw.solr to 2.6.1 to get fix path_depth handling. [phgross]
-- Handle special characters in link to advanced search. [njohner]
 - Correctly handle inactive groups in the sharing view. [njohner]
 - Drop custom model forms for proposals and create proposal model via event handler. [deiferni]
 - Include original files in ech0160 SIP export even when archival_file exists. [njohner]
 - Add filename and checked_out fields to recently-touched endpoint. [njohner]
-- Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 
 2019.4.0rc2 (2019-08-21)
 ------------------------
 
 - Introduce `IBaseProposal` class, `ISubmittedProposal` no longer inherits from `IProposal`. [deiferni]
-- Bump ftw.solr to 2.6.0 to get fix for metadata getting overwritten by extract handler. [lgraf]
 - Move remaining proposal model fields to plone content type. [deiferni]
 - Implement FTPSTransport for uploading SIPs to FTPS server. [lgraf]
 - Display keywords in Mail overview. [njohner]
@@ -41,7 +37,6 @@ Changelog
 2019.4.0rc1 (2019-08-08)
 ------------------------
 
-- Bump ftw.bumblebee to 3.7.3 to get fix for indexing checksum in ftw.solr. [lgraf]
 - Implement SIP delivery via FilesystemTransport. [lgraf]
 - Disallow deleting repository folders and roots except from the RepositoryDeleter. [njohner]
 - Expose document actions in @actions endpoint in separate file_actions category. [njohner, deiferni]
@@ -49,7 +44,6 @@ Changelog
 - Nightly jobs: Don't require ftw.raven when running locally [lgraf]
 - Fix team actor profile_url for foreign users. [phgross]
 - Include actor_id and actor_label in @notifications endpoint responses. [lgraf]
-- Bump docxcompose version to 1.0.1 [njohner]
 - Improve SIP package generation and download. [phgross]
 - Fix qa tests. [lgraf]
 - Disable properties action for teams. [deiferni]
@@ -86,10 +80,25 @@ Changelog
 - Update Solr to version 8.1.1. [buchi]
 
 
-2019.3.0 (2019-06-17)
+2019.3.2 (2019-08-27)
 ---------------------
 
-- Archiving form: Make sure dossier resolution preconditions are validated and handled. [lgraf]
+- Handle special characters in link to advanced search. [njohner]
+- Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
+
+
+2019.3.1 (2019-08-27)
+---------------------
+
+- Bump ftw.solr to 2.6.1 to get fix path_depth handling. [phgross]
+- Bump ftw.solr to 2.6.0 to get fix for metadata getting overwritten by extract handler. [lgraf]
+- Bump ftw.bumblebee to 3.7.3 to get fix for indexing checksum in ftw.solr. [lgraf]
+- Bump docxcompose version to 1.0.1 [njohner]
+
+
+2019.3.0 (2019-06-17) does not include 2019.2.6
+-----------------------------------------------
+
 - Fix encoding issue in OGDSUpdater's error logging. [lgraf]
 - Provides support for some additional metadata on the search endpoint. [phgross]
 - Include file_extension in API representation of documents. [phgross]
@@ -110,6 +119,20 @@ Changelog
 - Extend listing endpoint fields with file_extension and document_type. [phgross]
 - Extend task API serialization with responses data. [phgross]
 - Fix livesearch endpoint when using Solr. [buchi]
+
+
+2019.2.6 (2019-08-27)
+---------------------
+
+- Bump docxcompose version to 1.0.1 [njohner]
+- Handle special characters in link to advanced search. [njohner]
+- Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
+
+
+2019.2.5 (2019-06-07)
+---------------------
+
+- Archiving form: Make sure dossier resolution preconditions are validated and handled. [lgraf]
 
 
 2019.2.4 (2019-06-07)
