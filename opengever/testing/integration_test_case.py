@@ -19,6 +19,7 @@ from opengever.document.archival_file import STATE_CONVERTED
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import get_current_admin_unit

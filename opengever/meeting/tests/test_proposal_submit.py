@@ -53,8 +53,7 @@ class TestProposalSubmit(IntegrationTestCase):
         self.assertEqual(self.document.file.filename,
                          submitted_document.file.filename)
 
-        self.assertSubmittedDocumentCreated(
-            self.draft_proposal, self.document, submitted_document)
+        self.assertSubmittedDocumentCreated(self.draft_proposal, self.document)
 
         # document should have custom lock message
         browser.open(submitted_document)

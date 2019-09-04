@@ -13,7 +13,6 @@ from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Proposal
-from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
@@ -584,14 +583,8 @@ class TestProposal(IntegrationTestCase):
 
         self.login(self.committee_responsible)
         # submitted proposal created
-        model = self.draft_proposal.load_model()
-        submitted_path = model.submitted_physical_path.encode('utf-8')
-        submitted_proposal = self.portal.restrictedTraverse(submitted_path)
-
-        submitted_mail = submitted_proposal.get_documents()[0]
         self.assertSubmittedDocumentCreated(self.draft_proposal,
-                                            self.mail_eml,
-                                            submitted_mail)
+                                            self.mail_eml)
 
     @browsing
     def test_proposal_document_title_is_not_overridden_on_submit(self, browser):
@@ -687,8 +680,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(ori_document.Title(), submitted_document.Title())
         self.assertEqual(ori_document.file.filename, submitted_document.file.filename)
 
-        self.assertSubmittedDocumentCreated(
-            self.proposal, ori_document, submitted_document)
+        self.assertSubmittedDocumentCreated(self.proposal, ori_document)
 
         # submitted document should be locked by custom lock
         lockable = ILockable(submitted_document)
