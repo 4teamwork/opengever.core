@@ -108,6 +108,9 @@ class ResponseContainer(object):
 
         return list(storage.items())
 
+    def delete(self, key):
+        del self._storage()[key]
+
     def __contains__(self, key):
         storage = self._storage()
         if not storage:
