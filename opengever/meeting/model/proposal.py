@@ -376,18 +376,24 @@ class Proposal(Base):
         assert self.is_decided()
         IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
 
-    def decide(self, agenda_item):
-        document = self.resolve_submitted_proposal().get_proposal_document()
-        checkout_manager = getMultiAdapter((document, document.REQUEST),
-                                           ICheckinCheckoutManager)
-        if checkout_manager.get_checked_out_by() is not None:
-            raise ValueError(
-                'Cannot decide proposal when proposal document is checked out.')
+    def decide(self, agenda_item, excerpt_document):
+        # Proposals for AgendaItems that were decided before we introduced that
+        # Proposals get decided only when the excerpt is returned can be
+        # already decided even if the proposal has not been returned. Thus we
+        # only decide the proposal if it has not been decided yet.
+        if not self.is_decided():
+            proposal_document = self.resolve_submitted_proposal().get_proposal_document()
+            checkout_manager = getMultiAdapter((proposal_document, proposal_document.REQUEST),
+                                               ICheckinCheckoutManager)
+            if checkout_manager.get_checked_out_by() is not None:
+                raise ValueError(
+                    'Cannot decide proposal when proposal document is checked out.')
 
-        submitted_proposal = self.resolve_submitted_proposal()
-        ProposalDecideActivity(submitted_proposal, getRequest()).record()
-        IHistory(submitted_proposal).append_record(u'decided')
-        self.execute_transition('scheduled-decided')
+            submitted_proposal = self.resolve_submitted_proposal()
+            ProposalDecideActivity(submitted_proposal, getRequest()).record()
+            IHistory(submitted_proposal).append_record(u'decided')
+            self.execute_transition('scheduled-decided')
+        self._return_excerpt(excerpt_document)
 
     def register_excerpt(self, document_intid):
         """Adds a GeneratedExcerpt database entry and a corresponding
@@ -400,7 +406,7 @@ class Proposal(Base):
         self.session.add(excerpt)
         self.excerpt_document = excerpt
 
-    def return_excerpt(self, document):
+    def _return_excerpt(self, document):
         """Return the selected excerpt to the proposals originating dossier.
 
         The document is registered as official excerpt for this proposal and
@@ -415,10 +421,10 @@ class Proposal(Base):
             oguid=Oguid.for_object(document), generated_version=version)
         self.submitted_excerpt_document = excerpt
 
-        document_intid = self.copy_excerpt_to_proposal_dossier()
+        document_intid = self._copy_excerpt_to_proposal_dossier()
         self.register_excerpt(document_intid)
 
-    def copy_excerpt_to_proposal_dossier(self):
+    def _copy_excerpt_to_proposal_dossier(self):
         """Copies the submitted excerpt to the source dossier and returns
         the intid of the created document.
         """

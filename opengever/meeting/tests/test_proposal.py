@@ -561,13 +561,16 @@ class TestProposal(IntegrationTestCase):
         the job of the agenda item controller, not of the proposal model.
         """
         self.login(self.committee_responsible)
-        item = self.schedule_proposal(self.meeting,
-                                      self.submitted_proposal)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_proposal)
+        agenda_item.decide()
+        excerpt = agenda_item.generate_excerpt('Foo')
+
         self.checkout_document(self.submitted_proposal.get_proposal_document())
 
         model = self.submitted_proposal.load_model()
         with self.assertRaises(ValueError) as cm:
-            model.decide(item)
+            model.decide(agenda_item, excerpt)
 
         self.assertEquals(
             'Cannot decide proposal when proposal document is checked out.',

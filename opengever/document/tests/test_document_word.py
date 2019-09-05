@@ -37,8 +37,7 @@ class TestDocumentProposal(IntegrationTestCase):
 
         meeting_dossier_excerpt, = children['added']
         with self.observe_children(self.dossier) as children:
-            self.submitted_proposal.load_model().return_excerpt(
-                meeting_dossier_excerpt)
+            agenda_item.return_excerpt(meeting_dossier_excerpt)
 
         case_dossier_excerpt, = children['added']
         with self.login(self.dossier_responsible):
