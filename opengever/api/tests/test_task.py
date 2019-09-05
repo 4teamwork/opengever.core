@@ -1,6 +1,10 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
+from opengever.base.response import IResponseContainer
 from opengever.testing import IntegrationTestCase
 from plone.restapi.serializer.converters import json_compatible
+import json
 
 
 class TestTaskSerialization(IntegrationTestCase):
@@ -92,3 +96,37 @@ class TestTaskSerialization(IntegrationTestCase):
               u'rendered_text': u'',
               u'transition': u'transition-add-document'}],
             browser.json['responses'])
+
+    @browsing
+    def test_adding_a_response_sucessful(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        current_responses_count = len(IResponseContainer(self.task))
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            url = '{}/@responses'.format(self.task.absolute_url())
+            browser.open(url, method="POST", headers=self.api_headers,
+                         data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
+
+        self.assertEquals(current_responses_count + 1,
+                          len(IResponseContainer(self.task)))
+
+        self.assertEquals(201, browser.status_code)
+        self.maxDiff = None
+        self.assertEquals(
+            {u'@id': '{}/@responses/1481272800000000'.format(self.task.absolute_url()),
+             'response_id': 1481272800000000,
+             'response_type': 'comment',
+             u'created': u'2016-12-09T09:40:00',
+             u'changes': [],
+             u'creator': {
+                 u'token': self.regular_user.id,
+                 u'title': u'B\xe4rfuss K\xe4thi'},
+             u'text': u'Angebot \xfcberpr\xfcft',
+             u'transition': u'',
+             u'successor_oguid': u'',
+             u'rendered_text': u'',
+             u'related_items': [],
+             u'mimetype': u'',
+             u'added_objects': []},
+            browser.json)

@@ -3,6 +3,7 @@ from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
 from opengever.base.response import Response
 from opengever.ogds.base.actor import Actor
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import ISerializeToJson
@@ -14,6 +15,7 @@ from zExceptions import NotFound
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
@@ -100,6 +102,9 @@ class ResponsePost(Service):
     """
 
     def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         data = json_body(self.request)
 
         text = data.get('text')
@@ -139,6 +144,9 @@ class ResponsePatch(Service):
         return self.params[0]
 
     def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         response_container = IResponseContainer(self.context)
         if self._get_response_id not in response_container:
             raise NotFound
