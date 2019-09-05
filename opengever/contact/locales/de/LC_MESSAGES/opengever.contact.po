@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-05 17:31+0000\n"
+"POT-Creation-Date: 2019-09-05 07:50+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -19,6 +19,7 @@ msgid "Active"
 msgstr "Aktiv"
 
 #. Default: "Add Person"
+#: ./opengever/contact/browser/organization.py
 #: ./opengever/contact/browser/person.py
 msgid "Add Person"
 msgstr "Person hinzufügen"
@@ -65,6 +66,11 @@ msgstr "Bearbeiten"
 #: ./opengever/contact/browser/templates/participations.pt
 msgid "button_remove"
 msgstr "Löschen"
+
+#. Default: "Send e-Mail"
+#: ./opengever/contact/browser/templates/participations.pt
+msgid "button_send_mail"
+msgstr "E-Mail senden"
 
 #. Default: "Academic title"
 #: ./opengever/contact/browser/person_listing.py
@@ -177,9 +183,15 @@ msgstr "Adresse (Strasse / Nr.)"
 msgid "label_address2"
 msgstr "Adresszusatz"
 
+#. Default: "Label address"
+#: ./opengever/contact/browser/person.py
+msgid "label_address_label"
+msgstr "Adresse"
+
 #. Default: "Addresses"
+#: ./opengever/contact/browser/organization.py
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/browser/templates/organization.pt
-#: ./opengever/contact/browser/templates/person.pt
 msgid "label_addresses"
 msgstr "Adressen"
 
@@ -218,6 +230,7 @@ msgid "label_cancel"
 msgstr "Abbrechen"
 
 #. Default: "City"
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_city"
 msgstr "Ort"
@@ -233,6 +246,7 @@ msgid "label_contact"
 msgstr "Kontakt"
 
 #. Default: "Country"
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_country"
 msgstr "Land"
@@ -319,12 +333,29 @@ msgstr "Lokal"
 msgid "label_mail"
 msgstr "E-Mail-Adressen"
 
+#. Default: "Mail address"
+#: ./opengever/contact/browser/person.py
+msgid "label_mail_address"
+msgstr "E-Mail Adresse"
+
+#. Default: "Label mail address"
+#: ./opengever/contact/browser/person.py
+msgid "label_mail_address_label"
+msgstr "Label"
+
+#. Default: "Mail addresses"
+#: ./opengever/contact/browser/organization.py
+#: ./opengever/contact/browser/person.py
+msgid "label_mail_addresses"
+msgstr "E-Mail Adressen"
+
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_mobile"
 msgstr "Mobiltelefon"
 
 #. Default: "Name"
+#: ./opengever/contact/browser/organization.py
 #: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_name"
@@ -382,9 +413,20 @@ msgstr "Telefon Privat"
 msgid "label_phone_mobile"
 msgstr "Telefon Mobile"
 
+#. Default: "Phone number"
+#: ./opengever/contact/browser/person.py
+msgid "label_phone_number"
+msgstr "Nummer"
+
+#. Default: "Label phone number"
+#: ./opengever/contact/browser/person.py
+msgid "label_phone_number_label"
+msgstr "Label"
+
 #. Default: "Phone numbers"
+#: ./opengever/contact/browser/organization.py
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/browser/templates/organization.pt
-#: ./opengever/contact/browser/templates/person.pt
 msgid "label_phone_numbers"
 msgstr "Telefonnummern"
 
@@ -426,6 +468,11 @@ msgstr "Laufnummer"
 msgid "label_show_all"
 msgstr "Alle ${total} Beteiligungen anzeigen"
 
+#. Default: "Street"
+#: ./opengever/contact/browser/person.py
+msgid "label_street"
+msgstr "Strasse"
+
 #: ./opengever/contact/browser/tabs.py
 msgid "label_tabbedview_filter_all"
 msgstr "Alle"
@@ -459,6 +506,11 @@ msgstr "Benutzer"
 #. Default: "ZIP"
 #: ./opengever/contact/contact.py
 msgid "label_zip"
+msgstr "PLZ"
+
+#. Default: "Zip code"
+#: ./opengever/contact/browser/person.py
+msgid "label_zip_code"
 msgstr "PLZ"
 
 #. Default: "Function"

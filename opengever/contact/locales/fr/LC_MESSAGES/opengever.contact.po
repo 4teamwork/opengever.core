@@ -1,27 +1,27 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-05 17:31+0000\n"
+"POT-Creation-Date: 2019-09-05 07:50+0000\n"
 "PO-Revision-Date: 2017-11-29 11:04+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-contact/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/contact/browser/tabs.py
 msgid "Active"
 msgstr "Actif"
 
 #. Default: "Add Person"
+#: ./opengever/contact/browser/organization.py
 #: ./opengever/contact/browser/person.py
 msgid "Add Person"
 msgstr "Ajouter une personne"
@@ -68,6 +68,11 @@ msgstr "Editer"
 #: ./opengever/contact/browser/templates/participations.pt
 msgid "button_remove"
 msgstr "Effacer"
+
+#. Default: "Send e-Mail"
+#: ./opengever/contact/browser/templates/participations.pt
+msgid "button_send_mail"
+msgstr ""
 
 #. Default: "Academic title"
 #: ./opengever/contact/browser/person_listing.py
@@ -180,9 +185,15 @@ msgstr "Adresse (rue / n°)"
 msgid "label_address2"
 msgstr "Complément d'adresse"
 
+#. Default: "Label address"
+#: ./opengever/contact/browser/person.py
+msgid "label_address_label"
+msgstr ""
+
 #. Default: "Addresses"
+#: ./opengever/contact/browser/organization.py
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/browser/templates/organization.pt
-#: ./opengever/contact/browser/templates/person.pt
 msgid "label_addresses"
 msgstr "Adresses"
 
@@ -221,6 +232,7 @@ msgid "label_cancel"
 msgstr "Annuler"
 
 #. Default: "City"
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_city"
 msgstr "Localité"
@@ -236,6 +248,7 @@ msgid "label_contact"
 msgstr "Contact"
 
 #. Default: "Country"
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_country"
 msgstr "Pays"
@@ -322,12 +335,29 @@ msgstr "Local"
 msgid "label_mail"
 msgstr "Adresses électroniques"
 
+#. Default: "Mail address"
+#: ./opengever/contact/browser/person.py
+msgid "label_mail_address"
+msgstr ""
+
+#. Default: "Label mail address"
+#: ./opengever/contact/browser/person.py
+msgid "label_mail_address_label"
+msgstr ""
+
+#. Default: "Mail addresses"
+#: ./opengever/contact/browser/organization.py
+#: ./opengever/contact/browser/person.py
+msgid "label_mail_addresses"
+msgstr ""
+
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_mobile"
 msgstr "Téléphone portable"
 
 #. Default: "Name"
+#: ./opengever/contact/browser/organization.py
 #: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_name"
@@ -385,9 +415,20 @@ msgstr "Téléphone privé"
 msgid "label_phone_mobile"
 msgstr "Téléphone mobile"
 
+#. Default: "Phone number"
+#: ./opengever/contact/browser/person.py
+msgid "label_phone_number"
+msgstr ""
+
+#. Default: "Label phone number"
+#: ./opengever/contact/browser/person.py
+msgid "label_phone_number_label"
+msgstr ""
+
 #. Default: "Phone numbers"
+#: ./opengever/contact/browser/organization.py
+#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/browser/templates/organization.pt
-#: ./opengever/contact/browser/templates/person.pt
 msgid "label_phone_numbers"
 msgstr "Numéros de téléphone"
 
@@ -429,6 +470,11 @@ msgstr "Numéro courant"
 msgid "label_show_all"
 msgstr "Indiquer toutes les participations ${total}"
 
+#. Default: "Street"
+#: ./opengever/contact/browser/person.py
+msgid "label_street"
+msgstr ""
+
 #: ./opengever/contact/browser/tabs.py
 msgid "label_tabbedview_filter_all"
 msgstr "Tous"
@@ -463,6 +509,11 @@ msgstr "Utilisateurs"
 #: ./opengever/contact/contact.py
 msgid "label_zip"
 msgstr "NP"
+
+#. Default: "Zip code"
+#: ./opengever/contact/browser/person.py
+msgid "label_zip_code"
+msgstr ""
 
 #. Default: "Function"
 #: ./opengever/contact/contact.py
