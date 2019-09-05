@@ -1,7 +1,6 @@
 from BTrees.LOBTree import LOBTree
 from contextlib import contextmanager
 from datetime import datetime
-from opengever.base import _
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
@@ -118,35 +117,17 @@ class IResponse(Interface):
     """Interface and schema for the response object, an object added to
     plone content objects."""
 
-    response_type = schema.TextLine(
-        title=_(u'label_response_type', default=u'Response type'),
-        required=True
-    )
+    response_type = schema.TextLine(required=True)
 
-    response_id = schema.Int(
-        title=_(u'label_response_id', default=u'Response ID'),
-        required=True
-    )
+    response_id = schema.Int(required=True)
 
-    created = schema.Date(
-        title=_(u'label_created', default=u'Created'),
-        required=True
-    )
+    created = schema.Date(required=True)
 
-    creator = schema.TextLine(
-        title=_(u'label_creator', default=u'Creator'),
-        required=True
-    )
+    creator = schema.TextLine(required=True)
 
-    text = schema.Text(
-        title=_(u'label_text', default=u'Text'),
-        required=False,
-    )
+    text = schema.Text(required=False)
 
-    changes = schema.List(
-        title=_(u'label_changes', default=u'Changes'),
-        required=False,
-        value_type=schema.Dict())
+    changes = schema.List(required=False, value_type=schema.Dict())
 
 
 class Response(Persistent):
