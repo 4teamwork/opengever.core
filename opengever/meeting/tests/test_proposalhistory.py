@@ -47,8 +47,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         entries are correct.
 
         If with_submitted is True also assert that the history entries are
-        present for the submitted proposal. In that case also assert that uuids
-        of history entries from proposal and submitted proposal match.
+        present for the submitted proposal.
         """
         if not proposal:
             proposal = self.proposal
@@ -90,13 +89,6 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             else:
                 nof_records = len(expected_comments)
                 self.assertSequenceEqual(expected_comments, self.get_history_entries_comment(browser)[:nof_records])
-
-        # assert uuid of proposal and submitted proposal record match
-        proposal_history = IHistory(proposal)
-        s_proposal_history = IHistory(submitted_proposal)
-        proposal_history_record = list(proposal_history)[0]
-        s_proposal_history_record = list(s_proposal_history)[0]
-        self.assertEqual(proposal_history_record.uuid, s_proposal_history_record.uuid)
 
     @browsing
     def test_creation_creates_history_entry(self, browser):
@@ -254,9 +246,8 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
     @browsing
     def test_scheduling_creates_history_entry(self, browser):
         self.login(self.meeting_user, browser)
-        scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         with self.login(self.committee_responsible, browser):
-            browser.open(scheduling_url)
+            self.schedule_proposal(self.meeting, self.submitted_proposal)
         self.assert_proposal_history_records(
             u'Scheduled for meeting 9. Sitzung der Rechnungspr\xfcfungskommission '
             u'by M\xfcller Fr\xe4nzi (franzi.muller)',
@@ -268,10 +259,9 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
     @browsing
     def test_removing_from_schedule_creates_history_entry(self, browser):
         self.login(self.meeting_user, browser)
-        scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         unscheduling_url = self.meeting.model.get_url(view='agenda_items/2/delete')
         with self.login(self.committee_responsible, browser):
-            browser.open(scheduling_url)
+            self.schedule_proposal(self.meeting, self.submitted_proposal)
             browser.open(unscheduling_url)
         self.assert_proposal_history_records(
             u'Removed from schedule of meeting 9. Sitzung der Rechnungspr\xfcfungskommission '
@@ -284,13 +274,12 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
     @browsing
     def test_reopening_creates_history_entry(self, browser):
         self.login(self.meeting_user, browser)
-        scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         deciding_url = self.meeting.model.get_url(view='agenda_items/2/decide')
         generate_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/generate_excerpt?excerpt_title=bla')
         return_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/return_excerpt?document={}')
         reopening_url = self.meeting.model.get_url(view='agenda_items/2/reopen')
         with self.login(self.committee_responsible, browser):
-            browser.open(scheduling_url)
+            self.schedule_proposal(self.meeting, self.submitted_proposal)
             browser.open(deciding_url, data={'_authenticator': createToken()})
             browser.open(generate_excerpt_url, data={'_authenticator': createToken()})
             agenda_item = self.meeting.model.agenda_items[0]
@@ -309,12 +298,11 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
     @browsing
     def test_deciding_creates_history_entry(self, browser):
         self.login(self.meeting_user, browser)
-        scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         deciding_url = self.meeting.model.get_url(view='agenda_items/2/decide')
         generate_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/generate_excerpt?excerpt_title=bla')
         return_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/return_excerpt?document={}')
         with self.login(self.committee_responsible, browser):
-            browser.open(scheduling_url)
+            self.schedule_proposal(self.meeting, self.submitted_proposal)
             browser.open(deciding_url, data={'_authenticator': createToken()})
             browser.open(generate_excerpt_url, data={'_authenticator': createToken()})
             agenda_item = self.meeting.model.agenda_items[0]
@@ -331,14 +319,13 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
     @browsing
     def test_revising_creates_history_entry(self, browser):
         self.login(self.meeting_user, browser)
-        scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         deciding_url = self.meeting.model.get_url(view='agenda_items/2/decide')
         generate_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/generate_excerpt?excerpt_title=bla')
         return_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/return_excerpt?document={}')
         reopening_url = self.meeting.model.get_url(view='agenda_items/2/reopen')
         revising_url = self.meeting.model.get_url(view='agenda_items/2/revise')
         with self.login(self.committee_responsible, browser):
-            browser.open(scheduling_url)
+            self.schedule_proposal(self.meeting, self.submitted_proposal)
             browser.open(deciding_url, data={'_authenticator': createToken()})
             browser.open(generate_excerpt_url, data={'_authenticator': createToken()})
             agenda_item = self.meeting.model.agenda_items[0]

@@ -189,6 +189,14 @@
       layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
       />
 
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="receive-proposal-scheduled"
+      class=".receiveproposaltransition.ReceiveProposalScheduled"
+      permission="zope.Public"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
   <!-- committee tabs -->
   <browser:page
       name="tabbedview_view-meetings"

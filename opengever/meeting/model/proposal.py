@@ -1,7 +1,10 @@
+from opengever.base import advancedjson
 from opengever.base.model import Base
 from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.oguid import Oguid
+from opengever.base.request import dispatch_request
+from opengever.base.request import expect_ok_response
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -303,12 +306,24 @@ class Proposal(Base):
 
         self.execute_transition('submitted-scheduled')
         meeting.agenda_items.append(AgendaItem(proposal=self))
-        submitted_proposal = self.resolve_submitted_proposal()
+        meeting.reorder_agenda_items()
 
+        submitted_proposal = self.resolve_submitted_proposal()
         ProposalScheduledActivity(
             submitted_proposal, getRequest(), meeting.meeting_id).record()
         IHistory(self.resolve_submitted_proposal()).append_record(
             u'scheduled', meeting_id=meeting.meeting_id)
+
+        request_data = {'data': advancedjson.dumps({
+            'meeting_id': meeting.meeting_id,
+        })}
+        expect_ok_response(
+            dispatch_request(self.admin_unit_id,
+                             '@@receive-proposal-scheduled',
+                             path=self.physical_path,
+                             data=request_data),
+            'Unexpected response {!r} when scheduling proposal.'
+        )
 
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
