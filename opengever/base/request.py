@@ -48,6 +48,13 @@ def dispatch_json_request(target_admin_unit_id, viewname, path='',
     return json.loads(data)
 
 
+def expect_ok_response(response, msg="Unexpected response {!r}"):
+    response_body = response.read()
+    if response_body != 'OK':
+        raise ValueError(msg.format(response_body))
+    return response
+
+
 def dispatch_request(target_admin_unit_id, viewname, path='',
                      data={}, headers={}):
     """ Sends a request to another zope instance Returns a response stream
