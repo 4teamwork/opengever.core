@@ -41,14 +41,19 @@ builders
 class TestCase(unittest.TestCase):
     """Provide a shared base for opengever.core test classes."""
 
-    def assertSubmittedDocumentCreated(self, proposal, document, submitted_version=0):
-        submitted_document_model = SubmittedDocument.query.get_by_source(proposal, document)
+    def assertSubmittedDocumentCreated(self, proposal, doc_or_mail, submitted_version=0):
+        submitted_document_model = SubmittedDocument.query.get_by_source(
+            proposal, doc_or_mail)
         self.assertIsNotNone(submitted_document_model)
         portal = api.portal.get()
-        submitted_document = portal.restrictedTraverse(submitted_document_model.submitted_physical_path.encode('utf-8'))
-        self.assertEqual(Oguid.for_object(submitted_document), submitted_document_model.submitted_oguid)
-        self.assertEqual(submitted_version, submitted_document_model.submitted_version)
-        self.assertEqual(proposal.load_model(), submitted_document_model.proposal)
+        submitted_document = portal.restrictedTraverse(
+            submitted_document_model.submitted_physical_path.encode('utf-8'))
+        self.assertEqual(Oguid.for_object(submitted_document),
+                         submitted_document_model.submitted_oguid)
+        self.assertEqual(submitted_version,
+                         submitted_document_model.submitted_version)
+        self.assertEqual(proposal.load_model(),
+                         submitted_document_model.proposal)
 
 
 class FunctionalTestCase(TestCase):

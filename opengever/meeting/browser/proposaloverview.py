@@ -6,21 +6,17 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.proposal_transition_comment import ProposalTransitionCommentAddForm
+from opengever.meeting.proposal_transition_comment import SubmittedProposalTransitionCommentAddForm
 from opengever.tabbedview import GeverTabMixin
+from opengever.webactions.interfaces import IWebActionsRenderer
+from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
+from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
-from opengever.webactions.interfaces import IWebActionsRenderer
 
 
 class OverviewBase(object):
-
-    def transitions(self):
-        return self.context.get_transitions()
-
-    def transition_url(self, transition):
-        return ProposalTransitionCommentAddForm.url_for(self.context, transition.name)
 
     def is_comment_allowed(self):
         return self.context.can_comment()
@@ -94,7 +90,14 @@ class OverviewBase(object):
         return renderer()
 
 
-class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
+class ProposalOverview(OverviewBase, BrowserView, GeverTabMixin):
+
+    def transition_items(self):
+        wftool = api.portal.get_tool(name='portal_workflow')
+        return wftool.listActionInfos(object=self.context)
+
+    def transitions(self):
+        return []
 
     def get_submitted_document(self, document):
         return SubmittedDocument.query.get_by_source(
@@ -123,5 +126,17 @@ class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
 
 
 class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
-    """
-    """
+
+    def transition_url(self, transition):
+        return SubmittedProposalTransitionCommentAddForm.url_for(
+            self.context, transition.name)
+
+    def transitions(self):
+        if not api.user.has_permission('Modify portal content',
+                                       obj=self.context):
+            return []
+
+        return self.context.get_transitions()
+
+    def transition_items(self):
+        return []

@@ -401,3 +401,12 @@ msgstr ""
 
 msgid "batch_x_items_matching_your_criteria"
 msgstr ""
+
+msgid "proposal-transition-cancel"
+msgstr ""
+
+msgid "proposal-transition-reactivate"
+msgstr ""
+
+msgid "proposal-transition-submit"
+msgstr ""

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-09 08:18+0000\n"
+"POT-Creation-Date: 2019-09-04 11:26+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -460,7 +460,6 @@ msgstr "Soumettre les pièces jointes."
 
 #. Default: "Cancel"
 #: ./opengever/meeting/model/meeting.py
-#: ./opengever/meeting/model/proposal.py
 msgid "cancel"
 msgstr "Annuler"
 
@@ -895,6 +894,7 @@ msgstr "séances passées"
 #. Default: "Comment"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 #: ./opengever/meeting/proposal_transition_comment.py
+#: ./opengever/meeting/proposaltransition.py
 msgid "label_comment"
 msgstr "Commentaire"
 
@@ -1525,11 +1525,6 @@ msgstr "Aucun modèle n'est configuré pour l'ordre du jour; l'ordre du jour n'a
 msgid "msg_hold_meeting_dialog"
 msgstr "L'ordre du jour ne pourra plus être modifié après la clôture d'un point à l'ordre du jour."
 
-#. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_inactive_committee_selected"
-msgstr "La commission sélectionnée a été désactivé; la requête n'a pas pu être soumise."
-
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"
@@ -1560,21 +1555,6 @@ msgstr "Il n'y a pas de modèle configuré pour la table des matières; la table
 msgid "msg_pending_meetings"
 msgstr "Il y a des séances non clôturées."
 
-#. Default: "Proposal cancelled successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_cancelled"
-msgstr "Requête annulée avec succès."
-
-#. Default: "Proposal reactivated successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_reactivated"
-msgstr "La requête a été réactivée."
-
-#. Default: "Proposal successfully submitted."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_submitted"
-msgstr "Requête soumise avec succès."
-
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
@@ -1589,6 +1569,11 @@ msgstr "Puisque certains fichiers n'ont pas pu être converti en PDF, leur fichi
 #: ./opengever/meeting/browser/views.py
 msgid "msg_successfully_deleted"
 msgstr "L'objet a été supprimé avec succès."
+
+#. Default: "Review state changed successfully."
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "msg_transition_successful"
+msgstr "Statut modifié avec succès."
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
@@ -1758,11 +1743,6 @@ msgstr "Protocole"
 msgid "protocol_excerpt"
 msgstr "Extrait de protocole"
 
-#. Default: "Reactivate"
-#: ./opengever/meeting/model/proposal.py
-msgid "reactivate"
-msgstr "Réactiver"
-
 #. Default: "Reject"
 #: ./opengever/meeting/model/proposal.py
 msgid "reject"
@@ -1807,11 +1787,6 @@ msgstr "Mis à l'ordre du jour"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "send email"
 msgstr "Envoyer un e-mail"
-
-#. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py
-msgid "submit"
-msgstr "Soumettre"
 
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py

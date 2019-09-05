@@ -1,7 +1,3 @@
-from AccessControl import getSecurityManager
-from Acquisition import aq_inner
-from Acquisition import aq_parent
-from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -12,10 +8,11 @@ from ftw.testbrowser.pages import statusmessages
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.oguid import Oguid
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
+from opengever.meeting import CLOSED_PROPOSAL_STATES
+from opengever.meeting import OPEN_PROPOSAL_STATES
+from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.command import MIME_DOCX
-from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
-from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
@@ -31,6 +28,27 @@ from StringIO import StringIO
 from zc.relation.interfaces import ICatalog
 from zExceptions import Unauthorized
 from zope.component import getUtility
+
+
+class TestProposalStateGlobals(IntegrationTestCase):
+
+    def test_state_constants_cover_all_states(self):
+        self.login(self.manager)
+        all_states = OPEN_PROPOSAL_STATES + CLOSED_PROPOSAL_STATES
+
+        wftool = api.portal.get_tool('portal_workflow')
+        workflow = wftool.getWorkflowById('opengever_proposal_workflow')
+        self.assertItemsEqual(all_states, tuple(workflow.states),
+            "Workflow state global definitions and actually available "
+            "workflow states are unequal. You probably have added a new state"
+            "and now the module globals must be updated.")
+
+    def test_submitted_proposal_states_defined_in_workflow(self):
+        wftool = api.portal.get_tool('portal_workflow')
+        workflow = wftool.getWorkflowById('opengever_proposal_workflow')
+
+        self.assertTrue(all(state in tuple(workflow.states)
+                        for state in SUBMITTED_PROPOSAL_STATES))
 
 
 class TestProposalViewsDisabled(IntegrationTestCase):
@@ -533,11 +551,8 @@ class TestProposal(IntegrationTestCase):
         self.checkout_document(document)
         self.assertTrue(self.draft_proposal.contains_checked_out_documents())
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
-        browser.click_on("Confirm")
-        statusmessages.assert_message(
-            'Cannot change the state because the proposal'
-            ' contains checked out documents.')
+        button = browser.find("proposal-transition-submit")
+        self.assertFalse(button)
 
     def test_decide_not_allowed_when_documents_checked_out(self):
         """When deciding the proposal on the proposal model, the proposal
@@ -563,19 +578,13 @@ class TestProposal(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.set_related_items(self.draft_proposal, [self.mail_eml])
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
 
         self.login(self.committee_responsible)
         # submitted proposal created
-        model = self.draft_proposal.load_model()
-        submitted_path = model.submitted_physical_path.encode('utf-8')
-        submitted_proposal = self.portal.restrictedTraverse(submitted_path)
-
-        submitted_mail = submitted_proposal.get_documents()[0]
         self.assertSubmittedDocumentCreated(self.draft_proposal,
-                                            self.mail_eml,
-                                            submitted_mail)
+                                            self.mail_eml)
 
     @browsing
     def test_proposal_document_title_is_not_overridden_on_submit(self, browser):
@@ -583,7 +592,7 @@ class TestProposal(IntegrationTestCase):
         changed_title = u'\xc4nderung'
         self.draft_proposal.get_proposal_document().title = changed_title
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
         self.login(self.committee_responsible)
         # submitted proposal created
@@ -612,66 +621,6 @@ class TestProposal(IntegrationTestCase):
                          model.dossier_reference_number)
 
     @browsing
-    def test_proposal_submission_works_correctly(self, browser):
-        self.login(self.dossier_responsible, browser)
-        self.add_related_item(self.draft_proposal, self.document)
-        proposal_model = self.draft_proposal.load_model()
-        self.assertIsNone(proposal_model.submitted_physical_path)
-        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
-        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
-
-        self.assertIsNone(self.draft_proposal.date_of_submission)
-
-        browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
-        browser.click_on("Confirm")
-        statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal successfully submitted.')
-
-        self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
-        self.assert_workflow_state('proposal-state-submitted', self.draft_proposal)
-        self.assertEqual(date.today(), self.draft_proposal.date_of_submission)
-
-        # submitted proposal created
-        self.login(self.committee_responsible, browser)
-        self.assertEqual(u'opengever-meeting-committeecontainer'
-                         u'/committee-2/submitted-proposal-2',
-                         proposal_model.submitted_physical_path)
-        submitted_proposal = self.portal.restrictedTraverse(
-            proposal_model.submitted_physical_path.encode('utf-8'))
-        self.assertEqual(self.empty_committee,
-                         aq_parent(aq_inner(submitted_proposal)))
-        self.assertEqual(date.today(), submitted_proposal.date_of_submission)
-
-        # model synced
-        self.assertEqual(proposal_model, submitted_proposal.load_model())
-        self.assertEqual(Oguid.for_object(submitted_proposal),
-                         proposal_model.submitted_oguid)
-        self.assertEqual('submitted', proposal_model.workflow_state)
-        self.assertEqual(u'Antrag f\xfcr Kreiselbau',
-                         proposal_model.submitted_title)
-        self.assertEqual(date.today(), proposal_model.date_of_submission)
-
-        # document copied
-        self.assertEqual(1, len(submitted_proposal.get_documents()))
-        submitted_document = submitted_proposal.get_documents()[0]
-        self.assertEqual(self.document.Title(), submitted_document.Title())
-        self.assertEqual(self.document.file.filename,
-                         submitted_document.file.filename)
-
-        self.assertSubmittedDocumentCreated(
-            self.draft_proposal, self.document, submitted_document)
-
-        # document should have custom lock message
-        browser.open(submitted_document)
-        statusmessages.assert_message(
-            u'This document has been submitted as a copy of Vertr\xe4gsentwurf and '
-            u'cannot be edited directly.')
-        self.assertEqual(
-            self.document.absolute_url(),
-            browser.css('.portalMessage.info a').first.get('href'))
-
-    @browsing
     def test_regression_submitted_proposal_title_synced_on_submission(self, browser):
         """Test a regression for a proposal without attachments."""
 
@@ -679,107 +628,13 @@ class TestProposal(IntegrationTestCase):
         proposal_model = self.draft_proposal.load_model()
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
+        browser.click_on("proposal-transition-submit")
         browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal successfully submitted.')
+        statusmessages.assert_message('Review state changed successfully.')
 
         self.assertEqual(u'Antrag f\xfcr Kreiselbau',
                          proposal_model.submitted_title)
-
-    @browsing
-    def test_proposal_can_be_cancelled(self, browser):
-        self.login(self.dossier_responsible, browser)
-        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
-        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
-
-        browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Cancel')
-        browser.click_on("Confirm")
-
-        statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal cancelled successfully.')
-
-        self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
-        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
-
-    @browsing
-    def test_proposal_can_be_reactivated(self, browser):
-        self.login(self.dossier_responsible, browser)
-        self.draft_proposal.execute_transition('pending-cancelled')
-        self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
-
-        browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Reactivate')
-        browser.click_on("Confirm")
-        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
-
-    @browsing
-    def test_proposal_can_not_be_submitted_when_committee_is_inactive(self, browser):
-        self.login(self.committee_responsible)
-        self.empty_committee.load_model().deactivate()
-        self.assertEqual(Committee.STATE_INACTIVE,
-                         self.empty_committee.load_model().get_state())
-
-        self.login(self.dossier_responsible, browser)
-        browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
-        browser.click_on("Confirm")
-
-        statusmessages.assert_message(
-            u'The selected committeee has been deactivated, the proposal '
-            u'could not been submitted.')
-        self.assertEqual(self.draft_proposal.absolute_url(), browser.url)
-        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
-
-    @browsing
-    def test_resubmit_rejected_proposal_with_mail_attachments(self, browser):
-        with self.login(self.dossier_responsible, browser):
-            self.draft_proposal.relatedItems.append(
-                self.as_relation_value(self.mail_eml))
-
-            browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-            browser.click_on('Submit')
-            browser.click_on('Confirm')
-
-            submitted_proposal = self.draft_proposal.load_model().resolve_submitted_proposal()
-
-        with self.login(self.committee_responsible, browser):
-            browser.visit(submitted_proposal, view='tabbedview_view-overview')
-            browser.click_on('Reject')
-            browser.click_on('Confirm')
-
-        with self.login(self.dossier_responsible, browser):
-            browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-            browser.click_on('Submit')
-            browser.click_on('Confirm')
-
-            statusmessages.assert_message('Proposal successfully submitted.')
-
-    @browsing
-    def test_proposal_can_be_submitted_without_permission_on_commitee(self, browser):
-        self.login(self.dossier_responsible, browser)
-        # https://github.com/4teamwork/opengever.ftw/issues/41
-        self.assertFalse(getSecurityManager().checkPermission(
-            'View', self.draft_proposal.get_committee()))
-        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
-        browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
-        browser.click_on("Confirm")
-        self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
-        statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Proposal successfully submitted.')
-        self.assertEqual('proposal-state-submitted',
-                         api.content.get_state(self.draft_proposal))
-
-        self.login(self.administrator)
-        model = self.draft_proposal.load_model()
-        submitted_proposal = model.resolve_submitted_proposal()
-        proposal_file = self.draft_proposal.get_proposal_document().file
-        submitted_proposal_file = submitted_proposal.get_proposal_document().file
-        with proposal_file.open() as expected:
-            with submitted_proposal_file.open() as got:
-                self.assertEquals(expected.read(), got.read())
 
     def test_copying_proposals_is_prevented(self):
         self.login(self.administrator)
@@ -813,20 +668,6 @@ class TestProposal(IntegrationTestCase):
                 obj=self.draft_proposal.get_proposal_document()),
             'The proposal document should not be trashable.')
 
-    def test_is_submission_allowed(self):
-        self.login(self.administrator)
-        self.assertFalse(self.draft_proposal.is_submit_additional_documents_allowed())
-
-        self.assertTrue(self.proposal.is_submit_additional_documents_allowed())
-
-        # these transitions are not exposed on the proposal side
-        proposal_model = self.proposal.load_model()
-        proposal_model.execute_transition('submitted-scheduled')
-        self.assertTrue(self.proposal.is_submit_additional_documents_allowed())
-
-        proposal_model.execute_transition('scheduled-decided')
-        self.assertFalse(self.proposal.is_submit_additional_documents_allowed())
-
     def test_submit_additional_document(self):
         self.login(self.administrator)
         ori_document = self.subdocument
@@ -839,8 +680,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(ori_document.Title(), submitted_document.Title())
         self.assertEqual(ori_document.file.filename, submitted_document.file.filename)
 
-        self.assertSubmittedDocumentCreated(
-            self.proposal, ori_document, submitted_document)
+        self.assertSubmittedDocumentCreated(self.proposal, ori_document)
 
         # submitted document should be locked by custom lock
         lockable = ILockable(submitted_document)
@@ -870,7 +710,8 @@ class TestProposal(IntegrationTestCase):
 
     def test_submit_document_updates_proposal_attachements(self):
         self.login(self.administrator)
-        self.draft_proposal.execute_transition('pending-submitted')
+        api.content.transition(
+            self.draft_proposal, 'proposal-transition-submit')
         self.assertEqual(0, len(IProposal(self.draft_proposal).relatedItems))
 
         self.draft_proposal.submit_additional_document(self.document)
@@ -1117,16 +958,6 @@ class TestProposal(IntegrationTestCase):
         browser.open(self.submitted_proposal, view="edit")
 
         self.assertIsNone(browser.find_field_by_text('Issuer'))
-
-    def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
-        submitted_document_model = SubmittedDocument.query.get_by_source(
-            proposal, document)
-        self.assertIsNotNone(submitted_document_model)
-        self.assertEqual(Oguid.for_object(submitted_document),
-                         submitted_document_model.submitted_oguid)
-        self.assertEqual(0, submitted_document_model.submitted_version)
-        self.assertEqual(proposal.load_model(),
-                         submitted_document_model.proposal)
 
     @browsing
     def test_proposal_shows_native_language_names_on_form(self, browser):

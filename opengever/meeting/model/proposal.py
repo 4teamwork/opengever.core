@@ -36,55 +36,11 @@ from zope.globalrequest import getRequest
 MAX_TITLE_LENGTH = 256
 
 
-class Submit(Transition):
-
-    def execute(self, obj, model, text=None, **kwargs):
-        assert obj, 'submitting requires a plone context object.'
-
-        if not model.committee.is_active():
-            api.portal.show_message(
-                _(u'msg_inactive_committee_selected',
-                  default=u'The selected committeee has been deactivated, the'
-                  ' proposal could not been submitted.'),
-                request=getRequest(), type='error')
-            return getRequest().RESPONSE.redirect(obj.absolute_url())
-
-        super(Submit, self).execute(obj, model)
-        api.content.transition(obj=obj, transition='proposal-transition-submit')
-        obj.submit(text=text)
-
-        msg = _(u'msg_proposal_submitted',
-                default=u'Proposal successfully submitted.')
-        api.portal.show_message(msg, request=getRequest())
-
-
 class Reject(Transition):
 
     def execute(self, obj, model, text=None, **kwargs):
         obj.reject(text)
         msg = _(u"The proposal has been rejected successfully")
-        api.portal.show_message(msg, request=getRequest(), type='info')
-
-
-class Cancel(Transition):
-
-    def execute(self, obj, model, text=None, **kwargs):
-        super(Cancel, self).execute(obj, model)
-        model.cancel(text=text)
-
-        msg = _(u'msg_proposal_cancelled',
-                default=u'Proposal cancelled successfully.')
-        api.portal.show_message(msg, request=getRequest(), type='info')
-
-
-class Reactivate(Transition):
-
-    def execute(self, obj, model, text=None, **kwargs):
-        super(Reactivate, self).execute(obj, model)
-        model.reactivate(text)
-
-        msg = _(u'msg_proposal_reactivated',
-                default=u'Proposal reactivated successfully.')
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
@@ -162,8 +118,6 @@ class Proposal(Base):
         STATE_DECIDED,
         STATE_CANCELLED,
         ], [
-        Submit('pending', 'submitted',
-               title=_('submit', default='Submit')),
         Reject('submitted', 'pending',
                title=_('reject', default='Reject')),
         Transition('submitted', 'scheduled',
@@ -172,21 +126,22 @@ class Proposal(Base):
                    title=_('un-schedule', default='Remove from schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
-        Cancel('pending', 'cancelled',
-               title=_('cancel', default='Cancel')),
-        Reactivate('cancelled', 'pending',
-                   title=_('reactivate', default='Reactivate')),
         ])
+
+    # temporary mapping for plone workflow state to model workflow state
+    WORKFLOW_STATE_TO_SQL_STATE = {
+        'proposal-state-active': 'pending',
+        'proposal-state-cancelled': 'cancelled',
+        'proposal-state-submitted': 'submitted',
+    }
 
     def __repr__(self):
         return "<Proposal {}@{}>".format(self.int_id, self.admin_unit_id)
 
     @classmethod
     def create_from(cls, proposal):
-        workflow_state = proposal.workflow.default_state.name
-
         model = cls(oguid=Oguid.for_object(proposal),
-                    workflow_state=workflow_state,
+                    workflow_state='pending',
                     physical_path=proposal.get_physical_path())
         model.sync_with_proposal(proposal)
         return model
@@ -201,6 +156,13 @@ class Proposal(Base):
             proposal.get_repository_folder_title())
         committee = Committee.get_one(
             oguid=Oguid.parse(proposal.committee_oguid))
+
+        # temporarily use mapping from plone workflow state to model workflow
+        # state
+        workflow_state = api.content.get_state(proposal)
+        new_sql_state = self.WORKFLOW_STATE_TO_SQL_STATE.get(workflow_state)
+        if new_sql_state:
+            self.workflow_state = new_sql_state
 
         self.committee = committee
         self.language = proposal.language
@@ -224,10 +186,6 @@ class Proposal(Base):
 
     def get_state(self):
         return self.workflow.get_state(self.workflow_state)
-
-    def is_submitted(self):
-        submitted_states = (self.STATE_SUBMITTED, self.STATE_SCHEDULED, self.STATE_DECIDED)
-        return self.get_state() in submitted_states
 
     def execute_transition(self, name, text=None):
         self.workflow.execute_transition(None, self, name, text=text)
@@ -337,9 +295,6 @@ class Proposal(Base):
     def is_submit_additional_documents_allowed(self):
         return self.get_state() in [self.STATE_SUBMITTED, self.STATE_SCHEDULED]
 
-    def is_editable_in_dossier(self):
-        return self.get_state() == self.STATE_PENDING
-
     def is_editable_in_committee(self):
         return self.get_state() in [self.STATE_SUBMITTED, self.STATE_SCHEDULED]
 
@@ -394,12 +349,6 @@ class Proposal(Base):
     def reopen(self, agenda_item):
         assert self.is_decided()
         IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
-
-    def cancel(self, text=None):
-        IHistory(self.resolve_proposal()).append_record(u'cancelled', text=text)
-
-    def reactivate(self, text=None):
-        IHistory(self.resolve_proposal()).append_record(u'reactivated', text=text)
 
     def decide(self, agenda_item):
         document = self.resolve_submitted_proposal().get_proposal_document()

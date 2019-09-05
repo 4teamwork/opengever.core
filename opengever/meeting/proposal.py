@@ -16,6 +16,7 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
@@ -31,7 +32,6 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.trash.trash import ITrashed
 from plone import api
@@ -66,10 +66,6 @@ def default_title(context):
     # Use Title() accessor to make this defaultFactor robust in regard to
     # objects with ITranslatedTitle behavior or titles stored in SQL
     return context.Title().decode('utf-8')
-
-
-class IProposalModel(Interface):
-    """Proposal model schema interface."""
 
 
 class ISubmittedProposalModel(Interface):
@@ -178,8 +174,6 @@ class ISubmittedProposal(IBaseProposal):
 
 class ProposalBase(object):
 
-    workflow = None
-
     def Title(self):
         return self.title.encode('utf-8')
 
@@ -234,27 +228,8 @@ class ProposalBase(object):
 
         return attributes
 
-    def can_execute_transition(self, name):
-        if not api.user.has_permission('Modify portal content', obj=self):
-            return False
-
-        return self.workflow.can_execute_transition(self.load_model(), name)
-
-    def execute_transition(self, name, text=None):
-        self.workflow.execute_transition(self, self.load_model(), name, text=text)
-
-    def get_transitions(self):
-        if not api.user.has_permission('Modify portal content', obj=self):
-            return []
-
-        return self.workflow.get_transitions(self.get_state())
-
     def get_state(self):
-        model = self.load_model()
-        if model:
-            return model.get_state()
-
-        return self.workflow.default_state
+        return self.load_model().get_state()
 
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name="portal_url")
@@ -318,10 +293,6 @@ class ProposalBase(object):
         ProposalCommentedActivitiy(self, self.REQUEST).record()
         return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
 
-    def is_submitted(self):
-        model = self.load_model()
-        return model.is_submitted()
-
 
 class SubmittedProposal(ModelContainer, ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -333,6 +304,15 @@ class SubmittedProposal(ModelContainer, ProposalBase):
     implements(content_schema)
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['submitted-pending'])
+
+    def can_execute_transition(self, name):
+        return self.workflow.can_execute_transition(self.load_model(), name)
+
+    def execute_transition(self, name, text=None):
+        self.workflow.execute_transition(self, self.load_model(), name, text=text)
+
+    def get_transitions(self):
+        return self.workflow.get_transitions(self.get_state())
 
     def get_sync_admin_unit_id(self):
         return self.load_model().admin_unit_id
@@ -346,6 +326,9 @@ class SubmittedProposal(ModelContainer, ProposalBase):
 
         """
         return self.load_model().is_editable_in_committee()
+
+    def is_submitted(self):
+        return True
 
     def can_comment(self):
         return api.user.has_permission('Modify portal content', obj=self)
@@ -515,9 +498,6 @@ class Proposal(Container, ProposalBase):
     """
     implements(IProposal)
 
-    workflow = ProposalModel.workflow.with_visible_transitions(
-        ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
-
     def load_model(self):
         oguid = Oguid.for_object(self)
         if oguid is None:
@@ -530,14 +510,8 @@ class Proposal(Container, ProposalBase):
     def get_sync_target_path(self):
         return self.load_model().submitted_physical_path
 
-    def is_editable(self):
-        """A proposal in a dossier is only editable while not submitted.
-
-        It will remain editable on the submitted side but with a different set
-        of editable attributes.
-
-        """
-        return self.load_model().is_editable_in_dossier()
+    def is_submitted(self):
+        return api.content.get_state(self) in SUBMITTED_PROPOSAL_STATES
 
     def can_comment(self):
         return api.user.has_permission('opengever.meeting: Add Proposal Comment', obj=self)
@@ -550,6 +524,9 @@ class Proposal(Container, ProposalBase):
 
     def get_excerpt(self):
         return self.load_model().resolve_excerpt_document()
+
+    def has_active_committee(self):
+        return self.load_model().committee.is_active()
 
     def get_committee(self):
         return Oguid.parse(self.committee_oguid).resolve_object()

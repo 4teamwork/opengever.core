@@ -132,11 +132,6 @@ class TestReactivating(IntegrationTestCase):
 
 class TestReactivatingRESTAPI(TestReactivating):
 
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-
     def reactivate(self, dossier, browser, payload=None):
         browser.raise_http_errors = False
         url = dossier.absolute_url() + '/@workflow/dossier-transition-reactivate'

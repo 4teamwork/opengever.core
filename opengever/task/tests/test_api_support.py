@@ -11,11 +11,6 @@ import json
 
 class TestAPISupport(IntegrationTestCase):
 
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-
     @browsing
     def test_adding_a_task(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -96,11 +91,6 @@ class TestAPISupport(IntegrationTestCase):
 
 
 class TestAPITransitions(IntegrationTestCase):
-
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
 
     @browsing
     def test_transition_changes_adds_response(self, browser):

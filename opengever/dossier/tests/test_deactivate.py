@@ -88,7 +88,7 @@ class TestDossierDeactivation(IntegrationTestCase):
                          u"active proposals."]
         self.assert_errors(self.empty_dossier, browser, expected_msgs)
 
-        proposal.execute_transition('pending-cancelled')
+        api.content.transition(proposal, 'proposal-transition-cancel')
         self.deactivate(self.empty_dossier, browser)
         self.assert_workflow_state('dossier-state-inactive', self.empty_dossier)
 

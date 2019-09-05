@@ -208,4 +208,19 @@
 
   <adapter factory=".committee.RepositoryfolderValidator" />
 
+  <adapter
+      factory="opengever.meeting.proposaltransition.CancelTransitionExtender"
+      name="proposal-transition-cancel"
+      />
+
+  <adapter
+      factory="opengever.meeting.proposaltransition.ReactivateTransitionExtender"
+      name="proposal-transition-reactivate"
+      />
+
+  <adapter
+      factory="opengever.meeting.proposaltransition.SubmitTransitionExtender"
+      name="proposal-transition-submit"
+      />
+
 </configure>

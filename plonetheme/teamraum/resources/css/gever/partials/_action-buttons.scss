@@ -107,7 +107,7 @@ ul.tabbedview-action-list {
   @extend .gv-committee;
 }
 
-.actionButtons .pending-submitted {
+.actionButtons .proposal-transition-submit {
   @extend .gv-submit;
 }
 
@@ -115,11 +115,11 @@ ul.tabbedview-action-list {
   @extend .gv-refuse;
 }
 
-.actionButtons .pending-cancelled {
+.actionButtons .proposal-transition-cancel {
   @extend .gv-cancel;
 }
 
-.actionButtons .cancelled-pending {
+.actionButtons .proposal-transition-reactivate {
   @extend .gv-reopen;
 }
 

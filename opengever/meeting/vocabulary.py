@@ -6,6 +6,7 @@ from opengever.meeting.proposaltemplate import IProposalTemplate
 from operator import attrgetter
 from plone import api
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.CMFPlone.utils import safe_unicode
 from zope.interface import implementer
 from zope.interface import provider
@@ -13,6 +14,20 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+
+
+@provider(IContextSourceBinder)
+def get_proposal_transitions_vocabulary(context):
+    """Vocabulary with all proposal transitions valid for current state."""
+
+    wftool = api.portal.get_tool('portal_workflow')
+    transitions = []
+    for tdef in wftool.getTransitionsFor(context):
+        transitions.append(SimpleVocabulary.createTerm(
+                tdef['id'],
+                tdef['id'],
+                pmf(tdef['id'], default=tdef['title_or_id'])))
+    return SimpleVocabulary(transitions)
 
 
 @implementer(IVocabularyFactory)

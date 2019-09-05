@@ -66,6 +66,21 @@
           </table>
           <div class="actionButtons">
             <ul class="regular_buttons">
+                <tal:block repeat="item view/transition_items" i18n:domain="plone" tal:condition="view/transition_items">
+                  <li>
+                    <a tal:condition="item/url"
+                       tal:attributes="href item/url;
+                                       title item/title;
+                                       id item/id;
+                                       class item/id"
+                       i18n:attributes="title">
+                        <span tal:content="item/title"
+                              i18n:translate=""
+                              class="subMenuTitle actionText">
+                        </span>
+                    </a>
+                  </li>
+                </tal:block>
                 <tal:block tal:condition="view/transitions" repeat="transition view/transitions">
                   <li tal:condition="transition/visible">
                     <a tal:attributes="href python: view.transition_url(transition);

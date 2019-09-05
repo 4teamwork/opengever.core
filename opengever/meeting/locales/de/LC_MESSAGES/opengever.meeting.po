@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-09 08:18+0000\n"
+"POT-Creation-Date: 2019-09-04 11:26+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -458,7 +458,6 @@ msgstr "Beilagen einreichen"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/model/meeting.py
-#: ./opengever/meeting/model/proposal.py
 msgid "cancel"
 msgstr "Stornieren"
 
@@ -893,6 +892,7 @@ msgstr "Vergangene Sitzungen"
 #. Default: "Comment"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 #: ./opengever/meeting/proposal_transition_comment.py
+#: ./opengever/meeting/proposaltransition.py
 msgid "label_comment"
 msgstr "Kommentar"
 
@@ -1523,11 +1523,6 @@ msgstr "Es ist keine Vorlage für die Traktandenliste konfiguriert, die Traktand
 msgid "msg_hold_meeting_dialog"
 msgstr "Nach Abschluss eines Traktandums kann die Traktandenliste nicht mehr bearbeitet werden."
 
-#. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_inactive_committee_selected"
-msgstr "Das ausgewählte Gremium wurde deaktiviert, der Antrag konnte nicht eingereicht werden."
-
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"
@@ -1558,21 +1553,6 @@ msgstr "Es ist keine Vorlage für das Inhaltsverzeichnis konfiguriert, das Inhal
 msgid "msg_pending_meetings"
 msgstr "Nicht alle Sitzungen sind abgeschlossen."
 
-#. Default: "Proposal cancelled successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_cancelled"
-msgstr "Der Antrag wurde storniert."
-
-#. Default: "Proposal reactivated successfully."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_reactivated"
-msgstr "Der Antrag wurde wieder eröffnet."
-
-#. Default: "Proposal successfully submitted."
-#: ./opengever/meeting/model/proposal.py
-msgid "msg_proposal_submitted"
-msgstr "Antrag erfolgreich eingereicht."
-
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
@@ -1587,6 +1567,11 @@ msgstr "Es konnte nicht alle Dokumente in das PDF-Format konvertiert werden, des
 #: ./opengever/meeting/browser/views.py
 msgid "msg_successfully_deleted"
 msgstr "Das Objekt wurde erfolgreich gelöscht."
+
+#. Default: "Review state changed successfully."
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "msg_transition_successful"
+msgstr "Status erfolgreich geändert."
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
@@ -1756,11 +1741,6 @@ msgstr "Protokoll"
 msgid "protocol_excerpt"
 msgstr "Protokollauszug"
 
-#. Default: "Reactivate"
-#: ./opengever/meeting/model/proposal.py
-msgid "reactivate"
-msgstr "Wieder eröffnen"
-
 #. Default: "Reject"
 #: ./opengever/meeting/model/proposal.py
 msgid "reject"
@@ -1805,11 +1785,6 @@ msgstr "Traktandiert"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "send email"
 msgstr "E-Mail senden"
-
-#. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py
-msgid "submit"
-msgstr "Einreichen"
 
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py

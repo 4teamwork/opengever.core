@@ -64,7 +64,7 @@
   <browser:page
       for="opengever.meeting.proposal.IProposal"
       name="tabbed_view"
-      class="opengever.tabbedview.ModelProxyTabbedView"
+      class="opengever.tabbedview.GeverTabbedView"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
@@ -409,7 +409,14 @@
   <browser:page
       name="addtransitioncomment"
       class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormView"
-      for="opengever.meeting.proposal.IBaseProposal"
+      for="opengever.meeting.proposal.IProposal"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      name="addtransitioncomment_sql"
+      class="opengever.meeting.proposal_transition_comment.SubmittedProposalTransitionCommentAddFormView"
+      for="opengever.meeting.proposal.ISubmittedProposal"
       permission="cmf.AddPortalContent"
       />
 
@@ -418,6 +425,14 @@
       class="opengever.meeting.proposal_transition_comment.ProposalCommentAddFormView"
       for="opengever.meeting.proposal.IBaseProposal"
       permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      name="proposal_transition_controller"
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaltransitioncontroller.ProposalTransitionController"
+      permission="zope2.View"
+      allowed_interface=".proposaltransitioncontroller.IProposalTransitionController"
       />
 
 </configure>
