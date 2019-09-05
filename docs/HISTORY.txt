@@ -13,6 +13,7 @@ Changelog
 - Fix unicode error in listing endpoint. [njohner]
 - Bump docxcompose to version 1.0.2. [njohner]
 - Bump ftw.zipexport to include a bugfix to avoid doubled subfolders. [phgross]
+- Change task specific response implementation to the new base response implementation. [elioschmutz]
 - Introduce plone proposal workflow, provide api support for proposal workflow transitions. [deiferni]
 - Always raise when viewlet rendering errors occur during development. [deiferni]
 - Rename label and values of the privacy layer field. [phgross]
