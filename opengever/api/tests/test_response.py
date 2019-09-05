@@ -27,26 +27,40 @@ class TestResponseGETSerialization(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(
-                Response('Ich bin hier anderer Meinung!'))
+            response = Response()
+            response.text = u'Ich bin hier anderer Meinung!'
+            IResponseContainer(self.todo).add(response)
 
         with freeze(datetime(2016, 12, 24, 8, 23)):
             with self.login(self.workspace_admin):
-                response = Response(u'Ok, Danke f\xfcr dein Feedback')
+                response = Response()
+                response.text = u'Ok, Danke f\xfcr dein Feedback'
+                response.add_change('title', 'Foo', 'Bar')
                 IResponseContainer(self.todo).add(response)
 
         browser.open(self.todo, method="GET", headers=self.api_headers)
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
               'response_id': 1481272800000000,
+              u'response_type': u'default',
               u'created': u'2016-12-09T09:40:00',
+              u'changes': [],
               u'creator': {
                   u'token': self.workspace_member.id,
                   u'title': u'Schr\xf6dinger B\xe9atrice'},
               u'text': u'Ich bin hier anderer Meinung!'},
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1482564180000000',
               'response_id': 1482564180000000,
+              u'response_type': u'default',
               u'created': u'2016-12-24T08:23:00',
+              u'changes': [
+                  {
+                      'field_id': 'title',
+                      'before': 'Foo',
+                      'after': 'Bar',
+                      'field_title': '',
+                  }
+              ],
               u'creator': {
                   u'token': self.workspace_admin.id,
                   u'title': u'Hugentobler Fridolin'},
@@ -69,8 +83,9 @@ class TestResponseGET(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(
-                Response('Ich bin hier anderer Meinung!'))
+            response = Response()
+            response.text = u'Ich bin hier anderer Meinung!'
+            IResponseContainer(self.todo).add(response)
 
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
         browser.open(url, method="GET", headers=self.api_headers)
@@ -78,7 +93,9 @@ class TestResponseGET(IntegrationTestCase):
         self.assertEquals(
             {u'@id': url,
              'response_id': 1481272800000000,
+             u'response_type': u'default',
              u'created': u'2016-12-09T09:40:00',
+             u'changes': [],
              u'creator': {
                  u'token': self.workspace_member.id,
                  u'title': u'Schr\xf6dinger B\xe9atrice'},
@@ -116,7 +133,9 @@ class TestResponsePost(IntegrationTestCase):
         self.assertEquals(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
              'response_id': 1481272800000000,
+             'response_type': 'comment',
              u'created': u'2016-12-09T09:40:00',
+             u'changes': [],
              u'creator': {
                  u'token': self.workspace_member.id,
                  u'title': u'Schr\xf6dinger B\xe9atrice'},
@@ -128,11 +147,12 @@ class TestResponsePost(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         url = '{}/@responses'.format(self.todo.absolute_url())
-        with browser.expect_http_error(500):
+        with browser.expect_http_error(400):
             browser.open(url, method="POST", headers=self.api_headers)
 
         self.assertEquals(
-            {u'message': u'text', u'type': u'RequiredMissing'}, browser.json)
+            {u'message': u"Property 'text' is required", u'type': u'BadRequest'},
+            browser.json)
 
 
 class TestResponsePatch(IntegrationTestCase):
@@ -142,7 +162,7 @@ class TestResponsePatch(IntegrationTestCase):
         self.login(self.workspace_guest, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(Response('Test'))
+            IResponseContainer(self.todo).add(Response())
 
         with browser.expect_http_error(401):
             url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
@@ -154,7 +174,9 @@ class TestResponsePatch(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(Response('Test'))
+            response = Response()
+            response.text = 'Test'
+            IResponseContainer(self.todo).add(response)
 
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
         browser.open(url, method="PATCH", headers=self.api_headers,
@@ -171,12 +193,15 @@ class TestResponsePatch(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
-            IResponseContainer(self.todo).add(Response('Test'))
+            response = Response()
+            response.text = 'Test'
+            IResponseContainer(self.todo).add(response)
 
-        with browser.expect_http_error(500):
+        with browser.expect_http_error(400):
             url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
             browser.open(url, method="PATCH", headers=self.api_headers)
 
         self.assertEquals(
-            {u'message': u'text', u'type': u'RequiredMissing'}, browser.json)
+            {u'message': u"Property 'text' is required", u'type': u'BadRequest'},
+            browser.json)
         self.assertEquals('Test', IResponseContainer(self.todo).list()[0].text)

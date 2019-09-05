@@ -15,6 +15,7 @@ Changelog
 - Handle special characters in link to advanced search. [njohner]
 - Correctly handle inactive groups in the sharing view. [njohner]
 - Drop custom model forms for proposals and create proposal model via event handler. [deiferni]
+- Track changes in response objects for todo-types. [elioschmutz]
 - Include original files in ech0160 SIP export even when archival_file exists. [njohner]
 - Add filename and checked_out fields to recently-touched endpoint. [njohner]
 - Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]

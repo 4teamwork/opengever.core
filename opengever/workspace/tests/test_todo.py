@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -165,6 +166,34 @@ class TestAPISupportForTodo(IntegrationTestCase):
         self.assertEqual(u'\xc4 new login', self.todo.title)
 
     @browsing
+    def test_update_adds_response_object_with_changes(self, browser):
+        self.login(self.workspace_member, browser)
+
+        responses = IResponseContainer(self.todo).list()
+        self.assertEqual(0, len(responses))
+
+        browser.open(self.todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'title': u'\xc4 new login'}))
+
+        responses = IResponseContainer(self.todo).list()
+        self.assertEqual(1, len(responses))
+
+        last_response = responses[-1]
+        self.assertEqual('', last_response.text)
+        self.assertEqual('schema_field', last_response.response_type)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': 'title',
+                    'before': u'Fix user login',
+                    'after': u'\xc4 new login',
+                    'field_title': ''
+                }
+            ],
+            last_response.changes)
+
+    @browsing
     def test_deletion_is_only_possible_for_managers(self, browser):
         self.login(self.workspace_member, browser)
         with browser.expect_http_error(401):
@@ -183,3 +212,53 @@ class TestAPISupportForTodo(IntegrationTestCase):
         browser.open(self.todo, method='DELETE', headers=self.api_headers)
         self.assertEqual(204, browser.status_code)
         self.assertNotIn(todo_id, self.workspace.objectIds())
+
+    @browsing
+    def test_move_todo_adds_response_object_with_changes(self, browser):
+        self.login(self.workspace_member, browser)
+
+        def move_todo(todo, target):
+            todo_id = todo.getId()
+            data = {'source': todo.absolute_url()}
+            browser.open('{}/@move'.format(target.absolute_url()),
+                         method='POST', headers=self.api_headers,
+                         data=json.dumps(data))
+
+            return IResponseContainer(todo).list()[-1], target[todo_id]
+
+        response, todo = move_todo(self.todo, self.todolist_general)
+        self.assertEqual('move', response.response_type)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': '',
+                    'before': u'',
+                    'after': u'Allgemeine Informationen',
+                    'field_title': ''
+                }
+            ],
+            response.changes)
+
+        response, todo = move_todo(todo, self.todolist_introduction)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': '',
+                    'before': u'Allgemeine Informationen',
+                    'after': u'Projekteinf\xfchrung',
+                    'field_title': ''
+                }
+            ],
+            response.changes)
+
+        response, todo = move_todo(todo, self.workspace)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': '',
+                    'before': u'Projekteinf\xfchrung',
+                    'after': u'',
+                    'field_title': ''
+                }
+            ],
+            response.changes)

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-23 13:27+0000\n"
+"POT-Creation-Date: 2019-08-28 14:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -238,6 +238,11 @@ msgstr ""
 msgid "label_change_public_trial"
 msgstr ""
 
+#. Default: "Changes"
+#: ./opengever/base/response.py
+msgid "label_changes"
+msgstr ""
+
 #. Default: "Checked out"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_checked_out"
@@ -352,6 +357,11 @@ msgstr ""
 #. Default: "Response ID"
 #: ./opengever/base/response.py
 msgid "label_response_id"
+msgstr ""
+
+#. Default: "Response type"
+#: ./opengever/base/response.py
+msgid "label_response_type"
 msgstr ""
 
 #. Default: "Retention period (years)"
