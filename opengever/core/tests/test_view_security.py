@@ -43,6 +43,7 @@ WHITELIST = (
     # These views are registered for the IInternalOpengeverRequestLayer only
     # and thus are not reachable with a normal request:
     'opengever.meeting.browser.receiveproposaltransition.ReceiveProposalScheduled',
+    'opengever.meeting.browser.receiveproposaltransition.ReceiveProposalUnscheduled',
 )
 
 

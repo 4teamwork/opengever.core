@@ -343,6 +343,17 @@ class Proposal(Base):
         IHistory(self.resolve_submitted_proposal()).append_record(
             u'remove_scheduled', meeting_id=meeting.meeting_id)
 
+        request_data = {'data': advancedjson.dumps({
+            'meeting_id': meeting.meeting_id,
+        })}
+        expect_ok_response(
+            dispatch_request(self.admin_unit_id,
+                             '@@receive-proposal-unscheduled',
+                             path=self.physical_path,
+                             data=request_data),
+            'Unexpected response {!r} when unscheduling proposal.'
+        )
+
     def resolve_proposal(self):
         return self.oguid.resolve_object()
 

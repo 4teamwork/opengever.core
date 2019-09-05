@@ -8,7 +8,6 @@ from opengever.base.request import dispatch_request
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalDecideActivity
-from opengever.meeting.activity.activities import ProposalRemovedFromScheduleActivity
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
@@ -360,18 +359,12 @@ class ProposalRemovedFromSchedule(ProposalScheduled):
 
     history_type = u'remove_scheduled'
     css_class = 'scheduleRemoved'
-    needs_syncing = True
 
     def message(self):
         return _(u'proposal_history_label_remove_scheduled',
                  u'Removed from schedule of meeting ${meeting} by ${user}',
                  mapping={'user': self.get_actor_link(),
                           'meeting': self.meeting_title})
-
-    @classmethod
-    def receive(cls, context, request, data):
-        ProposalRemovedFromScheduleActivity(
-            context, request, data.get('meeting_id')).record()
 
 
 @ProposalHistory.register
