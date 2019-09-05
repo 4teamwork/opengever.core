@@ -41,7 +41,8 @@ class TestTaskSerialization(IntegrationTestCase):
         browser.open(self.task, method="GET", headers=self.api_headers)
 
         response = browser.json['responses'][-1]
-        self.assertEquals(self.dossier_responsible.id, response['creator'])
+        self.assertEquals(
+            self.dossier_responsible.id, response['creator'].get('token'))
         self.assertEquals(
             u'task-transition-modify-deadline', response['transition'])
         self.assertEquals(

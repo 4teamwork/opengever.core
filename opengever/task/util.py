@@ -1,8 +1,9 @@
 from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.activities import TaskTransitionActivity
-from persistent.list import PersistentList
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -17,7 +18,6 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 import opengever.task
-import types
 
 
 CUSTOM_INITIAL_VERSION_MESSAGE = 'custom_inital_version_message'
@@ -102,8 +102,8 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     `successor_oguid`: an OGUID to a (remote) object which was referenced.
     """
 
-    response = opengever.task.adapters.Response(text)
-    response.type = 'additional'
+    response = Response()
+    response.text = text
 
     for key, value in kwargs.items():
         setattr(response, key, value)
@@ -114,9 +114,9 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
             if old_value != new_value:
                 response.add_change(
                     field.__name__,
-                    field.title,
                     old_value,
-                    new_value)
+                    new_value,
+                    field_title=field.title)
 
     if added_object:
         intids = getUtility(IIntIds)
@@ -136,7 +136,7 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     if successor_oguid:
         response.successor_oguid = successor_oguid
 
-    container = opengever.task.adapters.IResponseContainer(task)
+    container = IResponseContainer(task)
     container.add(response)
 
     if not supress_events:

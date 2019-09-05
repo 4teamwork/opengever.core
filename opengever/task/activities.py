@@ -163,7 +163,7 @@ class TaskReassignActivity(TaskTransitionActivity):
         And change roles for old responsible from TASK_RESPONSIBLE
         to OLD_RESPONSIBLE.
         """
-        change = self.response.get_change('responsible')
+        change = ResponseDescription.get(response=self.response).get_change('responsible')
         self.center.add_task_responsible(self.context, self.context.responsible)
 
         self.center.remove_task_responsible(self.context, change.get('before'))
@@ -173,7 +173,7 @@ class TaskReassignActivity(TaskTransitionActivity):
     def after_recording(self):
         """Remove old responsible from watchers list.
         """
-        change = self.response.get_change('responsible')
+        change = ResponseDescription.get(response=self.response).get_change('responsible')
         self.center.remove_watcher_from_resource(
             self.context, change.get('before'), TASK_OLD_RESPONSIBLE_ROLE)
 

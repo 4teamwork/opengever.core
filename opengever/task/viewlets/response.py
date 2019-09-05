@@ -1,11 +1,12 @@
 from Acquisition import aq_inner
 from opengever.base.browser.helper import get_css_class
+from opengever.base.response import IResponseContainer
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
-from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Base
+from opengever.task.response_description import ResponseDescription
 from plone import api
 from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFCore.utils import getToolByName
@@ -25,9 +26,12 @@ class ResponseView(ViewletBase, Base):
 
         transforms = api.portal.get_tool(name='portal_transforms')
         for id, response in enumerate(container):
+            response_description = ResponseDescription.get(response=response)
             info = dict(
                 id=id,
                 response=response,
+                css_class=response_description.css_class,
+                msg=response_description.msg(),
                 text=transforms.convertTo(
                     'text/html', response.text,
                     mimetype='text/x-web-intelligent').getData(),
@@ -38,8 +42,8 @@ class ResponseView(ViewletBase, Base):
             responses.append(info)
 
         # sorting on date
-        responses.sort(lambda a, b: cmp(b['response'].date,
-                                    a['response'].date))
+        responses.sort(lambda a, b: cmp(b['response'].created,
+                                    a['response'].created))
 
         return responses
 

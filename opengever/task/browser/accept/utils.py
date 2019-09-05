@@ -10,7 +10,7 @@ from opengever.inbox.yearfolder import get_current_yearfolder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
@@ -282,7 +282,7 @@ class AcceptTaskWorkflowTransitionView(BrowserView):
         if len(response_container) == 0:
             return False
 
-        last_response = response_container[-1]
+        last_response = response_container.list()[-1]
         current_user = AccessControl.getSecurityManager().getUser()
 
         if last_response.transition == ACCEPT_TASK_TRANSITION and \

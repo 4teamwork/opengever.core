@@ -8,11 +8,11 @@
       <tal:define tal:define="id response_info/id;
                               response nocall:response_info/response">
 
-        <div class="answer" tal:attributes="class string:answer ${response/css_class}">
+        <div class="answer" tal:attributes="class string:answer ${response_info/css_class}">
 
           <div class="answerType">&nbsp;</div>
           <div class="answerBody">
-            <div class="date" tal:content="python:here.toLocalizedTime(response.date, long_format=True)" />
+            <div class="date" tal:content="python:here.toLocalizedTime(response.created, long_format=True)" />
 
             <div class="manageActions">
               <a tal:condition="view/can_edit" href="#" class="edit"
@@ -25,7 +25,7 @@
               </a>
             </div>
 
-            <h3 tal:content="structure response/msg" i18n:translate="">
+            <h3 tal:content="structure response_info/msg" i18n:translate="">
               Response Header
             </h3>
 

@@ -150,8 +150,8 @@ class DefaultTransitionExtender(TransitionExtender):
                 ITask(self.context).relatedItems.append(RelationValue(to_id))
                 response.add_change(
                     'relatedItems',
-                    _(u'label_related_items', default=u"Related Items"),
-                    '', item.title)
+                    '', item.title,
+                    _(u'label_related_items', default=u"Related Items"))
 
     def sync_change(self, transition, text, disable_sync):
         if not disable_sync:
@@ -180,8 +180,8 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
         ITask(self.context).responsible = api.user.get_current().getId()
         response.add_change(
             'responsible',
-            _(u"label_responsible", default=u"Responsible"),
-            old_responsible, ITask(self.context).responsible)
+            old_responsible, ITask(self.context).responsible,
+            _(u"label_responsible", default=u"Responsible"))
         self.context.sync()
 
 
@@ -303,8 +303,8 @@ class RejectTransitionExtender(DefaultTransitionExtender):
 
         response.add_change(
             'responsible',
-            _(u"label_responsible", default=u"Responsible"),
-            ITask(self.context).responsible, ITask(self.context).issuer)
+            ITask(self.context).responsible, ITask(self.context).issuer,
+            _(u"label_responsible", default=u"Responsible"))
 
         self.save_related_items(response, transition_params.get('relatedItems'))
         self.switch_responsible()

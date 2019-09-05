@@ -6,9 +6,9 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from opengever.activity.model import Activity
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-from opengever.task.adapters import IResponseContainer
-from opengever.task.adapters import Response
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase

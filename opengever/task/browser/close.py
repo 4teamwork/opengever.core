@@ -12,7 +12,7 @@ from opengever.base.utils import ok_response
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
 from opengever.task import _
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.util import change_task_workflow_state
@@ -301,7 +301,7 @@ class CloseTaskView(BrowserView):
         if len(response_container) == 0:
             return False
 
-        last_response = response_container[-1]
+        last_response = response_container.list()[-1]
         if last_response.transition == self.transition and \
            api.user.get_current().getId() == last_response.creator:
             return True

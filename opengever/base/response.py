@@ -7,6 +7,7 @@ from persistent.list import PersistentList
 from plone import api
 from plone.dexterity.utils import iterSchemata
 from plone.restapi.interfaces import IFieldSerializer
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.annotation import IAnnotations
 from zope.component import adapter
@@ -65,6 +66,9 @@ class ResponseContainer(object):
     def __init__(self, context):
         self.context = context
 
+    def __len__(self):
+        return len(self.list())
+
     def add(self, response):
         storage = self._storage(create_if_missing=True)
         if not IResponse.providedBy(response):
@@ -105,12 +109,26 @@ class ResponseContainer(object):
         if not storage:
             return False
 
+        if IResponse.providedBy(key):
+            key = key.response_id
         return long(key) in self._storage()
 
     def __getitem__(self, key):
         """Get an item by its key
         """
-        return self._storage()[long(key)]
+        storage = self._storage()
+        if not storage:
+            raise IndexError
+
+        return storage[long(key)]
+
+    def __iter__(self):
+        storage = self._storage()
+        if not storage:
+            return
+
+        for key, response in storage.items():
+            yield response
 
 
 class IResponse(Interface):
@@ -129,6 +147,23 @@ class IResponse(Interface):
 
     changes = schema.List(required=False, value_type=schema.Dict())
 
+    # Relations to added objects
+    added_object = RelationList(required=False)
+
+    # OGUID releation to a successor
+    successor_oguid = schema.TextLine(required=False)
+
+    # Rendered text (html) for caching
+    rendered_text = schema.Text(required=False)
+
+    # ID of perfomed transition
+    transition = schema.TextLine(required=False)
+
+    # Mime type of the response.
+    mimetype = schema.TextLine(required=False)
+
+    relatedItems = RelationList(required=False)
+
 
 class Response(Persistent):
     """A persistent lightweight object which represents a single response.
@@ -146,7 +181,13 @@ class Response(Persistent):
         self.creator = api.user.get_current().id
 
         self.text = ''
+        self.successor_oguid = ''
+        self.rendered_text = ''
+        self.transition = ''
+        self.mimetype = ''
         self.changes = PersistentList()
+        self.added_object = PersistentList()
+        self.relatedItems = PersistentList()
 
     def add_change(self, field_id, before, after, field_title=''):
         self.changes.append(PersistentDict(

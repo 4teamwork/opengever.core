@@ -11,6 +11,7 @@ from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
+from opengever.base.response import IResponseSupported
 from opengever.base.security import as_internal_workflow_transition
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
@@ -336,7 +337,7 @@ class IAddTaskSchema(ITask):
 class Task(Container):
     """Provide a container for tasks."""
 
-    implements(ITask, ITabbedviewUploadable)
+    implements(ITask, ITabbedviewUploadable, IResponseSupported)
 
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)

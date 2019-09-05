@@ -337,10 +337,12 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
         "items": [],
         "responses": [
           {
+            "response_id": 1
+            "response_type": "default"
             "added_object": null,
             "changes": [],
             "creator": "zopemaster",
-            "date": "2019-05-21T13:57:42+00:00",
+            "created": "2019-05-21T13:57:42+00:00",
             "date_of_completion": null,
             "relatedItems": [],
             "reminder_option": null,
@@ -348,10 +350,12 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
             "transition": "task-commented"
           },
           {
+            "response_id": 2
+            "response_type": "default"
             "added_object": null,
             "changes": [],
             "creator": "zopemaster",
-            "date": "2019-05-21T14:02:01+00:00",
+            "created": "2019-05-21T14:02:01+00:00",
             "date_of_completion": null,
             "relatedItems": [],
             "text": "Suspendisse faucibus, nunc et pellentesque egestas.",

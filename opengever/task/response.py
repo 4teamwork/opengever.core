@@ -1,5 +1,6 @@
 from AccessControl.users import nobody
 from Acquisition import aq_inner
+from opengever.base.response import IResponseContainer
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
 from opengever.ogds.base.utils import get_current_org_unit
@@ -7,7 +8,6 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import FINAL_TRANSITIONS
 from opengever.task import util
-from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.reminder import get_task_reminder_options_vocabulary

@@ -17,9 +17,6 @@
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
-  <adapter factory=".task.SerializeTaskToJson" />
-  <adapter factory=".task_response.TaskResponseDefaultFieldSerializer" />
-  <adapter factory=".task_response.SerializeTaskResponseToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
