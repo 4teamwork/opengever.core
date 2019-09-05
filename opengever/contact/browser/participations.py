@@ -1,3 +1,4 @@
+from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.json_response import JSONResponse
 from opengever.contact import _
@@ -83,3 +84,6 @@ class ParticpationTab(BrowserView, GeverTabMixin):
         return sorted(
             participations,
             key=lambda participation: participation.participant.get_title())
+
+    def dossier_mail(self):
+        return IEmailAddress(self.request).get_email_for_object(self.context)

@@ -749,7 +749,7 @@ readers do not read off random characters that represent icons */
 
 .fa-empire:before { content: "\f1d1"; }
 
-.fa-envelope:before, #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .email:before, .function-attach:before, .function-attach-inactive:before, .notifications-settings-form .mail-title:before, .notifications-configurations-form .mail-title:before { content: "\f0e0"; }
+.fa-envelope:before, #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .email:before, #content #participation_listing .actions a.send-mail-action:before, .function-attach:before, .function-attach-inactive:before, .notifications-settings-form .mail-title:before, .notifications-configurations-form .mail-title:before { content: "\f0e0"; }
 
 .fa-envelope-open:before { content: "\f2b6"; }
 
@@ -4064,13 +4064,13 @@ body.portaltype-opengever-contact-person #content .orgrole_listing.persons .name
 #content #participation_listing .actions a:hover { text-decoration: none; background-color: #f5f5f5; }
 #content #participation_listing .actions a:before { font-size: 16px; display: inline-block; vertical-align: middle; margin-right: 5px; }
 
-.template-add-person .datagridwidget-table-view, template-add-organization .datagridwidget-table-view { width: auto; border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
-.template-add-person .datagridwidget-table-view .header, template-add-organization .datagridwidget-table-view .header { font-weight: bold; background: none repeat scroll 0 0 #f5f5f5; color: #969696; padding: 2px; font-size: 1em; text-align: left; }
-.template-add-person .datagridwidget-table-view .cell-1, template-add-organization .datagridwidget-table-view .cell-1 { width: 15em; padding-right: 2em; }
-.template-add-person .datagridwidget-table-view .cell-2, template-add-organization .datagridwidget-table-view .cell-2 { width: 20em; }
-.template-add-person .datagridwidget-table-view-block, template-add-organization .datagridwidget-table-view-block { border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
-.template-add-person .datagridwidget-table-view-block .label, template-add-organization .datagridwidget-table-view-block .label { color: #969696; font-weight: bold; }
-.template-add-person .datagridwidget-table-view-block .datagridwidget-row, template-add-organization .datagridwidget-table-view-block .datagridwidget-row { border-bottom: 1px solid #e6e6e6; }
+.template-add-person .datagridwidget-table-view, .template-add-organization .datagridwidget-table-view { width: auto; border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
+.template-add-person .datagridwidget-table-view .header, .template-add-organization .datagridwidget-table-view .header { font-weight: bold; background: none repeat scroll 0 0 #f5f5f5; color: #969696; padding: 2px; font-size: 1em; text-align: left; }
+.template-add-person .datagridwidget-table-view .cell-1, .template-add-organization .datagridwidget-table-view .cell-1 { width: 15em; padding-right: 2em; }
+.template-add-person .datagridwidget-table-view .cell-2, .template-add-organization .datagridwidget-table-view .cell-2 { width: 20em; }
+.template-add-person .datagridwidget-table-view-block, .template-add-organization .datagridwidget-table-view-block { border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
+.template-add-person .datagridwidget-table-view-block .label, .template-add-organization .datagridwidget-table-view-block .label { color: #969696; font-weight: bold; }
+.template-add-person .datagridwidget-table-view-block .datagridwidget-row, .template-add-organization .datagridwidget-table-view-block .datagridwidget-row { border-bottom: 1px solid #e6e6e6; }
 
 .template-add-membership .ui-autocomplete, .template-opengever-meeting-proposa .ui-autocomplete, .portaltype-opengever-meeting-proposal.template-edit .ui-autocomplete { border: 1px solid #e6e6e6; background: none #fff; padding: 0; border-radius: 2px; box-shadow: 0 5px 40px 0 rgba(68, 68, 68, 0.2); font-size: inherit; }
 .template-add-membership .ui-autocomplete > .ui-menu-item, .template-opengever-meeting-proposa .ui-autocomplete > .ui-menu-item, .portaltype-opengever-meeting-proposal.template-edit .ui-autocomplete > .ui-menu-item { padding: 0; border-bottom: 1px solid #e6e6e6; display: block; }
@@ -4233,13 +4233,13 @@ body.portaltype-opengever-contact-person #content .orgrole_listing.persons .name
 #content #participation_listing .actions a:hover { text-decoration: none; background-color: #f5f5f5; }
 #content #participation_listing .actions a:before { font-size: 16px; display: inline-block; vertical-align: middle; margin-right: 5px; }
 
-.template-add-person .datagridwidget-table-view, template-add-organization .datagridwidget-table-view { width: auto; border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
-.template-add-person .datagridwidget-table-view .header, template-add-organization .datagridwidget-table-view .header { font-weight: bold; background: none repeat scroll 0 0 #f5f5f5; color: #969696; padding: 2px; font-size: 1em; text-align: left; }
-.template-add-person .datagridwidget-table-view .cell-1, template-add-organization .datagridwidget-table-view .cell-1 { width: 15em; padding-right: 2em; }
-.template-add-person .datagridwidget-table-view .cell-2, template-add-organization .datagridwidget-table-view .cell-2 { width: 20em; }
-.template-add-person .datagridwidget-table-view-block, template-add-organization .datagridwidget-table-view-block { border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
-.template-add-person .datagridwidget-table-view-block .label, template-add-organization .datagridwidget-table-view-block .label { color: #969696; font-weight: bold; }
-.template-add-person .datagridwidget-table-view-block .datagridwidget-row, template-add-organization .datagridwidget-table-view-block .datagridwidget-row { border-bottom: 1px solid #e6e6e6; }
+.template-add-person .datagridwidget-table-view, .template-add-organization .datagridwidget-table-view { width: auto; border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
+.template-add-person .datagridwidget-table-view .header, .template-add-organization .datagridwidget-table-view .header { font-weight: bold; background: none repeat scroll 0 0 #f5f5f5; color: #969696; padding: 2px; font-size: 1em; text-align: left; }
+.template-add-person .datagridwidget-table-view .cell-1, .template-add-organization .datagridwidget-table-view .cell-1 { width: 15em; padding-right: 2em; }
+.template-add-person .datagridwidget-table-view .cell-2, .template-add-organization .datagridwidget-table-view .cell-2 { width: 20em; }
+.template-add-person .datagridwidget-table-view-block, .template-add-organization .datagridwidget-table-view-block { border: 1px solid #e6e6e6; background: none repeat scroll 0 0 #f5f5f5; }
+.template-add-person .datagridwidget-table-view-block .label, .template-add-organization .datagridwidget-table-view-block .label { color: #969696; font-weight: bold; }
+.template-add-person .datagridwidget-table-view-block .datagridwidget-row, .template-add-organization .datagridwidget-table-view-block .datagridwidget-row { border-bottom: 1px solid #e6e6e6; }
 
 #tabbedview-body #journal_overview .contacts p, #tabbedview-body #journal_overview .documents p { margin-bottom: 0.5em; margin-top: 0.5em; }
 #tabbedview-body #journal_overview .add_journal_entry { display: inline-block; padding: 8px; padding-left: 12px; color: #000; border: 1px solid #e6e6e6; margin-bottom: 8px; border-radius: 2px; transition: background-color .2s ease-out; }

@@ -21,6 +21,14 @@
             Edit
           </a>
         </li>
+        <tal:cond tal:condition="participation/participant/mail_addresses">
+          <li tal:define="mail python: participation.participant.mail_addresses[0]">
+            <a class="send-mail-action" tal:attributes="href string:mailto:${mail/address}?bcc=${view/dossier_mail}&amp;subject=${context/title}"
+               i18n:translate="button_send_mail">
+              Send e-Mail
+            </a>
+          </li>
+        </tal:cond>
         <li>
           <a class="remove-action"
              tal:attributes="href string:${context/absolute_url}/${participation/wrapper_id}/remove"

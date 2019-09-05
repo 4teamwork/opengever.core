@@ -244,6 +244,10 @@ body.portaltype-opengever-contact-organization {
         @extend .fa-pen;
       }
 
+      &.send-mail-action:before {
+        @extend .fa-envelope;
+      }
+
       &.remove-action:before {
         @extend .fa-trash-alt;
       }
