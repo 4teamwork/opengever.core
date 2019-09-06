@@ -12,6 +12,7 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
+from opengever.meeting.proposal import PROPOSAL_TEMPLATE_KEY
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -22,8 +23,10 @@ from opengever.trash.trash import ITrashable
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
+from zExceptions import BadRequest
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
+from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 
@@ -367,11 +370,14 @@ class ProposalBuilder(DexterityBuilder):
                           'language': TranslatedTitle.FALLBACK_LANGUAGE,
                           'issuer': TEST_USER_ID}
         self._transition = None
-        self._proposal_file_data = assets.load('empty.docx')
         self._also_return_submitted_proposal = False
 
     def with_proposal_file(self, data):
         self._proposal_file_data = data
+        return self
+
+    def from_template(self, template_document):
+        self.template_document = template_document
         return self
 
     def before_create(self):
@@ -382,19 +388,35 @@ class ProposalBuilder(DexterityBuilder):
             else:
                 self.arguments['committee_oguid'] = committee.oguid.id
 
+        # Only one of template_document or _proposal_file_data can be set, if
+        # neither is set, we default _proposal_file_data to 'empty.docx'.
+        # If template_document is set, we use that as template for the proposal
+        # document, otherwise we use _proposal_file_data to create a document
+        # that will be used as template.
+        template = getattr(self, "template_document", None)
+        file = getattr(self, "_proposal_file_data", None)
+        if template and file:
+            raise BadRequest("Only one of template_document and "
+                             "_proposal_file_data should be set")
+        if not template:
+            if file:
+                template = create(Builder('document')
+                                  .attach_file_containing(file, u'proposal_template.docx')
+                                  .within(self.container))
+            else:
+                template = create(Builder('document')
+                                  .with_asset_file("empty.docx")
+                                  .within(self.container))
+        ann = IAnnotations(getRequest())
+        ann[PROPOSAL_TEMPLATE_KEY] = template.absolute_url_path()
+
         super(ProposalBuilder, self).before_create()
 
     def after_create(self, obj):
-        obj.create_proposal_document(
-            title=obj.title_or_id(),
-            filename=u'proposal_document.docx',
-            data=self._proposal_file_data,
-            content_type='application/vnd.openxmlformats'
-            '-officedocument.wordprocessingml.document')
-
         if self._transition:
             api.content.transition(obj, self._transition)
 
+        IAnnotations(getRequest()).pop(PROPOSAL_TEMPLATE_KEY)
         super(ProposalBuilder, self).after_create(obj)
 
     def create(self):
