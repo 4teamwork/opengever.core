@@ -6,6 +6,7 @@ from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.utils import is_docx
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
@@ -161,9 +162,7 @@ class IAddProposal(IProposal):
         # XXX - this should get removed once we have a mimetype index based on which we can filter at source
         proposal_document = data.proposal_document
         if proposal_document:
-            proposal_document_mimetype = proposal_document.file.contentType
-            docx_mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            if not proposal_document_mimetype == docx_mimetype:
+            if not is_docx(proposal_document):
                 raise Invalid(_(
                     u'error_only_docx_files_allowed_as_proposal_documents',
                     default=u'Only .docx files allowed as proposal documents.',
