@@ -1016,6 +1016,7 @@ class OpengeverContentFixture(object):
                     )
                 .relate_to(self.document)
                 .as_submitted()
+                .from_template(self.proposal_template)
                 ))
 
             self.register_path(
@@ -1041,6 +1042,7 @@ class OpengeverContentFixture(object):
                     committee=self.empty_committee.load_model(),
                     issuer=self.dossier_responsible.getId(),
                     )
+                .from_template(self.proposal_template)
                 ))
 
             self.decided_proposal = create(
@@ -1052,6 +1054,7 @@ class OpengeverContentFixture(object):
                     issuer=self.dossier_responsible.getId(),
                     )
                 .as_submitted()
+                .from_template(self.proposal_template)
                 )
 
             self.register_path(
