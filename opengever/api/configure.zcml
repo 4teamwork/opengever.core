@@ -27,6 +27,7 @@
 
   <adapter factory=".todo.DeserializeToDoFromJson" />
   <adapter factory=".mail.DeserializeMailFromJson" />
+  <adapter factory=".proposal.DeserializeProposalFromJson" />
 
   <plone:service
       method="PATCH"
