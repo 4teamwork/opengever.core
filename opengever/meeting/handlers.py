@@ -13,11 +13,15 @@ from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.meeting.proposal import PROPOSAL_TEMPLATE_KEY
 from opengever.meeting.proposalsqlsyncer import ProposalSqlSyncer
 from opengever.meeting.proposalsqlsyncer import SubmittedProposalSqlSyncer
 from opengever.meeting.sablontemplate import sablon_template_is_valid
+from opengever.meeting.utils import is_docx
 from opengever.setup.interfaces import IDuringSetup
+from plone import api
 from zc.relation.interfaces import ICatalog
+from zExceptions import BadRequest
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
@@ -130,6 +134,25 @@ def proposal_added(obj, event):
             successor_oguid=Oguid.for_object(obj).id)
 
     ProposalSqlSyncer(obj, event).sync()
+
+    # Create the proposal document
+    # We have to make sure the template exists and is a docx file
+    ann = IAnnotations(getRequest())
+    template_path = ann[PROPOSAL_TEMPLATE_KEY]
+
+    try:
+        proposal_template = api.portal.get().restrictedTraverse(
+            template_path.split("/"))
+    except Exception:
+        raise BadRequest("proposal_template does not exist")
+
+    if not is_docx(proposal_template):
+        raise BadRequest("proposal_template has to be a docx document")
+
+    obj.create_proposal_document(
+            title=obj.title_or_id(),
+            source_blob=proposal_template.file,
+        )
 
 
 def proposal_modified(obj, event):

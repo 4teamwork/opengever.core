@@ -56,6 +56,9 @@ from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
+PROPOSAL_TEMPLATE_KEY = 'opengever.meeting.proposal.proposal_template'
+
+
 @provider(IContextAwareDefaultFactory)
 def default_title(context):
     # At this point, only proposals (not submitted proposals) should acquire

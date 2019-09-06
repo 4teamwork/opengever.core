@@ -6,6 +6,7 @@ from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import PROPOSAL_TEMPLATE_KEY
 from opengever.meeting.utils import is_docx
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
@@ -25,6 +26,7 @@ from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
 from zExceptions import Unauthorized
+from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
@@ -296,16 +298,17 @@ class ProposalAddForm(DefaultAddForm):
         proposal_template = proposal_template \
             if proposal_document_type == 'template' else proposal_document
 
+        # write template path to annotations as the proposal document gets
+        # generated in opengever.meeting.handlers.proposal_added
+        ann = IAnnotations(self.request)
+        ann[PROPOSAL_TEMPLATE_KEY] = proposal_template.absolute_url_path()
+
         edit_after_creation = data.pop('edit_after_creation')
         self.instance_schema = IProposal
         noaq_proposal = super(ProposalAddForm, self).createAndAdd(data)
         proposal = self.context.get(noaq_proposal.getId())
-        proposal_doc = proposal.create_proposal_document(
-            title=proposal.title_or_id(),
-            source_blob=proposal_template.file,
-        )
         if edit_after_creation:
-            self.checkout_and_external_edit(proposal_doc)
+            self.checkout_and_external_edit(proposal.get_proposal_document())
 
         return proposal
 
