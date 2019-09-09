@@ -352,7 +352,8 @@ class TestCommitteeWorkflow(IntegrationTestCase):
             Builder('proposal').within(self.dossier)
             .having(title=u'Non-scheduled proposal',
                     committee=self.empty_committee.load_model())
-            .as_submitted())
+            .as_submitted()
+            .from_template(self.proposal_template))
         browser.open(self.empty_committee)
 
         editbar.menu_option('Actions', 'deactivate').click()

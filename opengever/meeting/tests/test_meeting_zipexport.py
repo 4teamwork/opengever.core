@@ -110,6 +110,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
             )
             .relate_to(self.mail_eml)
             .as_submitted()
+            .from_template(self.proposal_template)
         )
 
         self.schedule_proposal(self.meeting, submitted_proposal)
@@ -173,7 +174,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     'number_raw': 2,
                     'opengever_id': 4,
                     'proposal': {
-                        'checksum': '114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
+                        'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                         'file': 'Traktandum 2/Vertraege.docx',
                         'modified': u'2016-08-31T16:09:35+02:00',
                     },
@@ -248,7 +249,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                         u'number': u'2.',
                         u'number_raw': 2,
                         u'proposal': {
-                            u'checksum': u'114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
+                            u'checksum': u'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                             u'file': u'Traktandum 2/Vertraege.docx',
                             u'modified': u'2016-08-31T16:09:35+02:00',
                         },

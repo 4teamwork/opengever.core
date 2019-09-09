@@ -1396,7 +1396,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
     def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):
         self.login(self.committee_responsible, browser)
         create(Builder('proposal').within(self.resolvable_subdossier)
-                                  .having(committee=self.committee))
+                                  .having(committee=self.committee)
+                                  .from_template(self.proposal_template))
 
         self.login(self.secretariat_user, browser)
 

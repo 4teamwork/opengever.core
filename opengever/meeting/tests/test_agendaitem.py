@@ -51,7 +51,8 @@ class TestDisplayAgendaItems(IntegrationTestCase):
                           .within(self.dossier)
                           .having(committee=self.committee.load_model())
                           .with_submitted()
-                          .relate_to(*documents))
+                          .relate_to(*documents)
+                          .from_template(self.proposal_template))
         agenda_item = self.schedule_proposal(self.meeting, submitted_proposal)
 
         browser.open(self.agenda_item_url(agenda_item, 'list'))

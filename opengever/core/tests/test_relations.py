@@ -193,10 +193,14 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
         document_a = create(Builder('document').within(dossier_a))
         Versioner(document_a).create_initial_version()
 
-        create(Builder('document').within(dossier_a).relate_to(document_a))
+        document_b = create(Builder('document')
+                            .within(dossier_a)
+                            .relate_to(document_a)
+                            .with_asset_file('empty.docx'))
         create(Builder('proposaltemplate').relate_to(document_a))
 
         create(Builder('task').within(dossier_a).relate_to([document_a]))
+
         create(Builder('forwarding').within(dossier_a).relate_to([document_a]))
 
         sablontemplate_a = create(Builder('sablontemplate'))
@@ -214,7 +218,8 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
             .having(committee=committee.load_model())
             .within(dossier_a)
             .relate_to(document_a)
-            .with_submitted())
+            .with_submitted()
+            .from_template(document_b))
 
         dossier_expired = create(Builder('dossier').as_expired())
         self.grant('Records Manager')

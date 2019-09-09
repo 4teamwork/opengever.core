@@ -27,7 +27,7 @@ class TestProtocolJsonData(FunctionalTestCase):
                            .titled(u'Beweisaufn\xe4hme')
                            .within(self.dossier)
                            .attach_file_containing("lorem ipsum",
-                                                   name=u"beweisaufnahme.txt"))
+                                                   name=u"beweisaufnahme.docx"))
         self.doc2 = create(Builder("document")
                            .titled(u"Strafbefehl")
                            .within(self.dossier))
@@ -47,7 +47,8 @@ class TestProtocolJsonData(FunctionalTestCase):
                     dossier_reference_number=u'FD 2.6.8/1',
                     repository_folder_title=u'Strafwesen')
             .relate_to(self.doc1, self.doc2, self.mail1)
-            .as_submitted())
+            .as_submitted()
+            .from_template(self.doc1))
         self.proposal_model = self.proposal.load_model()
         self.submitted_proposal = self.proposal_model.resolve_submitted_proposal()
         self.member_peter = create(Builder('member'))

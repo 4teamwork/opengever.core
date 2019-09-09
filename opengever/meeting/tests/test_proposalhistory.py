@@ -363,7 +363,8 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
                           .having(title=u'Vertr\xe4ge',
                                   committee=self.committee.load_model(),
                                   issuer=self.dossier_responsible.getId())
-                          .relate_to(self.document))
+                          .relate_to(self.document)
+                          .from_template(self.proposal_template))
 
         # Add comment
         browser.open(proposal, view='addcomment')

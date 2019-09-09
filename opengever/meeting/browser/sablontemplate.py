@@ -19,7 +19,7 @@ SAMPLE_MEETING_DATA = {
         'decision_number': 1,
         'attachments': [{
             "title": u'Beweisaufn\xe4hme',
-            "filename": u"Beweisaufnaehme.txt"
+            "filename": u"Beweisaufnaehme.docx"
             }, {
             "title": u"L\xf6rem",
             "filename": u"Loerem.eml"

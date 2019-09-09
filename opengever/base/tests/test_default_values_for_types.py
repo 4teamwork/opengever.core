@@ -10,6 +10,7 @@ from hashlib import sha256
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.base.oguid import Oguid
+from opengever.meeting.proposal import PROPOSAL_TEMPLATE_KEY
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import fake_interaction
@@ -22,6 +23,7 @@ from z3c.form.browser.checkbox import CheckBoxWidget
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from z3c.form.interfaces import IDataConverter
 from z3c.form.interfaces import IGroupForm
+from zope.annotation.interfaces import IAnnotations
 from zope.schema import getFieldsInOrder
 from zope.schema import List
 import json
@@ -1309,6 +1311,11 @@ class TestProposalDefaults(TestDefaultsBase):
         self.login(self.meeting_user)
 
         with freeze(FROZEN_NOW):
+            # To create a proposal, a template always has to be specified and
+            # saved in the annotations of the request
+            ann = IAnnotations(self.request)
+            ann[PROPOSAL_TEMPLATE_KEY] = self.proposal_template.absolute_url_path()
+
             proposal = createContentInContainer(
                 self.dossier,
                 'opengever.meeting.proposal',
@@ -1325,6 +1332,11 @@ class TestProposalDefaults(TestDefaultsBase):
         self.login(self.meeting_user)
 
         with freeze(FROZEN_NOW):
+            # To create a proposal, a template always has to be specified and
+            # saved in the annotations of the request
+            ann = IAnnotations(self.request)
+            ann[PROPOSAL_TEMPLATE_KEY] = self.proposal_template.absolute_url_path()
+
             new_id = self.dossier.invokeFactory(
                 'opengever.meeting.proposal',
                 'proposal-999',

@@ -77,7 +77,8 @@ class TestDossierDeactivation(IntegrationTestCase):
     def test_not_possible_with_active_proposals(self, browser):
         self.login(self.committee_responsible, browser)
         proposal = create(Builder('proposal').within(self.empty_dossier)
-                                             .having(committee=self.committee))
+                                             .having(committee=self.committee)
+                                             .from_template(self.proposal_template))
 
         self.login(self.dossier_responsible, browser)
 

@@ -641,7 +641,8 @@ class TestProposal(IntegrationTestCase):
         create(Builder('proposal')
                .within(self.empty_dossier)
                .titled(u'My Proposal')
-               .having(committee=self.committee.load_model()))
+               .having(committee=self.committee.load_model())
+               .from_template(self.proposal_template))
 
         register_event_recorder(IObjectWillBeRemovedEvent)
 
