@@ -117,7 +117,7 @@ class SolrReplicationAPIClient(object):
 
     - Start Solr on SOLR_PORT
     - If necessary, delete all data in Solr. For example using
-      curl http://localhost:12333/solr/solrtest/update?commit=true -H "Content-type: application/json" --data-binary "{'delete': {'query': '*:*'}}"
+      curl http://localhost:12333/solr/solrtest/update?commit=true -H "Content-type: application/json" --data-binary "{'delete': {'query': '*:*'}}"  # noqa
     - Pick a unique backup name below. Backups will be created in
       var/solr/solrtest/data/
     - Run the tests below
