@@ -137,6 +137,10 @@ class ManageParticipants(BrowserView):
         elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_INVITATION, token)
+            # Avoid circular imports
+            from opengever.workspace.activities import WorkspaceWatcherManager
+            manager = WorkspaceWatcherManager(self.context)
+            manager.participant_removed(token)
             return
         else:
             raise BadRequest('Oh my, something went wrong')

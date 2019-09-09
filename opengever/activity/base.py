@@ -27,6 +27,10 @@ class BaseActivity(object):
         raise NotImplementedError()
 
     @property
+    def label(self):
+        raise NotImplementedError()
+
+    @property
     def title(self):
         return self.translate_to_all_languages(self.context.title)
 

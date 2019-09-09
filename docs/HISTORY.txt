@@ -9,6 +9,7 @@ Changelog
 - Rename label and values of the privacy layer field. [phgross]
 - Add configuration possibility, to blacklist mimetypes from archival conversion. [phgross]
 - Do no longer render `None` value in document description. [elioschmutz]
+- Integrate ToDos in GEVER-Notification-System. [njohner]
 - Prevent copy / paste of checked out documents. [njohner]
 - Add is_subdossier and is_subtask to listing endpoint. [njohner]
 - Correctly handle inactive groups in the sharing view. [njohner]

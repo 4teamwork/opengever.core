@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-07-12 15:11+0000\n"
+"POT-Creation-Date: 2019-09-04 08:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,14 @@ msgstr "Accepter"
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Action"
 msgstr "Action"
+
+#: ./opengever/workspace/activities.py
+msgid "Closed by ${user}"
+msgstr "Complété par ${user}"
+
+#: ./opengever/workspace/activities.py
+msgid "Commented by ${user}"
+msgstr "Kommentiert durch ${user}"
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Decline"
@@ -62,6 +70,10 @@ msgstr "Participant supprimé"
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Participant invited"
 msgstr "Participant invité"
+
+#: ./opengever/workspace/activities.py
+msgid "Reopened by ${user}"
+msgstr "Rouvert par ${user}"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Role updated"
@@ -155,6 +167,7 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/workspace/browser/tabs.py
 #: ./opengever/workspace/todo.py
+#: ./opengever/workspace/todolist.py
 msgid "label_title"
 msgstr "Titre"
 
@@ -162,6 +175,26 @@ msgstr "Titre"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_todo"
 msgstr ""
+
+#. Default: "ToDo assigned"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_assigned_activity"
+msgstr "Todo assigné"
+
+#. Default: "ToDo closed"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_closed_activity"
+msgstr "Todo complété"
+
+#. Default: "ToDo commented"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_commented_activity"
+msgstr "ToDo commenté"
+
+#. Default: "ToDo reopened"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_reopened_activity"
+msgstr "Todo rouvert"
 
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py
@@ -172,6 +205,11 @@ msgstr "Corbeille"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
 msgstr "Teamraüme"
+
+#. Default: "Assigned to ${responsible} by ${user}"
+#: ./opengever/workspace/activities.py
+msgid "summary_todo_assigned_activity"
+msgstr "Todo assigné à ${responsible} par ${user}"
 
 #. Default: "Manage participation of ${workspace}"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt

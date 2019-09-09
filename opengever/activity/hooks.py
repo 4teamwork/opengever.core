@@ -7,6 +7,8 @@ from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.model import create_session
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -107,6 +109,13 @@ DEFAULT_SETTINGS = [
 
     {'kind': 'dossier-overdue',
      'badge_notification_roles': [DOSSIER_RESPONSIBLE_ROLE]},
+
+    {'kind': 'todo-assigned',
+     'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
+     'digest_notification_roles': [WORKSPACE_MEMBER_ROLE]},
+    {'kind': 'todo-modified',
+     'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
+     'digest_notification_roles': [WORKSPACE_MEMBER_ROLE]},
 ]
 
 

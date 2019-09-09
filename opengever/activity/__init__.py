@@ -166,6 +166,12 @@ ACTIVITY_TRANSLATIONS = {
     'dossier-overdue': _(
         'dossier-overdue',
         default=u'Overdue dossier'),
+    'todo-assigned': _(
+        'todo-assigned',
+        default=u'ToDo assigned'),
+    'todo-modified': _(
+        'todo-modified',
+        default=u'ToDo modified'),
     'notify_own_actions': {
         'title': _('notify_own_actions_title',
                    default=u'Enable notifications for own actions'),

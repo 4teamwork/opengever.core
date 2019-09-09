@@ -36,6 +36,7 @@
                            data-tab-title-proposals view/tab_title_proposals;
                            data-tab-title-reminders view/tab_title_reminders;
                            data-tab-title-dispositions view/tab_title_dispositions;
+                           data-tab-title-workspaces view/tab_title_workspaces;
                            data-show-disposition view/show_disposition_tab;
                            data-show-proposals view/show_proposals_tab;">
 

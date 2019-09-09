@@ -6,7 +6,6 @@ from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
 
-
 class Subscription(Base):
     __tablename__ = 'subscriptions'
 

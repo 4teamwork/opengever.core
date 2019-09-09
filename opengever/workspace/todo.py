@@ -1,13 +1,17 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.response import IResponseSupported
 from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IToDo
+from opengever.workspace.interfaces import IWorkspace
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Container
 from plone.supermodel import model
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider
@@ -45,3 +49,16 @@ class IToDoSchema(model.Schema):
 
 class ToDo(Container):
     implements(IToDo, IResponseSupported)
+
+    def get_containing_workspace(self):
+        """Return the workspace containing the todo.
+        Every ToDo should be contained in a workspace.
+        """
+        obj = self
+
+        while not IPloneSiteRoot.providedBy(obj):
+            parent = aq_parent(aq_inner(obj))
+            if IWorkspace.providedBy(parent):
+                return parent
+            obj = parent
+        return None

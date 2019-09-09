@@ -12,11 +12,28 @@ from zope import schema
 from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.component import queryMultiAdapter
+from zope.component.interfaces import IObjectEvent
+from zope.component.interfaces import ObjectEvent
+from zope.event import notify
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 from zope.schema import getFields
 import time
+
+
+class IResponseAddedEvent(IObjectEvent):
+    """A response has been added to an object"""
+
+
+class ResponseAddedEvent(ObjectEvent):
+
+    implements(IResponseAddedEvent)
+
+    def __init__(self, context, response_container, response):
+        super(ResponseAddedEvent, self).__init__(context)
+        self.response_container = response_container
+        self.response = response
 
 
 class IResponseSupported(Interface):
@@ -60,6 +77,7 @@ class ResponseContainer(object):
 
         response.response_id = response_id
         storage[response_id] = response
+        notify(ResponseAddedEvent(self.context, self, response))
         return response_id
 
     def _storage(self, create_if_missing=False):
