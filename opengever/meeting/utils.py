@@ -38,6 +38,9 @@ def format_date(date, request=None):
 
 
 def is_docx(document):
-    document_mimetype = document.file.contentType
+    document_file = document.get_file()
+    if not document_file:
+        return False
+    document_mimetype = document_file.contentType
     docx_mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     return document_mimetype == docx_mimetype
