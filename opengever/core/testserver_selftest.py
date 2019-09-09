@@ -88,7 +88,7 @@ class TestserverSelftest(object):
             browser.open(search_url)
             self.assertEqual(
                 {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004',
-                 u'/plone/ordnungssystem/rechnungspruefungskommission/dossier-20': u'testserversession000000000000001'},
+                 u'/plone/ordnungssystem/rechnungspruefungskommission/dossier-21': u'testserversession000000000000001'},
                 {item['path']: item['UID'] for item in browser.json})
 
             self.testserverctl('zodb_teardown')
