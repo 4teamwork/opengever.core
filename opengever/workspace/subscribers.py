@@ -1,3 +1,4 @@
+from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.workspace.activities import ToDoAssignedActivity
@@ -91,7 +92,8 @@ def todo_modified(todo, event):
 
 
 def response_added(todo, event):
-    ToDoCommentedActivity(todo,
-                          getRequest(),
-                          event.response_container,
-                          event.response).record()
+    if event.response.response_type == COMMENT_RESPONSE_TYPE:
+        ToDoCommentedActivity(todo,
+                              getRequest(),
+                              event.response_container,
+                              event.response).record()
