@@ -1,0 +1,87 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Antrag",
+    "additionalProperties": false,
+    "properties": {
+        "title": {
+            "type": "string",
+            "title": "Titel",
+            "maxLength": 256,
+            "description": "",
+            "_zope_schema_type": "TextLine",
+            "default": ""
+        },
+        "description": {
+            "type": "string",
+            "title": "Beschreibung",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "issuer": {
+            "type": "string",
+            "title": "Antragssteller",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<User-ID eines g\u00fcltigen Antragsstellers>"
+        },
+        "date_of_submission": {
+            "type": "string",
+            "title": "",
+            "format": "date",
+            "description": "Eingereicht am",
+            "_zope_schema_type": "Date"
+        },
+        "language": {
+            "type": "string",
+            "title": "Sprache",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "default": "<User-spezifischer Default>",
+            "_vocabulary": "<Ein g\u00fcltiger Sprach-Code (de, en, fr...)>"
+        },
+        "committee_oguid": {
+            "type": "string",
+            "title": "Gremium",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<OGUID eines Committees>"
+        },
+        "relatedItems": {
+            "type": "array",
+            "title": "Beilagen",
+            "description": "",
+            "_zope_schema_type": "RelationList",
+            "default": []
+        },
+        "predecessor_proposal": {
+            "type": "string",
+            "title": "Vorg\u00e4ngiger Antrag",
+            "description": "",
+            "_zope_schema_type": "RelationChoice",
+            "_vocabulary": "<UID eines Antrags>"
+        },
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        }
+    },
+    "required": [
+        "issuer",
+        "committee_oguid"
+    ],
+    "field_order": [
+        "title",
+        "description",
+        "issuer",
+        "date_of_submission",
+        "language",
+        "committee_oguid",
+        "relatedItems",
+        "predecessor_proposal",
+        "changed"
+    ]
+}

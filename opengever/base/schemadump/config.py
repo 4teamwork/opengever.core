@@ -11,6 +11,7 @@ GEVER_TYPES = [
     'opengever.task.task',
     'opengever.repository.repositoryfolder',
     'opengever.repository.repositoryroot',
+    'opengever.meeting.proposal',
 ]
 
 GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
@@ -77,6 +78,12 @@ VOCAB_OVERRIDES = {
         'responsible': u'<User-ID eines g\xfcltigen Auftragnehmers>',
         'responsible_client': u'<G\xfcltige Org-Unit-ID>',
     },
+    'opengever.meeting.proposal.IProposal': {
+        'issuer': u'<User-ID eines g\xfcltigen Antragsstellers>',
+        'predecessor_proposal': u'<UID eines Antrags>',
+        'committee_oguid': u'<OGUID eines Committees>',
+        'language': u'<Ein g\xfcltiger Sprach-Code (de, en, fr...)>'
+    },
 }
 
 DEFAULT_OVERRIDES = {
@@ -97,6 +104,9 @@ DEFAULT_OVERRIDES = {
                               u':small-comment:`(Obwohl dieses Feld im User-Interface '
                               u'nicht erscheint (vom System automatisch gesetzt wird), '
                               u'muss es \xfcber die REST API angegeben werden)`',
+    },
+    'opengever.meeting.proposal.IProposal': {
+        'language': u'<User-spezifischer Default>'
     },
 }
 
@@ -138,6 +148,8 @@ JSON_SCHEMA_FIELD_TYPES = {
         'type': 'integer'},
     'RelationList': {
         'type': 'array'},
+    'RelationChoice': {
+        'type': 'string'},
     'Bool': {
         'type': 'boolean'},
     'NamedBlobFile': {
