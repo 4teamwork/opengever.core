@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.3.3 (unreleased)
+2019.3.3 (2019-09-11)
 ---------------------
 
 - Bump docxcompose to version 1.0.2. [njohner]
