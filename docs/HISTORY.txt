@@ -87,15 +87,22 @@ Changelog
 - Update Solr to version 8.1.1. [buchi]
 
 
-2019.3.2 (2019-08-27)
+2019.3.3 (2019-09-11)
 ---------------------
+
+- Bump docxcompose to version 1.0.2. [njohner]
+
+
+2019.3.2 (2019-08-27) does not include 2019.2.7
+-----------------------------------------------
+
 
 - Handle special characters in link to advanced search. [njohner]
 - Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 
-2019.3.1 (2019-08-27)
----------------------
+2019.3.1 (2019-08-27) does not include 2019.2.7
+-----------------------------------------------
 
 - Bump ftw.solr to 2.6.1 to get fix path_depth handling. [phgross]
 - Bump ftw.solr to 2.6.0 to get fix for metadata getting overwritten by extract handler. [lgraf]
@@ -103,8 +110,8 @@ Changelog
 - Bump docxcompose version to 1.0.1 [njohner]
 
 
-2019.3.0 (2019-06-17) does not include 2019.2.6
------------------------------------------------
+2019.3.0 (2019-06-17) does not include 2019.2.6 and 2019.2.7
+------------------------------------------------------------
 
 - Fix encoding issue in OGDSUpdater's error logging. [lgraf]
 - Provides support for some additional metadata on the search endpoint. [phgross]
@@ -126,6 +133,12 @@ Changelog
 - Extend listing endpoint fields with file_extension and document_type. [phgross]
 - Extend task API serialization with responses data. [phgross]
 - Fix livesearch endpoint when using Solr. [buchi]
+
+
+2019.2.7 (2019-09-11)
+---------------------
+
+- Bump docxcompose to version 1.0.2. [njohner]
 
 
 2019.2.6 (2019-08-27)
