@@ -172,7 +172,7 @@ class TestListingEndpoint(IntegrationTestCase):
     def test_search_filter(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=documents&search=feedback&columns=title'
+        view = '@listing?name=documents&search=feedb\xc3\xa4ck&columns=title'
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
         self.assertEqual(
@@ -670,3 +670,16 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         self.assertIsNone(portal_uid)
         filters = self.conn.search.call_args[0][0]['filter']
         self.assertNotIn(u'-UID:%s' % portal_uid, filters)
+
+    @browsing
+    def test_search_filter_handles_special_characters(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=documents&search=feedb\xc3\xa4ck&columns=title'
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        query = self.conn.search.call_args[0][0]["query"]
+        self.assertEqual(u'(Title:feedb\xe4ck* OR SearchableText:feedb\xe4ck* '
+                         u'OR metadata:feedb\xe4ck*)',
+                         query)
