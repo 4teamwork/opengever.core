@@ -28,12 +28,14 @@ class TestserverSelftest(object):
         case = unittest.TestCase('__init__')
         self.assertIn = case.assertIn
         self.assertNotIn = case.assertNotIn
+        self.assertEqual = case.assertEqual
         self.assertDictContainsSubset = case.assertDictContainsSubset
 
     def __call__(self):
         os.environ['ZSERVER_PORT'] = '0'
         os.environ['TESTSERVER_CTL_PORT'] = '0'
         os.environ['PYTHONUNBUFFERED'] = 'true'
+        os.environ['SOLR_PORT'] = os.environ.get('PORT3', '19903')
 
         self.plone_url = None
         self.xmlrpc_url = None
@@ -61,6 +63,12 @@ class TestserverSelftest(object):
             browser.replace_request_header('Accept', 'application/json')
             browser.replace_request_header('Content-Type', 'application/json')
 
+            search_url = self.plone_url + '@solrsearch?fq=path_parent:\\/plone\\/ordnungssystem\\/rechnungspruefungskommission'
+            browser.open(search_url)
+            self.assertEqual(
+                {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004'},
+                {item['path']: item['UID'] for item in browser.json})
+
             data = {'@type': 'opengever.dossier.businesscasedossier',
                     'title': u'Gesch\xe4ftsdossier',
                     'responsible': 'kathi.barfuss'}
@@ -77,11 +85,29 @@ class TestserverSelftest(object):
                  u'email': u'99001@example.org'},
                 browser.json)
 
+            browser.open(search_url)
+            self.assertEqual(
+                {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004',
+                 u'/plone/ordnungssystem/rechnungspruefungskommission/dossier-21': u'testserversession000000000000001'},
+                {item['path']: item['UID'] for item in browser.json})
+
             self.testserverctl('zodb_teardown')
             self.testserverctl('zodb_setup')
 
             with browser.expect_http_error(404):
                 browser.open(dossier_url)
+
+            browser.open(search_url)
+            self.assertEqual(
+                {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004'},
+                {item['path']: item['UID'] for item in browser.json})
+
+            # Make sure the bumblebee checksum is available:
+            browser.open(self.plone_url + '@solrsearch?fq=id:document-1&fl=id,bumblebee_checksum')
+            self.assertEqual(
+                [{'bumblebee_checksum': '9fb7bce1d9bc0eb51d26ea7018ad41f542851ed75cb21e33e04b65a7f9757028',
+                  'id': 'document-1'}],
+                browser.json)
 
             self.testserverctl('zodb_teardown')
 
@@ -153,6 +179,9 @@ class TestserverSelftest(object):
             os.kill(self.testserver_process.pid, signal.SIGINT)
         except KeyboardInterrupt:
             pass
+        except OSError as exc:
+            if exc.strerror != 'No such process':
+                raise
         self.testserver_thread.join()
 
     def is_controller_server_ready(self):
