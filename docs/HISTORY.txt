@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Bump ftw.solr to 2.6.2 to get fix for avoiding atomic updates with null-documents. [lgraf]
 - Bump docxcompose to version 1.0.2. [njohner]
 - Introduce plone proposal workflow, provide api support for proposal workflow transitions. [deiferni]
 - Always raise when viewlet rendering errors occur during development. [deiferni]
