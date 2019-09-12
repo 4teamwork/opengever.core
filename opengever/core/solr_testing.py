@@ -1,6 +1,7 @@
 from opengever.core.cached_testing import BUILDOUT_DIR
 from threading import Thread
 import atexit
+import errno
 import io
 import os
 import requests
@@ -51,7 +52,7 @@ class SolrServer(object):
         except KeyboardInterrupt:
             pass
         except OSError as exc:
-            if exc.strerror != 'No such process':
+            if exc.errno != errno.ESRCH:
                 raise
         self._thread.join()
         self._running = False
@@ -156,7 +157,7 @@ class SolrReplicationAPIClient(object):
         return response.json()
 
     def create_backup(self, name):
-        """Create a backup of the snapshot state identified by `name`.
+        """Create a backup named 'bak-{name}'.
         """
         self._require_configured()
         backup_name = 'bak-{}'.format(name)
@@ -167,7 +168,7 @@ class SolrReplicationAPIClient(object):
         if backup_path.exists():
             backup_path.rmtree()
 
-        # First, trigger solr commit so that changes are writte to disk.
+        # First, trigger solr commit so that changes are written to disk.
         self.session.get(url=self.base_url + '/update?commit=true').raise_for_status()
 
         response = self.session.get(url=self.base_url + '/replication',
@@ -180,7 +181,7 @@ class SolrReplicationAPIClient(object):
         return response
 
     def restore_backup(self, name):
-        """Restore a backup. `name` refers to the snapshot name.
+        """Restore a backup. `name` refers to the backup name.
         """
         self._require_configured()
         response = self.session.get(url=self.base_url + '/replication',
@@ -238,7 +239,7 @@ if __name__ == '__main__':
     port = 18988
     core = 'fritz'
     SolrReplicationAPIClient.get_instance().configure(port, core)
-    server = SolrServer.get_instance().configure(port)
+    server = SolrServer.get_instance().configure(port, core)
 
     server.start()
     print '... starting'
