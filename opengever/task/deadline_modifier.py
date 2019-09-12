@@ -32,10 +32,10 @@ class DeadlineModifier(object):
 
         checker = get_checker(self.context)
         if not include_agency:
-            return checker.current_user.is_issuer or checker.is_responsible
+            return checker.current_user.is_issuer or checker.current_user.is_responsible
         else:
             return (checker.current_user.is_issuer
-                    or checker.current_user.is_responsible
+                    or checker.current_user.current_user.is_responsible
                     or checker.current_user.in_issuing_orgunits_inbox_group
                     or checker.current_user.is_administrator)
 
