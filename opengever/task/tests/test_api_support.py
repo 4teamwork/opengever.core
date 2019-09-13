@@ -155,6 +155,23 @@ class TestAPITransitions(IntegrationTestCase):
             response.changes)
 
     @browsing
+    def test_modify_deadline_with_same_deadline_as_before_raises_an_error(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        url = '{}/@workflow/task-transition-modify-deadline'.format(
+            self.task.absolute_url())
+
+        data = {'new_deadline': self.task.deadline.strftime('%Y-%m-%d')}
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertIn(
+            'same_deadline_error',
+            browser.json.get('error').get('message'))
+
+    @browsing
     def test_close_successful(self, browser):
         self.login(self.dossier_responsible, browser=browser)
 
