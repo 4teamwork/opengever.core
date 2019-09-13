@@ -16,7 +16,8 @@
       additional_profiles="opengever.setup:default_content
                            opengever.examplecontent:empty_templates
                            opengever.examplecontent:repository_minimal
-                           opengever.examplecontent:municipality_content"
+                           opengever.examplecontent:municipality_content
+                           opengever.examplecontent:workspace_content"
       admin_unit_id="fd"
       administrator_group="gever_admins"
       records_manager_group="record_managers"
@@ -90,6 +91,14 @@
       />
 
   <genericsetup:registerProfile
+      name="workspace_content"
+      title="opengever.examplecontent: workspace_content"
+      directory="profiles/workspace_content"
+      description="Example workspace content"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
       name="empty_templates"
       title="opengever.examplecontent: empty_templates"
       directory="profiles/empty_templates"
@@ -100,6 +109,11 @@
   <profilehook:hook
       profile="opengever.examplecontent:municipality_content"
       handler=".hooks.municipality_content_profile_installed"
+      />
+
+  <profilehook:hook
+      profile="opengever.examplecontent:workspace_content"
+      handler=".hooks.workspace_content_profile_installed"
       />
 
 </configure>

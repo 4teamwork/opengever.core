@@ -1,0 +1,99 @@
+[
+    {
+        "_path": "/workspaces/workspace-1/todo-1",
+        "_type": "opengever.workspace.todo",
+        "responsible": "philippe.gross",
+        "title": "Bei Weiterleitung Dossiervorlagen anwählbar machen",
+        "text": "Uns ist folgendes aufgefallen: Bei Weiterleitungen besteht die Möglichkeit Dokumente einem bestehenden Dossier zuzuweisen oder zum konkreten Thema ein neues Dossier zu generieren.\nDieses Dossier muss einer Ordnungsposition zugewiesen werden.\n\nLeider fehlt bei diesem Ablauf die Möglichkeit auf Dossiervorlagen zuzugreifen.\n\nGerade für Mitberichte und Stellungnahmen könnte das Zugreifen auf Dossiervorlagen sehr komfortabel sein.\n\nIst es möglich diese Auswahlmöglichkeit zu ergänzen?"
+    },
+    {
+        "_path": "/workspaces/workspace-1/todo-2",
+        "_type": "opengever.workspace.todo",
+        "title": "Examplecontent um Teamraum erweitern.",
+        "responsible": "elio.schmutz",
+        "deadline": "2019-09-10"
+    },
+    {
+        "_path": "/workspaces/workspace-1/todo-3",
+        "_type": "opengever.workspace.todo",
+        "title": "Dossierübersicht: Subdossier Statusübersicht."
+    },
+    {
+        "_path": "/workspaces/workspace-1/todo-4",
+        "_type": "opengever.workspace.todo",
+        "title": "Neuer Mandant ZBJ",
+        "responsible": "lukas.graf"
+    },
+    {
+        "_path": "/workspaces/workspace-1/todo-5",
+        "_type": "opengever.workspace.todo",
+        "title": "Neuer Mandant HCF",
+        "completed": true
+    },
+    {
+        "_path": "/workspaces/workspace-1/todo-6",
+        "_type": "opengever.workspace.todo",
+        "title": "Neuer Mandant BDA",
+        "completed": true
+    },
+    {
+        "_path": "/workspaces/workspace-1/todo-7",
+        "_type": "opengever.workspace.todo",
+        "title": "Neuer Mandant DCU",
+        "completed": true
+    },
+    {
+        "_path": "/workspaces/workspace-1/todolist-1",
+        "_type": "opengever.workspace.todolist",
+        "title": "Wichtig",
+        "_children": [
+            {
+                "_path": "todo-8",
+                "_type": "opengever.workspace.todo",
+                "title": "Optimierung PDF"
+            },
+            {
+                "_path": "todo-9",
+                "_type": "opengever.workspace.todo",
+                "title": "Wartungs- und Supportvertrag"
+            },
+            {
+                "_path": "todo-10",
+                "_type": "opengever.workspace.todo",
+                "title": "Integration Kartenmaterial in diverse Ansichten des neuen und alten GEVER"
+            }
+        ]
+    },
+    {
+        "_path": "/workspaces/workspace-1/todolist-2",
+        "_type": "opengever.workspace.todolist",
+        "title": "Marketing"
+    },
+    {
+        "_path": "/workspaces/workspace-1/todolist-3",
+        "_type": "opengever.workspace.todolist",
+        "title": "Projektleitung",
+        "_children": [
+            {
+                "_path": "todo-11",
+                "_type": "opengever.workspace.todo",
+                "title": "Kundenkommunikation"
+            }
+        ]
+    },
+    {
+        "_path": "/workspaces/workspace-2/todolist-11",
+        "_type": "opengever.workspace.todolist",
+        "title": "Support"
+    },
+    {
+        "_path": "/workspaces/workspace-2/todolist-12",
+        "_type": "opengever.workspace.todolist",
+        "title": "Marketing"
+    },
+    {
+        "_path": "/workspaces/workspace-2/todolist-13",
+        "_type": "opengever.workspace.todolist",
+        "title": "Projektleitung"
+    }
+]
