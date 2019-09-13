@@ -1,0 +1,111 @@
+[
+  {
+    "_path": "/workspaces/workspace-1",
+    "_type": "opengever.workspace.workspace",
+    "title": "Projekt: GEVER",
+    "_ac_local_roles": {
+      "philippe.gross": [
+        "WorkspaceOwner",
+        "WorkspaceAdmin"
+      ],
+      "david.erni": [
+        "WorkspaceMember"
+      ],
+      "lukas.graf": [
+        "WorkspaceMember"
+      ],
+      "pascal.habegger": [
+        "WorkspaceMember"
+      ],
+      "niklaus.johner": [
+        "WorkspaceMember"
+      ],
+      "elio.schmutz": [
+        "WorkspaceMember"
+      ],
+      "jonas.baumann": [
+        "WorkspaceGuest"
+      ],
+      "mathias.leimgruber": [
+        "WorkspaceGuest"
+      ]
+    },
+    "_children": [
+      {
+        "_id": "folder-1",
+        "_type": "opengever.workspace.folder",
+        "title": "Signierte Dokumente"
+      },
+      {
+        "_id": "folder-2",
+        "_type": "opengever.workspace.folder",
+        "title": "Sonstiges",
+        "_children": [
+          {
+            "_path": "document-4",
+            "_type": "opengever.document.document",
+            "title": "Allgemeine Word-Vorlage mit Metadaten",
+            "file:file": "files/allgemeine-word-vorlage-mit-metadaten.docx"
+          }
+        ]
+      },
+      {
+        "_path": "document-1",
+        "_type": "opengever.document.document",
+        "title": "Leeres Word-Dokument",
+        "file:file": "files/word.docx"
+      },
+      {
+        "_path": "document-2",
+        "_type": "opengever.document.document",
+        "title": "Leere Excel-Tabelle",
+        "file:file": "files/excel.xlsx"
+      },
+      {
+        "_path": "document-3",
+        "_type": "opengever.document.document",
+        "title": "Leere Powerpoint Präsentation",
+        "file:file": "files/powerpoint.pptx"
+      }
+    ]
+  },
+  {
+    "_path": "/workspaces/workspace-2",
+    "_type": "opengever.workspace.workspace",
+    "title": "Projekt: GEVER UI",
+    "_ac_local_roles": {
+      "thomas.buchberger": [
+        "WorkspaceOwner",
+        "WorkspaceAdmin"
+      ],
+      "philippe.gross": [
+        "WorkspaceMember"
+      ]
+    }
+  },
+  {
+    "_path": "/workspaces/workspace-3",
+    "_type": "opengever.workspace.workspace",
+    "title": "Projekt: OneGovBox",
+    "_ac_local_roles": {
+      "mathias.leimgruber": [
+        "WorkspaceOwner",
+        "WorkspaceAdmin"
+      ],
+      "philippe.gross": [
+        "WorkspaceGuest"
+      ]
+    }
+  },
+  {
+    "_path": "/workspaces/workspace-4",
+    "_type": "opengever.workspace.workspace",
+    "title": "Projekt: Redesign",
+    "_ac_local_roles": {
+      "manuel.cassina": [
+        "WorkspaceOwner",
+        "WorkspaceAdmin"
+      ]
+    }
+  }
+]
