@@ -20,6 +20,7 @@ from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
@@ -374,7 +375,7 @@ class Listing(Service):
                 u'(Title:{term}* OR SearchableText:{term}*'
                 u' OR metadata:{term}*)')
             term_queries = [
-                pattern.format(term=escape(t)) for t in term.split()]
+                pattern.format(term=escape(safe_unicode(t))) for t in term.split()]
             query = u' AND '.join(term_queries)
 
         filter_queries = []
