@@ -459,7 +459,7 @@ Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten defini
 Generieren von OGGBundle
 ========================
 
-Mit ``bin/bundle-factory`` kann ein ``OGGBundle`` von einem Datenverzeichnis generiert werden.
+Mit ``bin/create-bundle`` kann ein ``OGGBundle`` von einem Datenverzeichnis generiert werden.
 
 -  Wenn ``--repo-nesting-depth`` gesetzt ist, wird das Skript ein ``OGGBundle`` für ein komplettes ``Ordnungssystem`` generieren. In diesem Fall wird das ``source_dir`` im ``OGGBundle`` als ein ``reporoot`` abgebildet, und alle Verzeichnisse welche eine Verschachtelungstiefe geringer als ``--repo-nesting-depth`` haben werden als ``repofolders`` abgebildet. Andere Verzeichnisse als ``dossiers`` und Dateien als ``documents``.
 
