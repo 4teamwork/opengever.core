@@ -210,6 +210,6 @@ setup(name='opengever.core',
       [console_scripts]
       create-policy = opengever.policytemplates.cli:main
       pyxbgen = opengever.disposition.ech0160.pyxbgen:main
-      bundle-factory = opengever.bundle.factory:main
+      create-bundle = opengever.bundle.factory:main
       """,
       )
