@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Bump ftw.solr to 2.7.0 to get console scripts for maintenance tasks. [deiferni]
 - Bump ftw.solr to 2.6.2 to get fix for avoiding atomic updates with null-documents. [lgraf]
 - Add example contentent for workspaces. [elioschmutz]
 - Bump docxcompose to version 1.0.2. [njohner]
