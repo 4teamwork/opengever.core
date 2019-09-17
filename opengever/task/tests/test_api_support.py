@@ -3,7 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.testing import IntegrationTestCase
 from plone import api
 import json
@@ -107,7 +107,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-in-progress',
                          self.seq_subtask_1.get_sql_object().review_state)
 
-        response = IResponseContainer(self.seq_subtask_1)[-1]
+        response = IResponseContainer(self.seq_subtask_1).list()[-1]
 
         self.assertEqual(u'Wird gemacht!', response.text)
         self.assertEqual(u'task-transition-open-in-progress', response.transition)
@@ -146,11 +146,11 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEqual(date(2019, 11, 23), self.task.deadline)
 
-        response = IResponseContainer(self.task)[-1]
+        response = IResponseContainer(self.task).list()[-1]
         self.assertEqual(
             [{'after': date(2019, 11, 23),
-              'id': 'deadline',
-              'name': u'label_deadline',
+              'field_id': 'deadline',
+              'field_title': u'label_deadline',
               'before': date(2016, 11, 1)}],
             response.changes)
 
@@ -186,7 +186,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-tested-and-closed',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Tiptop, Danke!', response.text)
         self.assertEqual('task-transition-resolved-tested-and-closed',
                          response.transition)
@@ -207,7 +207,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-tested-and-closed',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Done!', response.text)
         self.assertEqual('task-transition-in-progress-tested-and-closed',
                          response.transition)
@@ -228,7 +228,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-tested-and-closed',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Done!', response.text)
         self.assertEqual('task-transition-open-tested-and-closed',
                          response.transition)
@@ -249,7 +249,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-resolved',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Erledigt, siehe Anhang.', response.text)
         self.assertEqual('task-transition-in-progress-resolved',
                          response.transition)
@@ -274,7 +274,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(self.dossier_responsible.id, self.task.responsible)
         self.assertEqual('task-state-in-progress', api.content.get_state(self.task))
 
-        response = IResponseContainer(self.task)[-1]
+        response = IResponseContainer(self.task).list()[-1]
         self.assertEqual(u'Robert macht das.', response.text)
         self.assertEqual('task-transition-reassign', response.transition)
 
@@ -327,7 +327,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-cancelled',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Nicht mehr notwendig.', response.text)
         self.assertEqual('task-transition-open-cancelled', response.transition)
 
@@ -346,7 +346,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-open',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Brauchen wir trotzdem.', response.text)
         self.assertEqual('task-transition-cancelled-open', response.transition)
 
@@ -365,12 +365,12 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-rejected',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Kann nicht.', response.text)
         self.assertEqual('task-transition-open-rejected', response.transition)
         self.assertEqual([{'after': self.dossier_responsible.id,
-                           'id': 'responsible',
-                           'name': u'label_responsible',
+                           'field_id': 'responsible',
+                           'field_title': u'label_responsible',
                            'before': self.regular_user.id}],
                          response.changes)
 
@@ -389,7 +389,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-open',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Dann erledige ich das selbst.', response.text)
         self.assertEqual('task-transition-rejected-open', response.transition)
 
@@ -408,7 +408,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('task-state-in-progress',
                          api.content.get_state(self.subtask))
 
-        response = IResponseContainer(self.subtask)[-1]
+        response = IResponseContainer(self.subtask).list()[-1]
         self.assertEqual(u'Da stimmt was nicht.', response.text)
         self.assertEqual('task-transition-resolved-in-progress', response.transition)
 
@@ -454,7 +454,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(
             'task-state-open', api.content.get_state(self.seq_subtask_2))
 
-        response = IResponseContainer(self.seq_subtask_1)[-1]
+        response = IResponseContainer(self.seq_subtask_1).list()[-1]
         self.assertEqual(u'Ist nicht notwendig.', response.text)
         self.assertEqual('task-transition-rejected-skipped', response.transition)
 
@@ -475,6 +475,6 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(
             'task-state-open', api.content.get_state(self.seq_subtask_3))
 
-        response = IResponseContainer(self.seq_subtask_2)[-1]
+        response = IResponseContainer(self.seq_subtask_2).list()[-1]
         self.assertEqual(u'Ist nicht notwendig.', response.text)
         self.assertEqual('task-transition-planned-skipped', response.transition)

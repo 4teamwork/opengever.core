@@ -9,20 +9,27 @@ class TestTaskSerialization(IntegrationTestCase):
     def test_task_contains_a_list_of_responses(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.task, method="GET", headers=self.api_headers)
-
+        self.maxDiff = None
         responses = browser.json['responses']
         self.assertEquals(2, len(responses))
         self.assertEquals(
-            {u'added_objects': [{u'@id': self.subtask.absolute_url(),
-                                 u'@type': u'opengever.task.task',
-                                 u'description': u'',
-                                 u'review_state': u'task-state-resolved',
-                                 u'title': self.subtask.title}],
+            {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/@responses/1472652213000000',
+             u'added_objects': [
+                 {u'@id': self.subtask.absolute_url(),
+                  u'@type': u'opengever.task.task',
+                  u'description': u'',
+                  u'review_state': u'task-state-resolved',
+                  u'title': self.subtask.title}
+             ],
              u'changes': [],
-             u'creator': self.dossier_responsible.id,
-             u'date': json_compatible(self.subtask.created()),
-             u'date_of_completion': None,
+             u'created': json_compatible(self.subtask.created().utcdatetime()),
+             u'creator': {u'title': u'Ziegler Robert', u'token': u'robert.ziegler'},
+             u'mimetype': u'',
              u'related_items': [],
+             u'rendered_text': u'',
+             u'response_id': 1472652213000000,
+             u'response_type': u'default',
+             u'successor_oguid': u'',
              u'text': u'',
              u'transition': u'transition-add-subtask'},
             responses[0])
@@ -46,7 +53,7 @@ class TestTaskSerialization(IntegrationTestCase):
         self.assertEquals(
             u'task-transition-modify-deadline', response['transition'])
         self.assertEquals(
-            [{u'id': u'deadline', u'name': u'Deadline',
+            [{u'field_id': u'deadline', u'field_title': u'Deadline',
               u'after': u'2023-01-01', u'before': u'2016-11-01'}],
             response['changes'])
 
@@ -63,19 +70,25 @@ class TestTaskSerialization(IntegrationTestCase):
 
         browser.open(
             self.inbox_forwarding, method="GET", headers=self.api_headers)
-
         self.assertEquals(
-            [{u'added_objects': [{
+            [{u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@responses/1472630853000000',
+              u'response_id': 1472630853000000,
+              u'response_type': u'default',
+              u'added_objects': [{
                 u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/document-13',
                 u'@type': u'opengever.document.document',
                 u'description': u'',
                 u'review_state': u'document-state-draft',
                 u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung'}],
               u'changes': [],
-              u'creator': u'nicole.kohler',
-              u'date': u'2016-08-31T10:07:33+00:00',
-              u'date_of_completion': None,
+              u'creator': {
+                  u'token': u'nicole.kohler',
+                  u'title': u'Kohler Nicole'},
+              u'created': u'2016-08-31T10:07:33',
               u'related_items': [],
               u'text': u'',
+              u'mimetype': u'',
+              u'successor_oguid': u'',
+              u'rendered_text': u'',
               u'transition': u'transition-add-document'}],
             browser.json['responses'])

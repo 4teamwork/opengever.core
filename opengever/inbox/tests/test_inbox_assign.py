@@ -4,7 +4,7 @@ from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from Products.CMFCore.utils import getToolByName
 from sqlalchemy import desc
@@ -57,15 +57,15 @@ class TestAssignForwarding(FunctionalTestCase):
     def test_assign_add_corresonding_response(self, browser):
         self.assign_forwarding('org-unit-2', 'Fake Response')
 
-        response = IResponseContainer(self.forwarding)[-1]
+        response = IResponseContainer(self.forwarding).list()[-1]
 
-        responsible_change = {'id': 'responsible',
-                              'name': u'label_responsible',
+        responsible_change = {'field_id': 'responsible',
+                              'field_title': u'label_responsible',
                               'before': u'inbox:org-unit-1',
                               'after': u'inbox:org-unit-2'}
 
-        responsible_client_change = {'id': 'responsible_client',
-                                     'name': u'label_resonsible_client',
+        responsible_client_change = {'field_id': 'responsible_client',
+                                     'field_title': u'label_resonsible_client',
                                      'before': u'org-unit-1',
                                      'after': u'org-unit-2'}
 

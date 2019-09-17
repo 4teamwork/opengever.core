@@ -5,7 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.base.model import create_session
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
@@ -122,11 +122,11 @@ class TestTeamTasks(IntegrationTestCase):
         browser.fill({'Response': u'Das \xfcbernehme ich!'})
         browser.click_on('Save')
 
-        response = IResponseContainer(self.task)[-1]
+        response = IResponseContainer(self.task).list()[-1]
         expected = [{'before': u'team:1',
                      'after': 'kathi.barfuss',
-                     'id': 'responsible',
-                     'name': u'label_responsible'}]
+                     'field_id': 'responsible',
+                     'field_title': u'label_responsible'}]
 
         self.assertEqual(
             expected, [dict(change) for change in response.changes])
@@ -152,11 +152,11 @@ class TestTeamTasks(IntegrationTestCase):
         self.assertEquals(
             self.regular_user.getId(), successor.get_sql_object().responsible)
         self.assertEquals(
-            [{'after': 'kathi.barfuss', 'id': 'responsible',
-              'name': u'label_responsible', 'before': u'team:1'}],
-            IResponseContainer(self.task)[-1].changes)
+            [{'after': 'kathi.barfuss', 'field_id': 'responsible',
+              'field_title': u'label_responsible', 'before': u'team:1'}],
+            IResponseContainer(self.task).list()[-1].changes)
         self.assertEquals('task-transition-open-in-progress',
-                          IResponseContainer(self.task)[-1].transition)
+                          IResponseContainer(self.task).list()[-1].transition)
 
     @browsing
     def test_multi_admin_unit_team_task_edit_in_issuer_dossier(self, browser):

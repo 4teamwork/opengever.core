@@ -8,7 +8,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
@@ -87,11 +87,11 @@ class TestAssignTask(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         self.assign_task(self.secretariat_user, u'Please make that for me.')
 
-        response = IResponseContainer(self.task)[-1]
+        response = IResponseContainer(self.task).list()[-1]
         self.assertEquals(
             [{'after': self.secretariat_user.getId(),
-              'id': 'responsible',
-              'name': u'label_responsible',
+              'field_id': 'responsible',
+              'field_title': u'label_responsible',
               'before': self.regular_user.getId()}],
             response.changes)
         self.assertEquals('Please make that for me.', response.text)

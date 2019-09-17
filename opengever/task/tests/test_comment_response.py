@@ -4,7 +4,7 @@ from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.comment_response import CommentResponseHandler
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.testing import FunctionalTestCase

@@ -203,7 +203,7 @@ class TestTaskIntegration(FunctionalTestCase):
                          .within(maintask)
                          .titled('maintask'))
 
-        response = IResponseContainer(maintask)[-1]
+        response = IResponseContainer(maintask).list()[-1]
         self.assertEquals(intids.getId(subtask), response.added_objects[0].to_id)
         self.assertEquals('transition-add-subtask', response.transition)
 
@@ -233,7 +233,7 @@ class TestTaskIntegration(FunctionalTestCase):
                           .within(maintask)
                           .titled('Letter to Peter'))
 
-        response = IResponseContainer(maintask)[-1]
+        response = IResponseContainer(maintask).list()[-1]
         self.assertEquals(intids.getId(document), response.added_objects[0].to_id)
         self.assertEquals('transition-add-document', response.transition)
 

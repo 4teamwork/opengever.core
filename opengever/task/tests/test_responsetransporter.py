@@ -1,7 +1,7 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
@@ -40,9 +40,9 @@ class TestResponeTransporter(FunctionalTestCase):
 
         responses = IResponseContainer(copy)
         self.assertEquals(1, len(responses))
-        self.assertEquals('task-transition-open-in-progress', responses[0].transition)
-        self.assertEquals(u'Ich \xfcbernehme diese Aufgabe', responses[0].text)
-        self.assertEquals(TEST_USER_ID, responses[0].creator)
+        self.assertEquals('task-transition-open-in-progress', responses.list()[0].transition)
+        self.assertEquals(u'Ich \xfcbernehme diese Aufgabe', responses.list()[0].text)
+        self.assertEquals(TEST_USER_ID, responses.list()[0].creator)
 
     def test_get_responses(self):
         copy = create(Builder('task')
@@ -53,9 +53,9 @@ class TestResponeTransporter(FunctionalTestCase):
 
         responses = IResponseContainer(copy)
         self.assertEquals(1, len(responses))
-        self.assertEquals('task-transition-open-in-progress', responses[0].transition)
-        self.assertEquals(u'Ich \xfcbernehme diese Aufgabe', responses[0].text)
-        self.assertEquals(TEST_USER_ID, responses[0].creator)
+        self.assertEquals('task-transition-open-in-progress', responses.list()[0].transition)
+        self.assertEquals(u'Ich \xfcbernehme diese Aufgabe', responses.list()[0].text)
+        self.assertEquals(TEST_USER_ID, responses.list()[0].creator)
 
     def test_syncing_response_changes(self):
         add_simple_response(self.task,
@@ -71,14 +71,14 @@ class TestResponeTransporter(FunctionalTestCase):
             'admin-unit-1', copy.get_physical_path())
 
         self.assertEquals([{u'after': u'peter.mueller',
-                            u'id': u'responsible',
-                            u'name': u'label_responsible',
+                            u'field_id': u'responsible',
+                            u'field_title': u'label_responsible',
                             u'before': u'hugo.boss'},
                            {u'after': u'org-unit-2',
-                            u'id': u'responsible_client',
-                            u'name': u'label_resonsible_client',
+                            u'field_id': u'responsible_client',
+                            u'field_title': u'label_resonsible_client',
                             u'before': u'org-unit-1'}],
-                          IResponseContainer(copy)[1].changes)
+                          IResponseContainer(copy).list()[1].changes)
 
     def test_deadline_change_synchronisation(self):
         IDeadlineModifier(self.task).modify_deadline(
@@ -94,7 +94,7 @@ class TestResponeTransporter(FunctionalTestCase):
 
         self.assertEquals(
             [{u'after': date(2016, 03, 29),
-              u'id': u'deadline',
-              u'name': u'label_deadline',
+              u'field_id': u'deadline',
+              u'field_title': u'label_deadline',
               u'before': date(2016, 03, 27)}],
-            IResponseContainer(copy)[1].changes)
+            IResponseContainer(copy).list()[1].changes)
