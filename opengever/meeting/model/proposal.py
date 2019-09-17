@@ -394,12 +394,6 @@ class Proposal(Base):
             IHistory(submitted_proposal).append_record(u'decided')
             self.execute_transition('scheduled-decided')
 
-        expect_ok_response(
-            dispatch_request(self.admin_unit_id,
-                             '@@receive-proposal-decided',
-                             path=self.physical_path),
-            'Unexpected response {!r} when deciding proposal.'
-        )
         self._return_excerpt(excerpt_document)
 
     def register_excerpt(self, document_intid):
@@ -437,11 +431,10 @@ class Proposal(Base):
         """
         from opengever.meeting.command import CreateExcerptCommand
 
-        dossier = self.resolve_proposal().get_containing_dossier()
         response = CreateExcerptCommand(
             self.resolve_submitted_excerpt_document(),
             self.admin_unit_id,
-            '/'.join(dossier.getPhysicalPath())).execute()
+            self.physical_path).execute()
         return response['intid']
 
     def get_meeting_link(self):

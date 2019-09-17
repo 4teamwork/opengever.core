@@ -629,4 +629,4 @@ class CreateExcerptCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-excerpt-document', **self.kwargs)
+            view='receive-proposal-decided', **self.kwargs)
