@@ -796,6 +796,9 @@ def document_attached_to_email(context, event):
 
     The document in question is passed into the ObjectEvent.
     """
+    if gever_is_readonly():
+        return
+
     document = event.object
 
     doc_journal = _(u'label_document_attached',
@@ -806,6 +809,9 @@ def document_attached_to_email(context, event):
 
 
 def dossier_attached_to_email(context, event):
+    if gever_is_readonly():
+        return
+
     dossier_journal = _(u'label_document_in_dossier_attached',
                         default=u'Document in dossier attached to email '
                                 u'via OfficeConnector')
