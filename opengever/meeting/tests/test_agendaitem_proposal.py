@@ -446,6 +446,10 @@ class TestProposalAgendaItem(IntegrationTestCase):
             excerpt,
             agenda_item.proposal.submitted_excerpt_document.resolve_document())
 
+        # restore access to dossier
+        self.dossier.__ac_local_roles_block__ = False
+        self.assert_workflow_state('proposal-state-decided', self.proposal)
+
     @browsing
     def test_agenda_item_create_task_url(self, browser):
         self.login(self.committee_responsible, browser)

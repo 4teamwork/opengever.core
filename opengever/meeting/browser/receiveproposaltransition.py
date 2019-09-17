@@ -3,6 +3,7 @@ from opengever.base.request import tracebackify
 from opengever.base.security import as_internal_workflow_transition
 from opengever.base.security import elevated_privileges
 from opengever.base.utils import ok_response
+from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalRemovedFromScheduleActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.interfaces import IHistory
@@ -56,5 +57,24 @@ class ReceiveProposalUnscheduled(BrowserView):
                 u'remove_scheduled', meeting_id=meeting_id)
             ProposalRemovedFromScheduleActivity(
                 self.context, self.request, meeting_id).record()
+
+        return ok_response(self.request)
+
+
+@tracebackify
+class ReceiveProposalDecided(BrowserView):
+    """Receive a remote transition execution to decide the proposal.
+
+    This view is only available for internal requests.
+    """
+    def __call__(self):
+        alsoProvides(self.request, IDisableCSRFProtection)  # internal request
+
+        with elevated_privileges():
+            with as_internal_workflow_transition():
+                api.content.transition(
+                    obj=self.context, transition='proposal-transition-decide')
+            IHistory(self.context).append_record(u'decided')
+            ProposalDecideActivity(self.context, self.request).record()
 
         return ok_response(self.request)
