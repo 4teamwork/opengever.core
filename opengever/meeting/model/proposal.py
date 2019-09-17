@@ -135,6 +135,8 @@ class Proposal(Base):
     WORKFLOW_STATE_TO_SQL_STATE = {
         'proposal-state-active': 'pending',
         'proposal-state-cancelled': 'cancelled',
+        'proposal-state-decided': 'decided',
+        'proposal-state-scheduled': 'scheduled',
         'proposal-state-submitted': 'submitted',
     }
 
