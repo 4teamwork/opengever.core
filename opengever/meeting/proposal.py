@@ -24,7 +24,6 @@ from opengever.meeting.activity.watchers import remove_watchers_on_submitted_pro
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
-from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.interfaces import IHistory
@@ -394,7 +393,6 @@ class SubmittedProposal(ModelContainer, ProposalBase):
     def reject(self, text):
         """Reject the submitted proposal."""
 
-        RejectProposalCommand(self).execute()
         proposal = self.load_model()
         proposal.reject(text)
 
@@ -607,18 +605,6 @@ class Proposal(Container, ProposalBase):
             copy_command.execute()
 
         ProposalSubmittedActivity(self, self.REQUEST).record()
-
-    def reject(self):
-        """Reject the proposal.
-
-        Called via remote-request after the proposal has been rejected on the
-        committee side.
-        """
-
-        ProposalRejectedActivity(self, self.REQUEST).record()
-        self.date_of_submission = None
-        api.content.transition(obj=self,
-                               transition='proposal-transition-reject')
 
     def get_overview_attributes(self):
         data = super(Proposal, self).get_overview_attributes()

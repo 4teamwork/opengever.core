@@ -45,6 +45,7 @@ WHITELIST = (
     'opengever.meeting.browser.receiveproposaltransition.ReceiveProposalScheduled',
     'opengever.meeting.browser.receiveproposaltransition.ReceiveProposalUnscheduled',
     'opengever.meeting.browser.receiveproposaltransition.ReceiveProposalDecided',
+    'opengever.meeting.browser.receiveproposaltransition.ReceiveProposalRejected',
 )
 
 

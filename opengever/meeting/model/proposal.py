@@ -338,7 +338,17 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        IHistory(self.resolve_proposal()).append_record(u'rejected', text=text)
+
+        request_data = {'data': advancedjson.dumps({
+            'text': text,
+        })}
+        expect_ok_response(
+            dispatch_request(self.admin_unit_id,
+                             '@@receive-proposal-rejected',
+                             path=self.physical_path,
+                             data=request_data),
+            'Unexpected response {!r} when rejecting proposal.'
+        )
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')

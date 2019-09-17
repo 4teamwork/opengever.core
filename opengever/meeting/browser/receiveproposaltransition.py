@@ -6,6 +6,7 @@ from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.utils import ok_response
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting.activity.activities import ProposalDecideActivity
+from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalRemovedFromScheduleActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.interfaces import IHistory
@@ -90,3 +91,26 @@ class ReceiveProposalDecided(PrivilegedReceiveObject):
         document = super(ReceiveProposalDecided, self).receive()
         ILockable(document).lock(MEETING_EXCERPT_LOCK)
         return document
+
+
+@tracebackify
+class ReceiveProposalRejected(BrowserView):
+    """Receive a remote transition execution to reject the proposal.
+
+    This view is only available for internal requests.
+    """
+    def __call__(self):
+        data = advancedjson.loads(self.request.get('data'))
+        text = data['text']
+
+        with elevated_privileges():
+            with as_internal_workflow_transition():
+                api.content.transition(
+                    obj=self.context, transition='proposal-transition-reject')
+            IHistory(self.context).append_record(
+                u'rejected', text=text)
+            ProposalRejectedActivity(self.context, self.request).record()
+
+            self.context.date_of_submission = None
+
+        return ok_response(self.request)
