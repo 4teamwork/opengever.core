@@ -11,6 +11,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.journal import _
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
+from opengever.readonly.utils import gever_is_readonly
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.sharing.behaviors import IStandard
 from opengever.sharing.browser.sharing import ROLE_MAPPING
@@ -475,6 +476,8 @@ FILE_COPY_DOWNLOADED = 'File copy downloaded'
 
 
 def file_copy_downloaded(context, event):
+    if gever_is_readonly():
+        return
 
     title_unversioned = _(u'label_file_copy_downloaded',
                           default=u'Download copy')
