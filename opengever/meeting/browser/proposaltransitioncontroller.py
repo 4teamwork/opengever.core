@@ -1,7 +1,9 @@
+from opengever.base.interfaces import IInternalWorkflowTransition
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five import BrowserView
 from zExceptions import NotFound
+from zope.globalrequest import getRequest
 from zope.interface import Interface
 
 
@@ -115,6 +117,22 @@ class ProposalTransitionController(BrowserView):
     @action('proposal-transition-submit')
     def submit_action(self, transition):
         return self._addtransitioncomment_form_url(transition)
+
+    @guard('proposal-transition-decide')
+    def decide_guard(self):
+        return IInternalWorkflowTransition.providedBy(getRequest())
+
+    @guard('proposal-transition-reject')
+    def reject_guard(self):
+        return IInternalWorkflowTransition.providedBy(getRequest())
+
+    @guard('proposal-transition-schedule')
+    def schedule_guard(self):
+        return IInternalWorkflowTransition.providedBy(getRequest())
+
+    @guard('proposal-transition-unschedule')
+    def unschedule_guard(self):
+        return IInternalWorkflowTransition.providedBy(getRequest())
 
     def _get_function_for_transition(self, type_, transition):
         """Returns the appropriate function (guard or action) for a
