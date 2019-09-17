@@ -3,7 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
+from opengever.task.task_response import TaskResponse
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 import transaction
@@ -312,7 +312,7 @@ class TestResponseDescriptions(FunctionalTestCase):
     @browsing
     def test_null_fallback(self, browser):
         # add null response
-        null_response = Response(None)
+        null_response = TaskResponse(None)
         IResponseContainer(self.task).add(null_response)
         transaction.commit()
 

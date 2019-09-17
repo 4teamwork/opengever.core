@@ -10,7 +10,10 @@ from zope.interface import Interface
 
 
 class IResponseContainer(Interface):
-    pass
+    """Deprecated interface. Used for old task response implementation.
+
+    Remove as soon as upgrade MigrateOldTaskResponsesToResponsesNewImplementation
+    """
 
 
 class IResponse(Interface):
@@ -24,6 +27,10 @@ class IResponse(Interface):
 @implementer(IResponseContainer)
 @adapter(ITask)
 class ResponseContainer(object):
+    """Deprecated object. Used for old task response implementation.
+
+    Remove as soon as upgrade MigrateOldTaskResponsesToResponsesNewImplementation
+    """
     ANNO_KEY = 'poi.responses'
 
     def __init__(self, context):
@@ -40,5 +47,9 @@ class ResponseContainer(object):
 
 
 class Response(Persistent):
+    """Deprecated object. Used for old task response implementation.
 
+    Remove as soon as upgrade MigrateOldTaskResponsesToResponsesNewImplementation
+    have been installed on every deployment.
+    """
     implements(IResponse)

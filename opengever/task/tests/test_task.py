@@ -7,10 +7,10 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from opengever.activity.model import Activity
 from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.task import ITask
+from opengever.task.task_response import TaskResponse
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -138,7 +138,7 @@ class TestTaskIntegration(FunctionalTestCase):
 
     def test_addresponse(self):
         t1 = create(Builder('task').titled('Task 1'))
-        res = Response("")
+        res = TaskResponse("")
         container = IResponseContainer(t1)
         container.add(res)
         self.failUnless(res in container)

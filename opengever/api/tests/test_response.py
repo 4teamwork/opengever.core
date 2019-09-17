@@ -41,22 +41,16 @@ class TestResponseGETSerialization(IntegrationTestCase):
         browser.open(self.todo, method="GET", headers=self.api_headers)
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
-              u'added_objects': [],
               u'changes': [],
               u'created': u'2016-12-09T09:40:00',
               u'creator': {
                   u'title': u'Schr\xf6dinger B\xe9atrice',
                   u'token': u'beatrice.schrodinger'},
-              u'mimetype': u'',
-              u'related_items': [],
-              u'rendered_text': u'',
               u'response_id': 1481272800000000,
               u'response_type': u'default',
-              u'successor_oguid': u'',
               u'text': u'Ich bin hier anderer Meinung!',
-              u'transition': u''},
+              },
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1482564180000000',
-              u'added_objects': [],
               u'changes': [{u'after': u'Bar',
                             u'before': u'Foo',
                             u'field_id': u'title',
@@ -65,14 +59,11 @@ class TestResponseGETSerialization(IntegrationTestCase):
               u'creator': {
                   u'title': u'Hugentobler Fridolin',
                   u'token': u'fridolin.hugentobler'},
-              u'mimetype': u'',
-              u'related_items': [],
-              u'rendered_text': u'',
               u'response_id': 1482564180000000,
               u'response_type': u'default',
-              u'successor_oguid': u'',
               u'text': u'Ok, Danke f\xfcr dein Feedback',
-              u'transition': u''}],
+              }
+             ],
             browser.json['responses'])
 
 
@@ -99,19 +90,14 @@ class TestResponseGET(IntegrationTestCase):
         browser.open(url, method="GET", headers=self.api_headers)
         self.assertEquals(
             {u'@id': url,
-             u'added_objects': [],
              u'changes': [],
              u'created': u'2016-12-09T09:40:00',
              u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
                           u'token': self.workspace_member.id},
-             u'mimetype': u'',
-             u'related_items': [],
-             u'rendered_text': u'',
              u'response_id': 1481272800000000,
              u'response_type': u'default',
-             u'successor_oguid': u'',
              u'text': u'Ich bin hier anderer Meinung!',
-             u'transition': u''},
+             },
             browser.json)
 
 
@@ -152,12 +138,6 @@ class TestResponsePost(IntegrationTestCase):
                  u'token': self.workspace_member.id,
                  u'title': u'Schr\xf6dinger B\xe9atrice'},
              u'text': u'Angebot \xfcberpr\xfcft',
-             u'transition': u'',
-             u'successor_oguid': u'',
-             u'rendered_text': u'',
-             u'related_items': [],
-             u'mimetype': u'',
-             u'added_objects': [],
             },
             browser.json)
 

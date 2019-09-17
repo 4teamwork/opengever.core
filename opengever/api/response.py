@@ -43,6 +43,8 @@ class ResponseDefaultFieldSerializer(object):
 @adapter(IResponse, Interface)
 class SerializeResponseToJson(SerializeFolderToJson):
 
+    model = IResponse
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -52,7 +54,7 @@ class SerializeResponseToJson(SerializeFolderToJson):
             kwargs['container'].absolute_url(), self.context.response_id)
 
         result = {'@id': response_url}
-        for name, field in getFields(IResponse).items():
+        for name, field in getFields(self.model).items():
             serializer = queryMultiAdapter(
                 (field, self.context, self.request), IFieldSerializer)
             value = serializer()
@@ -94,12 +96,15 @@ class ResponseGet(Service):
 
         response = response_container[self._get_response_id]
         serializer = getMultiAdapter((response, self.request), ISerializeToJson)
+
         return serializer(container=self.context)
 
 
 class ResponsePost(Service):
     """Add a Response to the current context.
     """
+
+    response_class = Response
 
     def reply(self):
         # Disable CSRF protection
@@ -112,7 +117,7 @@ class ResponsePost(Service):
         if not text:
             raise BadRequest("Property 'text' is required")
 
-        response = Response(COMMENT_RESPONSE_TYPE)
+        response = self.response_class(COMMENT_RESPONSE_TYPE)
         response.text = text
         IResponseContainer(self.context).add(response)
 

@@ -4,15 +4,15 @@ from datetime import datetime
 from opengever.base.request import dispatch_json_request
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
-from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
 from opengever.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.document.versioner import Versioner
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
+from opengever.task.task_response import ITaskResponse
+from opengever.task.task_response import TaskResponse
 from opengever.task.util import get_documents_of_task
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
@@ -95,8 +95,7 @@ class ResponseTransporter(object):
         data = []
         for resp in IResponseContainer(self.context):
             resp_data = {}
-
-            for key in IResponse.names():
+            for key in list(ITaskResponse):
                 val = getattr(resp, key, None)
                 try:
                     val = self._encode(val)
@@ -114,7 +113,7 @@ class ResponseTransporter(object):
         container = IResponseContainer(self.context)
 
         for resp_data in data:
-            response = Response('')
+            response = TaskResponse('')
 
             for key, value in resp_data.items():
                 if value:

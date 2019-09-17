@@ -7,7 +7,6 @@ from persistent.list import PersistentList
 from plone import api
 from plone.dexterity.utils import iterSchemata
 from plone.restapi.interfaces import IFieldSerializer
-from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.annotation import IAnnotations
 from zope.component import adapter
@@ -154,23 +153,6 @@ class IResponse(Interface):
 
     changes = schema.List(required=False, value_type=schema.Dict())
 
-    # Relations to added objects
-    added_objects = RelationList(required=False)
-
-    # OGUID releation to a successor
-    successor_oguid = schema.TextLine(required=False)
-
-    # Rendered text (html) for caching
-    rendered_text = schema.Text(required=False)
-
-    # ID of perfomed transition
-    transition = schema.TextLine(required=False)
-
-    # Mime type of the response.
-    mimetype = schema.TextLine(required=False)
-
-    related_items = RelationList(required=False)
-
 
 class Response(Persistent):
     """A persistent lightweight object which represents a single response.
@@ -188,13 +170,7 @@ class Response(Persistent):
         self.creator = api.user.get_current().id
 
         self.text = ''
-        self.successor_oguid = ''
-        self.rendered_text = ''
-        self.transition = ''
-        self.mimetype = ''
         self.changes = PersistentList()
-        self.added_objects = PersistentList()
-        self.related_items = PersistentList()
 
     def add_change(self, field_id, before, after, field_title=''):
         self.changes.append(PersistentDict(
@@ -203,9 +179,6 @@ class Response(Persistent):
             before=before,
             after=after
         ))
-
-    def add_related_item(self, relation):
-        self.related_items.append(relation)
 
 
 COMMENT_RESPONSE_TYPE = 'comment'

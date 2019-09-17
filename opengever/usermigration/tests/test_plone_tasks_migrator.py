@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
+from opengever.task.task_response import TaskResponse
 from opengever.testing import FunctionalTestCase
 from opengever.usermigration.plone_tasks import PloneTasksMigrator
 
@@ -40,7 +40,7 @@ class TestPloneTasksMigrator(FunctionalTestCase):
     def test_migrates_plone_task_response_creator(self):
         task = create(Builder('task'))
 
-        response = Response()
+        response = TaskResponse()
         response.creator = 'HANS.MUSTER'
         IResponseContainer(task).add(response)
 
@@ -52,7 +52,7 @@ class TestPloneTasksMigrator(FunctionalTestCase):
     def test_migrates_plone_task_responsible_before(self):
         task = create(Builder('task'))
 
-        response = Response()
+        response = TaskResponse()
         response.add_change('responsible', 'HANS.MUSTER', 'peter')
         IResponseContainer(task).add(response)
 
@@ -64,7 +64,7 @@ class TestPloneTasksMigrator(FunctionalTestCase):
     def test_migrates_plone_task_responsible_after(self):
         task = create(Builder('task'))
 
-        response = Response()
+        response = TaskResponse()
         response.add_change('responsible', 'peter', 'HANS.MUSTER')
         IResponseContainer(task).add(response)
 

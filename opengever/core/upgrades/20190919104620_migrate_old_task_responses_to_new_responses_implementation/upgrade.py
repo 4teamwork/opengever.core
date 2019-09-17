@@ -1,7 +1,7 @@
 from ftw.upgrade import UpgradeStep
 from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
 from opengever.task.adapters import IResponseContainer as OldIResponseContainer
+from opengever.task.task_response import TaskResponse
 from opengever.task.task import ITask
 from persistent.list import PersistentList
 from zope.annotation.interfaces import IAnnotations
@@ -21,7 +21,7 @@ class MigrateOldTaskResponsesToNewResponsesImplementation(UpgradeStep):
         container = IResponseContainer(task)
         old_container = OldIResponseContainer(task)
         for old_response in old_container:
-            response = Response()
+            response = TaskResponse()
 
             if old_response.text:
                 response.text = old_response.text

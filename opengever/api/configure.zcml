@@ -20,6 +20,7 @@
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
+  <adapter factory=".task.SerializeTaskResponseToJson" />
   <adapter factory=".serializer.long_converter" />
 
   <adapter factory=".todo.DeserializeToDoFromJson" />
@@ -435,6 +436,15 @@
       for="opengever.workspace.interfaces.IWorkspace"
       factory=".todo.ToDoMove"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@responses"
+      for="opengever.task.task.ITask"
+      factory=".task.TaskResponsePost"
+      permission="cmf.ModifyPortalContent"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
 </configure>

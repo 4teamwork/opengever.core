@@ -1,9 +1,9 @@
 from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
 from opengever.task.activities import TaskCommentedActivity
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.response_syncer import sync_task_response
+from opengever.task.task_response import TaskResponse
 from plone import api
 from zope.event import notify
 from zope.interface import implements
@@ -31,7 +31,7 @@ class CommentResponseHandler(object):
         return self
 
     def _create_response(self, text):
-        response = Response(COMMENT_RESPONSE_TYPE)
+        response = TaskResponse(COMMENT_RESPONSE_TYPE)
         response.text = text
         response.transition = self.TRANSITION_TYPE
 

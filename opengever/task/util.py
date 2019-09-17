@@ -1,9 +1,9 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.activities import TaskTransitionActivity
+from opengever.task.task_response import TaskResponse
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -102,7 +102,7 @@ def add_simple_response(task, text='', field_changes=None, added_objects=None,
     `successor_oguid`: an OGUID to a (remote) object which was referenced.
     """
 
-    response = Response()
+    response = TaskResponse()
     response.text = text
 
     for key, value in kwargs.items():
