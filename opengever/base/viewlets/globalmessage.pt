@@ -1,0 +1,7 @@
+<div id="global-messages-container">
+<div id="global-messages" i18n:domain="opengever.base" tal:condition="view/available">
+
+  <div tal:replace="structure view/markup" />
+
+</div>
+</div>

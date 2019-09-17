@@ -88,6 +88,8 @@
         <drop css:theme="#portal-notifications" />
       </rules>
 
+      <replace css:content-children="#global-messages-container" css:theme-children="#globalmessages-wrapper" />
+
       <replace css:content-children=".gever-portal-control" css:theme-children="#gever-portal-controls" />
 
       <!-- header -->

@@ -107,4 +107,11 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="opengever.base.globalmessage"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      class=".globalmessage.GlobalMessageViewlet"
+      permission="zope2.View"
+      />
+
 </configure>
