@@ -49,8 +49,12 @@ class TestSafeCallDecorator(TestCase):
     def test_return_subclass(self):
         self.assertTrue(issubclass(ValidView, BrowserView))
 
-    def test_decorated_view_is_now_a_SafeCall_view(self):
-        self.assertEquals('SafeCall', ValidView.__name__)
+    def test_decorated_view_name_is_preserved(self):
+        self.assertEquals('ValidView', ValidView.__name__)
+
+    def test_decorated_view_module_is_preserved(self):
+        self.assertEquals('opengever.base.tests.test_safe_call_decorator',
+                          ValidView.__module__)
 
     def test_exceptions_gets_catched_and_returned(self):
         view = RaiseErrorView(object(), TestRequest())

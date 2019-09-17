@@ -178,7 +178,6 @@ def tracebackify(*args, **kwargs):
         to_re_raise = [to_re_raise]
 
     def wrapper(Cls):
-
         class SafeCall(Cls):
             def __call__(self, *args, **kwargs):
 
@@ -198,6 +197,11 @@ def tracebackify(*args, **kwargs):
 
                     return ''.join(traceback.format_exception(e_type, e_value,
                                                               tb))
+
+        # preserve some parts of the signature of what we're decorating
+        SafeCall.__name__ = Cls.__name__
+        SafeCall.__module__ = Cls.__module__
+
         return SafeCall
 
     if args:
