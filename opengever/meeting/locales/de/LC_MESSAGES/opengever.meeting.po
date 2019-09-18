@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-04 11:26+0000\n"
+"POT-Creation-Date: 2019-09-19 16:06+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1477,6 +1477,16 @@ msgstr "Sitzungen"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "memberships"
 msgstr "Mitgliedschaften"
+
+#. Default: "The proposal document is being checked out by ${creator}."
+#: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
+msgid "message_checkout_info"
+msgstr "Das Antragsdokument wurde von ${creator} ausgecheckt."
+
+#. Default: "The committee ${committee_title} is no longer active."
+#: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
+msgid "message_committee_inactive_warning"
+msgstr "Das Ko­mi­tee ${committee_title} wurde deaktiviert."
 
 #. Default: "Your changes were not saved, the protocol is locked by ${username}."
 #: ./opengever/meeting/browser/meetings/edit_meeting.py
