@@ -96,6 +96,25 @@ class ProposalOverview(OverviewBase, BrowserView, GeverTabMixin):
         wftool = api.portal.get_tool(name='portal_workflow')
         return wftool.listActionInfos(object=self.context)
 
+    def discreet_transition_items(self):
+        """Return discreet transition items.
+
+        They are shown as a hint to users in case a transition is not available
+        for some reason.
+
+        Only show items if the proposal is active but the submit action is not
+        available.
+        """
+        if api.content.get_state(self.context) != 'proposal-state-active':
+            return []
+
+        if self.context.contains_checked_out_documents():
+            return ['proposal-transition-cancel', 'proposal-transition-submit']
+        elif not self.context.has_active_committee():
+            return ['proposal-transition-submit']
+
+        return []
+
     def transitions(self):
         return []
 
@@ -139,4 +158,7 @@ class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
         return self.context.get_transitions()
 
     def transition_items(self):
+        return []
+
+    def discreet_transition_items(self):
         return []
