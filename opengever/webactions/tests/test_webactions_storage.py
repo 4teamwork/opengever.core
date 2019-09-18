@@ -122,7 +122,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "('title', RequiredMissing('title'))).",
-            cm.exception.message)
+            str(cm.exception))
 
     def test_icon_required_for_certain_display_locations(self):
         storage = get_storage()
@@ -141,7 +141,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "(None, Invalid(\"Display location 'title-buttons' requires an icon.\",))).",
-            cm.exception.message)
+            str(cm.exception))
 
     def test_icon_not_allowed_for_certain_display_locations(self):
         storage = get_storage()
@@ -161,7 +161,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "(None, Invalid(\"Display location 'actions-menu' doesn't allow an icon.\",))).",
-            cm.exception.message)
+            str(cm.exception))
 
     def test_at_most_one_icon_allowed(self):
         storage = get_storage()
@@ -183,7 +183,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
             "WebAction doesn't conform to schema (First error: "
             "(None, Invalid(\"Icon properties ['icon_name', 'icon_data'] are "
             "mutually exclusive. At most one icon allowed.\",))).",
-            cm.exception.message)
+            str(cm.exception))
 
     def test_rejects_invalid_data_uris_for_icon_data(self):
         storage = get_storage()
@@ -205,7 +205,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "('icon_data', InvalidURI('foo'))).",
-            cm.exception.message)
+            str(cm.exception))
 
         # Not a data URI
         new_action['icon_data'] = 'http://foo'
@@ -216,7 +216,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "('icon_data', InvalidBase64DataURI('http://foo'))).",
-            cm.exception.message)
+            str(cm.exception))
 
         # No base64 encoding declared
         new_action['icon_data'] = 'data:image/png,%s' % self.BASE64_ENCODED_PNG
@@ -227,7 +227,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "('icon_data', InvalidBase64DataURI('Data URI does not seem to declare base64 encoding.'))).",
-            cm.exception.message)
+            str(cm.exception))
 
         # Missing mimetype
         new_action['icon_data'] = 'data:base64,%s' % self.BASE64_ENCODED_PNG
@@ -238,7 +238,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "('icon_data', InvalidBase64DataURI('Data URI does not seem to declare a mimetype.'))).",
-            cm.exception.message)
+            str(cm.exception))
 
         # Not actually base64 encoded
         new_action['icon_data'] = 'data:image/png;base64,foo'  # noqa
@@ -249,7 +249,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "('icon_data', InvalidBase64DataURI(\"Data URI could not be decoded as base64 (Error('Incorrect padding',)).\"))).",  # noqa
-            cm.exception.message)
+            str(cm.exception))
 
     def test_cant_add_webaction_with_same_unique_name_twice(self):
         storage = get_storage()
@@ -277,7 +277,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
 
         self.assertEqual(
             "An action with the unique_name u'open-in-external-app-title-action' already exists",
-            cm.exception.message)
+            str(cm.exception))
 
     def test_adding_action_correctly_updates_unique_name_index(self):
         storage = get_storage()
@@ -322,7 +322,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
 
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: ('action_id', UnknownField('action_id'))).",
-            cm.exception.message)
+            str(cm.exception))
 
 
 class TestWebActionsStorageRetrieval(IntegrationTestCase):
@@ -401,7 +401,7 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
 
         self.assertEqual(
             "An action with the unique_name u'existing-unique-name' already exists",
-            cm.exception.message)
+            str(cm.exception))
 
     def test_update_webaction_with_invalid_fields_raises(self):
         storage = get_storage()
@@ -419,7 +419,7 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "('target_url', InvalidURI('not-an-url'))).",
-            cm.exception.message)
+            str(cm.exception))
 
     def test_invariants_are_validated_on_final_resulting_object(self):
         """When updating, we need to make sure that invariants are validated
@@ -451,7 +451,7 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: "
             "(None, Invalid(\"Display location 'actions-menu' doesn't allow an icon.\",))).",
-            cm.exception.message)
+            str(cm.exception))
 
         # If we however change both the properties covered by the invariant in
         # the same update, the change succeeds:
@@ -506,7 +506,7 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
 
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: ('action_id', UnknownField('action_id'))).",
-            cm.exception.message)
+            str(cm.exception))
 
 
 class TestWebActionsStorageDeletion(IntegrationTestCase):
