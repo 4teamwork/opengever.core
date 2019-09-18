@@ -197,6 +197,7 @@ class TestProposal(IntegrationTestCase):
             browser.css('table.listing').first.lists())
         self.assertEqual(u'en', proposal.language)
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
+        self.assert_workflow_state('proposal-state-active', proposal)
 
         model = proposal.load_model()
         self.assertEqual(u'Baugesuch Kreuzachkreisel', model.title)
@@ -253,6 +254,7 @@ class TestProposal(IntegrationTestCase):
             self.document.file.data,
             u'Did not succesfully copy the file over from self.document.',
             )
+        self.assert_workflow_state('proposal-state-active', browser.context)
 
     @browsing
     def test_proposal_cannot_be_created_in_browser_without_document_and_template(self, browser):
