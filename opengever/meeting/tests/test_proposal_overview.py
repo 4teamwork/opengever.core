@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.testing import IntegrationTestCase
 from urllib import urlencode
 
@@ -65,6 +66,19 @@ class TestProposalOverview(IntegrationTestCase):
             ['proposal-transition-cancel', 'Comment'],
             browser.css('.actionButtons .regular_buttons li a').text
         )
+
+    @browsing
+    def test_shows_warning_message_committee_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
+        editbar.menu_option('Actions', 'deactivate').click()
+
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.draft_proposal)
+
+        self.assertEqual(
+            [u'The committee Kommission f\xfcr Verkehr is no longer active.'],
+            warning_messages())
 
     @browsing
     def test_proposal_excerpt_document_link(self, browser):
