@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import IntegrationTestCase
 from urllib import urlencode
 
@@ -30,6 +31,20 @@ class TestProposalOverview(IntegrationTestCase):
             ['Comment'],
             browser.css('.actionButtons .regular_buttons li a').text
         )
+
+    @browsing
+    def test_shows_info_viewlet_message_proposal_document_checked_out(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        doc = self.draft_proposal.get_proposal_document()
+        self.checkout_document(doc)
+
+        browser.open(self.draft_proposal)
+
+        self.assertEqual(
+            ['The proposal document is being checked out by Ziegler Robert '
+             '(robert.ziegler).'],
+            info_messages())
 
     @browsing
     def test_shows_discreet_transition_button_committee_closed(self, browser):

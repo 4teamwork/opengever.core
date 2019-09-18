@@ -3,6 +3,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _ as document_mf
 from opengever.document.widgets.document_link import DocumentLinkWidget
+from opengever.meeting import _
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal

@@ -453,4 +453,12 @@
       allowed_interface=".proposaltransitioncontroller.IProposalTransitionController"
       />
 
+  <browser:viewlet
+      name="proposalinfoviewlet"
+      for="opengever.meeting.proposal.IProposal"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class=".viewlets.ProposalInfoViewlet"
+      permission="zope2.View"
+      />
+
 </configure>
