@@ -25,6 +25,7 @@
   <adapter factory=".task.NoCheckedoutDocsValidator" />
   <adapter factory=".transition.NoTeamsInProgressStateValidator" />
   <adapter factory=".transition.NoAdminUnitChangeInProgressStateValidator" />
+  <adapter factory=".transition.DeadlineChangedValidator" />
 
   <browser:page
       name="task_response_delete"

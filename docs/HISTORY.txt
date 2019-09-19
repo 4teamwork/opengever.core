@@ -6,6 +6,7 @@ Changelog
 
 - Set proposal plone workflow state when submitted proposal state changes. Refactor remote calls so that there is only one request per state change. [deiferni]
 - Bump ftw.solr to 2.7.0 to get console scripts for maintenance tasks. [deiferni]
+- Validate task deadline modification through the rest-api if the user uses the same deadline as already set on the task. [elioschmutz]
 - Bump ftw.solr to 2.6.2 to get fix for avoiding atomic updates with null-documents. [lgraf]
 - Add example contentent for workspaces. [elioschmutz]
 - Fix unicode error in listing endpoint. [njohner]

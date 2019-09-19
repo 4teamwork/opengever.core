@@ -34,6 +34,13 @@ class IModifyDeadlineSchema(Schema):
         )
 
 
+def validate_deadline_changed(context, value):
+    if value == context.deadline:
+        raise Invalid(
+            _('same_deadline_error',
+              default=u'The given deadline, is the current one.'))
+
+
 class ModifyDeadlineForm(Form):
     """Form wich allows to modify the deadline of a task."""
 
@@ -52,12 +59,10 @@ class ModifyDeadlineForm(Form):
     def handle_save(self, action):
         data, errors = self.extractData()
         if not errors:
-
-            if data.get('new_deadline') == self.context.deadline:
-                raise WidgetActionExecutionError(
-                    'new_deadline', Invalid(
-                        _('same_deadline_error',
-                          default=u'The given deadline, is the current one.')))
+            try:
+                validate_deadline_changed(self.context, data.get('new_deadline'))
+            except Invalid as err:
+                raise WidgetActionExecutionError('new_deadline', err)
 
             IDeadlineModifier(self.context).modify_deadline(
                 data.get('new_deadline'),

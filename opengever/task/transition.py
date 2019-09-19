@@ -13,6 +13,7 @@ from opengever.task.browser.assign import validate_no_teams
 from opengever.task.browser.delegate.metadata import IUpdateMetadata
 from opengever.task.browser.delegate.recipients import ISelectRecipientsSchema
 from opengever.task.browser.delegate.utils import create_subtasks
+from opengever.task.browser.modify_deadline import validate_deadline_changed
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.localroles import LocalRolesSetter
 from opengever.task.reminder.reminder import TaskReminder
@@ -28,6 +29,7 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import adapter
 from zope.component import getUtility
+from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.interface import implementer
@@ -193,6 +195,20 @@ class ModifyDeadlineTransitionExtender(TransitionExtender):
         IDeadlineModifier(self.context).modify_deadline(
             transition_params['new_deadline'], transition_params.get('text'),
             transition)
+
+
+class DeadlineChangedValidator(validator.SimpleFieldValidator):
+    """Deadline have to be changed.
+    """
+
+    def validate(self, value):
+        validate_deadline_changed(self.context, value)
+
+
+validator.WidgetValidatorDiscriminators(
+    DeadlineChangedValidator,
+    field=INewDeadline['new_deadline'],
+)
 
 
 @implementer(ITransitionExtender)
