@@ -273,12 +273,14 @@ class TestDeleteAgendaItems(IntegrationTestCase):
 
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
+        self.assert_workflow_state('proposal-state-scheduled', self.proposal)
         browser.open(self.agenda_item_url(agenda_item, 'delete'))
 
         self.assertEquals([{u'message': u'Agenda Item Successfully deleted',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
                           browser.json.get('messages'))
+        self.assert_workflow_state('proposal-state-submitted', self.proposal)
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):

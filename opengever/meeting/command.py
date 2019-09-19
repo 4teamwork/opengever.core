@@ -444,25 +444,6 @@ class CreateSubmittedProposalCommand(object):
         self.submitted_proposal_path = response['path']
 
 
-class RejectProposalCommand(object):
-
-    def __init__(self, submitted_proposal):
-        self.submitted_proposal = submitted_proposal
-
-    def execute(self):
-        model = self.submitted_proposal.load_model()
-        response = dispatch_request(
-            model.admin_unit_id,
-            '@@reject-proposal',
-            path=model.physical_path)
-
-        response_body = response.read()
-        if response_body != 'OK':
-            raise ValueError(
-                'Unexpected response {!r} when rejecting proposal.'.format(
-                    response_body))
-
-
 class NullUpdateSubmittedDocumentCommand(object):
 
     def __init__(self, document):
@@ -629,4 +610,4 @@ class CreateExcerptCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-excerpt-document', **self.kwargs)
+            view='receive-proposal-decided', **self.kwargs)

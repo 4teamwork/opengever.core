@@ -1,7 +1,10 @@
+from opengever.base import advancedjson
 from opengever.base.model import Base
 from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.oguid import Oguid
+from opengever.base.request import dispatch_request
+from opengever.base.request import expect_ok_response
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -132,6 +135,8 @@ class Proposal(Base):
     WORKFLOW_STATE_TO_SQL_STATE = {
         'proposal-state-active': 'pending',
         'proposal-state-cancelled': 'cancelled',
+        'proposal-state-decided': 'decided',
+        'proposal-state-scheduled': 'scheduled',
         'proposal-state-submitted': 'submitted',
     }
 
@@ -303,12 +308,24 @@ class Proposal(Base):
 
         self.execute_transition('submitted-scheduled')
         meeting.agenda_items.append(AgendaItem(proposal=self))
-        submitted_proposal = self.resolve_submitted_proposal()
+        meeting.reorder_agenda_items()
 
+        submitted_proposal = self.resolve_submitted_proposal()
         ProposalScheduledActivity(
             submitted_proposal, getRequest(), meeting.meeting_id).record()
         IHistory(self.resolve_submitted_proposal()).append_record(
             u'scheduled', meeting_id=meeting.meeting_id)
+
+        request_data = {'data': advancedjson.dumps({
+            'meeting_id': meeting.meeting_id,
+        })}
+        expect_ok_response(
+            dispatch_request(self.admin_unit_id,
+                             '@@receive-proposal-scheduled',
+                             path=self.physical_path,
+                             data=request_data),
+            'Unexpected response {!r} when scheduling proposal.'
+        )
 
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
@@ -321,12 +338,33 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        IHistory(self.resolve_proposal()).append_record(u'rejected', text=text)
+
+        request_data = {'data': advancedjson.dumps({
+            'text': text,
+        })}
+        expect_ok_response(
+            dispatch_request(self.admin_unit_id,
+                             '@@receive-proposal-rejected',
+                             path=self.physical_path,
+                             data=request_data),
+            'Unexpected response {!r} when rejecting proposal.'
+        )
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
         IHistory(self.resolve_submitted_proposal()).append_record(
             u'remove_scheduled', meeting_id=meeting.meeting_id)
+
+        request_data = {'data': advancedjson.dumps({
+            'meeting_id': meeting.meeting_id,
+        })}
+        expect_ok_response(
+            dispatch_request(self.admin_unit_id,
+                             '@@receive-proposal-unscheduled',
+                             path=self.physical_path,
+                             data=request_data),
+            'Unexpected response {!r} when unscheduling proposal.'
+        )
 
     def resolve_proposal(self):
         return self.oguid.resolve_object()
@@ -350,18 +388,25 @@ class Proposal(Base):
         assert self.is_decided()
         IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
 
-    def decide(self, agenda_item):
-        document = self.resolve_submitted_proposal().get_proposal_document()
-        checkout_manager = getMultiAdapter((document, document.REQUEST),
-                                           ICheckinCheckoutManager)
-        if checkout_manager.get_checked_out_by() is not None:
-            raise ValueError(
-                'Cannot decide proposal when proposal document is checked out.')
+    def decide(self, agenda_item, excerpt_document):
+        # Proposals for AgendaItems that were decided before we introduced that
+        # Proposals get decided only when the excerpt is returned can be
+        # already decided even if the proposal has not been returned. Thus we
+        # only decide the proposal if it has not been decided yet.
+        if not self.is_decided():
+            proposal_document = self.resolve_submitted_proposal().get_proposal_document()
+            checkout_manager = getMultiAdapter((proposal_document, proposal_document.REQUEST),
+                                               ICheckinCheckoutManager)
+            if checkout_manager.get_checked_out_by() is not None:
+                raise ValueError(
+                    'Cannot decide proposal when proposal document is checked out.')
 
-        submitted_proposal = self.resolve_submitted_proposal()
-        ProposalDecideActivity(submitted_proposal, getRequest()).record()
-        IHistory(submitted_proposal).append_record(u'decided')
-        self.execute_transition('scheduled-decided')
+            submitted_proposal = self.resolve_submitted_proposal()
+            ProposalDecideActivity(submitted_proposal, getRequest()).record()
+            IHistory(submitted_proposal).append_record(u'decided')
+            self.execute_transition('scheduled-decided')
+
+        self._return_excerpt(excerpt_document)
 
     def register_excerpt(self, document_intid):
         """Adds a GeneratedExcerpt database entry and a corresponding
@@ -374,7 +419,7 @@ class Proposal(Base):
         self.session.add(excerpt)
         self.excerpt_document = excerpt
 
-    def return_excerpt(self, document):
+    def _return_excerpt(self, document):
         """Return the selected excerpt to the proposals originating dossier.
 
         The document is registered as official excerpt for this proposal and
@@ -389,20 +434,19 @@ class Proposal(Base):
             oguid=Oguid.for_object(document), generated_version=version)
         self.submitted_excerpt_document = excerpt
 
-        document_intid = self.copy_excerpt_to_proposal_dossier()
+        document_intid = self._copy_excerpt_to_proposal_dossier()
         self.register_excerpt(document_intid)
 
-    def copy_excerpt_to_proposal_dossier(self):
+    def _copy_excerpt_to_proposal_dossier(self):
         """Copies the submitted excerpt to the source dossier and returns
         the intid of the created document.
         """
         from opengever.meeting.command import CreateExcerptCommand
 
-        dossier = self.resolve_proposal().get_containing_dossier()
         response = CreateExcerptCommand(
             self.resolve_submitted_excerpt_document(),
             self.admin_unit_id,
-            '/'.join(dossier.getPhysicalPath())).execute()
+            self.physical_path).execute()
         return response['intid']
 
     def get_meeting_link(self):

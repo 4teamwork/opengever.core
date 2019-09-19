@@ -1,4 +1,4 @@
-from DateTime import DateTime
+from copy import deepcopy
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
@@ -11,6 +11,16 @@ from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+
+
+def strip_timestamps(journal):
+    stripped_journal = []
+    for entry in journal:
+        without_time = deepcopy(entry)
+        if 'time' in without_time:
+            without_time.pop('time')
+        stripped_journal.append(without_time)
+    return stripped_journal
 
 
 class TestDossierJournalPDFView(MockTestCase):
@@ -60,7 +70,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 16:01:33 GMT+2'),
             },
             {
                 'action': {
@@ -70,7 +79,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 16:07:33 GMT+2'),
             },
             {
                 'action': {
@@ -80,7 +88,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 16:29:42 GMT+2'),
             },
             {
                 'action': {
@@ -90,7 +97,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 17:01:33 GMT+2'),
             },
             {
                 'action': {
@@ -100,7 +106,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 17:03:33 GMT+2'),
             },
             {
                 'action': {
@@ -110,7 +115,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'franzi.muller',
-                'time': DateTime('2016/08/31 17:17:35 GMT+2'),
             },
             {
                 'action': {
@@ -120,7 +124,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:01:33 GMT+2'),
             },
             {
                 'action': {
@@ -130,7 +133,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:03:33 GMT+2'),
             },
             {
                 'action': {
@@ -140,7 +142,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:05:33 GMT+2'),
             },
             {
                 'action': {
@@ -150,7 +151,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:07:33 GMT+2'),
             },
             {
                 'action': {
@@ -160,7 +160,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:09:33 GMT+2'),
             },
             {
                 'action': {
@@ -170,7 +169,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:11:33 GMT+2'),
             },
             {
                 'action': {
@@ -180,7 +178,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:13:33 GMT+2'),
             },
             {
                 'action': {
@@ -190,7 +187,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:23:33 GMT+2'),
             },
             {
                 'action': {
@@ -200,7 +196,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:25:33 GMT+2'),
             },
             {
                 'action': {
@@ -210,7 +205,6 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 18:27:33 GMT+2'),
             },
             {
                 'action': {
@@ -220,10 +214,10 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 20:15:33 GMT+2'),
             },
         ]
-        self.assertEqual(expected_journal, dossier_journal.get_journal_data())
+        self.assertEqual(
+            expected_journal, strip_timestamps(dossier_journal.get_journal_data()))
 
     def test_handle_special_white_space_characters(self):
         self.login(self.regular_user)

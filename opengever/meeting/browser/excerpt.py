@@ -1,11 +1,8 @@
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
-from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
-from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting import _
-from plone.locking.interfaces import ILockable
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -39,12 +36,3 @@ class UpdateDossierExcerpt(BrowserView):
                 context=self.request)
             Versioner(document).create_version(comment)
         return json.dumps({})
-
-
-class RecieveExcerptDocumentView(PrivilegedReceiveObject):
-    """Lock excerpt documents after recieving them."""
-
-    def receive(self):
-        document = super(RecieveExcerptDocumentView, self).receive()
-        ILockable(document).lock(MEETING_EXCERPT_LOCK)
-        return document

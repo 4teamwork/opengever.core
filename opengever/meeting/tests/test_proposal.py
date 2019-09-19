@@ -197,6 +197,7 @@ class TestProposal(IntegrationTestCase):
             browser.css('table.listing').first.lists())
         self.assertEqual(u'en', proposal.language)
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
+        self.assert_workflow_state('proposal-state-active', proposal)
 
         model = proposal.load_model()
         self.assertEqual(u'Baugesuch Kreuzachkreisel', model.title)
@@ -253,6 +254,7 @@ class TestProposal(IntegrationTestCase):
             self.document.file.data,
             u'Did not succesfully copy the file over from self.document.',
             )
+        self.assert_workflow_state('proposal-state-active', browser.context)
 
     @browsing
     def test_proposal_cannot_be_created_in_browser_without_document_and_template(self, browser):
@@ -561,13 +563,16 @@ class TestProposal(IntegrationTestCase):
         the job of the agenda item controller, not of the proposal model.
         """
         self.login(self.committee_responsible)
-        item = self.schedule_proposal(self.meeting,
-                                      self.submitted_proposal)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_proposal)
+        agenda_item.decide()
+        excerpt = agenda_item.generate_excerpt('Foo')
+
         self.checkout_document(self.submitted_proposal.get_proposal_document())
 
         model = self.submitted_proposal.load_model()
         with self.assertRaises(ValueError) as cm:
-            model.decide(item)
+            model.decide(agenda_item, excerpt)
 
         self.assertEquals(
             'Cannot decide proposal when proposal document is checked out.',

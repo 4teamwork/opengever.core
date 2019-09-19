@@ -368,12 +368,12 @@ class AgendaItem(Base):
         return False
 
     def return_excerpt(self, document):
-        # Agendaitems that were decided before we introduced that
-        # proposals get decided only when the excerpt is returned
-        # can be already decided even if the proposal has not been returned.
-        if not self.is_proposal_decided():
-            self.proposal.decide(self)
-        self.proposal.return_excerpt(document)
+        """Returning an excerpt decides the proposal.
+
+        Some legacy proposals can already be decided, the proposal can handle
+        that by itself.
+        """
+        self.proposal.decide(self, document)
 
     def generate_excerpt(self, title):
         """Generate an excerpt from the agenda items document.

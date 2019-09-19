@@ -98,6 +98,10 @@ class ReceiveObject(BrowserView):
     It returns JSON containing the created object's path and intid.
     """
 
+    @property
+    def container(self):
+        return self.context
+
     def __call__(self):
         obj = self.receive()
         portal = self.context.portal_url.getPortalObject()
@@ -117,8 +121,7 @@ class ReceiveObject(BrowserView):
 
     def receive(self):
         transporter = Transporter()
-        container = self.context
-        return transporter.receive(container, self.request)
+        return transporter.receive(self.container, self.request)
 
 
 class PrivilegedReceiveObject(ReceiveObject):
@@ -128,9 +131,8 @@ class PrivilegedReceiveObject(ReceiveObject):
 
     def receive(self):
         transporter = Transporter()
-        container = self.context
         with elevated_privileges():
-            return transporter.receive(container, self.request)
+            return transporter.receive(self.container, self.request)
 
 
 class ExtractObject(BrowserView):

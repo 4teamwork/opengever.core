@@ -431,7 +431,6 @@ class Meeting(Base, SQLFormSupport):
         assert proposal.committee == self.committee
 
         proposal.schedule(self)
-        self.reorder_agenda_items()
 
     def schedule_text(self, title, is_paragraph=False, description=None):
         self.agenda_items.append(AgendaItem(title=title,

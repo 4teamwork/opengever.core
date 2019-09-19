@@ -33,6 +33,13 @@ class TestProposalAgendaItem(IntegrationTestCase):
                           browser.json.get('messages'))
 
     @browsing
+    def test_schedule_submitted_proposal_changes_proposal_workflow_state(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
+
+        self.assert_workflow_state('proposal-state-scheduled', self.proposal)
+
+    @browsing
     def test_decide_proposal_agenda_item_generates_numbers(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(
@@ -438,6 +445,10 @@ class TestProposalAgendaItem(IntegrationTestCase):
         self.assertEqual(
             excerpt,
             agenda_item.proposal.submitted_excerpt_document.resolve_document())
+
+        # restore access to dossier
+        self.dossier.__ac_local_roles_block__ = False
+        self.assert_workflow_state('proposal-state-decided', self.proposal)
 
     @browsing
     def test_agenda_item_create_task_url(self, browser):

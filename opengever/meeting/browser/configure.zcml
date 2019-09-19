@@ -175,17 +175,42 @@
       />
 
   <browser:page
-      for="opengever.meeting.proposal.IProposal"
-      name="reject-proposal"
-      class=".rejectproposal.RejectProposal"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
       for="opengever.meeting.proposal.IBaseProposal"
       name="receive-proposal-history"
       class=".receiveproposalhistory.ReceiveProposalHistory"
       permission="zope2.View"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="receive-proposal-scheduled"
+      class=".receiveproposaltransition.ReceiveProposalScheduled"
+      permission="zope.Public"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="receive-proposal-unscheduled"
+      class=".receiveproposaltransition.ReceiveProposalUnscheduled"
+      permission="zope.Public"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="receive-proposal-decided"
+      class=".receiveproposaltransition.ReceiveProposalDecided"
+      permission="zope.Public"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="receive-proposal-rejected"
+      class=".receiveproposaltransition.ReceiveProposalRejected"
+      permission="zope.Public"
       layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
       />
 
@@ -269,13 +294,6 @@
       class=".meetingdossier_forms.MeetingDossierEditForm"
       name="edit"
       permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="*"
-      class=".excerpt.RecieveExcerptDocumentView"
-      name="recieve-excerpt-document"
-      permission="cmf.AddPortalContent"
       />
 
   <browser:page

@@ -198,16 +198,19 @@ class TestMeetingActivities(IntegrationTestCase):
     def test_record_activity_on_decide_a_proposal_for_proposal_and_submitted_proposal(self, browser):
         self.login(self.committee_responsible, browser)
         decided_activities = self.query_activities('proposal-transition-decide')
-        meeting = self.meeting.model
 
         proposal = self.create_proposal_with_issuer(
             self.dossier_responsible, self.committee, browser)
         submitted_proposal = self.submit_proposal(proposal, browser)
-        submitted_proposal.load_model().schedule(meeting)
+
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             submitted_proposal)
+        agenda_item.decide()
+        excerpt = agenda_item.generate_excerpt('Foo')
 
         self.assertEqual(0, decided_activities.count())
 
-        submitted_proposal.load_model().decide(meeting)
+        submitted_proposal.load_model().decide(agenda_item, excerpt)
 
         self.assertEqual(2, decided_activities.count())
 
