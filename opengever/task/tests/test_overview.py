@@ -84,7 +84,7 @@ class TestTaskOverview(IntegrationTestCase):
         zipfile = ZipFile(StringIO(browser.contents), 'r')
 
         self.assertEquals(
-            [u'Task - Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen/',
+            [u'Task - Rechtliche Grundlagen in Vertragsentwurf Uberprufen/',
              'Feedback zum Vertragsentwurf.docx'],
             zipfile.namelist())
 
