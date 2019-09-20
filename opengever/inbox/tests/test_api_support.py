@@ -1,7 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.inbox.yearfolder import get_current_yearfolder
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.browser.accept.utils import FORWARDING_SUCCESSOR_TYPE
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
@@ -31,7 +31,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(
             'forwarding-state-closed', api.content.get_state(forwarding))
 
-        response = IResponseContainer(forwarding)[-1]
+        response = IResponseContainer(forwarding).list()[-1]
         self.assertEqual('Wird gemacht.', response.text)
         self.assertEqual('forwarding-transition-close', response.transition)
 
@@ -56,7 +56,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(
             'forwarding-state-closed', api.content.get_state(forwarding))
 
-        response = IResponseContainer(forwarding)[-1]
+        response = IResponseContainer(forwarding).list()[-1]
         task = self.empty_dossier.objectValues()[-1]
         self.assertEqual(
             'forwarding-transition-assign-to-dossier', response.transition)
@@ -109,7 +109,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('forwarding-state-open',
                          api.content.get_state(self.inbox_forwarding))
 
-        response = IResponseContainer(self.inbox_forwarding)[-1]
+        response = IResponseContainer(self.inbox_forwarding).list()[-1]
         self.assertEqual(u'Robert macht das.', response.text)
         self.assertEqual('forwarding-transition-reassign', response.transition)
 
@@ -142,6 +142,6 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual('forwarding-state-open',
                          api.content.get_state(self.inbox_forwarding))
 
-        response = IResponseContainer(self.inbox_forwarding)[-1]
+        response = IResponseContainer(self.inbox_forwarding).list()[-1]
         self.assertEqual(u'Robert macht das.', response.text)
         self.assertEqual('forwarding-transition-reassign-refused', response.transition)

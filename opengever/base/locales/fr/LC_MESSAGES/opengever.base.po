@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-28 14:24+0000\n"
+"POT-Creation-Date: 2019-09-05 09:16+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -240,11 +240,6 @@ msgstr "Annuler"
 msgid "label_change_public_trial"
 msgstr "Modifier le 'statut public'"
 
-#. Default: "Changes"
-#: ./opengever/base/response.py
-msgid "label_changes"
-msgstr ""
-
 #. Default: "Checked out"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_checked_out"
@@ -261,15 +256,9 @@ msgid "label_confirm_action"
 msgstr "Confirmer l'action"
 
 #. Default: "Created"
-#: ./opengever/base/response.py
 #: ./opengever/base/viewlets/byline.py
 msgid "label_created"
 msgstr "Créé le"
-
-#. Default: "Creator"
-#: ./opengever/base/response.py
-msgid "label_creator"
-msgstr ""
 
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
@@ -356,16 +345,6 @@ msgstr "Justification pour le retrait du statut public"
 msgid "label_recently_touched"
 msgstr "Modifié récemment"
 
-#. Default: "Response ID"
-#: ./opengever/base/response.py
-msgid "label_response_id"
-msgstr ""
-
-#. Default: "Response type"
-#: ./opengever/base/response.py
-msgid "label_response_type"
-msgstr ""
-
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_retention_period"
@@ -385,11 +364,6 @@ msgstr "Recherche"
 #: ./opengever/base/browser/templates/gever-macros.pt
 msgid "label_severity_error"
 msgstr "Erreur"
-
-#. Default: "Text"
-#: ./opengever/base/response.py
-msgid "label_text"
-msgstr ""
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py

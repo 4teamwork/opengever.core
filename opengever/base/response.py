@@ -1,7 +1,6 @@
 from BTrees.LOBTree import LOBTree
 from contextlib import contextmanager
 from datetime import datetime
-from opengever.base import _
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
@@ -66,18 +65,25 @@ class ResponseContainer(object):
     def __init__(self, context):
         self.context = context
 
+    def __len__(self):
+        return len(self.list())
+
     def add(self, response):
         storage = self._storage(create_if_missing=True)
         if not IResponse.providedBy(response):
             raise ValueError('Only Response objects are allowed to add')
 
-        response_id = long(time.time() * 1e6)
-        while response_id in storage:
-            response_id += 1
+        response_id = self._generate_response_id(response.created, storage)
 
         response.response_id = response_id
         storage[response_id] = response
         notify(ResponseAddedEvent(self.context, self, response))
+        return response_id
+
+    def _generate_response_id(self, created, storage):
+        response_id = long(float(created.strftime('%s.%f')) * 1e6)
+        while response_id in storage:
+            response_id += 1
         return response_id
 
     def _storage(self, create_if_missing=False):
@@ -101,52 +107,51 @@ class ResponseContainer(object):
 
         return list(storage.items())
 
+    def delete(self, key):
+        del self._storage()[key]
+
     def __contains__(self, key):
         storage = self._storage()
         if not storage:
             return False
 
+        if IResponse.providedBy(key):
+            key = key.response_id
         return long(key) in self._storage()
 
     def __getitem__(self, key):
         """Get an item by its key
         """
-        return self._storage()[long(key)]
+        storage = self._storage()
+        if not storage:
+            raise IndexError
+
+        return storage[long(key)]
+
+    def __iter__(self):
+        storage = self._storage()
+        if not storage:
+            return
+
+        for key, response in storage.items():
+            yield response
 
 
 class IResponse(Interface):
     """Interface and schema for the response object, an object added to
     plone content objects."""
 
-    response_type = schema.TextLine(
-        title=_(u'label_response_type', default=u'Response type'),
-        required=True
-    )
+    response_type = schema.TextLine(required=True)
 
-    response_id = schema.Int(
-        title=_(u'label_response_id', default=u'Response ID'),
-        required=True
-    )
+    response_id = schema.Int(required=True)
 
-    created = schema.Date(
-        title=_(u'label_created', default=u'Created'),
-        required=True
-    )
+    created = schema.Date(required=True)
 
-    creator = schema.TextLine(
-        title=_(u'label_creator', default=u'Creator'),
-        required=True
-    )
+    creator = schema.TextLine(required=True)
 
-    text = schema.Text(
-        title=_(u'label_text', default=u'Text'),
-        required=False,
-    )
+    text = schema.Text(required=False)
 
-    changes = schema.List(
-        title=_(u'label_changes', default=u'Changes'),
-        required=False,
-        value_type=schema.Dict())
+    changes = schema.List(required=False, value_type=schema.Dict())
 
 
 class Response(Persistent):

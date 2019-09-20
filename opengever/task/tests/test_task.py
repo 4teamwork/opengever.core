@@ -6,11 +6,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from opengever.activity.model import Activity
+from opengever.base.response import IResponseContainer
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-from opengever.task.adapters import IResponseContainer
-from opengever.task.adapters import Response
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.task import ITask
+from opengever.task.task_response import TaskResponse
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -138,7 +138,7 @@ class TestTaskIntegration(FunctionalTestCase):
 
     def test_addresponse(self):
         t1 = create(Builder('task').titled('Task 1'))
-        res = Response("")
+        res = TaskResponse("")
         container = IResponseContainer(t1)
         container.add(res)
         self.failUnless(res in container)
@@ -203,8 +203,8 @@ class TestTaskIntegration(FunctionalTestCase):
                          .within(maintask)
                          .titled('maintask'))
 
-        response = IResponseContainer(maintask)[-1]
-        self.assertEquals(intids.getId(subtask), response.added_object.to_id)
+        response = IResponseContainer(maintask).list()[-1]
+        self.assertEquals(intids.getId(subtask), response.added_objects[0].to_id)
         self.assertEquals('transition-add-subtask', response.transition)
 
     def test_adding_a_subtask_via_remote_request_does_not_add_response_to_main_task(self):
@@ -233,8 +233,8 @@ class TestTaskIntegration(FunctionalTestCase):
                           .within(maintask)
                           .titled('Letter to Peter'))
 
-        response = IResponseContainer(maintask)[-1]
-        self.assertEquals(intids.getId(document), response.added_object.to_id)
+        response = IResponseContainer(maintask).list()[-1]
+        self.assertEquals(intids.getId(document), response.added_objects[0].to_id)
         self.assertEquals('transition-add-document', response.transition)
 
     @browsing

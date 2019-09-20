@@ -337,23 +337,27 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
         "items": [],
         "responses": [
           {
-            "added_object": null,
+            "response_id": 1
+            "response_type": "default"
+            "added_objects": [],
             "changes": [],
             "creator": "zopemaster",
-            "date": "2019-05-21T13:57:42+00:00",
+            "created": "2019-05-21T13:57:42+00:00",
             "date_of_completion": null,
-            "relatedItems": [],
+            "related_items": [],
             "reminder_option": null,
             "text": "Lorem ipsum.",
             "transition": "task-commented"
           },
           {
-            "added_object": null,
+            "response_id": 2
+            "response_type": "default"
+            "added_objects": [],
             "changes": [],
             "creator": "zopemaster",
-            "date": "2019-05-21T14:02:01+00:00",
+            "created": "2019-05-21T14:02:01+00:00",
             "date_of_completion": null,
-            "relatedItems": [],
+            "related_items": [],
             "text": "Suspendisse faucibus, nunc et pellentesque egestas.",
             "transition": "task-transition-open-in-progress"
           },

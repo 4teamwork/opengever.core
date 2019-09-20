@@ -2,8 +2,8 @@
 Migrate user IDs in Plone tasks (issuers, responsibles, responses)
 """
 
+from opengever.base.response import IResponseContainer
 from opengever.ogds.base.utils import ogds_service
-from opengever.task.adapters import IResponseContainer
 from opengever.task.task import ITask
 from opengever.usermigration.exceptions import UserMigrationException
 from plone import api
@@ -55,8 +55,8 @@ class PloneTasksMigrator(object):
     def _fix_responses(self, obj):
         container = IResponseContainer(obj)
         path = '/'.join(obj.getPhysicalPath())
-        for response_no, response in enumerate(container):
-            response_identifier = '%s - Response #%s' % (path, response_no)
+        for response in container:
+            response_identifier = '%s - Response #%s' % (path, response.response_id)
 
             # Fix response creator
             creator = getattr(response, 'creator', '')
@@ -69,7 +69,7 @@ class PloneTasksMigrator(object):
 
             for change in response.changes:
                 # Fix responsible [before|after]
-                if change.get('id') == 'responsible':
+                if change.get('field_id') == 'responsible':
                     before = change.get('before', '')
                     if before in self.principal_mapping:
                         new_userid = self.principal_mapping[before]

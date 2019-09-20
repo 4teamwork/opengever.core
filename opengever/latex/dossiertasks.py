@@ -6,7 +6,7 @@ from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from opengever.latex import _
 from opengever.latex.listing import ILaTexListing
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.task import ITask
 from plone import api
 from zope.component import adapter

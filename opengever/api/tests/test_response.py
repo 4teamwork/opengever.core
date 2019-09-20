@@ -41,30 +41,29 @@ class TestResponseGETSerialization(IntegrationTestCase):
         browser.open(self.todo, method="GET", headers=self.api_headers)
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
-              'response_id': 1481272800000000,
-              u'response_type': u'default',
-              u'created': u'2016-12-09T09:40:00',
               u'changes': [],
+              u'created': u'2016-12-09T09:40:00',
               u'creator': {
-                  u'token': self.workspace_member.id,
-                  u'title': u'Schr\xf6dinger B\xe9atrice'},
-              u'text': u'Ich bin hier anderer Meinung!'},
-             {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1482564180000000',
-              'response_id': 1482564180000000,
+                  u'title': u'Schr\xf6dinger B\xe9atrice',
+                  u'token': u'beatrice.schrodinger'},
+              u'response_id': 1481272800000000,
               u'response_type': u'default',
+              u'text': u'Ich bin hier anderer Meinung!',
+              },
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1482564180000000',
+              u'changes': [{u'after': u'Bar',
+                            u'before': u'Foo',
+                            u'field_id': u'title',
+                            u'field_title': u''}],
               u'created': u'2016-12-24T08:23:00',
-              u'changes': [
-                  {
-                      'field_id': 'title',
-                      'before': 'Foo',
-                      'after': 'Bar',
-                      'field_title': '',
-                  }
-              ],
               u'creator': {
-                  u'token': self.workspace_admin.id,
-                  u'title': u'Hugentobler Fridolin'},
-              u'text': u'Ok, Danke f\xfcr dein Feedback'}],
+                  u'title': u'Hugentobler Fridolin',
+                  u'token': u'fridolin.hugentobler'},
+              u'response_id': 1482564180000000,
+              u'response_type': u'default',
+              u'text': u'Ok, Danke f\xfcr dein Feedback',
+              }
+             ],
             browser.json['responses'])
 
 
@@ -89,17 +88,16 @@ class TestResponseGET(IntegrationTestCase):
 
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
         browser.open(url, method="GET", headers=self.api_headers)
-
         self.assertEquals(
             {u'@id': url,
-             'response_id': 1481272800000000,
-             u'response_type': u'default',
-             u'created': u'2016-12-09T09:40:00',
              u'changes': [],
-             u'creator': {
-                 u'token': self.workspace_member.id,
-                 u'title': u'Schr\xf6dinger B\xe9atrice'},
-             u'text': u'Ich bin hier anderer Meinung!'},
+             u'created': u'2016-12-09T09:40:00',
+             u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
+                          u'token': self.workspace_member.id},
+             u'response_id': 1481272800000000,
+             u'response_type': u'default',
+             u'text': u'Ich bin hier anderer Meinung!',
+             },
             browser.json)
 
 
@@ -139,7 +137,8 @@ class TestResponsePost(IntegrationTestCase):
              u'creator': {
                  u'token': self.workspace_member.id,
                  u'title': u'Schr\xf6dinger B\xe9atrice'},
-             u'text': u'Angebot \xfcberpr\xfcft'},
+             u'text': u'Angebot \xfcberpr\xfcft',
+            },
             browser.json)
 
     @browsing
@@ -196,7 +195,6 @@ class TestResponsePatch(IntegrationTestCase):
             response = Response()
             response.text = 'Test'
             IResponseContainer(self.todo).add(response)
-
         with browser.expect_http_error(400):
             url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
             browser.open(url, method="PATCH", headers=self.api_headers)

@@ -64,6 +64,7 @@ EXPECTED_INTERFACES = [
     'opengever.base.behaviors.lifecycle.ILifeCycleMarker',
     'opengever.base.behaviors.sequence.ISequenceNumberBehavior',
     'opengever.base.behaviors.translated_title.ITranslatedTitleSupport',
+    'opengever.base.response.IResponseSupported',
     'opengever.disposition.disposition.IDispositionSchema',
     'opengever.disposition.interfaces.IDisposition',
     'opengever.document.behaviors.IBaseDocument',

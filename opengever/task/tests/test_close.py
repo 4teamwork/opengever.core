@@ -1,5 +1,5 @@
 from ftw.testbrowser import browsing
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -14,7 +14,7 @@ class TestClosingForInformationTask(IntegrationTestCase):
         browser.fill({'Response': u'OK!'})
         browser.click_on('Save')
         self.assertEquals('task-state-tested-and-closed', api.content.get_state(self.info_task))
-        response = IResponseContainer(self.info_task)[-1]
+        response = IResponseContainer(self.info_task).list()[-1]
         self.assertEquals(u'OK!', response.text)
         self.assertEquals('task-transition-open-tested-and-closed', response.transition)
 
@@ -31,7 +31,7 @@ class TestClosingForInformationTask(IntegrationTestCase):
 
         self.assertEquals('task-state-tested-and-closed',
                           api.content.get_state(self.info_task))
-        response = IResponseContainer(self.info_task)[-1]
+        response = IResponseContainer(self.info_task).list()[-1]
         self.assertEquals(u'Danke sch\xf6n', response.text)
         self.assertEquals('task-transition-open-tested-and-closed',
                           response.transition)

@@ -2,7 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import IResponseSyncerSender
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.task.reminder.reminder import TaskReminder
@@ -295,7 +295,7 @@ class TestBaseResponseSyncerReceiver(FunctionalTestCase):
         response_container = IResponseContainer(task)
         self.assertEqual(1, len(response_container))
 
-        response = response_container[0]
+        response = response_container.list()[0]
 
         self.assertEqual('Response text', response.text)
         self.assertEqual('base-response', response.transition)
@@ -446,14 +446,14 @@ class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
         container = IResponseContainer(task)
-        response = container[-1]
+        response = container.list()[-1]
 
         self.assertEquals('Lorem Ipsum', response.text)
         self.assertEquals(TEST_USER_ID, response.creator)
         self.assertEquals(
             [{'after': datetime.date(2013, 10, 1),
-              'id': 'deadline',
-              'name': u'label_deadline',
+              'field_id': 'deadline',
+              'field_title': u'label_deadline',
               'before': datetime.date(2013, 1, 1)}],
             response.changes)
 
@@ -477,7 +477,7 @@ class TestCommentSyncer(FunctionalTestCase):
         response_container = IResponseContainer(predecessor)
         self.assertEqual(1, len(response_container))
 
-        response = response_container[0]
+        response = response_container.list()[0]
 
         self.assertEqual('We need more stuff!', response.text)
         self.assertEqual('task-commented', response.transition)
@@ -495,7 +495,7 @@ class TestCommentSyncer(FunctionalTestCase):
         response_container = IResponseContainer(successor)
         self.assertEqual(1, len(response_container))
 
-        response = response_container[0]
+        response = response_container.list()[0]
 
         self.assertEqual('We need more stuff!', response.text)
         self.assertEqual('task-commented', response.transition)
@@ -546,7 +546,7 @@ class TestWorkflowSyncer(FunctionalTestCase):
         wftool.doActionFor(predecessor, 'task-transition-resolved-in-progress',
                            transition_params={'text': u'\xe4\xe4hhh I am done!'})
 
-        response = IResponseContainer(successor)[-1]
+        response = IResponseContainer(successor).list()[-1]
         self.assertEquals('task-transition-resolved-in-progress', response.transition)
         self.assertEquals(u'\xe4\xe4hhh I am done!', response.text)
         self.assertEquals(TEST_USER_ID, response.creator)

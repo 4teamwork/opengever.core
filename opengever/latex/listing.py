@@ -300,10 +300,10 @@ class TaskHistoryLaTeXListing(LaTexListing):
 
     def get_columns(self):
         return [
-            Column('date',
+            Column('created',
                    _('label_time', default=u'Time'),
                    '10%',
-                   lambda item: helper.readable_date_time(item, item.date),
+                   lambda item: helper.readable_date_time(item, item.created),
                    "left"),
 
             Column('creator',

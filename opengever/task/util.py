@@ -1,8 +1,9 @@
 from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.response import IResponseContainer
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.activities import TaskTransitionActivity
-from persistent.list import PersistentList
+from opengever.task.task_response import TaskResponse
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -17,7 +18,6 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 import opengever.task
-import types
 
 
 CUSTOM_INITIAL_VERSION_MESSAGE = 'custom_inital_version_message'
@@ -92,18 +92,18 @@ def get_task_type_title(task_type, language):
                 return vdex_term['value']
 
 
-def add_simple_response(task, text='', field_changes=None, added_object=None,
+def add_simple_response(task, text='', field_changes=None, added_objects=None,
                         successor_oguid=None, supress_events=False,
                         supress_activity=False, **kwargs):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
-    `added_object`: an object which was added to the task
+    `added_objects`: objects which were added to the task
     `successor_oguid`: an OGUID to a (remote) object which was referenced.
     """
 
-    response = opengever.task.adapters.Response(text)
-    response.type = 'additional'
+    response = TaskResponse()
+    response.text = text
 
     for key, value in kwargs.items():
         setattr(response, key, value)
@@ -114,29 +114,20 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
             if old_value != new_value:
                 response.add_change(
                     field.__name__,
-                    field.title,
                     old_value,
-                    new_value)
+                    new_value,
+                    field_title=field.title)
 
-    if added_object:
+    if added_objects:
         intids = getUtility(IIntIds)
-
-        if isinstance(added_object, types.ListType) or \
-                isinstance(added_object, types.TupleType) or \
-                isinstance(added_object, types.GeneratorType):
-            response.added_object = PersistentList()
-            for obj in added_object:
-                iid = intids.getId(obj)
-                response.added_object.append(RelationValue(iid))
-
-        else:
-            iid = intids.getId(added_object)
-            response.added_object = RelationValue(iid)
+        for obj in added_objects:
+            iid = intids.getId(obj)
+            response.added_objects.append(RelationValue(iid))
 
     if successor_oguid:
         response.successor_oguid = successor_oguid
 
-    container = opengever.task.adapters.IResponseContainer(task)
+    container = IResponseContainer(task)
     container.add(response)
 
     if not supress_events:

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-28 14:24+0000\n"
+"POT-Creation-Date: 2019-09-05 09:16+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -241,11 +241,6 @@ msgstr "Abbrechen"
 msgid "label_change_public_trial"
 msgstr "Öffentlichkeitsstatus ändern"
 
-#. Default: "Changes"
-#: ./opengever/base/response.py
-msgid "label_changes"
-msgstr "Änderungen"
-
 #. Default: "Checked out"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_checked_out"
@@ -262,15 +257,9 @@ msgid "label_confirm_action"
 msgstr "Aktion bestätigen"
 
 #. Default: "Created"
-#: ./opengever/base/response.py
 #: ./opengever/base/viewlets/byline.py
 msgid "label_created"
 msgstr "Erstellt am"
-
-#. Default: "Creator"
-#: ./opengever/base/response.py
-msgid "label_creator"
-msgstr "Ersteller"
 
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
@@ -357,16 +346,6 @@ msgstr "Bearbeitungsinformation"
 msgid "label_recently_touched"
 msgstr "Kürzlich bearbeitet"
 
-#. Default: "Response ID"
-#: ./opengever/base/response.py
-msgid "label_response_id"
-msgstr "Antwort ID"
-
-#. Default: "Response type"
-#: ./opengever/base/response.py
-msgid "label_response_type"
-msgstr "Antwort Typ"
-
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_retention_period"
@@ -386,11 +365,6 @@ msgstr "Suche"
 #: ./opengever/base/browser/templates/gever-macros.pt
 msgid "label_severity_error"
 msgstr "Fehler"
-
-#. Default: "Text"
-#: ./opengever/base/response.py
-msgid "label_text"
-msgstr "Text"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py

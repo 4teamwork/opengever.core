@@ -1,5 +1,6 @@
 from AccessControl.users import nobody
 from Acquisition import aq_inner
+from opengever.base.response import IResponseContainer
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
 from opengever.ogds.base.utils import get_current_org_unit
@@ -7,7 +8,6 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import FINAL_TRANSITIONS
 from opengever.task import util
-from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.reminder import get_task_reminder_options_vocabulary
@@ -340,9 +340,9 @@ class Edit(Base):
             response_id = int(response_id)
         except ValueError:
             return None
-        if response_id >= len(self.folder):
+        if response_id >= len(self.folder.list()):
             return None
-        return self.folder[response_id]
+        return self.folder.list()[response_id]
 
     @property
     def response_found(self):
@@ -366,7 +366,11 @@ class Save(Base):
                 msg = translate(msg, 'Poi', context=self.request)
                 status.addStatusMessage(msg, type='error')
             else:
-                response = self.folder[response_id]
+                try:
+                    response_id = int(response_id)
+                except ValueError:
+                    return None
+                response = self.folder.list()[response_id]
                 response_text = form.get('response', u'')
                 response.text = response_text
                 # Remove cached rendered response.
@@ -413,14 +417,15 @@ class Delete(Base):
                     status.addStatusMessage(msg, type='error')
                     self.request.response.redirect(context.absolute_url())
                     return
-                if response_id >= len(self.folder):
+                if response_id >= len(self.folder.list()):
                     msg = _(u"Response id ${response_id} does not exist so it "
                             "cannot be removed.",
                             mapping=dict(response_id=response_id))
                     msg = translate(msg, 'Poi', context=context)
                     status.addStatusMessage(msg, type='error')
                 else:
-                    self.folder.delete(response_id)
+                    response = self.folder.list()[response_id]
+                    self.folder.delete(response.response_id)
                     msg = _(u"Removed response id ${response_id}.",
                             mapping=dict(response_id=response_id))
                     status.addStatusMessage(msg, type='info')

@@ -2,8 +2,8 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.task.adapters import IResponseContainer
-from opengever.task.adapters import Response
+from opengever.base.response import IResponseContainer
+from opengever.task.task_response import TaskResponse
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 import transaction
@@ -113,9 +113,9 @@ class TestResponseDescriptions(FunctionalTestCase):
 
         # Manually remove responsible change information from the response
         # to fake an old task situation.
-        response = IResponseContainer(self.task)[-1]
+        response = IResponseContainer(self.task).list()[-1]
         response.changes = [
-            change for change in response.changes if change['id'] != 'responsible']
+            change for change in response.changes if change['field_id'] != 'responsible']
         transaction.commit()
 
         browser.reload()
@@ -312,7 +312,7 @@ class TestResponseDescriptions(FunctionalTestCase):
     @browsing
     def test_null_fallback(self, browser):
         # add null response
-        null_response = Response(None)
+        null_response = TaskResponse(None)
         IResponseContainer(self.task).add(null_response)
         transaction.commit()
 

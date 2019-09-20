@@ -6,7 +6,7 @@ from opengever.base.transport import Transporter
 from opengever.inbox.browser.refuse import ForwardingRefuseForm
 from opengever.inbox.browser.refuse import STATUS_ALLREADY_DONE
 from opengever.inbox.browser.refuse import STATUS_SUCCESSFULL
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import obj2brain
 from Products.CMFCore.utils import getToolByName
@@ -80,7 +80,7 @@ class TestRefusingForwardings(FunctionalTestCase):
     def test_appends_an_correspondent_response(self):
         self.refuse_a_forwarding(self.forwarding, 'That is not my problem')
 
-        response = IResponseContainer(self.forwarding)[-1]
+        response = IResponseContainer(self.forwarding).list()[-1]
         self.assertEquals('That is not my problem', response.text)
         self.assertEquals('forwarding-transition-refuse', response.transition)
 

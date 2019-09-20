@@ -17,7 +17,7 @@ from opengever.globalindex.model.task import Task
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.validators import NoCheckedoutDocsValidator
 from persistent.list import PersistentList
@@ -134,7 +134,7 @@ class CompleteSuccessorTaskForm(Form):
                                             disable_sync=True,
                                             text=data['text'])
 
-            response = IResponseContainer(self.context)[-1]
+            response = IResponseContainer(self.context).list()[-1]
             self.deliver_documents_and_complete_task(data, response)
 
             msg = _(u'The documents were delivered to the issuer and the '
@@ -177,9 +177,6 @@ class CompleteSuccessorTaskForm(Form):
         documents and containing the entered response text.
         """
 
-        # add documents to the response
-        response.added_object = PersistentList()
-
         predecessor = Task.query.by_oguid(self.context.predecessor)
 
         transporter = Transporter()
@@ -210,29 +207,25 @@ class CompleteSuccessorTaskForm(Form):
                             RelationValue(int(doc_intid))]
 
                     # add response change entry for this relation
-                    if not response.relatedItems:
-                        response.relatedItems = [RelationValue(int(doc_intid))]
-                    else:
-                        response.relatedItems.append(
-                            RelationValue(int(doc_intid)))
+                    response.add_related_item(RelationValue(int(doc_intid)))
 
                     # set relation flag
                     doc._v__is_relation = True
                     response.add_change('relatedItems',
-                        _(u'label_related_items', default=u"Related Items"),
                         '',
-                        linked(doc, doc.Title()))
+                        linked(doc, doc.Title()),
+                        _(u'label_related_items', default=u"Related Items"))
 
                 else:
                     # add entry to the response for this document
-                    response.added_object.append(RelationValue(int(doc_intid)))
+                    response.added_objects.append(RelationValue(int(doc_intid)))
             else:
                 # append only the relation on the response
                 doc._v__is_relation = True
                 response.add_change('relatedItems',
-                    _(u'label_related_items', default=u"Related Items"),
                     '',
-                    linked(doc, doc.Title()))
+                    linked(doc, doc.Title()),
+                    _(u'label_related_items', default=u"Related Items"))
 
         request_data = {'data': json.dumps(data)}
         response = dispatch_request(
@@ -314,7 +307,7 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
         # syncing, so no workflow syncing is necessary.
         util.change_task_workflow_state(
             self.context, data['transition'], text=data['text'],
-            disable_sync=True, added_object=documents)
+            disable_sync=True, added_objects=documents)
 
         return ok_response()
 

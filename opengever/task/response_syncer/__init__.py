@@ -2,7 +2,7 @@ from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
 from opengever.base.utils import ok_response
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import IResponseSyncerSender
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import add_simple_response
@@ -140,7 +140,7 @@ class BaseResponseSyncerReceiver(BrowserView):
         if len(response_container) == 0:
             return False
 
-        last_response = response_container[-1]
+        last_response = response_container.list()[-1]
         current_user = AccessControl.getSecurityManager().getUser()
 
         if last_response.transition == transition and \

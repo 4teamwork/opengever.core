@@ -1,5 +1,5 @@
 from ftw.testing import MockTestCase
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.util import change_task_workflow_state
 from opengever.task.util import get_documents_of_task
 from opengever.testing import IntegrationTestCase
@@ -88,7 +88,7 @@ class TestChangeTaskWorklowState(IntegrationTestCase):
             self.subtask, 'task-transition-resolved-tested-and-closed')
 
         self.assertEqual('task-transition-resolved-tested-and-closed',
-                         IResponseContainer(self.subtask)[-1].transition)
+                         IResponseContainer(self.subtask).list()[-1].transition)
 
     def test_changes_workflow_state(self):
         self.login(self.dossier_responsible)

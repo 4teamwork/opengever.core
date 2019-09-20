@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.testing import IntegrationTestCase
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -20,7 +20,7 @@ class TestTaskResponses(IntegrationTestCase):
                       'New Deadline': '1.1.2017'})
         browser.click_on('Save')
 
-        response = IResponseContainer(self.task)[-1]
+        response = IResponseContainer(self.task).list()[-1]
 
         self.assertIsInstance(response, Persistent)
         self.assertIsInstance(response.changes, PersistentList)

@@ -23,7 +23,7 @@ class ResponseDescription(object):
             transition = response.transition
 
         if not transition:
-            docs, subtasks = response.get_added_objects()
+            docs, subtasks = cls.get_added_objects(response)
 
             if len(subtasks):
                 transition = 'transition-add-subtask'
@@ -38,6 +38,35 @@ class ResponseDescription(object):
 
         return description(response)
 
+    @classmethod
+    def get_added_objects(cls, response):
+        """ Returns two lists of docs, subtasks
+        """
+        docs = []
+        subtasks = []
+        for rel in response.added_objects:
+            obj = rel.to_object
+
+            # We can't use the interface itself because of circular imports.
+            if 'opengever.task.task.ITask' in [iface.__identifier__ for
+                                               iface in obj.__provides__]:
+                subtasks.append(obj)
+            else:
+                docs.append(obj)
+
+        return docs, subtasks
+
+    def creator_link(self):
+        return Actor.lookup(self.response.creator).get_link()
+
+    def get_change(self, field_name):
+        changes = [change for change in
+                   self.response.changes if change.get('field_id') == field_name]
+
+        if changes:
+            return changes[0]
+        return {}
+
     def __init__(self, response):
         self.response = response
 
@@ -49,12 +78,19 @@ class ResponseDescription(object):
         """
         return _('transition_label_default', u'Task opened')
 
+    def get_succesor(self):
+        from opengever.globalindex.model.task import Task
+        if self.response.successor_oguid:
+            return Task.query.by_oguid(self.response.successor_oguid)
+        else:
+            return None
+
     @property
     def _msg_mapping(self):
         """Returns the default mapping for the translated msg.
         Contains only the attribute `user`, which shows the link to the creator
         """
-        return {'user': self.response.creator_link()}
+        return {'user': self.creator_link()}
 
 
 class Reactivate(ResponseDescription):
@@ -77,7 +113,7 @@ class Reject(ResponseDescription):
     css_class = 'refuse'
 
     def msg(self):
-        if not self.response.get_change('responsible'):
+        if not self.get_change('responsible'):
             return _('old_transition_msg_reject',
                      default=u'Rejected by ${user}.',
                      mapping=self._msg_mapping)
@@ -93,7 +129,7 @@ class Reject(ResponseDescription):
     @property
     def _msg_mapping(self):
         mapping = super(Reject, self)._msg_mapping
-        change = self.response.get_change('responsible')
+        change = self.get_change('responsible')
         if change:
             mapping['old_responsible'] = Actor.lookup(change.get('before')).get_link()
             mapping['new_responsible'] = Actor.lookup(change.get('after')).get_link()
@@ -165,7 +201,7 @@ class Accept(ResponseDescription):
     @property
     def _msg_mapping(self):
         mapping = super(Accept, self)._msg_mapping
-        change = self.response.get_change('responsible')
+        change = self.get_change('responsible')
         if change:
             mapping['old_responsible'] = Actor.lookup(change.get('before')).get_link()
             mapping['new_responsible'] = Actor.lookup(change.get('after')).get_link()
@@ -174,7 +210,7 @@ class Accept(ResponseDescription):
 
     def msg(self):
         # Accepting a team task changes the responsible.
-        if self.response.get_change('responsible'):
+        if self.get_change('responsible'):
             return _(u'transition_msg_accept_team_task',
                      default=u'Accepted by ${user}, responsible changed from '
                      '${old_responsible} to ${new_responsible}.',
@@ -228,7 +264,7 @@ class Reassign(ResponseDescription):
     css_class = 'reassign'
 
     def msg(self):
-        change = self.response.get_change('responsible')
+        change = self.get_change('responsible')
         responsible_new = Actor.lookup(change.get('after')).get_link()
         responsible_old = Actor.lookup(change.get('before')).get_link()
 
@@ -236,7 +272,7 @@ class Reassign(ResponseDescription):
           return _('transition_msg_delegated_reassign',
                    u'Reassigned from ${responsible_old} to '
                    u'${responsible_new} by ${user}',
-                   mapping={'user': self.response.creator_link(),
+                   mapping={'user': self.creator_link(),
                             'responsible_new': responsible_new,
                             'responsible_old': responsible_old})
 
@@ -262,13 +298,13 @@ class ModifyDeadline(ResponseDescription):
         return date.strftime('%d.%m.%Y').decode('utf-8')
 
     def msg(self):
-        change = self.response.get_change('deadline')
+        change = self.get_change('deadline')
         new_deadline = change.get('after')
         old_deadline = change.get('before')
         return _('transition_msg_modify_deadline',
                  u'Deadline modified from ${deadline_old} to ${deadline_new} '
                  u'by ${user}',
-                 mapping={'user': self.response.creator_link(),
+                 mapping={'user': self.creator_link(),
                           'deadline_old': self._format_date(old_deadline),
                           'deadline_new': self._format_date(new_deadline)})
 
@@ -332,10 +368,10 @@ class AssignToDossier(ResponseDescription):
     css_class = 'assignDossier'
 
     def msg(self):
-        successor = self.response.get_succesor()
+        successor = self.get_succesor()
         return _('transition_msg_assign_to_dossier',
                  u'Assigned to dossier by ${user} successor=${successor}',
-                 mapping={'user': self.response.creator_link(),
+                 mapping={'user': self.creator_link(),
                           'successor': successor.get_link()})
 
     def label(self):
@@ -352,14 +388,14 @@ class SubTaskAdded(ResponseDescription):
     css_class = 'addSubtask'
 
     def msg(self):
-        docs, subtasks = self.response.get_added_objects()
+        docs, subtasks = self.get_added_objects(self.response)
 
         label = u' '.join(
             [task.get_sql_object().get_link() for task in subtasks])
 
         return _('transition_add_subtask',
                  u'Subtask ${task} added by ${user}',
-                 mapping={'user': self.response.creator_link(),
+                 mapping={'user': self.creator_link(),
                           'task': label})
 
     def label(self):
@@ -375,12 +411,12 @@ class DocumentAdded(ResponseDescription):
     css_class = 'addDocument'
 
     def msg(self):
-        docs, subtasks = self.response.get_added_objects()
+        docs, subtasks = self.get_added_objects(self.response)
         label = u' '.join([to_safe_html(doc.title) for doc in docs])
 
         return _('transition_add_document',
                  u'Document ${doc} added by ${user}',
-                 mapping={'user': self.response.creator_link(),
+                 mapping={'user': self.creator_link(),
                           'doc': label})
 
     def label(self):

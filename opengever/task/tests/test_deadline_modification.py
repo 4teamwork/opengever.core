@@ -3,7 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.reminder_settings import ReminderSetting
-from opengever.task.adapters import IResponseContainer
+from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
@@ -82,14 +82,14 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         old_deadline = self.task.deadline
 
         self._change_deadline(self.task, datetime.date(2013, 10, 1), 'Lorem Ipsum')
-        response = IResponseContainer(self.task)[-1]
+        response = IResponseContainer(self.task).list()[-1]
 
         self.assertEquals('Lorem Ipsum', response.text)
         self.assertEquals(self.dossier_responsible.id, response.creator)
         self.assertEquals(
             [{'after': datetime.date(2013, 10, 1),
-              'id': 'deadline',
-              'name': u'label_deadline',
+              'field_id': 'deadline',
+              'field_title': u'label_deadline',
               'before': old_deadline}],
             response.changes)
 
