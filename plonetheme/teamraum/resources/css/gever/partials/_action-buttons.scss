@@ -33,6 +33,12 @@ ul.tabbedview-action-list {
   .button {
     margin-bottom: 0;
   }
+
+  span.discreet {
+    @include button($iconset: gv);
+    color: $discreet;
+    pointer-events: none;
+  }
 }
 
 .agency_buttons dt {

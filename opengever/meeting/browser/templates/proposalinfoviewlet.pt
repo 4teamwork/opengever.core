@@ -1,0 +1,24 @@
+<tal:block tal:define="show_checkout_info view/show_checkout_info;
+                      show_committee_inactive_warning view/show_committee_inactive_warning;"
+           i18n:domain="opengever.meeting">
+  <dl tal:condition="show_checkout_info"
+      class="portalMessage info">
+    <dt i18n:domain="opengever.document" i18n:translate="label_checked_out">Checked out</dt>
+    <dd>
+      <tal:block i18n:translate="message_checkout_info">
+        The proposal document is being checked out by
+        <a i18n:name="creator" tal:replace="structure view/checkout_by_link" />.
+      </tal:block>
+    </dd>
+  </dl>
+  <dl class="portalMessage warning" tal:condition="show_committee_inactive_warning">
+    <dt i18n:translate="" i18n:domain="plone">Warning</dt>
+    <dd>
+      <tal:block i18n:translate="message_committee_inactive_warning">
+        The committee
+        <a i18n:name="committee_title" tal:replace="view/committee_title" />
+        is no longer active.
+      </tal:block>
+    </dd>
+  </dl>
+</tal:block>

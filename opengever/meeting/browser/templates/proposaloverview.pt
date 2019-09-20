@@ -95,6 +95,17 @@
                     </a>
                   </li>
                 </tal:block>
+                <tal:block tal:condition="view/discreet_transition_items" i18n:domain="plone"
+                           repeat="transition view/discreet_transition_items">
+                  <li>
+                    <span tal:attributes="title transition;
+                                          class string: ${transition} discreet;"
+                          i18n:attributes="title"
+                          i18n:translate=""
+                          tal:content="transition">
+                    </span>
+                  </li>
+                </tal:block>
                 <li>
                   <a tal:condition="view/is_comment_allowed" tal:attributes="href view/comment_url"
                      id="comment_proposal" class="proposalCommented"

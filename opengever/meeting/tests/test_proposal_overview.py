@@ -1,7 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
+from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.testing import IntegrationTestCase
 from urllib import urlencode
 
@@ -9,6 +12,73 @@ from urllib import urlencode
 class TestProposalOverview(IntegrationTestCase):
 
     features = ('meeting',)
+
+    @browsing
+    def test_shows_discreet_transition_buttons_proposal_document_checked_out(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        doc = self.draft_proposal.get_proposal_document()
+        self.checkout_document(doc)
+
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+
+        self.assertEqual(
+            ['proposal-transition-cancel',
+             'proposal-transition-submit',
+             'Comment'],
+            browser.css('.actionButtons .regular_buttons li').text
+        )
+        self.assertEqual(
+            ['Comment'],
+            browser.css('.actionButtons .regular_buttons li a').text
+        )
+
+    @browsing
+    def test_shows_info_viewlet_message_proposal_document_checked_out(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        doc = self.draft_proposal.get_proposal_document()
+        self.checkout_document(doc)
+
+        browser.open(self.draft_proposal)
+
+        self.assertEqual(
+            ['The proposal document is being checked out by Ziegler Robert '
+             '(robert.ziegler).'],
+            info_messages())
+
+    @browsing
+    def test_shows_discreet_transition_button_committee_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
+        editbar.menu_option('Actions', 'deactivate').click()
+
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+
+        self.assertEqual(
+            ['proposal-transition-cancel',
+             'proposal-transition-submit',
+             'Comment'],
+            browser.css('.actionButtons .regular_buttons li').text
+        )
+        self.assertEqual(
+            ['proposal-transition-cancel', 'Comment'],
+            browser.css('.actionButtons .regular_buttons li a').text
+        )
+
+    @browsing
+    def test_shows_warning_message_committee_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
+        editbar.menu_option('Actions', 'deactivate').click()
+
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.draft_proposal)
+
+        self.assertEqual(
+            [u'The committee Kommission f\xfcr Verkehr is no longer active.'],
+            warning_messages())
 
     @browsing
     def test_proposal_excerpt_document_link(self, browser):
