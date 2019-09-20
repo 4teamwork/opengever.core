@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Harmonize datetimes in recently-touched endpoint. [phgross]
 - Set proposal plone workflow state when submitted proposal state changes. Refactor remote calls so that there is only one request per state change. [deiferni]
 - Bump ftw.solr to 2.7.0 to get console scripts for maintenance tasks. [deiferni]
 - Validate task deadline modification through the rest-api if the user uses the same deadline as already set on the task. [elioschmutz]

@@ -1,5 +1,6 @@
 from BTrees.OOBTree import OOBTree
 from datetime import datetime
+from DateTime import DateTime
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.protect import unprotected_write
 from opengever.document.behaviors import IBaseDocument
@@ -9,11 +10,13 @@ from persistent.list import PersistentList
 from plone import api
 from plone.api.portal import get_registry_record
 from plone.uuid.interfaces import IUUID
+from tzlocal import get_localzone
 from zope.annotation import IAnnotations
 from zope.component.interfaces import IObjectEvent
 from zope.component.interfaces import ObjectEvent
 from zope.interface import implements
 import logging
+import pytz
 
 
 RECENTLY_TOUCHED_KEY = 'opengever.base.touched.recently_touched'
@@ -87,8 +90,8 @@ class ObjectTouchedHandler(object):
                 recently_touched_log.remove(entry)
 
         # Store touched items in order - most recent first
-        recently_touched_log.insert(
-            0, {'last_touched': datetime.now(), 'uid': obj_uid})
+        now = datetime.now(pytz.utc).astimezone(get_localzone())
+        recently_touched_log.insert(0, {'last_touched': now, 'uid': obj_uid})
 
         self.sort(recently_touched_log)
         self.rotate(current_user_id)

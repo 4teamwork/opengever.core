@@ -2,20 +2,22 @@ from BTrees.OOBTree import OOBTree
 from datetime import datetime
 from datetime import timedelta
 from ftw.testing import freeze
-from opengever.document.interfaces import IDossierJournalPDFMarker
-from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import RECENTLY_TOUCHED_KEY
+from opengever.document.interfaces import IDossierJournalPDFMarker
+from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
+from tzlocal import get_localzone
 from zope.annotation import IAnnotations
-from zope.interface import alsoProvides
 from zope.event import notify
+from zope.interface import alsoProvides
+import pytz
 
 
-FROZEN_NOW = datetime.now()
+FROZEN_NOW = datetime.now(pytz.utc).astimezone(get_localzone())
 
 
 class TestObjectTouchedLogging(IntegrationTestCase):
@@ -102,9 +104,9 @@ class TestObjectTouchedLogging(IntegrationTestCase):
         recently_touched_log = self._get_log(self.regular_user)
 
         recently_touched_log.extend([
-            {'last_touched': datetime(1995, 1, 1), 'uid': '1'},
-            {'last_touched': datetime(2010, 1, 1), 'uid': '3'},
-            {'last_touched': datetime(2000, 1, 1), 'uid': '2'},
+            {'last_touched': datetime(1995, 1, 1, tzinfo=get_localzone()), 'uid': '1'},
+            {'last_touched': datetime(2010, 1, 1, tzinfo=get_localzone()), 'uid': '3'},
+            {'last_touched': datetime(2000, 1, 1, tzinfo=get_localzone()), 'uid': '2'},
         ])
 
         with freeze(FROZEN_NOW + timedelta(hours=1)):
@@ -114,9 +116,9 @@ class TestObjectTouchedLogging(IntegrationTestCase):
 
         self.assertEqual([
             {'last_touched': FROZEN_NOW + timedelta(hours=1), 'uid': uid},
-            {'last_touched': datetime(2010, 1, 1, 0, 0), 'uid': '3'},
-            {'last_touched': datetime(2000, 1, 1, 0, 0), 'uid': '2'},
-            {'last_touched': datetime(1995, 1, 1, 0, 0), 'uid': '1'}],
+            {'last_touched': datetime(2010, 1, 1, 0, 0, tzinfo=get_localzone()), 'uid': '3'},
+            {'last_touched': datetime(2000, 1, 1, 0, 0, tzinfo=get_localzone()), 'uid': '2'},
+            {'last_touched': datetime(1995, 1, 1, 0, 0, tzinfo=get_localzone()), 'uid': '1'}],
             recently_touched_log)
 
     def test_recently_touched_log_gets_deduplicated_on_write(self):
@@ -140,7 +142,7 @@ class TestObjectTouchedLogging(IntegrationTestCase):
     def test_recently_touched_log_gets_rotated_on_write(self):
         self.login(self.regular_user)
 
-        start = datetime(2018, 4, 30, 12, 45)
+        start = datetime(2018, 4, 30, 12, 45, tzinfo=get_localzone())
         # Touch a document to initialize the log
         with freeze(start):
             notify(ObjectTouchedEvent(self.document))
@@ -166,10 +168,10 @@ class TestObjectTouchedLogging(IntegrationTestCase):
 
         expected = [
             {'last_touched': FROZEN_NOW, 'uid': 'createtreatydossiers000000000002'},  # noqa
-            {'last_touched': datetime(2018, 4, 30, 12, 59), 'uid': '14'},
-            {'last_touched': datetime(2018, 4, 30, 12, 58), 'uid': '13'},
-            {'last_touched': datetime(2018, 4, 30, 12, 57), 'uid': '12'},
-            {'last_touched': datetime(2018, 4, 30, 12, 56), 'uid': '11'},
+            {'last_touched': datetime(2018, 4, 30, 12, 59, tzinfo=get_localzone()), 'uid': '14'},
+            {'last_touched': datetime(2018, 4, 30, 12, 58, tzinfo=get_localzone()), 'uid': '13'},
+            {'last_touched': datetime(2018, 4, 30, 12, 57, tzinfo=get_localzone()), 'uid': '12'},
+            {'last_touched': datetime(2018, 4, 30, 12, 56, tzinfo=get_localzone()), 'uid': '11'},
         ]
         self.assertEqual(expected, recently_touched_log)
 
@@ -187,7 +189,7 @@ class TestObjectTouchedLogging(IntegrationTestCase):
 
         for i in range(limit * 3):
             recently_touched_log.append(
-                {'last_touched': datetime.now(), 'uid': str(i)})
+                {'last_touched': datetime.now(pytz.utc).astimezone(get_localzone()), 'uid': str(i)})
 
         self.checkout_document(self.subdocument)
 
