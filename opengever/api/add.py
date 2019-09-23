@@ -11,6 +11,8 @@ from plone.restapi.services.content.utils import create
 from Products.CMFPlone.utils import safe_hasattr
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
+from zope.component import ComponentLookupError
+from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.interface import alsoProvides
@@ -43,18 +45,8 @@ class FolderPost(Service):
             temporarily_wrapped = True
 
         # Update fields
-        deserializer = queryMultiAdapter((self.obj, self.request), IDeserializeFromJson)
-        if deserializer is None:
-            self.request.response.setStatus(501)
-            return dict(
-                error=dict(message="Cannot deserialize type {}".format(self.obj.portal_type))
-            )
-
-        try:
-            deserializer(validate_all=True, create=True)
-        except DeserializationError as e:
-            self.request.response.setStatus(400)
-            return dict(error=dict(type="DeserializationError", message=str(e)))
+        deserializer = getMultiAdapter((self.obj, self.request), IDeserializeFromJson)
+        deserializer(validate_all=True, create=True)
 
         if temporarily_wrapped:
             self.obj = aq_base(self.obj)
@@ -92,7 +84,16 @@ class FolderPost(Service):
             self.request.response.setStatus(400)
             return dict(error=dict(type="Bad Request", message=str(exc)))
 
-        self.deserialize_object()
+        try:
+            self.deserialize_object()
+        except ComponentLookupError:
+            self.request.response.setStatus(501)
+            return dict(
+                error=dict(message="Cannot deserialize type {}".format(self.obj.portal_type))
+            )
+        except DeserializationError as e:
+            self.request.response.setStatus(400)
+            return dict(error=dict(type="DeserializationError", message=str(e)))
 
         self.add_object_to_context()
 
