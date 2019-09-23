@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Use persistent-mapping for recently touched entries. [phgross]
 - Harmonize datetimes in recently-touched endpoint. [phgross]
 - Set proposal plone workflow state when submitted proposal state changes. Refactor remote calls so that there is only one request per state change. [deiferni]
 - Render discreet workflow transition buttons and show warning/info messages on proposal overview when proposal document is checked out or committee has been deactivated.

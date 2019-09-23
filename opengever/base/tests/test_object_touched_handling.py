@@ -8,6 +8,7 @@ from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.testing import IntegrationTestCase
+from persistent.mapping import PersistentMapping
 from plone import api
 from plone.uuid.interfaces import IUUID
 from tzlocal import get_localzone
@@ -55,6 +56,7 @@ class TestObjectTouchedLogging(IntegrationTestCase):
         self.assertEqual(
             {'last_touched': FROZEN_NOW, 'uid': IUUID(self.document)},
             last_entry)
+        self.assertIsInstance(last_entry, PersistentMapping)
 
     def test_object_touched_only_logs_tracked_types(self):
         self.login(self.regular_user)
