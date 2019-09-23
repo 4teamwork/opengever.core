@@ -21,9 +21,10 @@ import plone.protect.interfaces
 
 class FolderPost(Service):
     """Copy of plone.restapi.services.content.add.FolderPost
+    but with code split up in different methods.
     """
 
-    def reply(self):
+    def extract_data(self):
         data = json_body(self.request)
 
         self.type = data.get("@type", None)
@@ -33,19 +34,7 @@ class FolderPost(Service):
         if not self.type:
             raise BadRequest("Property '@type' is required")
 
-        # Disable CSRF protection
-        if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
-            alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
-
-        try:
-            self.obj = create(self.context, self.type, id_=self.id, title=self.title)
-        except Unauthorized as exc:
-            self.request.response.setStatus(403)
-            return dict(error=dict(type="Forbidden", message=str(exc)))
-        except BadRequest as exc:
-            self.request.response.setStatus(400)
-            return dict(error=dict(type="Bad Request", message=str(exc)))
-
+    def deserialize_object(self):
         # Acquisition wrap temporarily to satisfy things like vocabularies
         # depending on tools
         temporarily_wrapped = False
@@ -73,11 +62,10 @@ class FolderPost(Service):
         if not getattr(deserializer, "notifies_create", False):
             notify(ObjectCreatedEvent(self.obj))
 
+    def add_object_to_context(self):
         self.obj = add(self.context, self.obj, rename=not bool(self.id))
 
-        self.request.response.setStatus(201)
-        self.request.response.setHeader("Location", self.obj.absolute_url())
-
+    def serialize_object(self):
         serializer = queryMultiAdapter((self.obj, self.request), ISerializeToJson)
 
         serialized_obj = serializer()
@@ -86,5 +74,31 @@ class FolderPost(Service):
         # objects that have just been created via POST - so we make sure
         # to set it here
         serialized_obj["@id"] = self.obj.absolute_url()
+        return serialized_obj
+
+    def reply(self):
+        self.extract_data()
+
+        # Disable CSRF protection
+        if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
+            alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
+
+        try:
+            self.obj = create(self.context, self.type, id_=self.id, title=self.title)
+        except Unauthorized as exc:
+            self.request.response.setStatus(403)
+            return dict(error=dict(type="Forbidden", message=str(exc)))
+        except BadRequest as exc:
+            self.request.response.setStatus(400)
+            return dict(error=dict(type="Bad Request", message=str(exc)))
+
+        self.deserialize_object()
+
+        self.add_object_to_context()
+
+        self.request.response.setStatus(201)
+        self.request.response.setHeader("Location", self.obj.absolute_url())
+
+        serialized_obj = self.serialize_object()
 
         return serialized_obj
