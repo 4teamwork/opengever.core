@@ -325,7 +325,11 @@ class OGMail(Mail, BaseDocumentMixin):
 
         normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
         normalized_subject = normalizer.normalize_name(self.title)
-        self.message.filename = u'{}.eml'.format(normalized_subject)
+        if self.message.filename:
+            ext = os.path.splitext(self.message.filename)[-1]
+        else:
+            ext = u'.eml'
+        self.message.filename = u'{}{}'.format(normalized_subject, ext)
 
     def get_file(self):
         """An opengever mail has two fields for storing the mail-data.

@@ -79,6 +79,29 @@ class TestCreateMail(IntegrationTestCase):
         self.assertEqual(mail.original_message, None)
 
     @browsing
+    def test_create_mail_from_p7m(self, browser):
+        self.login(self.regular_user, browser)
+        mail_file = base64.b64encode(load('signed.p7m'))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(
+                self.dossier.absolute_url(),
+                data='{"@type": "ftw.mail.mail",'
+                     '"message": {"data": "%s", "encoding": "base64", '
+                     '"filename": "signed.p7m"}}' % mail_file,
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'})
+
+        self.assertEqual(browser.status_code, 201)
+        self.assertEqual(1, len(children.get('added')))
+
+        mail = children['added'].pop()
+        self.assertEqual(mail.Title(), 'Hello')
+        self.assertEqual(mail.message.filename, 'Hello.p7m')
+        self.assertEqual(mail.original_message, None)
+
+    @browsing
     def test_uses_title_if_given(self, browser):
         self.login(self.regular_user, browser)
         msg = base64.b64encode(load('mail_with_one_mail_attachment.eml'))
