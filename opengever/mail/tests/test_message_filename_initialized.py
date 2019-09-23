@@ -5,6 +5,7 @@ from ftw.mail import inbound
 from ftw.testbrowser import browsing
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
+from opengever.testing.assets import load
 
 
 class TestMessageFilenameInitialized(FunctionalTestCase):
@@ -30,6 +31,19 @@ class TestMessageFilenameInitialized(FunctionalTestCase):
                          portal_type='ftw.mail.mail')
         mail = result['success']
         self.assertEquals('Die Buergschaft.eml', mail.message.filename)
+
+    def test_quickupload_p7m_mail(self):
+        dossier = create(Builder("dossier"))
+        factory = IQuickUploadFileFactory(dossier)
+
+        result = factory(filename='signed.p7m',
+                         title=None,  # ignored by adapter
+                         description=None,  # ignored by adapter
+                         content_type='application/pkcs7-mime',
+                         data=load('signed.p7m'),
+                         portal_type='ftw.mail.mail')
+        mail = result['success']
+        self.assertEquals('Hello.p7m', mail.message.filename)
 
     def test_message_filename_initialzed_with_inboud_mail(self):
         dossier = create(Builder("dossier"))
