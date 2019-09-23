@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Bump plone.restapi to 4.5.1. [phgross]
 - Use persistent-mapping for recently touched entries. [phgross]
 - Harmonize datetimes in recently-touched endpoint. [phgross]
 - Set proposal plone workflow state when submitted proposal state changes. Refactor remote calls so that there is only one request per state change. [deiferni]

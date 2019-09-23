@@ -107,8 +107,6 @@ class TestToDoWatchers(IntegrationTestCase):
 
         self.assertItemsEqual([self.workspace_guest.getId()], responsible_watchers)
 
-    @skip("This fails because of a but in plone.restapi, "
-          "see https://github.com/4teamwork/opengever.core/issues/5902")
     @browsing
     def test_responsible_watcher_is_updated_when_todo_is_unassigned(self, browser):
         self.login(self.workspace_owner, browser)
