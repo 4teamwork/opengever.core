@@ -26,11 +26,11 @@ class FolderPost(Service):
     def reply(self):
         data = json_body(self.request)
 
-        type_ = data.get("@type", None)
-        id_ = data.get("id", None)
-        title = data.get("title", None)
+        self.type = data.get("@type", None)
+        self.id = data.get("id", None)
+        self.title = data.get("title", None)
 
-        if not type_:
+        if not self.type:
             raise BadRequest("Property '@type' is required")
 
         # Disable CSRF protection
@@ -38,7 +38,7 @@ class FolderPost(Service):
             alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
 
         try:
-            obj = create(self.context, type_, id_=id_, title=title)
+            self.obj = create(self.context, self.type, id_=self.id, title=self.title)
         except Unauthorized as exc:
             self.request.response.setStatus(403)
             return dict(error=dict(type="Forbidden", message=str(exc)))
@@ -49,16 +49,16 @@ class FolderPost(Service):
         # Acquisition wrap temporarily to satisfy things like vocabularies
         # depending on tools
         temporarily_wrapped = False
-        if IAcquirer.providedBy(obj) and not safe_hasattr(obj, "aq_base"):
-            obj = obj.__of__(self.context)
+        if IAcquirer.providedBy(self.obj) and not safe_hasattr(self.obj, "aq_base"):
+            self.obj = self.obj.__of__(self.context)
             temporarily_wrapped = True
 
         # Update fields
-        deserializer = queryMultiAdapter((obj, self.request), IDeserializeFromJson)
+        deserializer = queryMultiAdapter((self.obj, self.request), IDeserializeFromJson)
         if deserializer is None:
             self.request.response.setStatus(501)
             return dict(
-                error=dict(message="Cannot deserialize type {}".format(obj.portal_type))
+                error=dict(message="Cannot deserialize type {}".format(self.obj.portal_type))
             )
 
         try:
@@ -68,23 +68,23 @@ class FolderPost(Service):
             return dict(error=dict(type="DeserializationError", message=str(e)))
 
         if temporarily_wrapped:
-            obj = aq_base(obj)
+            self.obj = aq_base(self.obj)
 
         if not getattr(deserializer, "notifies_create", False):
-            notify(ObjectCreatedEvent(obj))
+            notify(ObjectCreatedEvent(self.obj))
 
-        obj = add(self.context, obj, rename=not bool(id_))
+        self.obj = add(self.context, self.obj, rename=not bool(self.id))
 
         self.request.response.setStatus(201)
-        self.request.response.setHeader("Location", obj.absolute_url())
+        self.request.response.setHeader("Location", self.obj.absolute_url())
 
-        serializer = queryMultiAdapter((obj, self.request), ISerializeToJson)
+        serializer = queryMultiAdapter((self.obj, self.request), ISerializeToJson)
 
         serialized_obj = serializer()
 
         # HypermediaBatch can't determine the correct canonical URL for
         # objects that have just been created via POST - so we make sure
         # to set it here
-        serialized_obj["@id"] = obj.absolute_url()
+        serialized_obj["@id"] = self.obj.absolute_url()
 
         return serialized_obj
