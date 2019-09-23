@@ -5,7 +5,9 @@ from ftw.mail import inbound
 from ftw.mail.interfaces import IEmailAddress
 from opengever.mail.mail import MESSAGE_SOURCE_MAILIN
 from opengever.testing import FunctionalTestCase
+from opengever.testing.assets import load
 from plone import api
+import email
 
 
 class TestMailInbound(FunctionalTestCase):
@@ -34,7 +36,7 @@ class TestMailInbound(FunctionalTestCase):
         with self.assertRaises(ValueError):
             inbound.createMailInContainer(dossier, message)
 
-    def test_mail_creation(self):
+    def test_eml_mail_creation(self):
         dossier = create(Builder("dossier"))
         to_addess = IEmailAddress(self.request).get_email_for_object(dossier)
 
@@ -43,3 +45,20 @@ class TestMailInbound(FunctionalTestCase):
         self.assertTrue(obj.preserved_as_paper)
         self.assertEqual(message, obj.message.data)
         self.assertEqual(MESSAGE_SOURCE_MAILIN, obj.message_source)
+        self.assertEqual('Test.eml', obj.message.filename)
+        self.assertEqual('message/rfc822', obj.message.contentType)
+
+    def test_p7m_mail_creation(self):
+        dossier = create(Builder("dossier"))
+        to_address = IEmailAddress(self.request).get_email_for_object(dossier)
+
+        msg = email.message_from_string(load('signed.p7m'))
+        msg.replace_header('To', to_address)
+        message = msg.as_string()
+
+        obj = inbound.createMailInContainer(dossier, message)
+        self.assertTrue(obj.preserved_as_paper)
+        self.assertEqual(message, obj.message.data)
+        self.assertEqual(MESSAGE_SOURCE_MAILIN, obj.message_source)
+        self.assertEqual('Hello.p7m', obj.message.filename)
+        self.assertEqual('application/pkcs7-mime', obj.message.contentType)
