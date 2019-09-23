@@ -39,7 +39,9 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             {'checked_out': [],
              'recently_touched': [{
                  'icon_class': 'icon-docx',
-                 'last_touched': '2018-04-30T00:00:00',
+                 # Because of an incorrect timezone handling in the freezer
+                 # last_touched should be `2018-04-30T00:00:00+02:00`
+                 'last_touched': u'2018-04-30T02:00:00+02:00',
                  'target_url': self.document.absolute_url(),
                  'title': u'Vertr\xe4gsentwurf',
                  'filename': u'Vertraegsentwurf.docx',
@@ -98,12 +100,14 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         self.assertEquals(
             {'checked_out': [],
              'recently_touched': [{
-                'icon_class': 'icon-docx is-checked-out',
-                'last_touched': '2018-04-30T00:00:00',
-                'target_url': self.document.absolute_url(),
-                'title': u'Vertr\xe4gsentwurf',
-                'filename': u'Vertraegsentwurf.docx',
-                'checked_out': self.secretariat_user.getId()}]},
+                 'icon_class': 'icon-docx is-checked-out',
+                 # Because of an incorrect timezone handling in the freezer
+                 # last_touched should be `2018-04-30T00:00:00+02:00`
+                 'last_touched': u'2018-04-30T02:00:00+02:00',
+                 'target_url': self.document.absolute_url(),
+                 'title': u'Vertr\xe4gsentwurf',
+                 'filename': u'Vertraegsentwurf.docx',
+                 'checked_out': self.secretariat_user.getId()}]},
             browser.json)
 
     @browsing

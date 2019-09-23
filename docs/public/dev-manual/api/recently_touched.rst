@@ -65,7 +65,7 @@ zwei separaten Listen:
         "recently_touched": [
           {
             "icon_class": "icon-dokument_powerpoint is-checked-out",
-            "last_touched": "2018-05-31T15:35:38.607793",
+            "last_touched": "2018-05-31T15:35:38+02:00",
             "target_url": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-229",
             "title": "Pra\u0308sentation - Firmenprofil Muster AG",
             "filename": "Praesentation - Firmenprofil Muster AG.ppt",
@@ -76,7 +76,7 @@ zwei separaten Listen:
           },
           {
             "icon_class": "icon-dokument_word",
-            "last_touched": "2018-05-31T15:34:42.442729",
+            "last_touched": "2018-05-31T15:34:42+02:00",
             "target_url": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-236",
             "title": "Anfrage Drei"
             "filename": "Anfrage Drei.docx",
