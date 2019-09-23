@@ -23,6 +23,7 @@ class TestOGQuickupload(IntegrationTestCase):
     def test_is_email_upload(self):
         self.assertTrue(self.adapter.is_email_upload('mail.msg'))
         self.assertTrue(self.adapter.is_email_upload('mail.eml'))
+        self.assertTrue(self.adapter.is_email_upload('mail.p7m'))
 
         self.assertFalse(self.adapter.is_email_upload('image.jpeg'))
         self.assertFalse(self.adapter.is_email_upload('test.doc'))
