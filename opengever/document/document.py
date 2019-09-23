@@ -49,7 +49,7 @@ import os.path
 
 
 LOG = logging.getLogger('opengever.document')
-MAIL_EXTENSIONS = ['.eml', '.msg']
+MAIL_EXTENSIONS = ['.eml', '.msg', '.p7m']
 
 
 # move the changeNote to the 'common' fieldset
