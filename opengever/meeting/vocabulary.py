@@ -1,3 +1,5 @@
+from opengever.api.add import SchemaValidationData
+from opengever.base.oguid import Oguid
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Member
@@ -186,7 +188,7 @@ class ProposalTemplatesForCommitteeVocabulary(object):
 
     The proposal template field is configured so that the list of templates
     is re-rendered whenever the user changes the committee.
-    This allows this vocubulary to ask the selected committee whether the
+    This allows this vocabulary to ask the selected committee whether the
     list of templates is limited. If so, the templates are reduced to the
     allowed templates.
 
@@ -203,15 +205,20 @@ class ProposalTemplatesForCommitteeVocabulary(object):
             return SimpleVocabulary([])
 
         allowed_uids = self.get_allowed_proposal_templates_UIDS(context)
-        objects = self.get_predecessor_proposal_documents(context.REQUEST)
+        objects = self.get_predecessor_proposal_documents(context)
         objects.extend(self.get_proposal_templates(template_folder, allowed_uids))
         return self.make_vocabulary_from_objects(objects)
 
-    def get_predecessor_proposal_documents(self, request):
+    def get_predecessor_proposal_documents(self, context):
         """Return a list of documents from the predecessor proposal.
         The returned documents can additionally be selected as proposal template.
         """
-        predecessor_path = request.form.get('form.widgets.predecessor_proposal', None)
+        if isinstance(context, SchemaValidationData) and "predecessor_proposal" in context.data:
+            # Proposal is being added through the REST-API.
+            predecessor = api.content.get(UID=context.predecessor_proposal)
+            return [predecessor.get_proposal_document()]
+
+        predecessor_path = context.REQUEST.form.get('form.widgets.predecessor_proposal', None)
         if predecessor_path and predecessor_path != u'--NOVALUE--':
             # The ++add++opengever.meeting.proposal was opened with a predecessor.
             # We should also offer to use the predecessor proposal document as
@@ -246,6 +253,11 @@ class ProposalTemplatesForCommitteeVocabulary(object):
         return committee.resolve_committee().allowed_proposal_templates
 
     def get_committee(self, context):
+        if isinstance(context, SchemaValidationData):
+            # Proposal is being added through the REST-API.
+            oguid = Oguid.parse(context.committee_oguid)
+            return Committee.query.get_by_oguid(oguid)
+
         committees = context.REQUEST.form.get('form.widgets.committee', None)
         if committees:
             return Committee.query.filter_by(committee_id=int(committees[0])).one()
