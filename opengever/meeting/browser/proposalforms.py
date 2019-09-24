@@ -145,13 +145,7 @@ class IAddProposalSupplementaryFields(Schema):
 
     @invariant
     def template_or_document_required_for_creation(data):
-        proposal_template = data.proposal_template
-        proposal_document = data.proposal_document
-        proposal_document_type = data.proposal_document_type
-
-        selected_document_type_choosen = proposal_template \
-            if proposal_document_type == 'template' else proposal_document
-
+        selected_document_type_choosen = get_selected_template(data)
         if not selected_document_type_choosen:
             raise Invalid(_(
                 u'error_template_or_document_required_for_creation',
@@ -168,6 +162,16 @@ class IAddProposalSupplementaryFields(Schema):
                     u'error_only_docx_files_allowed_as_proposal_documents',
                     default=u'Only .docx files allowed as proposal documents.',
                     ))
+
+
+def get_selected_template(data):
+    proposal_template = data.proposal_template
+    proposal_document = data.proposal_document
+    proposal_document_type = data.proposal_document_type
+
+    selected_template = proposal_template \
+        if proposal_document_type == 'template' else proposal_document
+    return selected_template
 
 
 class IAddProposal(IProposal, IAddProposalSupplementaryFields):
