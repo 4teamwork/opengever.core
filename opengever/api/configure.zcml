@@ -450,7 +450,7 @@
   <plone:service
       method="POST"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
-      factory=".add.FolderPost"
+      factory=".add.GeverFolderPost"
       permission="cmf.AddPortalContent"
       />
 
