@@ -16,6 +16,7 @@ from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.supermodel.model import Schema
 from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
@@ -89,7 +90,7 @@ class SubmittedProposalEditForm(DefaultEditForm):
         self.widgets['issuer'].mode = HIDDEN_MODE
 
 
-class IAddProposal(IProposal):
+class IAddProposalSupplementaryFields(Schema):
 
     proposal_document_type = Choice(
         title=_(u'label_template_or_existing_document',
@@ -167,6 +168,11 @@ class IAddProposal(IProposal):
                     u'error_only_docx_files_allowed_as_proposal_documents',
                     default=u'Only .docx files allowed as proposal documents.',
                     ))
+
+
+class IAddProposal(IProposal, IAddProposalSupplementaryFields):
+    """Schema used for the proposal add form
+    """
 
 
 class ProposalAddForm(DefaultAddForm):
