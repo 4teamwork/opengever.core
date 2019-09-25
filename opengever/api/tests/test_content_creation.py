@@ -3,10 +3,77 @@ from ftw.testbrowser import browsing
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.repository.interfaces import IRepositoryFolder
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
+from zope.interface import alsoProvides
 import json
+
+
+class ITestRepositoryFolder(IRepositoryFolder):
+    """Marker interface to register FolderPost for testing purposes
+    """
+
+
+class TestFolderPost(IntegrationTestCase):
+    """ Tests the refactored FolderPost method
+    """
+    def setUp(self):
+        super(TestFolderPost, self).setUp()
+        self.portal = self.layer['portal']
+
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.setDefaultLanguage('de-ch')
+        lang_tool.supported_langs = ['fr-ch', 'de-ch']
+
+        self.layer['load_zcml_string'](
+            '<configure '
+            '    xmlns="http://namespaces.zope.org/zope"'
+            '    xmlns:plone="http://namespaces.plone.org/plone"'
+            '    xmlns:zcml="http://namespaces.zope.org/zcml"'
+            '    xmlns:i18n="http://namespaces.zope.org/i18n"'
+            '>'
+            '<include package="plone.rest" file="meta.zcml" />'
+            '    <plone:service '
+            '        method="POST" '
+            '        for="opengever.api.tests.test_content_creation.ITestRepositoryFolder" '
+            '        factory="opengever.api.add.FolderPost" '
+            '        permission="cmf.AddPortalContent" '
+            '    /> '
+            '</configure> '
+            )
+
+    @browsing
+    def test_dossier_creation(self, browser):
+        self.login(self.regular_user, browser)
+        payload = {
+            u'@type': u'opengever.dossier.businesscasedossier',
+            u'title': u'Sanierung B\xe4rengraben 2016',
+            u'responsible': self.regular_user.id,
+            u'custody_period': 30,
+            u'archival_value': u'unchecked',
+            u'retention_period': 5,
+        }
+
+        alsoProvides(self.leaf_repofolder, ITestRepositoryFolder)
+
+        response = browser.open(
+            self.leaf_repofolder.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(201, response.status_code)
+
+        new_object_id = str(response.json['id'])
+        dossier = self.leaf_repofolder.restrictedTraverse(new_object_id)
+
+        self.assertEqual(u'Sanierung B\xe4rengraben 2016', dossier.title)
+        self.assertEqual(self.regular_user.id, IDossier(dossier).responsible)
+        self.assertEqual(30, ILifeCycle(dossier).custody_period)
+        self.assertEqual(u'unchecked', ILifeCycle(dossier).archival_value)
+        self.assertEqual(5, ILifeCycle(dossier).retention_period)
 
 
 class TestContentCreation(IntegrationTestCase):
