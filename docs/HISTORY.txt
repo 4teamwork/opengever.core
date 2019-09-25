@@ -6,6 +6,7 @@ Changelog
 
 - Add support for multipart/signed a.k.a. *.p7m mails. [deiferni]
 - Add documentation for the cancelcheckout endpoint. [njohner]
+- Downgrade solr to 7.3.1.
 - Bump plone.restapi to 4.5.1. [phgross]
 - Use persistent-mapping for recently touched entries. [phgross]
 - Harmonize datetimes in recently-touched endpoint. [phgross]
