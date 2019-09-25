@@ -4,7 +4,7 @@ Changelog
 2019.3.4 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix unicode error in listing endpoint. [njohner]
 
 
 2019.3.3 (2019-09-11)
