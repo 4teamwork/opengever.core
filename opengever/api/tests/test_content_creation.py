@@ -1,14 +1,87 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.testbrowser import browsing
+from opengever.api.add import get_validation_errors
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.supermodel.model import Schema
 from plone.uuid.interfaces import IUUID
+from zope import schema
 from zope.interface import alsoProvides
+from zope.interface import Invalid
+from zope.interface import invariant
+from zope.schema._bootstrapinterfaces import WrongType
+from zope.schema.interfaces import RequiredMissing
 import json
+
+
+class TestSchema(Schema):
+
+    first_field = schema.TextLine(
+        title=u'first',
+        required=True,
+    )
+
+    second_field = schema.TextLine(
+        title=u'second',
+        required=False,
+    )
+
+    @invariant
+    def fields_are_different(data):
+        if data.first_field == data.second_field:
+            raise Invalid("first_field and second_field must be different")
+
+
+class TestContext(object):
+    """test class used as context for schema validation
+    """
+
+
+class TestSchemaValidation(FunctionalTestCase):
+
+    def test_values_validation(self):
+        context = TestContext()
+
+        # validation succeeds with valid values
+        data = {'first_field': u'valid value'}
+        errors = get_validation_errors(context, data, TestSchema)
+        self.assertEqual([], errors)
+
+        # error is returned when value is invalid
+        data = {'first_field': 1}
+        errors = get_validation_errors(context, data, TestSchema)
+        self.assertEqual(1, len(errors))
+        field, error = errors[0]
+        self.assertEqual('first_field', field)
+        self.assertIsInstance(error, WrongType)
+
+    def test_required_fields_validation(self):
+        context = TestContext()
+
+        data = {}
+        errors = get_validation_errors(context, data, TestSchema)
+
+        self.assertEqual(1, len(errors))
+        field, error = errors[0]
+        self.assertEqual('first_field', field)
+        self.assertIsInstance(error, RequiredMissing)
+
+    def test_invariant_validation(self):
+        context = TestContext()
+
+        data = {'first_field': u'valid value', 'second_field': u'valid value'}
+        errors = get_validation_errors(context, data, TestSchema)
+
+        self.assertEqual(1, len(errors))
+        field, error = errors[0]
+        self.assertIsInstance(error, Invalid)
+        self.assertEqual('first_field and second_field must be different',
+                         error.message)
 
 
 class ITestRepositoryFolder(IRepositoryFolder):
