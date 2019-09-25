@@ -220,11 +220,26 @@ class OGMail(Mail, BaseDocumentMixin):
 
         return doc
 
+    def is_delete_attachment_supported(self):
+        """Return wheter this mail supports deleting attachments.
+
+        Signed mails do not support deleting attachments as that would
+        invalidate the attached signature.
+        """
+
+        message = self.get_file()
+        if not message:
+            return False
+
+        return message.contentType != 'application/pkcs7-mime'
+
     def delete_all_attachments(self):
         """Delete all of mail's attachments.
 
         The attachments will be removed from the attached message.
         """
+        assert self.is_delete_attachment_supported()
+
         self._delete_attachments(self.get_attachments())
 
     def delete_attachments(self, positions):
@@ -234,11 +249,15 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
+        assert self.is_delete_attachment_supported()
+
         attachments = [attachment for attachment in self.get_attachments()
                        if attachment.get('position') in positions]
         self._delete_attachments(attachments)
 
     def _delete_attachments(self, attachments):
+        assert self.is_delete_attachment_supported()
+
         if not attachments:
             return
 

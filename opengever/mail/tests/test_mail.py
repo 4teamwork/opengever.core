@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.testing import IntegrationTestCase
@@ -24,3 +26,18 @@ class TestMail(IntegrationTestCase):
         keywords = browser.find_field_by_text(u'Keywords')
         self.assertItemsEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
                               tuple(keywords.value))
+
+    def test_eml_supports_deleting_attachments(self):
+        self.login(self.regular_user)
+        self.assertTrue(self.mail_eml.is_delete_attachment_supported())
+
+    def test_p7m_prevents_deleting_attachments(self):
+        self.login(self.regular_user)
+
+        mail_p7m = create(
+            Builder("mail")
+            .with_asset_message('signed.p7m')
+            .within(self.dossier)
+            )
+
+        self.assertFalse(mail_p7m.is_delete_attachment_supported())
