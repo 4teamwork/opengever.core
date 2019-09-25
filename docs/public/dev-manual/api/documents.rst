@@ -5,15 +5,16 @@ Für die Bearbeitung einer Dokumentdatei muss auch via REST API der Checkin/Chec
 
 Folgende Abfolge ist dabei vorgesehen:
 
-    1. Checkout
-    #. Lock
-    #. Download
-    #. Upload
-    #. Unlock
-    #. Checkin
+    1. :ref:`Checkout <label-api_checkout>`
+    #. :ref:`Lock <label-api_lock>`
+    #. :ref:`Download <label-api_download>`
+    #. :ref:`Upload <label-api_upload>`
+    #. :ref:`Unlock <label-api_unlock>`
+    #. :ref:`Checkin <label-api_checkin>`
 
 Dieser Workflow kann abgebrochen werden indem man den Checkout widerruft mit dem :ref:`@cancelcheckout <label-api_cancelcheckout>` Endpoint.
 
+.. _label-api_checkout:
 
 Checkout - Dokument auschecken
 ------------------------------
@@ -52,6 +53,8 @@ Darf ein Dokument vom aktuellen Benutzer nicht ausgecheckt werden, so wird mit d
 Lock
 ----
 Um das Dokument von Schreibzugriffen von anderen Benutzern zu schützen muss es mittels Lock gesperrt werden.
+
+.. _label-api_lock:
 
 Lock erstellen
 ~~~~~~~~~~~~~~
@@ -134,6 +137,7 @@ Lock erstellen mit eigenem Timeout
     }
 
 
+.. _label-api_upload:
 
 Datei aktualisieren
 -------------------
@@ -177,6 +181,8 @@ Datei uploaden:
     Content-Type: application/json
 
 
+.. _label-api_unlock:
+
 Lock entfernen
 --------------
 Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden.
@@ -197,6 +203,8 @@ Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden.
         "stealable": true
     }
 
+
+.. _label-api_checkin:
 
 Checkin - Dokument einchecken
 -----------------------------
