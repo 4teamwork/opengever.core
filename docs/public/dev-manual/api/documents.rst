@@ -23,7 +23,7 @@ Ein Dokument wird via ``@checkout`` Endpoint ausgecheckt.
 
   .. sourcecode:: http
 
-    POST /ordnungssystem/dossier-23/document-123@checkout HTTP/1.1
+    POST /ordnungssystem/dossier-23/document-123/@checkout HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
@@ -34,7 +34,7 @@ Darf ein Dokument vom aktuellen Benutzer nicht ausgecheckt werden, so wird mit d
 
   .. sourcecode:: http
 
-    POST /ordnungssystem/fuehrung/dossier-23/document-123@checkout HTTP/1.1
+    POST /ordnungssystem/fuehrung/dossier-23/document-123/@checkout HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
