@@ -14,6 +14,8 @@ Folgende Abfolge ist dabei vorgesehen:
 
 Dieser Workflow kann abgebrochen werden indem man den Checkout widerruft mit dem :ref:`@cancelcheckout <label-api_cancelcheckout>` Endpoint.
 
+Dokumentversionen können mit dem :ref:`@history <label-api_history>` Endpoint aufgelistet werden.
+
 .. _label-api_checkout:
 
 Checkout - Dokument auschecken
@@ -137,6 +139,30 @@ Lock erstellen mit eigenem Timeout
     }
 
 
+.. _label-api_unlock:
+
+Lock entfernen
+~~~~~~~~~~~~~~
+
+Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden.
+
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/document-123/@unlock HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+        "locked": false,
+        "stealable": true
+    }
+
+
 .. _label-api_upload:
 
 Datei aktualisieren
@@ -181,29 +207,6 @@ Datei uploaden:
     Content-Type: application/json
 
 
-.. _label-api_unlock:
-
-Lock entfernen
---------------
-Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden.
-
-
-  .. sourcecode:: http
-
-    POST /ordnungssystem/dossier-23/document-123/@unlock HTTP/1.1
-    Accept: application/json
-
-  .. sourcecode:: http
-
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-
-    {
-        "locked": false,
-        "stealable": true
-    }
-
-
 .. _label-api_checkin:
 
 Checkin - Dokument einchecken
@@ -241,6 +244,8 @@ Der checkout von einem Dokument kann man mittels ``@cancelcheckout`` Endpoint wi
 
     HTTP/1.1 204 No Content
 
+
+.. _label-api_history:
 
 Versionen auflisten:
 --------------------
