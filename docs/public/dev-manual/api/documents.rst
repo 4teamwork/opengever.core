@@ -12,6 +12,7 @@ Folgende Abfolge ist dabei vorgesehen:
     #. Unlock
     #. Checkin
 
+Dieser Workflow kann abgebrochen werden indem man den Checkout widerruft mit dem :ref:`@cancelcheckout <label-api_cancelcheckout>` Endpoint.
 
 
 Checkout - Dokument auschecken
@@ -214,6 +215,23 @@ Ein Dokument wird via ``@checkin`` Endpoint eingecheckt, dabei wird automatisch 
 
     HTTP/1.1 204 No content
     Content-Type: application/json
+
+
+.. _label-api_cancelcheckout:
+
+Cancel checkout - Checkout widerrufen
+-------------------------------------
+
+Der checkout von einem Dokument kann man mittels ``@cancelcheckout`` Endpoint widerrufen.
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/document-123/@cancelcheckout HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content
 
 
 Versionen auflisten:

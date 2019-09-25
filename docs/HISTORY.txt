@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Add documentation for the cancelcheckout endpoint. [njohner]
 - Bump plone.restapi to 4.5.1. [phgross]
 - Use persistent-mapping for recently touched entries. [phgross]
 - Harmonize datetimes in recently-touched endpoint. [phgross]
