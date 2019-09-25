@@ -62,7 +62,7 @@
             </div>
 
 
-            <div class="field">
+            <div class="field" tal:condition="view/is_delete_attachment_supported">
               <label i18n:translate="label_delete_action"
                      class="horizontal">
                 Delete attachments

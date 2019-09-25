@@ -129,8 +129,8 @@ class ExtractAttachments(BrowserView):
                 attachments = [int(pos) for pos in attachments]
                 delete_action = self.request.get('delete_action', 'nothing')
                 if delete_action not in self.allowed_delete_actions:
-                    raise ValueError('Expected delete action to be one of ' +
-                                     str(self.allowed_delete_actions))
+                    raise ValueError('Expected delete action to be one of '
+                                     + str(self.allowed_delete_actions))
 
                 self.extract_attachments(attachments, delete_action)
                 return self.request.RESPONSE.redirect(
@@ -139,6 +139,9 @@ class ExtractAttachments(BrowserView):
 
         return super(ExtractAttachments, self).__call__()
 
+    def is_delete_attachment_supported(self):
+        return self.context.is_delete_attachment_supported()
+
     def extract_attachments(self, positions, delete_action):
         docs = self.context.extract_attachments_into_parent(positions)
         for document in docs:
@@ -146,6 +149,9 @@ class ExtractAttachments(BrowserView):
                     default=u'Created document ${title}',
                     mapping={'title': document.Title().decode('utf-8')})
             api.portal.show_message(msg, request=self.request, type='info')
+
+        if not self.is_delete_attachment_supported():
+            return
 
         # delete the attachments from the email message, if needed
         if delete_action == 'selected':

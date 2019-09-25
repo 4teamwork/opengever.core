@@ -22,6 +22,9 @@ MAIL_DATA_WRONG_MIMETYPE = resource_string(
 
 class TestExtractAttachmentView(FunctionalTestCase):
 
+    def get_delete_options(self, browser):
+        return browser.css('[name=delete_action] + label').text
+
     def setUp(self):
         super(TestExtractAttachmentView, self).setUp()
         self.dossier = create(Builder('dossier'))
@@ -126,6 +129,27 @@ class TestExtractAttachmentView(FunctionalTestCase):
         browser.css('.formControls input.standalone').first.click()
 
         self.assertEquals(self.mail.absolute_url(), browser.url)
+
+    @browsing
+    def test_delete_options_rendered_for_mails(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+
+        self.assertEqual(
+            ['Delete nothing',
+             'Delete all attachments',
+             'Delete all selected attachments'],
+            self.get_delete_options(browser)
+        )
+
+    @browsing
+    def test_delete_options_unavailable_for_signed_mails(self, browser):
+        mail_p7m = create(
+            Builder('mail')
+            .with_asset_message('signed.p7m')
+            .within(self.dossier)
+        )
+        browser.login().open(mail_p7m, view='extract_attachments')
+        self.assertEqual([], self.get_delete_options(browser))
 
 
 class TestExtractAttachmentViewForMailWithOriginalMessage(FunctionalTestCase):

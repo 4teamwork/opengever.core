@@ -31,7 +31,7 @@ class TestMail(IntegrationTestCase):
         self.login(self.regular_user)
         self.assertTrue(self.mail_eml.is_delete_attachment_supported())
 
-    def test_p7m_prevents_deleting_attachments(self):
+    def test_p7m_does_not_support_deleting_attachments(self):
         self.login(self.regular_user)
 
         mail_p7m = create(
