@@ -13,7 +13,6 @@ Changelog
 - Validate task deadline modification through the rest-api if the user uses the same deadline as already set on the task. [elioschmutz]
 - Bump ftw.solr to 2.6.2 to get fix for avoiding atomic updates with null-documents. [lgraf]
 - Add example contentent for workspaces. [elioschmutz]
-- Fix unicode error in listing endpoint. [njohner]
 - Bump docxcompose to version 1.0.2. [njohner]
 - Bump ftw.zipexport to include a bugfix to avoid doubled subfolders. [phgross]
 - Change task specific response implementation to the new base response implementation. [elioschmutz]
@@ -95,6 +94,12 @@ Changelog
 - Add per user configuration to activate notifications for own actions. [njohner]
 - Update ftw.solr to version 2.5.0 which allows near realtime searching. [buchi]
 - Update Solr to version 8.1.1. [buchi]
+
+
+2019.3.4 (2019-09-25)
+---------------------
+
+- Fix unicode error in listing endpoint. [njohner]
 
 
 2019.3.3 (2019-09-11)
