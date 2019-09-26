@@ -35,3 +35,12 @@ def format_date(date, request=None):
     date_string_format = api.portal.get_registry_record(
         "sablon_date_format_string", interface=IMeetingSettings)
     return ulocalized_time(date, date_string_format, request)
+
+
+def is_docx(document):
+    document_file = document.get_file()
+    if not document_file:
+        return False
+    document_mimetype = document_file.contentType
+    docx_mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    return document_mimetype == docx_mimetype

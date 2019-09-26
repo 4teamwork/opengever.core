@@ -74,4 +74,11 @@ Aufgabe
 
 .. include:: schemas/opengever.task.task.inc
 
+
+
+Anträge
+^^^^^^^
+
+.. include:: schemas/opengever.meeting.proposal.inc
+
 .. disqus::

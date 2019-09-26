@@ -29,6 +29,7 @@ Inhalt:
    preview.rst
    webactions.rst
    tasks.rst
+   proposals.rst
    reminder.rst
    journal.rst
    workspace/index

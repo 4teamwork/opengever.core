@@ -6,6 +6,7 @@ from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.utils import is_docx
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
@@ -15,6 +16,7 @@ from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.supermodel.model import Schema
 from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
@@ -88,7 +90,7 @@ class SubmittedProposalEditForm(DefaultEditForm):
         self.widgets['issuer'].mode = HIDDEN_MODE
 
 
-class IAddProposal(IProposal):
+class IAddProposalSupplementaryFields(Schema):
 
     proposal_document_type = Choice(
         title=_(u'label_template_or_existing_document',
@@ -143,13 +145,7 @@ class IAddProposal(IProposal):
 
     @invariant
     def template_or_document_required_for_creation(data):
-        proposal_template = data.proposal_template
-        proposal_document = data.proposal_document
-        proposal_document_type = data.proposal_document_type
-
-        selected_document_type_choosen = proposal_template \
-            if proposal_document_type == 'template' else proposal_document
-
+        selected_document_type_choosen = get_selected_template(data)
         if not selected_document_type_choosen:
             raise Invalid(_(
                 u'error_template_or_document_required_for_creation',
@@ -161,13 +157,26 @@ class IAddProposal(IProposal):
         # XXX - this should get removed once we have a mimetype index based on which we can filter at source
         proposal_document = data.proposal_document
         if proposal_document:
-            proposal_document_mimetype = proposal_document.file.contentType
-            docx_mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            if not proposal_document_mimetype == docx_mimetype:
+            if not is_docx(proposal_document):
                 raise Invalid(_(
                     u'error_only_docx_files_allowed_as_proposal_documents',
                     default=u'Only .docx files allowed as proposal documents.',
                     ))
+
+
+def get_selected_template(data):
+    proposal_template = data.proposal_template
+    proposal_document = data.proposal_document
+    proposal_document_type = data.proposal_document_type
+
+    selected_template = proposal_template \
+        if proposal_document_type == 'template' else proposal_document
+    return selected_template
+
+
+class IAddProposal(IProposal, IAddProposalSupplementaryFields):
+    """Schema used for the proposal add form
+    """
 
 
 class ProposalAddForm(DefaultAddForm):

@@ -447,4 +447,11 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="POST"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".add.GeverFolderPost"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>
