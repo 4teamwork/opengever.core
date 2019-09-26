@@ -39,6 +39,8 @@ Python                                                                         J
 Dateien
 -------
 
+.. _label-api_download:
+
 Download (Serialisierung)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 

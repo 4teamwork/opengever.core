@@ -5,14 +5,18 @@ Für die Bearbeitung einer Dokumentdatei muss auch via REST API der Checkin/Chec
 
 Folgende Abfolge ist dabei vorgesehen:
 
-    1. Checkout
-    #. Lock
-    #. Download
-    #. Upload
-    #. Unlock
-    #. Checkin
+    1. :ref:`Checkout <label-api_checkout>`
+    #. :ref:`Lock <label-api_lock>`
+    #. :ref:`Download <label-api_download>`
+    #. :ref:`Upload <label-api_upload>`
+    #. :ref:`Unlock <label-api_unlock>`
+    #. :ref:`Checkin <label-api_checkin>`
 
+Dieser Workflow kann abgebrochen werden indem man den Checkout widerruft mit dem :ref:`@cancelcheckout <label-api_cancelcheckout>` Endpoint.
 
+Dokumentversionen können mit dem :ref:`@history <label-api_history>` Endpoint aufgelistet werden.
+
+.. _label-api_checkout:
 
 Checkout - Dokument auschecken
 ------------------------------
@@ -21,7 +25,7 @@ Ein Dokument wird via ``@checkout`` Endpoint ausgecheckt.
 
   .. sourcecode:: http
 
-    POST /ordnungssystem/dossier-23/document-123@checkout HTTP/1.1
+    POST /ordnungssystem/dossier-23/document-123/@checkout HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
@@ -32,7 +36,7 @@ Darf ein Dokument vom aktuellen Benutzer nicht ausgecheckt werden, so wird mit d
 
   .. sourcecode:: http
 
-    POST /ordnungssystem/fuehrung/dossier-23/document-123@checkout HTTP/1.1
+    POST /ordnungssystem/fuehrung/dossier-23/document-123/@checkout HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
@@ -51,6 +55,8 @@ Darf ein Dokument vom aktuellen Benutzer nicht ausgecheckt werden, so wird mit d
 Lock
 ----
 Um das Dokument von Schreibzugriffen von anderen Benutzern zu schützen muss es mittels Lock gesperrt werden.
+
+.. _label-api_lock:
 
 Lock erstellen
 ~~~~~~~~~~~~~~
@@ -133,6 +139,31 @@ Lock erstellen mit eigenem Timeout
     }
 
 
+.. _label-api_unlock:
+
+Lock entfernen
+~~~~~~~~~~~~~~
+
+Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden.
+
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/document-123/@unlock HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+        "locked": false,
+        "stealable": true
+    }
+
+
+.. _label-api_upload:
 
 Datei aktualisieren
 -------------------
@@ -176,26 +207,7 @@ Datei uploaden:
     Content-Type: application/json
 
 
-Lock entfernen
---------------
-Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden.
-
-
-  .. sourcecode:: http
-
-    POST /ordnungssystem/dossier-23/document-123/@unlock HTTP/1.1
-    Accept: application/json
-
-  .. sourcecode:: http
-
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-
-    {
-        "locked": false,
-        "stealable": true
-    }
-
+.. _label-api_checkin:
 
 Checkin - Dokument einchecken
 -----------------------------
@@ -215,6 +227,25 @@ Ein Dokument wird via ``@checkin`` Endpoint eingecheckt, dabei wird automatisch 
     HTTP/1.1 204 No content
     Content-Type: application/json
 
+
+.. _label-api_cancelcheckout:
+
+Cancel checkout - Checkout widerrufen
+-------------------------------------
+
+Der checkout von einem Dokument kann man mittels ``@cancelcheckout`` Endpoint widerrufen.
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/document-123/@cancelcheckout HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content
+
+
+.. _label-api_history:
 
 Versionen auflisten:
 --------------------
