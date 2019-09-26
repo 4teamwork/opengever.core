@@ -35,11 +35,11 @@ class FolderPost(Service):
     def extract_data(self):
         data = json_body(self.request)
 
-        self.type = data.get("@type", None)
-        self.id = data.get("id", None)
-        self.title = data.get("title", None)
+        self.type_ = data.get("@type", None)
+        self.id_ = data.get("id", None)
+        self.title_ = data.get("title", None)
 
-        if not self.type:
+        if not self.type_:
             raise BadRequest("Property '@type' is required")
         return data
 
@@ -62,7 +62,7 @@ class FolderPost(Service):
             notify(ObjectCreatedEvent(self.obj))
 
     def add_object_to_context(self):
-        self.obj = add(self.context, self.obj, rename=not bool(self.id))
+        self.obj = add(self.context, self.obj, rename=not bool(self.id_))
 
     def serialize_object(self):
         serializer = queryMultiAdapter((self.obj, self.request), ISerializeToJson)
@@ -83,7 +83,7 @@ class FolderPost(Service):
             alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
 
         try:
-            self.obj = create(self.context, self.type, id_=self.id, title=self.title)
+            self.obj = create(self.context, self.type_, id_=self.id_, title=self.title_)
         except Unauthorized as exc:
             self.request.response.setStatus(403)
             return dict(error=dict(type="Forbidden", message=str(exc)))
@@ -118,7 +118,7 @@ class GeverFolderPost(FolderPost):
 
     def extract_data(self):
         data = super(GeverFolderPost, self).extract_data()
-        if self.type == 'opengever.meeting.proposal':
+        if self.type_ == 'opengever.meeting.proposal':
             data.update(self.extract_additional_data(data, IAddProposalSupplementaryFields))
             self.validate_additional_schema(data, IAddProposalSupplementaryFields)
         self.data = data
