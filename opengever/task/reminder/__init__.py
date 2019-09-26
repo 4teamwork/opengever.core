@@ -1,6 +1,7 @@
 from datetime import date
 from datetime import timedelta
 from opengever.task import _
+from persistent import Persistent
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 import logging
@@ -24,6 +25,15 @@ def last_monday(date_):
     return date_ - timedelta(days=date_.weekday())
 
 
+class PersistetReminderOption(Persistent):
+    def __init__(self, option_type, payload):
+        self.option_type = option_type
+        self.payload = payload
+
+    def reminder_option(self):
+        return TASK_REMINDER_OPTIONS.get(self.option_type)
+
+
 class ReminderOption(object):
 
     def __init__(self, option_type, option_title, remind_day_func, sort_order):
@@ -34,6 +44,9 @@ class ReminderOption(object):
 
     def calculate_remind_on(self, deadline):
         return self._remind_day_func(deadline)
+
+    def persist(self, payload):
+        return PersistetReminderOption(self.option_type, payload)
 
 
 TASK_REMINDER_SAME_DAY = ReminderOption(
@@ -64,11 +77,19 @@ TASK_REMINDER_BEGINNING_OF_WEEK = ReminderOption(
     remind_day_func=last_monday,
     sort_order=2)
 
+TASK_REMINDER_ABSOLUTE = ReminderOption(
+    option_type='absolute_date',
+    option_title=_(u'reminder_option_absolute_date',
+                   default="Specific date"),
+    remind_day_func=day_delta(0),
+    sort_order=4)
+
 TASK_REMINDER_OPTIONS = {
     TASK_REMINDER_SAME_DAY.option_type: TASK_REMINDER_SAME_DAY,
     TASK_REMINDER_ONE_DAY_BEFORE.option_type: TASK_REMINDER_ONE_DAY_BEFORE,
     TASK_REMINDER_ONE_WEEK_BEFORE.option_type: TASK_REMINDER_ONE_WEEK_BEFORE,
     TASK_REMINDER_BEGINNING_OF_WEEK.option_type: TASK_REMINDER_BEGINNING_OF_WEEK,
+    TASK_REMINDER_ABSOLUTE.option_type: TASK_REMINDER_ABSOLUTE,
 }
 
 

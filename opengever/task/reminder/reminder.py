@@ -16,7 +16,7 @@ class TaskReminder(object):
     def __init__(self):
         self.session = create_session()
 
-    def set_reminder(self, obj, option, user_id=None):
+    def set_reminder(self, obj, option, user_id=None, payload=''):
         """Sets a reminder for the given object for a specific user or for the
         current logged in user.
 
@@ -26,29 +26,27 @@ class TaskReminder(object):
         arguments:
         obj -- the object for which the reminder should be set
         option -- a TASK_REMINDER_OPTIONS option
+        payload -- additional data for the reminder
         """
         user_id = user_id or api.user.get_current().getId()
-        self._set_reminder_setting_in_annotation(obj, user_id, option)
+        self._set_reminder_setting_in_annotation(obj, user_id, option,
+                                                 option.persist(payload))
 
     def get_reminder(self, obj, user_id=None):
-        """Get the reminder-option object for the given object for a specific
+        """Get the persisted reminder object for the given object for a specific
         user or for the current logged in user.
 
         Returns None, if no reminder is set.
         """
         user_id = user_id or api.user.get_current().getId()
-        return TASK_REMINDER_OPTIONS.get(
-            self._get_user_annotation(obj, user_id))
+        return self._get_user_annotation(obj, user_id)
 
     def get_reminders(self, obj):
-        """Get the reminder-option object for the given object for a specific
-        user or for the current logged in user.
+        """Get the persisted reminder objects for the given object.
 
-        Returns None, if no reminder is set.
+        Returns a dict with { actor: persisted reminder object }
         """
-        storage = self._annotation_storage(obj)
-        return {actor: TASK_REMINDER_OPTIONS.get(value)
-                for actor, value in storage.items()}
+        return dict(self._annotation_storage(obj))
 
     def get_reminders_of_potential_responsibles(self, obj):
         """Get reminders of all responsible representatives.
@@ -59,7 +57,7 @@ class TaskReminder(object):
         data = {}
         for userid, reminder in self.get_reminders(obj).items():
             if userid in representatives:
-                data[userid] = reminder.option_type
+                data[userid] = reminder
         return data
 
     def get_sql_reminder(self, obj, user_id=None):
@@ -99,7 +97,7 @@ class TaskReminder(object):
             obj.get_sql_object().reminder_settings)
 
     def _set_reminder_setting_in_annotation(self, obj, user_id, option):
-        self._set_user_annotation(obj, user_id, option.option_type)
+        self._set_user_annotation(obj, user_id, option)
 
     def _clear_reminder_setting_in_annotation(self, obj, user_id):
         storage = self._annotation_storage(obj)
