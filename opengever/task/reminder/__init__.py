@@ -1,4 +1,3 @@
-from datetime import date
 from datetime import timedelta
 from opengever.task import _
 from zope.schema.vocabulary import SimpleTerm
