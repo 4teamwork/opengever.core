@@ -367,8 +367,24 @@ class TestUploadValidator(FunctionalTestCase):
 
         validator.validate(file)
 
-    def test_does_not_accept_emails(self):
+    def test_does_not_accept_eml(self):
         mail = NamedBlobFile('bla bla', filename=u'test.eml')
+        validator = UploadValidator(*self.validator_arguments())
+
+        with self.assertRaises(Invalid) as cm:
+            self.assertFalse(validator.validate(mail))
+        self.assertEquals('error_mail_upload', str(cm.exception))
+
+    def test_does_not_accept_msg(self):
+        mail = NamedBlobFile('bla bla', filename=u'test.msg')
+        validator = UploadValidator(*self.validator_arguments())
+
+        with self.assertRaises(Invalid) as cm:
+            self.assertFalse(validator.validate(mail))
+        self.assertEquals('error_mail_upload', str(cm.exception))
+
+    def test_does_not_accept_p7m(self):
+        mail = NamedBlobFile('bla bla', filename=u'test.p7m')
         validator = UploadValidator(*self.validator_arguments())
 
         with self.assertRaises(Invalid) as cm:

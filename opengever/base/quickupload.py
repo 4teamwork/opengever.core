@@ -100,7 +100,8 @@ class OGQuickUploadCapableFileFactory(object):
     def is_email_upload(self, filename):
         extension = os.path.splitext(filename)[1].lower()
         mimetype = self._get_mimetype(extension)
-        return extension == '.msg' or mimetype == 'message/rfc822'
+        return extension == '.msg' or mimetype in ('message/rfc822',
+                                                   'application/pkcs7-mime')
 
     def _get_mimetype(self, extension):
         return mimetypes.types_map.get(extension)

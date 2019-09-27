@@ -74,5 +74,11 @@
     "original_message_path": "files/sample.msg",
     "review_state": "document-state-draft",
     "title": "Mail in bestehendem Examplecontent Dossier"
+  },  {
+    "guid": "fdf43b595a2b4092968c8fb7bc45474c",
+    "parent_guid": "659645aec58d48a9b9663399ea2ec069",
+    "filepath": "files/signed.p7m",
+    "review_state": "document-state-draft",
+    "title": "Signiertes Mail."
   }
 ]

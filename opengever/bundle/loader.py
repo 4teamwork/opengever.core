@@ -200,10 +200,19 @@ class ItemPreprocessor(object):
         # Mails however need a bit of special love
         if self.json_name == 'documents.json':
             filepath = self.item['filepath']
-            if filepath is not None and filepath.endswith('.eml'):
+
+            if self._is_mail_type(filepath):
                 _type = 'ftw.mail.mail'
 
         self.item['_type'] = _type
+
+    def _is_mail_type(self, filepath):
+        """Return whether file extension is something we consider a mail."""
+
+        if filepath is None:
+            return False
+
+        return os.path.splitext(filepath)[-1] in ('.eml', '.p7m',)
 
     def _strip_extension_from_title(self):
         """Strip extension from title if present.

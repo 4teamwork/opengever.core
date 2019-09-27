@@ -48,6 +48,9 @@ und eventuelle Anhänge angezeigt. Mit der Aktion *Anhänge speichern* können
 die E-Mail-Anhänge separat als Dokumente gespeichert werden. Wahlweise können
 die Anhänge der E-Mail gelöscht werden.
 
+*(Für signierte E-Mails (Dateiendung *.p7m) können Anhänge nicht gelöscht
+werden, weil dadurch sonst die Signatur invalidiert würde)*
+
 |img-dokumente-31|
 
 Ein in OneGov GEVER abgelegtes E-Mail erneut versenden

@@ -34,7 +34,7 @@ class TestBundleSource(FunctionalTestCase):
 
     def test_yields_items_from_bundle(self):
         source = self.setup_source({})
-        self.assertEqual(15, len(list(source)))
+        self.assertEqual(16, len(list(source)))
 
     def test_raises_if_bundle_path_missing(self):
         transmogrifier = MockTransmogrifier()
