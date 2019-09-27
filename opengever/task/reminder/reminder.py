@@ -95,8 +95,12 @@ class TaskReminder(object):
         """If the duedate of a task will change, we have to update the
         reminde-day of all reminders set for this object.
         """
-        map(lambda reminder: reminder.update_remind_day(),
-            obj.get_sql_object().reminder_settings)
+        sql_task = obj.get_sql_object()
+
+        for reminder_setting in sql_task.reminder_settings:
+            option = TASK_REMINDER_OPTIONS[reminder_setting.option_type]
+            new_remind_day = option.calculate_remind_on(sql_task.deadline)
+            reminder_setting.remind_day = new_remind_day
 
     def _set_reminder_setting_in_annotation(self, obj, user_id, option):
         self._set_user_annotation(obj, user_id, option.option_type)
