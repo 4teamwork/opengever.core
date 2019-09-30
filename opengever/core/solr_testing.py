@@ -206,11 +206,6 @@ class SolrReplicationAPIClient(object):
             raise
         response_data = response.json()
 
-        if not response_data['status'] == 'OK':
-            print response
-            print response_data
-            raise Exception('Failed to check restore status')
-
         return response_data['restorestatus']
 
     def await_restored(self, timeout=60, interval=0.1):
