@@ -166,6 +166,26 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual(13824, len(IOGMail(mail).original_message.data))
         self.assertEqual(u'Lorem Ipsum', mail.title)
 
+    def test_handles_msg_only_mails(self):
+        mail = create(Builder('mail'))
+        self.assertIsNone(mail.message)
+        relative_path = '/'.join(mail.getPhysicalPath()[2:])
+        item = {
+            u"guid": u"12345",
+            u"_type": u"ftw.mail.mail",
+            u"_path": relative_path,
+            u"filepath": u"files/sample.msg",
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        self.assertEqual(
+            u'sample.msg', IOGMail(mail).original_message.filename)
+        self.assertEqual(13824, len(IOGMail(mail).original_message.data))
+
+        self.assertEqual('message/rfc822', mail.message.contentType)
+        self.assertEqual(u'Test attachment.eml', mail.message.filename)
+
     def test_uses_subject_as_title_only_when_no_title_is_given(self):
         mail2 = create(Builder('mail').titled(u'Test Mail'))
         item = {

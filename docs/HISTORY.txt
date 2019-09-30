@@ -4,7 +4,7 @@ Changelog
 2019.4.0rc4 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Support the bundle-import of mails in the msg format. [phgross]
 
 
 2019.4.0rc3 (2019-10-02)

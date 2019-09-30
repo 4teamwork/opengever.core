@@ -15,7 +15,7 @@ from collections import namedtuple
 
 
 # List of fnmatch() patterns to specify which "documents" to ignore
-IGNORES = ['*.DS_Store', '*.msg', '*.dll', '*.exe']
+IGNORES = ['*.DS_Store', '*.dll', '*.exe']
 
 
 DirectoryNode = namedtuple('Node', ['path', 'guid', 'parent_guid', 'level'])

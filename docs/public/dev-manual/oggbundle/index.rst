@@ -133,8 +133,6 @@ Der tatsächlich in OneGov GEVER verwendete Titel / Dateiname wird gesteuert üb
 
 Folgende Dateitypen sind in OGGBundles nicht erlaubt:
 
--  **.msg**
-
 -  **.exe**
 
 -  **.dll**
