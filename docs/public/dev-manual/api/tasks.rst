@@ -318,6 +318,83 @@ Zusätzliche Metadaten:
        :Datentyp: ``Text``
 
 
+Aufgabe kommentieren
+--------------------
+
+Eine Aufgabe kann über den `@responses` Endpoint kommentiert werden:
+
+
+Kommentar hinzufügen
+~~~~~~~~~~~~~~~~~~~~
+
+Ein POST Request auf den `@responses` Endpoint erstellt einen Kommentar mit dem aktuellen Benutzer.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST http://example.org/ordnungssystem/fuehrung/dossier-1/task-5/@responses HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+      {
+        "text": "Bitte rasch anschauen. Danke.",
+      }
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Content-Type: application/json
+
+      {
+        "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-5/@responses/1569875801956269",
+        "added_objects": [],
+        "changes": [],
+        "created": "2019-05-21T13:57:42+00:00",
+        "creator": {
+          "title": "Meier Peter",
+          "token": "peter.meier"
+        },
+        "mimetype": "",
+        "related_items": [],
+        "rendered_text": "",
+        "response_id": 1569875801956269,
+        "response_type": "comment",
+        "successor_oguid": "",
+        "text": "Bitte rasch anschauen. Danke.",
+        "transition": "task-commented"
+      }
+
+
+Kommentar bearbeiten
+~~~~~~~~~~~~~~~~~~~~
+
+Ein PATCH Request auf eine Kommentar-Ressource ändert den Kommentar.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      PATCH http://example.org/ordnungssystem/fuehrung/dossier-1/task-5/@responses/1569875801956269 HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+      {
+        "text": "Hat sich erledigt.",
+      }
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 Created
+      Content-Type: application/json
+
+
 Aufgabenverlauf
 ---------------
 Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter dem Attribut ``responses`` enthalten.
