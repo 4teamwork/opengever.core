@@ -1,9 +1,16 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.response import IResponseContainer
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.ogds.base.Extensions.plugins import activate_request_layer
+from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
+from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone.restapi.serializer.converters import json_compatible
+from zope.component import getMultiAdapter
 import json
 
 
@@ -123,10 +130,39 @@ class TestTaskSerialization(IntegrationTestCase):
                  u'token': self.regular_user.id,
                  u'title': u'B\xe4rfuss K\xe4thi'},
              u'text': u'Angebot \xfcberpr\xfcft',
-             u'transition': u'',
+             u'transition': u'task-commented',
              u'successor_oguid': u'',
              u'rendered_text': u'',
              u'related_items': [],
              u'mimetype': u'',
              u'added_objects': []},
             browser.json)
+
+
+class TestTaskCommentSync(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+
+    def test_comment_will_be_synced(self):
+        self.grant('Manager')
+
+        predecessor = create(Builder('task'))
+        successor = create(Builder('task').successor_from(predecessor))
+
+        activate_request_layer(self.portal.REQUEST,
+                               IInternalOpengeverRequestLayer)
+
+        successor_response_container = IResponseContainer(successor)
+        predecessor_response_container = IResponseContainer(predecessor)
+
+        self.assertEqual(0, len(successor_response_container))
+        self.assertEqual(0, len(predecessor_response_container))
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            self.request['BODY'] = '{"text": "Completed!"}'
+            endpoint = getMultiAdapter((predecessor, self.request),
+                                       name="POST_application_json_@responses")
+            endpoint.reply()
+
+        self.assertEqual(1, len(successor_response_container))
+        self.assertEqual(1, len(predecessor_response_container))
