@@ -136,7 +136,9 @@ class TestMeetingTemplate(IntegrationTestCase):
             ['paragraphtemplate-1',
              'paragraphtemplate-2',
              'paragraphtemplate-3'],
-            [paragraph.getId() for paragraph in self.meeting_template.get_paragraphs()])
+            self.meeting_template.objectIds())
+        for item in self.meeting_template.objectIds():
+            self.assertIsInstance(item, str)
 
         new_order = ['paragraphtemplate-2',
                      'paragraphtemplate-1',
@@ -153,6 +155,8 @@ class TestMeetingTemplate(IntegrationTestCase):
         self.assertEquals(
             new_order,
             [paragraph.getId() for paragraph in self.meeting_template.get_paragraphs()])
+        for item in self.meeting_template.objectIds():
+            self.assertIsInstance(item, str)
 
     @browsing
     def test_meeting_template_name_from_title_behaviour(self, browser):

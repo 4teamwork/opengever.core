@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Fix an issue with agenda item template ids not being stored as ascii. [deiferni]
 - Add support for multipart/signed a.k.a. *.p7m mails. [deiferni]
 - Add documentation for the cancelcheckout endpoint. [njohner]
 - Bump plone.restapi to 4.5.1. [phgross]

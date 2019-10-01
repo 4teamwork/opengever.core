@@ -22,6 +22,8 @@ class UpdateMeetingTemplateContentOrderView(BrowserView):
         order = reversed(json.loads(self.request.get('sortOrder')))
 
         for object_id in order:
+            # OFS IDs are ascii only, json strings are loaded as unicode
+            object_id = object_id.encode('ascii')
             self.context.moveObjectsToTop([object_id])
 
         return self.request.RESPONSE.redirect(self.context.absolute_url())
