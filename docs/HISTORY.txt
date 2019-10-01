@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Fix an issue with agenda item template ids not being stored as ascii. [deiferni]
+- Bump ftw.bumblebee to 3.8.0 for p7m support. [deiferni]
 - Add support for multipart/signed a.k.a. *.p7m mails. [deiferni]
 - Add documentation for the cancelcheckout endpoint. [njohner]
 - Downgrade solr to 7.3.1.
