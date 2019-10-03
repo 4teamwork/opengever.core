@@ -2,10 +2,12 @@ from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.model import USER_ID_LENGTH
 from opengever.ogds.models.user import User
+from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 
 
@@ -18,6 +20,7 @@ class UserSettings(Base):
 
     notify_own_actions = Column(Boolean, default=False, nullable=False)
     notify_inbox_actions = Column(Boolean, default=True, nullable=False)
+    _seen_tours = Column(Text, nullable=True)
 
     @classmethod
     def get_setting_for_user(cls, userid, setting_name):
@@ -40,3 +43,15 @@ class UserSettings(Base):
             config = cls(userid=userid)
             create_session().add(config)
         setattr(config, setting_name, value)
+
+    @property
+    def seen_tours(self):
+        tours = self._seen_tours
+        if tours:
+            return json.loads(self._seen_tours)
+
+        return []
+
+    @seen_tours.setter
+    def seen_tours(self, tours):
+        self._seen_tours = json.dumps(tours)
