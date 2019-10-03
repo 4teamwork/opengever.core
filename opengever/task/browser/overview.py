@@ -6,7 +6,7 @@ from opengever.globalindex.model.task import Task
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
 from opengever.task.activities import TaskReminderActivity
-from opengever.task.reminder import TASK_REMINDER_OPTIONS
+from opengever.task.reminder import REMINDER_TYPE_REGISTRY
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
@@ -220,20 +220,19 @@ class Overview(BrowserView, GeverTabMixin):
 
     def reminder_options(self):
         options = []
-        reminder_option = TaskReminder().get_reminder(self.context)
+        reminder = TaskReminder().get_reminder(self.context)
 
         options.append({
             'option_type': 'no-reminder',
             'option_title': translate(_('no_reminder', default='No reminder'),
                                       context=self.request),
             'sort_order': -1,
-            'selected': reminder_option is None,
+            'selected': reminder is None,
             'showSpinner': False,
             })
 
-        for option in TASK_REMINDER_OPTIONS.values():
-            selected = option.option_type == reminder_option.option_type if \
-                reminder_option else None
+        for option in REMINDER_TYPE_REGISTRY.values():
+            selected = option.option_type == reminder.option_type if reminder else None
             options.append({
                 'option_type': option.option_type,
                 'sort_order': option.sort_order,

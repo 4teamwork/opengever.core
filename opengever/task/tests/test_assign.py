@@ -9,7 +9,7 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.response import IResponseContainer
-from opengever.task.reminder import TASK_REMINDER_SAME_DAY
+from opengever.task.reminder import ReminderSameDay
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
@@ -74,8 +74,7 @@ class TestAssignTask(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         task_reminder = TaskReminder()
-        task_reminder.set_reminder(
-            self.task, TASK_REMINDER_SAME_DAY)
+        task_reminder.set_reminder(self.task, ReminderSameDay.option_type)
 
         self.assertIsNotNone(task_reminder.get_reminder(self.task))
 

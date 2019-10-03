@@ -2,11 +2,11 @@ from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
-from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.base.response import IResponseContainer
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.reminder import TASK_REMINDER_SAME_DAY
+from opengever.task.reminder import ReminderSameDay
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
@@ -149,7 +149,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
 
         self.task.deadline = today
         task_reminder.set_reminder(
-            self.task, TASK_REMINDER_SAME_DAY, self.regular_user.id)
+            self.task, ReminderSameDay.option_type, self.regular_user.id)
         self.task.sync()
 
         sql_setting = ReminderSetting.query.first()

@@ -10,7 +10,7 @@ from opengever.task import FINAL_TRANSITIONS
 from opengever.task import util
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
-from opengever.task.reminder import get_task_reminder_options_vocabulary
+from opengever.task.reminder.model import get_task_reminder_options_vocabulary
 from opengever.task.reminder.reminder import TaskReminder
 from plone import api
 from plone.autoform.form import AutoExtensibleForm

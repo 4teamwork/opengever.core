@@ -238,9 +238,9 @@ class Task(Base):
 
             # If the setting already exists, we only update the deadline
             if sql_setting.actor_id in reminders:
-                setting = reminders[sql_setting.actor_id]
-                sql_setting.option_type = setting.option_type
-                sql_setting.remind_day = setting.calculate_remind_on(
+                reminder = reminders[sql_setting.actor_id]
+                sql_setting.option_type = reminder.option_type
+                sql_setting.remind_day = reminder.calculate_trigger_date(
                     plone_task.deadline)
                 reminders.pop(sql_setting.actor_id)
 
@@ -251,8 +251,9 @@ class Task(Base):
         # Add new reminder settings
         for actor_id, reminder in reminders.items():
             setting = ReminderSetting(
-                task=self, actor_id=actor_id, option_type=reminder.option_type,
-                remind_day=reminder.calculate_remind_on(plone_task.deadline))
+                task=self, actor_id=actor_id,
+                option_type=reminder.option_type,
+                remind_day=reminder.calculate_trigger_date(plone_task.deadline))
             self.session.add(setting)
 
     # XXX move me to task query

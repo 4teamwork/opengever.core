@@ -1,4 +1,4 @@
-from opengever.task.reminder import TASK_REMINDER_OPTIONS
+from opengever.task.reminder import REMINDER_TYPE_REGISTRY
 from opengever.task.reminder.reminder import TaskReminder
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -11,7 +11,7 @@ error_msgs = {
     'missing_option_type': "The request body requires the 'option_type' attribute.",
     'non_existing_option_type': "The provided 'option_type' does not exists. "
                                 "Use one of the following options: {}".format(
-                                    ', '.join(TASK_REMINDER_OPTIONS.keys())),
+                                    ', '.join(REMINDER_TYPE_REGISTRY.keys())),
 }
 
 
@@ -22,7 +22,7 @@ class TaskReminderPost(Service):
 
     Payload: {
         "option_type": option_type
-         (see opengever.task.reminder.TASK_REMINDER_OPTIONS for possible option_types)
+         (see opengever.task.reminder.REMINDER_TYPE_REGISTRY for possible option_types)
     }
 
     """
@@ -33,9 +33,7 @@ class TaskReminderPost(Service):
         if not option_type:
             raise BadRequest(error_msgs.get('missing_option_type'))
 
-        reminder_option = TASK_REMINDER_OPTIONS.get(option_type)
-
-        if not reminder_option:
+        if option_type not in REMINDER_TYPE_REGISTRY:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
 
         # Disable CSRF protection
@@ -47,7 +45,7 @@ class TaskReminderPost(Service):
             self.request.response.setStatus(409)
             return super(TaskReminderPost, self).reply()
 
-        task_reminder.set_reminder(self.context, reminder_option)
+        task_reminder.set_reminder(self.context, option_type)
         self.context.sync()
 
         self.request.response.setStatus(204)
@@ -61,7 +59,7 @@ class TaskReminderPatch(Service):
 
     Payload: {
         "option_type": option_type
-         (see opengever.task.reminder.TASK_REMINDER_OPTIONS for possible option_types)
+         (see opengever.task.reminder.REMINDER_TYPE_REGISTRY for possible option_types)
     }
 
     """
@@ -69,22 +67,20 @@ class TaskReminderPatch(Service):
         data = json_body(self.request)
         option_type = data.get('option_type')
 
-        reminder_option = TASK_REMINDER_OPTIONS.get(option_type)
-
-        if option_type and not reminder_option:
+        if option_type and option_type not in REMINDER_TYPE_REGISTRY:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        if reminder_option:
+        if option_type:
             task_reminder = TaskReminder()
 
             if not task_reminder.get_reminder(self.context):
                 self.request.response.setStatus(404)
                 return super(TaskReminderPatch, self).reply()
 
-            task_reminder.set_reminder(self.context, reminder_option)
+            task_reminder.set_reminder(self.context, option_type)
             self.context.sync()
 
         self.request.response.setStatus(204)

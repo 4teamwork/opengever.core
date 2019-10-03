@@ -47,7 +47,8 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
-from opengever.task.reminder import TASK_REMINDER_SAME_DAY
+from opengever.task.reminder import Reminder
+from opengever.task.reminder import ReminderSameDay
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.helpers import localized_datetime
 from opengever.testing.model import TransparentModelLoader
@@ -808,10 +809,13 @@ class ReminderSettingsBuilder(SqlObjectBuilder):
     mapped_class = ReminderSetting
     id_argument_name = 'reminder_setting_id'
 
-    def for_object(self, obj, option=TASK_REMINDER_SAME_DAY):
+    def for_object(self, obj, option_type=ReminderSameDay.option_type, params=None):
+        if params is None:
+            params = {}
+        reminder = Reminder.create(option_type, params)
         self.arguments['task_id'] = obj.get_sql_object().task_id
-        self.arguments['option_type'] = option.option_type
-        self.arguments['remind_day'] = option.calculate_remind_on(obj.deadline)
+        self.arguments['option_type'] = reminder.option_type
+        self.arguments['remind_day'] = reminder.calculate_trigger_date(obj.deadline)
 
         return self
 
