@@ -63,11 +63,11 @@ class TestserverSelftest(object):
             browser.replace_request_header('Accept', 'application/json')
             browser.replace_request_header('Content-Type', 'application/json')
 
-            search_url = self.plone_url + '@solrsearch?fq=path_parent:\\/plone\\/ordnungssystem\\/rechnungspruefungskommission'
+            search_url = self.plone_url + '@solrsearch?fq=path_parent:\\/plone\\/ordnungssystem\\/rechnungspruefungskommission&fl=path,UID'
             browser.open(search_url)
             self.assertEqual(
                 {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004'},
-                {item['path']: item['UID'] for item in browser.json})
+                {item['path']: item['UID'] for item in browser.json['items']})
 
             data = {'@type': 'opengever.dossier.businesscasedossier',
                     'title': u'Gesch\xe4ftsdossier',
@@ -89,7 +89,7 @@ class TestserverSelftest(object):
             self.assertEqual(
                 {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004',
                  u'/plone/ordnungssystem/rechnungspruefungskommission/dossier-21': u'testserversession000000000000001'},
-                {item['path']: item['UID'] for item in browser.json})
+                {item['path']: item['UID'] for item in browser.json['items']})
 
             self.testserverctl('zodb_teardown')
             self.testserverctl('zodb_setup')
@@ -100,14 +100,14 @@ class TestserverSelftest(object):
             browser.open(search_url)
             self.assertEqual(
                 {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004'},
-                {item['path']: item['UID'] for item in browser.json})
+                {item['path']: item['UID'] for item in browser.json['items']})
 
             # Make sure the bumblebee checksum is available:
             browser.open(self.plone_url + '@solrsearch?fq=id:document-1&fl=id,bumblebee_checksum')
             self.assertEqual(
                 [{'bumblebee_checksum': '9fb7bce1d9bc0eb51d26ea7018ad41f542851ed75cb21e33e04b65a7f9757028',
                   'id': 'document-1'}],
-                browser.json)
+                browser.json['items'])
 
             self.testserverctl('zodb_teardown')
 
