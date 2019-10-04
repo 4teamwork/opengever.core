@@ -23,7 +23,7 @@ class TestReminderSettings(IntegrationTestCase):
 
     def test_gets_added_when_syncing_a_task(self):
         self.login(self.dossier_responsible)
-        self.task.set_reminder(ReminderOneWeekBefore.option_type)
+        self.task.set_reminder(ReminderOneWeekBefore())
         self.task.sync()
 
         self.assertEquals(1, ReminderSetting.query.count())
@@ -36,7 +36,7 @@ class TestReminderSettings(IntegrationTestCase):
     def test_gets_updated_when_syncing_a_task(self):
         self.login(self.dossier_responsible)
 
-        self.task.set_reminder(ReminderOneWeekBefore.option_type)
+        self.task.set_reminder(ReminderOneWeekBefore())
         self.task.sync()
 
         ReminderSetting.query.all()
@@ -50,7 +50,7 @@ class TestReminderSettings(IntegrationTestCase):
 
     def test_gets_removed_when_syncing_a_task(self):
         self.login(self.dossier_responsible)
-        self.task.set_reminder(ReminderOneWeekBefore.option_type)
+        self.task.set_reminder(ReminderOneWeekBefore())
         self.task.sync()
 
         self.assertEquals(1, ReminderSetting.query.count())

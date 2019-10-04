@@ -72,7 +72,7 @@ class TestAssignTask(IntegrationTestCase):
     def test_remove_task_reminder_of_old_responsible(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.task.set_reminder(ReminderSameDay.option_type)
+        self.task.set_reminder(ReminderSameDay())
 
         self.assertIsNotNone(self.task.get_reminder())
 

@@ -1,5 +1,4 @@
 from opengever.globalindex.model.reminder_settings import ReminderSetting
-from opengever.task.reminder import Reminder
 from opengever.task.reminder.interfaces import IReminderStorage
 from opengever.task.reminder.interfaces import IReminderSupport
 from plone import api
@@ -9,18 +8,13 @@ from zope.interface import implementer
 @implementer(IReminderSupport)
 class ReminderSupport(object):
 
-    def set_reminder(self, option_type, user_id=None, params=None):
+    def set_reminder(self, reminder, user_id=None):
         """Sets a reminder for the given object for a specific user or for the
         current logged in user.
 
         A previously set reminder for the given user for the given object will
         be overridden by the new reminder-setting.
-
-        arguments:
-        obj -- the object for which the reminder should be set
-        option_type -- a <Reminder>.option_type
         """
-        reminder = Reminder.create(option_type, params)
         storage = IReminderStorage(self)
         storage.set(reminder, user_id)
 

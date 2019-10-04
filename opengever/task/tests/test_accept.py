@@ -10,7 +10,7 @@ class TestAcceptTaskWorkflowTransitionView(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         self.seq_subtask_1.set_reminder(
-            ReminderOneDayBefore.option_type,
+            ReminderOneDayBefore(),
             user_id=self.regular_user.id)
 
         self.assertEqual(

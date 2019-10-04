@@ -377,7 +377,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
                           responsible_client='org-unit-1',
                           deadline=datetime.date.today()))
 
-        task.set_reminder(ReminderSameDay.option_type, 'hugo.boss')
+        task.set_reminder(ReminderSameDay(), 'hugo.boss')
 
         self.assertIsNotNone(task.get_reminder('hugo.boss'))
 

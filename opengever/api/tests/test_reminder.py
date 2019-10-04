@@ -56,7 +56,7 @@ class TestTaskReminderAPI(IntegrationTestCase):
     @browsing
     def test_post_raises_409_when_adding_already_set_reminder(self, browser):
         self.login(self.regular_user, browser)
-        self.task.set_reminder(ReminderOneDayBefore.option_type)
+        self.task.set_reminder(ReminderOneDayBefore())
 
         payload = {'option_type': ReminderOneDayBefore.option_type}
 
@@ -93,7 +93,7 @@ class TestTaskReminderAPI(IntegrationTestCase):
     @browsing
     def test_patch_updates_set_reminder(self, browser):
         self.login(self.regular_user, browser)
-        self.task.set_reminder(ReminderOneDayBefore.option_type)
+        self.task.set_reminder(ReminderOneDayBefore())
 
         payload = {'option_type': ReminderOneWeekBefore.option_type}
 
@@ -129,7 +129,7 @@ class TestTaskReminderAPI(IntegrationTestCase):
     @browsing
     def test_delete_removes_task_reminder(self, browser):
         self.login(self.regular_user, browser)
-        self.task.set_reminder(ReminderOneDayBefore.option_type)
+        self.task.set_reminder(ReminderOneDayBefore())
 
         self.assertEqual(
             ReminderOneDayBefore(),

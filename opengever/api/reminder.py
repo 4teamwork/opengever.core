@@ -4,6 +4,7 @@ from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.interface import alsoProvides
+from opengever.task.reminder import Reminder
 
 
 error_msgs = {
@@ -42,7 +43,8 @@ class TaskReminderPost(Service):
             self.request.response.setStatus(409)
             return super(TaskReminderPost, self).reply()
 
-        self.context.set_reminder(option_type)
+        reminder = Reminder.create(option_type, {})
+        self.context.set_reminder(reminder)
         self.context.sync()
 
         self.request.response.setStatus(204)
@@ -76,7 +78,8 @@ class TaskReminderPatch(Service):
                 self.request.response.setStatus(404)
                 return super(TaskReminderPatch, self).reply()
 
-            self.context.set_reminder(option_type)
+            reminder = Reminder.create(option_type, {})
+            self.context.set_reminder(reminder)
             self.context.sync()
 
         self.request.response.setStatus(204)
