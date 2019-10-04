@@ -1,8 +1,10 @@
 from opengever.ogds.models.user_settings import IUserSettings
 from opengever.ogds.models.user_settings import UserSettings
+from opengever.webactions.validation import get_validation_errors
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
+from zExceptions import BadRequest
 from zope.schema import getFieldsInOrder
 
 
@@ -30,6 +32,10 @@ class UserSettingsPatch(Service):
     def reply(self):
         userid = api.user.get_current().id
         data = json_body(self.request)
+
+        errors = get_validation_errors(data, IUserSettings)
+        if errors:
+            raise BadRequest(errors)
 
         setting = UserSettings.get_or_create(userid)
         for name, field in getFieldsInOrder(IUserSettings):

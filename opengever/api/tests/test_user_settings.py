@@ -80,3 +80,37 @@ class TestUsersSettingsPatch(IntegrationTestCase):
              "seen_tours": ['gever.introduction', 'gever.release-2019.3'],
              "notify_own_actions": False},
             browser.json)
+
+    @browsing
+    def test_values_are_validated(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(400):
+            data = json.dumps(
+                {'notify_inbox_actions': 'a string',
+                 'seen_tours': 235})
+
+            browser.open('{}/@user-settings'.format(self.portal.absolute_url()),
+                         data=data, method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'message': u"[('notify_inbox_actions', WrongType(u'a string', <type 'bool'>, 'notify_inbox_actions')), ('seen_tours', WrongType(235, <type 'list'>, 'seen_tours'))]",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_invalid_keys_raises(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(400):
+            data = json.dumps(
+                {'invalid_key': 'special value',
+                 'seen_tours': ['gever.introduction', 'gever.release_2019.3']})
+
+            browser.open('{}/@user-settings'.format(self.portal.absolute_url()),
+                         data=data, method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'message': "[(u'invalid_key', UnknownField(u'invalid_key'))]",
+             u'type': u'BadRequest'},
+            browser.json)
