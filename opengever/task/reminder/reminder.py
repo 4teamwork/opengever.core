@@ -1,4 +1,3 @@
-from opengever.base.model import create_session
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.reminder import Reminder
 from opengever.task.reminder.interfaces import IReminderStorage
@@ -72,20 +71,13 @@ class TaskReminderSupport(ReminderSupport):
             ReminderSetting.actor_id == user_id,
             ReminderSetting.task.has(task_id=self.get_sql_object().task_id)).first()
 
-
-class TaskReminder(object):
-
-    def __init__(self):
-        self.session = create_session()
-
-    def recalculate_remind_day_for_obj(self, obj):
+    def update_reminder_trigger_dates(self):
         """If the duedate of a task will change, we have to update the
         reminde-day of all reminders set for this object.
         """
-        sql_task = obj.get_sql_object()
+        sql_task = self.get_sql_object()
 
         for reminder_setting in sql_task.reminder_settings:
-            reminder = self.get_reminder(obj, user_id=reminder_setting.actor_id)
-            new_remind_day = reminder.calculate_trigger_date(
-                sql_task.deadline)
+            reminder = self.get_reminder(user_id=reminder_setting.actor_id)
+            new_remind_day = reminder.calculate_trigger_date(sql_task.deadline)
             reminder_setting.remind_day = new_remind_day

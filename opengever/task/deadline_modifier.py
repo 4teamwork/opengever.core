@@ -61,7 +61,7 @@ class DeadlineModifier(object):
 
         self.context.deadline = new_deadline
         notify(ObjectModifiedEvent(self.context))
-        self.context.recalculate_reminder_trigger_day()
+        self.context.update_reminder_trigger_dates()
 
     def sync_deadline(self, new_deadline, text, transition):
         sync_task_response(self.context, self.context.REQUEST, 'deadline',
