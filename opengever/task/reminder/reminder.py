@@ -3,12 +3,9 @@ from opengever.base.model import create_session
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import Reminder
-from persistent.dict import PersistentDict
+from opengever.task.reminder.interfaces import IReminderStorage
 from plone import api
-from zope.annotation import IAnnotations
 from zope.globalrequest import getRequest
-
-TASK_REMINDER_ANNOTATIONS_KEY = 'opengever.task.task_reminder'
 
 
 class TaskReminder(object):
@@ -27,9 +24,9 @@ class TaskReminder(object):
         obj -- the object for which the reminder should be set
         option_type -- a <Reminder>.option_type
         """
-        user_id = user_id or api.user.get_current().getId()
         reminder = Reminder.create(option_type, params)
-        self._set_reminder_setting_in_annotation(obj, reminder, user_id)
+        storage = IReminderStorage(obj)
+        storage.set(reminder, user_id)
 
     def get_reminder(self, obj, user_id=None):
         """Get the reminder for the given object for a specific
@@ -37,19 +34,15 @@ class TaskReminder(object):
 
         Returns None, if no reminder is set.
         """
-        user_id = user_id or api.user.get_current().getId()
-        reminder_dict = self._get_user_annotation(obj, user_id)
-        if reminder_dict:
-            return Reminder.deserialize(reminder_dict)
+        storage = IReminderStorage(obj)
+        return storage.get(user_id)
 
     def get_reminders(self, obj):
         """Get the mapping of userid -> reminder for all reminders
         (for all users) on the given obj.
         """
-        storage = self._annotation_storage(obj)
-        reminders = {user_id: Reminder.deserialize(reminder_dict)
-                     for user_id, reminder_dict in storage.items()}
-        return reminders
+        storage = IReminderStorage(obj)
+        return storage.list()
 
     def get_reminders_of_potential_responsibles(self, obj):
         """Get reminders of all responsible representatives.
@@ -76,8 +69,8 @@ class TaskReminder(object):
         """Removes a registered reminder for the given object for a specific
         user or for the current logged in user.
         """
-        user_id = user_id or api.user.get_current().getId()
-        self._clear_reminder_setting_in_annotation(obj, user_id)
+        storage = IReminderStorage(obj)
+        storage.clear(user_id)
 
     def create_reminder_notifications(self):
         """Creates an activity and the related notification for set reminders.
@@ -101,26 +94,3 @@ class TaskReminder(object):
             new_remind_day = reminder.calculate_trigger_date(
                 sql_task.deadline)
             reminder_setting.remind_day = new_remind_day
-
-    def _set_reminder_setting_in_annotation(self, obj, reminder, user_id):
-        self._set_user_annotation(obj, user_id,
-                                  PersistentDict(reminder.serialize()))
-
-    def _clear_reminder_setting_in_annotation(self, obj, user_id):
-        storage = self._annotation_storage(obj)
-        if user_id in storage:
-            del storage[user_id]
-
-    def _annotation_storage(self, obj):
-        annotations = IAnnotations(obj)
-        if TASK_REMINDER_ANNOTATIONS_KEY not in annotations:
-            annotations[TASK_REMINDER_ANNOTATIONS_KEY] = PersistentDict()
-
-        return annotations.get(TASK_REMINDER_ANNOTATIONS_KEY)
-
-    def _set_user_annotation(self, obj, user_id, value):
-        storage = self._annotation_storage(obj)
-        storage[user_id] = value
-
-    def _get_user_annotation(self, obj, user_id):
-        return self._annotation_storage(obj).get(user_id)
