@@ -31,7 +31,7 @@
        :Pflichtfeld: Ja :required:`(*)`
        
        
-       :Wertebereich: <User-ID eines gültigen Auftraggebers>
+       :Wertebereich: <User-ID eines gültigen Antragsstellers>
 
 
    .. py:attribute:: date_of_submission
@@ -51,7 +51,7 @@
        
        :Default: <User-spezifischer Default>
        
-       :Wertebereich: <Ein gültiges Sprach-Code (de, en, fr...)>
+       :Wertebereich: <Ein gültiger Sprach-Code (de, en, fr...)>
 
 
    .. py:attribute:: committee_oguid
