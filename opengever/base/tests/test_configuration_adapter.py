@@ -26,6 +26,11 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('cache_timeout', 2592000),
                 ('scope', u'oo_V1WebApi'),
             ])),
+            ('user_settings', OrderedDict([
+                ('notify_inbox_actions', True),
+                ('notify_own_actions', False),
+                ('seen_tours', []),
+            ])),
             ('sharing_configuration', OrderedDict([
                 ('white_list_prefix', u'^.+'),
                 ('black_list_prefix', u'^$'),
@@ -69,6 +74,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('root_url', 'http://nohost/plone'),
             ('cas_url', None),
             ])
+
         with self.login(self.regular_user):
             configuration = IGeverSettings(self.portal).get_config()
         self.assertEqual(expected_configuration, configuration)
