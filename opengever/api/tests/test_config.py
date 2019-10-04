@@ -145,6 +145,18 @@ class TestConfig(IntegrationTestCase):
                          {u'white_list_prefix': '^.+', u'black_list_prefix': '^$'})
 
     @browsing
+    def test_config_contains_user_settings(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            {u'notify_inbox_actions': True,
+             u'notify_own_actions': False,
+             u'seen_tours': []},
+            browser.json.get(u'user_settings'))
+
+    @browsing
     def test_config_contains_nightly_job_timewindow_settings(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.portal.absolute_url() + '/@config',
