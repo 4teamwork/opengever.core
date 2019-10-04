@@ -24,3 +24,8 @@ class IReminderStorage(Interface):
     def clear(self, user_id=None):
         """
         """
+
+
+class IReminderSupport(Interface):
+    """
+    """

@@ -4,16 +4,16 @@ from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import Reminder
 from opengever.task.reminder.interfaces import IReminderStorage
+from opengever.task.reminder.interfaces import IReminderSupport
 from plone import api
 from zope.globalrequest import getRequest
+from zope.interface import implementer
 
 
-class TaskReminder(object):
+@implementer(IReminderSupport)
+class ReminderSupport(object):
 
-    def __init__(self):
-        self.session = create_session()
-
-    def set_reminder(self, obj, option_type, user_id=None, params=None):
+    def set_reminder(self, option_type, user_id=None, params=None):
         """Sets a reminder for the given object for a specific user or for the
         current logged in user.
 
@@ -25,36 +25,46 @@ class TaskReminder(object):
         option_type -- a <Reminder>.option_type
         """
         reminder = Reminder.create(option_type, params)
-        storage = IReminderStorage(obj)
+        storage = IReminderStorage(self)
         storage.set(reminder, user_id)
 
-    def get_reminder(self, obj, user_id=None):
+    def get_reminder(self, user_id=None):
         """Get the reminder for the given object for a specific
         user or for the current logged in user.
 
         Returns None, if no reminder is set.
         """
-        storage = IReminderStorage(obj)
+        storage = IReminderStorage(self)
         return storage.get(user_id)
 
-    def get_reminders(self, obj):
+    def get_reminders(self):
         """Get the mapping of userid -> reminder for all reminders
         (for all users) on the given obj.
         """
-        storage = IReminderStorage(obj)
+        storage = IReminderStorage(self)
         return storage.list()
 
-    def get_reminders_of_potential_responsibles(self, obj):
+    def clear_reminder(self, user_id=None):
+        """Removes a registered reminder for the given object for a specific
+        user or for the current logged in user.
+        """
+        storage = IReminderStorage(self)
+        storage.clear(user_id)
+
+
+class TaskReminderSupport(ReminderSupport):
+
+    def get_reminders_of_potential_responsibles(self):
         """Get reminders of all responsible representatives.
         """
         representatives = [actor.userid for actor in
-                           obj.get_responsible_actor().representatives()]
+                           self.get_responsible_actor().representatives()]
 
         return {user_id: reminder
-                for user_id, reminder in self.get_reminders(obj).items()
+                for user_id, reminder in self.get_reminders().items()
                 if user_id in representatives}
 
-    def get_sql_reminder(self, obj, user_id=None):
+    def get_sql_reminder(self, user_id=None):
         """Get the sql-reminder for the given object for a specific user or
         for the current logged in user.
 
@@ -63,14 +73,13 @@ class TaskReminder(object):
         user_id = user_id or api.user.get_current().getId()
         return ReminderSetting.query.filter(
             ReminderSetting.actor_id == user_id,
-            ReminderSetting.task.has(task_id=obj.get_sql_object().task_id)).first()
+            ReminderSetting.task.has(task_id=self.get_sql_object().task_id)).first()
 
-    def clear_reminder(self, obj, user_id=None):
-        """Removes a registered reminder for the given object for a specific
-        user or for the current logged in user.
-        """
-        storage = IReminderStorage(obj)
-        storage.clear(user_id)
+
+class TaskReminder(object):
+
+    def __init__(self):
+        self.session = create_session()
 
     def create_reminder_notifications(self):
         """Creates an activity and the related notification for set reminders.

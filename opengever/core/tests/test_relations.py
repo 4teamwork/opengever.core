@@ -91,6 +91,7 @@ EXPECTED_INTERFACES = [
     'opengever.repository.interfaces.IRepositoryFolder',
     'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
     'opengever.sharing.behaviors.IDossier',
+    'opengever.task.reminder.interfaces.IReminderSupport',
     'opengever.task.task.ITask',
     'opengever.trash.trash.ITrashableMarker',
     'persistent.interfaces.IPersistent',

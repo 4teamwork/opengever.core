@@ -5,12 +5,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
+from opengever.base.response import IResponseContainer
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.base.response import IResponseContainer
 from opengever.task.reminder import ReminderSameDay
-from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
@@ -73,13 +72,12 @@ class TestAssignTask(IntegrationTestCase):
     def test_remove_task_reminder_of_old_responsible(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        task_reminder = TaskReminder()
-        task_reminder.set_reminder(self.task, ReminderSameDay.option_type)
+        self.task.set_reminder(ReminderSameDay.option_type)
 
-        self.assertIsNotNone(task_reminder.get_reminder(self.task))
+        self.assertIsNotNone(self.task.get_reminder())
 
         self.assign_task(self.secretariat_user, u'Thats a job for you.')
-        self.assertIsNone(task_reminder.get_reminder(self.task))
+        self.assertIsNone(self.task.get_reminder())
 
     @browsing
     def test_adds_an_corresponding_response(self, browser):

@@ -7,7 +7,6 @@ from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.reminder import ReminderSameDay
-from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
@@ -143,13 +142,12 @@ class TestDeadlineModificationForm(IntegrationTestCase):
     @browsing
     def test_recalculate_remind_on_for_set_reminders_if_deadline_changed(self, browser):
         self.login(self.dossier_responsible, browser=browser)
-        task_reminder = TaskReminder()
         today = datetime.date.today()
         tomorrow = today + datetime.timedelta(days=1)
 
         self.task.deadline = today
-        task_reminder.set_reminder(
-            self.task, ReminderSameDay.option_type, self.regular_user.id)
+        self.task.set_reminder(
+            ReminderSameDay.option_type, self.regular_user.id)
         self.task.sync()
 
         sql_setting = ReminderSetting.query.first()

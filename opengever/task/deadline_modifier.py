@@ -1,6 +1,5 @@
 from opengever.task.browser.transitioncontroller import get_checker
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -62,7 +61,7 @@ class DeadlineModifier(object):
 
         self.context.deadline = new_deadline
         notify(ObjectModifiedEvent(self.context))
-        TaskReminder().recalculate_remind_day_for_obj(self.context)
+        self.context.recalculate_reminder_trigger_day()
 
     def sync_deadline(self, new_deadline, text, transition):
         sync_task_response(self.context, self.context.REQUEST, 'deadline',

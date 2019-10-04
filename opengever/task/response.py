@@ -11,7 +11,6 @@ from opengever.task import util
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.reminder.model import get_task_reminder_options_vocabulary
-from opengever.task.reminder.reminder import TaskReminder
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
@@ -41,7 +40,7 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 
 @provider(IContextAwareDefaultFactory)
 def get_current_user_reminder(context):
-    reminder = TaskReminder().get_reminder(context)
+    reminder = context.get_reminder()
     return reminder.option_type if reminder else None
 
 

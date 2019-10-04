@@ -1,5 +1,4 @@
 from opengever.task.reminder import REMINDER_TYPE_REGISTRY
-from opengever.task.reminder.reminder import TaskReminder
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
@@ -39,13 +38,11 @@ class TaskReminderPost(Service):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        task_reminder = TaskReminder()
-
-        if task_reminder.get_reminder(self.context):
+        if self.context.get_reminder():
             self.request.response.setStatus(409)
             return super(TaskReminderPost, self).reply()
 
-        task_reminder.set_reminder(self.context, option_type)
+        self.context.set_reminder(option_type)
         self.context.sync()
 
         self.request.response.setStatus(204)
@@ -74,13 +71,12 @@ class TaskReminderPatch(Service):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         if option_type:
-            task_reminder = TaskReminder()
 
-            if not task_reminder.get_reminder(self.context):
+            if not self.context.get_reminder():
                 self.request.response.setStatus(404)
                 return super(TaskReminderPatch, self).reply()
 
-            task_reminder.set_reminder(self.context, option_type)
+            self.context.set_reminder(option_type)
             self.context.sync()
 
         self.request.response.setStatus(204)
@@ -94,16 +90,14 @@ class TaskReminderDelete(Service):
     """
 
     def reply(self):
-        task_reminder = TaskReminder()
-
-        if not task_reminder.get_reminder(self.context):
+        if not self.context.get_reminder():
             self.request.response.setStatus(404)
             return super(TaskReminderDelete, self).reply()
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        task_reminder.clear_reminder(self.context)
+        self.context.clear_reminder()
         self.context.sync()
 
         self.request.response.setStatus(204)
