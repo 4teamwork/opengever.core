@@ -2,8 +2,8 @@ from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
-from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.base.response import IResponseContainer
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
@@ -12,7 +12,6 @@ from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncer
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
-from unittest import skip
 from zExceptions import Unauthorized
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import datetime
@@ -138,8 +137,6 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         self.assertEquals(1, len(events))
         self.assertEqual(self.task, events[0].object)
 
-    @skip("This test currently fails in a flaky way on CI."
-          "https://github.com/4teamwork/opengever.core/issues/4945")
     @browsing
     def test_recalculate_remind_on_for_set_reminders_if_deadline_changed(self, browser):
         self.login(self.dossier_responsible, browser=browser)
