@@ -7,6 +7,7 @@ from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import REMINDER_TYPE_REGISTRY
+from opengever.task.reminder.model import REMINDER_TYPES_BLACKLISTED_FROM_UI
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -231,6 +232,13 @@ class Overview(BrowserView, GeverTabMixin):
             })
 
         for option in REMINDER_TYPE_REGISTRY.values():
+            # XXX: Once the sort_order has been eliminated, this place should
+            # be able to use the vocabulary as well, instead of directly
+            # accessing REMINDER_TYPE_REGISTRY
+
+            if option in REMINDER_TYPES_BLACKLISTED_FROM_UI:
+                continue
+
             selected = option.option_type == reminder_option.option_type if \
                 reminder_option else None
             options.append({
