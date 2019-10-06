@@ -37,8 +37,9 @@ class TaskReminder(object):
         Returns None, if no reminder is set.
         """
         user_id = user_id or api.user.get_current().getId()
-        return TASK_REMINDER_OPTIONS.get(
-            self._get_user_annotation(obj, user_id))
+        reminder_data = self._get_user_annotation(obj, user_id)
+        if reminder_data:
+            return TASK_REMINDER_OPTIONS.get(reminder_data['option_type'])
 
     def get_reminders(self, obj):
         """Get the reminder-option object for the given object for a specific
@@ -47,8 +48,8 @@ class TaskReminder(object):
         Returns None, if no reminder is set.
         """
         storage = self._annotation_storage(obj)
-        return {actor: TASK_REMINDER_OPTIONS.get(value)
-                for actor, value in storage.items()}
+        return {actor: TASK_REMINDER_OPTIONS.get(reminder_data['option_type'])
+                for actor, reminder_data in storage.items()}
 
     def get_reminders_of_potential_responsibles(self, obj):
         """Get reminders of all responsible representatives.
@@ -88,7 +89,8 @@ class TaskReminder(object):
             obj.get_sql_object().reminder_settings)
 
     def _set_reminder_setting_in_annotation(self, obj, user_id, option):
-        self._set_user_annotation(obj, user_id, option.option_type)
+        reminder_data = PersistentDict({'option_type': option.option_type})
+        self._set_user_annotation(obj, user_id, reminder_data)
 
     def _clear_reminder_setting_in_annotation(self, obj, user_id):
         storage = self._annotation_storage(obj)
