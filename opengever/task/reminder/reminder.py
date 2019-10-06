@@ -62,17 +62,6 @@ class TaskReminder(object):
                 data[userid] = reminder.option_type
         return data
 
-    def get_sql_reminder(self, obj, user_id=None):
-        """Get the sql-reminder for the given object for a specific user or
-        for the current logged in user.
-
-        Returns None, if no reminder is set.
-        """
-        user_id = user_id or api.user.get_current().getId()
-        return ReminderSetting.query.filter(
-            ReminderSetting.actor_id == user_id,
-            ReminderSetting.task.has(task_id=obj.get_sql_object().task_id)).first()
-
     def clear_reminder(self, obj, user_id=None):
         """Removes a registered reminder for the given object for a specific
         user or for the current logged in user.
