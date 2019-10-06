@@ -1,61 +1,74 @@
-from opengever.base.model import create_session
 from opengever.task.reminder.interfaces import IReminderStorage
+from opengever.task.reminder.interfaces import IReminderSupport
+from zope.interface import implementer
 
 
-class TaskReminder(object):
+@implementer(IReminderSupport)
+class ReminderSupport(object):
+    """Implements support for reminders for a particular content type.
 
-    def __init__(self):
-        self.session = create_session()
+    A farily generic implementation might be possible in the future,
+    but for now this is only used for the Task type.
 
-    def set_reminder(self, obj, reminder, user_id=None):
+    This interface could be implemented by an adapter, but for now we'll have
+    the Task class directly implement it itself, because then the methods
+    can be invoked directly on the task object and the code is more readable.
+    """
+
+    def set_reminder(self, reminder, user_id=None):
         """Sets a reminder for the given object for a specific user or for the
         current logged in user.
 
         A previously set reminder for the given user for the given object will
         be overridden by the new reminder.
         """
-        storage = IReminderStorage(obj)
+        storage = IReminderStorage(self)
         storage.set(reminder, user_id)
 
-    def get_reminder(self, obj, user_id=None):
+    def get_reminder(self, user_id=None):
         """Get the reminder for the given object for a specific
         user or for the current logged in user.
 
         Returns None, if no reminder is set.
         """
-        storage = IReminderStorage(obj)
+        storage = IReminderStorage(self)
         return storage.get(user_id)
 
-    def get_reminders(self, obj):
+    def get_reminders(self):
         """Get all reminders for this obj as a {userid: reminder} mapping.
         """
-        storage = IReminderStorage(obj)
+        storage = IReminderStorage(self)
         return storage.list()
 
-    def get_reminders_of_potential_responsibles(self, obj):
-        """Get reminders of all responsible representatives.
-        """
-        representatives = [actor.userid for actor in
-                           obj.get_responsible_actor().representatives()]
-
-        return {user_id: reminder
-                for user_id, reminder in self.get_reminders(obj).items()
-                if user_id in representatives}
-
-    def clear_reminder(self, obj, user_id=None):
+    def clear_reminder(self, user_id=None):
         """Removes a registered reminder for the given object for a specific
         user or for the current logged in user.
         """
-        storage = IReminderStorage(obj)
+        storage = IReminderStorage(self)
         storage.clear(user_id)
 
-    def recalculate_remind_day_for_obj(self, obj):
-        """If the duedate of a task will change, we have to update the
-        reminde-day of all reminders set for this object.
+
+class TaskReminderSupport(ReminderSupport):
+    """Aspects of reminder-support that are specific to tasks.
+    """
+
+    def get_reminders_of_potential_responsibles(self):
+        """Get reminders of all responsible representatives.
         """
-        sql_task = obj.get_sql_object()
+        representatives = [actor.userid for actor in
+                           self.get_responsible_actor().representatives()]
+
+        return {user_id: reminder
+                for user_id, reminder in self.get_reminders().items()
+                if user_id in representatives}
+
+    def update_reminder_trigger_dates(self):
+        """If the due date of a task changes, we have to update the
+        trigger date of all reminders set for this object.
+        """
+        sql_task = self.get_sql_object()
 
         for reminder_setting in sql_task.reminder_settings:
-            reminder = self.get_reminder(obj, user_id=reminder_setting.actor_id)
-            new_remind_day = reminder.calculate_trigger_date(sql_task.deadline)
-            reminder_setting.remind_day = new_remind_day
+            reminder = self.get_reminder(user_id=reminder_setting.actor_id)
+            new_trigger_date = reminder.calculate_trigger_date(sql_task.deadline)
+            reminder_setting.remind_day = new_trigger_date

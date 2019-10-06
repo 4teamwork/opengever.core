@@ -13,55 +13,57 @@ from opengever.task.reminder import ReminderOneDayBefore
 from opengever.task.reminder import ReminderOneWeekBefore
 from opengever.task.reminder import ReminderSameDay
 from opengever.task.reminder.cronjobs import create_reminder_notifications
-from opengever.task.reminder.reminder import TaskReminder
+from opengever.task.reminder.interfaces import IReminderSupport
 from opengever.testing import IntegrationTestCase
 from zope.component import getAdapter
+from zope.interface.verify import verifyObject
 import json
 import pytz
 
 
-class TestTaskReminder(IntegrationTestCase):
+class TestTaskReminderSupport(IntegrationTestCase):
 
     features = ('activity', )
 
+    def test_task_implements_reminder_support(self):
+        self.login(self.regular_user)
+        verifyObject(IReminderSupport, self.task)
+
     def test_set_reminder_stores_reminder_for_current_user(self):
         self.login(self.regular_user)
-        task_reminder = TaskReminder()
-        task_reminder.set_reminder(self.task, ReminderOneDayBefore())
+        self.task.set_reminder(ReminderOneDayBefore())
 
         self.assertEqual(
             ReminderOneDayBefore(),
-            task_reminder.get_reminder(self.task))
+            self.task.get_reminder())
 
-        self.assertIsNone(task_reminder.get_reminder(
-            self.task, user_id=self.dossier_responsible.getId()))
+        self.assertIsNone(self.task.get_reminder(
+            user_id=self.dossier_responsible.getId()))
 
     def test_set_reminder_updates_existing_reminder(self):
         self.login(self.regular_user)
-        task_reminder = TaskReminder()
-        task_reminder.set_reminder(self.task, ReminderOneDayBefore())
-        task_reminder.set_reminder(self.task, ReminderOneWeekBefore())
+        self.task.set_reminder(ReminderOneDayBefore())
+        self.task.set_reminder(ReminderOneWeekBefore())
 
         self.assertEqual(
             ReminderOneWeekBefore(),
-            task_reminder.get_reminder(self.task))
+            self.task.get_reminder())
 
     def test_clear_reminder_removes_existing_reminder(self):
         self.login(self.regular_user)
-        task_reminder = TaskReminder()
 
-        task_reminder.set_reminder(self.task, ReminderOneDayBefore())
-        task_reminder.set_reminder(
-            self.task, ReminderOneDayBefore(),
+        self.task.set_reminder(ReminderOneDayBefore())
+        self.task.set_reminder(
+            ReminderOneDayBefore(),
             user_id=self.dossier_responsible.getId())
 
-        task_reminder.clear_reminder(self.task)
-        self.assertIsNone(task_reminder.get_reminder(self.task))
+        self.task.clear_reminder()
+        self.assertIsNone(self.task.get_reminder())
 
         self.assertEqual(
             ReminderOneDayBefore(),
-            task_reminder.get_reminder(
-                self.task, user_id=self.dossier_responsible.getId()))
+            self.task.get_reminder(
+                user_id=self.dossier_responsible.getId()))
 
     def test_create_reminder_notifications_does_nothing_if_there_are_no_reminders(self):
         self.login(self.regular_user)
@@ -88,17 +90,15 @@ class TestTaskReminder(IntegrationTestCase):
         self.sequential_task.issuer = self.regular_user.getId()
         self.sequential_task.deadline = today + timedelta(days=5)
 
-        task_reminder = TaskReminder()
-
         with self.login(self.regular_user):
-            task_reminder.set_reminder(self.task, ReminderSameDay())
+            self.task.set_reminder(ReminderSameDay())
             self.task.sync()
 
-            task_reminder.set_reminder(self.sequential_task, ReminderSameDay())
+            self.sequential_task.set_reminder(ReminderSameDay())
             self.sequential_task.sync()
 
         with self.login(self.dossier_responsible):
-            task_reminder.set_reminder(self.subtask, ReminderOneDayBefore())
+            self.subtask.set_reminder(ReminderOneDayBefore())
             self.subtask.sync()
 
         with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
@@ -125,10 +125,8 @@ class TestTaskReminder(IntegrationTestCase):
         self.task.issuer = self.regular_user.getId()
         self.task.deadline = today
 
-        task_reminder = TaskReminder()
-
         with self.login(self.regular_user):
-            task_reminder.set_reminder(self.task, ReminderSameDay())
+            self.task.set_reminder(ReminderSameDay())
             self.task.sync()
 
         def create_reminders_for_task_in_state(task, state):
@@ -169,10 +167,8 @@ class TestTaskReminder(IntegrationTestCase):
         self.task.issuer = self.regular_user.getId()
         self.task.deadline = today
 
-        task_reminder = TaskReminder()
-
         with self.login(self.regular_user):
-            task_reminder.set_reminder(self.task, ReminderSameDay())
+            self.task.set_reminder(ReminderSameDay())
             self.task.sync()
 
         with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
@@ -226,7 +222,6 @@ class TestTaskReminderSelector(IntegrationTestCase):
     @browsing
     def test_init_state_selected_option(self, browser):
         self.login(self.regular_user, browser=browser)
-        task_reminder = TaskReminder()
 
         browser.visit(self.task, view='tabbedview_view-overview')
         init_state = self._get_init_state(browser)
@@ -238,7 +233,7 @@ class TestTaskReminderSelector(IntegrationTestCase):
             'no-reminder',
             selected_option[0].get('option_type'))
 
-        task_reminder.set_reminder(self.task, ReminderOneDayBefore())
+        self.task.set_reminder(ReminderOneDayBefore())
         browser.visit(self.task, view='tabbedview_view-overview')
         init_state = self._get_init_state(browser)
         selected_option = filter(lambda x: x.get('selected'),
@@ -259,13 +254,12 @@ class TestTaskReminderTransport(IntegrationTestCase):
     def test_extract_all_task_reminders_for_all_responsible_representatives(self):
         self.login(self.regular_user)
 
-        task_reminder = TaskReminder()
-        task_reminder.set_reminder(
-            self.task, ReminderOneDayBefore(), user_id=self.regular_user.id)
-        task_reminder.set_reminder(
-            self.task, ReminderOneDayBefore(), user_id=self.dossier_responsible.id)
-        task_reminder.set_reminder(
-            self.task, ReminderOneDayBefore(), user_id=self.secretariat_user.id)
+        self.task.set_reminder(
+            ReminderOneDayBefore(), user_id=self.regular_user.id)
+        self.task.set_reminder(
+            ReminderOneDayBefore(), user_id=self.dossier_responsible.id)
+        self.task.set_reminder(
+            ReminderOneDayBefore(), user_id=self.secretariat_user.id)
 
         # single user
         collector = getAdapter(self.task, IDataCollector, name='task-reminders')
@@ -287,16 +281,15 @@ class TestTaskReminderTransport(IntegrationTestCase):
     def test_transport_reminders(self):
         self.login(self.regular_user)
 
-        task_reminder = TaskReminder()
-        task_reminder.set_reminder(
-            self.task, ReminderOneDayBefore(), user_id=self.regular_user.id)
+        self.task.set_reminder(
+            ReminderOneDayBefore(), user_id=self.regular_user.id)
 
         collector = getAdapter(self.task, IDataCollector, name='task-reminders')
         data = collector.extract()
 
-        self.assertEqual({}, TaskReminder().get_reminders(self.subtask))
+        self.assertEqual({}, self.subtask.get_reminders())
         collector = getAdapter(self.subtask, IDataCollector, name='task-reminders')
         collector.insert(data)
         self.assertEqual(
             {self.regular_user.id: ReminderOneDayBefore()},
-            TaskReminder().get_reminders(self.subtask))
+            self.subtask.get_reminders())

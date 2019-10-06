@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.reminder import ReminderOneWeekBefore
-from opengever.task.reminder.reminder import TaskReminder
 from opengever.testing import IntegrationTestCase
 
 
@@ -24,8 +23,7 @@ class TestReminderSettings(IntegrationTestCase):
 
     def test_gets_added_when_syncing_a_task(self):
         self.login(self.dossier_responsible)
-        reminder = TaskReminder()
-        reminder.set_reminder(self.task, ReminderOneWeekBefore())
+        self.task.set_reminder(ReminderOneWeekBefore())
         self.task.sync()
 
         self.assertEquals(1, ReminderSetting.query.count())
@@ -38,8 +36,7 @@ class TestReminderSettings(IntegrationTestCase):
     def test_gets_updated_when_syncing_a_task(self):
         self.login(self.dossier_responsible)
 
-        reminder = TaskReminder()
-        reminder.set_reminder(self.task, ReminderOneWeekBefore())
+        self.task.set_reminder(ReminderOneWeekBefore())
         self.task.sync()
 
         ReminderSetting.query.all()
@@ -53,13 +50,12 @@ class TestReminderSettings(IntegrationTestCase):
 
     def test_gets_removed_when_syncing_a_task(self):
         self.login(self.dossier_responsible)
-        reminder = TaskReminder()
-        reminder.set_reminder(self.task, ReminderOneWeekBefore())
+        self.task.set_reminder(ReminderOneWeekBefore())
         self.task.sync()
 
         self.assertEquals(1, ReminderSetting.query.count())
 
-        reminder.clear_reminder(self.task, user_id=self.dossier_responsible.id)
+        self.task.clear_reminder(user_id=self.dossier_responsible.id)
         self.task.sync()
 
         self.assertEquals(0, ReminderSetting.query.count())

@@ -5,7 +5,6 @@ from opengever.base.security import elevated_privileges
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
 from opengever.task.reminder import Reminder
-from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.task import ITask
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.utils import addContentToContainer
@@ -361,11 +360,11 @@ class ResponsibleTaskRemindersDataCollector(object):
         self.context = context
 
     def extract(self):
-        reminders = TaskReminder().get_reminders_of_potential_responsibles(self.context)
+        reminders = self.context.get_reminders_of_potential_responsibles()
         return {user_id: reminder.serialize()
                 for user_id, reminder in reminders.items()}
 
     def insert(self, data):
         for user_id, reminder_data in data.items():
             reminder = Reminder.deserialize(reminder_data)
-            TaskReminder().set_reminder(self.context, reminder, user_id=user_id)
+            self.context.set_reminder(reminder, user_id=user_id)

@@ -30,6 +30,7 @@ from opengever.task import is_private_task_feature_enabled
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
+from opengever.task.reminder.reminder import TaskReminderSupport
 from opengever.task.validators import NoCheckedoutDocsValidator
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
@@ -334,7 +335,7 @@ class IAddTaskSchema(ITask):
     )
 
 
-class Task(Container):
+class Task(Container, TaskReminderSupport):
     """Provide a container for tasks."""
 
     implements(ITask, ITabbedviewUploadable, IResponseSupported)

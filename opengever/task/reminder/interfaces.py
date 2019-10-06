@@ -37,3 +37,32 @@ class IReminderStorage(Interface):
 
         If no user_id is given, defaults to the currently logged in user.
         """
+
+
+class IReminderSupport(Interface):
+    """Implements support for reminders for a particular content type.
+    """
+
+    def set_reminder(reminder, user_id=None):
+        """Sets a reminder for the given object for a specific user or for the
+        current logged in user.
+
+        A previously set reminder for the given user for the given object will
+        be overridden by the new reminder.
+        """
+
+    def get_reminder(user_id=None):
+        """Get the reminder for the given object for a specific user or for
+        the current logged in user.
+
+        Returns None, if no reminder is set.
+        """
+
+    def get_reminders():
+        """Get all reminders for this obj as a {userid: reminder} mapping.
+        """
+
+    def clear_reminder(user_id=None):
+        """Removes a registered reminder for the given object for a specific
+        user or for the current logged in user.
+        """

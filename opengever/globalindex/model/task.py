@@ -16,7 +16,6 @@ from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.task.reminder.reminder import TaskReminder
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_
@@ -232,7 +231,7 @@ class Task(Base):
         self.sync_reminders(plone_task)
 
     def sync_reminders(self, plone_task):
-        reminders = TaskReminder().get_reminders(plone_task)
+        reminders = plone_task.get_reminders()
 
         for sql_setting in self.reminder_settings:
 

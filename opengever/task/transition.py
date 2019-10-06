@@ -16,7 +16,6 @@ from opengever.task.browser.delegate.utils import create_subtasks
 from opengever.task.browser.modify_deadline import validate_deadline_changed
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.localroles import LocalRolesSetter
-from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -257,7 +256,7 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
         former_responsible = ITask['responsible']
         former_responsible_client = ITask['responsible_client']
 
-        TaskReminder().clear_reminder(self.context, self.context.responsible)
+        self.context.clear_reminder(self.context.responsible)
 
         changes = (
             (former_responsible, transition_params.get('responsible')),
