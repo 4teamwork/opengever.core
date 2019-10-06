@@ -12,6 +12,7 @@
 
   <include package=".browser" />
   <include package=".viewlets" />
+  <include package=".reminder" />
 
   <include file="profiles.zcml" />
   <include file="behaviors.zcml" />
