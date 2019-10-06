@@ -6,7 +6,7 @@ from opengever.globalindex.model.task import Task
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
 from opengever.task.activities import TaskReminderActivity
-from opengever.task.reminder import TASK_REMINDER_OPTIONS
+from opengever.task.reminder import REMINDER_TYPE_REGISTRY
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
@@ -231,7 +231,7 @@ class Overview(BrowserView, GeverTabMixin):
             'showSpinner': False,
             })
 
-        for option in TASK_REMINDER_OPTIONS.values():
+        for option in REMINDER_TYPE_REGISTRY.values():
             selected = option.option_type == reminder_option.option_type if \
                 reminder_option else None
             options.append({

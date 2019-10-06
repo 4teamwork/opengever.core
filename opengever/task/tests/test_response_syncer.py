@@ -1,10 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.response import IResponseContainer
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import IResponseSyncerSender
-from opengever.task.reminder import TASK_REMINDER_SAME_DAY
+from opengever.task.reminder import ReminderSameDay
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
@@ -379,7 +379,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
                           responsible_client='org-unit-1',
                           deadline=datetime.date.today()))
 
-        task_reminder.set_reminder(task, TASK_REMINDER_SAME_DAY, 'hugo.boss')
+        task_reminder.set_reminder(task, ReminderSameDay(), 'hugo.boss')
 
         self.assertIsNotNone(task_reminder.get_reminder(task, 'hugo.boss'))
 

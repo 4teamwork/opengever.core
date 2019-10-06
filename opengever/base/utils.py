@@ -1,3 +1,5 @@
+from persistent.dict import PersistentDict
+from persistent.list import PersistentList
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from xml.sax.saxutils import escape
@@ -152,3 +154,23 @@ def file_checksum(filename, chunksize=65536, algorithm=u'MD5'):
             h.update(chunk)
             chunk = f.read(chunksize)
         return algorithm, h.hexdigest()
+
+
+def make_persistent(data):
+    """Recursively turn a nested data structure of lists and dicts
+    into one using PersistentDics and PersistentLists.
+    """
+    if isinstance(data, dict):
+        new = PersistentDict()
+        for key, value in data.items():
+            new[make_persistent(key)] = make_persistent(value)
+        return new
+
+    elif isinstance(data, list):
+        new = PersistentList()
+        for value in data:
+            new.append(make_persistent(value))
+        return new
+
+    else:
+        return data

@@ -1,5 +1,5 @@
 from ftw.testbrowser import browsing
-from opengever.task.reminder import TASK_REMINDER_ONE_DAY_BEFORE
+from opengever.task.reminder import ReminderOneDayBefore
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.testing import IntegrationTestCase
 
@@ -12,7 +12,7 @@ class TestAcceptTaskWorkflowTransitionView(IntegrationTestCase):
 
         task_reminder = TaskReminder()
         task_reminder.set_reminder(
-            self.seq_subtask_1, TASK_REMINDER_ONE_DAY_BEFORE,
+            self.seq_subtask_1, ReminderOneDayBefore(),
             user_id=self.regular_user.id)
 
         self.assertEqual(

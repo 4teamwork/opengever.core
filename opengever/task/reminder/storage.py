@@ -1,4 +1,5 @@
-from opengever.task.reminder import TASK_REMINDER_OPTIONS
+from opengever.base.utils import make_persistent
+from opengever.task.reminder import Reminder
 from opengever.task.reminder.interfaces import IReminderStorage
 from persistent.dict import PersistentDict
 from plone import api
@@ -18,18 +19,18 @@ class ReminderAnnotationStorage(object):
     def __init__(self, context):
         self.context = context
 
-    def set(self, option_type, user_id=None):
+    def set(self, reminder, user_id=None):
         """Set a reminder on the adapted object.
 
-        option_type -- The kind of reminder to set
+        reminder -- The reminder to set
         user_id -- User to set the reminder for
 
         If no user_id is given, defaults to the currently logged in user.
         """
         user_id = user_id or api.user.get_current().getId()
-        assert option_type in TASK_REMINDER_OPTIONS.keys()
-        reminder_data = PersistentDict({'option_type': option_type})
-        self._set_user_annotation(user_id, reminder_data)
+        assert isinstance(reminder, Reminder)
+        reminder_data = reminder.serialize()
+        self._set_user_annotation(user_id, make_persistent(reminder_data))
 
     def get(self, user_id=None):
         """Return reminder for adapted object, or None if no reminder exists.
@@ -40,13 +41,16 @@ class ReminderAnnotationStorage(object):
         """
         user_id = user_id or api.user.get_current().getId()
         reminder_data = self._get_user_annotation(user_id)
-        return reminder_data
+        if reminder_data:
+            return Reminder.deserialize(reminder_data)
 
     def list(self):
         """Return user_id -> reminder mapping of all reminders for adapted obj.
         """
         reminders_by_user = self._annotation_storage()
-        return reminders_by_user
+        reminders = {user_id: Reminder.deserialize(reminder_data)
+                     for user_id, reminder_data in reminders_by_user.items()}
+        return reminders
 
     def clear(self, user_id=None):
         """Clear an existing reminder.
