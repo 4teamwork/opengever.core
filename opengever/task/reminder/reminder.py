@@ -1,9 +1,5 @@
-from datetime import date
 from opengever.base.model import create_session
-from opengever.globalindex.model.reminder_settings import ReminderSetting
-from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder.interfaces import IReminderStorage
-from zope.globalrequest import getRequest
 
 
 class TaskReminder(object):
@@ -52,17 +48,6 @@ class TaskReminder(object):
         """
         storage = IReminderStorage(obj)
         storage.clear(user_id)
-
-    def create_reminder_notifications(self):
-        """Creates an activity and the related notification for set reminders.
-        """
-        query = ReminderSetting.query.filter(
-            ReminderSetting.remind_day == date.today())
-
-        for reminder in query.all():
-            TaskReminderActivity(reminder.task, getRequest()).record(reminder.actor_id)
-
-        return query.count()
 
     def recalculate_remind_day_for_obj(self, obj):
         """If the duedate of a task will change, we have to update the

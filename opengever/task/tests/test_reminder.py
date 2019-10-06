@@ -12,6 +12,7 @@ from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import ReminderOneDayBefore
 from opengever.task.reminder import ReminderOneWeekBefore
 from opengever.task.reminder import ReminderSameDay
+from opengever.task.reminder.cronjobs import create_reminder_notifications
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.testing import IntegrationTestCase
 from zope.component import getAdapter
@@ -65,7 +66,7 @@ class TestTaskReminder(IntegrationTestCase):
     def test_create_reminder_notifications_does_nothing_if_there_are_no_reminders(self):
         self.login(self.regular_user)
 
-        TaskReminder().create_reminder_notifications()
+        create_reminder_notifications()
 
         self.assertEqual(0, Activity.query.count())
         self.assertEqual(0, Notification.query.count())
@@ -101,7 +102,7 @@ class TestTaskReminder(IntegrationTestCase):
             self.subtask.sync()
 
         with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
-            task_reminder.create_reminder_notifications()
+            create_reminder_notifications()
 
         task_reminder_activities = Activity.query.filter(
             Activity.kind == TaskReminderActivity.kind)
@@ -134,7 +135,7 @@ class TestTaskReminder(IntegrationTestCase):
             self.set_workflow_state(state, task)
 
             with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
-                task_reminder.create_reminder_notifications()
+                create_reminder_notifications()
 
         create_reminders_for_task_in_state(self.task, 'task-state-tested-and-closed')
         create_reminders_for_task_in_state(self.task, 'task-state-resolved')
@@ -175,7 +176,7 @@ class TestTaskReminder(IntegrationTestCase):
             self.task.sync()
 
         with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
-            task_reminder.create_reminder_notifications()
+            create_reminder_notifications()
 
         notifications = Notification.query.by_user(self.regular_user.getId())
         self.assertEqual(1, notifications.count())
