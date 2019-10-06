@@ -1,7 +1,9 @@
+from datetime import date
 from datetime import datetime
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.interfaces import IDataCollector
 from opengever.base.transport import Transporter
+from opengever.task.reminder import ReminderOnDate
 from opengever.testing import IntegrationTestCase
 from zExceptions import Unauthorized
 from zope.component import getAdapters
@@ -20,7 +22,9 @@ class TestTransporter(IntegrationTestCase):
     def test_all_data_collectors_extract_json_compatible_data(self):
         self.login(self.regular_user)
 
+        self.task.set_reminder(ReminderOnDate({'date': date(2019, 12, 30)}))
         objects_to_test = [self.task]
+
         for obj in objects_to_test:
             adapters = getAdapters((self.task,), IDataCollector)
             for name, adapter in adapters:

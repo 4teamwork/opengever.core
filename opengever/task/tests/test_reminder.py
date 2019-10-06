@@ -9,6 +9,7 @@ from opengever.activity.model import Notification
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.base.interfaces import IDataCollector
 from opengever.task.activities import TaskReminderActivity
+from opengever.task.reminder import ReminderOnDate
 from opengever.task.reminder import ReminderOneDayBefore
 from opengever.task.reminder import ReminderOneWeekBefore
 from opengever.task.reminder import ReminderSameDay
@@ -278,11 +279,12 @@ class TestTaskReminderTransport(IntegrationTestCase):
                 'params': {}}},
             collector.extract())
 
-    def test_transport_reminders(self):
+    def test_transport_reminders_with_params(self):
         self.login(self.regular_user)
 
         self.task.set_reminder(
-            ReminderOneDayBefore(), user_id=self.regular_user.id)
+            ReminderOnDate({'date': date(2018, 12, 30)}),
+            user_id=self.regular_user.id)
 
         collector = getAdapter(self.task, IDataCollector, name='task-reminders')
         data = collector.extract()
@@ -291,5 +293,5 @@ class TestTaskReminderTransport(IntegrationTestCase):
         collector = getAdapter(self.subtask, IDataCollector, name='task-reminders')
         collector.insert(data)
         self.assertEqual(
-            {self.regular_user.id: ReminderOneDayBefore()},
+            {self.regular_user.id: ReminderOnDate({'date': date(2018, 12, 30)})},
             self.subtask.get_reminders())

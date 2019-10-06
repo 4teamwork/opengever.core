@@ -361,7 +361,7 @@ class ResponsibleTaskRemindersDataCollector(object):
 
     def extract(self):
         reminders = self.context.get_reminders_of_potential_responsibles()
-        return {user_id: reminder.serialize()
+        return {user_id: reminder.serialize(json_compat=True)
                 for user_id, reminder in reminders.items()}
 
     def insert(self, data):

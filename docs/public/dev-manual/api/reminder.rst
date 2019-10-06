@@ -30,6 +30,24 @@ Wenn das Attribut einen Wert enthält, welcher nicht zulässig ist, wird eine Li
 
       HTTP/1.1 204 No content
 
+Für gewisse Reminder-Typen sind zusätzliche Parameter erforderlich. Diese
+können der entsprechenden Reminder-Subklasse entnommen werden. Parameter
+werden als Dictionary im 'params' property angegeben:
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /task-1/@reminder HTTP/1.1
+       Accept: application/json
+
+       {
+        "option_type": "on_date",
+        "params": {
+            "date": "2019-12-30"
+           }
+       }
+
 
 Erinnerung aktualisieren:
 -------------------------

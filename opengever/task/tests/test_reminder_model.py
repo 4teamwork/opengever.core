@@ -1,10 +1,14 @@
 from datetime import date
 from opengever.task.reminder import Reminder
 from opengever.task.reminder import ReminderBeginningOfWeek
+from opengever.task.reminder import ReminderOnDate
 from opengever.task.reminder import ReminderOneDayBefore
 from opengever.task.reminder import ReminderOneWeekBefore
 from opengever.task.reminder import ReminderSameDay
+from opengever.task.reminder.model import UnknownField
 from opengever.testing import IntegrationTestCase
+from zope.schema.interfaces import RequiredMissing
+from zope.schema.interfaces import WrongType
 
 
 class TestTaskReminderTypes(IntegrationTestCase):
@@ -26,6 +30,10 @@ class TestTaskReminderTypes(IntegrationTestCase):
             ReminderBeginningOfWeek(),
             Reminder.create('beginning_of_week'))
 
+        self.assertEqual(
+            ReminderOnDate({'date': date(2018, 12, 30)}),
+            Reminder.create('on_date', {'date': date(2018, 12, 30)}))
+
     def test_reminders_can_be_serialized(self):
         self.assertEqual(
             {'option_type': 'same_day', 'params': {}},
@@ -42,6 +50,11 @@ class TestTaskReminderTypes(IntegrationTestCase):
         self.assertEqual(
             {'option_type': 'beginning_of_week', 'params': {}},
             ReminderBeginningOfWeek().serialize())
+
+        self.assertEqual(
+            {'option_type': 'on_date',
+             'params': {'date': date(2018, 12, 30)}},
+            ReminderOnDate({'date': date(2018, 12, 30)}).serialize())
 
     def test_reminders_can_be_deserialized_from_data(self):
         self.assertEqual(
@@ -60,6 +73,11 @@ class TestTaskReminderTypes(IntegrationTestCase):
             ReminderBeginningOfWeek(),
             Reminder.deserialize({'option_type': 'beginning_of_week'}))
 
+        self.assertEqual(
+            ReminderOnDate({'date': date(2018, 12, 30)}),
+            Reminder.deserialize({'option_type': 'on_date',
+                                  'params': {'date': date(2018, 12, 30)}}))
+
     def test_serialization_deserialization_rountrip(self):
         self.assertEqual(
             ReminderSameDay(),
@@ -76,6 +94,11 @@ class TestTaskReminderTypes(IntegrationTestCase):
         self.assertEqual(
             ReminderBeginningOfWeek(),
             Reminder.deserialize(ReminderBeginningOfWeek().serialize()))
+
+        self.assertEqual(
+            ReminderOnDate({'date': date(2018, 12, 30)}),
+            Reminder.deserialize(
+                ReminderOnDate({'date': date(2018, 12, 30)}).serialize()))
 
     def test_calculate_trigger_date(self):
         deadline = date(2018, 7, 1)  # 01. July 2018, Sunday
@@ -99,3 +122,20 @@ class TestTaskReminderTypes(IntegrationTestCase):
         self.assertEqual(
             date(2018, 7, 2),  # Monday
             ReminderBeginningOfWeek().calculate_trigger_date(deadline))
+
+        self.assertEqual(
+            date(2018, 12, 30),
+            ReminderOnDate(
+                {'date': date(2018, 12, 30)}
+            ).calculate_trigger_date(deadline))
+
+    def test_parameter_schema_gets_validated(self):
+        with self.assertRaises(WrongType):
+            ReminderOnDate({'date': True})
+
+        with self.assertRaises(RequiredMissing):
+            ReminderOnDate()
+
+        with self.assertRaises(UnknownField):
+            ReminderOnDate({'unexpected': 'param',
+                            'date': date(2018, 12, 30)})

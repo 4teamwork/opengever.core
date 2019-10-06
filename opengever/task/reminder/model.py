@@ -1,7 +1,21 @@
+from copy import deepcopy
+from datetime import datetime
 from datetime import timedelta
 from opengever.task import _
+from plone.restapi.serializer.converters import json_compatible
+from zope.interface import Interface
+from zope.schema import Date
+from zope.schema import getFields
+from zope.schema import ValidationError
+from zope.schema.interfaces import RequiredMissing
+from zope.schema.interfaces import WrongType
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+
+
+class UnknownField(ValidationError):
+    """Encountered an unexpected, extra field that's not part of the schema.
+    """
 
 
 class Reminder(object):
@@ -15,11 +29,41 @@ class Reminder(object):
     option_type = None
     option_title = None
     sort_order = None
+    schema = None
 
     def __init__(self, params=None):
         if params is None:
             params = {}
-        self.params = params
+
+        self.validate_schema(params)
+        self.params = deepcopy(params)
+
+    @classmethod
+    def validate_schema(cls, params, validate_types=True):
+        """Simple schema validation.
+
+        Once opengever.webactions.validation has been factored out, this can
+        be updated to provide friendlier and more consistent validation.
+        """
+        fields = getFields(cls.schema) if cls.schema else {}
+
+        # Check all required params are supplied
+        missing = [field.getName() for field in fields.values()
+                   if field.required and field.getName() not in params]
+        if missing:
+            raise RequiredMissing(missing[0])
+
+        # Reject any unknown params
+        unknown = [param for param in params if param not in fields]
+        if unknown:
+            raise UnknownField(unknown[0])
+
+        # Validate parameter data types
+        if validate_types:
+            for name, value in params.items():
+                field = fields.get(name)
+                if not isinstance(value, field._type):
+                    raise WrongType(name)
 
     @staticmethod
     def create(option_type, params=None):
@@ -28,19 +72,45 @@ class Reminder(object):
         klass = REMINDER_TYPE_REGISTRY[option_type]
         return klass(params)
 
-    def serialize(self):
-        """Turn reminder instance's state into JSON serializable data.
+    def serialize(self, json_compat=False):
+        """Turn reminder instance's state into a simple Python data structure.
+
+        If json_compat is True, Dates will be represented as ISO 8601 strings
+        for JSON compatibility.
         """
         data = {}
         data['option_type'] = self.option_type
-        data['params'] = self.params
+        data['params'] = deepcopy(self.params)
+
+        if json_compat:
+            # Datetimes need some special love for JSON :-/
+            data['params'] = json_compatible(data['params'])
+
         return data
 
     @classmethod
     def deserialize(cls, reminder_data):
         """Construct reminder instance from serialized data dict.
+
+        If a parameter field is of `Date` type, both ISO 8601 strings
+        (from JSON) as well as Python native date objects are supported.
         """
-        return cls.create(**reminder_data)
+        option_type = reminder_data['option_type']
+        params = deepcopy(reminder_data.get('params'))
+        if params is None:
+            params = {}
+
+        target_class = REMINDER_TYPE_REGISTRY[option_type]
+        target_class.validate_schema(params, validate_types=False)
+
+        for name, value in params.items():
+            field = target_class.schema[name]
+
+            # Datetimes need some special love for JSON :-/
+            if isinstance(field, Date) and isinstance(value, basestring):
+                params[name] = datetime.strptime(value, '%Y-%m-%d').date()
+
+        return cls.create(option_type, params=params)
 
     def calculate_trigger_date(self, deadline):
         """Compute on which date this reminder should be triggered.
@@ -99,11 +169,31 @@ class ReminderBeginningOfWeek(Reminder):
         return deadline - timedelta(days=deadline.weekday())
 
 
+class ReminderOnDate(Reminder):
+
+    option_type = 'on_date'
+    option_title = _(u'reminder_option_title_on_date',
+                     default="On a specific date")
+    sort_order = 4
+
+    class IOnDateParams(Interface):
+
+        date = Date(
+            title=u'Date on which the reminder shall trigger',
+            required=True)
+
+    schema = IOnDateParams
+
+    def calculate_trigger_date(self, deadline):
+        return self.params['date']
+
+
 TASK_REMINDER_TYPES = (
     ReminderSameDay,
     ReminderOneDayBefore,
     ReminderOneWeekBefore,
     ReminderBeginningOfWeek,
+    ReminderOnDate,
 )
 
 REMINDER_TYPE_REGISTRY = {

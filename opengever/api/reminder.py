@@ -5,6 +5,7 @@ from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.interface import alsoProvides
+from zope.schema import ValidationError
 
 
 error_msgs = {
@@ -40,7 +41,12 @@ class TaskReminderPost(Service):
         if option_type not in REMINDER_TYPE_REGISTRY:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
 
-        reminder = Reminder.create(option_type, params)
+        reminder_data = {'option_type': option_type, 'params': params}
+
+        try:
+            reminder = Reminder.deserialize(reminder_data)
+        except (ValidationError, ValueError) as exc:
+            raise BadRequest(repr(exc))
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -71,23 +77,31 @@ class TaskReminderPatch(Service):
 
     def reply(self):
         data = json_body(self.request)
+
         option_type = data.get('option_type')
         params = data.get('params')
-
-        reminder_option = REMINDER_TYPE_REGISTRY.get(option_type)
 
         if option_type and option_type not in REMINDER_TYPE_REGISTRY:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
 
-        reminder = Reminder.create(option_type, params)
-
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        if reminder_option:
-            if not self.context.get_reminder():
+        if option_type or params:
+            existing_reminder = self.context.get_reminder()
+            if not existing_reminder:
                 self.request.response.setStatus(404)
                 return super(TaskReminderPatch, self).reply()
+
+            # Pick existing settings if not given (PATCH semantics)
+            option_type = option_type or existing_reminder.option_type
+            params = params if 'params' in data else existing_reminder.params
+
+            reminder_data = {'option_type': option_type, 'params': params}
+            try:
+                reminder = Reminder.deserialize(reminder_data)
+            except (ValidationError, ValueError) as exc:
+                raise BadRequest(repr(exc))
 
             self.context.set_reminder(reminder)
             self.context.sync()
