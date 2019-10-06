@@ -14,7 +14,7 @@ class MigrateTaskRemindersToNewStorageFormat(UpgradeStep):
     {'john.doe': 'same_day'}
 
     New format:
-    {'john.doe': {'option_type': 'same_day'}}
+    {'john.doe': {'option_type': 'same_day', 'params': {}}}
     """
 
     def __call__(self):
@@ -24,9 +24,13 @@ class MigrateTaskRemindersToNewStorageFormat(UpgradeStep):
 
     def migrate_reminder_annotations(self, task):
         ann = IAnnotations(task)
+
         if TASK_REMINDER_ANNOTATIONS_KEY in ann:
             reminder_annotations = ann[TASK_REMINDER_ANNOTATIONS_KEY]
+
             for user_id, option_type in reminder_annotations.items():
                 if isinstance(option_type, basestring):
-                    new_entry = PersistentDict({'option_type': option_type})
+                    new_entry = PersistentDict(
+                        {'option_type': option_type,
+                         'params': PersistentDict()})
                     reminder_annotations[user_id] = new_entry
