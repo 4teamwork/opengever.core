@@ -18,6 +18,24 @@ class TestTaskReminderAPI(IntegrationTestCase):
         }
 
     @browsing
+    def test_get_returns_task_reminder(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.task.set_reminder(ReminderOnDate({'date': date(1995, 6, 29)}))
+
+        browser.open(
+            self.task.absolute_url() + '/@reminder',
+            method='GET',
+            headers=self.http_headers,
+        )
+
+        self.assertEqual(
+            {u'@id': u'%s/@reminder' % self.task.absolute_url(),
+             u'option_type': u'on_date',
+             u'params': {u'date': u'1995-06-29'}},
+            browser.json)
+
+    @browsing
     def test_post_adds_task_reminder(self, browser):
         self.login(self.regular_user, browser)
         payload = {'option_type': ReminderOneDayBefore.option_type}

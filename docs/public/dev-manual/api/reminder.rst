@@ -6,6 +6,44 @@ Aufgaben-Erinnerungen
 Der ``@reminder`` Endpoint behandelt Erinnerungen für Aufgabe. Jeder Benutzer kann für jede Aufgabe eine eigene Erinnerung setzten.
 
 
+Erinnerung auslesen:
+--------------------
+Mit einem GET Request kann eine bestehende Erinnerung für den aktuellen Benutzer ausgelesen werden:
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /task-1/@reminder HTTP/1.1
+       Accept: application/json
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+
+       {
+        "@id": "http://example.onegovgever.ch/ordnungssystem/dossier-20/task-1/@reminder",
+        "option_type": "one_day_before",
+        "params": {}
+       }
+
+Falls für den aktuellen Benutzer keine Erinnerung gesetzt ist, antwortet der Endpoint mit 404 Not Found:
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 404 Not Found
+
+       {
+          "message": "Resource not found: http://example.onegovgever.ch/ordnungssystem/dossier-20/task-1/@reminder",
+          "type": "NotFound"
+       }
+
 Erinnerung setzten:
 -------------------
 Mit einem POST Request wird eine neue Erinnerung gesetzt. Als Body wird das Attribut ``option_type`` erwartet.

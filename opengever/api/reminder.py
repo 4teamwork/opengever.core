@@ -4,6 +4,7 @@ from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import NotFound
 from zope.interface import alsoProvides
 from zope.schema import ValidationError
 
@@ -14,6 +15,22 @@ error_msgs = {
                                 "Use one of the following options: {}".format(
                                     ', '.join(REMINDER_TYPE_REGISTRY.keys())),
 }
+
+
+class TaskReminderGet(Service):
+    """API endpoint to get a task-reminder for the current user.
+
+    GET /task/@reminder
+    """
+
+    def reply(self):
+        reminder = self.context.get_reminder()
+        if not reminder:
+            raise NotFound
+
+        reminder_data = reminder.serialize(json_compat=True)
+        reminder_data['@id'] = '/'.join((self.context.absolute_url(), '@reminder'))
+        return reminder_data
 
 
 class TaskReminderPost(Service):

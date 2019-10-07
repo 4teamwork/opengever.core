@@ -212,6 +212,14 @@
       />
 
   <plone:service
+      method="GET"
+      name="@reminder"
+      for="opengever.task.task.ITask"
+      factory=".reminder.TaskReminderGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       name="@reminder"
       for="opengever.task.task.ITask"
