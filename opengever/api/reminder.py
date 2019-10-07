@@ -2,6 +2,7 @@ from opengever.task.reminder import Reminder
 from opengever.task.reminder import REMINDER_TYPE_REGISTRY
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
+from plone.restapi.services import _no_content_marker
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
@@ -70,13 +71,13 @@ class TaskReminderPost(Service):
 
         if self.context.get_reminder():
             self.request.response.setStatus(409)
-            return super(TaskReminderPost, self).reply()
+            return _no_content_marker
 
         self.context.set_reminder(reminder)
         self.context.sync()
 
         self.request.response.setStatus(204)
-        return super(TaskReminderPost, self).reply()
+        return _no_content_marker
 
 
 class TaskReminderPatch(Service):
@@ -107,8 +108,7 @@ class TaskReminderPatch(Service):
         if option_type or params:
             existing_reminder = self.context.get_reminder()
             if not existing_reminder:
-                self.request.response.setStatus(404)
-                return super(TaskReminderPatch, self).reply()
+                raise NotFound
 
             # Pick existing settings if not given (PATCH semantics)
             option_type = option_type or existing_reminder.option_type
@@ -124,7 +124,7 @@ class TaskReminderPatch(Service):
             self.context.sync()
 
         self.request.response.setStatus(204)
-        return super(TaskReminderPatch, self).reply()
+        return _no_content_marker
 
 
 class TaskReminderDelete(Service):
@@ -135,8 +135,7 @@ class TaskReminderDelete(Service):
 
     def reply(self):
         if not self.context.get_reminder():
-            self.request.response.setStatus(404)
-            return super(TaskReminderDelete, self).reply()
+            raise NotFound
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -145,4 +144,4 @@ class TaskReminderDelete(Service):
         self.context.sync()
 
         self.request.response.setStatus(204)
-        return super(TaskReminderDelete, self).reply()
+        return _no_content_marker
