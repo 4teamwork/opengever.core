@@ -10,6 +10,8 @@ Changelog
 2019.4.0rc3 (2019-10-02)
 ------------------------
 
+- Add GET implementation for @reminder endpoint. [lgraf]
+- Add new reminder type ReminderOnDate (backend only). [lgraf]
 - Fix an issue with agenda item template ids not being stored as ascii. [deiferni]
 - Bump ftw.bumblebee to 3.8.0 for p7m support. [deiferni]
 - Add support for multipart/signed a.k.a. *.p7m mails. [deiferni]

@@ -1,18 +1,37 @@
-from opengever.task.reminder import TASK_REMINDER_OPTIONS
-from opengever.task.reminder.reminder import TaskReminder
+from opengever.task.reminder import Reminder
+from opengever.task.reminder import REMINDER_TYPE_REGISTRY
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
+from plone.restapi.services import _no_content_marker
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import NotFound
 from zope.interface import alsoProvides
+from zope.schema import ValidationError
 
 
 error_msgs = {
     'missing_option_type': "The request body requires the 'option_type' attribute.",
     'non_existing_option_type': "The provided 'option_type' does not exists. "
                                 "Use one of the following options: {}".format(
-                                    ', '.join(TASK_REMINDER_OPTIONS.keys())),
+                                    ', '.join(REMINDER_TYPE_REGISTRY.keys())),
 }
+
+
+class TaskReminderGet(Service):
+    """API endpoint to get a task-reminder for the current user.
+
+    GET /task/@reminder
+    """
+
+    def reply(self):
+        reminder = self.context.get_reminder()
+        if not reminder:
+            raise NotFound
+
+        reminder_data = reminder.serialize(json_compat=True)
+        reminder_data['@id'] = '/'.join((self.context.absolute_url(), '@reminder'))
+        return reminder_data
 
 
 class TaskReminderPost(Service):
@@ -21,37 +40,44 @@ class TaskReminderPost(Service):
     POST /task/@reminder
 
     Payload: {
-        "option_type": option_type
-         (see opengever.task.reminder.TASK_REMINDER_OPTIONS for possible option_types)
+        "option_type": option_type,
+        "params": dict of parameters
     }
 
+    (see opengever.task.reminder.REMINDER_TYPE_REGISTRY for possible option_types,
+    and the specific reminder subclass for supported/required parameters)
     """
+
     def reply(self):
         data = json_body(self.request)
         option_type = data.get('option_type')
+        params = data.get('params')
 
         if not option_type:
             raise BadRequest(error_msgs.get('missing_option_type'))
 
-        reminder_option = TASK_REMINDER_OPTIONS.get(option_type)
-
-        if not reminder_option:
+        if option_type not in REMINDER_TYPE_REGISTRY:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
+
+        reminder_data = {'option_type': option_type, 'params': params}
+
+        try:
+            reminder = Reminder.deserialize(reminder_data)
+        except (ValidationError, ValueError) as exc:
+            raise BadRequest(repr(exc))
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        task_reminder = TaskReminder()
-
-        if task_reminder.get_reminder(self.context):
+        if self.context.get_reminder():
             self.request.response.setStatus(409)
-            return super(TaskReminderPost, self).reply()
+            return _no_content_marker
 
-        task_reminder.set_reminder(self.context, reminder_option)
+        self.context.set_reminder(reminder)
         self.context.sync()
 
         self.request.response.setStatus(204)
-        return super(TaskReminderPost, self).reply()
+        return _no_content_marker
 
 
 class TaskReminderPatch(Service):
@@ -60,35 +86,45 @@ class TaskReminderPatch(Service):
     PATCH /task/@reminder
 
     Payload: {
-        "option_type": option_type
-         (see opengever.task.reminder.TASK_REMINDER_OPTIONS for possible option_types)
+        "option_type": option_type,
+        "params": dict of parameters
     }
-
+    (see opengever.task.reminder.REMINDER_TYPE_REGISTRY for possible option_types,
+    and the specific reminder subclass for supported/required parameters)
     """
+
     def reply(self):
         data = json_body(self.request)
+
         option_type = data.get('option_type')
+        params = data.get('params')
 
-        reminder_option = TASK_REMINDER_OPTIONS.get(option_type)
-
-        if option_type and not reminder_option:
+        if option_type and option_type not in REMINDER_TYPE_REGISTRY:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        if reminder_option:
-            task_reminder = TaskReminder()
+        if option_type or params:
+            existing_reminder = self.context.get_reminder()
+            if not existing_reminder:
+                raise NotFound
 
-            if not task_reminder.get_reminder(self.context):
-                self.request.response.setStatus(404)
-                return super(TaskReminderPatch, self).reply()
+            # Pick existing settings if not given (PATCH semantics)
+            option_type = option_type or existing_reminder.option_type
+            params = params if 'params' in data else existing_reminder.params
 
-            task_reminder.set_reminder(self.context, reminder_option)
+            reminder_data = {'option_type': option_type, 'params': params}
+            try:
+                reminder = Reminder.deserialize(reminder_data)
+            except (ValidationError, ValueError) as exc:
+                raise BadRequest(repr(exc))
+
+            self.context.set_reminder(reminder)
             self.context.sync()
 
         self.request.response.setStatus(204)
-        return super(TaskReminderPatch, self).reply()
+        return _no_content_marker
 
 
 class TaskReminderDelete(Service):
@@ -98,17 +134,14 @@ class TaskReminderDelete(Service):
     """
 
     def reply(self):
-        task_reminder = TaskReminder()
-
-        if not task_reminder.get_reminder(self.context):
-            self.request.response.setStatus(404)
-            return super(TaskReminderDelete, self).reply()
+        if not self.context.get_reminder():
+            raise NotFound
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        task_reminder.clear_reminder(self.context)
+        self.context.clear_reminder()
         self.context.sync()
 
         self.request.response.setStatus(204)
-        return super(TaskReminderDelete, self).reply()
+        return _no_content_marker

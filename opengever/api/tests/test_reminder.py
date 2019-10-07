@@ -1,8 +1,9 @@
+from datetime import date
 from ftw.testbrowser import browsing
 from opengever.api.reminder import error_msgs
-from opengever.task.reminder import TASK_REMINDER_ONE_DAY_BEFORE
-from opengever.task.reminder import TASK_REMINDER_ONE_WEEK_BEFORE
-from opengever.task.reminder.reminder import TaskReminder
+from opengever.task.reminder import ReminderOnDate
+from opengever.task.reminder import ReminderOneDayBefore
+from opengever.task.reminder import ReminderOneWeekBefore
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -11,19 +12,36 @@ class TestTaskReminderAPI(IntegrationTestCase):
 
     def setUp(self):
         super(TestTaskReminderAPI, self).setUp()
-        self.task_reminder = TaskReminder()
         self.http_headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
 
     @browsing
+    def test_get_returns_task_reminder(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.task.set_reminder(ReminderOnDate({'date': date(1995, 6, 29)}))
+
+        browser.open(
+            self.task.absolute_url() + '/@reminder',
+            method='GET',
+            headers=self.http_headers,
+        )
+
+        self.assertEqual(
+            {u'@id': u'%s/@reminder' % self.task.absolute_url(),
+             u'option_type': u'on_date',
+             u'params': {u'date': u'1995-06-29'}},
+            browser.json)
+
+    @browsing
     def test_post_adds_task_reminder(self, browser):
         self.login(self.regular_user, browser)
-        payload = {'option_type': TASK_REMINDER_ONE_DAY_BEFORE.option_type}
+        payload = {'option_type': ReminderOneDayBefore.option_type}
 
         self.assertIsNone(
-            self.task_reminder.get_reminder(self.task))
+            self.task.get_reminder())
 
         browser.open(
             self.task.absolute_url() + '/@reminder',
@@ -34,8 +52,29 @@ class TestTaskReminderAPI(IntegrationTestCase):
 
         self.assertEqual(204, browser.status_code)
         self.assertEqual(
-            TASK_REMINDER_ONE_DAY_BEFORE.option_type,
-            self.task_reminder.get_reminder(self.task).option_type)
+            ReminderOneDayBefore(),
+            self.task.get_reminder())
+
+    @browsing
+    def test_post_supports_reminder_params(self, browser):
+        self.login(self.regular_user, browser)
+        payload = {'option_type': ReminderOnDate.option_type,
+                   'params': {'date': '2018-12-30'}}
+
+        self.assertIsNone(
+            self.task.get_reminder())
+
+        browser.open(
+            self.task.absolute_url() + '/@reminder',
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.http_headers,
+        )
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(
+            ReminderOnDate({'date': date(2018, 12, 30)}),
+            self.task.get_reminder())
 
     @browsing
     def test_post_raises_when_option_type_is_missing(self, browser):
@@ -58,9 +97,9 @@ class TestTaskReminderAPI(IntegrationTestCase):
     @browsing
     def test_post_raises_409_when_adding_already_set_reminder(self, browser):
         self.login(self.regular_user, browser)
-        self.task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
+        self.task.set_reminder(ReminderOneDayBefore())
 
-        payload = {'option_type': TASK_REMINDER_ONE_WEEK_BEFORE.option_type}
+        payload = {'option_type': ReminderOneDayBefore.option_type}
 
         with browser.expect_http_error(409):
             browser.open(
@@ -71,8 +110,8 @@ class TestTaskReminderAPI(IntegrationTestCase):
             )
 
         self.assertEqual(
-            TASK_REMINDER_ONE_DAY_BEFORE.option_type,
-            self.task_reminder.get_reminder(self.task).option_type)
+            ReminderOneDayBefore(),
+            self.task.get_reminder())
 
     @browsing
     def test_post_shows_possible_reminder_options_if_option_does_not_exists(self, browser):
@@ -95,9 +134,9 @@ class TestTaskReminderAPI(IntegrationTestCase):
     @browsing
     def test_patch_updates_set_reminder(self, browser):
         self.login(self.regular_user, browser)
-        self.task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
+        self.task.set_reminder(ReminderOneDayBefore())
 
-        payload = {'option_type': TASK_REMINDER_ONE_WEEK_BEFORE.option_type}
+        payload = {'option_type': ReminderOneWeekBefore.option_type}
 
         browser.open(
             self.task.absolute_url() + '/@reminder',
@@ -108,14 +147,33 @@ class TestTaskReminderAPI(IntegrationTestCase):
 
         self.assertEqual(204, browser.status_code)
         self.assertEqual(
-            TASK_REMINDER_ONE_WEEK_BEFORE.option_type,
-            self.task_reminder.get_reminder(self.task).option_type)
+            ReminderOneWeekBefore(),
+            self.task.get_reminder())
+
+    @browsing
+    def test_patch_supports_reminder_params(self, browser):
+        self.login(self.regular_user, browser)
+        self.task.set_reminder(ReminderOnDate({'date': date(1995, 6, 29)}))
+
+        payload = {'params': {'date': '2018-12-30'}}
+
+        browser.open(
+            self.task.absolute_url() + '/@reminder',
+            data=json.dumps(payload),
+            method='PATCH',
+            headers=self.http_headers,
+        )
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(
+            ReminderOnDate({'date': date(2018, 12, 30)}),
+            self.task.get_reminder())
 
     @browsing
     def test_patch_raises_404_when_updating_not_yet_set_reminder(self, browser):
         self.login(self.regular_user, browser)
 
-        payload = {'option_type': TASK_REMINDER_ONE_WEEK_BEFORE.option_type}
+        payload = {'option_type': ReminderOneWeekBefore.option_type}
 
         with browser.expect_http_error(404):
             browser.open(
@@ -126,16 +184,16 @@ class TestTaskReminderAPI(IntegrationTestCase):
             )
 
         self.assertIsNone(
-            self.task_reminder.get_reminder(self.task))
+            self.task.get_reminder())
 
     @browsing
     def test_delete_removes_task_reminder(self, browser):
         self.login(self.regular_user, browser)
-        self.task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
+        self.task.set_reminder(ReminderOneDayBefore())
 
         self.assertEqual(
-            TASK_REMINDER_ONE_DAY_BEFORE.option_type,
-            self.task_reminder.get_reminder(self.task).option_type)
+            ReminderOneDayBefore(),
+            self.task.get_reminder())
 
         browser.open(
             self.task.absolute_url() + '/@reminder',
@@ -145,14 +203,14 @@ class TestTaskReminderAPI(IntegrationTestCase):
 
         self.assertEqual(204, browser.status_code)
         self.assertIsNone(
-            self.task_reminder.get_reminder(self.task))
+            self.task.get_reminder())
 
     @browsing
     def test_delete_raises_404_if_removing_non_existing_task_reminder(self, browser):
         self.login(self.regular_user, browser)
 
         self.assertIsNone(
-            self.task_reminder.get_reminder(self.task))
+            self.task.get_reminder())
 
         with browser.expect_http_error(404):
             browser.open(
@@ -162,4 +220,4 @@ class TestTaskReminderAPI(IntegrationTestCase):
             )
 
         self.assertIsNone(
-            self.task_reminder.get_reminder(self.task))
+            self.task.get_reminder())

@@ -1,8 +1,11 @@
+from datetime import date
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
+from opengever.globalindex.model.reminder_settings import ReminderSetting
+from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import logger
-from opengever.task.reminder.reminder import TaskReminder
 from plone import api
+from zope.globalrequest import getRequest
 import logging
 import transaction
 
@@ -24,6 +27,18 @@ def generate_remind_notifications_zopectl_handler(app, args):
     plone.REQUEST.setupLocale()
 
     logger.info('Start generate remind notifications...')
-    created = TaskReminder().create_reminder_notifications()
+    created = create_reminder_notifications()
     transaction.commit()
     logger.info('Successfully created {} notifications'.format(created))
+
+
+def create_reminder_notifications():
+    """Creates an activity and the related notification for set reminders.
+    """
+    query = ReminderSetting.query.filter(
+        ReminderSetting.remind_day == date.today())
+
+    for reminder in query.all():
+        TaskReminderActivity(reminder.task, getRequest()).record(reminder.actor_id)
+
+    return query.count()

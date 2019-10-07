@@ -1,11 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.response import IResponseContainer
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import IResponseSyncerSender
-from opengever.task.reminder import TASK_REMINDER_SAME_DAY
-from opengever.task.reminder.reminder import TaskReminder
+from opengever.task.reminder import ReminderSameDay
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
@@ -370,7 +369,6 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         create(Builder('ogds_user').id('hugo.boss'))
         create(Builder('ogds_user').id('james.bond'))
 
-        task_reminder = TaskReminder()
         task = create(Builder('task')
                       .in_state('task-state-in-progress')
                       .having(
@@ -379,9 +377,9 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
                           responsible_client='org-unit-1',
                           deadline=datetime.date.today()))
 
-        task_reminder.set_reminder(task, TASK_REMINDER_SAME_DAY, 'hugo.boss')
+        task.set_reminder(ReminderSameDay(), 'hugo.boss')
 
-        self.assertIsNotNone(task_reminder.get_reminder(task, 'hugo.boss'))
+        self.assertIsNotNone(task.get_reminder('hugo.boss'))
 
         self.prepare_request(task, text=u'I am done!',
                              transition='task-transition-reassign',
@@ -389,7 +387,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
                              responsible_client='org-unit-1')
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertIsNone(task_reminder.get_reminder(task, 'hugo.boss'))
+        self.assertIsNone(task.get_reminder('hugo.boss'))
 
     def test_allow_workflow_changes_on_remote_system_if_user_has_no_write_permission(self):
         create(Builder('ogds_user').id('hugo.boss'))

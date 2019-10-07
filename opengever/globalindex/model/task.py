@@ -16,7 +16,6 @@ from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.task.reminder.reminder import TaskReminder
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_
@@ -232,7 +231,7 @@ class Task(Base):
         self.sync_reminders(plone_task)
 
     def sync_reminders(self, plone_task):
-        reminders = TaskReminder().get_reminders(plone_task)
+        reminders = plone_task.get_reminders()
 
         for sql_setting in self.reminder_settings:
 
@@ -240,7 +239,7 @@ class Task(Base):
             if sql_setting.actor_id in reminders:
                 setting = reminders[sql_setting.actor_id]
                 sql_setting.option_type = setting.option_type
-                sql_setting.remind_day = setting.calculate_remind_on(
+                sql_setting.remind_day = setting.calculate_trigger_date(
                     plone_task.deadline)
                 reminders.pop(sql_setting.actor_id)
 
@@ -252,7 +251,7 @@ class Task(Base):
         for actor_id, reminder in reminders.items():
             setting = ReminderSetting(
                 task=self, actor_id=actor_id, option_type=reminder.option_type,
-                remind_day=reminder.calculate_remind_on(plone_task.deadline))
+                remind_day=reminder.calculate_trigger_date(plone_task.deadline))
             self.session.add(setting)
 
     # XXX move me to task query
