@@ -4,6 +4,7 @@ from collective.transmogrifier.utils import defaultMatcher
 from collective.transmogrifier.utils import traverse
 from ftw.mail.mail import IMail
 from mimetypes import guess_type
+from opengever.base.transforms.msg2mime import Msg2MimeTransform
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.document.document import IDocumentSchema
@@ -167,12 +168,33 @@ class FileLoaderSection(object):
                 "Unknown mimetype for file %s" % abs_filepath)
             mimetype = 'application/octet-stream'
 
-        with open(abs_filepath, 'rb') as f:
-            namedblobfile = field._type(
-                data=f.read(),
-                contentType=mimetype,
-                filename=self.get_filename(abs_filepath))
-            setattr(obj, field.getName(), namedblobfile)
+        # Special handling for outlook mails (*.msg)
+        if mimetype == 'application/vnd.ms-outlook' and field.getName() == 'message':
+            with open(abs_filepath, 'rb') as f:
+                filename = self.get_filename(abs_filepath)
+                base_filename, ext = os.path.splitext(filename)
+                filename = u'{}.eml'.format(base_filename)
+                file_data = f.read()
+
+                # eml using Msg2Mime transform
+                namedblobfile = field._type(
+                    data=Msg2MimeTransform().transform(file_data),
+                    contentType='message/rfc822',
+                    filename=filename)
+                setattr(obj, field.getName(), namedblobfile)
+
+                # original_message
+                namedblobfile = IOGMail['original_message']._type(
+                    data=file_data, filename=self.get_filename(abs_filepath))
+                setattr(obj, 'original_message', namedblobfile)
+
+        else:
+            with open(abs_filepath, 'rb') as f:
+                namedblobfile = field._type(
+                    data=f.read(),
+                    contentType=mimetype,
+                    filename=self.get_filename(abs_filepath))
+                setattr(obj, field.getName(), namedblobfile)
 
     def run_after_creation_jobs(self, item, obj):
         """Fire these event handlers manually because they got fired

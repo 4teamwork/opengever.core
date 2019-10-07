@@ -4,6 +4,7 @@ from collections import OrderedDict
 from datetime import datetime
 from jsonschema import FormatChecker
 from jsonschema import validate
+from opengever.document.document import MAIL_EXTENSIONS
 from pkg_resources import resource_filename as rf
 import codecs
 import json
@@ -212,7 +213,7 @@ class ItemPreprocessor(object):
         if filepath is None:
             return False
 
-        return os.path.splitext(filepath)[-1] in ('.eml', '.p7m',)
+        return os.path.splitext(filepath)[-1] in MAIL_EXTENSIONS
 
     def _strip_extension_from_title(self):
         """Strip extension from title if present.
