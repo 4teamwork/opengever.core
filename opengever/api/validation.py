@@ -1,5 +1,5 @@
-from opengever.webactions.exceptions import InvalidBase64DataURI
-from opengever.webactions.exceptions import UnknownField
+from opengever.api.exceptions import InvalidBase64DataURI
+from opengever.api.exceptions import UnknownField
 from urlparse import urlparse
 from zope.interface.exceptions import Invalid
 from zope.schema import getFieldNamesInOrder

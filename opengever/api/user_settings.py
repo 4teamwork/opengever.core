@@ -1,6 +1,6 @@
 from opengever.ogds.models.user_settings import IUserSettings
 from opengever.ogds.models.user_settings import UserSettings
-from opengever.webactions.validation import get_validation_errors
+from opengever.api.validation import get_validation_errors
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
