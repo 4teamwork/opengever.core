@@ -13,6 +13,7 @@ from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
+from opengever.ogds.models.user import User
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -406,6 +407,30 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
         self.assertItemsEqual(
             [(u'herbert.jager', TASK_RESPONSIBLE_ROLE)],
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
+
+    @browsing
+    def test_handles_reassign_to_the_same_user_correctly(self, browser):
+        # add additional org_unit
+        org_unit = self.add_additional_org_unit()
+        org_unit.users_group.users.append(User.get(self.regular_user.id))
+
+        self.login(self.regular_user, browser)
+
+        # manually register watchers
+        center = notification_center()
+        center.add_task_responsible(self.task, self.task.responsible)
+        center.add_task_issuer(self.task, self.task.issuer)
+
+        self.reassign(browser, self.regular_user, u'Bitte Abkl\xe4rungen erledigen.')
+
+        resource = notification_center().fetch_resource(self.task)
+        create_session().refresh(resource)
+        subscriptions = resource.subscriptions
+
+        self.assertItemsEqual(
+            [(self.regular_user.id, TASK_RESPONSIBLE_ROLE),
+             (self.dossier_responsible.id, TASK_ISSUER_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
     @browsing

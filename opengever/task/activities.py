@@ -164,8 +164,15 @@ class TaskReassignActivity(TaskTransitionActivity):
         to OLD_RESPONSIBLE.
         """
         change = ResponseDescription.get(response=self.response).get_change('responsible')
-        self.center.add_task_responsible(self.context, self.context.responsible)
 
+        # If the `responsible` is not part of the response changes, it means
+        # that the same responsible in another org unit has been selected. So
+        # there is no need to manipulate the watcher list, everything stays
+        # the same.
+        if not change:
+            return
+
+        self.center.add_task_responsible(self.context, self.context.responsible)
         self.center.remove_task_responsible(self.context, change.get('before'))
         self.center.add_watcher_to_resource(
             self.context, change.get('before'), TASK_OLD_RESPONSIBLE_ROLE)
