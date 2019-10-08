@@ -2,6 +2,7 @@ from AccessControl import getSecurityManager
 from AccessControl.users import nobody
 from collections import OrderedDict
 from opengever.activity.interfaces import IActivitySettings
+from opengever.api.user_settings import serialize_setting
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
@@ -22,6 +23,7 @@ from opengever.meeting.interfaces import IMeetingSettings
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.sharing.interfaces import ISharingConfiguration
@@ -63,6 +65,10 @@ class GeverSettingsAdpaterV1(object):
             info['user_fullname'] = user.getProperty('fullname')
         return info
 
+    def get_user_settings(self):
+        setting = UserSettings.query.filter_by(userid=api.user.get_current().id).one_or_none()
+        return serialize_setting(setting)
+
     def get_settings(self):
         settings = OrderedDict()
         settings['max_dossier_levels'] = api.portal.get_registry_record('maximum_dossier_depth', interface=IDossierContainerTypes) + 1  # noqa
@@ -71,6 +77,7 @@ class GeverSettingsAdpaterV1(object):
         settings['document_preserved_as_paper_default'] = api.portal.get_registry_record('preserved_as_paper_default', interface=IDocumentSettings)  # noqa
         settings['nightly_jobs'] = self.get_nightly_jobs_settings()
         settings['oneoffixx_settings'] = self.get_oneoffixx_settings()
+        settings['user_settings'] = self.get_user_settings()
         settings['sharing_configuration'] = self.get_sharing_configuration()
         return settings
 

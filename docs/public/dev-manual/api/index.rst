@@ -28,6 +28,7 @@ Inhalt:
    recently_touched.rst
    preview.rst
    webactions.rst
+   usersettings.rst
    tasks.rst
    proposals.rst
    reminder.rst

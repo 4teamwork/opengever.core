@@ -1,4 +1,4 @@
-from opengever.webactions.validation import Base64DataURI
+from opengever.api.validation import Base64DataURI
 from zope.interface import Interface
 from zope.interface import invariant
 from zope.interface.exceptions import Invalid

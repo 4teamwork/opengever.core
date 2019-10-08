@@ -58,7 +58,12 @@ GEVER-Mandanten abgefragt werden.
           "sharing_configuration": {
               "black_list_prefix": "^$",
               "white_list_prefix": "^.+"
-          }
+          },
+          "user_settings": {
+              "notify_inbox_actions": true,
+              "notify_own_actions": false,
+              "seen_tours": [],
+          },
           "version": "2018.4.0.dev0",
       }
 
@@ -133,3 +138,14 @@ sharing_configuration
 
     black_list_prefix
         regex Muster für Gruppen die in der Freigabe nicht angezeigt werden sollen
+
+user_settings
+
+    notify_inbox_actions
+        Einstellung um Eingangskorb-Benachrichtigungen zu aktivieren bzw. deaktivieren.
+
+    notify_own_actions
+        Einstellung um Benachrichtigung für eigene Aktionen zu aktivieren bzw. deaktivieren.
+
+    seen_tours
+        Gesehene Hilfe-Touren

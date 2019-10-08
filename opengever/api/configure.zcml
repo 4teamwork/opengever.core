@@ -462,4 +462,20 @@
       permission="cmf.AddPortalContent"
       />
 
+  <plone:service
+      method="GET"
+      name="@user-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".user_settings.UserSettingsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@user-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".user_settings.UserSettingsPatch"
+      permission="cmf.SetOwnProperties"
+      />
+
 </configure>
