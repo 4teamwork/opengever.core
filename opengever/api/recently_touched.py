@@ -4,10 +4,12 @@ from opengever.base.touched import RECENTLY_TOUCHED_INTERFACES_TO_TRACK
 from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from plone import api
 from plone.api.portal import get_registry_record
+from plone.restapi.serializer.summary import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.annotation import IAnnotations
+from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -70,15 +72,8 @@ class RecentlyTouchedGet(Service):
         # take care to update it on checkin/checkout
         entries = []
         for brain in self._get_checked_out_brains(user_id):
-            data = {
-                "icon_class": get_css_class(brain),
-                "last_touched": brain.modified.ISO8601(),
-                "target_url": brain.getURL(),
-                "title": brain.Title,
-                "filename": brain.filename,
-                "checked_out": brain.checked_out,
-            }
-            entries.append(data)
+            entries.append(
+                self.serialize_brain(brain, brain.modified.ISO8601()))
         return entries
 
     def _get_recently_touched(self, user_id):
@@ -126,15 +121,8 @@ class RecentlyTouchedGet(Service):
                 # match the currently tracked types
                 continue
 
-            data = {
-                "icon_class": get_css_class(brain),
-                "last_touched": entry['last_touched'].isoformat(),
-                "target_url": brain.getURL(),
-                "title": brain.Title,
-                "filename": brain.filename,
-                "checked_out": brain.checked_out,
-            }
-            entries.append(data)
+            entries.append(
+                self.serialize_brain(brain, entry['last_touched'].isoformat()))
 
         # Truncate list to currently configured limit (storage might still
         # contain more entries until they get rotated out).
@@ -142,6 +130,19 @@ class RecentlyTouchedGet(Service):
         entries = entries[:limit]
 
         return entries
+
+    def serialize_brain(self, brain, last_touched):
+        """Serialize the brain with the summary serialization from plone restapi
+        and extend the result with the two additional data `icon_class` and
+        `last_touched`.
+        """
+
+        result = getMultiAdapter(
+            (brain, self.request), ISerializeToJsonSummary)()
+        result.update({"icon_class": get_css_class(brain),
+                       "last_touched": last_touched})
+
+        return result
 
     def read_params(self):
         if len(self.params) != 1:

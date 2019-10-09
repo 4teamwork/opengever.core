@@ -39,13 +39,14 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             {'checked_out': [],
              'recently_touched': [{
                  'icon_class': 'icon-docx',
+                 'description': u'Wichtige Vertr\xe4ge',
                  # Because of an incorrect timezone handling in the freezer
                  # last_touched should be `2018-04-30T00:00:00+02:00`
-                 'last_touched': u'2018-04-30T02:00:00+02:00',
-                 'target_url': self.document.absolute_url(),
+                 'last_touched': '2018-04-30T02:00:00+02:00',
                  'title': u'Vertr\xe4gsentwurf',
-                 'filename': u'Vertraegsentwurf.docx',
-                 'checked_out': ''}]},
+                 'review_state': 'document-state-draft',
+                 '@id': self.document.absolute_url(),
+                 '@type': 'opengever.document.document'}]},
             browser.json)
 
     @browsing
@@ -67,11 +68,44 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         self.assertEquals(
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
+                'description': u'Wichtige Vertr\xe4ge',
                 'last_touched': '2018-04-30T00:00:00+02:00',
-                'target_url': self.document.absolute_url(),
                 'title': u'Vertr\xe4gsentwurf',
-                'filename': u'Vertraegsentwurf.docx',
-                'checked_out': self.regular_user.getId()}],
+                'review_state': 'document-state-draft',
+                '@id': self.document.absolute_url(),
+                '@type': 'opengever.document.document'}],
+             'recently_touched': []},
+            browser.json)
+
+    @browsing
+    def test_respects_metadata_fields_parameter(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self._clear_recently_touched_log(self.regular_user.getId())
+
+        with freeze(datetime(2018, 4, 30)):
+            manager = queryMultiAdapter(
+                (self.document, self.request), ICheckinCheckoutManager)
+            manager.checkout()
+
+        url = '%s/@recently-touched/%s?metadata_fields:list=checked_out&metadata_fields:list=filename' % (
+            self.portal.absolute_url(), self.regular_user.getId())
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEquals(
+            {'checked_out': [{
+                'icon_class': 'icon-docx is-checked-out-by-current-user',
+                'description': u'Wichtige Vertr\xe4ge',
+                'checked_out': self.regular_user.id,
+                'filename': 'Vertraegsentwurf.docx',
+                # Because of an incorrect timezone handling in the freezer
+                # last_touched should be `2018-04-30T00:00:00+02:00`
+                'last_touched': '2018-04-30T00:00:00+02:00',
+                'title': u'Vertr\xe4gsentwurf',
+                'review_state': 'document-state-draft',
+                '@id': self.document.absolute_url(),
+                '@type': 'opengever.document.document'}],
              'recently_touched': []},
             browser.json)
 
@@ -101,13 +135,14 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             {'checked_out': [],
              'recently_touched': [{
                  'icon_class': 'icon-docx is-checked-out',
+                 'description': u'Wichtige Vertr\xe4ge',
                  # Because of an incorrect timezone handling in the freezer
                  # last_touched should be `2018-04-30T00:00:00+02:00`
-                 'last_touched': u'2018-04-30T02:00:00+02:00',
-                 'target_url': self.document.absolute_url(),
+                 'last_touched': '2018-04-30T02:00:00+02:00',
                  'title': u'Vertr\xe4gsentwurf',
-                 'filename': u'Vertraegsentwurf.docx',
-                 'checked_out': self.secretariat_user.getId()}]},
+                 'review_state': 'document-state-draft',
+                 '@id': self.document.absolute_url(),
+                 '@type': 'opengever.document.document'}]},
             browser.json)
 
     @browsing
@@ -134,11 +169,12 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         self.assertEquals(
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
+                'description': u'Wichtige Vertr\xe4ge',
                 'last_touched': '2018-04-30T00:00:00+02:00',
-                'target_url': self.document.absolute_url(),
                 'title': u'Vertr\xe4gsentwurf',
-                'filename': u'Vertraegsentwurf.docx',
-                'checked_out': self.regular_user.getId()}],
+                'review_state': 'document-state-draft',
+                '@id': self.document.absolute_url(),
+                '@type': 'opengever.document.document'}],
              'recently_touched': []},
             browser.json)
 
