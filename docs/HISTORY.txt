@@ -9,6 +9,7 @@ Changelog
 - Add API endpoints for user-setings and add additional setting seen_tours. [phgross]
 - Support the bundle-import of mails in the msg format. [phgross]
 - Add API endpoints for user-setings and add additional setting seen_tours. [phgross]
+- Downpin ftw.recipe.solr to 1.2.1 to have log4j configuration valid for solr < 7.4.X [deiferni]
 
 
 2019.4.0rc3 (2019-10-02)
