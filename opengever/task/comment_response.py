@@ -28,7 +28,7 @@ class CommentResponseHandler(object):
         self._record_activity(response)
         self._sync_response(text)
 
-        return self
+        return response
 
     def _create_response(self, text):
         response = TaskResponse(COMMENT_RESPONSE_TYPE)

@@ -104,8 +104,6 @@ class ResponsePost(Service):
     """Add a Response to the current context.
     """
 
-    response_class = Response
-
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -117,15 +115,19 @@ class ResponsePost(Service):
         if not text:
             raise BadRequest("Property 'text' is required")
 
-        response = self.response_class(COMMENT_RESPONSE_TYPE)
-        response.text = text
-        IResponseContainer(self.context).add(response)
+        response = self.create_response(text)
 
         self.request.response.setStatus(201)
         self.request.response.setHeader("Location", self.context.absolute_url())
 
         serializer = getMultiAdapter((response, self.request), ISerializeToJson)
         return serializer(container=self.context)
+
+    def create_response(self, text):
+        response = Response(COMMENT_RESPONSE_TYPE)
+        response.text = text
+        IResponseContainer(self.context).add(response)
+        return response
 
 
 @implementer(IPublishTraverse)
