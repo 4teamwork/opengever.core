@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc4 (unreleased)
 ------------------------
 
+- Use plone.restapi summary serialization in the recently-touched endpoint. [phgross]
 - Fix a problem in the watcher handling when reassigning a task to the same user but a different org unit. [phgross]
 - Support the bundle-import of mails in the msg format. [phgross]
 - Add API endpoints for user-setings and add additional setting seen_tours. [phgross]

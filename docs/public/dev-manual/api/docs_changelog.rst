@@ -6,6 +6,12 @@ Changelog
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
 
+2019-10-08
+----------
+
+- Kapitel "Kürzich bearbeitet" aktualisiert: Repräsentation hat sich verändert, unterstützt neu aber den Parameter ``metadata_fields``.
+
+
 2019-06-04
 ----------
 

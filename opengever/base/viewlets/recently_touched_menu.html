@@ -13,7 +13,7 @@
         <ul class="dropdown-list">
           <li><span class="dropdown-list-header">{{i18n.label_checked_out}}</span></li>
           <li v-for="entry in checkedOut">
-            <a class="dropdown-list-item" :href="entry.target_url">
+            <a class="dropdown-list-item" :href="entry['@id']">
               <i :class="entry.icon_class" class="dropdown-list-item-icon"></i>
               <span class="dropdown-list-item-content">{{entry.title}}</span>
               <span class="dropdown-list-item-suffix timeago relativetime" :title="entry.last_touched">{{entry.last_touched}}</span>
@@ -34,7 +34,7 @@
         <ul class="dropdown-list">
           <li><span class="dropdown-list-header">{{i18n.label_recently_touched}}</span></li>
           <li v-for="entry in recentlyTouched">
-            <a class="dropdown-list-item" :href="entry.target_url">
+            <a class="dropdown-list-item" :href="entry['@id']">
               <i :class="entry.icon_class" class="dropdown-list-item-icon"></i>
               <span class="dropdown-list-item-content">{{entry.title}}</span>
               <span class="dropdown-list-item-suffix timeago relativetime" :title="entry.last_touched">{{entry.last_touched}}</span>
