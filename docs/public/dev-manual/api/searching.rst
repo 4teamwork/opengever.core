@@ -115,13 +115,20 @@ Um direkt eine Suchabfrage an den Solr Service abzusetzen, steht der ``@solrsear
 
 Query
 ~~~~~
-``q``: Query in Solr syntax.
+``q``: Suchbegriff
 
-Beipsiel für eine Suchabfrage nach dem Titel Kurzinfo:
+Beispiel für eine Suche nach "Kurz":
 
 .. sourcecode:: http
 
-  GET /plone/@solrsearch?query=Title:Kurz* HTTP/1.1
+  GET /plone/@solrsearch?q=Kurz HTTP/1.1
+
+Der Suchbegriff kann mit dem Parameter ``q.raw`` auch in Solr Query Syntax angegeben werden.
+Beispiel für eine Suche nach "Kurz" im Feld "Titel":
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?q.raw=Title:Kurz HTTP/1.1
 
 
 Filters
@@ -137,13 +144,13 @@ Beispiel für ein Suchabfrage gefiltert nach portal_type nur für Dokumente und 
 
 Fields
 ~~~~~~
-``fl``: Liste der Felder, die zurückgegeben werden sollen. Standardmässig werden die Felder ``UID``, ``Title``, ``Description``, ``path`` zurückgegeben.
+``fl``: Liste der Felder, die zurückgegeben werden sollen. Standardmässig werden die Felder ``@id``, ``@type``, ``title``, ``description`` und ``review_state`` zurückgegeben.
 
-Beispiel für ein Suchabfrage, mit id, Title und Laufnummer als Resultat
+Beispiel für ein Suchabfrage, mit UID, Title und Laufnummer als Resultat
 
 .. sourcecode:: http
 
-  GET /plone/@solrsearch?query=Title:Kurz*&fl=id,Title,sequence_number HTTP/1.1
+  GET /plone/@solrsearch?q=Kurz&fl=UID,Title,sequence_number HTTP/1.1
 
 
 Weitere optionale Parameter:

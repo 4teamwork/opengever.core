@@ -10,6 +10,7 @@ Changelog
 - Add API endpoints for user-setings and add additional setting seen_tours. [phgross]
 - Support the bundle-import of mails in the msg format. [phgross]
 - Add API endpoints for user-setings and add additional setting seen_tours. [phgross]
+- Extend @solrsearch endpoint by adding various useful information like item count, attributes from contentlisting objects, facets and snippets. [buchi]
 
 
 2019.4.0rc3 (2019-10-02)

@@ -24,18 +24,36 @@ class TestSolrSearchGet(IntegrationTestCase):
             "start": 0,
             "docs": [
                 {
-                    "UID": "85bed8c49f6d4f8b841693c6a7c6cff1",
-                    "Title": "My Folder 1",
+                    "UID": "createtreatydossiers000000000001",
+                    "path": "/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1",
+                    "Title": "Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung",
                 },
                 {
-                    "UID": "85a29144758f494c88df19182f749ed6",
-                    "Title": "My Folder 2",
+                    "UID": "createexpireddossier000000000001",
+                    "path": "/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5",
+                    "Title": "Abgeschlossene Vertr\xc3\xa4ge",
                 },
                 {
-                    "UID": "9398dad21bcd49f8a197cd50d10ea778",
-                    "Title": "My Document",
+                    "UID": "createtreatydossiers000000000002",
+                    "path": "/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14",
+                    "Title": "Vertr\xc3\xa4gsentwurf",
                 }
             ]
+        },
+        "facet_counts": {
+            "facet_fields": {
+                "portal_type": [
+                    "opengever.dossier.businesscasedossier", 2,
+                    "opengever.document.document", 1
+                ]
+            }
+        },
+        "highlighting": {
+            "createtreatydossiers000000000001": {},
+            "createexpireddossier000000000001": {},
+            "createtreatydossiers000000000002": {
+                "SearchableText": ["<em>Vertragsentwurf</em>"]
+            }
         }
     }
 
@@ -54,18 +72,33 @@ class TestSolrSearchGet(IntegrationTestCase):
              u'type': u'BadRequest'}, browser.json)
 
     @browsing
-    def test_passes_known_parameters_to_solr_utility(self, browser):
+    def test_simple_search_query(self, browser):
         self.login(self.regular_user, browser=browser)
 
         self.solr = self.mock_solr(response_json=self.solr_search_response)
 
-        url = u'{}/@solrsearch?query=Title:Kurz*&fq=portal_type:opengever.document.document'.format(self.portal.absolute_url())
+        url = u'{}/@solrsearch?q=Kurz'.format(self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.solr.search.assert_called_once_with(
-            fl='UID,Title,Description,path',
-            filters='portal_type:opengever.document.document',
-            query='Title:Kurz*')
+        self.assertEqual(
+            self.solr.search.call_args[1]['query'],
+            u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'
+            u'Title:Kurz^100 OR Title:Kurz*^20 OR SearchableText:Kurz^5 OR '
+            u'SearchableText:Kurz* OR metadata:Kurz^10 OR metadata:Kurz*^2 '
+            u'OR sequence_number_string:Kurz^2000')
+
+    @browsing
+    def test_raw_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?q.raw=Title:Kurz'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            self.solr.search.call_args[1]['query'],
+            'Title:Kurz')
 
     @browsing
     def test_fallback_to_default_fields_if_fl_parameter_is_empty(self, browser):
@@ -76,20 +109,40 @@ class TestSolrSearchGet(IntegrationTestCase):
         url = u'{}/@solrsearch'.format(self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.solr.search.assert_called_once_with(fl='UID,Title,Description,path')
+        self.assertEqual(
+            self.solr.search.call_args[1]['fl'],
+            'UID,Title,portal_type,path,review_state,Description')
 
     @browsing
-    def test_not_supported_fields_are_skipped(self, browser):
+    def test_blacklisted_attributes_are_skipped(self, browser):
         self.login(self.regular_user, browser=browser)
 
         self.solr = self.mock_solr(response_json=self.solr_search_response)
 
         # SearchableText is an unsupported field
-        url = u'{}/@solrsearch?fl=UID,SearchableText,Title'.format(
+        url = u'{}/@solrsearch?fl=SearchableText,allowedRolesAndUsers,getObject,UID,Title'.format(
             self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.solr.search.assert_called_once_with(fl='UID,Title')
+        self.assertEqual(
+            self.solr.search.call_args[1]['fl'],
+            'path,UID,Title')
+
+    @browsing
+    def test_filter_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = (u'{}/@solrsearch?fq=portal_type:opengever.document.document&'
+               u'fq=path_parent:\\/plone\\/ordnungssystem\\/fuhrung'.format(
+                   self.portal.absolute_url()))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            self.solr.search.call_args[1]['filters'],
+            ['portal_type:opengever.document.document',
+             'path_parent:\\/plone\\/ordnungssystem\\/fuhrung'])
 
     @browsing
     def test_returns_json_serialized_solr_docs(self, browser):
@@ -102,10 +155,112 @@ class TestSolrSearchGet(IntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(
-            [{u'UID': u'85bed8c49f6d4f8b841693c6a7c6cff1',
-              u'Title': u'My Folder 1'},
-             {u'UID': u'85a29144758f494c88df19182f749ed6',
-              u'Title': u'My Folder 2'},
-             {u'UID': u'9398dad21bcd49f8a197cd50d10ea778',
-              u'Title': u'My Document'}],
-            browser.json)
+            [{u'Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+              u'UID': u'createtreatydossiers000000000001'},
+             {u'Title': u'Abgeschlossene Vertr\xe4ge',
+              u'UID': u'createexpireddossier000000000001'},
+             {u'Title': u'Vertr\xe4gsentwurf',
+              u'UID': u'createtreatydossiers000000000002'}],
+            browser.json[u'items'])
+
+    @browsing
+    def test_returns_snippets(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?fl=UID,Title,snippets'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [{u'Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+              u'UID': u'createtreatydossiers000000000001',
+              u'snippets': u''},
+             {u'Title': u'Abgeschlossene Vertr\xe4ge',
+              u'UID': u'createexpireddossier000000000001',
+              u'snippets': u''},
+             {u'Title': u'Vertr\xe4gsentwurf',
+              u'UID': u'createtreatydossiers000000000002',
+              u'snippets': u'<em>Vertragsentwurf</em>'}],
+            browser.json[u'items'])
+
+    @browsing
+    def test_returns_facets(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?fl=UID,Title'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIn(u'facet_counts', browser.json)
+
+    @browsing
+    def test_default_start_and_rows(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?fl=UID,Title'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(self.solr.search.call_args[1]['start'], 0)
+        self.assertEqual(self.solr.search.call_args[1]['rows'], 25)
+
+    @browsing
+    def test_custom_start_and_rows(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?fl=UID,Title&start=20&rows=10'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(self.solr.search.call_args[1]['start'], 20)
+        self.assertEqual(self.solr.search.call_args[1]['rows'], 10)
+
+    @browsing
+    def test_max_rows(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?fl=UID,Title&start=0&rows=10000000'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(self.solr.search.call_args[1]['rows'], 1000)
+
+    @browsing
+    def test_default_sort(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?q=Foo&fl=UID,Title'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(self.solr.search.call_args[1]['sort'], 'score asc')
+
+        url = u'{}/@solrsearch?fl=UID,Title'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(self.solr.search.call_args[1]['sort'], None)
+
+    @browsing
+    def test_custom_sort(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.solr = self.mock_solr(response_json=self.solr_search_response)
+
+        url = u'{}/@solrsearch?fl=UID,Title&sort=modified asc'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(self.solr.search.call_args[1]['sort'], 'modified asc')
