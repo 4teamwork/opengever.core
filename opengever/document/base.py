@@ -12,6 +12,7 @@ from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IBaseProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
+from opengever.trash.trash import ITrashed
 from plone import api
 from plone.dexterity.content import Item
 from Products.CMFCore.utils import getToolByName
@@ -106,6 +107,10 @@ class BaseDocumentMixin(object):
     @property
     def is_mail(self):
         return False
+
+    @property
+    def is_trashed(self):
+        return ITrashed.providedBy(self)
 
     def is_inside_a_proposal(self):
         parent = aq_parent(aq_inner(self))
