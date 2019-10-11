@@ -135,22 +135,7 @@ Transition IDs:
 
 Zusätzliche Metadaten:
 
-   .. py:attribute:: responsibles
-
-       :Datentyp: ``List``
-       :Pflichtfeld: Ja :required:`(*)`
-
-   .. py:attribute:: title
-
-       :Datentyp: ``TextLine``
-       :Pflichtfeld: Ja :required:`(*)`
-
-   .. py:attribute:: issuer
-
-       :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
-
-   .. py:attribute:: deadline
+   .. py:attribute:: new_deadline
 
        :Datentyp: ``Date``
        :Pflichtfeld: Ja :required:`(*)`
