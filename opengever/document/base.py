@@ -7,6 +7,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IBaseProposal
@@ -215,6 +216,13 @@ class BaseDocumentMixin(object):
             return False
 
         return self.get_file().contentType.lower() in black_listed_types
+
+    def containing_dossier_title(self):
+        """"Returns the title of the main dossier which the document is placed in.
+        """
+        dossier = get_main_dossier(self)
+        if dossier:
+            return dossier.title
 
 
 def mimetype_lookup(mtr, contenttype):
