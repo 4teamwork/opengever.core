@@ -224,6 +224,17 @@ class BaseDocumentMixin(object):
         if dossier:
             return dossier.title
 
+    def containing_subdossier_title(self):
+        """"Returns the title of the subdossier which the document is placed in.
+        Returns None when the object is placed directly inside a main dossier.
+        """
+        dossier = self.get_parent_dossier()
+
+        # Return None if the dossier is a main dossier
+        if not IDossierMarker.providedBy(aq_parent(dossier)):
+            return None
+
+        return dossier.title
 
 def mimetype_lookup(mtr, contenttype):
     """Reimplemented as case insensitive from Products.MimetypesRegistry."""

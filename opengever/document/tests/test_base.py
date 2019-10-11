@@ -32,6 +32,18 @@ class TestBaseDocument(IntegrationTestCase):
             u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             self.sub_document.containing_dossier_title())
 
+    def test_containing_subdossier_title_returns_subdossier_title(self):
+        self.login(self.regular_user)
+
+        self.assertEqual(
+            u'2016',
+            self.subdocument.containing_subdossier_title())
+
+    def test_containing_subdossier_title_returns_None_for_document_inside_main_dossier(self):
+        self.login(self.regular_user)
+
+        self.assertIsNone(self.document.containing_subdossier_title())
+
 
 class TestBaseDocumentMails(TestBaseDocument):
 
