@@ -48,6 +48,40 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual('.msg', browser.json.get(u'file_extension'))
 
+    @browsing
+    def test_contains_additional_metadata(self, browser):
+        self.login(self.regular_user, browser)
+
+        # The helpers used for the api are already tested, so no
+        # need to repeat these here.
+        self.checkout_document(self.subdocument)
+
+        browser.open(self.subdocument, headers={'Accept': 'application/json'})
+
+        self.assertEqual(self.regular_user.id, browser.json['checked_out'])
+        self.assertFalse(browser.json['is_locked'])
+        self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+                         browser.json['containing_dossier'])
+        self.assertEqual(u'2016', browser.json['containing_subdossier'])
+        self.assertFalse(browser.json['trashed'])
+        self.assertFalse(browser.json['is_shadow_document'])
+        self.assertFalse(0, browser.json['current_version_id'])
+
+    @browsing
+    def test_additional_metadata_for_mails(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+
+        self.assertIsNone(browser.json['checked_out'])
+        self.assertFalse(browser.json['is_locked'])
+        self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+                         browser.json['containing_dossier'])
+        self.assertIsNone(browser.json['containing_subdossier'])
+        self.assertFalse(browser.json['trashed'])
+        self.assertFalse(browser.json['is_shadow_document'])
+        self.assertFalse(0, browser.json['current_version_id'])
+
 
 class TestDocumentPatch(IntegrationTestCase):
 

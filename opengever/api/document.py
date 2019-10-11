@@ -31,6 +31,18 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             self.context, 'pdf')
         result[u'file_extension'] = self.context.get_file_extension()
 
+        additional_metadata = {
+            'checked_out': self.context.checked_out_by(),
+            'is_locked': self.context.is_locked(),
+            'containing_dossier': self.context.containing_dossier_title(),
+            'containing_subdossier': self.context.containing_subdossier_title(),
+            'trashed': self.context.is_trashed,
+            'is_shadow_document': self.context.is_shadow_document(),
+            'current_version_id': self.context.get_current_version_id(
+                missing_as_zero=True),
+        }
+
+        result.update(additional_metadata)
         return result
 
 
