@@ -188,7 +188,7 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
 @adapter(ITask, IBrowserRequest)
 class ModifyDeadlineTransitionExtender(TransitionExtender):
 
-    schemas = [INewDeadline, ]
+    schemas = [IResponse, INewDeadline, ]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
         IDeadlineModifier(self.context).modify_deadline(
