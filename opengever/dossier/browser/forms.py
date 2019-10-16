@@ -41,21 +41,8 @@ class DossierAddForm(add.DefaultAddForm):
     def update(self):
         # XXX: These methods will later be refactored to use a common helper
         # function to access group widgets in z3c forms.
-        self.prefill_responsible()
         self.prefill_dossier_manager()
         super(DossierAddForm, self).update()
-
-    def prefill_responsible(self):
-        """Adds a default value for `responsible` to the request so the
-        field is prefilled with the current user, or the parent dossier's
-        responsible in the case of a subdossier.
-        """
-        if self.request.get('form.widgets.IDossier.responsible'):
-            # Only prefill if no value set already
-            return
-
-        current_user = api.user.get_current().getId()
-        self.request.set('form.widgets.IDossier.responsible', [current_user])
 
     def prefill_dossier_manager(self):
         """Prefill current user as dossier_manager in add forms.

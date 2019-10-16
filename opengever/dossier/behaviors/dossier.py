@@ -9,6 +9,7 @@ from opengever.dossier import _
 from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
+from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
@@ -32,6 +33,12 @@ class IDossierMarker(Interface, ITabbedviewUploadable):
 
 def start_date_default():
     return date.today()
+
+
+def current_user_default():
+    user = api.user.get_current()
+    if user:
+        return user.getId()
 
 
 class IDossier(model.Schema):
@@ -90,6 +97,7 @@ class IDossier(model.Schema):
         title=_(u"label_responsible", default="Responsible"),
         source=AssignedUsersSourceBinder(),
         required=True,
+        defaultFactory=current_user_default,
     )
 
     external_reference = schema.TextLine(
