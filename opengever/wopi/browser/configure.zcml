@@ -13,7 +13,7 @@
 
   <browser:page
       for="opengever.document.document.IDocumentSchema"
-      name="officeonline_edit"
+      name="office_online_edit"
       class=".edit.EditOnlineView"
       template="edit.pt"
       permission="zope2.View"
