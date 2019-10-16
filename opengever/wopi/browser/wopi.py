@@ -1,17 +1,17 @@
-from AccessControl import getSecurityManager
 from Acquisition import aq_parent
 from base64 import urlsafe_b64decode
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.wopi.lock import create_lock
+from opengever.wopi.lock import get_lock_token
+from opengever.wopi.lock import refresh_lock
+from opengever.wopi.lock import unlock
 from opengever.wopi.token import validate_access_token
 from plone import api
 from plone.app.uuid.utils import uuidToObject
-from plone.locking.interfaces import IRefreshableLockable
-from plone.locking.interfaces import STEALABLE_LOCK
 from plone.namedfile.file import NamedBlobFile
 from plone.namedfile.utils import set_headers
 from plone.namedfile.utils import stream_data
 from Products.Five.browser import BrowserView
-from webdav.LockItem import LockItem
 from zExceptions import NotFound as zNotFound
 from ZODB.utils import u64
 from zope.component import getMultiAdapter
@@ -64,7 +64,7 @@ class WOPIView(BrowserView):
         token = self.request.form.get('access_token', '')
         try:
             token = urlsafe_b64decode(token)
-        except:
+        except TypeError:
             token = None
         userid = validate_access_token(token, self.object_id)
         if not userid:
@@ -145,76 +145,57 @@ class WOPIView(BrowserView):
 
     def put_file(self):
         obj = self.obj()
-        lockable = IRefreshableLockable(obj, None)
-        if lockable is not None:
-            lock_info = lockable.lock_info()
-            if lock_info:
-                current_token = lock_info[0]['token']
-                token = self.request.getHeader('X-WOPI-Lock')
-                if current_token != token:
-                    logger.warn(
-                        'Lock token mismatch: current token: %s, '
-                        'provided token: %s', current_token, token)
-                # Office Online sends the wrong token?!!
-                #     self.request.response.setStatus(409)
-                #     self.request.response.setHeader('X-WOPI-Lock', token)
-                #     return
-                filename = obj.file.filename
-                content_type = obj.file.contentType
-                self.request.stdin.seek(0)
-                data = self.request.stdin.read()
-                obj.file = NamedBlobFile(
-                    data=data, filename=filename,
-                    contentType=content_type)
-                self.request.response.setStatus(200, lock=1)
-            else:
-                self.request.response.setStatus(409)
-                self.request.response.setHeader('X-WOPI-Lock', '')
-                return
+        current_token = get_lock_token(obj)
+        if current_token is not None:
+            token = self.request.getHeader('X-WOPI-Lock')
+            if current_token != token:
+                logger.warn(
+                    'Lock token mismatch: current token: %s, '
+                    'provided token: %s', current_token, token)
+            # Office Online sends the wrong token?!!
+            #     self.request.response.setStatus(409)
+            #     self.request.response.setHeader('X-WOPI-Lock', token)
+            #     return
+            filename = obj.file.filename
+            content_type = obj.file.contentType
+            self.request.stdin.seek(0)
+            data = self.request.stdin.read()
+            obj.file = NamedBlobFile(
+                data=data, filename=filename,
+                contentType=content_type)
+            self.request.response.setStatus(200, lock=1)
         else:
-            self.request.response.setStatus(501)
+            self.request.response.setStatus(409)
+            self.request.response.setHeader('X-WOPI-Lock', '')
+            return
 
     def lock(self):
         obj = self.obj()
-        lockable = IRefreshableLockable(obj, None)
-        if lockable is not None:
-            lock_info = lockable.lock_info()
-            if lock_info:
-                current_token = lock_info[0]['token']
-                old_token = self.request.getHeader('X-WOPI-OldLock')
-                token = self.request.getHeader('X-WOPI-Lock')
-                # UnlockAndRelock operation
-                if old_token:
-                    if current_token == old_token:
-                        lockable.unlock()
-                        self.create_lock(obj, token)
-                    else:
-                        self.request.response.setStatus(409)
-                        self.request.response.setHeader('X-WOPI-Lock', token)
-                        return
-                # Lock/RefreshLock operation
+        current_token = get_lock_token(obj)
+        if current_token:
+            old_token = self.request.getHeader('X-WOPI-OldLock')
+            token = self.request.getHeader('X-WOPI-Lock')
+            # UnlockAndRelock operation
+            if old_token:
+                if current_token == old_token:
+                    unlock(obj)
+                    create_lock(obj, token)
                 else:
-                    if current_token != token:
-                        self.request.response.setStatus(409)
-                        self.request.response.setHeader('X-WOPI-Lock', token)
-                        return
-                    lockable.refresh_lock()
+                    self.request.response.setStatus(409)
+                    self.request.response.setHeader('X-WOPI-Lock', token)
+                    return
+            # Lock/RefreshLock operation
             else:
-                self.checkout(obj)
-                token = self.request.getHeader('X-WOPI-Lock')
-                self.create_lock(obj, token)
-            self.request.response.setStatus(200, lock=1)
+                if current_token != token:
+                    self.request.response.setStatus(409)
+                    self.request.response.setHeader('X-WOPI-Lock', token)
+                    return
+                refresh_lock(obj)
         else:
-            self.request.response.setStatus(501)
-
-    def create_lock(self, obj, token):
-        """Create a lock with a custom token."""
-        user = getSecurityManager().getUser()
-        lock = LockItem(user, depth=0, timeout=1800, token=token)
-        obj.wl_setLock(token, lock)
-        lockable = IRefreshableLockable(obj, None)
-        locks = lockable._locks()
-        locks[STEALABLE_LOCK.__name__] = dict(type=STEALABLE_LOCK, token=token)
+            self.checkout(obj)
+            token = self.request.getHeader('X-WOPI-Lock')
+            create_lock(obj, token)
+        self.request.response.setStatus(200, lock=1)
 
     def checkout(self, obj):
         manager = getMultiAdapter((obj, self.request),
@@ -230,31 +211,22 @@ class WOPIView(BrowserView):
     def unlock(self):
         token = self.request.getHeader('X-WOPI-Lock')
         obj = self.obj()
-        lockable = IRefreshableLockable(obj, None)
-        if lockable is not None:
-            lock_info = lockable.lock_info()
-            if lock_info:
-                if lock_info[0]['token'] != token:
-                    self.request.response.setStatus(409)
-                    self.request.response.setHeader(
-                        'X-WOPI-Lock', lock_info[0]['token'])
-                    return
-                lockable.unlock()
-                self.checkin(obj)
-            self.request.response.setStatus(200, lock=1)
-        else:
-            self.request.response.setStatus(501)
+        current_token = get_lock_token(obj)
+        if current_token:
+            if current_token != token:
+                self.request.response.setStatus(409)
+                self.request.response.setHeader(
+                    'X-WOPI-Lock', current_token)
+                return
+            unlock(obj)
+            self.checkin(obj)
+        self.request.response.setStatus(200, lock=1)
 
     def get_lock(self):
         obj = self.obj()
-        lockable = IRefreshableLockable(obj, None)
-        if lockable is not None:
-            lock_info = lockable.lock_info()
-            if lock_info:
-                token = lock_info[0]['token']
-                self.request.response.setHeader('X-WOPI-Lock', token)
-            else:
-                self.request.response.setHeader('X-WOPI-Lock', '')
-            self.request.response.setStatus(200, lock=1)
+        token = get_lock_token(obj)
+        if token is not None:
+            self.request.response.setHeader('X-WOPI-Lock', token)
         else:
-            self.request.response.setStatus(501)
+            self.request.response.setHeader('X-WOPI-Lock', '')
+        self.request.response.setStatus(200, lock=1)
