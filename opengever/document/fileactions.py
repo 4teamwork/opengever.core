@@ -11,7 +11,8 @@ from opengever.officeconnector.helpers import is_officeconnector_attach_feature_
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.trash.trash import ITrashable
 from opengever.trash.trash import TrashError
-from plone import api
+from opengever.wopi import is_wopi_feature_enabled
+from opengever.wopi.lock import get_lock_token
 from plone import api
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -140,6 +141,11 @@ class DocumentFileActions(BaseDocumentFileActions):
             and not manager.is_locked()
             and not manager.is_checked_out_by_another_user())
 
+    def is_office_online_edit_action_available(self):
+        return (is_wopi_feature_enabled()
+                and self.context.is_office_online_editable()
+                and self.can_edit_with_office_online())
+
     def is_oc_direct_checkout_action_available(self):
         return (self.is_any_checkout_or_edit_available()
                 and self.context.is_office_connector_editable()
@@ -216,3 +222,14 @@ class DocumentFileActions(BaseDocumentFileActions):
                 and self.context.has_file()
                 and not self.context.is_checked_out()
                 and manager.is_checkout_allowed())
+
+    def can_edit_with_office_online(self):
+        # Office Online allows collaborative editing
+        # Thus a document is editable by Office Online if it's not checked out
+        # or if it's checked out by Office Online.
+        if self.context.checked_out_by():
+            if get_lock_token(self.context):
+                return True
+            else:
+                return False
+        return True

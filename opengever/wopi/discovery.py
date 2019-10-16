@@ -6,6 +6,7 @@ import requests
 
 
 _ACTIONS = {}
+_EDITABLE_EXTENSIONS = {}
 
 
 def etree_to_dict(t):
@@ -29,11 +30,12 @@ def etree_to_dict(t):
     return d
 
 
-def actions_by_extension(net_zone='external-https'):
+def actions_by_extension(net_zone='external-https', url=None):
     global _ACTIONS
 
-    url = api.portal.get_registry_record(
-        name='discovery_url', interface=IWOPISettings)
+    if url is None:
+        url = api.portal.get_registry_record(
+            name='discovery_url', interface=IWOPISettings)
     if url in _ACTIONS:
         return _ACTIONS[url]
 
@@ -65,3 +67,21 @@ def actions_by_extension(net_zone='external-https'):
                     }
     _ACTIONS[url] = actions
     return _ACTIONS[url]
+
+
+def editable_extensions(net_zone='external-https', url=None):
+    global _EDITABLE_EXTENSIONS
+
+    if url is None:
+        url = api.portal.get_registry_record(
+            name='discovery_url', interface=IWOPISettings)
+    if url in _EDITABLE_EXTENSIONS:
+        return _EDITABLE_EXTENSIONS[url]
+
+    extensions = set()
+    for extension, actions in actions_by_extension(net_zone=net_zone,
+                                                   url=url).items():
+        if 'edit' in actions:
+            extensions.add(extension)
+    _EDITABLE_EXTENSIONS[url] = extensions
+    return _EDITABLE_EXTENSIONS[url]
