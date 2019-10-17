@@ -9,10 +9,21 @@
               and show/hide the whole element.
               See https://github.com/FortAwesome/Font-Awesome/issues/7572 for
               more information about this bug. -->
-              <span v-if="showSpinner && !selected" class="fa fa-spinner fa-spin" />
-              <span v-if="selected && !showSpinner" class="fa fa-check" />
+              <span v-if="option.show_spinner && !option.selected" class="fa fa-spinner fa-spin" />
+              <span v-if="option.selected && !option.show_spinner" class="fa fa-check" />
             </span>
-            <span class="subMenuTitle actionText">{{title}}</span>
+            <span class="subMenuTitle actionText">{{option.option_title}}</span>
+        </a>
+    </li>
+</script>
+<script type="text/x-template" id="task-reminder-selector-option-on-date-vue-template">
+    <li>
+        <a href="#" @click.prevent="clicked">
+            <span class="taskReminderSelectorOptionIcon">
+              <span v-if="option.show_spinner && !option.selected" class="fa fa-spinner fa-spin" />
+              <span v-if="option.selected && !option.show_spinner" class="fa fa-check" />
+            </span>
+            <span class="subMenuTitle actionText">{{option.option_title}}</span>
         </a>
     </li>
 </script>
@@ -22,13 +33,20 @@
           <span class="taskReminderSelectorCurrent">{{currentTitle}}</span>
         </dt>
         <dd>
-            <ul class="taskReminderSelectorOptions">
-                <reminder-option v-for="option in orderedOptions"
-                                 @clicked="handleSetReminder(option)"
-                                 :selected="option.selected"
-                                 :showSpinner="option.showSpinner"
-                                 :title="option.option_title" />
-            </ul>
+          <ul class="taskReminderSelectorOptions">
+            <template v-for="option in orderedOptions">
+              <reminder-option-on-date
+                v-if="option.option_type === 'on_date'"
+                :option=option
+                @clicked="handleSetReminder"
+              ></reminder-option-on-date>
+              <reminder-option
+                v-else
+                :option=option
+                @clicked="handleSetReminder"
+              ></reminder-option>
+            </template>
+          </ul>
         </dd>
     </dl>
 </script>
