@@ -9,6 +9,7 @@ from opengever.activity.model import Notification
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.base.interfaces import IDataCollector
 from opengever.task.activities import TaskReminderActivity
+from opengever.task.reminder import Reminder
 from opengever.task.reminder import ReminderOnDate
 from opengever.task.reminder import ReminderOneDayBefore
 from opengever.task.reminder import ReminderOneWeekBefore
@@ -295,3 +296,51 @@ class TestTaskReminderTransport(IntegrationTestCase):
         self.assertEqual(
             {self.regular_user.id: ReminderOnDate({'date': date(2018, 12, 30)})},
             self.subtask.get_reminders())
+
+
+class TestTaskReminderResponseForm(IntegrationTestCase):
+
+    @browsing
+    def test_set_reminder_through_task_accepted_form(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.assertIsNone(self.task.get_reminder())
+
+        self.set_workflow_state('task-state-open', self.task)
+        browser.open(self.task)
+        browser.css('#workflow-transition-task-transition-open-in-progress').first.click()
+        browser.fill({'Reminder': ReminderSameDay.option_type})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertIsInstance(self.task.get_reminder(), ReminderSameDay)
+
+    @browsing
+    def test_set_reminder_absolute_reminder_through_task_accepted_form(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.assertIsNone(self.task.get_reminder())
+
+        self.set_workflow_state('task-state-open', self.task)
+        browser.open(self.task)
+        browser.css('#workflow-transition-task-transition-open-in-progress').first.click()
+        browser.fill({'Reminder': ReminderOnDate.option_type, 'Choose remind date': '31.10.2019'})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertIsInstance(self.task.get_reminder(), ReminderOnDate)
+        self.assertEqual(self.task.get_reminder().params,
+                         {'date': datetime(2019, 10, 31).date()})
+
+    @browsing
+    def test_remove_reminder_through_task_accepted_form(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.task.set_reminder(Reminder.create(ReminderSameDay.option_type))
+        self.assertIsInstance(self.task.get_reminder(), ReminderSameDay)
+
+        self.set_workflow_state('task-state-open', self.task)
+        browser.open(self.task)
+        browser.css('#workflow-transition-task-transition-open-in-progress').first.click()
+        browser.fill({'Reminder': None})
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertIsNone(self.task.get_reminder())

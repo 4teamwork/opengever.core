@@ -8,6 +8,27 @@ $(window).load(function(){
   } else {
     firstFormElement.focus();
   }
+
+  // Handle reminder_option-date visibility in task response form
+  function handleReminderOptionsDateChooserVisiblity(optionType) {
+    var optionTypeCalendarField = $('#formfield-form-widgets-reminder_option_date');
+    if (optionType === 'on_date') {
+      optionTypeCalendarField.show();
+    } else {
+      optionTypeCalendarField.hide();
+    }
+  }
+  var reminderOptionsForm = $('#form-widgets-reminder_option');
+  if (reminderOptionsForm.length) {
+    var currentOptionType = reminderOptionsForm[0].options[reminderOptionsForm[0].selectedIndex].value;
+    handleReminderOptionsDateChooserVisiblity(currentOptionType);
+    reminderOptionsForm.on('change', function(e) {
+      var optionType = e.target.options[e.target.selectedIndex].value;
+      handleReminderOptionsDateChooserVisiblity(optionType);
+    });
+  }
+
+
 });
 
 $(document).delegate('body', 'tabbedview.unknownresponse', function(event, overview, jqXHR) {

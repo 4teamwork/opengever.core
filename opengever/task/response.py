@@ -1,5 +1,6 @@
 from AccessControl.users import nobody
 from Acquisition import aq_inner
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.response import IResponseContainer
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
@@ -10,6 +11,8 @@ from opengever.task import FINAL_TRANSITIONS
 from opengever.task import util
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
+from opengever.task.reminder import Reminder
+from opengever.task.reminder import ReminderOnDate
 from opengever.task.reminder.model import get_task_reminder_options_vocabulary
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -24,6 +27,7 @@ from z3c.form import field
 from z3c.form import form
 from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
+from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
@@ -32,6 +36,8 @@ from zope.cachedescriptors.property import Lazy
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Interface
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.interface import provider
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
@@ -42,6 +48,13 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 def get_current_user_reminder(context):
     reminder = context.get_reminder()
     return reminder.option_type if reminder else None
+
+
+@provider(IContextAwareDefaultFactory)
+def get_remind_on_date(context):
+    reminder = context.get_reminder()
+    if isinstance(reminder, ReminderOnDate):
+        return reminder.params['date']
 
 
 class ITaskCommentResponseFormSchema(Interface):
@@ -93,6 +106,19 @@ class ITaskTransitionResponseFormSchema(Interface):
         required=False,
         defaultFactory=get_current_user_reminder
         )
+
+    reminder_option_date = schema.Date(
+        title=_(u"lable_reminder_choose_date", default=u"Choose remind date"),
+        required=False,
+        defaultFactory=get_remind_on_date
+        )
+
+    @invariant
+    def reminder_option_date_validator(data):
+        if data.reminder_option == ReminderOnDate.option_type and \
+                not data.reminder_option_date:
+            raise Invalid(_(u'no_remind_date_error',
+                          default=u'Please choose a remind date'))
 
 
 class Base(BrowserView):
@@ -204,6 +230,7 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(ITaskTransitionResponseFormSchema)
     # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
+    fields['reminder_option_date'].widgetFactory[INPUT_MODE] = DatePickerFieldWidget
     fields = fields.omit('date_of_completion')
 
     def update(self):
@@ -280,6 +307,9 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
         wftool.doActionFor(self.context, self.transition,
                            comment=data.get('text'), transition_params=data)
 
+        self.handleReminder(data.get('reminder_option'),
+                            data.get('reminder_option_date'))
+
         return self.redirect()
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'), name='cancel', )
@@ -297,6 +327,18 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
         if self.transition != 'task-transition-open-in-progress':
             self.widgets['reminder_option'].mode = HIDDEN_MODE
+            self.widgets['reminder_option_date'].mode = HIDDEN_MODE
+
+    def handleReminder(self, reminder_option, reminder_option_date):
+        params = {}
+        if reminder_option == ReminderOnDate.option_type:
+            params = {'date': reminder_option_date}
+
+        if reminder_option:
+            reminder = Reminder.create(reminder_option, params)
+            self.context.set_reminder(reminder)
+        else:
+            self.context.clear_reminder()
 
     def redirect(self):
         """Redirects to task if the current user still has View permission,
