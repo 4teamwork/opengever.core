@@ -4,6 +4,7 @@ from plone import api
 from Products.CMFCore.utils import getToolByName
 from xml.sax.saxutils import escape
 from zope.component import getMultiAdapter
+from zope.component.hooks import getSite
 import hashlib
 import json
 
@@ -174,3 +175,35 @@ def make_persistent(data):
 
     else:
         return data
+
+
+def rewrite_path_list_to_absolute_paths(request):
+    """If request contains a paths:list param, rewrite these paths so
+    they're always absolute (start with the Plone site).
+
+    (Modifies the request in place)
+
+    This is required for a couple views that use a paths:list parameter and
+    break with the new gever-ui, which sends "pseudo-relative" paths.
+
+    Pseudo-relative in this context means paths that don't start with the
+    Plone site (so are relative to it), but still have a leading slash).
+    """
+    if 'paths' in request:
+        portal = getSite()
+        portal_prefix = '/%s' % portal.id
+
+        paths = request['paths']
+        new_paths = []
+        for path in paths:
+            new_path = path
+
+            if not path.startswith('/'):
+                path = '/' + path
+
+            if not path.startswith(portal_prefix):
+                new_path = portal_prefix + path
+
+            new_paths.append(new_path)
+
+        request['paths'] = request.form['paths'] = new_paths
