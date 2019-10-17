@@ -3,12 +3,14 @@ from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from opengever.base.utils import rewrite_path_list_to_absolute_paths
 
 
 def get_selected_items_from_catalog(context, request):
     """Returns a set of brains.
     """
 
+    rewrite_path_list_to_absolute_paths(request)
     paths = request.get('paths', None)
 
     if paths:
