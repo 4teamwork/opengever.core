@@ -669,8 +669,26 @@ class IntegrationTestCase(TestCase):
         return catalog.getIndexDataForRID(rid).get('allowedRolesAndUsers')
 
     def make_path_param(self, *objects):
+        """Build a paths:list request parameter, as expected by some views.
+        """
         return {
             'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects]}
+
+    def make_pseudorelative_path_param(self, *objects):
+        """Build a paths:list request parameter with pseudo-relative paths.
+
+        Pseudo-relative in this context means that the paths don't start with
+        the Plone site (they are relative to it), but they still start with
+        a leading slash.
+
+        We get paths like this from the new gever-ui in some cases, that's
+        why some of our views need to also handle them.
+        """
+        def pseudo_relpath(obj):
+            return '/' + '/'.join(obj.getPhysicalPath()[2:])
+
+        return {
+            'paths:list': [pseudo_relpath(obj) for obj in objects]}
 
     @mutually_exclusive_parameters('response_file', 'response_json')
     @at_least_one_of('response_file', 'response_json')

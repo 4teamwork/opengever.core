@@ -17,7 +17,42 @@ class TestDossierReporter(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(view='dossier_report',
+                     # /plone/ordnungssystem/...
                      data=self.make_path_param(self.dossier, self.inactive_dossier))
+
+        data = browser.contents
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        rows = list(workbook.active.rows)
+
+        self.assertSequenceEqual(
+            [self.dossier.title,
+             datetime(2016, 1, 1),
+             None,
+             u'Ziegler Robert (robert.ziegler)',
+             u'dossier-state-active',
+             u'Client1 1.1 / 1'],
+            [cell.value for cell in rows[1]])
+
+        self.assertSequenceEqual(
+            [self.inactive_dossier.title,
+             datetime(2016, 1, 1, 0, 0),
+             datetime(2016, 12, 31, 0, 0),
+             u'Ziegler Robert (robert.ziegler)',
+             u'dossier-state-inactive',
+             u'Client1 1.1 / 3'],
+            [cell.value for cell in rows[2]])
+
+    @browsing
+    def test_dossier_report_with_pseudorelative_path(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='dossier_report',
+                     # /ordnungssystem/...
+                     data=self.make_pseudorelative_path_param(self.dossier, self.inactive_dossier))
 
         data = browser.contents
         with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
