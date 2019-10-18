@@ -75,6 +75,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``filesize``: Dateigrösse
 - ``has_sametype_children``: Ob es Objekte vom selben Inhaltstyp enthält.
 - ``issuer_fullname``: Auftraggeber (Anzeigename)
+- ``issuer``: Auftraggeber (Benutzername)
 - ``is_subdossier``: Ob das Dossier ein Subdossier ist.
 - ``is_sutask``: Ob die Aufgabe eine Unteraufgabe ist.
 - ``keywords``: Schlagwörter

@@ -131,6 +131,7 @@ FIELDS = {
     'is_subdossier': ('is_subdossier', 'is_subdossier', 'is_subdossier'),
     'is_subtask': ('is_subtask', 'is_subtask', 'is_subtask'),
     'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
+    'issuer': ('issuer', 'issuer', 'issuer'),
     'keywords': ('Subject', 'Subject', 'Subject'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
     'modified': ('modified', 'modified', 'modified'),
