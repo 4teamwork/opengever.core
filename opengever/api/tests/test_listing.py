@@ -468,6 +468,33 @@ class TestListingEndpoint(IntegrationTestCase):
             [item.get("@id") for item in subdossiers])
 
     @browsing
+    def test_filter_by_issuer(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # all tasks
+        view = '@listing?name=tasks&columns:list=issuer'
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        all_tasks = browser.json['items']
+
+        # only task issued by specific user
+        view = view + '&filters.issuer:record:list={}'.format(self.regular_user.getId(),)
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        filtered_tasks = browser.json['items']
+
+        self.assertTrue(len(all_tasks) > len(filtered_tasks) > 0)
+        # Make sure that filtering by issuer filtered according to
+        # the issuer field
+        self.assertItemsEqual(
+            [item for item in all_tasks if item.get("issuer") == self.regular_user.getId()],
+            filtered_tasks)
+
+        # Make sure that issuer is the right user for the expected objects.
+        expected_tasks = (self.sequential_task, )
+        self.assertItemsEqual(
+            [task.absolute_url() for task in expected_tasks],
+            [item.get("@id") for item in filtered_tasks])
+
+    @browsing
     def test_todos_listing(self, browser):
         self.login(self.workspace_member, browser=browser)
         query_string = '&'.join((
