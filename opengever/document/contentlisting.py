@@ -19,7 +19,7 @@ class DocumentContentListingObject(RealContentListingObject):
 
     @property
     def is_trashed(self):
-        return ITrashed.providedBy(self._realobject)
+        return self._realobject.is_trashed
 
     @property
     def is_removed(self):

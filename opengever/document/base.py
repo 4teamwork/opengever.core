@@ -7,11 +7,13 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IBaseProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
+from opengever.trash.trash import ITrashed
 from plone import api
 from plone.dexterity.content import Item
 from Products.CMFCore.utils import getToolByName
@@ -106,6 +108,10 @@ class BaseDocumentMixin(object):
     @property
     def is_mail(self):
         return False
+
+    @property
+    def is_trashed(self):
+        return ITrashed.providedBy(self)
 
     def is_inside_a_proposal(self):
         parent = aq_parent(aq_inner(self))
@@ -211,6 +217,24 @@ class BaseDocumentMixin(object):
 
         return self.get_file().contentType.lower() in black_listed_types
 
+    def containing_dossier_title(self):
+        """"Returns the title of the main dossier which the document is placed in.
+        """
+        dossier = get_main_dossier(self)
+        if dossier:
+            return dossier.title
+
+    def containing_subdossier_title(self):
+        """"Returns the title of the subdossier which the document is placed in.
+        Returns None when the object is placed directly inside a main dossier.
+        """
+        dossier = self.get_parent_dossier()
+
+        # Return None if the dossier is a main dossier
+        if not IDossierMarker.providedBy(aq_parent(dossier)):
+            return None
+
+        return dossier.title
 
 def mimetype_lookup(mtr, contenttype):
     """Reimplemented as case insensitive from Products.MimetypesRegistry."""
