@@ -1,10 +1,11 @@
+from opengever.base.browser.reporting_view import BaseReporterView
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import value
+from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.dossier import _
 from Products.CMFCore.utils import getToolByName
-from opengever.base.browser.reporting_view import BaseReporterView
 from Products.statusmessages.interfaces import IStatusMessage
 
 
@@ -60,6 +61,10 @@ class DossierReporter(BaseReporterView):
                 'orig_template', self.context.absolute_url())
 
             return self.request.RESPONSE.redirect(return_temp)
+
+        # XXX: Also make pseudo-relative paths work
+        # (as sent by the new gever-ui)
+        rewrite_path_list_to_absolute_paths(self.request)
 
         dossiers = self.get_selected_dossiers()
 

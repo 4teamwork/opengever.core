@@ -255,4 +255,12 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <browser:page
+      for="*"
+      name="zip_selected"
+      class=".zipexport.GEVERZipSelectedExportView"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>

@@ -3,6 +3,7 @@ from opengever.base.reporter import readable_author
 from opengever.base.reporter import readable_date
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
+from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.document import _
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -68,6 +69,10 @@ class DocumentReporter(BaseReporterView):
                 'orig_template', self.context.absolute_url())
 
             return self.request.RESPONSE.redirect(return_temp)
+
+        # XXX: Also make pseudo-relative paths work
+        # (as sent by the new gever-ui)
+        rewrite_path_list_to_absolute_paths(self.request)
 
         documents = self.get_selected_documents()
         reporter = XLSReporter(self.request, self.columns(), documents)
