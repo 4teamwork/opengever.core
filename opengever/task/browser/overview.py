@@ -7,7 +7,6 @@ from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import REMINDER_TYPE_REGISTRY
-from opengever.task.reminder.model import REMINDER_TYPES_BLACKLISTED_FROM_UI
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -236,8 +235,12 @@ class Overview(BrowserView, GeverTabMixin):
             # be able to use the vocabulary as well, instead of directly
             # accessing REMINDER_TYPE_REGISTRY
 
-            if option in REMINDER_TYPES_BLACKLISTED_FROM_UI:
-                continue
+            selected = False
+            params = {}
+
+            if reminder_option and reminder_option.option_type == option.option_type:
+                selected = True
+                params = reminder_option.serialize(json_compat=True).get('params')
 
             selected = option.option_type == reminder_option.option_type if \
                 reminder_option else None
@@ -248,6 +251,7 @@ class Overview(BrowserView, GeverTabMixin):
                     option.option_title, context=self.request),
                 'selected': selected,
                 'showSpinner': False,
+                'params': params
             })
 
         return options

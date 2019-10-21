@@ -200,18 +200,11 @@ REMINDER_TYPE_REGISTRY = {
     klass.option_type: klass for klass in REMINDER_TYPES
 }
 
-# This type requires a special widget and would therefore break the UI
-# until that widget is implemented. Remove this blacklist to have it show up.
-REMINDER_TYPES_BLACKLISTED_FROM_UI = (ReminderOnDate, )
-
 
 def get_task_reminder_options_vocabulary():
     terms = []
     options = REMINDER_TYPE_REGISTRY.values()
     for option in sorted(options, key=lambda x: x.sort_order):
-        if option in REMINDER_TYPES_BLACKLISTED_FROM_UI:
-            continue
-
         terms.append(SimpleTerm(
             option.option_type, title=option.option_title))
 

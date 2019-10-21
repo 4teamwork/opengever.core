@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-10-06 22:54+0000\n"
+"POT-Creation-Date: 2019-10-17 19:56+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -701,6 +701,11 @@ msgstr "Etat"
 msgid "label_workflow_state_byline"
 msgstr "Etat"
 
+#. Default: "Choose remind date"
+#: ./opengever/task/response.py
+msgid "lable_reminder_choose_date"
+msgstr ""
+
 #. Default: "Deadline successfully changed."
 #: ./opengever/task/browser/modify_deadline.py
 msgid "msg_deadline_change_successfull"
@@ -758,6 +763,11 @@ msgstr "Mes tâches"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "new_dossier"
 msgstr "Nouveau Dossier"
+
+#. Default: "Please choose a remind date"
+#: ./opengever/task/response.py
+msgid "no_remind_date_error"
+msgstr ""
 
 #. Default: "No reminder"
 #: ./opengever/task/browser/overview.py

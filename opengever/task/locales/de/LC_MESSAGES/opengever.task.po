@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-10-06 22:54+0000\n"
+"POT-Creation-Date: 2019-10-17 19:56+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -699,6 +699,11 @@ msgstr "Status"
 msgid "label_workflow_state_byline"
 msgstr "Status"
 
+#. Default: "Choose remind date"
+#: ./opengever/task/response.py
+msgid "lable_reminder_choose_date"
+msgstr "Wählen Sie ein Erinnerungdatum aus"
+
 #. Default: "Deadline successfully changed."
 #: ./opengever/task/browser/modify_deadline.py
 msgid "msg_deadline_change_successfull"
@@ -756,6 +761,11 @@ msgstr "Meine Aufgaben"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "new_dossier"
 msgstr "neues Dossier"
+
+#. Default: "Please choose a remind date"
+#: ./opengever/task/response.py
+msgid "no_remind_date_error"
+msgstr "Bitte wählen Sie ein Erinnerungsdatum aus."
 
 #. Default: "No reminder"
 #: ./opengever/task/browser/overview.py
