@@ -8,6 +8,7 @@ Changelog
 - Allow text field in task deadline modification through API. [njohner]
 - Make `issuer` filterable in the @lising endpoint. [elioschmutz]
 - Implement absolute reminder dates in the reminder-selector. [elioschmutz]
+- Fix mail deserialization for mails uploaded through tus-upload. [njohner]
 - Downpin ftw.recipe.solr to 1.2.1 to have log4j configuration valid for solr < 7.4.X [deiferni]
 - Use plone.restapi summary serialization in the recently-touched endpoint. [phgross]
 - document_report: Add support for pseudo-relative paths. [lgraf]
