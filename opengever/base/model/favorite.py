@@ -58,6 +58,7 @@ class Favorite(Base):
             'portal_type': self.portal_type,
             'favorite_id': self.favorite_id,
             'oguid': self.oguid.id,
+            'uid': self.plone_uid,
             'title': self.title,
             'icon_class': self.icon_class,
             'target_url': self.get_target_url(),

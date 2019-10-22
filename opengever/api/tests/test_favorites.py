@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
+from plone.uuid.interfaces import IUUID
 import json
 
 
@@ -34,6 +35,7 @@ class TestFavoritesGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+              u'uid': IUUID(self.dossier),
               u'portal_type': u'opengever.dossier.businesscasedossier',
               u'favorite_id': 1,
               u'position': 23,
@@ -44,6 +46,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
               u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
              {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/2',
+              u'uid': IUUID(self.document),
               u'portal_type': u'opengever.document.document',
               u'favorite_id': 2,
               u'position': 21,
@@ -71,6 +74,7 @@ class TestFavoritesGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
             {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
              u'position': 23,
@@ -116,7 +120,7 @@ class TestFavoritesGet(IntegrationTestCase):
 class TestFavoritesPost(IntegrationTestCase):
 
     @browsing
-    def test_adding_favorite(self, browser):
+    def test_adding_favorite_by_oguid(self, browser):
         self.login(self.regular_user, browser=browser)
 
         oguid = Oguid.for_object(self.document)
@@ -139,6 +143,7 @@ class TestFavoritesPost(IntegrationTestCase):
 
         self.assertEquals(
             {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
              u'oguid': u'plone:1014073300',
@@ -155,6 +160,42 @@ class TestFavoritesPost(IntegrationTestCase):
         self.assertEquals(oguid, fav.oguid)
 
     @browsing
+    def test_adding_favorite_by_uid(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@favorites/{}'.format(
+            self.portal.absolute_url(), self.regular_user.getId())
+        data = json.dumps({'uid': IUUID(self.document)})
+        browser.open(url, data=data, method='POST',
+                     headers={'Accept': 'application/json',
+                              'Content-Type': 'application/json'})
+
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual(u'http://nohost/plone/@favorites/kathi.barfuss/1',
+                         browser.headers.get('location'))
+
+        browser.open(browser.headers.get('location'), method='GET',
+                     headers={'Accept': 'application/json',
+                              'Content-Type': 'application/json'})
+        self.assertEquals(
+            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'uid': IUUID(self.document),
+             u'portal_type': u'opengever.document.document',
+             u'favorite_id': 1,
+             u'oguid': Oguid.for_object(self.document),
+             u'position': 0,
+             u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014073300',
+             u'tooltip_url': u'http://nohost/plone/resolve_oguid/plone:1014073300/tooltip',
+             u'icon_class': u'icon-docx',
+             u'admin_unit': u'Hauptmandant',
+             u'title': u'Vertr\xe4gsentwurf'}, browser.json)
+
+        self.assertEqual(1, Favorite.query.count())
+        fav = Favorite.query.first()
+        self.assertEquals(self.regular_user.getId(), fav.userid)
+        self.assertEquals(Oguid.for_object(self.document), fav.oguid)
+
+    @browsing
     def test_raises_with_missing_oguid(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -167,7 +208,7 @@ class TestFavoritesPost(IntegrationTestCase):
                                   'Content-Type': 'application/json'})
 
         self.assertEquals(
-            {u'message': u'Missing parameter oguid', u'type': u'BadRequest'},
+            {u'message': u'Missing parameter oguid or uid', u'type': u'BadRequest'},
             browser.json)
 
     @browsing
@@ -209,6 +250,7 @@ class TestFavoritesPost(IntegrationTestCase):
 
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@favorites/nicole.kohler/1',
+             u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'admin_unit': u'Hauptmandant',
              u'favorite_id': 1,
@@ -458,6 +500,7 @@ class TestFavoritesPatch(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
              u'title': u'\xdcbersicht OGIPs',

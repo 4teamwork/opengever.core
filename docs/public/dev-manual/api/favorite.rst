@@ -54,7 +54,7 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
 
 Favorit hinzufügen:
 -------------------
-Ein Favorit für ein beliebiges Objekt kann mittels POST Request hinzugefügt werden. Dabei wird die Oguid des Objektes im Paramter ``oguid`` erwartet.
+Ein Favorit für ein beliebiges Objekt kann mittels POST Request hinzugefügt werden. Dabei wird die Oguid als ``oguid`` Parameter oder die UID als ``uid`` Parameter erwartet.
 
 
 **Beispiel-Request**:
