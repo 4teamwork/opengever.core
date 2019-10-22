@@ -1,15 +1,22 @@
 # -*- coding: utf-8 -*-
+from opengever.base.interfaces import IDuringContentCreation
 from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import iterSchemataForType
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.sources.get import SourcesGet
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IIterableSource
 from zope.schema.interfaces import ISource
 
 
 class GEVERSourcesGet(SourcesGet):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        super(GEVERSourcesGet, self).__init__(context, request)
 
     def publishTraverse(self, request, name):
         # Treat any path segments after /@sources as parameters
@@ -41,6 +48,7 @@ class GEVERSourcesGet(SourcesGet):
             portal_type = self.params[0]
             fieldname = self.params[1]
             schemata = iterSchemataForType(portal_type)
+            alsoProvides(self.request, IDuringContentCreation)
 
         field = get_field_by_name(fieldname, schemata)
         if field is None:

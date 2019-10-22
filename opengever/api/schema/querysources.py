@@ -1,14 +1,21 @@
 from opengever.api.schema.sources import get_field_by_name
 from opengever.api.schema.sources import GEVERSourcesGet
+from opengever.base.interfaces import IDuringContentCreation
 from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import iterSchemataForType
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.interfaces import ISerializeToJson
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 
 
 class GEVERQuerySourcesGet(GEVERSourcesGet):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        super(GEVERQuerySourcesGet, self).__init__(context, request)
 
     def reply(self):
         if len(self.params) not in (1, 2):
@@ -35,6 +42,7 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
             portal_type = self.params[0]
             fieldname = self.params[1]
             schemata = iterSchemataForType(portal_type)
+            alsoProvides(self.request, IDuringContentCreation)
 
         field = get_field_by_name(fieldname, schemata)
         if field is None:

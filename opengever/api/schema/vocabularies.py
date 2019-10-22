@@ -1,13 +1,20 @@
+from opengever.base.interfaces import IDuringContentCreation
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.services.vocabularies.get import VocabulariesGet
 from zope.component import ComponentLookupError
 from zope.component import getMultiAdapter
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
+from zope.interface import alsoProvides
 from zope.schema.interfaces import IVocabularyFactory
-from plone.restapi.services.vocabularies.get import VocabulariesGet
 
 
 class GEVERVocabulariesGet(VocabulariesGet):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        super(GEVERVocabulariesGet, self).__init__(context, request)
 
     def reply(self):
         if len(self.params) == 0:
@@ -33,6 +40,7 @@ class GEVERVocabulariesGet(VocabulariesGet):
             # - first parameter is the portal_type, not needed here
             self.intent = 'add'
             vocab_name = self.params[1]
+            alsoProvides(self.request, IDuringContentCreation)
         else:
             return self._error(
                 400, "Bad Request",
