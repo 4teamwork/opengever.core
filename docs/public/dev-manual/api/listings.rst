@@ -98,6 +98,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``title``: Titel
 - ``type``: Inhaltstyp
 - ``@type``: Inhaltstyp
+- ``UID``: UID des Objektes
 
 Je nach Auflistungstyp und Inhalt sind bestimmte Felder nicht verfügbar. In diesem
 Fall wird der Wert ``none`` zurückgegeben. So haben Dossiers bspw. keinen Dateinamen,
@@ -194,6 +195,8 @@ siehe Tabelle:
     |``type``                  |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+
     |``@type``                 |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+
+    |``UID``                   |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+
 
 
