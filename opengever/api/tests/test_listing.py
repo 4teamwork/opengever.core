@@ -28,6 +28,7 @@ class TestListingEndpoint(IntegrationTestCase):
             'columns=review_state',
             'columns=responsible_fullname',
             'columns=relative_path',
+            'columns=UID',
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
@@ -37,6 +38,7 @@ class TestListingEndpoint(IntegrationTestCase):
             {u'review_state': u'dossier-state-active',
              u'responsible_fullname': u'Ziegler Robert',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+             u'UID': IUUID(self.dossier),
              u'reference': u'Client1 1.1 / 1',
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
@@ -54,6 +56,7 @@ class TestListingEndpoint(IntegrationTestCase):
             'columns=containing_dossier',
             'columns=bumblebee_checksum',
             'columns=relative_path',
+            'columns=UID',
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
@@ -63,6 +66,7 @@ class TestListingEndpoint(IntegrationTestCase):
              u'title': u'Vertr\xe4gsentwurf',
              u'document_author': u'test_user_1_',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
+             u'UID': IUUID(self.document),
              u'modified': u'2016-08-31T14:07:33+00:00',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'bumblebee_checksum': DOCX_CHECKSUM,
@@ -323,6 +327,7 @@ class TestListingEndpoint(IntegrationTestCase):
             'columns=completed',
             'columns=responsible_fullname',
             'columns=issuer_fullname',
+            'columns=UID',
             'columns=created',
             'columns=is_subtask',
         ))
@@ -344,6 +349,7 @@ class TestListingEndpoint(IntegrationTestCase):
              u'review_state_label': u'In Arbeit',
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
+             u'UID': IUUID(self.task),
              u'is_subtask': False},
             item)
 

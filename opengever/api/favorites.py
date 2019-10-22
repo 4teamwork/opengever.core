@@ -67,6 +67,13 @@ class FavoritesPost(Service):
     {
         "oguid": "fd:68398212"
     }
+
+    or
+
+    POST /@favorites/peter.mueller HTTP/1.1
+    {
+        "UID": "6683982128398212"
+    }
     """
 
     implements(IPublishTraverse)
@@ -99,15 +106,24 @@ class FavoritesPost(Service):
         return favorite.serialize(api.portal.get().absolute_url())
 
     def lookup_object(dataself, data):
-        oguid = Oguid.parse(data.get('oguid'))
-        obj = oguid.resolve_object()
+        if data.get('oguid'):
+            oguid = Oguid.parse(data.get('oguid'))
+            obj = oguid.resolve_object()
+        elif data.get('uid'):
+            uid = data.get('uid')
+            catalog = api.portal.get_tool('portal_catalog')
+            brains = catalog(UID=uid)
+            if brains:
+                obj = brains[0].getObject()
+
         if not obj:
-            raise BadRequest('Invalid oguid, could not be resolved.')
+            raise BadRequest('Invalid oguid/uid object could not be resolved.')
+
         return obj
 
     def validate_data(self, data):
-        if not data.get('oguid'):
-            raise BadRequest('Missing parameter oguid')
+        if not data.get('oguid') and not data.get('uid'):
+            raise BadRequest('Missing parameter oguid or uid')
         return data
 
     def validate_user(self, userid):

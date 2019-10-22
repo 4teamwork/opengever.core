@@ -153,6 +153,7 @@ FIELDS = {
     'title': ('Title', translated_title, 'sortable_title'),
     'type': ('portal_type', 'PortalType', 'portal_type'),
     '@type': ('portal_type', 'PortalType', 'portal_type'),
+    'UID': ('UID', 'UID', 'UID'),
 }
 
 DATE_INDEXES = set([

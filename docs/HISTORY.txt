@@ -4,6 +4,10 @@ Changelog
 2019.4.0rc4 (unreleased)
 ------------------------
 
+- Add UID to listing endpoints supported fields. [phgross]
+- Allow adding favorites by UID parameter via favorites endpoint. [phgross]
+- Add UID to listing endpoints supported fields. [phgross]
+- Allow adding favorites with UID parameter via favorites endpoint. [phgross]
 - Bump ftw.keywordwidget version to fix missing titles on terms. [njohner]
 - Allow text field in task deadline modification through API. [njohner]
 - Make `issuer` filterable in the @lising endpoint. [elioschmutz]
