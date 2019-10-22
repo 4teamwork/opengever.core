@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.4.0rc4 (unreleased)
+2019.4.0rc4 (2019-10-22)
 ------------------------
 
 - Add UID to listing endpoints supported fields. [phgross]
