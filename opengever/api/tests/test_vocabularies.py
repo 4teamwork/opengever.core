@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.base.behaviors.classification import IClassification
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -159,3 +160,172 @@ class TestNonSensitiveVocabularies(IntegrationTestCase):
     @browsing
     def test_all_non_sensitive_vocabularies_are_accessable_by_a_contributor(self, browser):
         self.assert_permission_for_non_sensitive_vocabulaires(browser, 'Contributor')
+
+
+class TestGetVocabularies(IntegrationTestCase):
+
+    @browsing
+    def test_get_vocabulary_for_edit(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.empty_dossier.absolute_url() + '/@vocabularies/opengever.document.document_types'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(8, response.get('items_total'))
+        expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
+                           u'question', u'regulations', u'report', u'request']
+        self.assertItemsEqual(expected_tokens,
+                              [item['token'] for item in response.get('items')])
+
+    @browsing
+    def test_get_vocabulary_for_add(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.empty_dossier.absolute_url() + '/@vocabularies/opengever.document.document/opengever.document.document_types'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(8, response.get('items_total'))
+        expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
+                           u'question', u'regulations', u'report', u'request']
+        self.assertItemsEqual(expected_tokens,
+                              [item['token'] for item in response.get('items')])
+
+    @browsing
+    def test_get_restricted_vocabulary_for_add(self, browser):
+        self.login(self.regular_user, browser)
+
+        url = self.leaf_repofolder.absolute_url() + '/@vocabularies/opengever.dossier.businesscasedossier/classification_classification_vocabulary'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        field = IClassification['classification']
+        field.set(field.interface(self.leaf_repofolder), u'confidential')
+        restricted_response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(url, restricted_response.get('@id'))
+        self.assertTrue(
+            response.get('items_total') > restricted_response.get('items_total'))
+        self.assertIn(
+            u'unprotected',
+            [item.get('token') for item in response.get('items')]
+            )
+        self.assertNotIn(
+            u'unprotected',
+            [item.get('token') for item in restricted_response.get('items')]
+            )
+
+    @browsing
+    def test_get_restricted_vocabulary_for_edit(self, browser):
+        self.login(self.regular_user, browser)
+
+        url = self.dossier.absolute_url() + '/@vocabularies/classification_classification_vocabulary'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        field = IClassification['classification']
+        field.set(field.interface(self.leaf_repofolder), u'confidential')
+        restricted_response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(url, restricted_response.get('@id'))
+        self.assertTrue(
+            response.get('items_total') > restricted_response.get('items_total'))
+        self.assertIn(
+            u'unprotected',
+            [item.get('token') for item in response.get('items')]
+            )
+        self.assertNotIn(
+            u'unprotected',
+            [item.get('token') for item in restricted_response.get('items')]
+            )
+
+
+class TestGetQuerySources(IntegrationTestCase):
+
+    @browsing
+    def test_get_querysource_for_edit(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.empty_dossier.absolute_url() + '/@querysources/responsible?query=nicole'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(1, response.get('items_total'))
+        self.assertItemsEqual([u'nicole.kohler'],
+                              [item['token'] for item in response.get('items')])
+
+    @browsing
+    def test_get_vocabulary_for_add(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.leaf_repofolder.absolute_url() + '/@querysources/opengever.dossier.businesscasedossier/responsible?query=nicole'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(1, response.get('items_total'))
+        self.assertItemsEqual([u'nicole.kohler'],
+                              [item['token'] for item in response.get('items')])
+
+
+class TestGetSources(IntegrationTestCase):
+
+    @browsing
+    def test_get_source_for_edit(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.document.absolute_url() + '/@sources/document_type'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(8, response.get('items_total'))
+        expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
+                           u'question', u'regulations', u'report', u'request']
+        self.assertItemsEqual(expected_tokens,
+                              [item['token'] for item in response.get('items')])
+
+    @browsing
+    def test_get_vocabulary_for_add(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.empty_dossier.absolute_url() + '/@sources/opengever.document.document/document_type'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(8, response.get('items_total'))
+        expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
+                           u'question', u'regulations', u'report', u'request']
+        self.assertItemsEqual(expected_tokens,
+                              [item['token'] for item in response.get('items')])
