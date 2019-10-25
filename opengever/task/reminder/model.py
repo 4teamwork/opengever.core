@@ -3,6 +3,8 @@ from datetime import datetime
 from datetime import timedelta
 from opengever.task import _
 from plone.restapi.serializer.converters import json_compatible
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import Interface
 from zope.schema import Date
 from zope.schema import getFields
@@ -78,6 +80,7 @@ class Reminder(object):
         """
         data = {}
         data['option_type'] = self.option_type
+        data['option_title'] = translate(self.option_title, context=getRequest())
         data['params'] = deepcopy(self.params)
 
         if json_compat:
