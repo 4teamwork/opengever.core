@@ -293,6 +293,21 @@ class TestGetQuerySources(IntegrationTestCase):
         self.assertItemsEqual([u'nicole.kohler'],
                               [item['token'] for item in response.get('items')])
 
+    @browsing
+    def test_get_keywords_querysource_for_edit(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.empty_dossier.absolute_url() + '/@querysources/keywords?query=secret'
+        response = browser.open(
+            url,
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(1, response.get('items_total'))
+        self.assertItemsEqual([u'secret'],
+                              [item['token'] for item in response.get('items')])
+
 
 class TestGetSources(IntegrationTestCase):
 
