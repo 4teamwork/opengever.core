@@ -9,8 +9,6 @@ from zope.schema import getFields
 from zope.schema import ValidationError
 from zope.schema.interfaces import RequiredMissing
 from zope.schema.interfaces import WrongType
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
 
 
 class UnknownField(ValidationError):
@@ -199,13 +197,3 @@ REMINDER_TYPES = (
 REMINDER_TYPE_REGISTRY = {
     klass.option_type: klass for klass in REMINDER_TYPES
 }
-
-
-def get_task_reminder_options_vocabulary():
-    terms = []
-    options = REMINDER_TYPE_REGISTRY.values()
-    for option in sorted(options, key=lambda x: x.sort_order):
-        terms.append(SimpleTerm(
-            option.option_type, title=option.option_title))
-
-    return SimpleVocabulary(terms)
