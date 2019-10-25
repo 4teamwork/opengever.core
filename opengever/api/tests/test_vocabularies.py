@@ -4,11 +4,6 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 
 
-def http_headers():
-    return {'Accept': 'application/json',
-            'Content-Type': 'application/json'}
-
-
 NON_SENSITIVE_VOCABUALRIES = [
     'Behaviors',
     'classification_classification_vocabulary',
@@ -120,7 +115,7 @@ class TestNonSensitiveVocabularies(IntegrationTestCase):
         response = browser.open(
             self.portal.absolute_url() + '/@vocabularies',
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertItemsEqual(
@@ -142,7 +137,7 @@ class TestNonSensitiveVocabularies(IntegrationTestCase):
             browser.open(
                 self.portal.absolute_url() + '/@vocabularies/{}'.format(vocabulary),
                 method='GET',
-                headers=http_headers())
+                headers=self.api_headers)
 
             if browser.status_code != 200:
                 not_accessable.append((vocabulary, browser.status_code))
@@ -171,7 +166,7 @@ class TestGetVocabularies(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
         self.assertEqual(url, response.get('@id'))
         self.assertEqual(8, response.get('items_total'))
@@ -187,7 +182,7 @@ class TestGetVocabularies(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
         self.assertEqual(url, response.get('@id'))
         self.assertEqual(8, response.get('items_total'))
@@ -204,7 +199,7 @@ class TestGetVocabularies(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         field = IClassification['classification']
@@ -212,7 +207,7 @@ class TestGetVocabularies(IntegrationTestCase):
         restricted_response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertEqual(url, response.get('@id'))
@@ -236,7 +231,7 @@ class TestGetVocabularies(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         field = IClassification['classification']
@@ -244,7 +239,7 @@ class TestGetVocabularies(IntegrationTestCase):
         restricted_response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertEqual(url, response.get('@id'))
@@ -270,7 +265,7 @@ class TestGetQuerySources(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertEqual(url, response.get('@id'))
@@ -285,7 +280,7 @@ class TestGetQuerySources(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertEqual(url, response.get('@id'))
@@ -300,7 +295,7 @@ class TestGetQuerySources(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertEqual(url, response.get('@id'))
@@ -318,7 +313,7 @@ class TestGetSources(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertEqual(url, response.get('@id'))
@@ -335,7 +330,7 @@ class TestGetSources(IntegrationTestCase):
         response = browser.open(
             url,
             method='GET',
-            headers=http_headers(),
+            headers=self.api_headers,
         ).json
 
         self.assertEqual(url, response.get('@id'))
