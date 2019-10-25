@@ -59,7 +59,11 @@ class GEVERSourcesGet(SourcesGet):
 
         bound_field = field.bind(self.context)
 
-        source = bound_field.source
+        if hasattr(bound_field, "value_type"):
+            source = bound_field.value_type.source
+        else:
+            source = bound_field.source
+
         if not ISource.providedBy(source):
             return self._error(
                 404, "Not Found",
