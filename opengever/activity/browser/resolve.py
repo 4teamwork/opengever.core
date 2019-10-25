@@ -8,6 +8,8 @@ from zExceptions import Unauthorized
 
 class ResolveNotificationView(ResolveOGUIDView):
 
+    key_to_strip = 'notification_id'
+
     def __call__(self):
         notification_id = self.request.get('notification_id', '')
         center = notification_center()
@@ -48,4 +50,4 @@ class ResolveNotificationView(ResolveOGUIDView):
             admin_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)
             url = ResolveOGUIDView.url_for(oguid, admin_unit)
 
-        return self.request.RESPONSE.redirect(url)
+        return self.request.RESPONSE.redirect(self.preserve_query_string(url))
