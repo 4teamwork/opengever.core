@@ -6,6 +6,7 @@ from ftw.testing import freeze
 from OFS.CopySupport import CopyError
 from opengever.testing import IntegrationTestCase
 from plone import api
+from tzlocal import get_localzone
 import pytz
 
 
@@ -13,8 +14,6 @@ class TestCopyDocuments(IntegrationTestCase):
 
     COPY_TIME = datetime(2018, 4, 28, 0, 0, tzinfo=pytz.UTC)
     PASTE_TIME = datetime(2018, 4, 30, 0, 0, tzinfo=pytz.UTC)
-    ZOPE_PASTE_TIME = DateTime(PASTE_TIME).toZone(DateTime().localZone())
-    ZOPE_PASTE_TIME_STR = '2018-04-30T02:00:00+02:00'
 
     def test_copying_a_document_prefixes_title_with_copy_of(self):
         self.login(self.regular_user)
@@ -65,6 +64,8 @@ class TestCopyDocuments(IntegrationTestCase):
             browser.open(self.empty_dossier, view="copy_items", data=data)
 
         with freeze(self.PASTE_TIME):
+            ZOPE_PASTE_TIME = DateTime()
+
             with self.observe_children(self.empty_dossier) as children:
                 browser.css('#contentActionMenus a#paste').first.click()
 
@@ -73,6 +74,8 @@ class TestCopyDocuments(IntegrationTestCase):
 
         original_metadata = self.get_catalog_metadata(self.subdocument)
         copy_metadata = self.get_catalog_metadata(copy)
+
+        ZOPE_PASTE_TIME_STR = ZOPE_PASTE_TIME.toZone(DateTime().localZone()).ISO()
 
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {'UID': copy.UID(),
@@ -85,12 +88,12 @@ class TestCopyDocuments(IntegrationTestCase):
                              'listCreators': (self.regular_user.id,),
                              'Creator': self.regular_user.id,
                              # dates
-                             'created': self.ZOPE_PASTE_TIME,
-                             'CreationDate': self.ZOPE_PASTE_TIME_STR,
+                             'created': ZOPE_PASTE_TIME,
+                             'CreationDate': ZOPE_PASTE_TIME_STR,
                              'start': self.PASTE_TIME.date(),
-                             'modified': self.ZOPE_PASTE_TIME,
-                             'ModificationDate': self.ZOPE_PASTE_TIME_STR,
-                             'Date': self.ZOPE_PASTE_TIME_STR,
+                             'modified': ZOPE_PASTE_TIME,
+                             'ModificationDate': ZOPE_PASTE_TIME_STR,
+                             'Date': ZOPE_PASTE_TIME_STR,
                              'changed': self.PASTE_TIME,
                              # containing dossier and subdossier
                              'containing_dossier': self.empty_dossier.Title(),
