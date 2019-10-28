@@ -358,8 +358,3 @@ class IGeverUI(Interface):
         title=u'Enable new GEVER UI',
         description=u'Whether new GEVER UI is enabled',
         default=False)
-
-    path = schema.URI(
-        title=u"Base URL of the GEVER UI",
-        description=u"Used as base URL to reach an object on the GEVER UI",
-        default="http://localhost:8081/#/")

@@ -13,4 +13,8 @@
       <property name="visible">True</property>
     </object>
   </object>
+
+  <object name="object_buttons" meta_type="CMF Action Category">
+    <object name="gever_ui" meta_type="CMF Action" remove="True"></object>
+  </object>
 </object>
