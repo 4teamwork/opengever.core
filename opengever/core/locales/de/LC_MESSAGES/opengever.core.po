@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-07-17 08:11+0000\n"
+"POT-Creation-Date: 2019-10-28 09:44+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -68,6 +68,7 @@ msgstr "Kontaktordner"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170718083059_add_copy_action_for_single_documents/actions.xml
+#: ./opengever/core/upgrades/20190823113658_do_not_show_copy_action_for_checked_out_documents/actions.xml
 msgid "Copy Item"
 msgstr "Kopieren"
 
@@ -260,6 +261,11 @@ msgstr "Zusätzliche Beilagen einreichen"
 #: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
 msgid "Submitted Proposal"
 msgstr "Eingereichter Antrag"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20191028103858_add_ui_switcher/actions.xml
+msgid "Switch UI"
+msgstr "Zur neuen Ansicht wechseln"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180809152739_add_gever_ui_action/actions.xml
