@@ -38,3 +38,13 @@ $(document).delegate('body', 'tabbedview.unknownresponse', function(event, overv
     return false;
   }
 });
+
+
+/**
+ * Gever UI-Switcher. This function will be called by a user-action to switch
+ * to the new gever-ui.
+ */
+function switchUI(){
+  createCookie('geverui', '1');
+  window.location.reload(true);
+}
