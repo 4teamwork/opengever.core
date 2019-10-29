@@ -10,6 +10,7 @@ Changelog
 2019.4.0rc4 (2019-10-22)
 ------------------------
 
+- Preserve query string in the resolve notification view. [phgross]
 - Add UID to listing endpoints supported fields. [phgross]
 - Allow adding favorites by UID parameter via favorites endpoint. [phgross]
 - Add UID to listing endpoints supported fields. [phgross]

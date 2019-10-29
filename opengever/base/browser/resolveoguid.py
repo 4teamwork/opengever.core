@@ -27,6 +27,7 @@ class ResolveOGUIDView(BrowserView):
 
     oguid_str = None
     view_name = None
+    key_to_strip = 'oguid'
 
     def publishTraverse(self, request, name):
         if self.oguid_str:
@@ -59,12 +60,13 @@ class ResolveOGUIDView(BrowserView):
         return '?'.join((url, qs))
 
     @classmethod
-    def _strip_oguid(cls, qs):
-        """Given a query string in the form 'key=value&foo=bar', remove any
-        'oguid' parameter from it if present.
+    def _strip_parameter(cls, qs):
+        """Given a query string in the form 'key=value&foo=bar', remove the
+        oguid parameter from it if present.
         """
         # Preserve order as well as multivalued query string params
-        qs_params = qs_params = [(k, v) for k, v in parse_qsl(qs) if k != 'oguid']
+        qs_params = qs_params = [
+            (k, v) for k, v in parse_qsl(qs) if k != cls.key_to_strip]
         return urlencode(qs_params)
 
     def _is_on_different_admin_unit(self, admin_unit_id):
@@ -86,13 +88,15 @@ class ResolveOGUIDView(BrowserView):
             if self.view_name:
                 url = '/'.join((url, self.view_name))
 
-        # Preserve query string
+        return self.request.RESPONSE.redirect(self.preserve_query_string(url))
+
+    def preserve_query_string(self, url):
         qs = self.request.get('QUERY_STRING')
-        qs = self._strip_oguid(qs)
+        qs = self._strip_parameter(qs)
         if qs:
             url = self._extend_with_querystring(url, qs)
 
-        return self.request.RESPONSE.redirect(url)
+        return url
 
     def _get_object(self, iid):
         intids = getUtility(IIntIds)

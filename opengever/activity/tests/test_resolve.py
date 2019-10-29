@@ -87,3 +87,13 @@ class TestResolveNotificationView(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.portal, view='resolve_notification', data={'notification_id': self.notification.notification_id})
         self.assertEquals(self.task.absolute_url(), browser.url)
+
+    @browsing
+    def test_preserves_query_string_in_remote_url(self, browser):
+        self.login(self.regular_user, browser)
+        url = '{}/resolve_notification?notification_id={}&foo=bar'.format(
+            self.portal.absolute_url(), self.notification.notification_id)
+        browser.open(url)
+
+        self.assertEquals('{}?foo=bar'.format(self.task.absolute_url()),
+                          browser.url)

@@ -12,6 +12,7 @@ from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from requests_toolbelt.utils import formdata
+from tzlocal import get_localzone
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import pytz
@@ -115,8 +116,6 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
 class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper):
 
     MOVE_TIME = datetime(2018, 4, 30, 0, 0, tzinfo=pytz.UTC)
-    ZOPE_MOVE_TIME = DateTime(MOVE_TIME).toZone(DateTime().localZone())
-    ZOPE_MOVE_TIME_STR = '2018-04-30T02:00:00+02:00'
 
     @browsing
     def test_move_document_metadata_update(self, browser):
@@ -126,6 +125,8 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         subdocument_metadata = self.get_catalog_metadata(self.subdocument)
 
         with freeze(self.MOVE_TIME):
+            ZOPE_MOVE_TIME = DateTime()
+
             with self.observe_children(self.empty_dossier) as children:
                 self.move_items((self.subdocument, ),
                                 source=self.subdossier,
@@ -135,15 +136,17 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         moved = children['added'].pop()
         moved_metadata = self.get_catalog_metadata(moved)
 
+        ZOPE_MOVE_TIME_STR = ZOPE_MOVE_TIME.toZone(DateTime().localZone()).ISO()
+
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {'UID': moved.UID(),
                              # creator
                              'listCreators': ('robert.ziegler', 'kathi.barfuss'),
                              # dates
                              'start': self.MOVE_TIME.date(),  # acquisition is responsible here
-                             'modified': self.ZOPE_MOVE_TIME,
-                             'ModificationDate': self.ZOPE_MOVE_TIME_STR,
-                             'Date': self.ZOPE_MOVE_TIME_STR,
+                             'modified': ZOPE_MOVE_TIME,
+                             'ModificationDate': ZOPE_MOVE_TIME_STR,
+                             'Date': ZOPE_MOVE_TIME_STR,
                              # containing dossier and subdossier
                              'reference': 'Client1 1.1 / 4 / 22',
                              'containing_dossier': self.empty_dossier.Title(),
