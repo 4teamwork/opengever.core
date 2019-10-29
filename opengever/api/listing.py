@@ -185,6 +185,9 @@ FILTERS = {
     ],
     u'todos': [
         u'object_provides:opengever.workspace.interfaces.IToDo',
+    ],
+    u'proposals': [
+        u'object_provides:opengever.meeting.proposal.IProposal',
     ]
 }
 
