@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc5 (unreleased)
 ------------------------
 
+- Remove catalog support for @listing endpoint. [elioschmutz]
 - Add a user action to switch to the new gever-ui. [elioschmutz]
 
 
