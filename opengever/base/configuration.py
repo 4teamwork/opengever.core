@@ -116,7 +116,6 @@ class GeverSettingsAdpaterV1(object):
         features['ech0147_import'] = api.portal.get_registry_record('ech0147_import_enabled', interface=IECH0147Settings)
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)
         features['gever_ui_enabled'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
-        features['gever_ui_path'] = api.portal.get_registry_record('path', interface=IGeverUI)
         features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
         features['tasks_pdf'] = api.portal.get_registry_record('tasks_pdf_enabled', interface=IDossierResolveProperties)
         features['meetings'] = api.portal.get_registry_record('is_feature_enabled', interface=IMeetingSettings)

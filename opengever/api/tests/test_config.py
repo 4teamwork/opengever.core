@@ -53,7 +53,6 @@ class TestConfig(IntegrationTestCase):
                 u'ech0147_import': False,
                 u'favorites': True,
                 u'gever_ui_enabled': False,
-                u'gever_ui_path': u'http://localhost:8081/#/',
                 u'journal_pdf': False,
                 u'meetings': False,
                 u'officeatwork': False,

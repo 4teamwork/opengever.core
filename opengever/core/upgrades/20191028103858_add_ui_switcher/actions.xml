@@ -1,0 +1,20 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+  <object name="user" meta_type="CMF Action Category">
+    <object name="switch_ui" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Switch UI</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:javascript:switchUI();</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">object/get_setting/gever_ui_enabled</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+
+  <object name="object_buttons" meta_type="CMF Action Category">
+    <object name="gever_ui" meta_type="CMF Action" remove="True"></object>
+  </object>
+</object>

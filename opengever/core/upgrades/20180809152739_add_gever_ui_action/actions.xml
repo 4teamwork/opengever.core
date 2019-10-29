@@ -4,7 +4,7 @@
   <object name="object_buttons" meta_type="CMF Action Category">
 
     <object name="gever_ui" meta_type="CMF Action" i18n:domain="opengever.core">
-      <property name="title" i18n:translate="">Switch to new UI</property>
+      <property name="title">Switch to new UI</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">python:path("object/get_setting/gever_ui_path") + object.virtual_url_path()</property>
       <property name="icon_expr" />
