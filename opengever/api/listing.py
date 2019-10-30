@@ -19,10 +19,9 @@ from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from plone.uuid.interfaces import IUUID
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.ZCatalog.Lazy import LazyMap
-from Products.ZCTextIndex.ParseTree import ParseError
+from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -168,7 +167,7 @@ DATE_INDEXES = set([
     'deadline',
 ])
 
-SOLR_FILTERS = {
+FILTERS = {
     u'dossiers': [
         u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
     ],
@@ -187,28 +186,6 @@ SOLR_FILTERS = {
     u'todos': [
         u'object_provides:opengever.workspace.interfaces.IToDo',
     ]
-}
-
-CATALOG_QUERIES = {
-    'dossiers': {
-        'object_provides': 'opengever.dossier.behaviors.dossier.IDossierMarker',  # noqa
-    },
-    'documents': {
-        'object_provides': 'opengever.document.behaviors.IBaseDocument',
-    },
-    'workspaces': {
-        'object_provides': 'opengever.workspace.interfaces.IWorkspace',
-    },
-    'workspace_folders': {
-        'object_provides': 'opengever.workspace.interfaces.IWorkspaceFolder',
-    },
-    'tasks': {
-        'object_provides': 'opengever.task.task.ITask',
-    },
-    'todos': {
-        'object_provides': 'opengever.workspace.interfaces.IToDo',
-    }
-
 }
 
 
@@ -240,9 +217,24 @@ FACET_TRANSFORMS = {
 }
 
 
+def with_active_solr_only(func):
+    """Raises an error if solr is not activated
+    """
+    def validate(*args, **kwargs):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        if not settings.use_solr:
+            raise BadRequest("Solr is deactivated. The @listing endpoint is "
+                             "only available with an activated solr")
+
+        return func(*args, **kwargs)
+    return validate
+
+
 class Listing(Service):
     """List of content items"""
 
+    @with_active_solr_only
     def reply(self):
         name = self.request.form.get('name')
 
@@ -271,16 +263,9 @@ class Listing(Service):
         except ValueError:
             depth = -1
 
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ISearchSettings)
-        if settings.use_solr:
-            items, facet_counts = self.solr_results(
-                name, term, columns, start, rows, sort_on, sort_order, filters,
-                depth, facets)
-        else:
-            items = self.catalog_results(
-                name, term, start, rows, sort_on, sort_order, filters, depth)
-            facet_counts = {}
+        items, facet_counts = self.results(
+            name, term, columns, start, rows, sort_on, sort_order, filters,
+            depth, facets)
 
         batch = HypermediaBatch(self.request, items)
         res = {}
@@ -309,42 +294,6 @@ class Listing(Service):
 
         return res
 
-    def catalog_results(self, name, term, start, rows, sort_on, sort_order,
-                        filters, depth):
-        if name not in CATALOG_QUERIES:
-            return []
-
-        query = CATALOG_QUERIES[name].copy()
-        query.update({
-            'path': {
-                'query': '/'.join(self.context.getPhysicalPath()),
-                'depth': depth,
-                'exclude_root': 1,
-            },
-            'sort_on': sort_on,
-            'sort_order': sort_order,
-            'sort_limit': start + rows,
-        })
-
-        if term:
-            query['SearchableText'] = term + '*'
-
-        for key, value in filters.items():
-            if key not in FIELDS:
-                continue
-            key = FIELDS[key][0]
-            if key is None:
-                continue
-            if key in DATE_INDEXES:
-                value = self.catalog_daterange_query(value)
-            query[key] = value
-
-        catalog = getToolByName(self.context, 'portal_catalog')
-        try:
-            return catalog(**query)
-        except ParseError:
-            return []
-
     def parse_dates(self, value):
         if isinstance(value, list):
             value = value[0]
@@ -360,15 +309,10 @@ class Listing(Service):
                 return None, None
         return date_from, date_to
 
-    def catalog_daterange_query(self, value):
-        date_from, date_to = self.parse_dates(value)
-        if date_from is not None and date_to is not None:
-            return {'query': [date_from, date_to], 'range': 'minmax'}
+    def results(self, name, term, columns, start, rows, sort_on,
+                sort_order, filters, depth, facets):
 
-    def solr_results(self, name, term, columns, start, rows, sort_on,
-                     sort_order, filters, depth, facets):
-
-        if name not in SOLR_FILTERS:
+        if name not in FILTERS:
             return []
 
         query = '*:*'
@@ -389,7 +333,7 @@ class Listing(Service):
 
         if 'trashed' not in filters:
             filter_queries.append(u'trashed:false')
-        filter_queries.extend(SOLR_FILTERS[name])
+        filter_queries.extend(FILTERS[name])
         filter_queries.append(u'path_parent:{}'.format(escape(
             '/'.join(self.context.getPhysicalPath()))))
 
@@ -405,7 +349,7 @@ class Listing(Service):
             if key is None:
                 continue
             if key in DATE_INDEXES:
-                value = self.solr_daterange_filter(value)
+                value = self.daterange_filter(value)
             elif isinstance(value, list):
                 value = u' OR '.join(value)
             if value is not None:
@@ -419,7 +363,7 @@ class Listing(Service):
                 sort += ' asc'
 
         params = {
-            'fl': self.solr_field_list(columns),
+            'fl': self.field_list(columns),
             'q.op': 'AND',
         }
 
@@ -453,13 +397,13 @@ class Listing(Service):
             return FIELDS[field][0]
         return None
 
-    def solr_field_list(self, columns):
+    def field_list(self, columns):
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
               'bumblebee_checksum']
         fl.extend(filter(None, map(self.field_name_to_index, columns)))
         return fl
 
-    def solr_daterange_filter(self, value):
+    def daterange_filter(self, value):
         date_from, date_to = self.parse_dates(value)
         if date_from is not None and date_to is not None:
             return u'[{} TO {}]'.format(
