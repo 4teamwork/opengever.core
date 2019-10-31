@@ -352,11 +352,16 @@ class Listing(Service):
             if key is None:
                 continue
             if key in DATE_INDEXES:
+                # It seems solr needs date filters unescaped, hence we
+                # only escape the other filter values
                 value = self.daterange_filter(value)
             elif isinstance(value, list):
+                value = map(escape, value)
                 value = u' OR '.join(value)
+            else:
+                value = escape(value)
             if value is not None:
-                filter_queries.append(u'{}:({})'.format(key, value))
+                filter_queries.append(u'{}:({})'.format(escape(key), value))
 
         sort = sort_on
         if sort:

@@ -90,7 +90,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
 
         filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn('review_state:(dossier-state-active)', filters)
+        self.assertIn('review_state:(dossier\\-state\\-active)', filters)
 
     @browsing
     def test_filter_by_multiple_review_states(self, browser):
@@ -105,7 +105,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         filters = self.conn.search.call_args[0][0]['filter']
         self.assertIn(
-            'review_state:(dossier-state-active OR dossier-state-inactive)',
+            'review_state:(dossier\\-state\\-active OR dossier\\-state\\-inactive)',
             filters,
         )
 
