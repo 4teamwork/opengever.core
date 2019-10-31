@@ -92,7 +92,9 @@ class WebActionsStorage(object):
         new_action = PersistentMapping(action_data)
         self._actions[action_id] = new_action
 
-        userid = api.user.get_current().getId()
+        # This is a workaround: the returned userid is of type unicode. As the "owner" field is of type ASCIILine, it is
+        # simply casted to a bytestring.
+        userid = str(api.user.get_current().getId())
         now = datetime.now()
 
         # The `action_id` is stored redundantly here in the actual
