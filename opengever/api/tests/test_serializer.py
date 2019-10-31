@@ -77,6 +77,21 @@ class TestDossierSerializer(IntegrationTestCase):
             browser.json.get(u'relative_path'),
             u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1')
 
+    @browsing
+    def test_dossier_serialization_contains_is_subdossier(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'is_subdossier'),
+            False)
+
+        browser.open(self.subdossier, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'is_subdossier'),
+            True)
+
 
 class TestDocumentSerializer(IntegrationTestCase):
 

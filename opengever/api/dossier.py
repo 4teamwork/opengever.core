@@ -19,5 +19,6 @@ class SerializeDossierToJson(GeverSerializeFolderToJson):
         result[u'reference_number'] = self.context.get_reference_number()
         result[u'email'] = IEmailAddress(self.request).get_email_for_object(
             self.context)
+        result[u'is_subdossier'] = self.context.is_subdossier()
 
         return result
