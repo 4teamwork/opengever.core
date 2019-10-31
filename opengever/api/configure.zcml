@@ -478,4 +478,12 @@
       permission="cmf.SetOwnProperties"
       />
 
+  <plone:service
+      method="GET"
+      name="@globalindex"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".globalindex.GlobalIndexGet"
+      permission="zope2.View"
+      />
+
 </configure>
