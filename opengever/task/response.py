@@ -13,7 +13,6 @@ from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.reminder import Reminder
 from opengever.task.reminder import ReminderOnDate
-from opengever.task.reminder.model import get_task_reminder_options_vocabulary
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
@@ -102,7 +101,7 @@ class ITaskTransitionResponseFormSchema(Interface):
         description=_("help_reminder",
                       default="Set a reminder to get notified based on "
                               "the duedate"),
-        source=get_task_reminder_options_vocabulary(),
+        source="opengever.task.reminder.TaskReminderOptionsVocabulary",
         required=False,
         defaultFactory=get_current_user_reminder
         )

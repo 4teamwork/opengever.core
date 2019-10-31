@@ -268,6 +268,7 @@ class TestTaskReminderTransport(IntegrationTestCase):
         self.assertEqual(
             {self.regular_user.id: {
                 'option_type': ReminderOneDayBefore.option_type,
+                'option_title': 'One day before deadline',
                 'params': {}}},
             collector.extract())
 
@@ -277,6 +278,7 @@ class TestTaskReminderTransport(IntegrationTestCase):
         self.assertEqual(
             {self.secretariat_user.id: {
                 'option_type': ReminderOneDayBefore.option_type,
+                'option_title': 'One day before deadline',
                 'params': {}}},
             collector.extract())
 

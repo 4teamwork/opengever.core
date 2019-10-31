@@ -22,7 +22,10 @@ class TestTaskReminderStorage(IntegrationTestCase):
         self.storage.set(ReminderSameDay())
 
         self.assertEqual({
-            self.regular_user.id: {'option_type': 'same_day', 'params': {}}},
+            self.regular_user.id: {
+                'option_type': 'same_day',
+                'option_title': 'At the morging of the deadline',
+                'params': {}}},
             self.storage._annotation_storage())
 
     def test_storage_set_for_other_user(self):
@@ -31,8 +34,11 @@ class TestTaskReminderStorage(IntegrationTestCase):
                          user_id=self.dossier_responsible.id)
 
         self.assertEqual({
-            self.dossier_responsible.id: {'option_type': 'same_day', 'params': {}}},
-            self.storage._annotation_storage())
+            self.dossier_responsible.id: {
+                'option_type': 'same_day',
+                'option_title': 'At the morging of the deadline',
+                'params': {}}
+        }, self.storage._annotation_storage())
 
     def test_storage_set_rejects_invalid_option_type(self):
         self.login(self.regular_user)

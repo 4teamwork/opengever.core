@@ -28,6 +28,7 @@ Mit einem GET Request kann eine bestehende Erinnerung für den aktuellen Benutze
        {
         "@id": "http://example.onegovgever.ch/ordnungssystem/dossier-20/task-1/@reminder",
         "option_type": "one_day_before",
+        "option_title": "One day before deadline",
         "params": {}
        }
 

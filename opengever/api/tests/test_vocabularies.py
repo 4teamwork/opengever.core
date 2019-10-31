@@ -49,6 +49,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.repository.RestrictedAddableDossiersVocabulary',
     'opengever.task.bidirectional_by_reference',
     'opengever.task.bidirectional_by_value',
+    'opengever.task.reminder.TaskReminderOptionsVocabulary',
     'opengever.task.unidirectional_by_reference',
     'opengever.task.unidirectional_by_value',
     'opengever.tasktemplates.active_tasktemplatefolders',

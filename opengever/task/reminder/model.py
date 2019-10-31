@@ -3,14 +3,14 @@ from datetime import datetime
 from datetime import timedelta
 from opengever.task import _
 from plone.restapi.serializer.converters import json_compatible
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import Interface
 from zope.schema import Date
 from zope.schema import getFields
 from zope.schema import ValidationError
 from zope.schema.interfaces import RequiredMissing
 from zope.schema.interfaces import WrongType
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
 
 
 class UnknownField(ValidationError):
@@ -80,6 +80,7 @@ class Reminder(object):
         """
         data = {}
         data['option_type'] = self.option_type
+        data['option_title'] = translate(self.option_title, context=getRequest())
         data['params'] = deepcopy(self.params)
 
         if json_compat:
@@ -199,13 +200,3 @@ REMINDER_TYPES = (
 REMINDER_TYPE_REGISTRY = {
     klass.option_type: klass for klass in REMINDER_TYPES
 }
-
-
-def get_task_reminder_options_vocabulary():
-    terms = []
-    options = REMINDER_TYPE_REGISTRY.values()
-    for option in sorted(options, key=lambda x: x.sort_order):
-        terms.append(SimpleTerm(
-            option.option_type, title=option.option_title))
-
-    return SimpleVocabulary(terms)

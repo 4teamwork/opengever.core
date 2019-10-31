@@ -32,6 +32,7 @@ class TestTaskReminderAPI(IntegrationTestCase):
         self.assertEqual(
             {u'@id': u'%s/@reminder' % self.task.absolute_url(),
              u'option_type': u'on_date',
+             u'option_title': u'On a specific date',
              u'params': {u'date': u'1995-06-29'}},
             browser.json)
 
