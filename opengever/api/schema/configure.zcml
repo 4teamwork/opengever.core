@@ -83,5 +83,10 @@
       />
 
   <adapter factory=".adapters.GEVERChoiceJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERCollectionJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERTupleJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERSetJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERListJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERChoiceslessRelationListSchemaProvider" />
 
 </configure>

@@ -8,6 +8,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
+from zope.schema.interfaces import ICollection
 
 
 class GEVERQuerySourcesGet(GEVERSourcesGet):
@@ -52,10 +53,20 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
             )
         bound_field = field.bind(self.context)
 
-        if hasattr(bound_field, "value_type"):
-            source = bound_field.value_type.source
-        else:
-            source = bound_field.source
+        # Look for a source directly on the field first
+        source = getattr(bound_field, 'source', None)
+
+        # Handle ICollections (like Tuples, Lists and Sets). These don't have
+        # sources themselves, but instead are multivalued, and their
+        # items are backed by a value_type of Choice with a source
+        if ICollection.providedBy(bound_field):
+            source = self._get_value_type_source(bound_field)
+            if not source:
+                ftype = bound_field.__class__.__name__
+                return self._error(
+                    404, "Not Found",
+                    "%r Field %r does not have a value_type of Choice with "
+                    "an IQuerySource" % (ftype, fieldname))
 
         if not IQuerySource.providedBy(source):
             return self._error(

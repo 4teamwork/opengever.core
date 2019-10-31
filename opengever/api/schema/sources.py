@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from opengever.base.interfaces import IDuringContentCreation
 from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import iterSchemataForType
@@ -7,6 +6,8 @@ from plone.restapi.services.sources.get import SourcesGet
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 from zope.schema import getFieldsInOrder
+from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import ICollection
 from zope.schema.interfaces import IIterableSource
 from zope.schema.interfaces import ISource
 
@@ -18,10 +19,15 @@ class GEVERSourcesGet(SourcesGet):
         self.request = request
         super(GEVERSourcesGet, self).__init__(context, request)
 
-    def publishTraverse(self, request, name):
-        # Treat any path segments after /@sources as parameters
-        self.params.append(name)
-        return self
+    def _get_value_type_source(self, field):
+        """Get the source of a Choice field that is used as the `value_type`
+        for a multi-valued ICollection field, like ITuple.
+        """
+        value_type = getattr(field, 'value_type', None)
+        value_type_source = getattr(value_type, 'source', None)
+        if not value_type or not IChoice.providedBy(value_type) or not value_type_source:
+            return None
+        return value_type_source
 
     def reply(self):
         if len(self.params) not in (1, 2):
@@ -59,10 +65,20 @@ class GEVERSourcesGet(SourcesGet):
 
         bound_field = field.bind(self.context)
 
-        if hasattr(bound_field, "value_type"):
-            source = bound_field.value_type.source
-        else:
-            source = bound_field.source
+        # Look for a source directly on the field first
+        source = getattr(bound_field, 'source', None)
+
+        # Handle ICollections (like Tuples, Lists and Sets). These don't have
+        # sources themselves, but instead are multivalued, and their
+        # items are backed by a value_type of Choice with a source
+        if ICollection.providedBy(bound_field):
+            source = self._get_value_type_source(bound_field)
+            if not source:
+                ftype = bound_field.__class__.__name__
+                return self._error(
+                    404, "Not Found",
+                    "%r Field %r does not have a value_type of Choice with "
+                    "an ISource" % (ftype, fieldname))
 
         if not ISource.providedBy(source):
             return self._error(
