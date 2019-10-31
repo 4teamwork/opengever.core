@@ -28,6 +28,10 @@ class TestListingEndpointWithoutSolr(IntegrationTestCase):
 
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
+    # XXX TODO: We need to add tests for the different listing endpoints
+    # once we have testing with Solr working.
+    # See # https://github.com/4teamwork/opengever.core/pull/6009 for tests
+    # we had for catalog listing endpoint.
 
     features = ('bumblebee', 'solr')
 
