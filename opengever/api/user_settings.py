@@ -1,6 +1,7 @@
+from opengever.api.validation import get_validation_errors
+from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import IUserSettings
 from opengever.ogds.models.user_settings import UserSettings
-from opengever.api.validation import get_validation_errors
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
@@ -9,8 +10,19 @@ from zope.schema import getFieldsInOrder
 
 
 def serialize_setting(setting):
+    userid = api.user.get_current().id
+    ogds_user = User.query.filter_by(userid=userid).one_or_none()
     data = {}
     for name, field in getFieldsInOrder(IUserSettings):
+        # Hardcode that a pure plone users has always seen all tours.
+        #
+        # This is because a pure plone-user has no user-settings,
+        # thus it's not possible to store seen tours. Whithout this check,
+        # he would always see every tour on a pagereload
+        if name == 'seen_tours' and not ogds_user:
+            data[name] = [u'*']
+            continue
+
         if setting:
             data[name] = getattr(setting, name)
         else:
