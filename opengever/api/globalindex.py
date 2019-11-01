@@ -1,6 +1,6 @@
 from opengever.api.listing import DEFAULT_SORT_INDEX
 from opengever.globalindex.model.task import Task
-from plone.restapi.batching import HypermediaBatch
+from opengever.api.batch import SQLHypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from sqlalchemy import asc
@@ -47,9 +47,9 @@ class GlobalIndexGet(Service):
             else:
                 query = query.filter(getattr(Task, key) == value)
 
-        tasks = query.all()
+        tasks = query
+        batch = SQLHypermediaBatch(self.request, tasks)
         items = []
-        batch = HypermediaBatch(self.request, tasks)
         for task in batch:
             items.append(
                 {key: json_compatible(getattr(task, key)) for (key) in self.METADATA})
