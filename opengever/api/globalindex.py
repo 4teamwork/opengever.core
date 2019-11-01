@@ -40,7 +40,7 @@ class GlobalIndexGet(Service):
         else:
             order = desc(getattr(Task, sort_on))
 
-        query = Task.query.order_by(order)
+        query = Task.query.restrict().order_by(order)
         for key, value in filters.items():
             if isinstance(value, list):
                 query = query.filter(getattr(Task, key).in_(value))

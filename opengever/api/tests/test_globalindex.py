@@ -109,3 +109,14 @@ class TestGlobalIndexGet(IntegrationTestCase):
 
         self.assertEqual(9, browser.json['items_total'])
         self.assertEqual(9, len(browser.json['items']))
+
+    @browsing
+    def test_query_is_restricted(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.portal, view='@globalindex', headers=self.api_headers)
+        self.assertEqual(15, browser.json['items_total'])
+
+        with self.login(self.secretariat_user, browser=browser):
+            browser.open(self.portal, view='@globalindex', headers=self.api_headers)
+            self.assertEqual(14, browser.json['items_total'])
