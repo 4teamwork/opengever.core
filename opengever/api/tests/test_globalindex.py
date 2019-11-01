@@ -15,10 +15,12 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(
             {u'title': u're: Diskr\xe4te Dinge',
              u'task_type': u'direct-execution',
+             u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'task_id': 14,
              u'created': u'2016-08-31T18:27:33',
              u'issuing_org_unit': u'fa',
              u'responsible': u'inbox:fa',
+             u'responsible_fullname': u'Inbox: Finanz\xe4mt',
              u'modified': u'2016-08-31T18:27:33',
              u'is_subtask': False,
              u'deadline': u'2020-01-01',
