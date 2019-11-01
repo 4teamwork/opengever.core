@@ -26,6 +26,8 @@ class GlobalIndexGet(Service):
         start = self.request.form.get('b_start', '0')
         rows = self.request.form.get('b_size', '25')
 
+        filters = self.request.form.get('filters', {})
+
         try:
             start = int(start)
             rows = int(rows)
@@ -38,7 +40,14 @@ class GlobalIndexGet(Service):
         else:
             order = desc(getattr(Task, sort_on))
 
-        tasks = Task.query.order_by(order).all()
+        query = Task.query.order_by(order)
+        for key, value in filters.items():
+            if isinstance(value, list):
+                query = query.filter(getattr(Task, key).in_(value))
+            else:
+                query = query.filter(getattr(Task, key) == value)
+
+        tasks = query.all()
         items = []
         batch = HypermediaBatch(self.request, tasks)
         for task in batch:

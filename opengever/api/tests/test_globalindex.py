@@ -79,3 +79,33 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(15, browser.json['items_total'])
         self.assertEqual(u'Ein notwendiges \xdcbel', browser.json['items'][0]['title'])
         self.assertEqual(u'2016-08-31T20:25:33', browser.json['items'][0]['modified'])
+
+    @browsing
+    def test_filter_by_single_value(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@globalindex?filters.responsible:record={}'.format(
+            self.regular_user.id)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            set([self.regular_user.id]),
+            set([item['responsible'] for item in browser.json['items']]))
+
+        self.assertEqual(12, browser.json['items_total'])
+        self.assertEqual(12, len(browser.json['items']))
+
+    @browsing
+    def test_filter_by_value_list(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@globalindex?filters.review_state:record:list=task-state-open&filters.review_state:record:list=task-state-in-progress'
+
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            set(['task-state-in-progress', 'task-state-open']),
+            set([item['review_state'] for item in browser.json['items']]))
+
+        self.assertEqual(9, browser.json['items_total'])
+        self.assertEqual(9, len(browser.json['items']))
