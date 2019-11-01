@@ -15,24 +15,21 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
     @browsing
     def test_repofolder_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(
-            self.leaf_repofolder, headers={'Accept': 'application/json'})
+        browser.open(self.leaf_repofolder, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1')
 
     @browsing
     def test_repofolder_serialization_contains_is_leafnode(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(
-            self.leaf_repofolder, headers={'Accept': 'application/json'})
+        browser.open(self.leaf_repofolder, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'is_leafnode'), True)
 
     @browsing
     def test_repofolder_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(
-            self.leaf_repofolder, headers={'Accept': 'application/json'})
+        browser.open(self.leaf_repofolder, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'relative_path'),
@@ -49,21 +46,21 @@ class TestDossierSerializer(IntegrationTestCase):
     @browsing
     def test_dossier_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.dossier, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1')
 
     @browsing
     def test_dossier_serialization_contains_email(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.dossier, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'email'), u'1014013300@example.org')
 
     @browsing
     def test_dossier_serialization_contains_responsible_fullname(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.dossier, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'responsible_fullname'), u'Ziegler Robert')
@@ -71,11 +68,26 @@ class TestDossierSerializer(IntegrationTestCase):
     @browsing
     def test_dossier_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.dossier, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'relative_path'),
             u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1')
+
+    @browsing
+    def test_dossier_serialization_contains_is_subdossier(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'is_subdossier'),
+            False)
+
+        browser.open(self.subdossier, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'is_subdossier'),
+            True)
 
 
 class TestDocumentSerializer(IntegrationTestCase):
@@ -88,21 +100,21 @@ class TestDocumentSerializer(IntegrationTestCase):
     @browsing
     def test_document_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.document, headers={'Accept': 'application/json'})
+        browser.open(self.document, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 14')
 
     @browsing
     def test_document_serialization_contains_bumblebee_checksum(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.document, headers={'Accept': 'application/json'})
+        browser.open(self.document, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'bumblebee_checksum'), DOCX_CHECKSUM)
 
     @browsing
     def test_document_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.document, headers={'Accept': 'application/json'})
+        browser.open(self.document, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'relative_path'),
@@ -112,14 +124,14 @@ class TestDocumentSerializer(IntegrationTestCase):
     @browsing
     def test_mail_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+        browser.open(self.mail_eml, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertEqual(u'Client1 1.1 / 1 / 29', browser.json.get(u'reference_number'))
 
     @browsing
     def test_mail_serialization_contains_bumblebee_checksum(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+        browser.open(self.mail_eml, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
 
         checksum = IBumblebeeDocument(self.mail_eml).get_checksum()
@@ -128,7 +140,7 @@ class TestDocumentSerializer(IntegrationTestCase):
     @browsing
     def test_mail_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+        browser.open(self.mail_eml, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'relative_path'),
