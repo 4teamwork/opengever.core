@@ -68,6 +68,11 @@ IVersionable.setTaggedValue(OMITTED_KEY, [
     (IAddForm, 'changeNote', 'true')])
 
 
+def is_email_upload(filename):
+    basename, extension = os.path.splitext(filename)
+    return extension.lower() in MAIL_EXTENSIONS
+
+
 class IDocumentSchema(model.Schema):
     """Document Schema Interface."""
 
@@ -101,6 +106,13 @@ class IDocumentSchema(model.Schema):
                             default=u'Either the title or the file is '
                             'required.'))
 
+    @invariant
+    def disallow_email_extensions(data):
+        if data.file and is_email_upload(data.file.filename):
+            raise Invalid(
+                u"It is not possible to add E-mails as document, use "
+                "portal_type ftw.mail.mail instead.")
+
 
 class UploadValidator(validator.SimpleFieldValidator):
     """Validate document uploads."""
@@ -125,7 +137,9 @@ class UploadValidator(validator.SimpleFieldValidator):
         if not value.filename:
             return
 
-        if self.is_email_upload(value.filename):
+        # We duplicate this validation (there is also an form invariant) to
+        # get a more detailed error message and directly shown by the field.
+        if is_email_upload(value.filename):
             self.raise_invalid()
 
         if self.is_proposal_upload():
@@ -138,10 +152,6 @@ class UploadValidator(validator.SimpleFieldValidator):
     def is_proposal_upload(self):
         """The upload form context can be, for example, a Dossier."""
         return getattr(self.context, 'is_inside_a_proposal', lambda: False)()
-
-    def is_email_upload(self, filename):
-        basename, extension = os.path.splitext(filename)
-        return extension.lower() in MAIL_EXTENSIONS
 
     def raise_invalid(self):
         if IDossierMarker.providedBy(self.context):

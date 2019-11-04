@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
+import json
 
 
 class TestDocumentSerializer(IntegrationTestCase):
@@ -81,6 +82,25 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(browser.json['trashed'])
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
+
+
+class TestDocumentPost(IntegrationTestCase):
+
+    @browsing
+    def test_does_not_allow_mails_as_file(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            data = {'@type': 'opengever.document.document',
+                    'file': {'data': 'foo bar', 'filename': 'test.eml'}}
+            browser.open(self.dossier, data=json.dumps(data), method='POST',
+                         headers=self.api_headers)
+
+        self.assertEqual(
+            u"[{'message': 'It is not possible to add E-mails as document, use portal_type ftw.mail.mail"
+            " instead.', 'error': Invalid(u'It is not possible to add E-mails as document, use portal_type "
+            "ftw.mail.mail instead.',)}]",
+            browser.json['message'])
 
 
 class TestDocumentPatch(IntegrationTestCase):

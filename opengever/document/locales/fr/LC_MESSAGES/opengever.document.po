@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-02 12:46+0000\n"
+"POT-Creation-Date: 2019-11-04 13:11+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -192,6 +192,11 @@ msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en ver
 #: ./opengever/document/document.py
 msgid "error_mail_upload"
 msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire, utilisez l'adresse E-Mail ${mailaddress}  ou glissez-le dans le dossier (Drag'n'Drop)."
+
+#. Default: "It's not possible to add E-mails as document, use portal_type ftw.mail.mail."
+#: ./opengever/document/document.py
+msgid "error_mail_upload_api"
+msgstr ""
 
 #. Default: "You have not selected any Items"
 #: ./opengever/document/browser/report.py
