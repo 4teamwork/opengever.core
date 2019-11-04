@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrashable
 
 
 class FileActionsTestBase(IntegrationTestCase):
@@ -87,6 +88,9 @@ class TestFileActionsGetForMails(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
             ]
 
         self.assertEqual(expected_file_actions,
@@ -111,6 +115,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -132,6 +139,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -149,6 +159,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
              u'icon': u''},
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -264,6 +277,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -275,6 +291,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         expected_file_actions = [
             {u'id': u'oneoffixx_retry',
              u'title': u'Oneoffixx retry',
+             u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -293,6 +312,59 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
              u'icon': u''},
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+
+class TestTrashingActionsForDocuments(FileActionsTestBase):
+
+    @browsing
+    def test_trashing_available_for_document(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = [
+            {u'id': u'oc_direct_checkout',
+             u'title': u'Checkout and edit',
+             u'icon': u''},
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
+    def test_untrashing_available_for_trashed_document(self, browser):
+        self.login(self.regular_user, browser)
+
+        trasher = ITrashable(self.document)
+        trasher.trash()
+
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'untrash_document',
+             u'title': u'Untrash document',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,

@@ -6,6 +6,8 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IFileActions
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.trash.trash import ITrashable
+from opengever.trash.trash import TrashError
 from plone import api
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -85,6 +87,14 @@ class BaseDocumentFileActions(object):
 
     def is_revert_to_version_action_available(self):
         return False
+
+    def is_trash_document_available(self):
+        trasher = ITrashable(self.context)
+        return trasher.verify_may_trash(raise_on_violations=False)
+
+    def is_untrash_document_available(self):
+        trasher = ITrashable(self.context)
+        return trasher.verify_may_untrash(raise_on_violations=False)
 
 
 @implementer(IFileActions)

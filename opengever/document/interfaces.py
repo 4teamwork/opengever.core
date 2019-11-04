@@ -193,3 +193,9 @@ class IFileActions(Interface):
 
     def is_revert_to_version_action_available():
         """Return whether the revert to version action is available."""
+
+    def is_trash_document_available():
+        """Return whether the trash_document action is available."""
+
+    def is_untrash_document_available():
+        """Return whether the untrash_document action is available."""

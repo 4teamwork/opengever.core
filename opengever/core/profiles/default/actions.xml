@@ -136,6 +136,24 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="trash_document" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_trash_document">Trash document</property>
+      <property name="available_expr">object/@@file_actions_availability/is_trash_document_available</property>
+      <property name="permissions">
+        <element value="opengever.trash: Trash content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="untrash_document" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_untrash_document">Untrash document</property>
+      <property name="available_expr">object/@@file_actions_availability/is_untrash_document_available</property>
+      <property name="permissions">
+        <element value="opengever.trash: Untrash content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
   <!-- SITE ACTIONS -->
