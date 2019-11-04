@@ -153,6 +153,10 @@ FIELDS = {
     'type': ('portal_type', 'PortalType', 'portal_type'),
     '@type': ('portal_type', 'PortalType', 'portal_type'),
     'UID': ('UID', 'UID', 'UID'),
+    'firstname': ('firstname', 'firstname', 'firstname'),
+    'lastname': ('lastname', 'lastname', 'lastname'),
+    'email': ('email', 'email', 'email'),
+    'phone_office': ('phone_office', 'phone_office', 'phone_office'),
 }
 
 DATE_INDEXES = set([
@@ -188,6 +192,9 @@ FILTERS = {
     ],
     u'proposals': [
         u'object_provides:opengever.meeting.proposal.IProposal',
+    ],
+    u'contacts': [
+        u'object_provides:opengever.contact.contact.IContact',
     ]
 }
 

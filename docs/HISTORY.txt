@@ -11,6 +11,7 @@ Changelog
 - Remove catalog support for @listing endpoint. [elioschmutz]
 - Moved reminder options vocabulary to globaly registered vocabulary. [phgross]
 - Add a user action to switch to the new gever-ui. [elioschmutz]
+- Add support for contacts to the @listing endpoint. [phgross]
 
 
 2019.4.0rc4 (2019-10-22)
