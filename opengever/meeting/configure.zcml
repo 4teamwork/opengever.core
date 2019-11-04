@@ -223,4 +223,10 @@
       name="proposal-transition-submit"
       />
 
+  <!-- indexers -->
+  <adapter
+      factory=".indexers.committeeIndexer"
+      name="responsible"
+      />
+
 </configure>

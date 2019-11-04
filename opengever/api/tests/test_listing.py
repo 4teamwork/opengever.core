@@ -28,6 +28,10 @@ class TestListingEndpointWithoutSolr(IntegrationTestCase):
 
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
+    # XXX TODO: We need to add tests for the different listing endpoints
+    # once we have testing with Solr working.
+    # See # https://github.com/4teamwork/opengever.core/pull/6009 for tests
+    # we had for catalog listing endpoint.
 
     features = ('bumblebee', 'solr')
 
@@ -86,7 +90,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
 
         filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn('review_state:(dossier-state-active)', filters)
+        self.assertIn('review_state:(dossier\\-state\\-active)', filters)
 
     @browsing
     def test_filter_by_multiple_review_states(self, browser):
@@ -101,7 +105,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         filters = self.conn.search.call_args[0][0]['filter']
         self.assertIn(
-            'review_state:(dossier-state-active OR dossier-state-inactive)',
+            'review_state:(dossier\\-state\\-active OR dossier\\-state\\-inactive)',
             filters,
         )
 

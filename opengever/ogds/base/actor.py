@@ -10,7 +10,9 @@ The lookup results are
  - A null-implementation if the identifier is None or actor is missing.
  - an InboxActor if the identifier starts with "inbox:"
  - a ContactActor if the identifier starts with "contact:"
- - an UserActor for any other string
+ - a TeamActor if the identifier starts with "team:"
+ - a CommitteeActor if the identifier starts with "committee:"
+ - a PloneUserActor or an OGDSUserActor for any other string.
 
 For known actor types use:
 >> Actor.user('my-identifier', user=user)
@@ -228,6 +230,29 @@ class TeamActor(Actor):
         return self.team.group.users
 
 
+class CommitteeActor(Actor):
+
+    css_class = 'actor-committee'
+
+    def __init__(self, identifier, committee=None):
+        super(CommitteeActor, self).__init__(identifier)
+        self.committee = committee
+
+    def get_profile_url(self):
+        return self.committee.get_url()
+
+    def corresponds_to(self, user):
+        return user in self.representatives()
+
+    def get_label(self, with_principal=None):
+        return self.committee.title
+
+    def representatives(self):
+        # Avoid circular imports
+        from opengever.meeting.activity.helpers import get_users_by_group
+        return get_users_by_group(self.committee.group_id)
+
+
 class ContactActor(Actor):
 
     css_class = 'actor-contact'
@@ -333,6 +358,17 @@ class ActorLookup(object):
 
         return TeamActor(self.identifier, team=team)
 
+    def is_committee(self):
+        return self.identifier.startswith('committee:')
+
+    def create_committee_actor(self, committee=None):
+        from opengever.meeting.model import Committee
+        if not committee:
+            committee_id = self.identifier.split(':', 1)[1]
+            committee = Committee.query.filter_by(committee_id=committee_id).one()
+
+        return CommitteeActor(self.identifier, committee=committee)
+
     def is_contact(self):
         return self.identifier.startswith('contact:')
 
@@ -400,5 +436,8 @@ class ActorLookup(object):
 
         elif self.is_team():
             return self.create_team_actor()
+
+        elif self.is_committee():
+            return self.create_committee_actor()
 
         return self.create_user_actor()

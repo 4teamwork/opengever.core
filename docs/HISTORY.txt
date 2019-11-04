@@ -7,6 +7,7 @@ Changelog
 - Update Products.LDAPUserFolder from 2.28.post2 to 2.28.post3. [elioschmutz]
 - Extend dossier serializer with `is_subdossier`. [elioschmutz]
 - Add @globalindex API endpoint. [phgross]
+- Add proposals to @listing endpoint. [njohner]
 - Remove catalog support for @listing endpoint. [elioschmutz]
 - Moved reminder options vocabulary to globaly registered vocabulary. [phgross]
 - Add a user action to switch to the new gever-ui. [elioschmutz]
