@@ -30,6 +30,7 @@ Inhalt:
    webactions.rst
    usersettings.rst
    tasks.rst
+   globalindex.rst
    proposals.rst
    reminder.rst
    journal.rst
