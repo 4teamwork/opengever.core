@@ -37,7 +37,9 @@ class GEVERVocabulariesGet(VocabulariesGet):
         elif len(self.params) == 2:
             # Add intent
             # - context is the container where the object will be created
-            # - first parameter is the portal_type, not needed here
+            # - first parameter is the portal_type
+            #   (which will be ignored by this endpoint, but is accepted
+            #   for consistency with @sources and @querysources)
             self.intent = 'add'
             vocab_name = self.params[1]
             alsoProvides(self.request, IDuringContentCreation)
