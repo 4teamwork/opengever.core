@@ -1,0 +1,92 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone">
+
+  <plone:service
+      method="GET"
+      accept="application/json"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".sources.GEVERSourcesGet"
+      name="@sources"
+      permission="plone.restapi.vocabularies"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".sources.GEVERSourcesGet"
+      name="@sources"
+      permission="plone.restapi.vocabularies"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".querysources.GEVERQuerySourcesGet"
+      name="@querysources"
+      permission="plone.restapi.vocabularies"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".querysources.GEVERQuerySourcesGet"
+      name="@querysources"
+      permission="plone.restapi.vocabularies"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".vocabularies.GEVERVocabulariesGet"
+      name="@vocabularies"
+      permission="plone.restapi.vocabularies"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".vocabularies.GEVERVocabulariesGet"
+      name="@vocabularies"
+      permission="plone.restapi.vocabularies"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json,application/schema+json"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".schema.GEVERSchemaGet"
+      name="@schema"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json,application/schema+json"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".schema.GEVERSchemaGet"
+      name="@schema"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter factory=".adapters.GEVERChoiceJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERCollectionJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERTupleJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERSetJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERListJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERChoiceslessRelationListSchemaProvider" />
+
+</configure>

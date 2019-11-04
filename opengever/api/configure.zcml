@@ -6,10 +6,13 @@
     i18n_domain="opengever.api">
 
   <include package="plone.rest" file="meta.zcml" />
+  <include package="plone.restapi" file="permissions.zcml" />
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
   <include package="opengever.webactions" file="permissions.zcml" />
   <include package="opengever.workspace" file="permissions.zcml" />
+
+  <include package=".schema" />
 
   <adapter factory=".serializer.GeverSerializeToJson" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
