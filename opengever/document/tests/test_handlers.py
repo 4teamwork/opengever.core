@@ -5,9 +5,9 @@ from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.document.docprops import DocPropertyWriter
+from opengever.document.docprops import TemporaryDocFile
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.dossier.docprops import DocPropertyWriter
-from opengever.dossier.docprops import TemporaryDocFile
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase

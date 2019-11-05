@@ -3,7 +3,7 @@ from docx import Document
 from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.dossier.docprops import TemporaryDocFile
+from opengever.document.docprops import TemporaryDocFile
 from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.interfaces import IYearfolderStorer
 from opengever.testing import FunctionalTestCase

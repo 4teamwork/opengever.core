@@ -4,8 +4,8 @@ from docxcompose.properties import CustomProperties
 from docxcompose.sdt import StructuredDocumentTags
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.dossier.docprops import DocPropertyWriter
-from opengever.dossier.docprops import TemporaryDocFile
+from opengever.document.docprops import DocPropertyWriter
+from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.tests import EXPECTED_DOC_PROPERTIES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry

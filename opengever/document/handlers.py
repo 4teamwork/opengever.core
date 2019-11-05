@@ -3,7 +3,7 @@ from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.document.archival_file import ArchivalFileConverter
-from opengever.dossier.docprops import DocPropertyWriter
+from opengever.document.docprops import DocPropertyWriter
 from traceback import format_exc
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent

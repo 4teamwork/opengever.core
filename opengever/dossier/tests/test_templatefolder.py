@@ -9,7 +9,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testing import freeze
 from opengever.contact.interfaces import IContactSettings
-from opengever.dossier.docprops import TemporaryDocFile
+from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
