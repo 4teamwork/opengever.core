@@ -5,15 +5,21 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.oguid import Oguid
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
+from opengever.base.response import IResponse
+from opengever.base.response import Response
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
+from persistent.dict import PersistentDict
 from persistent.mapping import PersistentMapping
 from plone import api
 from uuid import UUID
 from uuid import uuid4
+from zope import schema
 from zope.annotation.interfaces import IAnnotations
+from zope.interface import implements
+
 
 
 class ProposalHistory(object):
@@ -105,6 +111,29 @@ class ProposalHistory(object):
         on display by initialization. Instead just return a default value.
         """
         return IAnnotations(self.context).get(self.annotation_key, OOBTree())
+
+
+class IProposalResponse(IResponse):
+    """Interface and schema for the proposal specific response object,
+    containing an additional field"""
+
+    additional_data = schema.Dict(required=False)
+
+
+class ProposalResponse(Response):
+
+    implements(IProposalResponse)
+
+    def __init__(self, response_type='commented', text='', **kwargs):
+        super(ProposalResponse, self).__init__(response_type)
+        self.text = text
+        self.additional_data = PersistentDict()
+        self.additional_data.update(kwargs)
+
+    def __getattr__(self, name):
+        if name in self.additional_data:
+            return self.additional_data.get(name)
+        raise AttributeError
 
 
 class BaseHistoryRecord(object):
