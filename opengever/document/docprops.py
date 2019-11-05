@@ -4,17 +4,46 @@ from docxcompose.properties import CustomProperties
 from docxcompose.sdt import StructuredDocumentTags
 from opengever import journal
 from opengever.base.date_time import ulocalized_time
-from opengever.dossier.interfaces import IDocProperties
+from opengever.base.interfaces import IDocPropertyProvider
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.meeting.interfaces import IMeetingSettings
 from plone import api
 from plone.registry.interfaces import IRegistry
 from tempfile import NamedTemporaryFile
-from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component import queryAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 import os
+
+
+class DocPropertyCollector(object):
+    """Collects all doc-properties for a document.
+
+    Properties are provided by an IDocPropertyProvider adapter that can be
+    registered for different objects.
+    """
+    def __init__(self, document):
+        self.document = document
+
+    def get_properties(self, recipient_data=tuple()):
+        dossier = self.document.get_parent_dossier()
+        member = api.user.get_current()
+        proposal = self.document.get_proposal()
+
+        properties = {}
+        for obj in [self.document, dossier, member, proposal]:
+            property_provider = queryAdapter(obj, IDocPropertyProvider)
+            obj_properties = {}
+            if property_provider is not None:
+                obj_properties = property_provider.get_properties()
+            properties.update(obj_properties)
+
+        for recipient in recipient_data:
+            provider = recipient.get_doc_property_provider(prefix='recipient')
+            properties.update(provider.get_properties())
+
+        return properties
 
 
 class TemporaryDocFile(object):
@@ -57,9 +86,8 @@ class DocPropertyWriter(object):
         self.update_doc_properties(only_existing=False)
 
     def get_properties(self):
-        properties_adapter = getMultiAdapter(
-            (self.document, self.request), IDocProperties)
-        return properties_adapter.get_properties(self.recipient_data)
+        return DocPropertyCollector(self.document).get_properties(
+            self.recipient_data)
 
     def is_export_enabled(self):
         registry = getUtility(IRegistry)

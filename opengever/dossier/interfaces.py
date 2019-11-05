@@ -179,15 +179,6 @@ class IDossierArchiver(Interface):
         """
 
 
-class IDocProperties(Interface):
-    """Adapts IDossierMarker.
-    """
-
-    def get_properties():
-        """Return a dictionary of DocProperties for the adapted dossier.
-        """
-
-
 class IDocPropertyProvider(Interface):
     """May adapt any object that can be a provider for DocProperties.
     """

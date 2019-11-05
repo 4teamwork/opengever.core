@@ -7,17 +7,13 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.interfaces import IMemberData
-from Products.CMFCore.utils import getToolByName
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
-from zope.component import queryAdapter
 from zope.interface import implementer
-from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 @implementer(IDocPropertyProvider)
@@ -205,39 +201,4 @@ class DefaultMemberDocPropertyProvider(DocPropertyProvider):
         for attribute_name in self.ogds_user_attributes:
             value = getattr(ogds_user, attribute_name)
             self._add_property(properties, attribute_name, value)
-        return properties
-
-
-@implementer(IDocProperties)
-@adapter(IDocumentSchema, IBrowserRequest)
-class DefaultDocProperties(object):
-
-    def __init__(self, context, request):
-        # Context is the newly created document
-        self.context = context
-        self.request = request
-
-    def get_member(self, request):
-        portal_membership = getToolByName(self.context, 'portal_membership')
-        member = portal_membership.getAuthenticatedMember()
-        return member
-
-    def get_properties(self, recipient_data=tuple()):
-        document = self.context
-        dossier = document.get_parent_dossier()
-        member = self.get_member(self.request)
-        proposal = document.get_proposal()
-
-        properties = {}
-        for obj in [document, dossier, member, proposal]:
-            property_provider = queryAdapter(obj, IDocPropertyProvider)
-            obj_properties = {}
-            if property_provider is not None:
-                obj_properties = property_provider.get_properties()
-            properties.update(obj_properties)
-
-        for recipient in recipient_data:
-            provider = recipient.get_doc_property_provider(prefix='recipient')
-            properties.update(provider.get_properties())
-
         return properties

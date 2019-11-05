@@ -1,13 +1,12 @@
 from collections import OrderedDict
 from lxml import etree
-from opengever.dossier.interfaces import IDocProperties
+from opengever.document.docprops import DocPropertyCollector
 from opengever.officeconnector.helpers import create_oc_url
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five import BrowserView
 from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getMultiAdapter
 
 
 class OneoffixxConnectXml(BrowserView):
@@ -37,7 +36,7 @@ class OneoffixxConnectXml(BrowserView):
             )),
         ))
 
-        self.document_properties = getMultiAdapter((self.context, self.request), IDocProperties).get_properties()
+        self.document_properties = DocPropertyCollector(self.context).get_properties()
 
         self.request.RESPONSE.setHeader("Content-type", "application/xml")
         return self.generate_xml()

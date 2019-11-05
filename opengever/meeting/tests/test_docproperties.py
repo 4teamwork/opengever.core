@@ -1,11 +1,10 @@
-from opengever.dossier.interfaces import IDocProperties
+from opengever.document.docprops import DocPropertyCollector
 from opengever.testing import IntegrationTestCase
-from zope.component import getMultiAdapter
 
 
 def get_doc_properties(document, prefix='ogg.meeting.'):
-    docprops = getMultiAdapter((document, document.REQUEST), IDocProperties)
-    return {key: value for key, value in docprops.get_properties().items()
+    properties = DocPropertyCollector(document).get_properties()
+    return {key: value for key, value in properties.items()
             if key.startswith(prefix)}
 
 
