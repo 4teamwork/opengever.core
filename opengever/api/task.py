@@ -27,7 +27,7 @@ class SerializeTaskResponseToJson(SerializeResponseToJson):
 class TaskDeserializeFromJson(DeserializeFromJson):
     """A task specific deserializer which allows to pass in the
     responsible_client and responsible value in a combined string.
-    In the smae way as it is exposed by the APIs querysoure endpoint.
+    In the same way as it is exposed by the APIs querysoure endpoint.
     """
 
     def __call__(self, validate_all=False, data=None, create=False):

@@ -225,6 +225,12 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         self.assertTermKeys([u'org-unit-1:hans', u'org-unit-1:hugo', u'org-unit-1:john'],
                             result)
 
+    def test_search_for_inbox(self):
+        result = self.source.search('inbox:org-unit-1')
+
+        self.assertEquals(1, len(result), 'Expect 1 item')
+        self.assertTermKeys([u'inbox:org-unit-1'], result)
+
     def test_return_no_search_result_for_inactive_orgunits(self):
         result = self.source.search('Steueramt')
 
