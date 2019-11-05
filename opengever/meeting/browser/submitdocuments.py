@@ -205,7 +205,6 @@ class UpdateSubmittedDocumentView(BrowserView):
                 u'document_updated',
                 document_title=self.context.title,
                 submitted_version=history_data['submitted_version'],
-                uuid=history_data['uuid']
             )
 
             ProposalDocumentUpdatedActivity(

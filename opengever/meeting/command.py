@@ -471,14 +471,13 @@ class UpdateSubmittedDocumentCommand(object):
     def execute(self):
         submitted_version = self.document.get_current_version_id()
 
-        record = IHistory(self.proposal).append_record(
+        IHistory(self.proposal).append_record(
             u'document_updated',
             document_title=self.document.title,
             submitted_version=submitted_version,
         )
         history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
-            'uuid': record.uuid,
             })
 
         ProposalDocumentUpdatedActivity(
