@@ -50,7 +50,7 @@ class CreateSubmittedProposal(BrowserView):
 
             history_data = advancedjson.loads(self.request.get('history_data'))
             IHistory(submitted_proposal).append_record(
-                u'submitted', uuid=history_data['uuid'], text=history_data.get("text"))
+                u'submitted', text=history_data.get("text"))
 
             add_watchers_on_submitted_proposal_created(submitted_proposal)
 
