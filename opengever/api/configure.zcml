@@ -24,6 +24,7 @@
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
   <adapter factory=".task.SerializeTaskResponseToJson" />
+  <adapter factory=".task.TaskDeserializeFromJson" />
   <adapter factory=".serializer.long_converter" />
 
   <adapter factory=".todo.DeserializeToDoFromJson" />

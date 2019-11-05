@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Update the usersettings-serializer: A pure plone user has always seen all screens. [elioschmutz]
+- Support combined notation for task responsible. [phgross]
 - Update Products.LDAPUserFolder from 2.28.post2 to 2.28.post3. [elioschmutz]
 - Extend dossier serializer with `is_subdossier`. [elioschmutz]
 - Add @globalindex API endpoint. [phgross]

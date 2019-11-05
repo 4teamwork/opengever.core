@@ -160,6 +160,27 @@ class GeverFolderPost(FolderPost):
                 source_blob=proposal_template.file,
             )
 
+    def deserialize_object(self):
+        """Does the same as parent class, but pass in self.data to the deserializer.
+        """
+
+        # Acquisition wrap temporarily to satisfy things like vocabularies
+        # depending on tools
+        temporarily_wrapped = False
+        if IAcquirer.providedBy(self.obj) and not safe_hasattr(self.obj, "aq_base"):
+            self.obj = self.obj.__of__(self.context)
+            temporarily_wrapped = True
+
+        # Update fields
+        deserializer = getMultiAdapter((self.obj, self.request), IDeserializeFromJson)
+        deserializer(validate_all=True, create=True, data=self.data)
+
+        if temporarily_wrapped:
+            self.obj = aq_base(self.obj)
+
+        if not getattr(deserializer, "notifies_create", False):
+            notify(ObjectCreatedEvent(self.obj))
+
 
 class SchemaValidationData(object):
     """To validate a field, it needs to be bound to its context, as for example

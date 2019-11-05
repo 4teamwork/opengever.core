@@ -166,3 +166,165 @@ class TestTaskCommentSync(FunctionalTestCase):
 
         self.assertEqual(1, len(successor_response_container))
         self.assertEqual(1, len(predecessor_response_container))
+
+
+class TestTaskCreation(IntegrationTestCase):
+
+    data = {
+        "@type": "opengever.task.task",
+        "title": "Bitte Dokument reviewen",
+        "task_type": "direct-execution",
+    }
+
+    @browsing
+    def test_with_responsible_containing_responsible_client(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.data.update({
+            "responsible": {
+                'token': "fa:{}".format(self.regular_user.id),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': self.secretariat_user.id,
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            }
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        task, = children['added']
+        self.assertEqual(self.regular_user.id, task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual(self.secretariat_user.id, task.issuer)
+
+    @browsing
+    def test_with_responsible_containing_responsible_client_token_only(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.data.update({
+            "responsible": "fa:{}".format(self.regular_user.id),
+            "issuer": self.secretariat_user.id,
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        task, = children['added']
+        self.assertEqual(self.regular_user.id, task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual(self.secretariat_user.id, task.issuer)
+
+    @browsing
+    def test_without_responsible_client(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.data.update({
+            "responsible_client": "fa",
+            "responsible": {
+                'token': self.regular_user.id,
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': self.secretariat_user.id,
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            }
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+
+        task, = children['added']
+        self.assertEqual(self.regular_user.id, task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual(self.secretariat_user.id, task.issuer)
+
+    @browsing
+    def test_without_responsible_client_token_only(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.data.update({
+            "responsible": self.regular_user.id,
+            "responsible_client": "fa",
+            "issuer": self.secretariat_user.id,
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+
+        task, = children['added']
+        self.assertEqual(self.regular_user.id, task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual(self.secretariat_user.id, task.issuer)
+
+    @browsing
+    def test_supports_inboxes(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.data.update({
+            "responsible": "inbox:fa",
+            "issuer": "inbox:fa",
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+
+        task, = children['added']
+        self.assertEqual('inbox:fa', task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual('inbox:fa', task.issuer)
+
+    @browsing
+    def test_supports_teams(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.data.update({
+            "responsible": "team:1",
+            "issuer": self.regular_user.id,
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+
+        task, = children['added']
+        self.assertEqual('team:1', task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual(self.regular_user.id, task.issuer)
+
+
+class TestTaskPatch(IntegrationTestCase):
+
+    @browsing
+    def test_edit_responsible_with_responsible_client(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.add_additional_admin_and_org_unit()
+        data = {
+            "responsible": {
+                'token': "rk:james.bond",
+                'title': u'Ratskanzlei: James Bond'
+            }
+        }
+
+        browser.open(self.task, json.dumps(data),
+                     method="PATCH", headers=self.api_headers)
+
+        self.assertEqual('rk', self.task.responsible_client)
+        self.assertEqual('james.bond', self.task.responsible)
