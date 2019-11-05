@@ -1,11 +1,10 @@
-from DateTime import DateTime
 from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
-from opengever.base.request import dispatch_request
+from opengever.base.response import IResponseContainer
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
@@ -16,11 +15,11 @@ from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.mergetool import DocxMergeTool
 from opengever.meeting.model.generateddocument import GeneratedAgendaItemList
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.submitteddocument import SubmittedDocument
+from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
@@ -432,7 +431,8 @@ class CreateSubmittedProposalCommand(object):
             'contentType': blob.contentType,
             'data': base64.encodestring(blob.data)}
 
-        IHistory(self.proposal).append_record(u'submitted', text=text)
+        response = ProposalResponse(u'submitted', text=text)
+        IResponseContainer(self.proposal).add(response)
         history_data = advancedjson.dumps({'text': text})
 
         request_data = {
@@ -471,11 +471,12 @@ class UpdateSubmittedDocumentCommand(object):
     def execute(self):
         submitted_version = self.document.get_current_version_id()
 
-        IHistory(self.proposal).append_record(
+        response = ProposalResponse(
             u'document_updated',
             document_title=self.document.title,
             submitted_version=submitted_version,
         )
+        IResponseContainer(self.proposal).add(response)
         history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
             })
@@ -557,11 +558,12 @@ class CopyProposalDocumentCommand(object):
         submitted_version = self.document.get_current_version_id(
             missing_as_zero=True)
 
-        IHistory(self.proposal).append_record(
+        response = ProposalResponse(
             u'document_submitted',
             document_title=self.document.title,
             submitted_version=submitted_version,
-        )
+            )
+        IResponseContainer(self.proposal).add(response)
 
         if self.record_activity:
             ProposalDocumentSubmittedActivity(

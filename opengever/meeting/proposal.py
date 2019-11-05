@@ -7,6 +7,8 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.oguid import Oguid
+from opengever.base.response import IResponseContainer
+from opengever.base.response import IResponseSupported
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
@@ -26,9 +28,9 @@ from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
+from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from opengever.ogds.base.utils import ogds_service
@@ -173,6 +175,8 @@ class ISubmittedProposal(IBaseProposal):
 
 class ProposalBase(object):
 
+    implements(IResponseSupported)
+
     def Title(self):
         return self.title.encode('utf-8')
 
@@ -290,7 +294,9 @@ class ProposalBase(object):
 
     def comment(self, text):
         ProposalCommentedActivitiy(self, self.REQUEST).record()
-        return IHistory(self).append_record(u'commented', text=text)
+        response = ProposalResponse(u'commented', text=text)
+        IResponseContainer(self).add(response)
+        return response
 
 
 class SubmittedProposal(ModelContainer, ProposalBase):

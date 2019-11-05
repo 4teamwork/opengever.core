@@ -1,8 +1,9 @@
+from opengever.base.response import IResponseContainer
 from opengever.base.transition import ITransitionExtender
 from opengever.base.transition import TransitionExtender
 from opengever.meeting import _
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.meeting.proposalsqlsyncer import ProposalSqlSyncer
 from plone.supermodel.model import Schema
 from zope import schema
@@ -26,8 +27,8 @@ class CancelTransitionExtender(TransitionExtender):
     schemas = [IText, ]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        IHistory(self.context).append_record(
-            u'cancelled', text=transition_params.get('text'))
+        response = ProposalResponse(u'cancelled', text=transition_params.get('text'))
+        IResponseContainer(self.context).add(response)
         ProposalSqlSyncer(self.context, None).sync()
 
 
@@ -38,8 +39,8 @@ class ReactivateTransitionExtender(TransitionExtender):
     schemas = [IText, ]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        IHistory(self.context).append_record(
-            u'reactivated', text=transition_params.get('text'))
+        response = ProposalResponse(u'reactivated', text=transition_params.get('text'))
+        IResponseContainer(self.context).add(response)
         ProposalSqlSyncer(self.context, None).sync()
 
 
@@ -50,6 +51,6 @@ class SubmitTransitionExtender(TransitionExtender):
     schemas = [IText, ]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        # IHistory is created by `submit`
+        # Response is created by `submit`
         self.context.submit(text=transition_params.get('text'))
         ProposalSqlSyncer(self.context, None).sync()
