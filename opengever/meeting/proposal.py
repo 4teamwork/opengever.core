@@ -288,9 +288,9 @@ class ProposalBase(object):
 
         return False
 
-    def comment(self, text, uuid=None):
+    def comment(self, text):
         ProposalCommentedActivitiy(self, self.REQUEST).record()
-        return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
+        return IHistory(self).append_record(u'commented', text=text)
 
 
 class SubmittedProposal(ModelContainer, ProposalBase):
