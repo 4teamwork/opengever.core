@@ -558,7 +558,7 @@ class CopyProposalDocumentCommand(object):
         submitted_version = self.document.get_current_version_id(
             missing_as_zero=True)
 
-        record = IHistory(self.proposal).append_record(
+        IHistory(self.proposal).append_record(
             u'document_submitted',
             document_title=self.document.title,
             submitted_version=submitted_version,
@@ -570,7 +570,6 @@ class CopyProposalDocumentCommand(object):
 
         history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
-            'uuid': record.uuid,
             })
 
         activity = advancedjson.dumps({

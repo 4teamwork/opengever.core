@@ -243,7 +243,6 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
                 u'document_submitted',
                 document_title=document.title,
                 submitted_version=history_data['submitted_version'],
-                uuid=history_data['uuid']
             )
 
         activity = advancedjson.loads(self.request.get('activity'))
