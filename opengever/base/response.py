@@ -18,7 +18,6 @@ from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 from zope.schema import getFields
-import time
 
 
 class IResponseAddedEvent(IObjectEvent):
