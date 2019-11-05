@@ -353,15 +353,6 @@ class DefaultDocProperties(object):
         self.context = context
         self.request = request
 
-    def get_repofolder(self, dossier):
-        return None
-
-    def get_repo(self, dossier):
-        return None
-
-    def get_site(self, dossier):
-        return None
-
     def get_member(self, request):
         portal_membership = getToolByName(self.context, 'portal_membership')
         member = portal_membership.getAuthenticatedMember()
@@ -370,14 +361,11 @@ class DefaultDocProperties(object):
     def get_properties(self, recipient_data=tuple()):
         document = self.context
         dossier = document.get_parent_dossier()
-        repofolder = self.get_repofolder(dossier)
-        repo = self.get_repo(dossier)
-        site = self.get_site(dossier)
         member = self.get_member(self.request)
         proposal = document.get_proposal()
 
         properties = {}
-        for obj in [document, dossier, repofolder, repo, site, member, proposal]:
+        for obj in [document, dossier, member, proposal]:
             property_provider = queryAdapter(obj, IDocPropertyProvider)
             obj_properties = {}
             if property_provider is not None:
