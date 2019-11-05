@@ -40,6 +40,23 @@ class TestUsersSettingsGet(IntegrationTestCase):
              u'notify_own_actions': True},
             browser.json)
 
+    @browsing
+    def test_a_pure_plone_user_has_always_seen_all_tours(self, browser):
+        # Ogds-user user has no seen tours by default
+        self.login(self.regular_user, browser)
+        self.assertIsNotNone(self.get_ogds_user(self.regular_user))
+        browser.open('{}/@user-settings'.format(self.portal.absolute_url()),
+                     headers=self.api_headers)
+        self.assertEquals([], browser.json.get('seen_tours'))
+
+        # Pure plone user has all tours seen by default
+        self.login(self.manager, browser)
+        self.assertIsNone(self.get_ogds_user(self.manager))
+
+        browser.open('{}/@user-settings'.format(self.portal.absolute_url()),
+                     headers=self.api_headers)
+        self.assertEquals([u'*'], browser.json.get('seen_tours'))
+
 
 class TestUsersSettingsPatch(IntegrationTestCase):
 
