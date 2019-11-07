@@ -23,7 +23,7 @@ class UpdateMeetingTemplateContentOrderView(BrowserView):
 
         for object_id in order:
             # OFS IDs are ascii only, json strings are loaded as unicode
-            object_id = object_id.encode('ascii')
+            object_id = object_id.encode('utf-8')
             self.context.moveObjectsToTop([object_id])
 
         return self.request.RESPONSE.redirect(self.context.absolute_url())

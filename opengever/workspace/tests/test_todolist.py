@@ -146,8 +146,8 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
                .within(self.workspace))
 
         self.assertEqual(
-            ['folder-1', u'todolist-1', u'todolist-2',
-             'todo-1', u'todolist-3', u'todolist-4'],
+            ['folder-1', 'todolist-1', 'todolist-2',
+             'todo-1', 'todolist-3', 'todolist-4'],
             self.workspace.objectIds())
 
         # change order
@@ -161,9 +161,12 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
                      headers=self.api_headers, data=json.dumps(data))
 
         self.assertEqual(
-            ['folder-1', u'todolist-2', u'todolist-3',
-             'todo-1', u'todolist-1', u'todolist-4'],
+            ['folder-1', 'todolist-2', 'todolist-3',
+             'todo-1', 'todolist-1', 'todolist-4'],
             self.workspace.objectIds())
+
+        for id_ in self.workspace.objectIds():
+            self.assertIsInstance(id_, str)
 
     @browsing
     def test_only_order_change_is_allowed_for_workspace_member(self, browser):
