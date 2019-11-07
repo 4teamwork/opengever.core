@@ -20,6 +20,11 @@
             <Node Id="Dossier.Title">Verträge mit der kantonalen Finanzverwaltung</Node>
             <Node Id="User.FullName">Ziegler Robert</Node>
             <Node Id="User.ID">robert.ziegler</Node>
+            <Node Id="ogg.document.creator.user.email">robert.ziegler@gever.local</Node>
+            <Node Id="ogg.document.creator.user.firstname">Robert</Node>
+            <Node Id="ogg.document.creator.user.lastname">Ziegler</Node>
+            <Node Id="ogg.document.creator.user.title">Ziegler Robert</Node>
+            <Node Id="ogg.document.creator.user.userid">robert.ziegler</Node>
             <Node Id="ogg.document.document_date">Aug 31, 2016</Node>
             <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 38</Node>
             <Node Id="ogg.document.sequence_number">38</Node>
@@ -44,6 +49,11 @@
         <Value key="Dossier.Title" type="string">Verträge mit der kantonalen Finanzverwaltung</Value>
         <Value key="User.FullName" type="string">Ziegler Robert</Value>
         <Value key="User.ID" type="string">robert.ziegler</Value>
+        <Value key="ogg.document.creator.user.email" type="string">robert.ziegler@gever.local</Value>
+        <Value key="ogg.document.creator.user.firstname" type="string">Robert</Value>
+        <Value key="ogg.document.creator.user.lastname" type="string">Ziegler</Value>
+        <Value key="ogg.document.creator.user.title" type="string">Ziegler Robert</Value>
+        <Value key="ogg.document.creator.user.userid" type="string">robert.ziegler</Value>
         <Value key="ogg.document.document_date" type="string">Aug 31, 2016</Value>
         <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 38</Value>
         <Value key="ogg.document.sequence_number" type="string">38</Value>

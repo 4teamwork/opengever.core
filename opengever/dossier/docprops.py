@@ -31,10 +31,12 @@ class DocPropertyProvider(BaseDocPropertyProvider):
         return dict()
 
     def get_properties(self, prefix=None):
-        return self._merge(
-            super(DocPropertyProvider, self).get_properties(prefix=prefix),
-            self._collect_deprectated_properties()
-        )
+        properties = super(DocPropertyProvider, self).get_properties(
+            prefix=prefix)
+        if not prefix:
+            properties = self._merge(
+                properties, self._collect_deprectated_properties())
+        return properties
 
 
 @adapter(IDocumentSchema)

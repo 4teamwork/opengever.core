@@ -26,6 +26,13 @@ class DocPropertyCollector(object):
     def __init__(self, document):
         self.document = document
 
+    def get_document_creator(self):
+        creator_userid = self.document.Creator()
+        if not creator_userid:
+            return None
+
+        return api.user.get(userid=creator_userid)
+
     def get_properties(self, recipient_data=tuple()):
         dossier = self.document.get_parent_dossier()
         member = api.user.get_current()
@@ -38,6 +45,12 @@ class DocPropertyCollector(object):
             if property_provider is not None:
                 obj_properties = property_provider.get_properties()
             properties.update(obj_properties)
+
+        creator_properties = queryAdapter(self.get_document_creator(),
+                                                 IDocPropertyProvider)
+        if creator_properties:
+            properties.update(creator_properties.get_properties(
+                prefix=('document', 'creator',)))
 
         for recipient in recipient_data:
             provider = recipient.get_doc_property_provider()
