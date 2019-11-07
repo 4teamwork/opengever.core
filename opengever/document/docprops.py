@@ -31,17 +31,17 @@ class DocPropertyCollector(object):
         member = api.user.get_current()
         proposal = self.document.get_proposal()
 
-        properties = {}
+        properties = dict()
         for obj in [self.document, dossier, member, proposal]:
             property_provider = queryAdapter(obj, IDocPropertyProvider)
-            obj_properties = {}
+            obj_properties = dict()
             if property_provider is not None:
                 obj_properties = property_provider.get_properties()
             properties.update(obj_properties)
 
         for recipient in recipient_data:
-            provider = recipient.get_doc_property_provider(prefix='recipient')
-            properties.update(provider.get_properties())
+            provider = recipient.get_doc_property_provider()
+            properties.update(provider.get_properties(prefix='recipient'))
 
         return properties
 

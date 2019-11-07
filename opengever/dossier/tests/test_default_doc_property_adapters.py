@@ -1,5 +1,5 @@
+from opengever.base.interfaces import IDocPropertyProvider
 from opengever.document.docprops import DocPropertyCollector
-from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.dossier.tests import EXPECTED_DOC_PROPERTIES
 from opengever.dossier.tests import EXPECTED_DOCUMENT_PROPERTIES
 from opengever.dossier.tests import EXPECTED_DOSSIER_PROPERTIES
@@ -23,13 +23,13 @@ class TestDocProperties(IntegrationTestCase):
     def test_default_doc_properties_adapter_for_taskdocument(self):
         self.login(self.regular_user)
 
-        all_properties = DocPropertyCollector(self.document).get_properties()
+        all_properties = DocPropertyCollector(self.taskdocument).get_properties()
         self.assertEqual(EXPECTED_TASKDOC_PROPERTIES, all_properties)
 
     def test_default_doc_properties_adapter_for_proposaldocument(self):
         self.login(self.regular_user)
 
-        all_properties = DocPropertyCollector(self.document).get_properties()
+        all_properties = DocPropertyCollector(self.proposaldocument).get_properties()
         self.assertEqual(EXPECTED_PROPOSALDOC_PROPERTIES, all_properties)
 
     def test_default_document_doc_properties_provider(self):
