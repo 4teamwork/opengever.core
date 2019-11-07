@@ -67,9 +67,8 @@ class OrgRoleAddress(object):
             self.country,
         ])
 
-    def get_doc_property_provider(self, prefix):
-        return OrgRoleAddressDocPropertyProvider(
-            self.organization_address, self.organization, prefix)
+    def get_doc_property_provider(self):
+        return OrgRoleAddressDocPropertyProvider(self)
 
 
 class OrgRole(Base):
@@ -141,5 +140,5 @@ class OrgRole(Base):
         """
         return self.person.contact_id
 
-    def get_doc_property_provider(self, prefix):
-        return OrgRoleDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return OrgRoleDocPropertyProvider(self)

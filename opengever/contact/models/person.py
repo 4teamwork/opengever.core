@@ -51,5 +51,5 @@ class Person(Contact):
     def get_css_class(self):
         return 'contenttype-person'
 
-    def get_doc_property_provider(self, prefix):
-        return PersonDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return PersonDocPropertyProvider(self)

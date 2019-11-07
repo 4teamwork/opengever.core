@@ -54,5 +54,5 @@ class MailAddress(Base):
 
         setattr(self, name, to_safe_html(value))
 
-    def get_doc_property_provider(self, prefix):
-        return MailAddressDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return MailAddressDocPropertyProvider(self)

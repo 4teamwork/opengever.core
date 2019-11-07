@@ -33,5 +33,5 @@ class Address(Base):
             self.country
         ])
 
-    def get_doc_property_provider(self, prefix):
-        return AddressDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return AddressDocPropertyProvider(self)

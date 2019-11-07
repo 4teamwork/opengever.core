@@ -1,183 +1,130 @@
-class PrefixableDocPropertyProvider(object):
-    """Baseclass for PrefixableDocPropertyProvider.
-
-    Contains utility methods to create a dict of doc-properties. Allows
-    definition of a prefix that will be inserted in the namespace after the
-    application part.
-    """
-
-    NS_APP = 'ogg'
-
-    def __init__(self, prefix):
-        self.prefix = prefix
-
-    def _add_property(self, properties, kind, name, value):
-        """Add single property to collection of properties."""
-        key = '.'.join((self.NS_APP, self.prefix, kind, name))
-        properties[key] = value
-
-    def get_properties(self):
-        return {}
+from opengever.base.docprops import BaseDocPropertyProvider
 
 
-class ContactDocPropertyProvider(PrefixableDocPropertyProvider):
+class ContactDocPropertyProvider(BaseDocPropertyProvider):
+    """Doc property provider for contacts."""
 
-    def __init__(self, contact, prefix):
-        super(ContactDocPropertyProvider, self).__init__(prefix=prefix)
-        self.contact = contact
+    DEFAULT_PREFIX = ('contact',)
 
-    def get_properties(self):
-        properties = {}
-
-        self._add_property(properties, 'contact', 'title',
-                           self.contact.get_title(with_former_id=False))
-        self._add_property(properties, 'contact', 'description',
-                           self.contact.description)
-
-        return properties
+    def _collect_properties(self):
+        return {
+            'title': self.context.get_title(with_former_id=False),
+            'description': self.context.description,
+        }
 
 
-class PersonDocPropertyProvider(ContactDocPropertyProvider):
+class PersonDocPropertyProvider(BaseDocPropertyProvider):
 
-    def __init__(self, person, prefix):
-        super(PersonDocPropertyProvider, self).__init__(person, prefix=prefix)
-        self.person = person
+    DEFAULT_PREFIX = ('person',)
 
-    def get_properties(self):
-        properties = super(PersonDocPropertyProvider, self).get_properties()
+    def _collect_properties(self):
+        return {
+            'salutation': self.context.salutation,
+            'academic_title': self.context.academic_title,
+            'firstname': self.context.firstname,
+            'lastname': self.context.lastname,
+        }
 
-        self._add_property(properties, 'person', 'salutation',
-                           self.person.salutation)
-        self._add_property(properties, 'person', 'academic_title',
-                           self.person.academic_title)
-        self._add_property(properties, 'person', 'firstname',
-                           self.person.firstname)
-        self._add_property(properties, 'person', 'lastname',
-                           self.person.lastname)
-
-        return properties
+    def get_properties(self, prefix=None):
+        return self._merge(
+            super(PersonDocPropertyProvider, self).get_properties(prefix=prefix),
+            ContactDocPropertyProvider(self.context).get_properties(prefix=prefix)
+        )
 
 
-class OrganizationDocPropertProvider(ContactDocPropertyProvider):
+class OrganizationDocPropertProvider(BaseDocPropertyProvider):
 
-    def __init__(self, organization, prefix):
-        super(OrganizationDocPropertProvider, self).__init__(
-            organization, prefix=prefix)
-        self.organization = organization
+    DEFAULT_PREFIX = ('organization',)
 
-    def get_properties(self):
-        properties = super(OrganizationDocPropertProvider, self).get_properties()
+    def _collect_properties(self):
+        return {'name': self.context.name}
 
-        self._add_property(properties, 'organization', 'name',
-                           self.organization.name)
-
-        return properties
+    def get_properties(self, prefix=None):
+        return self._merge(
+            super(OrganizationDocPropertProvider, self).get_properties(prefix=prefix),
+            ContactDocPropertyProvider(self.context).get_properties(prefix=prefix)
+        )
 
 
-class OrgRoleDocPropertyProvider(PrefixableDocPropertyProvider):
+class OrgRoleDocPropertyProvider(BaseDocPropertyProvider):
     """Provides doc-properties for an org-role and its associated person."""
 
-    def __init__(self, org_role, prefix):
-        super(OrgRoleDocPropertyProvider, self).__init__(prefix)
-        self.org_role = org_role
+    DEFAULT_PREFIX = ('orgrole',)
 
-    def get_properties(self):
-        person_provider = self.org_role.person.get_doc_property_provider(self.prefix)
-        properties = person_provider.get_properties()
+    def _collect_properties(self):
+        return {
+            'function': self.context.function,
+            'description': self.context.description,
+            'department': self.context.department,
+        }
 
-        self._add_property(properties, 'orgrole', 'function',
-                           self.org_role.function)
-        self._add_property(properties, 'orgrole', 'description',
-                           self.org_role.description)
-        self._add_property(properties, 'orgrole', 'department',
-                           self.org_role.department)
+    def get_properties(self, prefix=None):
 
-        return properties
+        return self._merge(
+            super(OrgRoleDocPropertyProvider, self).get_properties(prefix=prefix),
+            self.context.person.get_doc_property_provider().get_properties(prefix=prefix)
+        )
 
 
-class AddressDocPropertyProvider(PrefixableDocPropertyProvider):
+class AddressDocPropertyProvider(BaseDocPropertyProvider):
     """Provides doc-properties for an address."""
 
-    def __init__(self, address, prefix):
-        super(AddressDocPropertyProvider, self).__init__(prefix)
-        self.address = address
+    DEFAULT_PREFIX = ('address',)
 
-    def get_properties(self):
-        properties = {}
-
-        self._add_property(properties, 'address', 'street',
-                           self.address.street)
-        self._add_property(properties, 'address', 'zip_code',
-                           self.address.zip_code)
-        self._add_property(properties, 'address', 'city',
-                           self.address.city)
-        self._add_property(properties, 'address', 'country',
-                           self.address.country)
-
-        return properties
+    def _collect_properties(self):
+        return {
+            'street': self.context.street,
+            'zip_code': self.context.zip_code,
+            'city': self.context.city,
+            'country': self.context.country,
+        }
 
 
-class MailAddressDocPropertyProvider(PrefixableDocPropertyProvider):
+class MailAddressDocPropertyProvider(BaseDocPropertyProvider):
     """Provides doc-properties for a mail-address."""
 
-    def __init__(self, mail_address, prefix):
-        super(MailAddressDocPropertyProvider, self).__init__(prefix)
-        self.mail_address = mail_address
+    DEFAULT_PREFIX = ('email',)
 
-    def get_properties(self):
-        properties = {}
-
-        self._add_property(properties, 'email', 'address',
-                           self.mail_address.address)
-
-        return properties
+    def _collect_properties(self):
+        return {
+            'address': self.context.address,
+        }
 
 
-class PhoneNumberDocPropertyProvider(PrefixableDocPropertyProvider):
+class PhoneNumberDocPropertyProvider(BaseDocPropertyProvider):
     """Provides doc-properties for a phone-number."""
 
-    def __init__(self, phonenumber, prefix):
-        super(PhoneNumberDocPropertyProvider, self).__init__(prefix)
-        self.phonenumber = phonenumber
+    DEFAULT_PREFIX = ('phone',)
 
-    def get_properties(self):
-        properties = {}
-
-        self._add_property(properties, 'phone', 'number',
-                           self.phonenumber.phone_number)
-
-        return properties
+    def _collect_properties(self):
+        return {
+            'number': self.context.phone_number,
+        }
 
 
-class URLDocPropertyProvider(PrefixableDocPropertyProvider):
+class URLDocPropertyProvider(BaseDocPropertyProvider):
     """Provides doc-properties for an url."""
 
-    def __init__(self, url, prefix):
-        super(URLDocPropertyProvider, self).__init__(prefix)
-        self.url = url
+    DEFAULT_PREFIX = ('url',)
 
-    def get_properties(self):
-        properties = {}
-
-        self._add_property(properties, 'url', 'url',
-                           self.url.url)
-
-        return properties
+    def _collect_properties(self):
+        return {
+            'url': self.context.url,
+        }
 
 
-class OrgRoleAddressDocPropertyProvider(AddressDocPropertyProvider):
-    """Provides doc-properties for org role addresses."""
+class OrgRoleAddressDocPropertyProvider(BaseDocPropertyProvider):
+    """Provides doc-properties for org role addresses.
 
-    def __init__(self, address, organization, prefix):
-        super(OrgRoleAddressDocPropertyProvider, self).__init__(address,
-                                                                prefix)
-        self.organization = organization
+    Injects organization name into address.
+    """
+    DEFAULT_PREFIX = ('organization',)
 
-    def get_properties(self):
-        properties = super(
-            OrgRoleAddressDocPropertyProvider, self).get_properties()
+    def _collect_properties(self):
+        return {'name': self.context.organization.name}
 
-        self._add_property(properties, 'organization', 'name',
-                           self.organization.name)
-
-        return properties
+    def get_properties(self, prefix=None):
+        return self._merge(
+            super(OrgRoleAddressDocPropertyProvider, self).get_properties(prefix=prefix),
+            AddressDocPropertyProvider(self.context.organization_address).get_properties(prefix=prefix)
+        )
