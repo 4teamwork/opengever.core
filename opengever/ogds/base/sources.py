@@ -233,6 +233,8 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
     def search(self, query_string):
         self.terms = []
+        # Ignore colons to support queries on inboxes-id.
+        query_string = query_string.replace(':', ' ')
 
         text_filters = query_string.split(' ')
         query = extend_query_with_textfilter(
