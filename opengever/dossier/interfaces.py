@@ -179,15 +179,6 @@ class IDossierArchiver(Interface):
         """
 
 
-class IDocPropertyProvider(Interface):
-    """May adapt any object that can be a provider for DocProperties.
-    """
-
-    def get_properties():
-        """Return a dictionary of DocProperties for the adapted object.
-        """
-
-
 class IDossierResolveProperties(Interface):
     """Dossier resolving configuration.
     """
