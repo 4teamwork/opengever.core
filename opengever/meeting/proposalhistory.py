@@ -1,5 +1,4 @@
 from BTrees.OOBTree import OOBTree
-from collections import namedtuple
 from datetime import datetime
 from opengever.base import advancedjson
 from opengever.base.date_time import utcnow_tz_aware
@@ -31,70 +30,6 @@ from zope.schema import getFields
 
 NEED_SYNCING = (u'revised', u'reopened', u'commented')
 
-Message = namedtuple('Message', ['label', 'default', 'to_map'])
-
-messages = {
-    'created': Message(u'proposal_history_label_created',
-                       u'Created by ${user}',
-                       ('user',)),
-
-    u'commented': Message(u'proposal_history_label_commented',
-                          u'Proposal commented by ${user}',
-                          ('user',)),
-
-    u'cancelled': Message(u'proposal_history_label_cancelled',
-                          u'Proposal cancelled by ${user}',
-                          ('user',)),
-
-    u'reactivated': Message(u'proposal_history_label_reactivated',
-                            u'Proposal reactivated by ${user}',
-                            ('user',)),
-
-    u'submitted': Message(u'proposal_history_label_submitted',
-                          u'Submitted by ${user}',
-                          ('user',)),
-
-    u'document_submitted': Message(
-        u'proposal_history_label_document_submitted',
-        u'Document ${document_title} submitted in version ${submitted_version} by ${user}',
-        ('user', 'document_title', 'submitted_version')),
-
-    u'rejected': Message(u'proposal_history_label_rejected',
-                         u'Rejected by ${user}',
-                         ('user',)),
-
-    u'reopened': Message(u'proposal_history_label_reopened',
-                         u'Proposal reopened by ${user}',
-                         ('user',)),
-
-    u'scheduled': Message(u'proposal_history_label_scheduled',
-                          u'Scheduled for meeting ${meeting} by ${user}',
-                          ('user', 'meeting',)),
-
-    u'decided': Message(u'proposal_history_label_decided',
-                        u'Proposal decided by ${user}',
-                        ('user',)),
-
-    u'revised': Message(u'proposal_history_label_revised',
-                        u'Proposal revised by ${user}',
-                        ('user',)),
-
-    u'remove_scheduled': Message(
-        u'proposal_history_label_remove_scheduled',
-        u'Removed from schedule of meeting ${meeting} by ${user}',
-        ('user', 'meeting')),
-
-    u'document_updated': Message(
-        u'proposal_history_label_document_updated',
-        u'Submitted document ${document_title} updated to version ${submitted_version} by ${user}',
-        ('user', 'document_title', 'submitted_version')),
-
-    u'successor_created': Message(
-        u'proposal_history_label_successor_created',
-        u'Successor proposal ${successor_link} created by ${user}',
-        ('successor_link', 'user')),
-}
-
 
 class ProposalResponseDescription(object):
 
@@ -111,17 +46,84 @@ class ProposalResponseDescription(object):
     def __getattr__(self, name):
         return getattr(self.response, name)
 
-    def message(self):
-        message = self._msg
-        mapping = dict((field, getattr(self, field)) for field in message.to_map)
-        return _(message.label, message.default, mapping)
-
     @property
     def css_class(self):
         return self.css_classes.get(self.response_type, self.response_type)
 
     @property
-    def _msg(self):
+    def mapping(self):
+        mapping = {'user': self.user}
+        if self.response_type in ['document_submitted', 'document_updated']:
+            mapping['title'] = self.document_title
+            mapping['version'] = self.submitted_version
+        elif self.response_type in ['scheduled', 'remove_scheduled']:
+            mapping['meeting'] = self.meeting_title
+        elif self.response_type == 'successor_created':
+            mapping['successor_link'] = self.successor_link
+        return mapping
+
+    def message(self):
+        messages = {
+            'created': _(u'proposal_history_label_created',
+                         u'Created by ${user}',
+                         self.mapping),
+
+            u'commented': _(u'proposal_history_label_commented',
+                            u'Proposal commented by ${user}',
+                            self.mapping),
+
+            u'cancelled': _(u'proposal_history_label_cancelled',
+                            u'Proposal cancelled by ${user}',
+                            self.mapping),
+
+            u'reactivated': _(u'proposal_history_label_reactivated',
+                              u'Proposal reactivated by ${user}',
+                              self.mapping),
+
+            u'submitted': _(u'proposal_history_label_submitted',
+                            u'Submitted by ${user}',
+                            self.mapping),
+
+            u'document_submitted': _(
+                u'proposal_history_label_document_submitted',
+                u'Document ${title} submitted in version ${version} by ${user}',
+                self.mapping),
+
+            u'rejected': _(u'proposal_history_label_rejected',
+                           u'Rejected by ${user}',
+                           self.mapping),
+
+            u'reopened': _(u'proposal_history_label_reopened',
+                           u'Proposal reopened by ${user}',
+                           self.mapping),
+
+            u'scheduled': _(u'proposal_history_label_scheduled',
+                            u'Scheduled for meeting ${meeting} by ${user}',
+                            self.mapping),
+
+            u'decided': _(u'proposal_history_label_decided',
+                          u'Proposal decided by ${user}',
+                          self.mapping),
+
+            u'revised': _(u'proposal_history_label_revised',
+                          u'Proposal revised by ${user}',
+                          self.mapping),
+
+            u'remove_scheduled': _(
+                u'proposal_history_label_remove_scheduled',
+                u'Removed from schedule of meeting ${meeting} by ${user}',
+                self.mapping),
+
+            u'document_updated': _(
+                u'proposal_history_label_document_updated',
+                u'Submitted document ${title} updated to version ${version} by ${user}',
+                self.mapping),
+
+            u'successor_created': _(
+                u'proposal_history_label_successor_created',
+                u'Successor proposal ${successor_link} created by ${user}',
+                self.mapping),
+        }
         return messages[self.response.response_type]
 
     @property
