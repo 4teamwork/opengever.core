@@ -91,12 +91,6 @@
       handler=".handlers.validate_template_file"
       />
 
-  <adapter
-      for=".proposal.IBaseProposal"
-      provides=".interfaces.IHistory"
-      factory=".proposalhistory.ProposalHistory"
-      />
-
   <!-- table sources -->
   <adapter factory=".tabs.meetinglisting.MeetingTableSource" />
   <adapter factory=".tabs.memberlisting.MemberTableSource" />

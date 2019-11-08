@@ -46,6 +46,3 @@ class IPeriodWrapper(ISQLObjectWrapper):
 class IMeetingDossier(model.Schema):
     """Marker interface for MeetingDossier"""
 
-
-class IHistory(Interface):
-    """History for an object."""
