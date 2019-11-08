@@ -144,7 +144,7 @@ class IResponse(Interface):
 
     response_id = schema.Int(required=True)
 
-    created = schema.Date(required=True)
+    created = schema.Datetime(required=True)
 
     creator = schema.TextLine(required=True)
 
