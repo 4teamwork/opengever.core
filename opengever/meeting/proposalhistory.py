@@ -14,11 +14,19 @@ from opengever.ogds.base.actor import Actor
 from persistent.dict import PersistentDict
 from persistent.mapping import PersistentMapping
 from plone import api
+from plone.restapi.interfaces import IFieldDeserializer
+from plone.restapi.interfaces import IFieldSerializer
+from plone.restapi.serializer.converters import json_compatible
 from uuid import UUID
 from uuid import uuid4
+from z3c.form.interfaces import IDataManager
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
+from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implements
+from zope.schema import getFields
+
 
 
 
@@ -134,6 +142,31 @@ class ProposalResponse(Response):
         if name in self.additional_data:
             return self.additional_data.get(name)
         raise AttributeError
+
+    def serialize(self):
+        request = getRequest()
+        data = {}
+        for name, field in getFields(IProposalResponse).items():
+            serializer = queryMultiAdapter(
+                (field, self, request), IFieldSerializer)
+            value = serializer()
+            data[json_compatible(name)] = value
+        return data
+
+    def deserialize(self, data):
+        fields = getFields(IProposalResponse)
+        request = getRequest()
+        for name, field in fields.items():
+            if name not in data:
+                continue
+            # Deserialize to field value
+            deserializer = queryMultiAdapter(
+                (field, self, request), IFieldDeserializer
+            )
+            value = deserializer(data[name])
+            # set value
+            dm = queryMultiAdapter((self, field), IDataManager)
+            dm.set(value)
 
 
 class BaseHistoryRecord(object):
