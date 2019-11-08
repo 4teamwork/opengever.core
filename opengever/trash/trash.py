@@ -64,18 +64,8 @@ class Trasher(object):
         self.context = context
 
     def trash(self):
-        if not _checkPermission('opengever.trash: Trash content',
-                                self.context):
-            raise Unauthorized()
-
-        folder = aq_parent(aq_inner(self.context))
-        if not _checkPermission('opengever.trash: Trash content', folder):
-            raise Unauthorized()
-
         # check that document can be trashed
-        self.verify_is_not_already_trashed()
-        self.verify_is_not_checked_out()
-        self.verify_is_not_returned_excerpt()
+        self.verify_may_trash()
 
         alsoProvides(self.context, ITrashed)
 
@@ -85,39 +75,81 @@ class Trasher(object):
         notify(TrashedEvent(self.context))
 
     def untrash(self):
-        if not _checkPermission('opengever.trash: Untrash content', self.context):
-            raise Unauthorized()
-
-        folder = aq_parent(aq_inner(self.context))
-        if not _checkPermission('opengever.trash: Trash content', folder):
-            raise Unauthorized()
-
-        if not ITrashed.providedBy(self.context) or self.context.is_removed:
-            raise Unauthorized()
+        self.verify_may_untrash()
 
         noLongerProvides(self.context, ITrashed)
 
         self.reindex()
         notify(UntrashedEvent(self.context))
 
+    def verify_may_trash(self, raise_on_violations=True):
+        if not self.check_trash_permission():
+            if raise_on_violations:
+                raise Unauthorized()
+            return False
+
+        if not self.is_trashable():
+            if raise_on_violations:
+                raise TrashError('Not trashable')
+            return False
+
+        if self.is_trashed():
+            if raise_on_violations:
+                raise TrashError('Already trashed')
+            return False
+
+        if self.is_checked_out():
+            if raise_on_violations:
+                raise TrashError('Document checked out')
+            return False
+
+        if self.is_returned_excerpt():
+            if raise_on_violations:
+                raise TrashError('The document has been returned as excerpt')
+            return False
+
+        return True
+
+    def verify_may_untrash(self, raise_on_violations=True):
+        if not self.check_untrash_permission():
+            if raise_on_violations:
+                raise Unauthorized()
+            return False
+
+        if not ITrashed.providedBy(self.context) or self.context.is_removed:
+            if raise_on_violations:
+                raise Unauthorized()
+            return False
+
+        return True
+
     def reindex(self):
         self.context.setModificationDate()
         self.context.reindexObject(idxs=['trashed', 'object_provides', 'modified'])
 
-    def verify_is_not_already_trashed(self):
-        if ITrashed.providedBy(self.context):
-            raise TrashError('Already trashed')
+    def check_trash_permission(self):
+        container = aq_parent(aq_inner(self.context))
+        return all(_checkPermission('opengever.trash: Trash content', obj)
+                   for obj in (self.context, container))
 
-    def verify_is_not_checked_out(self):
+    def check_untrash_permission(self):
+        container = aq_parent(aq_inner(self.context))
+        return all((_checkPermission('opengever.trash: Untrash content', self.context),
+                    _checkPermission('opengever.trash: Trash content', container)))
+
+    def is_trashable(self):
+        return ITrashableMarker.providedBy(self.context)
+
+    def is_trashed(self):
+        return ITrashed.providedBy(self.context)
+
+    def is_checked_out(self):
         manager = queryMultiAdapter((self.context, self.context.REQUEST),
                                     ICheckinCheckoutManager)
         if manager and manager.get_checked_out_by():
-            raise TrashError('Document checked out')
+            return True
+        return False
 
-    def verify_is_not_returned_excerpt(self):
-        """ An excerpt that has been returned to the proposal
-        should not be trashed
-        """
-        if (self.context.get_proposal() is not None
-                and self.context.get_proposal().get_excerpt() == self.context):
-            raise TrashError('The document has been returned as excerpt')
+    def is_returned_excerpt(self):
+        return (self.context.get_proposal() is not None
+                and self.context.get_proposal().get_excerpt() == self.context)

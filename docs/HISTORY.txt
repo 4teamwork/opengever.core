@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc5 (unreleased)
 ------------------------
 
+- Add trash_document and untrash_document file_actions. [lgraf]
 - Bump plone.restapi to 5.0.3 to get fix for filtering vocabs by non-ASCII titles. [lgraf]
 - Update the usersettings-serializer: A pure plone user has always seen all screens. [elioschmutz]
 - Support combined notation for task responsible. [phgross]
