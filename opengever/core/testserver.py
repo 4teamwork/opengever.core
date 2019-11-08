@@ -51,6 +51,16 @@ class TestserverLayer(OpengeverFixture):
         # Clear solr from potential artefacts of the previous run.
         SolrReplicationAPIClient.get_instance().clear()
 
+        # Install a Virtual Host Monster
+        if "virtual_hosting" not in app.objectIds():
+            # If ZopeLite was imported, we have no default virtual
+            # host monster
+            from Products.SiteAccess.VirtualHostMonster import (
+                manage_addVirtualHostMonster,
+            )
+
+            manage_addVirtualHostMonster(app, "virtual_hosting")
+
     def setUpPloneSite(self, portal):
         session.current_session = session.BuilderSession()
         session.current_session.session = create_session()
