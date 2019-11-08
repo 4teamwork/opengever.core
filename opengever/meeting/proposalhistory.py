@@ -1,4 +1,5 @@
 from BTrees.OOBTree import OOBTree
+from collections import namedtuple
 from datetime import datetime
 from opengever.base import advancedjson
 from opengever.base.date_time import utcnow_tz_aware
@@ -29,6 +30,113 @@ from zope.schema import getFields
 
 
 NEED_SYNCING = (u'revised', u'reopened', u'commented')
+
+Message = namedtuple('Message', ['label', 'default', 'to_map'])
+
+messages = {
+    'created': Message(u'proposal_history_label_created',
+                       u'Created by ${user}',
+                       ('user',)),
+
+    u'commented': Message(u'proposal_history_label_commented',
+                          u'Proposal commented by ${user}',
+                          ('user',)),
+
+    u'cancelled': Message(u'proposal_history_label_cancelled',
+                          u'Proposal cancelled by ${user}',
+                          ('user',)),
+
+    u'reactivated': Message(u'proposal_history_label_reactivated',
+                            u'Proposal reactivated by ${user}',
+                            ('user',)),
+
+    u'submitted': Message(u'proposal_history_label_submitted',
+                          u'Submitted by ${user}',
+                          ('user',)),
+
+    u'document_submitted': Message(
+        u'proposal_history_label_document_submitted',
+        u'Document ${document_title} submitted in version ${submitted_version} by ${user}',
+        ('user', 'document_title', 'submitted_version')),
+
+    u'rejected': Message(u'proposal_history_label_rejected',
+                         u'Rejected by ${user}',
+                         ('user',)),
+
+    u'reopened': Message(u'proposal_history_label_reopened',
+                         u'Proposal reopened by ${user}',
+                         ('user',)),
+
+    u'scheduled': Message(u'proposal_history_label_scheduled',
+                          u'Scheduled for meeting ${meeting} by ${user}',
+                          ('user', 'meeting',)),
+
+    u'decided': Message(u'proposal_history_label_decided',
+                        u'Proposal decided by ${user}',
+                        ('user',)),
+
+    u'revised': Message(u'proposal_history_label_revised',
+                        u'Proposal revised by ${user}',
+                        ('user',)),
+
+    u'remove_scheduled': Message(
+        u'proposal_history_label_remove_scheduled',
+        u'Removed from schedule of meeting ${meeting} by ${user}',
+        ('user', 'meeting')),
+
+    u'document_updated': Message(
+        u'proposal_history_label_document_updated',
+        u'Submitted document ${document_title} updated to version ${submitted_version} by ${user}',
+        ('user', 'document_title', 'submitted_version')),
+
+    u'successor_created': Message(
+        u'proposal_history_label_successor_created',
+        u'Successor proposal ${successor_link} created by ${user}',
+        ('successor_link', 'user')),
+}
+
+
+class ProposalResponseDescription(object):
+
+    css_classes = {
+        u'document_submitted': 'documentAdded',
+        u'remove_scheduled': 'scheduleRemoved',
+        u'document_updated': 'documentUpdated',
+        u'successor_created': 'created'
+    }
+
+    def __init__(self, response):
+        self.response = response
+
+    def __getattr__(self, name):
+        return getattr(self.response, name)
+
+    def message(self):
+        message = self._msg
+        mapping = dict((field, getattr(self, field)) for field in message.to_map)
+        return _(message.label, message.default, mapping)
+
+    @property
+    def css_class(self):
+        return self.css_classes.get(self.response_type, self.response_type)
+
+    @property
+    def _msg(self):
+        return messages[self.response.response_type]
+
+    @property
+    def user(self):
+        return Actor.lookup(self.response.creator).get_link()
+
+    @property
+    def successor_link(self):
+        successor = Oguid.parse(self.response.successor_oguid).resolve_object()
+        return successor.load_model().get_link(include_icon=False)
+
+    @property
+    def meeting_title(self):
+        meeting = Meeting.query.get(self.response.meeting_id)
+        return meeting.get_title() if meeting else u''
 
 
 class ProposalHistory(object):
