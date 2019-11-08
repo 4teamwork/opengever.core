@@ -1,8 +1,9 @@
 from opengever.base import advancedjson
 from opengever.base.request import tracebackify
 from opengever.base.utils import ok_response
-from opengever.meeting.interfaces import IHistory
 from Products.Five import BrowserView
+from opengever.base.response import IResponseContainer
+from opengever.meeting.proposalhistory import ProposalResponse
 
 
 @tracebackify
@@ -17,9 +18,13 @@ class ReceiveProposalHistory(BrowserView):
 
     def __call__(self):
         data = advancedjson.loads(self.request.get('data'))
-        timestamp = data['timestamp']
-
         data = data['data']
-        IHistory(self.context).receive_record(timestamp, data)
+        response = ProposalResponse()
+        response.deserialize(data)
+
+        # make sure that response does not get synced back
+        response._needs_syncing = False
+
+        IResponseContainer(self.context).add(response)
 
         return ok_response(self.request)

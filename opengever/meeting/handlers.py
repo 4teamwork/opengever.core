@@ -1,9 +1,11 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base import advancedjson
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.portlets import block_context_portlet_inheritance
+from opengever.base.request import dispatch_request
 from opengever.base.response import IResponseContainer
 from opengever.base.security import elevated_privileges
 from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
@@ -163,3 +165,25 @@ def validate_template_file(obj, event):
         IAnnotations(obj)[
             'opengever.meeting.sablon_template_is_valid'
         ] = sablon_template_is_valid(obj.file)
+
+
+def sync_proposal_response(context, event):
+    # We only need to sync responses when the proposal has been submitted and
+    # the response is of a type that needs syncing.
+    # Syncing back an already synced response is avoided by overriding
+    # response.needs_syncing in ReceiveProposalHistory.
+    if not (context.is_submitted() and event.response.needs_syncing):
+        return
+
+    path = context.get_sync_target_path()
+    admin_unit_id = context.get_sync_admin_unit_id()
+
+    data = event.response.serialize()
+    request_data = {'data': advancedjson.dumps({
+        'data': data,
+    })}
+    dispatch_request(
+        admin_unit_id,
+        '@@receive-proposal-history',
+        path=path,
+        data=request_data,)

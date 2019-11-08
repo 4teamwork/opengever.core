@@ -28,6 +28,7 @@ from zope.interface import implements
 from zope.schema import getFields
 
 
+NEED_SYNCING = (u'revised', u'reopened', u'commented')
 
 
 class ProposalHistory(object):
@@ -142,6 +143,12 @@ class ProposalResponse(Response):
         if name in self.additional_data:
             return self.additional_data.get(name)
         raise AttributeError
+
+    @property
+    def needs_syncing(self):
+        # Override of needs_syncing is needed to avoid syncing an already
+        # synced response.
+        return getattr(self, "_needs_syncing", self.response_type in NEED_SYNCING)
 
     def serialize(self):
         request = getRequest()

@@ -206,6 +206,12 @@
       handler=".handlers.submitted_proposal_modified"
       />
 
+  <subscriber
+      for="opengever.meeting.proposal.IBaseProposal
+           opengever.base.response.IResponseAddedEvent"
+      handler=".handlers.sync_proposal_response"
+      />
+
   <adapter factory=".committee.RepositoryfolderValidator" />
 
   <adapter
