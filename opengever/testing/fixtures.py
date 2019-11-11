@@ -14,7 +14,6 @@ from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
 from ftw.tokenauth.pas.storage import CredentialStorage
-from functools import wraps
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.command import CreateEmailCommand
@@ -23,7 +22,6 @@ from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.mail.tests import MAIL_DATA
-from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.officeconnector.helpers import get_auth_plugin
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import assets
@@ -1801,44 +1799,13 @@ class OpengeverContentFixture(object):
         end = start + timedelta(hours=1)
         with freeze(start) as clock:
             with ticking_creator(clock, minutes=tick_length):
-                with self.ticking_proposal_history(clock, seconds=1):
-                    with time_based_intids():
-                        yield
+                with time_based_intids():
+                    yield
 
             assert datetime.now(pytz.UTC) < end, (
                 'The context self.freeze_at_hour({}) creates too many objects '
                 'with ftw.builder, leading to a time overlap with '
                 'self.freeze_at_hour({}).').format(hour, hour + 1)
-
-    @contextmanager
-    def ticking_proposal_history(self, clock, **forward):
-        """The proposal history entries must be unique.
-        This context manager applies patches so that creating a proposal
-        history record will move the freezed clock forward a bit.
-        This context manager must not be nested.
-        """
-        marker_name = '_fixture_patched'
-
-        if getattr(BaseHistoryRecord, marker_name, None):
-            yield
-            return
-
-        original_init = BaseHistoryRecord.__init__
-
-        @wraps(original_init)
-        def patched_init(*args, **kwargs):
-            result = original_init(*args, **kwargs)
-            clock.forward(**forward)
-            return result
-
-        BaseHistoryRecord.__init__ = patched_init
-        setattr(BaseHistoryRecord, marker_name, True)
-        try:
-            yield
-
-        finally:
-            BaseHistoryRecord.__init__ = original_init
-            delattr(BaseHistoryRecord, marker_name)
 
     def register(self, attrname, obj):
         """Add an object to the lookup table so that it can be accessed from

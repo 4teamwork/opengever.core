@@ -166,7 +166,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     'attachments': [{
                         'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
                         'file': 'Traktandum 2/Beilage/1_Vertraegsentwurf.docx',
-                        'modified': u'2016-08-31T16:09:37+02:00',
+                        'modified': u'2016-08-31T16:09:33+02:00',
                         'title': u'Vertr\xe4gsentwurf',
                     }],
                     'number': '2.',
@@ -175,7 +175,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     'proposal': {
                         'checksum': '114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
                         'file': 'Traktandum 2/Vertraege.docx',
-                        'modified': u'2016-08-31T16:09:35+02:00',
+                        'modified': u'2016-08-31T16:09:33+02:00',
                     },
                     'sort_order': 3,
                     'title': u'Vertr\xe4ge',
@@ -242,7 +242,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                         u'attachments': [{
                             u'checksum': u'51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
                             u'file': u'Traktandum 2/Beilage/1_Vertraegsentwurf.docx',
-                            u'modified': u'2016-08-31T16:09:37+02:00',
+                            u'modified': u'2016-08-31T16:09:33+02:00',
                             u'title': u'Vertr\xe4gsentwurf',
                         }],
                         u'number': u'2.',
@@ -250,7 +250,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                         u'proposal': {
                             u'checksum': u'114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
                             u'file': u'Traktandum 2/Vertraege.docx',
-                            u'modified': u'2016-08-31T16:09:35+02:00',
+                            u'modified': u'2016-08-31T16:09:33+02:00',
                         },
                         u'sort_order': 3,
                         u'title': u'Vertr\xe4ge',
