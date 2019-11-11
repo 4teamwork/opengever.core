@@ -33,7 +33,6 @@ tests_require = [
     'pyquery',
     'requests_mock',
     'requests_toolbelt',
-    'unittest2',
     'xlrd',
     'z3c.blobfile',
     'z3c.form',

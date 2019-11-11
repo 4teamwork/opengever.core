@@ -2,10 +2,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import MEMORY_DB_LAYER
 from opengever.ogds.base.utils import OGDSService
-import unittest2
+import unittest
 
 
-class OGDSTestCase(unittest2.TestCase):
+class OGDSTestCase(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 
