@@ -5,7 +5,7 @@ from datetime import date
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.oguid import Oguid
-from opengever.meeting.interfaces import IHistory
+from opengever.base.response import IResponseContainer
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
@@ -75,13 +75,14 @@ class TestProposalSubmit(IntegrationTestCase):
         browser.open(url, method='POST', data=json.dumps(data),
                      headers=self.api_headers)
 
-        proposal_history = IHistory(self.draft_proposal)
-        proposal_submitted = list(proposal_history)[1]
-        self.assertEqual(u'Fertig!', proposal_submitted.text)
-        self.assertEqual(u'submitted', proposal_submitted.history_type)
+        proposal_history = IResponseContainer(self.draft_proposal)
+        proposal_submitted = proposal_history.list()[-2]
 
-        doc_submitted = list(proposal_history)[0]
-        self.assertEqual(u'document_submitted', doc_submitted.history_type)
+        self.assertEqual(u'Fertig!', proposal_submitted.text)
+        self.assertEqual(u'submitted', proposal_submitted.response_type)
+
+        doc_submitted = proposal_history.list()[-1]
+        self.assertEqual(u'document_submitted', doc_submitted.response_type)
 
         self._assert_proposal_submitted_correctly(browser)
 

@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
-from opengever.meeting.interfaces import IHistory
+from opengever.base.response import IResponseContainer
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -44,10 +44,10 @@ class TestProposalReactivate(IntegrationTestCase):
         browser.open(url, method='POST', data=json.dumps(data),
                      headers=self.api_headers)
 
-        proposal_history = IHistory(self.draft_proposal)
-        proposal_reactivated = list(proposal_history)[0]
+        proposal_history = IResponseContainer(self.draft_proposal)
+        proposal_reactivated = proposal_history.list()[-1]
         self.assertEqual(u'\xc4u\xe4 doch', proposal_reactivated.text)
-        self.assertEqual(u'reactivated', proposal_reactivated.history_type)
+        self.assertEqual(u'reactivated', proposal_reactivated.response_type)
 
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
         self.assert_workflow_state('proposal-state-active', self.draft_proposal)
