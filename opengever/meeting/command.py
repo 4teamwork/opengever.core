@@ -570,7 +570,7 @@ class CopyProposalDocumentCommand(object):
                 self.proposal, self.proposal.REQUEST, self.document.title).record()
 
         history_data = advancedjson.dumps({
-            'submitted_version': submitted_version,
+            'response': response.serialize(),
             })
 
         activity = advancedjson.dumps({

@@ -15,7 +15,6 @@ from opengever.meeting.activity.activities import ProposalDocumentSubmittedActiv
 from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
@@ -208,6 +207,7 @@ class UpdateSubmittedDocumentView(BrowserView):
                 document_title=self.context.title,
                 submitted_version=history_data['submitted_version'],
             )
+            response._needs_syncing = False
             IResponseContainer(submitted_proposal).add(response)
 
             ProposalDocumentUpdatedActivity(
@@ -240,12 +240,10 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
         document = super(RecieveSubmittedDocumentView, self).receive()
 
         history_data = advancedjson.loads(self.request.get('history_data'))
+        response = ProposalResponse()
+        response.deserialize(history_data['response'])
         with elevated_privileges():
-            IHistory(self.context).append_record(
-                u'document_submitted',
-                document_title=document.title,
-                submitted_version=history_data['submitted_version'],
-            )
+            IResponseContainer(self.context).add(response)
 
         activity = advancedjson.loads(self.request.get('activity'))
         if activity['record_activity']:
