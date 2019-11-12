@@ -14,8 +14,8 @@ class ProposalDocPropertyProvider(BaseDocPropertyProvider):
             'decision_number': '',
             'agenda_item_number': '',
             'agenda_item_number_raw': '',
-            'proposal_title': self.context.Title(),
-            'proposal_description': self.context.Description(),
+            'proposal_title': self.context.title,
+            'proposal_description': self.context.description,
             'proposal_state': translate(self.context.get_state().title,
                                         context=self.context.REQUEST),
         }
