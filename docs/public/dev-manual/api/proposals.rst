@@ -58,3 +58,56 @@ Auch Anträge können via REST API bedient werden. Die Erstellung eines Antrags 
         },
         "...": "..."
       }
+
+
+Antragverlauf
+-------------
+Der Verlauf eines Antrags ist in der GET Repräsentation eines Antrags unter dem Attribut ``responses`` enthalten.
+
+
+**Beispiel-Respones auf ein GET Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Accept: application/json
+
+      {
+        "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/proposal-5",
+        "@type": "opengever.meeting.proposal",
+        "UID": "3a551f6e3b62421da029dfceb71656e6",
+        "items": [],
+        "responses": [
+          {
+            "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/proposal-5/@responses/1569394746972113",
+            "response_id": 1569394746972113,
+            "response_type": "successor_created",
+            "additional_data": {
+                "successor_oguid": "fd:593382572"
+            },
+            "changes": [],
+            "creator": {
+                "title": "hugo.boss",
+                "token": "hugo.boss"
+            },
+            "created": "2019-05-21T13:57:42",
+            "text": "",
+          },
+          {
+            "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/proposal-5/@responses/1573486804000000",
+            "response_id": 1573486804000000
+            "response_type": "commented"
+            "additional_data": [],
+            "changes": [],
+            "creator": {
+                "title": "hugo.boss",
+                "token": "hugo.boss"
+            },
+            "created": "2019-11-11T16:40:04",
+            "text": "Suspendisse faucibus, nunc et pellentesque egestas.",
+          },
+        ]
+        "review_state": "proposal-state-submitted",
+        "...": "...",
+      }
+
