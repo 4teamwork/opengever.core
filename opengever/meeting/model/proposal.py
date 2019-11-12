@@ -42,7 +42,7 @@ MAX_TITLE_LENGTH = 256
 
 class Reject(Transition):
 
-    def execute(self, obj, model, text=None, **kwargs):
+    def execute(self, obj, model, text=u'', **kwargs):
         obj.reject(text)
         msg = _(u"The proposal has been rejected successfully")
         api.portal.show_message(msg, request=getRequest(), type='info')

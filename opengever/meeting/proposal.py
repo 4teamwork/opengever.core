@@ -594,7 +594,7 @@ class Proposal(Container, ProposalBase):
         command.execute()
         return command
 
-    def submit(self, text=None):
+    def submit(self, text=u''):
         self.date_of_submission = date.today()
 
         documents = self.get_documents()

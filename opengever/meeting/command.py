@@ -412,7 +412,7 @@ class CreateSubmittedProposalCommand(object):
         self.submitted_proposal_path = None
         self.admin_unit_id = self.proposal.get_committee_admin_unit().id()
 
-    def execute(self, text=None):
+    def execute(self, text=u''):
         model = self.proposal.load_model()
         jsondata = {'committee_oguid': model.committee.oguid.id,
                     'proposal_oguid': model.oguid.id}

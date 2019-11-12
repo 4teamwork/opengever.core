@@ -27,7 +27,8 @@ class CancelTransitionExtender(TransitionExtender):
     schemas = [IText, ]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        response = ProposalResponse(u'cancelled', text=transition_params.get('text'))
+        response = ProposalResponse(
+            u'cancelled', text=transition_params.get('text', u''))
         IResponseContainer(self.context).add(response)
         ProposalSqlSyncer(self.context, None).sync()
 
@@ -39,7 +40,8 @@ class ReactivateTransitionExtender(TransitionExtender):
     schemas = [IText, ]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        response = ProposalResponse(u'reactivated', text=transition_params.get('text'))
+        response = ProposalResponse(
+            u'reactivated', text=transition_params.get('text', u''))
         IResponseContainer(self.context).add(response)
         ProposalSqlSyncer(self.context, None).sync()
 
@@ -52,5 +54,5 @@ class SubmitTransitionExtender(TransitionExtender):
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
         # Response is created by `submit`
-        self.context.submit(text=transition_params.get('text'))
+        self.context.submit(text=transition_params.get('text', u''))
         ProposalSqlSyncer(self.context, None).sync()

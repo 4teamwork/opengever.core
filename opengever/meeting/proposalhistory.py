@@ -140,7 +140,7 @@ class ProposalResponse(Response):
 
     implements(IProposalResponse)
 
-    def __init__(self, response_type='commented', text='', **kwargs):
+    def __init__(self, response_type='commented', text=u'', **kwargs):
         super(ProposalResponse, self).__init__(response_type)
         # Because during transport creation time gets rounded down to seconds
         # we round it directly here to avoid potential ordering issues.

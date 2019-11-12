@@ -54,6 +54,8 @@ class MigrateProposalHistoryToProposalResponses(UpgradeStep):
             history_type = record.pop('history_type')
             userid = record.pop('userid')
             text = record.pop('text')
+            if text is None:
+                text = ''
 
             # we do not need the uuid
             record.pop('uuid')

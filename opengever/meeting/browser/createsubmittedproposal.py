@@ -51,7 +51,7 @@ class CreateSubmittedProposal(BrowserView):
 
             history_data = advancedjson.loads(self.request.get('history_data'))
             response = ProposalResponse(
-                u'submitted', text=history_data.get("text"))
+                u'submitted', text=history_data.get("text", u''))
             IResponseContainer(submitted_proposal).add(response)
 
             add_watchers_on_submitted_proposal_created(submitted_proposal)
