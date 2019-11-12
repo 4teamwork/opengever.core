@@ -21,5 +21,5 @@ class PhoneNumber(Base):
     label = Column(String(CONTENT_TITLE_LENGTH))
     phone_number = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
 
-    def get_doc_property_provider(self, prefix):
-        return PhoneNumberDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return PhoneNumberDocPropertyProvider(self)

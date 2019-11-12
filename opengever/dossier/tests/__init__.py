@@ -51,6 +51,33 @@ OGDS_USER_ATTRIBUTES = {
     'country': u'Schweiz',
 }
 
+EXPECTED_DOCUMENT_CREATOR_PROPERTIES = {
+    'ogg.document.creator.user.address1': None,
+    'ogg.document.creator.user.address2': None,
+    'ogg.document.creator.user.city': None,
+    'ogg.document.creator.user.country': None,
+    'ogg.document.creator.user.department': None,
+    'ogg.document.creator.user.department_abbr': None,
+    'ogg.document.creator.user.description': None,
+    'ogg.document.creator.user.directorate': None,
+    'ogg.document.creator.user.directorate_abbr': None,
+    'ogg.document.creator.user.email': u'robert.ziegler@gever.local',
+    'ogg.document.creator.user.email2': None,
+    'ogg.document.creator.user.firstname': u'Robert',
+    'ogg.document.creator.user.lastname': u'Ziegler',
+    'ogg.document.creator.user.phone_fax': None,
+    'ogg.document.creator.user.phone_mobile': None,
+    'ogg.document.creator.user.phone_office': None,
+    'ogg.document.creator.user.salutation': None,
+    'ogg.document.creator.user.title': u'Ziegler Robert',
+    'ogg.document.creator.user.url': None,
+    'ogg.document.creator.user.userid': 'robert.ziegler',
+    'ogg.document.creator.user.zip_code': None,
+    'ogg.document.delivery_date': None,
+
+
+}
+
 EXPECTED_DOSSIER_PROPERTIES = {
     'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
     'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
@@ -114,18 +141,21 @@ EXPECTED_MEETING_PROPERTIES = {
 }
 
 EXPECTED_DOC_PROPERTIES = dict(
+    EXPECTED_DOCUMENT_CREATOR_PROPERTIES.items() +
     EXPECTED_USER_DOC_PROPERTIES.items() +
     EXPECTED_DOSSIER_PROPERTIES.items() +
     EXPECTED_DOCUMENT_PROPERTIES.items()
 )
 
 EXPECTED_TASKDOC_PROPERTIES = dict(
+    EXPECTED_DOCUMENT_CREATOR_PROPERTIES.items() +
     EXPECTED_USER_DOC_PROPERTIES.items() +
     EXPECTED_DOSSIER_PROPERTIES.items() +
     EXPECTED_TASKDOCUMENT_PROPERTIES.items()
 )
 
 EXPECTED_PROPOSALDOC_PROPERTIES = dict(
+    EXPECTED_DOCUMENT_CREATOR_PROPERTIES.items() +
     EXPECTED_USER_DOC_PROPERTIES.items() +
     EXPECTED_DOSSIER_PROPERTIES.items() +
     EXPECTED_MEETING_PROPERTIES.items() +

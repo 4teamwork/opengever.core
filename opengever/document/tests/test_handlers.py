@@ -5,9 +5,9 @@ from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.document.docprops import DocPropertyWriter
+from opengever.document.docprops import TemporaryDocFile
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.dossier.docprops import DocPropertyWriter
-from opengever.dossier.docprops import TemporaryDocFile
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
@@ -92,6 +92,11 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.user.userid', TEST_USER_ID),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
+            ('ogg.document.creator.user.email', 'test@example.org'),
+            ('ogg.document.creator.user.userid', 'test_user_1_'),
+            ('ogg.document.creator.user.title', 'Test User'),
+            ('ogg.document.creator.user.firstname', 'User'),
+            ('ogg.document.creator.user.lastname', 'Test'),
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
@@ -128,6 +133,11 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.user.userid', TEST_USER_ID),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
+            ('ogg.document.creator.user.email', 'test@example.org'),
+            ('ogg.document.creator.user.userid', 'test_user_1_'),
+            ('ogg.document.creator.user.title', 'Test User'),
+            ('ogg.document.creator.user.firstname', 'User'),
+            ('ogg.document.creator.user.lastname', 'Test'),
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
@@ -166,6 +176,11 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.user.userid', TEST_USER_ID),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
+            ('ogg.document.creator.user.email', 'test@example.org'),
+            ('ogg.document.creator.user.userid', 'test_user_1_'),
+            ('ogg.document.creator.user.title', 'Test User'),
+            ('ogg.document.creator.user.firstname', 'User'),
+            ('ogg.document.creator.user.lastname', 'Test'),
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
@@ -203,6 +218,11 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.user.userid', TEST_USER_ID),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
+            ('ogg.document.creator.user.email', 'test@example.org'),
+            ('ogg.document.creator.user.userid', 'test_user_1_'),
+            ('ogg.document.creator.user.title', 'Test User'),
+            ('ogg.document.creator.user.firstname', 'User'),
+            ('ogg.document.creator.user.lastname', 'Test'),
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
@@ -238,6 +258,11 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.user.userid', TEST_USER_ID),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
+            ('ogg.document.creator.user.email', 'test@example.org'),
+            ('ogg.document.creator.user.userid', 'test_user_1_'),
+            ('ogg.document.creator.user.title', 'Test User'),
+            ('ogg.document.creator.user.firstname', 'User'),
+            ('ogg.document.creator.user.lastname', 'Test'),
         ]
         with TemporaryDocFile(moved_doc.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()

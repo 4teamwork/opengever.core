@@ -1,5 +1,5 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
-from opengever.dossier.docprops import DocPropertyWriter
+from opengever.document.docprops import DocPropertyWriter
 from opengever.testing import IntegrationTestCase
 
 

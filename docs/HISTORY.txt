@@ -7,6 +7,7 @@ Changelog
 - Bump ftw.keywordwidget to 2.1.2 to fix race condition when adding new keywords. [lgraf]
 - Add trash_document and untrash_document file_actions. [lgraf]
 - Bump plone.restapi to 5.0.3 to get fix for filtering vocabs by non-ASCII titles. [lgraf]
+- Add document creator metadata to available docproperties. [deiferni]
 - Update the usersettings-serializer: A pure plone user has always seen all screens. [elioschmutz]
 - Support combined notation for task responsible. [phgross]
 - Fix an issue with todo(-list) ids not being stored as bytestring. [deiferni]

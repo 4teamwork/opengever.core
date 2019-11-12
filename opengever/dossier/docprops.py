@@ -1,10 +1,6 @@
 from datetime import datetime
 from datetime import time
-from docx import Document
-from docxcompose.properties import CustomProperties
-from docxcompose.sdt import StructuredDocumentTags
-from opengever import journal
-from opengever.base.date_time import ulocalized_time
+from opengever.base.docprops import BaseDocPropertyProvider
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.vocabulary import voc_term_title
@@ -12,175 +8,15 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.interfaces import IDocProperties
-from opengever.dossier.interfaces import IDocPropertyProvider
-from opengever.dossier.interfaces import ITemplateFolderProperties
-from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.utils import ogds_service
-from plone import api
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
-from Products.CMFCore.utils import getToolByName
-from tempfile import NamedTemporaryFile
 from zope.component import adapter
 from zope.component import getAdapter
-from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component import queryAdapter
-from zope.event import notify
-from zope.interface import implementer
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.publisher.interfaces.browser import IBrowserRequest
-import os
 
 
-class TemporaryDocFile(object):
-
-    def __init__(self, file_):
-        self.file = file_
-        self.path = None
-
-    def __enter__(self):
-        template_data = self.file.data
-
-        with NamedTemporaryFile(delete=False) as tmpfile:
-            self.path = tmpfile.name
-            tmpfile.write(template_data)
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        os.remove(self.path)
-
-
-class DocPropertyWriter(object):
-    """Write doc-properties for a document.
-
-    The optional argument recipient_data is an iterable of doc-property
-    providers that are added to the document with a "recipient" prefix.
-    """
-
-    def __init__(self, document, recipient_data=tuple()):
-        self.recipient_data = recipient_data
-        self.document = document
-        self.request = self.document.REQUEST
-        self.date_format = api.portal.get_registry_record(
-            "sablon_date_format_string", interface=IMeetingSettings)
-
-    def update(self):
-        if self.update_doc_properties(only_existing=True):
-            journal.handlers.doc_properties_updated(self.document)
-
-    def initialize(self):
-        self.update_doc_properties(only_existing=False)
-
-    def get_properties(self):
-        properties_adapter = getMultiAdapter(
-            (self.document, self.request), IDocProperties)
-        return properties_adapter.get_properties(self.recipient_data)
-
-    def is_export_enabled(self):
-        registry = getUtility(IRegistry)
-        props = registry.forInterface(ITemplateFolderProperties)
-        return props.create_doc_properties
-
-    def update_doc_properties(self, only_existing):
-        if not self.is_export_enabled():
-            return False
-        if not self.has_file():
-            return False
-        if not self.is_supported_file():
-            return False
-
-        return self.write_properties(only_existing, self.get_properties())
-
-    def write_properties(self, only_existing, properties):
-        with TemporaryDocFile(self.document.file) as tmpfile:
-            changed = False
-
-            doc = Document(tmpfile.path)
-
-            props = CustomProperties(doc)
-
-            if not only_existing or any(key in props for key in properties.keys()):
-                for key, value in properties.items():
-                    # Docproperties must have a value.
-                    # In case of None we delete the property an set it's cached
-                    # value to empty string. We keep the field in the document
-                    # as the property may get a value in a later update.
-                    if value is None:
-                        if key in props:
-                            del props[key]
-                        props.update(key, u'')
-                    else:
-                        props[key] = value
-                    changed = True
-
-            if changed:
-                # Update cached properties
-                CustomProperties(doc).update_all()
-
-            # Update content controls
-            sdts = StructuredDocumentTags(doc)
-            for key, value in properties.items():
-                tags = sdts.tags_by_alias(key)
-                if tags:
-                    if isinstance(value, str):
-                        value = value.decode('utf8')
-                    elif isinstance(value, (int, float)):
-                        value = unicode(value)
-                    elif isinstance(value, datetime):
-                        value = ulocalized_time(
-                            value, self.date_format, self.request)
-                    elif value is None:
-                        value = u''
-                    sdts.set_text(key, value)
-                    changed = True
-
-            if changed:
-                doc.save(tmpfile.path)
-
-                with open(tmpfile.path) as processed_tmpfile:
-                    file_data = processed_tmpfile.read()
-
-                self.document.update_file(file_data)
-                notify(ObjectModifiedEvent(self.document))
-
-            return changed
-
-    def has_file(self):
-        return self.document.file is not None
-
-    def is_supported_file(self):
-        return self.document.file.contentType in [
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        ]
-
-
-@implementer(IDocPropertyProvider)
-class DocPropertyProvider(object):
-    """Baseclass for DocPropertyProviders.
-
-    Contains utility methods to create a dict of doc-properties. Set the NS
-    class attribute to define a namespace. All your property-values written
-    with _add_property will be prefixed with that namespace.
-    """
-
-    NS = tuple()
-
-    def __init__(self, context):
-        self.context = context
-
-    def _add_property(self, properties, name, value):
-        """Add single property to collection of properties.
-
-        If a namespace (NS) has been configured prefixes keys with that
-        namespace.
-        """
-        key = '.'.join(self.NS + (name,))
-        properties[key] = value
-
-    def get_properties(self):
-        return {}
+class DocPropertyProvider(BaseDocPropertyProvider):
+    """Baseclass for DocPropertyProviders for plone content."""
 
     def get_title(self):
         return self.context.title
@@ -191,13 +27,22 @@ class DocPropertyProvider(object):
     def get_sequence_number(self):
         return str(getUtility(ISequenceNumber).get_number(self.context))
 
+    def _collect_deprectated_properties(self):
+        return dict()
+
+    def get_properties(self, prefix=None):
+        properties = super(DocPropertyProvider, self).get_properties(
+            prefix=prefix)
+        if not prefix:
+            properties = self._merge(
+                properties, self._collect_deprectated_properties())
+        return properties
+
 
 @adapter(IDocumentSchema)
 class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
-    """
-    """
 
-    NS = ('ogg', 'document')
+    DEFAULT_PREFIX = ('document',)
 
     def _as_datetime(self, date):
         if not date:
@@ -228,67 +73,55 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
     def get_document_version(self):
         return IDocumentMetadata(self.context).get_current_version_id(missing_as_zero=True)
 
-    def get_properties(self):
-        """Return document properties.
+    def _collect_properties(self):
+        return {
+            'title': self.get_title(),
+            'reference_number': self.get_reference_number(),
+            'sequence_number': self.get_sequence_number(),
+            'document_author': self.get_document_author(),
+            'document_date': self.get_document_date(),
+            'document_type': self.get_document_type_label(),
+            'reception_date': self.get_reception_date(),
+            'delivery_date': self.get_delivery_date(),
+            'version_number': self.get_document_version(),
+        }
 
-        XXX Also contains deprecated properties that will go away eventually.
-        """
-
-        reference_number = self.get_reference_number()
-        sequence_number = str(self.get_sequence_number())
-
-        # XXX deprecated properties
-        properties = {'Document.ReferenceNumber': reference_number,
-                      'Document.SequenceNumber': sequence_number}
-
-        self._add_property(properties, 'title', self.get_title())
-        self._add_property(properties, 'reference_number', reference_number)
-        self._add_property(properties, 'sequence_number', sequence_number)
-        self._add_property(properties, 'document_author', self.get_document_author())
-        self._add_property(properties, 'document_date', self.get_document_date())
-        self._add_property(properties, 'document_type', self.get_document_type_label())
-        self._add_property(properties, 'reception_date', self.get_reception_date())
-        self._add_property(properties, 'delivery_date', self.get_delivery_date())
-        self._add_property(properties, 'version_number', self.get_document_version())
-
-        return properties
+    def _collect_deprectated_properties(self):
+        return {
+            'Document.ReferenceNumber': self.get_reference_number(),
+            'Document.SequenceNumber': self.get_sequence_number()
+        }
 
 
 @adapter(IDossierMarker)
 class DefaultDossierDocPropertyProvider(DocPropertyProvider):
     """Return the default dossier properties"""
 
-    NS = ('ogg', 'dossier')
+    DEFAULT_PREFIX = ('dossier',)
 
     def get_external_reference(self):
         return IDossier(self.context).external_reference
 
-    def get_properties(self):
-        """Return dossier properties.
+    def _collect_properties(self):
+        return {
+            'title': self.get_title(),
+            'reference_number': self.get_reference_number(),
+            'sequence_number': self.get_sequence_number(),
+            'external_reference': self.get_external_reference(),
+        }
 
-        XXX Also contains deprecated properties that will go away eventually.
-        """
-        reference_number = self.get_reference_number()
-        sequence_number = self.get_sequence_number()
-        title = self.get_title()
-
-        # XXX deprecated properties
-        properties = {'Dossier.ReferenceNumber': reference_number,
-                      'Dossier.Title': title}
-
-        self._add_property(properties, 'title', title)
-        self._add_property(properties, 'reference_number', reference_number)
-        self._add_property(properties, 'sequence_number', sequence_number)
-        self._add_property(properties, 'external_reference', self.get_external_reference())
-
-        return properties
+    def _collect_deprectated_properties(self):
+        return {
+            'Dossier.ReferenceNumber': self.get_reference_number(),
+            'Dossier.Title': self.get_title(),
+        }
 
 
 @adapter(IMemberData)
 class DefaultMemberDocPropertyProvider(DocPropertyProvider):
     """Return the default user properties from LDAP/ogds."""
 
-    NS = ('ogg', 'user')
+    DEFAULT_PREFIX = ('user',)
 
     ogds_user_attributes = (
         'firstname',
@@ -312,80 +145,34 @@ class DefaultMemberDocPropertyProvider(DocPropertyProvider):
         'country'
     )
 
-    def get_user_id(self):
-        return self.context.getMemberId()
+    def __init__(self, context):
+        super(DefaultMemberDocPropertyProvider, self).__init__(context)
+        self.user_id = self.context.getMemberId()
+        self.ogds_user = ogds_service().fetch_user(self.user_id)
 
-    def get_properties(self):
+    def get_fullname(self):
+        return self.ogds_user.fullname() if self.ogds_user else self.user_id
+
+    def _collect_properties(self):
         """Return user properties from OGDS.
 
         Always returns a minimal set of the properties 'ogg.user.userid' and
         'ogg.user.title' even when no ogds-user is found.
-
-        XXX Also contains deprecated properties that will go away eventually.
         """
-        user_id = self.get_user_id()
-        ogds_user = ogds_service().fetch_user(user_id)
-        fullname = ogds_user.fullname() if ogds_user else user_id
-
-        # XXX deprecated properties
-        properties = {'User.ID': user_id,
-                      'User.FullName': fullname}
-
-        self._add_property(properties, 'userid', user_id)
-        self._add_property(properties, 'title', fullname)
-
-        # abort early if there is no ogds user for some reason.
-        if not ogds_user:
+        properties = {
+            'userid': self.user_id,
+            'title': self.get_fullname()
+        }
+        if not self.ogds_user:
             return properties
 
         for attribute_name in self.ogds_user_attributes:
-            value = getattr(ogds_user, attribute_name)
-            self._add_property(properties, attribute_name, value)
+            value = getattr(self.ogds_user, attribute_name)
+            properties[attribute_name] = value
         return properties
 
-
-@implementer(IDocProperties)
-@adapter(IDocumentSchema, IBrowserRequest)
-class DefaultDocProperties(object):
-
-    def __init__(self, context, request):
-        # Context is the newly created document
-        self.context = context
-        self.request = request
-
-    def get_repofolder(self, dossier):
-        return None
-
-    def get_repo(self, dossier):
-        return None
-
-    def get_site(self, dossier):
-        return None
-
-    def get_member(self, request):
-        portal_membership = getToolByName(self.context, 'portal_membership')
-        member = portal_membership.getAuthenticatedMember()
-        return member
-
-    def get_properties(self, recipient_data=tuple()):
-        document = self.context
-        dossier = document.get_parent_dossier()
-        repofolder = self.get_repofolder(dossier)
-        repo = self.get_repo(dossier)
-        site = self.get_site(dossier)
-        member = self.get_member(self.request)
-        proposal = document.get_proposal()
-
-        properties = {}
-        for obj in [document, dossier, repofolder, repo, site, member, proposal]:
-            property_provider = queryAdapter(obj, IDocPropertyProvider)
-            obj_properties = {}
-            if property_provider is not None:
-                obj_properties = property_provider.get_properties()
-            properties.update(obj_properties)
-
-        for recipient in recipient_data:
-            provider = recipient.get_doc_property_provider(prefix='recipient')
-            properties.update(provider.get_properties())
-
-        return properties
+    def _collect_deprectated_properties(self):
+        return {
+            'User.ID': self.user_id,
+            'User.FullName': self.get_fullname(),
+        }

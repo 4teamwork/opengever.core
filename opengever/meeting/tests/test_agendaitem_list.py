@@ -7,7 +7,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
-from opengever.dossier.docprops import TemporaryDocFile
+from opengever.document.docprops import TemporaryDocFile
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.testing import IntegrationTestCase

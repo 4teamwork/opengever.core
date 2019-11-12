@@ -241,8 +241,6 @@
 
   <adapter factory=".docprops.DefaultMemberDocPropertyProvider" />
 
-  <adapter factory=".docprops.DefaultDocProperties" />
-
   <browser:page
       for="plone.dexterity.interfaces.IDexterityContainer"
       name="move_items"

@@ -9,7 +9,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testing import freeze
 from opengever.contact.interfaces import IContactSettings
-from opengever.dossier.docprops import TemporaryDocFile
+from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
@@ -193,6 +193,8 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         'doc-properties',
         )
 
+    maxDiff = None
+
     def assert_doc_properties_updated_journal_entry_generated(self, document, user):
         entry = get_journal_entry(document)
 
@@ -251,7 +253,28 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             'ogg.user.url': 'http://www.example.com',
             'ogg.user.userid': 'kathi.barfuss',
             'ogg.user.zip_code': '1234',
-            }
+            'ogg.document.creator.user.address1': 'Kappelenweg 13',
+            'ogg.document.creator.user.address2': 'Postfach 1234',
+            'ogg.document.creator.user.zip_code': '1234',
+            'ogg.document.creator.user.salutation': 'Prof. Dr.',
+            'ogg.document.creator.user.directorate_abbr': 'Arch',
+            'ogg.document.creator.user.phone_office': '012 34 56 78',
+            'ogg.document.creator.user.email2': 'bar@example.com',
+            'ogg.document.creator.user.department_abbr': 'SK',
+            'ogg.document.creator.user.city': 'Vorkappelen',
+            'ogg.document.creator.user.email': 'foo@example.com',
+            'ogg.document.creator.user.userid': 'kathi.barfuss',
+            'ogg.document.creator.user.phone_mobile': '012 34 56 76',
+            'ogg.document.creator.user.phone_fax': '012 34 56 77',
+            'ogg.document.creator.user.description': 'nix',
+            'ogg.document.creator.user.url': 'http://www.example.com',
+            'ogg.document.creator.user.title': u'B\xe4rfuss K\xe4thi',
+            'ogg.document.creator.user.country': 'Schweiz',
+            'ogg.document.creator.user.firstname': u'K\xe4thi',
+            'ogg.document.creator.user.lastname': u'B\xe4rfuss',
+            'ogg.document.creator.user.department': 'Staatskanzlei',
+            'ogg.document.creator.user.directorate': 'Staatsarchiv',
+        }
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
@@ -311,6 +334,27 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             'ogg.user.url': 'http://www.example.com',
             'ogg.user.userid': 'kathi.barfuss',
             'ogg.user.zip_code': '1234',
+            'ogg.document.creator.user.address1': 'Kappelenweg 13',
+            'ogg.document.creator.user.address2': 'Postfach 1234',
+            'ogg.document.creator.user.zip_code': '1234',
+            'ogg.document.creator.user.salutation': 'Prof. Dr.',
+            'ogg.document.creator.user.directorate_abbr': 'Arch',
+            'ogg.document.creator.user.phone_office': '012 34 56 78',
+            'ogg.document.creator.user.email2': 'bar@example.com',
+            'ogg.document.creator.user.department_abbr': 'SK',
+            'ogg.document.creator.user.city': 'Vorkappelen',
+            'ogg.document.creator.user.email': 'foo@example.com',
+            'ogg.document.creator.user.userid': 'kathi.barfuss',
+            'ogg.document.creator.user.phone_mobile': '012 34 56 76',
+            'ogg.document.creator.user.phone_fax': '012 34 56 77',
+            'ogg.document.creator.user.description': 'nix',
+            'ogg.document.creator.user.url': 'http://www.example.com',
+            'ogg.document.creator.user.title': u'B\xe4rfuss K\xe4thi',
+            'ogg.document.creator.user.country': 'Schweiz',
+            'ogg.document.creator.user.firstname': u'K\xe4thi',
+            'ogg.document.creator.user.lastname': u'B\xe4rfuss',
+            'ogg.document.creator.user.department': 'Staatskanzlei',
+            'ogg.document.creator.user.directorate': 'Staatsarchiv',
             }
 
         with TemporaryDocFile(document.file) as tmpfile:
@@ -344,7 +388,12 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         'ogg.user.lastname': 'Test',
         'ogg.user.title': 'Test User',
         'ogg.user.userid': TEST_USER_ID,
-        }
+        'ogg.document.creator.user.email': 'test@example.org',
+        'ogg.document.creator.user.userid': 'test_user_1_',
+        'ogg.document.creator.user.title': 'Test User',
+        'ogg.document.creator.user.firstname': 'User',
+        'ogg.document.creator.user.lastname': 'Test',
+    }
 
     def setUp(self):
         super(TestDocumentWithTemplateFormWithContacts, self).setUp()

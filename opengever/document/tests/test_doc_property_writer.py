@@ -4,8 +4,8 @@ from docxcompose.properties import CustomProperties
 from docxcompose.sdt import StructuredDocumentTags
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.dossier.docprops import DocPropertyWriter
-from opengever.dossier.docprops import TemporaryDocFile
+from opengever.document.docprops import DocPropertyWriter
+from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.tests import EXPECTED_DOC_PROPERTIES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
@@ -57,14 +57,16 @@ class TestDocPropertyWriter(IntegrationTestCase):
         self.login(self.regular_user)
         self.with_asset_file('with_gever_properties.docx')
 
-        (
-            DocPropertyWriter(self.document)
-            .update_doc_properties(only_existing=True)
-            )
+        DocPropertyWriter(self.document).update_doc_properties(
+            only_existing=True)
 
+        expected_properties = [
+            (key, value) for key, value
+            in EXPECTED_DOC_PROPERTIES.items() if value is not None]
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
-            self.assertItemsEqual(EXPECTED_DOC_PROPERTIES.items(), properties)
+
+            self.assertItemsEqual(expected_properties, properties)
 
     def test_overwrites_properties_of_wrong_type(self):
         self.login(self.regular_user)
@@ -177,6 +179,11 @@ class TestDocPropertyWriter(IntegrationTestCase):
             'ogg.user.url': 'http://www.example.com',
             'ogg.user.userid': 'kathi.barfuss',
             'ogg.user.zip_code': '1234',
+            'ogg.document.creator.user.email': 'robert.ziegler@gever.local',
+            'ogg.document.creator.user.firstname': 'Robert',
+            'ogg.document.creator.user.lastname': 'Ziegler',
+            'ogg.document.creator.user.title': 'Ziegler Robert',
+            'ogg.document.creator.user.userid': 'robert.ziegler',
         }
 
         with TemporaryDocFile(self.document.file) as tmpfile:
@@ -193,9 +200,13 @@ class TestDocPropertyWriter(IntegrationTestCase):
             .update_doc_properties(only_existing=False)
             )
 
+        expected_properties = {
+            key: value for key, value
+            in EXPECTED_DOC_PROPERTIES.items() if value is not None}
+
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
-            self.assertItemsEqual(EXPECTED_DOC_PROPERTIES.items(), properties)
+            self.assertItemsEqual(expected_properties.items(), properties)
 
     def test_writes_additional_recipient_property_providers(self):
         self.login(self.regular_user)

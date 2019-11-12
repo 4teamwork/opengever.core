@@ -42,5 +42,5 @@ class Organization(Contact):
     def get_css_class(self):
         return 'contenttype-organization'
 
-    def get_doc_property_provider(self, prefix):
-        return OrganizationDocPropertProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return OrganizationDocPropertProvider(self)

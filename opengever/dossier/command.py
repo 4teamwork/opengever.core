@@ -2,7 +2,7 @@ from opengever.base.command import BaseObjectCreatorCommand
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.role_assignments import RoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.dossier.docprops import DocPropertyWriter
+from opengever.document.docprops import DocPropertyWriter
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from plone.dexterity.utils import iterSchemataForType
 

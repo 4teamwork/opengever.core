@@ -65,8 +65,8 @@ class AddressAdapter(BaseAdapter):
                 self.street,
                 u" ".join(filter(None, [self.zip_code, self.city]))]
 
-    def get_doc_property_provider(self, prefix):
-        return AddressDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return AddressDocPropertyProvider(self)
 
 
 class MailAddressAdapter(BaseAdapter):
@@ -85,8 +85,8 @@ class MailAddressAdapter(BaseAdapter):
     def has_data(self):
         return bool(self.address)
 
-    def get_doc_property_provider(self, prefix):
-        return MailAddressDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return MailAddressDocPropertyProvider(self)
 
 
 class PhoneNumberAdapter(BaseAdapter):
@@ -105,8 +105,8 @@ class PhoneNumberAdapter(BaseAdapter):
     def has_data(self):
         return bool(self.phone_number)
 
-    def get_doc_property_provider(self, prefix):
-        return PhoneNumberDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return PhoneNumberDocPropertyProvider(self)
 
 
 class URLAdapter(BaseAdapter):
@@ -123,8 +123,8 @@ class URLAdapter(BaseAdapter):
     def has_data(self):
         return bool(self.url)
 
-    def get_doc_property_provider(self, prefix):
-        return URLDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return URLDocPropertyProvider(self)
 
 
 class OgdsUserToContactAdapter(BaseAdapter):
@@ -179,8 +179,8 @@ class OgdsUserToContactAdapter(BaseAdapter):
     def lastname(self):
         return self.ogds_user.lastname
 
-    def get_doc_property_provider(self, prefix):
-        return PersonDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return PersonDocPropertyProvider(self)
 
     @property
     def addresses(self):

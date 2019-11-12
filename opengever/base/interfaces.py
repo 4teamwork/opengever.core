@@ -358,3 +358,14 @@ class IGeverUI(Interface):
         title=u'Enable new GEVER UI',
         description=u'Whether new GEVER UI is enabled',
         default=False)
+
+
+class IDocPropertyProvider(Interface):
+    """A provider for DocProperties."""
+
+    def get_properties(prefix=None):
+        """Return a dictionary of DocProperties.
+
+        All keys will be prefixed by the default application prefix, followed
+        by the optional prefix argument.
+        """

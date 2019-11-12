@@ -19,5 +19,5 @@ class URL(Base):
     label = Column(String(CONTENT_TITLE_LENGTH))
     url = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
 
-    def get_doc_property_provider(self, prefix):
-        return URLDocPropertyProvider(self, prefix)
+    def get_doc_property_provider(self):
+        return URLDocPropertyProvider(self)
