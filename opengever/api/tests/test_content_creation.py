@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from opengever.api.add import get_validation_errors
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.oguid import Oguid
+from opengever.base.response import IResponseContainer
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.testing import FunctionalTestCase
@@ -253,6 +254,11 @@ class TestContentCreation(IntegrationTestCase):
         self.assertIsNotNone(checksum)
         self.assertEqual(IBumblebeeDocument(self.proposal_template).get_checksum(),
                          checksum)
+
+        # Creating a proposal should generate a history entry
+        responses = IResponseContainer(proposal).list()
+        self.assertEqual(1, len(responses))
+        self.assertEqual('created', responses[0].response_type)
 
     @browsing
     def test_template_is_mandatory_for_proposal_creation(self, browser):
