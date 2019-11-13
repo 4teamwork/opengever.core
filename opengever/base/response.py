@@ -148,7 +148,7 @@ class IResponse(Interface):
 
     creator = schema.TextLine(required=True)
 
-    text = schema.Text(required=False)
+    text = schema.Text(required=False, default=u'', missing_value=u'')
 
     changes = schema.List(required=False, value_type=schema.Dict())
 
@@ -168,7 +168,7 @@ class Response(Persistent):
         self.created = datetime.now()
         self.creator = api.user.get_current().id
 
-        self.text = ''
+        self.text = u''
         self.changes = PersistentList()
 
     def add_change(self, field_id, before, after, field_title=''):
