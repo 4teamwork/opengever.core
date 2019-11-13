@@ -45,3 +45,7 @@ class CannotExecuteTransition(Exception):
 
 class SablonProcessingFailed(Exception):
     """Processing of the sablon template failed."""
+
+
+class MultiplePeriodsFound(Exception):
+    """Multiple periods were found for the same date."""

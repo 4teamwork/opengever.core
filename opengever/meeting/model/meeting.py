@@ -203,8 +203,8 @@ class Meeting(Base, SQLFormSupport):
         meeting_sequence_number against concurrent updates.
 
         """
-        period = Period.query.get_current_for_update(self.committee)
-
+        period = Period.get_current(self.committee.resolve_committee(),
+                                    date=self.start.date())
         self.meeting_number = period.get_next_meeting_sequence_number()
 
     def get_meeting_number(self):
@@ -213,7 +213,8 @@ class Meeting(Base, SQLFormSupport):
         if not self.meeting_number:
             return None
 
-        period = Period.query.get_for_meeting(self)
+        period = Period.get_current(
+            self.committee.resolve_committee(), date=self.start.date())
         if not period:
             return str(self.meeting_number)
 
@@ -227,7 +228,8 @@ class Meeting(Base, SQLFormSupport):
         decision_sequence_number against concurrent updates.
 
         """
-        period = Period.query.get_current_for_update(self.committee)
+        period = Period.get_current(self.committee.resolve_committee(),
+                                    date=self.start.date())
 
         for agenda_item in self.agenda_items:
             agenda_item.generate_decision_number(period)

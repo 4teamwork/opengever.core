@@ -1,11 +1,15 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.meeting.model import Period
+from ftw.testing import freeze
+from opengever.meeting.exceptions import MultiplePeriodsFound
+from opengever.meeting.period import Period
 from opengever.testing import IntegrationTestCase
 import os
+import pytz
 
 
 class TestPathBar(IntegrationTestCase):
@@ -238,3 +242,55 @@ class TestPeriod(IntegrationTestCase):
                                  }]}
 
         self.assertEqual(toc_content, browser.json)
+
+
+class TestGetCurrentPeriod(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    def test_returns_period_for_current_date_by_default(self):
+        self.login(self.committee_responsible)
+        with freeze(datetime(2016, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            self.assertEqual(self.period, Period.get_current(self.committee))
+
+    def test_return_period_for_contained_date(self):
+        self.login(self.committee_responsible)
+        self.assertEqual(
+            self.period, Period.get_current(self.committee, date(2016, 3, 9)))
+
+    def test_return_period_first_date_of_range(self):
+        self.login(self.committee_responsible)
+        self.assertEqual(
+            self.period, Period.get_current(self.committee, date(2016, 1, 1)))
+
+    def test_return_period_last_date_of_range(self):
+        self.login(self.committee_responsible)
+        self.assertEqual(
+            self.period, Period.get_current(self.committee, date(2016, 12, 31)))
+
+    def test_returns_none_when_date_before_period_range(self):
+        self.login(self.committee_responsible)
+        self.assertIsNone(Period.get_current(self.committee, date(2013, 1, 1)))
+
+    def test_returns_none_when_date_after_period_range(self):
+        self.login(self.committee_responsible)
+        self.assertIsNone(Period.get_current(self.committee, date(2017, 1, 1)))
+
+    def test_raises_when_multiple_periods_found(self):
+        self.login(self.committee_responsible)
+        create(Builder('period').having(
+            title=u'duplicate 2016',
+            start=date(2016, 3, 1),
+            end=date(2016, 7, 1)).within(self.committee))
+
+        with self.assertRaises(MultiplePeriodsFound):
+            Period.get_current(self.committee, date(2016, 5, 1))
+
+    def test_unrestricted_search_returns_all_periods(self):
+        with self.login(self.committee_responsible):
+            committee = self.committee
+            period = self.period
+
+        self.assertEqual(
+            period, Period.get_current(committee, date(2016, 12, 31),
+                                       unrestricted=True))
