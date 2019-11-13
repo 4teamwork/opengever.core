@@ -348,9 +348,8 @@ def document_modified(context, event):
         # and is handled elsewhere - don't journalize it twice.
         return
 
-    # we need to distinguish between "metadata modified", "file modified",
-    # "file and metadata modified" and "public_trial modified"
-    file_changed = False
+    # we need to distinguish between "metadata modified"
+    # and "public_trial modified"
     metadata_changed = False
     public_trial_changed = False
 
@@ -358,46 +357,22 @@ def document_modified(context, event):
 
     for desc in event.descriptions:
         for attr in desc.attributes:
-            if attr in ('file', 'message', 'IDocumentMetadata.archival_file'):
-                file_changed = True
-            elif attr in ('IClassification.public_trial', 'public_trial'):
+            if attr in ('IClassification.public_trial', 'public_trial'):
                 # Attribute name is different when changed through regular
                 # edit form vs. edit_public_trial form, so check for both
                 public_trial_changed = True
-            else:
+            elif attr not in ('file', 'message', 'IDocumentMetadata.archival_file'):
+                # We ignore cases where only the file was modified
                 metadata_changed = True
 
-    if context.REQUEST.get('form.widgets.file.action',
-                           u'nochange') == u'nochange':
-        file_changed = False
-
-    if not file_changed and not metadata_changed and not public_trial_changed:
-        # the event shouldn't be fired in this case anyway..
+    if not metadata_changed and not public_trial_changed:
+        # We end up here when only the file has changed.
+        # We do not add a journal entry for this, as the important information
+        # is the checkin/checkout cycle, which creates a new file version and
+        # is being journalized.
         return
 
-    if file_changed and metadata_changed:
-        title = _(u'label_document_file_and_metadata_modified',
-                  default=u'Changed file and metadata')
-
-        parent_title = _(u'label_document_file_and_metadata_modified__parent',
-                         default=u'Changed file and metadata of '
-                         'document ${title}',
-                         mapping=dict(title=context.title_or_id()))
-
-        journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title)
-        journal_entry_factory(parent, DOCUMENT_MODIIFED_ACTION, parent_title)
-
-    elif file_changed:
-        title = _(u'label_document_file_modified',
-                  default=u'Changed file')
-        parent_title = _(u'label_document_file_modified__parent',
-                         default=u'Changed file of document ${title}',
-                         mapping=dict(title=context.title_or_id()))
-
-        journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title)
-        journal_entry_factory(parent, DOCUMENT_MODIIFED_ACTION, parent_title)
-
-    elif metadata_changed:
+    if metadata_changed:
         title = _(u'label_document_metadata_modified',
                   default=u'Changed metadata')
         parent_title = _(u'label_document_metadata_modified__parent',

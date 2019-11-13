@@ -58,16 +58,17 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
             DOCUMENT_MODIIFED_ACTION, u'Changed metadata', entry)
 
     @browsing
-    def test_modifying_the_file_is_journalized(self, browser):
+    def test_modifying_the_file_is_NOT_journalized(self, browser):
+        journal_entries = self.get_journal_entries()
+
         browser.login().open(self.document, view='edit')
         browser.fill({'File': ('Raw file data', 'file.txt', 'text/plain'),
                       'form.widgets.file.action': 'replace'})
         browser.css('#form-buttons-save').first.click()
 
-        entry = self.get_journal_entries()[-1]
-
-        self.assert_journal_entry(
-            DOCUMENT_MODIIFED_ACTION, u'Changed file', entry)
+        self.assertEqual(self.get_journal_entries(), journal_entries,
+                         'Modifying only the file wrongly created a journal '
+                         'entry')
 
     @browsing
     def test_modifying_the_file_and_metadata_is_journalized(self, browser):
@@ -80,7 +81,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
         entry = self.get_journal_entries()[-1]
 
         self.assert_journal_entry(
-            DOCUMENT_MODIIFED_ACTION, u'Changed file and metadata', entry)
+            DOCUMENT_MODIIFED_ACTION, u'Changed metadata', entry)
 
     @browsing
     def test_modifying_the_public_trial_metadata_is_journalized(self, browser):

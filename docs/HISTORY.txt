@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Add main dossier count to contentstats. [njohner]
+- No longer add journal entry for document file modification. [njohner]
 
 
 2019.4.0rc5 (2019-11-13)
