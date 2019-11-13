@@ -142,9 +142,17 @@ class ProposalResponse(Response):
 
     def __init__(self, response_type='commented', text=u'', **kwargs):
         super(ProposalResponse, self).__init__(response_type)
+
         # Because during transport creation time gets rounded down to seconds
         # we round it directly here to avoid potential ordering issues.
         self.created = self.created.replace(microsecond=0)
+
+        # Transitions are executed by default with text=None, which propagates
+        # to the Response, explicitely setting the text=None.
+        # We therefore set the correct default value here.
+        if text is None:
+            text = u''
+
         self.text = text
         self.additional_data = PersistentDict()
         self.additional_data.update(kwargs)
