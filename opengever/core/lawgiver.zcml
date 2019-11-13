@@ -49,6 +49,7 @@
                    opengever.inbox: Scan In,
                    opengever.meeting: Add Committee,
                    opengever.meeting: Add Member,
+                   opengever.meeting: Add Period,
                    opengever.meeting: Add Proposal Template,
                    opengever.meeting: Add Proposal,
                    opengever.meeting: Add Sablon Template,
