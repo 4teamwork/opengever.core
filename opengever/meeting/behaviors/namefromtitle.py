@@ -87,3 +87,24 @@ class ProposalNameFromTitle(object):
     def title(self):
         seq_number = getUtility(ISequenceNumber).get_number(self.context)
         return self.format.format(seq_number)
+
+
+class IPeriodNameFromTitle(INameFromTitle):
+    """Special name from title behavior for letting the normalizing name
+    chooser choose the ID.
+    The id of a period should be in the format: "period-{sequence number}"
+    """
+
+
+class PeriodNameFromTitle(object):
+    implements(IPeriodNameFromTitle)
+
+    format = u'period-{}'
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def title(self):
+        seq_number = getUtility(ISequenceNumber).get_number(self.context)
+        return self.format.format(seq_number)
