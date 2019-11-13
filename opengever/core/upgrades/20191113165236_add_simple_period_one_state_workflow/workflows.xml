@@ -1,0 +1,13 @@
+<object name="portal_workflow">
+
+  <object name="opengever_period_workflow" meta_type="Workflow" />
+
+  <bindings>
+
+    <type type_id="opengever.meeting.period">
+      <bound-workflow workflow_id="opengever_period_workflow" />
+    </type>
+
+  </bindings>
+
+</object>

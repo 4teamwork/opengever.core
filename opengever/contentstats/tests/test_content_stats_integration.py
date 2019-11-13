@@ -88,6 +88,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'mail-state-removed',
             'opengever_committee_workflow--STATUS--active',
             'opengever_committee_workflow--STATUS--inactive',
+            'opengever_period_workflow--STATUS--active',
             'opengever_workspace--STATUS--active',
             'opengever_workspace_folder--STATUS--active',
             'opengever_workspace_todo--STATUS--active',
