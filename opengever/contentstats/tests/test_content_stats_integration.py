@@ -218,3 +218,19 @@ class TestContentStatsIntegration(IntegrationTestCase):
         self.assertIn('_opengever.document.behaviors.IBaseDocument', stats)
         documentish_stats = stats['opengever.document.document'] + stats['ftw.mail.mail']
         self.assertEqual(documentish_stats, stats['_opengever.document.behaviors.IBaseDocument'])
+
+    def test_gever_portal_types_contains_main_dossiers(self):
+        stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST),
+                                         IStatsProvider,
+                                         name='portal_types')
+        stats = stats_provider.get_raw_stats()
+        self.assertIn('_opengever.dossier.maindossier', stats)
+
+        catalog = api.portal.get_tool('portal_catalog')
+        expected = stats['opengever.dossier.businesscasedossier']
+        expected += stats['opengever.meeting.meetingdossier']
+        expected += stats['opengever.private.dossier']
+        expected -= len(catalog.unrestrictedSearchResults(
+            object_provides=['opengever.dossier.behaviors.dossier.IDossierMarker'],
+            is_subdossier=True))
+        self.assertEqual(expected, stats['_opengever.dossier.maindossier'])
