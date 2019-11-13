@@ -1,10 +1,13 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashed
 from plone import api
 from plone.protect import createToken
+import pytz
 
 
 class TestAdHocAgendaItem(IntegrationTestCase):
@@ -163,25 +166,36 @@ class TestAdHocAgendaItem(IntegrationTestCase):
             item_data)
 
     @browsing
+    def test_schedule_adhoc_agenda_item(self, browser):
+        with freeze(datetime(2016, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            self.login(self.committee_responsible, browser)
+            browser.open(self.meeting, view='agenda_items/schedule_text',
+                         data={'title': u'Tisch Traktandum',
+                               '_authenticator': createToken()})
+            self.assertDictContainsSubset({'proceed': True}, browser.json)
+
+            browser.open(self.meeting, view='agenda_items/list')
+            self.assertDictContainsSubset(
+                {'title': u'Tisch Traktandum',
+                 'decision_number': None},
+                browser.json['items'][0])
+
+    @browsing
     def test_decision_number_for_adhoc_agenda_item(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.meeting, view='agenda_items/schedule_text',
-                     data={'title': u'Tisch Traktandum',
-                           '_authenticator': createToken()})
-        self.assertDictContainsSubset({'proceed': True}, browser.json)
+        with freeze(datetime(2016, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            self.login(self.committee_responsible, browser)
+            agenda_item = self.schedule_ad_hoc(self.meeting, u'Tisch Traktandum')
 
-        browser.open(self.meeting, view='agenda_items/list')
-        self.assertDictContainsSubset(
-            {'title': u'Tisch Traktandum',
-             'decision_number': None},
-            browser.json['items'][0])
+            browser.open(self.meeting, view='agenda_items/list')
+            self.assertDictContainsSubset(
+                {'title': u'Tisch Traktandum',
+                 'decision_number': None},
+                browser.json['items'][0])
 
-        browser.open(browser.json['items'][0]['decide_link'])
-        browser.open(self.meeting, view='agenda_items/list')
-        self.assertDictContainsSubset(
-            {'title': u'Tisch Traktandum',
-             'decision_number': u'2016 / 2'},
-            browser.json['items'][0])
+            browser.open(browser.json['items'][0]['decide_link'])
+            browser.open(self.meeting, view='agenda_items/list')
+
+            self.assertEqual(u'2016 / 2', agenda_item.get_decision_number())
 
     @browsing
     def test_create_ad_hoc_agenda_item_excerpt(self, browser):

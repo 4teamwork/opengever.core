@@ -8,6 +8,7 @@
   <property name="global_allow">True</property>
   <property name="allowed_content_types">
     <element value="opengever.meeting.submittedproposal" />
+    <element value="opengever.meeting.period" />
   </property>
 
   <!-- Schema interface -->

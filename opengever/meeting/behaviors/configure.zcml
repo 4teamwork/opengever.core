@@ -46,4 +46,12 @@
       for="opengever.meeting.period.IPeriod"
       />
 
+  <!-- period -->
+  <plone:behavior
+      title="Period"
+      description="Period schema"
+      provides="opengever.meeting.behaviors.period.IPeriodSchema"
+      for="opengever.meeting.period.IPeriod"
+      />
+
 </configure>

@@ -73,7 +73,7 @@ class TestPeriod(IntegrationTestCase):
         browser.fill({'Start date': '20.01.2016'}).submit()
 
         self.assertEqual(['Changes saved'], info_messages())
-        self.assertEqual(date(2016, 1, 20), Period.query.first().date_from)
+        self.assertEqual(date(2016, 1, 20), self.period.start)
 
     @browsing
     def test_close_and_create_new_period_new(self, browser):
