@@ -20,4 +20,6 @@
 
   <permission id="opengever.meeting.AddProposalComment" title="opengever.meeting: Add Proposal Comment" />
 
+  <permission id="opengever.meeting.AddPeriod" title="opengever.meeting: Add Period" />
+
 </configure>
