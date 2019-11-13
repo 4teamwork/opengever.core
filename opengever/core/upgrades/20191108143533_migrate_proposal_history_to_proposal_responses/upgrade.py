@@ -61,6 +61,6 @@ class MigrateProposalHistoryToProposalResponses(UpgradeStep):
             response = ProposalResponse(history_type, text=text, **record)
             response.creator = fields['creator']._type(userid)
             assert(isinstance(created, fields['created']._type))
-            response.created = created
+            response.created = created.replace(microsecond=0)
 
             response_container.add(response)

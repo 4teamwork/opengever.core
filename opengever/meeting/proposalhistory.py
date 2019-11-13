@@ -142,6 +142,9 @@ class ProposalResponse(Response):
 
     def __init__(self, response_type='commented', text='', **kwargs):
         super(ProposalResponse, self).__init__(response_type)
+        # Because during transport creation time gets rounded down to seconds
+        # we round it directly here to avoid potential ordering issues.
+        self.created = self.created.replace(microsecond=0)
         self.text = text
         self.additional_data = PersistentDict()
         self.additional_data.update(kwargs)
