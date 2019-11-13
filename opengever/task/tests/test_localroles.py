@@ -304,6 +304,32 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.assertEqual(('Editor', ), roles)
 
     @browsing
+    def test_reject_task_revokes_responsible_roles_on_task(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.set_workflow_state('task-state-open', self.subtask)
+
+        roles = self.subtask.get_local_roles_for_userid(self.regular_user.id)
+        self.assertEqual(('Editor',), roles)
+
+        roles = self.subtask.get_local_roles_for_userid(self.dossier_responsible.id)
+        self.assertEqual(('Owner', ), roles)
+
+        # reject
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-open-rejected')
+        browser.fill({'Response': 'Nope!'})
+        browser.click_on('Save')
+
+        # old responsible's permissions were revoked
+        roles = self.subtask.get_local_roles_for_userid(self.regular_user.id)
+        self.assertEqual(tuple(), roles)
+
+        # The new responsible, which is the issuer was granted permissions
+        roles = self.subtask.get_local_roles_for_userid(self.dossier_responsible.id)
+        self.assertEqual(('Editor', 'Owner', ), roles)
+
+    @browsing
     def test_reader_of_parent_can_still_view_closed_task(self, browser):
         with self.login(self.regular_user):
             RoleAssignmentManager(self.portal).add_or_update_assignment(

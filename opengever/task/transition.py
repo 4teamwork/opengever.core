@@ -307,6 +307,7 @@ class RejectTransitionExtender(DefaultTransitionExtender):
 
         self.save_related_items(response, transition_params.get('relatedItems'))
         self.switch_responsible()
+        notify(ObjectModifiedEvent(self.context))
 
     def update_watchers(self):
         center = notification_center()
@@ -316,6 +317,13 @@ class RejectTransitionExtender(DefaultTransitionExtender):
             self.context.oguid, self.context.issuer, TASK_RESPONSIBLE_ROLE)
 
     def switch_responsible(self):
+        # Revoke local roles for current responsible, except if
+        # revoke_permissions is set to False.
+        # The roles for the new responsible will be assigned afterwards
+        # in set_roles_after_modifying on the ObjectModifiedEvent.
+        if self.context.revoke_permissions:
+            LocalRolesSetter(self.context).revoke_roles()
+
         self.context.responsible = ITask(self.context).issuer
 
 

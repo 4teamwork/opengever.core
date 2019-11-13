@@ -7,6 +7,7 @@ Changelog
 - Fix unicode error in @listing endpoint filters. [lgraf]
 - Add main dossier count to contentstats. [njohner]
 - No longer add journal entry for document file modification. [njohner]
+- Revoke permissions for former responsible, when task gets rejected. [phgross]
 
 
 2019.4.0rc5 (2019-11-13)
