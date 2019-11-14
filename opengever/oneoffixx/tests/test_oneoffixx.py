@@ -26,7 +26,8 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
-        template_library = [{'datasources': [{'id': 1}]}]
+        template_library = {'datasources': [{'id': 1, 'isPrimary': True}]}
+        organization_units = [{'id': 'fake-org-id'}]
         self.template_word = {
             'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
             'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
@@ -65,15 +66,13 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
                 'templates': [template_powerpoint],
             },
         ]
-        favorites = {
-            'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bd',
-            'localizedName': 'Favorites',
-            'templates': [],
-        }
+        favorites = [self.template_word, ]
         session = requests.Session()
         adapter = requests_mock.Adapter()
         adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
         adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/OrganizationUnits',
+                             text=json.dumps(organization_units))
         adapter.register_uri(
             'GET',
             'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
@@ -112,16 +111,6 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
             'Filter',
             browser.css('input.tableradioSearchbox').first.get('placeholder'),
         )
-
-    @browsing
-    def test_oneoffixx_defaults_to_listing_all(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
-        self.assertEqual([], browser.css('option[selected=selected]').text)
-        self.assertIsNone(browser.css('select').first.value)
-        # XXX - this always renders the --NOVALUE-- as the actually chosen
-        # default is actually loaded over AJAX - confusing and bad UX
 
     @browsing
     def test_document_creation_from_oneoffixx_template_creates_shadow_doc(self, browser):
@@ -290,7 +279,8 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
-        template_library = [{'datasources': [{'id': 1}]}]
+        template_library = {'datasources': [{'id': 1, 'isPrimary': True}]}
+        organization_units = [{'id': 'fake-org-id'}]
         valid_template = {
             'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
             'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
@@ -306,11 +296,13 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
             'templateGroupId': 1,
         }
         template_groups = [{'templates': [valid_template, invalid_template]}]
-        favorites = {'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bd', 'localizedName': 'Favorites', 'templates': []}
+        favorites = []
         session = requests.Session()
         adapter = requests_mock.Adapter()
         adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
         adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/OrganizationUnits',
+                             text=json.dumps(organization_units))
         adapter.register_uri(
             'GET',
             'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
@@ -454,9 +446,12 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
     @browsing
     def test_template_groups_bad_return(self, browser):
         access_token = {'access_token': 'all_may_enter'}
-        template_library = [{'datasources': [{'id': 1}]}]
+        template_library = {'datasources': [{'id': 1, 'isPrimary': True}]}
+        organization_units = [{'id': 'fake-org-id'}]
         self.adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
         self.adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        self.adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/OrganizationUnits',
+                                  text=json.dumps(organization_units))
         self.adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups', status_code=400)
         OneoffixxAPIClient(self.session, self.credentials)
 
@@ -509,7 +504,8 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
-        template_library = [{'datasources': [{'id': 1}]}]
+        template_library = {'datasources': [{'id': 1, 'isPrimary': True}]}
+        organization_units = [{'id': 'fake-org-id'}]
         template_word = {
             'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
             'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
@@ -548,15 +544,13 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
                 'templates': [template_powerpoint],
             },
         ]
-        favorites = {
-            'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bd',
-            'localizedName': 'Favorites',
-            'templates': [template_powerpoint],
-        }
+        favorites = [template_powerpoint]
         session = requests.Session()
         adapter = requests_mock.Adapter()
         adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
         adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/OrganizationUnits',
+                             text=json.dumps(organization_units))
         adapter.register_uri(
             'GET',
             'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
@@ -601,20 +595,6 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
         self.assertEqual(expected_categories, browser.css('select option').text)
 
     @browsing
-    def test_oneoffixx_defaults_to_listing_favorites(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
-        self.assertEqual(
-            ['Favorites'], browser.css('option[selected=selected]').text)
-        self.assertEqual(
-            'c2ddc01a-befd-4e0d-b15f-f67025f532bd',
-            browser.css('select').first.value,
-        )
-        # XXX - this always renders the --NOVALUE-- as the actually chosen
-        # default is actually loaded over AJAX - confusing and bad UX
-
-    @browsing
     def test_oneoffixx_favorites_not_duplicated_on_select_all(self, browser):
         self.login(self.regular_user, browser)
         view = (
@@ -644,7 +624,7 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
             'document_with_oneoffixx_template'
             '/++widget++form.widgets.template'
             '/ajax_render'
-            '?form.widgets.template_group:list=c2ddc01a-befd-4e0d-b15f-f67025f532bd'
+            '?form.widgets.template_group:list=__favorites__'
             '&form.widgets.template_group-empty-marker=1'
             '&form.widgets.template-empty-marker=1'
             '&form.widgets.title'

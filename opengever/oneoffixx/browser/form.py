@@ -12,17 +12,21 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
 from zope.component import getUtility
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
 
+FAVORITES_FAKE_ID = '__favorites__'
+
+
 def get_oneoffixx_favorites():
     """Return the user chosen favorites as a template group, if any."""
     api_client = OneoffixxAPIClient()
     favorites = api_client.get_oneoffixx_favorites()
-    if favorites.get('templates'):
+    if favorites:
         return favorites
     return None
 
@@ -37,7 +41,13 @@ def get_oneoffixx_template_groups():
     template_groups = deepcopy(api_client.get_oneoffixx_template_groups())
     favorites = get_oneoffixx_favorites()
     if favorites:
-        template_groups.insert(0, favorites)
+        favorites_template_group = {
+            u'id': FAVORITES_FAKE_ID,
+            u'localizedName': translate(_(u'label_favorites', default=u'Favorites'),
+                                        context=getRequest()),
+            u'templates': favorites}
+
+        template_groups.insert(0, favorites_template_group)
     return template_groups
 
 
@@ -56,10 +66,12 @@ def get_oneoffixx_templates():
 
 
 def default_template_group():
-    """Return all templates, or the user favorites, if defined by user."""
+    """Returns the template group id or the favorites fake-groupid, if user has
+    favorites defined."""
+
     favorites = get_oneoffixx_favorites()
     if favorites:
-        return favorites.get('id')
+        return FAVORITES_FAKE_ID
     return None
 
 
@@ -78,15 +90,16 @@ def list_templates(context):
     if template_group is not None:
         favorites = get_oneoffixx_favorites()
         # Favorites are a special case
-        if favorites and template_group[0] == favorites.get('id'):
+        if favorites and template_group[0] == FAVORITES_FAKE_ID:
+            favorite_label = translate(
+                _(u'label_favorites', default=u'Favorites'), context=getRequest()),
             terms = [
                 SimpleVocabulary.createTerm(
-                    OneOffixxTemplate(
-                        template, favorites.get('localizedName', '')),
+                    OneOffixxTemplate(template, favorite_label),
                     template.get('id'),
                     template.get('localizedName'),
                 )
-                for template in favorites.get('templates')
+                for template in favorites
             ]
         elif template_group[0] != '--NOVALUE--':
             terms = [term for term in terms if term.value.group == template_group[0]]

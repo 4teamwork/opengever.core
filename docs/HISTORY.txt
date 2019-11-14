@@ -24,6 +24,7 @@ Changelog
 - No longer add journal entry for document file modification. [njohner]
 - Revoke permissions for former responsible, when task gets rejected. [phgross]
 - Use BaseResponse for proposal history to add API support. [njohner]
+- Update oneoffixx integration with the latest oneoffixx api changes. [phgross]
 
 
 2019.4.0rc5 (2019-11-13)
