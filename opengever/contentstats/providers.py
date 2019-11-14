@@ -26,7 +26,15 @@ class GEVERPortalTypesProvider(PortalTypesProvider):
         mails = counts.get('ftw.mail.mail', 0)
         docs = counts.get('opengever.document.document', 0)
         counts['_opengever.document.behaviors.IBaseDocument'] = (docs + mails)
+        counts['_opengever.dossier.maindossier'] = self.get_main_dossiers_count()
         return counts
+
+    def get_main_dossiers_count(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        count = len(catalog.unrestrictedSearchResults(
+            object_provides=['opengever.dossier.behaviors.dossier.IDossierMarker'],
+            is_subdossier=False))
+        return count
 
 
 @implementer(IStatsProvider)
