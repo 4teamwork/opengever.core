@@ -4,6 +4,7 @@ Changelog
 2019.5.1 (unreleased)
 ---------------------
 
+- Always use API for OfficeConnector. [njohner]
 - Refactor solrsearch and listing endpoints. [njohner]
 - Add tests for solrsearch and listing endpoints. [njohner]
 - Split invitations from participations endpoints. [njohner]
