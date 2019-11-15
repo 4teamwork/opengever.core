@@ -180,30 +180,6 @@ class OCIntegrationTestCase(IntegrationTestCase):
         return payloads
 
     def checkout_document(self, browser, raw_token, payload, document):
-        """Logs out, uses JWT to check out the document and logs back in."""
-        self.assertFalse(document.checked_out_by())
-
-        with self.as_officeconnector(browser):
-            headers = {
-                'Accept': 'text/html',
-                'Authorization': ' '.join(('Bearer', raw_token, )),
-            }
-
-            browser.open(
-                document,
-                headers=headers,
-                view=payload.get('checkout'),
-                send_authenticator=True,
-                )
-
-        self.assertEquals(api.user.get_current().id, document.checked_out_by())
-        self.assert_journal_entry(
-            document,
-            DOCUMENT_CHECKED_OUT,
-            u'Document checked out',
-            )
-
-    def checkout_document_via_api(self, browser, raw_token, payload, document):
         """Logs out, uses JWT to check out the document via the RESTAPI and logs back in."""
         self.assertFalse(document.checked_out_by())
 
@@ -220,53 +196,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
         self.assertEqual(api.user.get_current().id, document.checked_out_by())
         self.assert_journal_entry(document, DOCUMENT_CHECKED_OUT, u'Document checked out')
 
-    def lock_document(self, browser, raw_token, document):
-        """Logs out, uses JWT to WebDAV lock the document and logs back in."""
-        lock_manager = getMultiAdapter(
-            (document, self.request),
-            name='plone_lock_info',
-            )
-        self.assertFalse(lock_manager.is_locked())
-
-        with self.as_officeconnector(browser):
-            headers = {
-                'Authorization': ' '.join(('Bearer', raw_token, )),
-                'Content-Type': 'text/xml; charset="utf-8"',
-                'Depth': '0',
-                'Timeout': 'Infinite, Second-4100000000',
-                }
-
-            data = (
-                '<?xml version="1.0" encoding="utf-8"?>\n'
-                '<D:lockinfo xmlns:D="DAV:">\n'
-                '  <D:lockscope><D:exclusive/></D:lockscope>\n'
-                '  <D:locktype><D:write/></D:locktype>\n'
-                '  <D:owner>\n'
-                '  <D:href>Office Connector</D:href>\n'
-                '  </D:owner>\n'
-                '</D:lockinfo>'
-                )
-
-            browser.webdav('LOCK', document, headers=headers, data=data)
-            self.assertEquals(200, browser.status_code)
-            self.assertTrue(lock_manager.is_locked())
-
-            # Because of a Plone WebDav namespacing bug, the generated
-            # XML is not valid and has to be corrected before parsing.
-            # ftw.testbrowser does the correction when generating self.document
-            contents = browser.contents.replace(
-                '<D:href>', '<d:href>').replace('</D:href>', '</d:href>')
-
-            lock_token = ET.fromstring(contents).find(
-                './d:lockdiscovery/d:activelock/d:locktoken/',
-                {'d': 'DAV:'},
-                ).text
-
-            self.assertTrue(lock_token)
-
-        return lock_token
-
-    def lock_document_via_api(self, browser, raw_token, payload, document):
+    def lock_document(self, browser, raw_token, payload, document):
         """Logs out, uses JWT to WebDAV lock the document and logs back in."""
         lock_manager = getMultiAdapter((document, self.request), name='plone_lock_info')
         self.assertFalse(lock_manager.is_locked())
@@ -315,33 +245,6 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
     def upload_document(self, browser, raw_token, payload, document, new_file):
         with self.as_officeconnector(browser):
-            encoder = MultipartEncoder({
-                'form.widgets.file.action': 'replace',
-                'form.buttons.upload': 'oc-file-upload',
-                'form.widgets.file': (
-                    basename(new_file.name),
-                    new_file,
-                    payload.get('content-type'),
-                    ),
-                '_authenticator': payload.get('csrf-token'),
-                })
-
-            headers = {
-                'Authorization': ' '.join(('Bearer', raw_token, )),
-                'Content-Type': encoder.content_type,
-            }
-            browser.open(
-                document,
-                view=payload.get('upload-form'),
-                method='POST',
-                headers=headers,
-                data=encoder.to_string(),
-                )
-
-            self.assertEquals(204, browser.status_code)
-
-    def upload_document_via_api(self, browser, raw_token, payload, document, new_file):
-        with self.as_officeconnector(browser):
             filename = b64encode(basename(new_file.name))
             content_type = b64encode(payload.get('content-type'))
             headers = {
@@ -365,20 +268,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
             browser.open(upload_url, method='PATCH', data=new_file.read(), headers=headers)
             self.assertEquals(204, browser.status_code)
 
-    def unlock_document(self, browser, raw_token, document, lock_token):
-        lock_manager = getMultiAdapter((document, self.request), name='plone_lock_info')
-        self.assertTrue(lock_manager.is_locked())
-
-        with self.as_officeconnector(browser):
-            headers = {
-                'Authorization': ' '.join(('Bearer', raw_token, )),
-                'Lock-Token': lock_token,
-                }
-            browser.open(document, method='UNLOCK', headers=headers)
-            self.assertEquals(204, browser.status_code)
-            self.assertFalse(lock_manager.is_locked())
-
-    def unlock_document_via_api(self, browser, raw_token, payload, document):
+    def unlock_document(self, browser, raw_token, payload, document):
         lock_manager = getMultiAdapter((document, self.request), name='plone_lock_info')
         self.assertTrue(lock_manager.is_locked())
 
@@ -393,50 +283,6 @@ class OCIntegrationTestCase(IntegrationTestCase):
             self.assertFalse(lock_manager.is_locked())
 
     def checkin_document(self, browser, raw_token, payload, document, comment=None):
-        with self.as_officeconnector(browser):
-            headers = {
-                'Authorization': ' '.join(('Bearer', raw_token, )),
-            }
-
-            if comment:
-                encoder = MultipartEncoder({
-                    'form.widgets.comment': comment,
-                    'form.buttons.button_checkin': 'Checkin',
-                    '_authenticator': payload.get('csrf-token'),
-                    })
-
-                headers['Content-Type'] = encoder.content_type
-
-                browser.open(
-                    document,
-                    view=payload.get('checkin-with-comment'),
-                    headers=headers,
-                    method='POST',
-                    data=encoder.to_string(),
-                    )
-            else:
-                browser.open(
-                    document,
-                    headers=headers,
-                    view=payload.get('checkin-without-comment'),
-                    send_authenticator=True,
-                    )
-
-        self.assert_journal_entry(
-            document,
-            DOCUMENT_CHECKED_IN,
-            u'Document checked in',
-            )
-
-        journal_comments = get_journal_entry(document).get('comments')
-        if comment:
-            self.assertTrue(journal_comments)
-        else:
-            self.assertFalse(journal_comments)
-
-        self.assertEquals(200, browser.status_code)
-
-    def checkin_document_via_api(self, browser, raw_token, payload, document, comment=None):
         self.assertTrue(document.is_checked_out())
 
         with self.as_officeconnector(browser):

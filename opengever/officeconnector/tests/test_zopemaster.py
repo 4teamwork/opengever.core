@@ -80,27 +80,29 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
         self.assertEqual(expected_token, token)
 
         expected_payloads = [{
-            u'checkin-with-comment': u'@@checkin_document',
-            u'checkin-without-comment': u'checkin_without_comment',
-            u'checkout': u'@@checkout_documents',
+            u'status': u'status',
+            u'checkin': u'@checkin',
+            u'checkout': u'@checkout',
             u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
             u'download': u'download',
             u'filename': u'Vertraegsentwurf.docx',
-            u'upload-form': u'file_upload',
+            u'lock': u'@lock',
+            u'unlock': u'@unlock',
+            u'upload': u'@tus-replace',
             u'uuid': u'createtreatydossiers000000000002',
             }]
         payloads = self.fetch_document_checkout_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
         for payload, expected_payload in zip(payloads, expected_payloads):
             payload_copy = deepcopy(payload)
-            self.assertTrue(payload_copy.pop('csrf-token', None))
-            self.assertFalse(payload_copy.pop('reauth', None))
+            self.assertFalse(payload_copy.pop('csrf-token', None))
+            self.assertTrue(payload_copy.pop('reauth', None))
             self.assertEqual(expected_payload, payload_copy)
 
         self.checkout_document(browser, raw_token, payloads[0], self.document)
 
-        lock_token = self.lock_document(browser, raw_token, self.document)
+        self.lock_document(browser, raw_token, payloads[0], self.document)
 
         original_checksum = sha256(
             self.download_document(browser, raw_token, payloads[0]),
@@ -115,69 +117,6 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
 
         self.assertNotEquals(new_checksum, original_checksum)
 
-        self.unlock_document(browser, raw_token, self.document, lock_token)
+        self.unlock_document(browser, raw_token, payloads[0], self.document)
 
         self.checkin_document(browser, raw_token, payloads[0], self.document)
-
-
-class TestOfficeconnectorAsZopemasterDossierAPIWithCheckoutWithRESTAPI(TestOfficeconnectorAsZopemasterDossierAPIWithCheckout):  # noqa
-    features = (
-        'officeconnector-checkout',
-        'officeconnector-restapi',
-    )
-
-    @browsing
-    def test_checkout_checkin_open_with_file_without_comment(self, browser):
-        self.login(self.manager, browser)
-
-        with freeze(FREEZE_DATE):
-            oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
-
-        self.assertIsNotNone(oc_url)
-        self.assertEquals(200, browser.status_code)
-
-        expected_token = {
-            u'action': u'checkout',
-            u'documents': [u'createtreatydossiers000000000002'],
-            u'exp': 4121033100,
-            u'sub': u'admin',
-            u'url': u'http://nohost/plone/oc_checkout',
-            }
-        raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE, algorithms=('HS256',))
-        self.assertEqual(expected_token, token)
-
-        expected_payloads = [{
-            u'status': u'status',
-            u'checkin': u'@checkin',
-            u'checkout': u'@checkout',
-            u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
-            u'download': u'download',
-            u'filename': u'Vertraegsentwurf.docx',
-            u'lock': u'@lock',
-            u'unlock': u'@unlock',
-            u'upload': u'@tus-replace',
-            u'uuid': u'createtreatydossiers000000000002',
-        }]
-        payloads = self.fetch_document_checkout_payloads(browser, raw_token, token)
-        self.assertEquals(200, browser.status_code)
-        for payload, expected_payload in zip(payloads, expected_payloads):
-            payload_copy = deepcopy(payload)
-            self.assertFalse(payload_copy.pop('csrf-token', None))
-            self.assertTrue(payload_copy.pop('reauth', None))
-            self.assertEqual(expected_payload, payload_copy)
-
-        self.checkout_document_via_api(browser, raw_token, payloads[0], self.document)
-        self.lock_document_via_api(browser, raw_token, payloads[0], self.document)
-
-        original_checksum = sha256(self.download_document(browser, raw_token, payloads[0])).hexdigest()
-
-        with open(path_to_asset('addendum.docx')) as f:
-            self.upload_document_via_api(browser, raw_token, payloads[0], self.document, f)
-
-        new_checksum = sha256(self.download_document(browser, raw_token, payloads[0])).hexdigest()
-        self.assertNotEquals(new_checksum, original_checksum)
-
-        self.unlock_document_via_api(browser, raw_token, payloads[0], self.document)
-        self.checkin_document_via_api(browser, raw_token, payloads[0], self.document)

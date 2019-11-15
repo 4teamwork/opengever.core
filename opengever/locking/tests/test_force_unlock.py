@@ -35,7 +35,9 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
             token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
             self.assertEqual(expected_token, token)
 
-            self.lock_document(browser, raw_token, self.document)
+            payloads = self.fetch_document_checkout_payloads(
+                browser, raw_token, token)
+            self.lock_document(browser, raw_token, payloads[0], self.document)
 
             self.login(self.meeting_user, browser)
             browser.open(self.document)
@@ -65,7 +67,10 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
         self.assertEqual(expected_token, token)
 
         lockable = ILockable(self.document)
-        self.lock_document(browser, raw_token, self.document)
+
+        payloads = self.fetch_document_checkout_payloads(
+            browser, raw_token, token)
+        self.lock_document(browser, raw_token, payloads[0], self.document)
         self.assertTrue(lockable.locked())
 
         self.login(self.manager, browser)
