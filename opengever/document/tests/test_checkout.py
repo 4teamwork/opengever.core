@@ -173,11 +173,23 @@ class TestReverting(FunctionalTestCase):
             self.document.file._blob, version2.object.file._blob)
         self.assertNotEqual(self.document.file, version2.object.file)
 
-    def test_revert_does_not_change_document_date(self):
-        with freeze(datetime(2015, 01, 28, 12, 00)):
-            create_document_version(self.document, 3)
-        self.manager.revert_to_version(3)
-        self.assertEquals(self.document_date, self.document.document_date)
+    def test_reverting_to_older_version_does_not_revert_metadata(self):
+        self.assertEqual(u'Testdokum\xe4nt', self.document.title)
+
+        self.document.title = "New title"
+        create_document_version(self.document, 3)
+
+        # Plone retrieves previous version of the whole object
+        # including metadata
+        repo_tool = api.portal.get_tool('portal_repository')
+        version4 = repo_tool.retrieve(self.document, 3)
+        self.assertEqual("New title", version4.object.title)
+        version3 = repo_tool.retrieve(self.document, 2)
+        self.assertEqual(u'Testdokum\xe4nt', version3.object.title)
+
+        # GEVER's revert only retrieves the file
+        self.manager.revert_to_version(2)
+        self.assertEqual("New title", self.document.title)
 
     def test_revert_disallowed_for_unprivileded_user(self):
         self.grant('Authenticated')
