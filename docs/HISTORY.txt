@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Fixes is already done check in multi admin unit tasks completion. [phgross]
+- Fix @history patch endpoint to correctly revert to older document version. [njohner]
 - Fix unicode error in @listing endpoint filters. [lgraf]
 - Fix document serialization for older document versions. [phgross]
 - Add main dossier count to contentstats. [njohner]
