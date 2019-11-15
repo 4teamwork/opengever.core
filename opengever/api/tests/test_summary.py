@@ -157,3 +157,13 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
              u'filename': None,
              u'filesize': None}, summary)
+
+    @browsing
+    def test_summary_with_is_locked_on_tasks_containing_documents(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.task.text = u'Sample description'
+
+        browser.open(self.task.absolute_url() +
+                     '?metadata_fields:list=is_locked',
+                     headers={'Accept': 'application/json'})
