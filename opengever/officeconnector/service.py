@@ -7,7 +7,6 @@ from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
-from opengever.officeconnector.helpers import is_officeconnector_restapi_feature_enabled
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from plone import api
 from plone.protect import createToken
@@ -230,24 +229,18 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                 else:
                     payload['filename'] = document.get_filename()
 
-                if is_officeconnector_restapi_feature_enabled():
-                    reauth_querystring = '&'.join((
-                        '_authenticator={}'.format(payload.pop('csrf-token')),
-                        'mode=external',
-                        'reauth=1',
-                    ))
-                    payload['reauth'] = '?'.join(('@@checkout_documents', reauth_querystring))
-                    payload['status'] = 'status'
-                    payload['lock'] = '@lock'
-                    payload['checkout'] = '@checkout'
-                    payload['upload'] = '@tus-replace'
-                    payload['checkin'] = '@checkin'
-                    payload['unlock'] = '@unlock'
-                else:
-                    payload['checkin-with-comment'] = '@@checkin_document'
-                    payload['checkin-without-comment'] = 'checkin_without_comment'
-                    payload['checkout'] = '@@checkout_documents'
-                    payload['upload-form'] = 'file_upload'
+                reauth_querystring = '&'.join((
+                    '_authenticator={}'.format(payload.pop('csrf-token')),
+                    'mode=external',
+                    'reauth=1',
+                ))
+                payload['reauth'] = '?'.join(('@@checkout_documents', reauth_querystring))
+                payload['status'] = 'status'
+                payload['lock'] = '@lock'
+                payload['checkout'] = '@checkout'
+                payload['upload'] = '@tus-replace'
+                payload['checkin'] = '@checkin'
+                payload['unlock'] = '@unlock'
 
             else:
                 # Fail per default
