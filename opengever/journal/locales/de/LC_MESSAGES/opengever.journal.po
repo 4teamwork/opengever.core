@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2019-11-13 15:05+0000\n"
 "PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -85,26 +85,6 @@ msgstr "Dokument ausgecheckt"
 #: ./opengever/journal/handlers.py
 msgid "label_document_checkout_cancel"
 msgstr "Änderungen an der Datei widerrufen"
-
-#. Default: "Changed file and metadata"
-#: ./opengever/journal/handlers.py
-msgid "label_document_file_and_metadata_modified"
-msgstr "Datei und Metadaten bearbeitet"
-
-#. Default: "Changed file and metadata of document ${title}"
-#: ./opengever/journal/handlers.py
-msgid "label_document_file_and_metadata_modified__parent"
-msgstr "Datei und Metadaten des Dokuments «${title}» bearbeitet"
-
-#. Default: "Changed file"
-#: ./opengever/journal/handlers.py
-msgid "label_document_file_modified"
-msgstr "Datei bearbeitet"
-
-#. Default: "Changed file of document ${title}"
-#: ./opengever/journal/handlers.py
-msgid "label_document_file_modified__parent"
-msgstr "Datei des Dokuments «${title}» bearbeitet"
 
 #. Default: "Reverte document file to version ${version_id}"
 #: ./opengever/journal/handlers.py
@@ -310,4 +290,3 @@ msgstr "Journal"
 #: ./opengever/journal/templates/journal_selection.pt
 msgid "tab_matches"
 msgstr "${amount} Treffer"
-
