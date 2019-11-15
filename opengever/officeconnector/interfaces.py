@@ -16,11 +16,6 @@ class IOfficeConnectorSettings(Interface):
         u'OfficeConnector URLs',
         default=True)
 
-    restapi_enabled = schema.Bool(
-        title=u'OfficeConnector restapi support',
-        description=u'Enable sending restapi payloads Office Connector.',
-        default=False)
-
     officeconnector_editable_types_extra = schema.List(
         title=u'Office Connector supported additional MIME types',
         description=u'A list of Office Connector supported additional MIME types.'
@@ -40,7 +35,4 @@ class IOfficeConnectorSettingsView(Interface):
         pass
 
     def is_checkout_enabled():
-        pass
-
-    def is_restapi_enabled():
         pass
