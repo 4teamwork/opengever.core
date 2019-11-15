@@ -364,10 +364,16 @@ class Listing(Service):
                 value = self.daterange_filter(value)
             elif isinstance(value, list):
                 value = map(escape, value)
+                value = map(safe_unicode, value)
                 value = u' OR '.join(value)
             else:
                 value = escape(value)
             if value is not None:
+                # XXX: Instead of littering all this code with safe_unicode,
+                # we should convert user-supplied input to unicode *once*
+                # at the system boundaries (when extracting values from
+                # self.request.form) once this endpoint gets refactored.
+                value = safe_unicode(value)
                 filter_queries.append(u'{}:({})'.format(escape(key), value))
 
         sort = sort_on
