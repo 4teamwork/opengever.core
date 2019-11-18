@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
+from plone.namedfile.file import NamedBlobFile
 from zope.component import getMultiAdapter
 import json
 
@@ -82,6 +84,32 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(browser.json['trashed'])
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
+
+    @browsing
+    def test_respects_version_id_when_traversing_on_older_version(self, browser):
+        self.login(self.regular_user, browser)
+
+        versioner = Versioner(self.document)
+        versioner.create_initial_version()
+
+        self.checkout_document(self.document)
+        self.document.file = NamedBlobFile(
+            data='TEST DATA', filename=self.document.file.filename)
+        self.checkin_document(self.document)
+
+        url = '{}/@history/0'.format(self.document.absolute_url())
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(
+            browser.json.get(u'preview_url')[:124],
+            u'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494e'
+            u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview')
+
+        url = '{}/@history/1'.format(self.document.absolute_url())
+        browser.open(url, headers=self.api_headers)
+        self.assertNotEqual(
+            browser.json.get(u'preview_url')[:124],
+            u'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494e'
+            u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview')
 
 
 class TestDocumentPost(IntegrationTestCase):

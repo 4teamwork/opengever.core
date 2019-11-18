@@ -22,23 +22,26 @@ class SerializeDocumentToJson(GeverSerializeToJson):
         ref_num = IReferenceNumber(self.context)
         result[u'reference_number'] = ref_num.get_number()
 
+        version = "current" if kwargs.get('version') is None else kwargs.get('version')
+        obj = self.getVersion(version)
+
         bumblebee_service = bumblebee.get_service_v3()
         result[u'thumbnail_url'] = bumblebee_service.get_representation_url(
-            self.context, 'thumbnail')
+            obj, 'thumbnail')
         result[u'preview_url'] = bumblebee_service.get_representation_url(
-            self.context, 'preview')
+            obj, 'preview')
         result[u'pdf_url'] = bumblebee_service.get_representation_url(
-            self.context, 'pdf')
+            obj, 'pdf')
         result[u'file_extension'] = self.context.get_file_extension()
 
         additional_metadata = {
-            'checked_out': self.context.checked_out_by(),
-            'is_locked': self.context.is_locked(),
-            'containing_dossier': self.context.containing_dossier_title(),
-            'containing_subdossier': self.context.containing_subdossier_title(),
-            'trashed': self.context.is_trashed,
-            'is_shadow_document': self.context.is_shadow_document(),
-            'current_version_id': self.context.get_current_version_id(
+            'checked_out': obj.checked_out_by(),
+            'is_locked': obj.is_locked(),
+            'containing_dossier': obj.containing_dossier_title(),
+            'containing_subdossier': obj.containing_subdossier_title(),
+            'trashed': obj.is_trashed,
+            'is_shadow_document': obj.is_shadow_document(),
+            'current_version_id': obj.get_current_version_id(
                 missing_as_zero=True),
         }
 
