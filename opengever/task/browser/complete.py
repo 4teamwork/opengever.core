@@ -322,7 +322,7 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
         if len(response_container) == 0:
             return False
 
-        last_response = response_container[-1]
+        last_response = response_container.list()[-1]
         current_user = AccessControl.getSecurityManager().getUser()
 
         if last_response.transition == data['transition'] and \
