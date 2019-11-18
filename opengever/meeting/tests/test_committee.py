@@ -248,10 +248,6 @@ class TestCommittee(IntegrationTestCase):
              self.group_field_name: 'committee_rpk_group'})
         browser.css('#form-buttons-save').first.click()
 
-        browser.fill({'Title': u'Initial',
-                      'Start date': '01.01.2012',
-                      'End date': '31.12.2012'}).submit()
-
         statusmessages.assert_message('Item created')
 
         committee = browser.context
@@ -268,13 +264,6 @@ class TestCommittee(IntegrationTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(committee), model.oguid)
         self.assertEqual(u'A c\xf6mmittee', model.title)
-
-        self.assertEqual(1, len(model.periods))
-        period = model.periods[0]
-        self.assertEqual('active', period.workflow_state)
-        self.assertEqual(u'Initial', period.title)
-        self.assertEqual(date(2012, 1, 1), period.date_from)
-        self.assertEqual(date(2012, 12, 31), period.date_to)
 
     @browsing
     def test_committee_can_be_edited_in_browser(self, browser):

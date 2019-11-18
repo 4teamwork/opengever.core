@@ -367,13 +367,6 @@
   </class>
 
   <browser:page
-      for="opengever.meeting.committeecontainer.ICommitteeContainer"
-      class=".committeeforms.AddInitialPeriodStepView"
-      name="add-initial-period"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
       for="opengever.meeting.committee.ICommittee"
       class=".committeeforms.EditForm"
       name="edit"
