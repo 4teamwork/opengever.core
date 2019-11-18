@@ -16,6 +16,8 @@ import json
 
 class TestTaskSerialization(IntegrationTestCase):
 
+    maxDiff = None
+
     @browsing
     def test_task_contains_a_list_of_responses(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -82,8 +84,8 @@ class TestTaskSerialization(IntegrationTestCase):
         browser.open(
             self.inbox_forwarding, method="GET", headers=self.api_headers)
         self.assertEquals(
-            [{u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@responses/1472630853000000',
-              u'response_id': 1472630853000000,
+            [{u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@responses/1472634453000000',
+              u'response_id': 1472634453000000,
               u'response_type': u'default',
               u'added_objects': [{
                 u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/document-13',
@@ -95,7 +97,7 @@ class TestTaskSerialization(IntegrationTestCase):
               u'creator': {
                   u'token': u'nicole.kohler',
                   u'title': u'Kohler Nicole'},
-              u'created': u'2016-08-31T10:07:33',
+              u'created': u'2016-08-31T11:07:33',
               u'related_items': [],
               u'text': u'',
               u'mimetype': u'',

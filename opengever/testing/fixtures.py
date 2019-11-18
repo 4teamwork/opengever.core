@@ -92,15 +92,15 @@ class OpengeverContentFixture(object):
             with self.login(self.administrator):
                 self.create_templates()
 
-        with self.freeze_at_hour(9):
-            with self.login(self.administrator):
+        with self.login(self.administrator):
+            with self.freeze_at_hour(9):
                 self.create_special_templates()
                 self.create_subtemplates()
-
+            with self.freeze_at_hour(10):
                 with self.features('meeting'):
                     self.create_committees()
 
-        with self.freeze_at_hour(10):
+        with self.freeze_at_hour(11):
             with self.login(self.administrator):
                 self.create_inbox()
                 self.create_workspace_root()
