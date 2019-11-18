@@ -8,7 +8,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting.model import Period
+from opengever.meeting.period import Period
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.autoform import directives as form
@@ -74,9 +74,9 @@ class CloseCurrentPeriodStep(BaseWizardStepForm, ModelEditForm):
 
     def __init__(self, context, request):
         self.committee = context.load_model()
-        model = Period.query.get_current(self.committee)
+        period = Period.get_current(self.committee)
         super(CloseCurrentPeriodStep, self).__init__(
-            context, request, model)
+            context, request, period)
 
     def get_edit_values(self, keys):
         return self.model.get_edit_values(keys)
@@ -210,8 +210,14 @@ class PeriodsTab(BrowserView, GeverTabMixin):
     def get_periods(self):
         """Returns all periods for the current committee.
         """
-        return Period.query.by_committee(
-            self.context.load_model()).order_by(desc(Period.date_from))
+        return api.content.find(
+            context=self.context,
+            portal_type='opengever.meeting.period',
+            sort_on='start',
+            sort_order='descending')
+
+    def get_localized_time(self, dt):
+        return api.portal.get_localized_time(datetime=dt)
 
     def is_editable_by_current_user(self):
         """Return whether the current user can edit periods."""

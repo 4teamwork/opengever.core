@@ -4,33 +4,38 @@
   <ul id="period_listing" tal:condition="periods">
     <li tal:repeat="period periods" class="period">
       <div class="title">
-        <span tal:content="period/get_title"></span>
+        <span>
+          <tal:repl tal:replace="period/Title" />
+          (<tal:repl tal:replace="python: view.get_localized_time(period.start)" />
+          -
+          <tal:repl tal:replace="python: view.get_localized_time(period.end)" />)
+        </span>
       </div>
       <ul class="download actions">
         <li>
           <a class="download_toc"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/alphabetical_toc"
+             tal:attributes="href string:${period/getURL}/@@alphabetical_toc"
              i18n:translate="label_download_alphabetical_toc">
             download TOC alphabetical
           </a>
         </li>
         <li>
           <a class="download_toc"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_toc"
+             tal:attributes="href string:${period/getURL}/@@repository_toc"
              i18n:translate="label_download_repository_toc">
             download TOC by repository
           </a>
         </li>
         <li>
           <a class="download_toc"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/dossier_refnum_toc"
+             tal:attributes="href string:${period/getURL}/@@dossier_refnum_toc"
              i18n:translate="label_download_dossier_refnum_toc">
             download TOC by dossier reference number
           </a>
         </li>
         <li>
           <a class="download_toc"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_refnum_toc"
+             tal:attributes="href string:${period/getURL}/@@repository_refnum_toc"
              i18n:translate="label_download_repository_refnum_toc">
             download TOC by repository reference number
           </a>
@@ -39,7 +44,7 @@
       <ul class="actions" tal:condition="view/is_editable_by_current_user">
         <li>
           <a class="edit_period"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/edit"
+             tal:attributes="href string:${period/getURL}/@@edit"
              i18n:translate="label_edit">
             Edit
           </a>
@@ -48,28 +53,28 @@
       <ul class="debug actions" tal:condition="view/is_manager">
         <li>
           <a class="download_toc_json"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/alphabetical_toc/as_json"
+             tal:attributes="href string:${period/getURL}/alphabetical_toc/as_json"
              i18n:translate="label_download_alphabetical_toc_json">
             download TOC json alphabetical
           </a>
         </li>
         <li>
           <a class="download_toc_json"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_toc/as_json"
+             tal:attributes="href string:${period/getURL}/repository_toc/as_json"
              i18n:translate="label_download_repository_toc_json">
             download TOC json repository
           </a>
         </li>
         <li>
           <a class="download_toc_json"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/dossier_refnum_toc/as_json"
+             tal:attributes="href string:${period/getURL}/dossier_refnum_toc/as_json"
              i18n:translate="label_download_dossier_refnum_toc_json">
             download TOC json by dossier reference number
           </a>
         </li>
         <li>
           <a class="download_toc_json"
-             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_refnum_toc/as_json"
+             tal:attributes="href string:${period/getURL}/repository_refnum_toc/as_json"
              i18n:translate="label_download_repository_refnum_toc_json">
             download TOC json by repository reference number
           </a>
