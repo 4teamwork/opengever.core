@@ -547,6 +547,7 @@ Objects
       - self.decided_meeting
       - self.decided_proposal
       - self.meeting
+      - self.period
       - self.submitted_proposal
     - self.committee_participant_1
     - self.committee_participant_2

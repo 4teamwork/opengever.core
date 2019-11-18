@@ -755,6 +755,10 @@ class OpengeverContentFixture(object):
             self.committee.load_model().committee_id,
             )
 
+        self.period = self.register('period', api.content.find(
+            context=self.committee,
+            portal_type='opengever.meeting.period')[0].getObject())
+
         self.set_roles(
             self.committee, self.meeting_user.getId(), ['CommitteeMember'])
 

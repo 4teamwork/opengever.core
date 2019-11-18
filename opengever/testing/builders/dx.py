@@ -481,20 +481,25 @@ class CommitteeBuilder(DexterityBuilder):
         if not self._with_default_period:
             return
 
-        committee_model = obj.load_model()
         today = date.today()
-        db_session = self.session.session
-
-        db_session.add(Period(committee=committee_model,
-                              title=unicode(today.year),
-                              date_from=date(today.year, 1, 1),
-                              date_to=date(today.year, 12, 31)))
-
-        if self.session.auto_commit:
-            db_session.flush()
+        create(Builder('period').within(obj).having(
+              title=unicode(today.year),
+              start=date(today.year, 1, 1),
+              end=date(today.year, 12, 31)))
 
 
 builder_registry.register('committee', CommitteeBuilder)
+
+
+class PeriodBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.period'
+
+    def __init__(self, session):
+        super(PeriodBuilder, self).__init__(session)
+        self.arguments['title'] = unicode(date.today().year)
+
+
+builder_registry.register('period', PeriodBuilder)
 
 
 class TaskTemplateFolderBuilder(DexterityBuilder):

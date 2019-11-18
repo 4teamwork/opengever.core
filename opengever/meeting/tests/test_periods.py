@@ -42,14 +42,12 @@ class TestPeriod(IntegrationTestCase):
 
         create(Builder('period').having(
             title=u'2010',
-            date_from=date(2010, 1, 1),
-            date_to=date(2010, 12, 31),
-            committee=self.committee.load_model()))
+            start=date(2010, 1, 1),
+            end=date(2010, 12, 31)).within(self.committee))
         create(Builder('period').having(
             title=u'2011',
-            date_from=date(2011, 1, 1),
-            date_to=date(2011, 12, 31),
-            committee=self.committee.load_model()))
+            start=date(2011, 1, 1),
+            end=date(2011, 12, 31)).within(self.committee))
 
         browser.open(self.committee, view='tabbedview_view-periods')
         period_rows = browser.css('#period_listing .period')
@@ -112,8 +110,8 @@ class TestPeriod(IntegrationTestCase):
     def test_period_title_with_start_and_end_date(self):
         self.login(self.meeting_user)
         period = create(Builder('period').having(
-            title=u'Foo', date_from=date(2010, 1, 1),
-            date_to=date(2010, 12, 31), committee=self.committee.load_model()))
+            title=u'Foo', start=date(2010, 1, 1), end=date(2010, 12, 31))
+            .within(self.committee))
         self.assertEqual('Foo (Jan 01, 2010 - Dec 31, 2010)',
                          period.get_title())
 
