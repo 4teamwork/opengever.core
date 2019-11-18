@@ -77,6 +77,15 @@
       permission="opengever.trash.UntrashContent"
       />
 
+
+  <plone:service
+      method="PATCH"
+      name="@history"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".history.HistoryPatch"
+      permission="CMFEditions.RevertToPreviousVersions"
+      />
+
   <plone:service
       method="POST"
       name="@scan-in"
