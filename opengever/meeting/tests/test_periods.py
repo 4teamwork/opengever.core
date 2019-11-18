@@ -149,11 +149,6 @@ class TestPeriod(IntegrationTestCase):
         browser.open(self.committee, view='tabbedview_view-periods')
         button = browser.find('download TOC json alphabetical')
 
-        period = self.committee.load_model().periods[0]
-        expected_url = os.path.join(
-            period.get_url(self.committee), 'alphabetical_toc/as_json')
-        self.assertEqual(expected_url, button.get("href"))
-
         button.click()
         toc_content = {u'toc': [{u'group_title': u'I',
                                  u'contents': [{u'decision_number': 1,
@@ -172,10 +167,6 @@ class TestPeriod(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(self.committee, view='tabbedview_view-periods')
         button = browser.find('download TOC json repository')
-
-        period = self.committee.load_model().periods[0]
-        expected_url = os.path.join(period.get_url(self.committee), 'repository_toc/as_json')
-        self.assertEqual(expected_url, button.get("href"))
 
         button.click()
         toc_content = {u'toc': [{u'group_title': u'Vertr\xe4ge und Vereinbarungen',
@@ -196,10 +187,6 @@ class TestPeriod(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(self.committee, view='tabbedview_view-periods')
         button = browser.find('download TOC json by dossier reference number')
-
-        period = self.committee.load_model().periods[0]
-        expected_url = os.path.join(period.get_url(self.committee), 'dossier_refnum_toc/as_json')
-        self.assertEqual(expected_url, button.get("href"))
 
         button.click()
         toc_content = {u'toc': [{u'group_title': u'Client1 1.1 / 1',
@@ -222,12 +209,7 @@ class TestPeriod(IntegrationTestCase):
         browser.open(self.committee, view='tabbedview_view-periods')
         button = browser.find('download TOC json by repository reference number')
 
-        period = self.committee.load_model().periods[0]
-        expected_url = os.path.join(period.get_url(self.committee), 'repository_refnum_toc/as_json')
-        self.assertEqual(expected_url, button.get("href"))
-
         button.click()
-
         toc_content = {u'toc': [{u'group_title': u'Client1 1.1',
                                  u'contents': [{u'decision_number': 1,
                                                 u'description': None,

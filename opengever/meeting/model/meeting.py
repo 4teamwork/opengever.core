@@ -16,8 +16,8 @@ from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.model import AgendaItem
-from opengever.meeting.model import Period
 from opengever.meeting.model.membership import Membership
+from opengever.meeting.period import Period
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -209,7 +209,8 @@ class Meeting(Base, SQLFormSupport):
 
     def get_meeting_number(self):
         # Before the meeting is held, it will not have a meeting number.
-        # In that case we do not want to format it with the period title prefixed
+        # In that case we do not want to format it with the period title
+        # prefixed
         if not self.meeting_number:
             return None
 
