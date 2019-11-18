@@ -235,7 +235,7 @@ class CheckinCheckoutManager(object):
                                                     self.context)
 
     def is_revert_allowed(self):
-        """Return wheter reverting a the document to a previous version is
+        """Return wheter reverting the document to a previous version is
         allowed.
         """
         # is it already checked out?
