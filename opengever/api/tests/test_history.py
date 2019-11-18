@@ -26,6 +26,42 @@ class TestHistoryPatchEndpointForDocuments(IntegrationTestCase):
         self.assertEqual('VERSION 0 DATA', self.document.file.data)
 
     @browsing
+    def test_reverting_to_older_version_of_private_document(self, browser):
+        self.login(self.regular_user, browser)
+
+        create_document_version(self.private_document, 0)
+        create_document_version(self.private_document, 1)
+
+        self.assertEqual('VERSION 1 DATA', self.private_document.file.data)
+
+        browser.open(self.private_document,
+                     view='@history',
+                     data=json.dumps({"version": 0}),
+                     method='PATCH',
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('VERSION 0 DATA', self.private_document.file.data)
+
+    @browsing
+    def test_reverting_to_older_version_of_inbox_document(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        create_document_version(self.inbox_document, 0)
+        create_document_version(self.inbox_document, 1)
+
+        self.assertEqual('VERSION 1 DATA', self.inbox_document.file.data)
+
+        browser.open(self.inbox_document,
+                     view='@history',
+                     data=json.dumps({"version": 0}),
+                     method='PATCH',
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('VERSION 0 DATA', self.inbox_document.file.data)
+
+    @browsing
     def test_reverting_to_older_version_creates_new_version(self, browser):
         self.login(self.regular_user, browser)
 
@@ -64,6 +100,44 @@ class TestHistoryPatchEndpointForDocuments(IntegrationTestCase):
                      headers=self.api_headers)
 
         self.assertEqual('Title version 1', self.document.title)
+
+    @browsing
+    def test_reverting_to_older_version_of_private_document_does_not_revert_metadata(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.private_document.title = "Title version 0"
+        create_document_version(self.private_document, 0)
+        self.private_document.title = "Title version 1"
+        create_document_version(self.private_document, 1)
+
+        self.assertEqual('Title version 1', self.private_document.title)
+
+        browser.open(self.private_document,
+                     view='@history',
+                     data=json.dumps({"version": 0}),
+                     method='PATCH',
+                     headers=self.api_headers)
+
+        self.assertEqual('Title version 1', self.private_document.title)
+
+    @browsing
+    def test_reverting_to_older_version_of_inbox_document_does_not_revert_metadata(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        self.inbox_document.title = "Title version 0"
+        create_document_version(self.inbox_document, 0)
+        self.inbox_document.title = "Title version 1"
+        create_document_version(self.inbox_document, 1)
+
+        self.assertEqual('Title version 1', self.inbox_document.title)
+
+        browser.open(self.inbox_document,
+                     view='@history',
+                     data=json.dumps({"version": 0}),
+                     method='PATCH',
+                     headers=self.api_headers)
+
+        self.assertEqual('Title version 1', self.inbox_document.title)
 
     @browsing
     def test_reverting_to_older_version_fails_when_document_checked_out(self, browser):
