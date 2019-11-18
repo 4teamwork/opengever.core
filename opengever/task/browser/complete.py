@@ -210,7 +210,7 @@ class CompleteSuccessorTaskForm(Form):
 
                     # set relation flag
                     doc._v__is_relation = True
-                    response.add_change('relatedItems',
+                    response.add_change('related_items',
                         '',
                         linked(doc, doc.Title()),
                         _(u'label_related_items', default=u"Related Items"))
@@ -221,7 +221,7 @@ class CompleteSuccessorTaskForm(Form):
             else:
                 # append only the relation on the response
                 doc._v__is_relation = True
-                response.add_change('relatedItems',
+                response.add_change('related_items',
                     '',
                     linked(doc, doc.Title()),
                     _(u'label_related_items', default=u"Related Items"))
