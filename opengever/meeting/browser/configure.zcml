@@ -129,13 +129,6 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
-      name="edit"
-      class=".periods.EditPeriod"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
       for="opengever.meeting.period.IPeriod"
       name="alphabetical_toc"
       class=".toc.DownloadAlphabeticalTOC"
