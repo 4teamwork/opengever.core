@@ -1,4 +1,5 @@
 from opengever.base.utils import to_safe_html
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 
@@ -145,9 +146,26 @@ class Resolve(ResponseDescription):
 
     css_class = 'complete'
 
+    def get_documents_labels(self):
+        docs, subtasks = self.get_added_objects(self.response)
+        document_links = [DocumentLinkWidget(doc).render() for doc in docs]
+        related_items_links = [
+            change.get('after').decode('utf-8') for change in self.response.changes
+            if change.get('field_id') == 'related_items']
+
+        return u', '.join(document_links + related_items_links)
+
     def msg(self):
-        return _('transition_msg_resolve', u'Resolved by ${user}',
-                 mapping=self._msg_mapping)
+        document_labels = self.get_documents_labels()
+        if document_labels:
+            return _('transition_msg_resolve_with_documents',
+                     u'Resolved by ${user} and ${documents} returned',
+                     mapping={'user': self.creator_link(),
+                              'documents': document_labels})
+
+        else:
+            return _('transition_msg_resolve', u'Resolved by ${user}',
+                     mapping=self._msg_mapping)
 
     def label(self):
         return _('transition_label_resolve', u'Task resolved')

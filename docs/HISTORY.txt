@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Fix fallback to default sorting index in listing endpoint. [njohner]
+- Display returned documents in the task-resolved history entry. [phgross]
 - Fixes is already done check in multi admin unit tasks completion. [phgross]
 - Fix @history patch endpoint to correctly revert to older document version. [njohner]
 - Fix unicode error in @listing endpoint filters. [lgraf]
