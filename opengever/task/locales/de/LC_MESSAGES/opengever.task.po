@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-10-17 19:56+0000\n"
+"POT-Creation-Date: 2019-11-18 10:28+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -1066,6 +1066,11 @@ msgstr "Wieder eröffnet durch ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_resolve"
 msgstr "Erledigt durch ${user}"
+
+#. Default: "Resolved by ${user} and ${documents} returned"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_resolve_with_documents"
+msgstr "Erledigt durch ${user} und ${documents} zurückgesandt."
 
 #. Default: "Revised by ${user}"
 #: ./opengever/task/response_description.py
