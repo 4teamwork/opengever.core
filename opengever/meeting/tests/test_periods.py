@@ -7,8 +7,8 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.meeting.exceptions import MultiplePeriodsFound
 from opengever.meeting.period import Period
+from opengever.meeting.period import PeriodValidator
 from opengever.testing import IntegrationTestCase
-import os
 import pytz
 
 
@@ -32,9 +32,143 @@ class TestPathBar(IntegrationTestCase):
             )
 
 
+class TestGetOverlappingPeriods(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    def test_contained_within(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2016, 2, 2), date(2016, 3, 3))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_contained_within_equal_start(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2016, 1, 1), date(2016, 3, 3))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_contained_within_equal_end(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2016, 3, 7), date(2016, 12, 31))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_equal_range(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2016, 1, 1), date(2016, 12, 31))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_fully_overlaps_start(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2015, 1, 1), date(2016, 4, 5))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_fully_verlaps_end(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2016, 9, 9), date(2017, 1, 1))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_equal_start_overlap_end(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2016, 1, 1), date(2017, 1, 1))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_equal_end_overlaps_start(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2015, 12, 31), date(2016, 12, 31))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_overlaps_full(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2015, 12, 31), date(2017, 1, 1))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_no_overlap_ends_before(self):
+        self.login(self.committee_responsible)
+        self.assertItemsEqual([], PeriodValidator.get_overlapping_periods(
+            self.committee, date(2015, 12, 1), date(2015, 12, 31)))
+
+    def test_no_overlap_starts_after(self):
+        self.login(self.committee_responsible)
+        self.assertItemsEqual([], PeriodValidator.get_overlapping_periods(
+            self.committee, date(2017, 1, 1), date(2017, 9, 9)))
+
+    def test_overlap_start_of_period_overlaps_end_of_comparison(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2015, 1, 1), date(2016, 1, 1))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+    def test_overlap_end_of_period_overlaps_start_of_comparison(self):
+        self.login(self.committee_responsible)
+        overlapping = PeriodValidator.get_overlapping_periods(
+            self.committee, date(2016, 12, 31), date(2017, 7, 1))
+        self.assertEqual(1, len(overlapping))
+        self.assertEqual(self.period, overlapping[0].getObject())
+
+
 class TestPeriod(IntegrationTestCase):
 
     features = ('meeting',)
+
+    @browsing
+    def test_add_period_in_browser(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee, view='++add++opengever.meeting.period')
+
+        with self.observe_children(self.committee) as children:
+            browser.fill({'Title': u'2018',
+                          'Start date': '01.01.2018',
+                          'End date': '31.12.2018'}).submit()
+
+        self.assertEqual(["Item created"], info_messages())
+
+        self.assertEqual(1, len(children['added']))
+        period = children['added'].pop()
+        self.assertEqual(date(2018, 1, 1), period.start)
+        self.assertEqual(date(2018, 12, 31), period.end)
+        self.assertEqual(u'2018', period.title)
+
+    @browsing
+    def test_prevents_overlapping_period_in_browser(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee, view='++add++opengever.meeting.period')
+        browser.fill({'Title': u'Overlaps existing 2016 period',
+                      'Start date': '05.05.2016',
+                      'End date': '06.06.2016'}).submit()
+
+        self.assertEqual(
+            ["The period's range overlaps the following periods: 2016"],
+            browser.css("div.error").text)
+
+    @browsing
+    def test_prevents_end_before_start_in_browser(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee, view='++add++opengever.meeting.period')
+        browser.fill({'Title': u'End before start',
+                      'Start date': '04.04.2018',
+                      'End date': '03.04.2018'}).submit()
+
+        self.assertEqual(
+            ["The period's end date can't be before its start date."],
+            browser.css("div.error").text)
 
     @browsing
     def test_periods_tab(self, browser):

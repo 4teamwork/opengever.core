@@ -1,49 +1,34 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.browser.modelforms import ModelEditForm
-from opengever.meeting import _
 from opengever.tabbedview import GeverTabMixin
 from plone import api
-from plone.autoform import directives as form
-from plone.supermodel import model
+from plone.dexterity.browser.add import DefaultAddForm
+from plone.dexterity.browser.add import DefaultAddView
+from plone.dexterity.browser.edit import DefaultEditForm
+from plone.dexterity.interfaces import IDexterityFTI
+from Products.CMFCore.interfaces import IFolderish
 from Products.Five.browser import BrowserView
-from zope import schema
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
-class IPeriodModel(model.Schema):
-
-    title = schema.TextLine(
-        title=_(u"label_title", default=u"Title"),
-        max_length=256,
-        required=True)
-
-    form.widget(date_from=DatePickerFieldWidget)
-    date_from = schema.Date(
-        title=_('label_date_from', default='Start date'),
-        required=True,
-    )
-
-    form.widget(date_to=DatePickerFieldWidget)
-    date_to = schema.Date(
-        title=_('label_date_to', default='End date'),
-        required=True,
-    )
-
-
-class EditPeriod(ModelEditForm):
-
-    label = _('label_edit_period', default=u'Edit Period')
-
-    schema = IPeriodModel
-
-    def __init__(self, context, request):
-        super(EditPeriod, self).__init__(context, request, context.model)
+class PeriodEditForm(DefaultEditForm):
 
     def nextURL(self):
-        return "{}#periods".format(
-            aq_parent(aq_inner(self.context)).absolute_url())
+        return aq_parent(aq_inner(self.context)).absolute_url()
+
+
+class PeriodAddForm(DefaultAddForm):
+
+    def nextURL(self):
+        # context is the parent, so we're good
+        return self.context.absolute_url()
+
+
+@adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
+class PeriodAddView(DefaultAddView):
+    form = PeriodAddForm
 
 
 class PeriodsTab(BrowserView, GeverTabMixin):
