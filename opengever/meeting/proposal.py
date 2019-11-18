@@ -19,7 +19,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting import SUBMITTED_PROPOSAL_STATES
-from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalCommentedActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
@@ -293,7 +293,7 @@ class ProposalBase(object):
         return False
 
     def comment(self, text):
-        ProposalCommentedActivitiy(self, self.REQUEST).record()
+        ProposalCommentedActivity(self, self.REQUEST).record()
         response = ProposalResponse(u'commented', text=text)
         IResponseContainer(self).add(response)
         return response
