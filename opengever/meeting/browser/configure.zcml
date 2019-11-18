@@ -381,20 +381,6 @@
       />
 
   <browser:page
-      for="opengever.meeting.committee.ICommittee"
-      class=".periods.CloseCurrentPeriodStepView"
-      name="close-period"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.committee.ICommittee"
-      class=".periods.AddNewPeriodStepView"
-      name="add-period"
-      permission="cmf.AddPortalContent"
-      />
-
-  <browser:page
       for="opengever.meeting.proposal.IProposal"
       class=".proposaloverview.ProposalOverview"
       name="tabbedview_view-overview"

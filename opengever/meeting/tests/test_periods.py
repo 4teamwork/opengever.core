@@ -77,36 +77,6 @@ class TestPeriod(IntegrationTestCase):
         self.assertEqual(['Changes saved'], info_messages())
         self.assertEqual(date(2016, 1, 20), self.period.start)
 
-    @browsing
-    def test_close_and_create_new_period_new(self, browser):
-        self.login(self.committee_responsible, browser)
-
-        browser.open(self.committee)
-        browser.find('Close current period').click()
-
-        browser.fill({'Title': u'Old',
-                      'Start date': '01.01.2012',
-                      'End date': '31.12.2012'}).submit()
-        browser.fill({'Title': u'New',
-                      'Start date': '01.01.2013',
-                      'End date': '31.12.2013'}).submit()
-
-        self.assertEqual(["Record created"], info_messages())
-
-        committee_model = browser.context.load_model()  # refresh model
-        self.assertEqual(2, len(committee_model.periods))
-        old_period = committee_model.periods[0]
-        new_period = committee_model.periods[1]
-
-        self.assertEqual('closed', old_period.workflow_state)
-        self.assertEqual(u'Old', old_period.title)
-        self.assertEqual(date(2012, 1, 1), old_period.date_from)
-        self.assertEqual(date(2012, 12, 31), old_period.date_to)
-        self.assertEqual('active', new_period.workflow_state)
-        self.assertEqual(u'New', new_period.title)
-        self.assertEqual(date(2013, 1, 1), new_period.date_from)
-        self.assertEqual(date(2013, 12, 31), new_period.date_to)
-
     def test_period_title_with_start_and_end_date(self):
         self.login(self.meeting_user)
         period = create(Builder('period').having(
