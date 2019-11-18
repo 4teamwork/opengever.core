@@ -238,9 +238,8 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         self.committee_model = self.committee.load_model()
         self.period = create(Builder('period').having(
             title=u'2010',
-            date_from=date(2010, 1, 1),
-            date_to=date(2010, 12, 31),
-            committee=self.committee_model))
+            start=date(2010, 1, 1),
+            end=date(2010, 12, 31)).within(self.committee))
 
         self.meeting_before = create(Builder('meeting').having(
             committee=self.committee_model,
@@ -360,9 +359,8 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         self.other_committee_model = self.other_committee.load_model()
         self.other_period = create(Builder('period').having(
             title=u'2010',
-            date_from=date(2010, 1, 1),
-            date_to=date(2010, 12, 31),
-            committee=self.other_committee_model))
+            start=date(2010, 1, 1),
+            end=date(2010, 12, 31)).within(self.other_committee))
 
         self.other_meeting = create(Builder('meeting').having(
             committee=self.other_committee_model,
@@ -381,23 +379,21 @@ class TestAlphabeticalTOC(FunctionalTestCase):
 
     @browsing
     def test_shows_statusmessage_when_no_template_is_configured(self, browser):
-        url = self.period.get_url(self.committee)
-        browser.login().open(url, view=self.view_name)
+        browser.login().open(self.period, view=self.view_name)
         # when an error happens here, the view returns an error
         # and the page is reloaded in Javascript. Here we reload manually
-        browser.open(url)
+        browser.open(self.period)
         self.assertEqual(u'There is no toc template configured, toc could '
                          'not be generated.',
                          error_messages()[0])
 
     @browsing
     def test_toc_json_can_be_downloaded_only_by_managers(self, browser):
-        url = self.period.get_url(self.committee)
         with self.assertRaises(InsufficientPrivileges):
-            browser.login().open(url, view='{}/as_json'.format(self.view_name))
+            browser.login().open(self.period, view='{}/as_json'.format(self.view_name))
 
         self.grant('Manager')
-        browser.login().open(url, view='{}/as_json'.format(self.view_name))
+        browser.login().open(self.period, view='{}/as_json'.format(self.view_name))
         self.assertEqual(self.expected_toc_json, browser.json)
 
     @browsing
@@ -689,42 +685,37 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
 class TestMeetingTocDataLocalisation(IntegrationTestCase):
 
     @browsing
-    def test_date_localisation_in_toc_json_with_en_local(self, browser):
+    def test_date_localisation_in_toc_json_with_en_locale(self, browser):
         self.login(self.manager, browser)
         api.portal.set_registry_record(
             "sablon_date_format_string", u"%a %d %b", interface=IMeetingSettings)
         lang_tool = api.portal.get_tool('portal_languages')
-        period = self.committee.load_model().periods[0]
-        url = period.get_url(self.committee)
-
         lang_tool.setDefaultLanguage('en')
-        browser.open(url, view='alphabetical_toc/as_json')
+
+        browser.open(self.period, view='alphabetical_toc/as_json')
         self.assertEqual(u'Sun 17 Jul',
                          browser.json["toc"][0]["contents"][0]["meeting_date"])
 
     @browsing
-    def test_date_localisation_in_toc_json_with_fr_local(self, browser):
+    def test_date_localisation_in_toc_json_with_fr_locale(self, browser):
         self.login(self.manager, browser)
         api.portal.set_registry_record(
             "sablon_date_format_string", u"%a %d %b", interface=IMeetingSettings)
         lang_tool = api.portal.get_tool('portal_languages')
-        period = self.committee.load_model().periods[0]
-        url = period.get_url(self.committee)
-
         lang_tool.setDefaultLanguage('fr')
-        browser.open(url, view='alphabetical_toc/as_json')
+
+        browser.open(self.period, view='alphabetical_toc/as_json')
         self.assertEqual(u'Dim 17 Juil',
                          browser.json["toc"][0]["contents"][0]["meeting_date"])
 
     @browsing
-    def test_date_localisation_in_toc_json_with_de_local(self, browser):
+    def test_date_localisation_in_toc_json_with_de_locale(self, browser):
         self.login(self.manager, browser)
         api.portal.set_registry_record(
             "sablon_date_format_string", u"%a %d %b", interface=IMeetingSettings)
         lang_tool = api.portal.get_tool('portal_languages')
-        period = self.committee.load_model().periods[0]
-        url = period.get_url(self.committee)
         lang_tool.setDefaultLanguage('de')
-        browser.open(url, view='alphabetical_toc/as_json')
+
+        browser.open(self.period, view='alphabetical_toc/as_json')
         self.assertEqual(u'Son 17 Jul',
                          browser.json["toc"][0]["contents"][0]["meeting_date"])

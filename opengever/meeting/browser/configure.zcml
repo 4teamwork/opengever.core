@@ -136,7 +136,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="alphabetical_toc"
       class=".toc.DownloadAlphabeticalTOC"
       permission="zope2.View"
@@ -144,7 +144,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="repository_toc"
       class=".toc.DownloadRepositoryTOC"
       permission="zope2.View"
@@ -152,7 +152,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="dossier_refnum_toc"
       class=".toc.DownloadDossierReferenceNumberTOC"
       permission="zope2.View"
@@ -160,7 +160,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="repository_refnum_toc"
       class=".toc.DownloadRepositoryReferenceNumberTOC"
       permission="zope2.View"
