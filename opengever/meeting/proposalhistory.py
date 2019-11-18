@@ -16,9 +16,6 @@ from zope.interface import implements
 from zope.schema import getFields
 
 
-NEED_SYNCING = (u'revised', u'reopened', u'commented')
-
-
 class ProposalResponseDescription(object):
 
     css_classes = {
@@ -140,8 +137,10 @@ class ProposalResponse(Response):
 
     implements(IProposalResponse)
 
-    def __init__(self, response_type='commented', text=u'', **kwargs):
-        super(ProposalResponse, self).__init__(response_type)
+    NEED_SYNCING = (u'revised', u'reopened', u'commented')
+
+    def __init__(self, response_type='commented', text=u'', needs_syncing=None, **kwargs):
+        super(ProposalResponse, self).__init__(response_type=response_type)
 
         # Because during transport creation time gets rounded down to seconds
         # we round it directly here to avoid potential ordering issues.
@@ -152,6 +151,9 @@ class ProposalResponse(Response):
         # We therefore set the correct default value here.
         if text is None:
             text = u''
+
+        if needs_syncing is not None:
+            self._needs_syncing = needs_syncing
 
         self.text = text
         self.additional_data = PersistentDict()
@@ -166,7 +168,7 @@ class ProposalResponse(Response):
     def needs_syncing(self):
         # Override of needs_syncing is needed to avoid syncing an already
         # synced response.
-        return getattr(self, "_needs_syncing", self.response_type in NEED_SYNCING)
+        return getattr(self, "_needs_syncing", self.response_type in self.NEED_SYNCING)
 
     def serialize(self):
         request = getRequest()
@@ -178,7 +180,10 @@ class ProposalResponse(Response):
             data[json_compatible(name)] = value
         return data
 
-    def deserialize(self, data):
+    @classmethod
+    def deserialize(cls, data, needs_syncing=None):
+        response = cls(needs_syncing=needs_syncing)
+
         fields = getFields(IProposalResponse)
         request = getRequest()
         for name, field in fields.items():
@@ -186,9 +191,10 @@ class ProposalResponse(Response):
                 continue
             # Deserialize to field value
             deserializer = queryMultiAdapter(
-                (field, self, request), IFieldDeserializer
+                (field, response, request), IFieldDeserializer
             )
             value = deserializer(data[name])
             # set value
-            dm = queryMultiAdapter((self, field), IDataManager)
+            dm = queryMultiAdapter((response, field), IDataManager)
             dm.set(value)
+        return response

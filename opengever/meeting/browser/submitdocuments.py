@@ -204,10 +204,10 @@ class UpdateSubmittedDocumentView(BrowserView):
 
             response = ProposalResponse(
                 u'document_updated',
+                needs_syncing=False,
                 document_title=self.context.title,
                 submitted_version=history_data['submitted_version'],
             )
-            response._needs_syncing = False
             IResponseContainer(submitted_proposal).add(response)
 
             ProposalDocumentUpdatedActivity(
@@ -240,8 +240,7 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
         document = super(RecieveSubmittedDocumentView, self).receive()
 
         history_data = advancedjson.loads(self.request.get('history_data'))
-        response = ProposalResponse()
-        response.deserialize(history_data['response'])
+        response = ProposalResponse.deserialize(history_data['response'])
         with elevated_privileges():
             IResponseContainer(self.context).add(response)
 

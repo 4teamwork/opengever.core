@@ -186,4 +186,4 @@ def sync_proposal_response(context, event):
         admin_unit_id,
         '@@receive-proposal-history',
         path=path,
-        data=request_data,)
+        data=request_data)

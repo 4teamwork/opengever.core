@@ -20,11 +20,9 @@ class ReceiveProposalHistory(BrowserView):
     def __call__(self):
         data = advancedjson.loads(self.request.get('data'))
         data = data['data']
-        response = ProposalResponse()
-        response.deserialize(data)
-
+        # create response object from data and
         # make sure that response does not get synced back
-        response._needs_syncing = False
+        response = ProposalResponse.deserialize(data, needs_syncing=False)
 
         IResponseContainer(self.context).add(response)
         self.generate_activity_if_necessary(response)
