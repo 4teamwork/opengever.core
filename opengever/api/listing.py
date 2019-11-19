@@ -258,7 +258,7 @@ class Listing(Service):
             rows = 25
 
         sort_on = self.request.form.get('sort_on', DEFAULT_SORT_INDEX)
-        sort_on = FIELDS.get(sort_on, (None, DEFAULT_SORT_INDEX))[2]
+        sort_on = FIELDS.get(sort_on, (None, None, DEFAULT_SORT_INDEX))[2]
         sort_order = self.request.form.get('sort_order', 'descending')
         term = self.request.form.get('search', '').strip()
         columns = self.request.form.get('columns', [])

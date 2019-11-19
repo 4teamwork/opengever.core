@@ -249,7 +249,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
 
         sort = self.conn.search.call_args[0][0]["sort"]
-        self.assertEqual('desponsible desc', sort)
+        self.assertEqual('responsible desc', sort)
 
     @browsing
     def test_sort_on_inexistant_field(self, browser):
