@@ -287,12 +287,12 @@ class Reassign(ResponseDescription):
         responsible_old = Actor.lookup(change.get('before')).get_link()
 
         if not change.get('before') == self.response.creator:
-          return _('transition_msg_delegated_reassign',
-                   u'Reassigned from ${responsible_old} to '
-                   u'${responsible_new} by ${user}',
-                   mapping={'user': self.creator_link(),
-                            'responsible_new': responsible_new,
-                            'responsible_old': responsible_old})
+            return _('transition_msg_delegated_reassign',
+                     u'Reassigned from ${responsible_old} to '
+                     u'${responsible_new} by ${user}',
+                     mapping={'user': self.creator_link(),
+                              'responsible_new': responsible_new,
+                              'responsible_old': responsible_old})
 
         return _('transition_msg_reassign',
                  u'Reassigned from ${responsible_old} to '
