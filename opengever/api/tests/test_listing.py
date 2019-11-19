@@ -239,3 +239,25 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         self.assertEqual(u'(Title:feedb\xe4ck* OR SearchableText:feedb\xe4ck* '
                          u'OR metadata:feedb\xe4ck*)',
                          query)
+
+    @browsing
+    def test_sort_on_existing_field(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=documents&columns=title&sort_on=responsible'
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        sort = self.conn.search.call_args[0][0]["sort"]
+        self.assertEqual('desponsible desc', sort)
+
+    @browsing
+    def test_sort_on_inexistant_field(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=documents&columns=title&sort_on=inexistant'
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        sort = self.conn.search.call_args[0][0]["sort"]
+        self.assertEqual('modified desc', sort)
