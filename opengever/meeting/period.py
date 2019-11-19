@@ -39,6 +39,13 @@ class Period(Container):
         # results if the user can't see the period.
         return api.portal.get().unrestrictedTraverse(brains[0].getPath())
 
+    @property
+    def extended_title(self):
+        return u"{} ({} - {})".format(
+            self.title,
+            api.portal.get_localized_time(datetime=self.start),
+            api.portal.get_localized_time(datetime=self.end))
+
     def get_next_decision_sequence_number(self):
         self.decision_sequence_number += 1
         return self.decision_sequence_number

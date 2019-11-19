@@ -83,7 +83,7 @@ class TestPeriod(IntegrationTestCase):
             title=u'Foo', start=date(2010, 1, 1), end=date(2010, 12, 31))
             .within(self.committee))
         self.assertEqual('Foo (Jan 01, 2010 - Dec 31, 2010)',
-                         period.get_title())
+                         period.extended_title)
 
     @browsing
     def test_toc_json_button_only_shown_for_managers(self, browser):

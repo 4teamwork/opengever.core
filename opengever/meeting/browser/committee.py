@@ -61,4 +61,4 @@ class CommitteeOverview(BrowserView, GeverTabMixin):
         period = Period.get_current(self.context)
         if period is None:
             return _(u'No content')
-        return period.title
+        return period.extended_title

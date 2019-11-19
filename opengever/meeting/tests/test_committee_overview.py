@@ -13,12 +13,12 @@ class TestCommitteeOverview(IntegrationTestCase):
 
     @browsing
     def test_shows_current_period_box(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.committee, view='tabbedview_view-overview')
-
-        self.assertEqual(
-            u'2016 (Jan 01, 2016 - Dec 31, 2016)',
-            browser.css('#periodBox li').first.text)
+        with freeze(localized_datetime(2016, 1, 10)):
+            self.login(self.committee_responsible, browser)
+            browser.open(self.committee, view='tabbedview_view-overview')
+            self.assertEqual(
+                u'2016 (Jan 01, 2016 - Dec 31, 2016)',
+                browser.css('#periodBox li').first.text)
 
     @browsing
     def test_membership_box_shows_only_active_members(self, browser):
