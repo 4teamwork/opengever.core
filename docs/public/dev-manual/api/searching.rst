@@ -160,4 +160,58 @@ Weitere optionale Parameter:
 - ``sort``: Sortierung nach einem indexierten Feld
 
 
+Facetten
+~~~~~~~~
+``facet``: Muss auf ``true`` gesetzt sein damit Solr die Facetten zurückgibt.
+``facet.field``: Feld für welches Solr Facetten zurückgeben soll.
+
+Beispiel für ein Suchabfrage mit Facetten für ``responsible`` und ``portal_type``:
+
+  .. sourcecode:: http
+
+    GET /plone/@solrsearch?facet=true&facet.field=portal_type&facet.field=responsible HTTP/1.1
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "/plone/@solrsearch?facet=true&facet.field=portal_type&facet.field=responsible",
+      "facet_counts": {
+        "portal_type": {
+          "opengever.document.document": {
+            "count": 2
+          }
+        },
+        "responsible": {
+          "committee:161": {
+            "count": 2,
+            "label": "Kommission für Rechtsfragen"
+          },
+          "hugo.boss": {
+            "count": 1,
+            "label": "Hugo Boss"
+          }
+        }
+      },
+      "items": [
+        {
+          "@id": "/plone/ordnungssystem/fuehrung/dossier-23/document-59",
+          "filesize": 12303,
+          "modified": "2019-03-11T13:50:14+00:00",
+          "title": "Ein Brief"
+        },
+        {
+          "@id": "/plone/ordnungssystem/fuehrung/dossier-23/document-54",
+          "filesize": 8574,
+          "modified": "2019-03-11T12:32:24+00:00",
+          "title": "Eine Mappe"
+        }
+      ],
+      "items_total": 2,
+      "rows": 25,
+      "start": 0
+    }
+
 .. disqus::
