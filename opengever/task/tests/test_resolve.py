@@ -46,6 +46,15 @@ class TestResolveMultiAdminUnitTasks(IntegrationTestCase):
         self.assertEqual(
             ['The documents were delivered to the issuer and the tasks were completed.'],
             info_messages())
+
         self.assertEqual(1, len(self.private_task.listFolderContents()))
         copied_doc, = self.private_task.listFolderContents()
         self.assertEqual(u'RE: Vertr\xe4gsentwurf', copied_doc.title)
+
+        browser.open(self.inbox_task, view='tabbedview_view-overview')
+
+        self.assertEqual(
+            u'Resolved by B\xe4rfuss K\xe4thi (kathi.barfuss) and Vertr\xe4gsentwurf returned',
+            browser.css('.answers h3')[0].text)
+        self.assertEqual(self.document.absolute_url(),
+                         browser.css('.answers h3 a')[1].get('href'))
