@@ -6,9 +6,11 @@ from opengever.meeting.proposalhistory import IProposalResponse
 from opengever.meeting.proposalhistory import ProposalResponse
 from zope.annotation.interfaces import IAnnotations
 from zope.schema import getFields
+import logging
 
 
 annotation_key = 'object_history'
+log = logging.getLogger('ftw.upgrade')
 
 
 class MigrationResponseContainer(ResponseContainer):
@@ -50,15 +52,21 @@ class MigrateProposalHistoryToProposalResponses(UpgradeStep):
         response_container = MigrationResponseContainer(context)
 
         for key, record in history.items():
-            created = record.pop('created')
-            history_type = record.pop('history_type')
-            userid = record.pop('userid')
-            text = record.pop('text')
+            created = record.pop('created', None)
+            history_type = record.pop('history_type', None)
+            userid = record.pop('userid', None)
+            if created is None or history_type is None or userid is None:
+                log.warning("Skipping incomplete record on {}: {}".format(
+                    context.absolute_url(), record))
+                continue
+
+            # Text can be None in certain cases
+            text = record.pop('text', None)
             if text is None:
                 text = u''
 
             # we do not need the uuid
-            record.pop('uuid')
+            record.pop('uuid', None)
 
             response = ProposalResponse(history_type, text=text, **record)
             response.creator = fields['creator']._type(userid)
