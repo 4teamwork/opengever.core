@@ -3,8 +3,6 @@ from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _ as document_mf
 from opengever.document.widgets.document_link import DocumentLinkWidget
-from opengever.meeting import _
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal_transition_comment import SubmittedProposalTransitionCommentAddForm
@@ -15,6 +13,8 @@ from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
 from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
+from opengever.base.response import IResponseContainer
+from opengever.meeting.proposalhistory import ProposalResponseDescription
 
 
 class OverviewBase(object):
@@ -44,7 +44,8 @@ class OverviewBase(object):
         return self.context.get_excerpt()
 
     def history(self):
-        return IHistory(self.context)
+        for response in reversed(IResponseContainer(self.context).list()):
+            yield ProposalResponseDescription(response)
 
     def is_update_outdated_endabled(self):
         """We don't want to display the link to update outdated

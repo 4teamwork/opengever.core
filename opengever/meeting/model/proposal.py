@@ -5,6 +5,7 @@ from opengever.base.model import USER_ID_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
 from opengever.base.request import expect_ok_response
+from opengever.base.response import IResponseContainer
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -12,9 +13,9 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
+from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -41,7 +42,7 @@ MAX_TITLE_LENGTH = 256
 
 class Reject(Transition):
 
-    def execute(self, obj, model, text=None, **kwargs):
+    def execute(self, obj, model, text=u'', **kwargs):
         obj.reject(text)
         msg = _(u"The proposal has been rejected successfully")
         api.portal.show_message(msg, request=getRequest(), type='info')
@@ -313,8 +314,8 @@ class Proposal(Base):
         submitted_proposal = self.resolve_submitted_proposal()
         ProposalScheduledActivity(
             submitted_proposal, getRequest(), meeting.meeting_id).record()
-        IHistory(self.resolve_submitted_proposal()).append_record(
-            u'scheduled', meeting_id=meeting.meeting_id)
+        response = ProposalResponse(u'scheduled', meeting_id=meeting.meeting_id)
+        IResponseContainer(self.resolve_submitted_proposal()).add(response)
 
         request_data = {'data': advancedjson.dumps({
             'meeting_id': meeting.meeting_id,
@@ -352,8 +353,10 @@ class Proposal(Base):
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
-        IHistory(self.resolve_submitted_proposal()).append_record(
-            u'remove_scheduled', meeting_id=meeting.meeting_id)
+        response = ProposalResponse(u'remove_scheduled',
+                                    meeting_id=meeting.meeting_id)
+        IResponseContainer(self.resolve_submitted_proposal()).add(
+            response)
 
         request_data = {'data': advancedjson.dumps({
             'meeting_id': meeting.meeting_id,
@@ -379,14 +382,16 @@ class Proposal(Base):
             raise ValueError(
                 'Cannot revise proposal when proposal document is checked out.')
 
-        IHistory(self.resolve_submitted_proposal()).append_record(u'revised')
+        response = ProposalResponse(u'revised')
+        IResponseContainer(self.resolve_submitted_proposal()).add(response)
 
     def is_decided(self):
         return self.get_state() == self.STATE_DECIDED
 
     def reopen(self, agenda_item):
         assert self.is_decided()
-        IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
+        response = ProposalResponse(u'reopened')
+        IResponseContainer(self.resolve_submitted_proposal()).add(response)
 
     def decide(self, agenda_item, excerpt_document):
         # Proposals for AgendaItems that were decided before we introduced that
@@ -403,7 +408,8 @@ class Proposal(Base):
 
             submitted_proposal = self.resolve_submitted_proposal()
             ProposalDecideActivity(submitted_proposal, getRequest()).record()
-            IHistory(submitted_proposal).append_record(u'decided')
+            response = ProposalResponse(u'decided')
+            IResponseContainer(submitted_proposal).add(response)
             self.execute_transition('scheduled-decided')
 
         self._return_excerpt(excerpt_document)

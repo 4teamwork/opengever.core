@@ -11,6 +11,7 @@ Changelog
 - Add main dossier count to contentstats. [njohner]
 - No longer add journal entry for document file modification. [njohner]
 - Revoke permissions for former responsible, when task gets rejected. [phgross]
+- Use BaseResponse for proposal history to add API support. [njohner]
 
 
 2019.4.0rc5 (2019-11-13)

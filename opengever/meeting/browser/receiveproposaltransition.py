@@ -1,5 +1,6 @@
 from opengever.base import advancedjson
 from opengever.base.request import tracebackify
+from opengever.base.response import IResponseContainer
 from opengever.base.security import as_internal_workflow_transition
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import PrivilegedReceiveObject
@@ -9,7 +10,7 @@ from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalRemovedFromScheduleActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
-from opengever.meeting.interfaces import IHistory
+from opengever.meeting.proposalhistory import ProposalResponse
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -33,8 +34,8 @@ class ReceiveProposalScheduled(BrowserView):
             with as_internal_workflow_transition():
                 api.content.transition(
                     obj=self.context, transition='proposal-transition-schedule')
-            IHistory(self.context).append_record(
-                u'scheduled', meeting_id=meeting_id)
+            response = ProposalResponse(u'scheduled', meeting_id=meeting_id)
+            IResponseContainer(self.context).add(response)
             ProposalScheduledActivity(
                 self.context, self.request, meeting_id).record()
 
@@ -57,8 +58,8 @@ class ReceiveProposalUnscheduled(BrowserView):
             with as_internal_workflow_transition():
                 api.content.transition(
                     obj=self.context, transition='proposal-transition-unschedule')
-            IHistory(self.context).append_record(
-                u'remove_scheduled', meeting_id=meeting_id)
+            response = ProposalResponse(u'remove_scheduled', meeting_id=meeting_id)
+            IResponseContainer(self.context).add(response)
             ProposalRemovedFromScheduleActivity(
                 self.context, self.request, meeting_id).record()
 
@@ -85,7 +86,8 @@ class ReceiveProposalDecided(PrivilegedReceiveObject):
             with as_internal_workflow_transition():
                 api.content.transition(
                     obj=self.context, transition='proposal-transition-decide')
-            IHistory(self.context).append_record(u'decided')
+            response = ProposalResponse(u'decided')
+            IResponseContainer(self.context).add(response)
             ProposalDecideActivity(self.context, self.request).record()
 
         document = super(ReceiveProposalDecided, self).receive()
@@ -107,8 +109,8 @@ class ReceiveProposalRejected(BrowserView):
             with as_internal_workflow_transition():
                 api.content.transition(
                     obj=self.context, transition='proposal-transition-reject')
-            IHistory(self.context).append_record(
-                u'rejected', text=text)
+            response = ProposalResponse(u'rejected', text=text)
+            IResponseContainer(self.context).add(response)
             ProposalRejectedActivity(self.context, self.request).record()
 
             self.context.date_of_submission = None

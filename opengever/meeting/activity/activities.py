@@ -5,7 +5,7 @@ from opengever.meeting.activity.helpers import actor_link
 from opengever.meeting.model import Meeting
 
 
-class ProposalCommentedActivitiy(BaseActivity):
+class ProposalCommentedActivity(BaseActivity):
     """Activity representation for commenting a proposal.
     """
     kind = 'proposal-commented'

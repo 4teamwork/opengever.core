@@ -91,12 +91,6 @@
       handler=".handlers.validate_template_file"
       />
 
-  <adapter
-      for=".proposal.IBaseProposal"
-      provides=".interfaces.IHistory"
-      factory=".proposalhistory.ProposalHistory"
-      />
-
   <!-- table sources -->
   <adapter factory=".tabs.meetinglisting.MeetingTableSource" />
   <adapter factory=".tabs.memberlisting.MemberTableSource" />
@@ -204,6 +198,12 @@
       for="opengever.meeting.proposal.ISubmittedProposal
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.submitted_proposal_modified"
+      />
+
+  <subscriber
+      for="opengever.meeting.proposal.IBaseProposal
+           opengever.base.response.IResponseAddedEvent"
+      handler=".handlers.sync_proposal_response"
       />
 
   <adapter factory=".committee.RepositoryfolderValidator" />

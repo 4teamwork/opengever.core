@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
-from opengever.meeting.interfaces import IHistory
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -62,7 +61,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             self.assertSequenceEqual(expected_records, self.get_history_entries_text(browser)[:nof_records])
 
         # Now the record comments
-        if not expected_comments is None:
+        if expected_comments is not None:
             if isinstance(expected_comments, basestring):
                 self.assertEqual(expected_comments, self.get_latest_history_entry_comment(browser))
             else:
@@ -83,7 +82,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             nof_records = len(expected_records)
             self.assertSequenceEqual(expected_records, self.get_history_entries_text(browser)[:nof_records])
         # Now the record comments
-        if not expected_comments is None:
+        if expected_comments is not None:
             if isinstance(expected_comments, basestring):
                 self.assertEqual(expected_comments, self.get_latest_history_entry_comment(browser))
             else:

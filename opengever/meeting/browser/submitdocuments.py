@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base import advancedjson
+from opengever.base.response import IResponseContainer
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import PrivilegedReceiveObject
@@ -14,7 +15,7 @@ from opengever.meeting.activity.activities import ProposalDocumentSubmittedActiv
 from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
-from opengever.meeting.interfaces import IHistory
+from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -201,12 +202,13 @@ class UpdateSubmittedDocumentView(BrowserView):
             transporter = Transporter()
             transporter.update(self.context, self.request)
 
-            IHistory(submitted_proposal).append_record(
+            response = ProposalResponse(
                 u'document_updated',
+                needs_syncing=False,
                 document_title=self.context.title,
                 submitted_version=history_data['submitted_version'],
-                uuid=history_data['uuid']
             )
+            IResponseContainer(submitted_proposal).add(response)
 
             ProposalDocumentUpdatedActivity(
                 submitted_proposal, self.request,
@@ -238,13 +240,9 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
         document = super(RecieveSubmittedDocumentView, self).receive()
 
         history_data = advancedjson.loads(self.request.get('history_data'))
+        response = ProposalResponse.deserialize(history_data['response'])
         with elevated_privileges():
-            IHistory(self.context).append_record(
-                u'document_submitted',
-                document_title=document.title,
-                submitted_version=history_data['submitted_version'],
-                uuid=history_data['uuid']
-            )
+            IResponseContainer(self.context).add(response)
 
         activity = advancedjson.loads(self.request.get('activity'))
         if activity['record_activity']:

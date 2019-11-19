@@ -20,7 +20,6 @@ from opengever.task import util
 from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.validators import NoCheckedoutDocsValidator
-from persistent.list import PersistentList
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName

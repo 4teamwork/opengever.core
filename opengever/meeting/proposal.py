@@ -7,6 +7,8 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.oguid import Oguid
+from opengever.base.response import IResponseContainer
+from opengever.base.response import IResponseSupported
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
@@ -17,7 +19,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting import SUBMITTED_PROPOSAL_STATES
-from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalCommentedActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
@@ -26,9 +28,9 @@ from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
+from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from opengever.ogds.base.utils import ogds_service
@@ -173,6 +175,8 @@ class ISubmittedProposal(IBaseProposal):
 
 class ProposalBase(object):
 
+    implements(IResponseSupported)
+
     def Title(self):
         return self.title.encode('utf-8')
 
@@ -288,9 +292,11 @@ class ProposalBase(object):
 
         return False
 
-    def comment(self, text, uuid=None):
-        ProposalCommentedActivitiy(self, self.REQUEST).record()
-        return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
+    def comment(self, text):
+        ProposalCommentedActivity(self, self.REQUEST).record()
+        response = ProposalResponse(u'commented', text=text)
+        IResponseContainer(self).add(response)
+        return response
 
 
 class SubmittedProposal(ModelContainer, ProposalBase):
@@ -588,7 +594,7 @@ class Proposal(Container, ProposalBase):
         command.execute()
         return command
 
-    def submit(self, text=None):
+    def submit(self, text=u''):
         self.date_of_submission = date.today()
 
         documents = self.get_documents()
