@@ -173,7 +173,8 @@ class AgendaItem(Base):
 
         period = Period.get_current(
             self.meeting.committee.resolve_committee(),
-            self.meeting.start.date())
+            self.meeting.start.date(),
+            unrestricted=True)
         if not period:
             return str(self.decision_number)
 

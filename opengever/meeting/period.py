@@ -12,7 +12,7 @@ class IPeriod(model.Schema):
 class Period(Container):
 
     @staticmethod
-    def get_current(committee, date=None):
+    def get_current(committee, date=None, unrestricted=False):
         """Return today's period for committe."""
 
         date = date or datetime.date.today()
@@ -22,8 +22,12 @@ class Period(Container):
             'end': {'query': date, 'range': 'min'},
             'path': '/'.join(committee.getPhysicalPath()),
         }
+
         catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog(query)
+        if unrestricted:
+            brains = catalog.unrestrictedSearchResults(query)
+        else:
+            brains = catalog(query)
 
         if not brains:
             return None
@@ -31,7 +35,9 @@ class Period(Container):
         if len(brains) > 1:
             raise MultiplePeriodsFound()
 
-        return brains[0].getObject()
+        # if we are in restricted mode the initial catalog query will yield no
+        # results if the user can't see the period.
+        return api.portal.get().unrestrictedTraverse(brains[0].getPath())
 
     def get_next_decision_sequence_number(self):
         self.decision_sequence_number += 1
