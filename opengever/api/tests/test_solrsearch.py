@@ -41,11 +41,9 @@ class TestSolrSearchGet(IntegrationTestCase):
             ]
         },
         "facet_counts": {
-            "facet_fields": {
-                "portal_type": [
-                    "opengever.dossier.businesscasedossier", 2,
-                    "opengever.document.document", 1
-                ]
+            "portal_type": {
+                "opengever.dossier.businesscasedossier": 2,
+                "opengever.document.document": 1
             }
         },
         "highlighting": {

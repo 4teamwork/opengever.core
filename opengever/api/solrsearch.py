@@ -143,6 +143,6 @@ class SolrSearchGet(Service):
             "rows": rows,
         }
 
-        if 'facet_counts' in resp.body:
-            res['facet_counts'] = resp.body['facet_counts']
+        if resp.facets:
+            res['facet_counts'] = resp.facets
         return res
