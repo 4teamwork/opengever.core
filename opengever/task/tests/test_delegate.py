@@ -77,3 +77,20 @@ class TestDelegateTaskForm(IntegrationTestCase):
         self.assertEqual(
             ['Required input is missing.'],
             browser.css('#formfield-form-widgets-responsibles .error').text)
+
+    @browsing
+    def test_teams_are_selectable_as_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task, view='delegate_recipients')
+
+        form = browser.find_form_by_field('Responsibles')
+        form.find_widget('Responsibles').fill(['team:1'])
+        browser.css('#form-buttons-save').first.click()  # can't use submit()
+
+        form = browser.find_form_by_field('Issuer')
+        form.find_widget('Issuer').fill(self.dossier_responsible.getId())
+        browser.css('#form-buttons-save').first.click()  # can't use submit()
+
+        self.assertEqual(
+            ['1 subtasks were create.'], statusmessages.info_messages())
