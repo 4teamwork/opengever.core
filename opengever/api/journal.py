@@ -1,3 +1,4 @@
+from copy import deepcopy
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from opengever.base.helpers import display_name
@@ -128,6 +129,6 @@ class JournalGet(Service):
 
     def _data(self):
         annotations = IAnnotations(self.context)
-        items = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+        items = deepcopy(annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, []))
         items.reverse()
         return items
