@@ -224,6 +224,7 @@ FACET_TRANSFORMS = {
     'document_type': translate_document_type,
     'task_type': translate_task_type,
     'checked_out': display_name,
+    'Creator': display_name,
 }
 
 
@@ -292,7 +293,7 @@ class Listing(Service):
 
         if facet_counts:
             for field, facets in facet_counts.items():
-                transform = FACET_TRANSFORMS.get(field)
+                transform = FACET_TRANSFORMS.get(FIELDS[field][0])
                 for facet, count in facets.items():
                     facets[facet] = {"count": count}
                     if transform:
