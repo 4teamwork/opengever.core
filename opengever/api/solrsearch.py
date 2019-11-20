@@ -152,5 +152,7 @@ class SolrSearchGet(Service):
                 facet_counts[field][facet] = {"count": count}
                 if transform:
                     facet_counts[field][facet]['label'] = transform(facet)
+                else:
+                    facet_counts[field][facet]['label'] = facet
         res['facet_counts'] = facet_counts
         return res

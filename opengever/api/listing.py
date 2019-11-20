@@ -297,6 +297,8 @@ class Listing(Service):
                     facets[facet] = {"count": count}
                     if transform:
                         facets[facet]['label'] = transform(facet)
+                    else:
+                        facets[facet]['label'] = facet
             res['facets'] = facet_counts
 
         return res
