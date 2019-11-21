@@ -1,17 +1,17 @@
 from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
+from opengever.base.contentlisting import OpengeverRealContentListingObject
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.document import Document
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
 from opengever.trash.trash import ITrashed
 from plone import api
-from plone.app.contentlisting.realobject import RealContentListingObject
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 
 
-class DocumentContentListingObject(RealContentListingObject):
+class DocumentContentListingObject(OpengeverRealContentListingObject):
 
     @property
     def is_document(self):
