@@ -397,6 +397,26 @@
       />
 
   <browser:page
+      for="opengever.meeting.period.IPeriod"
+      class=".periods.PeriodEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter
+      name="opengever.meeting.period"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".periods.PeriodAddView"
+      />
+
+  <class class=".periods.PeriodAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+  <browser:page
       name="addtransitioncomment"
       class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormView"
       for="opengever.meeting.proposal.IProposal"

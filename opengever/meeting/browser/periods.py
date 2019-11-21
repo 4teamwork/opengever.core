@@ -16,14 +16,15 @@ from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 class PeriodEditForm(DefaultEditForm):
 
     def nextURL(self):
-        return aq_parent(aq_inner(self.context)).absolute_url()
+        # context of edit form is period, so get parent committee first
+        return aq_parent(aq_inner(self.context)).absolute_url() + '#periods'
 
 
 class PeriodAddForm(DefaultAddForm):
 
     def nextURL(self):
-        # context is the parent, so we're good
-        return self.context.absolute_url()
+        # context of add form is committee
+        return self.context.absolute_url() + '#periods'
 
 
 @adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
