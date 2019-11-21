@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from unittest import skip
 
 
 class TestSolrSearchGet(IntegrationTestCase):
@@ -41,11 +42,9 @@ class TestSolrSearchGet(IntegrationTestCase):
             ]
         },
         "facet_counts": {
-            "facet_fields": {
-                "portal_type": [
-                    "opengever.dossier.businesscasedossier", 2,
-                    "opengever.document.document", 1
-                ]
+            "portal_type": {
+                "opengever.dossier.businesscasedossier": {'count': 2},
+                "opengever.document.document": {'count': 1}
             }
         },
         "highlighting": {
@@ -196,6 +195,10 @@ class TestSolrSearchGet(IntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertIn(u'facet_counts', browser.json)
+
+    @skip("Just a reminder to test that facets also return translated labels")
+    def test_returns_facet_labels(self):
+        pass
 
     @browsing
     def test_default_start_and_rows(self, browser):

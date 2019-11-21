@@ -7,6 +7,7 @@ Changelog
 - Pin ftw.monitor to 1.0.0. [lgraf]
 - Allow teams as task responsible when delegating a task. [phgross]
 - Fix contentlisting and API summary for documents inside tasks. [phgross]
+- Also return facet labels in solrsearch endpoint. [njohner]
 - Fix fallback to default sorting index in listing endpoint. [njohner]
 - Display returned documents in the task-resolved history entry. [phgross]
 - Fixes is already done check in multi admin unit tasks completion. [phgross]
