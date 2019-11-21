@@ -1,6 +1,8 @@
 from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
 from opengever.base.security import elevated_privileges
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.core.upgrade import SQLUpgradeStep
+from plone import api
 from plone.dexterity.utils import createContentInContainer
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
@@ -21,6 +23,18 @@ periods_table = table(
     column('decision_sequence_number'),
     column('meeting_sequence_number'),
 )
+
+
+# from opengever.meeting.period.PeriodValidator
+def get_overlapping_periods(committee, start, end):
+    query = {
+        'portal_type': 'opengever.meeting.period',
+        'start': {'query': end, 'range': 'max'},
+        'end': {'query': start, 'range': 'min'},
+        'path': '/'.join(committee.getPhysicalPath()),
+    }
+    catalog = api.portal.get_tool('portal_catalog')
+    return catalog(query)
 
 
 class MigratePeriodsFromSqlToPlone(SQLUpgradeStep):
@@ -73,6 +87,13 @@ class MigratePeriodsFromSqlToPlone(SQLUpgradeStep):
             decision_sequence_number=period.decision_sequence_number,
             meeting_sequence_number=period.meeting_sequence_number,
         )
+
+        if get_overlapping_periods(committee, period.date_from, period.date_to):
+            log_msg_to_sentry(
+                'Overlapping period for {}. Upgrade will succeed but data '
+                'needs to be fixed manually.'.format(period.title),
+                context=committee,
+                request=self.portal.REQUEST)
 
         with elevated_privileges():
             createContentInContainer(committee,
