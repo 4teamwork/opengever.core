@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc6 (unreleased)
 ------------------------
 
+- Pin ftw.monitor to 1.0.0. [lgraf]
 - Fix fallback to default sorting index in listing endpoint. [njohner]
 - Display returned documents in the task-resolved history entry. [phgross]
 - Fixes is already done check in multi admin unit tasks completion. [phgross]
