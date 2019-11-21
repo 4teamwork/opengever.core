@@ -29,7 +29,7 @@ class ISelectRecipientsSchema(Schema):
         required=True,
         missing_value=[],
         value_type=schema.Choice(
-            source=AllUsersInboxesAndTeamsSourceBinder()))
+            source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True)))
 
     documents = schema.List(
         title=_(u'delegate_label_documents', default=u'Attach documents'),
