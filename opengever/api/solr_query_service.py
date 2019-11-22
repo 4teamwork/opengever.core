@@ -45,6 +45,8 @@ def safe_int(value, default=0):
 
 class SolrQueryBaseService(Service):
 
+    field_mapping = {}
+
     def prepare_solr_query(self):
         params = self.request.form.copy()
         query = self.extract_query(params)
@@ -105,3 +107,21 @@ class SolrQueryBaseService(Service):
 
     def prepare_additional_params(self, params):
         return params
+
+    def is_field_allowed(self, field):
+        return False
+
+    def get_field_index(self, field):
+        if field in self.field_mapping:
+            return self.field_mapping[field][0]
+        return field
+
+    def get_field_accessor(self, field):
+        if field in self.field_mapping:
+            return self.field_mapping[field][1]
+        return field
+
+    def get_field_sort_index(self, field):
+        if field in self.field_mapping:
+            return self.field_mapping[field][2]
+        return field

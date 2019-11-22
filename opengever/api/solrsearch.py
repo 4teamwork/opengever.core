@@ -43,6 +43,8 @@ class SolrSearchGet(SolrQueryBaseService):
     """REST API endpoint for querying Solr
     """
 
+    field_mapping = FIELD_MAPPING
+
     def extract_query(self, params):
         if 'q' in params:
             query = make_query(params['q'])
@@ -76,17 +78,16 @@ class SolrSearchGet(SolrQueryBaseService):
     def extract_field_list(self, params):
         self.requested_fields = params.pop('fl', None)
         if self.requested_fields:
-            self.requested_fields = (
-                set(self.requested_fields.split(',')) - BLACKLISTED_ATTRIBUTES)
+            self.requested_fields = self.requested_fields.split(',')
+            self.requested_fields = filter(
+                self.is_field_allowed, self.requested_fields)
         else:
             self.requested_fields = DEFAULT_FIELDS
 
         solr_fields = set(self.solr.manager.schema.fields.keys())
         requested_solr_fields = set([])
         for field in self.requested_fields:
-            if field in FIELD_MAPPING:
-                field = FIELD_MAPPING[field][0]
-            requested_solr_fields.add(field)
+            requested_solr_fields.add(self.get_field_index(field))
         return ','.join(
             (requested_solr_fields | REQUIRED_FIELDS) & solr_fields)
 
@@ -108,10 +109,7 @@ class SolrSearchGet(SolrQueryBaseService):
         for doc in docs:
             item = {}
             for field in self.requested_fields:
-                # Do not allow access to private attributes
-                if field.startswith("_"):
-                    continue
-                accessor = FIELD_MAPPING.get(field, (None, field))[1]
+                accessor = self.get_field_accessor(field)
                 value = getattr(doc, accessor, None)
                 if callable(value):
                     value = value()
@@ -131,3 +129,9 @@ class SolrSearchGet(SolrQueryBaseService):
         res['facet_counts'] = facet_counts
 
         return res
+
+    def is_field_allowed(self, field):
+        # Do not allow access to private attributes
+        if field.startswith("_") or field in BLACKLISTED_ATTRIBUTES:
+            return False
+        return True

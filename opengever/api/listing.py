@@ -26,23 +26,6 @@ import Missing
 DEFAULT_SORT_INDEX = 'modified'
 
 
-def create_list_item(item, fields):
-    obj = IContentListingObject(item)
-    data = {'@id': obj.getURL()}
-    for field in fields:
-        if field not in FIELDS:
-            continue
-        accessor = FIELDS[field][1]
-        if isinstance(accessor, str):
-            value = getattr(obj, accessor, None)
-            if callable(value):
-                value = value()
-        else:
-            value = accessor(obj)
-        data[field] = json_compatible(value)
-    return data
-
-
 def translated_title(obj):
     if ITranslatedTitleSupport.providedBy(obj):
         attr = 'title_{}'.format(get_preferred_language_code())
@@ -99,59 +82,60 @@ def get_path_depth(context):
 
 
 # Mapping of field name -> (index, accessor, sort index)
-FIELDS = {
+FIELDS_WITH_MAPPING = {
     'bumblebee_checksum': (None, 'bumblebee_checksum', DEFAULT_SORT_INDEX),
-    'changed': ('changed', 'changed', 'changed'),
-    'checked_out': ('checked_out', 'checked_out', 'checked_out'),
     'checked_out_fullname': ('checked_out', 'checked_out_fullname', 'checked_out'),
-    'completed': ('completed', 'completed', 'completed'),
-    'containing_dossier': ('containing_dossier', 'containing_dossier', 'containing_dossier'),
-    'containing_subdossier': ('containing_subdossier', 'containing_subdossier', 'containing_subdossier'),  # noqa
-    'created': ('created', 'created', 'created'),
     'creator': ('Creator', 'Creator', 'Creator'),
-    'deadline': ('deadline', 'deadline', 'deadline'),
-    'delivery_date': ('delivery_date', 'delivery_date', 'delivery_date'),
     'description': ('Description', 'Description', 'Description'),
-    'document_author': ('document_author', 'document_author', 'document_author'),
-    'document_date': ('document_date', 'document_date', 'document_date'),
-    'document_type': ('document_type', 'document_type', 'document_type'),
-    'end': ('end', 'end', 'end'),
-    'file_extension': ('file_extension', 'file_extension', 'file_extension'),
     'filename': ('filename', filename, 'filename'),
     'filesize': ('filesize', filesize, 'filesize'),
-    'has_sametype_children': ('has_sametype_children', 'has_sametype_children',
-                              'has_sametype_children'),
-    'is_subdossier': ('is_subdossier', 'is_subdossier', 'is_subdossier'),
-    'is_subtask': ('is_subtask', 'is_subtask', 'is_subtask'),
     'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
-    'issuer': ('issuer', 'issuer', 'issuer'),
     'keywords': ('Subject', 'Subject', 'Subject'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
-    'modified': ('modified', 'modified', 'modified'),
     'pdf_url': (None, 'preview_pdf_url', DEFAULT_SORT_INDEX),
     'preview_url': (None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
-    'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
-    'reference': ('reference', 'reference', 'reference'),
     'reference_number': ('reference', 'reference', 'reference'),
     'relative_path': (None, relative_path, DEFAULT_SORT_INDEX),
-    'responsible': ('responsible', 'responsible', 'responsible'),
     'responsible_fullname': ('responsible', 'responsible_fullname', 'responsible'),
-    'review_state': ('review_state', 'review_state', 'review_state'),
     'review_state_label': ('review_state', 'translated_review_state',
                            'review_state'),
-    'sequence_number': ('sequence_number', 'sequence_number', 'sequence_number'),
-    'start': ('start', 'start', 'start'),
     'task_type': ('task_type', translated_task_type, 'task_type'),
     'thumbnail_url': (None, 'preview_image_url', DEFAULT_SORT_INDEX),
     'title': ('Title', translated_title, 'sortable_title'),
     'type': ('portal_type', 'PortalType', 'portal_type'),
     '@type': ('portal_type', 'PortalType', 'portal_type'),
-    'UID': ('UID', 'UID', 'UID'),
-    'firstname': ('firstname', 'firstname', 'firstname'),
-    'lastname': ('lastname', 'lastname', 'lastname'),
-    'email': ('email', 'email', 'email'),
-    'phone_office': ('phone_office', 'phone_office', 'phone_office'),
 }
+
+OTHER_FIELDS = set([
+    'file_extension',
+    'deadline',
+    'containing_dossier',
+    'issuer',
+    'UID',
+    'document_author',
+    'is_subtask',
+    'start',
+    'checked_out',
+    'completed',
+    'phone_office',
+    'document_type',
+    'modified',
+    'sequence_number',
+    'containing_subdossier',
+    'has_sametype_children',
+    'reference',
+    'is_subdossier',
+    'document_date',
+    'end',
+    'responsible',
+    'lastname',
+    'review_state',
+    'email',
+    'firstname',
+    'receipt_date',
+    'created',
+    'changed',
+    'delivery_date'])
 
 DATE_INDEXES = set([
     'changed',
@@ -210,6 +194,10 @@ def with_active_solr_only(func):
 class Listing(SolrQueryBaseService):
     """List of content items"""
 
+    field_mapping = FIELDS_WITH_MAPPING
+    other_allowed_fields = OTHER_FIELDS
+    allowed_fields = set(field_mapping.keys()) | other_allowed_fields
+
     def extract_query(self, params):
         term = params.get('search', '').strip()
         query = '*:*'
@@ -251,9 +239,9 @@ class Listing(SolrQueryBaseService):
             filter_queries.append(u'path_depth:[* TO {}]'.format(max_path_depth))
 
         for key, value in filters.items():
-            if key not in FIELDS:
+            if not self.is_field_allowed(key):
                 continue
-            key = FIELDS[key][0]
+            key = self.get_field_index(key)
             if key is None:
                 continue
             if key in DATE_INDEXES:
@@ -277,7 +265,11 @@ class Listing(SolrQueryBaseService):
 
     def extract_sort(self, params, query):
         sort_on = params.get('sort_on', DEFAULT_SORT_INDEX)
-        sort_on = FIELDS.get(sort_on, (None, None, DEFAULT_SORT_INDEX))[2]
+        if self.is_field_allowed(sort_on):
+            sort_on = self.get_field_sort_index(sort_on)
+        else:
+            sort_on = DEFAULT_SORT_INDEX
+
         sort_order = params.get('sort_order', 'descending')
         sort = sort_on
         if sort:
@@ -291,7 +283,7 @@ class Listing(SolrQueryBaseService):
         self.columns = params.get('columns', [])
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
               'bumblebee_checksum']
-        fl.extend(filter(None, map(self.field_name_to_index, self.columns)))
+        fl.extend(filter(None, map(self.get_field_index, self.columns)))
         return fl
 
     def prepare_additional_params(self, params):
@@ -299,8 +291,9 @@ class Listing(SolrQueryBaseService):
             'q.op': 'AND',
         }
 
-        self.facets = params.get('facets', [])
-        facet_fields = filter(None, map(self.field_name_to_index, self.facets))
+        self.facets = filter(self.is_field_allowed, params.get('facets', []))
+        facet_fields = map(self.get_field_index, self.facets)
+
         if facet_fields:
             additional_params["facet"] = "true"
             additional_params["facet.mincount"] = 1
@@ -336,14 +329,14 @@ class Listing(SolrQueryBaseService):
 
         res['items'] = []
         for item in items[start:start + rows]:
-            res['items'].append(create_list_item(item, self.columns))
+            res['items'].append(self.create_list_item(item, self.columns))
 
         facet_counts = self.extract_facets_from_response(resp)
 
         # We map the index names back to the field names for the facets
         mapped_facet_counts = {}
         for field in self.facets:
-            index_name = self.field_name_to_index(field)
+            index_name = self.get_field_index(field)
             if index_name is None or index_name not in facet_counts:
                 continue
             mapped_facet_counts[field] = facet_counts[index_name]
@@ -366,14 +359,27 @@ class Listing(SolrQueryBaseService):
                 return None, None
         return date_from, date_to
 
-    @staticmethod
-    def field_name_to_index(field):
-        if field in FIELDS:
-            return FIELDS[field][0]
-        return None
+    def is_field_allowed(self, field):
+        return field in self.allowed_fields
 
     def daterange_filter(self, value):
         date_from, date_to = self.parse_dates(value)
         if date_from is not None and date_to is not None:
             return u'[{} TO {}]'.format(
                 to_iso8601(date_from), to_iso8601(date_to))
+
+    def create_list_item(self, item, fields):
+        obj = IContentListingObject(item)
+        data = {'@id': obj.getURL()}
+        for field in fields:
+            if not self.is_field_allowed(field):
+                continue
+            accessor = self.get_field_accessor(field)
+            if isinstance(accessor, str):
+                value = getattr(obj, accessor, None)
+                if callable(value):
+                    value = value()
+            else:
+                value = accessor(obj)
+            data[field] = json_compatible(value)
+        return data
