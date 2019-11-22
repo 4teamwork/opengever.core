@@ -4,6 +4,7 @@ from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
+from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.helpers import display_name
 from opengever.base.interfaces import ISearchSettings
@@ -16,7 +17,6 @@ from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.registry.interfaces import IRegistry
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
-from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
@@ -242,35 +242,11 @@ def with_active_solr_only(func):
     return validate
 
 
-class Listing(Service):
+class Listing(SolrQueryBaseService):
     """List of content items"""
 
-    @with_active_solr_only
-    def reply(self):
-        name = self.request.form.get('name')
-        if name not in FILTERS:
-            raise BadRequest
-
-        start = self.request.form.get('b_start', '0')
-        rows = self.request.form.get('b_size', '25')
-        try:
-            start = int(start)
-            rows = int(rows)
-        except ValueError:
-            start = 0
-            rows = 25
-
-        sort_on = self.request.form.get('sort_on', DEFAULT_SORT_INDEX)
-        sort_on = FIELDS.get(sort_on, (None, None, DEFAULT_SORT_INDEX))[2]
-        sort_order = self.request.form.get('sort_order', 'descending')
-        sort = sort_on
-        if sort:
-            if sort_order in ['descending', 'reverse']:
-                sort += ' desc'
-            else:
-                sort += ' asc'
-
-        term = self.request.form.get('search', '').strip()
+    def extract_query(self, params):
+        term = params.get('search', '').strip()
         query = '*:*'
         if term:
             pattern = (
@@ -279,8 +255,10 @@ class Listing(Service):
             term_queries = [
                 pattern.format(term=escape(safe_unicode(t))) for t in term.split()]
             query = u' AND '.join(term_queries)
+        return query
 
-        filters = self.request.form.get('filters', {})
+    def extract_filters(self, params):
+        filters = params.get('filters', {})
         if not isinstance(filters, record):
             filters = {}
         filter_queries = []
@@ -292,7 +270,7 @@ class Listing(Service):
 
         if 'trashed' not in filters:
             filter_queries.append(u'trashed:false')
-        filter_queries.extend(FILTERS[name])
+        filter_queries.extend(FILTERS[self.listing_name])
         filter_queries.append(u'path_parent:{}'.format(escape(
             '/'.join(self.context.getPhysicalPath()))))
 
@@ -330,28 +308,57 @@ class Listing(Service):
                 # self.request.form) once this endpoint gets refactored.
                 value = safe_unicode(value)
                 filter_queries.append(u'{}:({})'.format(escape(key), value))
+        return filter_queries
 
-        columns = self.request.form.get('columns', [])
-        params = {
-            'fl': self.field_list(columns),
+    def extract_sort(self, params, query):
+        sort_on = params.get('sort_on', DEFAULT_SORT_INDEX)
+        sort_on = FIELDS.get(sort_on, (None, None, DEFAULT_SORT_INDEX))[2]
+        sort_order = params.get('sort_order', 'descending')
+        sort = sort_on
+        if sort:
+            if sort_order in ['descending', 'reverse']:
+                sort += ' desc'
+            else:
+                sort += ' asc'
+        return sort
+
+    def extract_field_list(self, params):
+        self.columns = params.get('columns', [])
+        fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
+              'bumblebee_checksum']
+        fl.extend(filter(None, map(self.field_name_to_index, self.columns)))
+        return fl
+
+    def prepare_additional_params(self, params):
+        additional_params = {
             'q.op': 'AND',
         }
 
-        facets = self.request.form.get('facets', [])
-        facet_fields = filter(None, map(self.field_name_to_index, facets))
+        self.facets = params.get('facets', [])
+        facet_fields = filter(None, map(self.field_name_to_index, self.facets))
         if facet_fields:
-            params["facet"] = "true"
-            params["facet.mincount"] = 1
-            params["facet.field"] = facet_fields
+            additional_params["facet"] = "true"
+            additional_params["facet.mincount"] = 1
+            additional_params["facet.field"] = facet_fields
+        return additional_params
 
-        solr = getUtility(ISolrSearch)
-        resp = solr.search(
-            query=query, filters=filter_queries, start=start, rows=rows,
-            sort=sort, **params)
+    @with_active_solr_only
+    def reply(self):
+        self.listing_name = self.request.form.get('name')
+        if self.listing_name not in FILTERS:
+            raise BadRequest
+
+        self.solr = getUtility(ISolrSearch)
+
+        query, filters, start, rows, sort, field_list, params = self.prepare_solr_query()
+
+        resp = self.solr.search(
+            query=query, filters=filters, start=start, rows=rows, sort=sort,
+            fl=field_list, **params)
 
         # We map the index names back to the field names for the facets
         facet_counts = {}
-        for field in facets:
+        for field in self.facets:
             index_name = self.field_name_to_index(field)
             if index_name is None or index_name not in resp.facets:
                 continue
@@ -372,7 +379,7 @@ class Listing(Service):
 
         res['items'] = []
         for item in items[start:start + rows]:
-            res['items'].append(create_list_item(item, columns))
+            res['items'].append(create_list_item(item, self.columns))
 
         if facet_counts:
             for field, facets in facet_counts.items():
@@ -407,12 +414,6 @@ class Listing(Service):
         if field in FIELDS:
             return FIELDS[field][0]
         return None
-
-    def field_list(self, columns):
-        fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
-              'bumblebee_checksum']
-        fl.extend(filter(None, map(self.field_name_to_index, columns)))
-        return fl
 
     def daterange_filter(self, value):
         date_from, date_to = self.parse_dates(value)
