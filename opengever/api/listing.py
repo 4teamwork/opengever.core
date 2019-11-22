@@ -248,6 +248,8 @@ class Listing(Service):
     @with_active_solr_only
     def reply(self):
         name = self.request.form.get('name')
+        if name not in FILTERS:
+            raise BadRequest
 
         start = self.request.form.get('b_start', '0')
         rows = self.request.form.get('b_size', '25')
@@ -261,22 +263,14 @@ class Listing(Service):
         sort_on = self.request.form.get('sort_on', DEFAULT_SORT_INDEX)
         sort_on = FIELDS.get(sort_on, (None, None, DEFAULT_SORT_INDEX))[2]
         sort_order = self.request.form.get('sort_order', 'descending')
+        sort = sort_on
+        if sort:
+            if sort_order in ['descending', 'reverse']:
+                sort += ' desc'
+            else:
+                sort += ' asc'
+
         term = self.request.form.get('search', '').strip()
-        columns = self.request.form.get('columns', [])
-        filters = self.request.form.get('filters', {})
-        facets = self.request.form.get('facets', [])
-        if not isinstance(filters, record):
-            filters = {}
-
-        depth = self.request.form.get('depth', -1)
-        try:
-            depth = int(depth)
-        except ValueError:
-            depth = -1
-
-        if name not in FILTERS:
-            raise BadRequest
-
         query = '*:*'
         if term:
             pattern = (
@@ -286,6 +280,9 @@ class Listing(Service):
                 pattern.format(term=escape(safe_unicode(t))) for t in term.split()]
             query = u' AND '.join(term_queries)
 
+        filters = self.request.form.get('filters', {})
+        if not isinstance(filters, record):
+            filters = {}
         filter_queries = []
 
         # Exclude searchroot
@@ -298,6 +295,12 @@ class Listing(Service):
         filter_queries.extend(FILTERS[name])
         filter_queries.append(u'path_parent:{}'.format(escape(
             '/'.join(self.context.getPhysicalPath()))))
+
+        depth = self.request.form.get('depth', -1)
+        try:
+            depth = int(depth)
+        except ValueError:
+            depth = -1
 
         if depth > 0:
             context_depth = get_path_depth(self.context)
@@ -328,18 +331,13 @@ class Listing(Service):
                 value = safe_unicode(value)
                 filter_queries.append(u'{}:({})'.format(escape(key), value))
 
-        sort = sort_on
-        if sort:
-            if sort_order in ['descending', 'reverse']:
-                sort += ' desc'
-            else:
-                sort += ' asc'
-
+        columns = self.request.form.get('columns', [])
         params = {
             'fl': self.field_list(columns),
             'q.op': 'AND',
         }
 
+        facets = self.request.form.get('facets', [])
         facet_fields = filter(None, map(self.field_name_to_index, facets))
         if facet_fields:
             params["facet"] = "true"
