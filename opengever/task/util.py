@@ -111,12 +111,11 @@ def add_simple_response(task, text='', field_changes=None, added_objects=None,
     if field_changes:
         for field, new_value in field_changes:
             old_value = field.get(field.interface(task))
-            if old_value != new_value:
-                response.add_change(
-                    field.__name__,
-                    old_value,
-                    new_value,
-                    field_title=field.title)
+            response.add_change(
+                field.__name__,
+                old_value,
+                new_value,
+                field_title=field.title)
 
     if added_objects:
         intids = getUtility(IIntIds)

@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.base.response import IResponseContainer
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from plone import api
 import json
@@ -311,6 +312,30 @@ class TestAPITransitions(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(url, method='POST',
                          data=json.dumps(data), headers=self.api_headers)
+
+    @browsing
+    def test_reassign_only_unit_changes(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.set_workflow_state('task-state-open', self.task)
+
+        # Add regular user to gdgs orgunit
+        org_unit = self.add_additional_admin_and_org_unit()[1]
+        ogds_user = User.query.get(self.regular_user.id)
+        org_unit.users_group.users.append(ogds_user)
+
+        url = '{}/@workflow/task-transition-reassign'.format(self.task.absolute_url())
+        data = {'text': 'Robert macht das.',
+                'responsible': self.regular_user.id,
+                'responsible_client': u'gdgs'}
+        browser.open(url, method='POST', data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual('gdgs', self.task.responsible_client)
+        self.assertEqual(self.regular_user.id, self.task.responsible)
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEqual(
+            u'Reassigned from B\xe4rfuss K\xe4thi (kathi.barfuss) to B\xe4rfuss K\xe4thi (kathi.barfuss)',
+            browser.css('.answers h3')[0].text)
 
     @browsing
     def test_cancel_successful(self, browser):
