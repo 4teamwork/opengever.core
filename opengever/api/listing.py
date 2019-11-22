@@ -323,7 +323,7 @@ class Listing(Service):
                 sort_order, filters, depth, facets):
 
         if name not in FILTERS:
-            return []
+            raise BadRequest
 
         query = '*:*'
         if term:
