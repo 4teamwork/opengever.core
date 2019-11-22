@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2019.4.0rc6 (unreleased)
-------------------------
+2019.4.0 (2019-11-22)
+---------------------
 
 - Pin ftw.monitor to 1.0.0. [lgraf]
 - Allow teams as task responsible when delegating a task. [phgross]
