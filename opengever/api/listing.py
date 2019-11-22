@@ -274,54 +274,6 @@ class Listing(Service):
         except ValueError:
             depth = -1
 
-        items, facet_counts = self.results(
-            name, term, columns, start, rows, sort_on, sort_order, filters,
-            depth, facets)
-
-        batch = HypermediaBatch(self.request, items)
-        res = {}
-        res['@id'] = batch.canonical_url
-        res['items_total'] = batch.items_total
-        res['b_start'] = start
-        res['b_size'] = rows
-        if batch.links:
-            res['batching'] = batch.links
-
-        res['items'] = []
-        for item in items[start:start + rows]:
-            res['items'].append(create_list_item(item, columns))
-
-        if facet_counts:
-            for field, facets in facet_counts.items():
-                transform = FACET_TRANSFORMS.get(FIELDS[field][0])
-                for facet, count in facets.items():
-                    facets[facet] = {"count": count}
-                    if transform:
-                        facets[facet]['label'] = transform(facet)
-                    else:
-                        facets[facet]['label'] = facet
-            res['facets'] = facet_counts
-
-        return res
-
-    def parse_dates(self, value):
-        if isinstance(value, list):
-            value = value[0]
-        if not isinstance(value, str):
-            return None, None
-
-        dates = value.split('TO')
-        if len(dates) == 2:
-            try:
-                date_from = DateTime(dates[0]).earliestTime()
-                date_to = DateTime(dates[1]).latestTime()
-            except DateTimeError:
-                return None, None
-        return date_from, date_to
-
-    def results(self, name, term, columns, start, rows, sort_on,
-                sort_order, filters, depth, facets):
-
         if name not in FILTERS:
             raise BadRequest
 
@@ -407,10 +359,50 @@ class Listing(Service):
                 continue
             facet_counts[field] = resp.facets[index_name]
 
-        return (LazyMap(OGSolrDocument,
+        items = LazyMap(OGSolrDocument,
                         start * [None] + resp.docs,
-                        actual_result_count=resp.num_found,),
-                facet_counts)
+                        actual_result_count=resp.num_found,)
+
+        batch = HypermediaBatch(self.request, items)
+        res = {}
+        res['@id'] = batch.canonical_url
+        res['items_total'] = batch.items_total
+        res['b_start'] = start
+        res['b_size'] = rows
+        if batch.links:
+            res['batching'] = batch.links
+
+        res['items'] = []
+        for item in items[start:start + rows]:
+            res['items'].append(create_list_item(item, columns))
+
+        if facet_counts:
+            for field, facets in facet_counts.items():
+                transform = FACET_TRANSFORMS.get(FIELDS[field][0])
+                for facet, count in facets.items():
+                    facets[facet] = {"count": count}
+                    if transform:
+                        facets[facet]['label'] = transform(facet)
+                    else:
+                        facets[facet]['label'] = facet
+            res['facets'] = facet_counts
+
+        return res
+
+    def parse_dates(self, value):
+        if isinstance(value, list):
+            value = value[0]
+        if not isinstance(value, str):
+            return None, None
+
+        dates = value.split('TO')
+        if len(dates) == 2:
+            try:
+                date_from = DateTime(dates[0]).earliestTime()
+                date_to = DateTime(dates[1]).latestTime()
+            except DateTimeError:
+                return None, None
+        return date_from, date_to
 
     @staticmethod
     def field_name_to_index(field):
