@@ -76,7 +76,7 @@ Changelog
 - Add new reminder type ReminderOnDate (backend only). [lgraf]
 - Fix an issue with agenda item template ids not being stored as ascii. [deiferni]
 - Bump ftw.bumblebee to 3.8.0 for p7m support. [deiferni]
-- Add support for multipart/signed a.k.a. *.p7m mails. [deiferni]
+- Add support for multipart/signed a.k.a. \*.p7m mails. [deiferni]
 - Add documentation for the cancelcheckout endpoint. [njohner]
 - Downgrade solr to 7.3.1.
 - Bump plone.restapi to 4.5.1. [phgross]
