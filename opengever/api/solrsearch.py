@@ -1,6 +1,5 @@
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_query
-from opengever.api.listing import FACET_TRANSFORMS
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrContentListing
@@ -128,15 +127,7 @@ class SolrSearchGet(SolrQueryBaseService):
             "rows": rows,
         }
 
-        facet_counts = {}
-        for field, facets in resp.facets.items():
-            facet_counts[field] = {}
-            transform = FACET_TRANSFORMS.get(field)
-            for facet, count in facets.items():
-                facet_counts[field][facet] = {"count": count}
-                if transform:
-                    facet_counts[field][facet]['label'] = transform(facet)
-                else:
-                    facet_counts[field][facet]['label'] = facet
+        facet_counts = self.extract_facets_from_response(resp)
         res['facet_counts'] = facet_counts
+
         return res

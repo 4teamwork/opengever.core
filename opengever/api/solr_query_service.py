@@ -1,4 +1,39 @@
 from plone.restapi.services import Service
+from opengever.base.helpers import display_name
+from zope.i18n import translate
+from zope.globalrequest import getRequest
+from collective.elephantvocabulary import wrap_vocabulary
+from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
+from zope.component.hooks import getSite
+
+
+def translate_task_type(task_type):
+    return task_type_value_helper(task_type)
+
+
+def translate_document_type(document_type):
+    portal = getSite()
+    voc = wrap_vocabulary(
+            'opengever.document.document_types',
+            visible_terms_from_registry='opengever.document.interfaces.'
+                                        'IDocumentType.document_types')(portal)
+    try:
+        term = voc.getTerm(document_type)
+    except LookupError:
+        return document_type
+    else:
+        return term.title
+
+
+FACET_TRANSFORMS = {
+    'responsible': display_name,
+    'review_state': lambda state: translate(state, domain='plone',
+                                            context=getRequest()),
+    'document_type': translate_document_type,
+    'task_type': translate_task_type,
+    'checked_out': display_name,
+    'Creator': display_name,
+}
 
 
 def safe_int(value, default=0):
@@ -51,6 +86,19 @@ class SolrQueryBaseService(Service):
 
     def extract_sort(self, params, query):
         return None
+
+    def extract_facets_from_response(self, resp):
+        facet_counts = {}
+        for field, facets in resp.facets.items():
+            facet_counts[field] = {}
+            transform = FACET_TRANSFORMS.get(field)
+            for facet, count in facets.items():
+                facet_counts[field][facet] = {"count": count}
+                if transform:
+                    facet_counts[field][facet]['label'] = transform(facet)
+                else:
+                    facet_counts[field][facet]['label'] = facet
+        return facet_counts
 
     def extract_field_list(self, params):
         return ''
