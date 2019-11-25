@@ -75,10 +75,15 @@ class SolrSearchGet(SolrQueryBaseService):
                 sort = 'score asc'
         return sort
 
+    def parse_requested_fields(self, params):
+        requested_fields = params.pop('fl', None)
+        if requested_fields:
+            return requested_fields.split(',')
+        return requested_fields
+
     def extract_field_list(self, params):
-        self.requested_fields = params.pop('fl', None)
-        if self.requested_fields:
-            self.requested_fields = self.requested_fields.split(',')
+        self.requested_fields = self.parse_requested_fields(params)
+        if self.requested_fields is not None:
             self.requested_fields = filter(
                 self.is_field_allowed, self.requested_fields)
         else:

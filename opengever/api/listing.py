@@ -279,11 +279,15 @@ class Listing(SolrQueryBaseService):
                 sort += ' asc'
         return sort
 
+    def parse_requested_fields(self, params):
+        return params.get('columns', [])
+
     def extract_field_list(self, params):
-        self.columns = params.get('columns', [])
+        self.requested_fields = self.parse_requested_fields(params)
+
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
               'bumblebee_checksum']
-        fl.extend(filter(None, map(self.get_field_index, self.columns)))
+        fl.extend(filter(None, map(self.get_field_index, self.requested_fields)))
         return fl
 
     def prepare_additional_params(self, params):
@@ -329,7 +333,7 @@ class Listing(SolrQueryBaseService):
 
         res['items'] = []
         for item in items[start:start + rows]:
-            res['items'].append(self.create_list_item(item, self.columns))
+            res['items'].append(self.create_list_item(item, self.requested_fields))
 
         facet_counts = self.extract_facets_from_response(resp)
 
