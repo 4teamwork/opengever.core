@@ -6,11 +6,10 @@ from ftw.solr.query import escape
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import ISearchSettings
-from opengever.base.solr import OGSolrDocument
+from opengever.base.solr import OGSolrContentListing
 from opengever.base.utils import get_preferred_language_code
 from opengever.task.helper import task_type_helper
 from plone import api
-from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.registry.interfaces import IRegistry
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
@@ -323,10 +322,9 @@ class Listing(SolrQueryBaseService):
             query=query, filters=filters, start=start, rows=rows, sort=sort,
             fl=field_list, **params)
 
-        items = LazyMap(OGSolrDocument,
-                        start * [None] + resp.docs,
-                        actual_result_count=resp.num_found,)
-
+        # We use the HypermediaBatch only to generate the links,
+        # we therefore do not need the real sequence of objects here
+        items = LazyMap(None, [], actual_result_count=resp.num_found)
         batch = HypermediaBatch(self.request, items)
         res = {}
         res['@id'] = batch.canonical_url
@@ -336,9 +334,10 @@ class Listing(SolrQueryBaseService):
         if batch.links:
             res['batching'] = batch.links
 
+        docs = OGSolrContentListing(resp)
         res['items'] = []
-        for item in items[start:start + rows]:
-            res['items'].append(self.create_list_item(item))
+        for doc in docs:
+            res['items'].append(self.create_list_item(doc))
 
         facet_counts = self.extract_facets_from_response(resp)
 
@@ -377,16 +376,15 @@ class Listing(SolrQueryBaseService):
             return u'[{} TO {}]'.format(
                 to_iso8601(date_from), to_iso8601(date_to))
 
-    def create_list_item(self, item):
-        obj = IContentListingObject(item)
+    def create_list_item(self, doc):
         data = {}
         for field in self.response_fields:
             accessor = self.get_field_accessor(field)
             if isinstance(accessor, str):
-                value = getattr(obj, accessor, None)
+                value = getattr(doc, accessor, None)
                 if callable(value):
                     value = value()
             else:
-                value = accessor(obj)
+                value = accessor(doc)
             data[field] = json_compatible(value)
         return data
