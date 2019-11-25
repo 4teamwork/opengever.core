@@ -704,7 +704,7 @@ msgstr "Etat"
 #. Default: "Choose remind date"
 #: ./opengever/task/response.py
 msgid "lable_reminder_choose_date"
-msgstr ""
+msgstr "Choisissez une date pour le rappel."
 
 #. Default: "Deadline successfully changed."
 #: ./opengever/task/browser/modify_deadline.py
@@ -767,7 +767,7 @@ msgstr "Nouveau Dossier"
 #. Default: "Please choose a remind date"
 #: ./opengever/task/response.py
 msgid "no_remind_date_error"
-msgstr ""
+msgstr "Veuillez choisir une date pour le rappel."
 
 #. Default: "No reminder"
 #: ./opengever/task/browser/overview.py
@@ -792,7 +792,7 @@ msgstr "Au début de la semaine"
 #. Default: "On a specific date"
 #: ./opengever/task/reminder/model.py
 msgid "reminder_option_title_on_date"
-msgstr ""
+msgstr "A une date donnée"
 
 #. Default: "One day before deadline"
 #: ./opengever/task/reminder/model.py
@@ -1072,7 +1072,7 @@ msgstr "Accompli par ${user}"
 #. Default: "Resolved by ${user} and ${documents} returned"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_resolve_with_documents"
-msgstr ""
+msgstr "Accompli par ${user} et ${documents} renvoyés."
 
 #. Default: "Revised by ${user}"
 #: ./opengever/task/response_description.py

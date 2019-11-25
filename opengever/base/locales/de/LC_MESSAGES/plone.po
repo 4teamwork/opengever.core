@@ -160,7 +160,7 @@ msgid "disposition-transition-appraised-to-closed"
 msgstr "Dossiers aussondern"
 
 msgid "disposition-transition-archive"
-msgstr "Archivieren"
+msgstr "Archivierung bestätigen"
 
 msgid "disposition-transition-close"
 msgstr "Dossiers aussondern"

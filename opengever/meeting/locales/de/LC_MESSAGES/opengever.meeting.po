@@ -1486,7 +1486,7 @@ msgstr "Das Antragsdokument wurde von ${creator} ausgecheckt."
 #. Default: "The committee ${committee_title} is no longer active."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
 msgid "message_committee_inactive_warning"
-msgstr "Das Ko­mi­tee ${committee_title} wurde deaktiviert."
+msgstr "Das Gremium ${committee_title} wurde deaktiviert."
 
 #. Default: "Your changes were not saved, the protocol is locked by ${username}."
 #: ./opengever/meeting/browser/meetings/edit_meeting.py

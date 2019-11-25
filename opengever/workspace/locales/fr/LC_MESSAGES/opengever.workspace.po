@@ -117,22 +117,22 @@ msgstr "Membre du team"
 #. Default: "Owner"
 #: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceOwner"
-msgstr "Titulaire"
+msgstr "Responsable"
 
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
 msgid "invitation"
-msgstr ""
+msgstr "Invitation"
 
 #. Default: "Completed"
 #: ./opengever/workspace/todo.py
 msgid "label_completed"
-msgstr ""
+msgstr "Accompli"
 
 #. Default: "Deadline"
 #: ./opengever/workspace/todo.py
 msgid "label_deadline"
-msgstr ""
+msgstr "A compléter d'ici le"
 
 #. Default: "Description"
 #: ./opengever/workspace/browser/tabs.py
@@ -157,12 +157,12 @@ msgstr "Journal"
 #. Default: "Responsible"
 #: ./opengever/workspace/todo.py
 msgid "label_responsible"
-msgstr ""
+msgstr "Responsable"
 
 #. Default: "Text"
 #: ./opengever/workspace/todo.py
 msgid "label_text"
-msgstr ""
+msgstr "Texte"
 
 #. Default: "Title"
 #: ./opengever/workspace/browser/tabs.py
@@ -174,7 +174,7 @@ msgstr "Titre"
 #. Default: "ToDo"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_todo"
-msgstr ""
+msgstr "ToDo"
 
 #. Default: "ToDo assigned"
 #: ./opengever/workspace/activities.py
@@ -219,4 +219,4 @@ msgstr "Participant de  \"${workspace}\""
 #. Default: "User"
 #: ./opengever/workspace/participation/__init__.py
 msgid "user"
-msgstr ""
+msgstr "Utilisateur"

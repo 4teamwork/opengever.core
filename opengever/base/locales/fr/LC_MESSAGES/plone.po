@@ -160,7 +160,7 @@ msgid "disposition-transition-appraised-to-closed"
 msgstr "Offre clôturée"
 
 msgid "disposition-transition-archive"
-msgstr "Archivage confirmé"
+msgstr "Confirmer archivage"
 
 msgid "disposition-transition-close"
 msgstr "Offre clôturée"
