@@ -33,13 +33,11 @@ from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
-from opengever.meeting.model import Period
 from opengever.meeting.model import Proposal as ProposalModel
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit

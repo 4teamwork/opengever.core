@@ -11,7 +11,6 @@ from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
-from opengever.meeting.model import Period
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
