@@ -284,6 +284,8 @@ class Listing(SolrQueryBaseService):
 
     def extract_field_list(self, params):
         self.requested_fields = self.parse_requested_fields(params)
+        self.requested_fields = filter(
+            self.is_field_allowed, self.requested_fields)
 
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
               'bumblebee_checksum']
@@ -376,8 +378,6 @@ class Listing(SolrQueryBaseService):
         obj = IContentListingObject(item)
         data = {'@id': obj.getURL()}
         for field in fields:
-            if not self.is_field_allowed(field):
-                continue
             accessor = self.get_field_accessor(field)
             if isinstance(accessor, str):
                 value = getattr(obj, accessor, None)
