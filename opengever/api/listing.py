@@ -176,6 +176,8 @@ FILTERS = {
     ]
 }
 
+DEFAULT_FIELDS = set()
+
 
 def with_active_solr_only(func):
     """Raises an error if solr is not activated
@@ -280,12 +282,15 @@ class Listing(SolrQueryBaseService):
         return sort
 
     def parse_requested_fields(self, params):
-        return params.get('columns', [])
+        return params.get('columns', None)
 
     def extract_field_list(self, params):
         self.requested_fields = self.parse_requested_fields(params)
-        self.requested_fields = filter(
-            self.is_field_allowed, self.requested_fields)
+        if self.requested_fields is not None:
+            self.requested_fields = filter(
+                self.is_field_allowed, self.requested_fields)
+        else:
+            self.requested_fields = DEFAULT_FIELDS
 
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
               'bumblebee_checksum']
