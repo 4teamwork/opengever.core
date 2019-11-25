@@ -273,6 +273,21 @@ class TestMeetingView(IntegrationTestCase):
         self.assertEquals(IUUID(protocol_document), form.values["protocol"])
 
     @browsing
+    def test_displays_error_view_when_no_period_for_meeting_date_is_availabe(self, browser):
+        self.login(self.meeting_user, browser=browser)
+
+        # put meeting start outside period start-end range.
+        self.meeting.model.start = datetime(2019, 8, 31, 13, 30, tzinfo=pytz.UTC)
+
+        browser.open(self.meeting)
+        self.assertEqual(browser.css(".meeting-permission-error-title").first.text,
+                         "Missing period")
+        self.assertEqual(browser.css(".meeting-permission-error-message").first.text,
+                         "There is no period available for the meeting "
+                          "date Aug 31, 2019. You should either change the "
+                          "meeting date or add a new period to the committee:")
+
+    @browsing
     def test_displays_error_view_when_no_view_permissions_on_meeting_dossier(self, browser):
         self.login(self.meeting_user, browser=browser)
 
