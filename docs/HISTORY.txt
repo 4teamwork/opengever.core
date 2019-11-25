@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Update French translations. [njohner]
+- Update oneoffixx intergration to latest API changes. [phgross]
 
 
 2019.4.0 (2019-11-22)

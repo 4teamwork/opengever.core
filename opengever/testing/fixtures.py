@@ -1459,7 +1459,7 @@ class OpengeverContentFixture(object):
             shadow_document_annotations = IAnnotations(shadow_document)
             shadow_document_annotations['template-id'] = '2574d08d-95ea-4639-beab-3103fe4c3bc7'
             shadow_document_annotations['languages'] = [2055]
-            shadow_document_annotations['content_type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  # noqa
+            shadow_document_annotations['content-type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  # noqa
 
     @staticuid()
     def create_resolvable_dossier(self):
