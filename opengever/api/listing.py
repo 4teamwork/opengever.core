@@ -6,13 +6,11 @@ from ftw.solr.query import escape
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import ISearchSettings
-from opengever.base.solr import OGSolrContentListing
 from opengever.base.utils import get_preferred_language_code
 from opengever.task.helper import task_type_helper
 from plone import api
 from plone.registry.interfaces import IRegistry
 from plone.restapi.batching import HypermediaBatch
-from plone.restapi.serializer.converters import json_compatible
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
@@ -334,10 +332,7 @@ class Listing(SolrQueryBaseService):
         if batch.links:
             res['batching'] = batch.links
 
-        docs = OGSolrContentListing(resp)
-        res['items'] = []
-        for doc in docs:
-            res['items'].append(self.create_list_item(doc))
+        res['items'] = self.prepare_response_items(resp)
 
         facet_counts = self.extract_facets_from_response(resp)
 
@@ -375,16 +370,3 @@ class Listing(SolrQueryBaseService):
         if date_from is not None and date_to is not None:
             return u'[{} TO {}]'.format(
                 to_iso8601(date_from), to_iso8601(date_to))
-
-    def create_list_item(self, doc):
-        data = {}
-        for field in self.response_fields:
-            accessor = self.get_field_accessor(field)
-            if isinstance(accessor, str):
-                value = getattr(doc, accessor, None)
-                if callable(value):
-                    value = value()
-            else:
-                value = accessor(doc)
-            data[field] = json_compatible(value)
-        return data

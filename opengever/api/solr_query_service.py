@@ -1,10 +1,12 @@
-from plone.restapi.services import Service
-from opengever.base.helpers import display_name
-from zope.i18n import translate
-from zope.globalrequest import getRequest
 from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.helpers import display_name
+from opengever.base.solr import OGSolrContentListing
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
+from plone.restapi.serializer.converters import json_compatible
+from plone.restapi.services import Service
 from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 def translate_task_type(task_type):
@@ -146,3 +148,23 @@ class SolrQueryBaseService(Service):
         if field in self.field_mapping:
             return self.field_mapping[field][2]
         return field
+
+    def create_list_item(self, doc):
+        data = {}
+        for field in self.response_fields:
+            accessor = self.get_field_accessor(field)
+            if isinstance(accessor, str):
+                value = getattr(doc, accessor, None)
+                if callable(value):
+                    value = value()
+            else:
+                value = accessor(doc)
+            data[field] = json_compatible(value)
+        return data
+
+    def prepare_response_items(self, resp):
+        docs = OGSolrContentListing(resp)
+        items = []
+        for doc in docs:
+            items.append(self.create_list_item(doc))
+        return items

@@ -2,9 +2,7 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_query
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
-from opengever.base.solr import OGSolrContentListing
 from plone import api
-from plone.restapi.serializer.converters import json_compatible
 from zExceptions import BadRequest
 from zope.component import getUtility
 
@@ -96,22 +94,10 @@ class SolrSearchGet(SolrQueryBaseService):
             query=query, filters=filters, start=start, rows=rows, sort=sort,
             fl=field_list, **params)
 
-        docs = OGSolrContentListing(resp)
-        items = []
-        for doc in docs:
-            item = {}
-            for field in self.response_fields:
-                accessor = self.get_field_accessor(field)
-                value = getattr(doc, accessor, None)
-                if callable(value):
-                    value = value()
-                item[field] = json_compatible(value)
-            items.append(item)
-
         res = {
             "@id": "{}?{}".format(
                 self.request['ACTUAL_URL'], self.request['QUERY_STRING']),
-            "items": items,
+            "items": self.prepare_response_items(resp),
             "items_total": resp.num_found,
             "start": start,
             "rows": rows,
