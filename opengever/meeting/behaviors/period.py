@@ -1,4 +1,5 @@
 from collective import dexteritytextindexer
+from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _ as bmf
 from opengever.meeting import _
@@ -7,6 +8,18 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
 from zope import schema
 from zope.interface import alsoProvides
+
+
+def current_year():
+    return unicode(date.today().year)
+
+
+def first_day_of_current_year():
+    return date(date.today().year, 1, 1)
+
+
+def last_day_of_current_year():
+    return date(date.today().year, 12, 31)
 
 
 class IPeriodSchema(model.Schema):
@@ -29,18 +42,21 @@ class IPeriodSchema(model.Schema):
         title=_(u'label_title', default=u'Title'),
         required=True,
         max_length=256,
+        defaultFactory=current_year,
     )
 
     form.widget(start=DatePickerFieldWidget)
     start = schema.Date(
         title=_('label_date_from', default='Start date'),
         required=True,
+        defaultFactory=first_day_of_current_year,
     )
 
     form.widget(end=DatePickerFieldWidget)
     end = schema.Date(
         title=_('label_date_to', default='End date'),
         required=True,
+        defaultFactory=last_day_of_current_year,
     )
 
     form.write_permission(decision_sequence_number='cmf.ManagePortal')

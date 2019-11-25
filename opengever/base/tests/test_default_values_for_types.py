@@ -303,6 +303,22 @@ PRIVATEFOLDER_MISSING_VALUES = {
 }
 
 
+PERIOD_REQUIREDS = {
+}
+PERIOD_DEFAULTS = {
+    'title': unicode(FROZEN_TODAY.year),
+    'start': date(FROZEN_TODAY.year, 1, 1),
+    'end': date(FROZEN_TODAY.year, 12, 31),
+    'meeting_sequence_number': 0,
+    'decision_sequence_number': 0,
+    'changed': FROZEN_NOW,
+}
+PERIOD_FORM_DEFAULTS = {
+}
+PERIOD_MISSING_VALUES = {
+}
+
+
 class TestDefaultsBase(IntegrationTestCase):
     """Test our base classes have expected default values."""
 
@@ -1440,5 +1456,67 @@ class TestPrivateFolderDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(private_folder)
         expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+
+class TestPeriodDefaults(TestDefaultsBase):
+    """Test periods come with expected default values."""
+
+    portal_type = 'opengever.meeting.period'
+
+    requireds = PERIOD_REQUIREDS
+    type_defaults = PERIOD_DEFAULTS
+    form_defaults = PERIOD_FORM_DEFAULTS
+    missing_values = PERIOD_MISSING_VALUES
+
+    features = ('meeting',)
+
+    def get_obj_of_own_type(self):
+        return self.period
+
+    def test_create_content_in_container(self):
+        self.login(self.committee_responsible)
+
+        with freeze(FROZEN_NOW):
+            period = createContentInContainer(
+                self.committee,
+                self.portal_type
+            )
+
+        persisted_values = get_persisted_values_for_obj(period)
+        expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+    def test_invoke_factory(self):
+        self.login(self.committee_responsible)
+
+        with freeze(FROZEN_NOW):
+            new_id = self.committee.invokeFactory(
+                self.portal_type,
+                'period-999',
+            )
+        period = self.committee[new_id]
+
+        persisted_values = get_persisted_values_for_obj(period)
+        expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+    @browsing
+    def test_z3c_add_form(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        with self.observe_children(self.committee) as children:
+            with freeze(FROZEN_NOW):
+                browser.open(self.committee)
+                factoriesmenu.add(u'Period')
+                browser.click_on('Save')
+
+        period = children['added'].pop()
+
+        persisted_values = get_persisted_values_for_obj(period)
+        expected = self.get_z3c_form_defaults()
 
         self.assertDictEqual(expected, persisted_values)
