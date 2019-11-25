@@ -16,20 +16,20 @@ msgstr ""
 
 #: ./opengever/core/lawgiver.zcml
 msgid "dispose"
-msgstr ""
+msgstr "livrer"
 
 #: ./opengever/core/lawgiver.zcml
 msgid "manage the repository"
-msgstr ""
+msgstr "administrer le système de classement"
 
 #: ./opengever/core/lawgiver.zcml
 msgid "trash"
-msgstr ""
+msgstr "mettre dans la corbeille"
 
 #: ./opengever/core/lawgiver.zcml
 msgid "use the REST API"
-msgstr ""
+msgstr "utiliser la REST API"
 
 #: ./opengever/core/lawgiver.zcml
 msgid "use the developer tools"
-msgstr ""
+msgstr "utiliser les outils de développement"

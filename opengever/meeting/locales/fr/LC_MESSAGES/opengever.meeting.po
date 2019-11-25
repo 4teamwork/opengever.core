@@ -1483,12 +1483,12 @@ msgstr "Adhésions"
 #. Default: "The proposal document is being checked out by ${creator}."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
 msgid "message_checkout_info"
-msgstr ""
+msgstr "Le document de requête a déjà un checkout par ${creator}."
 
 #. Default: "The committee ${committee_title} is no longer active."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
 msgid "message_committee_inactive_warning"
-msgstr ""
+msgstr "La commission ${committee_title} a été désactivée."
 
 #. Default: "Your changes were not saved, the protocol is locked by ${username}."
 #: ./opengever/meeting/browser/meetings/edit_meeting.py

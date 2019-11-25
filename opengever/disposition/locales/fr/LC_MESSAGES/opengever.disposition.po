@@ -303,12 +303,12 @@ msgstr "Actualisé par ${user}"
 #. Default: "No SIP Package generated for this disposition."
 #: ./opengever/disposition/browser/ech0160.py
 msgid "msg_no_sip_package_generated"
-msgstr ""
+msgstr "Aucun paquet SIP n'a encore été généré pour cette offre."
 
 #. Default: "SIP Package generated successfully."
 #: ./opengever/disposition/browser/ech0160.py
 msgid "msg_sip_package_sucessfully_generated"
-msgstr ""
+msgstr "Paquet SIP généré avec succès."
 
 #. Default: "Period"
 #: ./opengever/disposition/browser/templates/overview.pt

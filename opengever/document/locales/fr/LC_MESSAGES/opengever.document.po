@@ -65,7 +65,7 @@ msgstr "Annulation du checkout du document ${title} inabouti."
 
 #: ./opengever/document/checkout/checkin.py
 msgid "Could not check in ${title}, it is not a document."
-msgstr "${title} n'est pas un document, par consequent checkin n'a pas abouti."
+msgstr "${title} n'est pas un document, le checkout n'a donc pas abouti."
 
 #: ./opengever/document/checkout/checkin.py
 msgid "Could not check in document ${title}"
@@ -78,7 +78,7 @@ msgstr "Checkout de ${title} n'a pas abouti."
 
 #: ./opengever/document/checkout/checkout.py
 msgid "Could not check out object: ${title}, it is not a document."
-msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti."
+msgstr "${title} n'est pas un document, par consequent checkout n'a pas abouti."
 
 #: ./opengever/document/browser/overview.py
 msgid "Current version: ${version}"
@@ -196,7 +196,7 @@ msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire
 #. Default: "It's not possible to add E-mails as document, use portal_type ftw.mail.mail."
 #: ./opengever/document/document.py
 msgid "error_mail_upload_api"
-msgstr ""
+msgstr "Il n'est pas possible d'ajouter un E-mail en tant que document, ajoutez-le en tant que ftw.mail.mail."
 
 #. Default: "You have not selected any Items"
 #: ./opengever/document/browser/report.py
