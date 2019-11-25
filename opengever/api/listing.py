@@ -179,6 +179,14 @@ FILTERS = {
 DEFAULT_FIELDS = set()
 
 
+REQUIRED_FIELDS = set(['UID',
+                       'getIcon',
+                       'portal_type',
+                       'path',
+                       'id',
+                       'bumblebee_checksum'])
+
+
 def with_active_solr_only(func):
     """Raises an error if solr is not activated
     """
@@ -292,10 +300,11 @@ class Listing(SolrQueryBaseService):
         else:
             self.requested_fields = DEFAULT_FIELDS
 
-        fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
-              'bumblebee_checksum']
-        fl.extend(filter(None, map(self.get_field_index, self.requested_fields)))
-        return fl
+        solr_fields = set(self.solr.manager.schema.fields.keys())
+        requested_solr_fields = set([])
+        for field in self.requested_fields:
+            requested_solr_fields.add(self.get_field_index(field))
+        return list((requested_solr_fields | REQUIRED_FIELDS) & solr_fields)
 
     def prepare_additional_params(self, params):
         additional_params = {
