@@ -46,8 +46,10 @@ def safe_int(value, default=0):
 class SolrQueryBaseService(Service):
 
     field_mapping = {}
+
     default_fields = set()
     required_search_fields = set()
+    required_response_fields = set()
 
     def prepare_solr_query(self):
         params = self.request.form.copy()
@@ -114,6 +116,9 @@ class SolrQueryBaseService(Service):
                 self.is_field_allowed, self.requested_fields)
         else:
             self.requested_fields = self.default_fields
+
+        self.response_fields = (set(self.requested_fields) |
+                                self.required_response_fields)
 
         solr_fields = set(self.solr.manager.schema.fields.keys())
         requested_solr_fields = set([])

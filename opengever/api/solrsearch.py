@@ -100,7 +100,7 @@ class SolrSearchGet(SolrQueryBaseService):
         items = []
         for doc in docs:
             item = {}
-            for field in self.requested_fields:
+            for field in self.response_fields:
                 accessor = self.get_field_accessor(field)
                 value = getattr(doc, accessor, None)
                 if callable(value):

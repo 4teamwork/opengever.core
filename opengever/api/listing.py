@@ -89,6 +89,7 @@ FIELDS_WITH_MAPPING = {
     'description': ('Description', 'Description', 'Description'),
     'filename': ('filename', filename, 'filename'),
     'filesize': ('filesize', filesize, 'filesize'),
+    '@id': ("path", "getURL", "path"),
     'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
     'keywords': ('Subject', 'Subject', 'Subject'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
@@ -184,6 +185,8 @@ REQUIRED_SEARCH_FIELDS = set(['UID',
                               'id',
                               'bumblebee_checksum'])
 
+REQUIRED_RESPONSE_FIELDS = set(['@id'])
+
 
 def with_active_solr_only(func):
     """Raises an error if solr is not activated
@@ -202,6 +205,7 @@ def with_active_solr_only(func):
 class Listing(SolrQueryBaseService):
     """List of content items"""
 
+    required_response_fields = REQUIRED_RESPONSE_FIELDS
     field_mapping = FIELDS_WITH_MAPPING
     required_search_fields = REQUIRED_SEARCH_FIELDS
     other_allowed_fields = OTHER_FIELDS
@@ -334,7 +338,7 @@ class Listing(SolrQueryBaseService):
 
         res['items'] = []
         for item in items[start:start + rows]:
-            res['items'].append(self.create_list_item(item, self.requested_fields))
+            res['items'].append(self.create_list_item(item))
 
         facet_counts = self.extract_facets_from_response(resp)
 
@@ -373,10 +377,10 @@ class Listing(SolrQueryBaseService):
             return u'[{} TO {}]'.format(
                 to_iso8601(date_from), to_iso8601(date_to))
 
-    def create_list_item(self, item, fields):
+    def create_list_item(self, item):
         obj = IContentListingObject(item)
-        data = {'@id': obj.getURL()}
-        for field in fields:
+        data = {}
+        for field in self.response_fields:
             accessor = self.get_field_accessor(field)
             if isinstance(accessor, str):
                 value = getattr(obj, accessor, None)
