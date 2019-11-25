@@ -35,6 +35,7 @@ $task: "\e61a";
 $remote_task: "\e61b";
 $subtask: "\e619";
 $forwarding: "\e621";
+$period: $fa-var-calendar-alt;
 $personal_overview: "\e622";
 $proposal: "\e613";
 $submittedproposal: "\e613";
@@ -332,6 +333,15 @@ body.template-tabbed_view.portaltype-opengever-meeting-committeecontainer {
   @include watermark-icon($committeecontainer);
 }
 
+body.template-tabbed_view.portaltype-opengever-meeting-period {
+  @include heading-icon($char: $period, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
+  @include watermark-icon($char: $period, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
+}
+
 body.template-view.portaltype-opengever-meeting-proposaltemplate,
 body.template-tabbed_view.portaltype-opengever-meeting-proposaltemplate,
 body.template-tabbed_view.portaltype-opengever-meeting-proposal,
@@ -450,6 +460,10 @@ body.meeting-view{
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-proposal:before {
   content: $proposal;
+}
+#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-period:before {
+  content: fa-content($period);
+  font-family: 'Font Awesome 5 Free';
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-committee:before{
   content: $committee;
@@ -614,6 +628,12 @@ body.meeting-view{
 .contenttype-opengever-meeting-sablontemplate:before {content: $document;}
 .contenttype-opengever-actor:before {content: $actor;}
 .contenttype-ftw-mail-mail:before {content: $mail;}
+
+.contenttype-opengever-meeting-period:before {
+  content: fa-content($period);
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
 
 .contenttype-opengever-dossier-businesscasedossier,
 .contenttype-opengever-zug-bdarp-casedossier2,
