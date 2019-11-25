@@ -176,15 +176,13 @@ FILTERS = {
     ]
 }
 
-DEFAULT_FIELDS = set()
 
-
-REQUIRED_FIELDS = set(['UID',
-                       'getIcon',
-                       'portal_type',
-                       'path',
-                       'id',
-                       'bumblebee_checksum'])
+REQUIRED_SEARCH_FIELDS = set(['UID',
+                              'getIcon',
+                              'portal_type',
+                              'path',
+                              'id',
+                              'bumblebee_checksum'])
 
 
 def with_active_solr_only(func):
@@ -205,6 +203,7 @@ class Listing(SolrQueryBaseService):
     """List of content items"""
 
     field_mapping = FIELDS_WITH_MAPPING
+    required_search_fields = REQUIRED_SEARCH_FIELDS
     other_allowed_fields = OTHER_FIELDS
     allowed_fields = set(field_mapping.keys()) | other_allowed_fields
 
@@ -291,20 +290,6 @@ class Listing(SolrQueryBaseService):
 
     def parse_requested_fields(self, params):
         return params.get('columns', None)
-
-    def extract_field_list(self, params):
-        self.requested_fields = self.parse_requested_fields(params)
-        if self.requested_fields is not None:
-            self.requested_fields = filter(
-                self.is_field_allowed, self.requested_fields)
-        else:
-            self.requested_fields = DEFAULT_FIELDS
-
-        solr_fields = set(self.solr.manager.schema.fields.keys())
-        requested_solr_fields = set([])
-        for field in self.requested_fields:
-            requested_solr_fields.add(self.get_field_index(field))
-        return list((requested_solr_fields | REQUIRED_FIELDS) & solr_fields)
 
     def prepare_additional_params(self, params):
         additional_params = {

@@ -46,6 +46,8 @@ def safe_int(value, default=0):
 class SolrQueryBaseService(Service):
 
     field_mapping = {}
+    default_fields = set()
+    required_search_fields = set()
 
     def prepare_solr_query(self):
         params = self.request.form.copy()
@@ -102,8 +104,22 @@ class SolrQueryBaseService(Service):
                     facet_counts[field][facet]['label'] = facet
         return facet_counts
 
+    def parse_requested_fields(self, params):
+        return []
+
     def extract_field_list(self, params):
-        return ''
+        self.requested_fields = self.parse_requested_fields(params)
+        if self.requested_fields is not None:
+            self.requested_fields = filter(
+                self.is_field_allowed, self.requested_fields)
+        else:
+            self.requested_fields = self.default_fields
+
+        solr_fields = set(self.solr.manager.schema.fields.keys())
+        requested_solr_fields = set([])
+        for field in self.requested_fields:
+            requested_solr_fields.add(self.get_field_index(field))
+        return list((requested_solr_fields | self.required_search_fields) & solr_fields)
 
     def prepare_additional_params(self, params):
         return params

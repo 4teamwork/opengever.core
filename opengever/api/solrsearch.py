@@ -33,7 +33,7 @@ BLACKLISTED_ATTRIBUTES = set([
     'allowedRolesAndUsers',
 ])
 
-REQUIRED_FIELDS = set([
+REQUIRED_SEARCH_FIELDS = set([
     'UID',
     'path',
 ])
@@ -44,6 +44,8 @@ class SolrSearchGet(SolrQueryBaseService):
     """
 
     field_mapping = FIELD_MAPPING
+    default_fields = DEFAULT_FIELDS
+    required_search_fields = REQUIRED_SEARCH_FIELDS
 
     def extract_query(self, params):
         if 'q' in params:
@@ -80,21 +82,6 @@ class SolrSearchGet(SolrQueryBaseService):
         if requested_fields:
             return requested_fields.split(',')
         return requested_fields
-
-    def extract_field_list(self, params):
-        self.requested_fields = self.parse_requested_fields(params)
-        if self.requested_fields is not None:
-            self.requested_fields = filter(
-                self.is_field_allowed, self.requested_fields)
-        else:
-            self.requested_fields = DEFAULT_FIELDS
-
-        solr_fields = set(self.solr.manager.schema.fields.keys())
-        requested_solr_fields = set([])
-        for field in self.requested_fields:
-            requested_solr_fields.add(self.get_field_index(field))
-        return ','.join(
-            (requested_solr_fields | REQUIRED_FIELDS) & solr_fields)
 
     def reply(self):
         if not api.portal.get_registry_record(
