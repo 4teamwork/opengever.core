@@ -1,4 +1,8 @@
 from collective.elephantvocabulary import wrap_vocabulary
+from DateTime import DateTime
+from DateTime.interfaces import DateTimeError
+from ftw.solr.converters import to_iso8601
+from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
@@ -9,6 +13,7 @@ from plone import api
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from Products.CMFPlone.utils import safe_unicode
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -31,19 +36,6 @@ def translate_document_type(document_type):
         return document_type
     else:
         return term.title
-
-
-FACET_TRANSFORMS = {
-    'responsible': display_name,
-    'review_state': lambda state: translate(state, domain='plone',
-                                            context=getRequest()),
-    'document_type': translate_document_type,
-    'task_type': translate_task_type,
-    'checked_out': display_name,
-    'Creator': display_name,
-}
-
-DEFAULT_SORT_INDEX = 'modified'
 
 
 def filesize(obj):
@@ -96,31 +88,125 @@ def relative_path(brain):
     return '/'.join(content_path[portal_path_length:])
 
 
-# Mapping of field name -> (index, accessor, sort index)
-FIELDS_WITH_MAPPING = {
-    'bumblebee_checksum': (None, 'bumblebee_checksum', DEFAULT_SORT_INDEX),
-    'checked_out_fullname': ('checked_out', 'checked_out_fullname', 'checked_out'),
-    'creator': ('Creator', 'Creator', 'Creator'),
-    'description': ('Description', 'Description', 'Description'),
-    'filename': ('filename', filename, 'filename'),
-    'filesize': ('filesize', filesize, 'filesize'),
-    '@id': ("path", "getURL", "path"),
-    'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
-    'keywords': ('Subject', 'Subject', 'Subject'),
-    'mimetype': ('getContentType', 'getContentType', 'mimetype'),
-    'pdf_url': (None, 'preview_pdf_url', DEFAULT_SORT_INDEX),
-    'preview_url': (None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
-    'reference_number': ('reference', 'reference', 'reference'),
-    'relative_path': (None, relative_path, DEFAULT_SORT_INDEX),
-    'responsible_fullname': ('responsible', 'responsible_fullname', 'responsible'),
-    'review_state_label': ('review_state', 'translated_review_state',
-                           'review_state'),
-    'task_type': ('task_type', translated_task_type, 'task_type'),
-    'thumbnail_url': (None, 'preview_image_url', DEFAULT_SORT_INDEX),
-    'title': ('Title', translated_title, 'sortable_title'),
-    'type': ('portal_type', 'PortalType', 'portal_type'),
-    '@type': ('portal_type', 'PortalType', 'portal_type'),
-}
+class SimpleListingField(object):
+
+    def __init__(self, field_name):
+        self.field_name = field_name
+        self.index = field_name
+        self.accessor = field_name
+        self.sort_index = field_name
+
+    def listing_to_solr_filter(self, value):
+        """transforms the filter value from the request to
+        a filter query suitable for solr
+        """
+        if self.index is None:
+            return
+        if isinstance(value, list):
+            value = map(escape, value)
+            value = map(safe_unicode, value)
+            value = u' OR '.join(value)
+        else:
+            value = escape(value)
+        return u'{}:({})'.format(escape(self.index), value)
+
+    def index_value_to_label(self, value):
+        return value
+
+
+class ListingField(SimpleListingField):
+
+    def __init__(self, field_name, index, accessor=None, sort_index=None, transform=None):
+        self.field_name = field_name
+        self.index = index
+        self.accessor = accessor if accessor is not None else index
+        self.sort_index = sort_index if sort_index is not None else index
+        self.transform = transform
+
+    def index_value_to_label(self, value):
+        if self.transform is None:
+            return value
+        return self.transform(value)
+
+
+class DateListingField(SimpleListingField):
+
+    def _parse_dates(self, value):
+        if isinstance(value, list):
+            value = value[0]
+        if not isinstance(value, str):
+            return None, None
+
+        dates = value.split('TO')
+        if len(dates) == 2:
+            try:
+                date_from = DateTime(dates[0]).earliestTime()
+                date_to = DateTime(dates[1]).latestTime()
+            except DateTimeError:
+                return None, None
+        return date_from, date_to
+
+    def listing_to_solr_filter(self, value):
+        """transforms the filter value from the request to
+        a filter query suitable for solr
+        """
+        if self.index is None:
+            return
+        date_from, date_to = self._parse_dates(value)
+        if date_from is not None and date_to is not None:
+            value = u'[{} TO {}]'.format(
+                to_iso8601(date_from), to_iso8601(date_to))
+        return u'{}:({})'.format(escape(self.index), value)
+
+
+DEFAULT_SORT_INDEX = 'modified'
+
+FIELDS_WITH_MAPPING = [
+    ListingField('checked_out', 'checked_out', transform=display_name),
+    ListingField('bumblebee_checksum', None, sort_index=DEFAULT_SORT_INDEX),
+    ListingField('checked_out', 'checked_out', transform=display_name),
+    ListingField('checked_out_fullname', 'checked_out', 'checked_out_fullname'),
+    ListingField('creator', 'Creator', transform=display_name),
+    ListingField('description', 'Description'),
+    ListingField('document_type', 'document_type', transform=translate_document_type),
+    ListingField('filename', 'filename', filename),
+    ListingField('filesize', 'filesize', filesize),
+    ListingField('issuer_fullname', 'issuer', 'issuer_fullname'),
+    ListingField('keywords', 'Subject'),
+    ListingField('mimetype', 'getContentType', sort_index='mimetype'),
+    ListingField('pdf_url', None, 'preview_pdf_url', DEFAULT_SORT_INDEX),
+    ListingField('preview_url', None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
+    ListingField('reference_number', 'reference'),
+    ListingField('relative_path', None, relative_path, DEFAULT_SORT_INDEX),
+    ListingField('responsible', 'responsible', transform=display_name),
+    ListingField('responsible_fullname', 'responsible', 'responsible_fullname'),
+    ListingField('review_state', 'review_state',
+                 transform=lambda state: translate(
+                    state, domain='plone', context=getRequest())),
+    ListingField('review_state_label', 'review_state', 'translated_review_state'),
+    ListingField('task_type', 'task_type', translated_task_type),
+    ListingField('thumbnail_url', None, 'preview_image_url', DEFAULT_SORT_INDEX),
+    ListingField('title', 'Title', translated_title, 'sortable_title'),
+    ListingField('type', 'portal_type', 'PortalType'),
+    ListingField('@type', 'portal_type', 'PortalType'),
+    ListingField('@id', "path", "getURL"),
+    ]
+
+# Add date fields to FIELDS_WITH_MAPPING
+date_fields = set([
+    'changed',
+    'created',
+    'delivery_date',
+    'document_date',
+    'end',
+    'modified',
+    'receipt_date',
+    'start',
+    'deadline',
+])
+
+FIELDS_WITH_MAPPING.extend(
+    [DateListingField(field_name) for field_name in date_fields])
 
 
 def safe_int(value, default=0):
@@ -132,11 +218,15 @@ def safe_int(value, default=0):
 
 class SolrQueryBaseService(Service):
 
-    field_mapping = FIELDS_WITH_MAPPING
+    field_mapping = {field.field_name: field for field in FIELDS_WITH_MAPPING}
 
     default_fields = set()
     required_search_fields = set()
     required_response_fields = set()
+
+    def __init__(self, context, request):
+        super(SolrQueryBaseService, self).__init__(context, request)
+        self.default_sort_index = DEFAULT_SORT_INDEX
 
     def prepare_solr_query(self):
         params = self.request.form.copy()
@@ -182,15 +272,14 @@ class SolrQueryBaseService(Service):
 
     def extract_facets_from_response(self, resp):
         facet_counts = {}
-        for field, facets in resp.facets.items():
-            facet_counts[field] = {}
-            transform = FACET_TRANSFORMS.get(field)
+        for field_name, facets in resp.facets.items():
+            field = self.get_field(field_name)
+            facet_counts[field_name] = {}
             for facet, count in facets.items():
-                facet_counts[field][facet] = {"count": count}
-                if transform:
-                    facet_counts[field][facet]['label'] = transform(facet)
-                else:
-                    facet_counts[field][facet]['label'] = facet
+                facet_counts[field_name][facet] = {
+                    "count": count,
+                    "label": field.index_value_to_label(facet)
+                    }
         return facet_counts
 
     def parse_requested_fields(self, params):
@@ -219,20 +308,19 @@ class SolrQueryBaseService(Service):
     def is_field_allowed(self, field):
         return False
 
-    def get_field_index(self, field):
-        if field in self.field_mapping:
-            return self.field_mapping[field][0]
-        return field
+    def get_field(self, field_name):
+        if field_name in self.field_mapping:
+            return self.field_mapping[field_name]
+        return SimpleListingField(field_name)
 
-    def get_field_accessor(self, field):
-        if field in self.field_mapping:
-            return self.field_mapping[field][1]
-        return field
+    def get_field_index(self, field_name):
+        return self.get_field(field_name).index
 
-    def get_field_sort_index(self, field):
-        if field in self.field_mapping:
-            return self.field_mapping[field][2]
-        return field
+    def get_field_accessor(self, field_name):
+        return self.get_field(field_name).accessor
+
+    def get_field_sort_index(self, field_name):
+        return self.get_field(field_name).sort_index
 
     def create_list_item(self, doc):
         data = {}

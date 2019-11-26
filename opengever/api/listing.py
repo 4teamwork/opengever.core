@@ -51,17 +51,6 @@ OTHER_FIELDS = set([
     'changed',
     'delivery_date'])
 
-DATE_INDEXES = set([
-    'changed',
-    'created',
-    'delivery_date',
-    'document_date',
-    'end',
-    'modified',
-    'receipt_date',
-    'start',
-    'deadline',
-])
 
 FILTERS = {
     u'dossiers': [
@@ -97,6 +86,7 @@ REQUIRED_SEARCH_FIELDS = set(['UID',
                               'path',
                               'id',
                               'bumblebee_checksum'])
+
 
 REQUIRED_RESPONSE_FIELDS = set(['@id'])
 
@@ -167,36 +157,18 @@ class Listing(SolrQueryBaseService):
             filter_queries.append(u'path_depth:[* TO {}]'.format(max_path_depth))
 
         for key, value in filters.items():
-            if not self.is_field_allowed(key):
-                continue
-            key = self.get_field_index(key)
-            if key is None:
-                continue
-            if key in DATE_INDEXES:
-                # It seems solr needs date filters unescaped, hence we
-                # only escape the other filter values
-                value = self.daterange_filter(value)
-            elif isinstance(value, list):
-                value = map(escape, value)
-                value = map(safe_unicode, value)
-                value = u' OR '.join(value)
-            else:
-                value = escape(value)
-            if value is not None:
-                # XXX: Instead of littering all this code with safe_unicode,
-                # we should convert user-supplied input to unicode *once*
-                # at the system boundaries (when extracting values from
-                # self.request.form) once this endpoint gets refactored.
-                value = safe_unicode(value)
-                filter_queries.append(u'{}:({})'.format(escape(key), value))
+            field = self.get_field(key)
+            solr_filter = field.listing_to_solr_filter(value)
+            if solr_filter:
+                filter_queries.append(solr_filter)
         return filter_queries
 
     def extract_sort(self, params, query):
-        sort_on = params.get('sort_on', DEFAULT_SORT_INDEX)
+        sort_on = params.get('sort_on', self.default_sort_index)
         if self.is_field_allowed(sort_on):
             sort_on = self.get_field_sort_index(sort_on)
         else:
-            sort_on = DEFAULT_SORT_INDEX
+            sort_on = self.default_sort_index
 
         sort_order = params.get('sort_order', 'descending')
         sort = sort_on
@@ -265,26 +237,5 @@ class Listing(SolrQueryBaseService):
 
         return res
 
-    def parse_dates(self, value):
-        if isinstance(value, list):
-            value = value[0]
-        if not isinstance(value, str):
-            return None, None
-
-        dates = value.split('TO')
-        if len(dates) == 2:
-            try:
-                date_from = DateTime(dates[0]).earliestTime()
-                date_to = DateTime(dates[1]).latestTime()
-            except DateTimeError:
-                return None, None
-        return date_from, date_to
-
     def is_field_allowed(self, field):
         return field in self.allowed_fields
-
-    def daterange_filter(self, value):
-        date_from, date_to = self.parse_dates(value)
-        if date_from is not None and date_to is not None:
-            return u'[{} TO {}]'.format(
-                to_iso8601(date_from), to_iso8601(date_to))
