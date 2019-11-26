@@ -130,12 +130,14 @@ class Listing(SolrQueryBaseService):
         if context_uid:
             filter_queries.append(u'-UID:%s' % context_uid)
 
+        # By default exclude trashed content
         if 'trashed' not in filters:
             filter_queries.append(u'trashed:false')
         filter_queries.extend(FILTERS[self.listing_name])
         filter_queries.append(u'path_parent:{}'.format(escape(
             '/'.join(self.context.getPhysicalPath()))))
 
+        # By default search recursively
         depth = self.request.form.get('depth', -1)
         try:
             depth = int(depth)
@@ -147,6 +149,7 @@ class Listing(SolrQueryBaseService):
             max_path_depth = context_depth + depth
             filter_queries.append(u'path_depth:[* TO {}]'.format(max_path_depth))
 
+        # Add requested filters
         for key, value in filters.items():
             field = self.get_field(key)
             solr_filter = field.listing_to_solr_filter(value)
@@ -155,6 +158,9 @@ class Listing(SolrQueryBaseService):
         return filter_queries
 
     def extract_sort(self, params, query):
+        """ Extract the sort order, defaulting to sorting in descending
+        order on self.default_sort_index
+        """
         sort_on = params.get('sort_on', self.default_sort_index)
         if self.is_field_allowed(sort_on):
             sort_on = self.get_field_sort_index(sort_on)
@@ -174,6 +180,9 @@ class Listing(SolrQueryBaseService):
         return params.get('columns', None)
 
     def prepare_additional_params(self, params):
+        """ Extract the requested facet fields and prepare the
+        corresponding parameters for the solr query.
+        """
         additional_params = {
             'q.op': 'AND',
         }

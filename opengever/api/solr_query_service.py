@@ -240,6 +240,8 @@ class SolrQueryBaseService(Service):
         self.default_sort_index = DEFAULT_SORT_INDEX
 
     def prepare_solr_query(self):
+        """ Extract the requested parameters and prepare the solr query
+        """
         params = self.request.form.copy()
         query = self.extract_query(params)
         filters = self.extract_filters(params)
@@ -251,6 +253,8 @@ class SolrQueryBaseService(Service):
         return query, filters, start, rows, sort, field_list, additional_params
 
     def extract_start(self, params):
+        """Solrsearch endpoint uses start while listing endpoint uses start_b
+        """
         if 'start' in params:
             start = safe_int(params['start'])
             del params['start']
@@ -262,6 +266,8 @@ class SolrQueryBaseService(Service):
         return start
 
     def extract_rows(self, params):
+        """Solrsearch endpoint uses rows while listing endpoint uses b_size
+        """
         if 'rows' in params:
             rows = min(safe_int(params['rows'], 25), 1000)
             del params['rows']
@@ -282,6 +288,9 @@ class SolrQueryBaseService(Service):
         return None
 
     def extract_facets_from_response(self, resp):
+        """Extracts facets from solr response and prepares
+        counts and labels for endpoint response.
+        """
         facet_counts = {}
         for field_name, facets in resp.facets.items():
             field = self.get_field(field_name)
@@ -294,9 +303,14 @@ class SolrQueryBaseService(Service):
         return facet_counts
 
     def parse_requested_fields(self, params):
+        """Extracts requested fields from request
+        """
         return []
 
     def extract_field_list(self, params):
+        """Extracts fields from request and prepare the list
+        of solr fields for the query and for the response.
+        """
         self.requested_fields = self.parse_requested_fields(params)
         if self.requested_fields is not None:
             self.requested_fields = filter(
@@ -320,6 +334,7 @@ class SolrQueryBaseService(Service):
         return False
 
     def get_field(self, field_name):
+        """return a ListingField for a given field_name"""
         if field_name in self.field_mapping:
             return self.field_mapping[field_name]
         return SimpleListingField(field_name)
@@ -333,7 +348,8 @@ class SolrQueryBaseService(Service):
     def get_field_sort_index(self, field_name):
         return self.get_field(field_name).sort_index
 
-    def create_list_item(self, doc):
+    def _create_list_item(self, doc):
+        """Gather requested data from a ContentListingObject in a dict"""
         data = {}
         for field in self.response_fields:
             accessor = self.get_field_accessor(field)
@@ -347,8 +363,10 @@ class SolrQueryBaseService(Service):
         return data
 
     def prepare_response_items(self, resp):
+        """Extract documents from the Sorl response and return a list
+        of items containing the requested data"""
         docs = OGSolrContentListing(resp)
         items = []
         for doc in docs:
-            items.append(self.create_list_item(doc))
+            items.append(self._create_list_item(doc))
         return items
