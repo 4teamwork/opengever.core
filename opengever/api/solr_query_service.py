@@ -238,6 +238,7 @@ class SolrQueryBaseService(Service):
     def __init__(self, context, request):
         super(SolrQueryBaseService, self).__init__(context, request)
         self.default_sort_index = DEFAULT_SORT_INDEX
+        self.response_fields = None
 
     def prepare_solr_query(self):
         """ Extract the requested parameters and prepare the solr query
@@ -311,14 +312,14 @@ class SolrQueryBaseService(Service):
         """Extracts fields from request and prepare the list
         of solr fields for the query and for the response.
         """
-        self.requested_fields = self.parse_requested_fields(params)
-        if self.requested_fields is not None:
-            self.requested_fields = filter(
-                self.is_field_allowed, self.requested_fields)
+        requested_fields = self.parse_requested_fields(params)
+        if requested_fields is not None:
+            requested_fields = filter(
+                self.is_field_allowed, requested_fields)
         else:
-            self.requested_fields = self.default_fields
+            requested_fields = self.default_fields
 
-        self.response_fields = (set(self.requested_fields) |
+        self.response_fields = (set(requested_fields) |
                                 self.required_response_fields)
 
         solr_fields = set(self.solr.manager.schema.fields.keys())
