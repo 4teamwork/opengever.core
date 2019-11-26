@@ -7,15 +7,6 @@ from zExceptions import BadRequest
 from zope.component import getUtility
 
 
-DEFAULT_FIELDS = set([
-    '@id',
-    '@type',
-    'title',
-    'description',
-    'review_state',
-])
-
-
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
     'getObject',
@@ -28,8 +19,6 @@ BLACKLISTED_ATTRIBUTES = set([
 class SolrSearchGet(SolrQueryBaseService):
     """REST API endpoint for querying Solr
     """
-
-    default_fields = DEFAULT_FIELDS
 
     def extract_query(self, params):
         if 'q' in params:

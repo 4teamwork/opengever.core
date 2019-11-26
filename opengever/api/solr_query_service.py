@@ -165,6 +165,14 @@ class DateListingField(SimpleListingField):
 
 DEFAULT_SORT_INDEX = 'modified'
 
+DEFAULT_FIELDS = set([
+    '@id',
+    '@type',
+    'title',
+    'description',
+    'review_state',
+])
+
 FIELDS_WITH_MAPPING = [
     ListingField('checked_out', 'checked_out', transform=display_name),
     ListingField('bumblebee_checksum', 'bumblebee_checksum', sort_index=DEFAULT_SORT_INDEX),
@@ -224,7 +232,7 @@ class SolrQueryBaseService(Service):
 
     field_mapping = {field.field_name: field for field in FIELDS_WITH_MAPPING}
 
-    default_fields = set()
+    default_fields = DEFAULT_FIELDS
     required_response_fields = set()
 
     def __init__(self, context, request):
