@@ -82,10 +82,14 @@ def translated_task_type(obj):
     return task_type_helper(obj, obj.task_type)
 
 
-def relative_path(brain):
+def to_relative_path(value):
     portal_path_length = len(api.portal.get().getPhysicalPath())
-    content_path = brain.getPath().split('/')
+    content_path = value.split('/')
     return '/'.join(content_path[portal_path_length:])
+
+
+def relative_path(brain):
+    return to_relative_path(brain.getPath())
 
 
 class SimpleListingField(object):
@@ -177,7 +181,7 @@ FIELDS_WITH_MAPPING = [
     ListingField('pdf_url', None, 'preview_pdf_url', DEFAULT_SORT_INDEX),
     ListingField('preview_url', None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
     ListingField('reference_number', 'reference'),
-    ListingField('relative_path', None, relative_path, DEFAULT_SORT_INDEX),
+    ListingField('relative_path', 'path', relative_path, transform=to_relative_path),
     ListingField('responsible', 'responsible', transform=display_name),
     ListingField('responsible_fullname', 'responsible', 'responsible_fullname'),
     ListingField('review_state', 'review_state',
