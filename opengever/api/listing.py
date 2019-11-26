@@ -4,105 +4,21 @@ from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.solr_query_service import SolrQueryBaseService
-from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import ISearchSettings
-from opengever.base.utils import get_preferred_language_code
-from opengever.task.helper import task_type_helper
-from plone import api
 from plone.registry.interfaces import IRegistry
 from plone.restapi.batching import HypermediaBatch
-from plone.rfc822.interfaces import IPrimaryFieldInfo
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from Products.ZCatalog.Lazy import LazyMap
 from zExceptions import BadRequest
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
-import Missing
-
-DEFAULT_SORT_INDEX = 'modified'
-
-
-def translated_title(obj):
-    if ITranslatedTitleSupport.providedBy(obj):
-        attr = 'title_{}'.format(get_preferred_language_code())
-        return getattr(obj, attr, obj.Title())
-    else:
-        return obj.Title()
-
-
-def translated_task_type(obj):
-    return task_type_helper(obj, obj.task_type)
-
-
-def filesize(obj):
-    try:
-        filesize = obj.filesize
-        if filesize != Missing.Value:
-            return filesize
-    except AttributeError:
-        pass
-    try:
-        info = IPrimaryFieldInfo(obj.getObject())
-    except TypeError:
-        return 0
-    if info.value is None:
-        return 0
-    return info.value.size
-
-
-def filename(obj):
-    try:
-        filename = obj.filename
-        if filename != Missing.Value:
-            return filename
-    except AttributeError:
-        pass
-    try:
-        info = IPrimaryFieldInfo(obj.getObject())
-    except TypeError:
-        return None
-    if info.value is None:
-        return None
-    return info.value.filename
-
-
-def relative_path(brain):
-    portal_path_length = len(api.portal.get().getPhysicalPath())
-    content_path = brain.getPath().split('/')
-    return '/'.join(content_path[portal_path_length:])
 
 
 def get_path_depth(context):
     # This mirrors the implementation in ftw.solr
     return len(context.getPhysicalPath()) - 1
 
-
-# Mapping of field name -> (index, accessor, sort index)
-FIELDS_WITH_MAPPING = {
-    'bumblebee_checksum': (None, 'bumblebee_checksum', DEFAULT_SORT_INDEX),
-    'checked_out_fullname': ('checked_out', 'checked_out_fullname', 'checked_out'),
-    'creator': ('Creator', 'Creator', 'Creator'),
-    'description': ('Description', 'Description', 'Description'),
-    'filename': ('filename', filename, 'filename'),
-    'filesize': ('filesize', filesize, 'filesize'),
-    '@id': ("path", "getURL", "path"),
-    'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
-    'keywords': ('Subject', 'Subject', 'Subject'),
-    'mimetype': ('getContentType', 'getContentType', 'mimetype'),
-    'pdf_url': (None, 'preview_pdf_url', DEFAULT_SORT_INDEX),
-    'preview_url': (None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
-    'reference_number': ('reference', 'reference', 'reference'),
-    'relative_path': (None, relative_path, DEFAULT_SORT_INDEX),
-    'responsible_fullname': ('responsible', 'responsible_fullname', 'responsible'),
-    'review_state_label': ('review_state', 'translated_review_state',
-                           'review_state'),
-    'task_type': ('task_type', translated_task_type, 'task_type'),
-    'thumbnail_url': (None, 'preview_image_url', DEFAULT_SORT_INDEX),
-    'title': ('Title', translated_title, 'sortable_title'),
-    'type': ('portal_type', 'PortalType', 'portal_type'),
-    '@type': ('portal_type', 'PortalType', 'portal_type'),
-}
 
 OTHER_FIELDS = set([
     'file_extension',
@@ -203,10 +119,12 @@ class Listing(SolrQueryBaseService):
     """List of content items"""
 
     required_response_fields = REQUIRED_RESPONSE_FIELDS
-    field_mapping = FIELDS_WITH_MAPPING
     required_search_fields = REQUIRED_SEARCH_FIELDS
     other_allowed_fields = OTHER_FIELDS
-    allowed_fields = set(field_mapping.keys()) | other_allowed_fields
+
+    def __init__(self, context, request):
+        super(Listing, self).__init__(context, request)
+        self.allowed_fields = set(self.field_mapping.keys()) | self.other_allowed_fields
 
     def extract_query(self, params):
         term = params.get('search', '').strip()

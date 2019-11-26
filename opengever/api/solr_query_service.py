@@ -1,12 +1,18 @@
 from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
+from opengever.base.utils import get_preferred_language_code
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
+from opengever.task.helper import task_type_helper
+from plone import api
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
+from plone.rfc822.interfaces import IPrimaryFieldInfo
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import Missing
 
 
 def translate_task_type(task_type):
@@ -37,6 +43,85 @@ FACET_TRANSFORMS = {
     'Creator': display_name,
 }
 
+DEFAULT_SORT_INDEX = 'modified'
+
+
+def filesize(obj):
+    try:
+        filesize = obj.filesize
+        if filesize != Missing.Value:
+            return filesize
+    except AttributeError:
+        pass
+    try:
+        info = IPrimaryFieldInfo(obj.getObject())
+    except TypeError:
+        return 0
+    if info.value is None:
+        return 0
+    return info.value.size
+
+
+def filename(obj):
+    try:
+        filename = obj.filename
+        if filename != Missing.Value:
+            return filename
+    except AttributeError:
+        pass
+    try:
+        info = IPrimaryFieldInfo(obj.getObject())
+    except TypeError:
+        return None
+    if info.value is None:
+        return None
+    return info.value.filename
+
+
+def translated_title(obj):
+    if ITranslatedTitleSupport.providedBy(obj):
+        attr = 'title_{}'.format(get_preferred_language_code())
+        return getattr(obj, attr, obj.Title())
+    else:
+        return obj.Title()
+
+
+def translated_task_type(obj):
+    return task_type_helper(obj, obj.task_type)
+
+
+def relative_path(brain):
+    portal_path_length = len(api.portal.get().getPhysicalPath())
+    content_path = brain.getPath().split('/')
+    return '/'.join(content_path[portal_path_length:])
+
+
+# Mapping of field name -> (index, accessor, sort index)
+FIELDS_WITH_MAPPING = {
+    'bumblebee_checksum': (None, 'bumblebee_checksum', DEFAULT_SORT_INDEX),
+    'checked_out_fullname': ('checked_out', 'checked_out_fullname', 'checked_out'),
+    'creator': ('Creator', 'Creator', 'Creator'),
+    'description': ('Description', 'Description', 'Description'),
+    'filename': ('filename', filename, 'filename'),
+    'filesize': ('filesize', filesize, 'filesize'),
+    '@id': ("path", "getURL", "path"),
+    'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
+    'keywords': ('Subject', 'Subject', 'Subject'),
+    'mimetype': ('getContentType', 'getContentType', 'mimetype'),
+    'pdf_url': (None, 'preview_pdf_url', DEFAULT_SORT_INDEX),
+    'preview_url': (None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
+    'reference_number': ('reference', 'reference', 'reference'),
+    'relative_path': (None, relative_path, DEFAULT_SORT_INDEX),
+    'responsible_fullname': ('responsible', 'responsible_fullname', 'responsible'),
+    'review_state_label': ('review_state', 'translated_review_state',
+                           'review_state'),
+    'task_type': ('task_type', translated_task_type, 'task_type'),
+    'thumbnail_url': (None, 'preview_image_url', DEFAULT_SORT_INDEX),
+    'title': ('Title', translated_title, 'sortable_title'),
+    'type': ('portal_type', 'PortalType', 'portal_type'),
+    '@type': ('portal_type', 'PortalType', 'portal_type'),
+}
+
 
 def safe_int(value, default=0):
     try:
@@ -47,7 +132,7 @@ def safe_int(value, default=0):
 
 class SolrQueryBaseService(Service):
 
-    field_mapping = {}
+    field_mapping = FIELDS_WITH_MAPPING
 
     default_fields = set()
     required_search_fields = set()

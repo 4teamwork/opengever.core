@@ -15,13 +15,6 @@ DEFAULT_FIELDS = set([
     'review_state',
 ])
 
-# Field name -> (Solr field, accessor)
-FIELD_MAPPING = {
-    "@id": ("path", "getURL"),
-    "@type": ("portal_type", "PortalType"),
-    "title": ("Title", "Title"),
-    "description": ("Description", "Description"),
-}
 
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
@@ -41,7 +34,6 @@ class SolrSearchGet(SolrQueryBaseService):
     """REST API endpoint for querying Solr
     """
 
-    field_mapping = FIELD_MAPPING
     default_fields = DEFAULT_FIELDS
     required_search_fields = REQUIRED_SEARCH_FIELDS
 
