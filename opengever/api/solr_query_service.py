@@ -225,7 +225,6 @@ class SolrQueryBaseService(Service):
     field_mapping = {field.field_name: field for field in FIELDS_WITH_MAPPING}
 
     default_fields = set()
-    required_search_fields = set()
     required_response_fields = set()
 
     def __init__(self, context, request):
@@ -304,7 +303,7 @@ class SolrQueryBaseService(Service):
         requested_solr_fields = set([])
         for field in self.response_fields:
             requested_solr_fields.add(self.get_field_index(field))
-        return list((requested_solr_fields | self.required_search_fields) & solr_fields)
+        return list(requested_solr_fields & solr_fields)
 
     def prepare_additional_params(self, params):
         return params

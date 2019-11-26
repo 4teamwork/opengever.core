@@ -80,14 +80,6 @@ FILTERS = {
 }
 
 
-REQUIRED_SEARCH_FIELDS = set(['UID',
-                              'getIcon',
-                              'portal_type',
-                              'path',
-                              'id',
-                              'bumblebee_checksum'])
-
-
 REQUIRED_RESPONSE_FIELDS = set(['@id'])
 
 
@@ -109,7 +101,6 @@ class Listing(SolrQueryBaseService):
     """List of content items"""
 
     required_response_fields = REQUIRED_RESPONSE_FIELDS
-    required_search_fields = REQUIRED_SEARCH_FIELDS
     other_allowed_fields = OTHER_FIELDS
 
     def __init__(self, context, request):

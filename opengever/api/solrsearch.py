@@ -24,18 +24,12 @@ BLACKLISTED_ATTRIBUTES = set([
     'allowedRolesAndUsers',
 ])
 
-REQUIRED_SEARCH_FIELDS = set([
-    'UID',
-    'path',
-])
-
 
 class SolrSearchGet(SolrQueryBaseService):
     """REST API endpoint for querying Solr
     """
 
     default_fields = DEFAULT_FIELDS
-    required_search_fields = REQUIRED_SEARCH_FIELDS
 
     def extract_query(self, params):
         if 'q' in params:
