@@ -56,6 +56,18 @@ def oneoffixx_favorites_cachekey(*args):
     return '-'.join(('oneoffixx_favorites', api.user.get_current().id, str(timeout), str(time() // timeout), ))
 
 
+def oneoffixx_organization_cachekey(*args):
+    """Cache the organization id per user.
+
+    The timeout is configurable in the registry and used as a part of the cache
+    key so changing the timeout immediately invalidates all caches.
+    """
+    timeout = api.portal.get_registry_record(
+        'cache_timeout', interface=IOneoffixxSettings)
+    return '-'.join(('oneoffixx_organizations', api.user.get_current().id,
+                     str(timeout), str(time() // timeout), ))
+
+
 class OneoffixxAPIClientSingleton(type):
     """Ensure we have a shared configurable singleton of the client."""
 
@@ -274,7 +286,11 @@ class OneoffixxAPIClient(object):
             url = u'/'.join((self.get_oneoffixx_webservice_url(), 'TenantInfo'))
             response = self.session.get(url)
             response.raise_for_status()
-            templatelibrary_id = response.json()[0].get('datasources')[0].get('id')
+            primary_sources = [
+                source for source in response.json().get('datasources', []) if source.get('isPrimary')]
+            if not primary_sources:
+                raise OneoffixxBackendException('No primary datasources found')
+            templatelibrary_id = primary_sources[0].get('id')
         except requests.HTTPError as error:
             if response.status_code == 401:
                 self.refresh_access_token(invalidate=True)
@@ -289,8 +305,34 @@ class OneoffixxAPIClient(object):
                 )
         return templatelibrary_id
 
+    @ram.cache(oneoffixx_organization_cachekey)
+    def get_organization_id(self):
+        templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
+        url = u'/'.join((
+            self.get_oneoffixx_webservice_url(),
+            u'{}'.format(templatelibrary_id),
+            'OrganizationUnits'))
+
+        try:
+            response = self.session.get(url)
+            response.raise_for_status()
+            organization_id = response.json()[0]['id']
+        except requests.HTTPError as error:
+            if response.status_code == 401:
+                self.refresh_access_token(invalidate=True)
+                response = self.session.get(url)
+                response.raise_for_status()
+                organization_id = response.json()
+            else:
+                raise OneoffixxBackendException(
+                    'Unable to fetch organization id for the current user',
+                    response.text, error)
+
+        return organization_id
+
     @ram.cache(oneoffixx_template_groups_cachekey)
     def get_oneoffixx_template_groups(self):
+        organization_id = self.get_organization_id()
         templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
         url = u'/'.join((
             self.get_oneoffixx_webservice_url(),
@@ -299,7 +341,7 @@ class OneoffixxAPIClient(object):
             u'TemplateGroups',
         ))
         try:
-            response = self.session.get(url)
+            response = self.session.get(url, data={'orgId': organization_id})
             response.raise_for_status()
             template_groups = response.json()
         except requests.HTTPError as error:
@@ -314,6 +356,7 @@ class OneoffixxAPIClient(object):
 
     @ram.cache(oneoffixx_favorites_cachekey)
     def get_oneoffixx_favorites(self):
+        organization_id = self.get_organization_id()
         templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
         url = u'/'.join((
             self.get_oneoffixx_webservice_url(),
@@ -322,7 +365,7 @@ class OneoffixxAPIClient(object):
             u'TemplateFavorites',
         ))
         try:
-            response = self.session.get(url)
+            response = self.session.get(url, data={'orgId': organization_id})
             response.raise_for_status()
             favorites = response.json()
         except requests.HTTPError as error:

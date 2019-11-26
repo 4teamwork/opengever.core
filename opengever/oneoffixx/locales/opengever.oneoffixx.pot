@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-05 18:08+0000\n"
+"POT-Creation-Date: 2019-11-15 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,11 @@ msgstr ""
 #. Default: "All templates"
 #: ./opengever/oneoffixx/browser/form.py
 msgid "label_all_template_groups"
+msgstr ""
+
+#. Default: "Favorites"
+#: ./opengever/oneoffixx/browser/form.py
+msgid "label_favorites"
 msgstr ""
 
 #. Default: "Template"
