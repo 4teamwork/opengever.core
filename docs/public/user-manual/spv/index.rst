@@ -24,6 +24,6 @@ können Sie in den untenstehenden Kapiteln nachlesen.
    sitzung-abschliessen
    protokollgenehmigung
    sitzungsunterlagen-aufbereiten
-   periode-abschliessen
+   perioden-erfassen
 
 .. disqus::
