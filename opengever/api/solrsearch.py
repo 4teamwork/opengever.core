@@ -1,10 +1,8 @@
-from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_query
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from plone import api
 from zExceptions import BadRequest
-from zope.component import getUtility
 
 
 BLACKLISTED_ATTRIBUTES = set([
@@ -60,8 +58,6 @@ class SolrSearchGet(SolrQueryBaseService):
         if not api.portal.get_registry_record(
                 'use_solr', interface=ISearchSettings):
             raise BadRequest('Solr is not enabled on this GEVER installation.')
-
-        self.solr = getUtility(ISolrSearch)
 
         query, filters, start, rows, sort, field_list, params = self.prepare_solr_query()
 

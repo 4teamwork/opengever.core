@@ -1,4 +1,3 @@
-from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
@@ -200,8 +199,6 @@ class Listing(SolrQueryBaseService):
             raise BadRequest(
                 "Unknown listing {}. Available listings are: {}".format(
                     self.name, ",".join(FILTERS.keys())))
-
-        self.solr = getUtility(ISolrSearch)
 
         query, filters, start, rows, sort, field_list, params = self.prepare_solr_query()
 

@@ -2,6 +2,7 @@ from collective.elephantvocabulary import wrap_vocabulary
 from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
+from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.helpers import display_name
@@ -14,6 +15,7 @@ from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFPlone.utils import safe_unicode
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -253,6 +255,7 @@ class SolrQueryBaseService(Service):
 
     def __init__(self, context, request):
         super(SolrQueryBaseService, self).__init__(context, request)
+        self.solr = getUtility(ISolrSearch)
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
 
