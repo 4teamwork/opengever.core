@@ -1,6 +1,5 @@
 from copy import deepcopy
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from ftw.journal.interfaces import IAnnotationsJournalizable
 from opengever.base.helpers import display_name
 from opengever.base.vocabulary import voc_term_title
 from opengever.journal.entry import ManualJournalEntry
