@@ -302,7 +302,7 @@ class SolrQueryBaseService(Service):
 
         solr_fields = set(self.solr.manager.schema.fields.keys())
         requested_solr_fields = set([])
-        for field in self.requested_fields:
+        for field in self.response_fields:
             requested_solr_fields.add(self.get_field_index(field))
         return list((requested_solr_fields | self.required_search_fields) & solr_fields)
 
