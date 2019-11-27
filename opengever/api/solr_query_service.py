@@ -93,12 +93,23 @@ def relative_path(brain):
 
 
 class SimpleListingField(object):
+    """Mapping between a requested field_name, the corresponding index
+    in sol, the accessor on the ContentListingObject, and an index used
+    when sorting according to this field.
+
+    transform: used to cast the value of the index to a label
+
+    additional_required_fields: used for fields that need data from
+    other solr indexes on the ContentListingObject to get computed
+    """
 
     def __init__(self, field_name):
         self.field_name = field_name
         self.index = field_name
         self.accessor = field_name
         self.sort_index = field_name
+        self.transform = None
+        self.additional_required_fields = []
 
     def listing_to_solr_filter(self, value):
         """transforms the filter value from the request to
@@ -120,12 +131,14 @@ class SimpleListingField(object):
 
 class ListingField(SimpleListingField):
 
-    def __init__(self, field_name, index, accessor=None, sort_index=None, transform=None):
+    def __init__(self, field_name, index, accessor=None, sort_index=None,
+                 transform=None, additional_required_fields=[]):
         self.field_name = field_name
         self.index = index
         self.accessor = accessor if accessor is not None else index
         self.sort_index = sort_index if sort_index is not None else index
         self.transform = transform
+        self.additional_required_fields = additional_required_fields
 
     def index_value_to_label(self, value):
         if self.transform is None:
@@ -186,8 +199,10 @@ FIELDS_WITH_MAPPING = [
     ListingField('issuer_fullname', 'issuer', 'issuer_fullname'),
     ListingField('keywords', 'Subject'),
     ListingField('mimetype', 'getContentType', sort_index='mimetype'),
-    ListingField('pdf_url', None, 'preview_pdf_url', DEFAULT_SORT_INDEX),
-    ListingField('preview_url', None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
+    ListingField('pdf_url', None, 'preview_pdf_url', DEFAULT_SORT_INDEX,
+                 additional_required_fields=['bumblebee_checksum', 'path']),
+    ListingField('preview_url', None, 'get_preview_frame_url', DEFAULT_SORT_INDEX,
+                 additional_required_fields=['bumblebee_checksum', 'path']),
     ListingField('reference_number', 'reference'),
     ListingField('relative_path', 'path', relative_path, transform=to_relative_path),
     ListingField('responsible', 'responsible', transform=display_name),
@@ -197,7 +212,8 @@ FIELDS_WITH_MAPPING = [
                     state, domain='plone', context=getRequest())),
     ListingField('review_state_label', 'review_state', 'translated_review_state'),
     ListingField('task_type', 'task_type', translated_task_type),
-    ListingField('thumbnail_url', None, 'preview_image_url', DEFAULT_SORT_INDEX),
+    ListingField('thumbnail_url', None, 'preview_image_url', DEFAULT_SORT_INDEX,
+                 additional_required_fields=['bumblebee_checksum', 'path']),
     ListingField('title', 'Title', translated_title, 'sortable_title'),
     ListingField('type', 'portal_type', 'PortalType'),
     ListingField('@type', 'portal_type', 'PortalType'),
@@ -324,8 +340,11 @@ class SolrQueryBaseService(Service):
 
         solr_fields = set(self.solr.manager.schema.fields.keys())
         requested_solr_fields = set([])
-        for field in self.response_fields:
-            requested_solr_fields.add(self.get_field_index(field))
+        for field_name in self.response_fields:
+            field = self.get_field(field_name)
+            requested_solr_fields.add(field.index)
+            # certain fields require data from other solr fields to be computed.
+            requested_solr_fields.update(set(field.additional_required_fields))
         return list(requested_solr_fields & solr_fields)
 
     def prepare_additional_params(self, params):
