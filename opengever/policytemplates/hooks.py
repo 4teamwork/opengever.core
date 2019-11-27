@@ -55,7 +55,7 @@ def post_adminunit_title(configurator, question, answer):
 def post_adminunit_abbreviation(configurator, question, answer):
     configurator.defaults.update({
         'adminunit.id': answer.lower(),
-        'deployment.ldap_ou': 'OpenGever{}'.format(answer.capitalize()),
+        'deployment.ldap_ou': '{}'.format(answer.capitalize()),
         'deployment.rolemanager_group': 'og_{}_leitung'.format(answer),
         'deployment.records_manager_group': 'og_{}_records_manager'.format(answer),
         'deployment.archivist_group': 'og_{}_archiv'.format(answer),
