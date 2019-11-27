@@ -2,8 +2,6 @@
 extends =
     test-policy.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-dev.cfg
-{{% if setup.enable_bumblebee_feature %}}
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/bumblebee.cfg
-{{% endif %}}
 
 ogds-db-name = opengever{{{package.name}}}
