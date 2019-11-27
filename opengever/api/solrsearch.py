@@ -54,6 +54,18 @@ class SolrSearchGet(SolrQueryBaseService):
             return requested_fields.split(',')
         return requested_fields
 
+    def prepare_additional_params(self, params):
+        facet_fields = params.get('facet.field', [])
+        if not isinstance(facet_fields, list):
+            facet_fields = [facet_fields]
+        if facet_fields:
+            facet_fields = [
+                facet for facet in facet_fields
+                if self.is_field_allowed(facet) and
+                self.get_field_index(facet) in self.solr_fields]
+            params['facet.field'] = facet_fields
+        return params
+
     def reply(self):
         if not api.portal.get_registry_record(
                 'use_solr', interface=ISearchSettings):
