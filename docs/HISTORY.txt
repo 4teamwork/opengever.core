@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Do not manipulate the persisten journal list on @history get. [phgross]
+- Fix authorization handling when fetching the template_group_id. [phgross]
 
 
 2019.4.1 (2019-11-26)
