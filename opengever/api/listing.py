@@ -1,6 +1,3 @@
-from DateTime import DateTime
-from DateTime.interfaces import DateTimeError
-from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.solr_query_service import SolrQueryBaseService
@@ -200,7 +197,9 @@ class Listing(SolrQueryBaseService):
     def reply(self):
         self.listing_name = self.request.form.get('name')
         if self.listing_name not in FILTERS:
-            raise BadRequest
+            raise BadRequest(
+                "Unknown listing {}. Available listings are: {}".format(
+                    self.name, ",".join(FILTERS.keys())))
 
         self.solr = getUtility(ISolrSearch)
 
