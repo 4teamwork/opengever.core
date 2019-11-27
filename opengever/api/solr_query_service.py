@@ -256,6 +256,7 @@ class SolrQueryBaseService(Service):
     def __init__(self, context, request):
         super(SolrQueryBaseService, self).__init__(context, request)
         self.solr = getUtility(ISolrSearch)
+        self.solr_fields = set(self.solr.manager.schema.fields.keys())
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
 
@@ -341,14 +342,13 @@ class SolrQueryBaseService(Service):
         self.response_fields = (set(requested_fields) |
                                 self.required_response_fields)
 
-        solr_fields = set(self.solr.manager.schema.fields.keys())
         requested_solr_fields = set([])
         for field_name in self.response_fields:
             field = self.get_field(field_name)
             requested_solr_fields.add(field.index)
             # certain fields require data from other solr fields to be computed.
             requested_solr_fields.update(set(field.additional_required_fields))
-        return list(requested_solr_fields & solr_fields)
+        return list(requested_solr_fields & self.solr_fields)
 
     def prepare_additional_params(self, params):
         return params
