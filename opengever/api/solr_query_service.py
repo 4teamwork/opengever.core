@@ -79,7 +79,7 @@ def translated_title(obj):
 
 
 def translated_task_type(obj):
-    return task_type_helper(obj, obj.task_type)
+    return task_type_helper(obj, obj.get("task_type"))
 
 
 def to_relative_path(value):
