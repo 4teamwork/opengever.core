@@ -99,10 +99,13 @@
         {tabId: 'reminders',
          tabTitle: this.getDataAttribute('tab-title-reminders'),
          activities: this.filterActivitiesByType(values, 'reminder')},
-        {tabId: 'workspaces',
-         tabTitle: this.getDataAttribute('tab-title-workspaces'),
-         activities: this.filterActivitiesByType(values, 'workspace')},
       ];
+      if (this.getDataAttribute('show-workspaces') == 'True') {
+        tabs.push({tabId: 'workspaces',
+           tabTitle: this.getDataAttribute('tab-title-workspaces'),
+           activities: this.filterActivitiesByType(values, 'workspace')
+        });
+      }
       if (this.getDataAttribute('show-proposals') == 'True') {
         tabs.push({tabId: 'proposals',
            tabTitle: this.getDataAttribute('tab-title-proposals'),

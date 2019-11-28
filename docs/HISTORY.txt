@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Fix styling bug in tabbedview after showing bumblebee tooltip. [njohner]
+- Only show workspace notification tab when feature is activated. [njohner]
 - Do not manipulate the persisten journal list on @history get. [phgross]
 - Fix authorization handling when fetching the template_group_id. [phgross]
 
