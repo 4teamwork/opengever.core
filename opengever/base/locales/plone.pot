@@ -348,9 +348,6 @@ msgstr ""
 msgid "Submit additional document"
 msgstr ""
 
-msgid "Close current period"
-msgstr ""
-
 msgid "label_has_parse_errors"
 msgstr ""
 
@@ -358,9 +355,6 @@ msgid "document_from_officeatwork"
 msgstr ""
 
 msgid "document_with_oneoffixx_template"
-msgstr ""
-
-msgid "Close current period"
 msgstr ""
 
 msgid "disposition-state-appraised"

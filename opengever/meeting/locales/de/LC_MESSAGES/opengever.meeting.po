@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-19 16:06+0000\n"
+"POT-Creation-Date: 2019-11-25 15:25+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,15 +43,6 @@ msgstr "Mitgliedschaft hinzufügen"
 #: ./opengever/meeting/browser/committeeforms.py
 msgid "Add committee"
 msgstr "Gremium hinzufügen"
-
-#: ./opengever/meeting/browser/periods.py
-msgid "Add new period"
-msgstr "Neue Periode hinzufügen"
-
-#: ./opengever/meeting/browser/committeeforms.py
-#: ./opengever/meeting/browser/periods.py
-msgid "Add period"
-msgstr "Periode hinzufügen"
 
 #: ./opengever/meeting/command.py
 msgid "Additional document ${title} has been submitted successfully."
@@ -102,14 +93,6 @@ msgstr "Die Mitgliedschaft kann nicht geändert werden, weil sie eine bestehende
 msgid "Clear filter"
 msgstr "Filter leeren"
 
-#: ./opengever/meeting/browser/periods.py
-msgid "Close currently active period"
-msgstr "Aktuelle Periode abschliessen"
-
-#: ./opengever/meeting/browser/periods.py
-msgid "Close period"
-msgstr "Periode abschliessen"
-
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Closing the meeting will automatically (re-)create the protocol."
 msgstr "Das Protokoll wird automatisch neu generiert, als es keine manuelle Änderungen beinhaltet"
@@ -152,7 +135,7 @@ msgstr "Ab Vorlage"
 msgid "History"
 msgstr "Verlauf"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
+#: ./opengever/meeting/browser/meetings/meeting.py
 msgid "Insufficient privileges on meeting dossier"
 msgstr "Unzureichende Berechtigungen auf dem Sitzungsdossier"
 
@@ -173,6 +156,11 @@ msgstr "Sitzungsnummer"
 msgid "Memberships"
 msgstr "Mitgliedschaften"
 
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "Missing period"
+msgstr "Fehlende Periode"
+
+#: ./opengever/meeting/browser/committee.py
 #: ./opengever/meeting/browser/templates/overview.pt
 msgid "No content"
 msgstr "Keine Inhalte"
@@ -226,6 +214,14 @@ msgstr "Erfolgreich traktandiert"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "The meeting and its dossier were created successfully"
 msgstr "Die Sitzung und das dazugehörige Sitzungsdossier wurden erfolgreich erstellt."
+
+#: ./opengever/meeting/period.py
+msgid "The period's end date can't be before its start date."
+msgstr "Das End-Datum einer Periode kann nicht vor ihrem Start-Datum liegen."
+
+#: ./opengever/meeting/period.py
+msgid "The period's range overlaps the following periods: ${periods}"
+msgstr "Die Zeitspanne der Periode überschneidet die folgenden bestehenden Perioden: ${periods}"
 
 #: ./opengever/meeting/model/proposal.py
 msgid "The proposal has been rejected successfully"
@@ -418,16 +414,11 @@ msgid "attachments"
 msgstr "Beilage"
 
 #. Default: "Cancel"
-#: ./opengever/meeting/browser/committeeforms.py
 #: ./opengever/meeting/browser/documents/submit.py
 #: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/submitdocuments.py
 msgid "button_cancel"
 msgstr "Abbrechen"
-
-#. Default: "Close period"
-#: ./opengever/meeting/browser/periods.py
-msgid "button_close_period"
-msgstr "Periode abschliessen"
 
 #. Default: "Confirm"
 #: ./opengever/meeting/proposal_transition_comment.py
@@ -435,7 +426,6 @@ msgid "button_confirm"
 msgstr "Bestätigen"
 
 #. Default: "Continue"
-#: ./opengever/meeting/browser/committeeforms.py
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
 msgstr "Weiter"
@@ -605,10 +595,20 @@ msgstr "Falls sie die Originaldateien anstatt der PDF-Dateien als Zip herunterla
 msgid "desc_pdf_zip_contents"
 msgstr "Das Zip enthält eine PDF-Datei für jedes Dokument in dieser Sitzung und eine JSON-Datei mit der das Zip in die Sitzungsapp importiert werden kann."
 
+#. Default: "Only visible for managers. Only change this if you know what you are doing!"
+#: ./opengever/meeting/behaviors/period.py
+msgid "description_decision_sequence_number"
+msgstr "Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden."
+
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
 msgid "description_group"
 msgstr "Diese Gruppe kann die Kommission bearbeiten und einsehen."
+
+#. Default: "Only visible for managers. Only change this if you know what you are doing!"
+#: ./opengever/meeting/behaviors/period.py
+msgid "description_meeting_sequence_number"
+msgstr "Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden."
 
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -945,8 +945,8 @@ msgid "label_current_period"
 msgstr "Aktuelle Periode"
 
 #. Default: "Start date"
+#: ./opengever/meeting/behaviors/period.py
 #: ./opengever/meeting/browser/memberships.py
-#: ./opengever/meeting/browser/periods.py
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_date_from"
 msgstr "Von"
@@ -957,8 +957,8 @@ msgid "label_date_of_submission"
 msgstr "Eingereicht am"
 
 #. Default: "End date"
+#: ./opengever/meeting/behaviors/period.py
 #: ./opengever/meeting/browser/memberships.py
-#: ./opengever/meeting/browser/periods.py
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_date_to"
 msgstr "Bis"
@@ -979,6 +979,11 @@ msgstr "Abschliessen"
 #: ./opengever/meeting/proposal.py
 msgid "label_decision_number"
 msgstr "Beschlussnummer"
+
+#. Default: "Sequence number for decisions"
+#: ./opengever/meeting/behaviors/period.py
+msgid "label_decision_sequence_number"
+msgstr "Beschluss-Sequenzummer"
 
 #. Default: "Are you sure you want to delete this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1066,11 +1071,6 @@ msgstr "Abbrechen"
 #: ./opengever/meeting/browser/memberships.py
 msgid "label_edit_membership"
 msgstr "Mitgliedschaft bearbeiten"
-
-#. Default: "Edit Period"
-#: ./opengever/meeting/browser/periods.py
-msgid "label_edit_period"
-msgstr "Bearbeiten"
 
 #. Default: "Save"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1198,6 +1198,11 @@ msgstr "Sitzung abgeschlossen"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
 msgstr "Die Sitzung kann nicht storniert werden solange sie Traktanden hat."
+
+#. Default: "Sequence number for meetings"
+#: ./opengever/meeting/behaviors/period.py
+msgid "label_meeting_sequence_number"
+msgstr "Sitzungs-Sequenznummer"
 
 #. Default: "Meeting Template"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1361,9 +1366,9 @@ msgid "label_template_or_existing_document"
 msgstr "Antragsdokument"
 
 #. Default: "Title"
+#: ./opengever/meeting/behaviors/period.py
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/meetings/protocol.py
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_title"
 msgstr "Titel"
 
@@ -1617,6 +1622,11 @@ msgstr "Neu eingereichte Anträge"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "no_edit_permissions_on_meeting_dossier"
 msgstr "Sie haben keine Rechte das Sitzungsdossier zu bearbeiten und Inhalte hinzuzufügen:"
+
+#. Default: "There is no period available for the meeting date ${start}. You should either change the meeting date or add a new period to the committee:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_period_for_meeting_date"
+msgstr "Für das Sitzungsdatum ${start} ist keine Periode verfügbar. Sie sollten entweder das Sitzungsdatum anpassen oder eine neue Periode für das Gremium erfassen:"
 
 #. Default: "User does not have permission to view the meeting dossier:"
 #: ./opengever/meeting/browser/meetings/meeting.py

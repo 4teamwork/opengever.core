@@ -29,9 +29,6 @@ msgstr "Einchecken"
 msgid "Checkout"
 msgstr "Auschecken"
 
-msgid "Close current period"
-msgstr "Aktuelle Periode abschliessen"
-
 msgid "Committee Member"
 msgstr "Mitglied"
 
