@@ -361,7 +361,10 @@ def document_modified(context, event):
                 # Attribute name is different when changed through regular
                 # edit form vs. edit_public_trial form, so check for both
                 public_trial_changed = True
-            elif attr not in ('file', 'message', 'IDocumentMetadata.archival_file'):
+            elif attr not in ('file',
+                              'message',
+                              'IDocumentMetadata.archival_file',
+                              'IDocumentSchema.file'):
                 # We ignore cases where only the file was modified
                 metadata_changed = True
 

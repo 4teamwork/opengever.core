@@ -1,4 +1,5 @@
 from copy import deepcopy
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from hashlib import sha256
@@ -7,6 +8,7 @@ from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from opengever.testing.assets import path_to_asset
+from zope.annotation.interfaces import IAnnotations
 import jwt
 
 
@@ -284,6 +286,17 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
             comment='foobar',
             )
 
+        # Verify journal entries produced by the cycle
+        journal = IAnnotations(self.document, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
+            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        expected_actions = ['Document added',
+                            'Document checked out',
+                            'File copy downloaded',
+                            'File copy downloaded',
+                            'Document checked in']
+        self.assertEquals(expected_actions,
+                          [entry["action"]["type"] for entry in journal])
+
     @browsing
     def test_checkout_checkin_inactive_without_file(self, browser):
         self.login(self.regular_user, browser)
@@ -399,6 +412,17 @@ class TestOfficeconnectorDossierAPIWithCheckoutWithRESTAPI(TestOfficeconnectorDo
 
         self.unlock_document_via_api(browser, raw_token, payloads[0], self.document)
         self.checkin_document_via_api(browser, raw_token, payloads[0], self.document, comment='foobar')
+
+        # Verify journal entries produced by the cycle
+        journal = IAnnotations(self.document, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
+            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        expected_actions = ['Document added',
+                            'Document checked out',
+                            'File copy downloaded',
+                            'File copy downloaded',
+                            'Document checked in']
+        self.assertEquals(expected_actions,
+                          [entry["action"]["type"] for entry in journal])
 
     @browsing
     def test_checkout_checkin_open_with_file_without_comment(self, browser):
