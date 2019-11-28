@@ -55,12 +55,12 @@ def post_adminunit_title(configurator, question, answer):
 def post_adminunit_abbreviation(configurator, question, answer):
     configurator.defaults.update({
         'adminunit.id': answer.lower(),
-        'deployment.ldap_ou': 'OpenGever{}'.format(answer.capitalize()),
-        'deployment.rolemanager_group': 'og_{}_leitung'.format(answer),
-        'deployment.records_manager_group': 'og_{}_records_manager'.format(answer),
-        'deployment.archivist_group': 'og_{}_archiv'.format(answer),
-        'orgunit.users_group': 'og_{}_benutzer'.format(answer),
-        'orgunit.inbox_group': 'og_{}_sekretariat'.format(answer),
+        'deployment.ldap_ou': '{}'.format(answer.capitalize()),
+        'deployment.rolemanager_group': '{}_admins'.format(answer),
+        'deployment.records_manager_group': '{}_admins'.format(answer),
+        'deployment.archivist_group': '{}_admins'.format(answer),
+        'orgunit.users_group': '{}_users'.format(answer),
+        'orgunit.inbox_group': '{}_inbox'.format(answer),
         'orgunit.id': answer.lower()
     })
     return answer

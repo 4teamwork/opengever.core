@@ -52,9 +52,7 @@
       policy_profile="opengever.{{{package.name}}}:default"
       additional_profiles="opengever.{{{package.name}}}:units
                            opengever.{{{package.name}}}:default_content
-                           {{% if setup.enable_casauth -%}}
                            opengever.setup:casauth
-                           {{% endif -%}}
                           "
       admin_unit_id="{{{adminunit.id}}}"
       rolemanager_group="{{{deployment.rolemanager_group}}}"
