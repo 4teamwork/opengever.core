@@ -69,22 +69,28 @@
     $(target).closest('.x-grid3-row').addClass('bumblebee-tooltip-active');
   }
 
-  function deactivateTableCells(target) {
+  function deactivateOtherTableCells(target) {
     $(target).closest('.x-grid3-row').siblings().removeClass('bumblebee-tooltip-active');
+  }
+
+  function deactivateTableCell(target) {
+    $(target).closest('.x-grid3-row').removeClass('bumblebee-tooltip-active');
   }
 
   function showBackdrop(event) {
     var target = event.originalEvent.target;
-    deactivateTableCells(target);
+    deactivateOtherTableCells(target);
     clearTimeout(tooltipHideTimer);
     $('body').addClass('bumblebee-tooltip-open');
     activateTableCell(target);
   }
 
-  function hideBackdrop() {
+  function hideBackdrop(event) {
     tooltipHideTimer = setTimeout(function() {
       $('body').removeClass('bumblebee-tooltip-open');
     }, settings.hide.delay / 2);
+    var target = event.originalEvent.target;
+    deactivateTableCell(target);
   }
 
   function closeTooltips(event, api) {
