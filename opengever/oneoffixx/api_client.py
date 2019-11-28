@@ -280,23 +280,27 @@ class OneoffixxAPIClient(object):
             ram.global_cache.invalidate(oneoffixx_access_token_cachekey())
         self.session.headers.update({'Authorization': ' '.join(('Bearer', self.get_oneoffixx_access_token()))})
 
+    def extract_templatelibrary_id(self, response):
+        data_sources = response.json().get('datasources', [])
+        primary_sources = [
+            source for source in data_sources if source.get('isPrimary')]
+        if not primary_sources:
+            raise OneoffixxBackendException('No primary datasources found')
+        return primary_sources[0].get('id')
+
     @ram.cache(oneoffixx_templatelibrary_id_cachekey)
     def get_oneoffixx_templatelibrary_id(self):
         try:
             url = u'/'.join((self.get_oneoffixx_webservice_url(), 'TenantInfo'))
             response = self.session.get(url)
             response.raise_for_status()
-            primary_sources = [
-                source for source in response.json().get('datasources', []) if source.get('isPrimary')]
-            if not primary_sources:
-                raise OneoffixxBackendException('No primary datasources found')
-            templatelibrary_id = primary_sources[0].get('id')
+            templatelibrary_id = self.extract_templatelibrary_id(response)
         except requests.HTTPError as error:
             if response.status_code == 401:
                 self.refresh_access_token(invalidate=True)
                 response = self.session.get(url)
                 response.raise_for_status()
-                templatelibrary_id = response.json()[0].get('datasources')[0].get('id')
+                templatelibrary_id = self.extract_templatelibrary_id(response)
             else:
                 raise OneoffixxBackendException(
                     'Unable to fetch the template library id from Oneoffixx.',
