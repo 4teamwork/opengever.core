@@ -666,7 +666,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:${object_url}/@@sharing</property>
       <property name="icon_expr" />
-      <property name="available_expr">python:not here.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspace')</property>
+      <property name="available_expr" />
       <property name="permissions">
         <element value="Sharing page: Delegate roles" />
       </property>
