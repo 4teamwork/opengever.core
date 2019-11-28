@@ -38,7 +38,8 @@
                            data-tab-title-dispositions view/tab_title_dispositions;
                            data-tab-title-workspaces view/tab_title_workspaces;
                            data-show-disposition view/show_disposition_tab;
-                           data-show-proposals view/show_proposals_tab;">
+                           data-show-proposals view/show_proposals_tab;
+                           data-show-workspaces view/show_workspaces_tab;">
 
         <tbody>
           <tal:block tal:replace="structure view/render_form_template"></tal:block>

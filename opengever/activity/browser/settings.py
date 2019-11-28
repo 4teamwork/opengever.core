@@ -8,12 +8,12 @@ from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.activity.roles import DOSSIER_RESPONSIBLE_ROLE
-from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
-from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.json_response import JSONResponse
 from opengever.base.model import create_session
@@ -21,6 +21,7 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.task.response_description import ResponseDescription
+from opengever.workspace import is_workspace_feature_enabled
 from path import Path
 from plone import api
 from Products.Five import BrowserView
@@ -417,3 +418,6 @@ class NotificationSettingsForm(BrowserView):
 
     def show_proposals_tab(self):
         return is_meeting_feature_enabled()
+
+    def show_workspaces_tab(self):
+        return is_workspace_feature_enabled()
