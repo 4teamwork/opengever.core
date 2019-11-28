@@ -1,5 +1,8 @@
-from opengever.core.cached_testing import BUILDOUT_DIR
+from collective.indexing.queue import processQueue
+from ftw.solr.interfaces import ISolrConnectionManager
+from path import Path
 from threading import Thread
+from zope.component import getUtility
 import atexit
 import errno
 import io
@@ -9,6 +12,9 @@ import signal
 import socket
 import subprocess
 import time
+
+
+BUILDOUT_DIR = Path(__file__).joinpath('..', '..', '..').abspath()
 
 
 class SolrServer(object):
@@ -39,6 +45,19 @@ class SolrServer(object):
         atexit.register(self.stop)
         self._running = True
         return self
+
+    def commit(self):
+        """Commit any pending updates in Solr.
+        """
+        conn = getUtility(ISolrConnectionManager)
+
+        if not self._configured or conn.connection is None:
+            raise Exception("Attempt to commit Solr in a test that didn't set "
+                            "up Solr (properly). Make sure your test case uses "
+                            "the OPENGEVER_SOLR_INTEGRATION_TESTING layer.")
+
+        processQueue()
+        conn.connection.commit()
 
     def stop(self):
         """Make sure the solr server is stopped.
@@ -93,7 +112,7 @@ class SolrServer(object):
         self._running = False
 
     def _run_server_process(self):
-        command = ['bin/solr', 'fg']
+        command = [BUILDOUT_DIR.joinpath('bin/solr'), 'fg']
         env = os.environ.copy()
         env.setdefault('SOLR_PORT', str(self.port))
         self._stdout = io.StringIO()
