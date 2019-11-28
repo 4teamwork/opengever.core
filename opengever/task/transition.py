@@ -253,17 +253,18 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
         if self.context.revoke_permissions:
             LocalRolesSetter(self.context).revoke_roles()
 
-        former_responsible = ITask['responsible']
-        former_responsible_client = ITask['responsible_client']
-
         self.context.clear_reminder(self.context.responsible)
 
-        changes = (
-            (former_responsible, transition_params.get('responsible')),
-            (former_responsible_client, transition_params.get('responsible_client')))
+        responsible_client = transition_params.get('responsible_client')
+        responsible = transition_params.get('responsible')
+
+        changes = [(ITask['responsible'], responsible)]
+        if ITask(self.context).responsible_client != responsible_client:
+            changes.append((ITask['responsible_client'], responsible_client))
         response = add_simple_response(
-            self.context, transition=transition, text=transition_params.get('text'),
-            field_changes=changes, supress_events=True)
+            self.context, transition=transition,
+            text=transition_params.get('text'), field_changes=changes,
+            supress_events=True)
 
         self.save_related_items(response, transition_params.get('relatedItems'))
         self.change_responsible(transition_params)
@@ -274,8 +275,7 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
             sync_task_response(
                 self.context, getRequest(), 'workflow',
                 transition, transition_params.get('text'),
-                responsible=transition_params.get('responsible'),
-                responsible_client=transition_params.get('responsible_client'))
+                responsible=responsible, responsible_client=responsible_client)
 
     def change_responsible(self, transition_params):
         self.context.responsible_client = transition_params.get('responsible_client')
