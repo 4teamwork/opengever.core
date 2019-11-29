@@ -245,6 +245,25 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
             [oguid.resolve_object().title for oguid in oguids])
 
     @browsing
+    def test_added_task_is_part_of_sequence(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.sequential_task) as subtasks:
+            browser.open(self.sequential_task,
+                         view='++add++opengever.task.task?position=1')
+            browser.fill({'Title': 'Subtask', 'Task Type': 'comment'})
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill(self.secretariat_user)
+            browser.click_on('Save')
+
+        additional_task, = subtasks['added']
+        self.assertTrue(IFromSequentialTasktemplate.providedBy(additional_task))
+
+        self.assertEquals(
+            additional_task.get_sql_object(),
+            self.seq_subtask_1.get_sql_object().tasktemplate_successor)
+
+    @browsing
     def test_adds_task_to_the_end_if_no_position_is_given(self, browser):
         self.login(self.regular_user, browser=browser)
 

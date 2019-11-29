@@ -6,6 +6,7 @@ Changelog
 
 - Register virtual host monster on site setup for testserver [bierik]
 - Fix setting agenda item description. [deiferni]
+- Fix automatic start of additionally added sequential tasks. [phgross]
 - Fix styling bug in tabbedview after showing bumblebee tooltip. [njohner]
 - Only show workspace notification tab when feature is activated. [njohner]
 - Fix response text for responsible changes to the same user. [phgross]
