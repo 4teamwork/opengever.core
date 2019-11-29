@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 
-version = '2019.4.2.dev0'
+version = '2019.4.2'
 maintainer = '4teamwork AG'
 
 
