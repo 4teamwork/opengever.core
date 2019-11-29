@@ -1,8 +1,8 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.exceptions import OneoffixxBackendException
-from opengever.oneoffixx.exceptions import OneoffixxConfigurationException
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.oneoffixx.utils import whitelisted_template_types
 from opengever.testing import IntegrationTestCase
@@ -360,9 +360,10 @@ class TestCreateDocFromUnconfiguredOneoffixxTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
         browser.exception_bubbling = True
+        factoriesmenu.add('document_with_oneoffixx_template')
+
         # Do note this will not fail if you actually do have the config file!
-        with self.assertRaises(OneoffixxConfigurationException):
-            factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
 
 
 class TestCreateDocFromUnconfiguredOneoffixxFakeSIDTemplate(IntegrationTestCase):
@@ -379,8 +380,9 @@ class TestCreateDocFromUnconfiguredOneoffixxFakeSIDTemplate(IntegrationTestCase)
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
         browser.exception_bubbling = True
-        with self.assertRaises(OneoffixxConfigurationException):
-            factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('document_with_oneoffixx_template')
+
+        self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
 
 
 class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
@@ -440,8 +442,9 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
         browser.exception_bubbling = True
-        with self.assertRaises(OneoffixxBackendException):
-            factoriesmenu.add('document_with_oneoffixx_template')
+
+        factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
 
     @browsing
     def test_template_groups_bad_return(self, browser):
@@ -458,8 +461,10 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
         browser.exception_bubbling = True
-        with self.assertRaises(OneoffixxBackendException):
-            factoriesmenu.add('document_with_oneoffixx_template')
+
+        factoriesmenu.add('document_with_oneoffixx_template')
+
+        self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
 
 
 class TestOneOffixxTemplateFeature(IntegrationTestCase):

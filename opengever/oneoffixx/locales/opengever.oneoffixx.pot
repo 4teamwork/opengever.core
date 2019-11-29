@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-15 14:40+0000\n"
+"POT-Creation-Date: 2019-11-29 13:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,4 +55,9 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/oneoffixx/browser/form.py
 msgid "label_title"
+msgstr ""
+
+#. Default: "Connection to OneOffixx failed."
+#: ./opengever/oneoffixx/browser/form.py
+msgid "msg_could_not_connect_to_oneoffixx"
 msgstr ""

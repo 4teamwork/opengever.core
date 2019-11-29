@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Register virtual host monster on site setup for testserver [bierik]
+- Catch oneoffixx api calls failures and show statusmessage instead. [phgross]
 - Fix setting agenda item description. [deiferni]
 - Fix automatic start of additionally added sequential tasks. [phgross]
 - Fix styling bug in tabbedview after showing bumblebee tooltip. [njohner]
