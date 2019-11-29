@@ -429,6 +429,17 @@ class TestWorkspaceSharing(IntegrationTestCase):
             [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
+    def test_available_roles_on_a_workspace_folder(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.workspace_folder, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'WorkspaceAdmin', u'WorkspaceMember', u'WorkspaceGuest'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
     def test_only_workspace_users_are_shown_for_workspace_admin_on_workspace(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
@@ -473,3 +484,45 @@ class TestWorkspaceSharing(IntegrationTestCase):
              u'hans.peter', u'beatrice.schrodinger'],
             [entry['id'] for entry in browser.json.get('entries')])
 
+    @browsing
+    def test_only_workspace_users_are_shown_for_workspace_admin_on_workspace_folder(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace_folder,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger'],
+            [entry['id'] for entry in browser.json.get('entries')])
+
+    @browsing
+    def test_only_workspace_users_are_shown_for_workspace_owner_on_workspace_folder(self, browser):
+        self.login(self.workspace_owner, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace_folder,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger'],
+            [entry['id'] for entry in browser.json.get('entries')])
+
+    @browsing
+    def test_all_users_are_shown_for_admins_on_workspace_folder(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace_folder,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'nicole.kohler', u'fridolin.hugentobler',
+             u'hans.peter', u'beatrice.schrodinger'],
+            [entry['id'] for entry in browser.json.get('entries')])
