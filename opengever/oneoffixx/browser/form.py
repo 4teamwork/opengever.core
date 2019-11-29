@@ -1,9 +1,11 @@
 from copy import deepcopy
 from opengever.base.schema import TableChoice
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.oneoffixx import _
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.command import CreateDocumentFromOneOffixxTemplateCommand
 from opengever.oneoffixx.utils import whitelisted_template_types
+from plone import api
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
@@ -221,3 +223,15 @@ class SelectOneOffixxTemplateDocumentWizardStep(Form):
 class SelectOneOffixxTemplateDocumentView(FormWrapper):
 
     form = SelectOneOffixxTemplateDocumentWizardStep
+
+    def __call__(self):
+        try:
+            return super(SelectOneOffixxTemplateDocumentView, self).__call__()
+        except Exception as exc:
+            log_msg_to_sentry(exc.message, context=self.context,
+                              request=self.request, url=self.request.URL)
+
+            msg = _(u'msg_could_not_connect_to_oneoffixx',
+                    u'Connection to OneOffixx failed.')
+            api.portal.show_message(message=msg, request=self.request, type='error')
+            self.request.RESPONSE.redirect(self.context.absolute_url())
