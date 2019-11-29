@@ -58,6 +58,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
@@ -600,6 +601,7 @@ class Task(Container, TaskReminderSupport):
             return annotations.get(TASK_PROCESS_ORDER_KEY)
 
     def add_task_to_tasktemplate_order(self, position, task):
+        alsoProvides(task, IFromSequentialTasktemplate)
         subtasks = self.get_tasktemplate_order()
         subtasks.insert(position, Oguid.for_object(task))
 
