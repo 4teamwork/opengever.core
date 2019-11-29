@@ -12,6 +12,15 @@
       />
 
   <browser:page
+      name="sharing"
+      for="opengever.workspace.interfaces.IWorkspace"
+      class=".sharing.WorkspaceSharingView"
+      permission="plone.DelegateRoles"
+      layer="opengever.sharing.interfaces.IOpengeverSharing"
+      allowed_attributes="saved"
+      />
+
+  <browser:page
       name="updateSharingInfo"
       for="*"
       class=".sharing.OpengeverSharingView"
