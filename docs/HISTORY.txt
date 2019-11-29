@@ -10,6 +10,8 @@ Changelog
 - Fix response text for responsible changes to the same user. [phgross]
 - Do not manipulate the persisten journal list on @history get. [phgross]
 - Fix authorization handling when fetching the template_group_id. [phgross]
+- Do not add document modified journal entry when saving file with OC RESTAPI. [njohner]
+- Do not manipulate the persistent journal list on @journal get. [phgross]
 
 
 2019.4.1 (2019-11-26)
