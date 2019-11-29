@@ -161,7 +161,7 @@ class AgendaItem(Base):
     def set_description(self, description):
         if self.has_proposal:
             self.submitted_proposal.description = description
-            self.submitted_proposal.sync_model()
+            self.proposal.sync_with_submitted_proposal(self.submitted_proposal)
         else:
             self.description = description
 

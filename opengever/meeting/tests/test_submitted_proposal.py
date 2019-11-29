@@ -89,7 +89,7 @@ class TestSubmittedProposal(IntegrationTestCase):
             [attribute.get('label') for attribute in attributes],
             )
 
-    def test_sql_index_proposal_title_is_updated(self):
+    def test_sql_index_proposal_title_and_description_are_updated(self):
         # an agenda item is needed for this test
         self.login(self.committee_responsible)
         self.meeting.model.schedule_proposal(self.proposal.load_model())
@@ -97,9 +97,13 @@ class TestSubmittedProposal(IntegrationTestCase):
         self.assertEquals(agenda_item.get_title(), agenda_item.proposal.submitted_title)
 
         agenda_item.set_title('New agenda item title')
+        agenda_item.set_description('New agenda item description')
 
         self.assertEquals('New agenda item title', agenda_item.get_title())
         self.assertEquals('New agenda item title', agenda_item.proposal.submitted_title)
+
+        self.assertEquals('New agenda item description', agenda_item.get_description())
+        self.assertEquals('New agenda item description', agenda_item.proposal.submitted_description)
 
     def test_get_containing_dossier_for_submitted_proposal_if_on_same_admin_unit(self):
         self.login(self.committee_responsible)
