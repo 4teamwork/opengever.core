@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.4.3 (unreleased)
+2019.5.0 (unreleased)
 ---------------------
 
 - Make Period a proper plone content type. Migrate old SQL base periods. [deiferni]
