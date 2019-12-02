@@ -21,11 +21,15 @@ class Period(Container):
     def get_current(committee, date=None, unrestricted=False):
         """Return today's period for committe."""
 
-        date = date or datetime.date.today()
+        start_date = date or datetime.date.today()
+
+        if isinstance(start_date, datetime.datetime):
+            start_date = start_date.date()
+
         query = {
             'portal_type': 'opengever.meeting.period',
-            'start': {'query': date, 'range': 'max'},
-            'end': {'query': date, 'range': 'min'},
+            'start': {'query': start_date, 'range': 'max'},
+            'end': {'query': start_date, 'range': 'min'},
             'path': '/'.join(committee.getPhysicalPath()),
         }
 

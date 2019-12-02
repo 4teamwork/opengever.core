@@ -352,6 +352,12 @@ class TestGetCurrentPeriod(IntegrationTestCase):
         self.assertEqual(
             self.period, Period.get_current(self.committee, date(2016, 12, 31)))
 
+    def test_return_period_last_date_of_range_with_datetime(self):
+        self.login(self.committee_responsible)
+        self.assertEqual(
+            self.period, Period.get_current(
+                self.committee, datetime(2016, 12, 31, 12, 59, tzinfo=pytz.utc)))
+
     def test_returns_none_when_date_before_period_range(self):
         self.login(self.committee_responsible)
         self.assertIsNone(Period.get_current(self.committee, date(2013, 1, 1)))
