@@ -73,8 +73,8 @@
     $(target).closest('.x-grid3-row').siblings().removeClass('bumblebee-tooltip-active');
   }
 
-  function deactivateTableCell(target) {
-    $(target).closest('.x-grid3-row').removeClass('bumblebee-tooltip-active');
+  function deactivateActiveTableCells() {
+    $('body .bumblebee-tooltip-active').removeClass('bumblebee-tooltip-active');
   }
 
   function showBackdrop(event) {
@@ -88,9 +88,8 @@
   function hideBackdrop(event) {
     tooltipHideTimer = setTimeout(function() {
       $('body').removeClass('bumblebee-tooltip-open');
+      deactivateActiveTableCells();
     }, settings.hide.delay / 2);
-    var target = event.originalEvent.target;
-    deactivateTableCell(target);
   }
 
   function closeTooltips(event, api) {

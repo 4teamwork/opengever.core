@@ -6,6 +6,7 @@ Changelog
 
 - Make Period a proper plone content type. Migrate old SQL base periods. [deiferni]
 - Restrict available users in sharing on workspaces and workspace folders. [njohner]
+- Correct styling bug fix in tabbedview after showing bumblebee tooltip. [njohner]
 
 
 2019.4.2 (2019-11-29)
