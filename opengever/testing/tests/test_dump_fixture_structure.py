@@ -6,7 +6,7 @@ import os.path
 import re
 
 
-class TestDumpFixtureStrutureToReadme(IntegrationTestCase):
+class TestDumpFixtureStructureToReadme(IntegrationTestCase):
 
     def test_dump_fixure(self):
         """This test dumps the fixture structure into the readme for
@@ -44,7 +44,7 @@ class TestDumpFixtureStrutureToReadme(IntegrationTestCase):
             md5_before, md5_after,
             'Fixture has changed and readme was not updated.\n'
             'run:\n'
-            ' $ bin/test -t TestDumpFixtureStrutureToReadme\n'
+            ' $ bin/test -t TestDumpFixtureStructureToReadme\n'
             'then commit the changes in the README.rst.')
 
     def _build_tree(self, name_to_path):

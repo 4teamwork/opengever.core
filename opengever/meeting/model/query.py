@@ -6,13 +6,11 @@ from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.model.generateddocument import GeneratedDocument
 from opengever.meeting.model.meeting import Meeting
 from opengever.meeting.model.membership import Membership
-from opengever.meeting.model.period import Period
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.base.query import BaseQuery
 from plone import api
 from sqlalchemy import and_
-from sqlalchemy import desc
 from sqlalchemy import or_
 
 
@@ -243,41 +241,3 @@ class GeneratedDocumentQuery(BaseQuery):
 
 
 GeneratedDocument.query_cls = GeneratedDocumentQuery
-
-
-class PeriodQuery(BaseQuery):
-
-    def active(self):
-        return self.filter_by(workflow_state=Period.STATE_ACTIVE.name)
-
-    def by_committee(self, committee):
-        return self.filter_by(committee=committee)
-
-    def get_current(self, committee):
-        return self.active().by_committee(committee).one()
-
-    def get_current_for_update(self, committee):
-        return self.with_for_update().get_current(committee)
-
-    def by_date(self, date):
-        return self.filter(and_(Period.date_from <= date,
-                                Period.date_to >= date))
-
-    def get_for_meeting(self, meeting):
-        """ returns the period matching the committee of meeting and containing
-        the meeting start date. If several periods match these conditions, return
-        the active period if it is among them, otherwise just pick the first match.
-        """
-        query = self.by_date(meeting.start).by_committee(meeting.committee)
-
-        if query.count() == 0:
-            return None
-
-        active = query.active()
-        if active.count() == 1:
-            return active.one()
-
-        return query.first()
-
-
-Period.query_cls = PeriodQuery

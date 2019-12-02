@@ -45,6 +45,7 @@
   <object name="opengever.meeting.meetingtemplate" meta_type="Dexterity FTI" />
   <object name="opengever.meeting.paragraphtemplate" meta_type="Dexterity FTI" />
   <object name="opengever.meeting.proposaltemplate" meta_type="Dexterity FTI" />
+  <object name="opengever.meeting.period" meta_type="Dexterity FTI" />
 
   <!-- PRIVATE -->
   <object name="opengever.private.root" meta_type="Dexterity FTI" />

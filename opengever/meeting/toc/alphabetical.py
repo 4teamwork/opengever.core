@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import datetime
 from datetime import time
 from datetime import timedelta
@@ -18,6 +20,7 @@ class AlphabeticalToc(object):
 
     def __init__(self, period):
         self.period = period
+        self.committee = aq_parent(aq_inner(period))
 
     @staticmethod
     def group_by_key(item):
@@ -58,9 +61,9 @@ class AlphabeticalToc(object):
 
     def build_query(self):
         datetime_from = pytz.UTC.localize(
-            datetime.combine(self.period.date_from, time(0, 0)))
+            datetime.combine(self.period.start, time(0, 0)))
         datetime_to = pytz.UTC.localize(
-            datetime.combine(self.period.date_to + timedelta(days=1),
+            datetime.combine(self.period.end + timedelta(days=1),
                              time(0, 0)))
 
         # we need the explicit join to filter below and to avoid a cross-join
@@ -71,7 +74,7 @@ class AlphabeticalToc(object):
         # relevant day for the toc
         query = query.filter(Meeting.start >= datetime_from,
                              Meeting.start < datetime_to,
-                             Meeting.committee == self.period.committee,
+                             Meeting.committee == self.committee.load_model(),
                              AgendaItem.is_paragraph == false()
                              )
         return query

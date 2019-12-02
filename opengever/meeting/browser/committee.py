@@ -1,5 +1,5 @@
 from opengever.meeting import _
-from opengever.meeting.model import Period
+from opengever.meeting.period import Period
 from opengever.tabbedview import GeverTabMixin
 from Products.Five.browser import BrowserView
 
@@ -58,5 +58,7 @@ class CommitteeOverview(BrowserView, GeverTabMixin):
         return [member.get_link(committee_container) for member in members]
 
     def period(self):
-        period = Period.query.get_current(self.context.load_model())
-        return period.get_title()
+        period = Period.get_current(self.context)
+        if period is None:
+            return _(u'No content')
+        return period.extended_title

@@ -49,6 +49,7 @@
                    opengever.inbox: Scan In,
                    opengever.meeting: Add Committee,
                    opengever.meeting: Add Member,
+                   opengever.meeting: Add Period,
                    opengever.meeting: Add Proposal Template,
                    opengever.meeting: Add Proposal,
                    opengever.meeting: Add Sablon Template,
@@ -270,6 +271,19 @@
         />
   </lawgiver:workflow>
 
+  <lawgiver:workflow name="opengever_period_workflow">
+    <lawgiver:ignore
+        permissions="
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate WorkspaceOwner role,
+                     Sharing page: Delegate WorkspacesUser role,
+                     Sharing page: Delegate WorkspacesCreator role,
+                     opengever.workspace: Add Workspace,
+                     "
+        />
+  </lawgiver:workflow>
 
   <lawgiver:workflow name="opengever_workspace_root">
     <lawgiver:ignore

@@ -10,8 +10,8 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
-from opengever.meeting.model import Period
 from opengever.meeting.model.excerpt import Excerpt
+from opengever.meeting.period import Period
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
@@ -171,7 +171,10 @@ class AgendaItem(Base):
         if not self.decision_number:
             return None
 
-        period = Period.query.get_for_meeting(self.meeting)
+        period = Period.get_current(
+            self.meeting.committee.resolve_committee(),
+            self.meeting.start.date(),
+            unrestricted=True)
         if not period:
             return str(self.decision_number)
 

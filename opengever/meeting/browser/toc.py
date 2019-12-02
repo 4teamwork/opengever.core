@@ -1,11 +1,13 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from opengever.meeting.toc.dossier_refnum import DossierReferenceNumberBasedTOC
-from opengever.meeting.toc.repository_refnum import RepositoryReferenceNumberBasedTOC
 from opengever.meeting.toc.repository import RepositoryBasedTOC
+from opengever.meeting.toc.repository_refnum import RepositoryReferenceNumberBasedTOC
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.Five.browser import BrowserView
@@ -20,11 +22,11 @@ class DownloadAlphabeticalTOC(BrowserView):
 
     def __init__(self, context, request):
         super(DownloadAlphabeticalTOC, self).__init__(context, request)
-        self.model = context.model
+        self.committee = aq_parent(aq_inner(self.context))
 
     def __call__(self):
         response = self.request.response
-        template = self.model.get_toc_template()
+        template = self.committee.get_toc_template()
         if not template:
             api.portal.show_message(
                 _('msg_no_toc_template',
@@ -52,7 +54,7 @@ class DownloadAlphabeticalTOC(BrowserView):
         return sablon.file_data
 
     def get_data(self):
-        return AlphabeticalToc(self.model).get_json()
+        return AlphabeticalToc(self.context).get_json()
 
     def get_json_data(self, pretty=False):
         indent = 4 if pretty else None
@@ -60,8 +62,8 @@ class DownloadAlphabeticalTOC(BrowserView):
 
     def get_filename(self):
         normalizer = getUtility(IIDNormalizer)
-        period_title = normalizer.normalize(self.model.title)
-        committee_title = normalizer.normalize(self.model.committee.title)
+        period_title = normalizer.normalize(self.context.title)
+        committee_title = normalizer.normalize(self.committee.title)
 
         return u"{}.docx".format(
             translate(_(u'filename_alphabetical_toc',
@@ -90,12 +92,12 @@ class DownloadAlphabeticalTOC(BrowserView):
 class DownloadRepositoryTOC(DownloadAlphabeticalTOC):
 
     def get_data(self):
-        return RepositoryBasedTOC(self.model).get_json()
+        return RepositoryBasedTOC(self.context).get_json()
 
     def get_filename(self):
         normalizer = getUtility(IIDNormalizer)
-        period_title = normalizer.normalize(self.model.title)
-        committee_title = normalizer.normalize(self.model.committee.title)
+        period_title = normalizer.normalize(self.context.title)
+        committee_title = normalizer.normalize(self.committee.title)
 
         return u"{}.docx".format(
             translate(_(u'filename_repository_toc',
@@ -110,12 +112,12 @@ class DownloadRepositoryTOC(DownloadAlphabeticalTOC):
 class DownloadDossierReferenceNumberTOC(DownloadAlphabeticalTOC):
 
     def get_data(self):
-        return DossierReferenceNumberBasedTOC(self.model).get_json()
+        return DossierReferenceNumberBasedTOC(self.context).get_json()
 
     def get_filename(self):
         normalizer = getUtility(IIDNormalizer)
-        period_title = normalizer.normalize(self.model.title)
-        committee_title = normalizer.normalize(self.model.committee.title)
+        period_title = normalizer.normalize(self.context.title)
+        committee_title = normalizer.normalize(self.committee.title)
 
         return u"{}.docx".format(
             translate(_(u'filename_dossier_reference_number_toc',
@@ -130,12 +132,12 @@ class DownloadDossierReferenceNumberTOC(DownloadAlphabeticalTOC):
 class DownloadRepositoryReferenceNumberTOC(DownloadAlphabeticalTOC):
 
     def get_data(self):
-        return RepositoryReferenceNumberBasedTOC(self.model).get_json()
+        return RepositoryReferenceNumberBasedTOC(self.context).get_json()
 
     def get_filename(self):
         normalizer = getUtility(IIDNormalizer)
-        period_title = normalizer.normalize(self.model.title)
-        committee_title = normalizer.normalize(self.model.committee.title)
+        period_title = normalizer.normalize(self.context.title)
+        committee_title = normalizer.normalize(self.committee.title)
 
         return u"{}.docx".format(
             translate(_(u'filename_repository_reference_number_toc',

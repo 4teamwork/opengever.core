@@ -1,0 +1,9 @@
+<rolemap>
+  <permissions>
+
+    <permission name="opengever.meeting: Add Period" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+  </permissions>
+</rolemap>

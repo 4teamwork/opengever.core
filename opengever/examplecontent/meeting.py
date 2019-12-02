@@ -78,20 +78,20 @@ class MeetingExampleContentCreator(object):
 
     def create_periods(self):
         create(Builder('period').having(
-            date_from=date(2016, 1, 1),
-            date_to=date(2016, 12, 31),
+            start=date(2016, 1, 1),
+            end=date(2016, 12, 31),
             committee=self.committee_law_model))
         create(Builder('period').having(
-            date_from=date(2016, 1, 1),
-            date_to=date(2016, 12, 31),
+            start=date(2016, 1, 1),
+            end=date(2016, 12, 31),
             committee=self.committee_accounting_model))
         create(Builder('period').having(
-            date_from=date(2016, 1, 1),
-            date_to=date(2016, 12, 31),
+            start=date(2016, 1, 1),
+            end=date(2016, 12, 31),
             committee=self.committee_assembly_model))
         create(Builder('period').having(
-            date_from=date(2016, 1, 1),
-            date_to=date(2016, 12, 31),
+            start=date(2016, 1, 1),
+            end=date(2016, 12, 31),
             committee=self.committee_evil_model))
 
     def create_members_and_memberships(self):

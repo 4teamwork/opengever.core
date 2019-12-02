@@ -39,10 +39,6 @@ class IMembershipWrapper(ISQLObjectWrapper):
     """Marker interface for membership object wrappers."""
 
 
-class IPeriodWrapper(ISQLObjectWrapper):
-    """Marker interface for period object wrappers."""
-
-
 class IMeetingDossier(model.Schema):
     """Marker interface for MeetingDossier"""
 

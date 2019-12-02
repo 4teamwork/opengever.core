@@ -12,13 +12,6 @@ class TestCommitteeTraversal(IntegrationTestCase):
                           self.committee.get(meeting_path_segment).model)
         self.assertIsNone(self.empty_committee.get(meeting_path_segment))
 
-    def test_can_only_access_contained_periods(self):
-        self.login(self.meeting_user)
-        period = self.committee.load_model().periods[0]
-        period_path_segment = 'period-{}'.format(period.period_id)
-        self.assertEquals(period, self.committee.get(period_path_segment).model)
-        self.assertIsNone(self.empty_committee.get(period_path_segment))
-
     def test_can_only_access_contained_memberships(self):
         self.login(self.meeting_user)
         membership = self.committee.load_model().memberships[0]

@@ -33,13 +33,11 @@ from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
-from opengever.meeting.model import Period
 from opengever.meeting.model import Proposal as ProposalModel
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
@@ -532,19 +530,6 @@ class LockBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('lock', LockBuilder)
-
-
-class PeriodBuilder(SqlObjectBuilder):
-
-    mapped_class = Period
-    id_argument_name = 'period_id'
-
-    def __init__(self, session):
-        super(PeriodBuilder, self).__init__(session)
-        self.arguments['title'] = unicode(date.today().year)
-
-
-builder_registry.register('period', PeriodBuilder)
 
 
 class PersonBuilder(SqlObjectBuilder):

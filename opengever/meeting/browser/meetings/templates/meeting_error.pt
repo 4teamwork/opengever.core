@@ -26,11 +26,13 @@
   </metal:title>
 
   <metal:content-core fill-slot="content-core">
-    <h2 class="meeting-permission-error-title" i18n:translate="">Insufficient privileges on meeting dossier</h2>
+    <h2 class="meeting-permission-error-title" tal:content="view/error_title">
+      Error title
+    </h2>
     <div class="meeting-permission-error-message" tal:content="view/error_message">
       Error message
     </div>
-    <span tal:replace="structure view/meeting_dossier_link"></span>
+    <span tal:replace="structure view/link_to_error|nothing"></span>
   </metal:content-core>
 
 </html>

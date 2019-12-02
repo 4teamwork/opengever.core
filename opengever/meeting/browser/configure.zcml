@@ -129,14 +129,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
-      name="edit"
-      class=".periods.EditPeriod"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="alphabetical_toc"
       class=".toc.DownloadAlphabeticalTOC"
       permission="zope2.View"
@@ -144,7 +137,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="repository_toc"
       class=".toc.DownloadRepositoryTOC"
       permission="zope2.View"
@@ -152,7 +145,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="dossier_refnum_toc"
       class=".toc.DownloadDossierReferenceNumberTOC"
       permission="zope2.View"
@@ -160,7 +153,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.interfaces.IPeriodWrapper"
+      for="opengever.meeting.period.IPeriod"
       name="repository_refnum_toc"
       class=".toc.DownloadRepositoryReferenceNumberTOC"
       permission="zope2.View"
@@ -367,31 +360,10 @@
   </class>
 
   <browser:page
-      for="opengever.meeting.committeecontainer.ICommitteeContainer"
-      class=".committeeforms.AddInitialPeriodStepView"
-      name="add-initial-period"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
       for="opengever.meeting.committee.ICommittee"
       class=".committeeforms.EditForm"
       name="edit"
       permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.committee.ICommittee"
-      class=".periods.CloseCurrentPeriodStepView"
-      name="close-period"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.committee.ICommittee"
-      class=".periods.AddNewPeriodStepView"
-      name="add-period"
-      permission="cmf.AddPortalContent"
       />
 
   <browser:page
@@ -423,6 +395,26 @@
       name="edit"
       permission="cmf.ModifyPortalContent"
       />
+
+  <browser:page
+      for="opengever.meeting.period.IPeriod"
+      class=".periods.PeriodEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter
+      name="opengever.meeting.period"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".periods.PeriodAddView"
+      />
+
+  <class class=".periods.PeriodAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
 
   <browser:page
       name="addtransitioncomment"

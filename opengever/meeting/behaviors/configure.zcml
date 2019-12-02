@@ -38,4 +38,20 @@
       for="opengever.meeting.committee.ICommittee"
       />
 
+  <plone:behavior
+      title="period name from title"
+      description=""
+      provides="opengever.meeting.behaviors.namefromtitle.IPeriodNameFromTitle"
+      factory=".namefromtitle.PeriodNameFromTitle"
+      for="opengever.meeting.period.IPeriod"
+      />
+
+  <!-- period -->
+  <plone:behavior
+      title="Period"
+      description="Period schema"
+      provides="opengever.meeting.behaviors.period.IPeriodSchema"
+      for="opengever.meeting.period.IPeriod"
+      />
+
 </configure>

@@ -2839,6 +2839,9 @@ body.template-tabbed_view.portaltype-opengever-meeting-committee #watermark-head
 body.template-tabbed_view.portaltype-opengever-meeting-committeecontainer h1.documentFirstHeading:before { font-family: "opengever"; font-size: 80%; content: ""; padding-right: 0.4em; }
 body.template-tabbed_view.portaltype-opengever-meeting-committeecontainer #watermark-header:after, body.template-tabbed_view.portaltype-opengever-meeting-committeecontainer #tabbedview-header:after { font-family: "opengever"; content: ""; font-size: 110px; line-height: 1em; position: absolute; right: 0; top: 0; opacity: 0.2; color: #aaa; text-shadow: 2px 1px #444444; -webkit-transform: rotate(20deg); transform: rotate(20deg); }
 
+body.template-tabbed_view.portaltype-opengever-meeting-period h1.documentFirstHeading:before { font-family: "Font Awesome 5 Free"; font-size: 80%; content: "\f073"; padding-right: 0.4em; font-weight: 900; }
+body.template-tabbed_view.portaltype-opengever-meeting-period #watermark-header:after, body.template-tabbed_view.portaltype-opengever-meeting-period #tabbedview-header:after { font-family: "Font Awesome 5 Free"; content: "\f073"; font-size: 110px; line-height: 1em; position: absolute; right: 0; top: 0; opacity: 0.2; color: #aaa; text-shadow: 2px 1px #444444; -webkit-transform: rotate(20deg); transform: rotate(20deg); font-weight: 900; }
+
 body.template-view.portaltype-opengever-meeting-proposaltemplate h1.documentFirstHeading:before, body.template-tabbed_view.portaltype-opengever-meeting-proposaltemplate h1.documentFirstHeading:before, body.template-tabbed_view.portaltype-opengever-meeting-proposal h1.documentFirstHeading:before, body.template-tabbed_view.portaltype-opengever-meeting-submittedproposal h1.documentFirstHeading:before { font-family: "opengever"; font-size: 80%; content: ""; padding-right: 0.4em; }
 body.template-view.portaltype-opengever-meeting-proposaltemplate #watermark-header:after, body.template-view.portaltype-opengever-meeting-proposaltemplate #tabbedview-header:after, body.template-tabbed_view.portaltype-opengever-meeting-proposaltemplate #watermark-header:after, body.template-tabbed_view.portaltype-opengever-meeting-proposaltemplate #tabbedview-header:after, body.template-tabbed_view.portaltype-opengever-meeting-proposal #watermark-header:after, body.template-tabbed_view.portaltype-opengever-meeting-proposal #tabbedview-header:after, body.template-tabbed_view.portaltype-opengever-meeting-submittedproposal #watermark-header:after, body.template-tabbed_view.portaltype-opengever-meeting-submittedproposal #tabbedview-header:after { font-family: "opengever"; content: ""; font-size: 110px; line-height: 1em; position: absolute; right: 0; top: 0; opacity: 0.2; color: #aaa; text-shadow: 2px 1px #444444; -webkit-transform: rotate(20deg); transform: rotate(20deg); }
 
@@ -2897,6 +2900,8 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-dossier-templatefolder:before, #plone-contentmenu-factories dd.actionMenuContent a#opengever-dossier-templatedossier:before, #plone-contentmenu-factories dd.actionMenuContent a#dossier_with_template:before { content: ""; }
 
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-proposal:before { content: ""; }
+
+#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-period:before { content: "\f073"; font-family: 'Font Awesome 5 Free'; }
 
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-committee:before { content: ""; }
 
@@ -3014,6 +3019,8 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 .contenttype-opengever-actor:before { content: ""; }
 
 .contenttype-ftw-mail-mail:before { content: ""; }
+
+.contenttype-opengever-meeting-period:before { content: "\f073"; font-family: 'Font Awesome 5 Free'; font-weight: 900; }
 
 .contenttype-opengever-dossier-businesscasedossier:before, .contenttype-opengever-zug-bdarp-casedossier2:before, .contenttype-opengever-zug-bdbds-bdbdscasebddossier:before, .contenttype-opengever-zug-bdbds-bdbdscasedossier2:before, .contenttype-opengever-zug-bdbds-bdbdscasevgbgdossier:before, .contenttype-opengever-zug-digva-orderdossier:before, .contenttype-opengever-zug-komsko-skocase:before, .contenttype-opengever-zug-skakr-businesscasedossier:before { content: ""; }
 

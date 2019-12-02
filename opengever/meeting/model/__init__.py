@@ -1,4 +1,3 @@
-from opengever.meeting.model.period import Period  # noqa
 from opengever.meeting.model.agendaitem import AgendaItem  # noqa
 from opengever.meeting.model.meeting import Meeting  # noqa
 from opengever.meeting.model.committee import Committee  # noqa
@@ -20,7 +19,6 @@ tables = [
     'meetings',
     'members',
     'memberships',
-    'periods',
     'proposals',
     'submitteddocuments',
     'excerpts',

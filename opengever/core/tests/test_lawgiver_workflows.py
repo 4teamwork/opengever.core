@@ -9,6 +9,10 @@ class TestCommitteeWorkflow(GeverWorkflowTest):
     workflow_name = 'opengever_committee_workflow'
 
 
+class TestPeriodWorkflow(GeverWorkflowTest):
+    workflow_name = 'opengever_period_workflow'
+
+
 class TestWorkspaceRootWorkflow(GeverWorkflowTest):
     workflow_name = 'opengever_workspace_root'
 

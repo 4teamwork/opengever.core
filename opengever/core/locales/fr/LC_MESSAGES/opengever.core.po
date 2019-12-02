@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-10-28 14:04+0000\n"
+"POT-Creation-Date: 2019-11-25 09:52+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -184,6 +184,11 @@ msgstr "Participation"
 #: ./opengever/core/upgrades/20180119143619_update_actions_for_workspace/actions.xml
 msgid "Participants"
 msgstr "Participants"
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.period.xml
+#: ./opengever/core/upgrades/20191113162638_add_period_content_type/types/opengever.meeting.period.xml
+msgid "Period"
+msgstr "Période"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Prefix Manager"

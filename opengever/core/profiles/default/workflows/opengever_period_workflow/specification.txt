@@ -1,0 +1,29 @@
+[Period workflow]
+Role mapping:
+  manager => Manager
+  committee admin => CommitteeAdministrator
+  committee responsible => CommitteeResponsible
+  committee member => CommitteeMember
+
+Visible roles:
+  committee member
+
+General:
+  A committee admin can always perform the same actions as a committee responsible.
+  A committee admin can always manage security.
+
+  A manager can always view.
+  A manager can always edit.
+  A manager can always manage security.
+  A manager can always use the developer tools.
+
+
+Initial Status: Active
+Status Active:
+  A committee member can view.
+
+  A committee responsible can view.
+  A committee responsible can add.
+  A committee responsible can edit.
+
+  A manager can perform the same actions as a committee responsible.

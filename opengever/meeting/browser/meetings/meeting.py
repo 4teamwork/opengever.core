@@ -17,6 +17,7 @@ from opengever.meeting.browser.meetings.transitions import MeetingTransitionCont
 from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
+from opengever.meeting.period import Period
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview.helper import linked
 from operator import itemgetter
@@ -273,23 +274,41 @@ class MeetingView(BrowserView):
         if (api.user.has_permission('Modify portal content', obj=committee) and not
                 api.user.has_permission('Modify portal content', obj=meeting_dossier) and not
                 self.model.is_closed()):
-            self.error_message = translate(
-                _("no_edit_permissions_on_meeting_dossier",
-                  default="User does not have permission to edit the meeting dossier:"),
-                context=self.request)
-            self.meeting_dossier_link = linked(meeting_dossier,
-                                               meeting_dossier.Title())
+            self.error_title = _("Insufficient privileges on meeting dossier")
+            self.error_message = _("no_edit_permissions_on_meeting_dossier",
+                  default="User does not have permission to edit the meeting "
+                          "dossier:")
+            self.link_to_error = linked(meeting_dossier,
+                                        meeting_dossier.Title())
             return self.error_template()
 
         elif (api.user.has_permission('View', obj=committee) and not
               api.user.has_permission('View', obj=meeting_dossier)):
-            self.error_message = translate(
-                _("no_view_permissions_on_meeting_dossier",
-                  default="User does not have permission to view the meeting dossier:"),
-                context=self.request)
-            self.meeting_dossier_link = linked(meeting_dossier,
-                                               meeting_dossier.Title(),
-                                               with_tooltip=False)
+            self.error_title = _("Insufficient privileges on meeting dossier")
+            self.error_message = _(
+                "no_view_permissions_on_meeting_dossier",
+                default="User does not have permission to view the meeting "
+                        "dossier:")
+            self.link_to_error = linked(meeting_dossier,
+                                        meeting_dossier.Title(),
+                                        with_tooltip=False)
+            return self.error_template()
+        # Render an error template when there is no Period for meeting start
+        # date. Even though the user could continue until the meeting is closed
+        # we want to raise attention as it is most likely an error.
+        if Period.get_current(self.model.committee.resolve_committee(),
+                              self.model.start.date()) is None:
+            localized_start = api.portal.get_localized_time(
+                self.model.start.date())
+            self.error_title = _("Missing period")
+            self.error_message = _("no_period_for_meeting_date",
+                  default="There is no period available for the meeting "
+                          "date ${start}. You should either change the "
+                          "meeting date or add a new period to the committee:",
+                  mapping={'start': localized_start})
+            self.link_to_error = linked(committee,
+                                        committee.Title(),
+                                        with_tooltip=False)
             return self.error_template()
 
         return self.template()

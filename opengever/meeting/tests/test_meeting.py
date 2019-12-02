@@ -335,3 +335,29 @@ class TestMeeting(IntegrationTestCase):
         self.assertEquals([item2], meeting.get_undecided_agenda_items())
         item2.decide()
         self.assertEquals([], meeting.get_undecided_agenda_items())
+
+    def test_generate_decision_numbers(self):
+        self.login(self.committee_responsible)
+
+        self.assertEqual(1, self.period.decision_sequence_number)
+
+        item_1 = self.schedule_ad_hoc(self.meeting, 'Foo')
+        item_2 = self.schedule_paragraph(self.meeting, 'Bar')
+        item_3 = self.schedule_proposal(self.meeting, self.submitted_proposal)
+
+        self.meeting.model.generate_decision_numbers()
+
+        self.assertEqual(2, item_1.decision_number)
+        self.assertIsNone(item_2.decision_number)
+        self.assertEqual(3, item_3.decision_number)
+        self.assertEqual(3, self.period.decision_sequence_number)
+
+    def test_generate_meeting_number(self):
+        self.login(self.committee_responsible)
+
+        self.assertEqual(1, self.period.meeting_sequence_number)
+
+        self.meeting.model.generate_meeting_number()
+
+        self.assertEqual(2, self.meeting.model.meeting_number)
+        self.assertEqual(2, self.period.meeting_sequence_number)

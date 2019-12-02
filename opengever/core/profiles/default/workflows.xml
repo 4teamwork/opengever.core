@@ -14,6 +14,7 @@
   <object name="opengever_mail_workflow" meta_type="Workflow" />
   <object name="opengever_meetingtemplate_workflow" meta_type="Workflow" />
   <object name="opengever_paragraphtemplate_workflow" meta_type="Workflow" />
+  <object name="opengever_period_workflow" meta_type="Workflow" />
   <object name="opengever_private_dossier_workflow" meta_type="Workflow" />
   <object name="opengever_private_folder_workflow" meta_type="Workflow" />
   <object name="opengever_private_root_workflow" meta_type="Workflow" />
@@ -101,6 +102,10 @@
 
     <type type_id="opengever.meeting.paragraphtemplate">
       <bound-workflow workflow_id="opengever_paragraphtemplate_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.period">
+      <bound-workflow workflow_id="opengever_period_workflow" />
     </type>
 
     <type type_id="opengever.meeting.proposal">
