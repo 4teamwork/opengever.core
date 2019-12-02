@@ -4,6 +4,7 @@ from glob2 import glob
 from opengever.base import model
 from opengever.base.model import create_session
 from opengever.base.utils import pretty_json
+from opengever.core.solr_testing import SolrReplicationAPIClient
 from path import Path
 from plone.app.testing import PloneFixture
 from plone.testing import zca
@@ -17,6 +18,7 @@ from zope.component.hooks import getSite
 import json
 import os
 import re
+import shutil
 import transaction
 
 
@@ -34,6 +36,7 @@ CACHE_PLONE_SETUP = {
     # This will cause the cache key to invalidate.
     'cache_globs': ('bin/test',),
     'has_sql': False,
+    'has_solr': False,
 }
 
 CACHE_GEVER_INSTALLATION = {
@@ -85,6 +88,7 @@ class DBCacheManager(object):
         self.cache_stacks = tuple(self._build_cache_stacks())
         self.data = {'site_site_manager_bases': {}}
         self._sql_deferred_load_stack = None
+        self._solr_deferred_load_stack = None
 
     def load_from_cache(self):
         """Load the most-top stack which has a valid cache key.
@@ -99,9 +103,11 @@ class DBCacheManager(object):
         print '(Loading database cache stack {!r}) '.format(stack['id']),
         zodbDB = self._load_zodb_from(stack)
         self._load_data_from(stack)
-        # Defer sql loading: the sql database engine is not configured at this
-        # point since the opengever.core ZCML is not yet loaded.
+        # Defer sql and solr loading: the sql database engine and Solr
+        # connection are not configured yet at this point since the
+        # opengever.core ZCML is not yet loaded.
         self._sql_deferred_load_stack = stack
+        self._solr_deferred_load_stack = stack
 
         # Mark the loaded stack and it's parents as loaded.
         for stack_or_parent in self.chain_of(stack):
@@ -133,6 +139,7 @@ class DBCacheManager(object):
         self._dump_zodb_to(zodbDB, stack)
         self._dump_data_to(stack)
         self._dump_sql(stack)
+        self._dump_solr(stack)
         self._dump_cachekey(stack)
 
     def apply_cache_fixes(self, stack):
@@ -144,6 +151,12 @@ class DBCacheManager(object):
             return
 
         self._restore_site_site_manager_bases(stack)
+
+        if self._solr_deferred_load_stack and stack.get('has_solr', True):
+            # XXX
+            self._load_solr(self._solr_deferred_load_stack)
+            self._solr_deferred_load_stack = None
+
         if self._sql_deferred_load_stack and stack.get('has_sql', True):
             # We need to defer loading of the sql: at the time we load
             # the databases we have not loaded the GEVER ZCML and therefore
@@ -167,6 +180,7 @@ class DBCacheManager(object):
             assert stack.get('cachekey', None) is None
             stack['cachekey'] = self._build_cachekey_from_globs(stack)
             stack.setdefault('has_sql', True)
+            stack.setdefault('has_solr', True)
             yield stack
             stack = stack.get('extends')
 
@@ -316,6 +330,47 @@ class DBCacheManager(object):
         session = create_session()
         map(session.execute, map(text, sql_statements))
         transaction.commit()
+
+    def _dump_solr(self, stack):
+        """Dumping Solr is done by triggering a backup via Solr's replication
+        API, and then moving away that backup (from Solr's data directory into
+        the stack's cache directory).
+        """
+        if not stack.get('has_solr', True):
+            return
+
+        client = SolrReplicationAPIClient.get_instance()
+        if client._configured:
+            client.create_backup('solr-cache')
+            client.await_backuped()
+
+            # XXX
+            import time
+            time.sleep(2)
+
+            solr_cache_source_dir = Path('../../var/solr/testserver/data').joinpath('snapshot.bak-solr-cache')
+            solr_cache_target_dir = stack['path'].joinpath('snapshot.bak-solr-cache')
+            print "Moving %s to %s" % (solr_cache_source_dir, solr_cache_target_dir)
+            shutil.move(solr_cache_source_dir, solr_cache_target_dir)
+
+    def _load_solr(self, stack):
+        """
+        """
+
+        client = SolrReplicationAPIClient.get_instance()
+        if client._configured:
+            solr_cache_source_dir = stack['path'].joinpath('snapshot.bak-solr-cache')
+            solr_cache_target_dir = Path('../../var/solr/testserver/data').joinpath('snapshot.bak-solr-cache')
+
+            print "Copying back %s to %s" % (solr_cache_source_dir, solr_cache_target_dir)
+
+            if solr_cache_target_dir.exists() and 'snapshot.bak-solr-cache' in solr_cache_target_dir:
+                shutil.rmtree(solr_cache_target_dir)
+            print "Restoring Solr backup"
+            shutil.copytree(solr_cache_source_dir, solr_cache_target_dir)
+            client.restore_backup('solr-cache')
+            client.await_restored()
+            print "Done"
 
     def _ensure_sql_database_is_empty(self):
         """In order to load a sql database from cache we need an empty databse.

@@ -1,6 +1,10 @@
-from opengever.core.cached_testing import BUILDOUT_DIR
+from collective.indexing.queue import processQueue
+from ftw.solr.interfaces import ISolrConnectionManager
+from path import Path
 from threading import Thread
+from zope.component import getUtility
 import atexit
+from itertools import izip_longest
 import errno
 import io
 import os
@@ -9,6 +13,16 @@ import signal
 import socket
 import subprocess
 import time
+
+
+# XXX
+BUILDOUT_DIR = Path(__file__).joinpath('..', '..', '..').abspath()
+
+
+def commit_solr():
+    processQueue()
+    conn = getUtility(ISolrConnectionManager)
+    conn.connection.commit()
 
 
 class SolrServer(object):
@@ -93,7 +107,7 @@ class SolrServer(object):
         self._running = False
 
     def _run_server_process(self):
-        command = ['bin/solr', 'fg']
+        command = ['../../bin/solr', 'fg']
         env = os.environ.copy()
         env.setdefault('SOLR_PORT', str(self.port))
         self._stdout = io.StringIO()
@@ -180,6 +194,32 @@ class SolrReplicationAPIClient(object):
             raise
         return response
 
+    def backup_status(self):
+        """Check for the progress of a running backup operation.
+        """
+        self._require_configured()
+        response = self.session.get(url=self.base_url + '/replication',
+                                    params={'command': 'details'})
+        try:
+            response.raise_for_status()
+        except Exception:
+            print response.json()
+            raise
+        response_data = response.json()
+
+        def grouper(iterable, n, fillvalue=None):
+            args = [iter(iterable)] * n
+            return izip_longest(fillvalue=fillvalue, *args)
+
+        backup_details = response_data.get('details', {}).get('backup', [])
+        backup_details = dict(grouper(backup_details, 2))
+
+        if not len(backup_details) == 5:
+            raise Exception("Unexpected backup details response from Solr - "
+                            "don't know how to parse %r" % response_data)
+
+        return backup_details['status']
+
     def restore_backup(self, name):
         """Restore a backup. `name` refers to the backup name.
         """
@@ -207,6 +247,19 @@ class SolrReplicationAPIClient(object):
         response_data = response.json()
 
         return response_data['restorestatus']
+
+    def await_backuped(self, timeout=60, interval=0.1):
+        """Block until the solr server has no backup in progress.
+        """
+        for index in range(int(timeout / interval)):
+            status = self.backup_status()
+
+            if status == u'success':
+                return
+
+            time.sleep(interval)
+
+        raise ValueError('Timeout ({}s) while waiting for backup to finish.'.format(timeout))
 
     def await_restored(self, timeout=60, interval=0.1):
         """Block until the solr server has no restore in progress.

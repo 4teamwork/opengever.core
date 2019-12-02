@@ -20,6 +20,8 @@ from opengever.core.cached_testing import CACHE_GEVER_FIXTURE
 from opengever.core.cached_testing import CACHE_GEVER_INSTALLATION
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
 from opengever.core.cached_testing import DB_CACHE_MANAGER
+from opengever.core.solr_testing import SolrReplicationAPIClient
+from opengever.core.solr_testing import SolrServer
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
@@ -374,6 +376,10 @@ class OfficeatworkLayer(PloneSandboxLayer):
 OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER = OfficeatworkLayer()
 
 
+SOLR_PORT = '8983'
+SOLR_CORE = 'testserver'
+
+
 class ContentFixtureLayer(OpengeverFixture):
     """The content fixture layer extends the regular OpengeverFixture with a
     content fixture.
@@ -433,8 +439,30 @@ class ContentFixtureLayer(OpengeverFixture):
         assert eventlog_conf.eventlog is not None
         getConfiguration().eventlog = eventlog_conf.eventlog
 
+    def start_solr(self):
+        SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
+        import collective.indexing.monkey  # noqa
+        import ftw.solr.patches  # noqa
+
+    def configure_solr(self, configurationContext):
+        # Solr must be started before registering the connection since ftw.solr
+        # will get the schema from solr and cache it.
+        SolrServer.get_instance().await_ready()
+        xmlconfig.string(
+            '<configure xmlns:solr="http://namespaces.plone.org/solr">'
+            '  <solr:connection host="localhost"'
+            '                   port="{SOLR_PORT}"'
+            '                   base="/solr/{SOLR_CORE}" />'
+            '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
+            context=configurationContext)
+
+        # Clear solr from potential artefacts of the previous run.
+        SolrReplicationAPIClient.get_instance().clear()
+
     def setUpZope(self, app, configurationContext):
+        self.start_solr()
         super(ContentFixtureLayer, self).setUpZope(app, configurationContext)
+        self.configure_solr(configurationContext)
 
         # Setting up the database, which creates a new engine, must happen after
         # opengever's ZCML is loaded in order to have engine creation event
@@ -485,10 +513,16 @@ class ContentFixtureLayer(OpengeverFixture):
             self['fixture_lookup_table'] = (
                 DB_CACHE_MANAGER.data['fixture_lookup_table'])
 
+        from opengever.base.interfaces import ISearchSettings
+        api.portal.set_registry_record('use_solr', True, interface=ISearchSettings)
+
         # bumblebee should only be turned on on-demand with the feature flag.
         # if this assertion fails a profile in the fixture enables bumblebee,
         # or if was left on by mistake after fixture setup.
         assert not is_bumblebee_feature_enabled()
+        from opengever.core.solr_testing import commit_solr
+        commit_solr()
+        SolrReplicationAPIClient.get_instance().create_backup('fixture')
 
     def installOpengeverProfiles(self, portal):
         if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_INSTALLATION):
@@ -538,6 +572,11 @@ class GEVERIntegrationTesting(FTWIntegrationTesting):
     def testSetUp(self):
         super(GEVERIntegrationTesting, self).testSetUp()
         logout()
+        SolrReplicationAPIClient.get_instance().await_restored()
+
+    def testTearDown(self):
+        SolrReplicationAPIClient.get_instance().restore_backup('fixture')
+        super(GEVERIntegrationTesting, self).testTearDown()
 
 
 class ThemeContentFixtureLayer(ContentFixtureLayer):
