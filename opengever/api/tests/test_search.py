@@ -11,8 +11,6 @@ import urlparse
 
 class TestSearchEndpoint(IntegrationTestCase):
 
-    api_headers = {'Accept': 'application/json'}
-
     def search_catalog(self, context, query):
         catalog = api.portal.get_tool('portal_catalog')
         path = '/'.join(context.getPhysicalPath())

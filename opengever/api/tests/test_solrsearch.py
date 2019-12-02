@@ -7,7 +7,6 @@ from unittest import skip
 
 class TestMockSolrSearchGet(IntegrationTestCase):
 
-    api_headers = {'Accept': 'application/json'}
     features = ['solr']
 
     @browsing
