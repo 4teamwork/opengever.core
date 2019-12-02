@@ -19,6 +19,7 @@ from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
 from opengever.sharing.interfaces import IDisabledPermissionCheck
 from opengever.sharing.interfaces import ISharingConfiguration
+from opengever.workspace.utils import get_workspace_user_ids
 from pkg_resources import resource_filename
 from plone import api
 from plone.app.workflow.browser.sharing import merge_search_results
@@ -404,7 +405,7 @@ class OpengeverSharingView(SharingView):
                                   get_principal_title,
                                   principal_type,
                                   id_key):
-        """A mapper for the original method, to constraint the users
+        """A mapper for the original method, to constrain the users
         list to only the users which are assigned to the current client
         """
 
@@ -443,6 +444,42 @@ class OpengeverSharingView(SharingView):
         portal = api.portal.get()
         qs = urlencode({'group': groupid})
         return '/'.join((portal.portal_url(), '@@list_groupmembers?%s' % qs))
+
+
+class WorkspaceSharingView(OpengeverSharingView):
+
+    def _principal_search_results(self,
+                                  search_for_principal,
+                                  get_principal_by_id,
+                                  get_principal_title,
+                                  principal_type,
+                                  id_key):
+        """A mapper for the original method, to constrain the users
+        list to only users having permissions on the workspace,
+        except for administrators which can set permissions for any users.
+        """
+
+        all_principals = SharingView._principal_search_results(
+            self,
+            search_for_principal,
+            get_principal_by_id,
+            get_principal_title,
+            principal_type,
+            id_key)
+
+        if not all_principals:
+            return all_principals
+
+        # Administrators can give permissions to any user
+        user = api.user.get_current()
+        is_administrator = user.has_role('Administrator') or user.has_role('Manager')
+        if is_administrator:
+            return all_principals
+
+        workspace_users = set(get_workspace_user_ids(self.context))
+        results = [principal for principal in all_principals
+                   if principal["id"] in workspace_users]
+        return results
 
 
 class SharingTab(OpengeverSharingView):

@@ -10,10 +10,11 @@ from opengever.base.role_assignments import TaskRoleAssignment
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.testing import IntegrationTestCase
 from plone import api
+from urllib import urlencode
 import json
 
 
-class TestOpengeverSharingIntegration(IntegrationTestCase):
+class TestOpengeverSharing(IntegrationTestCase):
 
     @browsing
     def test_available_roles_on_a_dossier(self, browser):
@@ -400,3 +401,128 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.assertEquals(
             [],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
+
+
+class TestWorkspaceSharing(IntegrationTestCase):
+
+    @browsing
+    def test_available_roles_on_a_workspace_root(self, browser):
+        # Only managers can delegate roles on the workspace root
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.workspace_root, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'WorkspacesCreator', u'WorkspacesUser'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
+    def test_available_roles_on_a_workspace(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.workspace, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'WorkspaceAdmin', u'WorkspaceOwner', u'WorkspaceMember', u'WorkspaceGuest'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
+    def test_available_roles_on_a_workspace_folder(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.workspace_folder, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'WorkspaceAdmin', u'WorkspaceMember', u'WorkspaceGuest'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
+    def test_only_workspace_users_are_shown_for_workspace_admin_on_workspace(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'fridolin.hugentobler', u'hans.peter',
+             u'beatrice.schrodinger', u'gunther.frohlich'],
+            [entry['id'] for entry in browser.json.get('entries')])
+
+    @browsing
+    def test_only_workspace_users_are_shown_for_workspace_owner_on_workspace(self, browser):
+        self.login(self.workspace_owner, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'fridolin.hugentobler', u'hans.peter',
+             u'beatrice.schrodinger', u'gunther.frohlich'],
+            [entry['id'] for entry in browser.json.get('entries')])
+
+    @browsing
+    def test_all_users_are_shown_for_admins_on_workspace(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'nicole.kohler', u'fridolin.hugentobler', u'gunther.frohlich',
+             u'hans.peter', u'beatrice.schrodinger'],
+            [entry['id'] for entry in browser.json.get('entries')])
+
+    @browsing
+    def test_only_workspace_users_are_shown_for_workspace_admin_on_workspace_folder(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace_folder,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger'],
+            [entry['id'] for entry in browser.json.get('entries')])
+
+    @browsing
+    def test_only_workspace_users_are_shown_for_workspace_owner_on_workspace_folder(self, browser):
+        self.login(self.workspace_owner, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace_folder,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger'],
+            [entry['id'] for entry in browser.json.get('entries')])
+
+    @browsing
+    def test_all_users_are_shown_for_admins_on_workspace_folder(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        query = {"search": "nicole"}
+        browser.open(self.workspace_folder,
+                     view='@sharing?{}'.format(urlencode(query)),
+                     method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [u'nicole.kohler', u'fridolin.hugentobler',
+             u'hans.peter', u'beatrice.schrodinger'],
+            [entry['id'] for entry in browser.json.get('entries')])
