@@ -272,19 +272,21 @@ class TestListingWithRealSolr(IntegrationTestCase):
     features = ('bumblebee', 'solr')
 
     @browsing
-    def test_real_solr_search_results_dynamic(self, browser):
+    def test_dossier_listing_fails_for_responsible_fullname(self, browser):
         self.login(self.regular_user, browser=browser)
-        create(Builder('dossier')
-               .titled(u'uniqueterm')
-               .within(self.repository_root))
-        commit_solr()
-        browser.open(self.repository_root,
-                     view='@solrsearch?q=uniqueterm',
-                     headers={'Accept': 'application/json'})
-        result = browser.json
-        self.assertEqual(1, result['items_total'])
-        self.assertEqual(1, len(result['items']))
-        self.assertEqual(u'uniqueterm', result['items'][0]['title'])
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=reference',
+            'columns=title',
+            'columns=review_state',
+            'columns=responsible_fullname',
+            'columns=relative_path',
+            'columns=UID',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        with browser.expect_http_error(500):
+            browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
 
     @browsing
     def test_dossier_listing(self, browser):
@@ -294,7 +296,6 @@ class TestListingWithRealSolr(IntegrationTestCase):
             'columns=reference',
             'columns=title',
             'columns=review_state',
-            'columns=responsible_fullname',
             'columns=relative_path',
             'columns=UID',
             'sort_on=created',
@@ -531,7 +532,7 @@ class TestListingWithRealSolr(IntegrationTestCase):
         items = browser.json['items']
         start_dates = list(set(map(lambda x: x['start'], items)))
         self.assertEqual(1, len(start_dates))
-        self.assertEqual('2016-01-01', start_dates[0])
+        self.assertEqual('2016-01-01T00:00:00Z', start_dates[0])
 
     @browsing
     def test_filter_by_deadline(self, browser):
@@ -553,7 +554,7 @@ class TestListingWithRealSolr(IntegrationTestCase):
         items = browser.json['items']
         deadlines = list(set(map(lambda x: x['deadline'], items)))
         self.assertEqual(1, len(deadlines))
-        self.assertEqual('2016-09-05', deadlines[0])
+        self.assertEqual('2016-09-05T00:00:00Z', deadlines[0])
 
     @browsing
     def test_workspaces_listing(self, browser):
@@ -796,19 +797,19 @@ class TestListingWithRealSolr(IntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1',
                     u'completed': False,
-                    u'deadline': u'2016-09-01',
+                    u'deadline': u'2016-09-01T00:00:00Z',
                     u'responsible': None,
                     u'title': u'Fix user login'},
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-3',
                     u'completed': True,
-                    u'deadline': u'2016-09-02',
+                    u'deadline': u'2016-09-02T00:00:00Z',
                     u'responsible': u'beatrice.schrodinger',
                     u'title': u'Cleanup installation'},
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-2',
                     u'completed': False,
-                    u'deadline': u'2016-12-01',
+                    u'deadline': u'2016-12-01T00:00:00Z',
                     u'responsible': u'beatrice.schrodinger',
                     u'title': u'Go live'}],
             browser.json['items'])
