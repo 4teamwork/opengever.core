@@ -5,9 +5,11 @@
         "title_de": "Sitzungen",
         "_ac_local_roles": {
             "{{{orgunit.users_group}}}": [
-                "Contributor",
-                "Editor",
-                "Reader"
+                "MeetingUser"
+            ],
+            "{{{deployment.rolemanager_group}}}": [
+                "CommitteeAdministrator",
+                "MeetingUser"
             ]
         }
     }
