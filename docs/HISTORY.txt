@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2019.5.0 (unreleased)
----------------------
+2019.5.0rc1 (2019-12-03)
+------------------------
 
 - Make Period a proper plone content type. Migrate old SQL base periods. [deiferni]
 - Restrict available users in sharing on workspaces and workspace folders. [njohner]
