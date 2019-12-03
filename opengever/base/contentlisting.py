@@ -51,10 +51,7 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         when the brain does not have keywords, as solr will simply not return
         the field in that case.
         """
-        if hasattr(self._brain, "Subject"):
-            return self._brain.Subject
-        else:
-            return None
+        return getattr(self._brain, "Subject", None)
 
     @property
     def is_document(self):

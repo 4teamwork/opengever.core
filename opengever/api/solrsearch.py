@@ -92,7 +92,7 @@ class SolrSearchGet(SolrQueryBaseService):
         return res
 
     def is_field_allowed(self, field):
-        # Do not allow access to private attributes
+        """Do not allow private or blacklisted attributes"""
         if field.startswith("_") or field in BLACKLISTED_ATTRIBUTES:
             return False
         return True

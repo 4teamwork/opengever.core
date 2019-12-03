@@ -97,7 +97,7 @@ def relative_path(brain):
 
 class SimpleListingField(object):
     """Mapping between a requested field_name, the corresponding index
-    in sol, the accessor on the ContentListingObject, and an index used
+    in solr, the accessor on the ContentListingObject, and an index used
     when sorting according to this field.
 
     transform: used to cast the value of the index to a label
@@ -271,11 +271,9 @@ class SolrQueryBaseService(Service):
         """Solrsearch endpoint uses start while listing endpoint uses start_b
         """
         if 'start' in params:
-            start = safe_int(params['start'])
-            del params['start']
+            start = safe_int(params.pop('start'))
         elif 'start_b' in params:
-            start = safe_int(params['start_b'])
-            del params['start_b']
+            start = safe_int(params.pop('start_b'))
         else:
             start = 0
         return start
@@ -284,11 +282,9 @@ class SolrQueryBaseService(Service):
         """Solrsearch endpoint uses rows while listing endpoint uses b_size
         """
         if 'rows' in params:
-            rows = min(safe_int(params['rows'], 25), 1000)
-            del params['rows']
+            rows = min(safe_int(params.pop('rows'), 25), 1000)
         elif 'b_size' in params:
-            rows = min(safe_int(params['b_size'], 25), 1000)
-            del params['b_size']
+            rows = min(safe_int(params.pop('b_size'), 25), 1000)
         else:
             rows = 25
         return rows

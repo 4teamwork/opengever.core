@@ -16,7 +16,8 @@ def get_path_depth(context):
     return len(context.getPhysicalPath()) - 1
 
 
-OTHER_FIELDS = set([
+# Fields with no mapping but allowed in the listing endpoint.
+OTHER_ALLOWED_FIELDS = set([
     'file_extension',
     'deadline',
     'containing_dossier',
@@ -97,7 +98,7 @@ class Listing(SolrQueryBaseService):
     """List of content items"""
 
     required_response_fields = REQUIRED_RESPONSE_FIELDS
-    other_allowed_fields = OTHER_FIELDS
+    other_allowed_fields = OTHER_ALLOWED_FIELDS
 
     def __init__(self, context, request):
         super(Listing, self).__init__(context, request)
