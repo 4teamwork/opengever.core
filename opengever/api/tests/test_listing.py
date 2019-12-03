@@ -245,7 +245,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
     features = ('bumblebee', 'solr')
 
     @browsing
-    def test_dossier_listing_fails_for_responsible_fullname(self, browser):
+    def test_dossier_listing_works_for_responsible_fullname(self, browser):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
             'name=dossiers',
@@ -258,8 +258,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        with browser.expect_http_error(500):
-            browser.open(self.repository_root, view=view, headers=self.api_headers)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
 
     @browsing
     def test_dossier_listing(self, browser):
