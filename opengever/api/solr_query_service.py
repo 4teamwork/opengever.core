@@ -268,12 +268,12 @@ class SolrQueryBaseService(Service):
         return query, filters, start, rows, sort, field_list, additional_params
 
     def extract_start(self, params):
-        """Solrsearch endpoint uses start while listing endpoint uses start_b
+        """Solrsearch endpoint uses start while listing endpoint uses b_start
         """
         if 'start' in params:
             start = safe_int(params.pop('start'))
-        elif 'start_b' in params:
-            start = safe_int(params.pop('start_b'))
+        elif 'b_start' in params:
+            start = safe_int(params.pop('b_start'))
         else:
             start = 0
         return start
