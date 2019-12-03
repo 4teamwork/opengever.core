@@ -276,8 +276,9 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         browser.open(self.repository_root, view=view, headers=self.api_headers)
         results = browser.json
 
-        self.assertEqual([u'b_size', u'b_start', u'@id', u'items_total', u'items'],
-                         results.keys())
+        self.assertItemsEqual(
+            [u'b_size', u'b_start', u'@id', u'items_total', u'items'],
+            results.keys())
         self.assertEqual(0, results["b_start"])
         self.assertEqual(25, results["b_size"])
         expected_url = "{}/{}".format(self.repository_root.absolute_url(),
