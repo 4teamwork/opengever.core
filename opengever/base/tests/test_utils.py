@@ -5,6 +5,7 @@ from mocker import ANY
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.utils import escape_html
 from opengever.base.utils import file_checksum
+from opengever.base.utils import safe_int
 from opengever.dossier.utils import find_parent_dossier
 from opengever.testing import IntegrationTestCase
 from plone.namedfile.file import NamedFile
@@ -164,3 +165,22 @@ class TestChecksum(TestCase):
         alg, chksum = file_checksum(filename, algorithm=u'SHA256')
         self.assertEqual(alg, u'SHA256')
         self.assertEqual(chksum, '2cbe78150099d95789ceb5606818eeefccc7228cedd9bbe9cf7ce6af7071abd2')
+
+
+class TestSafeInt(TestCase):
+
+    def test_transparently_returns_int(self):
+        value = 3
+        self.assertEquals(3, safe_int(value))
+
+    def test_casts_string_to_int(self):
+        value = '3'
+        self.assertEquals(3, safe_int(value))
+
+    def test_defaults_to_zero(self):
+        value = 'not an int'
+        self.assertEqual(0, safe_int(value))
+
+    def test_custom_default_value(self):
+        value = 'not an int'
+        self.assertEqual(7, safe_int(value, 7))

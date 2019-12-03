@@ -8,6 +8,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
 from opengever.base.utils import get_preferred_language_code
+from opengever.base.utils import safe_int
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.task.helper import task_type_helper
 from plone import api
@@ -237,13 +238,6 @@ date_fields = set([
 
 FIELDS_WITH_MAPPING.extend(
     [DateListingField(field_name) for field_name in date_fields])
-
-
-def safe_int(value, default=0):
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return default
 
 
 class SolrQueryBaseService(Service):

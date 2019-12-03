@@ -207,3 +207,10 @@ def rewrite_path_list_to_absolute_paths(request):
             new_paths.append(new_path)
 
         request['paths'] = request.form['paths'] = new_paths
+
+
+def safe_int(value, default=0):
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default
