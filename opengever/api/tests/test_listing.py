@@ -277,7 +277,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         results = browser.json
 
         self.assertItemsEqual(
-            [u'b_size', u'b_start', u'@id', u'items_total', u'items'],
+            [u'b_size', u'b_start', u'@id', u'items_total', u'items', u'facets'],
             results.keys())
         self.assertEqual(0, results["b_start"])
         self.assertEqual(25, results["b_size"])
