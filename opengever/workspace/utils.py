@@ -27,7 +27,7 @@ def is_within_workspace(context):
     return bool(filter(IWorkspace.providedBy, aq_chain(context)))
 
 
-def get_workspace_user_ids(context):
+def get_workspace_user_ids(context, disregard_block=False):
     """ Walks up the Acquisition chain and collects all userids assigned
     to a role with the View permission.
     """
@@ -49,8 +49,7 @@ def get_workspace_user_ids(context):
         users = users.union(set(
             map(itemgetter(0),
                 filter(lambda args: is_valid_userid(*args), userroles))))
-
-        if getattr(aq_base(context), '__ac_local_roles_block__', None):
+        if getattr(aq_base(context), '__ac_local_roles_block__', None) and not disregard_block:
             break
 
     return list(users)
