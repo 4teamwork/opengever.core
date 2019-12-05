@@ -14,7 +14,7 @@ msgstr ""
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
-#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "Active"
 msgstr ""
 
@@ -122,6 +122,31 @@ msgstr ""
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--STATUS--active"
+msgstr ""
+
+#. Default: "committee admin"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--CommitteeAdministrator"
+msgstr ""
+
+#. Default: "committee member"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--CommitteeMember"
+msgstr ""
+
+#. Default: "committee responsible"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--CommitteeResponsible"
+msgstr ""
+
+#. Default: "manager"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--Manager"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--STATUS--active"
 msgstr ""
 
 #. Default: "admin"
@@ -262,6 +287,41 @@ msgstr ""
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--STATUS--active"
+msgstr ""
+
+#. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--Administrator"
+msgstr ""
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--Manager"
+msgstr ""
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceGuest"
+msgstr ""
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceMember"
+msgstr ""
+
+#. Default: "workspace owner"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceOwner"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--STATUS--active"
 msgstr ""
 
 #. Default: "admin"
