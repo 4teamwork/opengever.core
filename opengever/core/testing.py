@@ -17,10 +17,8 @@ from opengever.base.model import create_session
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core import sqlite_testing
-from opengever.core.cached_testing import CACHE_GEVER_FIXTURE
-from opengever.core.cached_testing import CACHE_GEVER_INSTALLATION
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
-from opengever.core.cached_testing import DB_CACHE_MANAGER
+from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
@@ -486,20 +484,23 @@ class ContentFixtureLayer(OpengeverFixture):
         portal.portal_languages.use_combined_language_codes = True
         portal.portal_languages.addSupportedLanguage('de-ch')
 
-        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_FIXTURE):
+        db_cache_manager = self['db_cache_manager']
+
+        if not db_cache_manager.is_loaded_from_cache('GEVER_fixture'):
             sqlite_testing.create_tables()
             # Avoid circular imports:
             from opengever.testing.fixtures import OpengeverContentFixture
             setRequest(portal.REQUEST)
             self['fixture_lookup_table'] = OpengeverContentFixture()()
             setRequest(None)
-            DB_CACHE_MANAGER.data['fixture_lookup_table'] = (
+
+            db_cache_manager.data['fixture_lookup_table'] = (
                 self['fixture_lookup_table'])
-            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_FIXTURE)
+            db_cache_manager.dump_to_cache(self['zodbDB'], 'GEVER_fixture')
         else:
-            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_FIXTURE)
+            db_cache_manager.apply_cache_fixes('GEVER_fixture')
             self['fixture_lookup_table'] = (
-                DB_CACHE_MANAGER.data['fixture_lookup_table'])
+                db_cache_manager.data['fixture_lookup_table'])
 
         # bumblebee should only be turned on on-demand with the feature flag.
         # if this assertion fails a profile in the fixture enables bumblebee,
@@ -507,11 +508,13 @@ class ContentFixtureLayer(OpengeverFixture):
         assert not is_bumblebee_feature_enabled()
 
     def installOpengeverProfiles(self, portal):
-        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_INSTALLATION):
+        db_cache_manager = self['db_cache_manager']
+
+        if not db_cache_manager.is_loaded_from_cache('GEVER_installation'):
             super(ContentFixtureLayer, self).installOpengeverProfiles(portal)
-            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_INSTALLATION)
+            db_cache_manager.dump_to_cache(self['zodbDB'], 'GEVER_installation')
         else:
-            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_INSTALLATION)
+            db_cache_manager.apply_cache_fixes('GEVER_installation')
 
     def testTearDown(self):
         super(ContentFixtureLayer, self).testTearDown()
@@ -568,6 +571,8 @@ class ContentFixtureWithSolrLayer(ContentFixtureLayer):
     (see docstring of ContentFixtureLayer for details). This layer also
     shouldn't be used as a base for other layers.
     """
+
+    defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR, )
 
     def maybe_start_solr(self):
         SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
