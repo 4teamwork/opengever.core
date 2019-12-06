@@ -32,6 +32,11 @@ import re
 import sys
 
 
+EXCLUDED_LAYERS = [
+    'opengever.core.testing.opengever.core:integration:solr',
+]
+
+
 def which(program):
     def is_exe(fpath):
         return path.isfile(fpath) and access(fpath, X_OK)
@@ -121,6 +126,10 @@ def discover_tests(layers=None, modules=None):
                 batches[layer][classname] = 0
 
             batches[layer][classname] += 1
+
+    # Drop excluded layers
+    for excluded_layer in EXCLUDED_LAYERS:
+        batches.pop(excluded_layer, None)
 
     return batches
 
