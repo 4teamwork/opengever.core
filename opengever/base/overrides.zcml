@@ -2,6 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="opengever.base">
 
   <browser:menu
@@ -57,5 +58,13 @@
       factory=".contentlisting.OpengeverRealContentListingObject"
       for="Products.CMFCore.interfaces.IContentish"
       />
+
+  <!-- We need to use overrides for customizing this adapter (instead of our
+  browser layer) because the @@warmup view gets called on the Zope App root
+  (instead of the Plone site) and we therefore don't have our
+  IOpengeverBaseLayer browser layer on the request -->
+  <configure zcml:condition="installed ftw.monitor">
+    <adapter factory=".warmup.GEVERWarmupPerformer" />
+  </configure>
 
 </configure>
