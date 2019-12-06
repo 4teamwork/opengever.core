@@ -6,6 +6,7 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.contentstats.logger import setup_logger
+from ftw.solr.connection import local_data as solr_connection_cache
 from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing import FTWIntegrationTesting
@@ -442,7 +443,9 @@ class ContentFixtureLayer(OpengeverFixture):
         pass
 
     def maybe_configure_solr(self, configurationContext):
-        pass
+        # Clear ftw.solr's thread-local connection cache
+        if hasattr(solr_connection_cache, 'connection'):
+            delattr(solr_connection_cache, 'connection')
 
     def setUpZope(self, app, configurationContext):
         self.maybe_start_solr()
@@ -585,6 +588,10 @@ class ContentFixtureWithSolrLayer(ContentFixtureLayer):
             '                   base="/solr/{SOLR_CORE}" />'
             '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
             context=configurationContext)
+
+        # Clear ftw.solr's thread-local connection cache
+        if hasattr(solr_connection_cache, 'connection'):
+            delattr(solr_connection_cache, 'connection')
 
         # Clear solr from potential artefacts of the previous run.
         SolrReplicationAPIClient.get_instance().clear()
