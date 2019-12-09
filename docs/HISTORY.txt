@@ -4,6 +4,7 @@ Changelog
 2019.5.0rc2 (unreleased)
 ------------------------
 
+- Bump ftw.solr to 2.8.0 to get support for uploading blobs. [lgraf]
 - Add custom IWarmupPerformer to also warm up GEVER's trashed index. [lgraf]
 
 
