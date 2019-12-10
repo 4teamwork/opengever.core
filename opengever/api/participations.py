@@ -17,27 +17,6 @@ from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
 
-def participation_item(
-        context, request, token,
-        participation_type, editable, role, participant_fullname, inviter_fullname):
-
-    return {
-        '@id': '{}/@participations/{}/{}'.format(
-            context.absolute_url(),
-            participation_type.path_identifier,
-            token),
-        '@type': 'virtual.participations.{}'.format(participation_type.id),
-        'participant_fullname': participant_fullname,
-        'inviter_fullname': inviter_fullname,
-        'role': role,
-        'readable_role': PARTICIPATION_ROLES.get(role).translated_title(request),
-        'is_editable': editable,
-        'participation_type': participation_type.id,
-        'readable_participation_type': participation_type.translated_title(request),
-        'token': token,
-    }
-
-
 class ParticipationTraverseService(Service):
 
     implements(IPublishTraverse)
@@ -50,6 +29,26 @@ class ParticipationTraverseService(Service):
         # Consume any path segments after /@participations as parameters
         self.params.append(name)
         return self
+
+    def prepare_response_item(self, participant):
+        token = participant.get('token')
+        participation_type = PARTICIPATION_TYPES[participant.get('type_')]
+        role = participant.get('roles')[0]
+        return {
+            '@id': '{}/@participations/{}/{}'.format(
+                self.context.absolute_url(),
+                participation_type.path_identifier,
+                token),
+            '@type': 'virtual.participations.{}'.format(participation_type.id),
+            'participant_fullname': participant.get('name'),
+            'inviter_fullname': participant.get('inviter'),
+            'role': role,
+            'readable_role': PARTICIPATION_ROLES.get(role).translated_title(self.request),
+            'is_editable': participant.get('can_manage'),
+            'participation_type': participation_type.id,
+            'readable_participation_type': participation_type.translated_title(self.request),
+            'token': token,
+        }
 
 
 class ParticipationsGet(ParticipationTraverseService):
@@ -75,15 +74,7 @@ class ParticipationsGet(ParticipationTraverseService):
         manager = ManageParticipants(self.context, self.request)
         participants = manager.get_participants() + manager.get_pending_invitations()
         for participant in participants:
-            yield participation_item(
-                self.context, self.request,
-                token=participant.get('token'),
-                participation_type=PARTICIPATION_TYPES[participant.get('type_')],
-                editable=participant.get('can_manage'),
-                role=participant.get('roles')[0],
-                participant_fullname=participant.get('name'),
-                inviter_fullname=participant.get('inviter')
-                )
+            yield self.prepare_response_item(participant)
 
     def _participant(self, token):
         for participant in self._participations():
@@ -127,16 +118,8 @@ class ParticipationsPost(ParticipationTraverseService):
             raise BadRequest("User already participate to this workspace")
 
         manager = ManageParticipants(self.context, self.request)
-        invitation = manager._add(userid, role)
-        return participation_item(
-            self.context, self.request,
-            token=invitation['iid'],
-            participation_type=PARTICIPATION_TYPES['invitation'],
-            editable=manager.can_manage_member(),
-            role=invitation['role'],
-            participant_fullname=manager.get_full_user_info(userid=invitation['recipient']),
-            inviter_fullname=manager.get_full_user_info(userid=invitation['inviter'])
-            )
+        invitation = manager.invitation_to_item(manager._add(userid, role))
+        return self.prepare_response_item(invitation)
 
     def validate_duplicated_users(self, userid):
         manager = ManageParticipants(self.context, self.request)
