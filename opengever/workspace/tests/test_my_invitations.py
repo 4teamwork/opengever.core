@@ -52,14 +52,14 @@ class TestMyInvitationsView(IntegrationTestCase):
         browser.css('a.AcceptInvitation').first.click()
         self.assertEquals(self.workspace, browser.context)
         self.assertEquals(1,
-                          len(tuple(self.storage.iter_invitions_for_recipient(
+                          len(tuple(self.storage.iter_invitations_for_recipient(
                               self.regular_user.getId()))),
                           'Expect only one item')
 
     @browsing
     def test_cannot_accept_invitation_of_other_users(self, browser):
         self.login(self.workspace_admin, browser=browser)
-        foreign_iid = tuple(self.storage.iter_invitions_for_context(
+        foreign_iid = tuple(self.storage.iter_invitations_for_context(
             self.workspace))[0]['iid']
 
         with browser.expect_http_error(400):
@@ -103,7 +103,7 @@ class TestMyInvitationsView(IntegrationTestCase):
     @browsing
     def test_cannot_decline_invitation_from_other_users(self, browser):
         self.login(self.workspace_admin, browser=browser)
-        foreign_iid = tuple(self.storage.iter_invitions_for_context(
+        foreign_iid = tuple(self.storage.iter_invitations_for_context(
             self.workspace2))[0]['iid']
 
         with browser.expect_http_error(400):

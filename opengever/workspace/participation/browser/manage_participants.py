@@ -64,7 +64,7 @@ class ManageParticipants(BrowserView):
         storage = getUtility(IInvitationStorage)
         entries = []
 
-        for invitation in storage.iter_invitions_for_context(self.context):
+        for invitation in storage.iter_invitations_for_context(self.context):
             item = dict(name=self.get_full_user_info(userid=invitation['recipient']),
                         roles=[invitation['role']],
                         inviter=self.get_full_user_info(

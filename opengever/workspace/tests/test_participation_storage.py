@@ -115,11 +115,11 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
 
         self.assertItemsEqual(
             [workspace1, workspace2],
-            map(itemgetter('iid'), storage.iter_invitions_for_context(self.workspace)))
+            map(itemgetter('iid'), storage.iter_invitations_for_context(self.workspace)))
 
         self.assertItemsEqual(
             [folder],
-            map(itemgetter('iid'), storage.iter_invitions_for_context(self.workspace_folder)))
+            map(itemgetter('iid'), storage.iter_invitations_for_context(self.workspace_folder)))
 
     def test_iter_invitations_for_recipient(self):
         self.login(self.workspace_admin)
@@ -130,11 +130,11 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
 
         self.assertItemsEqual(
             [foo1, foo2],
-            map(itemgetter('iid'), storage.iter_invitions_for_recipient('foo')))
+            map(itemgetter('iid'), storage.iter_invitations_for_recipient('foo')))
 
         self.assertItemsEqual(
             [bar],
-            map(itemgetter('iid'), storage.iter_invitions_for_recipient('bar')))
+            map(itemgetter('iid'), storage.iter_invitations_for_recipient('bar')))
 
     def test_iter_invitations_for_inviter(self):
         self.login(self.workspace_admin)
@@ -145,11 +145,11 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
 
         self.assertItemsEqual(
             [foo1, foo2],
-            map(itemgetter('iid'), storage.iter_invitions_for_inviter('foo')))
+            map(itemgetter('iid'), storage.iter_invitations_for_inviter('foo')))
 
         self.assertItemsEqual(
             [bar],
-            map(itemgetter('iid'), storage.iter_invitions_for_inviter('bar')))
+            map(itemgetter('iid'), storage.iter_invitations_for_inviter('bar')))
 
     def add_invitation(self, **options):
         options.setdefault('target', self.workspace)
