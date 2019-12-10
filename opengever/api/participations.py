@@ -35,7 +35,7 @@ class ParticipationTraverseService(Service):
         participation_type = PARTICIPATION_TYPES[participant.get('type_')]
         role = participant.get('roles')[0]
         return {
-            '@id': '{}/@participations/{}/{}'.format(
+            '@id': '{}/@{}/{}'.format(
                 self.context.absolute_url(),
                 participation_type.path_identifier,
                 token),
@@ -61,29 +61,27 @@ class ParticipationsGet(ParticipationTraverseService):
     def reply(self):
         token = self.read_params()
         if token:
-            return self._participant(token)
+            return self.get_response_item(token)
         else:
             result = {}
-            self.extend_with_participations(result)
+            result['items'] = self.get_response_items()
             return result
 
-    def extend_with_participations(self, result):
-        result['items'] = list(self._participations())
+    def get_response_items(self):
+        return [self.prepare_response_item(item) for item in self._items()]
 
-    def _participations(self):
+    def _items(self):
         manager = ManageParticipants(self.context, self.request)
-        participants = manager.get_participants() + manager.get_pending_invitations()
-        for participant in participants:
-            yield self.prepare_response_item(participant)
+        return manager.get_participants()
 
-    def _participant(self, token):
-        for participant in self._participations():
-            if participant.get('token') == token:
-                return participant
+    def get_response_item(self, token):
+        for item in self._items():
+            if item.get('token') == token:
+                return self.prepare_response_item(item)
 
     def read_params(self):
-        if len(self.params) == 2:
-            return self.params[1]
+        if len(self.params) == 1:
+            return self.params[0]
         return None
 
 

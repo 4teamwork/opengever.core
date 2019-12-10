@@ -374,6 +374,14 @@
       />
 
   <plone:service
+      method="GET"
+      name="@invitations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".invitations.InvitationsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="DELETE"
       name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"

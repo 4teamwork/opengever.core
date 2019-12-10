@@ -27,12 +27,6 @@ class TestParticipationGet(IntegrationTestCase):
     def test_list_all_current_participants_and_invitations(self, browser):
         self.login(self.workspace_owner, browser)
 
-        iid = getUtility(IInvitationStorage).add_invitation(
-            self.workspace,
-            self.regular_user.getId(),
-            self.workspace_owner.getId(),
-            'WorkspaceGuest')
-
         response = browser.open(
             self.workspace.absolute_url() + '/@participations',
             method='GET',
@@ -42,7 +36,7 @@ class TestParticipationGet(IntegrationTestCase):
         self.assertItemsEqual(
             [
                 {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/users/beatrice.schrodinger',
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
                     u'@type': u'virtual.participations.user',
                     u'is_editable': True,
                     u'inviter_fullname': None,
@@ -54,7 +48,7 @@ class TestParticipationGet(IntegrationTestCase):
                     u'readable_participation_type': u'User',
                 },
                 {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/users/fridolin.hugentobler',
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
                     u'@type': u'virtual.participations.user',
                     u'is_editable': True,
                     u'inviter_fullname': None,
@@ -66,7 +60,7 @@ class TestParticipationGet(IntegrationTestCase):
                     u'readable_participation_type': u'User',
                 },
                 {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/users/gunther.frohlich',
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
                     u'@type': u'virtual.participations.user',
                     u'is_editable': False,
                     u'inviter_fullname': None,
@@ -78,7 +72,7 @@ class TestParticipationGet(IntegrationTestCase):
                     u'readable_participation_type': u'User',
                 },
                 {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/users/hans.peter',
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
                     u'@type': u'virtual.participations.user',
                     u'is_editable': True,
                     u'inviter_fullname': None,
@@ -88,18 +82,6 @@ class TestParticipationGet(IntegrationTestCase):
                     u'role': u'WorkspaceGuest',
                     u'participation_type': u'user',
                     u'readable_participation_type': u'User',
-                },
-                {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/invitations/{}'.format(iid),
-                    u'@type': u'virtual.participations.invitation',
-                    u'is_editable': True,
-                    u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
-                    u'participant_fullname': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                    u'token': iid,
-                    u'readable_role': u'Guest',
-                    u'role': u'WorkspaceGuest',
-                    u'participation_type': u'invitation',
-                    u'readable_participation_type': u'Invitation',
                 },
             ], response.get('items'))
 
@@ -180,14 +162,14 @@ class TestParticipationGet(IntegrationTestCase):
             'WorkspaceGuest')
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations/invitations/{}'.format(iid),
+            self.workspace.absolute_url() + '/@invitations/{}'.format(iid),
             method='GET',
             headers=http_headers(),
         ).json
 
         self.assertDictEqual(
             {
-                u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/invitations/{}'.format(iid),
+                u'@id': u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
                 u'@type': u'virtual.participations.invitation',
                 u'is_editable': True,
                 u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
@@ -204,14 +186,14 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_owner, browser)
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_guest.id),
+            self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
             method='GET',
             headers=http_headers(),
         ).json
 
         self.assertDictEqual(
             {
-                u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/users/hans.peter',
+                u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
                 u'@type': u'virtual.participations.user',
                 u'is_editable': True,
                 u'inviter_fullname': None,
@@ -358,7 +340,7 @@ class TestParticipationPost(IntegrationTestCase):
         iid = item.get('token')
         self.assertDictEqual(
             {
-                u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/invitations/{}'.format(iid),
+                u'@id': u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
                 u'@type': u'virtual.participations.invitation',
                 u'inviter_fullname': u'Hugentobler Fridolin (fridolin.hugentobler)',
                 u'is_editable': True,
@@ -372,7 +354,7 @@ class TestParticipationPost(IntegrationTestCase):
             item)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace.absolute_url() + '/@invitations',
             method='GET',
             headers=http_headers(),
         )
