@@ -6,6 +6,7 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.contentstats.logger import setup_logger
+from ftw.solr.connection import local_data as solr_connection_cache
 from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing import FTWIntegrationTesting
@@ -16,10 +17,10 @@ from opengever.base.model import create_session
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core import sqlite_testing
-from opengever.core.cached_testing import CACHE_GEVER_FIXTURE
-from opengever.core.cached_testing import CACHE_GEVER_INSTALLATION
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
-from opengever.core.cached_testing import DB_CACHE_MANAGER
+from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR
+from opengever.core.solr_testing import SolrReplicationAPIClient
+from opengever.core.solr_testing import SolrServer
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
@@ -433,8 +434,21 @@ class ContentFixtureLayer(OpengeverFixture):
         assert eventlog_conf.eventlog is not None
         getConfiguration().eventlog = eventlog_conf.eventlog
 
+    def maybe_start_solr(self):
+        pass
+
+    def maybe_stop_solr(self):
+        pass
+
+    def maybe_configure_solr(self, configurationContext):
+        # Clear ftw.solr's thread-local connection cache
+        if hasattr(solr_connection_cache, 'connection'):
+            delattr(solr_connection_cache, 'connection')
+
     def setUpZope(self, app, configurationContext):
+        self.maybe_start_solr()
         super(ContentFixtureLayer, self).setUpZope(app, configurationContext)
+        self.maybe_configure_solr(configurationContext)
 
         # Setting up the database, which creates a new engine, must happen after
         # opengever's ZCML is loaded in order to have engine creation event
@@ -470,20 +484,23 @@ class ContentFixtureLayer(OpengeverFixture):
         portal.portal_languages.use_combined_language_codes = True
         portal.portal_languages.addSupportedLanguage('de-ch')
 
-        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_FIXTURE):
+        db_cache_manager = self['db_cache_manager']
+
+        if not db_cache_manager.is_loaded_from_cache('GEVER_fixture'):
             sqlite_testing.create_tables()
             # Avoid circular imports:
             from opengever.testing.fixtures import OpengeverContentFixture
             setRequest(portal.REQUEST)
             self['fixture_lookup_table'] = OpengeverContentFixture()()
             setRequest(None)
-            DB_CACHE_MANAGER.data['fixture_lookup_table'] = (
+
+            db_cache_manager.data['fixture_lookup_table'] = (
                 self['fixture_lookup_table'])
-            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_FIXTURE)
+            db_cache_manager.dump_to_cache(self['zodbDB'], 'GEVER_fixture')
         else:
-            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_FIXTURE)
+            db_cache_manager.apply_cache_fixes('GEVER_fixture')
             self['fixture_lookup_table'] = (
-                DB_CACHE_MANAGER.data['fixture_lookup_table'])
+                db_cache_manager.data['fixture_lookup_table'])
 
         # bumblebee should only be turned on on-demand with the feature flag.
         # if this assertion fails a profile in the fixture enables bumblebee,
@@ -491,11 +508,13 @@ class ContentFixtureLayer(OpengeverFixture):
         assert not is_bumblebee_feature_enabled()
 
     def installOpengeverProfiles(self, portal):
-        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_INSTALLATION):
+        db_cache_manager = self['db_cache_manager']
+
+        if not db_cache_manager.is_loaded_from_cache('GEVER_installation'):
             super(ContentFixtureLayer, self).installOpengeverProfiles(portal)
-            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_INSTALLATION)
+            db_cache_manager.dump_to_cache(self['zodbDB'], 'GEVER_installation')
         else:
-            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_INSTALLATION)
+            db_cache_manager.apply_cache_fixes('GEVER_installation')
 
     def testTearDown(self):
         super(ContentFixtureLayer, self).testTearDown()
@@ -504,6 +523,8 @@ class ContentFixtureLayer(OpengeverFixture):
         self.bumblebee_queue.reset()
 
     def tearDownZope(self, app):
+        self.maybe_stop_solr()
+
         # Clean up ZConf
         conf = getConfiguration()
         del conf.eventlog
@@ -527,6 +548,65 @@ class ContentFixtureLayer(OpengeverFixture):
         pass
 
 
+SOLR_PORT = os.environ.get('PORT4', '19904')
+SOLR_CORE = 'testing'
+
+
+class ContentFixtureWithSolrLayer(ContentFixtureLayer):
+    """Layer with GEVER content fixture and a real Solr.
+
+    Use the SolrIntegrationTestCase (default to this layer) for tests that
+    need to run against a real Solr instance.
+
+    When you modify objects in your tests that lead to changes in Solr, you'll
+    need to make sure to issue a commit to Solr in order for these changes to
+    actually be visible (when querying Solr after that, and asserting on the
+    results for example). When using the SolrIntegrationTestCase, you can
+    simply do self.commit_solr() to commit pending changes on the Solr side.
+
+    Solr contents are isolated between tests using snapshots done via Solr's
+    replication API.
+
+    This layer inherits from ContentFixtureLayer instead of using it as a base
+    (see docstring of ContentFixtureLayer for details). This layer also
+    shouldn't be used as a base for other layers.
+    """
+
+    defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR, )
+
+    def maybe_start_solr(self):
+        SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
+        import collective.indexing.monkey  # noqa
+        import ftw.solr.patches  # noqa
+
+    def maybe_stop_solr(self):
+        SolrServer.get_instance().stop()
+
+    def maybe_configure_solr(self, configurationContext):
+        # Solr must be started before registering the connection since ftw.solr
+        # will get the schema from solr and cache it.
+        SolrServer.get_instance().await_ready()
+        xmlconfig.string(
+            '<configure xmlns:solr="http://namespaces.plone.org/solr">'
+            '  <solr:connection host="localhost"'
+            '                   port="{SOLR_PORT}"'
+            '                   base="/solr/{SOLR_CORE}" />'
+            '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
+            context=configurationContext)
+
+        # Clear ftw.solr's thread-local connection cache
+        if hasattr(solr_connection_cache, 'connection'):
+            delattr(solr_connection_cache, 'connection')
+
+        # Clear solr from potential artefacts of the previous run.
+        SolrReplicationAPIClient.get_instance().clear()
+
+    def setUpPloneSite(self, portal):
+        super(ContentFixtureWithSolrLayer, self).setUpPloneSite(portal)
+        SolrServer.get_instance().commit()
+        SolrReplicationAPIClient.get_instance().create_backup('fixture')
+
+
 class GEVERIntegrationTesting(FTWIntegrationTesting):
 
     def makeSavepoint(self):
@@ -538,6 +618,15 @@ class GEVERIntegrationTesting(FTWIntegrationTesting):
     def testSetUp(self):
         super(GEVERIntegrationTesting, self).testSetUp()
         logout()
+        client = SolrReplicationAPIClient.get_instance()
+        if client._configured:
+            client.await_restored()
+
+    def testTearDown(self):
+        client = SolrReplicationAPIClient.get_instance()
+        if client._configured:
+            client.restore_backup('fixture')
+        super(GEVERIntegrationTesting, self).testTearDown()
 
 
 class ThemeContentFixtureLayer(ContentFixtureLayer):
@@ -565,3 +654,9 @@ OPENGEVER_INTEGRATION_TESTING = GEVERIntegrationTesting(
     # See docstring of ContentFixtureLayer.
     bases=(ContentFixtureLayer(), TRAVERSAL_BROWSER_FIXTURE),
     name="opengever.core:integration")
+
+OPENGEVER_SOLR_INTEGRATION_TESTING = GEVERIntegrationTesting(
+    # Warning: do not try to base other layers on ContentFixtureWithSolrLayer.
+    # See docstring of ContentFixtureLayer.
+    bases=(ContentFixtureWithSolrLayer(), TRAVERSAL_BROWSER_FIXTURE),
+    name="opengever.core:integration:solr")

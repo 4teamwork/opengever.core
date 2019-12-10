@@ -1,6 +1,10 @@
-from opengever.core.cached_testing import BUILDOUT_DIR
+from collective.indexing.queue import processQueue
+from ftw.solr.interfaces import ISolrConnectionManager
+from path import Path
 from threading import Thread
+from zope.component import getUtility
 import atexit
+from itertools import izip_longest
 import errno
 import io
 import os
@@ -9,6 +13,9 @@ import signal
 import socket
 import subprocess
 import time
+
+
+BUILDOUT_DIR = Path(__file__).joinpath('..', '..', '..').abspath()
 
 
 class SolrServer(object):
@@ -39,6 +46,19 @@ class SolrServer(object):
         atexit.register(self.stop)
         self._running = True
         return self
+
+    def commit(self):
+        """Commit any pending updates in Solr.
+        """
+        conn = getUtility(ISolrConnectionManager)
+
+        if not self._configured or conn.connection is None:
+            raise Exception("Attempt to commit Solr in a test that didn't set "
+                            "up Solr (properly). Make sure your test case uses "
+                            "the OPENGEVER_SOLR_INTEGRATION_TESTING layer.")
+
+        processQueue()
+        conn.connection.commit()
 
     def stop(self):
         """Make sure the solr server is stopped.
@@ -93,7 +113,7 @@ class SolrServer(object):
         self._running = False
 
     def _run_server_process(self):
-        command = ['bin/solr', 'fg']
+        command = [BUILDOUT_DIR.joinpath('bin/solr'), 'fg']
         env = os.environ.copy()
         env.setdefault('SOLR_PORT', str(self.port))
         self._stdout = io.StringIO()
@@ -143,6 +163,10 @@ class SolrReplicationAPIClient(object):
         self.session = requests.session()
         self.session.headers.update({'Accept': 'application/json'})
 
+    def data_dir(self):
+        self._require_configured()
+        return BUILDOUT_DIR.joinpath('var/solr/%s/data' % self.core)
+
     def clear(self):
         """Delete all documents from Solr.
         """
@@ -180,6 +204,36 @@ class SolrReplicationAPIClient(object):
             raise
         return response
 
+    def backup_status(self):
+        """Check for the progress of a running backup operation.
+        """
+        self._require_configured()
+        response = self.session.get(url=self.base_url + '/replication',
+                                    params={'command': 'details'})
+        try:
+            response.raise_for_status()
+        except Exception:
+            print response.json()
+            raise
+        response_data = response.json()
+
+        def grouper(iterable, n, fillvalue=None):
+            args = [iter(iterable)] * n
+            return izip_longest(fillvalue=fillvalue, *args)
+
+        details = response_data.get('details', {})
+        if 'backup' not in details:
+            # Status endpoint may not know about running backup yet
+            return 'unknown'
+
+        backup_details = dict(grouper(details.get('backup', []), 2))
+
+        if not len(backup_details) == 5:
+            raise Exception("Unexpected backup details response from Solr - "
+                            "don't know how to parse %r" % response_data)
+
+        return backup_details['status']
+
     def restore_backup(self, name):
         """Restore a backup. `name` refers to the backup name.
         """
@@ -207,6 +261,31 @@ class SolrReplicationAPIClient(object):
         response_data = response.json()
 
         return response_data['restorestatus']
+
+    def await_backuped(self, timeout=60, interval=0.1):
+        """Block until the solr server has no backup in progress.
+        """
+        for index in range(int(timeout / interval)):
+            status = self.backup_status()
+
+            if status == u'success':
+                # XXX: Deal with Solr replication API race condition:
+                #
+                # Status responses from the Solr replication API have a
+                # race condition - the backup might already show status
+                # 'success' even though Solr hasn't finished writing it to
+                # disk yet.
+                #
+                # We could possibly solve this better by expecting a specific
+                # list of files to be written, and checking that the Solr
+                # process doesn't have any open file handles any more in
+                # the snapshot directory.
+                time.sleep(1)
+                return
+
+            time.sleep(interval)
+
+        raise ValueError('Timeout ({}s) while waiting for backup to finish.'.format(timeout))
 
     def await_restored(self, timeout=60, interval=0.1):
         """Block until the solr server has no restore in progress.

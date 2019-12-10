@@ -14,7 +14,9 @@ from mock import MagicMock
 from opengever.activity.hooks import insert_notification_defaults
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.core.testing import OPENGEVER_SOLR_INTEGRATION_TESTING
 from opengever.document.archival_file import STATE_CONVERTED
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -779,3 +781,13 @@ class IntegrationTestCase(TestCase):
 
     def assert_provides(self, obj, interface=None):
         self.assertTrue(interface.providedBy(obj), '{} should provide {}'.format(obj, interface))
+
+
+class SolrIntegrationTestCase(IntegrationTestCase):
+
+    layer = OPENGEVER_SOLR_INTEGRATION_TESTING
+
+    features = ('solr', )
+
+    def commit_solr(self):
+        SolrServer.get_instance().commit()
