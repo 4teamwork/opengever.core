@@ -33,8 +33,8 @@ class MeetingExampleContentCreator(object):
         self.committee_assembly = self.site['sitzungen']['committee-3']
         self.committee_assembly_model = self.committee_assembly.load_model()
 
-        self.commitee_evil = self.site['sitzungen']['evil-committee-1']
-        self.committee_evil_model = self.commitee_evil.load_model()
+        self.committee_evil = self.site['sitzungen']['evil-committee-1']
+        self.committee_evil_model = self.committee_evil.load_model()
 
         self.dossier_taxes_1 = self.site.restrictedTraverse(
             'ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-5')
@@ -79,20 +79,16 @@ class MeetingExampleContentCreator(object):
     def create_periods(self):
         create(Builder('period').having(
             start=date(2016, 1, 1),
-            end=date(2016, 12, 31),
-            committee=self.committee_law_model))
+            end=date(2016, 12, 31)).within(self.committee_law))
         create(Builder('period').having(
             start=date(2016, 1, 1),
-            end=date(2016, 12, 31),
-            committee=self.committee_accounting_model))
+            end=date(2016, 12, 31)).within(self.committee_accounting))
         create(Builder('period').having(
             start=date(2016, 1, 1),
-            end=date(2016, 12, 31),
-            committee=self.committee_assembly_model))
+            end=date(2016, 12, 31)).within(self.committee_assembly))
         create(Builder('period').having(
             start=date(2016, 1, 1),
-            end=date(2016, 12, 31),
-            committee=self.committee_evil_model))
+            end=date(2016, 12, 31)).within(self.committee_evil))
 
     def create_members_and_memberships(self):
         peter = create(Builder('member')
