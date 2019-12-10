@@ -21,6 +21,7 @@ else:
     from opengever.testing.sql import select_current_org_unit
     from opengever.testing.test_case import FunctionalTestCase
     from opengever.testing.integration_test_case import IntegrationTestCase
+    from opengever.testing.integration_test_case import SolrIntegrationTestCase
     from opengever.testing.test_case import TestCase
     import opengever.testing.testbrowser_datetime_widget
     import opengever.testing.testbrowser_tablechoice_widget

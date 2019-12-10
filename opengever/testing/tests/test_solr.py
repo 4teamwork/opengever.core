@@ -1,16 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_SOLR_INTEGRATION_TESTING
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 import random
 
 
-class TestSolrIsolation(IntegrationTestCase):
-
-    layer = OPENGEVER_SOLR_INTEGRATION_TESTING
-
-    features = ('solr', )
+class TestSolrIsolation(SolrIntegrationTestCase):
 
     @browsing
     def test_solr_search_results_with_dynamic_content(self, browser):

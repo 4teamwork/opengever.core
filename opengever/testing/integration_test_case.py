@@ -16,6 +16,7 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.core.testing import OPENGEVER_SOLR_INTEGRATION_TESTING
 from opengever.document.archival_file import STATE_CONVERTED
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -717,9 +718,6 @@ class IntegrationTestCase(TestCase):
             body=search_resp, status=200))
         return solr
 
-    def commit_solr(self):
-        SolrServer.get_instance().commit()
-
     def add_additional_org_unit(self, id_=u'gdgs'):
         return create(Builder('org_unit')
                       .id(id_)
@@ -783,3 +781,13 @@ class IntegrationTestCase(TestCase):
 
     def assert_provides(self, obj, interface=None):
         self.assertTrue(interface.providedBy(obj), '{} should provide {}'.format(obj, interface))
+
+
+class SolrIntegrationTestCase(IntegrationTestCase):
+
+    layer = OPENGEVER_SOLR_INTEGRATION_TESTING
+
+    features = ('solr', )
+
+    def commit_solr(self):
+        SolrServer.get_instance().commit()

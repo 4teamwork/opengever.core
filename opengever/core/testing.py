@@ -555,14 +555,14 @@ SOLR_CORE = 'testing'
 class ContentFixtureWithSolrLayer(ContentFixtureLayer):
     """Layer with GEVER content fixture and a real Solr.
 
-    Use an IntegrationTestCase with this layer for tests that need to run
-    against a real Solr instance.
+    Use the SolrIntegrationTestCase (default to this layer) for tests that
+    need to run against a real Solr instance.
 
     When you modify objects in your tests that lead to changes in Solr, you'll
     need to make sure to issue a commit to Solr in order for these changes to
     actually be visible (when querying Solr after that, and asserting on the
-    results for example). When using an IntegrationTestCase, you can simply
-    do self.commit_solr() to commit pending changes on the Solr side.
+    results for example). When using the SolrIntegrationTestCase, you can
+    simply do self.commit_solr() to commit pending changes on the Solr side.
 
     Solr contents are isolated between tests using snapshots done via Solr's
     replication API.
