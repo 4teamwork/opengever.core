@@ -10,7 +10,6 @@ from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone.protect import createToken
-from unittest import skip
 from zope.component import getUtility
 import json
 
