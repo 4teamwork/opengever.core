@@ -107,6 +107,10 @@ class WebActionsStorage(object):
         new_action['modified'] = now
         new_action['owner'] = userid if userid else 'Anonymous'
 
+        # To be sure to only store valid webactions, we also validate
+        # with the automatically added data
+        validate_schema(new_action, IPersistedWebActionSchema)
+
         self.index_action(new_action)
         return action_id
 
