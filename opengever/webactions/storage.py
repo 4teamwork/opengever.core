@@ -105,7 +105,9 @@ class WebActionsStorage(object):
         new_action['action_id'] = action_id
         new_action['created'] = now
         new_action['modified'] = now
-        new_action['owner'] = userid if userid else 'Anonymous'
+        # Some userids are unicode so we need to make sure to cast them to the
+        # correct type
+        new_action['owner'] = str(userid) if userid else 'Anonymous'
 
         # To be sure to only store valid webactions, we also validate
         # with the automatically added data
