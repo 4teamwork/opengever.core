@@ -1,5 +1,7 @@
-from zope.i18n import translate
+from opengever.ogds.base.actor import PloneUserActor
 from opengever.workspace import _
+from plone import api
+from zope.i18n import translate
 
 
 class ParticipationRole(object):
@@ -51,3 +53,40 @@ PARTICIPATION_TYPES = {
 
 PARTICIPATION_TYPES_BY_PATH_IDENTIFIER = {
     value.path_identifier: value for value in PARTICIPATION_TYPES.values()}
+
+
+def get_full_user_info(userid=None, member=None):
+    if member is None:
+        member = api.user.get(userid=userid)
+
+    if userid is None:
+        userid = member.getId()
+
+    return PloneUserActor(identifier=userid, user=member).get_label()
+
+
+def can_manage_member(context, member=None, roles=None):
+    if member and member.getId() == api.user.get_current().getId():
+        return False
+    elif roles and 'WorkspaceOwner' in roles:
+        return False
+    else:
+        return api.user.has_permission(
+            'Sharing page: Delegate WorkspaceAdmin role',
+            obj=context)
+
+
+def invitation_to_item(invitation, context):
+    if invitation['recipient']:
+        recipient_info = get_full_user_info(userid=invitation['recipient'])
+    else:
+        recipient_info = None
+
+    return dict(name=recipient_info,
+                roles=[invitation['role']],
+                inviter=get_full_user_info(
+                    userid=invitation['inviter']),
+                can_manage=can_manage_member(context),
+                type_='invitation',
+                token=invitation['iid'],
+                userid=invitation['recipient'])
