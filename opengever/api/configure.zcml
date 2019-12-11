@@ -390,6 +390,14 @@
       />
 
   <plone:service
+      method="DELETE"
+      name="@invitations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".invitations.InvitationsDelete"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
       method="POST"
       name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"

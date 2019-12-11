@@ -96,6 +96,24 @@ class InvitationsPost(ParticipationTraverseService):
         return self.params[0], self.params[1]
 
 
+class InvitationsDelete(ParticipationTraverseService):
+
+    def reply(self):
+        token = self.read_params()
+
+        manager = ManageParticipants(self.context, self.request)
+        manager._delete('invitation', token)
+        self.request.response.setStatus(204)
+        return None
+
+    def read_params(self):
+        if len(self.params) != 1:
+            raise BadRequest(
+                "Must supply token ID as URL path parameters.")
+
+        return self.params[0]
+
+
 class InvitationsPatch(ParticipationTraverseService):
 
     def reply(self):

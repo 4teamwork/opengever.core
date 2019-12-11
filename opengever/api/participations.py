@@ -82,21 +82,19 @@ class ParticipationsGet(ParticipationTraverseService):
 class ParticipationsDelete(ParticipationTraverseService):
 
     def reply(self):
-        path_identifier, token = self.read_params()
-        participation_type = PARTICIPATION_TYPES_BY_PATH_IDENTIFIER.get(
-            path_identifier)
+        token = self.read_params()
 
         manager = ManageParticipants(self.context, self.request)
-        manager._delete(participation_type.id, token)
+        manager._delete('user', token)
         self.request.response.setStatus(204)
         return None
 
     def read_params(self):
-        if len(self.params) != 2:
+        if len(self.params) != 1:
             raise BadRequest(
-                "Must supply type and token ID as URL path parameters.")
+                "Must supply token ID as URL path parameters.")
 
-        return self.params[0], self.params[1]
+        return self.params[0]
 
 
 class ParticipationsPost(ParticipationTraverseService):

@@ -217,7 +217,7 @@ class TestParticipationDelete(IntegrationTestCase):
             self.workspace_admin.getId(), 'WorkspaceGuest')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace.absolute_url() + '/@invitations',
             method='GET',
             headers=http_headers(),
         )
@@ -227,7 +227,7 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect an invitation.')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations/invitations/{}'.format(iid),
+            self.workspace.absolute_url() + '/@invitations/{}'.format(iid),
             method='DELETE',
             headers=http_headers(),
         )
@@ -235,7 +235,7 @@ class TestParticipationDelete(IntegrationTestCase):
         self.assertEqual(204, browser.status_code)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace.absolute_url() + '/@invitations',
             method='GET',
             headers=http_headers(),
         )
@@ -259,7 +259,7 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to have local roles for the user')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_guest.id),
+            self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
             method='DELETE',
             headers=http_headers(),
         )
@@ -282,7 +282,7 @@ class TestParticipationDelete(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_admin.id),
+                self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_admin.id),
                 method='DELETE',
                 headers=http_headers(),
             ).json
@@ -293,7 +293,7 @@ class TestParticipationDelete(IntegrationTestCase):
 
         with browser.expect_http_error(401):
             browser.open(
-                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_admin.id),
+                self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_admin.id),
                 method='DELETE',
                 headers=http_headers(),
             ).json
@@ -304,7 +304,7 @@ class TestParticipationDelete(IntegrationTestCase):
 
         with browser.expect_http_error(401):
             browser.open(
-                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_admin.id),
+                self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_admin.id),
                 method='DELETE',
                 headers=http_headers(),
             ).json
@@ -536,14 +536,14 @@ class TestParticipationPatch(IntegrationTestCase):
         }))
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations/invitations/{}'.format(iid),
+            self.workspace.absolute_url() + '/@invitations/{}'.format(iid),
             method='PATCH',
             data=data,
             headers=http_headers(),
             )
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace.absolute_url() + '/@invitations',
             method='GET',
             headers=http_headers(),
         )
