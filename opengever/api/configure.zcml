@@ -399,14 +399,6 @@
 
   <plone:service
       method="POST"
-      name="@participations"
-      for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participations.ParticipationsPost"
-      permission="plone.DelegateWorkspaceAdminRole"
-      />
-
-  <plone:service
-      method="POST"
       name="@invitations"
       for="opengever.workspace.interfaces.IWorkspace"
       factory=".invitations.InvitationsPost"
