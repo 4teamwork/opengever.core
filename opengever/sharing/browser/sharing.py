@@ -476,7 +476,7 @@ class WorkspaceSharingView(OpengeverSharingView):
         if is_administrator:
             return all_principals
 
-        workspace_users = set(get_workspace_user_ids(self.context))
+        workspace_users = set(get_workspace_user_ids(self.context, disregard_block=True))
         results = [principal for principal in all_principals
                    if principal["id"] in workspace_users]
         return results

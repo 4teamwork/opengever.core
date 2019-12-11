@@ -17,7 +17,7 @@ msgstr ""
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
-#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "Active"
 msgstr "Actif"
 
@@ -126,6 +126,31 @@ msgstr "Tous ceux qui travaillent avec le module des séances sont des utilisate
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--STATUS--active"
 msgstr "Actif"
+
+#. Default: "committee admin"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--CommitteeAdministrator"
+msgstr "Administrateur/trice de commission"
+
+#. Default: "committee member"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--CommitteeMember"
+msgstr "Membre de commissions"
+
+#. Default: "committee responsible"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--CommitteeResponsible"
+msgstr "Responsable de commissions"
+
+#. Default: "manager"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--ROLE--Manager"
+msgstr "Manager"
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
+msgid "opengever_period_workflow--STATUS--active"
+msgstr "Active"
 
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
@@ -265,6 +290,41 @@ msgstr "Le rôle d'utilisateur de Teamräume rend l'onglet «Teamräume» visibl
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--STATUS--active"
+msgstr "Actif"
+
+#. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--Administrator"
+msgstr "Administrateur"
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--Manager"
+msgstr "System Administrator"
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceAdmin"
+msgstr "Admin"
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceGuest"
+msgstr "Invité"
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceMember"
+msgstr "Membre d'équipe"
+
+#. Default: "workspace owner"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--ROLE--WorkspaceOwner"
+msgstr "Responsable"
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--STATUS--active"
 msgstr "Actif"
 
 #. Default: "admin"

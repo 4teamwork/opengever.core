@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Implement testing against a real Solr. [lgraf]
+- Sharing on workspace folders should always show workspace users. [njohner]
 
 
 2019.5.0 (2019-12-10)
