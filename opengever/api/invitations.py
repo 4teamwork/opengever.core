@@ -55,7 +55,7 @@ class MyInvitationsGet(Service):
         return result
 
 
-class InvitationsPost(ParticipationTraverseService):
+class WorkspaceInvitationsPost(ParticipationTraverseService):
     """API Endpoint for accepting or declining invitations.
 
     POST /@workspace-invitations/{invitation_id}/{action} HTTP/1.1

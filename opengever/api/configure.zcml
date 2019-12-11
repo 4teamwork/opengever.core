@@ -433,7 +433,7 @@
       method="POST"
       name="@workspace-invitations"
       for="*"
-      factory=".invitations.InvitationsPost"
+      factory=".invitations.WorkspaceInvitationsPost"
       permission="zope2.View"
       />
 
