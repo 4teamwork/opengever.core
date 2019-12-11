@@ -157,7 +157,7 @@ class TestParticipationGet(IntegrationTestCase):
 
         iid = getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -213,8 +213,10 @@ class TestParticipationDelete(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
         storage = getUtility(IInvitationStorage)
         iid = storage.add_invitation(
-            self.workspace, self.regular_user.getId(),
-            self.workspace_admin.getId(), 'WorkspaceGuest')
+            self.workspace,
+            self.regular_user.getProperty('email'),
+            self.workspace_admin.getId(),
+            'WorkspaceGuest')
 
         browser.open(
             self.workspace.absolute_url() + '/@invitations',
@@ -528,7 +530,7 @@ class TestParticipationPatch(IntegrationTestCase):
 
         storage = getUtility(IInvitationStorage)
         iid = storage.add_invitation(
-            self.workspace, self.regular_user.getId(),
+            self.workspace, self.regular_user.getProperty('email'),
             self.workspace_admin.getId(), 'WorkspaceGuest')
 
         data = json.dumps(json_compatible({
@@ -610,13 +612,13 @@ class TestMyInvitationsGet(IntegrationTestCase):
         with freeze(datetime(2018, 4, 30, 10, 30)):
             iid = getUtility(IInvitationStorage).add_invitation(
                 self.workspace,
-                self.regular_user.getId(),
+                self.regular_user.getProperty('email'),
                 self.workspace_owner.getId(),
                 'WorkspaceGuest')
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.reader_user.getId(),
+            self.reader_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -657,7 +659,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -685,7 +687,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -714,7 +716,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -742,7 +744,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -770,7 +772,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
