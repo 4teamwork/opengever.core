@@ -103,6 +103,20 @@ class TestInvitationsPost(IntegrationTestCase):
                          data=data)
 
     @browsing
+    def test_prevents_invalid_emails(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        url = '{}/@invitations'.format(self.workspace.absolute_url())
+        data = json.dumps({
+            'recipient_email': u'f@',
+            'role': WORKSPCAE_GUEST.id
+        })
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', headers=self.api_headers,
+                         data=data)
+
+    @browsing
     def test_can_only_add_workspace_related_roles(self, browser):
         self.login(self.workspace_admin, browser=browser)
         url = '{}/@invitations'.format(self.workspace.absolute_url())
