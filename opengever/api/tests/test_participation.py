@@ -492,7 +492,7 @@ class TestParticipationPatch(IntegrationTestCase):
                 'role': {'token': 'WorkspaceMember'}
             }))
             browser.open(
-                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.regular_user.id),
+                self.workspace.absolute_url() + '/@participations/{}'.format(self.regular_user.id),
                 method='PATCH',
                 data=data,
                 headers=http_headers(),

@@ -4,6 +4,7 @@ from opengever.workspace.participation import TYPE_INVITATION
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspace.participation.browser.my_invitations import MyWorkspaceInvitations
 from plone.protect.interfaces import IDisableCSRFProtection
+from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
@@ -93,3 +94,27 @@ class InvitationsPost(ParticipationTraverseService):
                 "Must supply an invitation ID and an action (accept/decline)")
 
         return self.params[0], self.params[1]
+
+
+class InvitationsPatch(ParticipationTraverseService):
+
+    def reply(self):
+        token = self.read_params()
+        data = self.validate_data(json_body(self.request))
+
+        manager = ManageParticipants(self.context, self.request)
+        manager._modify(token, data.get('role').get('token'), 'invitation')
+        return None
+
+    def read_params(self):
+        if len(self.params) != 1:
+            raise BadRequest(
+                "Must supply token ID as URL path parameters.")
+
+        return self.params[0]
+
+    def validate_data(self, data):
+        if not data.get('role'):
+            raise BadRequest('Missing parameter role')
+
+        return data
