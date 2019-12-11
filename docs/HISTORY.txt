@@ -4,6 +4,7 @@ Changelog
 2019.5.1 (unreleased)
 ---------------------
 
+- Split invitations from participations endpoints. [njohner]
 - Implement testing against a real Solr. [lgraf]
 - Sharing on workspace folders should always show workspace users. [njohner]
 

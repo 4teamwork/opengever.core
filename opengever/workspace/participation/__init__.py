@@ -39,7 +39,7 @@ class ParticipationType(object):
         return translate(self.title, context=request)
 
 
-TYPE_USER = ParticipationType('user', _('user', default="User"), 'users')
+TYPE_USER = ParticipationType('user', _('user', default="User"), 'participations')
 TYPE_INVITATION = ParticipationType('invitation',
                                     _('invitation', default="Invitation"),
                                     'invitations')

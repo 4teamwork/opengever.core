@@ -60,18 +60,18 @@ class InvitationStorage(object):
             else:
                 raise KeyError(key)
 
-    def iter_invitions_for_context(self, context):
+    def iter_invitations_for_context(self, context):
         uuid = IUUID(context)
         for iid, data in self._read_invitations.items():
             if data['target_uuid'] == uuid:
                 yield self.get_invitation(iid)
 
-    def iter_invitions_for_recipient(self, userid):
+    def iter_invitations_for_recipient(self, userid):
         for iid, data in self._read_invitations.items():
             if data['recipient'] == userid:
                 yield self.get_invitation(iid)
 
-    def iter_invitions_for_inviter(self, userid):
+    def iter_invitations_for_inviter(self, userid):
         for iid, data in self._read_invitations.items():
             if data['inviter'] == userid:
                 yield self.get_invitation(iid)

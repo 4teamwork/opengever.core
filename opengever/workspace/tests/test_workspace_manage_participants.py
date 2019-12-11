@@ -115,7 +115,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                            'role': 'WorkspaceGuest',
                            '_authenticator': createToken()})
 
-        invitations = tuple(self.storage.iter_invitions_for_context(self.workspace))
+        invitations = tuple(self.storage.iter_invitations_for_context(self.workspace))
         self.assertEquals(1, len(tuple(invitations)), 'Expect one invitation.')
 
         invitations_in_response = filter(
@@ -181,7 +181,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                            'type': 'invitation',
                            '_authenticator': createToken()})
 
-        invitations = self.storage.iter_invitions_for_context(self.workspace)
+        invitations = self.storage.iter_invitations_for_context(self.workspace)
         self.assertEquals(0, len(tuple(invitations)),
                           'Expect no invitation anymore.')
 

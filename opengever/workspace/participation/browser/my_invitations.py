@@ -32,7 +32,7 @@ class MyWorkspaceInvitations(BrowserView):
         userid = api.user.get_current().getId()
         target_title = _(u'Deleted Workspace')
 
-        entries = list(self.storage().iter_invitions_for_recipient(userid))
+        entries = list(self.storage().iter_invitations_for_recipient(userid))
         entries.sort(key=lambda item: item['created'])
 
         for entry in entries:

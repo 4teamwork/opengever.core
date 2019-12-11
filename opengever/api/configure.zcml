@@ -369,7 +369,15 @@
       method="GET"
       name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participation.ParticipationsGet"
+      factory=".participations.ParticipationsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      name="@invitations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".invitations.InvitationsGet"
       permission="zope2.View"
       />
 
@@ -377,7 +385,15 @@
       method="DELETE"
       name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participation.ParticipationsDelete"
+      factory=".participations.ParticipationsDelete"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@invitations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".invitations.InvitationsDelete"
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
@@ -385,7 +401,7 @@
       method="POST"
       name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participation.ParticipationsPost"
+      factory=".participations.ParticipationsPost"
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
@@ -393,7 +409,15 @@
       method="PATCH"
       name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participation.ParticipationsPatch"
+      factory=".participations.ParticipationsPatch"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@invitations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".invitations.InvitationsPatch"
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
@@ -401,7 +425,7 @@
       method="GET"
       name="@my-workspace-invitations"
       for="*"
-      factory=".participation.MyInvitationsGet"
+      factory=".invitations.MyInvitationsGet"
       permission="zope2.View"
       />
 
@@ -409,7 +433,7 @@
       method="POST"
       name="@workspace-invitations"
       for="*"
-      factory=".participation.InvitationsPost"
+      factory=".invitations.InvitationsPost"
       permission="zope2.View"
       />
 
