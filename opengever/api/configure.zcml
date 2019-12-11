@@ -409,7 +409,7 @@
       method="GET"
       name="@my-workspace-invitations"
       for="*"
-      factory=".participations.MyInvitationsGet"
+      factory=".invitations.MyInvitationsGet"
       permission="zope2.View"
       />
 
@@ -417,7 +417,7 @@
       method="POST"
       name="@workspace-invitations"
       for="*"
-      factory=".participations.InvitationsPost"
+      factory=".invitations.InvitationsPost"
       permission="zope2.View"
       />
 
