@@ -45,7 +45,6 @@ Der detailierte Ablauf wird nachstehend in Prosa erläutert:
   - Übersicht in `FAQ-Übersicht <https://feedback.onegovgever.ch/faq>`_ in Feedbackforum aktualisieren
   - Neue `Opty <https://extranet.4teamwork.ch/crm/opportunities>`_ erstellen 
   - Neue Dokumentablage in `OneGov GEVER <https://gever.4teamwork.ch/ordnungssystem/3/2/2/5#dossier>`_ machen und `Vorlage <https://gever.4teamwork.ch/vorlagen/opengever-dossier-templatefolder/document-18818#overview>`_ hinzufügen
-  - Neues To-Do in `Basecamp-Liste OGIP (in Bearbeitung) <https://basecamp.com/2768704/projects/13482340/todolists/46980735>`_ erstellen. Dieses to-do soll bei den weiteren Arbeiten am OGIP als Acitvity Stream benutzt werden (Status zu Stand).
 
 4.  Erarbeitung Konzept: Dies geschieht im Zusammenspiel von Projektleiter, Kunde, Entwickler. Die Aufgabenverteilung bei der Erstellung des OGIP ist sehr unterschiedlich, je nach Komplexitätsgrad des gewünschten Features.
 6.  Veröffentlichung Konzept: Reviewtes Konzept an Prozessverantwortlichen zurückspielen, damit folgende Schritte vorgenommen werden können:
@@ -59,20 +58,18 @@ Der detailierte Ablauf wird nachstehend in Prosa erläutert:
   - Geschätzer Aufwand in Opty hinterlegen für Planung
   - GEVER-Dossier abschliessen
   - Sicherstellen, dass OGIP in GEVER-Roadmap aufgenommen wird
-  - To-Do von `Basecamp-Liste OGIP (in Bearbeitung) <https://basecamp.com/2768704/projects/13482340/todolists/46980735>`_ nach `Basecamp-Liste OGIP (in Umsetzung) <https://basecamp.com/2768704/projects/13482340/todolists/51639259>`_ verschieben.
 
 8.  Umsetzung
 9.  Nach Realisierung OGIP:
 
   - In Feedbackforum in ursprünglichem Thema die Realisierung kommunizieren und Thema abschliessen
   - Im Feedbackforum FAQ-Bereich von "in Bearbeitung" nach "Umgesetzt" verschieben
-  - `Basecamp-Liste OGIP (in Umsetzung) <https://basecamp.com/2768704/projects/13482340/todolists/51639259>`_ abschliessen
   - Opty schliessen
 
 Status OGIPs
 ------------
 
-- ``in Bearbeitung`` Sobald eine OGIP-Nr erstellt wird bis zur Umsetzung bleibt der OGIP für die Öffentlichkeit im Status *in Bearbeitung*. Für 4tw intern wird im Basecamp noch der Status *in Umsetzung* gepflegt.
+- ``in Bearbeitung`` Sobald eine OGIP-Nr erstellt wird bis zur Umsetzung bleibt der OGIP für die Öffentlichkeit im Status *in Bearbeitung*. Für 4tw intern wird in der Opty der aktuelle Status gepflegt.
 
 - ``Umgesetzt`` Sobald die Umsetzung des OGIPs komplett abgeschlossen wurde, geht der OGIP in den Status *Umgesetzt*.
 
