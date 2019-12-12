@@ -11,6 +11,7 @@ from opengever.webactions.schema import IWebActionSchema
 from persistent.mapping import PersistentMapping
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.CMFPlone.utils import safe_unicode
 from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -105,9 +106,10 @@ class WebActionsStorage(object):
         new_action['action_id'] = action_id
         new_action['created'] = now
         new_action['modified'] = now
-        # Some userids are unicode so we need to make sure to cast them to the
-        # correct type
-        new_action['owner'] = str(userid) if userid else 'Anonymous'
+
+        # Some userids are unicode others are strings, so we need to make sure
+        # to cast them to the correct type
+        new_action['owner'] = safe_unicode(userid) if userid else u'Anonymous'
 
         # To be sure to only store valid webactions, we also validate
         # with the automatically added data

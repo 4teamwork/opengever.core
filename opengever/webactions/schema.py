@@ -125,7 +125,7 @@ class IWebActionSchema(Interface):
         description=u'List of groups this action is to be shown for. The '
                     u'action is only shown when the user is in at least one '
                     u'of these groups, as determined by querying the OGDS.',
-        value_type=ASCIILine(),
+        value_type=TextLine(),
         required=False)
 
     permissions = List(
@@ -187,7 +187,7 @@ class IWebActionMetadataSchema(Interface):
         description=u'Time when this action was last modified.',
         required=True)
 
-    owner = ASCIILine(
+    owner = TextLine(
         title=u'Owner',
         description=u'User that created the action.',
         required=True)
