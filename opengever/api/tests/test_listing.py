@@ -1,18 +1,15 @@
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
-from ftw.solr.connection import SolrResponse
-from ftw.solr.interfaces import ISolrSearch
 from ftw.testbrowser import browsing
 from mock import Mock
-from opengever.api.listing import filename
-from opengever.api.listing import filesize
 from opengever.api.listing import get_path_depth
+from opengever.api.solr_query_service import filename
+from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from unittest import skip
-from zope.component import getUtility
 
 
 class TestListingEndpointWithoutSolr(IntegrationTestCase):
@@ -26,7 +23,7 @@ class TestListingEndpointWithoutSolr(IntegrationTestCase):
         with browser.expect_http_error(code=400):
             browser.open(self.repository_root,
                          view='@listing',
-                         headers={'Accept': 'application/json'})
+                         headers=self.api_headers)
 
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
@@ -40,16 +37,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
     def setUp(self):
         super(TestListingEndpointWithSolr, self).setUp()
 
-        # Mock Solr connection
-        self.conn = Mock(name='SolrConnection')
-        self.conn.search.return_value = SolrResponse()
-        self.solr = getUtility(ISolrSearch)
-        self._manager = self.solr._manager
-        self.solr._manager = Mock(name='SolrConnectionManager')
-        self.solr.manager.connection = self.conn
-
-    def tearDown(self):
-        self.solr._manager = self._manager
+        self.solr = self.mock_solr(response_json={})
 
     def test_filesize_accessor_avoids_obj_lookup(self):
         obj = OGSolrContentListingObject(OGSolrDocument(
@@ -82,119 +70,14 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         self.assertEqual(filename(obj), self.document.file.filename)
 
     @browsing
-    def test_filter_by_review_state(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=review_state'
-                '&filters.review_state:record=dossier-state-active')
-        browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn('review_state:(dossier\\-state\\-active)', filters)
-
-    @browsing
-    def test_filter_by_multiple_review_states(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=review_state'
-                '&filters.review_state:record:list=dossier-state-active'
-                '&filters.review_state:record:list=dossier-state-inactive')
-        browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn(
-            'review_state:(dossier\\-state\\-active OR dossier\\-state\\-inactive)',
-            filters,
-        )
-
-    @browsing
-    def test_filter_by_start_date(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=start'
-                '&filters.start:record=2016-01-01TO2016-01-01')
-        browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn(
-            'start:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
-            filters,
-        )
-
-    @browsing
-    def test_filter_by_deadline(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=tasks&columns:list=title'
-                '&columns:list=deadline'
-                '&filters.deadline:record=2016-01-01TO2016-01-01')
-        browser.open(self.dossier, view=view,
-                     headers={'Accept': 'application/json'})
-
-        filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn(
-            'deadline:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
-            filters,
-        )
-
-    @browsing
-    def test_filter_by_file_extension(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=documents&columns:list=title'
-                '&columns:list=start'
-                '&filters.file_extension:record:list=.docx')
-        browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn(u'file_extension:(.docx)', filters)
-
-    @browsing
-    def test_filter_by_document_type(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=documents&columns:list=title'
-                '&columns:list=start'
-                '&filters.document_type:record:list=contract')
-        browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn(u'document_type:(contract)', filters)
-
-    @browsing
-    def test_filter_by_depth(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        # Guard assertion - we expect self.dossier to be on level 5
-        self.assertEqual(5, get_path_depth(self.dossier))
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=start'
-                '&depth=1')
-        browser.open(self.dossier, view=view,
-                     headers={'Accept': 'application/json'})
-
-        filters = self.conn.search.call_args[0][0]['filter']
-        self.assertIn(u'path_depth:[* TO 6]', filters)
-
-    @browsing
     def test_facet_counts(self, browser):
         self.login(self.regular_user, browser=browser)
 
         view = ('@listing?name=documents&columns:list=title'
                 '&facets:list=start')
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        params = self.conn.search.call_args[0][0]["params"]
+                     headers=self.api_headers)
+        params = self.solr.search.call_args[1]
         self.assertTrue(params['facet'],
                         msg="facet=true is needed to get facet counts back")
         self.assertEqual(1, params['facet.mincount'])
@@ -210,10 +93,10 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         view = '@listing?name=dossiers'
         browser.open(self.dossier, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
 
         context_uid = IUUID(self.dossier)
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(u'-UID:%s' % context_uid, filters)
 
     @browsing
@@ -222,11 +105,11 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         view = '@listing?name=dossiers'
         browser.open(self.portal, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
 
         portal_uid = IUUID(self.portal, None)
         self.assertIsNone(portal_uid)
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertNotIn(u'-UID:%s' % portal_uid, filters)
 
     @browsing
@@ -235,9 +118,8 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         view = '@listing?name=documents&search=feedb\xc3\xa4ck&columns=title'
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        query = self.conn.search.call_args[0][0]["query"]
+                     headers=self.api_headers)
+        query = self.solr.search.call_args[1]["query"]
         self.assertEqual(u'(Title:feedb\xe4ck* OR SearchableText:feedb\xe4ck* '
                          u'OR metadata:feedb\xe4ck*)',
                          query)
@@ -248,9 +130,8 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         view = '@listing?name=documents&columns=title&sort_on=responsible'
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        sort = self.conn.search.call_args[0][0]["sort"]
+                     headers=self.api_headers)
+        sort = self.solr.search.call_args[1]["sort"]
         self.assertEqual('responsible desc', sort)
 
     @browsing
@@ -259,9 +140,8 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         view = '@listing?name=documents&columns=title&sort_on=inexistant'
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
-
-        sort = self.conn.search.call_args[0][0]["sort"]
+                     headers=self.api_headers)
+        sort = self.solr.search.call_args[1]["sort"]
         self.assertEqual('modified desc', sort)
 
 
@@ -270,7 +150,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
     features = ('bumblebee', 'solr')
 
     @browsing
-    def test_dossier_listing_fails_for_responsible_fullname(self, browser):
+    def test_dossier_listing_works_for_responsible_fullname(self, browser):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
             'name=dossiers',
@@ -283,8 +163,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        with browser.expect_http_error(500):
-            browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
 
     @browsing
     def test_dossier_listing(self, browser):
@@ -299,11 +178,12 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
         results = browser.json
 
-        self.assertEqual([u'b_size', u'b_start', u'@id', u'items_total', u'items'],
-                         results.keys())
+        self.assertItemsEqual(
+            [u'b_size', u'b_start', u'@id', u'items_total', u'items', u'facets'],
+            results.keys())
         self.assertEqual(0, results["b_start"])
         self.assertEqual(25, results["b_size"])
         expected_url = "{}/{}".format(self.repository_root.absolute_url(),
@@ -335,7 +215,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, view=view, headers=self.api_headers)
         self.assertEqual(
             {u'reference': u'Client1 1.1 / 1 / 14',
              u'title': u'Vertr\xe4gsentwurf',
@@ -357,7 +237,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, view=view, headers=self.api_headers)
 
         self.assertEqual(
             'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local'
@@ -374,7 +254,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, view=view, headers=self.api_headers)
         self.assertEqual(
             'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local'
             '/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/pdf',
@@ -386,7 +266,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         view = '@listing?name=documents&columns=filename&columns=filesize&sort_on=created'
-        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.dossier, view=view, headers=self.api_headers)
 
         self.assertEqual(
             {u'@id': self.document.absolute_url(),
@@ -394,56 +274,26 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'filename': u'Vertraegsentwurf.docx'},
             browser.json['items'][-1])
 
-    def test_filesize_accessor_avoids_obj_lookup(self):
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778", "filesize": 12345}))
-        obj.getObject = Mock()
-        self.assertEqual(filesize(obj), 12345)
-        self.assertFalse(obj.getObject.called)
-
-    def test_filename_accessor_avoids_obj_lookup(self):
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778", "filename": "Foo.pdf"}))
-        obj.getObject = Mock()
-        self.assertEqual(filename(obj), "Foo.pdf")
-        self.assertFalse(obj.getObject.called)
-
-    def test_filesize_accessor_with_obj_lookup(self):
-        self.login(self.regular_user)
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778"}))
-        obj.getObject = Mock()
-        obj.getObject.return_value = self.document
-        self.assertEqual(filesize(obj), self.document.file.size)
-        self.assertTrue(obj.getObject.called)
-
-    def test_filename_accessor_with_obj_lookup(self):
-        self.login(self.regular_user)
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778"}))
-        obj.filename = u'Vertraegsentwurf.docx'
-        self.assertEqual(filename(obj), self.document.file.filename)
-
     @browsing
     def test_batching(self, browser):
         self.login(self.regular_user, browser=browser)
 
         view = '@listing?name=dossiers'
         browser.open(
-            self.repository_root, view=view, headers={'Accept': 'application/json'})
+            self.repository_root, view=view, headers=self.api_headers)
         all_dossiers = browser.json['items']
 
         # batched no start point
         view = '@listing?name=dossiers&b_size=3'
         browser.open(
-            self.repository_root, view=view, headers={'Accept': 'application/json'})
+            self.repository_root, view=view, headers=self.api_headers)
         self.assertEqual(3, len(browser.json['items']))
         self.assertEqual(all_dossiers[0:3], browser.json['items'])
 
         # batched with start point
         view = '@listing?name=dossiers&b_size=2&b_start=4'
         browser.open(
-            self.repository_root, view=view, headers={'Accept': 'application/json'})
+            self.repository_root, view=view, headers=self.api_headers)
         self.assertEqual(2, len(browser.json['items']))
         self.assertEqual(all_dossiers[4:6], browser.json['items'])
 
@@ -453,7 +303,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         view = '@listing?name=documents&search=feedb\xc3\xa4ck&columns=title'
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
         self.assertEqual(
             [self.taskdocument.absolute_url()],
             [item['@id'] for item in browser.json['items']])
@@ -464,7 +314,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         view = '@listing?name=dossiers&columns:list=title&sort_on=created'
         browser.open(
-            self.dossier, view=view, headers={'Accept': 'application/json'})
+            self.dossier, view=view, headers=self.api_headers)
 
         self.assertNotIn(
             self.dossier.Title().decode('utf8'),
@@ -493,7 +343,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                 '&columns:list=review_state'
                 '&filters.review_state:record=dossier-state-active')
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
 
         items = browser.json['items']
         review_states = list(set(map(lambda x: x['review_state'], items)))
@@ -509,7 +359,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                 '&filters.review_state:record:list=dossier-state-active'
                 '&filters.review_state:record:list=dossier-state-inactive')
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
 
         items = browser.json['items']
         review_states = list(set(map(lambda x: x['review_state'], items)))
@@ -525,7 +375,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                 '&columns:list=start'
                 '&filters.start:record=2016-01-01TO2016-01-01')
         browser.open(self.repository_root, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
 
         items = browser.json['items']
         start_dates = list(set(map(lambda x: x['start'], items)))
@@ -538,7 +388,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         view = '@listing?name=tasks&columns:list=title&columns:list=deadline'
         browser.open(self.dossier, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
 
         items = browser.json['items']
         self.assertTrue(
@@ -547,7 +397,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         view = '{}&filters.deadline:record=2016-08-01TO2016-10-01'.format(view)
         browser.open(self.dossier, view=view,
-                     headers={'Accept': 'application/json'})
+                     headers=self.api_headers)
 
         items = browser.json['items']
         deadlines = list(set(map(lambda x: x['deadline'], items)))
@@ -563,7 +413,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=description',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.workspace_root, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.workspace_root, view=view, headers=self.api_headers)
 
         self.assertDictEqual(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1',
@@ -580,7 +430,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=description',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.workspace, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.workspace, view=view, headers=self.api_headers)
 
         self.assertDictEqual(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/folder-1',
@@ -686,7 +536,6 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         browser.open(self.repository_root, view=view, headers=self.api_headers)
         number_of_documents = len(browser.json['items'])
 
-
         # filtered on document_type
         view = ('@listing?name=documents&'
                 'columns:list=title&columns:list=start'
@@ -788,7 +637,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_order=ascending',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.workspace, view=view, headers={'Accept': 'application/json'})
+        browser.open(self.workspace, view=view, headers=self.api_headers)
 
         self.assertEqual(
             [

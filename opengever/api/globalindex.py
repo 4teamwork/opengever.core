@@ -1,5 +1,5 @@
 from opengever.api.batch import SQLHypermediaBatch
-from opengever.api.listing import DEFAULT_SORT_INDEX
+from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.base.helpers import display_name
 from opengever.globalindex.model.task import Task
 from plone.restapi.serializer.converters import json_compatible

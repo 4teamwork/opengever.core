@@ -46,6 +46,13 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         else:
             raise AttributeError(name)
 
+    def Subject(self):
+        """We need to overwrite CatalogContentListingObject.Subject which fails
+        when the brain does not have keywords, as solr will simply not return
+        the field in that case.
+        """
+        return getattr(self._brain, "Subject", None)
+
     @property
     def is_document(self):
         return self._brain.portal_type == 'opengever.document.document'
@@ -172,13 +179,16 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
                 review_state, domain='plone', context=self.request)
 
     def responsible_fullname(self):
-        return display_name(self._brain.responsible)
+        userid = getattr(self._brain, "responsible", None)
+        return None if userid is None else display_name(userid)
 
     def issuer_fullname(self):
-        return display_name(self._brain.issuer)
+        userid = getattr(self._brain, "issuer", None)
+        return None if userid is None else display_name(userid)
 
     def checked_out_fullname(self):
-        return display_name(self._brain.checked_out)
+        userid = getattr(self._brain, "checked_out", None)
+        return None if userid is None else display_name(userid)
 
     def creator(self):
         return self._brain.Creator

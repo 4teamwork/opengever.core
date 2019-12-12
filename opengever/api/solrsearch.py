@@ -1,30 +1,9 @@
-from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_query
-from opengever.api.listing import FACET_TRANSFORMS
+from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
-from opengever.base.solr import OGSolrContentListing
 from plone import api
-from plone.restapi.serializer.converters import json_compatible
-from plone.restapi.services import Service
 from zExceptions import BadRequest
-from zope.component import getUtility
 
-
-DEFAULT_FIELDS = set([
-    '@id',
-    '@type',
-    'title',
-    'description',
-    'review_state',
-])
-
-# Field name -> (Solr field, accessor)
-FIELD_MAPPING = {
-    "@id": ("path", "getURL"),
-    "@type": ("portal_type", "PortalType"),
-    "title": ("Title", "Title"),
-    "description": ("Description", "Description"),
-}
 
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
@@ -34,26 +13,12 @@ BLACKLISTED_ATTRIBUTES = set([
     'allowedRolesAndUsers',
 ])
 
-REQUIRED_FIELDS = set([
-    'UID',
-    'path',
-])
 
-
-def safe_int(value, default=0):
-    try:
-        return int(value)
-    except (ValueError, TypeError):
-        return default
-
-
-class SolrSearchGet(Service):
+class SolrSearchGet(SolrQueryBaseService):
     """REST API endpoint for querying Solr
     """
 
-    def make_solr_query(self):
-        params = self.request.form.copy()
-
+    def extract_query(self, params):
         if 'q' in params:
             query = make_query(params['q'])
             del params['q']
@@ -62,25 +27,17 @@ class SolrSearchGet(Service):
             del params['q.raw']
         else:
             query = '*:*'
+        return query
 
+    def extract_filters(self, params):
         if 'fq' in params:
             filters = params['fq']
             del params['fq']
         else:
             filters = []
+        return filters
 
-        if 'start' in params:
-            start = safe_int(params['start'])
-            del params['start']
-        else:
-            start = 0
-
-        if 'rows' in params:
-            rows = min(safe_int(params['rows'], 25), 1000)
-            del params['rows']
-        else:
-            rows = 25
-
+    def extract_sort(self, params, query):
         if 'sort' in params:
             sort = params['sort']
             del params['sort']
@@ -89,70 +46,53 @@ class SolrSearchGet(Service):
                 sort = None
             else:
                 sort = 'score asc'
+        return sort
 
-        return query, filters, start, rows, sort, params
+    def parse_requested_fields(self, params):
+        requested_fields = params.pop('fl', None)
+        if requested_fields:
+            return requested_fields.split(',')
+        return requested_fields
+
+    def prepare_additional_params(self, params):
+        facet_fields = params.get('facet.field', [])
+        if not isinstance(facet_fields, list):
+            facet_fields = [facet_fields]
+        if facet_fields:
+            facet_fields = [
+                facet for facet in facet_fields
+                if self.is_field_allowed(facet) and
+                self.get_field_index(facet) in self.solr_fields]
+            params['facet.field'] = facet_fields
+        return params
 
     def reply(self):
         if not api.portal.get_registry_record(
                 'use_solr', interface=ISearchSettings):
             raise BadRequest('Solr is not enabled on this GEVER installation.')
 
-        query, filters, start, rows, sort, params = self.make_solr_query()
+        query, filters, start, rows, sort, field_list, params = self.prepare_solr_query()
 
-        requested_fields = params.get('fl')
-        if requested_fields:
-            requested_fields = (
-                set(requested_fields.split(',')) - BLACKLISTED_ATTRIBUTES)
-        else:
-            requested_fields = DEFAULT_FIELDS
-
-        solr = getUtility(ISolrSearch)
-        solr_fields = set(solr.manager.schema.fields.keys())
-        requested_solr_fields = set([])
-        for field in requested_fields:
-            if field in FIELD_MAPPING:
-                field = FIELD_MAPPING[field][0]
-            requested_solr_fields.add(field)
-        params['fl'] = ','.join(
-            (requested_solr_fields | REQUIRED_FIELDS) & solr_fields)
-
-        resp = solr.search(
+        resp = self.solr.search(
             query=query, filters=filters, start=start, rows=rows, sort=sort,
-            **params)
-
-        docs = OGSolrContentListing(resp)
-        items = []
-        for doc in docs:
-            item = {}
-            for field in requested_fields:
-                # Do not allow access to private attributes
-                if field.startswith("_"):
-                    continue
-                accessor = FIELD_MAPPING.get(field, (None, field))[1]
-                value = getattr(doc, accessor, None)
-                if callable(value):
-                    value = value()
-                item[field] = json_compatible(value)
-            items.append(item)
+            fl=field_list, **params)
 
         res = {
             "@id": "{}?{}".format(
                 self.request['ACTUAL_URL'], self.request['QUERY_STRING']),
-            "items": items,
+            "items": self.prepare_response_items(resp),
             "items_total": resp.num_found,
             "start": start,
             "rows": rows,
         }
 
-        facet_counts = {}
-        for field, facets in resp.facets.items():
-            facet_counts[field] = {}
-            transform = FACET_TRANSFORMS.get(field)
-            for facet, count in facets.items():
-                facet_counts[field][facet] = {"count": count}
-                if transform:
-                    facet_counts[field][facet]['label'] = transform(facet)
-                else:
-                    facet_counts[field][facet]['label'] = facet
+        facet_counts = self.extract_facets_from_response(resp)
         res['facet_counts'] = facet_counts
+
         return res
+
+    def is_field_allowed(self, field):
+        """Do not allow private or blacklisted attributes"""
+        if field.startswith("_") or field in BLACKLISTED_ATTRIBUTES:
+            return False
+        return True
