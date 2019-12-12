@@ -70,101 +70,6 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         self.assertEqual(filename(obj), self.document.file.filename)
 
     @browsing
-    def test_filter_by_review_state(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=review_state'
-                '&filters.review_state:record=dossier-state-active')
-        browser.open(self.repository_root, view=view, headers=self.api_headers)
-        filters = self.solr.search.call_args[1]['filters']
-        self.assertIn('review_state:(dossier\\-state\\-active)', filters)
-
-    @browsing
-    def test_filter_by_multiple_review_states(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=review_state'
-                '&filters.review_state:record:list=dossier-state-active'
-                '&filters.review_state:record:list=dossier-state-inactive')
-        browser.open(self.repository_root, view=view, headers=self.api_headers)
-        filters = self.solr.search.call_args[1]['filters']
-        self.assertIn(
-            'review_state:(dossier\\-state\\-active OR dossier\\-state\\-inactive)',
-            filters,
-        )
-
-    @browsing
-    def test_filter_by_start_date(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=start'
-                '&filters.start:record=2016-01-01TO2016-01-01')
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        filters = self.solr.search.call_args[1]['filters']
-        self.assertIn(
-            'start:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
-            filters,
-        )
-
-    @browsing
-    def test_filter_by_deadline(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=tasks&columns:list=title'
-                '&columns:list=deadline'
-                '&filters.deadline:record=2016-01-01TO2016-01-01')
-        browser.open(self.dossier, view=view,
-                     headers=self.api_headers)
-        filters = self.solr.search.call_args[1]['filters']
-        self.assertIn(
-            'deadline:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
-            filters,
-        )
-
-    @browsing
-    def test_filter_by_file_extension(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=documents&columns:list=title'
-                '&columns:list=start'
-                '&filters.file_extension:record:list=.docx')
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        filters = self.solr.search.call_args[1]['filters']
-        self.assertIn(u'file_extension:(.docx)', filters)
-
-    @browsing
-    def test_filter_by_document_type(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        view = ('@listing?name=documents&columns:list=title'
-                '&columns:list=start'
-                '&filters.document_type:record:list=contract')
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        filters = self.solr.search.call_args[1]['filters']
-        self.assertIn(u'document_type:(contract)', filters)
-
-    @browsing
-    def test_filter_by_depth(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        # Guard assertion - we expect self.dossier to be on level 5
-        self.assertEqual(5, get_path_depth(self.dossier))
-
-        view = ('@listing?name=dossiers&columns:list=title'
-                '&columns:list=start'
-                '&depth=1')
-        browser.open(self.dossier, view=view,
-                     headers=self.api_headers)
-        filters = self.solr.search.call_args[1]['filters']
-        self.assertIn(u'path_depth:[* TO 6]', filters)
-
-    @browsing
     def test_facet_counts(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -368,36 +273,6 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'filesize': self.document.file.size,
              u'filename': u'Vertraegsentwurf.docx'},
             browser.json['items'][-1])
-
-    def test_filesize_accessor_avoids_obj_lookup(self):
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778", "filesize": 12345}))
-        obj.getObject = Mock()
-        self.assertEqual(filesize(obj), 12345)
-        self.assertFalse(obj.getObject.called)
-
-    def test_filename_accessor_avoids_obj_lookup(self):
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778", "filename": "Foo.pdf"}))
-        obj.getObject = Mock()
-        self.assertEqual(filename(obj), "Foo.pdf")
-        self.assertFalse(obj.getObject.called)
-
-    def test_filesize_accessor_with_obj_lookup(self):
-        self.login(self.regular_user)
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778"}))
-        obj.getObject = Mock()
-        obj.getObject.return_value = self.document
-        self.assertEqual(filesize(obj), self.document.file.size)
-        self.assertTrue(obj.getObject.called)
-
-    def test_filename_accessor_with_obj_lookup(self):
-        self.login(self.regular_user)
-        obj = OGSolrContentListingObject(OGSolrDocument(
-            {"UID": "9398dad21bcd49f8a197cd50d10ea778"}))
-        obj.filename = u'Vertraegsentwurf.docx'
-        self.assertEqual(filename(obj), self.document.file.filename)
 
     @browsing
     def test_batching(self, browser):
@@ -660,7 +535,6 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         view = '@listing?name=documents&columns:list=title&columns:list=start'
         browser.open(self.repository_root, view=view, headers=self.api_headers)
         number_of_documents = len(browser.json['items'])
-
 
         # filtered on document_type
         view = ('@listing?name=documents&'
