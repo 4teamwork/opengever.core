@@ -1,18 +1,15 @@
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
-from ftw.solr.connection import SolrResponse
-from ftw.solr.interfaces import ISolrSearch
 from ftw.testbrowser import browsing
 from mock import Mock
-from opengever.api.listing import filename
-from opengever.api.listing import filesize
 from opengever.api.listing import get_path_depth
+from opengever.api.solr_query_service import filename
+from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from unittest import skip
-from zope.component import getUtility
 
 
 class TestListingEndpointWithoutSolr(IntegrationTestCase):
@@ -40,16 +37,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
     def setUp(self):
         super(TestListingEndpointWithSolr, self).setUp()
 
-        # Mock Solr connection
-        self.conn = Mock(name='SolrConnection')
-        self.conn.search.return_value = SolrResponse()
-        self.solr = getUtility(ISolrSearch)
-        self._manager = self.solr._manager
-        self.solr._manager = Mock(name='SolrConnectionManager')
-        self.solr.manager.connection = self.conn
-
-    def tearDown(self):
-        self.solr._manager = self._manager
+        self.solr = self.mock_solr(response_json={})
 
     def test_filesize_accessor_avoids_obj_lookup(self):
         obj = OGSolrContentListingObject(OGSolrDocument(
@@ -91,7 +79,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn('review_state:(dossier\\-state\\-active)', filters)
 
     @browsing
@@ -105,7 +93,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(
             'review_state:(dossier\\-state\\-active OR dossier\\-state\\-inactive)',
             filters,
@@ -121,7 +109,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(
             'start:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
             filters,
@@ -137,7 +125,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.dossier, view=view,
                      headers={'Accept': 'application/json'})
 
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(
             'deadline:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
             filters,
@@ -153,7 +141,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(u'file_extension:(.docx)', filters)
 
     @browsing
@@ -166,7 +154,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(u'document_type:(contract)', filters)
 
     @browsing
@@ -182,7 +170,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.dossier, view=view,
                      headers={'Accept': 'application/json'})
 
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(u'path_depth:[* TO 6]', filters)
 
     @browsing
@@ -194,7 +182,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        params = self.conn.search.call_args[0][0]["params"]
+        params = self.solr.search.call_args[1]
         self.assertTrue(params['facet'],
                         msg="facet=true is needed to get facet counts back")
         self.assertEqual(1, params['facet.mincount'])
@@ -213,7 +201,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
 
         context_uid = IUUID(self.dossier)
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertIn(u'-UID:%s' % context_uid, filters)
 
     @browsing
@@ -226,7 +214,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         portal_uid = IUUID(self.portal, None)
         self.assertIsNone(portal_uid)
-        filters = self.conn.search.call_args[0][0]['filter']
+        filters = self.solr.search.call_args[1]['filters']
         self.assertNotIn(u'-UID:%s' % portal_uid, filters)
 
     @browsing
@@ -237,7 +225,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        query = self.conn.search.call_args[0][0]["query"]
+        query = self.solr.search.call_args[1]["query"]
         self.assertEqual(u'(Title:feedb\xe4ck* OR SearchableText:feedb\xe4ck* '
                          u'OR metadata:feedb\xe4ck*)',
                          query)
@@ -250,7 +238,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        sort = self.conn.search.call_args[0][0]["sort"]
+        sort = self.solr.search.call_args[1]["sort"]
         self.assertEqual('responsible desc', sort)
 
     @browsing
@@ -261,7 +249,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
 
-        sort = self.conn.search.call_args[0][0]["sort"]
+        sort = self.solr.search.call_args[1]["sort"]
         self.assertEqual('modified desc', sort)
 
 
