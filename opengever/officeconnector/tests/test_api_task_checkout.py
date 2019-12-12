@@ -15,7 +15,6 @@ class TestOfficeconnectorTaskAPIWithCheckoutWithRESTAPI(OCIntegrationTestCase):
     features = (
         '!officeconnector-attach',
         'officeconnector-checkout',
-        'officeconnector-restapi',
     )
 
     @browsing
@@ -76,16 +75,16 @@ class TestOfficeconnectorTaskAPIWithCheckoutWithRESTAPI(OCIntegrationTestCase):
             self.assertTrue(payload_copy.pop('reauth', None))
             self.assertEqual(expected_payload, payload_copy)
 
-        self.checkout_document_via_api(browser, raw_token, payloads[0], document)
-        self.lock_document_via_api(browser, raw_token, payloads[0], document)
+        self.checkout_document(browser, raw_token, payloads[0], document)
+        self.lock_document(browser, raw_token, payloads[0], document)
 
         original_checksum = sha256(self.download_document(browser, raw_token, payloads[0])).hexdigest()
 
         with open(path_to_asset('addendum.docx')) as f:
-            self.upload_document_via_api(browser, raw_token, payloads[0], document, f)
+            self.upload_document(browser, raw_token, payloads[0], document, f)
 
         new_checksum = sha256(self.download_document(browser, raw_token, payloads[0])).hexdigest()
         self.assertNotEqual(new_checksum, original_checksum)
 
-        self.unlock_document_via_api(browser, raw_token, payloads[0], document)
-        self.checkin_document_via_api(browser, raw_token, payloads[0], document)
+        self.unlock_document(browser, raw_token, payloads[0], document)
+        self.checkin_document(browser, raw_token, payloads[0], document)
