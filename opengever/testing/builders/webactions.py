@@ -1,5 +1,6 @@
 from ftw.builder import builder_registry
 from opengever.webactions.interfaces import IWebActionsStorage
+from Products.CMFPlone.utils import safe_unicode
 from zope.component import getMultiAdapter
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -30,7 +31,7 @@ class WebActionBuilder(object):
         return self
 
     def owned_by(self, owner):
-        self.owner = owner
+        self.owner = safe_unicode(owner)
         return self
 
     def create(self, **kwargs):

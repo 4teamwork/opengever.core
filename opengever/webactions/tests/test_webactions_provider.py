@@ -171,9 +171,9 @@ class TestWebActionProvider(TestWebActionBase):
     def test_webaction_provider_respects_groups(self):
         self.login(self.regular_user)
         storage = get_storage()
-        storage.update(0, {"groups": ['fa_inbox_users']})
-        storage.update(1, {"groups": ['fa_inbox_users', 'committee_rpk_group']})
-        storage.update(2, {"groups": ['committee_rpk_group']})
+        storage.update(0, {"groups": [u'fa_inbox_users']})
+        storage.update(1, {"groups": [u'fa_inbox_users', u'committee_rpk_group']})
+        storage.update(2, {"groups": [u'committee_rpk_group']})
 
         provider = getMultiAdapter((self.dossier, self.request),
                                    IWebActionsProvider)

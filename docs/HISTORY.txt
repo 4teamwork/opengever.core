@@ -8,6 +8,7 @@ Changelog
 - Refactor solrsearch and listing endpoints. [njohner]
 - Add tests for solrsearch and listing endpoints. [njohner]
 - Split invitations from participations endpoints. [njohner]
+- Make and enforce unicode for webaction owner and groups. [njohner]
 - Implement testing against a real Solr. [lgraf]
 - Sharing on workspace folders should always show workspace users. [njohner]
 

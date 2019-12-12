@@ -28,7 +28,7 @@ class TestWebActionsPost(IntegrationTestCase):
             'order': 0,
             'scope': 'global',
             'types': ['opengever.dossier.businesscasedossier'],
-            'groups': ['some-group'],
+            'groups': [u'some-group'],
             'permissions': ['add:opengever.document.document'],
             'comment': u'Lorem Ipsum',
             'unique_name': u'open-in-external-app-title-action',
