@@ -95,7 +95,7 @@ class MyWorkspaceInvitations(BrowserView):
         return target
 
     def decline(self):
-        """Decline invitaion by deleting the invitation from the storage.
+        """Decline invitation by deleting the invitation from the storage.
         """
         invitation = self.get_invitation_and_validate_payload()
         self._decline(invitation)

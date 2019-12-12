@@ -4,4 +4,4 @@ class DuplicatePendingInvitation(Exception):
 
 
 class MultipleUsersFound(Exception):
-    """Found multiple users for the invitaion."""
+    """Found multiple users for the invitation."""
