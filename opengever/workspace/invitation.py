@@ -28,3 +28,11 @@ class IWorkspaceInvitationSchema(Interface):
         description=u'Role of this invitation.',
         values=PARTICIPATION_ROLES.keys(),
         required=True)
+
+    comment = schema.Text(
+        title=u'Comment',
+        description=u'Comment to this invitation.',
+        required=False,
+        missing_value=u'',
+        default=u'',
+        )

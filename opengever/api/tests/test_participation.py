@@ -500,7 +500,8 @@ class TestMyInvitationsGet(IntegrationTestCase):
                     u'created': u'2018-04-30T10:30:00+00:00',
                     u'decline': u'http://nohost/plone/@workspace-invitations/{}/decline'.format(iid),
                     u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
-                    u'title': u'A Workspace'
+                    u'title': u'A Workspace',
+                    u'comment': u''
                 }
             ], response.get('items'))
 

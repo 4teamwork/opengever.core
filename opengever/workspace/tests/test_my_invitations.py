@@ -27,7 +27,8 @@ class TestMyInvitationsView(IntegrationTestCase):
             self.workspace_admin.getId(), 'WorkspaceGuest')
         self.storage.add_invitation(
             self.workspace2, self.regular_user.getProperty('email'),
-            self.workspace_admin.getId(), 'WorkspaceGuest')
+            self.workspace_admin.getId(), 'WorkspaceGuest',
+            comment=u"another invitation")
         self.storage.add_invitation(
             self.workspace2, self.workspace_guest.getProperty('email'),
             self.workspace_admin.getId(), 'WorkspaceGuest')

@@ -32,6 +32,7 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
              'recipient_email': 'hans.peter@gever.local',
              'inviter': 'gunther.frohlich',
              'role': 'WorkspaceGuest',
+             'comment': u'',
              'created': creation_date,
              'status': 'pending',
              'updated': None},
@@ -64,6 +65,7 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                  'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'gunther.frohlich',
                  'role': 'WorkspaceGuest',
+                 'comment': u'',
                  'created': creation_date,
                  'updated': None,
                  'status': 'pending'},
@@ -78,13 +80,15 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                  'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'gunther.frohlich',
                  'role': 'WorkspaceMember',
+                 'comment': u'',
                  'created': creation_date,
                  'updated': utcnow_tz_aware(),
                  'status': 'pending'},
                 storage.get_invitation(iid))
 
             clock.forward(hours=1)
-            storage.update_invitation(iid, recipient='fritz', inviter='hans')
+            storage.update_invitation(iid, recipient='fritz',
+                                      inviter='hans', comment=u"new")
             self.assertDictEqual(
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace),
@@ -92,6 +96,7 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                  'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'hans',
                  'role': 'WorkspaceMember',
+                 'comment': u'new',
                  'created': creation_date,
                  'updated': utcnow_tz_aware(),
                  'status': 'pending'},
@@ -106,6 +111,7 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                  'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'hans',
                  'role': 'WorkspaceMember',
+                 'comment': u'new',
                  'created': creation_date,
                  'updated': utcnow_tz_aware(),
                  'status': 'pending'},

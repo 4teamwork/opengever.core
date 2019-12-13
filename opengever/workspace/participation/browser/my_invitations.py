@@ -48,6 +48,7 @@ class MyWorkspaceInvitations(BrowserView):
                        'target_title': target_title,
                        'iid': entry['iid'],
                        'created': entry['created'],
+                       'comment': entry['comment']
                        }
 
     def get_invitation_and_validate_payload(self):

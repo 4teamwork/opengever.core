@@ -54,6 +54,7 @@ class MyInvitationsGet(Service):
                 'decline': '{}/decline'.format(base_url),
                 'title': invitation.get('target_title'),
                 'inviter_fullname': invitation.get('inviter'),
+                'comment': invitation.get('comment'),
                 'created': json_compatible(invitation.get('created')),
                 })
 
@@ -157,7 +158,8 @@ class InvitationsPost(ParticipationTraverseService):
         iid = storage.add_invitation(self.context,
                                      data['recipient_email'],
                                      inviter_id,
-                                     data['role'])
+                                     data['role'],
+                                     comment=data.get('comment', u''))
 
         self.request.response.setStatus(201)
         self.request.response.setHeader('Location', self.context.absolute_url())

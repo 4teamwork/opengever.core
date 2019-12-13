@@ -38,7 +38,7 @@ class InvitationStorage(object):
         """
         return IAnnotations(getSite())
 
-    def add_invitation(self, target, recipient_email, inviter, role):
+    def add_invitation(self, target, recipient_email, inviter, role, comment=u''):
         if self._has_pending_invitation(target, recipient_email):
             raise DuplicatePendingInvitation(
                 'Duplicate pending invitation for {}'.format(recipient_email))
@@ -53,6 +53,7 @@ class InvitationStorage(object):
             'recipient_email': recipient_email,
             'inviter': inviter,
             'role': role,
+            'comment': comment,
             'created': utcnow_tz_aware(),
             'updated': None,
             'status': STATE_PENDING})
@@ -69,7 +70,7 @@ class InvitationStorage(object):
     def update_invitation(self, iid, **updates):
         self._write_invitations[iid]['updated'] = utcnow_tz_aware()
         for key, value in updates.items():
-            if key in ('recipient', 'inviter', 'role'):
+            if key in ('recipient', 'inviter', 'role', 'comment'):
                 self._write_invitations[iid][key] = value
             elif key == 'target':
                 self._write_invitations[iid]['target_uuid'] = IUUID(value)
