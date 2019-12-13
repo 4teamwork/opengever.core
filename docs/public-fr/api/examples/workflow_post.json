@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "action": "dossier-transition-reactivate",
+  "actor": "john.doe",
+  "comments": "",
+  "review_state": "dossier-state-active",
+  "time": "2016-08-02T15:20:21+00:00"
+}

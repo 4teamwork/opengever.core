@@ -23,3 +23,4 @@ Index:
    spv/index
    app-seances/index.rst
    chapitre17-triage
+   api/index

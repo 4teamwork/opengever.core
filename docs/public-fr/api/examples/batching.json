@@ -1,0 +1,45 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "@id": "http://example.org/dossier/@search",
+  "batching": {
+    "@id": "http://example.org/dossier/@search?b_size=5&sort_on=path",
+    "first": "http://example.org/dossier/@search?b_size=5&sort_on=path&b_start=0",
+    "last": "http://example.org/dossier/@search?b_size=5&sort_on=path&b_start=5",
+    "next": "http://example.org/dossier/@search?b_size=5&sort_on=path&b_start=5"
+  },
+  "items": [
+    {
+      "@id": "http://example.org/plone/dossier",
+      "@type": "opengever.dossier.businesscasedossier",
+      "description": "",
+      "title": "Folder"
+    },
+    {
+      "@id": "http://example.org/dossier/doc-1",
+      "@type": "opengever.document.document",
+      "description": "",
+      "title": "Document 1"
+    },
+    {
+      "@id": "http://example.org/dossier/doc-2",
+      "@type": "opengever.document.document",
+      "description": "",
+      "title": "Document 2"
+    },
+    {
+      "@id": "http://example.org/dossier/doc-3",
+      "@type": "opengever.document.document",
+      "description": "",
+      "title": "Document 3"
+    },
+    {
+      "@id": "http://example.org/dossier/doc-4",
+      "@type": "opengever.document.document",
+      "description": "",
+      "title": "Document 4"
+    }
+  ],
+  "items_total": 8
+}

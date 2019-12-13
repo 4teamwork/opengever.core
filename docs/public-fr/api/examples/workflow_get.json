@@ -1,0 +1,27 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "history": [
+    {
+      "action": null,
+      "actor": "john.doe",
+      "comments": "",
+      "review_state": "dossier-state-active",
+      "time": "2016-08-02T17:08:50+00:00"
+    },
+    {
+      "action": "dossier-transition-resolve",
+      "actor": "john.doe",
+      "comments": "",
+      "review_state": "dossier-state-resolved",
+      "time": "2016-08-02T17:08:54+00:00"
+    }
+  ],
+  "transitions": [
+    {
+      "@id": "http://example.org/dossier-15/@workflow/dossier-transition-reactivate",
+      "title": "dossier-transition-reactivate"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "@id": "http://example.org/ordnungssystem/fuehrung/gemeinderecht/@search",
+  "items": [
+    {
+      "@id": "http://example.org/ordnungssystem/fuehrung/gemeinderecht",
+      "@type": "opengever.repository.repositoryfolder",
+      "description": "",
+      "title": "0.0. Gemeinderecht"
+    },
+    {
+      "@id": "http://example.org/ordnungssystem/fuehrung/gemeinderecht/dossier-15",
+      "@type": "opengever.dossier.businesscasedossier",
+      "description": "",
+      "title": "Ein Geschäftsdossier"
+    }
+  ],
+  "items_total": 2
+}
