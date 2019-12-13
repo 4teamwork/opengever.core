@@ -1,4 +1,10 @@
+from ftw.testing.mailing import Mailing
+from opengever.activity.mailer import process_mail_queue
+from opengever.testing import IntegrationTestCase
 from opengever.workspace.invitation import valid_email
+from opengever.workspace.participation.storage import IInvitationStorage
+from zope.component import getUtility
+import email
 import unittest
 
 
@@ -36,3 +42,35 @@ class TestUnitEmailValidator(unittest.TestCase):
 
     def test_valid_email_plus(self):
         self.assert_valid('user+mailbox@example.com')
+
+
+class TestInvitationMail(IntegrationTestCase):
+
+    features = (
+        'workspace',
+        'activity',
+        )
+
+    def test_adding_invitation_sends_mail(self):
+        self.login(self.workspace_admin)
+
+        mailing = Mailing(self.portal)
+        process_mail_queue()
+        self.assertFalse(mailing.has_messages())
+
+        storage = getUtility(IInvitationStorage)
+        iid = storage.add_invitation(
+            self.workspace, self.regular_user.getProperty('email'),
+            self.workspace_admin.getId(), 'WorkspaceGuest')
+        process_mail_queue()
+
+        self.assertTrue(mailing.has_messages())
+        mails = mailing.get_messages()
+        self.assertEqual(1, len(mails))
+        mail = email.message_from_string(mails[0])
+
+        self.assertIn(self.workspace_admin.getProperty('email'), mail.get("From"))
+        self.assertEqual(self.regular_user.getProperty('email'), mail.get("To"))
+
+        link = "{}/@@my-invitations/accept?iid={}".format(self.workspace.absolute_url(), iid)
+        self.assertIn(link, mail.as_string().decode('quoted-printable'))

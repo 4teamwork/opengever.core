@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-04 08:28+0000\n"
+"POT-Creation-Date: 2019-12-13 15:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,6 +125,21 @@ msgstr ""
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
 msgid "invitation"
+msgstr ""
+
+#. Default: "Accept: ${accept_link}"
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_accept"
+msgstr ""
+
+#. Default: "You were invited by ${user} to the workspace \"${title}\"."
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_description"
+msgstr ""
+
+#. Default: "Invitation to workspace \"${title}\""
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_subject"
 msgstr ""
 
 #. Default: "Completed"

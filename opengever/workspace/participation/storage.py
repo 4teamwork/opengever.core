@@ -2,6 +2,7 @@ from BTrees.OOBTree import OOBTree
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
+from opengever.workspace.participation.invitation_mailer import InvitationMailer
 from persistent.mapping import PersistentMapping
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -57,6 +58,7 @@ class InvitationStorage(object):
             'created': utcnow_tz_aware(),
             'updated': None,
             'status': STATE_PENDING})
+        self.send_invitation_mail(iid)
         return iid
 
     def get_invitation(self, iid):
@@ -138,3 +140,8 @@ class InvitationStorage(object):
             return self.portal_annotations[self.ANNOTATIONS_DATA_KEY]
         else:
             return {}
+
+    def send_invitation_mail(self, iid):
+        invitation = self.get_invitation(iid)
+        mailer = InvitationMailer()
+        mailer.send_invitation(invitation)

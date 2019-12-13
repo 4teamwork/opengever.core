@@ -1,0 +1,18 @@
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="opengever.workspace">
+
+    <h1 style="text-align: center; margin: 0 0 10px 0; font-family: Arial, sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;" tal:content="options/title">
+    </h1>
+
+    <tal:block tal:condition="options/description">
+      <tal:block tal:repeat="paragraph options/description">
+        <p tal:content="structure paragraph" />
+      </tal:block>
+    </tal:block>
+
+    <p tal:content="options/accept" />
+
+</html>
