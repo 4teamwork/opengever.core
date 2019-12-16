@@ -127,17 +127,17 @@ msgstr "Invitation"
 #. Default: "Accept: ${accept_link}"
 #: ./opengever/workspace/participation/invitation_mailer.py
 msgid "invitation_accept"
-msgstr ""
+msgstr "Accepter: ${accept_link}"
 
 #. Default: "You were invited by ${user} to the workspace \"${title}\"."
 #: ./opengever/workspace/participation/invitation_mailer.py
 msgid "invitation_mail_description"
-msgstr ""
+msgstr "Vous avez été invité par ${user} pour le teamraum \"${title}\"."
 
 #. Default: "Invitation to workspace \"${title}\""
 #: ./opengever/workspace/participation/invitation_mailer.py
 msgid "invitation_mail_subject"
-msgstr ""
+msgstr "Invitation pour le teamraum \"${title}\""
 
 #. Default: "Completed"
 #: ./opengever/workspace/todo.py
