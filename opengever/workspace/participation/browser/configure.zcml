@@ -27,7 +27,7 @@
       for="*"
       name="my-invitations"
       class=".my_invitations.MyWorkspaceInvitations"
-      permission="zope2.View"
+      permission="zope.Public"
       allowed_attributes="accept decline"
       />
 

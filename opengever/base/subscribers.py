@@ -42,6 +42,7 @@ ALLOWED_ENDPOINTS = set([
     'health-check',
     'upgrades-api',
     'oauth2-token',
+    'my-invitations',
 ])
 
 
