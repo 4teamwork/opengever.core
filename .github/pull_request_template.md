@@ -9,7 +9,7 @@ _Screenshot: erwünscht, sollen aber immer nur unterstützend eingesetzt werden.
 
 _Link zum Issue: `closes` oder `fixes` keyword verwenden._
 
-Definition of Done: https://gever.4teamwork.ch/ordnungssystem/3/2/2/allgemeines/dossier-3644/document-30943
+Definition of Done: https://github.com/4teamwork/opengever.core/wiki/Definition-of-Done
 
 
 ## Checkliste
