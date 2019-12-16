@@ -4,6 +4,7 @@ from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.globalrequest import getRequest
 
 
 @implementer(IVocabularyFactory)
@@ -17,6 +18,6 @@ class RolesVocabulary(object):
             terms.append(SimpleTerm(value=role.id,
                                     token=role.id,
                                     title=safe_unicode(
-                                        role.translated_title(context.REQUEST))))
+                                        role.translated_title(getRequest()))))
 
         return SimpleVocabulary(terms)

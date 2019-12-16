@@ -149,6 +149,7 @@ class InvitationsPost(ParticipationTraverseService):
 
     def reply(self):
         data = json_body(self.request)
+        data['role'] = data.get('role', {}).get('token')
         errors = get_validation_errors(data, IWorkspaceInvitationSchema)
         if errors:
             raise BadRequest(errors)

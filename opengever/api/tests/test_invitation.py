@@ -22,7 +22,7 @@ class TestInvitationsPost(IntegrationTestCase):
         url = '{}/@invitations'.format(self.workspace.absolute_url())
         data = json.dumps({
             'recipient_email': self.regular_user.getProperty('email'),
-            'role': WORKSPCAE_GUEST.id
+            'role': {'token': WORKSPCAE_GUEST.id},
         })
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
@@ -41,7 +41,7 @@ class TestInvitationsPost(IntegrationTestCase):
                 u'participation_type': u'invitation',
                 u'readable_participation_type': u'Invitation',
                 u'readable_role': u'Guest',
-                u'role': u'WorkspaceGuest',
+                u'role': WORKSPCAE_GUEST.id,
                 u'token': iid,
             },
             item)
@@ -66,7 +66,7 @@ class TestInvitationsPost(IntegrationTestCase):
         url = '{}/@invitations'.format(self.workspace.absolute_url())
         data = json.dumps({
             'recipient_email': u'foo@example.com',
-            'role': WORKSPCAE_GUEST.id
+            'role': {'token': WORKSPCAE_GUEST.id},
         })
 
         with self.assertRaises(DuplicatePendingInvitation):
@@ -94,7 +94,7 @@ class TestInvitationsPost(IntegrationTestCase):
         url = '{}/@invitations'.format(self.workspace.absolute_url())
         data = json.dumps({
             'recipient_email': u'twice@example.com',
-            'role': WORKSPCAE_GUEST.id
+            'role': {'token': WORKSPCAE_GUEST.id},
         })
 
         with self.assertRaises(MultipleUsersFound):
@@ -109,7 +109,7 @@ class TestInvitationsPost(IntegrationTestCase):
         url = '{}/@invitations'.format(self.workspace.absolute_url())
         data = json.dumps({
             'recipient_email': u'f@',
-            'role': WORKSPCAE_GUEST.id
+            'role': {'token': WORKSPCAE_GUEST.id},
         })
 
         with browser.expect_http_error(400):
@@ -122,7 +122,7 @@ class TestInvitationsPost(IntegrationTestCase):
         url = '{}/@invitations'.format(self.workspace.absolute_url())
         data = json.dumps({
             'recipient_email': u'foo@example.com',
-            'role': 'Reader'
+            'role': {'token': 'Reader'},
         })
 
         with browser.expect_http_error(400):
@@ -131,7 +131,7 @@ class TestInvitationsPost(IntegrationTestCase):
 
         data = json.dumps({
             'recipient_email': u'foo@example.com',
-            'role': 'Site Administrator'
+            'role': {'token': 'Site Administrator'},
         })
 
         with browser.expect_http_error(400):
@@ -145,7 +145,7 @@ class TestInvitationsPost(IntegrationTestCase):
         url = '{}/@invitations'.format(self.workspace.absolute_url())
         data = json.dumps({
             'recipient_email': self.regular_user.getProperty('email'),
-            'role': 'WorkspaceAdmin'
+            'role': {'token': 'WorkspaceAdmin'},
         })
 
         with browser.expect_http_error(401):
@@ -159,7 +159,7 @@ class TestInvitationsPost(IntegrationTestCase):
         url = '{}/@invitations'.format(self.workspace.absolute_url())
         data = json.dumps({
             'recipient_email': self.regular_user.getProperty('email'),
-            'role': 'WorkspaceAdmin'
+            'role': {'token': 'WorkspaceAdmin'},
         })
 
         with browser.expect_http_error(401):

@@ -26,7 +26,7 @@ class IWorkspaceInvitationSchema(Interface):
     role = schema.Choice(
         title=u'Role',
         description=u'Role of this invitation.',
-        values=PARTICIPATION_ROLES.keys(),
+        vocabulary='opengever.workspace.RolesVocabulary',
         required=True)
 
     comment = schema.Text(
