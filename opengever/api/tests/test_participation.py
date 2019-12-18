@@ -23,6 +23,8 @@ def get_entry_by_token(entries, token):
 
 class TestParticipationGet(IntegrationTestCase):
 
+    maxDiff = None
+
     @browsing
     def test_list_all_current_participants_and_invitations(self, browser):
         self.login(self.workspace_owner, browser)
@@ -38,50 +40,39 @@ class TestParticipationGet(IntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
                     u'@type': u'virtual.participations.user',
-                    u'is_editable': True,
-                    u'inviter_fullname': None,
                     u'participant_fullname': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
+                    u'is_editable': True,
+                    u'role': {u'token': u'WorkspaceMember',
+                              u'title': u'Member'},
                     u'token': 'beatrice.schrodinger',
-                    u'readable_role': u'Member',
-                    u'role': u'WorkspaceMember',
-                    u'participation_type': u'user',
-                    u'readable_participation_type': u'User',
-                },
-                {
+                    u'participant_email': u'beatrice.schrodinger@gever.local',
+                }, {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
                     u'@type': u'virtual.participations.user',
-                    u'is_editable': True,
-                    u'inviter_fullname': None,
                     u'participant_fullname': u'Hugentobler Fridolin (fridolin.hugentobler)',
+                    u'is_editable': True,
+                    u'role': {u'token': u'WorkspaceAdmin',
+                              u'title': u'Admin'},
                     u'token': 'fridolin.hugentobler',
-                    u'readable_role': u'Admin',
-                    u'role': u'WorkspaceAdmin',
-                    u'participation_type': u'user',
-                    u'readable_participation_type': u'User',
-                },
-                {
+                    u'participant_email': u'fridolin.hugentobler@gever.local',
+                }, {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
                     u'@type': u'virtual.participations.user',
-                    u'is_editable': False,
-                    u'inviter_fullname': None,
                     u'participant_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
+                    u'is_editable': False,
+                    u'role': {u'token': u'WorkspaceOwner',
+                              u'title': u'Owner'},
                     u'token': 'gunther.frohlich',
-                    u'readable_role': u'Owner',
-                    u'role': u'WorkspaceOwner',
-                    u'participation_type': u'user',
-                    u'readable_participation_type': u'User',
-                },
-                {
+                    u'participant_email': u'gunther.frohlich@gever.local',
+                }, {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
                     u'@type': u'virtual.participations.user',
-                    u'is_editable': True,
-                    u'inviter_fullname': None,
                     u'participant_fullname': u'Peter Hans (hans.peter)',
+                    u'is_editable': True,
+                    u'role': {u'token': u'WorkspaceGuest',
+                              u'title': u'Guest'},
                     u'token': 'hans.peter',
-                    u'readable_role': u'Guest',
-                    u'role': u'WorkspaceGuest',
-                    u'participation_type': u'user',
-                    u'readable_participation_type': u'User',
+                    u'participant_email': u'hans.peter@gever.local',
                 },
             ], response.get('items'))
 
@@ -152,36 +143,6 @@ class TestParticipationGet(IntegrationTestCase):
             'No entry should be editable because the user has no permission')
 
     @browsing
-    def test_get_single_invitation(self, browser):
-        self.login(self.workspace_owner, browser)
-
-        iid = getUtility(IInvitationStorage).add_invitation(
-            self.workspace,
-            self.regular_user.getProperty('email'),
-            self.workspace_owner.getId(),
-            'WorkspaceGuest')
-
-        response = browser.open(
-            self.workspace.absolute_url() + '/@invitations/{}'.format(iid),
-            method='GET',
-            headers=http_headers(),
-        ).json
-
-        self.assertDictEqual(
-            {
-                u'@id': u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
-                u'@type': u'virtual.participations.invitation',
-                u'is_editable': True,
-                u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
-                u'participant_fullname': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                u'token': iid,
-                u'readable_role': u'Guest',
-                u'role': u'WorkspaceGuest',
-                u'participation_type': u'invitation',
-                u'readable_participation_type': u'Invitation',
-            }, response)
-
-    @browsing
     def test_get_single_participant(self, browser):
         self.login(self.workspace_owner, browser)
 
@@ -196,13 +157,13 @@ class TestParticipationGet(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
                 u'@type': u'virtual.participations.user',
                 u'is_editable': True,
-                u'inviter_fullname': None,
                 u'participant_fullname': u'Peter Hans (hans.peter)',
                 u'token': 'hans.peter',
-                u'readable_role': u'Guest',
-                u'role': u'WorkspaceGuest',
-                u'participation_type': u'user',
-                u'readable_participation_type': u'User',
+                u'role': {
+                    'token': 'WorkspaceGuest',
+                    'title': 'Guest',
+                },
+                u'participant_email': 'hans.peter@gever.local',
             }, response)
 
 
@@ -325,7 +286,9 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
-        self.assertEquals('WorkspaceGuest', entry.get('role'))
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
 
         data = json.dumps(json_compatible({
             'role': {'token': 'WorkspaceMember'}
@@ -344,7 +307,9 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
-        self.assertEquals('WorkspaceMember', entry.get('role'))
+        self.assertEquals(
+            {u'token': u'WorkspaceMember', u'title': u'Member'},
+            entry.get('role'))
 
     @browsing
     def test_cannot_modify_inexisting_user(self, browser):
