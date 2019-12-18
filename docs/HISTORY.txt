@@ -11,6 +11,7 @@ Changelog
 - Make and enforce unicode for webaction owner and groups. [njohner]
 - Implement testing against a real Solr. [lgraf]
 - Sharing on workspace folders should always show workspace users. [njohner]
+- Replace @participations endpoint with @invitations endpoint accepting slightly different parameters. [deiferni]
 
 
 2019.5.0 (2019-12-10)

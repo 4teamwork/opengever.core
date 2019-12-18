@@ -1,8 +1,10 @@
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
+from opengever.workspace.participation import can_manage_member
+from opengever.workspace.participation import get_full_user_info
+from opengever.workspace.participation import invitation_to_item
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.workflow.interfaces import ISharingPageRole
@@ -42,51 +44,21 @@ class ManageParticipants(BrowserView):
                 item = dict(token=userid,
                             roles=list(set(roles) & set(
                                 MANAGED_ROLES + ['WorkspaceOwner'])),
-                            can_manage=self.can_manage_member(member, roles),
+                            can_manage=can_manage_member(self.context, member, roles),
                             type_='user',
-                            name=self.get_full_user_info(member=member),
+                            name=get_full_user_info(member=member),
                             userid=userid)
                 entries.append(item)
         return entries
-
-    def can_manage_member(self, member=None, roles=None):
-
-        if member and member.getId() == api.user.get_current().getId():
-            return False
-        elif roles and 'WorkspaceOwner' in roles:
-            return False
-        else:
-            return api.user.has_permission(
-                'Sharing page: Delegate WorkspaceAdmin role',
-                obj=self.context)
-
-    def invitation_to_item(self, invitation):
-        return dict(name=self.get_full_user_info(userid=invitation['recipient']),
-                    roles=[invitation['role']],
-                    inviter=self.get_full_user_info(
-                        userid=invitation['inviter']),
-                    can_manage=self.can_manage_member(),
-                    type_='invitation',
-                    token=invitation['iid'],
-                    userid=invitation['recipient'])
 
     def get_pending_invitations(self):
         storage = getUtility(IInvitationStorage)
         entries = []
 
         for invitation in storage.iter_invitations_for_context(self.context):
-            entries.append(self.invitation_to_item(invitation))
+            entries.append(invitation_to_item(invitation, self.context))
 
         return entries
-
-    def get_full_user_info(self, userid=None, member=None):
-        if member is None:
-            member = api.user.get(userid=userid)
-
-        if userid is None:
-            userid = member.getId()
-
-        return PloneUserActor(identifier=userid, user=member).get_label()
 
     def user_has_permission(self, role):
         permission = getUtility(ISharingPageRole, name=role).required_permission
@@ -101,7 +73,7 @@ class ManageParticipants(BrowserView):
         return self.__call__()
 
     def _add(self, userid, role):
-        if not userid or not role or not self.can_manage_member():
+        if not userid or not role or not can_manage_member(self.context):
             raise BadRequest('No userid or role provided')
 
         if role not in MANAGED_ROLES and not self.user_has_permission(role):
@@ -131,12 +103,12 @@ class ManageParticipants(BrowserView):
         return self.__call__()
 
     def _delete(self, type_, token):
-        if type_ == 'invitation' and self.can_manage_member():
+        if type_ == 'invitation' and can_manage_member(self.context):
             storage = getUtility(IInvitationStorage)
             storage.remove_invitation(token)
             return
 
-        elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
+        elif type_ == 'user' and can_manage_member(self.context, api.user.get(userid=token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_INVITATION, token)
             # Avoid circular imports

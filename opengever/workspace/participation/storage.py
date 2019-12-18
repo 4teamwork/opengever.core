@@ -1,9 +1,14 @@
 from BTrees.OOBTree import OOBTree
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.workspace.exceptions import DuplicatePendingInvitation
+from opengever.workspace.exceptions import MultipleUsersFound
 from persistent.mapping import PersistentMapping
+from plone import api
 from plone.uuid.interfaces import IUUID
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getMultiAdapter
 from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
 import uuid
@@ -11,6 +16,9 @@ import uuid
 
 class IInvitationStorage(Interface):
     pass
+
+
+STATE_PENDING = 'pending'
 
 
 @implementer(IInvitationStorage)
@@ -30,16 +38,25 @@ class InvitationStorage(object):
         """
         return IAnnotations(getSite())
 
-    def add_invitation(self, target, recipient, inviter, role):
+    def add_invitation(self, target, recipient_email, inviter, role, comment=u''):
+        if self._has_pending_invitation(target, recipient_email):
+            raise DuplicatePendingInvitation(
+                'Duplicate pending invitation for {}'.format(recipient_email))
+
         iid = self._generate_iid()
+        recipient_user_id = self._find_user_id_for_email(recipient_email)
+
         self._write_invitations[iid] = PersistentMapping({
             'iid': iid,
             'target_uuid': IUUID(target),
-            'recipient': recipient,
+            'recipient': recipient_user_id,
+            'recipient_email': recipient_email,
             'inviter': inviter,
             'role': role,
+            'comment': comment,
             'created': utcnow_tz_aware(),
-            'updated': None})
+            'updated': None,
+            'status': STATE_PENDING})
         return iid
 
     def get_invitation(self, iid):
@@ -53,7 +70,7 @@ class InvitationStorage(object):
     def update_invitation(self, iid, **updates):
         self._write_invitations[iid]['updated'] = utcnow_tz_aware()
         for key, value in updates.items():
-            if key in ('recipient', 'inviter', 'role'):
+            if key in ('recipient', 'inviter', 'role', 'comment'):
                 self._write_invitations[iid][key] = value
             elif key == 'target':
                 self._write_invitations[iid]['target_uuid'] = IUUID(value)
@@ -66,9 +83,9 @@ class InvitationStorage(object):
             if data['target_uuid'] == uuid:
                 yield self.get_invitation(iid)
 
-    def iter_invitations_for_recipient(self, userid):
+    def iter_invitations_for_recipient_email(self, email):
         for iid, data in self._read_invitations.items():
-            if data['recipient'] == userid:
+            if data['recipient_email'] == email:
                 yield self.get_invitation(iid)
 
     def iter_invitations_for_inviter(self, userid):
@@ -82,6 +99,28 @@ class InvitationStorage(object):
             return self.generate_iid()
         else:
             return iid
+
+    def _find_user_id_for_email(self, email):
+        pas_search = getMultiAdapter((api.portal.get(), getRequest()),
+                                     name='pas_search')
+        users = pas_search.searchUsers(email=email)
+        if len(users) > 1:
+            raise MultipleUsersFound("Found mulitple users for {}".format(email))
+        elif len(users) == 0:
+            return None
+
+        return users[0].get('userid')
+
+    def _has_pending_invitation(self, target, recipient_email):
+        target_uuid = IUUID(target)
+        for iid, data in self._read_invitations.items():
+            if data['target_uuid'] != target_uuid:
+                continue
+            if data['status'] != STATE_PENDING:
+                continue
+
+            if data['recipient_email'] == recipient_email:
+                return True
 
     @property
     def _write_invitations(self):

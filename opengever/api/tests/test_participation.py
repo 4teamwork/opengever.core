@@ -157,7 +157,7 @@ class TestParticipationGet(IntegrationTestCase):
 
         iid = getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -213,8 +213,10 @@ class TestParticipationDelete(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
         storage = getUtility(IInvitationStorage)
         iid = storage.add_invitation(
-            self.workspace, self.regular_user.getId(),
-            self.workspace_admin.getId(), 'WorkspaceGuest')
+            self.workspace,
+            self.regular_user.getProperty('email'),
+            self.workspace_admin.getId(),
+            'WorkspaceGuest')
 
         browser.open(
             self.workspace.absolute_url() + '/@invitations',
@@ -310,145 +312,6 @@ class TestParticipationDelete(IntegrationTestCase):
             ).json
 
 
-class TestParticipationPost(IntegrationTestCase):
-
-    @browsing
-    def test_add_invitiation(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-
-        browser.open(
-            self.workspace.absolute_url() + '/@participations',
-            method='GET',
-            headers=http_headers(),
-        )
-
-        self.assertIsNone(
-            get_entry_by_token(browser.json.get('items'), self.regular_user.id),
-            'Regular user should not be a participant of this workspace.')
-
-        data = json.dumps(json_compatible({
-            'user': {'token': self.regular_user.id},
-            'role': {'token': 'WorkspaceGuest'}
-        }))
-        item = browser.open(
-            self.workspace.absolute_url() + '/@participations/invitations',
-            method='POST',
-            data=data,
-            headers=http_headers(),
-        ).json
-
-        iid = item.get('token')
-        self.assertDictEqual(
-            {
-                u'@id': u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
-                u'@type': u'virtual.participations.invitation',
-                u'inviter_fullname': u'Hugentobler Fridolin (fridolin.hugentobler)',
-                u'is_editable': True,
-                u'participant_fullname': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                u'participation_type': u'invitation',
-                u'readable_participation_type': u'Invitation',
-                u'readable_role': u'Guest',
-                u'role': u'WorkspaceGuest',
-                u'token': iid,
-            },
-            item)
-
-        browser.open(
-            self.workspace.absolute_url() + '/@invitations',
-            method='GET',
-            headers=http_headers(),
-        )
-
-        self.assertDictEqual(
-            item,
-            get_entry_by_token(browser.json.get('items'), iid),
-            "The serialized invitation from the POST request should be the "
-            "same as the serialized invitation in the GET request.")
-
-    @browsing
-    def test_can_only_add_invitations_with_Workspace_related_roles(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-        with browser.expect_http_error(401):
-            data = json.dumps(json_compatible({
-                'user': {'token': self.regular_user.id},
-                'role': {'token': 'Reader'}
-            }))
-            browser.open(
-                self.workspace.absolute_url() + '/@participations/invitations',
-                method='POST',
-                data=data,
-                headers=http_headers(),
-                )
-
-        with browser.expect_http_error(500):
-            data = json.dumps(json_compatible({
-                'user': {'token': self.regular_user.id},
-                'role': {'token': 'Site Administrator'}
-            }))
-            browser.open(
-                self.workspace.absolute_url() + '/@participations/invitations',
-                method='POST',
-                data=data,
-                headers=http_headers(),
-                )
-
-    @browsing
-    def test_member_cannot_use_post_endpoint(self, browser):
-        self.login(self.workspace_member, browser=browser)
-        with browser.expect_http_error(401):
-            data = json.dumps(json_compatible({
-                'user': {'token': self.regular_user.id},
-                'role': {'token': 'WorkspaceAdmin'}
-            }))
-            browser.open(
-                self.workspace.absolute_url() + '/@participations/invitations',
-                method='POST',
-                data=data,
-                headers=http_headers(),
-                )
-
-    @browsing
-    def test_guest_cannot_use_post_endpoint(self, browser):
-        self.login(self.workspace_guest, browser=browser)
-        with browser.expect_http_error(401):
-            data = json.dumps(json_compatible({
-                'user': {'token': self.regular_user.id},
-                'role': {'token': 'WorkspaceAdmin'}
-            }))
-            browser.open(
-                self.workspace.absolute_url() + '/@participations/invitations',
-                method='POST',
-                data=data,
-                headers=http_headers(),
-                )
-
-    @browsing
-    def test_raise_not_found_if_post_on_users_endpoint(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-        with browser.expect_http_error(404):
-            browser.open(
-                self.workspace.absolute_url() + '/@participations/users',
-                method='POST',
-                data={},
-                headers=http_headers(),
-                )
-
-    @browsing
-    def test_raise_bad_request_if_adding_existing_user(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-        data = json.dumps(json_compatible({
-            'user': {'token': self.workspace_guest.id},
-            'role': {'token': 'WorkspaceMember'}
-        }))
-        with browser.expect_http_error(400):
-            browser.open(
-                self.workspace.absolute_url() + '/@participations/invitations',
-                method='POST',
-                data=data,
-                headers=http_headers(),
-            ).json
-
-
 class TestParticipationPatch(IntegrationTestCase):
 
     @browsing
@@ -528,7 +391,7 @@ class TestParticipationPatch(IntegrationTestCase):
 
         storage = getUtility(IInvitationStorage)
         iid = storage.add_invitation(
-            self.workspace, self.regular_user.getId(),
+            self.workspace, self.regular_user.getProperty('email'),
             self.workspace_admin.getId(), 'WorkspaceGuest')
 
         data = json.dumps(json_compatible({
@@ -610,13 +473,13 @@ class TestMyInvitationsGet(IntegrationTestCase):
         with freeze(datetime(2018, 4, 30, 10, 30)):
             iid = getUtility(IInvitationStorage).add_invitation(
                 self.workspace,
-                self.regular_user.getId(),
+                self.regular_user.getProperty('email'),
                 self.workspace_owner.getId(),
                 'WorkspaceGuest')
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.reader_user.getId(),
+            self.reader_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -637,7 +500,8 @@ class TestMyInvitationsGet(IntegrationTestCase):
                     u'created': u'2018-04-30T10:30:00+00:00',
                     u'decline': u'http://nohost/plone/@workspace-invitations/{}/decline'.format(iid),
                     u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
-                    u'title': u'A Workspace'
+                    u'title': u'A Workspace',
+                    u'comment': u''
                 }
             ], response.get('items'))
 
@@ -657,7 +521,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -685,7 +549,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -714,7 +578,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -742,7 +606,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
@@ -770,7 +634,7 @@ class TestInvitationsPOST(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 

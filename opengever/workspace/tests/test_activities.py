@@ -127,7 +127,7 @@ class TestToDoWatchers(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getId(),
+            self.regular_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 

@@ -97,40 +97,6 @@ class ParticipationsDelete(ParticipationTraverseService):
         return self.params[0]
 
 
-class ParticipationsPost(ParticipationTraverseService):
-
-    def reply(self):
-        self.validate_params()
-        data = self.validate_data(json_body(self.request))
-        userid = data.get('user').get('token')
-        role = data.get('role').get('token')
-        if not self.validate_duplicated_users(userid):
-            raise BadRequest("User already participate to this workspace")
-
-        manager = ManageParticipants(self.context, self.request)
-        invitation = manager.invitation_to_item(manager._add(userid, role))
-        return self.prepare_response_item(invitation)
-
-    def validate_duplicated_users(self, userid):
-        manager = ManageParticipants(self.context, self.request)
-        participants = manager.get_participants() + manager.get_pending_invitations()
-        existing_users = filter(lambda p: p.get('userid') == userid, participants)
-        return len(existing_users) == 0
-
-    def validate_params(self):
-        if len(self.params) != 1 or self.params[0] != TYPE_INVITATION.path_identifier:
-            raise NotFound
-
-    def validate_data(self, data):
-        if not data.get('user'):
-            raise BadRequest('Missing parameter userid')
-
-        if not data.get('role'):
-            raise BadRequest('Missing parameter role')
-
-        return data
-
-
 class ParticipationsPatch(ParticipationTraverseService):
 
     def reply(self):

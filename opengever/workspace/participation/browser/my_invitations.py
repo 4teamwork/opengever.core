@@ -29,10 +29,10 @@ class MyWorkspaceInvitations(BrowserView):
         return getUtility(IInvitationStorage)
 
     def get_invitations(self):
-        userid = api.user.get_current().getId()
+        email = api.user.get_current().getProperty('email')
         target_title = _(u'Deleted Workspace')
 
-        entries = list(self.storage().iter_invitations_for_recipient(userid))
+        entries = list(self.storage().iter_invitations_for_recipient_email(email))
         entries.sort(key=lambda item: item['created'])
 
         for entry in entries:
@@ -48,6 +48,7 @@ class MyWorkspaceInvitations(BrowserView):
                        'target_title': target_title,
                        'iid': entry['iid'],
                        'created': entry['created'],
+                       'comment': entry['comment']
                        }
 
     def get_invitation_and_validate_payload(self):
@@ -95,7 +96,7 @@ class MyWorkspaceInvitations(BrowserView):
         return target
 
     def decline(self):
-        """Decline invitaion by deleting the invitation from the storage.
+        """Decline invitation by deleting the invitation from the storage.
         """
         invitation = self.get_invitation_and_validate_payload()
         self._decline(invitation)

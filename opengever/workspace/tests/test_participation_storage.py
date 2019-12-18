@@ -1,7 +1,11 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.exceptions import DuplicatePendingInvitation
+from opengever.workspace.exceptions import MultipleUsersFound
 from opengever.workspace.participation.storage import IInvitationStorage
 from operator import itemgetter
 from plone.uuid.interfaces import IUUID
@@ -17,7 +21,7 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
         with freeze(creation_date):
             iid = getUtility(IInvitationStorage).add_invitation(
                 self.workspace,
-                self.workspace_guest.getId(),
+                self.workspace_guest.getProperty('email'),
                 self.workspace_owner.getId(),
                 'WorkspaceGuest')
 
@@ -25,9 +29,12 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
             {'iid': iid,
              'target_uuid': IUUID(self.workspace),
              'recipient': 'hans.peter',
+             'recipient_email': 'hans.peter@gever.local',
              'inviter': 'gunther.frohlich',
              'role': 'WorkspaceGuest',
+             'comment': u'',
              'created': creation_date,
+             'status': 'pending',
              'updated': None},
             getUtility(IInvitationStorage).get_invitation(iid))
 
@@ -55,10 +62,13 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace),
                  'recipient': 'hans.peter',
+                 'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'gunther.frohlich',
                  'role': 'WorkspaceGuest',
+                 'comment': u'',
                  'created': creation_date,
-                 'updated': None},
+                 'updated': None,
+                 'status': 'pending'},
                 storage.get_invitation(iid))
 
             clock.forward(hours=1)
@@ -67,22 +77,29 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace),
                  'recipient': 'hans.peter',
+                 'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'gunther.frohlich',
                  'role': 'WorkspaceMember',
+                 'comment': u'',
                  'created': creation_date,
-                 'updated': utcnow_tz_aware()},
+                 'updated': utcnow_tz_aware(),
+                 'status': 'pending'},
                 storage.get_invitation(iid))
 
             clock.forward(hours=1)
-            storage.update_invitation(iid, recipient='fritz', inviter='hans')
+            storage.update_invitation(iid, recipient='fritz',
+                                      inviter='hans', comment=u"new")
             self.assertDictEqual(
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace),
                  'recipient': 'fritz',
+                 'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'hans',
                  'role': 'WorkspaceMember',
+                 'comment': u'new',
                  'created': creation_date,
-                 'updated': utcnow_tz_aware()},
+                 'updated': utcnow_tz_aware(),
+                 'status': 'pending'},
                 storage.get_invitation(iid))
 
             clock.forward(hours=1)
@@ -91,10 +108,13 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace_folder),
                  'recipient': 'fritz',
+                 'recipient_email': 'hans.peter@gever.local',
                  'inviter': 'hans',
                  'role': 'WorkspaceMember',
+                 'comment': u'new',
                  'created': creation_date,
-                 'updated': utcnow_tz_aware()},
+                 'updated': utcnow_tz_aware(),
+                 'status': 'pending'},
                 storage.get_invitation(iid))
 
             with self.assertRaises(KeyError):
@@ -110,7 +130,8 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
         self.login(self.workspace_admin)
         storage = getUtility(IInvitationStorage)
         workspace1 = self.add_invitation(target=self.workspace)
-        workspace2 = self.add_invitation(target=self.workspace)
+        workspace2 = self.add_invitation(target=self.workspace,
+                                         recipient_email='foo@example.com')
         folder = self.add_invitation(target=self.workspace_folder)
 
         self.assertItemsEqual(
@@ -124,24 +145,26 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
     def test_iter_invitations_for_recipient(self):
         self.login(self.workspace_admin)
         storage = getUtility(IInvitationStorage)
-        foo1 = self.add_invitation(recipient='foo')
-        foo2 = self.add_invitation(recipient='foo')
-        bar = self.add_invitation(recipient='bar')
+        foo1 = self.add_invitation(recipient_email='foo@example.com')
+        foo2 = self.add_invitation(target=self.workspace_folder,
+                                   recipient_email='foo@example.com')
+        qux = self.add_invitation(recipient_email='qux@example.com')
 
         self.assertItemsEqual(
             [foo1, foo2],
-            map(itemgetter('iid'), storage.iter_invitations_for_recipient('foo')))
-
+            map(itemgetter('iid'),
+                storage.iter_invitations_for_recipient_email('foo@example.com')))
         self.assertItemsEqual(
-            [bar],
-            map(itemgetter('iid'), storage.iter_invitations_for_recipient('bar')))
+            [qux],
+            map(itemgetter('iid'),
+                storage.iter_invitations_for_recipient_email('qux@example.com')))
 
     def test_iter_invitations_for_inviter(self):
         self.login(self.workspace_admin)
         storage = getUtility(IInvitationStorage)
         foo1 = self.add_invitation(inviter='foo')
-        foo2 = self.add_invitation(inviter='foo')
-        bar = self.add_invitation(inviter='bar')
+        foo2 = self.add_invitation(inviter='foo', recipient_email='foo@example.com')
+        bar = self.add_invitation(inviter='bar', recipient_email='qux@example.com')
 
         self.assertItemsEqual(
             [foo1, foo2],
@@ -151,9 +174,47 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
             [bar],
             map(itemgetter('iid'), storage.iter_invitations_for_inviter('bar')))
 
+    def test_prevents_duplicate_invitation_per_workspace(self):
+        self.login(self.workspace_admin)
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            'foo@example.com',
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        with self.assertRaises(DuplicatePendingInvitation):
+            getUtility(IInvitationStorage).add_invitation(
+                        self.workspace,
+                        'foo@example.com',
+                        self.workspace_owner.getId(),
+                        'WorkspaceGuest')
+
+    def test_raises_when_multiple_users_have_same_email(self):
+        with self.login(self.manager):
+            create(Builder('user')
+                   .named('foo', 'bar')
+                   .with_roles(['Member'])
+                   .in_groups('fa_users')
+                   .with_email('twice@example.com'))
+
+            create(Builder('user')
+                   .named('bar', 'qux')
+                   .with_roles(['Member'])
+                   .in_groups('fa_users')
+                   .with_email('twice@example.com'))
+
+        self.login(self.workspace_admin)
+        with self.assertRaises(MultipleUsersFound):
+            getUtility(IInvitationStorage).add_invitation(
+                        self.workspace,
+                        'twice@example.com',
+                        self.workspace_owner.getId(),
+                        'WorkspaceGuest')
+
     def add_invitation(self, **options):
         options.setdefault('target', self.workspace)
-        options.setdefault('recipient', self.workspace_guest.getId())
+        options.setdefault('recipient_email', self.workspace_guest.getProperty('email'))
         options.setdefault('inviter', self.workspace_owner.getId())
         options.setdefault('role', 'WorkspaceGuest')
         return getUtility(IInvitationStorage).add_invitation(**options)

@@ -1,8 +1,13 @@
 from opengever.api.participations import ParticipationsGet
 from opengever.api.participations import ParticipationTraverseService
+from opengever.api.validation import get_validation_errors
+from opengever.workspace.invitation import IWorkspaceInvitationSchema
+from opengever.workspace.participation import invitation_to_item
 from opengever.workspace.participation import TYPE_INVITATION
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspace.participation.browser.my_invitations import MyWorkspaceInvitations
+from opengever.workspace.participation.storage import IInvitationStorage
+from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
@@ -11,6 +16,7 @@ from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.interface import alsoProvides
 
 
@@ -48,6 +54,7 @@ class MyInvitationsGet(Service):
                 'decline': '{}/decline'.format(base_url),
                 'title': invitation.get('target_title'),
                 'inviter_fullname': invitation.get('inviter'),
+                'comment': invitation.get('comment'),
                 'created': json_compatible(invitation.get('created')),
                 })
 
@@ -55,7 +62,7 @@ class MyInvitationsGet(Service):
         return result
 
 
-class InvitationsPost(ParticipationTraverseService):
+class WorkspaceInvitationsPost(ParticipationTraverseService):
     """API Endpoint for accepting or declining invitations.
 
     POST /@workspace-invitations/{invitation_id}/{action} HTTP/1.1
@@ -136,3 +143,27 @@ class InvitationsPatch(ParticipationTraverseService):
             raise BadRequest('Missing parameter role')
 
         return data
+
+
+class InvitationsPost(ParticipationTraverseService):
+
+    def reply(self):
+        data = json_body(self.request)
+        data['role'] = data.get('role', {}).get('token')
+        errors = get_validation_errors(data, IWorkspaceInvitationSchema)
+        if errors:
+            raise BadRequest(errors)
+
+        inviter_id = api.user.get_current().getId()
+        storage = getUtility(IInvitationStorage)
+        iid = storage.add_invitation(self.context,
+                                     data['recipient_email'],
+                                     inviter_id,
+                                     data['role'],
+                                     comment=data.get('comment', u''))
+
+        self.request.response.setStatus(201)
+        self.request.response.setHeader('Location', self.context.absolute_url())
+        invitation = storage.get_invitation(iid)
+        return self.prepare_response_item(invitation_to_item(
+            invitation, self.context))

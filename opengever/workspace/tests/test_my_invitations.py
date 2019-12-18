@@ -23,13 +23,14 @@ class TestMyInvitationsView(IntegrationTestCase):
                                  .titled(u'Second workspace'))
 
         self.storage.add_invitation(
-            self.workspace, self.regular_user.getId(),
+            self.workspace, self.regular_user.getProperty('email'),
             self.workspace_admin.getId(), 'WorkspaceGuest')
         self.storage.add_invitation(
-            self.workspace2, self.regular_user.getId(),
-            self.workspace_admin.getId(), 'WorkspaceGuest')
+            self.workspace2, self.regular_user.getProperty('email'),
+            self.workspace_admin.getId(), 'WorkspaceGuest',
+            comment=u"another invitation")
         self.storage.add_invitation(
-            self.workspace2, self.workspace_guest.getId(),
+            self.workspace2, self.workspace_guest.getProperty('email'),
             self.workspace_admin.getId(), 'WorkspaceGuest')
 
         RoleAssignmentManager(self.workspace_root).add_or_update_assignment(
@@ -52,8 +53,8 @@ class TestMyInvitationsView(IntegrationTestCase):
         browser.css('a.AcceptInvitation').first.click()
         self.assertEquals(self.workspace, browser.context)
         self.assertEquals(1,
-                          len(tuple(self.storage.iter_invitations_for_recipient(
-                              self.regular_user.getId()))),
+                          len(tuple(self.storage.iter_invitations_for_recipient_email(
+                              self.regular_user.getProperty('email')))),
                           'Expect only one item')
 
     @browsing
