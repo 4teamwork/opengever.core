@@ -145,3 +145,8 @@ class InvitationStorage(object):
         invitation = self.get_invitation(iid)
         mailer = InvitationMailer()
         mailer.send_invitation(invitation)
+
+    def map_email_to_current_userid_for_all_invitations(self, email):
+        userid = api.user.get_current().getId()
+        for invitation in self.iter_invitations_for_recipient_email(email):
+            self._write_invitations[invitation['iid']]['recipient'] = userid

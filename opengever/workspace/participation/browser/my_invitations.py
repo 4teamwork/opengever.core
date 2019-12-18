@@ -152,6 +152,10 @@ class MyWorkspaceInvitations(BrowserView):
     def _accept(self, invitation):
         with elevated_privileges():
             target = uuidToObject(invitation['target_uuid'])
+            self.storage().map_email_to_current_userid_for_all_invitations(
+                invitation['recipient_email'])
+            # recipient was set in the invitation, so we need to fetch it anew
+            invitation = self.storage().get_invitation(invitation['iid'])
 
             assignment = InvitationRoleAssignment(
                 invitation['recipient'], [invitation['role']], target)
