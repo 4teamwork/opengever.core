@@ -1,4 +1,3 @@
-from opengever.api.participations import ParticipationsGet
 from opengever.api.participations import ParticipationTraverseService
 from opengever.api.validation import get_validation_errors
 from opengever.workspace.invitation import IWorkspaceInvitationSchema
@@ -20,14 +19,19 @@ from zope.component import getUtility
 from zope.interface import alsoProvides
 
 
-class InvitationsGet(ParticipationsGet):
+class InvitationsGet(Service):
     """API Endpoint which returns a list of all invitations for the current
     workspace.
 
     GET workspace/@invitations HTTP/1.1
     """
 
-    def _items(self):
+    def reply(self):
+        result = {}
+        result['items'] = self.get_response_items()
+        return result
+
+    def get_response_items(self):
         manager = ManageParticipants(self.context, self.request)
         return manager.get_pending_invitations()
 
@@ -169,5 +173,4 @@ class InvitationsPost(ParticipationTraverseService):
         self.request.response.setStatus(201)
         self.request.response.setHeader('Location', self.context.absolute_url())
         invitation = storage.get_invitation(iid)
-        return self.prepare_response_item(invitation_to_item(
-            invitation, self.context))
+        return invitation_to_item(invitation, self.context)

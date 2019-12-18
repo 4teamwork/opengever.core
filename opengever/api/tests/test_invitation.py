@@ -15,6 +15,8 @@ import json
 
 class TestInvitationsPost(IntegrationTestCase):
 
+    maxDiff = None
+
     @browsing
     def test_adding_new_invitation(self, browser):
         self.login(self.workspace_admin, browser=browser)
@@ -36,12 +38,11 @@ class TestInvitationsPost(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
                 u'@type': u'virtual.participations.invitation',
                 u'inviter_fullname': u'Hugentobler Fridolin (fridolin.hugentobler)',
-                u'is_editable': True,
-                u'participant_fullname': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                u'participation_type': u'invitation',
-                u'readable_participation_type': u'Invitation',
-                u'readable_role': u'Guest',
-                u'role': WORKSPCAE_GUEST.id,
+                u'recipient_email': u'kathi.barfuss@gever.local',
+                u'role': {
+                    'token': 'WorkspaceGuest',
+                    'title': 'Guest',
+                },
                 u'token': iid,
             },
             item)

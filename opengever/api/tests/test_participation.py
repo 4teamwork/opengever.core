@@ -386,36 +386,6 @@ class TestParticipationPatch(IntegrationTestCase):
                 )
 
     @browsing
-    def test_modify_role_of_invitation(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-
-        storage = getUtility(IInvitationStorage)
-        iid = storage.add_invitation(
-            self.workspace, self.regular_user.getProperty('email'),
-            self.workspace_admin.getId(), 'WorkspaceGuest')
-
-        data = json.dumps(json_compatible({
-            'role': {'token': 'WorkspaceAdmin'}
-        }))
-
-        browser.open(
-            self.workspace.absolute_url() + '/@invitations/{}'.format(iid),
-            method='PATCH',
-            data=data,
-            headers=http_headers(),
-            )
-
-        browser.open(
-            self.workspace.absolute_url() + '/@invitations',
-            method='GET',
-            headers=http_headers(),
-        )
-
-        self.assertEquals(
-            'WorkspaceAdmin',
-            get_entry_by_token(browser.json.get('items'), iid).get('role'))
-
-    @browsing
     def test_do_not_allow_modifying_the_WorkspaceOwnerRole(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
