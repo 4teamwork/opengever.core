@@ -12,6 +12,7 @@ from opengever.workspace.config import workspace_config
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.uuid.utils import uuidToObject
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
@@ -19,6 +20,7 @@ from urllib import urlencode
 from zExceptions import BadRequest
 from zExceptions import InternalError
 from zope.component import getUtility
+from zope.interface import alsoProvides
 
 
 class MyWorkspaceInvitations(BrowserView):
@@ -115,6 +117,8 @@ class MyWorkspaceInvitations(BrowserView):
         3. The user is logged-in. In that case we accept the invitation by
            setting the role and redirect the user to the workspace.
         """
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         invitation = self.get_invitation_and_validate_payload()
         with elevated_privileges():
             target_workspace = uuidToObject(invitation['target_uuid'])
@@ -170,6 +174,8 @@ class MyWorkspaceInvitations(BrowserView):
     def decline(self):
         """Decline invitation by deleting the invitation from the storage.
         """
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         invitation = self.get_invitation_and_validate_payload()
         self._decline(invitation)
         return self.request.RESPONSE.redirect(
