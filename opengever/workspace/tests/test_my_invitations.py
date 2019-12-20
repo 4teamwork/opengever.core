@@ -11,7 +11,6 @@ from opengever.workspace.participation import load_signed_payload
 from opengever.workspace.participation import serialize_and_sign_payload
 from opengever.workspace.participation.browser.my_invitations import MyWorkspaceInvitations
 from opengever.workspace.participation.storage import IInvitationStorage
-from plone.protect import createToken
 from zope.component import getUtility
 import urlparse
 
@@ -77,9 +76,13 @@ class TestMyInvitationsView(IntegrationTestCase):
         parsed_url = urlparse.urlparse(browser.url)
         self.assertEqual('/portal/login', parsed_url.path)
 
-        # with redirect_url to accept the invitation
+        # with redirect_url to accept the invitation and no_redirect in payload
+        payload = serialize_and_sign_payload({'iid': self.invitation_id,
+                                              u'no_redirect': 1})
+        accept_url = "{}/@@my-invitations/accept?invitation={}".format(
+            self.workspace_url, payload)
         params = urlparse.parse_qs(parsed_url.query)
-        self.assertDictEqual({'redirect_url': [self.accept_url]}, params)
+        self.assertDictEqual({'redirect_url': [accept_url]}, params)
 
     @browsing
     def test_accept_invitation_for_unknown_user(self, browser):
@@ -112,7 +115,7 @@ class TestMyInvitationsView(IntegrationTestCase):
         callback_payload = load_signed_payload(
             urlparse.parse_qs(callback.query)['invitation'][0])
         self.assertDictEqual(
-            {u'new_user': 1, u'iid': self.invitation_id},
+            {u'new_user': 1, u'iid': self.invitation_id, u'no_redirect': 1},
             callback_payload)
 
     @browsing

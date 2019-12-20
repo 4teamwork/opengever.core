@@ -20,6 +20,7 @@ from urllib import urlencode
 from zExceptions import BadRequest
 from zExceptions import InternalError
 from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
@@ -59,7 +60,7 @@ class MyWorkspaceInvitations(BrowserView):
 
     def get_invitation_and_validate_payload(self):
         payload = load_signed_payload(self.request.get('invitation'))
-        iid = payload.get('iid', None)
+        iid = payload.pop('iid', None)
 
         if iid is None:
             raise BadRequest('No iid given')
@@ -69,7 +70,8 @@ class MyWorkspaceInvitations(BrowserView):
             raise BadRequest('Wrong invitation')
         if invitation['status'] != STATE_PENDING:
             raise BadRequest('Invitation not pending')
-        return self._get_invitation(iid)
+
+        return self._get_invitation(iid), payload
 
     def _get_invitation(self, iid):
         try:
@@ -111,14 +113,20 @@ class MyWorkspaceInvitations(BrowserView):
         """
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        invitation = self.get_invitation_and_validate_payload()
+        invitation, payload = self.get_invitation_and_validate_payload()
         with elevated_privileges():
             target_workspace = uuidToObject(invitation['target_uuid'])
 
         if api.user.is_anonymous():
+            if payload.get("no_redirect", None):
+                # User just registered or logged in on the portal
+                # but does not have a GEVER session yet.
+                raise Unauthorized
+
             accept_url = "{}/@@my-invitations/accept".format(
                 target_workspace.absolute_url())
-            accept_params = {'iid': invitation['iid']}
+            accept_params = {'iid': invitation['iid'],
+                             'no_redirect': 1}
 
             if not self.storage()._find_user_id_for_email(invitation['recipient_email']):
                 accept_params['new_user'] = 1
@@ -168,7 +176,7 @@ class MyWorkspaceInvitations(BrowserView):
         """
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        invitation = self.get_invitation_and_validate_payload()
+        invitation, payload = self.get_invitation_and_validate_payload()
         self._decline(invitation)
         return self.request.RESPONSE.redirect(
             self.context.absolute_url() + '/' + self.__name__)
