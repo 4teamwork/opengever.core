@@ -14,22 +14,19 @@ from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from urllib import urlencode
 from zExceptions import BadRequest
 from zExceptions import InternalError
+from zExceptions import NotFound
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
 
 class MyWorkspaceInvitations(BrowserView):
 
-    template = ViewPageTemplateFile('templates/my-invitations.pt')
-
     def __call__(self):
-
-        return self.template()
+        raise NotFound()
 
     def is_feature_enabled(self):
         return is_workspace_feature_enabled()
