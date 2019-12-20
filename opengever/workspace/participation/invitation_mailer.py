@@ -1,5 +1,6 @@
 from opengever.activity.mailer import Mailer
 from opengever.ogds.base.actor import ActorLookup
+from opengever.workspace.participation import serialize_and_sign_payload
 from plone.app.uuid.utils import uuidToObject
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
@@ -23,8 +24,9 @@ class InvitationMailer(Mailer):
             context=self.request
             )
 
-        accept_link = "{}/@@my-invitations/accept?iid={}".format(
-            target_workspace.absolute_url(), invitation['iid'])
+        payload = serialize_and_sign_payload({'iid': invitation['iid']})
+        accept_link = "{}/@@my-invitations/accept?invitation={}".format(
+            target_workspace.absolute_url(), payload)
 
         inviter = ActorLookup(invitation['inviter']).lookup()
 

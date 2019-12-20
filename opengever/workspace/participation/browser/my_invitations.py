@@ -1,4 +1,3 @@
-from itsdangerous import URLSafeTimedSerializer
 from opengever.base.casauth import get_gever_portal_url
 from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -8,7 +7,8 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.workspace import _
 from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.activities import WorkspaceWatcherManager
-from opengever.workspace.config import workspace_config
+from opengever.workspace.participation import load_signed_payload
+from opengever.workspace.participation import serialize_and_sign_payload
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -61,7 +61,8 @@ class MyWorkspaceInvitations(BrowserView):
                        }
 
     def get_invitation_and_validate_payload(self):
-        iid = self.request.get('iid', None)
+        payload = load_signed_payload(self.request.get('invitation'))
+        iid = payload.get('iid', None)
 
         if iid is None:
             raise BadRequest('No iid given')
@@ -101,13 +102,6 @@ class MyWorkspaceInvitations(BrowserView):
             raise InternalError("group {} is not unique".format(group_id))
         return groups[0]['dn']
 
-    def _serialize_and_sign_payload(self, payload):
-        """Serialize and sign the payload for the portal
-        """
-        secret = workspace_config.secret
-        serializer = URLSafeTimedSerializer(secret)
-        return serializer.dumps(payload)
-
     def accept(self):
         """Accept an invitation. There are 3 different scenarios here:
         1. The user is not logged in and his E-mail address does not match any
@@ -130,21 +124,21 @@ class MyWorkspaceInvitations(BrowserView):
 
             if not self.storage()._find_user_id_for_email(invitation['recipient_email']):
                 accept_params['new_user'] = 1
-                accept_url = "{}?{}".format(
-                    accept_url, urlencode(accept_params))
+                accept_url = "{}?invitation={}".format(
+                    accept_url, serialize_and_sign_payload(accept_params))
                 group_dn = self._get_orgunit_group_dn()
 
                 params = {'email': invitation['recipient_email'],
                           'callback': accept_url,
                           'group': group_dn
                           }
-                payload = self._serialize_and_sign_payload(params)
+                payload = serialize_and_sign_payload(params)
                 redirect_url = "{}/registration?invitation={}".format(
                     get_gever_portal_url(), payload)
 
             else:
-                accept_url = "{}?{}".format(
-                    accept_url, urlencode(accept_params))
+                accept_url = "{}?invitation={}".format(
+                    accept_url, serialize_and_sign_payload(accept_params))
                 params = {'redirect_url': accept_url}
                 redirect_url = "{}/login?{}".format(
                     get_gever_portal_url(), urlencode(params))

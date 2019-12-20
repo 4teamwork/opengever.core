@@ -2,6 +2,7 @@ from ftw.testing.mailing import Mailing
 from opengever.activity.mailer import process_mail_queue
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.invitation import valid_email
+from opengever.workspace.participation import serialize_and_sign_payload
 from opengever.workspace.participation.storage import IInvitationStorage
 from zope.component import getUtility
 import email
@@ -72,5 +73,7 @@ class TestInvitationMail(IntegrationTestCase):
         self.assertIn(self.workspace_admin.getProperty('email'), mail.get("From"))
         self.assertEqual(self.regular_user.getProperty('email'), mail.get("To"))
 
-        link = "{}/@@my-invitations/accept?iid={}".format(self.workspace.absolute_url(), iid)
+        payload = {"iid": iid}
+        payload = serialize_and_sign_payload(payload)
+        link = "{}/@@my-invitations/accept?invitation={}".format(self.workspace.absolute_url(), payload)
         self.assertIn(link, mail.as_string().decode('quoted-printable'))
