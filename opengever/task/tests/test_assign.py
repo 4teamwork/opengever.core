@@ -140,6 +140,21 @@ class TestAssignTask(IntegrationTestCase):
         self.assertEquals('team:1', self.task.responsible)
 
     @browsing
+    def test_reassign_task_to_a_inbox_group_is_possible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.set_workflow_state('task-state-open', self.task)
+        odgs = self.add_additional_admin_and_org_unit()[1]
+        inbox_group_name = u'inbox:gdgs'
+
+        self.assign_task(inbox_group_name, u'Please make that for me.')
+
+        self.assertEquals(['Task successfully reassigned.'], info_messages())
+
+        self.assertEquals(odgs.id(), self.task.responsible_client)
+        self.assertEquals(inbox_group_name, self.task.responsible)
+
+    @browsing
     def test_reassign_task_in_progress_state_to_a_team_isnt_possible(self, browser):
         self.login(self.regular_user, browser=browser)
 
