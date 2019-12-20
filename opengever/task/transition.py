@@ -80,7 +80,7 @@ class INewResponsibleSchema(Schema):
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(
-            only_current_inbox=True,
+            only_current_inbox=False,
             only_current_orgunit=True,
             include_teams=True),
         required=True)
