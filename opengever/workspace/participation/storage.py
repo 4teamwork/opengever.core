@@ -20,6 +20,8 @@ class IInvitationStorage(Interface):
 
 
 STATE_PENDING = 'pending'
+STATE_ACCEPTED = 'accepted'
+STATE_DECLINED = 'declined'
 
 
 @implementer(IInvitationStorage)
@@ -69,6 +71,12 @@ class InvitationStorage(object):
     def remove_invitation(self, iid):
         del self._write_invitations[iid]
 
+    def mark_invitation_as_accepted(self, iid):
+        self._write_invitations[iid]['status'] = STATE_ACCEPTED
+
+    def mark_invitation_as_declined(self, iid):
+        self._write_invitations[iid]['status'] = STATE_DECLINED
+
     def update_invitation(self, iid, **updates):
         self._write_invitations[iid]['updated'] = utcnow_tz_aware()
         for key, value in updates.items():
@@ -79,27 +87,35 @@ class InvitationStorage(object):
             else:
                 raise KeyError(key)
 
-    def iter_invitations_for_context(self, context):
+    def iter_invitations_for_context(self, context, pending_only=True):
         uuid = IUUID(context)
         for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
             if data['target_uuid'] == uuid:
                 yield self.get_invitation(iid)
 
-    def iter_invitations_for_recipient_email(self, email):
+    def iter_invitations_for_recipient_email(self, email, pending_only=True):
         for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
             if data['recipient_email'] == email:
                 yield self.get_invitation(iid)
 
-    def iter_invitations_for_inviter(self, userid):
+    def iter_invitations_for_inviter(self, userid, pending_only=True):
         for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
             if data['inviter'] == userid:
                 yield self.get_invitation(iid)
 
-    def iter_invitations_for_current_user(self):
+    def iter_invitations_for_current_user(self, pending_only=True):
         user = api.user.get_current()
         userid = user.getId()
         email = user.getProperty('email')
         for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
             if data['recipient'] == userid or data['recipient_email'] == email:
                 yield self.get_invitation(iid)
 

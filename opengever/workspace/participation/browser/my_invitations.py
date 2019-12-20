@@ -10,6 +10,7 @@ from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.participation import load_signed_payload
 from opengever.workspace.participation import serialize_and_sign_payload
 from opengever.workspace.participation.storage import IInvitationStorage
+from opengever.workspace.participation.storage import STATE_PENDING
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -66,7 +67,8 @@ class MyWorkspaceInvitations(BrowserView):
         invitation = self._get_invitation(iid)
         if not invitation:
             raise BadRequest('Wrong invitation')
-
+        if invitation['status'] != STATE_PENDING:
+            raise BadRequest('Invitation not pending')
         return self._get_invitation(iid)
 
     def _get_invitation(self, iid):
@@ -154,7 +156,7 @@ class MyWorkspaceInvitations(BrowserView):
             assignment = InvitationRoleAssignment(
                 invitation['recipient'], [invitation['role']], target)
             RoleAssignmentManager(target).add_or_update_assignment(assignment)
-            self.storage().remove_invitation(invitation['iid'])
+            self.storage().mark_invitation_as_accepted(invitation['iid'])
 
             manager = WorkspaceWatcherManager(self.context)
             manager.new_participant_added(invitation['recipient'], invitation['role'])
@@ -172,4 +174,4 @@ class MyWorkspaceInvitations(BrowserView):
             self.context.absolute_url() + '/' + self.__name__)
 
     def _decline(self, invitation):
-        self.storage().remove_invitation(invitation.get('iid'))
+        self.storage().mark_invitation_as_declined(invitation['iid'])
