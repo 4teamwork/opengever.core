@@ -38,10 +38,9 @@ class MyWorkspaceInvitations(BrowserView):
         return getUtility(IInvitationStorage)
 
     def get_invitations(self):
-        email = api.user.get_current().getProperty('email')
         target_title = _(u'Deleted Workspace')
 
-        entries = list(self.storage().iter_invitations_for_recipient_email(email))
+        entries = list(self.storage().iter_invitations_for_current_user())
         entries.sort(key=lambda item: item['created'])
 
         for entry in entries:

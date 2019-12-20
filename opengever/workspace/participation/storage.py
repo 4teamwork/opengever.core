@@ -95,6 +95,14 @@ class InvitationStorage(object):
             if data['inviter'] == userid:
                 yield self.get_invitation(iid)
 
+    def iter_invitations_for_current_user(self):
+        user = api.user.get_current()
+        userid = user.getId()
+        email = user.getProperty('email')
+        for iid, data in self._read_invitations.items():
+            if data['recipient'] == userid or data['recipient_email'] == email:
+                yield self.get_invitation(iid)
+
     def _generate_iid(self):
         iid = uuid.uuid4().hex
         if iid in self._read_invitations:
