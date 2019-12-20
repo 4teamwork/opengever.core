@@ -12,6 +12,7 @@ from ftw.testing.mailing import Mailing
 from functools import wraps
 from mock import MagicMock
 from opengever.activity.hooks import insert_notification_defaults
+from opengever.activity.mailer import process_mail_queue
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.core.solr_testing import SolrServer
@@ -119,6 +120,7 @@ class IntegrationTestCase(TestCase):
     def tearDown(self):
         super(IntegrationTestCase, self).tearDown()
         if 'activity' in self.features:
+            process_mail_queue()
             Mailing(self.portal).tear_down()
 
     @staticmethod

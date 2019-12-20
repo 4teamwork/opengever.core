@@ -36,6 +36,7 @@ class TestDigestMail(IntegrationTestCase):
 
     def tearDown(self):
         super(TestDigestMail, self).tearDown()
+        process_mail_queue()
         Mailing(self.portal).tear_down()
 
     def test_sends_mail_to_all_notified_users(self):

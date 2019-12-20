@@ -482,6 +482,7 @@ class TestSuccesssorHandling(FunctionalTestCase):
 
     def tearDown(self):
         super(TestSuccesssorHandling, self).tearDown()
+        process_mail_queue()
         Mailing(self.layer['portal']).tear_down()
 
     def test_when_accepting_task_with_successor_responsible_watcher_gets_moved_from_predecessor_to_successsor(self):

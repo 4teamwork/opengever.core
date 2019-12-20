@@ -5,6 +5,7 @@ from ftw.mail.utils import get_attachments
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
+from opengever.activity.mailer import process_mail_queue
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.interfaces import IDocumentSent
 from opengever.testing import FunctionalTestCase
@@ -38,6 +39,10 @@ class TestSendDocument(FunctionalTestCase):
                .with_admin_unit(public_url='http://nohost/plone'))
 
         Mailing(self.portal).set_up()
+
+    def tearDown(self):
+        process_mail_queue()
+        Mailing(self.portal).tear_down()
 
     def test_dossier_is_sendable(self):
         dossier = create(Builder("dossier"))
