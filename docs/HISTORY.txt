@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - When tearing down test layer, wait for solr to be torn down properly. [siegy]
+- Fix to reassign a task to a new inbox group. [elioschmutz]
 
 
 2019.4.2 (2019-11-29)
