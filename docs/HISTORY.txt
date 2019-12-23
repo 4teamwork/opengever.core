@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Allow invitations to external users through E-mails. [njohner]
+- Update invitation and participation GET json response format. [deiferni]
 - Fix to reassign a task to a new inbox group. [elioschmutz]
 - Always use API for OfficeConnector. [njohner]
 - Refactor solrsearch and listing endpoints. [njohner]
