@@ -1,3 +1,4 @@
+from logging import getLogger
 from opengever.base.casauth import get_gever_portal_url
 from opengever.base.model import create_session
 from opengever.base.role_assignments import InvitationRoleAssignment
@@ -26,6 +27,9 @@ from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.interface import alsoProvides
+
+
+logger = getLogger('opengever.workspace.participation')
 
 
 class MyWorkspaceInvitations(BrowserView):
@@ -124,6 +128,7 @@ class MyWorkspaceInvitations(BrowserView):
             if payload.get("no_redirect", None):
                 # User just registered or logged in on the portal
                 # but does not have a GEVER session yet.
+                logger.info("Triggering CAS redirect for Anonymous user.")
                 raise Unauthorized
 
             accept_url = "{}/@@my-invitations/accept".format(
@@ -132,6 +137,8 @@ class MyWorkspaceInvitations(BrowserView):
                              'no_redirect': 1}
 
             if not self.storage()._find_user_id_for_email(invitation['recipient_email']):
+                logger.info("Redirecting to new user registration for "
+                            "invitation {}".format(invitation['iid']))
                 accept_params['new_user'] = 1
                 accept_url = "{}?invitation={}".format(
                     accept_url, serialize_and_sign_payload(accept_params))
@@ -146,6 +153,10 @@ class MyWorkspaceInvitations(BrowserView):
                     get_gever_portal_url(), payload)
 
             else:
+                logger.info("E-Mail address for invitation {} matched an existing "
+                            "user. Redirecting to portal login.".format(
+                                invitation['iid']))
+
                 accept_url = "{}?invitation={}".format(
                     accept_url, serialize_and_sign_payload(accept_params))
                 params = {'redirect_url': accept_url}
@@ -154,6 +165,8 @@ class MyWorkspaceInvitations(BrowserView):
 
             return self.request.RESPONSE.redirect(redirect_url)
 
+        logger.info("Accepting invitation {} for user {!r}".format(
+            invitation['iid'], api.user.get_current().getId()))
         target = self._accept(invitation)
         self._create_ogds_entry()
         return self.request.RESPONSE.redirect(target.absolute_url())
