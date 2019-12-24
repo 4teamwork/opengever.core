@@ -1,9 +1,12 @@
 from opengever.base.casauth import get_gever_portal_url
+from opengever.base.model import create_session
 from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.user import User
 from opengever.workspace import _
 from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.activities import WorkspaceWatcherManager
@@ -150,8 +153,32 @@ class MyWorkspaceInvitations(BrowserView):
                     get_gever_portal_url(), urlencode(params))
 
             return self.request.RESPONSE.redirect(redirect_url)
+
         target = self._accept(invitation)
+        self._create_ogds_entry()
         return self.request.RESPONSE.redirect(target.absolute_url())
+
+    def _create_ogds_entry(self):
+        session = create_session()
+        member = api.user.get_current()
+        userid = member.getId()
+        firstname = member.getProperty('firstname', '')
+        lastname = member.getProperty('lastname', '')
+        email = member.getProperty('email')
+        ogds_user = User(
+            userid=userid,
+            firstname=firstname,
+            lastname=lastname,
+            email=email)
+
+        # Assign the intersection of existing OGDS groups and the newly created
+        # user's groups as groups for the new OGDS user entry. This will most
+        # likely be just the OrgUnit's users_group. If there's more, they
+        # will be created and assigned during next sync.
+        groups_of_new_user = member.getUser().getGroupIds()
+        groups = Group.query.filter(Group.groupid.in_(groups_of_new_user)).all()
+        ogds_user.groups = groups
+        session.add(ogds_user)
 
     def _accept(self, invitation):
         with elevated_privileges():
