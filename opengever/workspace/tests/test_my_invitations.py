@@ -82,7 +82,7 @@ class TestMyInvitationsView(IntegrationTestCase):
         accept_url = "{}/@@my-invitations/accept?invitation={}".format(
             self.workspace_url, payload)
         params = urlparse.parse_qs(parsed_url.query)
-        self.assertDictEqual({'redirect_url': [accept_url]}, params)
+        self.assertDictEqual({'next': [accept_url]}, params)
 
     @browsing
     def test_accept_invitation_for_unknown_user(self, browser):
