@@ -1,6 +1,8 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from mock import Mock
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
@@ -13,6 +15,9 @@ from opengever.workspace.participation.browser.my_invitations import MyWorkspace
 from opengever.workspace.participation.storage import IInvitationStorage
 from zope.component import getUtility
 import urlparse
+
+
+FROZEN_NOW = datetime(2019, 12, 27, 12, 35)
 
 
 class TestMyInvitationsView(IntegrationTestCase):
@@ -32,23 +37,24 @@ class TestMyInvitationsView(IntegrationTestCase):
                                      .within(self.workspace_root)
                                      .titled(u'Second workspace'))
 
-            self.invitation_id = self.storage.add_invitation(
-                self.workspace, self.regular_user.getProperty('email'),
-                self.workspace_admin.getId(), 'WorkspaceGuest')
-            self.storage.add_invitation(
-                self.workspace2, self.regular_user.getProperty('email'),
-                self.workspace_admin.getId(), 'WorkspaceGuest',
-                comment=u"another invitation")
-            self.storage.add_invitation(
-                self.workspace2, self.workspace_guest.getProperty('email'),
-                self.workspace_admin.getId(), 'WorkspaceGuest')
+            with freeze(FROZEN_NOW):
+                self.invitation_id = self.storage.add_invitation(
+                    self.workspace, self.regular_user.getProperty('email'),
+                    self.workspace_admin.getId(), 'WorkspaceGuest')
+                self.storage.add_invitation(
+                    self.workspace2, self.regular_user.getProperty('email'),
+                    self.workspace_admin.getId(), 'WorkspaceGuest',
+                    comment=u"another invitation")
+                self.storage.add_invitation(
+                    self.workspace2, self.workspace_guest.getProperty('email'),
+                    self.workspace_admin.getId(), 'WorkspaceGuest')
 
-            self.workspace_url = self.workspace.absolute_url()
-            payload = serialize_and_sign_payload({'iid': self.invitation_id})
-            self.accept_url = "{}/@@my-invitations/accept?invitation={}".format(
-                self.workspace_url, payload)
-            self.decline_url = "{}/@@my-invitations/decline?invitation={}".format(
-                self.workspace_url, payload)
+                self.workspace_url = self.workspace.absolute_url()
+                payload = serialize_and_sign_payload({'iid': self.invitation_id})
+                self.accept_url = "{}/@@my-invitations/accept?invitation={}".format(
+                    self.workspace_url, payload)
+                self.decline_url = "{}/@@my-invitations/decline?invitation={}".format(
+                    self.workspace_url, payload)
 
             RoleAssignmentManager(self.workspace_root).add_or_update_assignment(
                 SharingRoleAssignment(self.regular_user.getId(),
@@ -68,21 +74,24 @@ class TestMyInvitationsView(IntegrationTestCase):
 
     @browsing
     def test_accept_invitation_when_not_signed_in(self, browser):
-        # redirect fails because portal is not set up
-        with browser.expect_http_error():
-            browser.open(self.accept_url)
+        self.maxDiff = None
+        with freeze(FROZEN_NOW):
+            # redirect fails because portal is not set up
+            with browser.expect_http_error():
+                browser.open(self.accept_url)
 
-        # check that we get redirected to login
-        parsed_url = urlparse.urlparse(browser.url)
-        self.assertEqual('/portal/login', parsed_url.path)
+            # check that we get redirected to login
+            parsed_url = urlparse.urlparse(browser.url)
+            self.assertEqual('/portal/login', parsed_url.path)
 
-        # with redirect_url to accept the invitation and no_redirect in payload
-        payload = serialize_and_sign_payload({'iid': self.invitation_id,
-                                              u'no_redirect': 1})
-        accept_url = "{}/@@my-invitations/accept?invitation={}".format(
-            self.workspace_url, payload)
-        params = urlparse.parse_qs(parsed_url.query)
-        self.assertDictEqual({'next': [accept_url]}, params)
+
+            # with redirect_url to accept the invitation and no_redirect in payload
+            payload = serialize_and_sign_payload({'iid': self.invitation_id,
+                                                      u'no_redirect': 1})
+            accept_url = "{}/@@my-invitations/accept?invitation={}".format(
+                self.workspace_url, payload)
+            params = urlparse.parse_qs(parsed_url.query)
+            self.assertDictEqual({'next': [accept_url]}, params)
 
     @browsing
     def test_accept_invitation_for_unknown_user(self, browser):
@@ -180,7 +189,8 @@ class TestMyInvitationsView(IntegrationTestCase):
     @browsing
     def test_cannot_accept_invalid_invitation(self, browser):
         self.login(self.regular_user, browser=browser)
-        payload = serialize_and_sign_payload({'iid': 'someinvalidiid'})
+        with freeze(FROZEN_NOW):
+            payload = serialize_and_sign_payload({'iid': 'someinvalidiid'})
         accept_url = "{}/@@my-invitations/accept?invitation={}".format(
             self.workspace_url, payload)
         with browser.expect_http_error(400):
@@ -220,7 +230,8 @@ class TestMyInvitationsView(IntegrationTestCase):
     def test_cannot_decline_invalid_invitation(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        payload = serialize_and_sign_payload({'iid': 'someinvalidiid'})
+        with freeze(FROZEN_NOW):
+            payload = serialize_and_sign_payload({'iid': 'someinvalidiid'})
         decline_url = "{}/@@my-invitations/decline?invitation={}".format(
             self.workspace_url, payload)
         with browser.expect_http_error(400):

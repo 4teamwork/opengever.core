@@ -1,3 +1,5 @@
+from datetime import datetime
+from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity.mailer import process_mail_queue
 from opengever.testing import IntegrationTestCase
@@ -59,21 +61,23 @@ class TestInvitationMail(IntegrationTestCase):
         process_mail_queue()
         self.assertFalse(mailing.has_messages())
 
-        storage = getUtility(IInvitationStorage)
-        iid = storage.add_invitation(
-            self.workspace, self.regular_user.getProperty('email'),
-            self.workspace_admin.getId(), 'WorkspaceGuest')
-        process_mail_queue()
+        with freeze(datetime(2019, 12, 27)):
+            storage = getUtility(IInvitationStorage)
+            iid = storage.add_invitation(
+                self.workspace, self.regular_user.getProperty('email'),
+                self.workspace_admin.getId(), 'WorkspaceGuest')
+            process_mail_queue()
 
-        self.assertTrue(mailing.has_messages())
-        mails = mailing.get_messages()
-        self.assertEqual(1, len(mails))
-        mail = email.message_from_string(mails[0])
+            self.assertTrue(mailing.has_messages())
+            mails = mailing.get_messages()
+            self.assertEqual(1, len(mails))
+            mail = email.message_from_string(mails[0])
 
-        self.assertIn(self.workspace_admin.getProperty('email'), mail.get("From"))
-        self.assertEqual(self.regular_user.getProperty('email'), mail.get("To"))
+            self.assertIn(self.workspace_admin.getProperty('email'), mail.get("From"))
+            self.assertEqual(self.regular_user.getProperty('email'), mail.get("To"))
 
-        payload = {"iid": iid}
-        payload = serialize_and_sign_payload(payload)
+            payload = {"iid": iid}
+            payload = serialize_and_sign_payload(payload)
+
         link = "{}/@@my-invitations/accept?invitation={}".format(self.workspace.absolute_url(), payload)
         self.assertIn(link, mail.as_string().decode('quoted-printable'))
