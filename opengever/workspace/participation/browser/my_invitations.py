@@ -168,13 +168,18 @@ class MyWorkspaceInvitations(BrowserView):
         logger.info("Accepting invitation {} for user {!r}".format(
             invitation['iid'], api.user.get_current().getId()))
         target = self._accept(invitation)
-        self._create_ogds_entry()
         return self.request.RESPONSE.redirect(target.absolute_url())
 
-    def _create_ogds_entry(self):
-        session = create_session()
+    def _maybe_create_ogds_entry(self):
         member = api.user.get_current()
         userid = member.getId()
+
+        if ogds_service().fetch_user(userid):
+            # OGDS entry for user already exists, no need to create one
+            return
+
+        logger.info("Creating OGDS entry for user %r" % userid)
+        session = create_session()
         firstname = member.getProperty('firstname', '')
         lastname = member.getProperty('lastname', '')
         email = member.getProperty('email')
@@ -209,6 +214,7 @@ class MyWorkspaceInvitations(BrowserView):
             manager = WorkspaceWatcherManager(self.context)
             manager.new_participant_added(invitation['recipient'], invitation['role'])
 
+        self._maybe_create_ogds_entry()
         return target
 
     def decline(self):
