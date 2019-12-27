@@ -7,10 +7,14 @@ from opengever.testing import IntegrationTestCase
 from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
 from opengever.workspace.participation.storage import IInvitationStorage
+from opengever.workspace.participation.storage import STATE_ACCEPTED
+from opengever.workspace.participation.storage import STATE_DECLINED
+from opengever.workspace.participation.storage import STATE_PENDING
 from operator import itemgetter
 from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 import pytz
+
 
 
 class TestWorspaceParticipationStorage(IntegrationTestCase):
@@ -50,6 +54,24 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
 
         with self.assertRaises(KeyError):
             getUtility(IInvitationStorage).remove_invitation(iid)
+
+    def test_mark_invitation_as_accepted(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        iid = self.add_invitation()
+        self.assertEqual(STATE_PENDING, storage.get_invitation(iid)['status'])
+
+        storage.mark_invitation_as_accepted(iid)
+        self.assertEqual(STATE_ACCEPTED, storage.get_invitation(iid)['status'])
+
+    def test_mark_invitation_as_declined(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        iid = self.add_invitation()
+        self.assertEqual(STATE_PENDING, storage.get_invitation(iid)['status'])
+
+        storage.mark_invitation_as_declined(iid)
+        self.assertEqual(STATE_DECLINED, storage.get_invitation(iid)['status'])
 
     def test_update_invitation(self):
         self.login(self.workspace_admin)
@@ -173,6 +195,59 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
         self.assertItemsEqual(
             [bar],
             map(itemgetter('iid'), storage.iter_invitations_for_inviter('bar')))
+
+    def test_iter_invitations_for_current_user_lists_only_pending_invitations(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        iid1 = self.add_invitation()
+        iid2 = self.add_invitation(target=self.workspace_folder)
+
+        self.login(self.workspace_guest)
+        self.assertItemsEqual(
+            [iid1, iid2],
+            map(itemgetter('iid'), storage.iter_invitations_for_current_user()))
+
+        storage.mark_invitation_as_accepted(iid1)
+        self.assertItemsEqual(
+            [iid2],
+            map(itemgetter('iid'), storage.iter_invitations_for_current_user()))
+
+        storage.mark_invitation_as_declined(iid2)
+        self.assertItemsEqual(
+            [],
+            map(itemgetter('iid'), storage.iter_invitations_for_current_user()))
+
+    def test_iter_invitations_for_current_user_lists_matching_mail_and_userid(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        iid1 = self.add_invitation()
+        iid2 = self.add_invitation(target=self.workspace_folder)
+
+        storage._write_invitations[iid1]['recipient'] = None
+        storage._write_invitations[iid2]['recipient_email'] = None
+
+        self.login(self.workspace_guest)
+        self.assertItemsEqual(
+            [iid1, iid2],
+            map(itemgetter('iid'), storage.iter_invitations_for_current_user()))
+
+    def test_map_email_to_current_userid_for_all_invitations(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        iid1 = self.add_invitation()
+        iid2 = self.add_invitation(recipient_email=self.workspace_admin.getProperty('email'))
+
+        self.login(self.workspace_guest)
+        self.assertItemsEqual(
+            [iid1],
+            map(itemgetter('iid'), storage.iter_invitations_for_current_user()))
+
+        storage.map_email_to_current_userid_for_all_invitations(
+            self.workspace_admin.getProperty('email'))
+
+        self.assertItemsEqual(
+            [iid1, iid2],
+            map(itemgetter('iid'), storage.iter_invitations_for_current_user()))
 
     def test_prevents_duplicate_invitation_per_workspace(self):
         self.login(self.workspace_admin)

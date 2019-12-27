@@ -77,7 +77,8 @@ class Mailer(object):
         """
         mail_queue.put(msg)
 
-    def prepare_mail(self, subject=u'', to_userid=None, from_userid=None, data=None):
+    def prepare_mail(self, subject=u'', to_userid=None, to_email=None,
+                     from_userid=None, data=None):
         if data is None:
             data = {}
 
@@ -91,8 +92,9 @@ class Mailer(object):
             msg['From'] = make_addr_header(
                 u'OneGov GEVER', api.portal.get().email_from_address, 'utf-8')
 
-        recipient = ogds_service().fetch_user(to_userid)
-        msg['To'] = recipient.email
+        if to_userid:
+            to_email = ogds_service().fetch_user(to_userid).email
+        msg['To'] = to_email
         msg['Subject'] = Header(subject, 'utf-8')
 
         # Break (potential) description out into a list element per newline

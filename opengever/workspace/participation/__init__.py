@@ -1,5 +1,7 @@
+from itsdangerous import URLSafeTimedSerializer
 from opengever.ogds.base.actor import PloneUserActor
 from opengever.workspace import _
+from opengever.workspace.config import workspace_config
 from plone import api
 from zope.i18n import translate
 
@@ -90,3 +92,17 @@ def invitation_to_item(invitation, context):
                 type_='invitation',
                 token=invitation['iid'],
                 userid=invitation['recipient'])
+
+
+def serialize_and_sign_payload(payload):
+    """Serialize and sign a payload
+    """
+    secret = workspace_config.secret
+    serializer = URLSafeTimedSerializer(secret)
+    return serializer.dumps(payload)
+
+
+def load_signed_payload(payload):
+    secret = workspace_config.secret
+    serializer = URLSafeTimedSerializer(secret)
+    return serializer.loads(payload)

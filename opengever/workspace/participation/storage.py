@@ -2,6 +2,7 @@ from BTrees.OOBTree import OOBTree
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
+from opengever.workspace.participation.invitation_mailer import InvitationMailer
 from persistent.mapping import PersistentMapping
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -19,6 +20,8 @@ class IInvitationStorage(Interface):
 
 
 STATE_PENDING = 'pending'
+STATE_ACCEPTED = 'accepted'
+STATE_DECLINED = 'declined'
 
 
 @implementer(IInvitationStorage)
@@ -57,6 +60,7 @@ class InvitationStorage(object):
             'created': utcnow_tz_aware(),
             'updated': None,
             'status': STATE_PENDING})
+        self.send_invitation_mail(iid)
         return iid
 
     def get_invitation(self, iid):
@@ -66,6 +70,12 @@ class InvitationStorage(object):
 
     def remove_invitation(self, iid):
         del self._write_invitations[iid]
+
+    def mark_invitation_as_accepted(self, iid):
+        self._write_invitations[iid]['status'] = STATE_ACCEPTED
+
+    def mark_invitation_as_declined(self, iid):
+        self._write_invitations[iid]['status'] = STATE_DECLINED
 
     def update_invitation(self, iid, **updates):
         self._write_invitations[iid]['updated'] = utcnow_tz_aware()
@@ -77,20 +87,36 @@ class InvitationStorage(object):
             else:
                 raise KeyError(key)
 
-    def iter_invitations_for_context(self, context):
+    def iter_invitations_for_context(self, context, pending_only=True):
         uuid = IUUID(context)
         for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
             if data['target_uuid'] == uuid:
                 yield self.get_invitation(iid)
 
-    def iter_invitations_for_recipient_email(self, email):
+    def iter_invitations_for_recipient_email(self, email, pending_only=True):
         for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
             if data['recipient_email'] == email:
                 yield self.get_invitation(iid)
 
-    def iter_invitations_for_inviter(self, userid):
+    def iter_invitations_for_inviter(self, userid, pending_only=True):
         for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
             if data['inviter'] == userid:
+                yield self.get_invitation(iid)
+
+    def iter_invitations_for_current_user(self, pending_only=True):
+        user = api.user.get_current()
+        userid = user.getId()
+        email = user.getProperty('email')
+        for iid, data in self._read_invitations.items():
+            if pending_only and data['status'] != STATE_PENDING:
+                continue
+            if data['recipient'] == userid or data['recipient_email'] == email:
                 yield self.get_invitation(iid)
 
     def _generate_iid(self):
@@ -138,3 +164,13 @@ class InvitationStorage(object):
             return self.portal_annotations[self.ANNOTATIONS_DATA_KEY]
         else:
             return {}
+
+    def send_invitation_mail(self, iid):
+        invitation = self.get_invitation(iid)
+        mailer = InvitationMailer()
+        mailer.send_invitation(invitation)
+
+    def map_email_to_current_userid_for_all_invitations(self, email):
+        userid = api.user.get_current().getId()
+        for invitation in self.iter_invitations_for_recipient_email(email):
+            self._write_invitations[invitation['iid']]['recipient'] = userid

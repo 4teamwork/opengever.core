@@ -573,62 +573,6 @@ class TestInvitationsPOST(IntegrationTestCase):
             browser.visit(self.workspace)
 
     @browsing
-    def test_disallow_accept_invitation_of_other_user(self, browser):
-        self.login(self.workspace_owner, browser)
-
-        getUtility(IInvitationStorage).add_invitation(
-            self.workspace,
-            self.regular_user.getProperty('email'),
-            self.workspace_owner.getId(),
-            'WorkspaceGuest')
-
-        self.login(self.regular_user, browser)
-
-        my_invitations = self.get_my_invitations(browser)
-        accept_link = my_invitations.get('items')[0].get('accept')
-
-        self.login(self.workspace_owner, browser)
-
-        # Accept invitation of regular-user
-        with browser.expect_http_error(400):
-            browser.open(
-                accept_link,
-                method='POST',
-                headers=http_headers()).json
-
-        self.login(self.regular_user, browser)
-        my_invitations = self.get_my_invitations(browser)
-        self.assertEqual(1, len(my_invitations.get('items')))
-
-    @browsing
-    def test_disallow_decline_invitation_of_other_user(self, browser):
-        self.login(self.workspace_owner, browser)
-
-        getUtility(IInvitationStorage).add_invitation(
-            self.workspace,
-            self.regular_user.getProperty('email'),
-            self.workspace_owner.getId(),
-            'WorkspaceGuest')
-
-        self.login(self.regular_user, browser)
-
-        my_invitations = self.get_my_invitations(browser)
-        accept_link = my_invitations.get('items')[0].get('decline')
-
-        self.login(self.workspace_owner, browser)
-
-        # Decline invitation of regular-user
-        with browser.expect_http_error(400):
-            browser.open(
-                accept_link,
-                method='POST',
-                headers=http_headers()).json
-
-        self.login(self.regular_user, browser)
-        my_invitations = self.get_my_invitations(browser)
-        self.assertEqual(1, len(my_invitations.get('items')))
-
-    @browsing
     def test_raise_404_for_unknown_action(self, browser):
         self.login(self.workspace_owner, browser)
 

@@ -148,6 +148,10 @@ class InvitationsPatch(ParticipationTraverseService):
 class InvitationsPost(ParticipationTraverseService):
 
     def reply(self):
+
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         data = json_body(self.request)
         data['role'] = data.get('role', {}).get('token')
         errors = get_validation_errors(data, IWorkspaceInvitationSchema)
