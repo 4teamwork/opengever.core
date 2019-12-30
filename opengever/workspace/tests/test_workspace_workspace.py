@@ -161,6 +161,12 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
 class TestWorkspaceWorkspaceAPI(IntegrationTestCase):
 
+    EXPECTED_ADD_INVITATION_ACTION = {
+        u'title': u'Add invitation',
+        u'id': u'add_invitation',
+        u'icon': u''
+    }
+
     @browsing
     def test_update(self, browser):
         self.login(self.workspace_owner, browser)
@@ -181,3 +187,21 @@ class TestWorkspaceWorkspaceAPI(IntegrationTestCase):
             browser.open(self.workspace, method='PATCH',
                          headers=self.api_headers,
                          data=json.dumps({'title': u'\xfcberarbeitungsphase'}))
+
+    @browsing
+    def test_workspace_admin_can_view_add_invitation_action(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        browser.open(self.workspace, view='@actions', headers=self.api_headers)
+        actions = browser.json['object_buttons']
+
+        self.assertIn(self.EXPECTED_ADD_INVITATION_ACTION, actions)
+
+    @browsing
+    def test_workspace_member_cannot_see_add_invitation_action(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(self.workspace, view='@actions', headers=self.api_headers)
+        actions = browser.json['object_buttons']
+
+        self.assertNotIn(self.EXPECTED_ADD_INVITATION_ACTION, actions)
