@@ -17,3 +17,19 @@ class TestWorkspaceSerializer(IntegrationTestCase):
             self.workspace, headers={'Accept': 'application/json'}).json
 
         self.assertTrue(response.get(u'can_manage_participants'))
+
+    @browsing
+    def test_workspace_serialization_contains_responsible(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(
+            self.workspace, headers={'Accept': 'application/json'}).json
+
+        self.assertDictContainsSubset({
+            'responsible': {
+                u'token': u'gunther.frohlich',
+                u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)'
+            },
+            'responsible_fullname': u'Fr\xf6hlich G\xfcnther',
+            },
+            browser.json
+        )
