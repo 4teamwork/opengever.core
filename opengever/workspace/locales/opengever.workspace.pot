@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-12-13 15:01+0000\n"
+"POT-Creation-Date: 2019-12-30 15:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.workspace\n"
 
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Accept"
-msgstr ""
-
 #: ./opengever/workspace/participation/browser/participants_view.py
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Action"
 msgstr ""
 
@@ -32,10 +27,6 @@ msgstr ""
 
 #: ./opengever/workspace/activities.py
 msgid "Commented by ${user}"
-msgstr ""
-
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Decline"
 msgstr ""
 
 #: ./opengever/workspace/participation/browser/participants_view.py
@@ -54,16 +45,8 @@ msgstr ""
 msgid "Invite"
 msgstr ""
 
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Invited by"
-msgstr ""
-
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Invited by:"
-msgstr ""
-
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "My invitations"
 msgstr ""
 
 #: ./opengever/workspace/participation/browser/participants_view.py
@@ -96,10 +79,6 @@ msgstr ""
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "User"
-msgstr ""
-
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Workspace"
 msgstr ""
 
 #. Default: "Admin"
