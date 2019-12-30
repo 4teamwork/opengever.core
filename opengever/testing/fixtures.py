@@ -2013,12 +2013,13 @@ class OpengeverContentFixture(object):
 
         RoleAssignmentManager(self.workspace).reset([
             InvitationRoleAssignment(
-                self.workspace_admin.id, ['WorkspaceAdmin'], self.workspace),
-            InvitationRoleAssignment(
                 self.workspace_member.id, ['WorkspaceMember'], self.workspace),
             InvitationRoleAssignment(
                 self.workspace_guest.id, ['WorkspaceGuest'], self.workspace)
         ])
+        self.set_roles(
+            self.workspace, self.workspace_admin.getId(),
+            ['WorkspaceAdmin'])
 
         self.workspace_folder = self.register('workspace_folder', create(
             Builder('workspace folder')

@@ -117,11 +117,6 @@ msgstr ""
 msgid "WorkspaceMember"
 msgstr ""
 
-#. Default: "Owner"
-#: ./opengever/workspace/participation/__init__.py
-msgid "WorkspaceOwner"
-msgstr ""
-
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
 msgid "invitation"

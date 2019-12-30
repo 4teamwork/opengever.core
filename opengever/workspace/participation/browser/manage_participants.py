@@ -42,8 +42,7 @@ class ManageParticipants(BrowserView):
             member = api.user.get(userid=userid)
             if member is not None:
                 item = dict(token=userid,
-                            roles=list(set(roles) & set(
-                                MANAGED_ROLES + ['WorkspaceOwner'])),
+                            roles=list(set(roles) & set(MANAGED_ROLES)),
                             can_manage=can_manage_member(self.context, member, roles),
                             type_='user',
                             name=get_full_user_info(member=member),
@@ -142,7 +141,7 @@ class ManageParticipants(BrowserView):
         if type_ == 'user':
             user_roles = api.user.get_roles(username=token, obj=self.context,
                                             inherit=False)
-            if user_roles and 'WorkspaceOwner' not in user_roles:
+            if user_roles:
                 assignment = InvitationRoleAssignment(token, [role], self.context)
                 RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 

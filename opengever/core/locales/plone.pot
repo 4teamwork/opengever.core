@@ -174,11 +174,6 @@ msgstr ""
 msgid "opengever_workspace--ROLE--WorkspaceMember"
 msgstr ""
 
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
-msgid "opengever_workspace--ROLE--WorkspaceOwner"
-msgstr ""
-
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceAdmin"
@@ -192,11 +187,6 @@ msgstr ""
 #. Default: "Workspace members can read and modify all contents of the workspace."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceMember"
-msgstr ""
-
-#. Default: "The workspace owner is the responsible person for this workspace."
-#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
-msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceOwner"
 msgstr ""
 
 #. Default: "Active"
@@ -227,11 +217,6 @@ msgstr ""
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceMember"
-msgstr ""
-
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
-msgid "opengever_workspace_folder--ROLE--WorkspaceOwner"
 msgstr ""
 
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
@@ -314,11 +299,6 @@ msgstr ""
 msgid "opengever_workspace_todo--ROLE--WorkspaceMember"
 msgstr ""
 
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
-msgid "opengever_workspace_todo--ROLE--WorkspaceOwner"
-msgstr ""
-
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--STATUS--active"
@@ -347,11 +327,6 @@ msgstr ""
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--ROLE--WorkspaceMember"
-msgstr ""
-
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
-msgid "opengever_workspace_todolist--ROLE--WorkspaceOwner"
 msgstr ""
 
 #. Default: "Active"

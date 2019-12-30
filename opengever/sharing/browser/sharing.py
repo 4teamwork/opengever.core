@@ -44,7 +44,7 @@ ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
                'Publisher', 'DossierManager',
                'MeetingUser', 'CommitteeAdministrator',
                'CommitteeResponsible', 'CommitteeMember', 'WorkspaceAdmin',
-               'WorkspaceOwner', 'WorkspacesCreator',
+               'WorkspacesCreator',
                'WorkspaceMember', 'WorkspaceGuest', 'WorkspacesUser']
 
 

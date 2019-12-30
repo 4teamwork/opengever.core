@@ -41,9 +41,9 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'type_': u'user',
                  u'token': u'fridolin.hugentobler',
                  u'userid': u'fridolin.hugentobler'},
-                {u'can_manage': False,
+                {u'can_manage': True,
                  u'name': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
-                 u'roles': [u'WorkspaceOwner'],
+                 u'roles': [u'WorkspaceAdmin'],
                  u'type_': u'user',
                  u'token': u'gunther.frohlich',
                  u'userid': u'gunther.frohlich'},
@@ -192,17 +192,6 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                          data={'token': self.regular_user.getId(),
                                'role': 'Contributor',
                                'type': 'user',
-                               '_authenticator': createToken()})
-
-    @browsing
-    def test_do_not_allow_modifying_the_WorkspaceOwnerRole(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-
-        with browser.expect_http_error(400):
-            browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
-                         data={'token': self.workspace_owner.getId(),
-                               'type': 'user',
-                               'role': 'WorkspaceAdmin',
                                '_authenticator': createToken()})
 
     @browsing

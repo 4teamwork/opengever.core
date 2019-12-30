@@ -5,7 +5,6 @@
     "title": "Projekt: GEVER",
     "_ac_local_roles": {
       "philippe.gross": [
-        "WorkspaceOwner",
         "WorkspaceAdmin"
       ],
       "david.erni": [
@@ -75,7 +74,6 @@
     "title": "Projekt: GEVER UI",
     "_ac_local_roles": {
       "thomas.buchberger": [
-        "WorkspaceOwner",
         "WorkspaceAdmin"
       ],
       "philippe.gross": [
@@ -89,7 +87,6 @@
     "title": "Projekt: OneGovBox",
     "_ac_local_roles": {
       "mathias.leimgruber": [
-        "WorkspaceOwner",
         "WorkspaceAdmin"
       ],
       "philippe.gross": [
@@ -103,7 +100,6 @@
     "title": "Projekt: Redesign",
     "_ac_local_roles": {
       "manuel.cassina": [
-        "WorkspaceOwner",
         "WorkspaceAdmin"
       ]
     }

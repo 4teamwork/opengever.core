@@ -16,7 +16,6 @@
   <lawgiver:role name="WorkspaceAdmin" />
   <lawgiver:role name="WorkspaceGuest" />
   <lawgiver:role name="WorkspaceMember" />
-  <lawgiver:role name="WorkspaceOwner" />
   <lawgiver:role name="WorkspacesCreator" />
   <lawgiver:role name="WorkspacesUser" />
 
@@ -248,7 +247,6 @@
                      Sharing page: Delegate WorkspaceAdmin role,
                      Sharing page: Delegate WorkspaceGuest role,
                      Sharing page: Delegate WorkspaceMember role,
-                     Sharing page: Delegate WorkspaceOwner role,
                      Sharing page: Delegate WorkspacesUser role,
                      Sharing page: Delegate WorkspacesCreator role,
                      opengever.workspace: Add Workspace,
@@ -263,7 +261,6 @@
                      Sharing page: Delegate WorkspaceAdmin role,
                      Sharing page: Delegate WorkspaceGuest role,
                      Sharing page: Delegate WorkspaceMember role,
-                     Sharing page: Delegate WorkspaceOwner role,
                      Sharing page: Delegate WorkspacesUser role,
                      Sharing page: Delegate WorkspacesCreator role,
                      opengever.workspace: Add Workspace,
@@ -277,7 +274,6 @@
                      Sharing page: Delegate WorkspaceAdmin role,
                      Sharing page: Delegate WorkspaceGuest role,
                      Sharing page: Delegate WorkspaceMember role,
-                     Sharing page: Delegate WorkspaceOwner role,
                      Sharing page: Delegate WorkspacesUser role,
                      Sharing page: Delegate WorkspacesCreator role,
                      opengever.workspace: Add Workspace,

@@ -23,12 +23,9 @@ WORKSPCAE_MEMBER = ParticipationRole(
     'WorkspaceMember', _('WorkspaceMember', default="Member"), True)
 WORKSPCAE_ADMIN = ParticipationRole(
     'WorkspaceAdmin', _('WorkspaceAdmin', default="Admin"), True)
-WORKSPCAE_OWNER = ParticipationRole(
-    'WorkspaceOwner', _('WorkspaceOwner', default="Owner"), False)
 
 PARTICIPATION_ROLES = {
     WORKSPCAE_GUEST.id: WORKSPCAE_GUEST,
-    WORKSPCAE_OWNER.id: WORKSPCAE_OWNER,
     WORKSPCAE_ADMIN.id: WORKSPCAE_ADMIN,
     WORKSPCAE_MEMBER.id: WORKSPCAE_MEMBER
 }
@@ -70,8 +67,6 @@ def get_full_user_info(userid=None, member=None):
 
 def can_manage_member(context, member=None, roles=None):
     if member and member.getId() == api.user.get_current().getId():
-        return False
-    elif roles and 'WorkspaceOwner' in roles:
         return False
     else:
         return api.user.has_permission(
