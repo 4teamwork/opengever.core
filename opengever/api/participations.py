@@ -9,6 +9,7 @@ from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
+from plone import api
 
 
 class ParticipationTraverseService(Service):
@@ -51,6 +52,24 @@ class ParticipationsGet(ParticipationTraverseService):
 
     GET workspace/@participations HTTP/1.1
     """
+
+    def prepare_response_item(self, participant):
+        userid = participant.get('token')
+        role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
+        member = api.user.get(userid=userid)
+        return {
+            '@id': '{}/@participations/{}'.format(
+                self.context.absolute_url(), userid),
+            '@type': 'virtual.participations.user',
+            'participant_fullname': participant.get('name'),
+            'is_editable': participant.get('can_manage'),
+            'role': {
+                'token': role.id,
+                'title': role.translated_title(self.request),
+            },
+            'token': userid,
+            'participant_email': member.getProperty('email'),
+        }
 
     def reply(self):
         token = self.read_params()

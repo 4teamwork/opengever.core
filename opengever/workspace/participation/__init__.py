@@ -3,6 +3,7 @@ from opengever.ogds.base.actor import PloneUserActor
 from opengever.workspace import _
 from opengever.workspace.config import workspace_config
 from plone import api
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
@@ -79,19 +80,19 @@ def can_manage_member(context, member=None, roles=None):
 
 
 def invitation_to_item(invitation, context):
-    if invitation['recipient']:
-        recipient_info = get_full_user_info(userid=invitation['recipient'])
-    else:
-        recipient_info = None
-
-    return dict(name=recipient_info,
-                roles=[invitation['role']],
-                inviter=get_full_user_info(
-                    userid=invitation['inviter']),
-                can_manage=can_manage_member(context),
-                type_='invitation',
-                token=invitation['iid'],
-                userid=invitation['recipient'])
+    token = invitation['iid']
+    role = PARTICIPATION_ROLES.get(invitation['role'])
+    return {
+        '@id': '{}/@invitations/{}'.format(context.absolute_url(), token),
+        '@type': 'virtual.participations.invitation',
+        'inviter_fullname': get_full_user_info(userid=invitation['inviter']),
+        'recipient_email': invitation['recipient_email'],
+        'role': {
+            'token': role.id,
+            'title': role.translated_title(getRequest()),
+        },
+        'token': token,
+    }
 
 
 def serialize_and_sign_payload(payload):
