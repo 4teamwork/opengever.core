@@ -166,3 +166,44 @@ class TestInvitationsPost(IntegrationTestCase):
         with browser.expect_http_error(401):
             browser.open(url, method='POST', headers=self.api_headers,
                          data=data)
+
+
+class TestInvitationsDelete(IntegrationTestCase):
+
+    @browsing
+    def test_delete_invitation(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        storage = getUtility(IInvitationStorage)
+        iid = storage.add_invitation(
+            self.workspace,
+            self.regular_user.getProperty('email'),
+            self.workspace_admin.getId(),
+            'WorkspaceGuest')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@invitations',
+            method='GET',
+            headers=self.api_headers,
+        )
+
+        self.assertIsNotNone(
+            get_entry_by_token(browser.json.get('items'), iid),
+            'Expect an invitation.')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@invitations/{}'.format(iid),
+            method='DELETE',
+            headers=self.api_headers,
+        )
+
+        self.assertEqual(204, browser.status_code)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@invitations',
+            method='GET',
+            headers=self.api_headers,
+        )
+
+        self.assertIsNone(
+            get_entry_by_token(browser.json.get('items'), iid),
+            'Expect no invitation anymore.')

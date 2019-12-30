@@ -170,44 +170,6 @@ class TestParticipationGet(IntegrationTestCase):
 class TestParticipationDelete(IntegrationTestCase):
 
     @browsing
-    def test_delete_invitation(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-        storage = getUtility(IInvitationStorage)
-        iid = storage.add_invitation(
-            self.workspace,
-            self.regular_user.getProperty('email'),
-            self.workspace_admin.getId(),
-            'WorkspaceGuest')
-
-        browser.open(
-            self.workspace.absolute_url() + '/@invitations',
-            method='GET',
-            headers=http_headers(),
-        )
-
-        self.assertIsNotNone(
-            get_entry_by_token(browser.json.get('items'), iid),
-            'Expect an invitation.')
-
-        browser.open(
-            self.workspace.absolute_url() + '/@invitations/{}'.format(iid),
-            method='DELETE',
-            headers=http_headers(),
-        )
-
-        self.assertEqual(204, browser.status_code)
-
-        browser.open(
-            self.workspace.absolute_url() + '/@invitations',
-            method='GET',
-            headers=http_headers(),
-        )
-
-        self.assertIsNone(
-            get_entry_by_token(browser.json.get('items'), iid),
-            'Expect no invitation anymore.')
-
-    @browsing
     def test_delete_local_role(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
