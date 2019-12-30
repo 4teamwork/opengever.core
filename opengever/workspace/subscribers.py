@@ -13,12 +13,12 @@ from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 
 
-def assign_owner_role_on_creation(workspace, event):
-    """The creator of the workspace should have the WorkspaceOwner role,
+def assign_admin_role_to_workspace_creator(workspace, event):
+    """The creator of the workspace should have the Admin role,
     so that the she / he can access the workspace.
     """
     owner_userid = workspace.Creator()
-    assignment = SharingRoleAssignment(owner_userid, ['WorkspaceOwner'])
+    assignment = SharingRoleAssignment(owner_userid, ['WorkspaceAdmin'])
     RoleAssignmentManager(workspace).add_or_update_assignment(assignment)
 
 

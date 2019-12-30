@@ -14,10 +14,11 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
     @browsing
     def test_workspace_is_addable_in_workspaceroot(self, browser):
-        self.login(self.workspace_owner, browser)
+        self.login(self.workspace_admin, browser)
         browser.visit(self.workspace_root)
         factoriesmenu.add('Workspace')
 
+        browser.exception_bubbling = True
         form = browser.find_form_by_field('Title')
         form.fill({'Title': 'Example Workspace'})
         form.save()
@@ -25,13 +26,13 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
         assert_no_error_messages(browser)
         workspace = browser.context
 
-        self.assertEquals((('gunther.frohlich', ('WorkspaceOwner',)),),
+        self.assertEquals((('fridolin.hugentobler', ('WorkspaceAdmin',)),),
                           workspace.get_local_roles())
         self.assertEquals(
             [{'cause': ASSIGNMENT_VIA_SHARING,
-              'roles': ['WorkspaceOwner'],
+              'roles': ['WorkspaceAdmin'],
               'reference': None,
-              'principal': 'gunther.frohlich'}],
+              'principal': 'fridolin.hugentobler'}],
             RoleAssignmentManager(workspace).storage._storage())
 
     @browsing
