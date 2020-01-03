@@ -78,6 +78,8 @@
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" regex="icu4j-.*\.jar" />
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" regex="lucene-analyzers-icu-.*\.jar" />
 
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-dataimporthandler-.*\.jar" />
+
   <!-- an exact 'path' can be used instead of a 'dir' to specify a
        specific jar file.  This will cause a serious error to be logged
        if it can't be loaded.
@@ -795,6 +797,12 @@
       <str name="fmap.content">SearchableText</str>
       <str name="uprefix">ignored_</str>
       <bool name="ignoreTikaException">true</bool>
+    </lst>
+  </requestHandler>
+
+  <requestHandler name="/dataimport" class="solr.DataImportHandler">
+    <lst name="defaults">
+      <str name="config">data-config.xml</str>
     </lst>
   </requestHandler>
 

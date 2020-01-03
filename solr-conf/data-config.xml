@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataConfig>
+  <document>
+    <entity name="Solr" processor="SolrEntityProcessor"
+            url="${dataimporter.request.source_url}"
+            query="*:*"
+            fl="*,ignored_version_:_version_,ignored_path_parent:path_parent,ignored_sequence_number_string:sequence_number_string"
+            sort="UID asc"/>
+  </document>
+</dataConfig>
