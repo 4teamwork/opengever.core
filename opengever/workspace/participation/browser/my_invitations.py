@@ -1,7 +1,7 @@
 from logging import getLogger
 from opengever.base.casauth import get_gever_portal_url
 from opengever.base.model import create_session
-from opengever.base.role_assignments import InvitationRoleAssignment
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import PloneUserActor
@@ -206,7 +206,7 @@ class MyWorkspaceInvitations(BrowserView):
             # recipient was set in the invitation, so we need to fetch it anew
             invitation = self.storage().get_invitation(invitation['iid'])
 
-            assignment = InvitationRoleAssignment(
+            assignment = SharingRoleAssignment(
                 invitation['recipient'], [invitation['role']], target)
             RoleAssignmentManager(target).add_or_update_assignment(assignment)
             self.storage().mark_invitation_as_accepted(invitation['iid'])

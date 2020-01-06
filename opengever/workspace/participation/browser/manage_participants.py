@@ -1,5 +1,5 @@
-from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
-from opengever.base.role_assignments import InvitationRoleAssignment
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
 from opengever.workspace.participation import can_manage_member
@@ -109,7 +109,7 @@ class ManageParticipants(BrowserView):
 
         elif type_ == 'user' and can_manage_member(self.context, api.user.get(userid=token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
-                ASSIGNMENT_VIA_INVITATION, token)
+                ASSIGNMENT_VIA_SHARING, token)
             # Avoid circular imports
             from opengever.workspace.activities import WorkspaceWatcherManager
             manager = WorkspaceWatcherManager(self.context)
@@ -142,7 +142,7 @@ class ManageParticipants(BrowserView):
             user_roles = api.user.get_roles(username=token, obj=self.context,
                                             inherit=False)
             if user_roles:
-                assignment = InvitationRoleAssignment(token, [role], self.context)
+                assignment = SharingRoleAssignment(token, [role], self.context)
                 RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
                 self.context.setModificationDate()
