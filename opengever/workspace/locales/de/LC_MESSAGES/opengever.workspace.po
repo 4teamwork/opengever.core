@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-12-13 15:01+0000\n"
+"POT-Creation-Date: 2019-12-30 15:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,12 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Accept"
-msgstr "Annehmen"
-
 #: ./opengever/workspace/participation/browser/participants_view.py
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Action"
 msgstr "Aktion"
 
@@ -30,10 +25,6 @@ msgstr "Erledigt durch ${user}"
 #: ./opengever/workspace/activities.py
 msgid "Commented by ${user}"
 msgstr "Kommentiert durch ${user}"
-
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Decline"
-msgstr "Ablehnen"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Delete"
@@ -51,17 +42,9 @@ msgstr "Einladung"
 msgid "Invite"
 msgstr "Einladen"
 
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Invited by"
-msgstr "Von"
-
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Invited by:"
 msgstr "Eingeladen durch:"
-
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "My invitations"
-msgstr "Teamraum Einladungen"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Participant deleted"
@@ -95,10 +78,6 @@ msgstr "Typ"
 msgid "User"
 msgstr "Benutzer"
 
-#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
-msgid "Workspace"
-msgstr "Teamraum"
-
 #. Default: "Admin"
 #: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceAdmin"
@@ -113,11 +92,6 @@ msgstr "Gast"
 #: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceMember"
 msgstr "Teammitglied"
-
-#. Default: "Owner"
-#: ./opengever/workspace/participation/__init__.py
-msgid "WorkspaceOwner"
-msgstr "Federführung"
 
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py

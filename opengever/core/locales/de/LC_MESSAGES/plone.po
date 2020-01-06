@@ -177,11 +177,6 @@ msgstr "Gast"
 msgid "opengever_workspace--ROLE--WorkspaceMember"
 msgstr "Teammitglied"
 
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
-msgid "opengever_workspace--ROLE--WorkspaceOwner"
-msgstr "Federführung"
-
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceAdmin"
@@ -196,11 +191,6 @@ msgstr "Gäste haben lesenden Zugriff auf alle Inhalten, können aber keine Inha
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceMember"
 msgstr "Teammitglieder haben lesenden und schreibenden Zugriff auf alle Inhalte."
-
-#. Default: "The workspace owner is the responsible person for this workspace."
-#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
-msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceOwner"
-msgstr "Federführende sind verantwortlich für den Teamraum."
 
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
@@ -231,11 +221,6 @@ msgstr "Gast"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceMember"
 msgstr "Teammitglied"
-
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
-msgid "opengever_workspace_folder--ROLE--WorkspaceOwner"
-msgstr "Federführung"
 
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
@@ -317,11 +302,6 @@ msgstr "Gast"
 msgid "opengever_workspace_todo--ROLE--WorkspaceMember"
 msgstr "Teammitglied"
 
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
-msgid "opengever_workspace_todo--ROLE--WorkspaceOwner"
-msgstr "Federführung"
-
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--STATUS--active"
@@ -351,11 +331,6 @@ msgstr "Gast"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--ROLE--WorkspaceMember"
 msgstr "Teammitglied"
-
-#. Default: "workspace owner"
-#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
-msgid "opengever_workspace_todolist--ROLE--WorkspaceOwner"
-msgstr "Federführung"
 
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt

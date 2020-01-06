@@ -4,6 +4,7 @@ Changelog
 2019.5.1 (unreleased)
 ---------------------
 
+- Return creator of workspace in GET, make sure he is a WorkspaceAdministrator upon workspace creation. Get rid of WorkspaceOwner role. [deiferni]
 - Allow invitations to external users through E-mails. [njohner]
 - Update invitation and participation GET json response format. [deiferni]
 - Fix to reassign a task to a new inbox group. [elioschmutz]

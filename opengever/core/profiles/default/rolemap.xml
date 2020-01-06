@@ -17,7 +17,6 @@
     <role name="WorkspaceAdmin" />
     <role name="WorkspaceGuest" />
     <role name="WorkspaceMember" />
-    <role name="WorkspaceOwner" />
     <role name="WorkspacesCreator" />
     <role name="WorkspacesUser" />
     <role name="MemberAreaAdministrator" />
@@ -246,7 +245,6 @@
     <permission name="Sharing page: Delegate WorkspaceAdmin role" acquire="False" />
     <permission name="Sharing page: Delegate WorkspaceGuest role" acquire="False" />
     <permission name="Sharing page: Delegate WorkspaceMember role" acquire="False" />
-    <permission name="Sharing page: Delegate WorkspaceOwner role" acquire="False" />
     <permission name="Sharing page: Delegate WorkspacesCreator role" acquire="False" />
     <permission name="Sharing page: Delegate WorkspacesUser role" acquire="False" />
 

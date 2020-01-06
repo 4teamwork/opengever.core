@@ -3,7 +3,6 @@ Role mapping:
   workspace guest => WorkspaceGuest
   workspace member => WorkspaceMember
   workspace admin => WorkspaceAdmin
-  workspace owner => WorkspaceOwner
   admin => Administrator
   systems administrator => Manager
 
@@ -26,8 +25,7 @@ Visible roles:
 General:
   A workspace member can perform the same actions as a workspace guest.
   A workspace admin can perform the same actions as a workspace member.
-  A workspace owner can perform the same actions as a workspace admin.
-  An admin can perform the same actions as a workspace owner.
+  An admin can perform the same actions as a workspace admin.
 
   A systems administrator can always add.
   A systems administrator can always view.

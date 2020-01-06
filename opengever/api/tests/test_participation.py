@@ -60,8 +60,8 @@ class TestParticipationGet(IntegrationTestCase):
                     u'@type': u'virtual.participations.user',
                     u'participant_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
                     u'is_editable': False,
-                    u'role': {u'token': u'WorkspaceOwner',
-                              u'title': u'Owner'},
+                    u'role': {u'token': u'WorkspaceAdmin',
+                              u'title': u'Admin'},
                     u'token': 'gunther.frohlich',
                     u'participant_email': u'gunther.frohlich@gever.local',
                 }, {
@@ -77,8 +77,8 @@ class TestParticipationGet(IntegrationTestCase):
             ], response.get('items'))
 
     @browsing
-    def test_owner_is_not_editable(self, browser):
-        self.login(self.workspace_admin, browser)
+    def test_admin_cannot_edit_himself(self, browser):
+        self.login(self.workspace_owner, browser)
 
         response = browser.open(
             self.workspace.absolute_url() + '/@participations',
@@ -341,30 +341,6 @@ class TestParticipationPatch(IntegrationTestCase):
         with browser.expect_http_error(401):
             data = json.dumps(json_compatible({
                 'role': {'token': 'Contributor'}
-            }))
-
-            browser.open(
-                entry['@id'],
-                method='PATCH',
-                data=data,
-                headers=http_headers(),
-                )
-
-    @browsing
-    def test_do_not_allow_modifying_the_WorkspaceOwnerRole(self, browser):
-        self.login(self.workspace_admin, browser=browser)
-
-        browser.open(
-            self.workspace.absolute_url() + '/@participations',
-            method='GET',
-            headers=http_headers(),
-        )
-
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_owner.id)
-
-        with browser.expect_http_error(400):
-            data = json.dumps(json_compatible({
-                'role': {'token': 'WorkspaceAdmin'}
             }))
 
             browser.open(

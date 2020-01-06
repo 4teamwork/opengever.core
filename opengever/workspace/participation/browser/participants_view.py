@@ -34,7 +34,6 @@ class ParticipantsView(BrowserView):
             'workspaceguest': PARTICIPATION_ROLES.get('WorkspaceGuest').translated_title(self.request),
             'workspacemember': PARTICIPATION_ROLES.get('WorkspaceMember').translated_title(self.request),
             'workspaceadmin': PARTICIPATION_ROLES.get('WorkspaceAdmin').translated_title(self.request),
-            'workspaceowner': PARTICIPATION_ROLES.get('WorkspaceOwner').translated_title(self.request),
             'user': translate(_('User'), context=self.request),
             'type': translate(_('Type'), context=self.request),
             'role': translate(_('Rolle'), context=self.request),

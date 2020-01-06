@@ -425,7 +425,7 @@ class TestWorkspaceSharing(IntegrationTestCase):
                      method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(
-            [u'WorkspaceAdmin', u'WorkspaceOwner', u'WorkspaceMember', u'WorkspaceGuest'],
+            [u'WorkspaceAdmin', u'WorkspaceMember', u'WorkspaceGuest'],
             [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
@@ -495,7 +495,8 @@ class TestWorkspaceSharing(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
 
         self.assertItemsEqual(
-            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger'],
+            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger',
+             u'gunther.frohlich'],
             [entry['id'] for entry in browser.json.get('entries')])
 
     @browsing
@@ -509,7 +510,8 @@ class TestWorkspaceSharing(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
 
         self.assertItemsEqual(
-            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger'],
+            [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger',
+             u'gunther.frohlich'],
             [entry['id'] for entry in browser.json.get('entries')])
 
     @browsing
@@ -524,5 +526,5 @@ class TestWorkspaceSharing(IntegrationTestCase):
 
         self.assertItemsEqual(
             [u'nicole.kohler', u'fridolin.hugentobler',
-             u'hans.peter', u'beatrice.schrodinger'],
+             u'hans.peter', u'beatrice.schrodinger', u'gunther.frohlich'],
             [entry['id'] for entry in browser.json.get('entries')])

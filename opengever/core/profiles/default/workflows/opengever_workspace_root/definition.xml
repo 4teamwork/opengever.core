@@ -36,7 +36,6 @@
   <permission>Sharing page: Delegate WorkspaceAdmin role</permission>
   <permission>Sharing page: Delegate WorkspaceGuest role</permission>
   <permission>Sharing page: Delegate WorkspaceMember role</permission>
-  <permission>Sharing page: Delegate WorkspaceOwner role</permission>
   <permission>Sharing page: Delegate WorkspacesCreator role</permission>
   <permission>Sharing page: Delegate WorkspacesUser role</permission>
   <permission>Sharing page: Delegate roles</permission>
@@ -182,7 +181,6 @@
     <permission-map name="Sharing page: Delegate WorkspaceAdmin role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspaceGuest role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspaceMember role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate WorkspaceOwner role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
