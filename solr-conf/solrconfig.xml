@@ -806,6 +806,18 @@
     </lst>
   </requestHandler>
 
+  <requestHandler name="/replication" class="solr.ReplicationHandler" >
+    <lst name="master">
+      <str name="replicateAfter">commit</str>
+      <str name="replicateAfter">optimize</str>
+   </lst>
+   <lst name="slave">
+      <str name="enable">${solr.replication.enable:false}</str>
+      <str name="masterUrl">${solr.replication.masterUrl:http://localhost:8983/solr/core/replication}</str>
+      <str name="pollInterval">${solr.replication.pollInterval:00:00:15}</str>
+   </lst>
+  </requestHandler>
+
   <!-- Search Components
 
        Search components are registered to SolrCore and used by

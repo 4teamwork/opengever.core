@@ -4,6 +4,7 @@ Changelog
 2019.5.1 (unreleased)
 ---------------------
 
+- Configure Solr replication handler. [buchi]
 - Implement @role-inheritance serivce endpoint for workspace folders. [deiferni]
 - Include permissions.zcml of Products.CMFEditions. [lgraf]
 - Add action to create new invitations to workspaces. [deiferni]
