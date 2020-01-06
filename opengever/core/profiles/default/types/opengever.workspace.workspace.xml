@@ -73,4 +73,14 @@
     <permission value="Modify portal content" />
   </action>
 
+  <action
+      action_id="add_invitation"
+      visible="True"
+      title="Add invitation"
+      url_expr="string:${object_url}/@invitations"
+      condition_expr=""
+      category="object_buttons">
+    <permission value="Sharing page: Delegate WorkspaceAdmin role" />
+  </action>
+
 </object>

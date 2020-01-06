@@ -125,30 +125,6 @@ class InvitationsDelete(ParticipationTraverseService):
         return self.params[0]
 
 
-class InvitationsPatch(ParticipationTraverseService):
-
-    def reply(self):
-        token = self.read_params()
-        data = self.validate_data(json_body(self.request))
-
-        manager = ManageParticipants(self.context, self.request)
-        manager._modify(token, data.get('role').get('token'), 'invitation')
-        return None
-
-    def read_params(self):
-        if len(self.params) != 1:
-            raise BadRequest(
-                "Must supply token ID as URL path parameters.")
-
-        return self.params[0]
-
-    def validate_data(self, data):
-        if not data.get('role'):
-            raise BadRequest('Missing parameter role')
-
-        return data
-
-
 class InvitationsPost(ParticipationTraverseService):
 
     def reply(self):

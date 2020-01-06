@@ -367,26 +367,10 @@
 
   <plone:service
       method="GET"
-      name="@participations"
-      for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participations.ParticipationsGet"
-      permission="zope2.View"
-      />
-
-  <plone:service
-      method="GET"
       name="@invitations"
       for="opengever.workspace.interfaces.IWorkspace"
       factory=".invitations.InvitationsGet"
       permission="zope2.View"
-      />
-
-  <plone:service
-      method="DELETE"
-      name="@participations"
-      for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participations.ParticipationsDelete"
-      permission="plone.DelegateWorkspaceAdminRole"
       />
 
   <plone:service
@@ -406,18 +390,26 @@
       />
 
   <plone:service
-      method="PATCH"
+      method="GET"
       name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"
-      factory=".participations.ParticipationsPatch"
+      factory=".participations.ParticipationsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participations.ParticipationsDelete"
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
   <plone:service
       method="PATCH"
-      name="@invitations"
+      name="@participations"
       for="opengever.workspace.interfaces.IWorkspace"
-      factory=".invitations.InvitationsPatch"
+      factory=".participations.ParticipationsPatch"
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
