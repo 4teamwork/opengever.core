@@ -143,7 +143,7 @@ class TestMyInvitationsView(IntegrationTestCase):
                 self.workspace).get_assignments_by_principal_id(self.regular_user.getId())
         self.assertEqual(1, len(assignments))
         assignment = assignments[0]
-        self.assertEqual(u'label_assignment_via_workspace_invitation',
+        self.assertEqual(u'label_assignment_via_sharing',
                          assignment.cause_title())
         self.assertEqual(['WorkspaceGuest'], assignment.roles)
         self.assertEqual(self.regular_user.getId(), assignment.principal)
