@@ -5,6 +5,20 @@ Changelog
 ---------------------
 
 - Nothing changed yet.
+- Include permissions.zcml of Products.CMFEditions. [lgraf]
+- Add action to create new invitations to workspaces. [deiferni]
+- Return creator of workspace in GET, make sure he is a WorkspaceAdministrator upon workspace creation. Get rid of WorkspaceOwner role. [deiferni]
+- Allow invitations to external users through E-mails. [njohner]
+- Update invitation and participation GET json response format. [deiferni]
+- Fix to reassign a task to a new inbox group. [elioschmutz]
+- Always use API for OfficeConnector. [njohner]
+- Refactor solrsearch and listing endpoints. [njohner]
+- Add tests for solrsearch and listing endpoints. [njohner]
+- Split invitations from participations endpoints. [njohner]
+- Make and enforce unicode for webaction owner and groups. [njohner]
+- Implement testing against a real Solr. [lgraf]
+- Sharing on workspace folders should always show workspace users. [njohner]
+- Replace @participations endpoint with @invitations endpoint accepting slightly different parameters. [deiferni]
 
 
 2019.5.0 (2019-12-10)

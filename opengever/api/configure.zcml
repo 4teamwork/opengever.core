@@ -7,6 +7,7 @@
 
   <include package="plone.rest" file="meta.zcml" />
   <include package="plone.restapi" file="permissions.zcml" />
+  <include package="Products.CMFEditions" file="permissions.zcml" />
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
   <include package="opengever.webactions" file="permissions.zcml" />
