@@ -152,6 +152,7 @@ class SolrReplicationAPIClient(object):
         try:
             response.raise_for_status()
         except Exception:
+            raise Exception(response.text)
             print response.json()
             raise
         return response.json()
