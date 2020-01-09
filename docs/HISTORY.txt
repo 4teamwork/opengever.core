@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.5.2 (unreleased)
+2019.6.0 (2020-01-09)
 ---------------------
 
 - Update Solr to version 8.4.0. [buchi]
