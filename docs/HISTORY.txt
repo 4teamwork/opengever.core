@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.5.1 (unreleased)
+2019.5.1 (2020-01-09)
 ---------------------
 
 - Include permissions.zcml of Products.CMFEditions. [lgraf]
