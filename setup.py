@@ -41,6 +41,12 @@ tests_require = [
     'zope.testing',
 ]
 
+solr_conf_files = [
+    os.path.join(parent, name)
+    for (parent, subdirs, files) in os.walk('solr-conf')
+    for name in files + subdirs
+]
+
 setup(name='opengever.core',
       version=version,
       description="OpenGever Core (Maintainer: %s)" % maintainer,
@@ -73,13 +79,7 @@ setup(name='opengever.core',
       ],
       include_package_data=True,
       data_files=[
-          ('solr-conf', [
-              'solr-conf/managed-schema',
-              'solr-conf/mapping-FoldToASCII.txt',
-              'solr-conf/solrconfig.xml',
-              'solr-conf/stopwords.txt',
-              'solr-conf/synonyms.txt',
-          ]),
+          ('solr-conf', solr_conf_files),
       ],
       zip_safe=False,
       install_requires=[

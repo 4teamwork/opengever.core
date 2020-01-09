@@ -18,6 +18,7 @@ Changelog
 - Implement testing against a real Solr. [lgraf]
 - Sharing on workspace folders should always show workspace users. [njohner]
 - Replace @participations endpoint with @invitations endpoint accepting slightly different parameters. [deiferni]
+- Update Solr to version 8.4.0. [buchi]
 
 
 2019.5.0 (2019-12-10)
