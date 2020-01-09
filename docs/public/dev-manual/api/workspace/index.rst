@@ -11,6 +11,7 @@ Hier werden alle Teamraum-Schnittstellen beschrieben, welche von OneGov GEVER un
 
    workspace_invitations
    participation
+   role_inheritance
    todos
    todolists
 
