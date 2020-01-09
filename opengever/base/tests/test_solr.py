@@ -181,33 +181,3 @@ class TestOGSolrDocument(unittest.TestCase):
         doc = OGSolrDocument(data={'Description': 'My Description'})
         obj = OGSolrContentListingObject(doc)
         self.assertEqual(obj.CroppedDescription(), 'My Description')
-
-
-class TestSolrConfigIncludedDataFiles(unittest.TestCase):
-
-    def test_data_files_included(self):
-        """This test verifies that files in solr-conf/ are explicitely listed
-        in setup.py's data_files. This is required for them to be copied
-        into the .egg during installation time (just having them in
-        MANIFEST.in is not enough, that will only make sure they get included
-        in the source distribution).
-
-        Because they need to be listed in data_files explicitely (globs are
-        not supported), these are prone to be missed, and a failure to include
-        them would only be noticed after release / at deployment time.
-        Hence this test.
-        """
-        og_core = get_distribution('opengever.core').location
-        with open(os.path.join(og_core, 'setup.py')) as setup_py_file:
-            setup_py = setup_py_file.read()
-
-        # This is a simplistic test for now. Needs to be adapted if the
-        # solr-conf directory is renamed or moved, or if subdirectories
-        # are added.
-        files_in_solr_conf = os.listdir(os.path.join(og_core, 'solr-conf'))
-        for fn in files_in_solr_conf:
-            path = 'solr-conf/%s' % fn
-            if path not in setup_py:
-                self.fail(
-                    "Expected %r to appear in setup.py but it didn't. "
-                    "(Should be listed in data_files)" % path)
