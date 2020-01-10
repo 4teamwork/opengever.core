@@ -2,9 +2,6 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.participation import PARTICIPATION_ROLES
-from opengever.workspace.participation import PARTICIPATION_TYPES
-from opengever.workspace.participation import PARTICIPATION_TYPES_BY_PATH_IDENTIFIER
-from opengever.workspace.participation import TYPE_INVITATION
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -12,7 +9,6 @@ from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Forbidden
-from zExceptions import NotFound
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
@@ -32,23 +28,21 @@ class ParticipationTraverseService(Service):
         return self
 
     def prepare_response_item(self, participant):
-        token = participant.get('token')
-        participation_type = PARTICIPATION_TYPES[participant.get('type_')]
-        role = participant.get('roles')[0]
+        userid = participant.get('token')
+        role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
+        member = api.user.get(userid=userid)
         return {
-            '@id': '{}/@{}/{}'.format(
-                self.context.absolute_url(),
-                participation_type.path_identifier,
-                token),
-            '@type': 'virtual.participations.{}'.format(participation_type.id),
+            '@id': '{}/@participations/{}'.format(
+                self.context.get_context_with_local_roles().absolute_url(), userid),
+            '@type': 'virtual.participations.user',
             'participant_fullname': participant.get('name'),
-            'inviter_fullname': participant.get('inviter'),
-            'role': role,
-            'readable_role': PARTICIPATION_ROLES.get(role).translated_title(self.request),
             'is_editable': participant.get('can_manage'),
-            'participation_type': participation_type.id,
-            'readable_participation_type': participation_type.translated_title(self.request),
-            'token': token,
+            'role': {
+                'token': role.id,
+                'title': role.translated_title(self.request),
+            },
+            'token': userid,
+            'participant_email': member.getProperty('email'),
         }
 
     def participants(self, context):
@@ -67,25 +61,6 @@ class ParticipationsGet(ParticipationTraverseService):
 
     GET workspace/@participations HTTP/1.1
     """
-
-    def prepare_response_item(self, participant):
-        userid = participant.get('token')
-        role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
-        member = api.user.get(userid=userid)
-        return {
-            '@id': '{}/@participations/{}'.format(
-                self.context.get_context_with_local_roles().absolute_url(), userid),
-            '@type': 'virtual.participations.user',
-            'participant_fullname': participant.get('name'),
-            'is_editable': participant.get('can_manage'),
-            'role': {
-                'token': role.id,
-                'title': role.translated_title(self.request),
-            },
-            'token': userid,
-            'participant_email': member.getProperty('email'),
-        }
-
     def reply(self):
         token = self.read_params()
         if token:
