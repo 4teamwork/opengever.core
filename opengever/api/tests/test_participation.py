@@ -332,6 +332,38 @@ class TestParticipationDelete(IntegrationTestCase):
                 headers=http_headers(),
             ).json
 
+    @browsing
+    def test_remove_local_roles_from_self_managed_folders_if_removed_in_upper_context(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        block_role_inheritance(self.workspace_folder, browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
+            method='DELETE',
+            headers=http_headers(),
+        )
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNone(
+            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            'Expect to have no local roles anymore for the user in the workspace')
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNone(
+            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            'Expect to have no local roles anymore for the user in the folder')
+
 
 class TestParticipationPatch(IntegrationTestCase):
 

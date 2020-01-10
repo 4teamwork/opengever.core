@@ -111,8 +111,7 @@ class ParticipationsDelete(ParticipationTraverseService):
     def reply(self):
         token = self.read_params()
 
-        manager = ManageParticipants(self.context, self.request)
-        manager._delete('user', token)
+        self.recursive_delete_participation(self.context, token)
         self.request.response.setStatus(204)
         return None
 
@@ -122,6 +121,20 @@ class ParticipationsDelete(ParticipationTraverseService):
                 "Must supply token ID as URL path parameters.")
 
         return self.params[0]
+
+    def recursive_delete_participation(self, obj, token):
+        """It is possible that a subfolder has blocked the role inheritance
+        and has assigned it's own roles for a specific user. We have to be sure
+        that this user will be deleted in the whole tree and not only in the
+        current context.
+        """
+        if obj.get_context_with_local_roles() == obj and self.find_participant(token, obj):
+                manager = ManageParticipants(obj, self.request)
+                manager._delete('user', token)
+
+        for folder in obj.listFolderContents(
+                contentFilter={'portal_type': 'opengever.workspace.folder'}):
+            self.recursive_delete_participation(folder, token)
 
 
 class ParticipationsPatch(ParticipationTraverseService):
