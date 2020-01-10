@@ -21,6 +21,22 @@ def get_entry_by_token(entries, token):
     return None
 
 
+def block_role_inheritance(obj, browser, copy_roles=False):
+    browser.open(
+        obj.absolute_url() + '/@role-inheritance',
+        data=json.dumps({'blocked': True, 'copy_roles': copy_roles}),
+        method='POST',
+        headers=http_headers())
+
+
+def remove_participation(obj, browser, token):
+    browser.open(
+        obj.absolute_url() + '/@participations/{}'.format(token),
+        method='DELETE',
+        headers=http_headers(),
+    )
+
+
 class TestParticipationGet(IntegrationTestCase):
 
     maxDiff = None
@@ -98,12 +114,7 @@ class TestParticipationGet(IntegrationTestCase):
     def test_list_all_folder_participants_with_blocked_role_inheritance_in_folder(self, browser):
         self.login(self.workspace_owner, browser)
 
-        browser.open(
-            self.workspace_folder,
-            view='/@role_inheritance',
-            data=json.dumps({'blocked': True}),
-            method='POST',
-            headers=self.api_headers)
+        block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
 
         response = browser.open(
             self.workspace_folder.absolute_url() + '/@participations',
@@ -248,12 +259,7 @@ class TestParticipationDelete(IntegrationTestCase):
     def test_delete_local_role_from_folder(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
-        browser.open(
-            self.workspace_folder,
-            view='/@role_inheritance',
-            data=json.dumps({'blocked': True}),
-            method='POST',
-            headers=self.api_headers)
+        block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
 
         browser.open(
             self.workspace_folder.absolute_url() + '/@participations',
@@ -369,12 +375,7 @@ class TestParticipationPatch(IntegrationTestCase):
     def test_modify_a_users_local_role_on_folder(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
-        browser.open(
-            self.workspace_folder,
-            view='/@role_inheritance',
-            data=json.dumps({'blocked': True}),
-            method='POST',
-            headers=self.api_headers)
+        block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
 
         browser.open(
             self.workspace_folder.absolute_url() + '/@participations',
@@ -481,6 +482,153 @@ class TestParticipationPatch(IntegrationTestCase):
                 entry['@id'],
                 method='PATCH',
                 data=data,
+                headers=http_headers(),
+                )
+
+
+class TestParticipationPost(IntegrationTestCase):
+
+    @browsing
+    def test_let_a_user_participate_to_a_folder(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        block_role_inheritance(self.workspace_folder, browser)
+        remove_participation(self.workspace_folder, browser, self.workspace_member.id)
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        self.assertIsNone(entry)
+
+        data = {
+            "token": self.workspace_member.id,
+            "role": 'WorkspaceGuest'
+        }
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='POST',
+            data=json.dumps(data),
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+    @browsing
+    def test_do_not_allow_to_participate_a_user_to_a_folder_if_role_inheritance_is_not_blocked(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        data = {
+            "token": self.workspace_member.id,
+            "role": 'WorkspaceGuest'
+        }
+
+        with browser.expect_http_error(403):
+            browser.open(
+                self.workspace_folder.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_cannot_participate_an_inexisting_user(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        block_role_inheritance(self.workspace_folder, browser)
+
+        data = {
+            "token": 'not-existing-user',
+            "role": 'WorkspaceGuest'
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace_folder.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_can_only_assign_predefined_workspace_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        block_role_inheritance(self.workspace_folder, browser)
+        remove_participation(self.workspace_folder, browser, self.workspace_member.id)
+
+        data = {
+            "token": self.workspace_member.id,
+            "role": 'Manager'
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace_folder.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_do_not_allow_readding_an_already_existing_user(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        self.assertIsNotNone(entry)
+
+        data = {
+            "token": self.workspace_member.id,
+            "role": 'WorkspaceGuest'
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace_folder.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_only_users_from_the_upper_context_are_allowed_to_participate_to_a_folder(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        block_role_inheritance(self.workspace_folder, browser)
+        remove_participation(self.workspace, browser, self.workspace_member.id)
+        remove_participation(self.workspace_folder, browser, self.workspace_member.id)
+
+        data = {
+            "token": self.workspace_member.id,
+            "role": 'WorkspaceGuest'
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace_folder.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
                 headers=http_headers(),
                 )
 
