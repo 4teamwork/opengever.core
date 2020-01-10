@@ -366,6 +366,62 @@ class TestParticipationPatch(IntegrationTestCase):
             entry.get('role'))
 
     @browsing
+    def test_modify_a_users_local_role_on_folder(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace_folder,
+            view='/@role_inheritance',
+            data=json.dumps({'blocked': True}),
+            method='POST',
+            headers=self.api_headers)
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+        data = json.dumps(json_compatible({
+            'role': {'token': 'WorkspaceMember'}
+        }))
+        browser.open(
+            entry['@id'],
+            method='PATCH',
+            data=data,
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceMember', u'title': u'Member'},
+            entry.get('role'),
+            'Expect to have the WorkspaceMember role')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'),
+            'Expect to still have the WorkspaceGuest role on the workspace')
+
+    @browsing
     def test_cannot_modify_inexisting_user(self, browser):
         self.login(self.workspace_admin, browser=browser)
 

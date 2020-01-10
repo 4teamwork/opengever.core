@@ -431,6 +431,14 @@
       />
 
   <plone:service
+      method="PATCH"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".participations.ParticipationsPatch"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
       method="GET"
       name="@role-inheritance"
       for="opengever.workspace.interfaces.IWorkspaceFolder"
