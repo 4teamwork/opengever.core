@@ -77,6 +77,49 @@ class TestParticipationGet(IntegrationTestCase):
             ], response.get('items'))
 
     @browsing
+    def test_list_all_current_participants_in_folder_lists_participants_of_the_workspace(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        response = browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertItemsEqual(
+            [
+                u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+            ], [item.get('@id') for item in response.get('items')])
+
+    @browsing
+    def test_list_all_folder_participants_with_blocked_role_inheritance_in_folder(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        browser.open(
+            self.workspace_folder,
+            view='/@role_inheritance',
+            data=json.dumps({'blocked': True}),
+            method='POST',
+            headers=self.api_headers)
+
+        response = browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertItemsEqual(
+            [
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/beatrice.schrodinger',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/fridolin.hugentobler',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/gunther.frohlich',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/hans.peter',
+            ], [item.get('@id') for item in response.get('items')])
+
+    @browsing
     def test_admin_cannot_edit_himself(self, browser):
         self.login(self.workspace_owner, browser)
 

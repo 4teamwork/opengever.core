@@ -59,7 +59,7 @@ class ParticipationsGet(ParticipationTraverseService):
         member = api.user.get(userid=userid)
         return {
             '@id': '{}/@participations/{}'.format(
-                self.context.absolute_url(), userid),
+                self.context.get_context_with_local_roles().absolute_url(), userid),
             '@type': 'virtual.participations.user',
             'participant_fullname': participant.get('name'),
             'is_editable': participant.get('can_manage'),
@@ -84,7 +84,8 @@ class ParticipationsGet(ParticipationTraverseService):
         return [self.prepare_response_item(item) for item in self._items()]
 
     def _items(self):
-        manager = ManageParticipants(self.context, self.request)
+        manager = ManageParticipants(
+            self.context.get_context_with_local_roles(), self.request)
         return manager.get_participants()
 
     def get_response_item(self, token):
