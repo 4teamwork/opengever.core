@@ -245,6 +245,55 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to have no local roles anymore for the user')
 
     @browsing
+    def test_delete_local_role_from_folder(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace_folder,
+            view='/@role_inheritance',
+            data=json.dumps({'blocked': True}),
+            method='POST',
+            headers=self.api_headers)
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNotNone(
+            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            'Expect to have local roles for the user')
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
+            method='DELETE',
+            headers=http_headers(),
+        )
+
+        self.assertEqual(204, browser.status_code)
+
+        browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNone(
+            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            'Expect to have no local roles anymore for the user')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNotNone(
+            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            'Expect to still have local roles for the user on the workspace')
+
+    @browsing
     def test_current_user_cannot_remove_its_local_roles(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
