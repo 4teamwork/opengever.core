@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashable
+from plone.protect import createToken
 
 
 class FileActionsTestBase(IntegrationTestCase):
@@ -91,6 +92,9 @@ class TestFileActionsGetForMails(FileActionsTestBase):
             {u'id': u'trash_document',
              u'title': u'Trash document',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
 
         self.assertEqual(expected_file_actions,
@@ -118,6 +122,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'trash_document',
              u'title': u'Trash document',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -142,6 +149,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'trash_document',
              u'title': u'Trash document',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -162,6 +172,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
              u'icon': u''},
             {u'id': u'trash_document',
              u'title': u'Trash document',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -193,6 +206,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
              u'icon': u''},
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
              u'icon': u''},
             ]
 
@@ -226,6 +242,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
 
         self.assertEqual(expected_file_actions,
@@ -250,6 +269,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_manager_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -258,6 +280,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         expected_dossier_manager_file_actions = [
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
              u'icon': u''},
             ]
         self.assertEqual(expected_dossier_manager_file_actions,
@@ -280,6 +305,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'trash_document',
              u'title': u'Trash document',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -294,6 +322,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
              u'icon': u''},
             {u'id': u'trash_document',
              u'title': u'Trash document',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -315,6 +346,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
              u'icon': u''},
             {u'id': u'trash_document',
              u'title': u'Trash document',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -342,6 +376,9 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
             {u'id': u'trash_document',
              u'title': u'Trash document',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -366,6 +403,119 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
             {u'id': u'untrash_document',
              u'title': u'Untrash document',
              u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
+
+
+class TestNewTaskFromDocumentAction(FileActionsTestBase):
+
+    @browsing
+    def test_task_from_doc_not_available_for_doc_in_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.resolvable_dossier,
+                     view='transition-resolve',
+                     data={'_authenticator': createToken()})
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.resolvable_document))
+
+    @browsing
+    def test_task_from_doc_not_available_for_doc_in_task(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = [
+            {u'id': u'oc_direct_checkout',
+             u'title': u'Checkout and edit',
+             u'icon': u''},
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.taskdocument))
+
+    @browsing
+    def test_task_from_doc_not_available_for_doc_in_inbox(self, browser):
+        self.login(self.secretariat_user, browser)
+        expected_file_actions = [
+            {u'id': u'oc_direct_checkout',
+             u'title': u'Checkout and edit',
+             u'icon': u''},
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.inbox_document))
+
+    @browsing
+    def test_task_from_doc_not_available_for_doc_in_private_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = [
+            {u'id': u'oc_direct_checkout',
+             u'title': u'Checkout and edit',
+             u'icon': u''},
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'trash_document',
+             u'title': u'Trash document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.private_document))
+
+    @browsing
+    def test_task_from_doc_not_available_for_doc_in_inactive_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.inactive_document))

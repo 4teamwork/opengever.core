@@ -1,13 +1,17 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IFileActions
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.trash.trash import ITrashable
 from opengever.trash.trash import TrashError
+from plone import api
 from plone import api
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -95,6 +99,12 @@ class BaseDocumentFileActions(object):
     def is_untrash_document_available(self):
         trasher = ITrashable(self.context)
         return trasher.verify_may_untrash(raise_on_violations=False)
+
+    def is_new_task_from_document_available(self):
+        parent = aq_parent(aq_inner(self.context))
+        is_inside_dossier = IDossierMarker.providedBy(parent)
+        may_add_task = api.user.has_permission('opengever.task: Add task', obj=parent)
+        return is_inside_dossier and may_add_task
 
 
 @implementer(IFileActions)
