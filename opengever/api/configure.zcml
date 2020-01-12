@@ -416,6 +416,22 @@
 
   <plone:service
       method="GET"
+      name="@role-inheritance"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".role_inheritance.RoleInheritanceGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@role-inheritance"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".role_inheritance.RoleInheritancePost"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="GET"
       name="@my-workspace-invitations"
       for="*"
       factory=".invitations.MyInvitationsGet"

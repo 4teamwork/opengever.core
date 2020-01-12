@@ -236,8 +236,13 @@ class RoleAssignmentStorage(object):
     def add_or_update(self, principal, roles, cause, reference):
         """Add or update a role assignment
         """
+        oguid = None
+        if reference:
+            if isinstance(reference, basestring):
+                oguid = reference
+            else:
+                oguid = Oguid.for_object(reference).id
 
-        oguid = Oguid.for_object(reference).id if reference else None
         data = {
             'principal': principal,
             'roles': list(roles),
@@ -270,6 +275,17 @@ class RoleAssignmentManager(object):
 
     def has_storage(self):
         return self.storage.has_storage()
+
+    def copy_assigments_to(self, target):
+        if not self.has_storage():
+            return
+
+        target_manager = RoleAssignmentManager(target)
+        source_assignments = [
+            RoleAssignment(**assignment)
+            for assignment in self.storage.get_all()
+        ]
+        target_manager.add_or_update_assignments(source_assignments)
 
     def add_or_update_assignment(self, assignment, reindex=True):
         self.storage.add_or_update(assignment.principal,
