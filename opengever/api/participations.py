@@ -31,12 +31,12 @@ class ParticipationTraverseService(Service):
         userid = participant.get('token')
         role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
         member = api.user.get(userid=userid)
+        managing_context = self.context.get_context_with_local_roles()
         return {
-            '@id': '{}/@participations/{}'.format(
-                self.context.get_context_with_local_roles().absolute_url(), userid),
+            '@id': '{}/@participations/{}'.format(managing_context.absolute_url(), userid),
             '@type': 'virtual.participations.user',
             'participant_fullname': participant.get('name'),
-            'is_editable': participant.get('can_manage'),
+            'is_editable': managing_context == self.context and participant.get('can_manage'),
             'role': {
                 'token': role.id,
                 'title': role.translated_title(self.request),

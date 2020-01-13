@@ -183,6 +183,22 @@ class TestParticipationGet(IntegrationTestCase):
             'The admin should be able to manage {}'.format(self.workspace_guest.id))
 
     @browsing
+    def test_an_admin_can_only_edit_other_members_if_role_inheritance_is_blocked(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        response = browser.open(
+            self.workspace_folder.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        items = response.get('items')
+
+        self.assertFalse(
+            get_entry_by_token(items, self.workspace_guest.id)['is_editable'],
+            'The admin should not be able to manage {}'.format(self.workspace_guest.id))
+
+    @browsing
     def test_user_without_sharing_permission_cannot_manage(self, browser):
         self.login(self.workspace_member, browser)
 
