@@ -40,9 +40,10 @@ class ManageParticipants(BrowserView):
 
         for userid, roles in self.context.get_local_roles():
             member = api.user.get(userid=userid)
-            if member is not None:
+            managed_roles = list(set(roles) & set(MANAGED_ROLES))
+            if member is not None and managed_roles:
                 item = dict(token=userid,
-                            roles=list(set(roles) & set(MANAGED_ROLES)),
+                            roles=managed_roles,
                             can_manage=can_manage_member(self.context, member, roles),
                             type_='user',
                             name=get_full_user_info(member=member),
