@@ -118,8 +118,14 @@ class ParticipationsPatch(ParticipationTraverseService):
         token = self.read_params()
         data = self.validate_data(json_body(self.request))
 
+        role = data.get('role')
+
+        if not role:
+            self.request.RESPONSE.setStatus(204)
+            return None
+
         manager = ManageParticipants(self.context, self.request)
-        manager._modify(token, data.get('role').get('token'), 'user')
+        manager._modify(token, role.get('token'), 'user')
         return None
 
     def read_params(self):
@@ -130,8 +136,9 @@ class ParticipationsPatch(ParticipationTraverseService):
         return self.params[0]
 
     def validate_data(self, data):
-        if not data.get('role'):
-            raise BadRequest('Missing parameter role')
+        role = data.get('role', {})
+        if role and not role.get('token'):
+            raise BadRequest('Missing parameter token in role parameter')
 
         return data
 
