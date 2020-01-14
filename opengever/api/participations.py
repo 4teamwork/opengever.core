@@ -35,13 +35,15 @@ class ParticipationTraverseService(Service):
         return {
             '@id': '{}/@participations/{}'.format(managing_context.absolute_url(), userid),
             '@type': 'virtual.participations.user',
-            'participant_fullname': participant.get('name'),
             'is_editable': managing_context == self.context and participant.get('can_manage'),
             'role': {
                 'token': role.id,
                 'title': role.translated_title(self.request),
             },
-            'token': userid,
+            'participant': {
+                "token": userid,
+                "title": participant.get('name'),
+            },
             'participant_email': member.getProperty('email'),
         }
 
@@ -136,9 +138,12 @@ class ParticipationsPatch(ParticipationTraverseService):
         return self.params[0]
 
     def validate_data(self, data):
-        role = data.get('role', {})
-        if role and not role.get('token'):
-            raise BadRequest('Missing parameter token in role parameter')
+        role = data.get('role')
+        if isinstance(role, dict):
+            role = role.get("token")
+
+        if not role:
+            raise BadRequest('Missing parameter role')
 
         return data
 
@@ -164,16 +169,21 @@ class ParticipationsPost(ParticipationTraverseService):
             token, self.context.get_context_with_local_roles()))
 
     def validate_data(self, data):
-        token = data.get('token')
-        role = data.get('role')
+        participant = data.get('participant')
+        if isinstance(participant, dict):
+            participant = participant.get("token")
 
-        if not token:
-            raise BadRequest('Missing parameter token')
+        role = data.get('role')
+        if isinstance(role, dict):
+            role = role.get("token")
+
+        if not participant:
+            raise BadRequest('Missing parameter participant')
 
         if not role:
             raise BadRequest('Missing parameter role')
 
-        return token, role
+        return participant, role
 
     def validate_participation(self, token, role):
         if not self.context.has_blocked_local_role_inheritance():

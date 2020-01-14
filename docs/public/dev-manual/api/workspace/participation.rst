@@ -32,24 +32,28 @@ Ein GET Request gibt die Beteiligungen sowie die aktiven Einladungen eines Inhal
           "@type": "virtual.participations.user",
           "is_editable": true,
           "participant_email": "max.muster@example.org",
-          "participant_fullname": "Max Muster (max.muster)",
           "role": {
             "title": "Admin",
             "token": "WorkspaceAdmin"
           },
-          "token": "max.muster"
+          "participant": {
+            "title": "Max Muster (max.muster)",
+            "token": "max.muster"
+          }
         },
         {
           "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/petra.frohlich",
           "@type": "virtual.participations.user",
           "is_editable": true,
           "participant_email": "petra.frohlich@example.org",
-          "participant_fullname": "Petra Fröhlich (petra.frohlich)",
           "role": {
             "title": "Teammitglied",
             "token": "WorkspaceMember"
           },
-          "token": "petra.frohlich"
+          "participant": {
+            "title": "Petra Fröhlich (petra.frohlich)",
+            "token": "petra.frohlich"
+          }
         }
       ]
     }
@@ -79,12 +83,14 @@ Ein GET Request auf die jeweilige Resource gibt die Beteiligungen oder die Einla
       "@type": "virtual.participations.user",
       "is_editable": true,
       "participant_email": "max.muster@example.org",
-      "participant_fullname": "Max Muster (max.muster)",
       "role": {
         "title": "Admin",
         "token": "WorkspaceAdmin"
       },
-      "token": "max.muster"
+      "participant": {
+        "title": "Max Muster (max.muster)",
+        "token": "max.muster"
+      }
     }
 
 
@@ -121,7 +127,7 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
        Accept: application/json
 
        {
-         "token": "maria.meier",
+         "participant": "maria.meier",
          "role": "WorkspaceMember",
        }
 
@@ -142,7 +148,10 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
         "title": "Admin",
         "token": "WorkspaceMember"
       },
-      "token": "max.muster"
+      "participant": {
+        "title": "Max Muster (max.muster)",
+        "token": "max.muster"
+      }
     }
 
 
@@ -158,7 +167,7 @@ Beteiligungen können über einen PATCH request auf die jeweilige Ressourece ge�
     Accept: application/json
 
     {
-      "role": { "token": "WorkspaceAdmin" }
+      "role": "WorkspaceAdmin"
     }
 
 **Beispiel-Response**:

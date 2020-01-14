@@ -16,7 +16,7 @@ def http_headers():
 
 def get_entry_by_token(entries, token):
     for entry in entries:
-        if entry['token'] == token:
+        if entry['participant']['token'] == token:
             return entry
     return None
 
@@ -56,38 +56,46 @@ class TestParticipationGet(IntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
                     u'@type': u'virtual.participations.user',
-                    u'participant_fullname': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
                     u'is_editable': True,
                     u'role': {u'token': u'WorkspaceMember',
                               u'title': u'Member'},
-                    u'token': 'beatrice.schrodinger',
+                    u'participant': {
+                        'token': 'beatrice.schrodinger',
+                        'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
+                    },
                     u'participant_email': u'beatrice.schrodinger@gever.local',
                 }, {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
                     u'@type': u'virtual.participations.user',
-                    u'participant_fullname': u'Hugentobler Fridolin (fridolin.hugentobler)',
                     u'is_editable': True,
                     u'role': {u'token': u'WorkspaceAdmin',
                               u'title': u'Admin'},
-                    u'token': 'fridolin.hugentobler',
+                    u'participant': {
+                        'token': 'fridolin.hugentobler',
+                        'title': u'Hugentobler Fridolin (fridolin.hugentobler)',
+                    },
                     u'participant_email': u'fridolin.hugentobler@gever.local',
                 }, {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
                     u'@type': u'virtual.participations.user',
-                    u'participant_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
                     u'is_editable': False,
                     u'role': {u'token': u'WorkspaceAdmin',
                               u'title': u'Admin'},
-                    u'token': 'gunther.frohlich',
+                    u'participant': {
+                        'token': 'gunther.frohlich',
+                        'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
+                    },
                     u'participant_email': u'gunther.frohlich@gever.local',
                 }, {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
                     u'@type': u'virtual.participations.user',
-                    u'participant_fullname': u'Peter Hans (hans.peter)',
                     u'is_editable': True,
                     u'role': {u'token': u'WorkspaceGuest',
                               u'title': u'Guest'},
-                    u'token': 'hans.peter',
+                    u'participant': {
+                        'token': 'hans.peter',
+                        'title': u'Peter Hans (hans.peter)',
+                    },
                     u'participant_email': u'hans.peter@gever.local',
                 },
             ], response.get('items'))
@@ -227,8 +235,10 @@ class TestParticipationGet(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
                 u'@type': u'virtual.participations.user',
                 u'is_editable': True,
-                u'participant_fullname': u'Peter Hans (hans.peter)',
-                u'token': 'hans.peter',
+                u'participant': {
+                    'token': 'hans.peter',
+                    'title': u'Peter Hans (hans.peter)',
+                },
                 u'role': {
                     'token': 'WorkspaceGuest',
                     'title': 'Guest',
@@ -553,8 +563,8 @@ class TestParticipationPost(IntegrationTestCase):
         self.assertIsNone(entry)
 
         data = {
-            "token": self.workspace_member.id,
-            "role": 'WorkspaceGuest'
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
         }
 
         browser.open(
@@ -580,8 +590,8 @@ class TestParticipationPost(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         data = {
-            "token": self.workspace_member.id,
-            "role": 'WorkspaceGuest'
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
         }
 
         with browser.expect_http_error(403):
@@ -599,8 +609,8 @@ class TestParticipationPost(IntegrationTestCase):
         block_role_inheritance(self.workspace_folder, browser)
 
         data = {
-            "token": 'not-existing-user',
-            "role": 'WorkspaceGuest'
+            "participant": {"token": 'not-existing-user'},
+            "role": {"token": 'WorkspaceGuest'},
         }
 
         with browser.expect_http_error(400):
@@ -619,8 +629,8 @@ class TestParticipationPost(IntegrationTestCase):
         remove_participation(self.workspace_folder, browser, self.workspace_member.id)
 
         data = {
-            "token": self.workspace_member.id,
-            "role": 'Manager'
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'Manager'},
         }
 
         with browser.expect_http_error(400):
@@ -647,8 +657,8 @@ class TestParticipationPost(IntegrationTestCase):
         self.assertIsNotNone(entry)
 
         data = {
-            "token": self.workspace_member.id,
-            "role": 'WorkspaceGuest'
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
         }
 
         with browser.expect_http_error(400):
@@ -668,8 +678,8 @@ class TestParticipationPost(IntegrationTestCase):
         remove_participation(self.workspace_folder, browser, self.workspace_member.id)
 
         data = {
-            "token": self.workspace_member.id,
-            "role": 'WorkspaceGuest'
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
         }
 
         with browser.expect_http_error(400):
