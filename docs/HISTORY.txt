@@ -4,7 +4,7 @@ Changelog
 2019.6.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Configure Solr replication handler. [buchi]
 
 
 2019.6.0 (2020-01-09)
