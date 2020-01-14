@@ -133,11 +133,11 @@ class TestServerFunctionalTesting(FunctionalTesting):
         self.context_manager = self.isolation()
         self.context_manager.__enter__()
         transaction.commit()
-        SolrReplicationAPIClient.get_instance().await_restored()
 
     def testTearDown(self):
         self.context_manager.__exit__(None, None, None)
         SolrReplicationAPIClient.get_instance().restore_backup('fixture')
+        SolrReplicationAPIClient.get_instance().await_restored()
         super(TestServerFunctionalTesting, self).testTearDown()
 
 
