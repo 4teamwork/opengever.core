@@ -618,14 +618,12 @@ class GEVERIntegrationTesting(FTWIntegrationTesting):
     def testSetUp(self):
         super(GEVERIntegrationTesting, self).testSetUp()
         logout()
-        client = SolrReplicationAPIClient.get_instance()
-        if client._configured:
-            client.await_restored()
 
     def testTearDown(self):
         client = SolrReplicationAPIClient.get_instance()
         if client._configured:
             client.restore_backup('fixture')
+            client.await_restored()
         super(GEVERIntegrationTesting, self).testTearDown()
 
 
