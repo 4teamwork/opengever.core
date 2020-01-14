@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.5.1 (unreleased)
+2020.1.0 (unreleased)
 ---------------------
 
 - Configure Solr replication handler. [buchi]
