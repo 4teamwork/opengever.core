@@ -117,17 +117,19 @@ class ParticipationsDelete(ParticipationTraverseService):
 class ParticipationsPatch(ParticipationTraverseService):
 
     def reply(self):
-        token = self.read_params()
-        data = self.validate_data(json_body(self.request))
+        participant = self.read_params()
+        data = json_body(self.request)
 
         role = data.get('role')
+        if isinstance(role, dict):
+            role = role.get("token")
 
         if not role:
             self.request.RESPONSE.setStatus(204)
             return None
 
         manager = ManageParticipants(self.context, self.request)
-        manager._modify(token, role.get('token'), 'user')
+        manager._modify(participant, role, 'user')
         return None
 
     def read_params(self):
@@ -136,16 +138,6 @@ class ParticipationsPatch(ParticipationTraverseService):
                 "Must supply token ID as URL path parameters.")
 
         return self.params[0]
-
-    def validate_data(self, data):
-        role = data.get('role')
-        if isinstance(role, dict):
-            role = role.get("token")
-
-        if not role:
-            raise BadRequest('Missing parameter role')
-
-        return data
 
 
 class ParticipationsPost(ParticipationTraverseService):
