@@ -31,4 +31,18 @@ $(function() {
     }
 
   });
+
+  $('.unlock-submitted-document').prepOverlay(
+    {
+      subtype: 'ajax',
+      filter: '#unlock-submitted-document',
+      closeselector: '#form-buttons-cancel',
+      formselector: '#unlock-submitted-document',
+      noform: function(el, config) {
+        $(config.filter).closest('.overlay-ajax').overlay().close();
+        location.reload();
+      }
+    }
+  );
+
 });

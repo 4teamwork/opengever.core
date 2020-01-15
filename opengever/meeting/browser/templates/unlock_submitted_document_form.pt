@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.meeting">
+
+<body>
+
+<metal:main fill-slot="main">
+
+<form id="unlock-submitted-document"
+      tal:attributes="action string:${context/absolute_url}/@@unlock_submitted_document_form"
+      method="POST">
+
+  <h1 i18n:translate="label_unlock_submitted_document">
+    Unlock submitted document
+  </h1>
+
+  <dl class="portalMessage warning">
+    <dt i18n:translate="label_warning">Warning</dt>
+    <dd i18n:translate="warning_unlock_submitted_document">
+      This cannot be undone.
+    </dd>
+  </dl>
+
+  <p class="panel" i18n:translate="msg_unlock_submitted_document">
+    Do you really want to unlock the submitted document?
+  </p>
+
+  <div class="form_elements">
+    <input i18n:attributes="value Unlock" i18n:domain="plone"
+    type="submit" value="Unlock" name="form.buttons.unlock"
+    id="form-buttons-unlock" class="destructive" />
+
+    <input type="submit" i18n:domain="plone" i18n:attributes="value label_cancel"
+    value="Cancel" class="standalone" name="form.buttons.cancel" id="form-buttons-cancel"/>
+  </div>
+</form>
+</metal:main>
+
+</body>
+</html>

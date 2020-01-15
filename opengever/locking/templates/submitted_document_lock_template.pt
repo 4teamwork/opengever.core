@@ -6,18 +6,28 @@
     <dl class="portalMessage info">
       <dt i18n:domain="plone" i18n:translate="label_locked">Locked</dt>
       <dd>
-        <tal:author-page tal:condition="nocall: document"
-            i18n:translate="description_locked_linked_submitted_document">
-          This document has been submitted as a copy of
-          <a i18n:name="document"
-             tal:content="document/Title"
-             tal:attributes="href document/absolute_url" />
-          and cannot be edited directly.
-        </tal:author-page>
-        <tal:author-page tal:condition="not: nocall: document"
-            i18n:translate="description_locked_submitted_document">
-          This document has been submitted as a copy and cannot be edited directly.
-        </tal:author-page>
+          <tal:author-page tal:condition="nocall: document"
+              i18n:translate="description_locked_linked_submitted_document">
+            This document has been submitted as a copy of
+            <a i18n:name="document"
+               tal:content="document/Title"
+               tal:attributes="href document/absolute_url" />
+            and cannot be edited directly.
+            <a  tal:attributes="action string:${context/absolute_url}/@@unlock_submitted_document_form"
+                class="unlock-submitted-document button"
+                i18n:domain="plone"
+                i18n:name="unlock_button"
+                i18n:translate="">Unlock</a>
+          </tal:author-page>
+          <tal:author-page tal:condition="not: nocall: document"
+              i18n:translate="description_locked_submitted_document">
+            This document has been submitted as a copy and cannot be edited directly.
+            <a  tal:attributes="action string:${context/absolute_url}/@@unlock_submitted_document_form"
+                class="unlock-submitted-document button"
+                i18n:domain="plone"
+                i18n:name="unlock_button"
+                i18n:translate="">Unlock</a>
+          </tal:author-page>
       </dd>
     </dl>
   </tal:block>

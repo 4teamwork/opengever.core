@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-20 08:10+0000\n"
+"POT-Creation-Date: 2020-01-24 09:07+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1398,6 +1398,11 @@ msgstr "Transition"
 msgid "label_transition_executed"
 msgstr "Modification d'état ${transition} exécutée"
 
+#. Default: "Unlock submitted document"
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
+msgid "label_unlock_submitted_document"
+msgstr ""
+
 #. Default: "Are you sure you want to unschedule this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_unschedule_agenda_item_confirm_text"
@@ -1415,6 +1420,7 @@ msgstr "Prochaines séances"
 
 #. Default: "Warning"
 #: ./opengever/meeting/browser/meetings/zipexport.py
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
 msgid "label_warning"
 msgstr "Avertissement"
 
@@ -1588,6 +1594,11 @@ msgstr "L'objet a été supprimé avec succès."
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "msg_transition_successful"
 msgstr "Statut modifié avec succès."
+
+#. Default: "Do you really want to unlock the submitted document?"
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
+msgid "msg_unlock_submitted_document"
+msgstr ""
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
@@ -1807,6 +1818,11 @@ msgstr "Mis à l'ordre du jour"
 msgid "send email"
 msgstr "Envoyer un e-mail"
 
+#. Default: "Document has been unlocked"
+#: ./opengever/meeting/browser/unlock_submitted_document_form.py
+msgid "statmsg_submitted_document_unlocked"
+msgstr ""
+
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py
 msgid "submitted"
@@ -1886,3 +1902,8 @@ msgstr "Insérer le point à l'ordre du jour:"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_schedule_proposal"
 msgstr "Mettre à l'ordre du jour:"
+
+#. Default: "This cannot be undone."
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
+msgid "warning_unlock_submitted_document"
+msgstr ""

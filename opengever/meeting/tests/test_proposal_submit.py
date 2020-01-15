@@ -59,7 +59,7 @@ class TestProposalSubmit(IntegrationTestCase):
         browser.open(submitted_document)
         statusmessages.assert_message(
             u'This document has been submitted as a copy of Vertr\xe4gsentwurf and '
-            u'cannot be edited directly.')
+            u'cannot be edited directly. Unlock')
         self.assertEqual(
             self.document.absolute_url(),
             browser.css('.portalMessage.info a').first.get('href'))

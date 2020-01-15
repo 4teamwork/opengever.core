@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-11 08:27+0000\n"
+"POT-Creation-Date: 2020-01-15 09:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,12 +24,12 @@ msgstr "Dieses Dokument ist eine Kopie eines Protokollauszugs aus einer Sitzung 
 msgid "description_locked_linked_excerpt_document"
 msgstr "Dieses Dokument ist eine Kopie des Protokollauszugs ${document} aus der Sitzung ${meeting} und kann nicht direkt bearbeitet werden."
 
-#. Default: "This document has been submitted as a copy of ${document} and cannot be edited directly."
+#. Default: "This document has been submitted as a copy of ${document} and cannot be edited directly. ${unlock_button}"
 #: ./opengever/locking/templates/submitted_document_lock_template.pt
 msgid "description_locked_linked_submitted_document"
-msgstr "Dieses Dokument wurde als Kopie von ${document} eingereicht und kann nicht direkt bearbeitet werden."
+msgstr "Dieses Dokument wurde als Kopie von ${document} eingereicht und kann nicht direkt bearbeitet werden. ${unlock_button}"
 
-#. Default: "This document has been submitted as a copy and cannot be edited directly."
+#. Default: "This document has been submitted as a copy and cannot be edited directly. ${unlock_button}"
 #: ./opengever/locking/templates/submitted_document_lock_template.pt
 msgid "description_locked_submitted_document"
-msgstr "Dieses Dokument wurde als Kopie eingereicht und kann nicht direkt bearbeitet werden"
+msgstr "Dieses Dokument wurde als Kopie eingereicht und kann nicht direkt bearbeitet werden. ${unlock_button}"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-20 08:10+0000\n"
+"POT-Creation-Date: 2020-01-24 09:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1395,6 +1395,11 @@ msgstr ""
 msgid "label_transition_executed"
 msgstr ""
 
+#. Default: "Unlock submitted document"
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
+msgid "label_unlock_submitted_document"
+msgstr ""
+
 #. Default: "Are you sure you want to unschedule this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_unschedule_agenda_item_confirm_text"
@@ -1412,6 +1417,7 @@ msgstr ""
 
 #. Default: "Warning"
 #: ./opengever/meeting/browser/meetings/zipexport.py
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
 msgid "label_warning"
 msgstr ""
 
@@ -1584,6 +1590,11 @@ msgstr ""
 #. Default: "Review state changed successfully."
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "msg_transition_successful"
+msgstr ""
+
+#. Default: "Do you really want to unlock the submitted document?"
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
+msgid "msg_unlock_submitted_document"
 msgstr ""
 
 #. Default: "There are unscheduled proposals submitted to this committee."
@@ -1804,6 +1815,11 @@ msgstr ""
 msgid "send email"
 msgstr ""
 
+#. Default: "Document has been unlocked"
+#: ./opengever/meeting/browser/unlock_submitted_document_form.py
+msgid "statmsg_submitted_document_unlocked"
+msgstr ""
+
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py
 msgid "submitted"
@@ -1882,4 +1898,9 @@ msgstr ""
 #. Default: "Schedule proposal:"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_schedule_proposal"
+msgstr ""
+
+#. Default: "This cannot be undone."
+#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
+msgid "warning_unlock_submitted_document"
 msgstr ""
