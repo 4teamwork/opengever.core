@@ -3084,6 +3084,8 @@ div.answer.documentAdded div.answerType:before { content: ""; }
 
 div.answer.documentUpdated div.answerType:before { content: ""; }
 
+div.answer.documentUnlocked div.answerType:before { content: ""; }
+
 div.answer.rejected div.answerType:before { content: ""; }
 
 div.answer.revised div.answerType:before { content: ""; }
