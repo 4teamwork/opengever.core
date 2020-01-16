@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-24 09:07+0000\n"
+"POT-Creation-Date: 2020-01-24 09:08+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1713,6 +1713,11 @@ msgstr "Requête décidée par ${user}"
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_document_submitted"
 msgstr "Document ${title} soumis par ${user} en version ${version}."
+
+#. Default: "Submitted document ${title} permanently unlocked by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_document_unlocked"
+msgstr ""
 
 #. Default: "Submitted document ${title} updated to version ${version} by ${user}"
 #: ./opengever/meeting/proposalhistory.py

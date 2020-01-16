@@ -22,6 +22,7 @@ class ProposalResponseDescription(object):
         u'document_submitted': 'documentAdded',
         u'remove_scheduled': 'scheduleRemoved',
         u'document_updated': 'documentUpdated',
+        u'document_unlocked': 'documentUnlocked',
         u'successor_created': 'created'
     }
 
@@ -45,6 +46,8 @@ class ProposalResponseDescription(object):
             mapping['meeting'] = self.meeting_title
         elif self.response_type == 'successor_created':
             mapping['successor_link'] = self.successor_link
+        elif self.response_type in ['document_unlocked']:
+            mapping['title'] = self.document_title
         return mapping
 
     def message(self):
@@ -104,6 +107,11 @@ class ProposalResponseDescription(object):
                 u'Submitted document ${title} updated to version ${version} by ${user}',
                 self.mapping),
 
+            u'document_unlocked': _(
+                u'proposal_history_label_document_unlocked',
+                u'Submitted document ${title} permanently unlocked by ${user}',
+                self.mapping),
+
             u'successor_created': _(
                 u'proposal_history_label_successor_created',
                 u'Successor proposal ${successor_link} created by ${user}',
@@ -137,7 +145,7 @@ class ProposalResponse(Response):
 
     implements(IProposalResponse)
 
-    NEED_SYNCING = (u'revised', u'reopened', u'commented')
+    NEED_SYNCING = (u'revised', u'reopened', u'commented', 'document_unlocked')
 
     def __init__(self, response_type='commented', text=u'', needs_syncing=None, **kwargs):
         super(ProposalResponse, self).__init__(response_type=response_type)

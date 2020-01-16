@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-24 09:07+0000\n"
+"POT-Creation-Date: 2020-01-24 09:08+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1711,6 +1711,11 @@ msgstr "Antrag beschlossen durch ${user}"
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_document_submitted"
 msgstr "Dokument ${title} in Version ${version} eingereicht durch ${user}"
+
+#. Default: "Submitted document ${title} permanently unlocked by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_document_unlocked"
+msgstr "Eingereichtes Dokument ${title} wurde entkoppelt durch ${user}"
 
 #. Default: "Submitted document ${title} updated to version ${version} by ${user}"
 #: ./opengever/meeting/proposalhistory.py

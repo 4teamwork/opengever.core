@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
+from opengever.meeting.model import SubmittedDocument
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -237,6 +238,25 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         with self.login(self.meeting_user, browser):
             self.assert_proposal_history_records(
                 u'Submitted document Vertr\xe4gsentwurf updated to version 1 by B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                self.proposal,
+                browser,
+                with_submitted=True,
+                )
+
+    @browsing
+    def test_unlock_submitted_document_creates_history_entry(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        submitted_document = SubmittedDocument.query.get_by_source(
+            self.proposal, self.document).resolve_submitted()
+
+        browser.open(submitted_document, view="unlock_submitted_document_form")
+        browser.find_button_by_label('Unlock').click()
+
+        with self.login(self.meeting_user, browser):
+            self.assert_proposal_history_records(
+                u'Submitted document Vertr\xe4gsentwurf permanently unlocked '
+                u'by M\xfcller Fr\xe4nzi (franzi.muller)',
                 self.proposal,
                 browser,
                 with_submitted=True,

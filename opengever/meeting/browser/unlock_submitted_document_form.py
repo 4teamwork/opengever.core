@@ -1,5 +1,9 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from opengever.base.response import IResponseContainer
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting import _
+from opengever.meeting.proposalhistory import ProposalResponse
 from plone.locking.interfaces import ILockable
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -20,6 +24,7 @@ class UnlockSubmittedDocumentForm(BrowserView):
 
         if self.request.get('form.buttons.unlock'):
             self.unlock()
+            self.add_response_object()
 
             msg = _('statmsg_submitted_document_unlocked',
                     default=u'Document has been unlocked',)
@@ -59,3 +64,15 @@ class UnlockSubmittedDocumentForm(BrowserView):
         function will return False.
         """
         return self.request.get('ajax_load', False)
+
+    def show_form(self):
+        return self.is_form_submitted() and self.is_js_request()
+
+    def add_response_object(self):
+        response = ProposalResponse(
+            u'document_unlocked',
+            document_title=self.context.title,
+            )
+
+        proposal = aq_parent(aq_inner(self.context))
+        IResponseContainer(proposal).add(response)
