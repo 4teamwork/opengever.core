@@ -154,6 +154,15 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="new_task_from_document" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_new_task_from_document">New task from document</property>
+      <property name="available_expr">object/@@file_actions_availability/is_new_task_from_document_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
   <!-- SITE ACTIONS -->

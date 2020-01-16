@@ -199,3 +199,6 @@ class IFileActions(Interface):
 
     def is_untrash_document_available():
         """Return whether the untrash_document action is available."""
+
+    def is_new_task_from_document_available():
+        """Return whether the new_task_from_document action is available."""
