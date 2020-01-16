@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.api.tests.test_participation import get_entry_by_token
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
@@ -11,6 +10,13 @@ from opengever.workspace.participation import WORKSPCAE_GUEST
 from opengever.workspace.participation.storage import IInvitationStorage
 from zope.component import getUtility
 import json
+
+
+def get_entry_by_token(entries, token):
+    for entry in entries:
+        if entry['token'] == token:
+            return entry
+    return None
 
 
 class TestInvitationsPost(IntegrationTestCase):

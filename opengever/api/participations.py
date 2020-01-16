@@ -1,15 +1,17 @@
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.participation import PARTICIPATION_ROLES
-from opengever.workspace.participation import PARTICIPATION_TYPES
-from opengever.workspace.participation import PARTICIPATION_TYPES_BY_PATH_IDENTIFIER
-from opengever.workspace.participation import TYPE_INVITATION
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from plone import api
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
-from zExceptions import NotFound
+from zExceptions import Forbidden
+from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
-from plone import api
 
 
 class ParticipationTraverseService(Service):
@@ -26,24 +28,33 @@ class ParticipationTraverseService(Service):
         return self
 
     def prepare_response_item(self, participant):
-        token = participant.get('token')
-        participation_type = PARTICIPATION_TYPES[participant.get('type_')]
-        role = participant.get('roles')[0]
+        userid = participant.get('token')
+        role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
+        member = api.user.get(userid=userid)
+        managing_context = self.context.get_context_with_local_roles()
         return {
-            '@id': '{}/@{}/{}'.format(
-                self.context.absolute_url(),
-                participation_type.path_identifier,
-                token),
-            '@type': 'virtual.participations.{}'.format(participation_type.id),
-            'participant_fullname': participant.get('name'),
-            'inviter_fullname': participant.get('inviter'),
-            'role': role,
-            'readable_role': PARTICIPATION_ROLES.get(role).translated_title(self.request),
-            'is_editable': participant.get('can_manage'),
-            'participation_type': participation_type.id,
-            'readable_participation_type': participation_type.translated_title(self.request),
-            'token': token,
+            '@id': '{}/@participations/{}'.format(managing_context.absolute_url(), userid),
+            '@type': 'virtual.participations.user',
+            'is_editable': managing_context == self.context and participant.get('can_manage'),
+            'role': {
+                'token': role.id,
+                'title': role.translated_title(self.request),
+            },
+            'participant': {
+                "token": userid,
+                "title": participant.get('name'),
+            },
+            'participant_email': member.getProperty('email'),
         }
+
+    def participants(self, context):
+        manager = ManageParticipants(context, self.request)
+        return manager.get_participants()
+
+    def find_participant(self, token, context):
+        for item in self.participants(context):
+            if item.get('token') == token:
+                return item
 
 
 class ParticipationsGet(ParticipationTraverseService):
@@ -52,45 +63,19 @@ class ParticipationsGet(ParticipationTraverseService):
 
     GET workspace/@participations HTTP/1.1
     """
-
-    def prepare_response_item(self, participant):
-        userid = participant.get('token')
-        role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
-        member = api.user.get(userid=userid)
-        return {
-            '@id': '{}/@participations/{}'.format(
-                self.context.absolute_url(), userid),
-            '@type': 'virtual.participations.user',
-            'participant_fullname': participant.get('name'),
-            'is_editable': participant.get('can_manage'),
-            'role': {
-                'token': role.id,
-                'title': role.translated_title(self.request),
-            },
-            'token': userid,
-            'participant_email': member.getProperty('email'),
-        }
-
     def reply(self):
         token = self.read_params()
         if token:
-            return self.get_response_item(token)
+            return self.prepare_response_item(self.find_participant(
+                token, self.context.get_context_with_local_roles()))
         else:
             result = {}
             result['items'] = self.get_response_items()
             return result
 
     def get_response_items(self):
-        return [self.prepare_response_item(item) for item in self._items()]
-
-    def _items(self):
-        manager = ManageParticipants(self.context, self.request)
-        return manager.get_participants()
-
-    def get_response_item(self, token):
-        for item in self._items():
-            if item.get('token') == token:
-                return self.prepare_response_item(item)
+        return [self.prepare_response_item(item) for item in
+                self.participants(self.context.get_context_with_local_roles())]
 
     def read_params(self):
         if len(self.params) == 1:
@@ -103,8 +88,7 @@ class ParticipationsDelete(ParticipationTraverseService):
     def reply(self):
         token = self.read_params()
 
-        manager = ManageParticipants(self.context, self.request)
-        manager._delete('user', token)
+        self.recursive_delete_participation(self.context, token)
         self.request.response.setStatus(204)
         return None
 
@@ -115,15 +99,37 @@ class ParticipationsDelete(ParticipationTraverseService):
 
         return self.params[0]
 
+    def recursive_delete_participation(self, obj, token):
+        """It is possible that a subfolder has blocked the role inheritance
+        and has assigned it's own roles for a specific user. We have to be sure
+        that this user will be deleted in the whole tree and not only in the
+        current context.
+        """
+        if obj.get_context_with_local_roles() == obj and self.find_participant(token, obj):
+                manager = ManageParticipants(obj, self.request)
+                manager._delete('user', token)
+
+        for folder in obj.listFolderContents(
+                contentFilter={'portal_type': 'opengever.workspace.folder'}):
+            self.recursive_delete_participation(folder, token)
+
 
 class ParticipationsPatch(ParticipationTraverseService):
 
     def reply(self):
-        token = self.read_params()
-        data = self.validate_data(json_body(self.request))
+        participant = self.read_params()
+        data = json_body(self.request)
+
+        role = data.get('role')
+        if isinstance(role, dict):
+            role = role.get("token")
+
+        if not role:
+            self.request.RESPONSE.setStatus(204)
+            return None
 
         manager = ManageParticipants(self.context, self.request)
-        manager._modify(token, data.get('role').get('token'), 'user')
+        manager._modify(participant, role, 'user')
         return None
 
     def read_params(self):
@@ -133,8 +139,57 @@ class ParticipationsPatch(ParticipationTraverseService):
 
         return self.params[0]
 
+
+class ParticipationsPost(ParticipationTraverseService):
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        token, role = self.validate_data(json_body(self.request))
+
+        self.validate_participation(token, role)
+
+        assignment = SharingRoleAssignment(token, [role], self.context)
+        RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
+
+        activity_manager = WorkspaceWatcherManager(self.context)
+        activity_manager.new_participant_added(token, role)
+
+        self.request.response.setStatus(201)
+        return self.prepare_response_item(self.find_participant(
+            token, self.context.get_context_with_local_roles()))
+
     def validate_data(self, data):
-        if not data.get('role'):
+        participant = data.get('participant')
+        if isinstance(participant, dict):
+            participant = participant.get("token")
+
+        role = data.get('role')
+        if isinstance(role, dict):
+            role = role.get("token")
+
+        if not participant:
+            raise BadRequest('Missing parameter participant')
+
+        if not role:
             raise BadRequest('Missing parameter role')
 
-        return data
+        return participant, role
+
+    def validate_participation(self, token, role):
+        if not self.context.has_blocked_local_role_inheritance():
+            raise Forbidden(
+                "The participations are not managed in this context. "
+                "Please block the role inheritance before adding "
+                "new participants.")
+
+        if not self.find_participant(token, self.context.get_parent_with_local_roles()):
+            raise BadRequest('The participant is not allowed')
+
+        if self.find_participant(token, self.context.get_context_with_local_roles()):
+            raise BadRequest('The participant already exists')
+
+        if role not in PARTICIPATION_ROLES:
+            raise BadRequest('Role is not availalbe. Available roles are: {}'.format(
+                PARTICIPATION_ROLES.keys()))

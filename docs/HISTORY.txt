@@ -5,6 +5,8 @@ Changelog
 ---------------------
 
 - Configure Solr replication handler. [buchi]
+- Implement PossibleWorkspaceFolderParticipantsVocabulary to get all possible workspace folder participants. [elioschmutz]
+- Implement GET, PATCH and POST @participations endpoint for workspace folders. [elioschmutz]
 - Implement @role-inheritance serivce endpoint for workspace folders. [deiferni]
 - Include permissions.zcml of Products.CMFEditions. [lgraf]
 - Add action to create new invitations to workspaces. [deiferni]

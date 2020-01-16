@@ -31,7 +31,7 @@ Vererbung unterbrechen:
 -----------------------
 Mit einem POST Request kann die Rollenvererbung unterbrochen werden.
 
-Wird eine Vererbung unterbrochen, werden initial alle bisherigen Berechtigungen für den Ordner kopiert.
+Wird eine Vererbung unterbrochen, wird der aktuelle Benutzer als neuen und einzigen Admin hinzugefügt.
 
 **Beispiel-Request**:
 
@@ -41,7 +41,7 @@ Wird eine Vererbung unterbrochen, werden initial alle bisherigen Berechtigungen 
        Accept: application/json
 
        {
-         "blocked": true,
+         "blocked": true
        }
 
 **Beispiel-Response**:
@@ -56,6 +56,35 @@ Wird eine Vererbung unterbrochen, werden initial alle bisherigen Berechtigungen 
       "blocked": true
     }
 
+
+Vererbung unterbrechen mit Rollen-Kopie
+---------------------------------------
+Mit der Option `copy_roles` auf dem @role-inheritance Endpoint werden bestehende Berechtigungen nach dem Unterbrechen der
+Vererbung automatisch kopiert.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /workspace-1/folder-1/@role-inheritance HTTP/1.1
+       Accept: application/json
+
+       {
+         "blocked": true,
+         "copy_roles": true
+       }
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "blocked": true,
+    }
 
 Berechtigungen vererben:
 ------------------------

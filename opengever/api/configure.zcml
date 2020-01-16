@@ -416,6 +416,38 @@
 
   <plone:service
       method="GET"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".participations.ParticipationsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".participations.ParticipationsDelete"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".participations.ParticipationsPatch"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="POST"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".participations.ParticipationsPost"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="GET"
       name="@role-inheritance"
       for="opengever.workspace.interfaces.IWorkspaceFolder"
       factory=".role_inheritance.RoleInheritanceGet"

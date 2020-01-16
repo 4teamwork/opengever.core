@@ -28,28 +28,32 @@ Ein GET Request gibt die Beteiligungen sowie die aktiven Einladungen eines Inhal
     {
       "items": [
         {
-          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/users/max.muster",
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
           "@type": "virtual.participations.user",
-          "inviter_fullname": null,
-          "is_editable": false,
-          "participant_fullname": "Max Muster (max.muster)",
-          "readable_role": "Federführung",
-          "role": "WorkspaceOwner",
-          "token": "max.muster",
-          "participation_type": "user",
-          "readable_participation_type": "User",
+          "is_editable": true,
+          "participant_email": "max.muster@example.org",
+          "role": {
+            "title": "Admin",
+            "token": "WorkspaceAdmin"
+          },
+          "participant": {
+            "title": "Max Muster (max.muster)",
+            "token": "max.muster"
+          }
         },
         {
-          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc300",
-          "@type": "virtual.participations.invitation",
-          "inviter_fullname": "Max Muster (max.muster)",
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/petra.frohlich",
+          "@type": "virtual.participations.user",
           "is_editable": true,
-          "participant_fullname": "Petra Fröhlich (petra.frohlich)",
-          "readable_role": "Gast",
-          "role": "WorkspaceGuest",
-          "token": "3a8bfcb1b6294edfb60e2a43717fc300",
-          "participation_type": "invitation",
-          "readable_participation_type": "Invitation",
+          "participant_email": "petra.frohlich@example.org",
+          "role": {
+            "title": "Teammitglied",
+            "token": "WorkspaceMember"
+          },
+          "participant": {
+            "title": "Petra Fröhlich (petra.frohlich)",
+            "token": "petra.frohlich"
+          }
         }
       ]
     }
@@ -75,31 +79,30 @@ Ein GET Request auf die jeweilige Resource gibt die Beteiligungen oder die Einla
     Content-Type: application/json
 
     {
-      "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/users/max.muster",
+      "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
       "@type": "virtual.participations.user",
-      "inviter_fullname": null,
-      "is_editable": false,
-      "participant_fullname": "Max Muster (max.muster)",
-      "readable_role": "Federführung",
-      "role": "WorkspaceOwner",
-      "token": "max.muster",
-      "participation_type": "user",
-      "readable_participation_type": "User",
+      "is_editable": true,
+      "participant_email": "max.muster@example.org",
+      "role": {
+        "title": "Admin",
+        "token": "WorkspaceAdmin"
+      },
+      "participant": {
+        "title": "Max Muster (max.muster)",
+        "token": "max.muster"
+      }
     }
 
 
 Beteiligungen löschen:
 ----------------------
-Ein DELETE Request auf die `@id` einer Beteiligung löscht die entsprechnede Beteilungung oder Einladung.
-
-Die URL setzt sich dabei folgendermassen zusammen:
-``gever-url/workspaces/workspace/@participations/{participation_type}/{token}``
+Ein DELETE Request auf die `@id` einer Beteiligung löscht die entsprechnede Beteilungung.
 
 **Beispiel-Request**:
 
    .. sourcecode:: http
 
-       DELETE /workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc300 HTTP/1.1
+       DELETE /workspace-1/@participations/max.muster HTTP/1.1
        Accept: application/json
 
 
@@ -110,32 +113,21 @@ Die URL setzt sich dabei folgendermassen zusammen:
       HTTP/1.1 204 No Content
 
 
-Beteiligungen hinzufügen (Benutzer einladen):
----------------------------------------------
-Eine Beteiligung kann nur über eine Einladung hinzugefügt werden. Der eingeladene Benutzer muss seine Beteiligung erste bestätigen, bevor der Benutzer effektiv berechtigt wird.
+Beteiligungen hinzufügen:
+-------------------------
+In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) können beteiligungen über einen POST request auf den @participations Endpoint hinzugefügt werden.
 
-Eine Einladung wird durch einen POST request auf den `@participation/invitations` Endpoint erstellt.
-
-
-**Parameter:**
-
-Pflicht:
-
-``userid``: ``String``
-   ID des Benutzers, welcher eingeladen werden soll
-
-``role``: ``String``
-   Eine Arbeitsraum-Rolle
+**Achtung**: Eine Beteiligung in einem Arbeitsraum kann nur über eine Einladung hinzugefügt werden. Der eingeladene Benutzer muss seine Beteiligung erste bestätigen, bevor der Benutzer effektiv berechtigt wird.
 
 **Beispiel-Request**:
 
    .. sourcecode:: http
 
-       POST /workspaces/workspace-1/@participations/invitations/ HTTP/1.1
+       POST /workspaces/workspace-1/folder-1/@participations HTTP/1.1
        Accept: application/json
 
        {
-         "userid": "maria.meier",
+         "participant": "maria.meier",
          "role": "WorkspaceMember",
        }
 
@@ -147,40 +139,36 @@ Pflicht:
     Content-Type: application/json
 
     {
-          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc301",
-          "@type": "virtual.participations.invitation",
-          "inviter_fullname": "Max Muster (max.muster)",
-          "is_editable": true,
-          "participant_fullname": "Maria Meier (maria.meier)",
-          "readable_role": "Teammitglied",
-          "role": "WorkspaceMember",
-          "token": "3a8bfcb1b6294edfb60e2a43717fc301",
-          "participation_type": "invitation",
-          "readable_participation_type": "Invitation",
+      "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
+      "@type": "virtual.participations.user",
+      "is_editable": true,
+      "participant_email": "max.muster@example.org",
+      "participant_fullname": "Max Muster (max.muster)",
+      "role": {
+        "title": "Admin",
+        "token": "WorkspaceMember"
+      },
+      "participant": {
+        "title": "Max Muster (max.muster)",
+        "token": "max.muster"
+      }
     }
 
 
 Beteiligungen bearbeiten:
 -------------------------
-Sowohl Beteiligungen wie auch Einladungen können über einen PATCH request auf die jeweilige Ressourece geändert werden.
-
-**Parameter:**
-
-Pflicht:
-
-``role``: ``String``
-   Eine Arbeitsraum-Rolle
+Beteiligungen können über einen PATCH request auf die jeweilige Ressourece geändert werden.
 
 **Beispiel-Request**:
 
-   .. sourcecode:: http
+  .. sourcecode:: http
 
-       POST /workspaces/workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc301 HTTP/1.1
-       Accept: application/json
+    PATCH /workspaces/workspace-1/@participations/max.muster HTTP/1.1
+    Accept: application/json
 
-       {
-         "role": "WorkspaceAdmin",
-       }
+    {
+      "role": "WorkspaceAdmin"
+    }
 
 **Beispiel-Response**:
 

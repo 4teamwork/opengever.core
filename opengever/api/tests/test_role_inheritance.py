@@ -33,13 +33,13 @@ class TestRoleInheritanceGet(IntegrationTestCase):
 class TestRoleInheritancePost(IntegrationTestCase):
 
     @browsing
-    def test_block_workspace_folder_role_inheritance(self, browser):
+    def test_block_workspace_folder_role_inheritance_with_copy_roles(self, browser):
         self.login(self.workspace_owner, browser)
 
         browser.open(
             self.workspace_folder,
             view='/@role-inheritance',
-            data=json.dumps({'blocked': True}),
+            data=json.dumps({'blocked': True, 'copy_roles': True}),
             method='POST',
             headers=self.api_headers)
 
@@ -53,6 +53,50 @@ class TestRoleInheritancePost(IntegrationTestCase):
             workspace_manager.get_assignments_by_cause(ASSIGNMENT_VIA_SHARING),
             folder_manager.get_assignments_by_cause(ASSIGNMENT_VIA_SHARING),
             "Sharing assignment should be same as parent workspace"
+        )
+
+    @browsing
+    def test_block_workspace_folder_role_inheritance_with_workspace_admin_will_copy_only_workspace_admin(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        browser.open(
+            self.workspace_folder,
+            view='/@role-inheritance',
+            data=json.dumps({'blocked': True}),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual({'blocked': True}, browser.json)
+        self.assertTrue(self.workspace_folder.__ac_local_roles_block__)
+
+        folder_manager = RoleAssignmentManager(self.workspace_folder)
+        assignments = folder_manager.get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+        self.assertEqual(
+            [self.workspace_admin.id],
+            [assignment.get('principal') for assignment in assignments],
+            "Only the workspace admin should be the new principals for the folder"
+        )
+
+    @browsing
+    def test_block_workspace_folder_role_inheritance_with_manager_will_copy_all_workspace_admins(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(
+            self.workspace_folder,
+            view='/@role-inheritance',
+            data=json.dumps({'blocked': True}),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual({'blocked': True}, browser.json)
+        self.assertTrue(self.workspace_folder.__ac_local_roles_block__)
+
+        folder_manager = RoleAssignmentManager(self.workspace_folder)
+        assignments = folder_manager.get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+        self.assertItemsEqual(
+            [self.workspace_owner.id, self.workspace_admin.id],
+            [assignment.get('principal') for assignment in assignments],
+            "Only workspace admins should be the new principals for the folder"
         )
 
     @browsing

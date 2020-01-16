@@ -57,6 +57,11 @@
       name="opengever.workspace.RolesVocabulary"
       />
 
+  <utility
+      factory=".vocabularies.PossibleWorkspaceFolderParticipantsVocabulary"
+      name="opengever.workspace.PossibleWorkspaceFolderParticipantsVocabulary"
+      />
+
   <plone:service
       method="PATCH"
       for="opengever.workspace.interfaces.IWorkspace"
