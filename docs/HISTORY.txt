@@ -4,6 +4,7 @@ Changelog
 2019.5.1 (unreleased)
 ---------------------
 
+- When tearing down test layer, wait for solr to be torn down properly. [siegy]
 - Configure Solr replication handler. [buchi]
 - Implement PossibleWorkspaceFolderParticipantsVocabulary to get all possible workspace folder participants. [elioschmutz]
 - Implement GET, PATCH and POST @participations endpoint for workspace folders. [elioschmutz]
