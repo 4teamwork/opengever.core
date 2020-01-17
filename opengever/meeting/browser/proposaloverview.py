@@ -13,6 +13,7 @@ from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
+from plone.locking.interfaces import ILockable
 from plone.protect.utils import addTokenToUrl
 from Products.CMFDiffTool.utils import safe_utf8
 from Products.Five.browser import BrowserView
@@ -38,9 +39,6 @@ class OverviewBase(object):
         """Return the sprite-css-class for the given object.
         """
         return ' '.join(['rollover-breadcrumb', get_css_class(item)])
-
-    def documents(self):
-        return IContentListing(self.context.get_documents())
 
     def excerpt(self):
         return self.context.get_excerpt()
@@ -161,7 +159,7 @@ class ProposalOverview(OverviewBase, BrowserView, GeverTabMixin):
 
     def get_submitted_document(self, document):
         return SubmittedDocument.query.get_by_source(
-            self.context, document.getObject())
+            self.context, document)
 
     def get_update_document_url(self, document):
         return '{}/@@submit_additional_documents?document_path={}'.format(
@@ -183,6 +181,20 @@ class ProposalOverview(OverviewBase, BrowserView, GeverTabMixin):
             u"Current version: ${version}",
             mapping={'version': document.getObject().get_current_version_id(
                 missing_as_zero=True)})
+
+    def default_attachments(self):
+        return IContentListing([doc for doc in self.context.get_documents()
+                                if self.show_as_default_attachment(doc)])
+
+    def unlocked_attachments(self):
+        return IContentListing([doc for doc in self.context.get_documents()
+                                if not self.show_as_default_attachment(doc)])
+
+    def show_as_default_attachment(self, document):
+        submitted_document = self.get_submitted_document(document)
+        if not submitted_document:
+            return True
+        return ILockable(submitted_document.resolve_submitted()).locked()
 
 
 class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
@@ -208,3 +220,11 @@ class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
         """Creating a task from a submitted proposal is not allowed at all.
         """
         return False
+
+    def default_attachments(self):
+        return IContentListing([doc for doc in self.context.get_documents()
+                                if ILockable(doc).locked()])
+
+    def unlocked_attachments(self):
+        return IContentListing([doc for doc in self.context.get_documents()
+                                if not ILockable(doc).locked()])

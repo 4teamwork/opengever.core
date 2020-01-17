@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-24 09:08+0000\n"
+"POT-Creation-Date: 2020-01-24 09:09+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1401,6 +1401,11 @@ msgstr "Modification d'état ${transition} exécutée"
 #. Default: "Unlock submitted document"
 #: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
 msgid "label_unlock_submitted_document"
+msgstr ""
+
+#. Default: "Unlocked attachments"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_unlocked_attachments"
 msgstr ""
 
 #. Default: "Are you sure you want to unschedule this agendaitem?"

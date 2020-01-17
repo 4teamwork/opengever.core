@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
+from opengever.meeting.model import SubmittedDocument
 from opengever.testing import IntegrationTestCase
 from urllib import urlencode
 
@@ -143,6 +144,54 @@ class TestProposalOverview(IntegrationTestCase):
             ['Decision number', '2016 / 2'],
             ['Attachments', u'Vertr\xe4gsentwurf'],
             ['Excerpt', 'The Excerpt'],
+        ]
+        self.assertEqual(expected_listing, browser.css('table.listing').first.lists())
+
+    @browsing
+    def test_show_unlocked_submitted_attachments_in_its_own_list_item(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        self.proposal.submit_additional_document(self.subdocument)
+
+        submitted_document = SubmittedDocument.query.get_by_source(
+            self.proposal, self.subdocument).resolve_submitted()
+
+        browser.open(submitted_document, view="unlock_submitted_document_form")
+        browser.find_button_by_label('Unlock').click()
+
+        browser.open(self.submitted_proposal, view='tabbedview_view-overview')
+
+        expected_listing = [
+            ['Title', u'Vertr\xe4ge'],
+            ['Description', u'F\xfcr weitere Bearbeitung bewilligen'],
+            ['Dossier', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
+            ['Committee', u'Rechnungspr\xfcfungskommission'],
+            ['Meeting', u''],
+            ['Issuer', 'Ziegler Robert (robert.ziegler)'],
+            ['Proposal document', u'Vertr\xe4ge'],
+            ['State', 'Submitted'],
+            ['Decision number', ''],
+            ['Attachments', u'Vertr\xe4gsentwurf'],
+            ['Unlocked attachments', u'\xdcbersicht der Vertr\xe4ge von 2016'],
+            ['Excerpt', ''],
+        ]
+        self.assertEqual(expected_listing, browser.css('table.listing').first.lists())
+
+        self.login(self.meeting_user, browser)
+        browser.open(self.proposal, view='tabbedview_view-overview')
+
+        expected_listing = [
+            ['Title', u'Vertr\xe4ge'],
+            ['Description', u'F\xfcr weitere Bearbeitung bewilligen'],
+            ['Committee', u'Rechnungspr\xfcfungskommission'],
+            ['Meeting', u''],
+            ['Issuer', 'Ziegler Robert (robert.ziegler)'],
+            ['Proposal document', u'Vertr\xe4ge'],
+            ['State', 'Submitted'],
+            ['Decision number', ''],
+            ['Attachments', u'Vertr\xe4gsentwurf'],
+            ['Unlocked attachments', u'\xdcbersicht der Vertr\xe4ge von 2016'],
+            ['Excerpt', ''],
         ]
         self.assertEqual(expected_listing, browser.css('table.listing').first.lists())
 
