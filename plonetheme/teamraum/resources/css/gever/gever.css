@@ -2449,7 +2449,7 @@ readers do not read off random characters that represent icons */
 
 .gv-subtask:before { content: ""; }
 
-.gv-task:before { content: ""; }
+.gv-task:before, .actionButtons .createTaskFromProposal:before { content: ""; }
 
 .gv-shared-task:before { content: ""; }
 

@@ -25,11 +25,12 @@ class TestProposalOverview(IntegrationTestCase):
         self.assertEqual(
             ['proposal-transition-cancel',
              'proposal-transition-submit',
-             'Comment'],
+             'Comment',
+             'Create task'],
             browser.css('.actionButtons .regular_buttons li').text
         )
         self.assertEqual(
-            ['Comment'],
+            ['Comment', 'Create task'],
             browser.css('.actionButtons .regular_buttons li a').text
         )
 
@@ -59,11 +60,12 @@ class TestProposalOverview(IntegrationTestCase):
         self.assertEqual(
             ['proposal-transition-cancel',
              'proposal-transition-submit',
-             'Comment'],
+             'Comment',
+             'Create task'],
             browser.css('.actionButtons .regular_buttons li').text
         )
         self.assertEqual(
-            ['proposal-transition-cancel', 'Comment'],
+            ['proposal-transition-cancel', 'Comment', 'Create task'],
             browser.css('.actionButtons .regular_buttons li a').text
         )
 
@@ -186,3 +188,35 @@ class TestProposalOverview(IntegrationTestCase):
 
         self.assertIn('&lt;bold&gt;Action with HTML&lt;/bold&gt;',
                       browser.css('ul.webactions_buttons a').first.innerHTML)
+
+    @browsing
+    def test_create_task_from_proposal_opens_the_prefileld_task_add_form(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.proposal, view='tabbedview_view-overview')
+        browser.find('Create task').click()
+
+        browser.fill({'Task Type': 'To comment'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            'fa:' + self.dossier_responsible.getId())
+
+        browser.find('Save').click()
+
+        # The browser will display the tasks tab of the dossier after adding a task.
+        task = browser.context.objectValues()[-1]
+
+        self.assertEqual(self.proposal.title, task.title,
+                         'Title should have been prefilled ')
+        self.assertItemsEqual(
+            [self.proposal.get_proposal_document(), self.document],
+            [rel.to_object for rel in task.relatedItems],
+            'Related items should have been prefilled with the '
+            'proposal document and all related proposal documents')
+
+    @browsing
+    def test_do_not_show_create_task_from_proposal_on_submitted_proposal(self, browser):
+        self.login(self.meeting_user, browser)
+
+        browser.open(self.submitted_proposal, view='tabbedview_view-overview')
+        self.assertIsNone(browser.find('Create task'))

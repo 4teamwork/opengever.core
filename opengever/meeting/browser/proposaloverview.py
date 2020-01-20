@@ -1,20 +1,22 @@
 from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
+from opengever.base.response import IResponseContainer
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _ as document_mf
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal_transition_comment import SubmittedProposalTransitionCommentAddForm
+from opengever.meeting.proposalhistory import ProposalResponseDescription
 from opengever.tabbedview import GeverTabMixin
 from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
+from plone.protect.utils import addTokenToUrl
+from Products.CMFDiffTool.utils import safe_utf8
 from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
-from opengever.base.response import IResponseContainer
-from opengever.meeting.proposalhistory import ProposalResponseDescription
 
 
 class OverviewBase(object):
@@ -79,6 +81,43 @@ class OverviewBase(object):
 
         model = self.context.load_model()
         return model.get_state() == model.STATE_DECIDED
+
+    def is_create_task_from_proposal_allowed(self):
+        """Returns True if the current user is allowed to add a new task to
+        the current dossier.
+        """
+        if ISubmittedProposal.providedBy(self.context):
+            return False
+
+        return api.user.has_permission('opengever.task: Add task',
+                                       obj=self.context)
+
+    def create_task_from_proposal_url(self):
+        """Returns an url to directly create a task from a proposal.
+
+        The proposal title, the proposal document as well as all proposal
+        attachements will be prefilled in the add form.
+        """
+        dossier = self.context.get_containing_dossier()
+
+        query_string_elements = []
+        query_string_elements.append(
+            'form.widgets.title={}'.format(safe_utf8(self.context.title)))
+
+        relations = []
+        relations.append(self.context.get_proposal_document())
+        relations.extend(self.context.get_documents())
+
+        relation_paths = ['/'.join(relation.getPhysicalPath()) for relation
+                          in relations]
+
+        query_string_elements.extend(['paths:list={}'.format(url) for url
+                                     in relation_paths])
+
+        return addTokenToUrl(
+            '{}/++add++opengever.task.task?{}'.format(
+                dossier.absolute_url(),
+                '&'.join(query_string_elements)))
 
     def render_protocol_excerpt_document_link(self):
         excerpt = self.context.get_excerpt()
@@ -164,3 +203,8 @@ class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
 
     def discreet_transition_items(self):
         return []
+
+    def is_create_task_from_proposal_allowed(self):
+        """Creating a task from a submitted proposal is not allowed at all.
+        """
+        return False
