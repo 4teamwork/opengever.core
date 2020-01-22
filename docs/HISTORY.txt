@@ -4,6 +4,7 @@ Changelog
 2020.1.0 (unreleased)
 ---------------------
 
+- Fix volatile related proposal documents. [elioschmutz]
 - Add new_document_from_task file_action. [lgraf]
 - When tearing down test layer, wait for solr to be torn down properly. [siegy]
 - Configure Solr replication handler. [buchi]

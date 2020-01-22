@@ -591,6 +591,10 @@ class Proposal(Container, ProposalBase):
             self.relatedItems.append(
                 RelationValue(getUtility(IIntIds).getId(document)))
 
+            # We have to manually notfiy the ZODB about the changed relatedItems.
+            # https://zodb.readthedocs.io/en/latest/working.html#handling-changes-to-mutable-objects
+            self._p_changed = 1
+
         command.execute()
         return command
 
