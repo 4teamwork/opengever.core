@@ -621,7 +621,6 @@ class ResolveConditions(object):
         return self._invalid_dates
 
     def _recursive_date_validation(self, dossier, main=True):
-
         if not main:
             # check end_date
             # If a dossier is already resolved, but seems to have an invalid
@@ -633,7 +632,7 @@ class ResolveConditions(object):
                 self._invalid_dates.append(dossier.title)
 
         # recursively check subdossiers
-        subdossiers = dossier.get_subdossiers()
+        subdossiers = dossier.get_subdossiers(depth=1)
         for sub in subdossiers:
             sub = sub.getObject()
             self._recursive_date_validation(sub, main=False)
