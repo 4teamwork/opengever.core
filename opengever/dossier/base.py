@@ -288,7 +288,6 @@ class DossierContainer(Container):
         docs = self.portal_catalog(
             portal_type="opengever.document.document",
             path=dict(
-                depth=2,
                 query='/'.join(self.getPhysicalPath()),
                 ),
             )
