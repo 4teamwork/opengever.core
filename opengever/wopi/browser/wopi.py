@@ -22,7 +22,10 @@ from zope.publisher.interfaces import NotFound
 import json
 import logging
 
+
 logger = logging.getLogger('opengever.wopi')
+
+_marker = object()
 
 
 @implementer(IPublishTraverse)
@@ -32,6 +35,7 @@ class WOPIView(BrowserView):
         super(WOPIView, self).__init__(context, request)
         self.endpoint = None
         self.object_id = None
+        self._obj = _marker
         self.operation = None
         self.method = request.get('REQUEST_METHOD')
         self.override = request.getHeader('X-WOPI-Override')
@@ -50,14 +54,6 @@ class WOPIView(BrowserView):
         return self
 
     def __call__(self):
-        url = self.request.ACTUAL_URL + '?' + self.request.get('QUERY_STRING')
-        lock = self.request.getHeader('X-WOPI-Lock', 'None')
-        old_lock = self.request.getHeader('X-WOPI-OldLock', 'None')
-        logger.info(
-            'WOPI-Request: url=%s, method=%s,  X-WOPI-Override=%s, '
-            'X-WOPI-Lock=%s, X-WOPI-OldLock=%s',
-            url, self.method, self.override, lock, old_lock)
-
         if self.object_id is None:
             raise zNotFound()
 
@@ -71,65 +67,80 @@ class WOPIView(BrowserView):
             self.request.response.setStatus(401)
             return "Unauthorized"
 
-        with api.env.adopt_user(username=userid):
-            if self.endpoint == 'files':
-                if self.operation is None:
-                    if self.method == 'GET':
-                        return self.check_file_info()
-                    elif self.method == 'POST':
-                        if self.override == 'LOCK':
-                            return self.lock()
-                        elif self.override == 'UNLOCK':
-                            return self.unlock()
-                        elif self.override == 'REFRESH_LOCK':
-                            return self.lock()
-                        elif self.override == 'GET_LOCK':
-                            return self.get_lock()
-                elif self.operation == 'contents':
-                    if self.method == 'GET':
-                        return self.get_file()
-                    elif self.method == 'POST':
-                        if self.override == 'PUT':
-                            return self.put_file()
+        operation = None
+        if self.endpoint == 'files':
+            if self.operation is None:
+                if self.method == 'GET':
+                    operation = 'check_file_info'
+                elif self.method == 'POST':
+                    if self.override == 'LOCK':
+                        if self.request.getHeader('X-WOPI-OldLock'):
+                            operation = 'unlock_and_relock'
+                        else:
+                            operation = 'lock'
+                    elif self.override == 'UNLOCK':
+                        operation = 'unlock'
+                    elif self.override == 'REFRESH_LOCK':
+                        operation = 'refresh_lock'
+                    elif self.override == 'GET_LOCK':
+                        operation = 'get_lock'
+                    elif self.override == 'PUT_RELATIVE':
+                        operation = 'put_relative_file'
+            elif self.operation == 'contents':
+                if self.method == 'GET':
+                    operation = 'get_file'
+                elif self.method == 'POST':
+                    if self.override == 'PUT':
+                        operation = 'put_file'
 
-        raise zNotFound()
+        if operation is None:
+            self.request.response.setStatus(400)
+            return
+
+        operation_name = ''.join([o.title() for o in operation.split('_')])
+        logger.debug('WOPI Operation: %s', operation_name)
+
+        method = getattr(self, operation)
+        with api.env.adopt_user(username=userid):
+            return method()
 
     def render_json(self, data):
         self.request.response.setHeader("Content-Type", 'application/json')
         return json.dumps(
             data, indent=2, sort_keys=True, separators=(', ', ': '))
 
+    @property
     def obj(self):
-        obj = uuidToObject(self.object_id)
-        if obj is None:
+        if self._obj is not _marker:
+            return self._obj
+        self._obj = uuidToObject(self.object_id)
+        if self._obj is None:
             raise zNotFound()
-        return obj
+        return self._obj
 
     def check_file_info(self):
-        obj = self.obj()
         member = self.portal_state.member()
-        dossier = aq_parent(obj)
-        modified_dt = obj.modified().asdatetime()
+        dossier = aq_parent(self.obj)
+        modified_dt = self.obj.modified().asdatetime()
         modified_iso9601 = (
             modified_dt.replace(tzinfo=None) - modified_dt.utcoffset()
             ).isoformat() + 'Z'
         data = {
-            'BaseFileName': obj.file.filename,
-            'OwnerId': obj.Creator(),
-            'Size': obj.file.size,
+            'BaseFileName': self.obj.file.filename,
+            'OwnerId': self.obj.Creator(),
+            'Size': self.obj.file.size,
             'UserId': member.getId(),
-            # 'Version': str(obj.get_current_version_id()),
-            'Version': str(u64(obj.file._blob._p_serial)),
+            'Version': self._file_version(),
             'UserFriendlyName': member.getProperty('fullname') or member.getId(),
             'SupportsUpdate': True,
             'SupportsLocks': True,
             'SupportsGetLock': True,
             'UserCanNotWriteRelative': True,
             'UserCanWrite': True,
-            'CloseUrl': obj.absolute_url(),
+            'CloseUrl': self.obj.absolute_url(),
             'BreadcrumbBrandName': 'OneGov GEVER',
             'BreadcrumbBrandUrl': self.portal_state.portal_url(),
-            'BreadcrumbDocName': obj.Title(),
+            'BreadcrumbDocName': self.obj.Title(),
             'BreadcrumbFolderName': dossier.Title(),
             'BreadcrumbFolderUrl': dossier.absolute_url(),
             'LastModifiedTime': modified_iso9601,
@@ -137,96 +148,119 @@ class WOPIView(BrowserView):
         return self.render_json(data)
 
     def get_file(self):
-        obj = self.obj()
-        file_ = obj.file
-
+        file_ = self.obj.file
+        self.request.response.setHeader(
+            'X-WOPI-ItemVersion', self._file_version())
         set_headers(file_, self.request.response, filename=file_.filename)
         return stream_data(file_)
 
+    def lock(self):
+        current_token = get_lock_token(self.obj)
+        if current_token:
+            token = self.request.getHeader('X-WOPI-Lock')
+            if current_token != token:
+                self.request.response.setStatus(409)
+                self.request.response.setHeader('X-WOPI-Lock', current_token)
+                return
+            refresh_lock(self.obj)
+        else:
+            self.checkout()
+            token = self.request.getHeader('X-WOPI-Lock')
+            create_lock(self.obj, token)
+            self.request.response.setHeader(
+                'X-WOPI-ItemVersion', self._file_version())
+        self.request.response.setStatus(200, lock=1)
+
+    def get_lock(self):
+        token = get_lock_token(self.obj)
+        if token is not None:
+            self.request.response.setHeader('X-WOPI-Lock', token)
+        else:
+            self.request.response.setHeader('X-WOPI-Lock', '')
+        self.request.response.setStatus(200, lock=1)
+
+    refresh_lock = lock
+
+    def unlock(self):
+        token = self.request.getHeader('X-WOPI-Lock')
+        current_token = get_lock_token(self.obj)
+        if current_token is None or current_token != token:
+            self.request.response.setStatus(409)
+            self.request.response.setHeader(
+                'X-WOPI-Lock', current_token or '')
+            return
+        unlock(self.obj)
+        self.checkin()
+        self.request.response.setHeader(
+            'X-WOPI-ItemVersion', self._file_version())
+        self.request.response.setStatus(200, lock=1)
+
+    def unlock_and_relock(self):
+        current_token = get_lock_token(self.obj)
+        if current_token:
+            old_token = self.request.getHeader('X-WOPI-OldLock')
+            token = self.request.getHeader('X-WOPI-Lock')
+            if current_token == old_token:
+                unlock(self.obj)
+                create_lock(self.obj, token)
+                self.request.response.setStatus(200, lock=1)
+            else:
+                self.request.response.setStatus(409)
+                self.request.response.setHeader('X-WOPI-Lock', current_token)
+                return
+
     def put_file(self):
-        obj = self.obj()
-        current_token = get_lock_token(obj)
+        current_token = get_lock_token(self.obj)
         if current_token is not None:
             token = self.request.getHeader('X-WOPI-Lock')
             if current_token != token:
                 logger.warn(
                     'Lock token mismatch: current token: %s, '
                     'provided token: %s', current_token, token)
-            # Office Online sends the wrong token?!!
-            #     self.request.response.setStatus(409)
-            #     self.request.response.setHeader('X-WOPI-Lock', token)
-            #     return
-            filename = obj.file.filename
-            content_type = obj.file.contentType
-            self.request.stdin.seek(0)
-            data = self.request.stdin.read()
-            obj.file = NamedBlobFile(
-                data=data, filename=filename,
-                contentType=content_type)
-            self.request.response.setStatus(200, lock=1)
+                self.request.response.setStatus(409)
+                self.request.response.setHeader('X-WOPI-Lock', current_token)
+                return
+            self._put_file()
         else:
-            self.request.response.setStatus(409)
-            self.request.response.setHeader('X-WOPI-Lock', '')
-            return
-
-    def lock(self):
-        obj = self.obj()
-        current_token = get_lock_token(obj)
-        if current_token:
-            old_token = self.request.getHeader('X-WOPI-OldLock')
-            token = self.request.getHeader('X-WOPI-Lock')
-            # UnlockAndRelock operation
-            if old_token:
-                if current_token == old_token:
-                    unlock(obj)
-                    create_lock(obj, token)
-                else:
-                    self.request.response.setStatus(409)
-                    self.request.response.setHeader('X-WOPI-Lock', token)
-                    return
-            # Lock/RefreshLock operation
+            if self.obj.file.size == 0:
+                self._put_file()
             else:
-                if current_token != token:
-                    self.request.response.setStatus(409)
-                    self.request.response.setHeader('X-WOPI-Lock', token)
-                    return
-                refresh_lock(obj)
-        else:
-            self.checkout(obj)
-            token = self.request.getHeader('X-WOPI-Lock')
-            create_lock(obj, token)
-        self.request.response.setStatus(200, lock=1)
+                self.request.response.setStatus(409)
+                self.request.response.setHeader('X-WOPI-Lock', '')
 
-    def checkout(self, obj):
-        manager = getMultiAdapter((obj, self.request),
+    def put_relative_file(self):
+        # Not implemented
+        self.request.response.setStatus(501)
+
+    def checkout(self):
+        manager = getMultiAdapter((self.obj, self.request),
                                   ICheckinCheckoutManager)
         if not manager.get_checked_out_by():
             manager.checkout()
 
-    def checkin(self, obj):
-        manager = getMultiAdapter((obj, self.request),
+    def checkin(self):
+        manager = getMultiAdapter((self.obj, self.request),
                                   ICheckinCheckoutManager)
         manager.checkin()
 
-    def unlock(self):
-        token = self.request.getHeader('X-WOPI-Lock')
-        obj = self.obj()
-        current_token = get_lock_token(obj)
-        if current_token:
-            if current_token != token:
-                self.request.response.setStatus(409)
-                self.request.response.setHeader(
-                    'X-WOPI-Lock', current_token)
-                return
-            unlock(obj)
-            self.checkin(obj)
-        self.request.response.setStatus(200, lock=1)
+    def _file_version(self):
+        # The current version of the file.
+        # This value must change when the file changes, and version values must
+        # never repeat for a given file. Thus we use the ZODB transaction id.
+        version = str(u64(self.obj.file._blob._p_serial))
+        if version == '0':
+            version = str(u64(self.obj._p_serial))
+        return version
 
-    def get_lock(self):
-        obj = self.obj()
-        token = get_lock_token(obj)
-        if token is not None:
-            self.request.response.setHeader('X-WOPI-Lock', token)
-        else:
-            self.request.response.setHeader('X-WOPI-Lock', '')
+    def _put_file(self):
+        filename = self.obj.file.filename
+        content_type = self.obj.file.contentType
+        self.request.stdin.seek(0)
+        data = self.request.stdin.read()
+        self.obj.file = NamedBlobFile(
+            data=data, filename=filename,
+            contentType=content_type)
+        self.request.response.setHeader(
+            'X-WOPI-ItemVersion', self._file_version())
+        logger.info('X-WOPI-ItemVersion: %s', self._file_version())
         self.request.response.setStatus(200, lock=1)
