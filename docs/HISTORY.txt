@@ -4,6 +4,7 @@ Changelog
 2020.1.0 (unreleased)
 ---------------------
 
+- Add 'filing_no' field to Solr schema. [lgraf]
 - Fix volatile related proposal documents. [elioschmutz]
 - Add a button to create a task from a proposal. [elioschmutz]
 - Allow to unlock and edit submitted documents in a submitted proposal. [elioschmutz]
