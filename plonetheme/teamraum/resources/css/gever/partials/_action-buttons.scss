@@ -141,6 +141,10 @@ ul.tabbedview-action-list {
   @extend .gv-proposal;
 }
 
+.actionButtons .createTaskFromProposal {
+  @extend .gv-task;
+}
+
 #tabbedview-body {
   .file-action-buttons, .editActions, .updateActions {
     margin-left: 0;

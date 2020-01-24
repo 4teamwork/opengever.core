@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-25 15:25+0000\n"
+"POT-Creation-Date: 2020-01-20 08:10+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -342,7 +342,7 @@ msgstr "Déposer l'extrait de protocole"
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 #: ./opengever/meeting/model/committee.py
-#: ./opengever/meeting/model/period.py
+#: ./opengever/meeting/tabs/meetinglisting.py
 msgid "active"
 msgstr "Actif"
 
@@ -465,14 +465,8 @@ msgstr "Annulé"
 msgid "close_meeting"
 msgstr "Clôturer"
 
-#. Default: "Close period"
-#: ./opengever/meeting/model/period.py
-msgid "close_period"
-msgstr "Clôturer la période"
-
 #. Default: "Closed"
 #: ./opengever/meeting/model/meeting.py
-#: ./opengever/meeting/model/period.py
 msgid "closed"
 msgstr "Clôturé"
 
@@ -929,6 +923,11 @@ msgstr "Générer"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_create_excerpt"
 msgstr "Générer un extrait de protocole"
+
+#. Default: "Create task"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_create_task_from_proposal"
+msgstr ""
 
 #. Default: "Creator"
 #: ./opengever/meeting/browser/meetings/meeting.py

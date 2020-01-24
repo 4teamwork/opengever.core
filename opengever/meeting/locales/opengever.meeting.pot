@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-25 15:25+0000\n"
+"POT-Creation-Date: 2020-01-20 08:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -339,7 +339,7 @@ msgstr ""
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 #: ./opengever/meeting/model/committee.py
-#: ./opengever/meeting/model/period.py
+#: ./opengever/meeting/tabs/meetinglisting.py
 msgid "active"
 msgstr ""
 
@@ -462,14 +462,8 @@ msgstr ""
 msgid "close_meeting"
 msgstr ""
 
-#. Default: "Close period"
-#: ./opengever/meeting/model/period.py
-msgid "close_period"
-msgstr ""
-
 #. Default: "Closed"
 #: ./opengever/meeting/model/meeting.py
-#: ./opengever/meeting/model/period.py
 msgid "closed"
 msgstr ""
 
@@ -925,6 +919,11 @@ msgstr ""
 #. Default: "Create Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_create_excerpt"
+msgstr ""
+
+#. Default: "Create task"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_create_task_from_proposal"
 msgstr ""
 
 #. Default: "Creator"

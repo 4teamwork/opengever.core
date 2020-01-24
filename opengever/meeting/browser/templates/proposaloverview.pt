@@ -128,6 +128,16 @@
                     </button>
                   </form>
                 </li>
+                <li>
+                  <a tal:condition="view/is_create_task_from_proposal_allowed" tal:attributes="href view/create_task_from_proposal_url"
+                     id="create_task_from_proposal" class="createTaskFromProposal"
+                     title="Create task"
+                     i18n:attributes="title label_create_task_from_proposal">
+                      <span i18n:translate="label_create_task_from_proposal" class="subMenuTitle actionText">
+                        Create task
+                      </span>
+                  </a>
+                </li>
             </ul>
             <ul class="webactions_buttons">
                 <tal:block repeat="subMenuItem view/get_webaction_items">
