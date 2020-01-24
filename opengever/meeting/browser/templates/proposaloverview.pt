@@ -4,7 +4,8 @@
       tal:omit-tag="python: True">
 
   <tal:i18n i18n:domain="opengever.meeting"
-            tal:define="documents view/documents;
+            tal:define="documents view/default_attachments;
+                        unlocked_documents view/unlocked_attachments;
                         excerpt view/excerpt;">
 
     <div class="boxGroup bumblebee-document-wrapper">
@@ -33,7 +34,7 @@
 
                     <tal:enable tal:condition="view/is_update_outdated_endabled">
                       <tal:outdated
-                          tal:define="submitted_document python:view.get_submitted_document(document)"
+                          tal:define="submitted_document python:view.get_submitted_document(document.getObject())"
                           tal:condition="python: submitted_document and view.is_outdated(document, submitted_document)"
                           i18n:domain="opengever.document">
 
@@ -55,6 +56,16 @@
                     </tal:enable>
 
 
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr tal:condition="unlocked_documents">
+              <th i18n:translate="label_unlocked_attachments">Unlocked attachments</th>
+              <td>
+                <ul>
+                  <li tal:repeat="document unlocked_documents">
+                    <a tal:replace="structure document/render_link" />
                   </li>
                 </ul>
               </td>

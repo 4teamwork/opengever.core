@@ -13,6 +13,7 @@ from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Proposal
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
@@ -26,6 +27,7 @@ from plone.protect import createToken
 from requests_toolbelt.utils import formdata
 from StringIO import StringIO
 from zc.relation.interfaces import ICatalog
+from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getUtility
 
@@ -691,6 +693,54 @@ class TestProposal(IntegrationTestCase):
         lockable = ILockable(submitted_document)
         self.assertTrue(lockable.locked())
         self.assertFalse(lockable.can_safely_unlock(MEETING_SUBMITTED_LOCK))
+
+    @browsing
+    def test_unlock_submited_additional_document_will_unlock_but_not_unlink_document(self, browser):
+        self.login(self.administrator, browser)
+
+        with self.observe_children(self.submitted_proposal) as children:
+            with self.login(self.dossier_responsible):
+                self.proposal.submit_additional_document(self.subdocument)
+
+        submitted_document, = children['added']
+        lockable = ILockable(submitted_document)
+
+        self.assertTrue(lockable.locked())
+        self.assertIsNotNone(SubmittedDocument.query.get_by_target(submitted_document))
+
+        browser.visit(submitted_document, view="@@unlock_submitted_document_form")
+        browser.find_button_by_label('Unlock').click()
+
+        statusmessages.assert_message('Document has been unlocked')
+
+        self.assertFalse(lockable.locked(), "Submitted document should be unlocked")
+        self.assertIsNotNone(
+            SubmittedDocument.query.get_by_target(submitted_document),
+            "Submitted document should not be unlinked")
+
+    @browsing
+    def test_unlock_not_submitted_document_raises_not_found_error(self, browser):
+        self.login(self.administrator, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(NotFound):
+            browser.visit(self.document, view="@@unlock_submitted_document_form")
+
+    @browsing
+    def test_unlock_submitted_document_returns_no_content_if_ajax_load_is_true(self, browser):
+        self.login(self.administrator, browser)
+
+        with self.observe_children(self.submitted_proposal) as children:
+            with self.login(self.dossier_responsible):
+                self.proposal.submit_additional_document(self.subdocument)
+
+        submitted_document, = children['added']
+        lockable = ILockable(submitted_document)
+
+        browser.visit(submitted_document, view="@@unlock_submitted_document_form?ajax_load=true&form.buttons.unlock=true")
+
+        self.assertEqual([''], browser.css('body').text_content())
+        self.assertFalse(lockable.locked(), "Submitted document should be unlocked")
 
     def test_submit_new_document_version_updates_submitted_document(self):
         self.login(self.administrator)

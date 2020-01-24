@@ -83,6 +83,7 @@ $removeSchedule: "\e61e";
 $decided: "\e623";
 $addDocument: "\e615";
 $updateDocument: "\e610";
+$unlockDocument: "\e60c";
 $protocoll: "\e625";
 $handle: "\e61d";
 $remove: "\e61e";
@@ -712,6 +713,7 @@ div.answer.scheduleRemoved div.answerType:before { content: $removeSchedule; }
 div.answer.decided div.answerType:before { content: $decided; }
 div.answer.documentAdded div.answerType:before { content: $addDocument; }
 div.answer.documentUpdated div.answerType:before { content: $updateDocument; }
+div.answer.documentUnlocked div.answerType:before { content: $unlockDocument; }
 div.answer.rejected div.answerType:before { content: $reject; }
 div.answer.revised div.answerType:before { content: $decided; }
 div.answer.reopened div.answerType:before { content: $reopen; }

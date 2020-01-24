@@ -6,6 +6,7 @@ Changelog
 
 - Fix volatile related proposal documents. [elioschmutz]
 - Add a button to create a task from a proposal. [elioschmutz]
+- Allow to unlock and edit submitted documents in a submitted proposal. [elioschmutz]
 - Add new_document_from_task file_action. [lgraf]
 - When tearing down test layer, wait for solr to be torn down properly. [siegy]
 - Configure Solr replication handler. [buchi]
