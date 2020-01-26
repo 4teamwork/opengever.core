@@ -143,6 +143,7 @@
     <field name="file_extension" type="string" indexed="true" stored="false" />
     <field name="filename" type="string" indexed="true" stored="false" />
     <field name="filesize" type="pint" indexed="true" stored="false" />
+    <field name="filing_no" type="string" indexed="true" stored="false" />
     <field name="firstname" type="string" indexed="true" stored="false" />
     <field name="has_sametype_children" type="boolean" indexed="false" stored="true" />
     <field name="is_subdossier" type="boolean" indexed="true" stored="false" />
