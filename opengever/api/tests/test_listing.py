@@ -1,7 +1,6 @@
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from mock import Mock
-from opengever.api.listing import get_path_depth
 from opengever.api.solr_query_service import filename
 from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
@@ -270,6 +269,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         self.assertEqual(
             {u'@id': self.document.absolute_url(),
+             u'UID': IUUID(self.document),
              u'filesize': self.document.file.size,
              u'filename': u'Vertraegsentwurf.docx'},
             browser.json['items'][-1])
@@ -417,6 +417,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1',
+             u'UID': IUUID(self.workspace),
              u'title': u'A Workspace',
              u'description': u'A Workspace description'},
             browser.json['items'][-1])
@@ -434,6 +435,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/folder-1',
+             u'UID': IUUID(self.workspace_folder),
              u'title': u'WS F\xc3lder',
              u'description': u'A Workspace folder description'},
             browser.json['items'][-1])
@@ -643,18 +645,21 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             [
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1',
+                    u'UID': IUUID(self.todo),
                     u'completed': False,
                     u'deadline': u'2016-09-01T00:00:00Z',
                     u'responsible': None,
                     u'title': u'Fix user login'},
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-3',
+                    u'UID': IUUID(self.completed_todo),
                     u'completed': True,
                     u'deadline': u'2016-09-02T00:00:00Z',
                     u'responsible': u'beatrice.schrodinger',
                     u'title': u'Cleanup installation'},
                 {
                     u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-2',
+                    u'UID': IUUID(self.assigned_todo),
                     u'completed': False,
                     u'deadline': u'2016-12-01T00:00:00Z',
                     u'responsible': u'beatrice.schrodinger',

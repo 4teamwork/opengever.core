@@ -106,7 +106,8 @@ class TestserverSelftest(object):
             browser.open(self.plone_url + '@solrsearch?fq=id:document-1&fl=id,bumblebee_checksum')
             self.assertEqual(
                 [{'bumblebee_checksum': '9fb7bce1d9bc0eb51d26ea7018ad41f542851ed75cb21e33e04b65a7f9757028',
-                  'id': 'document-1'}],
+                  'id': 'document-1',
+                  'UID': u'createtemplates00000000000000002'}],
                 browser.json['items'])
 
             self.testserverctl('zodb_teardown')

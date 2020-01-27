@@ -189,6 +189,9 @@ DEFAULT_FIELDS = set([
     'review_state',
 ])
 
+# UID is necessary when requesting snippets
+REQUIRED_RESPONSE_FIELDS = set(['UID'])
+
 FIELDS_WITH_MAPPING = [
     ListingField('checked_out', 'checked_out', transform=display_name),
     ListingField('bumblebee_checksum', 'bumblebee_checksum', sort_index=DEFAULT_SORT_INDEX),
@@ -245,7 +248,7 @@ class SolrQueryBaseService(Service):
     field_mapping = {field.field_name: field for field in FIELDS_WITH_MAPPING}
 
     default_fields = DEFAULT_FIELDS
-    required_response_fields = set()
+    required_response_fields = REQUIRED_RESPONSE_FIELDS
 
     def __init__(self, context, request):
         super(SolrQueryBaseService, self).__init__(context, request)

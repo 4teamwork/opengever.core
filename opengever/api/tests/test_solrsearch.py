@@ -77,12 +77,13 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         url = u'{}/@solrsearch'.format(self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.assertEqual([u'review_state',
-                          u'title',
-                          u'@id',
-                          u'@type',
-                          u'description'],
-                         browser.json["items"][0].keys())
+        self.assertItemsEqual([u'review_state',
+                               u'title',
+                               u'@id',
+                               u'UID',
+                               u'@type',
+                               u'description'],
+                              browser.json["items"][0].keys())
 
     @browsing
     def test_blacklisted_attributes_are_skipped(self, browser):
