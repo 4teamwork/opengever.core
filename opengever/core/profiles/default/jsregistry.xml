@@ -1,6 +1,21 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
 
   <javascript
+      id="++resource++plone.app.jquery.js"
+      insert-after="++resource++opengever.base/es6_promise_polyfill_auto.min.js"
+      />
+
+  <javascript
+      id="++resource++plone.app.jquerytools.js"
+      insert-after="++resource++plone.app.jquery.js"
+      />
+
+  <javascript
+      id="++resource++plone.app.jquerytools.overlayhelpers.js"
+      insert-after="++resource++plone.app.jquerytools.js"
+      />
+
+  <javascript
       enabled="False"
       id="++resource++ftw.showroom/handlebars.js"
       insert-after="++resource++datetimepicker/js/datetimepicker_widget.js"
