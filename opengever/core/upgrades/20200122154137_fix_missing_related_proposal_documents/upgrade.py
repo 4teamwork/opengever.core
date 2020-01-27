@@ -1,5 +1,6 @@
 from ftw.upgrade import UpgradeStep
 from opengever.meeting.model import SubmittedDocument
+from opengever.ogds.base.utils import get_current_admin_unit
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -20,7 +21,12 @@ class FixMissingRelatedProposalDocuments(UpgradeStep):
         updated_proposals = []
         updated_documents = 0
 
-        submitted_documents = SubmittedDocument.query.all()
+        # The postgres db contains the submitted documents of all the
+        # admin_units, but only the ones from the current admin unit
+        # can be resolved here.
+        admin_unit = get_current_admin_unit()
+        submitted_documents = SubmittedDocument.query.filter_by(
+            admin_unit_id=admin_unit.id()).all()
 
         # The postgres db still contains all the relations between documents and
         # proposals. We iterate over each submitted document relation in the
