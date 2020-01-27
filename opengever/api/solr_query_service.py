@@ -332,8 +332,8 @@ class SolrQueryBaseService(Service):
         else:
             requested_fields = self.default_fields
 
-        self.response_fields = (set(requested_fields) |
-                                self.required_response_fields)
+        self.response_fields = (set(requested_fields)
+                                | self.required_response_fields)
 
         requested_solr_fields = set([])
         for field_name in self.response_fields:

@@ -186,8 +186,8 @@ class Listing(SolrQueryBaseService):
         }
 
         self.facets = [facet for facet in params.get('facets', [])
-                       if self.is_field_allowed(facet) and
-                       self.get_field_index(facet) in self.solr_fields]
+                       if self.is_field_allowed(facet)
+                       and self.get_field_index(facet) in self.solr_fields]
         facet_fields = map(self.get_field_index, self.facets)
 
         if facet_fields:
