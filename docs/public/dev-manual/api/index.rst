@@ -34,6 +34,7 @@ Inhalt:
    proposals.rst
    reminder.rst
    journal.rst
+   sharing.rst
    workspace/index
    examples/index.rst
    docs_changelog.rst
