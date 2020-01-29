@@ -1,6 +1,7 @@
 from ftw.table import helper
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting import _
 from opengever.meeting.model import Proposal
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -9,13 +10,14 @@ from opengever.tabbedview import SqlTableSource
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import linked_ogds_author
+from plone import api
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
-from plone import api
+import cgi
 
 
 class IProposalTableSourceConfig(ITableSourceConfig):
@@ -61,6 +63,14 @@ def translated_state(item, value):
         translate(item.get_state().title, context=getRequest()))
 
 
+def path_checkbox(item, value):
+    title = cgi.escape(item.title, quote=True)
+    return '''<input type="checkbox" class="noborder selectable"
+    name="paths:list" id="%s" value="%s"
+    alt="Select %s" title="Select %s" />''' % (
+        item.id, item.getPath(), title, title)
+
+
 class ActiveProposalFilter(Filter):
     """Only display active (from the dossiers side) Proposals."""
 
@@ -101,8 +111,24 @@ class ProposalListingTab(FilteredListingTab):
     show_selects = False
 
     @property
+    def enabled_actions(self):
+        actions = []
+        if IDossierMarker.providedBy(self.context) and self.context.is_open():
+            actions.append('move_proposal_items')
+
+        return actions
+
+    @property
     def columns(self):
-        return (
+        columns = []
+        if self.enabled_actions:
+            columns.append({'column': '',
+                            'column_title': '',
+                            'transform': path_checkbox,
+                            'sortable': False,
+                            'groupable': False,
+                            'width': 30})
+        columns.extend([
             {'column': 'decision_number',
              'column_title': _(u'label_decision_number',
                                default=u'Decision number'),
@@ -157,8 +183,8 @@ class ProposalListingTab(FilteredListingTab):
              'sortable': True,
              'groupable': True,
              'width': 200},
-
-        )
+        ])
+        return columns
 
     def get_base_query(self):
         return Proposal.query.by_container(
