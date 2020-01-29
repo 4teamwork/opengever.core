@@ -22,4 +22,3 @@ Index:
    chapitre14-referentiel
    spv/index
    app-seances/index.rst
-   chapitre17-triage
