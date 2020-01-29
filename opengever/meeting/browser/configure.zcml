@@ -461,4 +461,11 @@
       class=".unlock_submitted_document_form.UnlockSubmittedDocumentForm"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="move_proposal_items"
+      class=".move_proposal_items.MoveProposalItemsFormView"
+      permission="zope2.CopyOrMove"
+      />
+
 </configure>

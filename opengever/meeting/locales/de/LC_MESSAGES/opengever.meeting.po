@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-24 09:09+0000\n"
+"POT-Creation-Date: 2020-01-29 22:31+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -660,10 +660,20 @@ msgstr "Der Freitext darf nicht leer sein."
 msgid "error_default_template_is_in_allowed_templates"
 msgstr "Die Standardvorlage für Traktanden ohne Antrag sollte bei den erlaubten Vorlagen ausgewählt sein."
 
+#. Default: "Can only move objects from open dossiers"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "error_move_proposal_dossier_not_open"
+msgstr "Es können nur Objekte aus aktiven Dossiers verschoben werden."
+
 #. Default: "Cannot change the state because the proposal contains checked out documents."
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "error_must_checkin_documents_for_transition"
 msgstr "Der Status kann nicht geändert werden solange der Antrag ausgecheckte Dokumente enthält."
+
+#. Default: "You have not selected any items"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "error_no_items_selected"
+msgstr "Sie haben kein Element ausgewählt"
 
 #. Default: "Insufficient privileges to add a document to the meeting dossier."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -994,6 +1004,11 @@ msgstr "Wollen Sie dieses Element wirklich streichen?"
 #: ./opengever/meeting/proposal.py
 msgid "label_description"
 msgstr "Beschreibung"
+
+#. Default: "Destination"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "label_destination"
+msgstr "Zieldossier"
 
 #. Default: "Dossier"
 #: ./opengever/meeting/proposal.py
