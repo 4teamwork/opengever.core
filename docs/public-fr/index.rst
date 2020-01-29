@@ -1,7 +1,7 @@
-OneGov GEVER Dokumentation
-==========================
+Documentation de OneGov GEVER
+=============================
 
-Inhalt:
+Contenu:
 
 .. toctree::
    :maxdepth: 3

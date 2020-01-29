@@ -3,12 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Entwickler-Dokumentation
-========================
+Documentation pour Développeur
+==============================
 
-Diese Entwickler-Dokumentation beschreibt die offenen Schnittstellen von
-OneGov GEVER und richtet sich in erster Linie an Entwickler und Integratoren
-von Fachanwendungen und Drittlösungen.
+Cette documentation pour développeurs décrit les interfaces de OneGov GEVER
+et se déstine en premier lieu aux développeurs et intégrateurs d'applications
+spécialisées.
 
 .. toctree::
    :maxdepth: 2
