@@ -16,7 +16,7 @@ class SharingGet(APISharingGet):
     Disable `plone.DelegateRoles` permission check, all users should be
     able to access sharing informations.
 
-    Add additional request parameter `ignore_permission`, which is used for
+    Add additional request parameter `ignore_permissions`, which is used for
     readonly listings of the current local roles, as it's done in the sharing
     tab.
     """
