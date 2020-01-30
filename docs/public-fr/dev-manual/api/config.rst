@@ -1,19 +1,18 @@
 .. _config:
 
-Konfiguration
+Configuration
 =============
 
-Über den ``/@config`` Endpoint können diverse Konfigurationsoptionen des
-GEVER-Mandanten abgefragt werden.
+On peut interroger diverses options de configuration du client GEVER avec l'endpoint ``/@config``.
 
-**Beispiel-Request**:
+**Exemple de Request**:
 
    .. sourcecode:: http
 
        GET /@config HTTP/1.1
        Accept: application/json
 
-**Beispiel-Response**:
+**Exemple de Response**:
 
    .. sourcecode:: http
 
@@ -68,81 +67,81 @@ GEVER-Mandanten abgefragt werden.
       }
 
 
-Konfigurationsoptionen
-----------------------
+Options de configuration
+------------------------
 
 max_repositoryfolder_levels
-    Maximale Verschachtelungstiefe von Ordnungspositionen
+    Profonduer maximale d'imbrication des numéros de classements
 
 max_dossier_levels
-    Maximale Verschachtelungstiefe von Dossiers
+    Profonduer maximale d'imbrication des dossiers
 
 features
-    Optional aktivierbare Features:
+    Features optionelles activables:
 
     activity
-        Benachrichtigungen
+        Notifications
 
     contacts
-        Erweitertes Kontaktmodul
+        Module de contacts étendu
 
     doc_properties
-        Hinzufügen von DocProperties bei aus Vorlagen erstellten Word-Dokumenten
+        Ajout de DocProperties pour les documents word créés à partir de modèles
 
     dossier_templates
-        Dossiervorlagen
+        Modèles de dossiers
 
     ech0147_export
-        eCH-0039/eCH-0147 Export von Dossiers und Dokumenten
+        eCH-0039/eCH-0147 Export de dossiers et de documents
 
     ech0147_import
-        eCH-0039/eCH-0147 Import von Dossiers und Dokumenten
+        eCH-0039/eCH-0147 Import de dossiers et de documents
 
     meetings
-        Sitzungs- und Protokollverwaltung (SPV)
+        Gestion des séances et procès-verbaux (SPV)
 
     officeatwork
-        Unterstützung für Officeatwork Vorlagen
+        Support pour modèles Officeatwork
 
     officeconnector_attach
-        Versand von E-Mails über Outlook
+        Envoi d'E-Mails avec Outlook
 
     officeconnector_checkout
-        Checkout und Checkin von Dokumenten über Office Connector
+        Checkout et Checkin de documents avec Office Connector
 
     preview
-        Dokumentvorschau
+        Aperçu des documents
 
     preview_open_pdf_in_new_window
-        PDF in der Dokumentvorschau werden in einem neuen Fenster geöffnet
+        Le PDF dans l'aperçu d'un document et ouvert dans une nouvelle fenêtre.
 
     repositoryfolder_documents_tab
-        Dokumente-Tab bei Ordnungspositionen
+        Tab des documents sur un numéro de classement
 
     repositoryfolder_tasks_tab
-        Aufgaben-Tab bei Ordnungspositionen
+        Tab des tâches sur un numéro de classement
 
     solr
-        Suche über Apache Solr
+        Recherche avec Apache Solr
 
     workspace
-        Arbeitsräume
+        Teamraum
 
 sharing_configuration
 
     white_list_prefix
-        regex Muster für Gruppen die in der Freigabe angezeigt werden sollen
+        Motif regex pour détérminer quels groupes sont visible pour le partage.
 
     black_list_prefix
-        regex Muster für Gruppen die in der Freigabe nicht angezeigt werden sollen
+        Motif regex pour détérminer quels groupes ne sont pas visible pour le partage.
 
 user_settings
 
     notify_inbox_actions
-        Einstellung um Eingangskorb-Benachrichtigungen zu aktivieren bzw. deaktivieren.
+        Activer ou désactiver les notifications de la boîte de récéption.
 
     notify_own_actions
-        Einstellung um Benachrichtigung für eigene Aktionen zu aktivieren bzw. deaktivieren.
+        Activer ou désactiver les notifications pour se propres actions.
 
     seen_tours
-        Gesehene Hilfe-Touren
+        Tours d'aide déjà visionnés
