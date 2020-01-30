@@ -4,15 +4,11 @@ Changelog
 2020.1.0 (unreleased)
 ---------------------
 
-- Add 'filing_no' field to Solr schema. [lgraf]
-- Add upgrade step to correct public_trial_statement type. [njohner]
 - Fix JS ordering issue: define overlayhelpers.js position. [njohner]
 - Fix volatile related proposal documents. [elioschmutz]
 - Add a button to create a task from a proposal. [elioschmutz]
 - Allow to unlock and edit submitted documents in a submitted proposal. [elioschmutz]
 - Add new_document_from_task file_action. [lgraf]
-- When tearing down test layer, wait for solr to be torn down properly. [siegy]
-- Configure Solr replication handler. [buchi]
 - Implement PossibleWorkspaceFolderParticipantsVocabulary to get all possible workspace folder participants. [elioschmutz]
 - Implement GET, PATCH and POST @participations endpoint for workspace folders. [elioschmutz]
 - Implement @role-inheritance serivce endpoint for workspace folders. [deiferni]
@@ -21,7 +17,6 @@ Changelog
 - Return creator of workspace in GET, make sure he is a WorkspaceAdministrator upon workspace creation. Get rid of WorkspaceOwner role. [deiferni]
 - Allow invitations to external users through E-mails. [njohner]
 - Update invitation and participation GET json response format. [deiferni]
-- Fix to reassign a task to a new inbox group. [elioschmutz]
 - Add missing french translation for example repository root. [elioschmutz]
 - Always use API for OfficeConnector. [njohner]
 - Refactor solrsearch and listing endpoints. [njohner]
@@ -31,6 +26,26 @@ Changelog
 - Implement testing against a real Solr. [lgraf]
 - Sharing on workspace folders should always show workspace users. [njohner]
 - Replace @participations endpoint with @invitations endpoint accepting slightly different parameters. [deiferni]
+
+
+2019.6.2 (2020-01-29)
+---------------------
+
+- Add upgrade step to correct public_trial_statement type. [njohner]
+
+
+2019.6.1 (2020-01-26)
+---------------------
+
+- Add 'filing_no' field to Solr schema. [lgraf]
+- Fix to reassign a task to a new inbox group. [elioschmutz]
+- When tearing down test layer, wait for solr to be torn down properly. [siegy]
+- Configure Solr replication handler. [buchi]
+
+
+2019.6.0 (2020-01-09)
+---------------------
+
 - Update Solr to version 8.4.0. [buchi]
 
 
