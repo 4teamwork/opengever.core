@@ -11,6 +11,7 @@ Changelog
 ------------------------
 
 - Fix JS ordering issue: define overlayhelpers.js position. [njohner]
+- Add French API and admin documentations. [njohner]
 - Fix volatile related proposal documents. [elioschmutz]
 - Add a button to create a task from a proposal. [elioschmutz]
 - Allow to unlock and edit submitted documents in a submitted proposal. [elioschmutz]
