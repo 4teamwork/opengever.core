@@ -30,7 +30,10 @@ def validate_access_token(token, scope, ttl=43200):
     digest = token[:32]
 
     timestamp = token[32:40]
-    timestamp = int(timestamp, 16)
+    try:
+        timestamp = int(timestamp, 16)
+    except ValueError:
+        return None
     if time() - timestamp > ttl:
         return None
 

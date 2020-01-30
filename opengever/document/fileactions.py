@@ -42,6 +42,9 @@ class BaseDocumentFileActions(object):
     def is_any_checkout_or_edit_available(self):
         return False
 
+    def is_office_online_edit_action_available(self):
+        return False
+
     def is_oc_direct_checkout_action_available(self):
         return False
 
@@ -144,7 +147,7 @@ class DocumentFileActions(BaseDocumentFileActions):
     def is_office_online_edit_action_available(self):
         return (is_wopi_feature_enabled()
                 and self.context.is_office_online_editable()
-                and self.can_edit_with_office_online())
+                and self._can_edit_with_office_online())
 
     def is_oc_direct_checkout_action_available(self):
         return (self.is_any_checkout_or_edit_available()
@@ -223,7 +226,7 @@ class DocumentFileActions(BaseDocumentFileActions):
                 and not self.context.is_checked_out()
                 and manager.is_checkout_allowed())
 
-    def can_edit_with_office_online(self):
+    def _can_edit_with_office_online(self):
         # Office Online allows collaborative editing
         # Thus a document is editable by Office Online if it's not checked out
         # or if it's checked out by Office Online.
