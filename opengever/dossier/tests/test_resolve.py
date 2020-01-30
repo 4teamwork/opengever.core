@@ -1329,6 +1329,22 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
                            ['not all documents are checked in'])
 
     @browsing
+    def test_resolving_is_cancelled_when_documents_in_subsubdossiers_are_checked_out(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        subsubdossier = create(Builder('dossier')
+                               .within(self.resolvable_subdossier))
+        subsubdocument = create(Builder('document').within(subsubdossier))
+
+        self.checkout_document(subsubdocument)
+
+        self.resolve(self.resolvable_dossier, browser)
+
+        self.assert_not_resolved(self.resolvable_dossier)
+        self.assert_errors(self.resolvable_dossier, browser,
+                           ['not all documents are checked in'])
+
+    @browsing
     def test_resolving_is_cancelled_when_active_tasks_exist(self, browser):
         self.login(self.secretariat_user, browser)
 

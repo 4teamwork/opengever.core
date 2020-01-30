@@ -227,33 +227,38 @@ class DossierResolveView(BrowserView, DossierResolutionStatusmessageMixin):
 
         resolve_manager = LockingResolveManager(self.context)
 
-        # Validate preconditions early. This is so we don't redirect to the
-        # archive form (if filing number feature enabled) in a case where
-        # it will fail anyway because of violated preconditions.
-        #
-        # XXX: This will validate preconditions *twice* though (the second
-        # time via resolve_manager.resolve()). This should eventually be
-        # cleaned up so we don't unnecessarily validate preconditions multiple
-        # times.
+        # If filing number feature is enabled, we redirect to an additional
+        # archive form that needs to be filled out first. The actual resolving
+        # will then be triggered from that form.
+        if resolve_manager.is_archive_form_needed():
+            # Validate preconditions early. This is so we don't redirect to the
+            # archive form (if filing number feature enabled) in a case where
+            # it will fail anyway because of violated preconditions.
+            #
+            # XXX: This will validate preconditions *thrice* though (the second
+            # time in the archiv form and then via resolve_manager.resolve()).
+            # This should eventually be cleaned up so we don't unnecessarily
+            # validate preconditions multiple times.
+            try:
+                resolve_manager.resolver.raise_on_failed_preconditions()
+
+            except PreconditionsViolated as exc:
+                return self.show_errors(exc.errors)
+
+            except InvalidDates as exc:
+                return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
+
+            archive_url = '/'.join((self.context_url, 'transition-archive'))
+            return self.redirect(archive_url)
+
         try:
-            resolve_manager.resolver.raise_on_failed_preconditions()
+            resolve_manager.resolve()
 
         except PreconditionsViolated as exc:
             return self.show_errors(exc.errors)
 
         except InvalidDates as exc:
             return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
-
-        # If filing number feature is enabled, we redirect to an additional
-        # archive form that needs to be filled out first. The actual resolving
-        # will then be triggered from that form.
-        if resolve_manager.is_archive_form_needed():
-            archive_url = '/'.join((self.context_url, 'transition-archive'))
-            return self.redirect(archive_url)
-
-        # All good, proceed with resolving the dossier.
-        try:
-            resolve_manager.resolve()
 
         except AlreadyBeingResolved:
             return self.show_being_resolved_msg()
@@ -621,7 +626,6 @@ class ResolveConditions(object):
         return self._invalid_dates
 
     def _recursive_date_validation(self, dossier, main=True):
-
         if not main:
             # check end_date
             # If a dossier is already resolved, but seems to have an invalid
@@ -633,7 +637,7 @@ class ResolveConditions(object):
                 self._invalid_dates.append(dossier.title)
 
         # recursively check subdossiers
-        subdossiers = dossier.get_subdossiers()
+        subdossiers = dossier.get_subdossiers(depth=1)
         for sub in subdossiers:
             sub = sub.getObject()
             self._recursive_date_validation(sub, main=False)

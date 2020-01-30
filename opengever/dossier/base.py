@@ -288,7 +288,6 @@ class DossierContainer(Container):
         docs = self.portal_catalog(
             portal_type="opengever.document.document",
             path=dict(
-                depth=2,
                 query='/'.join(self.getPhysicalPath()),
                 ),
             )
@@ -307,13 +306,13 @@ class DossierContainer(Container):
         """Check if the enddate is valid.
         """
         dossier = IDossier(self)
-        end_date = self.earliest_possible_end_date()
 
         # no enddate is valid because it would be overwritten
         # with the earliest_possible_end_date
         if dossier.end is None:
             return True
 
+        end_date = self.earliest_possible_end_date()
         if end_date:
             # Dossier end date needs to be older
             # than the earliest possible end_date
