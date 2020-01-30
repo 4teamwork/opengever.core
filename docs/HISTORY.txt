@@ -6,6 +6,7 @@ Changelog
 
 - Add 'filing_no' field to Solr schema. [lgraf]
 - Add upgrade step to correct public_trial_statement type. [njohner]
+- Fix JS ordering issue: define overlayhelpers.js position. [njohner]
 - Fix volatile related proposal documents. [elioschmutz]
 - Add a button to create a task from a proposal. [elioschmutz]
 - Allow to unlock and edit submitted documents in a submitted proposal. [elioschmutz]
