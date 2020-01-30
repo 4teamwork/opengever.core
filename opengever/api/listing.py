@@ -1,4 +1,5 @@
 from ftw.solr.query import escape
+from opengever.api.solr_query_service import REQUIRED_RESPONSE_FIELDS as DEFAULT_REQUIRED_RESPONSE_FIELDS
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from plone.registry.interfaces import IRegistry
@@ -77,7 +78,7 @@ FILTERS = {
 }
 
 
-REQUIRED_RESPONSE_FIELDS = set(['@id'])
+REQUIRED_RESPONSE_FIELDS = DEFAULT_REQUIRED_RESPONSE_FIELDS.union(set(['@id']))
 
 
 def with_active_solr_only(func):
@@ -185,8 +186,8 @@ class Listing(SolrQueryBaseService):
         }
 
         self.facets = [facet for facet in params.get('facets', [])
-                       if self.is_field_allowed(facet) and
-                       self.get_field_index(facet) in self.solr_fields]
+                       if self.is_field_allowed(facet)
+                       and self.get_field_index(facet) in self.solr_fields]
         facet_fields = map(self.get_field_index, self.facets)
 
         if facet_fields:
