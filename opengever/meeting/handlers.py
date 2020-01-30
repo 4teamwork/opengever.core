@@ -10,10 +10,12 @@ from opengever.base.response import IResponseContainer
 from opengever.base.security import elevated_privileges
 from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
 from opengever.meeting.command import UpdateExcerptInDossierCommand
+from opengever.meeting.exceptions import ProposalMovedOutsideOfMainDossierError
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.excerpt import Excerpt
+from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.meeting.proposalsqlsyncer import ProposalSqlSyncer
@@ -109,6 +111,27 @@ def delete_copied_proposal(copied_proposal, event):
     with elevated_privileges():
         container = aq_parent(copied_proposal)
         container._delObject(copied_proposal.id, suppress_events=True)
+
+
+def proposal_will_be_moved(obj, event):
+    # make sure obj wasn't just created or deleted
+    if not event.oldParent or not event.newParent:
+        return
+
+    if not IProposal.providedBy(event.object):
+        # If the dossier gets moved, all of its children gets moved as well.
+        #
+        # In this case, the obj is the proposal, but the event object is the
+        # dossier. In this case we don't want to validate the new parent of
+        # the proposal because it will be the same.
+        return
+
+    old_main_dossier = event.oldParent.get_main_dossier()
+    new_main_dossier = event.newParent.get_main_dossier()
+
+    if old_main_dossier.UID() is not new_main_dossier.UID():
+        raise ProposalMovedOutsideOfMainDossierError(
+            "It is not allowed to move a proposal outside of its main dossier")
 
 
 def proposal_moved(obj, event):

@@ -183,6 +183,12 @@
       />
 
   <subscriber
+      for="opengever.meeting.proposal.IBaseProposal
+           OFS.interfaces.IObjectWillBeMovedEvent"
+      handler=".handlers.proposal_will_be_moved"
+      />
+
+  <subscriber
       for="opengever.meeting.proposal.IProposal
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.proposal_modified"
