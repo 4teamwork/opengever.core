@@ -57,7 +57,11 @@ class Navigation(object):
             if roots:
                 root = roots[0].getObject()
             else:
+                # when on a teamraum deployment with no repository, no root
+                # is found. As a temporary fix we return no navigation in these
+                # cases.
                 root = None
+                return {'navigation': {}}
 
         result = {
             'navigation': {

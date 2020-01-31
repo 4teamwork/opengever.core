@@ -7,6 +7,7 @@ Changelog
 - Implement the teamraum client authentication flow. [elioschmutz]
 - Implement the workspace client to make requests to a teamraum from GEVER. [elioschmutz]
 - Implement the workspace client authentication flow. [elioschmutz]
+- Handle deployments with no repository in navigation endpoint. [njohner]
 - Add documentation for sharing endpoint. [njohner]
 - Always request UID from solr, as it is needed for snippets. [njohner]
 - Speed up validation of dossier resolution preconditions. [njohner]
