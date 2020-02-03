@@ -49,3 +49,8 @@ class SablonProcessingFailed(Exception):
 
 class MultiplePeriodsFound(Exception):
     """Multiple periods were found for the same date."""
+
+
+class ProposalMovedOutsideOfMainDossierError(Exception):
+    """The proposal have been moved outside of its main dossier which is not allowed.
+    """

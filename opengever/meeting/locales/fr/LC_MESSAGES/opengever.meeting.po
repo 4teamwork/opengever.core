@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-24 09:09+0000\n"
+"POT-Creation-Date: 2020-01-29 22:31+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -662,10 +662,20 @@ msgstr "Ce texte libre ne doit pas être vide."
 msgid "error_default_template_is_in_allowed_templates"
 msgstr "Le modèle pour les points à l'ordre du jour sans requête doit être sélectionné parmis les modèles autorisés."
 
+#. Default: "Can only move objects from open dossiers"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "error_move_proposal_dossier_not_open"
+msgstr ""
+
 #. Default: "Cannot change the state because the proposal contains checked out documents."
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "error_must_checkin_documents_for_transition"
 msgstr "L'état ne peut pas être changé tant que la requête contient des documents qui ont été extraits."
+
+#. Default: "You have not selected any items"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "error_no_items_selected"
+msgstr ""
 
 #. Default: "Insufficient privileges to add a document to the meeting dossier."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -996,6 +1006,11 @@ msgstr "Êtes-vous sûr de vouloir supprimer cet élément?"
 #: ./opengever/meeting/proposal.py
 msgid "label_description"
 msgstr "Description"
+
+#. Default: "Destination"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "label_destination"
+msgstr ""
 
 #. Default: "Dossier"
 #: ./opengever/meeting/proposal.py
