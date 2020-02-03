@@ -183,6 +183,13 @@
                    "
       />
 
+  <!-- Use Workspace Client is only managed globally in rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.workspaceclient: Use Workspace Client,
+                   "
+      />
+
   <!--  "ftw.usermigration: Migrate users" is never managed via workflows -->
   <lawgiver:ignore
       permissions="

@@ -4,6 +4,8 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.workspaceclient">
 
+  <include file="permissions.zcml" />
+
   <plone:behavior
       title="Remote workpsace support"
       description="Provides functions to handle remote workspaces"

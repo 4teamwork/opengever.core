@@ -3,6 +3,7 @@ from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnable
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.session import WorkspaceSession
 from plone import api
+from zExceptions import Unauthorized
 import os
 
 
@@ -21,8 +22,10 @@ class WorkspaceClient(object):
     @property
     def session(self):
         """We always need to invoke a new workspace-session. Otherwise it is
-        possible to dispatch a reqeust with another users session.
+        possible to dispatch a request with another users session.
         """
+        if not api.user.has_permission('opengever.workspaceclient: Use Workspace Client'):
+            raise Unauthorized("User does not have permission to use the WorkspaceClient")
         return WorkspaceSession(self.workspace_url,
                                 api.user.get_current().getId())
 

@@ -19,6 +19,7 @@
     <role name="WorkspaceMember" />
     <role name="WorkspacesCreator" />
     <role name="WorkspacesUser" />
+    <role name="WorkspaceClientUser" />
     <role name="MemberAreaAdministrator" />
   </roles>
 
@@ -313,6 +314,10 @@
 
     <permission name="opengever.workspace: Update Content Order" acquire="True">
       <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.workspaceclient: Use Workspace Client" acquire="True">
+      <role name="WorkspaceClientUser" />
     </permission>
 
     <permission name="plone.restapi: Access Plone vocabularies" acquire="True">

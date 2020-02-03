@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.workspaceclient">
+
+  <permission id="opengever.workspaceclient.UserWorkspaceClient" title="opengever.workspaceclient: Use Workspace Client" />
+
+</configure>
