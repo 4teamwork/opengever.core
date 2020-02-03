@@ -44,7 +44,8 @@ class TestWOPIDiscovery(MockTestCase):
     def mock_discovery_request(self):
         self.mock_utility(MockRegistry(), IRegistry)
         with open(
-            os.path.join(os.path.dirname(__file__), 'data', 'discovery.xml')
+            os.path.join(os.path.dirname(__file__), 'data',
+                         'discovery_xml.txt')
         ) as data_file:
             resp = data_file.read()
         with requests_mock.mock() as mock:
