@@ -176,4 +176,7 @@
   <!-- Workspace -->
   <records interface="opengever.workspace.interfaces.IWorkspaceSettings" />
 
+  <!-- WorkspaceClient-->
+  <records interface="opengever.workspaceclient.interfaces.IWorkspaceClientSettings" />
+
 </registry>

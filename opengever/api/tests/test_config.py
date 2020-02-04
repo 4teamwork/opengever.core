@@ -73,6 +73,7 @@ class TestConfig(IntegrationTestCase):
                 u'solr': False,
                 u'tasks_pdf': False,
                 u'workspace': False,
+                u'workspace_client': False,
             })
 
     @browsing

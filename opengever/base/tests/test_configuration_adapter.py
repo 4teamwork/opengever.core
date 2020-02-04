@@ -67,6 +67,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('sablon_date_format', u'%d.%m.%Y'),
                 ('solr', False),
                 ('workspace', False),
+                ('workspace_client', False),
                 ('private_tasks', True),
                 ('optional_task_permissions_revoking', False),
                 ])),

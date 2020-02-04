@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.tokenauth.testing.builders import KeyPairBuilder  # noqa
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
 from plone import api
 import os
 
@@ -24,6 +25,8 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
         api.user.grant_roles(user=self.service_user,
                              roles=['ServiceKeyUser', 'Impersonator'])
 
+        self.enable_feature()
+
     @contextmanager
     def env(self, **env):
         """Temporary set env variables.
@@ -35,3 +38,7 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
         finally:
             os.environ.clear()
             os.environ.update(original)
+
+    def enable_feature(self, enabled=True):
+        api.portal.set_registry_record(
+            'is_feature_enabled', enabled, IWorkspaceClientSettings)

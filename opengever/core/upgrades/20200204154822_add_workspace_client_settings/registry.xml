@@ -1,0 +1,6 @@
+<registry>
+
+  <!-- WorkspaceClient-->
+  <records interface="opengever.workspaceclient.interfaces.IWorkspaceClientSettings" />
+
+</registry>
