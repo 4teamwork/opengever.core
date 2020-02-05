@@ -35,3 +35,20 @@ class APIRequestException(Exception):
                 msgs.append("Response from service app: {}".format(self.original_exception.response.text))
 
         return "\n".join(msgs)
+
+
+class WorkspaceURLMissing(Exception):
+
+    def __init__(self):
+        super(WorkspaceURLMissing, self).__init__(
+            'The WorkspaceClient does not know where to dispatch the request.\n'
+            'Please specify a URL to the workspace through the environment '
+            'variable: TEAMRAUM_URL ')
+
+
+class WorkspaceClientFeatureNotEnabled(Exception):
+
+    def __init__(self):
+        super(WorkspaceClientFeatureNotEnabled, self).__init__(
+            'Please activate the workspace client feature in the portal '
+            'registry in the IWorkspaceClientSettings')
