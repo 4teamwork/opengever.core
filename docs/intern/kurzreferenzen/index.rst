@@ -7,6 +7,7 @@ Inhalt:
    :maxdepth: 2
 
    bumblebee
+   teamraum
    solr
    ogip
    feedbackforum-prozess

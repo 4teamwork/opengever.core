@@ -4,6 +4,7 @@ Changelog
 2020.1.0rc2 (unreleased)
 ------------------------
 
+- Implement the teamraum client authentication flow. [elioschmutz]
 - Add documentation for sharing endpoint. [njohner]
 - Always request UID from solr, as it is needed for snippets. [njohner]
 - Speed up validation of dossier resolution preconditions. [njohner]
