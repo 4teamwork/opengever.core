@@ -18,6 +18,6 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
 
     def test_make_requests_to_the_configured_workspace(self):
         with self.workspace_client_env() as client:
-            response = client.request.get(self.portal.absolute_url()).json()
+            response = client.request.get('/').json()
 
         self.assertEqual(self.portal.absolute_url(), response.get('@id'))

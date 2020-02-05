@@ -35,7 +35,7 @@ class TestWorkspaceSessionManager(FunctionalWorkspaceClientTestCase):
 
         session = WorkspaceSession(self.portal.absolute_url(), TEST_USER_ID)
 
-        response = session.request.get(self.portal.absolute_url()).json()
+        response = session.request.get('/').json()
 
         self.assertEqual(self.portal.absolute_url(), response.get('@id'))
 
@@ -56,7 +56,7 @@ class TestWorkspaceSessionManager(FunctionalWorkspaceClientTestCase):
         transaction.commit()
 
         # Making a request with the same session will reuse the jwt_token
-        response = session.request.get(self.portal.absolute_url()).json()
+        response = session.request.get('/').json()
         self.assertEqual(jwt_token, extract_jwt_token(session),
                          "JWT token should still be the same")
 
@@ -66,7 +66,7 @@ class TestWorkspaceSessionManager(FunctionalWorkspaceClientTestCase):
         transaction.commit()
 
         # Making a request with an expired token will auto-renew the jwt-token
-        response = session.request.get(self.portal.absolute_url()).json()
+        response = session.request.get('/').json()
         self.assertNotEqual(jwt_token, extract_jwt_token(session),
                             "JWT should have been renewed")
         self.assertEqual(self.portal.absolute_url(), response.get('@id'))
