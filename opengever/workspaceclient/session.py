@@ -155,6 +155,7 @@ class WorkspaceSession(object):
         session.obtain_token()
         return session
 
+    @property
     def _unique_session_key(self):
         return (self.workspace_url, self.username)
 

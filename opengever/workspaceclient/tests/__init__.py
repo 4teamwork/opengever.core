@@ -6,6 +6,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.testing import FunctionalTestCase
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
+from opengever.workspaceclient.session import SESSION_STORAGE
 from plone import api
 import os
 import transaction
@@ -29,6 +30,9 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
                                             username='service.user')
         api.user.grant_roles(user=self.service_user,
                              roles=['ServiceKeyUser', 'Impersonator'])
+
+        # Reset the session store
+        SESSION_STORAGE.sessions = None
 
         self.enable_feature()
 

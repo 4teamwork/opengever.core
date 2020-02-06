@@ -110,3 +110,25 @@ class TestWorkspaceSessionManager(FunctionalWorkspaceClientTestCase):
             self.assertEqual(
                 manager.session.headers.get('User-Agent'),
                 'opengever.core/{} Baumverwaltung/7.0'.format(GEVER_VERSION))
+
+    def test_unique_session_for_each_user(self):
+        create(Builder('workspace_token_auth_app')
+               .issuer(self.service_user)
+               .uri(self.portal.absolute_url()))
+        transaction.commit()
+
+        session_1 = WorkspaceSession(self.portal.absolute_url(), TEST_USER_ID)
+        session_2 = WorkspaceSession(self.portal.absolute_url(), self.service_user.getId())
+
+        self.assertIsNot(session_1.session, session_2.session)
+
+    def test_reuse_session(self):
+        create(Builder('workspace_token_auth_app')
+               .issuer(self.service_user)
+               .uri(self.portal.absolute_url()))
+        transaction.commit()
+
+        session_1 = WorkspaceSession(self.portal.absolute_url(), TEST_USER_ID)
+        session_2 = WorkspaceSession(self.portal.absolute_url(), TEST_USER_ID)
+
+        self.assertIs(session_1.session, session_2.session)
