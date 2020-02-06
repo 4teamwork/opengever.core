@@ -11,6 +11,7 @@
         "_path": "eingangskorb",
         "_type": "opengever.inbox.inbox",
         "title_de": "Eingangskorb",
+        "title_fr": "Boîte de réception",
         "responsible_org_unit": "{{{orgunit.id}}}",
         "_ac_local_roles": {
           "{{{orgunit.inbox_group}}}": [
@@ -24,6 +25,7 @@
         "_path": "vorlagen",
         "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
+        "title_fr": "Modèles"
         "_ac_local_roles": {
             "{{{orgunit.users_group}}}": [
                 "Reader"
@@ -39,6 +41,7 @@
         "_path": "kontakte",
         "_type": "opengever.contact.contactfolder",
         "title_de": "Kontakte",
+        "title_fr": "Contacts",
         "_transitions": "publish",
         "_ac_local_roles": {
             "{{{orgunit.users_group}}}": [

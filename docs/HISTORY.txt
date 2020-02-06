@@ -4,7 +4,7 @@ Changelog
 2020.1.0rc3 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Add french titles for initial content in the policytemplate. [phgross]
 
 
 2020.1.0rc2 (2020-02-11)
