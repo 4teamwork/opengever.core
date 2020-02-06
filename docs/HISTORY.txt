@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Bump ftw.solr to 2.8.1 for to_iso8601 fix for years before 1900. [deiferni]
+- Handle path depth when filtering a table. [njohner]
 
 
 2019.6.2 (2020-01-29)

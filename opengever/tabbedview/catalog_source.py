@@ -78,8 +78,21 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             elif key == 'sort_on' or key == 'sort_order':
                 continue
             elif key == 'path':
+                path_query = value.get('query')
                 filters.append(u'path_parent:{}'.format(
-                    escape(value.get('query'))))
+                    escape(path_query)))
+
+                depth = value.get('depth', -1)
+                try:
+                    depth = int(depth)
+                except ValueError:
+                    depth = -1
+                if depth > 0:
+                    # path starts with /, so splitting gives context_depth + 1
+                    context_depth = len(path_query.split("/")) - 1
+                    max_path_depth = context_depth + depth
+                    filters.append(u'path_depth:[* TO {}]'.format(max_path_depth))
+
             elif isinstance(value, (list, tuple)):
                 filters.append(u'{}:({})'.format(
                     key, escape(' OR '.join(value))))

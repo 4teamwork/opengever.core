@@ -50,6 +50,15 @@ class TestSolrSearch(IntegrationTestCase):
             self.solr.search.call_args[1]['filters'],
             [u'trashed:false', u'path_parent:\\/my\\/path'])
 
+    def test_solr_filters_contain_path_depth(self):
+        self.source.solr_results(
+            {'SearchableText': 'foo', 'path': {'query': '/my/path', 'depth': '1'}})
+        self.assertEqual(
+            self.solr.search.call_args[1]['filters'],
+            [u'trashed:false',
+             u'path_parent:\\/my\\/path',
+             u'path_depth:[* TO 3]'])
+
     def test_solr_filters_handle_booleans(self):
         self.source.solr_results(
             {'SearchableText': 'foo', 'is_subdossier': True})
