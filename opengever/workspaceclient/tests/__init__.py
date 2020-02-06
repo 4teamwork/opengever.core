@@ -22,14 +22,25 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
     def setUp(self):
         super(FunctionalWorkspaceClientTestCase, self).setUp()
 
-        # Minimal GEVER setup
-        self.repo = create(Builder('repository_root'))
-
         # Generate a service user
         self.service_user = api.user.create(email="service-user@example.com",
                                             username='service.user')
-        api.user.grant_roles(user=self.service_user,
-                             roles=['ServiceKeyUser', 'Impersonator'])
+
+        self.grant('ServiceKeyUser', 'Impersonator',
+                   user_id=self.service_user.getId())
+
+        # Minimal GEVER setup
+        self.repository_root = create(Builder('repository_root'))
+        self.leaf_repofolder = create(Builder('repository').within(self.repository_root))
+        self.dossier = create(Builder('dossier').within(self.leaf_repofolder))
+
+        # Teamraum setup
+        self.workspace_root = create(Builder('workspace_root')
+                                     .having(id='workspaces'))
+        self.grant('WorkspaceUser', on=self.workspace_root)
+
+        self.workspace = create(Builder('workspace').within(self.workspace_root))
+        self.grant('WorkspaceMember', on=self.workspace)
 
         # Reset the session store
         SESSION_STORAGE.sessions = None

@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.workspaceclient">
+
+  <plone:behavior
+      title="Remote workpsace support"
+      description="Provides functions to handle remote workspaces"
+      provides=".interfaces.ILinkedWorkspaces"
+      factory=".linked_workspaces.LinkedWorkspaces"
+      marker=".interfaces.ILinkedWorkspacesMarker"
+      />
+
+</configure>
