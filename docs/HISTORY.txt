@@ -4,8 +4,6 @@ Changelog
 2020.1.0rc2 (unreleased)
 ------------------------
 
-- Bump ftw.solr to 2.8.1 for to_iso8601 fix for years before 1900. [deiferni]
-- Handle path depth when filtering a table. [njohner]
 - Implement the teamraum client authentication flow. [elioschmutz]
 - Add documentation for sharing endpoint. [njohner]
 - Always request UID from solr, as it is needed for snippets. [njohner]
@@ -40,6 +38,13 @@ Changelog
 - Implement testing against a real Solr. [lgraf]
 - Sharing on workspace folders should always show workspace users. [njohner]
 - Replace @participations endpoint with @invitations endpoint accepting slightly different parameters. [deiferni]
+
+
+2019.6.3 (2020-02-06)
+---------------------
+
+- Bump ftw.solr to 2.8.1 for to_iso8601 fix for years before 1900. [deiferni]
+- Handle path depth when filtering a table. [njohner]
 
 
 2019.6.2 (2020-01-29)
