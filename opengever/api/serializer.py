@@ -3,7 +3,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
-from opengever.workspaceclient import is_workspace_client_feature_enabled
+from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
@@ -37,7 +37,7 @@ def extend_with_responses(result, context, request):
 
 
 def extend_with_workspaces(result, context):
-    if not is_workspace_client_feature_enabled():
+    if not is_workspace_client_feature_available():
         return
 
     manager = queryAdapter(context, ILinkedWorkspaces)

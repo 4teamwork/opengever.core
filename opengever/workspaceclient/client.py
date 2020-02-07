@@ -1,4 +1,4 @@
-from opengever.workspaceclient import is_workspace_client_feature_enabled
+from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.session import WorkspaceSession
@@ -12,7 +12,7 @@ class WorkspaceClient(object):
     """
 
     def __init__(self):
-        if not is_workspace_client_feature_enabled():
+        if not is_workspace_client_feature_available():
             raise WorkspaceClientFeatureNotEnabled()
 
         if not self.workspace_url:
