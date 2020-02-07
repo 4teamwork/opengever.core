@@ -8,6 +8,8 @@ from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
 from opengever.workspaceclient.session import SESSION_STORAGE
 from plone import api
+from zope.component import queryUtility
+from zope.ramcache.interfaces.ram import IRAMCache
 import os
 import transaction
 
@@ -46,6 +48,7 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
         SESSION_STORAGE.sessions = None
 
         self.enable_feature()
+        self.invalidate_cache()
 
     @contextmanager
     def env(self, **env):
@@ -75,3 +78,7 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
 
         with self.env(TEAMRAUM_URL=url):
             yield WorkspaceClient()
+
+    def invalidate_cache(self):
+        util = queryUtility(IRAMCache)
+        util.invalidateAll()

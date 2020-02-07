@@ -44,8 +44,32 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.grant('WorkspaceMember', on=unauthorized_workspace)
             transaction.commit()
 
+            self.invalidate_cache()
             self.assertItemsEqual(
                 [self.workspace.absolute_url(),
                  authorized_workspace.absolute_url(),
                  unauthorized_workspace.absolute_url()],
                 [workspace.get('@id') for workspace in manager.list()])
+
+    def test_cache_list_stored_workspaces(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            self.workspace.title = 'Old title'
+            self.workspace.reindexObject()
+            transaction.commit()
+
+            self.assertEqual(['Old title'],
+                             [workspace.get('title') for workspace in manager.list()])
+
+            self.workspace.title = 'New title'
+            self.workspace.reindexObject()
+            transaction.commit()
+
+            self.assertEqual(['Old title'],
+                             [workspace.get('title') for workspace in manager.list()])
+
+            self.invalidate_cache()
+            self.assertEqual(['New title'],
+                             [workspace.get('title') for workspace in manager.list()])
