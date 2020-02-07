@@ -16,16 +16,19 @@ class TestKeyRegistry(IntegrationTestCase):
     def temp_fs_key(self, key):
         temp_dir = tempfile.mkdtemp()
         original_key_directory = key_registry.key_directory
+        original_keys = key_registry.keys
         key_registry.key_directory = temp_dir
         file_ = tempfile.NamedTemporaryFile(
             dir=temp_dir, suffix=".json", delete=False)
         file_.write(json.dumps(json_compatible(key)))
         file_.close()
         try:
+            key_registry.load_file_system_keys()
             yield temp_dir
         finally:
             shutil.rmtree(temp_dir)
             key_registry.key_directory = original_key_directory
+            key_registry.keys = original_keys
 
     def test_raises_an_error_if_the_key_file_not_found_for_a_specific_url(self):
         service_key_client = create(Builder('workspace_token_auth_app')
@@ -34,11 +37,11 @@ class TestKeyRegistry(IntegrationTestCase):
             with self.assertRaises(ServiceKeyMissing) as cm:
                 key_registry.get_key_for('http://example.de/plone/')
 
-            self.maxDiff = None
-            self.assertEqual(
-                "No workspace service key found for URL http://example.de/plone.\n"
-                "Found keys ('http://example.com/plone',) in the folder: {}".format(path),
-                str(cm.exception))
+                self.maxDiff = None
+                self.assertEqual(
+                    "No workspace service key found for URL http://example.de/plone.\n"
+                    "Found keys ('http://example.com/plone',) in the folder: {}".format(path),
+                    str(cm.exception))
 
     def test_skip_fs_keys_without_a_token_uri(self):
         service_key_client = create(Builder('workspace_token_auth_app')

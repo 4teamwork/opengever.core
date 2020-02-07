@@ -29,6 +29,7 @@ from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.task.interfaces import ITaskSettings
 from opengever.workspace.interfaces import IWorkspaceSettings
+from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
 from pkg_resources import get_distribution
 from plone import api
 from zope.component import adapter
@@ -134,6 +135,7 @@ class GeverSettingsAdpaterV1(object):
         features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)  # noqa
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
+        features['workspace_client'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceClientSettings)  # noqa
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
         features['optional_task_permissions_revoking'] = api.portal.get_registry_record('optional_task_permissions_revoking_enabled', interface=ITaskSettings)  # noqa
         return features
