@@ -51,7 +51,6 @@ class TemplateFolderDocuments(Documents):
         'checkin',
         'checkout',
         'trashed',
-        'create_task',
         'send_as_email',
         'submit_additional_documents',
     ]
@@ -120,7 +119,6 @@ class TemplateFolderSablonTemplates(Documents):
         'cancel',
         'checkin',
         'checkout',
-        'create_task',
         'trashed',
         'move_items',
         'send_as_email',
@@ -162,7 +160,6 @@ class TemplateFolderProposalTemplates(Documents):
         'cancel',
         'checkin',
         'checkout',
-        'create_task',
         'trashed',
         'move_items',
         'send_as_email',
