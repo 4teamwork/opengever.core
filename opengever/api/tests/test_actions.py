@@ -519,3 +519,65 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.inactive_document))
+
+
+class TestFolderActions(IntegrationTestCase):
+
+    features = ('bumblebee',)
+    maxDiff = None
+    createTaskAction = {
+        u'id': u'create_task',
+        u'title': u'Create Task',
+        u'icon': u'',}
+
+    def get_folder_buttons(self, browser, context):
+        browser.open(context.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        return browser.json['folder_buttons']
+
+    @browsing
+    def test_create_task_available_in_open_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.assertIn(self.createTaskAction,
+                      self.get_folder_buttons(browser, self.resolvable_dossier))
+
+    @browsing
+    def test_create_task_available_in_task(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertIn(self.createTaskAction,
+                         self.get_folder_buttons(browser, self.task))
+
+    @browsing
+    def test_create_task_available_in_meetingdossier(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertIn(self.createTaskAction,
+                         self.get_folder_buttons(browser, self.meeting_dossier))
+
+    @browsing
+    def test_create_task_not_available_in_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.resolvable_dossier,
+                     view='transition-resolve',
+                     data={'_authenticator': createToken()})
+        self.assertNotIn(self.createTaskAction,
+                         self.get_folder_buttons(browser, self.resolvable_dossier))
+
+    @browsing
+    def test_create_task_not_available_in_inbox(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.assertNotIn(self.createTaskAction,
+                         self.get_folder_buttons(browser, self.inbox))
+
+    @browsing
+    def test_create_task_not_available_in_private_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertNotIn(self.createTaskAction,
+                         self.get_folder_buttons(browser, self.private_dossier))
+
+
+    @browsing
+    def test_create_task_not_available_inactive_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertNotIn(self.createTaskAction,
+                         self.get_folder_buttons(browser, self.inactive_dossier))

@@ -263,4 +263,11 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <browser:page
+      for="*"
+      name="folder_buttons_availability"
+      class=".folder_buttons_availability.FolderButtonsAvailabilityView"
+      permission="zope2.View"
+      />
+
 </configure>
