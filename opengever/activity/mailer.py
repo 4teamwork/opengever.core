@@ -45,6 +45,8 @@ class Mailer(object):
     and digest mails.
     """
 
+    default_addr_header = u'OneGov GEVER'
+
     def __init__(self):
         # This is required by ViewPageTemplateFile for
         # the html mail-template
@@ -90,7 +92,7 @@ class Mailer(object):
                                            actor.email, 'utf-8')
         else:
             msg['From'] = make_addr_header(
-                u'OneGov GEVER', api.portal.get().email_from_address, 'utf-8')
+                self.default_addr_header, api.portal.get().email_from_address, 'utf-8')
 
         if to_userid:
             to_email = ogds_service().fetch_user(to_userid).email
