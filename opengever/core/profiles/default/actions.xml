@@ -280,10 +280,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:++add++opengever.task.task:method</property>
       <property name="icon_expr" />
-      <property name="available_expr" />
-      <property name="permissions">
-        <element value="opengever.task: Add task" />
-      </property>
+      <property name="available_expr">object/@@folder_buttons_availability/is_create_task_available</property>
       <property name="visible">True</property>
     </object>
 

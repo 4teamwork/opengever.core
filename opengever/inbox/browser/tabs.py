@@ -79,7 +79,6 @@ class InboxDocuments(Documents):
     depth = 1
 
     disabled_actions = ['create_proposal',
-                        'create_task',
                         'submit_additional_documents']
 
     @property
@@ -115,8 +114,6 @@ class InboxDocuments(Documents):
     def major_actions(self):
         """Defines wich actions are major Actions"""
         actions = super(InboxDocuments, self).major_actions
-        actions = [action for action in actions
-                   if action not in ('create_task',)]
         actions += ['create_forwarding']
         return actions
 

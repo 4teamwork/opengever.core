@@ -9,7 +9,6 @@ class RepositoryFolderDocuments(Documents):
         'zip_selected',  # disabled because ZIP does not work on repository folders
         'send_as_email',  # target not available on repository folders
         'trashed',  # target not available on repository folders
-        'create_task',  # cannot create task in repository folders
     )
 
     @property
