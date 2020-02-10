@@ -94,6 +94,7 @@ EXPECTED_INTERFACES = [
     'opengever.task.reminder.interfaces.IReminderSupport',
     'opengever.task.task.ITask',
     'opengever.trash.trash.ITrashableMarker',
+    'opengever.workspaceclient.interfaces.ILinkedWorkspacesMarker',
     'persistent.interfaces.IPersistent',
     'plone.app.lockingbehavior.behaviors.ILocking',
     'plone.app.relationfield.interfaces.IDexterityHasRelations',

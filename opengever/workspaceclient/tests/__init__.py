@@ -8,6 +8,8 @@ from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
 from opengever.workspaceclient.session import SESSION_STORAGE
 from plone import api
+from zope.component import queryUtility
+from zope.ramcache.interfaces.ram import IRAMCache
 import os
 import transaction
 
@@ -22,19 +24,31 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
     def setUp(self):
         super(FunctionalWorkspaceClientTestCase, self).setUp()
 
-        # Minimal GEVER setup
-        self.repo = create(Builder('repository_root'))
-
         # Generate a service user
         self.service_user = api.user.create(email="service-user@example.com",
                                             username='service.user')
-        api.user.grant_roles(user=self.service_user,
-                             roles=['ServiceKeyUser', 'Impersonator'])
+
+        self.grant('ServiceKeyUser', 'Impersonator',
+                   user_id=self.service_user.getId())
+
+        # Minimal GEVER setup
+        self.repository_root = create(Builder('repository_root'))
+        self.leaf_repofolder = create(Builder('repository').within(self.repository_root))
+        self.dossier = create(Builder('dossier').within(self.leaf_repofolder))
+
+        # Teamraum setup
+        self.workspace_root = create(Builder('workspace_root')
+                                     .having(id='workspaces'))
+        self.grant('WorkspaceUser', on=self.workspace_root)
+
+        self.workspace = create(Builder('workspace').within(self.workspace_root))
+        self.grant('WorkspaceMember', on=self.workspace)
 
         # Reset the session store
         SESSION_STORAGE.sessions = None
 
         self.enable_feature()
+        self.invalidate_cache()
 
     @contextmanager
     def env(self, **env):
@@ -64,3 +78,7 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
 
         with self.env(TEAMRAUM_URL=url):
             yield WorkspaceClient()
+
+    def invalidate_cache(self):
+        util = queryUtility(IRAMCache)
+        util.invalidateAll()

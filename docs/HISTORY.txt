@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Use Teamraum in mail header for invitations. [njohner]
+- Integrate related workspaces to dossiers. [elioschmutz]
 - Implement the teamraum client authentication flow. [elioschmutz]
 - Implement the workspace client to make requests to a teamraum from GEVER. [elioschmutz]
 - Implement the workspace client authentication flow. [elioschmutz]

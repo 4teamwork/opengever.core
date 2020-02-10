@@ -21,3 +21,17 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             response = client.request.get('/').json()
 
         self.assertEqual(self.portal.absolute_url(), response.get('@id'))
+
+    def test_get_an_object(self):
+        with self.workspace_client_env() as client:
+            response = client.get(self.workspace.absolute_url())
+
+        self.assertEqual(self.workspace.absolute_url(), response.get('@id'))
+
+    def test_search_for_objects(self):
+        with self.workspace_client_env() as client:
+            response = client.search(UID=[self.workspace.UID()])
+
+        self.assertEqual(1, response.get('items_total'))
+        self.assertEqual(self.workspace.absolute_url(),
+                         response.get('items')[0].get('@id'))
