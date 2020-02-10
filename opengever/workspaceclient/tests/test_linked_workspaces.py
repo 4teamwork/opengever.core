@@ -73,3 +73,18 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.invalidate_cache()
             self.assertEqual(['New title'],
                              [workspace.get('title') for workspace in manager.list()])
+
+    def test_create_workspace_will_store_workspace_in_the_storage(self):
+        with self.workspace_client_env() as client:
+            manager = ILinkedWorkspaces(self.dossier)
+            self.assertEqual([], manager.list())
+
+            with self.observe_children(self.workspace_root) as children:
+                response = manager.create(title=u"My new w\xf6rkspace")
+                transaction.commit()
+
+            self.assertEqual(u"My new w\xf6rkspace", response.get('title'))
+
+            workspace = children['added'].pop()
+            self.assertEqual([workspace.absolute_url()],
+                             [ws.get('@id') for ws in manager.list()])

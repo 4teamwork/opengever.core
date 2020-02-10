@@ -45,3 +45,12 @@ class LinkedWorkspaces(object):
         return self.client.search(
             UID=uids,
             portal_type="opengever.workspace.workspace").get('items')
+
+    def create(self, **data):
+        """Creates a new workspace an links it with the current dossier.
+
+        This function returns the serialized workspace.
+        """
+        workspace = self.client.create_workspace(**data)
+        self.storage.add(workspace.get('UID'))
+        return workspace

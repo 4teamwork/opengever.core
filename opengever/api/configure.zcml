@@ -12,6 +12,7 @@
   <include package="opengever.trash" file="permissions.zcml" />
   <include package="opengever.webactions" file="permissions.zcml" />
   <include package="opengever.workspace" file="permissions.zcml" />
+  <include package="opengever.workspaceclient" file="permissions.zcml" />
 
   <include package=".schema" />
 
@@ -565,6 +566,14 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".globalindex.GlobalIndexGet"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@create-linked-workspace"
+      for="opengever.workspaceclient.interfaces.ILinkedWorkspacesMarker"
+      factory=".linked_workspaces.LinkedWorkspacesPost"
+      permission="opengever.workspaceclient.UserWorkspaceClient"
       />
 
 </configure>
