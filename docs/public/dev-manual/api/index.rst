@@ -36,6 +36,7 @@ Inhalt:
    journal.rst
    sharing.rst
    workspace/index
+   linked_workspaces.rst
    examples/index.rst
    docs_changelog.rst
 
