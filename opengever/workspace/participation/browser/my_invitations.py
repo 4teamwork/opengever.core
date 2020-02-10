@@ -1,10 +1,11 @@
 from logging import getLogger
 from opengever.base.casauth import get_gever_portal_url
 from opengever.base.model import create_session
-from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import PloneUserActor
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
@@ -92,7 +93,7 @@ class MyWorkspaceInvitations(BrowserView):
         """get the dn of the group associated with the current orgunit
         """
         portal = api.portal.get()
-        org_units = ogds_service().all_org_units()
+        org_units = get_current_admin_unit().org_units
         if len(org_units) > 1:
             raise InternalError("Workspace installation can only have a "
                                 "single enabled org_unit")

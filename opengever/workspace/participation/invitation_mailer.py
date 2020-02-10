@@ -12,6 +12,7 @@ _ = MessageFactory("opengever.workspace")
 class InvitationMailer(Mailer):
 
     template = ViewPageTemplateFile("templates/invitation_mail.pt")
+    default_addr_header = u'Teamraum'
 
     def send_invitation(self, invitation):
         target_workspace = uuidToObject(invitation['target_uuid'])

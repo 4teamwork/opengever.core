@@ -4,6 +4,7 @@ Changelog
 2020.1.0rc2 (unreleased)
 ------------------------
 
+- Use Teamraum in mail header for invitations. [njohner]
 - Implement the teamraum client authentication flow. [elioschmutz]
 - Implement the workspace client to make requests to a teamraum from GEVER. [elioschmutz]
 - Implement the workspace client authentication flow. [elioschmutz]
