@@ -1,6 +1,21 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
 
   <javascript
+      id="++resource++opengever.base/event_polyfill.js"
+      insert-before="*"
+      />
+
+  <javascript
+      id="++resource++opengever.base/es6_promise_polyfill.min.js"
+      insert-after="++resource++opengever.base/event_polyfill.js"
+      />
+
+  <javascript
+      id="++resource++opengever.base/es6_promise_polyfill_auto.min.js"
+      insert-after="++resource++opengever.base/es6_promise_polyfill.min.js"
+      />
+
+  <javascript
       id="++resource++plone.app.jquery.js"
       insert-after="++resource++opengever.base/es6_promise_polyfill_auto.min.js"
       />
