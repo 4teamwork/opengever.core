@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.1.0rc2 (unreleased)
+2020.1.0rc2 (2020-02-11)
 ------------------------
 
 - Use Teamraum in mail header for invitations. [njohner]
