@@ -77,7 +77,9 @@ class FtwTokenAuthSession(requests.Session):
         grant = jwt.encode(claim_set, self.service_key["private_key"], algorithm="RS256")
         payload = {"grant_type": GRANT_TYPE, "assertion": grant}
 
-        response = requests.post(self.service_key["token_uri"], data=payload)
+        response = requests.post(self.service_key["token_uri"], data=payload,
+                                 headers={"Accept": "application/json"})
+
         self.raise_for_status(response)
 
         bearer_token = response.json()["access_token"]
