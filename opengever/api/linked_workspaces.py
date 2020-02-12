@@ -7,13 +7,20 @@ from zExceptions import NotFound
 from zope.interface import alsoProvides
 
 
-class LinkedWorkspacesPost(Service):
+class LinkedWorkspacesService(Service):
+    def reply(self):
+        if not is_workspace_client_feature_available():
+            raise NotFound
+
+        return super(LinkedWorkspacesService, self).reply()
+
+
+class LinkedWorkspacesPost(LinkedWorkspacesService):
     """API Endpoint to add a new linked workspace.
     """
 
     def reply(self):
-        if not is_workspace_client_feature_available():
-            raise NotFound
+        super(LinkedWorkspacesPost, self).reply()
 
         if self.context.is_subdossier():
             raise NotFound
