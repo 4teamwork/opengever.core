@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Add french titles for initial content in the policytemplate. [phgross]
+- Enable the solr flag in the policytemplate. [phgross]
 
 
 2020.1.0rc2 (2020-02-11)
@@ -43,7 +44,6 @@ Changelog
 - Allow invitations to external users through E-mails. [njohner]
 - Update invitation and participation GET json response format. [deiferni]
 - Add missing french translation for example repository root. [elioschmutz]
-- Enable the solr flag in the policytempalte. [phgross]
 - Always use API for OfficeConnector. [njohner]
 - Refactor solrsearch and listing endpoints. [njohner]
 - Add tests for solrsearch and listing endpoints. [njohner]
