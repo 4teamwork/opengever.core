@@ -86,7 +86,7 @@ class TestWorkspaceSessionManager(FunctionalWorkspaceClientTestCase):
         self.maxDiff = None
         self.assertEqual(
             '500 Server Error: None for url: {}/@@oauth2-token'.format(self.portal.absolute_url()),
-            str(cm.exception.original_exception))
+            str(cm.exception))
 
     def test_user_agent(self):
         create(Builder('workspace_token_auth_app')
