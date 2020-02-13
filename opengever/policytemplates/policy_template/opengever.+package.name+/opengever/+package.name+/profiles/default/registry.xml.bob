@@ -125,4 +125,8 @@
     <value>True</value>
   </record>
 
+  <records interface="opengever.base.interfaces.ISearchSettings">
+    <value key="use_solr">True</value>
+  </records>
+
 </registry>
