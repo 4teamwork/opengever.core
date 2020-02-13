@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import NotFound
@@ -24,7 +25,7 @@ def fix_publisher_test_bug(browser, obj):
     browser.open(obj, method='GET', headers={'Accept': 'application/json'})
 
 
-class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
+class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
 
     @browsing
     def test_create_linked_workspace(self, browser):
@@ -97,3 +98,50 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'},
                 )
+
+
+class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
+    @browsing
+    def test_get_linked_workspaces(self, browser):
+        with self.workspace_client_env():
+            browser.login()
+            response = browser.open(
+                self.dossier.absolute_url() + '/@linked-workspaces',
+                method='GET', headers={'Accept': 'application/json'}).json
+
+            self.assertEqual([], response.get('items'))
+
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            transaction.commit()
+
+            response = browser.open(
+                self.dossier.absolute_url() + '/@linked-workspaces',
+                method='GET', headers={'Accept': 'application/json'}).json
+
+            self.assertEqual(
+                [self.workspace.absolute_url()],
+                [workspace.get('@id') for workspace in response.get('items')])
+
+    @browsing
+    def test_get_linked_workspaces_replaces_service_url_with_actual_request_url(self, browser):
+        url = self.dossier.absolute_url() + '/@linked-workspaces'
+        with self.workspace_client_env():
+            browser.login()
+            response = browser.open(url, method='GET', headers={'Accept': 'application/json'}).json
+
+            self.assertEqual(url, response.get('@id'))
+
+    @browsing
+    def test_raise_not_found_for_subdossiers(self, browser):
+        subdossier = create(Builder('dossier').within(self.dossier))
+        transaction.commit()
+        browser.login()
+
+        with self.workspace_client_env():
+            browser.exception_bubbling = True
+            with self.assertRaises(NotFound):
+                browser.open(
+                    subdossier.absolute_url() + '/@linked-workspaces',
+                    method='GET', headers={'Accept': 'application/json'}).json

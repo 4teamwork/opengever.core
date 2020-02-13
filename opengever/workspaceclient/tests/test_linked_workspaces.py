@@ -14,13 +14,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
 
-            self.assertEqual([], manager.list())
+            self.assertEqual([], manager.list().get('items'))
 
             manager.storage.add(self.workspace.UID())
 
             self.assertEqual(
                 [self.workspace.absolute_url()],
-                [workspace.get('@id') for workspace in manager.list()])
+                [workspace.get('@id') for workspace in manager.list().get('items')])
 
     def test_list_skips_workspaces_if_no_view_permission(self):
         unauthorized_workspace = create(Builder('workspace').within(self.workspace_root))
@@ -41,7 +41,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             self.assertItemsEqual(
                 [self.workspace.absolute_url(), authorized_workspace.absolute_url()],
-                [workspace.get('@id') for workspace in manager.list()])
+                [workspace.get('@id') for workspace in manager.list().get('items')])
 
             self.grant('WorkspaceMember', on=unauthorized_workspace)
             transaction.commit()
@@ -51,7 +51,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 [self.workspace.absolute_url(),
                  authorized_workspace.absolute_url(),
                  unauthorized_workspace.absolute_url()],
-                [workspace.get('@id') for workspace in manager.list()])
+                [workspace.get('@id') for workspace in manager.list().get('items')])
 
     def test_cache_list_stored_workspaces(self):
         with self.workspace_client_env():
@@ -63,23 +63,23 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             transaction.commit()
 
             self.assertEqual(['Old title'],
-                             [workspace.get('title') for workspace in manager.list()])
+                             [workspace.get('title') for workspace in manager.list().get('items')])
 
             self.workspace.title = 'New title'
             self.workspace.reindexObject()
             transaction.commit()
 
             self.assertEqual(['Old title'],
-                             [workspace.get('title') for workspace in manager.list()])
+                             [workspace.get('title') for workspace in manager.list().get('items')])
 
             self.invalidate_cache()
             self.assertEqual(['New title'],
-                             [workspace.get('title') for workspace in manager.list()])
+                             [workspace.get('title') for workspace in manager.list().get('items')])
 
     def test_create_workspace_will_store_workspace_in_the_storage(self):
         with self.workspace_client_env() as client:
             manager = ILinkedWorkspaces(self.dossier)
-            self.assertEqual([], manager.list())
+            self.assertEqual([], manager.list().get('items'))
 
             with self.observe_children(self.workspace_root) as children:
                 response = manager.create(title=u"My new w\xf6rkspace")
@@ -89,7 +89,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             workspace = children['added'].pop()
             self.assertEqual([workspace.absolute_url()],
-                             [ws.get('@id') for ws in manager.list()])
+                             [ws.get('@id') for ws in manager.list().get('items')])
 
     def test_subdossiers_do_not_provided_linked_workspaces(self):
         subdossier = create(Builder('dossier').within(self.dossier))

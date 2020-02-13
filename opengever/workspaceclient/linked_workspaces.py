@@ -50,11 +50,11 @@ class LinkedWorkspaces(object):
         """
         uids = self.storage.list()
         if not uids:
-            return uids
+            return {'items': [], 'total_items': 0}
 
         return self.client.search(
             UID=uids,
-            portal_type="opengever.workspace.workspace").get('items')
+            portal_type="opengever.workspace.workspace")
 
     def create(self, **data):
         """Creates a new workspace an links it with the current dossier.

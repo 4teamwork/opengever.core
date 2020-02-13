@@ -15,6 +15,25 @@ class LinkedWorkspacesService(Service):
         return super(LinkedWorkspacesService, self).reply()
 
 
+class LinkedWorkspacesGet(LinkedWorkspacesService):
+    """API Endpoint to get all linked workspaces for a specific context
+    """
+    def reply(self):
+        super(LinkedWorkspacesGet, self).reply()
+
+        if self.context.is_subdossier():
+            raise NotFound
+
+        response = ILinkedWorkspaces(self.context).list()
+
+        # The response id contains the url of the workspace-client request.
+        # We don't want to send it back to the client. We replace it with the
+        # actual client request url.
+        response['@id'] = self.request.getURL()
+
+        return response
+
+
 class LinkedWorkspacesPost(LinkedWorkspacesService):
     """API Endpoint to add a new linked workspace.
     """
