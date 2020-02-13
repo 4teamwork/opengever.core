@@ -1,6 +1,4 @@
-from opengever.workspaceclient.exceptions import APIRequestException
 from opengever.workspaceclient.keys import key_registry
-from requests import HTTPError
 import jwt
 import pkg_resources
 import requests
@@ -50,7 +48,7 @@ class FtwTokenAuthSession(requests.Session):
             response = super(FtwTokenAuthSession, self).request(method, url,
                                                                 *args, **kwargs)
 
-        self.raise_for_status(response)
+        response.raise_for_status()
 
         return response
 
@@ -84,16 +82,10 @@ class FtwTokenAuthSession(requests.Session):
                                  headers={"Accept": "application/json"},
                                  timeout=REQUEST_TIMEOUT)
 
-        self.raise_for_status(response)
+        response.raise_for_status()
 
         bearer_token = response.json()["access_token"]
         self.headers.update({"Authorization": "Bearer {}".format(bearer_token)})
-
-    def raise_for_status(self, response):
-        try:
-            response.raise_for_status()
-        except HTTPError as exception:
-            raise APIRequestException(exception)
 
     def url_from_path_or_url(self, path_or_url):
         """Generates a url based on the path_or_url:

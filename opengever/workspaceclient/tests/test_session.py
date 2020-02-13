@@ -2,12 +2,12 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.tokenauth.pas.storage import CredentialStorage
-from opengever.workspaceclient.exceptions import APIRequestException
 from opengever.workspaceclient.session import GEVER_VERSION
 from opengever.workspaceclient.session import WorkspaceSession
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from requests import HTTPError
 import requests_mock
 import transaction
 
@@ -80,7 +80,7 @@ class TestWorkspaceSessionManager(FunctionalWorkspaceClientTestCase):
         with requests_mock.Mocker() as mocker:
             mocker.post('{}/@@oauth2-token'.format(self.portal.absolute_url()),
                         status_code=500)
-            with self.assertRaises(APIRequestException) as cm:
+            with self.assertRaises(HTTPError) as cm:
                 WorkspaceSession(self.portal.absolute_url(), 'john.doe')
 
         self.maxDiff = None
