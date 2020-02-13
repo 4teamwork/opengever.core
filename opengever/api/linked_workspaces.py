@@ -1,4 +1,5 @@
 from functools import wraps
+from opengever.base.sentry import maybe_report_exception
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -11,11 +12,15 @@ from zExceptions import NotFound
 from zope.interface import alsoProvides
 from zope.publisher.http import status_reasons
 import json
-
+import logging
+import sys
+import traceback
 
 REQUEST_TIMEOUT = 408
 GATEWAY_TIMEOUT = 504
 BAD_GATEWAY = 502
+
+logger = logging.getLogger('opengever.api: LinkedWorkspaces')
 
 
 def request_error_handler(func):
@@ -68,13 +73,21 @@ def request_error_handler(func):
             u'type': type(exception).__name__.decode('utf-8'),
         }
 
+    def log_exception_to_sentry(obj):
+        e_type, e_value, tb = sys.exc_info()
+        maybe_report_exception(obj, obj.request, e_type, e_value, tb)
+        formatted_traceback = ''.join(traceback.format_exception(e_type, e_value, tb))
+        logger.error('Exception while requesting teamraum deployment:\n%s', formatted_traceback)
+
     @wraps(func)
     def handler(obj, *args, **kwargs):
         try:
             return func(obj, *args, **kwargs)
         except HTTPError as exception:
+            log_exception_to_sentry(obj)
             return handle_http_error(obj, exception)
         except Timeout as exception:
+            log_exception_to_sentry(obj)
             return handle_timeout_error(obj, exception)
 
     return handler
