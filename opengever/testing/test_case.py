@@ -1,3 +1,5 @@
+from AccessControl import getSecurityManager
+from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.keywordwidget.tests import widget  # keep!
@@ -54,6 +56,25 @@ class TestCase(unittest.TestCase):
                          submitted_document_model.submitted_version)
         self.assertEqual(proposal.load_model(),
                          submitted_document_model.proposal)
+
+    @contextmanager
+    def observe_children(self, obj, check_security=True):
+        """Observe the children of an object for testing that children were
+        added or removed within the context manager.
+        """
+        if check_security:
+            def allowed(obj):
+                return getSecurityManager().checkPermission(
+                    'Access contents information', obj)
+        else:
+            def allowed(obj):
+                return True
+
+        children = {'before': filter(allowed, obj.objectValues())}
+        yield children
+        children['after'] = filter(allowed, obj.objectValues())
+        children['added'] = set(children['after']) - set(children['before'])
+        children['removed'] = set(children['before']) - set(children['after'])
 
 
 class FunctionalTestCase(TestCase):
