@@ -67,7 +67,6 @@ class TestTaskActivites(FunctionalTestCase):
             [['Task title', u'Abkl\xe4rung Fall Meier'],
              ['Deadline', 'Feb 13, 2015'],
              ['Task Type', 'To comment'],
-             ['Dossier title', 'Dossier XY'],
              ['Text', 'Lorem ipsum'],
              ['Responsible', 'Boss Hugo (hugo.boss)'],
              ['Issuer', 'Test User (test_user_1_)']],

@@ -22,13 +22,13 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(0,  Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         for notification in Notification.query.all():
             notification.is_read = True
 
         with freeze(datetime(2018, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         self.assertEqual(2, len(center.get_watchers(self.task)))
 
@@ -78,7 +78,7 @@ class TestNotificationsGet(IntegrationTestCase):
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             for i in range(5):
-                TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+                TaskAddedActivity(self.task, self.request).record()
 
         self.login(self.regular_user, browser=browser)
 
@@ -109,7 +109,7 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(0,  Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         url = '{}/@notifications/{}/1'.format(self.portal.absolute_url(),
                                               self.regular_user.getId())
@@ -163,7 +163,7 @@ class TestNotificationsGet(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         # Different username in path
         with browser.expect_http_error(401):
@@ -188,7 +188,7 @@ class TestNotificationsPatch(IntegrationTestCase):
     def test_mark_notification_as_read(self, browser):
         self.login(self.dossier_responsible, browser=browser)
 
-        TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+        TaskAddedActivity(self.task, self.request).record()
 
         url = '{}/@notifications/{}/{}'.format(self.portal.absolute_url(),
                                                self.regular_user.getId(), 1)
@@ -224,7 +224,7 @@ class TestNotificationsPatch(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         # Different username in path
         with browser.expect_http_error(401):

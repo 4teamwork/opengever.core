@@ -53,10 +53,6 @@ class TaskAddedActivity(BaseTaskActivity):
     """Activity representation for adding a task.
     """
 
-    def __init__(self, context, request, parent):
-        super(TaskAddedActivity, self).__init__(context, request)
-        self.parent = parent
-
     @property
     def kind(self):
         return PloneMessageFactory(u'task-added', default=u'Task added')
@@ -108,8 +104,6 @@ class TaskAddedActivity(BaseTaskActivity):
              api.portal.get_localized_time(str(self.context.deadline))],
             [_('label_task_type', u'Task Type'),
              self.context.get_task_type_label(language=language)],
-            [_('label_dossier_title', u'Dossier title'),
-             self.parent.title],
             [_('label_text', u'Text'),
              self.context.text if self.context.text else u'-'],
             [_('label_responsible', u'Responsible'),

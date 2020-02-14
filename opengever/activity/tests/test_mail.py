@@ -216,7 +216,7 @@ class TestNotificationMailsAndSavepoints(IntegrationTestCase):
         self.login(self.dossier_responsible)
 
         # Trigger a notification that dispatches a mail
-        activity = TaskAddedActivity(self.task, getRequest(), self.dossier)
+        activity = TaskAddedActivity(self.task, getRequest())
         activity.record()
 
         # Creating a savepoint will fail with the MailDataManager if it's

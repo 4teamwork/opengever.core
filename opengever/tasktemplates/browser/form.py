@@ -300,11 +300,11 @@ class AddForm(BrowserView):
             task.reindexObject()
 
             # add activity record for subtask
-            activity = TaskAddedActivity(task, self.request, self.context)
+            activity = TaskAddedActivity(task, self.request)
             activity.record()
 
         # add activity record for the main task
-        activity = TaskAddedActivity(main_task, self.request, self.context)
+        activity = TaskAddedActivity(main_task, self.request)
         activity.record()
 
         IStatusMessage(self.request).addStatusMessage(
