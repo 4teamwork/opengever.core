@@ -4,6 +4,7 @@ Changelog
 2020.1.0rc3 (unreleased)
 ------------------------
 
+- Assign correct role Reader to reader_group. [deiferni]
 - Add permission and role to use the workspace Client. [njohner]
 - Add french titles for initial content in the policytemplate. [phgross]
 - Enable the solr flag in the policytemplate. [phgross]

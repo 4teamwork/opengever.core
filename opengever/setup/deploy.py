@@ -164,7 +164,7 @@ class GeverDeployment(object):
         self.site.manage_changeProperties(title=site_title)
 
         self.assign_group_to_role(self.site, self.config,
-                                  'reader_group', 'Member')
+                                  'reader_group', 'Reader')
         self.assign_group_to_role(self.site, self.config,
                                   'rolemanager_group', 'Role Manager')
         self.assign_group_to_role(self.site, self.config,
