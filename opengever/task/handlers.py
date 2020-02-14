@@ -11,7 +11,6 @@ from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 
@@ -159,10 +158,9 @@ def record_added_activity(task, event):
     if IDuringTaskTemplateFolderTriggering.providedBy(getRequest()):
         return
 
-    parent = aq_parent(aq_inner(task))
     if IForwarding.providedBy(task):
-        activity = ForwardingAddedActivity(task, getRequest(), parent)
+        activity = ForwardingAddedActivity(task, getRequest())
     else:
-        activity = TaskAddedActivity(task, getRequest(), parent)
+        activity = TaskAddedActivity(task, getRequest())
 
     activity.record()

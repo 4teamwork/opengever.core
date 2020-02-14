@@ -127,7 +127,7 @@ class TaskTemplateFolderTrigger(object):
 
         # add activity record for subtask
         if api.content.get_state(task) != TASK_STATE_PLANNED:
-            activity = TaskAddedActivity(task, getRequest(), main_task)
+            activity = TaskAddedActivity(task, getRequest())
             activity.record()
 
         return task
