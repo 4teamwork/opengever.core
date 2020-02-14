@@ -15,6 +15,9 @@ class LinkedWorkspacesPost(Service):
         if not is_workspace_client_feature_available():
             raise NotFound
 
+        if self.context.is_subdossier():
+            raise NotFound
+
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 

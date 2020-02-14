@@ -1,11 +1,12 @@
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
 from plone.memoize import ram
 from time import time
 from zope.component import adapter
+from zope.component.interfaces import ComponentLookupError
 from zope.interface import implementer
 
 
@@ -32,6 +33,9 @@ class LinkedWorkspaces(object):
     """
 
     def __init__(self, context):
+        if context.is_subdossier():
+            raise ComponentLookupError()
+
         self.client = WorkspaceClient()
         self.storage = LinkedWorkspacesStorage(context)
         self.context = context

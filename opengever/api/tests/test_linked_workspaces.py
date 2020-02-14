@@ -1,9 +1,12 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 import json
+import transaction
 
 
 def fix_publisher_test_bug(browser, obj):
@@ -71,6 +74,24 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             with self.assertRaises(Unauthorized):
                 browser.open(
                     self.dossier.absolute_url() + '/@create-linked-workspace',
+                    data=json.dumps({"title": "My linked workspace"}),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+    @browsing
+    def test_raise_not_found_for_subdossiers(self, browser):
+        subdossier = create(Builder('dossier').within(self.dossier))
+        transaction.commit()
+        browser.login()
+        with self.workspace_client_env():
+            fix_publisher_test_bug(browser, subdossier)
+
+            browser.exception_bubbling = True
+            with self.assertRaises(NotFound):
+                browser.open(
+                    subdossier.absolute_url() + '/@create-linked-workspace',
                     data=json.dumps({"title": "My linked workspace"}),
                     method='POST',
                     headers={'Accept': 'application/json',
