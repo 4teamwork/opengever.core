@@ -32,7 +32,9 @@
           <dd style="margin: 0; padding: 0;">
             <ul style="padding: 0; Margin: 0;">
               <li style="Margin:0 0 1em; list-style:disc; mso-special-format:bullet;" tal:repeat="activity item/activities">
-                <p tal:content="structure activity/summary" />
+                <tal:block tal:repeat="paragraph activity/summary">
+                  <p tal:content="structure paragraph" />
+                </tal:block>
               </li>
             </ul>
           </dd>

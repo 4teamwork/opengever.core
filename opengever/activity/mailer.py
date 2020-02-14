@@ -103,6 +103,10 @@ class Mailer(object):
         if data.get('description'):
             data['description'] = data.get('description').splitlines()
 
+        # Break (potential) summary up into a list of lines
+        if data.get('summary'):
+            data['summary'] = data.get('summary').splitlines()
+
         html = self.prepare_html(data)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
         return msg

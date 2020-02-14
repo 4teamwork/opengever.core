@@ -18,7 +18,9 @@
     </metal:title>
 
     <metal:content metal:fill-slot="content">
-      <p class="notification_label" tal:content="structure options/summary" />
+      <tal:block tal:repeat="paragraph options/summary">
+        <p class="notification_label" tal:content="structure paragraph" />
+      </tal:block>
 
       <p><a href="" tal:content="options/title" tal:attributes="href options/link"></a></p>
 
