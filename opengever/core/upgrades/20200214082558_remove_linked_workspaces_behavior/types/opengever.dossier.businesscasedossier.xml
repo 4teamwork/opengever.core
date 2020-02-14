@@ -1,0 +1,7 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <property name="behaviors" purge="False">
+    <element remove="True" value="opengever.workspaceclient.interfaces.ILinkedWorkspaces" />
+  </property>
+
+</object>

@@ -571,7 +571,7 @@
   <plone:service
       method="POST"
       name="@create-linked-workspace"
-      for="opengever.workspaceclient.interfaces.ILinkedWorkspacesMarker"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.LinkedWorkspacesPost"
       permission="opengever.workspaceclient.UserWorkspaceClient"
       />

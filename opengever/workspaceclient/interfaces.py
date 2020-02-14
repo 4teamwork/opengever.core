@@ -10,11 +10,6 @@ class IWorkspaceClientSettings(Interface):
         default=False)
 
 
-class ILinkedWorkspacesMarker(Interface):
-    """Marker interface for the ILinkedWorkspaces behavior
-    """
-
-
 class ILinkedWorkspaces(Interface):
     """Behavior interface to manage remote workspaces
     """

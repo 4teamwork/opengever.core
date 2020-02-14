@@ -42,7 +42,6 @@
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     <element value="opengever.mail.behaviors.ISendableDocsContainer" />
     <element value="opengever.dossier.behaviors.protect_dossier.IProtectDossier" />
-    <element value="opengever.workspaceclient.interfaces.ILinkedWorkspaces" />
   </property>
 
   <!-- View information -->
