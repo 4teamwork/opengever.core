@@ -2,6 +2,8 @@ from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
+from plone import api
+from zExceptions import Unauthorized
 
 
 class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
@@ -15,6 +17,15 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
         with self.env(TEAMRAUM_URL=''):
             with self.assertRaises(WorkspaceURLMissing):
                 WorkspaceClient()
+
+    def test_raises_an_error_if_user_lacks_neccesary_permissions(self):
+        with self.workspace_client_env() as client:
+            client.request.get('/').json()
+
+            roles = set(api.user.get_roles())
+            self.grant(roles.difference({'WorkspaceClientUser'}))
+            with self.assertRaises(Unauthorized):
+                client.request.get('/').json()
 
     def test_make_requests_to_the_configured_workspace(self):
         with self.workspace_client_env() as client:

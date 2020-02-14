@@ -44,6 +44,9 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
         self.workspace = create(Builder('workspace').within(self.workspace_root))
         self.grant('WorkspaceMember', on=self.workspace)
 
+        # Grant necessary permissions to use the workspace client
+        self.grant('WorkspaceClientUser', *api.user.get_roles())
+
         # Reset the session store
         SESSION_STORAGE.sessions = None
 

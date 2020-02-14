@@ -1,0 +1,14 @@
+<rolemap>
+
+  <roles>
+    <role name="WorkspaceClientUser" />
+  </roles>
+
+  <permissions>
+    <permission name="opengever.workspaceclient: Use Workspace Client" acquire="True">
+      <role name="WorkspaceClientUser" />
+    </permission>
+
+  </permissions>
+
+</rolemap>
