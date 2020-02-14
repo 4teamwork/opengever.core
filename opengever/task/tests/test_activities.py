@@ -1,8 +1,10 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
 from opengever.activity.mailer import process_mail_queue
@@ -279,16 +281,17 @@ class TestTaskActivites(FunctionalTestCase):
                       .in_state('task-state-in-progress')
                       .within(self.dossier))
 
-        browser.login().open(task, view='++add++opengever.task.task')
-        browser.fill({'Title': u'Unteraufgabe Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
-                      'Text': 'Lorem ipsum'})
+        with freeze(datetime(2015, 03, 02)):
+            browser.login().open(task, view='++add++opengever.task.task')
+            browser.fill({'Title': u'Unteraufgabe Abkl\xe4rung Fall Meier',
+                          'Task Type': 'comment',
+                          'Text': 'Lorem ipsum'})
 
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('hugo.boss')
-        form.find_widget('Issuer').fill(u'hugo.boss')
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill('hugo.boss')
+            form.find_widget('Issuer').fill(u'hugo.boss')
 
-        browser.css('#form-buttons-save').first.click()
+            browser.css('#form-buttons-save').first.click()
 
         # Ensure adding subtask activity is fired only once.
         # Second activity is for task creation
@@ -301,6 +304,18 @@ class TestTaskActivites(FunctionalTestCase):
                           u'Dossier: Dossier XY',
                           activity.summary)
 
+        browser.open_html(activity.description)
+        rows = browser.css('table').first.rows
+
+        self.assertEquals(
+            [['Task title', u'Unteraufgabe Abkl\xe4rung Fall Meier'],
+             ['Deadline', 'Mar 07, 2015'],
+             ['Task Type', 'To comment'],
+             ['Containing tasks', u'Abkl\xe4rung Fall Meier'],
+             ['Text', 'Lorem ipsum'],
+             ['Responsible', 'Boss Hugo (hugo.boss)'],
+             ['Issuer', 'Boss Hugo (hugo.boss)']],
+            [row.css('td').text for row in rows])
 
     @browsing
     def test_adding_a_document_notifies_watchers(self, browser):
