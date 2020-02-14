@@ -19,6 +19,7 @@
                            opengever.examplecontent:municipality_content
                            opengever.examplecontent:workspace_content"
       admin_unit_id="fd"
+      reader_group="gever_reader"
       administrator_group="gever_admins"
       records_manager_group="record_managers"
       archivist_group="archiv"
@@ -32,6 +33,7 @@
                            opengever.examplecontent:repository_minimal
                            opengever.examplecontent:municipality_content"
       admin_unit_id="ska"
+      reader_group="gever_reader"
       administrator_group="gever_admins"
       records_manager_group="record_managers"
       archivist_group="archiv"
