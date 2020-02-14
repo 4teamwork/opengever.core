@@ -52,7 +52,8 @@ class TestNotificationsGet(IntegrationTestCase):
               u'link': u'http://nohost/plone/@@resolve_notification?notification_id=3',
               u'notification_id': 3,
               u'read': False,
-              u'summary': u'New task opened by Ziegler Robert',
+              u'summary': u'New task opened by Ziegler Robert\n'
+                          u'Dossier: Vertr\xe4ge mit der kantonalen Finanzverwaltung',
               u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
              {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
               u'actor_id': u'nicole.kohler',
@@ -62,7 +63,8 @@ class TestNotificationsGet(IntegrationTestCase):
               u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
               u'notification_id': 1,
               u'read': True,
-              u'summary': u'New task opened by Ziegler Robert',
+              u'summary': u'New task opened by Ziegler Robert\n'
+                          u'Dossier: Vertr\xe4ge mit der kantonalen Finanzverwaltung',
               u'title': u'Vertragsentwurf \xdcberpr\xfcfen'}],
             browser.json.get('items'))
 
@@ -126,7 +128,8 @@ class TestNotificationsGet(IntegrationTestCase):
              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
              u'notification_id': 1,
              u'read': False,
-             u'summary': u'New task opened by Ziegler Robert',
+             u'summary': u'New task opened by Ziegler Robert\n'
+                         u'Dossier: Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
             browser.json)
 

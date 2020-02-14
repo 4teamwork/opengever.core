@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-18 10:28+0000\n"
+"POT-Creation-Date: 2020-02-13 14:09+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -439,6 +439,7 @@ msgid "label_complete_documents"
 msgstr "Documents"
 
 #. Default: "Containing tasks"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
 msgstr "Tâche principale"
@@ -467,10 +468,10 @@ msgstr "A réaliser jusqu'au"
 msgid "label_documents"
 msgstr "Documents"
 
-#. Default: "Dossier title"
+#. Default: "Dossier: ${title}"
 #: ./opengever/task/activities.py
 msgid "label_dossier_title"
-msgstr "Titre du dossier"
+msgstr "Titre du dossier: ${title}"
 
 #. Default: "You are not allowed to edit this response."
 #: ./opengever/task/templates/edit_response.pt

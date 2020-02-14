@@ -5,6 +5,7 @@ from opengever.activity.model.notification import Notification
 from opengever.activity.roles import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.base.model import get_locale
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.task import _
@@ -12,9 +13,43 @@ from opengever.task import FINISHED_TASK_STATES
 from opengever.task.response_description import ResponseDescription
 from plone import api
 from Products.CMFPlone import PloneMessageFactory
+from Products.CMFPlone.utils import safe_unicode
 
 
-class TaskAddedActivity(BaseActivity):
+class BaseTaskActivity(BaseActivity):
+
+    @property
+    def dossier_title(self):
+        """If the task is in a subdossier, return its title, otherwise
+        return the title of the main dossier (or inbox for a forwarding)"""
+
+        if isinstance(self.context, Task):
+            # context is a task model
+            dossier_title = self.context.containing_dossier
+            subdossier_title = self.context.containing_subdossier
+        else:
+            # context is a plone task
+            dossier_title = self.context.get_containing_dossier_title()
+            subdossier_title = self.context.get_containing_subdossier()
+
+        container_title = safe_unicode(subdossier_title or dossier_title)
+        return self.translate_to_all_languages(
+            _('label_dossier_title',
+              default=u'Dossier: ${title}',
+              mapping={'title': container_title}))
+
+    @property
+    def summary_msg(self):
+        raise NotImplementedError()
+
+    @property
+    def summary(self):
+        return {
+            lang: "\n".join([self.summary_msg[lang], self.dossier_title[lang]])
+            for lang in self._get_supported_languages()}
+
+
+class TaskAddedActivity(BaseTaskActivity):
     """Activity representation for adding a task.
     """
 
@@ -32,7 +67,7 @@ class TaskAddedActivity(BaseActivity):
             _('transition_label_default', u'Task opened'))
 
     @property
-    def summary(self):
+    def summary_msg(self):
         actor = Actor.lookup(self.context.Creator())
         msg = _('label_task_added', u'New task opened by ${user}',
                 mapping={'user': actor.get_label(with_principal=False)})
@@ -89,7 +124,7 @@ class TaskAddedActivity(BaseActivity):
         self.center.add_task_issuer(self.context, self.context.issuer)
 
 
-class BaseTaskResponseActivity(BaseActivity):
+class BaseTaskResponseActivity(BaseTaskActivity):
     """Abstract base class for all task-response related activities.
 
     The TaskResponseActivity class is a representation for every activity which
@@ -102,7 +137,7 @@ class BaseTaskResponseActivity(BaseActivity):
         self.response = response
 
     @property
-    def summary(self):
+    def summary_msg(self):
         return self.translate_to_all_languages(
             ResponseDescription.get(response=self.response).msg())
 
@@ -188,7 +223,7 @@ class TaskReassignActivity(TaskTransitionActivity):
         return False
 
 
-class TaskReminderActivity(BaseActivity):
+class TaskReminderActivity(BaseTaskActivity):
     kind = 'task-reminder'
     IGNORED_STATES = FINISHED_TASK_STATES + ['task-state-resolved']
     system_activity = True
@@ -204,7 +239,7 @@ class TaskReminderActivity(BaseActivity):
         self.center = base_notification_center()
 
     @property
-    def summary(self):
+    def summary_msg(self):
         return self.translate_to_all_languages(
             _('task_reminder_activity_summary', u'Deadline is on ${deadline}',
               mapping={'deadline': self._deadline()}))

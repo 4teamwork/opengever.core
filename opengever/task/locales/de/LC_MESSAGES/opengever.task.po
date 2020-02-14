@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-11-18 10:28+0000\n"
+"POT-Creation-Date: 2020-02-13 14:09+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -437,6 +437,7 @@ msgid "label_complete_documents"
 msgstr "Dokumente"
 
 #. Default: "Containing tasks"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
 msgstr "Hauptaufgabe"
@@ -465,10 +466,10 @@ msgstr "Zu erledigen bis"
 msgid "label_documents"
 msgstr "Dokumente"
 
-#. Default: "Dossier title"
+#. Default: "Dossier: ${title}"
 #: ./opengever/task/activities.py
 msgid "label_dossier_title"
-msgstr "Dossiertitel"
+msgstr "Dossiertitel: ${title}"
 
 #. Default: "You are not allowed to edit this response."
 #: ./opengever/task/templates/edit_response.pt

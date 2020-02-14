@@ -176,7 +176,8 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         activity = activities[-1]
         self.assertEquals('task-added', activity.kind)
         self.assertEquals('Task opened', activity.label)
-        self.assertEquals(u'New task opened by B\xe4rfuss K\xe4thi',
+        self.assertEquals(u'New task opened by B\xe4rfuss K\xe4thi\n'
+                          u'Dossier: Vertr\xe4ge mit der kantonalen Finanzverwaltung',
                           activity.summary)
         self.assertEquals(Oguid.for_object(subtask2), activity.resource.oguid)
 
