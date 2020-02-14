@@ -99,7 +99,7 @@ class NotificationView(BrowserView):
             data.append({
                 'title': notification.activity.title,
                 'label': notification.activity.label,
-                'summary': notification.activity.summary,
+                'summary': notification.activity.summary.splitlines(),
                 'created': notification.activity.created.astimezone(
                     pytz.UTC).isoformat(),
                 'link': resolve_notification_url(notification),

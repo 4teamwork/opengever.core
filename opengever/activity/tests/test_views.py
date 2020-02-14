@@ -165,7 +165,7 @@ class TestListNotifications(IntegrationTestCase):
                 u'link': u'http://nohost/plone/@@resolve_notification'
                          u'?notification_id=1',
                 u'read': False,
-                u'summary': u'Task created by Test User',
+                u'summary': [u'Task created by Test User'],
                 u'target': u'_self',
                 u'title': u'Kennzahlen 2014 erfassen',
             },
@@ -176,7 +176,7 @@ class TestListNotifications(IntegrationTestCase):
                 u'link': u'http://nohost/plone/@@resolve_notification'
                          u'?notification_id=2',
                 u'read': True,
-                u'summary': u'Task created by Test User',
+                u'summary': [u'Task created by Test User'],
                 u'target': u'_self',
                 u'title': u'Kennzahlen 2014 erfassen',
             },
@@ -358,7 +358,7 @@ class TestListNotifications(IntegrationTestCase):
                 u'link': u'http://nohost/plone/@@resolve_notification'
                          u'?notification_id=1',
                 u'read': False,
-                u'summary': u'Task created by Test User',
+                u'summary': [u'Task created by Test User'],
                 u'target': u'_self',
                 u'title': u'Kennzahlen 2014 erfassen',
             },
@@ -369,7 +369,7 @@ class TestListNotifications(IntegrationTestCase):
                 u'link': u'http://nohost/plone/@@resolve_notification'
                          u'?notification_id=2',
                 u'read': False,
-                u'summary': u'Task bla added by Hugo',
+                u'summary': [u'Task bla added by Hugo'],
                 u'target': u'_self',
                 u'title': u'Kennzahlen 2015 erfassen',
             },
@@ -422,7 +422,7 @@ class TestListNotifications(IntegrationTestCase):
             u'link': u'http://nohost/plone/@@resolve_notification'
                      u'?notification_id=2',
             u'read': False,
-            u'summary': u'Task bla added by Hugo',
+            u'summary': [u'Task bla added by Hugo'],
             u'target': u'_self',
             u'title': u'Kennzahlen 2015 erfassen',
         }]

@@ -25,7 +25,9 @@
                     <span class="timeago relativetime" title="{{created}}">{{created}}</span>
                   </div>
                   <a class="notification-list-item-title" target="{{target}}" href="{{link}}">{{title}}</a>
-                  <div class="notification-list-item-summary">{{{summary}}}</div>
+                  {{#each summary}}
+                    <div class="notification-list-item-summary">{{{this}}}</div>
+                  {{/each}}
                 </span>
               </li>
             {{/each}}
