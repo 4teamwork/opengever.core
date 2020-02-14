@@ -491,9 +491,11 @@ class Task(Container, TaskReminderSupport):
         return IReferenceNumber(self).get_number()
 
     def get_containing_dossier(self):
+        """Returns the first parent dossier or inbox"""
         return get_containing_dossier(self)
 
     def get_containing_dossier_title(self):
+        """Title of the main dossier or inbox"""
         # get the containing_dossier value directly with the indexer
         adapter = getMultiAdapter(
             (self, getToolByName(self, 'portal_catalog')),
@@ -503,6 +505,8 @@ class Task(Container, TaskReminderSupport):
         return adapter()
 
     def get_containing_subdossier(self):
+        """Title of the containing subdossier or empty string if it is
+        contained directly in a dossier"""
         # get the containing_dossier value directly with the indexer
         adapter = getMultiAdapter(
             (self, getToolByName(self, 'portal_catalog')),
