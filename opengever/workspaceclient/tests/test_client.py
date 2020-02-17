@@ -58,3 +58,13 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
 
         workspace = children['added'].pop()
         self.assertEqual(workspace.title, response.get('title'))
+
+    def test_lookup_url_by_uid_returns_none_if_nothing_found(self):
+        with self.workspace_client_env() as client:
+            url = client.lookup_url_by_uid('not-existing-uid')
+            self.assertIsNone(url)
+
+    def test_lookup_url_by_uid_returns_the_absolute_url_to_the_obeject_if_found(self):
+        with self.workspace_client_env() as client:
+            url = client.lookup_url_by_uid(self.workspace.UID())
+            self.assertEqual(self.workspace.absolute_url(), url)

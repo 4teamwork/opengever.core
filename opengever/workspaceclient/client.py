@@ -72,3 +72,16 @@ class WorkspaceClient(object):
         })
 
         return self.request.post('/workspaces', json=payload).json()
+
+    def lookup_url_by_uid(self, uid):
+        """Searches on the remote system for an object having the given UID and
+        returns the URL to this object.
+
+        If no object is found with the given UID, it returns None.
+        """
+        items = self.search(UID=uid).get('items')
+
+        if len(items) > 1:
+            raise LookupError("Found multiple workspaces with the same UID")
+
+        return items[0].get('@id') if items else None
