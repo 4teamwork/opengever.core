@@ -12,6 +12,9 @@ class LinkedWorkspacesStorage(object):
         self.context = context
         self._initialize_storage()
 
+    def __contains__(self, item):
+        return item in self._storage
+
     def add(self, uid):
         """Add a workspace by its UID.
         """
