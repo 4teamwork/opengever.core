@@ -3,6 +3,7 @@ from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
+from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.interface import alsoProvides
 
@@ -22,7 +23,7 @@ class LinkedWorkspacesGet(LinkedWorkspacesService):
         super(LinkedWorkspacesGet, self).reply()
 
         if self.context.is_subdossier():
-            raise NotFound
+            raise BadRequest
 
         response = ILinkedWorkspaces(self.context).list()
 
@@ -42,7 +43,7 @@ class LinkedWorkspacesPost(LinkedWorkspacesService):
         super(LinkedWorkspacesPost, self).reply()
 
         if self.context.is_subdossier():
-            raise NotFound
+            raise BadRequest
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)

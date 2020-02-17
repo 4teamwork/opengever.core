@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 import json
@@ -82,7 +83,7 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
                 )
 
     @browsing
-    def test_raise_not_found_for_subdossiers(self, browser):
+    def test_raise_exception_for_subdossiers(self, browser):
         subdossier = create(Builder('dossier').within(self.dossier))
         transaction.commit()
         browser.login()
@@ -90,7 +91,7 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
             fix_publisher_test_bug(browser, subdossier)
 
             browser.exception_bubbling = True
-            with self.assertRaises(NotFound):
+            with self.assertRaises(BadRequest):
                 browser.open(
                     subdossier.absolute_url() + '/@create-linked-workspace',
                     data=json.dumps({"title": "My linked workspace"}),
@@ -134,14 +135,14 @@ class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
             self.assertEqual(url, response.get('@id'))
 
     @browsing
-    def test_raise_not_found_for_subdossiers(self, browser):
+    def test_raise_exception_for_subdossiers(self, browser):
         subdossier = create(Builder('dossier').within(self.dossier))
         transaction.commit()
         browser.login()
 
         with self.workspace_client_env():
             browser.exception_bubbling = True
-            with self.assertRaises(NotFound):
+            with self.assertRaises(BadRequest):
                 browser.open(
                     subdossier.absolute_url() + '/@linked-workspaces',
                     method='GET', headers={'Accept': 'application/json'}).json
