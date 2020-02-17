@@ -48,9 +48,19 @@ class WorkspaceClient(object):
         return self.request.get(url_or_path, params=kwargs).json()
 
     def get(self, url_or_path):
-        """Lookup an object.
+        """Proxy method to perform a get request.
         """
         return self.request.get(url_or_path).json()
+
+    def post(self, url_or_path, *args, **kwargs):
+        """Proxy method to perform a post request.
+        """
+        return self.request.post(url_or_path, *args, **kwargs).json()
+
+    def patch(self, url_or_path, *args, **kwargs):
+        """Proxy method to perform a patch request.
+        """
+        return self.request.patch(url_or_path, *args, **kwargs).json()
 
     def create_workspace(self, **data):
         """Crates a new workspace and returns the serialization of the new
