@@ -4,6 +4,7 @@ Changelog
 2020.1.0rc3 (unreleased)
 ------------------------
 
+- Allow Administrators to add new keywords. [njohner]
 - Assign correct role Reader to reader_group. [deiferni]
 - Add permission and role to use the workspace Client. [njohner]
 - Add french titles for initial content in the policytemplate. [phgross]

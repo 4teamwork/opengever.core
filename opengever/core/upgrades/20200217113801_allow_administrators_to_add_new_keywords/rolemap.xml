@@ -1,0 +1,13 @@
+<rolemap>
+  <permissions>
+
+    <permission name="ftw.keywordwidget: Add new term" acquire="False">
+      <role name="Manager" />
+      <role name="Site Administrator" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+  </permissions>
+
+</rolemap>

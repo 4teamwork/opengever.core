@@ -46,6 +46,7 @@
       <role name="Manager" />
       <role name="Site Administrator" />
       <role name="Contributor" />
+      <role name="Administrator" />
     </permission>
 
     <permission name="opengever.bumblebee: Revive Preview" acquire="True">
