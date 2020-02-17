@@ -8,6 +8,7 @@ Changelog
 - Add permission and role to use the workspace Client. [njohner]
 - Add french titles for initial content in the policytemplate. [phgross]
 - Enable the solr flag in the policytemplate. [phgross]
+- Implement @linked-workspaces endpoint. [elioschmutz]
 - Implement @create-linked-workspace endpoint. [elioschmutz]
 
 

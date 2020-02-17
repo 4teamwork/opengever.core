@@ -576,4 +576,12 @@
       permission="opengever.workspaceclient.UserWorkspaceClient"
       />
 
+  <plone:service
+      method="GET"
+      name="@linked-workspaces"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.LinkedWorkspacesGet"
+      permission="zope2.View"
+      />
+
 </configure>
