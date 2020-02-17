@@ -51,3 +51,14 @@ class WorkspaceClient(object):
         """Lookup an object.
         """
         return self.request.get(url_or_path).json()
+
+    def create_workspace(self, **data):
+        """Crates a new workspace and returns the serialization of the new
+        workspace
+        """
+        payload = data
+        payload.update({
+            '@type': 'opengever.workspace.workspace'
+        })
+
+        return self.request.post('/workspaces', json=payload).json()

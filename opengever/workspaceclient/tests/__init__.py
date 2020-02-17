@@ -39,7 +39,7 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
         # Teamraum setup
         self.workspace_root = create(Builder('workspace_root')
                                      .having(id='workspaces'))
-        self.grant('WorkspaceUser', on=self.workspace_root)
+        self.grant('WorkspacesUser', 'WorkspacesCreator', on=self.workspace_root)
 
         self.workspace = create(Builder('workspace').within(self.workspace_root))
         self.grant('WorkspaceMember', on=self.workspace)

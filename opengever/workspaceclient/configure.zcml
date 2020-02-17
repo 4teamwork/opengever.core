@@ -6,12 +6,6 @@
 
   <include file="permissions.zcml" />
 
-  <plone:behavior
-      title="Remote workpsace support"
-      description="Provides functions to handle remote workspaces"
-      provides=".interfaces.ILinkedWorkspaces"
-      factory=".linked_workspaces.LinkedWorkspaces"
-      marker=".interfaces.ILinkedWorkspacesMarker"
-      />
+  <adapter factory=".linked_workspaces.LinkedWorkspaces" />
 
 </configure>

@@ -4,6 +4,7 @@ from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import Unauthorized
+import transaction
 
 
 class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
@@ -46,3 +47,14 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
         self.assertEqual(1, response.get('items_total'))
         self.assertEqual(self.workspace.absolute_url(),
                          response.get('items')[0].get('@id'))
+
+    def test_create_workspace(self):
+        with self.observe_children(self.workspace_root) as children:
+            with self.workspace_client_env() as client:
+                response = client.create_workspace(title=u"My new w\xf6rkspace")
+                transaction.commit()
+
+        self.assertEqual(u"My new w\xf6rkspace", response.get('title'))
+
+        workspace = children['added'].pop()
+        self.assertEqual(workspace.title, response.get('title'))
