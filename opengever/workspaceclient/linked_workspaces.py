@@ -59,7 +59,8 @@ class LinkedWorkspaces(object):
 
         return self.client.search(
             UID=uids,
-            portal_type="opengever.workspace.workspace")
+            portal_type="opengever.workspace.workspace",
+            metadata_fields="UID")
 
     def create(self, **data):
         """Creates a new workspace an links it with the current dossier.
