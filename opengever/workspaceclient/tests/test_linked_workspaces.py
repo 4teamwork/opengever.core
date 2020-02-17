@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.workspaceclient.exceptions import WorkspaceNotFound
+from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -99,3 +101,50 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.assertRaises(ComponentLookupError):
                 getAdapter(subdossier, ILinkedWorkspaces)
+
+    def test_copy_document_without_file_to_workspace(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .having(preserved_as_paper=True))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.workspace) as children:
+                response = manager.copy_document_to_workspace(document, self.workspace.UID())
+                transaction.commit()
+
+            self.assertEqual(1, len(children['added']))
+            workspace_document = children['added'].pop()
+
+            self.assertEqual(workspace_document.absolute_url(), response.get('@id'))
+            self.assertEqual(workspace_document.title, document.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(document),
+                manager._serialized_document_schema_fields(workspace_document))
+
+    def test_copy_document_to_workspace_raises_error_if_workspace_is_not_linked_to_the_dossier(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .having(preserved_as_paper=True))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+
+            self.assertNotIn(self.workspace.UID(), manager.storage)
+            with self.assertRaises(WorkspaceNotLinked):
+                manager.copy_document_to_workspace(document, self.workspace.UID())
+
+    def test_copy_document_to_workspace_raises_error_if_workspace_could_not_be_found(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .having(preserved_as_paper=True))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add('removed-workspace-uid')
+
+            with self.assertRaises(WorkspaceNotFound):
+                manager.copy_document_to_workspace(document, 'removed-workspace-uid')
