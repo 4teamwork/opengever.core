@@ -12,9 +12,41 @@ from opengever.task import FINISHED_TASK_STATES
 from opengever.task.response_description import ResponseDescription
 from plone import api
 from Products.CMFPlone import PloneMessageFactory
+from Products.CMFPlone.utils import safe_unicode
 
 
-class TaskAddedActivity(BaseActivity):
+class BaseTaskActivity(BaseActivity):
+
+    CONTAINER_TITLE_MAX_LENGHT = 30
+
+    @property
+    def dossier_title(self):
+        """If the task is in a subdossier, return its title, otherwise
+        return the title of the main dossier (or inbox for a forwarding)"""
+
+        # context can be a plone task or a task model
+        dossier_title = self.context.get_containing_dossier_title()
+        subdossier_title = self.context.get_containing_subdossier()
+
+        container_title = safe_unicode(subdossier_title or dossier_title)
+        return container_title
+
+    @property
+    def title(self):
+        task_title = super(BaseTaskActivity, self).title
+
+        if len(self.dossier_title) > self.CONTAINER_TITLE_MAX_LENGHT:
+            cropped_dossier_title = self.dossier_title[:self.CONTAINER_TITLE_MAX_LENGHT - 3] + u"..."
+        else:
+            cropped_dossier_title = self.dossier_title
+
+        return {code: u"[{dossier_title}] {task_title}".format(
+                    dossier_title=cropped_dossier_title,
+                    task_title=task_title[code])
+                for code in self._get_supported_languages()}
+
+
+class TaskAddedActivity(BaseTaskActivity):
     """Activity representation for adding a task.
     """
 
@@ -89,7 +121,7 @@ class TaskAddedActivity(BaseActivity):
         self.center.add_task_issuer(self.context, self.context.issuer)
 
 
-class BaseTaskResponseActivity(BaseActivity):
+class BaseTaskResponseActivity(BaseTaskActivity):
     """Abstract base class for all task-response related activities.
 
     The TaskResponseActivity class is a representation for every activity which
@@ -188,7 +220,7 @@ class TaskReassignActivity(TaskTransitionActivity):
         return False
 
 
-class TaskReminderActivity(BaseActivity):
+class TaskReminderActivity(BaseTaskActivity):
     kind = 'task-reminder'
     IGNORED_STATES = FINISHED_TASK_STATES + ['task-state-resolved']
     system_activity = True
