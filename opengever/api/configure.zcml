@@ -584,4 +584,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@copy-document-to-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.CopyDocumentToWorkspacePost"
+      permission="opengever.workspaceclient.UserWorkspaceClient"
+      />
+
 </configure>
