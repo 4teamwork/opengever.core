@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import base_notification_center
 from opengever.activity.base import BaseActivity
@@ -100,7 +102,7 @@ class TaskAddedActivity(BaseTaskActivity):
     def collect_description_data(self, language):
         """Returns a list with [label, value] pairs.
         """
-        return [
+        data = [
             [_('label_task_title', u'Task title'), self.context.title],
             [_('label_deadline', u'Deadline'),
              api.portal.get_localized_time(str(self.context.deadline))],
@@ -114,7 +116,13 @@ class TaskAddedActivity(BaseTaskActivity):
              self.context.get_responsible_actor().get_label()],
             [_('label_issuer', u'Issuer'),
              self.context.get_issuer_actor().get_label()]
-        ]
+            ]
+        if self.context.get_is_subtask():
+            parent = aq_parent(aq_inner(self.context))
+            data.insert(
+                4, [_('label_containing_task', u'Containing tasks'), parent.title]
+                )
+        return data
 
     def before_recording(self):
         self.center.add_task_responsible(self.context,
