@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Allow Administrators to add new keywords. [njohner]
+- Implement @copy-document-to-workspace endpoint. [elioschmutz]
 - Assign correct role Reader to reader_group. [deiferni]
 - Allow administrators to deactivate dossiers. [njohner]
 - Add permission and role to use the workspace Client. [njohner]
