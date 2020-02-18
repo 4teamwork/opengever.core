@@ -4,6 +4,7 @@ Changelog
 2020.1.0rc3 (unreleased)
 ------------------------
 
+- Add container title to task activities. [njohner]
 - Allow Administrators to add new keywords. [njohner]
 - Implement @copy-document-to-workspace endpoint. [elioschmutz]
 - Assign correct role Reader to reader_group. [deiferni]

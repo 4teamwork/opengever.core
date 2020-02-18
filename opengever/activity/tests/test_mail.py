@@ -152,7 +152,7 @@ class TestEmailNotification(IntegrationTestCase):
         process_mail_queue()
 
         raw_mail = Mailing(self.portal).pop()
-        link = ('<p><a href=3D"http://nohost/plone/@@resolve_notification?notification=\n_id=3D1">'
+        link = ('<p><a href=3D"http://nohost/plone/@@resolve_notification?notificati=\non_id=3D1">'
                 '[Vertr=C3=A4ge mit der kantonalen...] Test Task</a></p>')
         self.assertIn(link, raw_mail.strip())
 

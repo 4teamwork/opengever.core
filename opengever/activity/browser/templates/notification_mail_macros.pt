@@ -213,8 +213,9 @@
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr>
                   <td style="padding: 40px; font-family: Arial, sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                    <h1 style="text-align: center; margin: 0 0 10px 0; font-family: Arial, sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;" tal:content="options/title">
+                    <h1 style="text-align: center; margin: 0 0 10px 0; font-family: Arial, sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">
                         <metal:title define-slot="title">
+                          <span tal:replace="options/title"/>
                         </metal:title>
                     </h1>
                     <metal:subtitle define-slot="subtitle">
