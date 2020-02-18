@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
@@ -8,6 +9,31 @@ from plone import api
 from zope.component import getAdapter
 from zope.component.interfaces import ComponentLookupError
 import transaction
+
+
+@contextmanager
+def auto_commit_after_request(client):
+    """This contextmanager injects a session hook for the current client
+    session to commit the transaction after each request.
+
+    This is required in some functional non-browser tests where we perform
+    multiple subrequests in one function call.
+
+    This is not required for browser-tests or production environments because
+    the transaction will be committed automatically as soon as a request is
+    finished.
+    """
+    def commit_transaction_hook(*args, **kwargs):
+        transaction.commit()
+
+    client_session_hooks = client.session.session.hooks
+    original_hooks = list(client_session_hooks['response'])
+    client_session_hooks['response'].append(commit_transaction_hook)
+
+    try:
+        yield
+    finally:
+        client_session_hooks['response'] = original_hooks
 
 
 class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
@@ -148,3 +174,26 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.assertRaises(WorkspaceNotFound):
                 manager.copy_document_to_workspace(document, 'removed-workspace-uid')
+
+    def test_copy_document_with_file_to_a_workspace(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.workspace) as children:
+                with auto_commit_after_request(manager.client):
+                    response = manager.copy_document_to_workspace(document, self.workspace.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_document = children['added'].pop()
+
+            self.assertEqual(workspace_document.absolute_url(), response.get('@id'))
+            self.assertEqual(workspace_document.title, document.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(document),
+                manager._serialized_document_schema_fields(workspace_document))
