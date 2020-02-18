@@ -6,6 +6,7 @@ Changelog
 
 - Allow Administrators to add new keywords. [njohner]
 - Assign correct role Reader to reader_group. [deiferni]
+- Allow administrators to deactivate dossiers. [njohner]
 - Add permission and role to use the workspace Client. [njohner]
 - Add french titles for initial content in the policytemplate. [phgross]
 - Enable the solr flag in the policytemplate. [phgross]
