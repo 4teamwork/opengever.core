@@ -1,9 +1,11 @@
+from opengever.testing import assets
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import Unauthorized
+import os
 import transaction
 
 
@@ -68,3 +70,31 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
         with self.workspace_client_env() as client:
             url = client.lookup_url_by_uid(self.workspace.UID())
             self.assertEqual(self.workspace.absolute_url(), url)
+
+    def test_tus_upload(self):
+        with self.workspace_client_env() as client:
+            filepath = assets.path_to_asset('vertragsentwurf.docx')
+            file_size = os.path.getsize(filepath)
+            content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            additional_metadata = {
+                'title': u"My new d\xf6kument",
+                'description': u'Fantastic'
+            }
+
+            with self.observe_children(self.workspace) as children:
+                response = client.tus_upload(
+                    self.workspace.absolute_url(),
+                    open(filepath, 'r'), file_size, content_type,
+                    'vertragsentwurf.docx', **additional_metadata)
+                transaction.commit()
+
+            self.assertEqual(1, len(children['added']))
+            document = children['added'].pop()
+
+            self.assertEqual(document.absolute_url(), response.get('@id'))
+            self.assertEqual(open(filepath, 'r').read(),
+                             document.file.open().read())
+
+            self.assertEqual(u'My new doekument.docx', document.file.filename)
+            self.assertEqual(u'My new d\xf6kument', document.title)
+            self.assertEqual('Fantastic', document.description)

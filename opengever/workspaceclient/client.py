@@ -1,8 +1,10 @@
+from base64 import b64encode
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.session import WorkspaceSession
 from plone import api
+from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
 import os
 
@@ -85,3 +87,61 @@ class WorkspaceClient(object):
             raise LookupError("Found multiple workspaces with the same UID")
 
         return items[0].get('@id') if items else None
+
+    def tus_upload(self, url_or_path, file_, size, content_type, filename,
+                   **additional_metadata):
+        """Creates a new file within the folder of the given url or path and
+        extends the created file with some additional metadata.
+
+        :param url_or_path: Location where to create the new document
+        :param file: Readable IO which holds the content of the file
+        :param size: The size of the file
+        :param content_type: The content type of the document
+        :param filename: The filename of the document
+        :param additional_metadata: Additional metadatadata for the new object
+        """
+        url_or_path = url_or_path.strip('/')
+        metadata = {
+            'filename': filename,
+            '@type': 'opengever.document.document',
+            'content_type': content_type
+        }
+
+        tus = self.request.post('{}/@tus-upload'.format(url_or_path), headers={
+            'Tus-Resumable': '1.0.0',
+            'Upload-Length': str(size),
+            'Upload-Metadata': self._tus_metadata_string(metadata),
+        })
+
+        created_document = self.request.patch(
+            tus.headers['Location'],
+            headers={
+                'Tus-Resumable': '1.0.0',
+                'Upload-Offset': '0',
+                'Content-Type': 'application/offset+octet-stream'
+            },
+            data=file_,
+        )
+
+        document_url = created_document.headers['Location']
+
+        # It's not possible to directly update the metadata of an object through
+        # a TUS-request. We perform another patch-request to update the newly
+        # created document with some additional metadata.
+        return self.patch(document_url, json=additional_metadata,
+                          headers={'Prefer': 'return=representation'})
+
+    def _tus_metadata_string(self, metadata):
+        """We can pass metadata in the request header of a TUS-request.
+
+        The 'Upload-Metadata' header contains a string of key-value pairs where
+        the values are base64 encoded.
+
+        This function converts a dict into a tus metadata string.
+        """
+        metadata_items = []
+        for key, value in metadata.items():
+            b64_value = str(b64encode(safe_utf8(value)))
+            metadata_items.append('{} {}'.format(key, b64_value))
+
+        return ','.join(metadata_items)
