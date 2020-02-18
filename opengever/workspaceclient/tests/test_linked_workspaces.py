@@ -193,6 +193,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             self.assertEqual(workspace_document.absolute_url(), response.get('@id'))
             self.assertEqual(workspace_document.title, document.title)
+            self.assertEqual(workspace_document.file.open().read(),
+                             document.file.open().read())
 
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
