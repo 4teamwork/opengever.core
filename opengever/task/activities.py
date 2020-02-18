@@ -35,6 +35,11 @@ class BaseTaskActivity(BaseActivity):
     def title(self):
         task_title = super(BaseTaskActivity, self).title
 
+        if not self.dossier_title:
+            # Just to be safe, but this should not happen, except in tests
+            # where tasks are created directly on the site root.
+            return task_title
+
         if len(self.dossier_title) > self.CONTAINER_TITLE_MAX_LENGHT:
             cropped_dossier_title = self.dossier_title[:self.CONTAINER_TITLE_MAX_LENGHT - 3] + u"..."
         else:
