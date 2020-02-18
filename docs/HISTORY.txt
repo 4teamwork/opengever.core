@@ -4,6 +4,7 @@ Changelog
 2020.1.0rc3 (unreleased)
 ------------------------
 
+- Add smoke tests for rewrite rules and VHost configs. [lgraf]
 - Add container title to task activities. [njohner]
 - Allow Administrators to add new keywords. [njohner]
 - Implement @copy-document-to-workspace endpoint. [elioschmutz]
