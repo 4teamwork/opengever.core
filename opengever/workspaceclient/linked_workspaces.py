@@ -97,6 +97,11 @@ class LinkedWorkspaces(object):
                                       content_type, filename,
                                       **self._tus_document_repr(document_repr))
 
+    def has_linked_workspaces(self):
+        """Returns true if the current context has linked workspaces
+        """
+        return self.list().get('items_total', 0) > 0
+
     def _form_fields(self, obj):
         """Returns a list of all form field names of the given object.
         """

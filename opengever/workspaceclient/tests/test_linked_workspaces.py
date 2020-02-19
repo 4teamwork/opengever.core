@@ -199,3 +199,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
+
+    def test_has_linked_workspaces(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+
+            self.assertFalse(manager.has_linked_workspaces())
+
+            manager.storage.add(self.workspace.UID())
+
+            self.assertTrue(manager.has_linked_workspaces())
