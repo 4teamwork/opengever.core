@@ -1,13 +1,17 @@
+from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 import json
+import requests_mock
 import transaction
 
 
@@ -146,3 +150,33 @@ class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
                 browser.open(
                     subdossier.absolute_url() + '/@linked-workspaces',
                     method='GET', headers={'Accept': 'application/json'}).json
+
+    @browsing
+    def test_request_error_handling(self, browser):
+        LinkedWorkspacesStorage(self.dossier).add(self.workspace.UID())
+
+        def assertStatusCode(test_with, raised_error):
+            with self.workspace_client_env():
+                browser.login()
+                browser.exception_bubbling = True
+                with requests_mock.Mocker() as mocker:
+                    mocker.post('{}/@@oauth2-token'.format(self.portal.absolute_url()),
+                                status_code=test_with)
+
+                    with self.assertRaises(HTTPServerError):
+                        browser.open(
+                            self.dossier.absolute_url() + '/@linked-workspaces',
+                            method='GET', headers={'Accept': 'application/json'}).json
+
+            self.assertEqual(
+                raised_error, browser.status_code,
+                '{} should raise a {}'.format(test_with, raised_error))
+            self.assertEqual(
+                test_with, browser.json.get('service_error').get('status_code'),
+                'The service_error status code should contain the original status code')
+
+        assertStatusCode(test_with=404, raised_error=502)
+        assertStatusCode(test_with=408, raised_error=504)
+        assertStatusCode(test_with=500, raised_error=502)
+        assertStatusCode(test_with=502, raised_error=502)
+        assertStatusCode(test_with=504, raised_error=504)
