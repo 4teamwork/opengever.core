@@ -40,7 +40,6 @@ class FtwTokenAuthSession(requests.Session):
 
         response = super(FtwTokenAuthSession, self).request(method, url,
                                                             *args, **kwargs)
-
         if self.token_has_expired(response):
             # We got an 'Access token expired' response => refresh token
             self.obtain_token()
@@ -54,7 +53,7 @@ class FtwTokenAuthSession(requests.Session):
 
     def token_has_expired(self, response):
         status = response.status_code
-        content_type = response.headers['Content-Type']
+        content_type = response.headers.get('Content-Type')
 
         if status == 401 and content_type == 'application/json':
             body = response.json()

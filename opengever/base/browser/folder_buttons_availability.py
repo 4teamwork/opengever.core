@@ -1,7 +1,9 @@
-from Products.Five import BrowserView
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from plone import api
 from opengever.task.task import ITask
+from opengever.workspaceclient import is_workspace_client_feature_available
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from plone import api
+from Products.Five import BrowserView
 
 
 class FolderButtonsAvailabilityView(BrowserView):
@@ -19,3 +21,19 @@ class FolderButtonsAvailabilityView(BrowserView):
         may_add_task = api.user.has_permission('opengever.task: Add task',
                                                obj=self.context)
         return (is_dossier or is_task) and may_add_task
+
+    def is_copy_documents_to_workspace_available(self):
+        """Only available if there are linked workspaces for the current
+        main-dossier.
+        """
+        if not IDossierMarker.providedBy(self.context):
+            return False
+
+        if not is_workspace_client_feature_available():
+            return False
+
+        if self.context.is_subdossier():
+            return False
+
+        linked_workspaces_manager = ILinkedWorkspaces(self.context.get_main_dossier())
+        return linked_workspaces_manager.has_linked_workspaces()

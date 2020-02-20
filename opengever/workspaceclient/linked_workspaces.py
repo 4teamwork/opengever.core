@@ -1,13 +1,18 @@
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.workspaceclient.client import WorkspaceClient
+from opengever.workspaceclient.exceptions import WorkspaceNotFound
+from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from plone import api
 from plone.memoize import ram
+from plone.restapi.interfaces import ISerializeToJson
 from time import time
 from zope.component import adapter
+from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
 from zope.interface import implementer
+from plone.dexterity.utils import iterSchemata
 
 
 CACHE_TIMEOUT = 24 * 60 * 60
@@ -54,7 +59,8 @@ class LinkedWorkspaces(object):
 
         return self.client.search(
             UID=uids,
-            portal_type="opengever.workspace.workspace")
+            portal_type="opengever.workspace.workspace",
+            metadata_fields="UID")
 
     def create(self, **data):
         """Creates a new workspace an links it with the current dossier.
@@ -64,3 +70,73 @@ class LinkedWorkspaces(object):
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
         return workspace
+
+    def copy_document_to_workspace(self, document, workspace_uid):
+        """Will upload a copy of a document to a linked workspace.
+        """
+        if workspace_uid not in self.storage:
+            raise WorkspaceNotLinked()
+
+        workspace_url = self.client.lookup_url_by_uid(workspace_uid)
+
+        if not workspace_url:
+            raise WorkspaceNotFound()
+
+        file_ = document.file
+        document_repr = self._serialized_document_schema_fields(document)
+
+        if not file_:
+            # File only preserved in paper.
+            return self.client.post(workspace_url, json=document_repr)
+
+        content_type = document.content_type()
+
+        filename = document.get_filename()
+        size = file_.size
+        return self.client.tus_upload(workspace_url, file_.open(), size,
+                                      content_type, filename,
+                                      **self._tus_document_repr(document_repr))
+
+    def has_linked_workspaces(self):
+        """Returns true if the current context has linked workspaces
+        """
+        return self.list().get('items_total', 0) > 0
+
+    def _form_fields(self, obj):
+        """Returns a list of all form field names of the given object.
+        """
+        fieldnames = []
+        for schema in iterSchemata(obj):
+            for fieldname in schema:
+                fieldnames.append(fieldname)
+        return fieldnames
+
+    def _serialized_document_schema_fields(self, document):
+        """Serializes all document schema fields.
+        """
+        serializer = getMultiAdapter((document, self.context.REQUEST), ISerializeToJson)
+        whitelist = self._form_fields(document)
+        whitelist.append('@type')
+        return self._whitelisted_dict(serializer(), whitelist)
+
+    def _tus_document_repr(self, serialized_document):
+        """Prepares the serialized document to match the criterias to add a new
+        document with the `tus_upload`.
+        """
+        return self._blacklisted_dict(serialized_document, ['@type', 'file'])
+
+    def _whitelisted_dict(self, dict_obj, whitelist):
+        whitelisted_dict = {}
+        for key in whitelist:
+            if key in dict_obj:
+                whitelisted_dict[key] = dict_obj[key]
+        return whitelisted_dict
+
+    def _blacklisted_dict(self, dict_obj, blacklist):
+        blacklisted_dict = {}
+        for key in dict_obj.keys():
+            if key in blacklist:
+                continue
+            blacklisted_dict[key] = dict_obj[key]
+
+        return blacklisted_dict

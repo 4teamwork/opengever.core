@@ -573,7 +573,7 @@
       name="@create-linked-workspace"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.LinkedWorkspacesPost"
-      permission="opengever.workspaceclient.UserWorkspaceClient"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
       />
 
   <plone:service
@@ -582,6 +582,14 @@
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.LinkedWorkspacesGet"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@copy-document-to-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.CopyDocumentToWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
       />
 
 </configure>

@@ -33,3 +33,10 @@ class TestLinkedWorkspacesStorage(FunctionalWorkspaceClientTestCase):
         storage.add('UID-2')
 
         self.assertEqual(['UID-1', 'UID-2'], storage.list())
+
+    def test_storage_contains_uid(self):
+        storage = LinkedWorkspacesStorage(self.dossier)
+        storage.add('UID-1')
+
+        self.assertIn('UID-1', storage)
+        self.assertNotIn('UID-2', storage)

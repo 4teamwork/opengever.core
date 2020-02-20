@@ -68,6 +68,7 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
     def enable_feature(self, enabled=True):
         api.portal.set_registry_record(
             'is_feature_enabled', enabled, IWorkspaceClientSettings)
+        transaction.commit()
 
     @contextmanager
     def workspace_client_env(self, url=DEFAULT_MARKER):

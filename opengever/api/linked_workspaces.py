@@ -1,7 +1,10 @@
 from functools import wraps
 from opengever.base.sentry import maybe_report_exception
+from opengever.document.document import IDocumentSchema
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from plone import api
+from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
@@ -98,6 +101,9 @@ class LinkedWorkspacesService(Service):
         if not is_workspace_client_feature_available():
             raise NotFound
 
+        if self.context.is_subdossier():
+            raise BadRequest
+
         return super(LinkedWorkspacesService, self).render()
 
 
@@ -106,9 +112,6 @@ class LinkedWorkspacesGet(LinkedWorkspacesService):
     """
     @request_error_handler
     def reply(self):
-        if self.context.is_subdossier():
-            raise BadRequest
-
         response = ILinkedWorkspaces(self.context).list()
 
         # The response id contains the url of the workspace-client request.
@@ -125,9 +128,6 @@ class LinkedWorkspacesPost(LinkedWorkspacesService):
 
     @request_error_handler
     def reply(self):
-        if self.context.is_subdossier():
-            raise BadRequest
-
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
@@ -135,3 +135,44 @@ class LinkedWorkspacesPost(LinkedWorkspacesService):
         data = json_body(self.request)
 
         return ILinkedWorkspaces(self.context).create(**data)
+
+
+class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
+    """API Endpoint to copy a document to a linked workspace.
+    """
+    @request_error_handler
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        workspace_uid, document = self.validate_data(json_body(self.request))
+
+        return ILinkedWorkspaces(self.context).copy_document_to_workspace(
+            document, workspace_uid)
+
+    def validate_data(self, data):
+        workspace_uid = data.get('workspace_uid')
+        if not workspace_uid:
+            raise BadRequest("Property 'workspace_uid' is required")
+
+        document_uid = data.get('document_uid')
+        if not document_uid:
+            raise BadRequest("Property 'document_uid' is required")
+
+        document = uuidToObject(document_uid)
+        if not document or not IDocumentSchema.providedBy(document):
+            raise BadRequest("The document does not exist")
+
+        if not self.obj_contained_in(document, self.context):
+            raise BadRequest(
+                "Only documents within the current main dossier are allowed")
+
+        return workspace_uid, document
+
+    def obj_contained_in(self, obj, container):
+        catalog = api.portal.get_tool('portal_catalog')
+        results = catalog.searchResults(
+            path={'query': '/'.join(container.getPhysicalPath())},
+            UID=obj.UID())
+
+        return len(results)

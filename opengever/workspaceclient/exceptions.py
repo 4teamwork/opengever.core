@@ -23,3 +23,17 @@ class WorkspaceClientFeatureNotEnabled(Exception):
         super(WorkspaceClientFeatureNotEnabled, self).__init__(
             'Please activate the workspace client feature in the portal '
             'registry in the IWorkspaceClientSettings')
+
+
+class WorkspaceNotLinked(Exception):
+
+    def __init__(self):
+        super(WorkspaceNotLinked, self).__init__(
+            'The workspace in not linked with the current dossier.')
+
+
+class WorkspaceNotFound(Exception):
+
+    def __init__(self):
+        super(WorkspaceNotFound, self).__init__(
+            'No workspace found.')
