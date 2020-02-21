@@ -44,6 +44,11 @@
       />
 
   <utility
+      component=".sections.set_dates.SetDatesSection"
+      name="opengever.bundle.set_dates"
+      />
+
+  <utility
       component=".sections.workflow.WorkflowUpdaterSection"
       name="opengever.bundle.workflow"
       />

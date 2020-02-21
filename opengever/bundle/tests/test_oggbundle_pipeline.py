@@ -24,6 +24,7 @@ from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import json
+import tzlocal
 
 
 FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
@@ -440,6 +441,10 @@ class TestOggBundlePipeline(IntegrationTestCase):
             date(2007, 1, 1),
             document1.document_date)
         self.assertEqual(
+            document1.changed,
+            datetime(2019, 12, 5, 14, 9, 59, 240726, tzinfo=tzlocal.get_localzone()))
+
+        self.assertEqual(
             tuple(),
             document1.keywords)
         self.assertTrue(
@@ -467,6 +472,10 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             date(2011, 1, 1),
             document2.document_date)
+        self.assertEqual(
+            document2.changed,
+            datetime(2019, 12, 5, tzinfo=tzlocal.get_localzone()))
+
         self.assertEqual(
             u'directive',
             document2.document_type)
@@ -507,6 +516,10 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             IAnnotations(document3)[BUNDLE_GUID_KEY],
             index_data_for(document3)[GUID_INDEX_NAME])
+
+        self.assertEqual(
+            document3.changed,
+            tzlocal.get_localzone().localize(FROZEN_NOW))
 
     def assert_document4_created(self, parent):
         document4 = self.find_by_title(
