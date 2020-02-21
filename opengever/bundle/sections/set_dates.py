@@ -25,6 +25,11 @@ class SetDatesSection(object):
         self.context = transmogrifier.context
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
 
+    def set_modification_date(self, obj, modification_date):
+        obj.setModificationDate(
+            modification_date=modification_date)
+        obj.reindexObject(idxs=['modified'])
+
     def set_changed(self, obj, changed):
         changed = datify(changed).asdatetime()
         if changed.tzinfo is None:
@@ -37,6 +42,7 @@ class SetDatesSection(object):
             obj = self._get_obj(item)
             changed = item.get("changed")
             if changed:
+                self.set_modification_date(obj, changed)
                 self.set_changed(obj, changed)
 
             yield item
