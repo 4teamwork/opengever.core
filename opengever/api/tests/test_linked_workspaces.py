@@ -347,8 +347,8 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             transaction.commit()
 
             browser.login()
+            fix_publisher_test_bug(browser, document)
             with self.observe_children(self.workspace) as children:
-                fix_publisher_test_bug(browser, self.dossier)
                 browser.open(
                     self.dossier.absolute_url() + '/@copy-document-to-workspace',
                     data=json.dumps(payload),
