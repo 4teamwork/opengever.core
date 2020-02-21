@@ -192,17 +192,17 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
         }
 
         with self.workspace_client_env():
-                browser.login()
+            browser.login()
 
-                browser.exception_bubbling = True
-                with self.assertRaises(BadRequest) as cm:
-                    browser.open(
-                        self.dossier.absolute_url() + '/@copy-document-to-workspace',
-                        data=json.dumps(payload),
-                        method='POST',
-                        headers={'Accept': 'application/json',
-                                 'Content-Type': 'application/json'},
-                    )
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
 
         self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
 
@@ -213,17 +213,17 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
         }
 
         with self.workspace_client_env():
-                browser.login()
+            browser.login()
 
-                browser.exception_bubbling = True
-                with self.assertRaises(BadRequest) as cm:
-                    browser.open(
-                        self.dossier.absolute_url() + '/@copy-document-to-workspace',
-                        data=json.dumps(payload),
-                        method='POST',
-                        headers={'Accept': 'application/json',
-                                 'Content-Type': 'application/json'},
-                    )
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
 
         self.assertEqual("Property 'document_uid' is required", str(cm.exception))
 
@@ -235,17 +235,17 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
         }
 
         with self.workspace_client_env():
-                browser.login()
+            browser.login()
 
-                browser.exception_bubbling = True
-                with self.assertRaises(BadRequest) as cm:
-                    browser.open(
-                        self.dossier.absolute_url() + '/@copy-document-to-workspace',
-                        data=json.dumps(payload),
-                        method='POST',
-                        headers={'Accept': 'application/json',
-                                 'Content-Type': 'application/json'},
-                    )
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
 
         self.assertEqual("The document does not exist", str(cm.exception))
 
@@ -260,17 +260,17 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
         }
 
         with self.workspace_client_env():
-                browser.login()
+            browser.login()
 
-                browser.exception_bubbling = True
-                with self.assertRaises(BadRequest) as cm:
-                    browser.open(
-                        self.dossier.absolute_url() + '/@copy-document-to-workspace',
-                        data=json.dumps(payload),
-                        method='POST',
-                        headers={'Accept': 'application/json',
-                                 'Content-Type': 'application/json'},
-                    )
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
 
         self.assertEqual("Only documents within the current main dossier are allowed", str(cm.exception))
 
@@ -326,6 +326,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
+            self.assertEqual(len(children['added']), 1)
             workspace_document = children['added'].pop()
             self.assertEqual(workspace_document.absolute_url(), browser.json.get('@id'))
 
@@ -346,8 +347,8 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             transaction.commit()
 
             browser.login()
+            fix_publisher_test_bug(browser, document)
             with self.observe_children(self.workspace) as children:
-                fix_publisher_test_bug(browser, self.dossier)
                 browser.open(
                     self.dossier.absolute_url() + '/@copy-document-to-workspace',
                     data=json.dumps(payload),
@@ -356,6 +357,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
+            self.assertEqual(len(children['added']), 1)
             workspace_document = children['added'].pop()
 
             self.assertEqual(workspace_document.absolute_url(), browser.json.get('@id'))
