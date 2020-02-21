@@ -1,4 +1,6 @@
+from collections import namedtuple
 from datetime import datetime
+from datetime import date
 from fnmatch import fnmatch
 from os import listdir
 from os.path import basename
@@ -11,7 +13,7 @@ import argparse
 import errno
 import json
 import os
-from collections import namedtuple
+import platform
 
 
 # List of fnmatch() patterns to specify which "documents" to ignore
@@ -20,6 +22,24 @@ IGNORES = ['*.DS_Store', '*.dll', '*.exe']
 
 DirectoryNode = namedtuple('Node', ['path', 'guid', 'parent_guid', 'level'])
 FileNode = namedtuple('Node', ['path', 'guid', 'parent_guid'])
+
+
+def creation_date(path_to_file):
+    """
+    From https://stackoverflow.com/questions/237079
+    Try to get the date that a file was created, falling back to when it was
+    last modified if that isn't possible.
+    """
+    if platform.system() == 'Windows':
+        return os.path.getctime(path_to_file)
+    else:
+        stat = os.stat(path_to_file)
+        try:
+            return stat.st_birthtime
+        except AttributeError:
+            # We're probably on Linux. No easy way to get creation dates here,
+            # so we'll settle for when its content was last modified.
+            return stat.st_mtime
 
 
 class FilesystemWalker(object):
@@ -188,6 +208,16 @@ class OGGBundleDocument(OGGBundleItemBase):
         super(OGGBundleDocument, self).__init__(node)
         self._data['parent_guid'] = self.node.parent_guid
         self._data['filepath'] = self.node.path
+        self._data['document_date'] = self.creation_date
+        self._data['changed'] = self.modification_date
+
+    @property
+    def modification_date(self):
+        return datetime.fromtimestamp(os.path.getmtime(self.path)).isoformat()
+
+    @property
+    def creation_date(self):
+        return date.fromtimestamp(creation_date(self.path)).isoformat()
 
 
 class BundleFactory(object):
