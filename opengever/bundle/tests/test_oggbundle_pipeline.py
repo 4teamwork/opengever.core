@@ -530,6 +530,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             document3.changed,
             tzlocal.get_localzone().localize(FROZEN_NOW))
+        self.assertEqual(
+            document3.created(),
+            DateTime(FROZEN_NOW))
 
     def assert_document4_created(self, parent):
         document4 = self.find_by_title(
