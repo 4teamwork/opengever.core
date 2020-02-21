@@ -572,9 +572,23 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             u'Peter Muster <from@example.org>',
             mail.document_author)
+
+        # Setting the document date in the bundle for an e-mail has no effect
+        # The date from the E-mail is used instead
+        self.assertNotEqual(
+            date(2011, 1, 1),
+            mail.document_date)
         self.assertEqual(
             date(2013, 1, 1),
             mail.document_date)
+
+        self.assertEqual(
+            mail.modified(),
+            DateTime("2019-12-05"))
+        self.assertEqual(
+            mail.changed,
+            datetime(2019, 12, 5, tzinfo=tzlocal.get_localzone()))
+
         self.assertEqual(
             None,
             mail.document_type)
