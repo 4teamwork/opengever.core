@@ -56,11 +56,18 @@ class TestEmailNotification(IntegrationTestCase):
     @browsing
     def test_subject_is_title(self, browser):
         self.login(self.dossier_responsible, browser)
+
+        # We change the dossier title to ASCII-only, makes it easier
+        # to test the mail subject
+        self.dossier.title = "Dossier title"
+
         self.create_task_via_browser(browser)
         process_mail_queue()
 
         mail = email.message_from_string(Mailing(self.portal).pop())
-        self.assertEquals('GEVER Activity: Test Task', mail.get('Subject'))
+
+        self.assertEquals(
+            'GEVER Activity: [Dossier title] Test Task', mail.get('Subject'))
 
     @browsing
     def test_notification_summary_is_split_into_paragraphs(self, browser):
@@ -145,7 +152,8 @@ class TestEmailNotification(IntegrationTestCase):
         process_mail_queue()
 
         raw_mail = Mailing(self.portal).pop()
-        link = '<p><a href=3D"http://nohost/plone/@@resolve_notification?notification=\n_id=3D1">Test Task</a></p>'
+        link = ('<p><a href=3D"http://nohost/plone/@@resolve_notification?notificati=\non_id=3D1">'
+                '[Vertr=C3=A4ge mit der kantonalen...] Test Task</a></p>')
         self.assertIn(link, raw_mail.strip())
 
     @browsing
@@ -216,7 +224,7 @@ class TestNotificationMailsAndSavepoints(IntegrationTestCase):
         self.login(self.dossier_responsible)
 
         # Trigger a notification that dispatches a mail
-        activity = TaskAddedActivity(self.task, getRequest(), self.dossier)
+        activity = TaskAddedActivity(self.task, getRequest())
         activity.record()
 
         # Creating a savepoint will fail with the MailDataManager if it's

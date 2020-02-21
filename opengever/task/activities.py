@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import base_notification_center
 from opengever.activity.base import BaseActivity
@@ -12,15 +14,48 @@ from opengever.task import FINISHED_TASK_STATES
 from opengever.task.response_description import ResponseDescription
 from plone import api
 from Products.CMFPlone import PloneMessageFactory
+from Products.CMFPlone.utils import safe_unicode
 
 
-class TaskAddedActivity(BaseActivity):
+class BaseTaskActivity(BaseActivity):
+
+    CONTAINER_TITLE_MAX_LENGHT = 30
+
+    @property
+    def dossier_title(self):
+        """If the task is in a subdossier, return its title, otherwise
+        return the title of the main dossier (or inbox for a forwarding)"""
+
+        # context can be a plone task or a task model
+        dossier_title = self.context.get_containing_dossier_title()
+        subdossier_title = self.context.get_containing_subdossier()
+
+        container_title = safe_unicode(subdossier_title or dossier_title)
+        return container_title
+
+    @property
+    def title(self):
+        task_title = super(BaseTaskActivity, self).title
+
+        if not self.dossier_title:
+            # Just to be safe, but this should not happen, except in tests
+            # where tasks are created directly on the site root.
+            return task_title
+
+        if len(self.dossier_title) > self.CONTAINER_TITLE_MAX_LENGHT:
+            cropped_dossier_title = self.dossier_title[:self.CONTAINER_TITLE_MAX_LENGHT - 3] + u"..."
+        else:
+            cropped_dossier_title = self.dossier_title
+
+        return {code: u"[{dossier_title}] {task_title}".format(
+                    dossier_title=cropped_dossier_title,
+                    task_title=task_title[code])
+                for code in self._get_supported_languages()}
+
+
+class TaskAddedActivity(BaseTaskActivity):
     """Activity representation for adding a task.
     """
-
-    def __init__(self, context, request, parent):
-        super(TaskAddedActivity, self).__init__(context, request)
-        self.parent = parent
 
     @property
     def kind(self):
@@ -67,21 +102,27 @@ class TaskAddedActivity(BaseActivity):
     def collect_description_data(self, language):
         """Returns a list with [label, value] pairs.
         """
-        return [
+        data = [
             [_('label_task_title', u'Task title'), self.context.title],
             [_('label_deadline', u'Deadline'),
              api.portal.get_localized_time(str(self.context.deadline))],
             [_('label_task_type', u'Task Type'),
              self.context.get_task_type_label(language=language)],
             [_('label_dossier_title', u'Dossier title'),
-             self.parent.title],
+             self.dossier_title],
             [_('label_text', u'Text'),
              self.context.text if self.context.text else u'-'],
             [_('label_responsible', u'Responsible'),
              self.context.get_responsible_actor().get_label()],
             [_('label_issuer', u'Issuer'),
              self.context.get_issuer_actor().get_label()]
-        ]
+            ]
+        if self.context.get_is_subtask():
+            parent = aq_parent(aq_inner(self.context))
+            data.insert(
+                4, [_('label_containing_task', u'Containing tasks'), parent.title]
+                )
+        return data
 
     def before_recording(self):
         self.center.add_task_responsible(self.context,
@@ -89,7 +130,7 @@ class TaskAddedActivity(BaseActivity):
         self.center.add_task_issuer(self.context, self.context.issuer)
 
 
-class BaseTaskResponseActivity(BaseActivity):
+class BaseTaskResponseActivity(BaseTaskActivity):
     """Abstract base class for all task-response related activities.
 
     The TaskResponseActivity class is a representation for every activity which
@@ -188,7 +229,7 @@ class TaskReassignActivity(TaskTransitionActivity):
         return False
 
 
-class TaskReminderActivity(BaseActivity):
+class TaskReminderActivity(BaseTaskActivity):
     kind = 'task-reminder'
     IGNORED_STATES = FINISHED_TASK_STATES + ['task-state-resolved']
     system_activity = True

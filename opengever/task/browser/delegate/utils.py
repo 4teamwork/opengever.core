@@ -1,4 +1,3 @@
-from opengever.task.activities import TaskAddedActivity
 from opengever.task.util import update_reponsible_field_data
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
@@ -6,7 +5,6 @@ from plone.dexterity.utils import iterSchemata
 from z3c.relationfield import RelationValue
 from zope import schema
 from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 import urllib
 

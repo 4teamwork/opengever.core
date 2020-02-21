@@ -1,8 +1,10 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
 from opengever.activity.mailer import process_mail_queue
@@ -56,7 +58,8 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
 
         browser.open_html(activity.description)
@@ -116,7 +119,8 @@ class TestTaskActivites(FunctionalTestCase):
     def test_task_accepted(self, browser):
         task = create(Builder('task')
                       .titled(u'Abkl\xe4rung Fall Meier')
-                      .having(responsible=TEST_USER_ID))
+                      .having(responsible=TEST_USER_ID)
+                      .within(self.dossier))
 
         browser.login().open(task)
         browser.css('#workflow-transition-task-transition-open-in-progress').first.click()
@@ -129,7 +133,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Accepted by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
@@ -137,7 +141,8 @@ class TestTaskActivites(FunctionalTestCase):
 
     @browsing
     def test_task_commented(self, browser):
-        dossier = create(Builder('dossier'))
+        dossier = create(Builder('dossier')
+                         .titled(u"Dossier XY"))
         task = create(Builder('task')
                       .within(dossier)
                       .titled(u'Abkl\xe4rung Fall Meier')
@@ -153,7 +158,8 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-commented', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Commented by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
@@ -166,7 +172,8 @@ class TestTaskActivites(FunctionalTestCase):
                .with_roles('Reader', 'Editor', 'Contributor'))
         task = create(Builder('task')
                       .titled(u'Abkl\xe4rung Fall Meier')
-                      .having(responsible='hugo.boss'))
+                      .having(responsible='hugo.boss')
+                      .within(self.dossier))
 
         browser.login(username='hugo.boss', password='secret').open(task)
         browser.css('#workflow-transition-task-transition-open-in-progress').first.click()
@@ -182,7 +189,8 @@ class TestTaskActivites(FunctionalTestCase):
         task = create(Builder('task')
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=TEST_USER_ID)
-                      .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress')
+                      .within(self.dossier))
 
         browser.login().open(task)
         browser.css('#workflow-transition-task-transition-in-progress-resolved').first.click()
@@ -195,7 +203,8 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-in-progress-resolved', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Resolved by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Ist erledigt.', activity.description)
@@ -205,7 +214,8 @@ class TestTaskActivites(FunctionalTestCase):
         task = create(Builder('task')
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=TEST_USER_ID)
-                      .in_state('task-state-rejected'))
+                      .in_state('task-state-rejected')
+                      .within(self.dossier))
 
         alsoProvides(task, IFromSequentialTasktemplate)
         transaction.commit()
@@ -221,7 +231,8 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-rejected-skipped', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Skipped by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Wird \xfcbersprungen.', activity.description)
@@ -232,7 +243,8 @@ class TestTaskActivites(FunctionalTestCase):
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=u'hugo.boss',
                               deadline=date(2015, 03, 01))
-                      .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress')
+                      .within(self.dossier))
 
         browser.login().open(
             task, view='modify_deadline',
@@ -248,11 +260,13 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-modify-deadline', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(u'[Dossier XY] Abkl\xe4rung Fall Meier',
+                          activity.title)
         self.assertEquals(
             'Deadline modified from 01.03.2015 to 20.03.2016 by'
             ' <a href="http://nohost/plone/@@user-details/test_user_1_">'
-            'Test User (test_user_1_)</a>', activity.summary)
+            'Test User (test_user_1_)</a>',
+            activity.summary)
         self.assertEquals(u'nicht dring\xe4nd', activity.description)
 
     @browsing
@@ -261,18 +275,20 @@ class TestTaskActivites(FunctionalTestCase):
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=u'hugo.boss',
                               deadline=date(2015, 03, 01))
-                      .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress')
+                      .within(self.dossier))
 
-        browser.login().open(task, view='++add++opengever.task.task')
-        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
-                      'Text': 'Lorem ipsum'})
+        with freeze(datetime(2015, 03, 02)):
+            browser.login().open(task, view='++add++opengever.task.task')
+            browser.fill({'Title': u'Unteraufgabe Abkl\xe4rung Fall Meier',
+                          'Task Type': 'comment',
+                          'Text': 'Lorem ipsum'})
 
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('hugo.boss')
-        form.find_widget('Issuer').fill(u'hugo.boss')
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill('hugo.boss')
+            form.find_widget('Issuer').fill(u'hugo.boss')
 
-        browser.css('#form-buttons-save').first.click()
+            browser.css('#form-buttons-save').first.click()
 
         # Ensure adding subtask activity is fired only once.
         # Second activity is for task creation
@@ -280,8 +296,22 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(u'[Dossier XY] Unteraufgabe Abkl\xe4rung Fall Meier',
+                          activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
+
+        browser.open_html(activity.description)
+        rows = browser.css('table').first.rows
+        self.assertEquals(
+            [['Task title', u'Unteraufgabe Abkl\xe4rung Fall Meier'],
+             ['Deadline', 'Mar 07, 2015'],
+             ['Task Type', 'To comment'],
+             ['Dossier title', 'Dossier XY'],
+             ['Containing tasks', u'Abkl\xe4rung Fall Meier'],
+             ['Text', 'Lorem ipsum'],
+             ['Responsible', 'Boss Hugo (hugo.boss)'],
+             ['Issuer', 'Boss Hugo (hugo.boss)']],
+            [row.css('td').text for row in rows])
 
     @browsing
     def test_adding_a_document_notifies_watchers(self, browser):
@@ -289,7 +319,8 @@ class TestTaskActivites(FunctionalTestCase):
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=u'hugo.boss',
                               deadline=date(2015, 03, 01))
-                      .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress')
+                      .within(self.dossier))
 
         browser.login().open(task, view='++add++opengever.document.document')
         browser.fill({'Title': u'Letter to peter'})
@@ -308,7 +339,8 @@ class TestTaskActivites(FunctionalTestCase):
                       .titled(u'Abkl\xe4rung Fall Huber')
                       .having(responsible=u'hugo.boss',
                               deadline=date(2015, 07, 01))
-                      .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress')
+                      .within(self.dossier))
 
         browser.login().open(task)
         browser.find('task-transition-delegate').click()
@@ -326,7 +358,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Huber', activity.title)
+        self.assertEquals(u'[Dossier XY] Abkl\xe4rung Fall Huber', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
 
 
@@ -355,7 +387,9 @@ class TestTaskReassignActivity(IntegrationTestCase):
         reassign_activity = activities[-1]
 
         self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
-        self.assertEquals(u'Vertragsentwurf \xdcberpr\xfcfen', reassign_activity.title)
+        self.assertEquals(
+          u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
+          reassign_activity.title)
         self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
                           u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
@@ -375,7 +409,9 @@ class TestTaskReassignActivity(IntegrationTestCase):
         reassign_activity = activities[-1]
 
         self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
-        self.assertEquals(u'Vertragsentwurf \xdcberpr\xfcfen', reassign_activity.title)
+        self.assertEquals(
+          u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
+          reassign_activity.title)
         self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
                           u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
@@ -473,7 +509,8 @@ class TestSuccesssorHandling(FunctionalTestCase):
         self.dossier = create(Builder('dossier').titled(u'Dosssier A'))
         self.predecessor = create(Builder('task')
                                   .having(responsible='peter.meier',
-                                          issuer='james.meier'))
+                                          issuer='james.meier')
+                                  .within(self.dossier))
 
         self.center.add_task_responsible(self.predecessor, 'peter.meier')
         self.center.add_task_issuer(self.predecessor, 'james.meier')
@@ -517,6 +554,8 @@ class TestTaskReminderActivity(IntegrationTestCase):
 
         self.assertEquals('task-reminder', activity.kind)
         self.assertEquals('Task reminder', activity.label)
-        self.assertEquals(self.task.title, activity.title)
+        self.assertEquals(
+          u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
+          activity.title)
         self.assertEqual(SYSTEM_ACTOR_ID, activity.actor_id)
         self.assertEquals(u'Deadline is on Nov 01, 2016', activity.summary)

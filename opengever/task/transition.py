@@ -1,4 +1,3 @@
-from Acquisition import aq_parent
 from opengever.activity import notification_center
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.source import DossierPathSourceBinder
@@ -28,7 +27,6 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import adapter
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.interface import implementer
@@ -347,12 +345,13 @@ class OpenPlannedTransitionExtender(DefaultTransitionExtender):
     record an TaskAdded activity instead."""
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        response = add_simple_response(self.context, transition=transition,
+        response = add_simple_response(self.context,
+                                       transition=transition,
                                        text=transition_params.get('text'),
-            supress_activity=True)
+                                       supress_activity=True)
 
         TaskAddedActivity(
-            self.context, getRequest(), aq_parent(self.context)).record()
+            self.context, getRequest()).record()
 
         self.save_related_items(response, transition_params.get('relatedItems'))
         self.sync_change(transition, transition_params.get('text'), disable_sync)

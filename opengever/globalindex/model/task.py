@@ -464,6 +464,16 @@ class Task(Base):
         """Wrap a span-tag around the text with the status-css class."""
         return u'<span class="wf-%s">%s</span>' % (self.review_state, text)
 
+    def get_containing_dossier_title(self):
+        """containing dossier title encoded as utf-8 to mirror the behavior
+        of opengever.task.task.Task"""
+        return self.containing_dossier.encode('utf-8')
+
+    def get_containing_subdossier(self):
+        """containing subdossier title encoded as utf-8 to mirror the behavior
+        of opengever.task.task.Task"""
+        return self.containing_subdossier.encode('utf-8')
+
 
 class TaskQuery(BaseQuery):
 

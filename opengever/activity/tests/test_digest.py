@@ -75,7 +75,7 @@ class TestDigestMail(IntegrationTestCase):
         browser.open_html(str(messages[0].get_payload()[0]))
 
         self.assertEquals('Oct 16, 2017', browser.css('table p').text[0])
-        self.assertEquals(['Daily Digest for B=C3=A4rfuss K=C3=A4thi'],
+        self.assertEquals(['= Daily Digest for B=C3=A4rfuss K=C3=A4thi ='],
                           browser.css('h1').text)
         self.assertEquals(['Bitte =C3=84nderungen nachvollziehen'],
                           browser.css('h2 a').text)

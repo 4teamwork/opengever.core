@@ -22,13 +22,13 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(0,  Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         for notification in Notification.query.all():
             notification.is_read = True
 
         with freeze(datetime(2018, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         self.assertEqual(2, len(center.get_watchers(self.task)))
 
@@ -53,7 +53,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'notification_id': 3,
               u'read': False,
               u'summary': u'New task opened by Ziegler Robert',
-              u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
+              u'title': u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen'},
              {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
               u'actor_id': u'nicole.kohler',
               u'actor_label': u'Kohler Nicole',
@@ -63,7 +63,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'notification_id': 1,
               u'read': True,
               u'summary': u'New task opened by Ziegler Robert',
-              u'title': u'Vertragsentwurf \xdcberpr\xfcfen'}],
+              u'title': u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen'}],
             browser.json.get('items'))
 
     @browsing
@@ -76,7 +76,7 @@ class TestNotificationsGet(IntegrationTestCase):
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             for i in range(5):
-                TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+                TaskAddedActivity(self.task, self.request).record()
 
         self.login(self.regular_user, browser=browser)
 
@@ -107,7 +107,7 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(0,  Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         url = '{}/@notifications/{}/1'.format(self.portal.absolute_url(),
                                               self.regular_user.getId())
@@ -127,7 +127,7 @@ class TestNotificationsGet(IntegrationTestCase):
              u'notification_id': 1,
              u'read': False,
              u'summary': u'New task opened by Ziegler Robert',
-             u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
+             u'title': u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen'},
             browser.json)
 
     @browsing
@@ -160,7 +160,7 @@ class TestNotificationsGet(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         # Different username in path
         with browser.expect_http_error(401):
@@ -185,7 +185,7 @@ class TestNotificationsPatch(IntegrationTestCase):
     def test_mark_notification_as_read(self, browser):
         self.login(self.dossier_responsible, browser=browser)
 
-        TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+        TaskAddedActivity(self.task, self.request).record()
 
         url = '{}/@notifications/{}/{}'.format(self.portal.absolute_url(),
                                                self.regular_user.getId(), 1)
@@ -221,7 +221,7 @@ class TestNotificationsPatch(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+            TaskAddedActivity(self.task, self.request).record()
 
         # Different username in path
         with browser.expect_http_error(401):

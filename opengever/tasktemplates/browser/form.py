@@ -73,7 +73,7 @@ meta_data['tasks'] = {
          'width': 30,
          'sortable': False,
          'hideable': False,
-         'menuDisabled':True,
+         'menuDisabled': True,
          'dataIndex': 'path_checkbox'},
 
         {'id': 'Title',
@@ -247,8 +247,8 @@ class AddForm(BrowserView):
             responsible=self.replace_interactive_user('current_user'),
             responsible_client=get_current_org_unit().id(),
             task_type='direct-execution',
-            deadline=date.today() +
-            timedelta(highest_deadline + deadline_timedelta),
+            deadline=(date.today()
+                      + timedelta(highest_deadline + deadline_timedelta)),
             )
 
         main_task = createContent('opengever.task.task', **data)
@@ -300,11 +300,11 @@ class AddForm(BrowserView):
             task.reindexObject()
 
             # add activity record for subtask
-            activity = TaskAddedActivity(task, self.request, self.context)
+            activity = TaskAddedActivity(task, self.request)
             activity.record()
 
         # add activity record for the main task
-        activity = TaskAddedActivity(main_task, self.request, self.context)
+        activity = TaskAddedActivity(main_task, self.request)
         activity.record()
 
         IStatusMessage(self.request).addStatusMessage(
