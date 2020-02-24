@@ -25,6 +25,7 @@ from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import json
+import pytz
 import tzlocal
 
 
@@ -529,7 +530,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             DateTime(FROZEN_NOW))
         self.assertEqual(
             document3.changed,
-            tzlocal.get_localzone().localize(FROZEN_NOW))
+            pytz.utc.localize(FROZEN_NOW))
         self.assertEqual(
             document3.created(),
             DateTime(FROZEN_NOW))
