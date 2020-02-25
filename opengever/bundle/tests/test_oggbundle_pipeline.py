@@ -1,6 +1,7 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from datetime import date
 from datetime import datetime
+from DateTime import DateTime
 from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
@@ -24,6 +25,8 @@ from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import json
+import pytz
+import tzlocal
 
 
 FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
@@ -440,6 +443,13 @@ class TestOggBundlePipeline(IntegrationTestCase):
             date(2007, 1, 1),
             document1.document_date)
         self.assertEqual(
+            document1.modified(),
+            DateTime("2019-12-05T14:09:59.240726"))
+        self.assertEqual(
+            document1.changed,
+            datetime(2019, 12, 5, 14, 9, 59, 240726, tzinfo=tzlocal.get_localzone()))
+
+        self.assertEqual(
             tuple(),
             document1.keywords)
         self.assertTrue(
@@ -467,6 +477,13 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             date(2011, 1, 1),
             document2.document_date)
+        self.assertEqual(
+            document2.modified(),
+            DateTime("2019-12-05"))
+        self.assertEqual(
+            document2.changed,
+            datetime(2019, 12, 5, tzinfo=tzlocal.get_localzone()))
+
         self.assertEqual(
             u'directive',
             document2.document_type)
@@ -508,6 +525,16 @@ class TestOggBundlePipeline(IntegrationTestCase):
             IAnnotations(document3)[BUNDLE_GUID_KEY],
             index_data_for(document3)[GUID_INDEX_NAME])
 
+        self.assertEqual(
+            document3.modified(),
+            DateTime(FROZEN_NOW))
+        self.assertEqual(
+            document3.changed,
+            pytz.utc.localize(FROZEN_NOW))
+        self.assertEqual(
+            document3.created(),
+            DateTime(FROZEN_NOW))
+
     def assert_document4_created(self, parent):
         document4 = self.find_by_title(
             parent, u'Nonexistent document referenced via UNC-Path with Umlaut')
@@ -545,9 +572,23 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             u'Peter Muster <from@example.org>',
             mail.document_author)
+
+        # Setting the document date in the bundle for an e-mail has no effect
+        # The date from the E-mail is used instead
+        self.assertNotEqual(
+            date(2011, 1, 1),
+            mail.document_date)
         self.assertEqual(
             date(2013, 1, 1),
             mail.document_date)
+
+        self.assertEqual(
+            mail.modified(),
+            DateTime("2019-12-05"))
+        self.assertEqual(
+            mail.changed,
+            datetime(2019, 12, 5, tzinfo=tzlocal.get_localzone()))
+
         self.assertEqual(
             None,
             mail.document_type)

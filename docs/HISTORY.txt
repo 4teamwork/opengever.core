@@ -6,6 +6,8 @@ Changelog
 
 - Add smoke tests for rewrite rules and VHost configs. [lgraf]
 - Add container title to task activities. [njohner]
+- Set document_date and changed in bundle factory. [njohner]
+- Handle changed and modified in ogg bundles. [njohner]
 - Allow Administrators to add new keywords. [njohner]
 - Implement @copy-document-to-workspace endpoint. [elioschmutz]
 - Assign correct role Reader to reader_group. [deiferni]

@@ -87,6 +87,19 @@ class TestOggBundleFactory(IntegrationTestCase):
         self.assertTrue(document.get(u'parent_guid') or document.get(u'parent_reference'),
                         msg="A document always needs to define its parent")
 
+        # We cannot assert the values of the document_date and changed fields
+        # as they basically depend on when the repo was cloned. Instead we
+        # simply assert the list of properties on the object
+        self.assertItemsEqual(
+            [u'filepath',
+             u'parent_guid',
+             u'changed',
+             u'document_date',
+             u'title',
+             u'review_state',
+             u'guid'],
+            document.keys())
+
     def setUp(self):
         super(TestOggBundleFactory, self).setUp()
         self.tempdir = mkdtemp()
