@@ -40,27 +40,19 @@ class FtwTokenAuthSession(requests.Session):
 
         response = super(FtwTokenAuthSession, self).request(method, url,
                                                             *args, **kwargs)
-        if self.token_has_expired(response):
-            # We got an 'Access token expired' response => refresh token
+        if response.status_code == 401:
+            # We try to refresh the access token
             self.obtain_token()
+
             # Re-dispatch the request that previously failed
+            # (only once, using a single, non-recursive request, in order to
+            # avoid an infinite loop)
             response = super(FtwTokenAuthSession, self).request(method, url,
                                                                 *args, **kwargs)
 
         response.raise_for_status()
 
         return response
-
-    def token_has_expired(self, response):
-        status = response.status_code
-        content_type = response.headers.get('Content-Type')
-
-        if status == 401 and content_type == 'application/json':
-            body = response.json()
-            if body.get('error_description') == 'Access token expired':
-                return True
-
-        return False
 
     def obtain_token(self):
         """Acquires a fresh authorization token from the workspace and sets it

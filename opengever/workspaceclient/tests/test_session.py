@@ -8,6 +8,7 @@ from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from requests import HTTPError
+from zExceptions import Unauthorized
 import requests_mock
 import transaction
 
@@ -70,6 +71,60 @@ class TestWorkspaceSessionManager(FunctionalWorkspaceClientTestCase):
         self.assertNotEqual(jwt_token, extract_jwt_token(session),
                             "JWT should have been renewed")
         self.assertEqual(self.portal.absolute_url(), response.get('@id'))
+
+    def test_auto_renew_access_token_on_401(self):
+        def extract_jwt_token(session):
+            return session.session.headers.get('Authorization').split(' ')[-1]
+
+        plugin = api.portal.get_tool('acl_users')['token_auth']
+        storage = CredentialStorage(plugin)
+        create(Builder('workspace_token_auth_app')
+               .issuer(self.service_user)
+               .uri(self.portal.absolute_url()))
+        transaction.commit()
+
+        # Make a new session will create a jwt-token for the current session
+        session = WorkspaceSession(self.portal.absolute_url(), TEST_USER_ID)
+        jwt_token = extract_jwt_token(session)
+        transaction.commit()
+
+        # Making a request with the same session will reuse the jwt_token
+        response = session.request.get('/').json()
+        self.assertEqual(jwt_token, extract_jwt_token(session),
+                         "JWT token should still be the same")
+
+        # Remove all access tokens on the server side. The PAS plugin of
+        # ftw.tokenauth will then just skip the auth-process and the user will
+        # be anonymous for further calls. This will raise a 401 because an
+        # anonymous user is not allowed to make any request.
+        for token in storage._access_tokens.keys():
+            del storage._access_tokens[token]
+        transaction.commit()
+
+        # Making a request with a not exisitng token will auto-renew the jwt-token
+        response = session.request.get('/').json()
+        self.assertNotEqual(jwt_token, extract_jwt_token(session),
+                            "JWT should have been renewed")
+        self.assertEqual(self.portal.absolute_url(), response.get('@id'))
+
+    def test_http_error_401_will_not_end_in_an_infinite_loop_of_token_renewal(self):
+        create(Builder('workspace_token_auth_app')
+               .issuer(self.service_user)
+               .uri(self.portal.absolute_url()))
+        transaction.commit()
+
+        session = WorkspaceSession(self.portal.absolute_url(), TEST_USER_ID)
+        transaction.commit()
+
+        with requests_mock.Mocker(real_http=True) as mocker:
+            mocker.get(self.portal.absolute_url(), status_code=401)
+
+            # Making a request will raise a 401, the WorkspaceSession will
+            # try to renew the token, but this will raise another 401.
+            with self.assertRaises(HTTPError) as cm:
+                session.request.get('/').json()
+
+            self.assertEqual(401, cm.exception.response.status_code)
 
     def test_error_when_key_invalid(self):
         create(Builder('workspace_token_auth_app')
