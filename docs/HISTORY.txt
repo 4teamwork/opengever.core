@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2020.1.0rc3 (unreleased)
-------------------------
+2020.1.0 (2020-02-26)
+---------------------
 
 - Add smoke tests for rewrite rules and VHost configs. [lgraf]
 - Add container title to task activities. [njohner]
