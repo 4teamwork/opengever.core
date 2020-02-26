@@ -15,7 +15,7 @@ import subprocess
 import time
 
 
-BUILDOUT_DIR = Path(__file__).joinpath('..', '..', '..').abspath()
+BUILDOUT_DIR = Path(os.environ.get('BUILDOUT_DIR', Path(__file__).joinpath('..', '..', '..').abspath()))
 
 
 class SolrServer(object):
