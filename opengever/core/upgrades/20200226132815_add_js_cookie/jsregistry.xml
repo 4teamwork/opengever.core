@@ -1,0 +1,14 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/js_cookie.min.js"
+      inline="False"
+      insert-before="*"
+      />
+
+</object>

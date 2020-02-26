@@ -45,6 +45,7 @@ $(document).delegate('body', 'tabbedview.unknownresponse', function(event, overv
  * to the new gever-ui.
  */
 function switchUI(){
-  createCookie('geverui', '1');
+  var pathname = new URL($('body').data('portal-url')).pathname;
+  Cookies.set('geverui', '1', {path: pathname});
   window.location.reload(true);
 }
