@@ -46,6 +46,6 @@ $(document).delegate('body', 'tabbedview.unknownresponse', function(event, overv
  */
 function switchUI(){
   var pathname = new URL($('body').data('portal-url')).pathname;
-  Cookies.set('geverui', '1', {path: pathname});
+  Cookies.set('geverui', '1', {path: pathname, expires: 365});
   window.location.reload(true);
 }
