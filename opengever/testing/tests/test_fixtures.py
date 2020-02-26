@@ -1,6 +1,7 @@
 from DateTime import DateTime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import plone
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -15,6 +16,12 @@ class TestTestingFixture(IntegrationTestCase):
         self.login(self.regular_user)
         self.assertEquals('nicole.kohler', self.administrator.getId())
         self.assertIn('Administrator', self.administrator.getRoles())
+
+    def test_users_have_seen_all_tours(self):
+        self.login(self.regular_user)
+        self.assertEqual(
+            ["*"],
+            UserSettings.get_setting_for_user(api.user.get_current().getId(), 'seen_tours'))
 
     def test_repository_root_has_static_creation_date(self):
         self.login(self.regular_user)

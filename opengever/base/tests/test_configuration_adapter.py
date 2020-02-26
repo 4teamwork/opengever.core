@@ -29,7 +29,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('user_settings', OrderedDict([
                 ('notify_inbox_actions', True),
                 ('notify_own_actions', False),
-                ('seen_tours', []),
+                ('seen_tours', ['*']),
             ])),
             ('sharing_configuration', OrderedDict([
                 ('white_list_prefix', u'^.+'),

@@ -153,7 +153,7 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(
             {u'notify_inbox_actions': True,
              u'notify_own_actions': False,
-             u'seen_tours': []},
+             u'seen_tours': [u'*']},
             browser.json.get(u'user_settings'))
 
     @browsing

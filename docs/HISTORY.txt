@@ -4,7 +4,7 @@ Changelog
 2020.2.0rc1 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Set seen_tours for all users in test fixture. [njohner]
 
 
 2020.1.0 (2020-02-26)

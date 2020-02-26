@@ -18,12 +18,12 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
-from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.mail.tests import MAIL_DATA
 from opengever.officeconnector.helpers import get_auth_plugin
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
@@ -192,6 +192,7 @@ class OpengeverContentFixture(object):
             u'Nicole',
             u'Kohler',
             ['Administrator', 'APIUser'],
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.member_admin = self.create_user(
@@ -199,12 +200,14 @@ class OpengeverContentFixture(object):
             u'David',
             u'Meier',
             ['MemberAreaAdministrator', 'APIUser'],
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.dossier_responsible = self.create_user(
             'dossier_responsible',
             u'Robert',
             u'Ziegler',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.regular_user = self.create_user(
@@ -228,12 +231,14 @@ class OpengeverContentFixture(object):
             salutation='Prof. Dr.',
             url='http://www.example.com',
             zip_code='1234',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.meeting_user = self.create_user(
             'meeting_user',
             u'Herbert',
             u'J\xe4ger',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.secretariat_user = self.create_user(
@@ -241,18 +246,21 @@ class OpengeverContentFixture(object):
             u'J\xfcrgen',
             u'K\xf6nig',
             group=self.org_unit_fd.inbox_group,
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.committee_responsible = self.create_user(
             'committee_responsible',
             u'Fr\xe4nzi',
             u'M\xfcller',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.dossier_manager = self.create_user(
             'dossier_manager',
             u'F\xe4ivel',
             u'Fr\xfchling',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.records_manager = self.create_user(
@@ -260,37 +268,43 @@ class OpengeverContentFixture(object):
             u'Ramon',
             u'Flucht',
             ['Records Manager'],
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.workspace_owner = self.create_user(
             'workspace_owner',
             u'G\xfcnther',
             u'Fr\xf6hlich',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.workspace_admin = self.create_user(
             'workspace_admin',
             u'Fridolin',
             u'Hugentobler',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.workspace_member = self.create_user(
             'workspace_member',
             u'B\xe9atrice',
             u'Schr\xf6dinger',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.workspace_guest = self.create_user(
             'workspace_guest',
             u'Hans',
             u'Peter',
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.archivist = self.create_user(
             'archivist',
             u'J\xfcrgen',
             u'Fischer',
-            ['Archivist']
+            ['Archivist'],
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         self.service_user = self.create_user(
@@ -302,13 +316,15 @@ class OpengeverContentFixture(object):
                 'ServiceKeyUser',
                 'Impersonator',
                 'Administrator',
-            ])
+            ],
+            )
 
         self.webaction_manager = self.create_user(
             'webaction_manager',
             u'WebAction',
             u'Manager',
             ['WebActionManager'],
+            user_settings={'_seen_tours': '["*"]'},
             )
 
         # This user is intended to be used in situations where you need a user
@@ -1862,8 +1878,8 @@ class OpengeverContentFixture(object):
             lastname,
             globalroles=(),
             group=None,
-            **kwargs
-        ):
+            user_settings=None,
+            **kwargs):
         """Create an OGDS user and a Plone user.
         The user is member of the current org unit user group.
         The ``attrname`` is the attribute name used to access this user
@@ -1888,6 +1904,7 @@ class OpengeverContentFixture(object):
             .assign_to_org_units([self.org_unit_fd])
             .in_group(group)
             .having(**kwargs)
+            .with_user_settings(**(user_settings or {}))
             )
 
         # Use a static bumblebee user salt so that access tokens are predictable
