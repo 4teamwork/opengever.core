@@ -2,7 +2,6 @@ from ftw.testbrowser import browsing
 from opengever.base.model import create_session
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import IntegrationTestCase
-from zExceptions import Unauthorized
 import json
 
 

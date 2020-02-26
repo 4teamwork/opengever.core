@@ -2,7 +2,6 @@ from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.model import USER_ID_LENGTH
 from opengever.ogds.models.user import User
-from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
