@@ -45,6 +45,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.task.reminder import Reminder
 from opengever.task.reminder import ReminderSameDay
 from opengever.testing.builders.base import TEST_USER_ID
@@ -259,6 +260,7 @@ class OGDSUserBuilder(SqlObjectBuilder):
         self.arguments['userid'] = 'test'
         self.arguments['email'] = 'test@example.org'
         self.arguments[self.id_argument_name] = TEST_USER_ID
+        self.user_settings = {}
 
     def as_contact_adapter(self):
         self._as_contact_adapter = True
@@ -282,12 +284,22 @@ class OGDSUserBuilder(SqlObjectBuilder):
             obj = OgdsUserToContactAdapter(obj)
         return obj
 
+    def after_create(self, obj):
+        if self.user_settings:
+            for key, value in self.user_settings.items():
+                UserSettings.save_setting_for_user(obj.userid, key, value)
+        return obj
+
     def add_object_to_session(self, obj):
         if self._as_contact_adapter:
             # unwrap the ogds user from its adapter
             obj = obj.ogds_user
 
         self.db_session.add(obj)
+
+    def with_user_settings(self, **settings):
+        self.user_settings = settings
+        return self
 
 
 builder_registry.register('ogds_user', OGDSUserBuilder)

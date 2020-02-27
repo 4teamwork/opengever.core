@@ -2,7 +2,6 @@ from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.model import USER_ID_LENGTH
 from opengever.ogds.models.user import User
-from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -51,6 +50,14 @@ class UserSettings(Base):
 
     @classmethod
     def save_setting_for_user(cls, userid, setting_name, value):
+        """Creates a new entry for the user if necessary and saves the value
+        for the given setting.
+
+        Note that seen_tours cannot be set through this method as it is not
+        a column in the table. One can set _seen_tours instead, but this
+        circumvents the setter, so make sure that the value is not a list but
+        a json.dumps of the list.
+        """
         # Make sure that setting_name is a column of the UserSettings model.
         error_msg = "{} has to be a column on UserSettings".format(setting_name)
         assert setting_name in cls.__table__.columns, error_msg
