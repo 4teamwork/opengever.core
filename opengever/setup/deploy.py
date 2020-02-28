@@ -175,6 +175,13 @@ class GeverDeployment(object):
                                   'records_manager_group', 'Records Manager')
         self.assign_group_to_role(self.site, self.config,
                                   'api_group', 'APIUser')
+        self.assign_group_to_role(self.site, self.config,
+                                  'workspace_client_user_group',
+                                  'WorkspaceClientUser')
+        self.assign_group_to_role(self.site, self.config,
+                                  'workspace_user_group', 'WorkspacesUser')
+        self.assign_group_to_role(self.site, self.config,
+                                  'workspace_creator_group', 'WorkspacesCreator')
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.

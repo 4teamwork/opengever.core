@@ -85,6 +85,21 @@ class IDeploymentDirective(Interface):
         required=False,
         max_length=GROUP_ID_LENGTH)
 
+    workspace_creator_group = TextLine(
+        title=u'Workspace creator group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
+    workspace_user_group = TextLine(
+        title=u'Workspace user group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
+    workspace_client_user_group = TextLine(
+        title=u'Workspace client group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
 
 def register_ldap(context, **kwargs):
     title = kwargs.get('title')
