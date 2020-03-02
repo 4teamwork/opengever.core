@@ -112,6 +112,17 @@ class LinkedWorkspaces(object):
                                       content_type, filename,
                                       **self._tus_document_repr(document_repr))
 
+    def list_documents_in_linked_workspace(self, workspace_uid, **kwargs):
+        """List documents contained in a linked workspace
+        """
+        workspace_url = self._get_linked_workspace_url(workspace_uid)
+
+        return self.client.search(
+            url_or_path=workspace_url,
+            portal_type="opengever.document.document",
+            metadata_fields="UID",
+            **kwargs)
+
     def has_linked_workspaces(self):
         """Returns true if the current context has linked workspaces
         """

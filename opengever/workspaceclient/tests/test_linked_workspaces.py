@@ -230,3 +230,65 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager.storage.add(self.workspace.UID())
 
             self.assertTrue(manager.has_linked_workspaces())
+
+    def test_list_documents_in_linked_workspace_raises_if_workspace_is_not_linked(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            self.assertNotIn(self.workspace.UID(), manager.storage)
+            with self.assertRaises(WorkspaceNotLinked):
+                manager.list_documents_in_linked_workspace(self.workspace.UID())
+
+    def test_list_documents_in_linked_workspace_raises_if_workspace_could_not_be_found(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add('removed-workspace-uid')
+
+            with self.assertRaises(WorkspaceNotFound):
+                manager.list_documents_in_linked_workspace('removed-workspace-uid')
+
+    def test_list_documents_in_linked_workspace(self):
+        document = create(Builder('document')
+                          .within(self.workspace))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            documents = manager.list_documents_in_linked_workspace(self.workspace.UID())
+            expected_url = ('{}/@search?portal_type=opengever.document.document&'
+                            'metadata_fields=UID'.format(self.workspace.absolute_url()))
+            self.assertEqual(expected_url, documents['@id'])
+            self.assertEqual(1, documents['items_total'])
+            self.assertEqual(
+                {u'@id': document.absolute_url(),
+                 u'@type': u'opengever.document.document',
+                 u'UID': document.UID(),
+                 u'description': u'',
+                 u'review_state': u'document-state-draft',
+                 u'title': u'Testdokum\xe4nt'},
+                documents['items'][0])
+
+    def test_list_documents_in_linked_workspace_handles_batching(self):
+        document1 = create(Builder('document')
+                           .within(self.workspace))
+        document2 = create(Builder('document')
+                           .within(self.workspace))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            self.assertEqual(
+                [document1.absolute_url(), document2.absolute_url()],
+                [doc.get('@id') for doc in manager.list_documents_in_linked_workspace(
+                    self.workspace.UID()).get('items')])
+
+            self.assertEqual(
+                [document1.absolute_url()],
+                [doc.get('@id') for doc in manager.list_documents_in_linked_workspace(
+                    self.workspace.UID(), b_size=1).get('items')])
+
+            self.assertEqual(
+                [document2.absolute_url()],
+                [doc.get('@id') for doc in manager.list_documents_in_linked_workspace(
+                    self.workspace.UID(), b_size=1, b_start=1).get('items')])
