@@ -20,6 +20,12 @@ Neue Funktionalitäten in der SPV
 - Neu können Anhänge zu Anträgen aus der Sitzungsansicht bearbeitet werden.
 
 
+Erweiterung OGG-Bundle
+----------------------
+Die Datenschnittstelle OGG-Bundle zur Migration wurde erweitert und kann nun
+mehr Metadaten setzen, dies ist insbesondere bei Migrationen ab
+Windows-Dateisystemen nützlich.
+
 Sonstiges und Bugfixes
 ----------------------
 - Eine Performanceverbesserung von Dossierabschluss wurde eingeführt.
