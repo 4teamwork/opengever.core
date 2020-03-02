@@ -48,4 +48,13 @@ CLUSTERS_TO_TEST = [
         gever_ui_is_default=False,
     ),
 
+    Cluster(
+        'https://demo.teamraum.ch',
+        admin_units=[
+            AdminUnit('tr', is_dedicated_teamraum=True),
+        ],
+        new_portal=True,
+        gever_ui_is_default=True,
+    ),
+
 ]
