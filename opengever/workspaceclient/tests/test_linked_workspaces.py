@@ -50,6 +50,27 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 [self.workspace.absolute_url()],
                 [workspace.get('@id') for workspace in manager.list().get('items')])
 
+    def test_batching_in_list_linked_workspaces(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            workspace2 = create(Builder('workspace').within(self.workspace_root))
+            self.grant('WorkspaceMember', on=workspace2)
+            manager.storage.add(workspace2.UID())
+
+            self.assertEqual(
+                [self.workspace.absolute_url(), workspace2.absolute_url()],
+                [workspace.get('@id') for workspace in manager.list().get('items')])
+
+            self.assertEqual(
+                [self.workspace.absolute_url()],
+                [workspace.get('@id') for workspace in manager.list(b_size=1).get('items')])
+
+            self.assertEqual(
+                [workspace2.absolute_url()],
+                [workspace.get('@id') for workspace in manager.list(b_size=1, b_start=1).get('items')])
+
     def test_list_skips_workspaces_if_no_view_permission(self):
         unauthorized_workspace = create(Builder('workspace').within(self.workspace_root))
         self.grant('', on=unauthorized_workspace)

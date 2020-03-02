@@ -138,6 +138,40 @@ class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
             self.assertEqual(url, response.get('@id'))
 
     @browsing
+    def test_get_linked_workspaces_handles_batching(self, browser):
+        endpoint_url = self.dossier.absolute_url() + '/@linked-workspaces'
+        query_url = endpoint_url + '?b_size=1'
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            workspace2 = create(Builder('workspace').within(self.workspace_root))
+            self.grant('WorkspaceMember', on=workspace2)
+            manager.storage.add(workspace2.UID())
+
+            transaction.commit()
+
+            browser.login()
+            response = browser.open(
+                query_url,
+                method='GET',
+                headers={'Accept': 'application/json'}).json
+
+            self.assertEqual(endpoint_url, response.get('@id'))
+            self.assertEqual(2, response.get('items_total'))
+            self.assertEqual(
+                {"@id": query_url,
+                 "first": endpoint_url + '?b_start=0&b_size=1',
+                 "last": endpoint_url + '?b_start=1&b_size=1',
+                 "next": endpoint_url + '?b_start=1&b_size=1'},
+                response.get('batching'))
+
+            self.assertEqual(1, len(response.get('items')))
+            self.assertEqual(
+                [self.workspace.absolute_url()],
+                [workspace.get('@id') for workspace in response.get('items')])
+
+    @browsing
     def test_raise_exception_for_subdossiers(self, browser):
         subdossier = create(Builder('dossier').within(self.dossier))
         transaction.commit()

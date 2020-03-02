@@ -6,6 +6,7 @@ from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from requests import HTTPError
@@ -107,18 +108,31 @@ class LinkedWorkspacesService(Service):
         return super(LinkedWorkspacesService, self).render()
 
 
-class LinkedWorkspacesGet(LinkedWorkspacesService):
-    """API Endpoint to get all linked workspaces for a specific context
+class ProxyHypermediaBatch(LinkedWorkspacesService):
+    """When the remote workspace-client reply is batched, all
+    batching URLS will contain the workspace-client URL. This
+    is not what these proxy endpoints should send back, so that
+    we need to replace the batching information before forwarding
+    the reply.
     """
+
+    def get_remote_client_reply(self):
+        raise NotImplementedError()
+
     @request_error_handler
     def reply(self):
-        response = ILinkedWorkspaces(self.context).list()
+        batch = self.get_remote_client_reply()
+        proxy_batch = HypermediaBatch(self.request, [None for i in range(batch['items_total'])])
+        batch['@id'] = proxy_batch.canonical_url
+        batch['batching'] = proxy_batch.links
+        return batch
 
-        # The response id contains the url of the workspace-client request.
-        # We don't want to send it back to the client. We replace it with the
-        # actual client request url.
-        response['@id'] = self.request.getURL()
 
+class LinkedWorkspacesGet(ProxyHypermediaBatch):
+    """API Endpoint to get all linked workspaces for a specific context
+    """
+    def get_remote_client_reply(self):
+        response = ILinkedWorkspaces(self.context).list(**self.request.form)
         return response
 
 

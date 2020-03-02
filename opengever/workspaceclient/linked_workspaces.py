@@ -18,17 +18,27 @@ from plone.dexterity.utils import iterSchemata
 CACHE_TIMEOUT = 24 * 60 * 60
 
 
-def list_cache_key(linked_workspaces_instance):
-    """Cache key builder with the current user, a timeout and an additional
-    string or list to append to the key.
+def list_cache_key(linked_workspaces_instance, **kwargs):
+    """Cache key builder for linked workspaces list.
+    This cache key is per user and will get invalidated every CACHE_TIMEOUT,
+    when a workspace is linked or removed from a dossier or when CACHE_TIMEOUT
+    is modified.
+    It also depends on additional parameters which should be btaching parameters
+    of the request.
     """
-
     uid = linked_workspaces_instance.context.UID()
     linked_workspace_uids = '-'.join(linked_workspaces_instance.storage.list())
     userid = api.user.get_current().getId()
     timeout_key = str(time() // CACHE_TIMEOUT if CACHE_TIMEOUT > 0 else str(time()))
-    return '-'.join(('linked_workspaces_storage', userid, uid, linked_workspace_uids,
-                    str(CACHE_TIMEOUT), timeout_key))
+
+    cache_key = '-'.join(('linked_workspaces_storage', userid, uid,
+                         linked_workspace_uids, str(CACHE_TIMEOUT), timeout_key))
+
+    keywordarguments = '-'.join('{}={}'.format(key, value) for key, value in kwargs.items())
+    if keywordarguments:
+        cache_key = '{}-{}'.format(cache_key, keywordarguments)
+
+    return cache_key
 
 
 @implementer(ILinkedWorkspaces)
@@ -45,8 +55,8 @@ class LinkedWorkspaces(object):
         self.storage = LinkedWorkspacesStorage(context)
         self.context = context
 
-    @ram.cache(lambda method, context: list_cache_key(context))
-    def list(self):
+    @ram.cache(lambda method, context, **kwargs: list_cache_key(context, **kwargs))
+    def list(self, **kwargs):
         """Returns a JSON summary-representation of all stored workspaces.
         This function lookups all UIDs on the remote system by dispatching a
         search requests to the remote system.
@@ -60,7 +70,8 @@ class LinkedWorkspaces(object):
         return self.client.search(
             UID=uids,
             portal_type="opengever.workspace.workspace",
-            metadata_fields="UID")
+            metadata_fields="UID",
+            **kwargs)
 
     def create(self, **data):
         """Creates a new workspace an links it with the current dossier.
@@ -71,9 +82,7 @@ class LinkedWorkspaces(object):
         self.storage.add(workspace.get('UID'))
         return workspace
 
-    def copy_document_to_workspace(self, document, workspace_uid):
-        """Will upload a copy of a document to a linked workspace.
-        """
+    def _get_linked_workspace_url(self, workspace_uid):
         if workspace_uid not in self.storage:
             raise WorkspaceNotLinked()
 
@@ -81,6 +90,12 @@ class LinkedWorkspaces(object):
 
         if not workspace_url:
             raise WorkspaceNotFound()
+        return workspace_url
+
+    def copy_document_to_workspace(self, document, workspace_uid):
+        """Will upload a copy of a document to a linked workspace.
+        """
+        workspace_url = self._get_linked_workspace_url(workspace_uid)
 
         file_ = document.file
         document_repr = self._serialized_document_schema_fields(document)
