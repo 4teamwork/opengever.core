@@ -22,5 +22,5 @@ Neue Funktionalitäten in der SPV
 
 Sonstiges und Bugfixes
 ----------------------
-- Eine Performanceverbesserung von Dossierabschluss wurde eingeführt
+- Eine Performanceverbesserung von Dossierabschluss wurde eingeführt.
 - Berechtigungen von Administratoren wurden angepasst um Probleme mit Dossier stornieren und dem Hinzufügen von Schlagwörtern zu beheben.
