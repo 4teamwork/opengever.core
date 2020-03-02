@@ -7,6 +7,7 @@ Releases von OneGov GEVER.
 .. toctree::
    :maxdepth: 1
 
+   2020.1 <release-2020.1>
    2019.5-6 <release-2019.5-6>
    2019.4 <release-2019.4>
    2019.3 <release-2019.3>
