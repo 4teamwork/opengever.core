@@ -4,6 +4,7 @@ Changelog
 2020.2.0rc1 (unreleased)
 ------------------------
 
+- Extend policytemplates to use the single thread setup. [elioschmutz]
 - Extend policytemplates with workspace deployment. [elioschmutz]
 - Extend policytemplates with gever-ui activation. [elioschmutz]
 - Restrict `geverui` cookie to admin unit. [elioschmutz]
