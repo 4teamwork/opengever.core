@@ -65,7 +65,7 @@ class LinkedWorkspaces(object):
         """
         uids = self.storage.list()
         if not uids:
-            return {'items': [], 'total_items': 0}
+            return {'items': [], 'items_total': 0}
 
         return self.client.search(
             UID=uids,
