@@ -60,6 +60,17 @@
       cookable="True"
       expression=""
       enabled="True"
+      id="++resource++opengever.base/js_cookie.min.js"
+      inline="False"
+      insert-before="*"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
       id="++resource++opengever.base/notify.js"
       inline="False"
       insert-after="++resource++ftw.showroom/handlebars.js"
