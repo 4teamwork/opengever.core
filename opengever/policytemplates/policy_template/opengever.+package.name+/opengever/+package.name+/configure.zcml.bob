@@ -46,6 +46,22 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <opengever:registerLDAP
+      title="OneGov GEVER {{{package.title}}} LDAP"
+      ldap_profile="opengever.{{{package.name}}}:ldap"
+      is_default="True"
+      />
+
+{{% if setup.workspace %}}
+  <genericsetup:registerProfile
+      name="workspaces_content"
+      title="opengever.{{{package.name}}}:workspaces_content"
+      description="Default content for {{{package.title}}}."
+      directory="profiles/workspaces_content"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+{{% endif %}}
+
   <!-- deployments -->
   <opengever:registerDeployment
       title="OneGov GEVER {{{package.title}}}"
@@ -63,10 +79,20 @@
       mail_from_address="{{{deployment.mail_from_address}}}"
       />
 
-  <opengever:registerLDAP
-      title="OneGov GEVER {{{package.title}}} LDAP"
-      ldap_profile="opengever.{{{package.name}}}:ldap"
-      is_default="True"
+{{% if setup.workspace %}}
+  <opengever:registerDeployment
+      title="Teamraum {{{package.title}}}"
+      policy_profile="opengever.{{{package.name}}}:default"
+      additional_profiles="opengever.{{{package.name}}}:workspaces_content
+                           opengever.setup:casauth
+                          "
+      admin_unit_id="{{{adminunit.id}}}"
+      rolemanager_group="{{{deployment.rolemanager_group}}}"
+      records_manager_group="{{{deployment.records_manager_group}}}"
+      workspace_creators_group="{{{deployment.workspace_creators_group}}}"
+      workspace_users_group="{{{deployment.workspace_users_group}}}"
+      mail_domain="{{{deployment.mail_domain}}}"
+      mail_from_address="{{{deployment.mail_from_address}}}"
       />
-
+{{% endif %}}
 </configure>

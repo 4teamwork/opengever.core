@@ -155,12 +155,17 @@ def post_preserved_as_paper(configurator, question, answer):
 def post_render(configurator):
     has_templates = configurator.variables['include_templates']
     has_meeting = configurator.variables['setup.enable_meeting_feature']
+    has_workspace = configurator.variables['setup.workspace']
 
     package_name = configurator.variables['package.name']
-    content_path = os.path.join(
+    profiles_path = os.path.join(
         configurator.target_directory,
         'opengever.{}'.format(package_name),
-        'opengever', package_name, 'profiles', 'default_content',
+        'opengever', package_name, 'profiles')
+
+    content_path = os.path.join(
+        profiles_path,
+        'default_content',
         'opengever_content')
 
     if has_meeting:
@@ -171,6 +176,9 @@ def post_render(configurator):
 
         if not has_templates:
             _delete_templates_files(configurator, content_path)
+
+    if not has_workspace:
+        _delete_workspaces_content_profile(profiles_path)
 
 
 def _delete_templates_files(configurator, content_path):
@@ -203,3 +211,7 @@ def _get_sablon_template_paths():
                 filename)))
 
     return paths
+
+
+def _delete_workspaces_content_profile(profiles_path):
+    os.remove(os.path.join(profiles_path, 'workspaces_content'))
