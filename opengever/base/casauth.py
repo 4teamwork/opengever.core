@@ -60,4 +60,4 @@ def build_cas_server_url():
     initially configure the ftw.casauth plugin.
     """
     base_url = get_cluster_base_url()
-    return urljoin(base_url, 'portal')
+    return urljoin(base_url, 'portal/cas')
