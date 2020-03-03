@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
+from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
@@ -400,3 +401,118 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
+
+
+class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_raises_when_workspace_uid_is_missing(self, browser):
+
+        url = "/".join([self.dossier.absolute_url(),
+                        '@list-documents-in-linked-workspace',
+                        ])
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual("Missing path segment 'workspace_uid'",
+                         str(cm.exception))
+
+    @browsing
+    def test_raises_when_workspace_cant_be_looked_up_by_uid(self, browser):
+
+        url = "/".join([self.dossier.absolute_url(),
+                        '@list-documents-in-linked-workspace',
+                        'nonexisting'])
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(WorkspaceNotLinked) as cm:
+                browser.open(
+                    url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual(
+            "The workspace in not linked with the current dossier.",
+            str(cm.exception))
+
+    @browsing
+    def test_lists_documents_in_linked_workspace(self, browser):
+        document = create(Builder('document').within(self.workspace))
+
+        url = "/".join([self.dossier.absolute_url(),
+                        '@list-documents-in-linked-workspace',
+                        str(self.workspace.UID())])
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+
+            response = browser.open(
+                    url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                ).json
+
+            self.assertEqual(url, response.get('@id'))
+            self.assertEqual(1, response.get('items_total'))
+            self.assertEqual(
+                [{u'@id': document.absolute_url(),
+                  u'@type': u'opengever.document.document',
+                  u'UID': document.UID(),
+                  u'description': u'',
+                  u'review_state': u'document-state-draft',
+                  u'title': u'Testdokum\xe4nt'}],
+                response['items'])
+
+    @browsing
+    def test_lists_documents_in_linked_workspace_handles_batching(self, browser):
+        document1 = create(Builder('document').within(self.workspace))
+        create(Builder('document').within(self.workspace))
+
+        endpoint_url = "/".join([self.dossier.absolute_url(),
+                                 '@list-documents-in-linked-workspace',
+                                 str(self.workspace.UID())])
+        query_url = endpoint_url + '?b_size=1'
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            response = browser.open(
+                    query_url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                ).json
+
+            self.assertEqual(endpoint_url, response.get('@id'))
+            self.assertEqual(2, response.get('items_total'))
+            self.assertEqual(
+                {"@id": query_url,
+                 "first": endpoint_url + '?b_start=0&b_size=1',
+                 "last": endpoint_url + '?b_start=1&b_size=1',
+                 "next": endpoint_url + '?b_start=1&b_size=1'},
+                response.get('batching'))
+
+            self.assertEqual(1, len(response.get('items')))
+            self.assertEqual(
+                [document1.absolute_url()],
+                [document.get('@id') for document in response.get('items')])

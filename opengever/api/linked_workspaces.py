@@ -14,7 +14,9 @@ from requests import Timeout
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.interface import alsoProvides
+from zope.interface import implements
 from zope.publisher.http import status_reasons
+from zope.publisher.interfaces import IPublishTraverse
 import json
 import logging
 import sys
@@ -190,3 +192,33 @@ class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
             UID=obj.UID())
 
         return len(results)
+
+
+class ListDocumentsInLinkedWorkspaceGet(ProxyHypermediaBatch):
+    """API Endpoint to list the documents in a linked workspace.
+    The workspace UID has to be passed as a path segment:
+    /@list-documents-in-linked-workspace/workspace_uid
+    """
+    implements(IPublishTraverse)
+
+    def __init__(self, context, request):
+        super(ListDocumentsInLinkedWorkspaceGet, self).__init__(context, request)
+        self.path_segments = []
+
+    def publishTraverse(self, request, name):
+        """Consume any path segments after /@list-documents-in-linked-workspace
+        as parameters"""
+        self.path_segments.append(name)
+        return self
+
+    def validate_path_segments(self):
+        if len(self.path_segments) == 1:
+            return self.path_segments[0]
+        elif len(self.path_segments) == 0:
+            raise BadRequest("Missing path segment 'workspace_uid'")
+        raise BadRequest("Spurious path segments, only workspace_uid is allowed.")
+
+    def get_remote_client_reply(self):
+        workspace_uid = self.validate_path_segments()
+        documents = ILinkedWorkspaces(self.context).list_documents_in_linked_workspace(workspace_uid, **self.request.form)
+        return documents

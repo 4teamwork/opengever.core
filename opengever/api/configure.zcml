@@ -600,4 +600,12 @@
       permission="opengever.document.AddDocument"
       />
 
+  <plone:service
+      method="GET"
+      name="@list-documents-in-linked-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.ListDocumentsInLinkedWorkspaceGet"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
 </configure>
