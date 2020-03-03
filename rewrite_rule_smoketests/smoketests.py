@@ -183,6 +183,22 @@ def test_gever_front_page_logged_in_old_ui(browser, admin_unit):
     assert_equal(admin_unit.url, logo.attrib['href'])
 
 
+@on_admin_unit
+def test_anonymous_post_requests_always_hit_gever(browser, admin_unit):
+    """This is a regression test for a case, where simple POST requests got
+    answered with the new frontend's index.html.
+    """
+    target_url = '/'.join((admin_unit.front_page_url, 'doesnt-exist'))
+
+    browser.raise_http_errors = False
+    browser.open(target_url, method='POST')
+
+    assert_equal(404, browser.status_code)
+
+    # Assert we hit Plone by checking for the presence of the logo
+    assert_equal(1, len(browser.css('#portal-logo')))
+
+
 def main():
     prompt_credentials = False
     if '--prompt-credentials' in sys.argv:
