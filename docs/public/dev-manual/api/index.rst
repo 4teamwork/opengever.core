@@ -37,6 +37,7 @@ Inhalt:
    sharing.rst
    workspace/index
    linked_workspaces.rst
+   templatefolder.rst
    examples/index.rst
    docs_changelog.rst
 
