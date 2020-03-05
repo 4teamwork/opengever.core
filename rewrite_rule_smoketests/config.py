@@ -16,7 +16,7 @@ CLUSTERS_TO_TEST = [
             AdminUnit('rk'),
         ],
         new_portal=False,
-        gever_ui_is_default=True,
+        gever_ui_is_default=False,
     ),
 
     Cluster(
