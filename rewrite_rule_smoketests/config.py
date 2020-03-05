@@ -49,6 +49,24 @@ CLUSTERS_TO_TEST = [
     ),
 
     Cluster(
+        'https://demo.onegovgever.ch',
+        admin_units=[
+            AdminUnit('demo'),
+        ],
+        new_portal=False,
+        gever_ui_is_default=False,
+    ),
+
+    Cluster(
+        'https://sales.onegovgever.ch',
+        admin_units=[
+            AdminUnit('sales'),
+        ],
+        new_portal=False,
+        gever_ui_is_default=False,
+    ),
+
+    Cluster(
         'https://demo.teamraum.ch',
         admin_units=[
             AdminUnit('tr', is_dedicated_teamraum=True),
