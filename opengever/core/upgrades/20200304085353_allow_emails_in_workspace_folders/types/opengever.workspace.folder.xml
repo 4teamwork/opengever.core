@@ -1,0 +1,9 @@
+<object name="opengever.workspace.folder">
+
+  <property name="allowed_content_types">
+    <element value="opengever.document.document" />
+    <element value="ftw.mail.mail" />
+    <element value="opengever.workspace.folder" />
+  </property>
+
+</object>

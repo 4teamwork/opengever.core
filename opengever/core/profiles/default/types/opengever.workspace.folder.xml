@@ -9,6 +9,7 @@
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
     <element value="opengever.document.document" />
+    <element value="ftw.mail.mail" />
     <element value="opengever.workspace.folder" />
   </property>
 
