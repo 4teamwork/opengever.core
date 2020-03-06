@@ -447,7 +447,7 @@ msgstr "Geben Sie die vollständige Ablagenummer an."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_keywords"
-msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition. <br>ACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen)."
+msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition.\nACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen)."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_number_of_containers"
