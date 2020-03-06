@@ -255,8 +255,10 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager.storage.add(self.workspace.UID())
 
             documents = manager.list_documents_in_linked_workspace(self.workspace.UID())
-            expected_url = ('{}/@search?portal_type=opengever.document.document&'
-                            'metadata_fields=UID'.format(self.workspace.absolute_url()))
+            expected_url = (
+                '{}/@search?portal_type=opengever.document.document&'
+                'portal_type=ftw.mail.mail&metadata_fields=UID'.format(
+                    self.workspace.absolute_url()))
             self.assertEqual(expected_url, documents['@id'])
             self.assertEqual(1, documents['items_total'])
             self.assertEqual(

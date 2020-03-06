@@ -121,7 +121,7 @@ class LinkedWorkspaces(object):
 
         return self.client.search(
             url_or_path=workspace_url,
-            portal_type="opengever.document.document",
+            portal_type=["opengever.document.document", "ftw.mail.mail"],
             metadata_fields="UID",
             **kwargs)
 
