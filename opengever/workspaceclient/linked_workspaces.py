@@ -97,19 +97,21 @@ class LinkedWorkspaces(object):
         """
         workspace_url = self._get_linked_workspace_url(workspace_uid)
 
-        file_ = document.file
+        file_ = document.get_file()
         document_repr = self._serialized_document_schema_fields(document)
 
         if not file_:
             # File only preserved in paper.
             return self.client.post(workspace_url, json=document_repr)
 
+        portal_type = document.portal_type
         content_type = document.content_type()
 
         filename = document.get_filename()
         size = file_.size
-        return self.client.tus_upload(workspace_url, file_.open(), size,
-                                      content_type, filename,
+
+        return self.client.tus_upload(workspace_url, portal_type, file_.open(),
+                                      size, content_type, filename,
                                       **self._tus_document_repr(document_repr))
 
     def list_documents_in_linked_workspace(self, workspace_uid, **kwargs):

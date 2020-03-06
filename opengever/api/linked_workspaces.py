@@ -1,6 +1,6 @@
 from functools import wraps
 from opengever.base.sentry import maybe_report_exception
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
@@ -176,7 +176,7 @@ class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
             raise BadRequest("Property 'document_uid' is required")
 
         document = uuidToObject(document_uid)
-        if not document or not IDocumentSchema.providedBy(document):
+        if not document or not IBaseDocument.providedBy(document):
             raise BadRequest("The document does not exist")
 
         if not self.obj_contained_in(document, self.context):

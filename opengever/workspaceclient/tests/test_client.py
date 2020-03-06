@@ -76,6 +76,7 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             filepath = assets.path_to_asset('vertragsentwurf.docx')
             file_size = os.path.getsize(filepath)
             content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            portal_type = 'opengever.document.document'
             additional_metadata = {
                 'title': u"My new d\xf6kument",
                 'description': u'Fantastic'
@@ -84,6 +85,7 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             with self.observe_children(self.workspace) as children:
                 response = client.tus_upload(
                     self.workspace.absolute_url(),
+                    portal_type,
                     open(filepath, 'r'), file_size, content_type,
                     'vertragsentwurf.docx', **additional_metadata)
                 transaction.commit()
