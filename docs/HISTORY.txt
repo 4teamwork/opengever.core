@@ -4,6 +4,7 @@ Changelog
 2020.2.0rc1 (unreleased)
 ------------------------
 
+- Some adjustments. [elioschmutz]
 - Restrict `geverui` cookie to admin unit. [elioschmutz]
 - Extend the opengever deployment directive with workspace roles. [elioschmutz]
 - Set seen_tours for all users in test fixture. [njohner]
