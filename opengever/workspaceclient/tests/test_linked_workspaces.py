@@ -1,7 +1,9 @@
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.workspaceclient.exceptions import WorkspaceNotFound
+from opengever.base.command import CreateEmailCommand
+from opengever.mail.tests import MAIL_DATA
+from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
@@ -193,7 +195,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager = ILinkedWorkspaces(self.dossier)
             manager.storage.add('removed-workspace-uid')
 
-            with self.assertRaises(WorkspaceNotFound):
+            with self.assertRaises(LookupError):
                 manager.copy_document_to_workspace(document, 'removed-workspace-uid')
 
     def test_copy_document_with_file_to_a_workspace(self):
@@ -243,7 +245,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager = ILinkedWorkspaces(self.dossier)
             manager.storage.add('removed-workspace-uid')
 
-            with self.assertRaises(WorkspaceNotFound):
+            with self.assertRaises(LookupError):
                 manager.list_documents_in_linked_workspace('removed-workspace-uid')
 
     def test_list_documents_in_linked_workspace(self):
@@ -294,3 +296,100 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 [document2.absolute_url()],
                 [doc.get('@id') for doc in manager.list_documents_in_linked_workspace(
                     self.workspace.UID(), b_size=1, b_start=1).get('items')])
+
+    def test_copy_document_with_file_from_a_workspace(self):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .with_dummy_content())
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_from_workspace(document.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_document = children['added'].pop()
+            self.assertEqual(document.title, workspace_document.title)
+            self.assertEqual(document.description, workspace_document.description)
+            self.assertEqual(document.file.open().read(),
+                             workspace_document.file.open().read())
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(document),
+                manager._serialized_document_schema_fields(workspace_document))
+
+    def test_copy_document_without_file_from_a_workspace(self):
+        document = create(Builder('document')
+                          .within(self.workspace))
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_from_workspace(document.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_document = children['added'].pop()
+            self.assertEqual(document.title, workspace_document.title)
+            self.assertEqual(document.description, workspace_document.description)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(document),
+                manager._serialized_document_schema_fields(workspace_document))
+
+    def test_copy_eml_mail_from_a_workspace(self):
+        mail = create(Builder("mail")
+                      .with_message(MAIL_DATA)
+                      .within(self.workspace))
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_from_workspace(mail.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_mail = children['added'].pop()
+            self.assertEqual(mail.title, workspace_mail.title)
+            self.assertEqual(mail.description, workspace_mail.description)
+            self.assertEqual(workspace_mail.get_file().open().read(),
+                             mail.get_file().open().read())
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))
+
+    def test_copy_msg_mail_from_a_workspace(self):
+        msg = load('testmail.msg')
+        command = CreateEmailCommand(self.workspace, 'testm\xc3\xa4il.msg', msg)
+        mail = command.execute()
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_from_workspace(mail.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_mail = children['added'].pop()
+            self.assertEqual(mail.title, workspace_mail.title)
+            self.assertEqual(mail.description, workspace_mail.description)
+            self.assertEqual(workspace_mail.get_file().open().read(),
+                             mail.get_file().open().read())
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))

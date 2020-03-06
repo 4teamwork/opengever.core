@@ -83,8 +83,11 @@ class WorkspaceClient(object):
         """
         items = self.search(UID=uid).get('items')
 
+        if not items:
+            raise LookupError("Did not find object with UID {}".format(uid))
+
         if len(items) > 1:
-            raise LookupError("Found multiple workspaces with the same UID")
+            raise LookupError("Found multiple objects with the same UID")
 
         return items[0].get('@id') if items else None
 

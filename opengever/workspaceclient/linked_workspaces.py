@@ -1,3 +1,4 @@
+from opengever.api.add import GeverFolderPost
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
@@ -12,6 +13,7 @@ from time import time
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 
 CACHE_TIMEOUT = 24 * 60 * 60
@@ -38,6 +40,35 @@ def list_cache_key(linked_workspaces_instance, **kwargs):
         cache_key = '{}-{}'.format(cache_key, keywordarguments)
 
     return cache_key
+
+
+class ProxyPost(GeverFolderPost):
+    """When copying a document back from Workspace into GEVER, we GET the
+    document from the workspace so that we have the serialized data. We then
+    need to deserialize this to create a new object in the dossier. The process
+    needed for this creation is the same as in a POST request to GEVER (i.e.
+    create an object in the void, get the correct deserializer and deserialize
+    the data into the object, add the object to the context), except
+    that we already have the data and do not need to get it from the request.
+    This class allows us to reuse GeverFolderPost by simply overwriting how we
+    get the serialized data.
+    """
+    def __init__(self, data):
+        self._request_data = data
+
+    @property
+    def request_data(self):
+        """We have the serialized data from a previous GET request,
+        and it is not contained in the request as it would be for a
+        normal POST.
+        """
+        return self._request_data
+
+    def serialize_object(self):
+        """The reply here is not sent back to the user, so we do not
+        need to serialize the object, but rather return the object itself.
+        """
+        return self.obj
 
 
 @implementer(ILinkedWorkspaces)
@@ -112,6 +143,38 @@ class LinkedWorkspaces(object):
         return self.client.tus_upload(workspace_url, portal_type, file_.open(),
                                       size, content_type, filename,
                                       **self._tus_document_repr(document_repr))
+
+    def copy_document_from_workspace(self, document_uid):
+        """Will upload a copy of a document to a linked workspace.
+        """
+        document_url = self.client.lookup_url_by_uid(document_uid)
+        document_repr = self.client.get(url_or_path=document_url)
+
+        if document_repr.get('archival_file'):
+            data = self.client.request.get(document_repr['archival_file']['download'])
+            document_repr['archival_file']['data'] = data.content
+        if document_repr.get('file'):
+            data = self.client.request.get(document_repr['file']['download'])
+            document_repr['file']['data'] = data.content
+        elif document_repr.get('original_message'):
+            # The deserializer will copy the file in message back to
+            # original_message and transform it back to an eml and store it
+            # in message. Writing the original_message directly would require
+            # manager permissions.
+            data = self.client.request.get(document_repr['original_message']['download'])
+            document_repr['message'] = document_repr.pop('original_message')
+            document_repr['message']['data'] = data.content
+        elif document_repr.get('message'):
+            data = self.client.request.get(document_repr['message']['download'])
+            document_repr['message']['data'] = data.content
+
+        # We should avoid setting the id ourselves, can lead to conflicts
+        document_repr = self._blacklisted_dict(document_repr, ['id'])
+
+        proxy_post = ProxyPost(document_repr)
+        proxy_post.context = self.context
+        proxy_post.request = getRequest()
+        return proxy_post.reply()
 
     def list_documents_in_linked_workspace(self, workspace_uid, **kwargs):
         """List documents contained in a linked workspace
