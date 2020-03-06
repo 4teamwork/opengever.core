@@ -8,11 +8,13 @@ from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from requests import HTTPError
 from requests import Timeout
 from zExceptions import BadRequest
 from zExceptions import NotFound
+from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.http import status_reasons
@@ -222,3 +224,29 @@ class ListDocumentsInLinkedWorkspaceGet(ProxyHypermediaBatch):
         workspace_uid = self.validate_path_segments()
         documents = ILinkedWorkspaces(self.context).list_documents_in_linked_workspace(workspace_uid, **self.request.form)
         return documents
+
+
+class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
+    """API Endpoint to copy a document form a linked workspace
+    into the context (a dossier).
+    """
+    @request_error_handler
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        document_uid = self.validate_data(json_body(self.request))
+        document = ILinkedWorkspaces(self.context).copy_document_from_workspace(
+            document_uid)
+        return self.serialize_object(document)
+
+    def serialize_object(self, obj):
+        serializer = queryMultiAdapter((obj, self.request), ISerializeToJson)
+        serialized_obj = serializer()
+        return serialized_obj
+
+    def validate_data(self, data):
+        document_uid = data.get('document_uid')
+        if not document_uid:
+            raise BadRequest("Property 'document_uid' is required")
+        return document_uid
