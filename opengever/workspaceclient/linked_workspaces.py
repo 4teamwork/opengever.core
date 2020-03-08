@@ -5,6 +5,7 @@ from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from plone import api
+from plone.dexterity.utils import iterSchemata
 from plone.memoize import ram
 from plone.restapi.interfaces import ISerializeToJson
 from time import time
@@ -12,8 +13,6 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
 from zope.interface import implementer
-from plone.dexterity.utils import iterSchemata
-
 
 CACHE_TIMEOUT = 24 * 60 * 60
 
@@ -151,7 +150,9 @@ class LinkedWorkspaces(object):
         """Prepares the serialized document to match the criterias to add a new
         document with the `tus_upload`.
         """
-        return self._blacklisted_dict(serialized_document, ['@type', 'file'])
+        return self._blacklisted_dict(
+            serialized_document,
+            ['@type', 'file', 'archival_file', 'message', 'original_message'])
 
     def _whitelisted_dict(self, dict_obj, whitelist):
         whitelisted_dict = {}
