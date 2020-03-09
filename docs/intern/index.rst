@@ -17,6 +17,7 @@ Inhalt:
    meta.rst
    oggbundle/index.rst
    oneoffixx/index.rst
+   wopi/index.rst
 
 
 Stichwortverzeichnis

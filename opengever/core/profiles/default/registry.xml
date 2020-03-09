@@ -173,6 +173,9 @@
   <!-- TASK -->
   <records interface="opengever.task.interfaces.ITaskSettings" />
 
+  <!-- WOPI (Office Online) -->
+  <records interface="opengever.wopi.interfaces.IWOPISettings" />
+
   <!-- Workspace -->
   <records interface="opengever.workspace.interfaces.IWorkspaceSettings" />
 

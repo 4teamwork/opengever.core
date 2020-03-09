@@ -146,6 +146,9 @@ class IFileActions(Interface):
     def is_any_checkout_or_edit_available():
         """Return wheter any of the checkout or edit actions are available."""
 
+    def is_office_online_edit_action_available():
+        """Return whether the edit with Office Online action is available."""
+
     def is_oc_direct_checkout_action_available():
         """Return whether OfficeConnector direct checkout action is available.
         """

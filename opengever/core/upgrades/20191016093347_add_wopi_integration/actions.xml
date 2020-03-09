@@ -1,0 +1,15 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <object name="file_actions" meta_type="CMF Action Category">
+
+    <object name="office_online_edit" meta_type="CMF Action" i18n:domain="opengever.document" insert-after="oc_zem_edit">
+      <property name="title" i18n:translate="label_office_online_edit">Edit with Office Online</property>
+      <property name="available_expr">object/@@file_actions_availability/is_office_online_edit_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+</object>

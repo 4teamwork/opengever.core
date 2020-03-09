@@ -20,6 +20,7 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.task.task import ITask
+from opengever.wopi.discovery import editable_extensions
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform import directives as form
@@ -293,6 +294,15 @@ class Document(Item, BaseDocumentMixin):
         manager = getMultiAdapter((self, self.REQUEST),
                                   ICheckinCheckoutManager)
         return manager.get_checked_out_by()
+
+    def is_office_online_editable(self):
+        filename = self.get_filename()
+        if filename is None:
+            return False
+        name, ext = os.path.splitext(filename)
+        if ext and ext[1:] in editable_extensions():
+            return True
+        return False
 
     def is_office_connector_editable(self):
         if self.file is None:
