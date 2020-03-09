@@ -247,7 +247,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
     @browsing
     def test_raises_when_document_uid_missing(self, browser):
         payload = {
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -269,7 +269,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
     def test_raises_when_document_cant_be_looked_up_by_uid(self, browser):
         payload = {
             'document_uid': 'not-existing-document-uid',
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -321,7 +321,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
 
         payload = {
             'document_uid': document.UID(),
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         transaction.commit()
@@ -346,7 +346,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
 
         payload = {
             'document_uid': document.UID(),
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -376,7 +376,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
 
         payload = {
             'document_uid': document.UID(),
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -525,7 +525,9 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
 
     @browsing
     def test_raises_when_document_uid_missing(self, browser):
-        payload = {}
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+        }
 
         with self.workspace_client_env():
             browser.login()
@@ -543,9 +545,10 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
         self.assertEqual("Property 'document_uid' is required", str(cm.exception))
 
     @browsing
-    def test_raises_when_document_cant_be_looked_up_by_uid(self, browser):
+    def test_raises_when_workspace_uid_missing(self, browser):
+        document = create(Builder('document').within(self.workspace))
         payload = {
-            'document_uid': 'not-existing-document-uid',
+            'document_uid': document.UID()
         }
 
         with self.workspace_client_env():
@@ -561,21 +564,52 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
-        self.assertEqual("The document does not exist", str(cm.exception))
+        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+
+    @browsing
+    def test_raises_when_document_cant_be_looked_up_by_uid(self, browser):
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': 'not-existing-document-uid',
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(LookupError) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual(
+            "Document not in linked workspace",
+            str(cm.exception))
 
     @browsing
     def test_raises_when_document_is_not_within_linked_workspace(self, browser):
         document = create(Builder('document').within(self.dossier))
 
         payload = {
+            'workspace_uid': self.workspace.UID(),
             'document_uid': document.UID(),
         }
 
         with self.workspace_client_env():
-            browser.login()
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
 
+            browser.login()
             browser.exception_bubbling = True
-            with self.assertRaises(BadRequest) as cm:
+            with self.assertRaises(LookupError) as cm:
                 browser.open(
                     self.dossier.absolute_url() + '/@copy-document-from-workspace',
                     data=json.dumps(payload),
@@ -584,7 +618,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
-        self.assertEqual("Only documents within the current main dossier are allowed", str(cm.exception))
+        self.assertEqual("Document not in linked workspace", str(cm.exception))
 
     @browsing
     def test_copy_document_without_file_from_workspace(self, browser):
@@ -593,6 +627,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                           .having(preserved_as_paper=True))
 
         payload = {
+            'workspace_uid': self.workspace.UID(),
             'document_uid': document.UID(),
         }
 
@@ -622,6 +657,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                           .with_dummy_content())
 
         payload = {
+            'workspace_uid': self.workspace.UID(),
             'document_uid': document.UID(),
         }
 
@@ -659,6 +695,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
         transaction.commit()
 
         payload = {
+            'workspace_uid': self.workspace.UID(),
             'document_uid': mail.UID(),
         }
 
@@ -700,6 +737,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
         transaction.commit()
 
         payload = {
+            'workspace_uid': self.workspace.UID(),
             'document_uid': mail.UID(),
         }
 

@@ -235,9 +235,9 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        document_uid = self.validate_data(json_body(self.request))
+        workspace_uid, document_uid = self.validate_data(json_body(self.request))
         document = ILinkedWorkspaces(self.context).copy_document_from_workspace(
-            document_uid)
+            workspace_uid, document_uid)
         return self.serialize_object(document)
 
     def serialize_object(self, obj):
@@ -246,7 +246,10 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         return serialized_obj
 
     def validate_data(self, data):
+        workspace_uid = data.get('workspace_uid')
+        if not workspace_uid:
+            raise BadRequest("Property 'workspace_uid' is required")
         document_uid = data.get('document_uid')
         if not document_uid:
             raise BadRequest("Property 'document_uid' is required")
-        return document_uid
+        return workspace_uid, document_uid

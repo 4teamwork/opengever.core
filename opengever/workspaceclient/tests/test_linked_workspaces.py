@@ -309,7 +309,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(document.UID())
+                    manager.copy_document_from_workspace(
+                        self.workspace.UID(), document.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
@@ -333,7 +334,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(document.UID())
+                    manager.copy_document_from_workspace(
+                        self.workspace.UID(), document.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
@@ -356,7 +358,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(mail.UID())
+                    manager.copy_document_from_workspace(
+                        self.workspace.UID(), mail.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
@@ -381,7 +384,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(mail.UID())
+                    manager.copy_document_from_workspace(
+                        self.workspace.UID(), mail.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()

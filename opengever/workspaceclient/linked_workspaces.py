@@ -144,10 +144,20 @@ class LinkedWorkspaces(object):
                                       size, content_type, filename,
                                       **self._tus_document_repr(document_repr))
 
-    def copy_document_from_workspace(self, document_uid):
-        """Will upload a copy of a document to a linked workspace.
+    def _get_document_by_uid(self, workspace_uid, document_uid):
+        linked_documents = self.list_documents_in_linked_workspace(workspace_uid)
+        for document in linked_documents["items"]:
+            if document.get('UID') == document_uid:
+                return document
+
+    def copy_document_from_workspace(self, workspace_uid, document_uid):
+        """Will copy a document from a linked workspace.
         """
-        document_url = self.client.lookup_url_by_uid(document_uid)
+        document = self._get_document_by_uid(workspace_uid, document_uid)
+        if not document:
+            raise LookupError("Document not in linked workspace")
+
+        document_url = document.get("@id")
         document_repr = self.client.get(url_or_path=document_url)
 
         if document_repr.get('archival_file'):
