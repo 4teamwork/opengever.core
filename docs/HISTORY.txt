@@ -10,6 +10,9 @@ Changelog
 - Add API service to create document from template. [deiferni]
 - Restrict `geverui` cookie to admin unit. [elioschmutz]
 - Extend the opengever deployment directive with workspace roles. [elioschmutz]
+- Add API endpoint to copy documents from a workspace. [njohner]
+- Add API endpoint to list documents in linked workspace. [njohner]
+- Allow copying mails to linked workspace. [njohner]
 - Set seen_tours for all users in test fixture. [njohner]
 - Add support for Office Online aka WOPI. [buchi]
 
