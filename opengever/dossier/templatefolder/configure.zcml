@@ -114,4 +114,9 @@
       handler=".subscribers.configure_templatefolder_portlets"
       />
 
+  <utility
+      factory=".vocabulary.DocumentTemplatesVocabulary"
+      name="opengever.dossier.DocumentTemplatesVocabulary"
+      />
+
 </configure>

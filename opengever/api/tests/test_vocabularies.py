@@ -27,6 +27,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.base.ReferenceFormatterVocabulary',
     'opengever.document.document_types',
     'opengever.dossier.container_types',
+    'opengever.dossier.DocumentTemplatesVocabulary',
     'opengever.dossier.participation_roles',
     'opengever.dossier.type_prefixes',
     'opengever.dossier.ValidResolverNamesVocabulary',

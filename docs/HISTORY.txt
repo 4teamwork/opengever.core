@@ -7,6 +7,7 @@ Changelog
 - Extend policytemplates to use the single thread setup. [elioschmutz]
 - Extend policytemplates with workspace deployment. [elioschmutz]
 - Extend policytemplates with gever-ui activation. [elioschmutz]
+- Add API service to create document from template. [deiferni]
 - Restrict `geverui` cookie to admin unit. [elioschmutz]
 - Extend the opengever deployment directive with workspace roles. [elioschmutz]
 - Set seen_tours for all users in test fixture. [njohner]

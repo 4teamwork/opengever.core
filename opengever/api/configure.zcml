@@ -592,4 +592,12 @@
       permission="opengever.workspaceclient.UseWorkspaceClient"
       />
 
+  <plone:service
+      method="POST"
+      name="@document-from-template"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".templatefolder.DocumentFromTemplatePost"
+      permission="opengever.document.AddDocument"
+      />
+
 </configure>
