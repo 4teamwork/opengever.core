@@ -405,6 +405,83 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
 
+    @browsing
+    def test_copy_eml_mail_to_a_workspace(self, browser):
+        mail = create(Builder("mail")
+                      .with_message(MAIL_DATA)
+                      .within(self.dossier))
+        transaction.commit()
+
+        payload = {
+            'document_uid': mail.UID(),
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, mail)
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            workspace_mail = children['added'].pop()
+
+            self.assertEqual(workspace_mail.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(workspace_mail.title, mail.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))
+
+    @browsing
+    def test_copy_msg_mail_to_a_workspace(self, browser):
+        msg = load('testmail.msg')
+        command = CreateEmailCommand(
+            self.dossier, 'testm\xc3\xa4il.msg', msg)
+        mail = command.execute()
+        transaction.commit()
+
+        payload = {
+            'document_uid': mail.UID(),
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, mail)
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            workspace_mail = children['added'].pop()
+
+            self.assertEqual(workspace_mail.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(workspace_mail.title, mail.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))
+
 
 class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
 

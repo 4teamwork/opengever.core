@@ -223,6 +223,63 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
 
+    def test_copy_eml_mail_to_a_workspace(self):
+        mail = create(Builder("mail")
+                      .with_message(MAIL_DATA)
+                      .within(self.dossier))
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            with self.observe_children(self.workspace) as children:
+                with auto_commit_after_request(manager.client):
+                    response = manager.copy_document_to_workspace(mail, self.workspace.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_mail = children['added'].pop()
+
+            self.assertEqual(workspace_mail.absolute_url(), response.get('@id'))
+            self.assertEqual(workspace_mail.title, mail.title)
+
+            self.assertEqual(workspace_mail.get_file().open().read(),
+                             mail.get_file().open().read())
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))
+
+    def test_copy_msg_mail_to_a_workspace(self):
+
+        msg = load('testmail.msg')
+        command = CreateEmailCommand(
+            self.dossier, 'testm\xc3\xa4il.msg', msg)
+        mail = command.execute()
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.workspace) as children:
+                with auto_commit_after_request(manager.client):
+                    response = manager.copy_document_to_workspace(mail, self.workspace.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_mail = children['added'].pop()
+
+            self.assertEqual(workspace_mail.absolute_url(), response.get('@id'))
+            self.assertEqual(workspace_mail.title, mail.title)
+
+            self.assertEqual(workspace_mail.get_file().open().read(),
+                             mail.get_file().open().read())
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))
+
     def test_has_linked_workspaces(self):
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)

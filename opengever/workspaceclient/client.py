@@ -131,6 +131,11 @@ class WorkspaceClient(object):
         # It's not possible to directly update the metadata of an object through
         # a TUS-request. We perform another patch-request to update the newly
         # created document with some additional metadata.
+        if portal_type == "ftw.mail.mail":
+            # patching E-mails would require manager permissions
+            # on the remote system.
+            return self.get(obj_url)
+
         return self.patch(obj_url, json=additional_metadata,
                           headers={'Prefer': 'return=representation'})
 
