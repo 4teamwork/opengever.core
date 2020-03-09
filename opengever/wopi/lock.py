@@ -38,3 +38,29 @@ def refresh_lock(obj):
     lockable = IRefreshableLockable(obj, None)
     if lockable is not None:
         lockable.refresh_lock()
+
+
+def validate_lock(server_token, client_token, strict=True):
+    """Return True if a client's lock token is valid, False otherwise.
+
+    Usually this means that the lock token strings must match exactly.
+    However, for some put_file operations the MS WOPI client does actually
+    send incomplete tokens, which still need to be accepted.
+
+    We've so far only seen this for the put_file operation, and in these
+    two specific variants:
+    - The client token is a substring of the server_token
+    - The client token looks like JSON, and contains a subset of the key/value
+      pairs present in the server_token (with keys in the same order).
+
+    When invoked with strict=False, we also consider these two partial
+    matches valid.
+    """
+    if strict:
+        return server_token == client_token
+
+    return any((
+        server_token == client_token,
+        '}' in client_token and client_token[:-1] in server_token,
+        client_token in server_token,
+    ))

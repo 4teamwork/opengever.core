@@ -5,6 +5,7 @@ from opengever.wopi.lock import create_lock
 from opengever.wopi.lock import get_lock_token
 from opengever.wopi.lock import refresh_lock
 from opengever.wopi.lock import unlock
+from opengever.wopi.lock import validate_lock
 from opengever.wopi.token import validate_access_token
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -158,7 +159,7 @@ class WOPIView(BrowserView):
         current_token = get_lock_token(self.obj)
         if current_token:
             token = self.request.getHeader('X-WOPI-Lock')
-            if current_token != token:
+            if not validate_lock(current_token, token):
                 self.request.response.setStatus(409)
                 self.request.response.setHeader('X-WOPI-Lock', current_token)
                 return
@@ -200,7 +201,7 @@ class WOPIView(BrowserView):
         if current_token:
             old_token = self.request.getHeader('X-WOPI-OldLock')
             token = self.request.getHeader('X-WOPI-Lock')
-            if current_token == old_token:
+            if validate_lock(current_token, old_token):
                 unlock(self.obj)
                 create_lock(self.obj, token)
                 self.request.response.setStatus(200, lock=1)
@@ -213,7 +214,7 @@ class WOPIView(BrowserView):
         current_token = get_lock_token(self.obj)
         if current_token is not None:
             token = self.request.getHeader('X-WOPI-Lock')
-            if current_token != token:
+            if not validate_lock(current_token, token, strict=False):
                 logger.warn(
                     'Lock token mismatch: current token: %s, '
                     'provided token: %s', current_token, token)
