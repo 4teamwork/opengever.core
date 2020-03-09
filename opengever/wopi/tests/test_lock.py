@@ -3,6 +3,7 @@ from opengever.wopi.lock import create_lock
 from opengever.wopi.lock import get_lock_token
 from opengever.wopi.lock import refresh_lock
 from opengever.wopi.lock import unlock
+from opengever.wopi.lock import validate_lock
 from plone.locking.interfaces import ILockable
 
 
@@ -42,3 +43,18 @@ class TestLocking(IntegrationTestCase):
         refresh_lock(self.document)
         self.assertGreater(
             self.document.wl_lockItems()[0][1].getModifiedTime(), mtime)
+
+    def test_validate_lock_strict(self):
+        self.assertTrue(validate_lock('LOCK-TOKEN', 'LOCK-TOKEN'))
+        self.assertFalse(validate_lock('LOCK-TOKEN', 'OCK-TO'))
+
+    def test_validate_lock_forgiving(self):
+        self.assertTrue(
+            validate_lock('LOCK-TOKEN', 'LOCK-TOKEN', strict=False))
+        self.assertTrue(
+            validate_lock('LOCK-TOKEN', 'OCK-TO', strict=False))
+        self.assertTrue(
+            validate_lock("{'a': 1, 'b': 2}", "{'a': 1}", strict=False))
+
+        self.assertFalse(
+            validate_lock('LOCK-TOKEN', 'SOMETHING-ELSE', strict=False))
