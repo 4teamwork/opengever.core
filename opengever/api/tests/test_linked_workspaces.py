@@ -480,6 +480,7 @@ class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
                   u'@type': u'opengever.document.document',
                   u'UID': document.UID(),
                   u'description': u'',
+                  u'filename': u'',
                   u'review_state': u'document-state-draft',
                   u'title': u'Testdokum\xe4nt'}],
                 response['items'])
