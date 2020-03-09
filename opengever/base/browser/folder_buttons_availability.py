@@ -22,9 +22,9 @@ class FolderButtonsAvailabilityView(BrowserView):
                                                obj=self.context)
         return (is_dossier or is_task) and may_add_task
 
-    def is_copy_documents_to_workspace_available(self):
-        """Only available if there are linked workspaces for the current
-        main-dossier.
+    def _can_copy_between_workspace_and_dossier(self):
+        """Only if the workspace_client_feature is enabled and
+        the context is a main dossier with linked workspaces.
         """
         if not IDossierMarker.providedBy(self.context):
             return False
@@ -37,3 +37,9 @@ class FolderButtonsAvailabilityView(BrowserView):
 
         linked_workspaces_manager = ILinkedWorkspaces(self.context.get_main_dossier())
         return linked_workspaces_manager.has_linked_workspaces()
+
+    def is_copy_documents_to_workspace_available(self):
+        return self._can_copy_between_workspace_and_dossier()
+
+    def is_copy_documents_from_workspace_available(self):
+        return self._can_copy_between_workspace_and_dossier()

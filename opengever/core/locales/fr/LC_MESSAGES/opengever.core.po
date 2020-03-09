@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-02-18 15:58+0000\n"
+"POT-Creation-Date: 2020-03-09 15:36+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -72,6 +72,11 @@ msgstr "Copier"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Copy Items"
 msgstr "Copier"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20200309163442_add_copy_documents_from_workspace_action/actions.xml
+msgid "Copy documents from workspace"
+msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200218164654_add_copy_documents_to_workspace_action/actions.xml

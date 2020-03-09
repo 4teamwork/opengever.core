@@ -32,8 +32,12 @@ class FolderPost(Service):
     but with code split up in different methods.
     """
 
+    @property
+    def request_data(self):
+        return json_body(self.request)
+
     def extract_data(self):
-        data = json_body(self.request)
+        data = self.request_data
 
         self.type_ = data.get("@type", None)
         self.id_ = data.get("id", None)

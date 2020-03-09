@@ -83,13 +83,16 @@ class WorkspaceClient(object):
         """
         items = self.search(UID=uid).get('items')
 
+        if not items:
+            raise LookupError("Did not find object with UID {}".format(uid))
+
         if len(items) > 1:
-            raise LookupError("Found multiple workspaces with the same UID")
+            raise LookupError("Found multiple objects with the same UID")
 
         return items[0].get('@id') if items else None
 
-    def tus_upload(self, url_or_path, file_, size, content_type, filename,
-                   **additional_metadata):
+    def tus_upload(self, url_or_path, portal_type, file_, size, content_type,
+                   filename, **additional_metadata):
         """Creates a new file within the folder of the given url or path and
         extends the created file with some additional metadata.
 
@@ -103,7 +106,7 @@ class WorkspaceClient(object):
         url_or_path = url_or_path.strip('/')
         metadata = {
             'filename': filename,
-            '@type': 'opengever.document.document',
+            '@type': portal_type,
             'content_type': content_type
         }
 
@@ -113,7 +116,7 @@ class WorkspaceClient(object):
             'Upload-Metadata': self._tus_metadata_string(metadata),
         })
 
-        created_document = self.request.patch(
+        created_obj = self.request.patch(
             tus.headers['Location'],
             headers={
                 'Tus-Resumable': '1.0.0',
@@ -123,12 +126,17 @@ class WorkspaceClient(object):
             data=file_,
         )
 
-        document_url = created_document.headers['Location']
+        obj_url = created_obj.headers['Location']
 
         # It's not possible to directly update the metadata of an object through
         # a TUS-request. We perform another patch-request to update the newly
         # created document with some additional metadata.
-        return self.patch(document_url, json=additional_metadata,
+        if portal_type == "ftw.mail.mail":
+            # patching E-mails would require manager permissions
+            # on the remote system.
+            return self.get(obj_url)
+
+        return self.patch(obj_url, json=additional_metadata,
                           headers={'Prefer': 'return=representation'})
 
     def _tus_metadata_string(self, metadata):

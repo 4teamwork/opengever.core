@@ -2,6 +2,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
+from opengever.base.command import CreateEmailCommand
+from opengever.mail.tests import MAIL_DATA
+from opengever.testing.assets import load
+from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
@@ -138,6 +142,40 @@ class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
             self.assertEqual(url, response.get('@id'))
 
     @browsing
+    def test_get_linked_workspaces_handles_batching(self, browser):
+        endpoint_url = self.dossier.absolute_url() + '/@linked-workspaces'
+        query_url = endpoint_url + '?b_size=1'
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            workspace2 = create(Builder('workspace').within(self.workspace_root))
+            self.grant('WorkspaceMember', on=workspace2)
+            manager.storage.add(workspace2.UID())
+
+            transaction.commit()
+
+            browser.login()
+            response = browser.open(
+                query_url,
+                method='GET',
+                headers={'Accept': 'application/json'}).json
+
+            self.assertEqual(endpoint_url, response.get('@id'))
+            self.assertEqual(2, response.get('items_total'))
+            self.assertEqual(
+                {"@id": query_url,
+                 "first": endpoint_url + '?b_start=0&b_size=1',
+                 "last": endpoint_url + '?b_start=1&b_size=1',
+                 "next": endpoint_url + '?b_start=1&b_size=1'},
+                response.get('batching'))
+
+            self.assertEqual(1, len(response.get('items')))
+            self.assertEqual(
+                [self.workspace.absolute_url()],
+                [workspace.get('@id') for workspace in response.get('items')])
+
+    @browsing
     def test_raise_exception_for_subdossiers(self, browser):
         subdossier = create(Builder('dossier').within(self.dossier))
         transaction.commit()
@@ -209,7 +247,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
     @browsing
     def test_raises_when_document_uid_missing(self, browser):
         payload = {
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -231,7 +269,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
     def test_raises_when_document_cant_be_looked_up_by_uid(self, browser):
         payload = {
             'document_uid': 'not-existing-document-uid',
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -283,7 +321,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
 
         payload = {
             'document_uid': document.UID(),
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         transaction.commit()
@@ -308,7 +346,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
 
         payload = {
             'document_uid': document.UID(),
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -338,7 +376,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
 
         payload = {
             'document_uid': document.UID(),
-            'workspace_uid': self.workspace.UID()
+            'workspace_uid': self.workspace.UID(),
         }
 
         with self.workspace_client_env():
@@ -366,3 +404,443 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
+
+    @browsing
+    def test_copy_eml_mail_to_a_workspace(self, browser):
+        mail = create(Builder("mail")
+                      .with_message(MAIL_DATA)
+                      .within(self.dossier))
+        transaction.commit()
+
+        payload = {
+            'document_uid': mail.UID(),
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, mail)
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            workspace_mail = children['added'].pop()
+
+            self.assertEqual(workspace_mail.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(workspace_mail.title, mail.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))
+
+    @browsing
+    def test_copy_msg_mail_to_a_workspace(self, browser):
+        msg = load('testmail.msg')
+        command = CreateEmailCommand(
+            self.dossier, 'testm\xc3\xa4il.msg', msg)
+        mail = command.execute()
+        transaction.commit()
+
+        payload = {
+            'document_uid': mail.UID(),
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, mail)
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            workspace_mail = children['added'].pop()
+
+            self.assertEqual(workspace_mail.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(workspace_mail.title, mail.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(workspace_mail))
+
+
+class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_raises_when_workspace_uid_is_missing(self, browser):
+
+        url = "/".join([self.dossier.absolute_url(),
+                        '@list-documents-in-linked-workspace',
+                        ])
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual("Missing path segment 'workspace_uid'",
+                         str(cm.exception))
+
+    @browsing
+    def test_raises_when_workspace_cant_be_looked_up_by_uid(self, browser):
+
+        url = "/".join([self.dossier.absolute_url(),
+                        '@list-documents-in-linked-workspace',
+                        'nonexisting'])
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(WorkspaceNotLinked) as cm:
+                browser.open(
+                    url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual(
+            "The workspace in not linked with the current dossier.",
+            str(cm.exception))
+
+    @browsing
+    def test_lists_documents_in_linked_workspace(self, browser):
+        document = create(Builder('document').within(self.workspace))
+
+        url = "/".join([self.dossier.absolute_url(),
+                        '@list-documents-in-linked-workspace',
+                        str(self.workspace.UID())])
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+
+            response = browser.open(
+                    url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                ).json
+
+            self.assertEqual(url, response.get('@id'))
+            self.assertEqual(1, response.get('items_total'))
+            self.assertEqual(
+                [{u'@id': document.absolute_url(),
+                  u'@type': u'opengever.document.document',
+                  u'UID': document.UID(),
+                  u'description': u'',
+                  u'filename': u'',
+                  u'review_state': u'document-state-draft',
+                  u'title': u'Testdokum\xe4nt'}],
+                response['items'])
+
+    @browsing
+    def test_lists_documents_in_linked_workspace_handles_batching(self, browser):
+        document1 = create(Builder('document').within(self.workspace))
+        create(Builder('document').within(self.workspace))
+
+        endpoint_url = "/".join([self.dossier.absolute_url(),
+                                 '@list-documents-in-linked-workspace',
+                                 str(self.workspace.UID())])
+        query_url = endpoint_url + '?b_size=1'
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            response = browser.open(
+                    query_url,
+                    method='GET',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                ).json
+
+            self.assertEqual(endpoint_url, response.get('@id'))
+            self.assertEqual(2, response.get('items_total'))
+            self.assertEqual(
+                {"@id": query_url,
+                 "first": endpoint_url + '?b_start=0&b_size=1',
+                 "last": endpoint_url + '?b_start=1&b_size=1',
+                 "next": endpoint_url + '?b_start=1&b_size=1'},
+                response.get('batching'))
+
+            self.assertEqual(1, len(response.get('items')))
+            self.assertEqual(
+                [document1.absolute_url()],
+                [document.get('@id') for document in response.get('items')])
+
+
+class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_raises_when_document_uid_missing(self, browser):
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            browser.login()
+
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual("Property 'document_uid' is required", str(cm.exception))
+
+    @browsing
+    def test_raises_when_workspace_uid_missing(self, browser):
+        document = create(Builder('document').within(self.workspace))
+        payload = {
+            'document_uid': document.UID()
+        }
+
+        with self.workspace_client_env():
+            browser.login()
+
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+
+    @browsing
+    def test_raises_when_document_cant_be_looked_up_by_uid(self, browser):
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': 'not-existing-document-uid',
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(LookupError) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual(
+            "Document not in linked workspace",
+            str(cm.exception))
+
+    @browsing
+    def test_raises_when_document_is_not_within_linked_workspace(self, browser):
+        document = create(Builder('document').within(self.dossier))
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': document.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(LookupError) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual("Document not in linked workspace", str(cm.exception))
+
+    @browsing
+    def test_copy_document_without_file_from_workspace(self, browser):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .having(preserved_as_paper=True))
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': document.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            with self.observe_children(self.dossier) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            document_copy = children['added'].pop()
+            self.assertEqual(document_copy.absolute_url(), browser.json.get('@id'))
+
+    @browsing
+    def test_copy_document_with_file_from_a_workspace(self, browser):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .with_dummy_content())
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': document.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, document)
+            with self.observe_children(self.dossier) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            document_copy = children['added'].pop()
+
+            self.assertEqual(document_copy.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(document_copy.title, document.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(document),
+                manager._serialized_document_schema_fields(document_copy))
+
+    @browsing
+    def test_copy_eml_mail_from_a_workspace(self, browser):
+        mail = create(Builder("mail")
+                      .with_message(MAIL_DATA)
+                      .within(self.workspace))
+        transaction.commit()
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': mail.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, mail)
+            with self.observe_children(self.dossier) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            mail_copy = children['added'].pop()
+
+            self.assertEqual(mail_copy.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(mail_copy.title, mail.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(mail_copy))
+
+    @browsing
+    def test_copy_msg_mail_from_a_workspace(self, browser):
+        msg = load('testmail.msg')
+        command = CreateEmailCommand(
+            self.workspace,
+            'testm\xc3\xa4il.msg',
+            msg)
+
+        mail = command.execute()
+        transaction.commit()
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': mail.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, mail)
+            with self.observe_children(self.dossier) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 1)
+            mail_copy = children['added'].pop()
+
+            self.assertEqual(mail_copy.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(mail_copy.title, mail.title)
+
+            self.assertItemsEqual(
+                manager._serialized_document_schema_fields(mail),
+                manager._serialized_document_schema_fields(mail_copy))

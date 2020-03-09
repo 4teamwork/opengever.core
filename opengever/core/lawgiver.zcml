@@ -128,6 +128,22 @@
       permissions="ftw.keywordwidget: Add new term"
       />
 
+  <!-- By default only managers can add E-mails and the permission is
+       in the globally ignored permissions. We therefore need to specify
+       it for each workflow where we want it managed. -->
+  <include package="ftw.mail" file="lawgiver.zcml" />
+  <lawgiver:map_permissions
+      action_group="add"
+      permissions="ftw.mail: Add Mail"
+      workflow="opengever_workspace"
+      />
+
+  <lawgiver:map_permissions
+      action_group="add"
+      permissions="ftw.mail: Add Mail"
+      workflow="opengever_workspace_folder"
+      />
+
   <!-- The "use developer tools" contains all permissions for features we only
        want to use in developer. Only the Manager role should have this action
        group. -->

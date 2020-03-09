@@ -580,7 +580,6 @@ class TestFolderActions(IntegrationTestCase):
         self.assertNotIn(self.createTaskAction,
                          self.get_folder_buttons(browser, self.private_dossier))
 
-
     @browsing
     def test_create_task_not_available_inactive_dossier(self, browser):
         self.login(self.regular_user, browser)
@@ -593,6 +592,11 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
     copy_documents_to_workspace_action = {
         u'id': u'copy_documents_to_workspace',
         u'title': u'Copy documents to workspace',
+        u'icon': u''}
+
+    copy_documents_from_workspace_action = {
+        u'id': u'copy_documents_from_workspace',
+        u'title': u'Copy documents from workspace',
         u'icon': u''}
 
     def get_folder_buttons(self, browser, context):
@@ -609,47 +613,65 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         transaction.commit()
 
     @browsing
-    def test_action_available_in_dossier_with_linked_workspaces(self, browser):
+    def test_copy_documents_actions_available_in_dossier_with_linked_workspaces(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
+            actions = self.get_folder_buttons(browser, self.dossier)
             self.assertIn(self.copy_documents_to_workspace_action,
-                          self.get_folder_buttons(browser, self.dossier))
+                          actions)
+            self.assertIn(self.copy_documents_from_workspace_action,
+                          actions)
 
     @browsing
-    def test_action_not_available_in_subdossier(self, browser):
+    def test_copy_documents_actions_not_available_in_subdossier(self, browser):
         browser.login()
         subdossier = create(Builder('dossier').within(self.dossier))
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
+            actions = self.get_folder_buttons(browser, subdossier)
             self.assertNotIn(self.copy_documents_to_workspace_action,
-                             self.get_folder_buttons(browser, subdossier))
+                             actions)
+            self.assertNotIn(self.copy_documents_from_workspace_action,
+                             actions)
 
     @browsing
-    def test_action_not_available_in_dossier_without_linked_workspaces(self, browser):
+    def test_copy_documents_actions_not_available_in_dossier_without_linked_workspaces(self, browser):
         browser.login()
         with self.workspace_client_env():
+            actions = self.get_folder_buttons(browser, self.dossier)
             self.assertNotIn(self.copy_documents_to_workspace_action,
-                             self.get_folder_buttons(browser, self.dossier))
+                             actions)
+            self.assertNotIn(self.copy_documents_from_workspace_action,
+                             actions)
 
     @browsing
-    def test_action_not_available_in_repository(self, browser):
+    def test_copy_documents_actions_not_available_in_repository(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
+            actions = self.get_folder_buttons(browser, self.leaf_repofolder)
             self.assertNotIn(self.copy_documents_to_workspace_action,
-                             self.get_folder_buttons(browser, self.leaf_repofolder))
+                             actions)
+            self.assertNotIn(self.copy_documents_from_workspace_action,
+                             actions)
 
     @browsing
-    def test_action_not_available_if_feature_deactivated(self, browser):
+    def test_copy_documents_actions_not_available_if_feature_deactivated(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
+            actions = self.get_folder_buttons(browser, self.dossier)
             self.assertIn(self.copy_documents_to_workspace_action,
-                          self.get_folder_buttons(browser, self.dossier))
+                          actions)
+            self.assertIn(self.copy_documents_from_workspace_action,
+                          actions)
 
             self.enable_feature(False)
             transaction.commit()
 
+            actions = self.get_folder_buttons(browser, self.dossier)
             self.assertNotIn(self.copy_documents_to_workspace_action,
-                             self.get_folder_buttons(browser, self.dossier))
+                             actions)
+            self.assertNotIn(self.copy_documents_from_workspace_action,
+                             actions)
