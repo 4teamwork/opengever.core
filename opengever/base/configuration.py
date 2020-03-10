@@ -35,6 +35,7 @@ from plone import api
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
+import os
 
 
 @implementer(IGeverSettings)
@@ -54,6 +55,7 @@ class GeverSettingsAdpaterV1(object):
             config['features'] = self.get_features()
         config['root_url'] = api.portal.get().absolute_url()
         config['cas_url'] = get_cas_server_url()
+        config['apps_url'] = os.environ.get('APPS_ENDPOINT_URL')
         return config
 
     def get_info(self):
