@@ -3,7 +3,6 @@ from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
-from sqlalchemy.sql.expression import true
 
 
 class OGDSService(object):
@@ -39,9 +38,8 @@ class OGDSService(object):
         return self._query_user().filter_by(active=False).all()
 
     def assigned_org_units(self, userid):
-        query = self._query_org_units().join(OrgUnit.users_group)
+        query = self._query_org_units(enabled_only=True).join(OrgUnit.users_group)
         query = query.join(Group.users).filter(User.userid == userid)
-        query = query.filter(OrgUnit.enabled == true())
         return query.all()
 
     def assigned_groups(self, userid):
@@ -50,13 +48,10 @@ class OGDSService(object):
         return query.all()
 
     def fetch_org_unit(self, unit_id):
-        return self._query_org_units().get(unit_id)
+        return self._query_org_units(enabled_only=False).get(unit_id)
 
     def all_org_units(self, enabled_only=True):
-        query = self._query_org_units()
-        if enabled_only:
-            query = query.filter_by(enabled=True)
-
+        query = self._query_org_units(enabled_only=enabled_only)
         return query.all()
 
     def fetch_admin_unit(self, unit_id):
@@ -71,7 +66,7 @@ class OGDSService(object):
         return query.count() > 1
 
     def has_multiple_org_units(self):
-        return self._query_org_units().count() > 1
+        return self._query_org_units(enabled_only=False).count() > 1
 
     def fetch_group(self, groupid):
         return self._query_group().get(groupid)
@@ -88,8 +83,11 @@ class OGDSService(object):
             query = query.filter_by(active=True)
         return query.all()
 
-    def _query_org_units(self):
-        return OrgUnit.query.order_by(OrgUnit.title)
+    def _query_org_units(self, enabled_only=True):
+        query = OrgUnit.query
+        if enabled_only:
+            query = query.filter_by(enabled=enabled_only)
+        return query.order_by(OrgUnit.title)
 
     def _query_user(self):
         return User.query

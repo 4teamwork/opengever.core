@@ -14,7 +14,6 @@ from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-from sqlalchemy.sql.expression import true
 from UserDict import DictMixin
 from zope.component import getUtility
 from zope.component.hooks import getSite
@@ -75,9 +74,8 @@ class OGDSService(object):
         if userid is None:
             userid = self._get_current_user_id()
 
-        query = self._query_org_units().join(OrgUnit.users_group)
+        query = self._query_org_units(enabled_only=True).join(OrgUnit.users_group)
         query = query.join(Group.users).filter(User.userid == userid)
-        query = query.filter(OrgUnit.enabled == true())
         org_units = query.all()
 
         if omit_current:
@@ -92,13 +90,10 @@ class OGDSService(object):
         return query.all()
 
     def fetch_org_unit(self, unit_id):
-        return self._query_org_units().get(unit_id)
+        return self._query_org_units(enabled_only=False).get(unit_id)
 
     def all_org_units(self, enabled_only=True):
-        query = self._query_org_units()
-        if enabled_only:
-            query = query.filter_by(enabled=True)
-
+        query = self._query_org_units(enabled_only=enabled_only)
         return query.all()
 
     def fetch_admin_unit(self, unit_id):
@@ -113,7 +108,8 @@ class OGDSService(object):
         return query.count() > 1
 
     def has_multiple_org_units(self):
-        return self._query_org_units().count() > 1
+        query = self._query_org_units(enabled_only=False)
+        return query.count() > 1
 
     def fetch_group(self, groupid):
         return self._query_group().get(groupid)
@@ -130,8 +126,11 @@ class OGDSService(object):
             query = query.filter_by(active=True)
         return query.all()
 
-    def _query_org_units(self):
-        return OrgUnit.query.order_by(OrgUnit.title)
+    def _query_org_units(self, enabled_only=True):
+        query = OrgUnit.query
+        if enabled_only:
+            query = query.filter_by(enabled=enabled_only)
+        return query.order_by(OrgUnit.title)
 
     def _query_user(self):
         return User.query
