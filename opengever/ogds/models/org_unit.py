@@ -46,6 +46,7 @@ class OrgUnit(Base):
     unit_id = Column(String(UNIT_ID_LENGTH), primary_key=True)
     title = Column(String(UNIT_TITLE_LENGTH))
     enabled = Column(Boolean(), default=True)
+    hidden = Column(Boolean(), default=False, nullable=False)
 
     # formerly 'group'
     users_group_id = Column(String(GROUP_ID_LENGTH),
