@@ -5,6 +5,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashable
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
+from plone import api
 from plone.protect import createToken
 import transaction
 
@@ -589,6 +590,11 @@ class TestFolderActions(IntegrationTestCase):
 
 class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
 
+    list_workspaces_action = {
+        u'id': u'list_workspaces',
+        u'title': u'List workspaces',
+        u'icon': u''}
+
     copy_documents_to_workspace_action = {
         u'id': u'copy_documents_to_workspace',
         u'title': u'Copy documents to workspace',
@@ -599,79 +605,92 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         u'title': u'Copy documents from workspace',
         u'icon': u''}
 
-    def get_folder_buttons(self, browser, context):
+    workspace_actions = [list_workspaces_action,
+                         copy_documents_to_workspace_action,
+                         copy_documents_from_workspace_action]
+
+    def get_actions(self, browser, context):
         browser.open(context.absolute_url() + '/@actions',
                      method='GET',
                      headers={'Accept': 'application/json',
                               'Content-Type': 'application/json'})
 
-        return browser.json['folder_buttons']
+        return browser.json['folder_buttons'] + browser.json['folder_actions']
 
     def link_workspace(self, obj):
         manager = ILinkedWorkspaces(obj)
         manager.storage.add(self.workspace.UID())
         transaction.commit()
 
+    def assert_workspace_actions_available(self, browser, dossier):
+        actions = self.get_actions(browser, dossier)
+        for action in self.workspace_actions:
+            self.assertIn(action, actions)
+
+    def assert_workspace_actions_not_available(self, browser, dossier):
+        actions = self.get_actions(browser, dossier)
+        for action in self.workspace_actions:
+            self.assertNotIn(action, actions)
+
     @browsing
     def test_copy_documents_actions_available_in_dossier_with_linked_workspaces(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
-            actions = self.get_folder_buttons(browser, self.dossier)
+            actions = self.get_actions(browser, self.dossier)
             self.assertIn(self.copy_documents_to_workspace_action,
                           actions)
             self.assertIn(self.copy_documents_from_workspace_action,
                           actions)
 
     @browsing
-    def test_copy_documents_actions_not_available_in_subdossier(self, browser):
+    def test_workspace_actions_not_available_in_subdossier(self, browser):
         browser.login()
         subdossier = create(Builder('dossier').within(self.dossier))
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
-            actions = self.get_folder_buttons(browser, subdossier)
-            self.assertNotIn(self.copy_documents_to_workspace_action,
-                             actions)
-            self.assertNotIn(self.copy_documents_from_workspace_action,
-                             actions)
+            self.assert_workspace_actions_not_available(browser, subdossier)
 
     @browsing
     def test_copy_documents_actions_not_available_in_dossier_without_linked_workspaces(self, browser):
         browser.login()
         with self.workspace_client_env():
-            actions = self.get_folder_buttons(browser, self.dossier)
+            actions = self.get_actions(browser, self.dossier)
             self.assertNotIn(self.copy_documents_to_workspace_action,
                              actions)
             self.assertNotIn(self.copy_documents_from_workspace_action,
                              actions)
 
     @browsing
-    def test_copy_documents_actions_not_available_in_repository(self, browser):
+    def test_workspace_actions_not_available_in_repository(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
-            actions = self.get_folder_buttons(browser, self.leaf_repofolder)
-            self.assertNotIn(self.copy_documents_to_workspace_action,
-                             actions)
-            self.assertNotIn(self.copy_documents_from_workspace_action,
-                             actions)
+            self.assert_workspace_actions_not_available(browser, self.leaf_repofolder)
 
     @browsing
-    def test_copy_documents_actions_not_available_if_feature_deactivated(self, browser):
+    def test_workspaces_actions_only_available_if_feature_activated(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
-            actions = self.get_folder_buttons(browser, self.dossier)
-            self.assertIn(self.copy_documents_to_workspace_action,
-                          actions)
-            self.assertIn(self.copy_documents_from_workspace_action,
-                          actions)
+
+            self.assert_workspace_actions_available(browser, self.dossier)
 
             self.enable_feature(False)
             transaction.commit()
 
-            actions = self.get_folder_buttons(browser, self.dossier)
-            self.assertNotIn(self.copy_documents_to_workspace_action,
-                             actions)
-            self.assertNotIn(self.copy_documents_from_workspace_action,
-                             actions)
+            self.assert_workspace_actions_not_available(browser, self.dossier)
+
+    @browsing
+    def test_workspaces_actions_only_available_if_user_has_permission(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+
+            self.assert_workspace_actions_available(browser, self.dossier)
+
+            roles = api.user.get_roles()
+            roles.remove('WorkspaceClientUser')
+            self.grant(*roles)
+
+            self.assert_workspace_actions_not_available(browser, self.dossier)

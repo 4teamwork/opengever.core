@@ -543,6 +543,20 @@
       <property name="visible">True</property>
     </object>
 
+  </object>
+
+  <!-- FOLDER ACTIONS used to list available actions through the actions endpoint-->
+  <object name="folder_actions" meta_type="CMF Action Category">
+
+    <object name="list_workspaces" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">List workspaces</property>
+      <property name="description">Gever-UI action</property>
+      <property name="url_expr" />
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@folder_buttons_availability/is_list_workspaces_available</property>
+      <property name="visible">True</property>
+    </object>
+
     <object name="copy_documents_from_workspace" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Copy documents from workspace</property>
       <property name="description">Gever-UI action</property>
@@ -553,7 +567,6 @@
     </object>
 
   </object>
-
 
   <!-- OBJECT -->
   <object name="object" meta_type="CMF Action Category">
