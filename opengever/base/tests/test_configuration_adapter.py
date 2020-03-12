@@ -1,7 +1,9 @@
 from collections import OrderedDict
+from contextlib import contextmanager
 from opengever.base.interfaces import IGeverSettings
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
+import os
 
 
 class TestConfigurationAdapter(IntegrationTestCase):
@@ -73,6 +75,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ])),
             ('root_url', 'http://nohost/plone'),
             ('cas_url', None),
+            ('apps_url', None),
             ])
 
         with self.login(self.regular_user):
@@ -85,6 +88,35 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('version', get_distribution('opengever.core').version),
             ('root_url', 'http://nohost/plone'),
             ('cas_url', None),
+            ('apps_url', None),
             ])
         configuration = IGeverSettings(self.portal).get_config()
+        self.assertEqual(configuration, expected_configuration)
+
+    def test_apps_url_can_be_set_through_env_variable(self):
+
+        @contextmanager
+        def custom_apps_url(url):
+            """Contextmanager to temporary replace the APPS_ENDPOINT_URL
+            """
+            original_env_value = os.environ.get('APPS_ENDPOINT_URL')
+            os.environ['APPS_ENDPOINT_URL'] = url
+
+            yield
+
+            if original_env_value:
+                os.environ['APPS_ENDPOINT_URL'] = original_env_value
+            else:
+                del os.environ['APPS_ENDPOINT_URL']
+
+        expected_configuration = OrderedDict([
+            ('@id', 'http://nohost/plone/@config'),
+            ('version', get_distribution('opengever.core').version),
+            ('root_url', 'http://nohost/plone'),
+            ('cas_url', None),
+            ('apps_url', 'http://example.com/api/apps'),
+            ])
+
+        with custom_apps_url('http://example.com/api/apps'):
+            configuration = IGeverSettings(self.portal).get_config()
         self.assertEqual(configuration, expected_configuration)

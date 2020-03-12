@@ -10,6 +10,7 @@ Changelog
 2020.2.0rc1 (2020-03-11)
 ------------------------
 
+- Extend the @config endpoint with an `apps_url` attribute. [elioschmutz]
 - Extend policytemplates to use the single thread setup. [elioschmutz]
 - Extend policytemplates with workspace deployment. [elioschmutz]
 - Extend policytemplates with gever-ui activation. [elioschmutz]
