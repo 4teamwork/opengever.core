@@ -73,6 +73,96 @@ class TestCheckinIntegration(IntegrationTestCase):
         manager.checkin(comment="Force checkin")
         self.assertFalse(IRefreshableLockable(self.document).locked())
 
+    def test_collaborative_checkin(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # List of collaborators starts out with the user that initially
+        # checked out the document
+        self.assertEqual([self.regular_user.getId()],
+                         manager.get_collaborators())
+
+        # Other collaborator can checkin
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            manager.get_collaborators())
+
+        self.login(self.dossier_responsible)
+        manager.checkin(collaborative=True)
+        self.assertIsNone(manager.get_checked_out_by())
+
+    def test_collaborative_checkin_only_allowed_for_other_collaborators(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # This user is not a collaborator
+        self.login(self.dossier_responsible)
+
+        self.assertFalse(manager.is_checkin_allowed())
+        with self.assertRaises(Unauthorized):
+            manager.checkin(collaborative=True)
+
+    def test_collaborative_checkout_can_only_be_checked_in_collaboratively(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # Regular checkin is not allowed
+        self.assertFalse(manager.is_checkin_allowed())
+        with self.assertRaises(Unauthorized):
+            manager.checkin()
+
+    def test_collaborators_are_cleared_after_checkin(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            manager.get_collaborators())
+        self.assertTrue(manager.is_collaborative_checkout())
+
+        # List of collaborators should be cleared on checkin
+        manager.checkin(collaborative=True)
+        self.assertEqual([], manager.get_collaborators())
+        self.assertFalse(manager.is_collaborative_checkout())
+        self.assertIsNone(manager.get_checked_out_by())
+
+    def test_collaborative_checkout_can_be_force_checked_in(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # Force checkin is still allowed
+        self.login(self.administrator)
+        self.assertTrue(manager.is_checkin_allowed())
+        manager.checkin()
+        self.assertIsNone(manager.get_checked_out_by())
+        self.assertEqual([], manager.get_collaborators())
+
 
 class TestCheckin(FunctionalTestCase):
     """Tests for the checkin functionality."""
