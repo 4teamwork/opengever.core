@@ -1,14 +1,23 @@
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
+from plone import api
 
 
 class OGDSService(object):
 
     def __init__(self, session):
         self.session = session
+
+    def _get_current_user_id(self):
+        return api.user.get_current().getId()
+
+    def fetch_current_user(self):
+        userid = self._get_current_user_id()
+        return self.fetch_user(userid) if userid else None
 
     def find_user(self, userid):
         """Returns a User by its userid. When no User is found, this method raises.
@@ -37,10 +46,19 @@ class OGDSService(object):
     def inactive_users(self):
         return self._query_user().filter_by(active=False).all()
 
-    def assigned_org_units(self, userid):
+    def assigned_org_units(self, userid=None, omit_current=False):
+        if userid is None:
+            userid = self._get_current_user_id()
+
         query = self._query_org_units(enabled_only=True).join(OrgUnit.users_group)
         query = query.join(Group.users).filter(User.userid == userid)
-        return query.all()
+        org_units = query.all()
+
+        if omit_current:
+            current_org_unit = get_current_org_unit()
+            org_units = [each for each in org_units
+                         if each != current_org_unit]
+        return org_units
 
     def assigned_groups(self, userid):
         query = Group.query.join(Group.users)
@@ -66,7 +84,8 @@ class OGDSService(object):
         return query.count() > 1
 
     def has_multiple_org_units(self):
-        return self._query_org_units(enabled_only=False).count() > 1
+        query = self._query_org_units(enabled_only=False)
+        return query.count() > 1
 
     def fetch_group(self, groupid):
         return self._query_group().get(groupid)
