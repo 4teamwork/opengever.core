@@ -14,7 +14,7 @@ from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from sqlalchemy import and_
 from sqlalchemy import Column
 from sqlalchemy import Integer

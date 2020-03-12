@@ -33,7 +33,7 @@ from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.trash.trash import ITrashed
 from plone import api
 from plone.app.uuid.utils import uuidToObject

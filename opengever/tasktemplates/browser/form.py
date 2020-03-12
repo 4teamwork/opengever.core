@@ -6,7 +6,7 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import _

@@ -7,7 +7,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task.util import update_reponsible_field_data
 from opengever.tasktemplates import _
 from opengever.tasktemplates import INTERACTIVE_USERS

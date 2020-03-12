@@ -1,5 +1,5 @@
 from opengever.contact.utils import get_contactfolder_url
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.exceptions import RecordNotFound
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile

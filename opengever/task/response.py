@@ -5,7 +5,7 @@ from opengever.base.response import IResponseContainer
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task import _
 from opengever.task import FINAL_TRANSITIONS
 from opengever.task import util

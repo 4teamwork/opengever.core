@@ -1,5 +1,5 @@
 from opengever.document import _
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from zope.component import getUtility
 from zope.globalrequest import getRequest

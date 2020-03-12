@@ -8,7 +8,7 @@ from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate

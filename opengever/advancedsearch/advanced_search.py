@@ -6,7 +6,7 @@ from opengever.advancedsearch import _
 from opengever.ogds.base.sources import AllUsersSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task.util import getTaskTypeVocabulary
 from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel import model

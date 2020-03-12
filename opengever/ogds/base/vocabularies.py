@@ -1,4 +1,4 @@
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory

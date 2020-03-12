@@ -2,7 +2,7 @@ from ftw.keywordwidget.widget import KeywordWidget
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task import _
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response

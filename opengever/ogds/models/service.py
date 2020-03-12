@@ -1,10 +1,14 @@
-from opengever.ogds.base.utils import get_current_org_unit
+from opengever.base.model import create_session
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 from plone import api
+
+
+def ogds_service():
+    return OGDSService(create_session())
 
 
 class OGDSService(object):
@@ -55,6 +59,8 @@ class OGDSService(object):
         org_units = query.all()
 
         if omit_current:
+            # Avoid circular imports
+            from opengever.ogds.base.utils import get_current_org_unit
             current_org_unit = get_current_org_unit()
             org_units = [each for each in org_units
                          if each != current_org_unit]

@@ -5,7 +5,7 @@ from opengever.base.transport import Transporter
 from opengever.inbox import _
 from opengever.inbox.browser.schema import ISimpleResponseForm
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task import _ as task_mf
 from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.transporter import IResponseTransporter

@@ -7,7 +7,7 @@ step, where the user has to choose the method of participation.
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.globalindex.handlers.task import sync_task
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.interfaces import ISuccessorTaskController

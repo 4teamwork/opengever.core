@@ -6,7 +6,7 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from opengever.workspace import _

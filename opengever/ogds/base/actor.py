@@ -28,7 +28,7 @@ from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.team import Team
 from plone.dexterity.utils import safe_unicode
 from Products.CMFCore.interfaces._tools import IMemberData

@@ -15,7 +15,7 @@ from opengever.activity.model import Watcher
 from opengever.base.model import create_session
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.model.task import TaskPrincipal
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.usermigration.exceptions import UserMigrationException
 from operator import itemgetter

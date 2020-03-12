@@ -7,7 +7,7 @@ from mock import Mock
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation import load_signed_payload
 from opengever.workspace.participation import serialize_and_sign_payload

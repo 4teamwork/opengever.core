@@ -22,7 +22,7 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task import _
 from opengever.task import FINAL_TASK_STATES
 from opengever.task import is_optional_task_permissions_revoking_enabled

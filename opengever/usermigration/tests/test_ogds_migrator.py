@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
 from opengever.usermigration.exceptions import UserMigrationException
 from opengever.usermigration.ogds import OGDSMigrator

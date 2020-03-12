@@ -5,7 +5,7 @@ from opengever.contact.docprops import PersonDocPropertyProvider
 from opengever.contact.docprops import PhoneNumberDocPropertyProvider
 from opengever.contact.docprops import URLDocPropertyProvider
 from opengever.ogds.base.browser.userdetails import UserDetails
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 
 
 class BaseAdapter(object):

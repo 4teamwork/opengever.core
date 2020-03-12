@@ -1,5 +1,5 @@
 from opengever.ogds.base.utils import get_ou_selector
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone.app.caching.interfaces import IETagValue
 from plone.app.layout.viewlets import common
 from Products.Five.browser import BrowserView

@@ -8,7 +8,7 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from Products.CMFCore.interfaces import IMemberData
 from zope.component import adapter
 from zope.component import getAdapter

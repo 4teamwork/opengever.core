@@ -5,7 +5,7 @@ from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
 from plone import api
 

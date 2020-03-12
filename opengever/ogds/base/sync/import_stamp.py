@@ -4,7 +4,7 @@ from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
 from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Five.browser import BrowserView

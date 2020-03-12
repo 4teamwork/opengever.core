@@ -6,7 +6,7 @@ from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.ech0147.utils import create_document
 from opengever.ech0147.utils import create_dossier
 from opengever.ogds.base.sources import AllUsersSourceBinder
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.autoform import directives
 from plone.autoform.form import AutoExtensibleForm
