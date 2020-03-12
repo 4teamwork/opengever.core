@@ -54,7 +54,9 @@ class OGDSService(object):
         if userid is None:
             userid = self._get_current_user_id()
 
-        query = self._query_org_units(enabled_only=True).join(OrgUnit.users_group)
+        query = self._query_org_units(
+            enabled_only=True, visible_only=True).join(OrgUnit.users_group)
+
         query = query.join(Group.users).filter(User.userid == userid)
         org_units = query.all()
 
@@ -72,34 +74,41 @@ class OGDSService(object):
         return query.all()
 
     def fetch_org_unit(self, unit_id):
-        return self._query_org_units(enabled_only=False).get(unit_id)
+        return self._query_org_units(
+            enabled_only=False, visible_only=False).get(unit_id)
 
-    def all_org_units(self, enabled_only=True):
-        query = self._query_org_units(enabled_only=enabled_only)
+    def all_org_units(self, enabled_only=True, visible_only=True):
+        query = self._query_org_units(enabled_only=enabled_only,
+                                      visible_only=visible_only)
         return query.all()
 
     def fetch_admin_unit(self, unit_id):
-        return self._query_admin_units(enabled_only=False).get(unit_id)
+        return self._query_admin_units(
+            enabled_only=False, visible_only=False).get(unit_id)
 
-    def all_admin_units(self, enabled_only=True):
-        query = self._query_admin_units(enabled_only)
+    def all_admin_units(self, enabled_only=True, visible_only=True):
+        query = self._query_admin_units(enabled_only=enabled_only,
+                                        visible_only=visible_only)
         return query.all()
 
-    def has_multiple_admin_units(self, enabled_only=True):
-        query = self._query_admin_units(enabled_only)
+    def has_multiple_admin_units(self, enabled_only=True, visible_only=True):
+        query = self._query_admin_units(enabled_only=enabled_only,
+                                        visible_only=visible_only)
         return query.count() > 1
 
     def has_multiple_org_units(self):
-        query = self._query_org_units(enabled_only=False)
+        query = self._query_org_units(enabled_only=False, visible_only=False)
         return query.count() > 1
 
     def fetch_group(self, groupid):
         return self._query_group().get(groupid)
 
-    def _query_admin_units(self, enabled_only=True):
+    def _query_admin_units(self, enabled_only=True, visible_only=True):
         query = AdminUnit.query
         if enabled_only:
-            query = query.filter_by(enabled=enabled_only)
+            query = query.filter_by(enabled=True)
+        if visible_only:
+            query = query.filter_by(hidden=False)
         return query
 
     def all_groups(self, active_only=True):
@@ -108,10 +117,12 @@ class OGDSService(object):
             query = query.filter_by(active=True)
         return query.all()
 
-    def _query_org_units(self, enabled_only=True):
+    def _query_org_units(self, enabled_only=True, visible_only=True):
         query = OrgUnit.query
         if enabled_only:
-            query = query.filter_by(enabled=enabled_only)
+            query = query.filter_by(enabled=True)
+        if visible_only:
+            query = query.filter_by(hidden=False)
         return query.order_by(OrgUnit.title)
 
     def _query_user(self):

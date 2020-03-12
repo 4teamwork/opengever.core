@@ -69,21 +69,44 @@ class TestOGDSServiceAdminUnitMethods(OGDSTestCase):
         self.admin_unit_2.enabled = False
         self.assertFalse(self.service.has_multiple_admin_units())
 
+    def test_has_multiple_admin_units_counts_only_visible_admin_units(self):
+        self.admin_unit_1.hidden = True
+        self.admin_unit_2.hidden = True
+        self.assertFalse(self.service.has_multiple_admin_units())
+
     def test_fetch_admin_unit_by_unit_id(self):
         self.assertEqual(self.admin_unit_1, self.service.fetch_admin_unit('canton_1'))
 
     def test_fetching_disabled_admin_unit_by_unit_id(self):
         self.assertEqual(self.admin_unit_3, self.service.fetch_admin_unit('canton_3'))
 
+    def test_fetching_hidden_admin_unit_by_unit_id(self):
+        self.admin_unit_3.hidden = True
+        self.assertEqual(self.admin_unit_3, self.service.fetch_admin_unit('canton_3'))
+
     def test_fetch_not_existing_admin_unit_returns_none(self):
         self.assertIsNone(self.service.fetch_admin_unit('admin_xx'))
 
     def test_all_admin_units_returns_a_list_of_all_enabled_admin_units(self):
-        self.assertSequenceEqual([self.admin_unit_1, self.admin_unit_2], self.service.all_admin_units())
+        self.assertSequenceEqual(
+            [self.admin_unit_1, self.admin_unit_2],
+            self.service.all_admin_units())
 
-    def test_all_admin_units_includes_disabled_orgunits_when_flag_is_set(self):
-        expected_admin_units = [self.admin_unit_1, self.admin_unit_2, self.admin_unit_3]
-        self.assertSequenceEqual(expected_admin_units, self.service.all_admin_units(enabled_only=False))
+    def test_all_admin_units_returns_a_list_of_all_visible_admin_units(self):
+        self.admin_unit_1.hidden = True
+        self.assertSequenceEqual([self.admin_unit_2], self.service.all_admin_units())
+
+    def test_all_admin_units_includes_disabled_admin_units_when_flag_is_set(self):
+        self.assertFalse(self.admin_unit_3.enabled)
+        self.assertSequenceEqual(
+            [self.admin_unit_1, self.admin_unit_2, self.admin_unit_3],
+            self.service.all_admin_units(enabled_only=False))
+
+    def test_all_admin_units_includes_hidden_admin_units_when_flag_is_set(self):
+        self.admin_unit_1.hidden = True
+        self.assertSequenceEqual(
+            [self.admin_unit_1, self.admin_unit_2],
+            self.service.all_admin_units(visible_only=False))
 
 
 class TestOGDSServiceOrgUnitMethods(OGDSTestCase):
@@ -100,6 +123,14 @@ class TestOGDSServiceOrgUnitMethods(OGDSTestCase):
     def test_fetch_org_unit_by_unit_id(self):
         self.assertEqual(self.org_unit_c, self.service.fetch_org_unit('unitc'))
 
+    def test_fetching_disabled_org_unit_by_unit_id(self):
+        self.assertFalse(self.org_unit_d.enabled)
+        self.assertEqual(self.org_unit_d, self.service.fetch_org_unit('unitd'))
+
+    def test_fetching_hidden_org_unit_unit_by_unit_id(self):
+        self.org_unit_c.hidden = True
+        self.assertEqual(self.org_unit_c, self.service.fetch_org_unit('unitc'))
+
     def test_fetch_org_unit_returns_none_when_no_org_unit_is_found(self):
         self.assertIsNone(self.service.fetch_org_unit('not-existing-unit'))
 
@@ -107,10 +138,54 @@ class TestOGDSServiceOrgUnitMethods(OGDSTestCase):
         units = self.service.assigned_org_units('hugo')
         self.assertSequenceEqual([self.org_unit_a, self.org_unit_b], units)
 
-    def test_all_org_units_returns_list_of_all_orgunits(self):
-        units = self.service.all_org_units()
-        self.assertSequenceEqual([self.org_unit_a, self.org_unit_b, self.org_unit_c], units)
+    def test_assigned_org_units_returns_only_enabled_orgunits(self):
+        self.org_unit_a.enabled = False
+        self.assertSequenceEqual(
+            [self.org_unit_b],
+            self.service.assigned_org_units('hugo'))
+
+    def test_assigned_org_units_returns_only_visible_orgunits(self):
+        self.org_unit_a.hidden = True
+        self.assertSequenceEqual(
+            [self.org_unit_b],
+            self.service.assigned_org_units('hugo'))
+
+    def test_all_org_units_returns_list_of_all_enabled_orgunits(self):
+        self.assertSequenceEqual(
+            [self.org_unit_a, self.org_unit_b, self.org_unit_c],
+            self.service.all_org_units())
+
+        self.org_unit_a.enabled = False
+        self.assertSequenceEqual(
+            [self.org_unit_b, self.org_unit_c],
+            self.service.all_org_units())
+
+    def test_all_org_units_returns_only_visible_orgunits(self):
+        self.org_unit_a.hidden = True
+        self.assertSequenceEqual(
+            [self.org_unit_b, self.org_unit_c],
+            self.service.all_org_units())
 
     def test_all_org_units_includes_disabled_orgunits_when_flag_is_set(self):
-        units = self.service.all_org_units(enabled_only=False)
-        self.assertSequenceEqual([self.org_unit_a, self.org_unit_b, self.org_unit_c, self.org_unit_d], units)
+        self.assertFalse(self.org_unit_d.enabled)
+        self.assertSequenceEqual(
+            [self.org_unit_a, self.org_unit_b, self.org_unit_c, self.org_unit_d],
+            self.service.all_org_units(enabled_only=False))
+
+    def test_all_org_units_includes_hidden_orgunits_when_flag_is_set(self):
+        self.org_unit_a.hidden = True
+        self.assertSequenceEqual(
+            [self.org_unit_a, self.org_unit_b, self.org_unit_c],
+            self.service.all_org_units(visible_only=False))
+
+    def test_has_multiple_org_units_counts_disabled_org_units(self):
+        self.org_unit_b.enabled = False
+        self.org_unit_c.enabled = False
+        self.org_unit_d.enabled = False
+        self.assertTrue(self.service.has_multiple_org_units())
+
+    def test_has_multiple_org_units_counts_hidden_org_units(self):
+        self.org_unit_b.hidden = True
+        self.org_unit_c.hidden = True
+        self.org_unit_d.hidden = True
+        self.assertTrue(self.service.has_multiple_org_units())

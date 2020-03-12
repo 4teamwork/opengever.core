@@ -12,6 +12,7 @@ Changelog
 - Fix encoding issue in query-source `query` parameter. [deiferni]
 - Do no longer send activity mails from the current user due to spam issues when the user's email address does not match the portal domain. [elioschmutz]
 - OfficeOnline: Use collaborative checkout / checkins. [lgraf]
+- Handle hidden flag in models.OGDSService. [njohner]
 - Add list workspaces action for new frontend. [njohner]
 - Add additional fields to @user-listing endpoint. [njohner]
 - Add ogds user listing via @user-listing endpoint. [deiferni]
