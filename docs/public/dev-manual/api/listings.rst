@@ -253,3 +253,91 @@ Optionale Parameter:
 
     GET /ordnungssystem/fuehrung/dossier-23/@listing?name=documents&facets:list=creator HTTP/1.1
     Accept: application/json
+
+
+Auflistungen User und Teams
+===========================
+
+Mit den Endpoints ``@ogds-user-listing`` und ``@team-listing`` können Benutzer und
+Teams aus dem ogds aufgelistet werden. Diese beiden Endpoints liefern
+inhaltlich die gleiche Struktur wie der ``@listing`` Endpoint, unterstützen
+aber nur ein Subset der Parameter. Im Moment ist es nicht möglich die
+``columns`` anzugeben, sondern es werden immer alle vom vom Modell
+untertstützten Attribute zurückgegeben. Des weiteren ist der ``depth``
+Paremeter nicht implementiert, ``facets`` werden ebenfalls nicht unterstützt.
+Dies weil die Datenquelle eine SQL-Datenbank und nicht Solr ist.
+
+
+Beispiel: Auflistung aller Benutzer:
+
+  .. sourcecode:: http
+
+    GET /kontakte/kontakte/@ogds-user-listing HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
+      "b_size": 25,
+      "b_start": 0,
+      "facets": {},
+      "items": [
+        {
+          "@id": "http://localhost:8080/fd/kontakte/@ogds-user/sandro.ackermann",
+          "@type": "virtual.ogds.user",
+          "active": true,
+          "department": null,
+          "directorate": null,
+          "email": "sandro.ackermann@example.com",
+          "firstname": "Sandro",
+          "lastname": "Ackermann",
+          "phone_office": null,
+          "title": "Ackermann Sandro",
+          "userid": "sandro.ackermann"
+        },
+      ],
+      "items_total": 1
+    }
+
+
+Optionale Parameter:
+--------------------
+Folgende Parameter werden im Moment unterstützt:
+
+- ``b_start``: Das erste zurückzugebende Element
+- ``b_size``: Die maximale Anzahl der zurückzugebenden Elemente
+- ``sort_on``: Sortierung nach einem indexierten Feld
+- ``sort_order``: Sortierreihenfolge: ``ascending`` (aufsteigend) oder ``descending`` (absteigend)
+- ``search``: Filterung nach einem beliebigen Suchbegriff
+- ``filters``: Einschränkung nach einem bestimmten Wert eines Feldes
+
+
+Filtern:
+--------
+Im Moment ist für beide Endpoinst nur ein Filter nach Status (aktiv/inaktiv)
+implementiert. Mit ``filters.state:record:list`` können die gewünschten Status
+angegeben werden:
+
+- ``active``: aktive Benutzer/Teams
+- ``inactive``: inaktive Benutzer/Teams
+
+
+**Beispiel: Nur aktive Teams abfragen**
+
+  .. sourcecode:: http
+
+    GET /kontakte/@team-listing?filters.state:record:list=active HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel: Aktive und inaktive Teams abfragen**
+
+  .. sourcecode:: http
+
+    GET /kontakte/@team-listing?filters.state:record:list=active&filters.state:record:list=inactive HTTP/1.1
+    Accept: application/json
+
