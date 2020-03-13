@@ -95,14 +95,14 @@ def with_active_solr_only(func):
     return validate
 
 
-class Listing(SolrQueryBaseService):
+class ListingGet(SolrQueryBaseService):
     """List of content items"""
 
     required_response_fields = REQUIRED_RESPONSE_FIELDS
     other_allowed_fields = OTHER_ALLOWED_FIELDS
 
     def __init__(self, context, request):
-        super(Listing, self).__init__(context, request)
+        super(ListingGet, self).__init__(context, request)
         self.allowed_fields = set(self.field_mapping.keys()) | self.other_allowed_fields
 
     def extract_query(self, params):
