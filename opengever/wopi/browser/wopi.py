@@ -237,12 +237,12 @@ class WOPIView(BrowserView):
         manager = getMultiAdapter((self.obj, self.request),
                                   ICheckinCheckoutManager)
         if not manager.get_checked_out_by():
-            manager.checkout()
+            manager.checkout(collaborative=True)
 
     def checkin(self):
         manager = getMultiAdapter((self.obj, self.request),
                                   ICheckinCheckoutManager)
-        manager.checkin()
+        manager.checkin(collaborative=True)
 
     def _file_version(self):
         # The current version of the file.
@@ -264,4 +264,16 @@ class WOPIView(BrowserView):
         self.request.response.setHeader(
             'X-WOPI-ItemVersion', self._file_version())
         logger.info('X-WOPI-ItemVersion: %s', self._file_version())
+
+        # Track collaborators
+        editors = self.request.getHeader('X-WOPI-Editors')
+        if editors is None:
+            logger.warn('X-WOPI-Editors header is missing')
+        else:
+            editors = [ed.strip() for ed in editors.split(',')]
+            manager = getMultiAdapter((self.obj, self.request),
+                                      ICheckinCheckoutManager)
+            for editor in editors:
+                manager.add_collaborator(editor)
+
         self.request.response.setStatus(200, lock=1)
