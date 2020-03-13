@@ -10,6 +10,7 @@ from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
 from zExceptions import BadRequest
+from ZPublisher.HTTPRequest import record
 
 
 class OGDSListingBaseService(Service):
@@ -28,13 +29,13 @@ class OGDSListingBaseService(Service):
     model_class = None
 
     def reply(self):
-        params = self.request.form.copy()
+        sort_on, sort_order, search, filters, b_start, b_size = self.extract_params()
         query = self.get_base_query()
-        query = self.extend_query_with_sorting(query, params)
-        query = self.extend_query_with_search(query, params)
-        query = self.extend_query_with_filters(query, params)
+        query = self.extend_query_with_sorting(query, sort_on, sort_order)
+        query = self.extend_query_with_search(query, search)
+        query = self.extend_query_with_filters(query, filters)
         items_total = query.count()
-        b_start, b_size, query = self.extend_query_with_batching(query, params)
+        query = self.extend_query_with_batching(query, b_start, b_size)
 
         items = []
         for model in query.all():
@@ -54,6 +55,31 @@ class OGDSListingBaseService(Service):
           "items_total": items_total
         }
 
+    def extract_params(self):
+        params = self.request.form.copy()
+
+        sort_on = params.get('sort_on', self.default_sort_on).strip()
+        sort_order = params.get('sort_order', self.default_sort_order)
+
+        search = params.get('search', u'').strip()
+        search = safe_unicode(search)
+        # remove trailing asterisk
+        if search.endswith(u'*'):
+            search = search[:-1]
+
+        filters = params.get('filters', {})
+        if not isinstance(filters, record):
+            filters = {}
+
+        b_start = safe_int(params.get('b_start', 0), 0)
+        if b_start < 0:
+            raise BadRequest("The parameter 'b_start' can't be negative.")
+        b_size = min(safe_int(params.get('b_size', 25), 25), 100)
+        if b_size < 0:
+            raise BadRequest("The parameter 'b_size' can't be negative.")
+
+        return sort_on, sort_order, search, filters, b_start, b_size
+
     def get_base_query(self):
         session = create_session()
         return session.query(self.model_class)
@@ -63,10 +89,7 @@ class OGDSListingBaseService(Service):
             item[colname] = getattr(model, colname)
         return item
 
-    def extend_query_with_sorting(self, query, params):
-        sort_on = params.get('sort_on', self.default_sort_on).strip()
-        sort_order = params.get('sort_order', self.default_sort_order)
-
+    def extend_query_with_sorting(self, query, sort_on, sort_order):
         # early abort if the column is not in the query
         if not sort_column_exists(query, sort_on):
             return query
@@ -82,16 +105,9 @@ class OGDSListingBaseService(Service):
             order_f = asc
         return query.order_by(order_f(sort_on))
 
-    def extend_query_with_search(self, query, params):
-        search = params.get('search', '').strip()
+    def extend_query_with_search(self, query, search):
         if not search:
             return query
-
-        search = safe_unicode(search)
-
-        # remove trailing asterisk
-        if search.endswith(u'*'):
-            search = search[:-1]
 
         # split up the search term into words, extend them with the default
         # wildcards and then search for every word seperately
@@ -105,17 +121,10 @@ class OGDSListingBaseService(Service):
 
         return query
 
-    def extend_query_with_filters(self, query, params):
+    def extend_query_with_filters(self, query, filters):
         return query
 
-    def extend_query_with_batching(self, query, params):
-        b_start = safe_int(params.get('b_start', 0), 0)
-        if b_start < 0:
-            raise BadRequest("The parameter 'b_start' can't be negative.")
-        b_size = min(safe_int(params.get('b_size', 25), 25), 100)
-        if b_size < 0:
-            raise BadRequest("The parameter 'b_size' can't be negative.")
-
+    def extend_query_with_batching(self, query, b_start, b_size):
         query = query.offset(b_start)
         query = query.limit(b_size)
-        return b_start, b_size, query
+        return query

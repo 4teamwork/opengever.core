@@ -1,6 +1,5 @@
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.ogds.models.team import Team
-from ZPublisher.HTTPRequest import record
 
 
 class TeamListingGet(OGDSListingBaseService):
@@ -38,16 +37,12 @@ class TeamListingGet(OGDSListingBaseService):
             self.context.absolute_url(), model.team_id)
         return item
 
-    def extend_query_with_filters(self, query, params):
+    def extend_query_with_filters(self, query, filters):
         """Implement hardcoded state filter.
 
         The state filter expects a list of states to be displayed. By default
         it will return all states (active and inacvite users).
         """
-        filters = params.get('filters', {})
-        if not isinstance(filters, record):
-            filters = {}
-
         state = filters.get('state', self.default_state_filter)
         if state == ['active']:
             query = query.filter_by(active=True)
