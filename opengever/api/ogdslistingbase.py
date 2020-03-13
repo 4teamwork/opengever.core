@@ -1,0 +1,121 @@
+from opengever.base.model import create_session
+from opengever.base.utils import safe_int
+from opengever.tabbedview.sqlsource import cast_to_string
+from opengever.tabbedview.sqlsource import sort_column_exists
+from plone.restapi.batching import HypermediaBatch
+from plone.restapi.services import Service
+from Products.CMFPlone.utils import safe_unicode
+from sqlalchemy import or_
+from sqlalchemy.sql.expression import asc
+from sqlalchemy.sql.expression import column
+from sqlalchemy.sql.expression import desc
+from zExceptions import BadRequest
+
+
+class OGDSListingBaseService(Service):
+    """API Endpoint base class for ogds listings.
+
+    Not directly exposed via API.
+
+    Handles a subset of the parameters already provided by the @listing
+    endpoint.
+    """
+
+    item_columns = tuple()
+    searchable_columns = tuple()
+    default_sort_on = None
+    default_sort_order = 'ascending'
+    model_class = None
+
+    def reply(self):
+        params = self.request.form.copy()
+        query = self.get_base_query()
+        query = self.extend_query_with_sorting(query, params)
+        query = self.extend_query_with_search(query, params)
+        query = self.extend_query_with_filters(query, params)
+        items_total = query.count()
+        b_start, b_size, query = self.extend_query_with_batching(query, params)
+
+        items = []
+        for model in query.all():
+            item = {}
+            item = self.fill_item(item, model)
+            items.append(item)
+
+        # We use HypermediaBatch for the canonical url only
+        batch = HypermediaBatch(self.request, items)
+        # return empty facet dict to keep response structure consistent
+        return {
+          "@id": batch.canonical_url,
+          "b_size": b_size,
+          "b_start": b_start,
+          "facets": {},
+          "items": items,
+          "items_total": items_total
+        }
+
+    def get_base_query(self):
+        session = create_session()
+        return session.query(self.model_class)
+
+    def fill_item(self, item, model):
+        for colname in self.item_columns:
+            item[colname] = getattr(model, colname)
+        return item
+
+    def extend_query_with_sorting(self, query, params):
+        sort_on = params.get('sort_on', self.default_sort_on).strip()
+        sort_order = params.get('sort_order', self.default_sort_order)
+
+        # early abort if the column is not in the query
+        if not sort_column_exists(query, sort_on):
+            return query
+
+        # Don't plug column names as literal strings into an order_by
+        # clause, but use a ColumnClause instead to allow SQLAlchemy to
+        # properly quote the identifier name depending on the dialect
+        sort_on = column(sort_on)
+
+        if sort_order in ['descending', 'reverse']:
+            order_f = desc
+        else:
+            order_f = asc
+        return query.order_by(order_f(sort_on))
+
+    def extend_query_with_search(self, query, params):
+        search = params.get('search', '').strip()
+        if not search:
+            return query
+
+        search = safe_unicode(search)
+
+        # remove trailing asterisk
+        if search.endswith(u'*'):
+            search = search[:-1]
+
+        # split up the search term into words, extend them with the default
+        # wildcards and then search for every word seperately
+        for word in search.split():
+            term = u'%%%s%%' % word
+
+            expressions = []
+            for field in self.searchable_columns:
+                expressions.append(cast_to_string(field).ilike(term))
+            query = query.filter(or_(*expressions))
+
+        return query
+
+    def extend_query_with_filters(self, query, params):
+        return query
+
+    def extend_query_with_batching(self, query, params):
+        b_start = safe_int(params.get('b_start', 0), 0)
+        if b_start < 0:
+            raise BadRequest("The parameter 'b_start' can't be negative.")
+        b_size = min(safe_int(params.get('b_size', 25), 25), 100)
+        if b_size < 0:
+            raise BadRequest("The parameter 'b_size' can't be negative.")
+
+        query = query.offset(b_start)
+        query = query.limit(b_size)
+        return b_start, b_size, query
