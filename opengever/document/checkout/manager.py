@@ -12,6 +12,7 @@ from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.ogds.base.actor import Actor
 from opengever.trash.trash import ITrashed
 from persistent.list import PersistentList
 from plone import api
@@ -130,6 +131,8 @@ class CheckinCheckoutManager(object):
           (Except force checkin)
         - Any of the collaborators may check in a collaborative checkout,
           not just the user that initially checked out the document.
+        - On checkin, the list of collaborators gets written to the version
+          and journal comments.
         """
         return bool(self.get_collaborators())
 
@@ -183,10 +186,26 @@ class CheckinCheckoutManager(object):
 
         # remember that we checked in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
-        self.annotations.pop(COLLABORATORS_ANNOTATIONS_KEY, None)
+        collaborators = self.annotations.pop(COLLABORATORS_ANNOTATIONS_KEY, None)
 
         # Clear any WebDAV locks left over by ExternalEditor if necessary
         self.clear_locks()
+
+        if collaborators:
+            # Replace user provided comment with list of collaborators
+            collaborator_list = u', '.join(
+                Actor.lookup(user_id).get_label()
+                for user_id in collaborators)
+
+            # XXX: The comment is translated in the site language here. We
+            # should eventually change this so we can translate parametrized
+            # messages during display time in the user's language.
+            site_language = api.portal.get_default_language()
+            comment = translate(
+                _(u'label_document_collaborators',
+                  default=u'Collaborators: ${collaborators}',
+                  mapping={'collaborators': collaborator_list}),
+                target_language=site_language.split('-')[0])
 
         # create new version in CMFEditions
         self.versioner.create_version(comment)

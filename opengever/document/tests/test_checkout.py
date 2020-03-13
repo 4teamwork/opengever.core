@@ -11,6 +11,7 @@ from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
@@ -162,6 +163,31 @@ class TestCheckinIntegration(IntegrationTestCase):
         manager.checkin()
         self.assertIsNone(manager.get_checked_out_by())
         self.assertEqual([], manager.get_collaborators())
+
+    def test_collaborators_get_written_to_journal_and_version_comments(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+
+        manager.checkin(collaborative=True)
+
+        collaborator_note = (u'Collaborators: '
+                             u'B\xe4rfuss K\xe4thi (kathi.barfuss), '
+                             u'Ziegler Robert (robert.ziegler)')
+
+        version_metadata = Versioner(self.document).get_version_metadata(0)
+        version_comment = version_metadata['sys_metadata']['comment']
+        self.assertEqual(collaborator_note, version_comment)
+
+        self.assert_journal_entry(
+            self.document,
+            DOCUMENT_CHECKED_IN,
+            u'Document checked in',
+            comment=collaborator_note.encode('utf-8'),
+        )
 
 
 class TestCheckin(FunctionalTestCase):

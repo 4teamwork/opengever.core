@@ -12,11 +12,13 @@ from plone.app.uuid.utils import uuidToObject
 from plone.namedfile.file import NamedBlobFile
 from plone.namedfile.utils import set_headers
 from plone.namedfile.utils import stream_data
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound as zNotFound
 from ZODB.utils import u64
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces import NotFound
@@ -100,6 +102,9 @@ class WOPIView(BrowserView):
 
         operation_name = ''.join([o.title() for o in operation.split('_')])
         logger.debug('WOPI Operation: %s', operation_name)
+
+        # Disable CSRF protection - WOPI client can't supply a CSRF token
+        alsoProvides(self.request, IDisableCSRFProtection)
 
         method = getattr(self, operation)
         with api.env.adopt_user(username=userid):
