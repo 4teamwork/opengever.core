@@ -288,8 +288,8 @@
   <plone:service
       method="GET"
       for="opengever.contact.interfaces.IContactFolder"
-      factory=".userlisting.UserListingGet"
-      name="@user-listing"
+      factory=".ogdsuserlisting.OGDDSUserListingGet"
+      name="@ogds-user-listing"
       permission="zope2.View"
       />
 

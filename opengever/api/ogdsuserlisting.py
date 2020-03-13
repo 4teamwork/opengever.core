@@ -1,11 +1,11 @@
-from opengever.api.ogdslistingbase import OgdsListingBaseService
+from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.ogds.models.user import User
 
 
-class UserListingGet(OgdsListingBaseService):
+class OGDDSUserListingGet(OGDSListingBaseService):
     """API Endpoint that returns users from ogds.
 
-    GET /@user-listing HTTP/1.1
+    GET /@ogds-user-listing HTTP/1.1
 
     The endpoint returns an object with the same structure as the object
     returned by the @listing endpoint.
@@ -38,7 +38,7 @@ class UserListingGet(OgdsListingBaseService):
     default_state_filter = tuple()
 
     def fill_item(self, item, model):
-        item = super(UserListingGet, self).fill_item(item, model)
+        item = super(OGDDSUserListingGet, self).fill_item(item, model)
         item['@type'] = 'virtual.ogds.user'
         item['title'] = model.fullname()
         item['@id'] = '{}/@ogds-user/{}'.format(

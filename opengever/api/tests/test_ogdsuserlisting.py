@@ -3,14 +3,14 @@ from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
 
 
-class TestUserListingGet(IntegrationTestCase):
+class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_user_listing_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.contactfolder,
-                     view='@user-listing',
+                     view='@ogds-user-listing',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
@@ -48,7 +48,7 @@ class TestUserListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.contactfolder,
-                     view='@user-listing?b_size=4&b_start=7',
+                     view='@ogds-user-listing?b_size=4&b_start=7',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
@@ -68,7 +68,7 @@ class TestUserListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.contactfolder,
-                     view='@user-listing?b_start=999',
+                     view='@ogds-user-listing?b_start=999',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
@@ -81,7 +81,7 @@ class TestUserListingGet(IntegrationTestCase):
     def test_batch_size_maximum_is_100(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,
-                     view='@user-listing?b_size=999',
+                     view='@ogds-user-listing?b_size=999',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertEqual(100, browser.json['b_size'])
@@ -92,7 +92,7 @@ class TestUserListingGet(IntegrationTestCase):
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.contactfolder,
-                         view='@user-listing?b_size=-1',
+                         view='@ogds-user-listing?b_size=-1',
                          headers=self.api_headers)
 
     @browsing
@@ -101,7 +101,7 @@ class TestUserListingGet(IntegrationTestCase):
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.contactfolder,
-                         view='@user-listing?b_start=-1',
+                         view='@ogds-user-listing?b_start=-1',
                          headers=self.api_headers)
 
     @browsing
@@ -111,7 +111,7 @@ class TestUserListingGet(IntegrationTestCase):
         ogds_user.active = False
 
         browser.open(self.contactfolder,
-                     view='@user-listing?filters.state:record:list=inactive',
+                     view='@ogds-user-listing?filters.state:record:list=inactive',
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
@@ -126,7 +126,7 @@ class TestUserListingGet(IntegrationTestCase):
         ogds_user.active = False
 
         browser.open(self.contactfolder,
-                     view='@user-listing?filters.state:record:list=active',
+                     view='@ogds-user-listing?filters.state:record:list=active',
                      headers=self.api_headers)
 
         self.assertEqual(18, len(browser.json['items']))
@@ -141,7 +141,7 @@ class TestUserListingGet(IntegrationTestCase):
         ogds_user.active = False
 
         browser.open(self.contactfolder,
-                     view='@user-listing'
+                     view='@ogds-user-listing'
                            '?filters.state:record:list=inactive'
                           '&filters.state:record:list=active',
                      headers=self.api_headers)
@@ -155,7 +155,7 @@ class TestUserListingGet(IntegrationTestCase):
     def test_search_firstname(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,
-                     view=u'@user-listing?search=L\xfcck',
+                     view=u'@ogds-user-listing?search=L\xfcck',
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
@@ -178,7 +178,7 @@ class TestUserListingGet(IntegrationTestCase):
     def test_search_fristname_and_lastname(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,
-                     view=u'@user-listing?search=frido gentobler',
+                     view=u'@ogds-user-listing?search=frido gentobler',
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
@@ -201,7 +201,7 @@ class TestUserListingGet(IntegrationTestCase):
     def test_search_strips_asterisk(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,
-                     view=u'@user-listing?search=gentobler*',
+                     view=u'@ogds-user-listing?search=gentobler*',
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
@@ -211,7 +211,7 @@ class TestUserListingGet(IntegrationTestCase):
     def test_sort_on_firstname(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,
-                     view=u'@user-listing?sort_on=firstname',
+                     view=u'@ogds-user-listing?sort_on=firstname',
                      headers=self.api_headers)
 
         self.assertEqual(19, len(browser.json['items']))
@@ -224,7 +224,7 @@ class TestUserListingGet(IntegrationTestCase):
     def test_sort_descending(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,
-                     view=u'@user-listing?sort_order=descending',
+                     view=u'@ogds-user-listing?sort_order=descending',
                      headers=self.api_headers)
 
         self.assertEqual(19, len(browser.json['items']))
