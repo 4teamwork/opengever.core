@@ -4,6 +4,7 @@ Changelog
 2020.2.0rc2 (unreleased)
 ------------------------
 
+- OfficeOnline: Use collaborative checkout / checkins. [lgraf]
 - Add list workspaces action for new frontend. [njohner]
 - Add ogds user listing via @user-listing endpoint. [deiferni]
 - Add ogds team listing via @team-listing endpoint. [deiferni]
