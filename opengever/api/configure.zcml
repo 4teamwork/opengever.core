@@ -311,6 +311,14 @@
 
   <plone:service
       method="GET"
+      for="opengever.contact.interfaces.IContactFolder"
+      factory=".ogdsuser.OGDSUserGet"
+      name="@ogds-user"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
       for="zope.interface.Interface"
       factory=".livesearch.GeverLiveSearchGet"
       name="@livesearch"
