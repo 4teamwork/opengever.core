@@ -293,6 +293,13 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      for="opengever.contact.interfaces.IContactFolder"
+      factory=".teamlisting.TeamListingGet"
+      name="@team-listing"
+      permission="zope2.View"
+      />
 
   <plone:service
       method="GET"
