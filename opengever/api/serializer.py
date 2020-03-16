@@ -1,6 +1,7 @@
 from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.model import Base
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from plone import api
@@ -8,6 +9,7 @@ from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.interfaces import IJsonCompatible
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
 from zope.component import adapter
@@ -65,3 +67,22 @@ def long_converter(value):
     in a later release.
     """
     return value
+
+
+@implementer(ISerializeToJson)
+@adapter(Base, IOpengeverBaseLayer)
+class SerializeSQLModelToJson(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, *args, **kwargs):
+        data = {}
+        for col in self.get_columns():
+            key = self.context.__mapper__.get_property_by_column(col).key
+            data[key] = json_compatible(getattr(self.context, key))
+        return data
+
+    def get_columns(self):
+        return self.context.__table__.columns
