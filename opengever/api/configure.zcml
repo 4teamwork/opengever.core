@@ -18,6 +18,7 @@
 
   <adapter factory=".serializer.GeverSerializeToJson" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
+  <adapter factory=".serializer.SerializeSQLModelToJson" />
 
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
