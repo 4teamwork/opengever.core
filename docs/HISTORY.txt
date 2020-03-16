@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Add list workspaces action for new frontend. [njohner]
+- Add additional fields to @user-listing endpoint. [njohner]
 - Add ogds user listing via @user-listing endpoint. [deiferni]
 - Add ogds team listing via @team-listing endpoint. [deiferni]
 

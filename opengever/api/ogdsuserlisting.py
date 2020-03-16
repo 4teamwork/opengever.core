@@ -16,10 +16,13 @@ class OGDDSUserListingGet(OGDSListingBaseService):
         'department',
         'directorate',
         'email',
+        'email2',
         'firstname',
         'firstname',
         'lastname',
         'phone_office',
+        'phone_mobile',
+        'phone_fax',
         'userid',
     )
 
@@ -28,7 +31,10 @@ class OGDDSUserListingGet(OGDSListingBaseService):
         User.firstname,
         User.userid,
         User.email,
+        User.email2,
         User.phone_office,
+        User.phone_mobile,
+        User.phone_fax,
         User.department,
         User.directorate,
     )

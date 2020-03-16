@@ -293,9 +293,12 @@ Beispiel: Auflistung aller Benutzer:
           "department": null,
           "directorate": null,
           "email": "sandro.ackermann@example.com",
+          "email2": null,
           "firstname": "Sandro",
           "lastname": "Ackermann",
           "phone_office": null,
+          "phone_mobile": null,
+          "phone_fax": null,
           "title": "Ackermann Sandro",
           "userid": "sandro.ackermann"
         },
