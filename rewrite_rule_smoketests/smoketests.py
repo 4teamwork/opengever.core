@@ -42,7 +42,7 @@ def test_canonical_https_redirect(browser, entity):
     # In single unit setups canonical HTTPS redirect adds a trailing
     # slash to the admin unit URL, otherwise it doesn't
     if isinstance(entity, AdminUnit):
-        if entity.cluster.single_unit_setup:
+        if not entity.cluster.url_contains_site_id:
             expect_trailing_slash = True
 
     parsed = urlparse(entity.url)
