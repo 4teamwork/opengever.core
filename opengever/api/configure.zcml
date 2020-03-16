@@ -280,7 +280,7 @@
   <plone:service
       method="GET"
       for="zope.interface.Interface"
-      factory=".listing.Listing"
+      factory=".listing.ListingGet"
       name="@listing"
       permission="zope2.View"
       />
