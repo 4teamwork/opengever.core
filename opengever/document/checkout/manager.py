@@ -12,7 +12,9 @@ from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.ogds.base.actor import Actor
 from opengever.trash.trash import ITrashed
+from persistent.list import PersistentList
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
@@ -25,6 +27,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
+COLLABORATORS_ANNOTATIONS_KEY = 'opengever.document.collaborators'
 
 
 @implementer(ICheckinCheckoutManager)
@@ -75,7 +78,7 @@ class CheckinCheckoutManager(object):
             and self.is_not_trashed()
             )
 
-    def checkout(self):
+    def checkout(self, collaborative=False):
         """Checkout the adapted document.
         """
         # is the user allowed to checkout?
@@ -86,6 +89,9 @@ class CheckinCheckoutManager(object):
         user_id = getSecurityManager().getUser().getId()
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = user_id
 
+        if collaborative:
+            self.add_collaborator(user_id)
+
         # update last modified timestamp for recently modified menu
         self.context.setModificationDate()
 
@@ -95,6 +101,16 @@ class CheckinCheckoutManager(object):
         notify(ObjectCheckedOutEvent(self.context, ''))
         notify(ObjectTouchedEvent(self.context))
 
+    def add_collaborator(self, collaborator):
+        if COLLABORATORS_ANNOTATIONS_KEY not in self.annotations:
+            self.annotations[COLLABORATORS_ANNOTATIONS_KEY] = PersistentList()
+
+        if collaborator not in self.annotations[COLLABORATORS_ANNOTATIONS_KEY]:
+            self.annotations[COLLABORATORS_ANNOTATIONS_KEY].append(collaborator)
+
+    def get_collaborators(self):
+        return self.annotations.get(COLLABORATORS_ANNOTATIONS_KEY, [])
+
     def is_simple_checkin_allowed(self):
         return self.is_checkin_allowed() and not self.is_locked()
 
@@ -103,7 +119,24 @@ class CheckinCheckoutManager(object):
             return True
         return False
 
-    def is_checkin_allowed(self):
+    def is_collaborative_checkout(self):
+        """Whether this is a collaborative checkout or not.
+
+        Collaborative checkouts are currently intended to be used by the
+        Office Online WOPI view. They behave slightly differently
+        than regular checkouts:
+
+        - For collaborative checkouts, collaborators are tracked
+        - They may only be checked in with checkin(collaborative=True)
+          (Except force checkin)
+        - Any of the collaborators may check in a collaborative checkout,
+          not just the user that initially checked out the document.
+        - On checkin, the list of collaborators gets written to the version
+          and journal comments.
+        """
+        return bool(self.get_collaborators())
+
+    def is_checkin_allowed(self, collaborative=False):
         """Checks whether checkin is allowed for the current user on the
         adapted document.
         """
@@ -127,26 +160,52 @@ class CheckinCheckoutManager(object):
         if not self.check_permission('opengever.document: Checkin'):
             return False
 
-        # is the user the one who owns the checkout
+        if self.is_collaborative_checkout() and not collaborative:
+            # If collaboratively checked out, only checkin(collaborative=True)
+            # is allowed (via the WOPI View for now)
+            return False
+
         current_user_id = getSecurityManager().getUser().getId()
+
+        if collaborative:
+            # For collaborative checkouts, any of the collaborators are
+            # allowed to check in
+            return current_user_id in self.get_collaborators()
 
         return self.get_checked_out_by() == current_user_id
 
-    def checkin(self, comment=''):
+    def checkin(self, comment='', collaborative=False):
         """Checkin the adapted document, using the `comment` for the
         journal entry.
         """
         notify(ObjectBeforeCheckInEvent(self.context))
 
         # is the user allowed to checkin?
-        if not self.is_checkin_allowed():
+        if not self.is_checkin_allowed(collaborative=collaborative):
             raise Unauthorized
 
         # remember that we checked in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
+        collaborators = self.annotations.pop(COLLABORATORS_ANNOTATIONS_KEY, None)
 
         # Clear any WebDAV locks left over by ExternalEditor if necessary
         self.clear_locks()
+
+        if collaborators:
+            # Replace user provided comment with list of collaborators
+            collaborator_list = u', '.join(
+                Actor.lookup(user_id).get_label()
+                for user_id in collaborators)
+
+            # XXX: The comment is translated in the site language here. We
+            # should eventually change this so we can translate parametrized
+            # messages during display time in the user's language.
+            site_language = api.portal.get_default_language()
+            comment = translate(
+                _(u'label_document_collaborators',
+                  default=u'Collaborators: ${collaborators}',
+                  mapping={'collaborators': collaborator_list}),
+                target_language=site_language.split('-')[0])
 
         # create new version in CMFEditions
         self.versioner.create_version(comment)

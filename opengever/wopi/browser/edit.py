@@ -1,10 +1,12 @@
 from AccessControl import getSecurityManager
 from base64 import urlsafe_b64encode
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.wopi.discovery import actions_by_extension
 from opengever.wopi.token import create_access_token
 from plone.uuid.interfaces import IUUID
 from Products.Five.browser import BrowserView
 from time import time
+from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 
 
@@ -20,6 +22,13 @@ class EditOnlineView(BrowserView):
 
         uuid = IUUID(self.context)
         user = getSecurityManager().getUser()
+
+        # The MS WOPI client sometimes doesn't send the X-WOPI-Editors
+        # header. We therefore also track collaborators here.
+        manager = getMultiAdapter((self.context, self.request),
+                                  ICheckinCheckoutManager)
+        manager.add_collaborator(user.getId())
+
         self.access_token = urlsafe_b64encode(
             create_access_token(user.getId(), uuid))
         self.access_token_ttl = int(time() + 43200) * 1000

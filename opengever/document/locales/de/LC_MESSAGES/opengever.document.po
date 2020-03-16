@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-11-04 13:11+0000\n"
+"POT-Creation-Date: 2020-03-13 14:31+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -190,11 +190,6 @@ msgstr "Sie haben weder eine Datei ausgewählt noch ist das Dokument in Papierfo
 #: ./opengever/document/document.py
 msgid "error_mail_upload"
 msgstr "Es ist nicht erlaubt hier E-Mails anzufügen. Bitte senden Sie das E-Mail an die Addresse ${mailaddress} oder ziehen Sie es in das Dossier (Drag'n'Drop)."
-
-#. Default: "It's not possible to add E-mails as document, use portal_type ftw.mail.mail."
-#: ./opengever/document/document.py
-msgid "error_mail_upload_api"
-msgstr "Es ist nicht erlaubt hier E-Mails anzufügen. Verwenden Sie den Typ ftw.mail.mail."
 
 #. Default: "You have not selected any Items"
 #: ./opengever/document/browser/report.py
@@ -444,6 +439,11 @@ msgstr "Digital verfügbar"
 #: ./opengever/document/browser/report.py
 msgid "label_document_checked_out_by"
 msgstr "In Bearbeitung"
+
+#. Default: "Collaborators: ${collaborators}"
+#: ./opengever/document/checkout/manager.py
+msgid "label_document_collaborators"
+msgstr "Bearbeitet durch: ${collaborators}"
 
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py

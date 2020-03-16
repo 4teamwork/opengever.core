@@ -12,11 +12,13 @@ from plone.app.uuid.utils import uuidToObject
 from plone.namedfile.file import NamedBlobFile
 from plone.namedfile.utils import set_headers
 from plone.namedfile.utils import stream_data
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound as zNotFound
 from ZODB.utils import u64
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces import NotFound
@@ -100,6 +102,9 @@ class WOPIView(BrowserView):
 
         operation_name = ''.join([o.title() for o in operation.split('_')])
         logger.debug('WOPI Operation: %s', operation_name)
+
+        # Disable CSRF protection - WOPI client can't supply a CSRF token
+        alsoProvides(self.request, IDisableCSRFProtection)
 
         method = getattr(self, operation)
         with api.env.adopt_user(username=userid):
@@ -237,12 +242,12 @@ class WOPIView(BrowserView):
         manager = getMultiAdapter((self.obj, self.request),
                                   ICheckinCheckoutManager)
         if not manager.get_checked_out_by():
-            manager.checkout()
+            manager.checkout(collaborative=True)
 
     def checkin(self):
         manager = getMultiAdapter((self.obj, self.request),
                                   ICheckinCheckoutManager)
-        manager.checkin()
+        manager.checkin(collaborative=True)
 
     def _file_version(self):
         # The current version of the file.
@@ -264,4 +269,16 @@ class WOPIView(BrowserView):
         self.request.response.setHeader(
             'X-WOPI-ItemVersion', self._file_version())
         logger.info('X-WOPI-ItemVersion: %s', self._file_version())
+
+        # Track collaborators
+        editors = self.request.getHeader('X-WOPI-Editors')
+        if editors is None:
+            logger.warn('X-WOPI-Editors header is missing')
+        else:
+            editors = [ed.strip() for ed in editors.split(',')]
+            manager = getMultiAdapter((self.obj, self.request),
+                                      ICheckinCheckoutManager)
+            for editor in editors:
+                manager.add_collaborator(editor)
+
         self.request.response.setStatus(200, lock=1)

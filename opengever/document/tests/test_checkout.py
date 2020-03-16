@@ -11,6 +11,7 @@ from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
@@ -72,6 +73,121 @@ class TestCheckinIntegration(IntegrationTestCase):
         self.login(self.administrator)
         manager.checkin(comment="Force checkin")
         self.assertFalse(IRefreshableLockable(self.document).locked())
+
+    def test_collaborative_checkin(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # List of collaborators starts out with the user that initially
+        # checked out the document
+        self.assertEqual([self.regular_user.getId()],
+                         manager.get_collaborators())
+
+        # Other collaborator can checkin
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            manager.get_collaborators())
+
+        self.login(self.dossier_responsible)
+        manager.checkin(collaborative=True)
+        self.assertIsNone(manager.get_checked_out_by())
+
+    def test_collaborative_checkin_only_allowed_for_other_collaborators(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # This user is not a collaborator
+        self.login(self.dossier_responsible)
+
+        self.assertFalse(manager.is_checkin_allowed())
+        with self.assertRaises(Unauthorized):
+            manager.checkin(collaborative=True)
+
+    def test_collaborative_checkout_can_only_be_checked_in_collaboratively(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # Regular checkin is not allowed
+        self.assertFalse(manager.is_checkin_allowed())
+        with self.assertRaises(Unauthorized):
+            manager.checkin()
+
+    def test_collaborators_are_cleared_after_checkin(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            manager.get_collaborators())
+        self.assertTrue(manager.is_collaborative_checkout())
+
+        # List of collaborators should be cleared on checkin
+        manager.checkin(collaborative=True)
+        self.assertEqual([], manager.get_collaborators())
+        self.assertFalse(manager.is_collaborative_checkout())
+        self.assertIsNone(manager.get_checked_out_by())
+
+    def test_collaborative_checkout_can_be_force_checked_in(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        # Force checkin is still allowed
+        self.login(self.administrator)
+        self.assertTrue(manager.is_checkin_allowed())
+        manager.checkin()
+        self.assertIsNone(manager.get_checked_out_by())
+        self.assertEqual([], manager.get_collaborators())
+
+    def test_collaborators_get_written_to_journal_and_version_comments(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator(self.dossier_responsible.getId())
+
+        manager.checkin(collaborative=True)
+
+        collaborator_note = (u'Collaborators: '
+                             u'B\xe4rfuss K\xe4thi (kathi.barfuss), '
+                             u'Ziegler Robert (robert.ziegler)')
+
+        version_metadata = Versioner(self.document).get_version_metadata(0)
+        version_comment = version_metadata['sys_metadata']['comment']
+        self.assertEqual(collaborator_note, version_comment)
+
+        self.assert_journal_entry(
+            self.document,
+            DOCUMENT_CHECKED_IN,
+            u'Document checked in',
+            comment=collaborator_note.encode('utf-8'),
+        )
 
 
 class TestCheckin(FunctionalTestCase):
