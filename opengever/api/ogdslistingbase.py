@@ -3,6 +3,7 @@ from opengever.base.utils import safe_int
 from opengever.tabbedview.sqlsource import cast_to_string
 from opengever.tabbedview.sqlsource import sort_column_exists
 from plone.restapi.batching import HypermediaBatch
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import or_
@@ -10,6 +11,7 @@ from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
 from zExceptions import BadRequest
+from zope.component import queryMultiAdapter
 from ZPublisher.HTTPRequest import record
 
 
@@ -22,7 +24,6 @@ class OGDSListingBaseService(Service):
     endpoint.
     """
 
-    item_columns = tuple()
     searchable_columns = tuple()
     default_sort_on = None
     default_sort_order = 'ascending'
@@ -39,9 +40,9 @@ class OGDSListingBaseService(Service):
 
         items = []
         for model in query.all():
-            item = {}
-            item = self.fill_item(item, model)
-            items.append(item)
+            serializer = queryMultiAdapter(
+                (model, self.request), ISerializeToJsonSummary)
+            items.append(serializer())
 
         # We use HypermediaBatch for the canonical url only
         batch = HypermediaBatch(self.request, items)
@@ -84,11 +85,6 @@ class OGDSListingBaseService(Service):
         session = create_session()
         return session.query(self.model_class)
 
-    def fill_item(self, item, model):
-        for colname in self.item_columns:
-            item[colname] = getattr(model, colname)
-        return item
-
     def extend_query_with_sorting(self, query, sort_on, sort_order):
         # early abort if the column is not in the query
         if not sort_column_exists(query, sort_on):
@@ -128,3 +124,10 @@ class OGDSListingBaseService(Service):
         query = query.offset(b_start)
         query = query.limit(b_size)
         return query
+
+    @property
+    def item_base_get_url(self):
+        """URL used to construct the GET url for items in the listing,
+        of the form item_base_get_url/endpoint_name/item_id
+        """
+        return self.context.absolute_url()

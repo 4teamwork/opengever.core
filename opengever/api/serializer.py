@@ -4,6 +4,8 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.model import Base
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.ogds.models.team import Team
+from opengever.ogds.models.user import User
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
@@ -12,6 +14,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
+from plone.restapi.serializer.summary import ISerializeToJsonSummary
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
@@ -86,3 +89,84 @@ class SerializeSQLModelToJson(object):
 
     def get_columns(self):
         return self.context.__table__.columns
+
+
+class SerializeSQLModelToJsonSummaryBase(object):
+
+    item_columns = tuple()
+    content_type = ''
+    id_attribute_name = ''
+    endpoint_name = ''
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, *args, **kwargs):
+        data = {}
+        for colname in self.item_columns:
+            data[colname] = json_compatible(getattr(self.context, colname))
+
+        data['@type'] = self.content_type
+        data['@id'] = self.get_url
+        self.add_additional_metadata(data)
+        return data
+
+    @property
+    def get_url(self):
+        base_url = self.request.URL.rsplit("/@")[0]
+        return '{}/{}/{}'.format(
+            base_url,
+            self.endpoint_name,
+            getattr(self.context, self.id_attribute_name)
+            )
+
+    def add_additional_metadata(self, data):
+        pass
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(Team, IOpengeverBaseLayer)
+class SerializeTeamModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+
+    item_columns = (
+        'active',
+        'groupid',
+        'org_unit_id',
+        'team_id',
+        'title',
+    )
+
+    content_type = 'virtual.ogds.team'
+    id_attribute_name = 'team_id'
+    endpoint_name = '@team'
+
+    def add_additional_metadata(self, data):
+        data['org_unit_title'] = self.context.org_unit.title
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(User, IOpengeverBaseLayer)
+class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+
+    item_columns = (
+        'active',
+        'department',
+        'directorate',
+        'email',
+        'email2',
+        'firstname',
+        'firstname',
+        'lastname',
+        'phone_office',
+        'phone_mobile',
+        'phone_fax',
+        'userid',
+    )
+
+    content_type = 'virtual.ogds.user'
+    id_attribute_name = 'userid'
+    endpoint_name = '@ogds-user'
+
+    def add_additional_metadata(self, data):
+        data['title'] = self.context.fullname()
