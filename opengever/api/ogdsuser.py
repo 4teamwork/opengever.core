@@ -1,5 +1,9 @@
+from opengever.ogds.base.utils import ogds_service
+from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -23,11 +27,31 @@ class OGDSUserGet(Service):
 
     def reply(self):
         userid = self.read_params()
-        return {
+        service = ogds_service()
+        user = service.fetch_user(userid)
+        data = {
             '@id': '{}/@ogds-user/{}'.format(
                 self.context.absolute_url(), userid),
             '@type': 'virtual.ogds.user',
-        }
+            }
+
+        # Add all the data from the user table
+        serializer = queryMultiAdapter((user, self.request), ISerializeToJson)
+        data.update(serializer())
+
+        # Add the groups and teams assigned to that user
+        groups = service.assigned_groups(userid)
+        data['groups'] = []
+        data['teams'] = []
+        for group in groups:
+            group_serializer = queryMultiAdapter(
+                (group, self.request), ISerializeToJsonSummary)
+            data['groups'].append(group_serializer())
+            for team in group.teams:
+                team_serializer = queryMultiAdapter(
+                    (team, self.request), ISerializeToJsonSummary)
+                data['teams'].append(team_serializer())
+        return data
 
     def read_params(self):
         if len(self.params) != 1:
