@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-03-13 14:31+0000\n"
+"POT-Creation-Date: 2020-03-17 15:18+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -641,6 +641,11 @@ msgstr "Oui"
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
 msgstr "${creator} a fait un checkout de ce document."
+
+#. Default: "This item is being edited in Office Online by ${creator}."
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+msgid "message_collaborative_checkout_info"
+msgstr ""
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py

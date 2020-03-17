@@ -24,6 +24,23 @@ class TestCheckedOutViewlet(IntegrationTestCase):
                          link.get('href'))
 
     @browsing
+    def test_viewlet_shows_msg_for_collaborative_checkout(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout(collaborative=True)
+        browser.open(self.document)
+
+        message = browser.css('dl.checked_out_viewlet dd').first
+        link = browser.css('dl.checked_out_viewlet a').first
+
+        self.assertEqual(u'This item is being edited in Office Online by B\xe4rfuss K\xe4thi (kathi.barfuss).',
+                         message.text)
+        self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
+                         link.get('href'))
+
+    @browsing
     def test_viewlet_is_disabled_when_document_is_not_checked_out(self, browser):
         self.login(self.regular_user, browser)
 

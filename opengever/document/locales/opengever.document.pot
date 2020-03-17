@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-03-13 14:31+0000\n"
+"POT-Creation-Date: 2020-03-17 15:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -640,6 +640,11 @@ msgstr ""
 #. Default: "This item is being checked out by ${creator}."
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
+msgstr ""
+
+#. Default: "This item is being edited in Office Online by ${creator}."
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+msgid "message_collaborative_checkout_info"
 msgstr ""
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."

@@ -4,6 +4,7 @@ Changelog
 2020.2.0rc2 (unreleased)
 ------------------------
 
+- OfficeOnline: Show specific message for collaborative checkouts. [lgraf]
 - Extend the document serialization with `checked_out_fullname`. [elioschmutz]
 - Add a new profile to setup a cas auth plugin for the ianus portal. [elioschmutz]
 - Fix encoding issue in query-source `query` parameter. [deiferni]
