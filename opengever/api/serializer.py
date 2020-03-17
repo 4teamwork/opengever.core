@@ -4,6 +4,7 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.model import Base
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from plone import api
@@ -170,3 +171,18 @@ class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     def add_additional_metadata(self, data):
         data['title'] = self.context.fullname()
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(Group, IOpengeverBaseLayer)
+class SerializeGroupModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+
+    item_columns = (
+        'groupid',
+        'title',
+        'active',
+    )
+
+    content_type = 'virtual.ogds.group'
+    id_attribute_name = 'groupid'
+    endpoint_name = '@group'

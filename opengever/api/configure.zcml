@@ -21,6 +21,7 @@
   <adapter factory=".serializer.SerializeSQLModelToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJsonSummary" />
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
+  <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
 
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
