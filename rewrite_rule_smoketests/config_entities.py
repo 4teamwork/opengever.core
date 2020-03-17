@@ -32,7 +32,7 @@ class AdminUnit(object):
     def url(self):
         """The AdminUnit's URL.
         """
-        if self.cluster.single_unit_setup:
+        if not self.cluster.url_contains_site_id:
             # https://lab.onegovgever.ch
             return self.cluster.url
 
@@ -51,11 +51,12 @@ class Cluster(object):
     """
 
     def __init__(self, url, new_portal=False, gever_ui_is_default=False,
-                 admin_units=None):
+                 admin_units=None, url_contains_site_id=None):
         self.url = url
         self.new_portal = new_portal
         self.gever_ui_is_default = gever_ui_is_default
         self.admin_units = admin_units
+        self._url_contains_site_id = url_contains_site_id
 
         # Link admin units to their containing cluster
         for admin_unit in self.admin_units:
@@ -80,6 +81,17 @@ class Cluster(object):
         """Whether this cluster is single-unit setup or not.
         """
         return len(self.admin_units) == 1
+
+    @property
+    def url_contains_site_id(self):
+        """Whether the admin_unit urls contain the site id or not.
+        This is always the case for multi-unit setups, and normally not
+        for single-unit setups
+        """
+        if self._url_contains_site_id is None:
+            return not self.single_unit_setup
+        else:
+            return self._url_contains_site_id
 
     @property
     def portal_url(self):

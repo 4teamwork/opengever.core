@@ -75,4 +75,13 @@ CLUSTERS_TO_TEST = [
         gever_ui_is_default=True,
     ),
 
+    Cluster(
+        'https://cloud.onegovgever.ch',
+        admin_units=[
+            AdminUnit('bg', is_dedicated_teamraum=False),
+        ],
+        new_portal=False,
+        gever_ui_is_default=False,
+        url_contains_site_id=True,
+    ),
 ]
