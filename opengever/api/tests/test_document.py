@@ -63,6 +63,7 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         self.assertEqual(self.regular_user.id, browser.json['checked_out'])
         self.assertEqual(u'B\xe4rfuss K\xe4thi', browser.json['checked_out_fullname'])
+        self.assertFalse(browser.json['is_collaborative_checkout'])
         self.assertFalse(browser.json['is_locked'])
         self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
                          browser.json['containing_dossier'])
@@ -70,6 +71,15 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(browser.json['trashed'])
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
+
+    @browsing
+    def test_contains_collaborative_checkout_info(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.checkout_document(self.subdocument, collaborative=True)
+
+        browser.open(self.subdocument, headers={'Accept': 'application/json'})
+        self.assertTrue(browser.json['is_collaborative_checkout'])
 
     @browsing
     def test_additional_metadata_for_mails(self, browser):

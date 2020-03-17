@@ -324,6 +324,11 @@ class OGMail(Mail, BaseDocumentMixin):
         """
         return False
 
+    def is_collaborative_checkout(self):
+        """Mail does not support checkin/checkout.
+        """
+        return False
+
     def is_checkout_and_edit_available(self):
         """Mail does not support checkin/checkout.
         """
