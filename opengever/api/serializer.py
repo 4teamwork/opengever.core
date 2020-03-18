@@ -16,6 +16,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
+from plone.restapi.serializer.expansion import expandable_elements
 from plone.restapi.serializer.summary import ISerializeToJsonSummary
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -102,18 +103,32 @@ class SerializeWrappedSQLModelToJsonBase(object):
 
     def __call__(self, *args, **kwargs):
         data = {
-            '@id': self.context.absolute_url().rsplit("/view")[0],
+            '@id': self.get_url(),
             '@type': self.content_type
             }
 
         serializer = queryMultiAdapter((self.context.model, self.request), ISerializeToJson)
         data.update(serializer())
 
+        self.add_expandable_elements(data)
         self.add_additional_metadata(data)
         return data
 
     def get_columns(self):
         return self.context.__table__.columns
+
+    def get_url(self):
+        return self.context.absolute_url().rsplit("/view")[0]
+
+    def add_expandable_elements(self, data):
+        """For now we only handle breadcrumbs. We get them from the parent
+        and then add the information for the current wrapped object"""
+        parent_expandables = expandable_elements(self.context.parent, self.request)
+        breadcrumbs = parent_expandables['@components']['breadcrumbs']
+        if 'items' in breadcrumbs:
+            breadcrumbs['items'].insert(
+                0, {'@id': self.get_url(), 'title': self.context.model.title})
+        data['@components'] = {'breadcrumbs': breadcrumbs}
 
     def add_additional_metadata(self, data):
         pass
