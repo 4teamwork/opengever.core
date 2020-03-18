@@ -37,13 +37,15 @@ class SQLWrapperBase(ExtensionClass.Base, Implicit, Traversable):
         """Implements default-view behavior for sql wrapper objects.
 
         Means that if a sql wrapper gets accessed directly without a view,
-        the pre-traversal hook make sure that a default view gets displayed.
+        the pre-traversal hook make sure that a default view gets displayed,
+        except when we are trying to access a REST-API service.
         """
         # XXX hack around a bug(?) in BeforeTraverse.MultiHook
         # see Products.CMFCore.DynamicType.__before_publishing_traverse__
         REQUEST = arg2 or arg1
 
         stack = REQUEST['TraversalRequestNameStack']
-        if stack == []:
+
+        if stack == [] and not getattr(REQUEST, '_rest_service_id', None) == 'GET_application_json_':
             stack.append(self.default_view)
             REQUEST._hacked_path = 1
