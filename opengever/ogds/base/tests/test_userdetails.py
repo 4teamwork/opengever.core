@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
@@ -6,11 +7,14 @@ from opengever.testing import IntegrationTestCase
 
 class TestUserDetails(IntegrationTestCase):
 
+    def user_details_url(self, userid):
+        return "{}/user-{}".format(get_contactfolder_url(), userid)
+
     @browsing
     def test_user_details(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.user_details_url('kathi.barfuss'))
 
         self.assertEquals([u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
                           browser.css('h1.documentFirstHeading').text)
@@ -40,7 +44,7 @@ class TestUserDetails(IntegrationTestCase):
         kathi.department_abbr = None
         kathi.directorate_abbr = None
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.user_details_url('kathi.barfuss'))
 
         self.assertEquals([u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
                           browser.css('h1.documentFirstHeading').text)
@@ -54,12 +58,12 @@ class TestUserDetails(IntegrationTestCase):
     @browsing
     def test_user_details_return_not_found_for_not_exisiting_user(self, browser):  # noqa
         with browser.expect_http_error(code=404):
-            browser.login().open(self.portal, view='@@user-details/not.found')
+            browser.login().open(self.user_details_url('not.found'))
 
     @browsing
     def test_list_all_team_memberships(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.user_details_url('kathi.barfuss'))
 
         self.assertEquals(
             [u'Projekt \xdcberbaung Dorfmatte'], browser.css('.teams li').text)
@@ -70,7 +74,7 @@ class TestUserDetails(IntegrationTestCase):
     def test_lists_group_memberships(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.user_details_url('kathi.barfuss'))
 
         self.assertEqual(
             ['fa Users Group', 'Projekt A'], browser.css('.groups li').text)
@@ -89,7 +93,7 @@ class TestUserDetails(IntegrationTestCase):
         group_with_spaces = Group(groupid='with spaces')
         user.groups.append(group_with_spaces)
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.user_details_url('kathi.barfuss'))
 
         group_links = [a.get('href') for a in browser.css('.groups li a')]
         self.assertEqual(

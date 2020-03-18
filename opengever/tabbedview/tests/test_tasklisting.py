@@ -69,7 +69,7 @@ class TestTaskListing(IntegrationTestCase):
 
         link = browser.find(u'B\xe4rfuss K\xe4thi (kathi.barfuss)')
         self.assertEquals(
-            'http://nohost/plone/@@user-details/kathi.barfuss',
+            'http://nohost/plone/kontakte/user-kathi.barfuss/view',
             link.get('href'))
         self.assertEquals('actor-label actor-user', link.get('class'))
 
@@ -84,7 +84,7 @@ class TestTaskListing(IntegrationTestCase):
 
         link = browser.find(u'Ziegler Robert (robert.ziegler)')
         self.assertEquals(
-            'http://nohost/plone/@@user-details/robert.ziegler',
+            'http://nohost/plone/kontakte/user-robert.ziegler/view',
             link.get('href'))
         self.assertEquals('actor-label actor-user', link.get('class'))
 

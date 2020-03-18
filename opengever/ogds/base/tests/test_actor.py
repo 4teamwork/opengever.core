@@ -109,15 +109,15 @@ class TestActorLookup(IntegrationTestCase):
             u'K\xf6nig J\xfcrgen (jurgen.konig)', actor.get_label())
         self.assertEqual('jurgen.konig', actor.permission_identifier)
         self.assertTrue(
-            actor.get_profile_url().endswith('@@user-details/jurgen.konig'))
+            actor.get_profile_url().endswith('/kontakte/user-jurgen.konig'))
 
         self.assertEqual(
-            u'<a href="http://nohost/plone/@@user-details/jurgen.konig">'
+            u'<a href="http://nohost/plone/kontakte/user-jurgen.konig/view">'
             u'K\xf6nig J\xfcrgen (jurgen.konig)</a>',
             actor.get_link())
 
         self.assertEqual(
-            u'<a href="http://nohost/plone/@@user-details/jurgen.konig" '
+            u'<a href="http://nohost/plone/kontakte/user-jurgen.konig/view" '
             u'class="actor-label actor-user">K\xf6nig J\xfcrgen '
             u'(jurgen.konig)</a>',
             actor.get_link(with_icon=True))

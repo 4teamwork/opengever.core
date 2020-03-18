@@ -72,7 +72,7 @@ class TestGetCreator(IntegrationTestCase):
         adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
         creator_link = adapter.get_creator_link()
         self.assertIn('Ziegler Robert (robert.ziegler)', creator_link)
-        self.assertIn('http://nohost/plone/@@user-details/robert.ziegler', creator_link)
+        self.assertIn('http://nohost/plone/kontakte/user-robert.ziegler/view', creator_link)
 
 
 class TestGetDocumentDate(IntegrationTestCase):

@@ -120,7 +120,7 @@ class TestManualJournalEntry(FunctionalTestCase):
                           row.dict().get('References'))
 
         self.assertEquals(
-            ['http://nohost/plone/@@user-details/peter.mueller'],
+            ['http://nohost/plone/kontakte/user-peter.mueller/view'],
             [link.get('href') for link in links])
         self.assertEquals([u'M\xfcller Peter (peter.mueller)'], links.text)
 

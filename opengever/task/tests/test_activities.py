@@ -135,7 +135,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals(u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
-            u'Accepted by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
+            u'Accepted by <a href="http://nohost/plone/kontakte/user-test_user_1_/view">Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
 
@@ -161,7 +161,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
           u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
-            u'Commented by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
+            u'Commented by <a href="http://nohost/plone/kontakte/user-test_user_1_/view">Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
 
@@ -206,7 +206,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
           u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
-            u'Resolved by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
+            u'Resolved by <a href="http://nohost/plone/kontakte/user-test_user_1_/view">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Ist erledigt.', activity.description)
 
     @browsing
@@ -234,7 +234,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
           u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
-            u'Skipped by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
+            u'Skipped by <a href="http://nohost/plone/kontakte/user-test_user_1_/view">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Wird \xfcbersprungen.', activity.description)
 
     @browsing
@@ -264,7 +264,7 @@ class TestTaskActivites(FunctionalTestCase):
                           activity.title)
         self.assertEquals(
             'Deadline modified from 01.03.2015 to 20.03.2016 by'
-            ' <a href="http://nohost/plone/@@user-details/test_user_1_">'
+            ' <a href="http://nohost/plone/kontakte/user-test_user_1_/view">'
             'Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'nicht dring\xe4nd', activity.description)
@@ -390,9 +390,9 @@ class TestTaskReassignActivity(IntegrationTestCase):
         self.assertEquals(
           u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
-        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/kontakte/user-kathi.barfuss/view">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
-                          u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
+                          u'to <a href="http://nohost/plone/kontakte/user-herbert.jager/view">'
                           u'J\xe4ger Herbert (herbert.jager)</a> by admin (admin)',
                           reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
@@ -412,9 +412,9 @@ class TestTaskReassignActivity(IntegrationTestCase):
         self.assertEquals(
           u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
-        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/kontakte/user-kathi.barfuss/view">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
-                          u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
+                          u'to <a href="http://nohost/plone/kontakte/user-herbert.jager/view">'
                           u'J\xe4ger Herbert (herbert.jager)</a>',
                           reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)

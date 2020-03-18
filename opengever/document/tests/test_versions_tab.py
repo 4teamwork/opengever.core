@@ -107,7 +107,7 @@ class TestVersionsTab(BaseVersionsTab):
         actor_link = first_row.css('td a').first
 
         self.assertEquals('Boss Hugo (test-user)', actor_link.text)
-        self.assertEquals('http://nohost/plone/@@user-details/test-user',
+        self.assertEquals('http://nohost/plone/kontakte/user-test-user/view',
                           actor_link.attrib['href'])
 
     @browsing

@@ -3,7 +3,9 @@ from opengever.contact import is_contact_feature_enabled
 from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Contact
 from opengever.ogds.base.wrapper import TeamWrapper
+from opengever.ogds.base.wrapper import UserWrapper
 from opengever.ogds.models.team import Team
+from opengever.ogds.models.user import User
 from plone.dexterity.content import Container
 from zope.interface import implements
 
@@ -40,6 +42,12 @@ class ContactFolder(Container, TranslatedTitleMixin):
             team = Team.query.get(team_id)
             if team:
                 return TeamWrapper.wrap(self, team)
+
+        if id_.startswith('user-'):
+            user_id = id_.split('-', 1)[-1]
+            user = User.query.get(user_id)
+            if user:
+                return UserWrapper.wrap(self, user)
 
         if default is _marker:
             raise KeyError(id_)

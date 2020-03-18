@@ -20,7 +20,7 @@
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
         <a class="link-parent"
-           tal:attributes="href string:${here/absolute_url}/kontakte/#users"
+           tal:attributes="href string:${view/contactfolder_url}#users"
            i18n:translate="link_all_users">Show all users</a>
 
         <div tal:replace="structure view/user_details_table" />

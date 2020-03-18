@@ -60,8 +60,8 @@ class TestTeamDetails(IntegrationTestCase):
             links.text)
 
         self.assertEquals(
-            ['http://nohost/plone/@@user-details/kathi.barfuss',
-             'http://nohost/plone/@@user-details/robert.ziegler'],
+            ['http://nohost/plone/kontakte/user-kathi.barfuss/view',
+             'http://nohost/plone/kontakte/user-robert.ziegler/view'],
             [link.get('href') for link in links])
 
     @browsing

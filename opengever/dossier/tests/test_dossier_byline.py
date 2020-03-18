@@ -38,7 +38,7 @@ class TestDossierByline(TestDossierBylineBase):
         browser.open(self.dossier)
 
         responsible = self.get_byline_value_by_label('Responsible:')
-        self.assertEqual('http://nohost/plone/@@user-details/robert.ziegler',
+        self.assertEqual('http://nohost/plone/kontakte/user-robert.ziegler/view',
                          responsible.get('href'))
 
     @browsing

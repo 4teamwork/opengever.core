@@ -19,7 +19,7 @@ class TestTaskOverview(IntegrationTestCase):
         browser.open(self.task, view='tabbedview_view-overview')
 
         self.assertEquals(
-            'http://nohost/plone/@@user-details/robert.ziegler',
+            'http://nohost/plone/kontakte/user-robert.ziegler/view',
             browser.css('.issuer a').first.get('href'))
 
     @browsing

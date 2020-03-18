@@ -264,7 +264,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        user_details_link = browser.css('td [href*="user-details"]')
+        user_details_link = browser.css('td [href*="kontakte/user-"]')
 
         self.assertEquals(1, len(user_details_link))
 
@@ -274,7 +274,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertIn(
-            '/@@user-details/robert.ziegler',
+            '/kontakte/user-robert.ziegler',
             user_details_link.first.attrib['href'],
             )
 

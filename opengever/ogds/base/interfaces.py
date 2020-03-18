@@ -133,3 +133,7 @@ class IInternalOpengeverRequestLayer(Interface):
 
 class ITeam(Interface):
     """Marker interface for team object wrappers."""
+
+
+class IUser(Interface):
+    """Marker interface for user object wrappers."""

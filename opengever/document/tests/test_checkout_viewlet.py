@@ -19,7 +19,7 @@ class TestCheckedOutViewlet(FunctionalTestCase):
 
         self.assertEqual('This item is being checked out by Test User (test_user_1_).',
                          message.text)
-        self.assertEqual('http://nohost/plone/@@user-details/test_user_1_',
+        self.assertEqual('http://nohost/plone/kontakte/user-test_user_1_/view',
                          link.get('href'))
 
     @browsing

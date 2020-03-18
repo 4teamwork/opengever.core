@@ -30,7 +30,7 @@ class TestResponseViewlet(IntegrationTestCase):
         answer = browser.css('div.answers .answer').first
         self.assertEqual('Created by Ziegler Robert (robert.ziegler)',
                          answer.css('h3').first.text)
-        self.assertEqual('http://nohost/plone/@@user-details/robert.ziegler',
+        self.assertEqual('http://nohost/plone/kontakte/user-robert.ziegler/view',
                          answer.css('h3 a').first.get('href'))
 
     @browsing
@@ -42,7 +42,7 @@ class TestResponseViewlet(IntegrationTestCase):
         answer = browser.css('div.answers .answer').first
         self.assertEqual('Closed by Ziegler Robert (robert.ziegler)',
                          answer.css('h3').first.text)
-        self.assertEqual('http://nohost/plone/@@user-details/robert.ziegler',
+        self.assertEqual('http://nohost/plone/kontakte/user-robert.ziegler/view',
                          answer.css('h3 a').first.get('href'))
 
     @browsing
