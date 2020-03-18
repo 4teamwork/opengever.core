@@ -5,6 +5,7 @@ from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import iterSchemataForType
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.interfaces import ISerializeToJson
+from Products.CMFPlone.utils import safe_unicode
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
@@ -81,8 +82,7 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
                 u'the source using the ?query= QS parameter'
             )
 
-        query = self.request.form['query']
-
+        query = safe_unicode(self.request.form['query'])
         result = source.search(query)
 
         terms = []
