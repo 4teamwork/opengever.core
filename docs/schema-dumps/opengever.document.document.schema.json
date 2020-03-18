@@ -83,7 +83,7 @@
         "keywords": {
             "type": "array",
             "title": "Schlagw\u00f6rter",
-            "description": "Schlagw\u00f6rter zur Umschreibung eines Dokuments. Nicht zu verwechseln mit der Ordnungsposition. <br>ACHTUNG: Beachten Sie bei der Verwendung von Schlagw\u00f6rter die Datenschutzvorgaben (z.B. keine Eigennamen).",
+            "description": "Schlagw\u00f6rter zur Umschreibung eines Dokuments. Nicht zu verwechseln mit der Ordnungsposition.\nACHTUNG: Beachten Sie bei der Verwendung von Schlagw\u00f6rter die Datenschutzvorgaben (z.B. keine Eigennamen).",
             "_zope_schema_type": "Tuple"
         },
         "foreign_reference": {
