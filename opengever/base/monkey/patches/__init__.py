@@ -19,6 +19,8 @@ from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
+from .plone_restapi import PatchPloneRestAPIOrdering
+from .plone_restapi import PatchPloneRESTWrapper
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -26,7 +28,6 @@ from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
-from .plone_restapi import PatchPloneRestAPIOrdering
 
 
 PatchActionInfo()()
@@ -58,3 +59,4 @@ ScrubBoboExceptions()()
 PatchExceptionFormatter()()
 PatchWorkflowTool()()
 PatchPloneRestAPIOrdering()()
+PatchPloneRESTWrapper()()
