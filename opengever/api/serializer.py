@@ -4,7 +4,9 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.model import Base
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.wrapper import TeamWrapper
+from opengever.ogds.base.wrapper import UserWrapper
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
@@ -147,6 +149,30 @@ class SerializeWrappedTeamToJson(SerializeWrappedSQLModelToJsonBase):
             user_serializer = queryMultiAdapter(
                 (user, self.request), ISerializeToJsonSummary)
             data['users'].append(user_serializer())
+
+
+@implementer(ISerializeToJson)
+@adapter(UserWrapper, IOpengeverBaseLayer)
+class SerializeWrappedUserToJson(SerializeWrappedSQLModelToJsonBase):
+
+    content_type = 'virtual.ogds.user'
+
+    def add_additional_metadata(self, data):
+        # Add the groups and teams assigned to that user
+        userid = self.context.model.userid
+        service = ogds_service()
+        groups = service.assigned_groups(userid)
+        data['groups'] = []
+        data['teams'] = []
+        for group in groups:
+            group_serializer = queryMultiAdapter(
+                (group, self.request), ISerializeToJsonSummary)
+            data['groups'].append(group_serializer())
+            for team in group.teams:
+                team_serializer = queryMultiAdapter(
+                    (team, self.request), ISerializeToJsonSummary)
+                data['teams'].append(team_serializer())
+        return data
 
 
 class SerializeSQLModelToJsonSummaryBase(object):

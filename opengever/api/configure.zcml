@@ -20,6 +20,7 @@
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
   <adapter factory=".serializer.SerializeSQLModelToJson" />
   <adapter factory=".serializer.SerializeWrappedTeamToJson" />
+  <adapter factory=".serializer.SerializeWrappedUserToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJsonSummary" />
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
