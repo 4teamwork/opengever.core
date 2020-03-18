@@ -19,6 +19,7 @@
   <adapter factory=".serializer.GeverSerializeToJson" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
   <adapter factory=".serializer.SerializeSQLModelToJson" />
+  <adapter factory=".serializer.SerializeWrappedTeamToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJsonSummary" />
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
@@ -650,6 +651,14 @@
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.CopyDocumentFromWorkspacePost"
       permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
+      method="GET"
+      for="opengever.base.interfaces.ISQLObjectWrapper"
+      factory="plone.restapi.services.content.get.ContentGet"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
 </configure>

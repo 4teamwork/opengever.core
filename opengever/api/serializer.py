@@ -4,6 +4,7 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.model import Base
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.ogds.base.wrapper import TeamWrapper
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
@@ -18,6 +19,7 @@ from plone.restapi.serializer.dxcontent import SerializeToJson
 from plone.restapi.serializer.summary import ISerializeToJsonSummary
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
 
@@ -90,6 +92,46 @@ class SerializeSQLModelToJson(object):
 
     def get_columns(self):
         return self.context.__table__.columns
+
+
+class SerializeWrappedSQLModelToJsonBase(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, *args, **kwargs):
+        data = {
+            '@id': self.context.absolute_url().rsplit("/view")[0],
+            '@type': self.content_type
+            }
+
+        serializer = queryMultiAdapter((self.context.model, self.request), ISerializeToJson)
+        data.update(serializer())
+
+        self.add_additional_metadata(data)
+        return data
+
+    def get_columns(self):
+        return self.context.__table__.columns
+
+    def add_additional_metadata(self, data):
+        pass
+
+
+@implementer(ISerializeToJson)
+@adapter(TeamWrapper, IOpengeverBaseLayer)
+class SerializeWrappedTeamToJson(SerializeWrappedSQLModelToJsonBase):
+
+    content_type = 'virtual.ogds.team'
+
+    def add_additional_metadata(self, data):
+        # We add the team members
+        data['users'] = []
+        for user in self.context.model.group.users:
+            user_serializer = queryMultiAdapter(
+                (user, self.request), ISerializeToJsonSummary)
+            data['users'].append(user_serializer())
 
 
 class SerializeSQLModelToJsonSummaryBase(object):
