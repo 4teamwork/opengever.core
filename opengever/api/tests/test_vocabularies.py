@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import IClassification
 from opengever.testing import IntegrationTestCase
 from plone import api
+from urllib import urlencode
 
 
 NON_SENSITIVE_VOCABUALRIES = [
@@ -304,6 +305,19 @@ class TestGetQuerySources(IntegrationTestCase):
         self.assertEqual(1, response.get('items_total'))
         self.assertItemsEqual([u'secret'],
                               [item['token'] for item in response.get('items')])
+
+    @browsing
+    def test_get_task_issuer_non_ascii_char_handling(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.task.absolute_url() + '/@querysources/issuer?{}'.format(
+            urlencode({'query': u'k\xf6vin'.encode('utf-8')}))
+        response = browser.open(
+            url,
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(0, response.get('items_total'))
 
 
 class TestGetSources(IntegrationTestCase):
