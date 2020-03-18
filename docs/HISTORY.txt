@@ -6,6 +6,7 @@ Changelog
 
 - OfficeOnline: Show specific message for collaborative checkouts. [lgraf]
 - Document GET API: Also include info about collaborative checkouts. [lgraf]
+- Also return @id in globalindex endpoint. [njohner]
 - Extend the document serialization with `checked_out_fullname`. [elioschmutz]
 - Add a new profile to setup a cas auth plugin for the ianus portal. [elioschmutz]
 - Fix encoding issue in query-source `query` parameter. [deiferni]
