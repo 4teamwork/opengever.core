@@ -18,7 +18,7 @@ class TestLogoutWithCASAuth(IntegrationTestCase):
 
     def setUp(self):
         super(TestLogoutWithCASAuth, self).setUp()
-        install_cas_auth_plugin()
+        install_cas_auth_plugin('portal')
 
     def tearDown(self):
         super(TestLogoutWithCASAuth, self).tearDown()

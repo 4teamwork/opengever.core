@@ -7,21 +7,29 @@ from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 SESSION_DEFAULT_TIMEOUT = 24 * 60 * 60
 
 
-def setup_cas(site):
+def setup_cas_gever_portal(site):
+    setup_cas(site, cas_path='portal')
+
+
+def setup_cas_ianus_portal(site):
+    setup_cas(site, cas_path='portal/cas')
+
+
+def setup_cas(site, cas_path):
     """Install and configure CAS authentication plugin.
        Rename session cookie to avoid conflicts with multiple clients.
     """
-    install_cas_auth_plugin()
+    install_cas_auth_plugin(cas_path)
     rename_session_cookie(site)
 
 
-def install_cas_auth_plugin():
+def install_cas_auth_plugin(cas_path):
     acl_users = api.portal.get_tool('acl_users')
 
     if 'cas_auth' not in acl_users.objectIds():
         # Build the URL for the CAS server once during initial setup and
         # configure it for the plugin.
-        cas_server_url = build_cas_server_url()
+        cas_server_url = build_cas_server_url(cas_path)
 
         plugin = CASAuthenticationPlugin(
             'cas_auth', cas_server_url=cas_server_url)

@@ -37,7 +37,7 @@ class TestClusterBaseURL(IntegrationTestCase):
             'http://dev.example.com/', get_cluster_base_url())
 
 
-class TestCASServerURL(IntegrationTestCase):
+class TestCASServerURLForGeverPortal(IntegrationTestCase):
 
     def test_cas_plugin_server_url_is_based_on_public_url(self):
         get_current_admin_unit().public_url = 'http://example.com/foobar'
@@ -59,6 +59,16 @@ class TestCASServerURL(IntegrationTestCase):
 
     def test_cas_server_url_is_none_if_cas_plugin_is_missing(self):
         self.assertEquals(None, get_cas_server_url())
+
+
+class TestCASServerURLForIanusPortal(IntegrationTestCase):
+
+    def test_cas_plugin_server_url_is_based_on_public_url(self):
+        get_current_admin_unit().public_url = 'http://example.com/foobar'
+        applyProfile(self.layer['portal'], 'opengever.setup:casauth_ianus_portal')
+        cas_plugin = self.portal.acl_users.cas_auth
+        self.assertEquals(
+            'http://example.com/foobar/portal/cas', cas_plugin.cas_server_url)
 
 
 class TestGEVERPortalURL(IntegrationTestCase):
