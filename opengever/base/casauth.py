@@ -53,11 +53,11 @@ def get_cas_server_url():
     return url
 
 
-def build_cas_server_url():
+def build_cas_server_url(cas_path):
     """Build the URL to the CAS server, based on the GEVER cluster URL.
 
     This URL should only be constructed once during setup, in order to
     initially configure the ftw.casauth plugin.
     """
     base_url = get_cluster_base_url()
-    return urljoin(base_url, 'portal')
+    return urljoin(base_url, cas_path)

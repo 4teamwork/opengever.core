@@ -1,0 +1,18 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <object name="user" meta_type="CMF Action Category">
+    <object name="my-portal" meta_type="CMF Action" i18n:domain="opengever.setup" insert-before="logout">
+      <property name="title" i18n:translate="">My portal</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${context/@@gever_state/gever_portal_url}</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:member is not None</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+</object>

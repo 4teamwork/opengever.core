@@ -39,7 +39,20 @@
 
   <profilehook:hook
       profile="opengever.setup:casauth"
-      handler=".casauth.setup_cas"
+      handler=".casauth.setup_cas_gever_portal"
+      />
+
+  <genericsetup:registerProfile
+      name="casauth_ianus_portal"
+      title="opengever.setup: casauth ianus portal"
+      directory="profiles/casauth_ianus_portal"
+      description="Sets up the cas authentication plugin for the ianus portal."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <profilehook:hook
+      profile="opengever.setup:casauth_ianus_portal"
+      handler=".casauth.setup_cas_ianus_portal"
       />
 
 </configure>
