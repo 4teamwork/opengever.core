@@ -62,6 +62,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         browser.open(self.subdocument, headers={'Accept': 'application/json'})
 
         self.assertEqual(self.regular_user.id, browser.json['checked_out'])
+        self.assertEqual(u'B\xe4rfuss K\xe4thi', browser.json['checked_out_fullname'])
         self.assertFalse(browser.json['is_locked'])
         self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
                          browser.json['containing_dossier'])
@@ -77,6 +78,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         browser.open(self.mail_eml, headers={'Accept': 'application/json'})
 
         self.assertIsNone(browser.json['checked_out'])
+        self.assertIsNone(browser.json['checked_out_fullname'])
         self.assertFalse(browser.json['is_locked'])
         self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
                          browser.json['containing_dossier'])

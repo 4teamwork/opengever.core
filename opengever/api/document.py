@@ -1,10 +1,11 @@
 from ftw import bumblebee
+from opengever.api.serializer import GeverSerializeToJson
+from opengever.base.helpers import display_name
 from opengever.base.interfaces import IReferenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
-from opengever.api.serializer import GeverSerializeToJson
 from plone.restapi.services.content.update import ContentPatch
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -34,8 +35,12 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             obj, 'pdf')
         result[u'file_extension'] = self.context.get_file_extension()
 
+        checked_out_by = obj.checked_out_by()
+        checked_out_by_fullname = display_name(checked_out_by) if checked_out_by else None
+
         additional_metadata = {
-            'checked_out': obj.checked_out_by(),
+            'checked_out': checked_out_by,
+            'checked_out_fullname': checked_out_by_fullname,
             'is_locked': obj.is_locked(),
             'containing_dossier': obj.containing_dossier_title(),
             'containing_subdossier': obj.containing_subdossier_title(),
