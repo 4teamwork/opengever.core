@@ -4,8 +4,14 @@
 
     <dt i18n:translate="label_checked_out">Checked out</dt>
     <dd>
-        <tal:block i18n:translate="message_checkout_info">
+        <tal:block tal:condition="not:view/is_collaborative_checkout" i18n:translate="message_checkout_info">
             This item is being checked out by
+            <a i18n:name="creator"
+               tal:replace="structure view/checkout_by_link" />.
+        </tal:block>
+
+        <tal:block tal:condition="view/is_collaborative_checkout" i18n:translate="message_collaborative_checkout_info">
+            This item is being edited in Office Online by 
             <a i18n:name="creator"
                tal:replace="structure view/checkout_by_link" />.
         </tal:block>

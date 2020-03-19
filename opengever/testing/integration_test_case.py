@@ -537,10 +537,10 @@ class IntegrationTestCase(TestCase):
         self.set_related_items(obj, [related_obj], fieldname=fieldname,
                                append=True)
 
-    def checkout_document(self, document):
+    def checkout_document(self, document, collaborative=False):
         """Checkout the given document.
         """
-        return self.get_checkout_manager(document).checkout()
+        return self.get_checkout_manager(document).checkout(collaborative=collaborative)
 
     def checkin_document(self, document):
         """Checkin the given document.

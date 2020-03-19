@@ -1,31 +1,48 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
+from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.testing import IntegrationTestCase
+from zope.component import getMultiAdapter
 
 
-class TestCheckedOutViewlet(FunctionalTestCase):
+class TestCheckedOutViewlet(IntegrationTestCase):
 
     @browsing
     def test_viewlet_show_msg_when_document_is_checked_out(self, browser):
-        document = create(Builder('document')
-                          .titled(u'TestDocument')
-                          .checked_out())
+        self.login(self.regular_user, browser)
 
-        browser.login().open(document)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+        browser.open(self.document)
 
         message = browser.css('dl.checked_out_viewlet dd').first
         link = browser.css('dl.checked_out_viewlet a').first
 
-        self.assertEqual('This item is being checked out by Test User (test_user_1_).',
+        self.assertEqual(u'This item is being checked out by B\xe4rfuss K\xe4thi (kathi.barfuss).',
                          message.text)
-        self.assertEqual('http://nohost/plone/@@user-details/test_user_1_',
+        self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
+                         link.get('href'))
+
+    @browsing
+    def test_viewlet_shows_msg_for_collaborative_checkout(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout(collaborative=True)
+        browser.open(self.document)
+
+        message = browser.css('dl.checked_out_viewlet dd').first
+        link = browser.css('dl.checked_out_viewlet a').first
+
+        self.assertEqual(u'This item is being edited in Office Online by B\xe4rfuss K\xe4thi (kathi.barfuss).',
+                         message.text)
+        self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
                          link.get('href'))
 
     @browsing
     def test_viewlet_is_disabled_when_document_is_not_checked_out(self, browser):
-        document = create(Builder('document').titled(u'TestDocument'))
-        browser.login().open(document)
+        self.login(self.regular_user, browser)
 
-        self.assertEqual([],
-                         browser.css('dl.checked_out_viewlet'))
+        browser.open(self.document)
+        self.assertEqual([], browser.css('dl.checked_out_viewlet'))

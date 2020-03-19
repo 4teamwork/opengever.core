@@ -41,6 +41,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
         additional_metadata = {
             'checked_out': checked_out_by,
             'checked_out_fullname': checked_out_by_fullname,
+            'is_collaborative_checkout': obj.is_collaborative_checkout(),
             'is_locked': obj.is_locked(),
             'containing_dossier': obj.containing_dossier_title(),
             'containing_subdossier': obj.containing_subdossier_title(),

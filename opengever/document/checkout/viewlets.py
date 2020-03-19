@@ -27,3 +27,5 @@ class CheckedOutViewlet(ViewletBase):
 
             self.checkout_by_link = Actor.user(
                 manager.get_checked_out_by()).get_link()
+
+            self.is_collaborative_checkout = manager.is_collaborative_checkout()

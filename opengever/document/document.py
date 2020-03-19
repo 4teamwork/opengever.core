@@ -295,6 +295,11 @@ class Document(Item, BaseDocumentMixin):
                                   ICheckinCheckoutManager)
         return manager.get_checked_out_by()
 
+    def is_collaborative_checkout(self):
+        manager = getMultiAdapter((self, self.REQUEST),
+                                  ICheckinCheckoutManager)
+        return manager.is_collaborative_checkout()
+
     def is_office_online_editable(self):
         filename = self.get_filename()
         if filename is None:
