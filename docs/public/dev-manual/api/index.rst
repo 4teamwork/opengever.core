@@ -28,6 +28,7 @@ Inhalt:
    recently_touched.rst
    preview.rst
    webactions.rst
+   users.rst
    usersettings.rst
    tasks.rst
    globalindex.rst
