@@ -7,6 +7,7 @@ from opengever.base.response import IResponseContainer
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone.restapi.serializer.converters import json_compatible
@@ -309,6 +310,28 @@ class TestTaskCreation(IntegrationTestCase):
         self.assertEqual('team:1', task.responsible)
         self.assertEqual('fa', task.responsible_client)
         self.assertEqual(self.regular_user.id, task.issuer)
+
+    @browsing
+    def test_supports_responsible_from_hidden_orgunit(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        org_unit = get_current_org_unit()
+        org_unit.hidden = True
+
+        self.data.update({
+            "responsible": "fa:{}".format(self.regular_user.id),
+            "issuer": self.secretariat_user.id,
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        task, = children['added']
+        self.assertEqual(self.regular_user.id, task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual(self.secretariat_user.id, task.issuer)
 
 
 class TestTaskPatch(IntegrationTestCase):

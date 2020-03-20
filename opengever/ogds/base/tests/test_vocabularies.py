@@ -140,7 +140,7 @@ class TestOrgUnitsVocabularyFactory(FunctionalTestCase):
              (u'arch', u'Staatsarchiv')],
             voca_factory(self.portal))
 
-    def test_contains_only_visible_org_units(self):
+    def test_contains_hidden_org_units(self):
         admin_unit = create(Builder('admin_unit'))
         create(Builder('org_unit').id('rr')
                .having(title="Regierungsrat",
@@ -158,9 +158,10 @@ class TestOrgUnitsVocabularyFactory(FunctionalTestCase):
             name='opengever.ogds.base.OrgUnitsVocabularyFactory')
 
         self.assertTermKeys(
-            ['rr', 'arch'], voca_factory(self.portal))
+            ['rr', 'arch', 'afi'], voca_factory(self.portal))
 
         self.assertTerms(
-            [(u'rr', u'Regierungsrat'),
+            [(u'afi', u'Informatikamt'),
+             (u'rr', u'Regierungsrat'),
              (u'arch', u'Staatsarchiv')],
             voca_factory(self.portal))

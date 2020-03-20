@@ -289,24 +289,25 @@ class TestTaskIntegration(FunctionalTestCase):
             browser.css('#formfield-form-widgets-responsible_client .error').text)
 
     @browsing
-    def test_cannot_set_responsible_client_for_disabled_orgunit2(self, browser):
-        self.get_org_unit().hidden = True
+    def test_cannot_set_responsible_client_for_hidden_orgunit(self, browser):
+        """Responsibles from a hidden orgunit are valid, but the widget does
+        not allow us to choose them. We therefore need to test searching the
+        responsible directly in the widget.
+        """
         dossier = create(Builder('dossier'))
-        browser.login().open(dossier, view='++add++opengever.task.task')
+        widget_url = "{}/{}".format(
+            dossier.absolute_url(),
+            '++add++opengever.task.task/++widget++form.widgets.responsible')
+        search_url = widget_url + '/search?q={}:{}'.format(
+            self.get_org_unit().id(), TEST_USER_ID)
 
-        browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment'})
+        browser.login()
+        search_result = browser.open(search_url).json
+        self.assertEqual(1, search_result['total_count'])
 
-        # Fill Responible manually
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.get_org_unit().id() + ':' + TEST_USER_ID)
-        browser.find('Save').click()
-
-        self.assertEquals(['There were some errors.'], error_messages())
-        self.assertEquals(
-            ['Required input is missing.'],
-            browser.css('#formfield-form-widgets-responsible_client .error').text)
+        self.get_org_unit().hidden = True
+        search_result = browser.open(search_url).json
+        self.assertEqual(0, search_result['total_count'])
 
     @browsing
     def test_create_a_task_for_every_selected_person_with_multiple_orgunits(self, browser):

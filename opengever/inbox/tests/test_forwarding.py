@@ -100,25 +100,24 @@ class TestForwarding(IntegrationTestCase):
 
     @browsing
     def test_hidden_orgunits_are_not_available_as_responsible_client(self, browser):
+        """Responsibles from a hidden orgunit are valid, but the widget does
+        not allow us to choose them. We therefore need to test searching the
+        responsible directly in the widget.
+        """
         self.login(self.secretariat_user, browser=browser)
-        get_current_org_unit().hidden = True
+        orgunit = get_current_org_unit()
+        widget_url = "{}/{}".format(
+            self.inbox.absolute_url(),
+            '++add++opengever.inbox.forwarding/++widget++form.widgets.responsible')
+        search_url = widget_url + '/search?q={}:{}'.format(
+            orgunit.id(), self.regular_user.id)
 
-        data = self.make_path_param(self.inbox_document)
-        browser.open(
-            self.inbox, data, view='++add++opengever.inbox.forwarding')
-        browser.fill({'Title': u'Test forwarding'})
+        search_result = browser.open(search_url).json
+        self.assertEqual(1, search_result['total_count'])
 
-        # Fill responsible manually
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.regular_user.id))
-        with self.observe_children(self.inbox) as children:
-            browser.find('Save').click()
-
-        self.assertEqual(0, len(children['added']))
-        self.assertEqual(['There were some errors.'], error_messages())
-        self.assertEquals(
-            ['Required input is missing.'],
-            browser.css('#formfield-form-widgets-responsible_client .error').text)
+        orgunit.hidden = True
+        search_result = browser.open(search_url).json
+        self.assertEqual(0, search_result['total_count'])
 
     @browsing
     def test_teams_are_available_as_responsible(self, browser):

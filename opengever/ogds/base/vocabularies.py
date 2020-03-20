@@ -17,7 +17,7 @@ class OrgUnitsVocabularyFactory(object):
         return vocab
 
     def key_value_provider(self):
-        for unit in ogds_service().all_org_units():
+        for unit in ogds_service().all_org_units(visible_only=False):
             yield (unit.id(), unit.label())
 
 
