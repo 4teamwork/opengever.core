@@ -123,6 +123,24 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
             ['Client 1', 'Client 3', 'Client 4'], units.text)
 
     @browsing
+    def test_list_only_enabled_org_units(self, browser):
+        self.org_unit3.enabled = False
+        browser.login().open(self.repo_root)
+        units = browser.css('.orgunitMenuContent li')
+
+        self.assertEquals(
+            ['Client 1', 'Client 4'], units.text)
+
+    @browsing
+    def test_list_only_visible_org_units(self, browser):
+        self.org_unit3.hidden = True
+        browser.login().open(self.repo_root)
+        units = browser.css('.orgunitMenuContent li')
+
+        self.assertEquals(
+            ['Client 1', 'Client 4'], units.text)
+
+    @browsing
     def test_active_unit_is_not_linked(self, browser):
         browser.login().open(self.repo_root)
         units = browser.css('.orgunitMenuContent li span')
