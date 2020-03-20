@@ -5,6 +5,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.activity.model import Activity
 from opengever.base.response import IResponseContainer
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
@@ -266,6 +267,46 @@ class TestTaskIntegration(FunctionalTestCase):
             TEST_USER_ID,
             task.responsible,
             'The user should be stored after submitting the form')
+
+    @browsing
+    def test_cannot_set_responsible_client_for_disabled_orgunit(self, browser):
+        self.get_org_unit().enabled = False
+        dossier = create(Builder('dossier'))
+        browser.login().open(dossier, view='++add++opengever.task.task')
+
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment'})
+
+        # Fill Responible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
+        browser.find('Save').click()
+
+        self.assertEquals(['There were some errors.'], error_messages())
+        self.assertEquals(
+            ['Required input is missing.'],
+            browser.css('#formfield-form-widgets-responsible_client .error').text)
+
+    @browsing
+    def test_cannot_set_responsible_client_for_disabled_orgunit2(self, browser):
+        self.get_org_unit().hidden = True
+        dossier = create(Builder('dossier'))
+        browser.login().open(dossier, view='++add++opengever.task.task')
+
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment'})
+
+        # Fill Responible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
+        browser.find('Save').click()
+
+        self.assertEquals(['There were some errors.'], error_messages())
+        self.assertEquals(
+            ['Required input is missing.'],
+            browser.css('#formfield-form-widgets-responsible_client .error').text)
 
     @browsing
     def test_create_a_task_for_every_selected_person_with_multiple_orgunits(self, browser):
