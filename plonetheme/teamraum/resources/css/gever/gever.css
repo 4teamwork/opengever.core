@@ -2683,6 +2683,8 @@ input[type='checkbox']:disabled ~ label > span { color: #ccc; }
 
 body.portaltype-opengever-meeting-committee.template-edit #content-core div.error { background-color: #fdc; border: 1px solid red; padding: 0.5em; margin: 1em 0; }
 
+.formHelp { white-space: pre-wrap; }
+
 #opengever_meeting_meeting .collapsible, #opengever_meeting_protocol .collapsible, .portaltype-opengever-contact-organization .collapsible, .portaltype-opengever-contact-person .collapsible { width: 100%; margin-bottom: 8px; border-radius: 2px; box-sizing: border-box; }
 #opengever_meeting_meeting .collapsible .collapsible-header, #opengever_meeting_protocol .collapsible .collapsible-header, .portaltype-opengever-contact-organization .collapsible .collapsible-header, .portaltype-opengever-contact-person .collapsible .collapsible-header { display: table; width: 100%; background-color: #437795; border-radius: 4px; color: #fff; border-right: 1px solid #437795; }
 #opengever_meeting_meeting .collapsible .collapsible-header > .button, #opengever_meeting_protocol .collapsible .collapsible-header > .button, .portaltype-opengever-contact-organization .collapsible .collapsible-header > .button, .portaltype-opengever-contact-person .collapsible .collapsible-header > .button { display: table-cell; border-right: 1px solid #e6e6e6; border-top-left-radius: 2px; border-bottom-left-radius: 2px; }
