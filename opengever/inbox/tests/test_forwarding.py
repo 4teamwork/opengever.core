@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.factoriesmenu import addable_types
+from ftw.testbrowser.pages.statusmessages import error_messages
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import IntegrationTestCase
 
 
@@ -74,6 +76,49 @@ class TestForwarding(IntegrationTestCase):
         fieldsets = browser.css('form#form fieldset')
         self.assertEqual(1, len(fieldsets))
         self.assertEqual('Common', fieldsets.first.css('legend').first.text)
+
+    @browsing
+    def test_users_are_available_as_responsible(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        data = self.make_path_param(self.inbox_document)
+        browser.open(
+            self.inbox, data, view='++add++opengever.inbox.forwarding')
+        browser.fill({'Title': u'Test forwarding'})
+
+        # Fill responsible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.regular_user.id))
+        with self.observe_children(self.inbox) as children:
+            browser.find('Save').click()
+
+        self.assertEqual(1, len(children['added']))
+        forwarding = children['added'].pop()
+
+        self.assertEqual(self.regular_user.id, forwarding.responsible)
+        self.assertEqual(u'Test forwarding', forwarding.title)
+
+    @browsing
+    def test_hidden_orgunits_are_not_available_as_responsible_client(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        get_current_org_unit().hidden = True
+
+        data = self.make_path_param(self.inbox_document)
+        browser.open(
+            self.inbox, data, view='++add++opengever.inbox.forwarding')
+        browser.fill({'Title': u'Test forwarding'})
+
+        # Fill responsible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.regular_user.id))
+        with self.observe_children(self.inbox) as children:
+            browser.find('Save').click()
+
+        self.assertEqual(0, len(children['added']))
+        self.assertEqual(['There were some errors.'], error_messages())
+        self.assertEquals(
+            ['Required input is missing.'],
+            browser.css('#formfield-form-widgets-responsible_client .error').text)
 
     @browsing
     def test_teams_are_available_as_responsible(self, browser):
