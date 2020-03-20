@@ -17,7 +17,8 @@ class GlobalIndexGet(Service):
         'predecessor_id', 'containing_dossier']
 
     ADDITIONAL_METADATA = {
-        'responsible_fullname': lambda task: display_name(task.responsible)}
+        'responsible_fullname': lambda task: display_name(task.responsible),
+        '@id': lambda task: task.absolute_url()}
 
     def reply(self):
 

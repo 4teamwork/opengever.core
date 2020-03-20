@@ -18,7 +18,7 @@ Der globale, also über den ganzen Mandantenverbund verteilte, Aufgabenindex kan
     {
       "batching": null,
       "items": [
-        {
+        { "@id": "http://localhost:8080//ordnungssystem/dossier-23/document-123/task-1",
           "title": "re: Direkte Anfrage",
           "task_type": "direct-execution",
           "task_id": 14,

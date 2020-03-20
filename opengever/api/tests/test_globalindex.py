@@ -13,7 +13,8 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(15, browser.json['items_total'])
         self.assertEqual(15, len(browser.json['items']))
         self.assertEqual(
-            {u'title': u're: Diskr\xe4te Dinge',
+            {u'@id': self.inbox_task.absolute_url(),
+             u'title': u're: Diskr\xe4te Dinge',
              u'task_type': u'direct-execution',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'task_id': 14,
