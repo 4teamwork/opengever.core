@@ -101,6 +101,9 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
         url = "{}/@@checkout_documents".format(self.context.absolute_url())
         return addTokenToUrl(url)
 
+    def get_office_online_edit_url(self):
+        return u'{}/office_online_edit'.format(self.context.absolute_url())
+
     def get_open_as_pdf_url(self):
         if not self.is_open_as_pdf_action_available():
             return None

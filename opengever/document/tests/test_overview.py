@@ -6,10 +6,16 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
+from opengever.wopi import discovery
+from opengever.wopi.interfaces import IWOPISettings
+from opengever.wopi.lock import create_lock as create_wopi_lock
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
+from plone.registry.interfaces import IRegistry
 from urllib import urlencode
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 
 
@@ -868,3 +874,157 @@ class TestDocumentOverviewWithMeeting(IntegrationTestCase):
             )
 
         self.assertSubmittedDocumentCreated(self.proposal, self.document, submitted_version=1)
+
+
+class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
+
+    features = (
+        '!officeconnector-attach',
+        '!officeconnector-checkout',
+    )
+
+    def setUp(self):
+        super(TestDocumentOverviewWithOfficeOnline, self).setUp()
+
+        # Enable WOPI / Office Online support
+        settings = getUtility(IRegistry).forInterface(IWOPISettings)
+        settings.enabled = True
+        settings.discovery_url = u'http://localhost/hosting/discovery'
+
+        discovery._EDITABLE_EXTENSIONS = {
+            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
+        }
+
+    @browsing
+    def test_has_additional_office_online_edit_button(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        edit_buttons = browser.css('a.function-edit')
+
+        self.assertEquals(['Checkout and edit', 'Edit in Office Online'],
+                          [btn.text for btn in edit_buttons])
+
+        self.assertIn('/editing_document', edit_buttons[0].attrib['href'])
+        self.assertIn('/office_online_edit', edit_buttons[1].attrib['href'])
+
+    @browsing
+    def test_office_online_editable_if_collaboratively_checked_out_by_self(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = getMultiAdapter(
+            (self.document, self.request), ICheckinCheckoutManager)
+
+        # Collaboratively check out and acquire WOPI lock
+        manager.checkout(collaborative=True)
+        create_wopi_lock(self.document, 'my-token')
+
+        # Tabbedview gets in the way of the redirect so we'll have to revisit
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        document_metadata = browser.css('.documentMetadata tr').text
+
+        self.assertIn(
+            u'Checked out B\xe4rfuss K\xe4thi (kathi.barfuss)',
+            document_metadata,
+        )
+
+        file_actions = browser.css('.file-action-buttons a').text
+
+        # Collaborative checkout by self:
+        # - "Edit in Office Online" action is available
+        # But not:
+        # - Cancel checkout (because it's locked)
+        # - Checkin (because it's a collaborative checkout)
+        self.assertEquals(
+            ['Edit',
+             'Edit in Office Online',
+             'Download copy'],
+            file_actions)
+
+    @browsing
+    def test_office_online_editable_if_collaboratively_checked_out_by_other(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        manager = getMultiAdapter(
+            (self.document, self.request), ICheckinCheckoutManager)
+
+        # Collaboratively check out and acquire WOPI lock
+        manager.checkout(collaborative=True)
+        create_wopi_lock(self.document, 'my-token')
+
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        document_metadata = browser.css('.documentMetadata tr').text
+
+        self.assertIn(
+            u'Checked out Ziegler Robert (robert.ziegler)',
+            document_metadata,
+        )
+
+        file_actions = browser.css('.file-action-buttons a').text
+
+        # Collaborative checkout by someone else:
+        # - "Edit in Office Online" action is available
+        # But not:
+        # - Cancel checkout (because it's locked)
+        # - Checkin (because it's a collaborative checkout)
+        # - Edit (checked out by someone else)
+        # - Download copy (checked out by someone else)
+        self.assertEquals(
+            ['Edit in Office Online'],
+            file_actions)
+
+    @browsing
+    def test_not_office_online_editable_if_regularly_checked_out_by_self(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        # Tabbedview gets in the way of the redirect so we'll have to revisit
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        document_metadata = browser.css('.documentMetadata tr').text
+
+        self.assertIn(
+            u'Checked out B\xe4rfuss K\xe4thi (kathi.barfuss)',
+            document_metadata,
+        )
+
+        file_actions = browser.css('.file-action-buttons a').text
+
+        # "Edit in Office Online" action not shown (regular checkout by self)
+        self.assertEquals(
+            ['Edit',
+             'Checkin without comment',
+             'Checkin with comment',
+             'Cancel checkout',
+             'Download copy'],
+            file_actions)
+
+    @browsing
+    def test_not_office_online_editable_if_regularly_checked_out_by_other(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        document_metadata = browser.css('.documentMetadata tr').text
+
+        self.assertIn(
+            u'Checked out Ziegler Robert (robert.ziegler)',
+            document_metadata,
+        )
+
+        file_actions = browser.css('.file-action-buttons a').text
+
+        # "Edit in Office Online" action not shown (regular checkout by other)
+        self.assertEquals([], file_actions)

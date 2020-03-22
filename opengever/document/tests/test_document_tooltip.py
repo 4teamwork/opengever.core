@@ -1,7 +1,11 @@
 from ftw import bumblebee
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.wopi import discovery
+from opengever.wopi.interfaces import IWOPISettings
 from plone.protect import createToken
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 class TestDocumentTooltip(IntegrationTestCase):
@@ -64,6 +68,36 @@ class TestDocumentTooltip(IntegrationTestCase):
             'http://nohost/plone/ordnungssystem/fuhrung'
             '/vertrage-und-vereinbarungen/dossier-1/document-14',
             details.get('href'))
+
+    @browsing
+    def test_tooltip_actions_with_office_online_enabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Enable WOPI / Office Online support
+        settings = getUtility(IRegistry).forInterface(IWOPISettings)
+        settings.enabled = True
+        settings.discovery_url = u'http://localhost/hosting/discovery'
+
+        discovery._EDITABLE_EXTENSIONS = {
+            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
+        }
+
+        browser.open(self.document, view='tooltip')
+        metadata, checkout, edit_in_office_online, download, details = browser.css(
+            '.file-action-buttons a')
+
+        self.assertEquals('Edit metadata', metadata.text)
+        self.assertEquals('Checkout and edit', checkout.text)
+
+        self.assertEquals('Edit in Office Online', edit_in_office_online.text)
+        self.assertTrue(edit_in_office_online.get('href').startswith(
+            'http://nohost/plone/ordnungssystem/fuhrung'
+            '/vertrage-und-vereinbarungen/dossier-1/document-14'
+            '/office_online_edit'
+        ))
+
+        self.assertEquals('Download copy', download.text)
+        self.assertEquals('Open detail view', details.text)
 
     @browsing
     def test_checkout_link_is_only_available_for_documents(self, browser):
