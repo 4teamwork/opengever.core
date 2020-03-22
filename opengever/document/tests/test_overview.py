@@ -935,11 +935,11 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         # Collaborative checkout by self:
         # - "Edit in Office Online" action is available
         # But not:
+        # - Edit [with OfficeConnector] (because it's a collaborative checkout)
         # - Cancel checkout (because it's locked)
         # - Checkin (because it's a collaborative checkout)
         self.assertEquals(
-            ['Edit',
-             'Edit in Office Online',
+            ['Edit in Office Online',
              'Download copy'],
             file_actions)
 

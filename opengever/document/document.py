@@ -321,6 +321,11 @@ class Document(Item, BaseDocumentMixin):
             (self, getRequest()), ICheckinCheckoutManager)
 
         if manager.get_checked_out_by():
+            if manager.is_collaborative_checkout():
+                # Collaborative checkouts should never be mixed with regular
+                # checkouts / OfficeConnector editing
+                return False
+
             if manager.get_checked_out_by() == \
                     getSecurityManager().getUser().getId():
                 return True
