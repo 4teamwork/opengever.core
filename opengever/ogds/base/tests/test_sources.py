@@ -322,6 +322,21 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         self.assertFalse(result,
                          'Expect no Inbox for the inactive OrgUnit Steueramt')
 
+    def test_do_not_return_inboxes_of_hidden_orgunits(self):
+        self.org_unit1.hidden = True
+        result = self.source.search('inbox:org-unit-1')
+
+        self.assertFalse(result,
+                         'Expect no Inbox for the hidden OrgUnit org-unit-1')
+
+    def test_inboxes_of_hidden_orgunits_are_valid_terms(self):
+        self.org_unit1.hidden = True
+        term = self.source.getTermByToken('inbox:org-unit-1')
+
+        self.assertTrue(
+          term, 'Inbox for the hidden OrgUnit org-unit-1 should be a valid term')
+        self.assertEqual('inbox:org-unit-1', term.token)
+
     def test_search_for_term_inbox_or_partial_term_that_matches_inbox(self):
         inboxes = self.source.search('Inbox')
         self.assertEquals(2, len(inboxes), 'Expect two inboxes')

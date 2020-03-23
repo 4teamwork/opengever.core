@@ -120,6 +120,27 @@ class TestForwarding(IntegrationTestCase):
         self.assertEqual(0, search_result['total_count'])
 
     @browsing
+    def test_inbox_of_hidden_orgunits_are_not_available_as_responsible(self, browser):
+        """Inbox of hidden orgunit is valid, but the widget does not allow us
+        to choose them. We therefore need to test searching the responsible
+        directly in the widget.
+        """
+        self.login(self.secretariat_user, browser=browser)
+        orgunit = get_current_org_unit()
+        widget_url = "{}/{}".format(
+            self.inbox.absolute_url(),
+            '++add++opengever.inbox.forwarding/++widget++form.widgets.responsible')
+        search_url = widget_url + '/search?q={}:{}'.format(
+            'inbox', orgunit.id())
+
+        search_result = browser.open(search_url).json
+        self.assertEqual(1, search_result['total_count'])
+
+        orgunit.hidden = True
+        search_result = browser.open(search_url).json
+        self.assertEqual(0, search_result['total_count'])
+
+    @browsing
     def test_teams_are_available_as_responsible(self, browser):
         self.login(self.secretariat_user, browser=browser)
 

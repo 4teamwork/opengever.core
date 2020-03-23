@@ -274,6 +274,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
         query = OrgUnit.query
         query = query.filter(OrgUnit.enabled == True)  # noqa
+        query = query.filter(OrgUnit.hidden == False)  # noqa
 
         if self.only_current_inbox:
             query = query.filter(OrgUnit.unit_id == self.client_id)
