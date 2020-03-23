@@ -67,7 +67,7 @@ class TestEmailNotification(IntegrationTestCase):
         mail = email.message_from_string(Mailing(self.portal).pop())
 
         self.assertEquals(
-            'GEVER Activity: [Dossier title] Test Task', mail.get('Subject'))
+            'GEVER Activity: Dossier title - Test Task', mail.get('Subject'))
 
     @browsing
     def test_notification_summary_is_split_into_paragraphs(self, browser):
@@ -153,7 +153,7 @@ class TestEmailNotification(IntegrationTestCase):
 
         raw_mail = Mailing(self.portal).pop()
         link = ('<p><a href=3D"http://nohost/plone/@@resolve_notification?notificati=\non_id=3D1">'
-                '[Vertr=C3=A4ge mit der kantonalen...] Test Task</a></p>')
+                'Vertr=C3=A4ge mit der kantonalen... - Test Task</a></p>')
         self.assertIn(link, raw_mail.strip())
 
     @browsing

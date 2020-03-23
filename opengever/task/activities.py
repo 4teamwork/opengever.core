@@ -47,7 +47,7 @@ class BaseTaskActivity(BaseActivity):
         else:
             cropped_dossier_title = self.dossier_title
 
-        return {code: u"[{dossier_title}] {task_title}".format(
+        return {code: u"{dossier_title} - {task_title}".format(
                     dossier_title=cropped_dossier_title,
                     task_title=task_title[code])
                 for code in self._get_supported_languages()}

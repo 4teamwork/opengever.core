@@ -59,7 +59,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(
-          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
+          u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
 
         browser.open_html(activity.description)
@@ -133,7 +133,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
-        self.assertEquals(u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Accepted by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
@@ -159,7 +159,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-commented', activity.kind)
         self.assertEquals(
-          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
+          u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Commented by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
@@ -204,7 +204,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-in-progress-resolved', activity.kind)
         self.assertEquals(
-          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
+          u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Resolved by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Ist erledigt.', activity.description)
@@ -232,7 +232,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-rejected-skipped', activity.kind)
         self.assertEquals(
-          u'[Dossier XY] Abkl\xe4rung Fall Meier', activity.title)
+          u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Skipped by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Wird \xfcbersprungen.', activity.description)
@@ -260,7 +260,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-modify-deadline', activity.kind)
-        self.assertEquals(u'[Dossier XY] Abkl\xe4rung Fall Meier',
+        self.assertEquals(u'Dossier XY - Abkl\xe4rung Fall Meier',
                           activity.title)
         self.assertEquals(
             'Deadline modified from 01.03.2015 to 20.03.2016 by'
@@ -296,7 +296,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)
-        self.assertEquals(u'[Dossier XY] Unteraufgabe Abkl\xe4rung Fall Meier',
+        self.assertEquals(u'Dossier XY - Unteraufgabe Abkl\xe4rung Fall Meier',
                           activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
 
@@ -358,7 +358,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)
-        self.assertEquals(u'[Dossier XY] Abkl\xe4rung Fall Huber', activity.title)
+        self.assertEquals(u'Dossier XY - Abkl\xe4rung Fall Huber', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
 
 
@@ -388,7 +388,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
         self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
         self.assertEquals(
-          u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
+          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
         self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
@@ -410,7 +410,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
         self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
         self.assertEquals(
-          u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
+          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
         self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
@@ -555,7 +555,7 @@ class TestTaskReminderActivity(IntegrationTestCase):
         self.assertEquals('task-reminder', activity.kind)
         self.assertEquals('Task reminder', activity.label)
         self.assertEquals(
-          u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen',
+          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
           activity.title)
         self.assertEqual(SYSTEM_ACTOR_ID, activity.actor_id)
         self.assertEquals(u'Deadline is on Nov 01, 2016', activity.summary)
