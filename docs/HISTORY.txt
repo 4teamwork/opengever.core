@@ -6,6 +6,7 @@ Changelog
 
 - Do not allow to choose inbox of hidden OrgUnit as responsible in forwardings. [njohner]
 - Change container title format in task activities. [njohner]
+- Disable OfficeOnline action on docs in resolved or inactive dossiers. [lgraf]
 - Add hidden flag to OrgUnits and AdminUnits. [njohner]
 - Disallow choosing hidden orgunits as responsible_client in tasks and forwardings. [njohner]
 - Do not display hidden orgunits in orgunit selector. [njohner]

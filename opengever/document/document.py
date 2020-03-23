@@ -344,6 +344,11 @@ class Document(Item, BaseDocumentMixin):
             (self, self.REQUEST), ICheckinCheckoutManager)
         return manager.is_locked()
 
+    def is_checkout_permitted(self):
+        manager = queryMultiAdapter(
+            (self, self.REQUEST), ICheckinCheckoutManager)
+        return manager.is_checkout_permitted()
+
     def is_shadow_document(self):
         return api.content.get_state(self) == self.shadow_state
 

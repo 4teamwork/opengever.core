@@ -12,6 +12,7 @@ from opengever.wopi.lock import create_lock as create_wopi_lock
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
+from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
 from urllib import urlencode
 from zope.component import getMultiAdapter
@@ -1028,3 +1029,43 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
 
         # "Edit in Office Online" action not shown (regular checkout by other)
         self.assertEquals([], file_actions)
+
+    @browsing
+    def test_not_office_online_editable_if_in_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.resolvable_dossier,
+                     view='transition-resolve',
+                     data={'_authenticator': createToken()})
+
+        self.login(self.regular_user, browser)
+
+        # Tabbedview gets in the way of the redirect so we'll have to revisit
+        browser.open(self.resolvable_document, view='tabbedview_view-overview')
+
+        file_actions = browser.css('.file-action-buttons a').text
+
+        # "Edit in Office Online" action not shown (resolved dossier)
+        self.assertEquals(
+            ['Download copy'],
+            file_actions)
+
+    @browsing
+    def test_not_office_online_editable_if_in_inactive_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.resolvable_dossier,
+                     view='transition-deactivate',
+                     data={'_authenticator': createToken()})
+
+        self.login(self.regular_user, browser)
+
+        # Tabbedview gets in the way of the redirect so we'll have to revisit
+        browser.open(self.resolvable_document, view='tabbedview_view-overview')
+
+        file_actions = browser.css('.file-action-buttons a').text
+
+        # "Edit in Office Online" action not shown (inactive dossier)
+        self.assertEquals(
+            ['Download copy'],
+            file_actions)
