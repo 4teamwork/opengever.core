@@ -53,7 +53,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'notification_id': 3,
               u'read': False,
               u'summary': u'New task opened by Ziegler Robert',
-              u'title': u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen'},
+              u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
              {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
               u'actor_id': u'nicole.kohler',
               u'actor_label': u'Kohler Nicole',
@@ -63,7 +63,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'notification_id': 1,
               u'read': True,
               u'summary': u'New task opened by Ziegler Robert',
-              u'title': u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen'}],
+              u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'}],
             browser.json.get('items'))
 
     @browsing
@@ -127,7 +127,7 @@ class TestNotificationsGet(IntegrationTestCase):
              u'notification_id': 1,
              u'read': False,
              u'summary': u'New task opened by Ziegler Robert',
-             u'title': u'[Vertr\xe4ge mit der kantonalen...] Vertragsentwurf \xdcberpr\xfcfen'},
+             u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
             browser.json)
 
     @browsing
