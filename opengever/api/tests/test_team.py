@@ -11,7 +11,7 @@ class TestTeamGet(IntegrationTestCase):
         self.team_id = Team.get_one(groupid='projekt_a').team_id
 
     @browsing
-    def test_user_default_response(self, browser):
+    def test_team_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.contactfolder,
@@ -23,8 +23,14 @@ class TestTeamGet(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/kontakte/@team/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
+             u'group': {u'@id': u'http://nohost/plone/kontakte/@group/projekt_a',
+                        u'@type': u'virtual.ogds.group',
+                        u'active': True,
+                        u'groupid': u'projekt_a',
+                        u'title': u'Projekt A'},
              u'groupid': u'projekt_a',
              u'org_unit_id': u'fa',
+             u'org_unit_title': u'Finanz\xe4mt',
              u'team_id': 1,
              u'title': u'Projekt \xdcberbaung Dorfmatte',
              u'users': [{u'@id': u'http://nohost/plone/kontakte/@ogds-user/kathi.barfuss',

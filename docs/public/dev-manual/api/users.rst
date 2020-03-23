@@ -87,7 +87,15 @@ Ein Team wird lediglich durch einen Eintrag in der SQL Datenbank repräsentiert 
         "@type": "virtual.ogds.team",
         "active": true,
         "groupid": "afi_benutzer",
+        "group": {
+            "@id": "http://localhost:8080/fd/kontakte/@group/admin-group",
+            "@type": "virtual.ogds.group",
+            "active": true,
+            "groupid": "admin-group",
+            "title": null
+        },
         "org_unit_id": "fd",
+        "org_unit_title": "Finanzdepartement",
         "team_id": 90,
         "title": "afi_benutzer",
         "users": [
