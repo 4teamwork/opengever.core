@@ -2,7 +2,7 @@
 Helpers for migrating user and group related data in OGDS SQL tables.
 """
 
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.usermigration.exceptions import UserMigrationException
 import logging
 

@@ -1,6 +1,6 @@
 from opengever.activity import notification_center
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone import api
 from zExceptions import NotFound
 from zExceptions import Unauthorized

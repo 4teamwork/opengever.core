@@ -8,7 +8,7 @@ from opengever.base.utils import escape_html
 from opengever.base.utils import get_hostname
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.tabbedview import _
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer

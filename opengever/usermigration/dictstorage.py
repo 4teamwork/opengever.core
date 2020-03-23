@@ -3,8 +3,8 @@ Helpers for migrating user and group related data in dictstorage SQL tables.
 """
 
 from ftw.dictstorage.sql import DictStorageModel
-from opengever.ogds.base.utils import create_session
-from opengever.ogds.base.utils import ogds_service
+from opengever.base.model import create_session
+from opengever.ogds.models.service import ogds_service
 from opengever.usermigration.exceptions import UserMigrationException
 import logging
 

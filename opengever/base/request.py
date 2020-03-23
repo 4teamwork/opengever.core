@@ -2,7 +2,7 @@ from opengever.base.sentry import maybe_report_exception
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO
 from ZODB.POSException import ConflictError

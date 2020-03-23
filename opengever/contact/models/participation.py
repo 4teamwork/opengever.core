@@ -8,7 +8,7 @@ from opengever.contact import _
 from opengever.contact.models.org_role import OrgRole
 from opengever.contact.models.participation_role import ParticipationRole
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer

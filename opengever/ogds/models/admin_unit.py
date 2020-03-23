@@ -23,6 +23,7 @@ class AdminUnit(Base):
     site_url = Column(String(100), nullable=False)
     public_url = Column(String(100), nullable=False)
     abbreviation = Column(String(50), nullable=False)
+    hidden = Column(Boolean(), default=False, nullable=False)
 
     org_units = relationship("OrgUnit", backref="admin_unit")
 

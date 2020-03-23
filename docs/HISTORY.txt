@@ -4,6 +4,9 @@ Changelog
 2020.2.0rc2 (unreleased)
 ------------------------
 
+- Add hidden flag to OrgUnits and AdminUnits. [njohner]
+- Disallow choosing hidden orgunits as responsible_client in tasks and forwardings. [njohner]
+- Do not display hidden orgunits in orgunit selector. [njohner]
 - OfficeOnline: Show specific message for collaborative checkouts. [lgraf]
 - Document GET API: Also include info about collaborative checkouts. [lgraf]
 - Also return @id in globalindex endpoint. [njohner]

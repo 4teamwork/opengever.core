@@ -4,7 +4,7 @@ Migrate user IDs in checked out state for documents as well as WebDAV locks.
 
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.usermigration.exceptions import UserMigrationException
 from plone import api
 from zope.component import getMultiAdapter

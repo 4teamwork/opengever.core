@@ -1,5 +1,5 @@
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
 from zope.i18n import translate

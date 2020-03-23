@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 from opengever.activity.error_handling import NotificationErrorHandler
 from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone import api
 from threading import local
 import transaction

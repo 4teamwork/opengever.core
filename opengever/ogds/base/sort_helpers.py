@@ -2,7 +2,7 @@ from opengever.base.model import create_session
 from opengever.contact import contact_service
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.interfaces import ISyncStamp
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName

@@ -7,7 +7,7 @@ from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.activity import notification_center
 from opengever.activity.hooks import insert_notification_defaults
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID

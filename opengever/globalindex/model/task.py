@@ -15,7 +15,7 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_

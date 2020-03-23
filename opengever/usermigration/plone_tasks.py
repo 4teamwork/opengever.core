@@ -3,7 +3,7 @@ Migrate user IDs in Plone tasks (issuers, responsibles, responses)
 """
 
 from opengever.base.response import IResponseContainer
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task.task import ITask
 from opengever.usermigration.exceptions import UserMigrationException
 from plone import api

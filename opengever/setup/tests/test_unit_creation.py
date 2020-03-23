@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.setup.creation.adminunit import AdminUnitCreator
 from opengever.setup.creation.orgunit import OrgUnitCreator
 from opengever.setup.exception import GeverSetupException

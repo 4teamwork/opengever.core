@@ -2,7 +2,7 @@ from Acquisition import aq_chain
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import ISQLObjectWrapper
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryroot import IRepositoryRoot
 from plone.app.layout.navigation.interfaces import INavigationRoot

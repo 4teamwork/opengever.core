@@ -17,7 +17,7 @@ from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone.autoform.widgets import ParameterizedWidget
 from plone.registry.interfaces import IRegistry

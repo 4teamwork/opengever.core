@@ -26,7 +26,7 @@ from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController

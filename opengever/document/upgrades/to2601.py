@@ -1,6 +1,6 @@
 from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 
 
 class ResolveDocumentAuthor(UpgradeStep):

@@ -20,7 +20,7 @@ from opengever.disposition.interfaces import IHistoryStorage
 from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api

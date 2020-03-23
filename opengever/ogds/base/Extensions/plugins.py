@@ -1,5 +1,5 @@
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone.protect.interfaces import IDisableCSRFProtection
 from zope.interface import alsoProvides
 
@@ -36,7 +36,7 @@ def authenticate_credentials(self, credentials):
     ip = credentials['remote_address'].strip()
     # is the client_id and the ip combination valid?
     admin_unit = ogds_service().fetch_admin_unit(auid)
-    #split client.ip_address because they could be a comme seperated list
+    # split client.ip_address because they could be a comme seperated list
     if admin_unit and ip in admin_unit.ip_address.split(','):
         activate_request_layer(self.REQUEST, IInternalOpengeverRequestLayer)
         activate_request_layer(self.REQUEST, IDisableCSRFProtection)

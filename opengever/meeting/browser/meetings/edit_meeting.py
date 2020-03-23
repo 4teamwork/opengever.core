@@ -6,7 +6,7 @@ from opengever.meeting import _
 from opengever.meeting.browser.meetings.protocol import IMeetingMetadata
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from plone.locking.interfaces import ILockable
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile

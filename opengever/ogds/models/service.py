@@ -1,15 +1,27 @@
+from opengever.base.model import create_session
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
-from sqlalchemy.sql.expression import true
+from plone import api
+
+
+def ogds_service():
+    return OGDSService(create_session())
 
 
 class OGDSService(object):
 
     def __init__(self, session):
         self.session = session
+
+    def _get_current_user_id(self):
+        return api.user.get_current().getId()
+
+    def fetch_current_user(self):
+        userid = self._get_current_user_id()
+        return self.fetch_user(userid) if userid else None
 
     def find_user(self, userid):
         """Returns a User by its userid. When no User is found, this method raises.
@@ -38,11 +50,23 @@ class OGDSService(object):
     def inactive_users(self):
         return self._query_user().filter_by(active=False).all()
 
-    def assigned_org_units(self, userid):
-        query = self._query_org_units().join(OrgUnit.users_group)
+    def assigned_org_units(self, userid=None, omit_current=False):
+        if userid is None:
+            userid = self._get_current_user_id()
+
+        query = self._query_org_units(
+            enabled_only=True, visible_only=True).join(OrgUnit.users_group)
+
         query = query.join(Group.users).filter(User.userid == userid)
-        query = query.filter(OrgUnit.enabled == true())
-        return query.all()
+        org_units = query.all()
+
+        if omit_current:
+            # Avoid circular imports
+            from opengever.ogds.base.utils import get_current_org_unit
+            current_org_unit = get_current_org_unit()
+            org_units = [each for each in org_units
+                         if each != current_org_unit]
+        return org_units
 
     def assigned_groups(self, userid):
         query = Group.query.join(Group.users)
@@ -50,36 +74,41 @@ class OGDSService(object):
         return query.all()
 
     def fetch_org_unit(self, unit_id):
-        return self._query_org_units().get(unit_id)
+        return self._query_org_units(
+            enabled_only=False, visible_only=False).get(unit_id)
 
-    def all_org_units(self, enabled_only=True):
-        query = self._query_org_units()
-        if enabled_only:
-            query = query.filter_by(enabled=True)
-
+    def all_org_units(self, enabled_only=True, visible_only=True):
+        query = self._query_org_units(enabled_only=enabled_only,
+                                      visible_only=visible_only)
         return query.all()
 
     def fetch_admin_unit(self, unit_id):
-        return self._query_admin_units(enabled_only=False).get(unit_id)
+        return self._query_admin_units(
+            enabled_only=False, visible_only=False).get(unit_id)
 
-    def all_admin_units(self, enabled_only=True):
-        query = self._query_admin_units(enabled_only)
+    def all_admin_units(self, enabled_only=True, visible_only=True):
+        query = self._query_admin_units(enabled_only=enabled_only,
+                                        visible_only=visible_only)
         return query.all()
 
-    def has_multiple_admin_units(self, enabled_only=True):
-        query = self._query_admin_units(enabled_only)
+    def has_multiple_admin_units(self, enabled_only=True, visible_only=True):
+        query = self._query_admin_units(enabled_only=enabled_only,
+                                        visible_only=visible_only)
         return query.count() > 1
 
     def has_multiple_org_units(self):
-        return self._query_org_units().count() > 1
+        query = self._query_org_units(enabled_only=False, visible_only=False)
+        return query.count() > 1
 
     def fetch_group(self, groupid):
         return self._query_group().get(groupid)
 
-    def _query_admin_units(self, enabled_only=True):
+    def _query_admin_units(self, enabled_only=True, visible_only=True):
         query = AdminUnit.query
         if enabled_only:
-            query = query.filter_by(enabled=enabled_only)
+            query = query.filter_by(enabled=True)
+        if visible_only:
+            query = query.filter_by(hidden=False)
         return query
 
     def all_groups(self, active_only=True):
@@ -88,8 +117,13 @@ class OGDSService(object):
             query = query.filter_by(active=True)
         return query.all()
 
-    def _query_org_units(self):
-        return OrgUnit.query.order_by(OrgUnit.title)
+    def _query_org_units(self, enabled_only=True, visible_only=True):
+        query = OrgUnit.query
+        if enabled_only:
+            query = query.filter_by(enabled=True)
+        if visible_only:
+            query = query.filter_by(hidden=False)
+        return query.order_by(OrgUnit.title)
 
     def _query_user(self):
         return User.query

@@ -1,4 +1,4 @@
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
@@ -17,7 +17,7 @@ class OrgUnitsVocabularyFactory(object):
         return vocab
 
     def key_value_provider(self):
-        for unit in ogds_service().all_org_units():
+        for unit in ogds_service().all_org_units(visible_only=False):
             yield (unit.id(), unit.label())
 
 

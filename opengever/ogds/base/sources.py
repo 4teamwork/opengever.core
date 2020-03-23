@@ -131,6 +131,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
         self.only_current_orgunit = kwargs.get('only_current_orgunit', False)
         self.only_active_orgunits = kwargs.get('only_active_orgunits', True)
+        self.only_visible_orgunits = kwargs.get('only_visible_orgunits', True)
         self.only_current_inbox = kwargs.get('only_current_inbox', False)
         self.include_teams = kwargs.get('include_teams', False)
 
@@ -155,6 +156,8 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
               be queried.
             - only_active_orgunits: Filter out actors that don't have an org
               unit at all, or an inactive one (true by default).
+            - only_visible_orgunits: Filter out actors that don't have an org
+              unit at all, or a hidden one (true by default).
         """
         models = (User, ) if self.only_users else (User, OrgUnit)
         query = create_session().query(*models)
@@ -166,6 +169,9 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
         if self.only_active_orgunits:
             query = query.filter(OrgUnit.enabled == True)  # noqa
+
+        if self.only_visible_orgunits:
+            query = query.filter(OrgUnit.hidden == False)  # noqa
 
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -313,11 +319,13 @@ class AllUsersInboxesAndTeamsSourceBinder(object):
     def __init__(self,
                  only_current_orgunit=False,
                  only_active_orgunits=True,
+                 only_visible_orgunits=True,
                  only_current_inbox=False,
                  include_teams=False):
 
         self.only_current_orgunit = only_current_orgunit
         self.only_active_orgunits = only_active_orgunits
+        self.only_visible_orgunits = only_visible_orgunits
         self.only_current_inbox = only_current_inbox
         self.include_teams = include_teams
 
@@ -326,6 +334,7 @@ class AllUsersInboxesAndTeamsSourceBinder(object):
             context,
             only_current_orgunit=self.only_current_orgunit,
             only_active_orgunits=self.only_active_orgunits,
+            only_visible_orgunits=self.only_visible_orgunits,
             only_current_inbox=self.only_current_inbox,
             include_teams=self.include_teams)
 

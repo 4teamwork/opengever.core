@@ -11,7 +11,7 @@ from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task.helper import task_type_helper
 from Products.Five import BrowserView
 from sqlalchemy import and_

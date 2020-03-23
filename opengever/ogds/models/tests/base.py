@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import MEMORY_DB_LAYER
-from opengever.ogds.base.utils import OGDSService
+from opengever.ogds.models.service import OGDSService
 import unittest
 
 

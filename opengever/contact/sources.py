@@ -3,7 +3,7 @@ from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.interface import implementer
 from zope.interface import implements
@@ -60,7 +60,7 @@ class ContactsSource(object):
         self.terms = []
 
         text_filters = query_string.split()
-        query = Contact.query.filter(Contact.is_active == True)
+        query = Contact.query.filter(Contact.is_active == True)  # noqa
         query = query.polymorphic_by_searchable_text(
             text_filters=text_filters)
 

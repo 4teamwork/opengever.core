@@ -14,7 +14,7 @@ from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.meeting.wrapper import MembershipWrapper
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.autoform import directives as form
 from plone.i18n.normalizer.interfaces import IIDNormalizer

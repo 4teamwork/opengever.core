@@ -3,7 +3,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.response import IResponseContainer
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.service import ogds_service
 from opengever.task import _
 from opengever.task.response import Base
 from opengever.task.response_description import ResponseDescription
