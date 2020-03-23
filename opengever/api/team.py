@@ -1,5 +1,8 @@
+from opengever.ogds.models.team import Team
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -22,12 +25,10 @@ class TeamGet(Service):
         return self
 
     def reply(self):
-        team_id = self.read_params()
-        return {
-            '@id': '{}/@team/{}'.format(
-                self.context.absolute_url(), team_id),
-            '@type': 'virtual.ogds.team',
-        }
+        teamid = self.read_params()
+        team = Team.query.get(teamid)
+        serializer = queryMultiAdapter((team, self.request), ISerializeToJson)
+        return serializer()
 
     def read_params(self):
         if len(self.params) != 1:

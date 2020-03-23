@@ -1,5 +1,8 @@
+from opengever.ogds.base.utils import ogds_service
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import queryMultiAdapter
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -23,11 +26,10 @@ class OGDSUserGet(Service):
 
     def reply(self):
         userid = self.read_params()
-        return {
-            '@id': '{}/@ogds-user/{}'.format(
-                self.context.absolute_url(), userid),
-            '@type': 'virtual.ogds.user',
-        }
+        service = ogds_service()
+        user = service.fetch_user(userid)
+        serializer = queryMultiAdapter((user, self.request), ISerializeToJson)
+        return serializer()
 
     def read_params(self):
         if len(self.params) != 1:

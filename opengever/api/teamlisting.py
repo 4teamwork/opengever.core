@@ -11,14 +11,6 @@ class TeamListingGet(OGDSListingBaseService):
     returned by the @listing endpoint.
     """
 
-    item_columns = (
-        'active',
-        'groupid',
-        'org_unit_id',
-        'team_id',
-        'title',
-    )
-
     searchable_columns = (
         Team.title,
         Team.groupid,
@@ -28,14 +20,6 @@ class TeamListingGet(OGDSListingBaseService):
     default_sort_on = 'title'
     model_class = Team
     default_state_filter = tuple()
-
-    def fill_item(self, item, model):
-        item = super(TeamListingGet, self).fill_item(item, model)
-        item['org_unit_title'] = model.org_unit.title
-        item['@type'] = 'virtual.ogds.team'
-        item['@id'] = '{}/@team/{}'.format(
-            self.context.absolute_url(), model.team_id)
-        return item
 
     def extend_query_with_filters(self, query, filters):
         """Implement hardcoded state filter.

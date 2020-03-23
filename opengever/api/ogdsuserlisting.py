@@ -11,21 +11,6 @@ class OGDDSUserListingGet(OGDSListingBaseService):
     returned by the @listing endpoint.
     """
 
-    item_columns = (
-        'active',
-        'department',
-        'directorate',
-        'email',
-        'email2',
-        'firstname',
-        'firstname',
-        'lastname',
-        'phone_office',
-        'phone_mobile',
-        'phone_fax',
-        'userid',
-    )
-
     searchable_columns = (
         User.lastname,
         User.firstname,
@@ -42,14 +27,6 @@ class OGDDSUserListingGet(OGDSListingBaseService):
     default_sort_on = 'lastname'
     model_class = User
     default_state_filter = tuple()
-
-    def fill_item(self, item, model):
-        item = super(OGDDSUserListingGet, self).fill_item(item, model)
-        item['@type'] = 'virtual.ogds.user'
-        item['title'] = model.fullname()
-        item['@id'] = '{}/@ogds-user/{}'.format(
-            self.context.absolute_url(), model.userid)
-        return item
 
     def extend_query_with_filters(self, query, filters):
         """Implement hardcoded state filter.
