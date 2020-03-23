@@ -146,6 +146,7 @@ class DocumentFileActions(BaseDocumentFileActions):
 
     def is_office_online_edit_action_available(self):
         return (is_wopi_feature_enabled()
+                and self.context.is_checkout_permitted()
                 and self.context.is_office_online_editable()
                 and self._can_edit_with_office_online())
 

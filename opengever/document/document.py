@@ -321,6 +321,11 @@ class Document(Item, BaseDocumentMixin):
             (self, getRequest()), ICheckinCheckoutManager)
 
         if manager.get_checked_out_by():
+            if manager.is_collaborative_checkout():
+                # Collaborative checkouts should never be mixed with regular
+                # checkouts / OfficeConnector editing
+                return False
+
             if manager.get_checked_out_by() == \
                     getSecurityManager().getUser().getId():
                 return True
@@ -338,6 +343,11 @@ class Document(Item, BaseDocumentMixin):
         manager = queryMultiAdapter(
             (self, self.REQUEST), ICheckinCheckoutManager)
         return manager.is_locked()
+
+    def is_checkout_permitted(self):
+        manager = queryMultiAdapter(
+            (self, self.REQUEST), ICheckinCheckoutManager)
+        return manager.is_checkout_permitted()
 
     def is_shadow_document(self):
         return api.content.get_state(self) == self.shadow_state
