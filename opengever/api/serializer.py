@@ -1,9 +1,9 @@
 from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base.interfaces import IOpengeverBaseLayer
-from opengever.base.model import Base
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
@@ -12,12 +12,13 @@ from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.interfaces import IJsonCompatible
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
-from plone.restapi.serializer.summary import ISerializeToJsonSummary
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
 
@@ -73,9 +74,9 @@ def long_converter(value):
     return value
 
 
-@implementer(ISerializeToJson)
-@adapter(Base, IOpengeverBaseLayer)
-class SerializeSQLModelToJson(object):
+class SerializeSQLModelToJsonBase(object):
+
+    content_type = ''
 
     def __init__(self, context, request):
         self.context = context
@@ -86,10 +87,40 @@ class SerializeSQLModelToJson(object):
         for col in self.get_columns():
             key = self.context.__mapper__.get_property_by_column(col).key
             data[key] = json_compatible(getattr(self.context, key))
+
+        data['@type'] = self.content_type
+        data['@id'] = self.request.URL
+        self.add_additional_metadata(data)
         return data
 
     def get_columns(self):
         return self.context.__table__.columns
+
+    def add_additional_metadata(self, data):
+        pass
+
+
+@implementer(ISerializeToJson)
+@adapter(User, IOpengeverBaseLayer)
+class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
+
+    content_type = 'virtual.ogds.user'
+
+    def add_additional_metadata(self, data):
+        """Add the groups and teams assigned to that user."""
+
+        service = ogds_service()
+        groups = service.assigned_groups(self.context.userid)
+        data['groups'] = []
+        data['teams'] = []
+        for group in groups:
+            group_serializer = queryMultiAdapter(
+                (group, self.request), ISerializeToJsonSummary)
+            data['groups'].append(group_serializer())
+            for team in group.teams:
+                team_serializer = queryMultiAdapter(
+                    (team, self.request), ISerializeToJsonSummary)
+                data['teams'].append(team_serializer())
 
 
 class SerializeSQLModelToJsonSummaryBase(object):
