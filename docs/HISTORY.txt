@@ -4,6 +4,7 @@ Changelog
 2020.2.0rc2 (unreleased)
 ------------------------
 
+- Do not allow to choose inbox of hidden OrgUnit as responsible in forwardings. [njohner]
 - Add hidden flag to OrgUnits and AdminUnits. [njohner]
 - Disallow choosing hidden orgunits as responsible_client in tasks and forwardings. [njohner]
 - Do not display hidden orgunits in orgunit selector. [njohner]
