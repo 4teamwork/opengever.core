@@ -126,3 +126,10 @@ anzugeben:
 
 ``23:00 - 26:00`` würde dementsprechend Start um ``23:00``, und Ende um
 ``02:00`` *am nächsten Tag* bedeuten.
+
+App-Switcher konfigurieren
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Für jedes neue Deployment muss der App-Switcher konfiguriert werden.
+
+Dazu gibt es eine Kurzreferenz unter dem Kapitel :ref:`appswitcher`.

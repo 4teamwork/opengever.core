@@ -1,3 +1,5 @@
+.. _appswitcher:
+
 App-Switcher im neuen Frontend
 ==============================
 Jeder Mandant und jeder Teamraum repräsetiert eine eigene Applikation. Der Benutzer kann über den App-Switcher oben links im neuen UI zwischen diesen Applikationen wechseln.
