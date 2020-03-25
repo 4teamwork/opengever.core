@@ -26,6 +26,7 @@ Aufgaben
 - Eine Aufgabe kann nun auch mandantenübergreifend neu zugewiesen werden.
 - Doppelte Benachrichtigungen beim Delegieren von Aufgaben wurden korrigiert.
 
+
 OGIP 53 - Berechtigungsentzug bei Aufgaben aussetzen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -   Mit der neuen Option ``Berechtigungen nach Abschluss entziehen`` kann der Entzug der Berechtigungen deaktiviert werden und so eine langfristige Freigabe von Dokumenten sichergestellt werden.
