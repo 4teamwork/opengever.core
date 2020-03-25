@@ -1,7 +1,11 @@
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
+from opengever.api.listing import FILTERS
 from opengever.base.interfaces import IOpengeverBaseLayer
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from zope.component import adapter
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -9,10 +13,30 @@ from zope.interface import Interface
 @implementer(IExpandableElement)
 @adapter(Interface, IOpengeverBaseLayer)
 class ListingStats(object):
+    """Returns a facet pivot of the current object.
 
+    The format is based on the solr facet pivot format:
+    https://lucene.apache.org/solr/guide/6_6/faceting.html#Faceting-facet.pivot
+
+    {
+        "@id": '/@listing-stats',
+        "facet_pivot": {
+            "pivot_name": [
+                {
+                    "field": "fieldname",
+                    "count": 0,
+                    "value": "value",
+                    "pivot": [...]
+                }
+            ]
+        }
+
+    }
+    """
     def __init__(self, context, request):
         self.context = context
         self.request = request
+        self.solr = getUtility(ISolrSearch)
 
     def __call__(self, expand=False):
         result = {
@@ -24,9 +48,153 @@ class ListingStats(object):
         if not expand:
             return result
 
-        result['listing-stats']['facet_pivot'] = {}  # Not implemented yet
+        result['listing-stats']['facet_pivot'] = self.get_pivots()
 
         return result
+
+    def get_pivots(self):
+        """Returns a dict of pivots.
+        """
+        pivots = {}
+        pivots.update(self._get_listing_name_pivot())
+        return pivots
+
+    def _get_listing_name_pivot(self):
+        """Reurns the `listing_name` pivot section which depends on the FILTER
+        values of the @listing endpoint.
+        """
+        solr_pivot = 'object_provides'
+        response = self._fetch_solr_stats(solr_pivot)
+
+        listing_name_pivot = self._create_listing_name_pivot(response, solr_pivot)
+        listing_name_pivot_name = solr_pivot.replace('object_provides', 'listing_name')
+
+        return {listing_name_pivot_name: listing_name_pivot}
+
+    def _fetch_solr_stats(self, pivot):
+        """Queries the solr with a pivot search query.
+
+        This allows to get a hierarchy of values for fields and subfields.
+
+        The Pivot-Result looks like:
+
+        {
+          "facet_counts":{
+            "facet_pivot":{
+              "object_provides,review_state":[
+                {
+                  "field":"object_provides",
+                  "value":"opengever.document.behaviors.IBaseDocument",
+                  "count":310,
+                  "pivot":[
+                    {
+                      "field":"review_state",
+                      "value":"document-state-draft",
+                      "count":310
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+
+        Caution: The current implementation could easely be done with a default
+        facet search query. But we need to extend it later with substatistics,
+        i.e. the review-states for a specific type. The current implementation
+        already takes care of this future improvement.
+        """
+        params = {
+            'facet': True,
+            'rows': 0,
+            'facet.pivot': pivot,
+            'filters': 'path_parent:{}/*'.format(escape(
+                '/'.join(self.context.getPhysicalPath())))
+        }
+
+        return self.solr.search(**params)
+
+    def _create_listing_name_pivot(self, solr_response, pivot):
+        """Processes solr_response to extract the statistics and format them
+        for output:
+
+        Input solr_response:
+        {
+          "facet_counts":{
+            "facet_pivot":{
+              "object_provides":[
+                {
+                  "field":"object_provides",
+                  "value":"opengever.document.behaviors.IBaseDocument",
+                  "count":310,
+                },
+              ]
+            }
+          }
+        }
+
+        Output:
+        {
+          "facet_pivot":{
+            "listing_name": [
+              {
+                "field":"documents",
+                "value":"opengever.document.behaviors.IBaseDocument",
+                "count":310,
+              }
+            ]
+          }
+        }
+
+        """
+        pivots = solr_response.get(
+            'facet_counts', {}).get(
+            'facet_pivot', {}).get(pivot)
+
+        pivot_by_value = self._pivots_by_value(pivots)
+
+        pivots = []
+        for listing_name, filter_queries in FILTERS.items():
+
+            if len(filter_queries) > 1:
+                raise NotImplementedError("Can't handle multiple filter queries.")
+
+            pivot_field, pivot_value = filter_queries[0].split(':')
+            pivot = pivot_by_value.get(pivot_value, {})
+            if not pivot:
+                pivot = {'count': 0}
+
+            pivot['field'] = 'listing_name'
+            pivot['value'] = listing_name
+            pivots.append(pivot)
+        return pivots
+
+    def _pivots_by_value(self, pivots):
+        """Transforms a list of solr pivots into a dictionary with pivot
+        values as keys:
+
+        Input pivots:
+        [
+          {
+            "field":"object_provides",
+            "value":"opengever.document.behaviors.IBaseDocument",
+            "count":310
+          }
+        ]
+
+        Output:
+        {
+          "opengever.document.behaviors.IBaseDocument": {
+            "field":"object_provides",
+            "value":"opengever.document.behaviors.IBaseDocument",
+            "count":310
+          }
+        }
+        """
+        pivot_dict = {}
+        for pivot in pivots:
+            pivot_dict[pivot.get('value')] = pivot
+        return pivot_dict
 
 
 class ListingStatsGet(Service):
