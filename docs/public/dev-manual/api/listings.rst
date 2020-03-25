@@ -1,4 +1,4 @@
-.. listings:
+.. _listings:
 
 Auflistungen
 ============

@@ -14,6 +14,7 @@ Inhalt:
    batching.rst
    summaries.rst
    listings.rst
+   listing_stats.rst
    navigation.rst
    searching.rst
    documents.rst
