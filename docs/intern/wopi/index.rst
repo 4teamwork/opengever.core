@@ -102,7 +102,7 @@ Docker Desktop (macOS) the ZServer needs to listen on all interfaces to be
 accessible from the Docker container. This can be acomplished by setting the
 environment variable ZSERVER_HOST before executing the test.
 
-.. code-block::
+.. code-block:: bash
 
   export ZSERVER_HOST="0.0.0.0"
   bin/test -m opengever.wopi -t test_validator
@@ -115,7 +115,7 @@ After that the ``WOPISrc`` URL and the ``access token`` have to be extracted fro
 
 Example: run the ``PutFileReturnsDifferentVersion`` test
 
-.. code-block::
+.. code-block:: bash
 
   docker run -it --rm tylerbutler/wopi-validator -- \
     -w <WOPISrc> -t <access_token> -l 0 -s -n files.PutFileReturnsDifferentVersion

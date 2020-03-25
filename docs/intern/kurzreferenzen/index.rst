@@ -12,4 +12,4 @@ Inhalt:
    ogip
    feedbackforum-prozess
    ubersetzungen
-   multi-app-setup
+   appswitcher
