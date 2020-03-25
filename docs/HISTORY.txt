@@ -4,6 +4,7 @@ Changelog
 2020.2.2 (unreleased)
 ---------------------
 
+- Add @listing-stats API endpoint to get statistical data from folderish content. [elioschmutz]
 - Fix public documentation build. [elioschmutz]
 
 
