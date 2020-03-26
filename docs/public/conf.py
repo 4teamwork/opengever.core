@@ -50,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'OneGov GEVER API'
-copyright = u'2018 <a href="https://www.4teamwork.ch">4teamwork AG</a>'
+copyright = u'2020 <a href="https://www.4teamwork.ch">4teamwork AG</a>'
 author = u'4teamwork AG'
 disqus_shortname = 'onegovgever'
 

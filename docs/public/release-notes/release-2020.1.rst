@@ -1,5 +1,3 @@
-:orphan:
-
 OneGov GEVER Release 2020.1
 ===========================
 
@@ -25,6 +23,7 @@ Erweiterung OGG-Bundle
 Die Datenschnittstelle OGG-Bundle zur Migration wurde erweitert und kann nun
 mehr Metadaten setzen, dies ist insbesondere bei Migrationen ab
 Windows-Dateisystemen nützlich.
+
 
 Sonstiges und Bugfixes
 ----------------------
