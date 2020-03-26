@@ -1,5 +1,9 @@
 from opengever.wopi.interfaces import IWOPISettings
 from plone import api
+from zope.i18nmessageid import MessageFactory
+
+
+_ = MessageFactory('opengever.wopi')
 
 
 def is_wopi_feature_enabled():

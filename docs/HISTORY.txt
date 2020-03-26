@@ -17,6 +17,7 @@ Changelog
 2020.2.0 (2020-03-24)
 ---------------------
 
+- Prevent attempts to edit exclusively checked out documents in Office Online. [lgraf]
 - Do not allow to choose inbox of hidden OrgUnit as responsible in forwardings. [njohner]
 - Change container title format in task activities. [njohner]
 - Disable OfficeOnline action on docs in resolved or inactive dossiers. [lgraf]
