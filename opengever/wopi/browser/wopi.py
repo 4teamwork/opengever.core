@@ -14,6 +14,7 @@ from plone.namedfile.utils import set_headers
 from plone.namedfile.utils import stream_data
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
+from zExceptions import BadRequest
 from zExceptions import NotFound as zNotFound
 from ZODB.utils import u64
 from zope.component import getMultiAdapter
@@ -170,7 +171,7 @@ class WOPIView(BrowserView):
                 return
             refresh_lock(self.obj)
         else:
-            self.checkout()
+            self.checkout_if_needed()
             token = self.request.getHeader('X-WOPI-Lock')
             create_lock(self.obj, token)
             self.request.response.setHeader(
@@ -238,10 +239,24 @@ class WOPIView(BrowserView):
         # Not implemented
         self.request.response.setStatus(501)
 
-    def checkout(self):
+    def checkout_if_needed(self):
         manager = getMultiAdapter((self.obj, self.request),
                                   ICheckinCheckoutManager)
-        if not manager.get_checked_out_by():
+
+        checked_out_by = manager.get_checked_out_by()
+
+        if checked_out_by and not manager.is_collaborative_checkout():
+            # Race condition - this should be prevented by the UI whenever
+            # possible, but if this happens we reject the Office Online
+            # edit attempt in order to prevent conflicting changes.
+            msg = ('Attempt to edit %r with Office Online even though it is '
+                   'already checked out for exclusive editing by %r' % (
+                       self.obj, checked_out_by))
+            logger.error(msg)
+            raise BadRequest(msg)
+
+        if not checked_out_by:
+            # Not checked out yet, check out for collaborative editing
             manager.checkout(collaborative=True)
 
     def checkin(self):
