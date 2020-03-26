@@ -11,6 +11,8 @@ class AddHiddenFlagToAdminAndOrgUnits(SchemaMigration):
 
     def migrate(self):
         for tablename in ['admin_units', 'org_units']:
+            if self.has_column(tablename, "hidden"):
+                continue
             self.add_column(tablename)
             self.insert_default_value(tablename)
             self.make_column_non_nullable(tablename)
@@ -32,3 +34,7 @@ class AddHiddenFlagToAdminAndOrgUnits(SchemaMigration):
     def make_column_non_nullable(self, tablename):
         self.op.alter_column(tablename, 'hidden',
                              existing_type=Boolean, nullable=False)
+
+    def has_column(self, table_name, column_name):
+        table = self.metadata.tables.get(table_name)
+        return column_name in table.columns
