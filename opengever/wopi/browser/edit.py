@@ -23,11 +23,7 @@ class EditOnlineView(BrowserView):
         uuid = IUUID(self.context)
         user = getSecurityManager().getUser()
 
-        # The MS WOPI client sometimes doesn't send the X-WOPI-Editors
-        # header. We therefore also track collaborators here.
-        manager = getMultiAdapter((self.context, self.request),
-                                  ICheckinCheckoutManager)
-        manager.add_collaborator(user.getId())
+        self.track_additional_collaborator_if_needed(user)
 
         self.access_token = urlsafe_b64encode(
             create_access_token(user.getId(), uuid))
@@ -57,3 +53,18 @@ class EditOnlineView(BrowserView):
         self.urlsrc = '?'.join([url, ''.join(params_with_values)])
 
         return self.index()
+
+    def track_additional_collaborator_if_needed(self, user):
+        """If user joins a collaborative editing session, track them.
+
+        The MS WOPI client sometimes doesn't send the X-WOPI-Editors
+        header. We therefore also track collaborators here.
+
+        But only for additional users that join a collaborative editing
+        session - the user that initially checks out the document should
+        already have been added as a collaborator.
+        """
+        manager = getMultiAdapter((self.context, self.request),
+                                  ICheckinCheckoutManager)
+        if manager.get_checked_out_by() and manager.is_collaborative_checkout():
+            manager.add_collaborator(user.getId())
