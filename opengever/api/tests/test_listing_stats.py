@@ -97,3 +97,33 @@ class TestListingStats(SolrIntegrationTestCase):
         self.assertEqual(4, sum([facet.get('count') for facet in pivot]))
         self.assertEqual(1, self.get_facet_by_value(pivot, 'dossiers').get('count'))
         self.assertEqual(3, self.get_facet_by_value(pivot, 'documents').get('count'))
+
+    @browsing
+    def test_exclude_trashed_content(self, browser):
+        self.login(self.regular_user, browser)
+
+        dossier = create(Builder('dossier').within(self.leaf_repofolder))
+        document = create(Builder('document').within(dossier))
+
+        self.commit_solr()
+
+        browser.open(
+            '{}/@listing-stats'.format(self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+
+        pivot = self.get_facet_pivot_for(dossier, 'listing_name', browser)
+        self.assertEqual(1, self.get_facet_by_value(pivot, 'documents').get('count'))
+
+        browser.open(document.absolute_url() + '/@trash',
+                     method='POST', headers={'Accept': 'application/json'})
+
+        self.commit_solr()
+
+        browser.open(
+            '{}/@listing-stats'.format(self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+
+        pivot = self.get_facet_pivot_for(dossier, 'listing_name', browser)
+        self.assertEqual(0, self.get_facet_by_value(pivot, 'documents').get('count'))

@@ -104,15 +104,19 @@ class ListingStats(object):
         i.e. the review-states for a specific type. The current implementation
         already takes care of this future improvement.
         """
+        fq = [
+            'trashed:false',
+            'path_parent:{}/*'.format(escape(
+                '/'.join(self.context.getPhysicalPath())))
+        ]
+
         params = {
             'facet': True,
             'rows': 0,
             'facet.pivot': pivot,
-            'filters': 'path_parent:{}/*'.format(escape(
-                '/'.join(self.context.getPhysicalPath())))
         }
 
-        return self.solr.search(**params)
+        return self.solr.search(filters=fq, **params)
 
     def _create_listing_name_pivot(self, solr_response, pivot):
         """Processes solr_response to extract the statistics and format them
