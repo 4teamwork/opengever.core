@@ -102,6 +102,7 @@ class SchemaDocsBuilder(DirectoryHelperMixin):
             # placeholder
             field['vocabulary'] = field['_vocabulary']
 
+        self._cleanup_field_values(field)
         field_template = env.get_template('field.rst')
         field_doc = field_template.render(**field)
         return field_doc
@@ -127,3 +128,20 @@ class SchemaDocsBuilder(DirectoryHelperMixin):
         for name in os.listdir(dir_):
             if name.endswith('.' + SCHEMA_DOC_EXTENSION):
                 os.remove(pjoin(dir_, name))
+
+    def _cleanup_field_values(self, field):
+        description = field.get('description')
+        if description:
+            # Fixes: https://github.com/4teamwork/opengever.core/issues/6340
+            #
+            # We need to use newline chars instead of <br> in schema
+            # descriptions for new lines because the new UI does not render html
+            # tags in field descriptions.
+            #
+            # Unfortunately, using a new-line char will unindent the description
+            # block and will raise a sphinx build warning which will cause a
+            # test failure.
+            #
+            # We remove the newline chars in the description fields completely
+            # to fix the layout in the build documentation and to fix the tests.
+            field['description'] = description.replace('\n', ' ')
