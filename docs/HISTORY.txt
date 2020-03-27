@@ -4,7 +4,7 @@ Changelog
 2020.3.0rc1 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Bump ftw.solr version to 2.8.2 to get fix for millisecond rounding error. [njohner]
 
 
 2020.2.0 (2020-03-24)
