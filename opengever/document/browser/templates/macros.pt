@@ -86,7 +86,7 @@
         </tal:checkout_and_edit_discreet>
 
         <tal:edit_in_office_online tal:condition="view/is_office_online_edit_action_available">
-            <a class="function-edit"
+            <a class="function-edit" id="office-online-edit"
                 tal:attributes="href view/get_office_online_edit_url"
                 i18n:translate="label_edit_in_office_online">
                 Edit in Office Online
