@@ -290,6 +290,19 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".listing_stats.ListingStats"
+      name="listing-stats"
+      />
+
+  <plone:service
+      method="GET"
+      for="Products.CMFCore.interfaces.IFolderish"
+      factory=".listing_stats.ListingStatsGet"
+      name="@listing-stats"
+      permission="zope2.View"
+      />
+
   <plone:service
       method="GET"
       for="opengever.contact.interfaces.IContactFolder"

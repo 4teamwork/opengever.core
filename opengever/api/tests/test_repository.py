@@ -13,6 +13,7 @@ class TestRepositoryAPI(IntegrationTestCase):
             u'@components': {
                 u'actions': {u'@id': u'http://nohost/plone/ordnungssystem/@actions'},
                 u'breadcrumbs': {u'@id': u'http://nohost/plone/ordnungssystem/@breadcrumbs'},
+                u'listing-stats': {u'@id': u'http://nohost/plone/ordnungssystem/@listing-stats'},
                 u'navigation': {u'@id': u'http://nohost/plone/ordnungssystem/@navigation'},
                 u'types': {u'@id': u'http://nohost/plone/ordnungssystem/@types'},
                 u'workflow': {u'@id': u'http://nohost/plone/ordnungssystem/@workflow'},
