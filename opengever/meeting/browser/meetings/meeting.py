@@ -5,7 +5,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.handlebars import prepare_handlebars_template
-from opengever.base.helper import title_helper
+from opengever.base.helpers import title_helper
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
