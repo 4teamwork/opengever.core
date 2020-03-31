@@ -13,7 +13,7 @@ class InvalidIPRangeSpecification(ValueError):
 
 
 def parse_ip_range(ip_range):
-    """Parse an IP range specification and return a list of allowed networks.
+    """Parse an IP range specification and return a corresponding list networks.
 
     IP ranges may be specified as a single IP address or as a network in CIDR
     notation using the slash-suffix.
@@ -37,16 +37,16 @@ def parse_ip_range(ip_range):
     return networks
 
 
-def permitted_ip(client_ip, ip_range):
+def is_in_ip_range(client_ip, ip_range):
     """Return True if a client IP is in the given range(s), False otherwise.
     """
     try:
-        allowed_networks = parse_ip_range(ip_range)
+        networks = parse_ip_range(ip_range)
     except InvalidIPRangeSpecification:
         return False
 
     ip = ip_address(to_unicode(client_ip))
-    return any(ip in net for net in allowed_networks)
+    return any(ip in net for net in networks)
 
 
 def to_unicode(ip_spec):
