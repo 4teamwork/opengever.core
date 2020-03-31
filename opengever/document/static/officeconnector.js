@@ -61,11 +61,18 @@
 
     $(document).on("click", ".oc-checkout", function(event) {
         var checkoutButton = $(event.currentTarget);
+        var officeOnlineButton = $('#office-online-edit');
         var documentURL = checkoutButton.data("document-url");
         if(checkoutButton.hasClass('oc-loading')) {
             return false;
         }
         checkoutButton.addClass("oc-loading");
+
+        // Disable "Edit in Office Online" button
+        var disabledOfficeOnlineButton = $('<span class="function-edit-inactive discreet" />');
+        disabledOfficeOnlineButton.text(officeOnlineButton.text());
+        officeOnlineButton.replaceWith(disabledOfficeOnlineButton);
+
         isDocumentLocked(documentURL).pipe(function(status) {
             if(status) {
                 return edit();

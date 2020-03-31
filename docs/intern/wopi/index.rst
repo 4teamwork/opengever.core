@@ -105,7 +105,7 @@ environment variable ZSERVER_HOST before executing the test.
 .. code-block:: bash
 
   export ZSERVER_HOST="0.0.0.0"
-  bin/test -m opengever.wopi -t test_validator
+  bin/test -m opengever.wopi -t test_run_validator
 
 The WOPI validator can also be run manually against a running OGG instance.
 This may be more convenient during development and allows to run just specific tests.
