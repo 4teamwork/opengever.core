@@ -144,7 +144,7 @@ class IFileActions(Interface):
         """Return whether the action to edit metadata is available."""
 
     def is_any_checkout_or_edit_available():
-        """Return wheter any of the checkout or edit actions are available."""
+        """Return whether any of the checkout or edit actions are available."""
 
     def is_office_online_edit_action_available():
         """Return whether the edit with Office Online action is available."""
