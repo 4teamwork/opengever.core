@@ -146,7 +146,7 @@
     <value key="local_query_parameters">{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}</value>
     <value key="simple_search_term_pattern">Title:{term}^100 OR Title:{term}*^20 OR SearchableText:{term}^5 OR SearchableText:{term}* OR metadata:{term}^10 OR metadata:{term}*^2 OR sequence_number_string:{term}^2000</value>
     <value key="simple_search_phrase_pattern">Title:"{phrase}"^500 OR SearchableText:"{phrase}"^200 OR metadata:"{phrase}"^300</value>
-    <value key="complex_search_pattern">Title:({term})^10 OR SearchableText:({term})</value>
+    <value key="complex_search_pattern">Title:({phrase})^10 OR SearchableText:({phrase})</value>
   </records>
   <records interface="opengever.base.interfaces.ISearchSettings" />
 
