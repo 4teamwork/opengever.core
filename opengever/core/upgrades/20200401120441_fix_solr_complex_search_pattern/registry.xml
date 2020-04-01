@@ -1,0 +1,7 @@
+<registry>
+
+  <records interface="ftw.solr.interfaces.ISolrSettings">
+    <value key="complex_search_pattern">Title:({phrase})^10 OR SearchableText:({phrase})</value>
+  </records>
+
+</registry>
