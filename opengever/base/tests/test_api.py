@@ -2,14 +2,18 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.api.testing import RelativeSession
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from opengever.wopi.lock import create_lock as create_wopi_lock
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.protect import createToken
 from zope.app.intid.interfaces import IIntIds
+from zope.component import getMultiAdapter
 from zope.component import getUtility
+import transaction
 
 
 class TestBaseDocumentApi(FunctionalTestCase):
@@ -48,6 +52,9 @@ class TestBaseDocumentApi(FunctionalTestCase):
 
         self.assertIn('checked_out', response)
         self.assertEqual(False, response['checked_out'])
+
+        self.assertIn('checked_out_collaboratively', response)
+        self.assertEqual(False, response['checked_out_collaboratively'])
 
         self.assertIn('checked_out_by', response)
         self.assertEqual(None, response['checked_out_by'])
@@ -102,6 +109,34 @@ class TestBaseDocumentApi(FunctionalTestCase):
 
         self.api.headers.update({'Accept': 'application/json'})
         response = self.api.get(document_path + '/status').json()
+
+        self.assertIn('locked', response)
+        self.assertEqual(True, response['locked'])
+
+        self.assertIn('locked_by', response)
+        self.assertEqual(TEST_USER_ID, response['locked_by'])
+
+    def test_document_status_api_returns_info_about_collaborative_checkouts(self):
+        manager = getMultiAdapter((self.document, self.document.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout(collaborative=True)
+        create_wopi_lock(self.document, 'my-token')
+        transaction.commit()
+
+        site_id = api.portal.get().id
+        path_segments = [s for s in self.document.getPhysicalPath()
+                         if s != site_id]
+        document_path = '/'.join(path_segments)
+        response = self.api.get(document_path + '/status').json()
+
+        self.assertIn('checked_out', response)
+        self.assertEqual(True, response['checked_out'])
+
+        self.assertIn('checked_out_collaboratively', response)
+        self.assertEqual(True, response['checked_out_collaboratively'])
+
+        self.assertIn('checked_out_by', response)
+        self.assertEqual(TEST_USER_ID, response['checked_out_by'])
 
         self.assertIn('locked', response)
         self.assertEqual(True, response['locked'])
