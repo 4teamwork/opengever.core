@@ -2,11 +2,13 @@ from opengever.document.fileactions import BaseDocumentFileActions
 from opengever.document.fileactions import DocumentFileActions
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IFileActions
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing.test_case import TestCase
 from opengever.wopi import discovery
 from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.lock import create_lock
+from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -119,3 +121,90 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         create_lock(self.document, 'TOKEN')
         actions = getMultiAdapter((self.document, self.request), IFileActions)
         self.assertTrue(actions.is_office_online_edit_action_available())
+
+
+class TestOfficeConnectorActions(IntegrationTestCase):
+
+    def set_blacklisted_ip_range(self, ip_range):
+        api.portal.set_registry_record(
+            'office_connector_disallowed_ip_range',
+            ip_range,
+            interface=IOfficeConnectorSettings)
+
+    def test_oc_direct_checkout_action_availability(self):
+        self.login(self.regular_user)
+        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        self.set_blacklisted_ip_range(u'192.168.0.0/16')
+
+        self.assertTrue(actions.is_oc_direct_checkout_action_available())
+
+        self.request._client_addr = '127.0.0.1'
+        self.assertTrue(actions.is_oc_direct_checkout_action_available())
+
+        self.request._client_addr = '192.168.0.0'
+        self.assertFalse(actions.is_oc_direct_checkout_action_available())
+
+    def test_oc_direct_edit_action_availability(self):
+        self.login(self.regular_user)
+        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        self.set_blacklisted_ip_range(u'192.168.0.0/16')
+
+        self.assertFalse(actions.is_oc_direct_edit_action_available())
+
+        self.checkout_document(self.document)
+        self.assertTrue(actions.is_oc_direct_edit_action_available())
+
+        self.request._client_addr = '127.0.0.1'
+        self.assertTrue(actions.is_oc_direct_edit_action_available())
+
+        self.request._client_addr = '192.168.0.0'
+        self.assertFalse(actions.is_oc_direct_edit_action_available())
+
+    def test_oc_zem_checkout_action_availability(self):
+        self.deactivate_feature('officeconnector-checkout')
+
+        self.login(self.regular_user)
+        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        self.set_blacklisted_ip_range(u'192.168.0.0/16')
+
+        self.assertTrue(actions.is_oc_zem_checkout_action_available())
+
+        self.request._client_addr = '127.0.0.1'
+        self.assertTrue(actions.is_oc_zem_checkout_action_available())
+
+        self.request._client_addr = '192.168.0.0'
+        self.assertFalse(actions.is_oc_zem_checkout_action_available())
+
+    def test_oc_zem_edit_action_availability(self):
+        self.deactivate_feature('officeconnector-checkout')
+
+        self.login(self.regular_user)
+        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        self.set_blacklisted_ip_range(u'192.168.0.0/16')
+
+        self.assertFalse(actions.is_oc_zem_edit_action_available())
+
+        self.checkout_document(self.document)
+        self.assertTrue(actions.is_oc_zem_edit_action_available())
+
+        self.request._client_addr = '127.0.0.1'
+        self.assertTrue(actions.is_oc_zem_edit_action_available())
+
+        self.request._client_addr = '192.168.0.0'
+        self.assertFalse(actions.is_oc_zem_edit_action_available())
+
+    def test_oc_unsupported_file_checkout_action_availability(self):
+        self.login(self.regular_user)
+        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        self.set_blacklisted_ip_range(u'192.168.0.0/16')
+
+        self.assertFalse(actions.is_oc_unsupported_file_checkout_action_available())
+
+        self.document.file.contentType = u'foo/bar'
+        self.assertTrue(actions.is_oc_unsupported_file_checkout_action_available())
+
+        self.request._client_addr = '127.0.0.1'
+        self.assertTrue(actions.is_oc_unsupported_file_checkout_action_available())
+
+        self.request._client_addr = '192.168.0.0'
+        self.assertFalse(actions.is_oc_unsupported_file_checkout_action_available())
