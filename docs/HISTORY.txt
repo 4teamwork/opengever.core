@@ -2,8 +2,9 @@ Changelog
 =========
 
 2019.6.4 (unreleased)
-------------------------
+---------------------
 
+- Bump ftw.solr version to 2.8.3 to get update of modified index. [njohner]
 - Bump ftw.solr version to 2.8.2 to get fix for millisecond rounding error. [njohner]
 - Fix solr complex search pattern configuration. [deiferni]
 
