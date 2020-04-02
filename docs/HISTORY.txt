@@ -4,6 +4,7 @@ Changelog
 2020.2.2 (unreleased)
 ---------------------
 
+- Do not show OC checkout and edit buttons when user is in EMM environment. [njohner]
 - Prevent documents being edited in Office Online from getting opened in OfficeConnector. [lgraf]
 - Bump ftw.solr version to 2.8.4 to get update of modified index. [njohner]
 - Add @listing-stats API endpoint to get statistical data from folderish content. [elioschmutz]
