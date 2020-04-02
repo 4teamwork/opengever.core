@@ -1,0 +1,4 @@
+<registry>
+  <!-- OFFICECONNECTOR -->
+  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" />
+</registry>
