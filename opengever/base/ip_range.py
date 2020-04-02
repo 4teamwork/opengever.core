@@ -57,6 +57,8 @@ def to_unicode(ip_spec):
     sure the ip_spec is unicode, decoding it as ASCII if necessary (IP specs
     should never contain any non-ASCII characters).
     """
+    if ip_spec is None:
+        return u''
     if not isinstance(ip_spec, unicode):
         ip_spec = ip_spec.decode('ascii')
     return ip_spec
