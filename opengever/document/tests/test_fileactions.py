@@ -128,7 +128,7 @@ class TestOfficeConnectorActions(IntegrationTestCase):
 
     def set_blacklisted_ip_range(self, ip_range):
         api.portal.set_registry_record(
-            'office_connector_disallowed_ip_range',
+            'office_connector_disallowed_ip_ranges',
             ip_range,
             interface=IOfficeConnectorSettings)
 

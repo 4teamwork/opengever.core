@@ -29,7 +29,7 @@ class IOfficeConnectorSettings(Interface):
         u'These are subtractive from the default list.',
         default=[])
 
-    office_connector_disallowed_ip_range = schema.TextLine(
+    office_connector_disallowed_ip_ranges = schema.TextLine(
         title=u'IP Range from which office connecctor cannot be used '
               u'(no checkout and edit)',
         required=False,

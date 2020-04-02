@@ -28,7 +28,7 @@ def is_officeconnector_checkout_feature_enabled():
         )
 
 
-def is_client_ip_in_office_connector_disallowed_ip_range():
+def is_client_ip_in_office_connector_disallowed_ip_ranges():
     request = getRequest()
     client_ip = request.getClientAddr()
     if not client_ip:
@@ -39,7 +39,7 @@ def is_client_ip_in_office_connector_disallowed_ip_range():
         return False
 
     blacklisted_ip_ranges = api.portal.get_registry_record(
-        'office_connector_disallowed_ip_range',
+        'office_connector_disallowed_ip_ranges',
         interface=IOfficeConnectorSettings,
         )
     return is_in_ip_range(client_ip, blacklisted_ip_ranges)

@@ -10,7 +10,7 @@ from opengever.contact.sources import ContactsSourceBinder
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
-from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_range
+from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.autoform import directives as form
@@ -171,7 +171,7 @@ class SelectTemplateDocumentWizardStep(
         super(SelectTemplateDocumentWizardStep, self).updateFieldsFromSchemata()
         if not is_contact_feature_enabled():
             self.fields = self.fields.omit('recipient')
-        if is_client_ip_in_office_connector_disallowed_ip_range():
+        if is_client_ip_in_office_connector_disallowed_ip_ranges():
             self.fields = self.fields.omit('edit_after_creation')
 
     @property
