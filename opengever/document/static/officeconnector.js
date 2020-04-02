@@ -39,15 +39,17 @@
         });
     }
 
-    function isDocumentLocked(documentURL) {
+    function getDocumentStatus(documentURL) {
         return requestJSON(documentURL + "/status").pipe(function(data) {
-            return JSON.parse(data).locked;
+            return JSON.parse(data);
         });
     }
 
     function checkout(documentURL) {
         return poll(function() {
-            return isDocumentLocked(documentURL);
+            return getDocumentStatus(documentURL).pipe(function(status) {
+                return status.locked;
+            });
         });
     }
 
@@ -73,17 +75,24 @@
         disabledOfficeOnlineButton.text(officeOnlineButton.text());
         officeOnlineButton.replaceWith(disabledOfficeOnlineButton);
 
-        isDocumentLocked(documentURL).pipe(function(status) {
-            if(status) {
+        getDocumentStatus(documentURL)
+          .pipe(function(status) {
+            if (status.checked_out_collaboratively) {
+                // Prevent OC launch in a stale tab if document is currently
+                // being edited in Office Online
+                console.log("Abandoning OfficeConector checkout");
+            } else if (status.locked) {
                 return edit();
             } else {
                 return checkout(documentURL);
             }
-        })
-        .done(function() { location.reload(); })
-        .fail(function() {
+          })
+          .done(function() {
+            location.reload();
+          })
+          .fail(function() {
             checkoutButton.removeClass("oc-loading");
-        });
+          });
     });
 
 })(window.jQuery);
