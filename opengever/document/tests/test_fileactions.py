@@ -1,3 +1,4 @@
+from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
 from opengever.document.fileactions import BaseDocumentFileActions
 from opengever.document.fileactions import DocumentFileActions
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -131,9 +132,12 @@ class TestOfficeConnectorActions(IntegrationTestCase):
             ip_range,
             interface=IOfficeConnectorSettings)
 
+    def get_actions(self):
+        return getMultiAdapter((self.document, self.request), IFileActions)
+
     def test_oc_direct_checkout_action_availability(self):
         self.login(self.regular_user)
-        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        actions = self.get_actions()
         self.set_blacklisted_ip_range(u'192.168.0.0/16')
 
         self.assertTrue(actions.is_oc_direct_checkout_action_available())
@@ -146,7 +150,7 @@ class TestOfficeConnectorActions(IntegrationTestCase):
 
     def test_oc_direct_edit_action_availability(self):
         self.login(self.regular_user)
-        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        actions = self.get_actions()
         self.set_blacklisted_ip_range(u'192.168.0.0/16')
 
         self.assertFalse(actions.is_oc_direct_edit_action_available())
@@ -164,7 +168,7 @@ class TestOfficeConnectorActions(IntegrationTestCase):
         self.deactivate_feature('officeconnector-checkout')
 
         self.login(self.regular_user)
-        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        actions = self.get_actions()
         self.set_blacklisted_ip_range(u'192.168.0.0/16')
 
         self.assertTrue(actions.is_oc_zem_checkout_action_available())
@@ -179,7 +183,7 @@ class TestOfficeConnectorActions(IntegrationTestCase):
         self.deactivate_feature('officeconnector-checkout')
 
         self.login(self.regular_user)
-        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        actions = self.get_actions()
         self.set_blacklisted_ip_range(u'192.168.0.0/16')
 
         self.assertFalse(actions.is_oc_zem_edit_action_available())
@@ -195,7 +199,7 @@ class TestOfficeConnectorActions(IntegrationTestCase):
 
     def test_oc_unsupported_file_checkout_action_availability(self):
         self.login(self.regular_user)
-        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        actions = self.get_actions()
         self.set_blacklisted_ip_range(u'192.168.0.0/16')
 
         self.assertFalse(actions.is_oc_unsupported_file_checkout_action_available())
@@ -208,3 +212,31 @@ class TestOfficeConnectorActions(IntegrationTestCase):
 
         self.request._client_addr = '192.168.0.0'
         self.assertFalse(actions.is_oc_unsupported_file_checkout_action_available())
+
+
+class TestOfficeConnectorActionButtons(TestOfficeConnectorActions):
+
+    def get_actions(self):
+        actions = VisibleActionButtonRendererMixin()
+        actions.context = self.document
+        actions.request = self.request
+        return actions
+
+    def test_oc_unsupported_file_discreet_edit_visibility(self):
+        self.login(self.regular_user)
+        actions = self.get_actions()
+        self.set_blacklisted_ip_range(u'192.168.0.0/16')
+
+        self.assertFalse(actions.is_oc_unsupported_file_discreet_edit_visible())
+
+        self.document.file.contentType = u'foo/bar'
+        self.assertFalse(actions.is_oc_unsupported_file_discreet_edit_visible())
+
+        self.checkout_document(self.document)
+        self.assertTrue(actions.is_oc_unsupported_file_discreet_edit_visible())
+
+        self.request._client_addr = '127.0.0.1'
+        self.assertTrue(actions.is_oc_unsupported_file_discreet_edit_visible())
+
+        self.request._client_addr = '192.168.0.0'
+        self.assertFalse(actions.is_oc_unsupported_file_discreet_edit_visible())
