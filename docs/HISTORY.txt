@@ -4,6 +4,7 @@ Changelog
 2020.2.2 (unreleased)
 ---------------------
 
+- Bump ftw.solr version to 2.8.3 to get update of modified index. [njohner]
 - Add @listing-stats API endpoint to get statistical data from folderish content. [elioschmutz]
 - Fix public documentation build. [elioschmutz]
 - Fix solr complex search pattern configuration. [deiferni]
