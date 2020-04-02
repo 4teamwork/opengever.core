@@ -348,3 +348,29 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
                 )
 
             self.assertIsNone(oc_url)
+
+    @browsing
+    def test_checkout_checkin_collaboratively_checked_out_without_file(self, browser):
+        self.login(self.regular_user, browser)
+        self.get_checkout_manager(self.empty_document).checkout(collaborative=True)
+
+        with browser.expect_http_error(403):
+            oc_url = self.fetch_document_checkout_oc_url(
+                browser,
+                self.empty_document,
+                )
+
+            self.assertIsNone(oc_url)
+
+    @browsing
+    def test_checkout_checkin_collaboratively_checked_out_with_file(self, browser):
+        self.login(self.regular_user, browser)
+        self.get_checkout_manager(self.document).checkout(collaborative=True)
+
+        with browser.expect_http_error(403):
+            oc_url = self.fetch_document_checkout_oc_url(
+                browser,
+                self.document,
+                )
+
+            self.assertIsNone(oc_url)

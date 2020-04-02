@@ -79,6 +79,11 @@ class OfficeConnectorCheckoutURL(OfficeConnectorURL):
     """
 
     def render(self):
+        if self.context.is_collaborative_checkout():
+            # Documents currently being edited in Office Online must not be
+            # edited in Office Connector, even if checked out by the same user
+            raise Forbidden
+
         if is_officeconnector_checkout_feature_enabled():
             payload = {'action': 'checkout'}
 
