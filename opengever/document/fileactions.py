@@ -10,7 +10,6 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.trash.trash import ITrashable
-from opengever.trash.trash import TrashError
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.wopi.lock import get_lock_token
 from plone import api
@@ -24,6 +23,8 @@ from zope.interface import Interface
 @adapter(IBaseDocument, Interface)
 class BaseDocumentFileActions(object):
     """Define availability for actions and action sets on IBaseDocument.
+    This adapter defines the availability for mails, as it is overwritten
+    by DocumentFileActions for documents.
 
     Methods should return availability for one single action.
     """
