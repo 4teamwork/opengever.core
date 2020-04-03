@@ -1,5 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.ip_range import is_in_ip_range
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.document.behaviors import IBaseDocument
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from plone import api
@@ -8,6 +10,7 @@ from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlug
 from ua_parser.user_agent_parser import ParseUserAgent
 from zExceptions import Forbidden
 from zExceptions import NotFound
+from zope.globalrequest import getRequest
 import json
 
 
@@ -23,6 +26,24 @@ def is_officeconnector_checkout_feature_enabled():
         'direct_checkout_and_edit_enabled',
         interface=IOfficeConnectorSettings,
         )
+
+
+def is_client_ip_in_office_connector_disallowed_ip_ranges():
+    request = getRequest()
+    client_ip = request.getClientAddr()
+    if not client_ip:
+        # If for some reason we cannot determine the client_ip, we
+        # cannot check whether office connector should be disallowed
+        # for this request. This could be a problem with the configuration
+        # of trusted proxies.
+        log_msg_to_sentry('Cannot determine client IP.', request=request)
+        return False
+
+    blacklisted_ip_ranges = api.portal.get_registry_record(
+        'office_connector_disallowed_ip_ranges',
+        interface=IOfficeConnectorSettings,
+        )
+    return is_in_ip_range(client_ip, blacklisted_ip_ranges)
 
 
 def parse_bcc(request):

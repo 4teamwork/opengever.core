@@ -1,3 +1,4 @@
+from opengever.base.ip_range import valid_ip_range
 from zope import schema
 from zope.interface import Interface
 
@@ -27,6 +28,18 @@ class IOfficeConnectorSettings(Interface):
         description=u'A list of Office Connector blacklisted MIME types.'
         u'These are subtractive from the default list.',
         default=[])
+
+    office_connector_disallowed_ip_ranges = schema.TextLine(
+        title=u'IP Range from which office connecctor cannot be used '
+              u'(no checkout and edit)',
+        required=False,
+        constraint=valid_ip_range,
+        description=(
+            u'IP range specification in '
+            u'<strong><a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation">'  # noqa
+            u'CIDR notation</a></strong>. '
+            u'Multiple comma-separated addresses / networks may be supplied.'),
+    )
 
 
 class IOfficeConnectorSettingsView(Interface):

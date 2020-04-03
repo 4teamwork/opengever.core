@@ -164,3 +164,11 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'nightly_jobs'),
                          {u'start_time': u'1:00:00', u'end_time': u'5:00:00'})
+
+    @browsing
+    def test_config_contains_is_emm_environment(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertIn(u'is_emm_environment', browser.json)

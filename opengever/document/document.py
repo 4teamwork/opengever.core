@@ -16,6 +16,7 @@ from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
@@ -317,6 +318,9 @@ class Document(Item, BaseDocumentMixin):
         return self.content_type().lower() in editable_mimetypes
 
     def is_checkout_and_edit_available(self):
+        if is_client_ip_in_office_connector_disallowed_ip_ranges():
+            return False
+
         manager = queryMultiAdapter(
             (self, getRequest()), ICheckinCheckoutManager)
 
