@@ -32,9 +32,10 @@ def is_client_ip_in_office_connector_disallowed_ip_ranges():
     request = getRequest()
     client_ip = request.getClientAddr()
     if not client_ip:
-        # trusted proxies are not set up correctly so we cannot
-        # check whether office connector should be disallowed for
-        # this request.
+        # If for some reason we cannot determine the client_ip, we
+        # cannot check whether office connector should be disallowed
+        # for this request. This could be a problem with the configuration
+        # of trusted proxies.
         log_msg_to_sentry('Cannot determine client IP.', request=request)
         return False
 
