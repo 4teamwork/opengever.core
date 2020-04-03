@@ -12,16 +12,13 @@ Changelog
 
 - Do not show OC checkout and edit buttons when user is in EMM environment. [njohner]
 - Prevent documents being edited in Office Online from getting opened in OfficeConnector. [lgraf]
-- Bump ftw.solr version to 2.8.4 to get update of modified index. [njohner]
 - Add @listing-stats API endpoint to get statistical data from folderish content. [elioschmutz]
 - Fix public documentation build. [elioschmutz]
-- Fix solr complex search pattern configuration. [deiferni]
 
 
 2020.2.1 (2020-03-27)
 ---------------------
 
-- Bump ftw.solr version to 2.8.2 to get fix for millisecond rounding error. [njohner]
 - Backdate AddHiddenFlagToAdminAndOrgUnit upgrade step. [njohner]
 
 
@@ -69,8 +66,8 @@ Changelog
 - Add support for Office Online aka WOPI. [buchi]
 
 
-2020.1.0 (2020-02-26)
----------------------
+2020.1.0 (2020-02-26) does not include 2019.6.4
+-----------------------------------------------
 
 - Add smoke tests for rewrite rules and VHost configs. [lgraf]
 - Add container title to task activities. [njohner]
@@ -131,6 +128,14 @@ Changelog
 - Implement testing against a real Solr. [lgraf]
 - Sharing on workspace folders should always show workspace users. [njohner]
 - Replace @participations endpoint with @invitations endpoint accepting slightly different parameters. [deiferni]
+
+
+2019.6.4 (2020-04-02)
+---------------------
+
+- Bump ftw.solr version to 2.8.4 to get update of modified index. [njohner]
+- Bump ftw.solr version to 2.8.2 to get fix for millisecond rounding error. [njohner]
+- Fix solr complex search pattern configuration. [deiferni]
 
 
 2019.6.3 (2020-02-06)
