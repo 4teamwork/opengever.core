@@ -1,10 +1,10 @@
 Changelog
 =========
 
-2020.3.0 (unreleased)
+2020.2.3 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Revert always using the `mail_from` for notifications, this breaks customers auto-reply use case. [deiferni]
 
 
 2020.2.2 (2020-04-03)
