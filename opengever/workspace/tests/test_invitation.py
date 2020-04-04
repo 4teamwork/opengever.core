@@ -73,7 +73,7 @@ class TestInvitationMail(IntegrationTestCase):
             self.assertEqual(1, len(mails))
             mail = email.message_from_string(mails[0])
 
-            self.assertIn('test@localhost', mail.get("From"))
+            self.assertIn(self.workspace_admin.getProperty('email'), mail.get("From"))
             self.assertEqual(self.regular_user.getProperty('email'), mail.get("To"))
 
             payload = {"iid": iid}

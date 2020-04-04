@@ -142,7 +142,7 @@ class TestEmailNotification(IntegrationTestCase):
 
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals('foo@example.com', mail.get('To'))
-        self.assertEquals('OneGov GEVER <test@localhost>', get_header(mail, 'From'))
+        self.assertEquals('Ziegler Robert <robert.ziegler@gever.local>', get_header(mail, 'From'))
 
     @browsing
     def test_task_title_is_linked_to_resolve_notification_view(self, browser):
