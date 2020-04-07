@@ -1,0 +1,67 @@
+diff --git a/development.cfg b/development.cfg
+index 696cace50..592562bad 100644
+--- a/development.cfg
++++ b/development.cfg
+@@ -11,8 +11,11 @@ extends =
+     base-testserver.cfg
+ 
+ always-checkout = false
++allow-picked-versions = true
+ 
+-ogds-db-name = opengever
++deployment-number = 77
++
++ogds-db-name = opengever-readonly
+ 
+ tool-parts +=
+     docxcompose
+@@ -38,6 +41,8 @@ parts +=
+     ${buildout:test-parts}
+     ${buildout:code-audit-parts}
+     ${buildout:i18n-parts}
++    zeo
++    instance1
+ 
+ # example mysql configuration
+ #ogds-db-name = opengever
+@@ -46,15 +51,28 @@ parts +=
+ #ogds-dsn = mysql://${buildout:ogds-db-user}:${buildout:ogds-db-pw}@localhost/${buildout:ogds-db-name}?charset=utf8
+ #ogds-db-driver = MySQL-python
+ 
++[zeo]
++recipe = plone.recipe.zeoserver
++zeo-address = 127.0.0.1:1${buildout:deployment-number}20
++pack-days = 7
++read-only = off
++
++
+ [upgrade]
+ eggs += ftw.upgrade[colors]
+ 
+ [instance]
++read-only = off
++zeo-client = on
++zeo-address = ${zeo:zeo-address}
++shared-blob = on
++
+ zserver-threads = 4
+ environment-vars +=
+-    BUMBLEBEE_APP_ID gever_dev
++    BUMBLEBEE_APP_ID gever_local_dev
+     BUMBLEBEE_INTERNAL_PLONE_URL http://localhost:${instance:http-address}/fd
+     BUMBLEBEE_PUBLIC_URL http://localhost:3000/
++    BUMBLEBEE_SECRET <secret>
+ 
+ zcml +=
+   opengever.core
+@@ -62,6 +80,10 @@ zcml +=
+ [solr]
+ cores = ${solr:gever-cores}
+ 
++[instance1]
++<= instance
++http-address = 1${buildout:deployment-number}01
++
+ [test]
+ initialization +=
+     os.environ['SABLON_BIN'] = '${buildout:sablon-executable}'
