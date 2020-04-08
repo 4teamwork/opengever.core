@@ -3,8 +3,10 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.role_assignments import RoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.document.docprops import DocPropertyWriter
+from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from plone.dexterity.utils import iterSchemataForType
+from zope.globalrequest import getRequest
 
 
 class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
@@ -32,7 +34,13 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
             )
 
     def execute(self):
+        # The blob will be overwritten just afterwards when we add
+        # the recepient data to the docproperties. Solr will then
+        # be unable to process that blob.
+        getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
         obj = super(CreateDocumentFromTemplateCommand, self).execute()
+
+        getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, False)
         DocPropertyWriter(obj, recipient_data=self.recipient_data).initialize()
 
         # Set blocking of role inheritance based on the template object
