@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2020.2.4 (unreleased)
----------------------
+2020.3.0rc1 (2020-04-09)
+------------------------
 
 - Fix solr indexing bug when creating a document from a template. [njohner]
 - Bump docxcompose to 1.1.0 for header/footer docproperty support. [deiferni]
