@@ -4,7 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Extend the `meeting.json`, which will be generated for an exported meeting, with a `agenda_item_list` property which contains a link to the agenda item list document. [elioschmutz]
 
 
 2020.3.0rc1 (2020-04-09)
