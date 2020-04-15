@@ -25,7 +25,7 @@
         "_path": "vorlagen",
         "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
-        "title_fr": "Modèles"
+        "title_fr": "Modèles",
         "_ac_local_roles": {
             "{{{orgunit.users_group}}}": [
                 "Reader"

@@ -214,4 +214,4 @@ def _get_sablon_template_paths():
 
 
 def _delete_workspaces_content_profile(profiles_path):
-    os.remove(os.path.join(profiles_path, 'workspaces_content'))
+    shutil.rmtree(os.path.join(profiles_path, 'workspaces_content'))
