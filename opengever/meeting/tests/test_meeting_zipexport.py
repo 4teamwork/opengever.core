@@ -30,6 +30,44 @@ class TestMeetingZipExportView(IntegrationTestCase):
                       zip_file.namelist())
 
     @browsing
+    def test_zip_export_includes_generated_agenda_item_list_document(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.generate_agenda_item_list(self.meeting)
+        self.assertTrue(self.meeting.model.has_agendaitem_list_document())
+
+        browser.open(self.meeting, view='export-meeting-zip')
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+        self.assertIn('Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx',
+                      zip_file.namelist())
+
+    @browsing
+    def test_zip_export_meeting_json_includes_agenda_item_list(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        with freeze(localized_datetime(2017, 12, 13)):
+            self.generate_agenda_item_list(self.meeting)
+
+        self.assertTrue(self.meeting.model.has_agendaitem_list_document())
+
+        browser.open(self.meeting, view='export-meeting-zip')
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+
+        meeting_json = json.loads(zip_file.open('meeting.json').read())
+        meeting = meeting_json.get('meetings')[0]
+
+        self.assertIn('agenda_item_list', meeting)
+
+        agenda_item_list = meeting.get('agenda_item_list')
+
+        self.assertDictEqual(
+            {
+                u'checksum': agenda_item_list.get('checksum'),
+                u'file': u'Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx',
+                u'modified': u'2017-12-13T00:00:00+01:00',
+            },
+            agenda_item_list)
+
+    @browsing
     def test_zip_export_agenda_items_attachments(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
@@ -207,6 +245,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
         self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         with freeze(localized_datetime(2017, 12, 14)):
+            self.generate_agenda_item_list(self.meeting)
             self.meeting.model.close()
 
         browser.open(self.meeting, view='export-meeting-zip')
@@ -216,9 +255,10 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
         meeting_json = json.loads(zip_file.read('meeting.json'))
 
-        # the protocol is generated during the tests and its checksum cannot
-        # be predicted
+        # the protocol and agenda_item_list are generated during the tests and
+        # their checksums cannot be predicted
         meeting_json['meetings'][0]['protocol']['checksum'] = 'unpredictable'
+        meeting_json['meetings'][0]['agenda_item_list']['checksum'] = 'unpredictable'
         meeting_json['meetings'][0].pop('opengever_id')
         for agenda_item in meeting_json['meetings'][0]['agenda_items']:
             agenda_item.pop('opengever_id')
@@ -264,6 +304,11 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     u'file': u'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
                     u'modified': u'2017-12-14T00:00:00+01:00',
                 },
+                u'agenda_item_list': {
+                    u'checksum': 'unpredictable',
+                    u'file': u'Traktandenliste-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
+                    u'modified': u'2017-12-14T00:00:00+01:00',
+                },
                 u'start': u'2016-09-12T15:30:00+00:00',
                 u'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich',
             }],
@@ -273,6 +318,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
         expected_file_names = [
             'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
+            'Traktandenliste-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
             'Traktandum 1/Ad-hoc Traktandthm.docx',
             'Traktandum 2/Beilage/1_Vertraegsentwurf.docx',
             'Traktandum 2/Vertraege.docx',
