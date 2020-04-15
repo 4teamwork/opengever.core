@@ -211,30 +211,15 @@ respective user in our development LDAP tree.
 Installing and activating Solr
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Extend the Solr configuration in your `buildout.cfg` and add the Solr directive:
+Solr is installed automatically during Buildout but needs to be activated in GEVER.
 
-.. code::
-
-    [buildout]
-    extends =
-        development.cfg
-        https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/solr.cfg
-    solr-port = 8983
-
-
-Buildout
-
-.. code::
-
-    $ bin/buildout
-
-Then start Solr
+Just start Solr:
 
 .. code::
 
     $ bin/solr start
 
-Run the `activate_solr` maintenance script:
+Then run the `activate_solr` maintenance script:
 
 .. code::
 
