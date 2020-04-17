@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
+- Extend the ftw.mail.mail workflow with teamraum specific roles. [elioschmutz]
 - Extend the `meeting.json`, which will be generated for an exported meeting, with a `agenda_item_list` property which contains a link to the agenda item list document. [elioschmutz]
 
 
