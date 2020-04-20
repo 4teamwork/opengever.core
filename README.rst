@@ -473,7 +473,7 @@ Creating policies
 -----------------
 A script to semi-automatically create policies is provided as ``bin/create-policy``. The script runs in interactive mode and generates policies based on the questions asked. Policies are stored in the source directory ``src``.
 
-Policy templates are avilable from the ``opengever.policytemplates`` package. At the time of writing there is only one policy template for simple SAAS policies.
+Policy templates are available from the ``opengever.policytemplates`` package. At the time of writing there is only one policy template for simple SaaS policies.
 
 Once a new policy has been generated the following things need to be added manually:
 
