@@ -6,7 +6,7 @@ Da die Kommunikation immer nur von GEVER nach Teamraum (nie umgekehrt) stattfind
 
 Service-Benutzer erstellen
 --------------------------
-Erstellen Sie einen Benutzer sowohl auf GEVER wie auch auf Teamraum Seite mit den Rollen ``ServiceKeyUser`` und ``Impersonator``.
+Erstellen Sie einen Benutzer auf der Teamraum Seite mit den Rollen ``ServiceKeyUser`` und ``Impersonator``.
 
 Service-Schlüssel ausstellen
 ----------------------------
@@ -33,3 +33,9 @@ Feature aktivieren
 Nachdem die Verbindung konfiguriert ist, muss das Feature für den Teamraum-Client in der Plone-Registry unter dem Key: ``IWorkspaceClientSettings`` aktiviert werden.
 
 **Achtung**: Die Verbindung funktioniert nicht mit dem zopemaster: https://github.com/4teamwork/ftw.tokenauth/blob/master/ftw/tokenauth/pas/plugin.py#L254
+
+Berechtigung für Benutzer
+-------------------------
+Grundsätzlich steht nun die Verbindung von GEVER zum Teamraum.
+
+Damit nun ein Benutzer die Verbindung auch verwenden darf, benötigt dieser die Rolle ``WorkspaceClientUser``.
