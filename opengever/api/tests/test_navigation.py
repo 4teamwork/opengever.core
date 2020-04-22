@@ -185,3 +185,39 @@ class TestNavigation(IntegrationTestCase):
         self.assertEqual(
             [self.workspace.UID(), self.workspace_folder.UID()],
             [item.get('uid') for item in items])
+
+    @browsing
+    def test_businesscasedossier_has_undefined_leaf_node(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('content_interfaces', 'opengever.dossier.businesscase.IBusinessCaseDossier')
+        ]
+        browser.open(
+            self.portal.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+        self.assertIsNone(
+            browser.json['tree'][0]['is_leafnode'],
+            "Being a leaf node only makes sense for repository folders.",
+        )
+
+    @browsing
+    def test_repositoryfolder_leaf_nodes(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(
+            self.portal.absolute_url() + '/@navigation',
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        self.assertFalse(
+            browser.json.get('tree')[0]['is_leafnode'],
+            'The repo folder "http://nohost/plone/ordnungssystem/fuhrung" has children '
+            'and thus must not be a leaf node.',
+        )
+        self.assertTrue(
+            browser.json.get('tree')[0]['nodes'][0]['is_leafnode'],
+             'The repo folder "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen" '
+             'has no children and thus must be a leaf node.',
+        )

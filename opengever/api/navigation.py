@@ -116,7 +116,7 @@ class Navigation(object):
             else [content_interfaces]
 
     def brain_to_node(self, brain):
-        return {
+        node = {
             '@type': brain.portal_type,
             'text': brain.Title,
             'description': brain.Description,
@@ -125,7 +125,11 @@ class Navigation(object):
             'active': brain.review_state != REPOSITORY_FOLDER_STATE_INACTIVE,
             'current': self.context.absolute_url() == brain.getURL(),
             'current_tree': self.context.absolute_url().startswith(brain.getURL()),
+            'is_leafnode': None,
         }
+        if brain.portal_type == 'opengever.repository.repositoryfolder':
+            node['is_leafnode'] = not brain.has_sametype_children
+        return node
 
 
 class NavigationGet(Service):
