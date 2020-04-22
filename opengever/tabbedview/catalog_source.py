@@ -22,11 +22,11 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
-        if 'SearchableText' in query:
-            registry = getUtility(IRegistry)
-            settings = registry.forInterface(ISearchSettings)
-            if settings.use_solr:
-                return self.solr_results(query)
+
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        if settings.use_solr:
+            return self.solr_results(query)
 
         return super(GeverCatalogTableSource, self).search_results(query)
 
@@ -62,14 +62,17 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         return query
 
     def solr_results(self, query):
-        term = query['SearchableText'].rstrip('*').decode('utf8')
-        pattern = (
-            u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}* OR '
-            u'Title:{term} OR SearchableText:{term} OR metadata:{term})'
-        )
+        if 'SearchableText' in query:
+            term = query['SearchableText'].rstrip('*').decode('utf8')
+            pattern = (
+                u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}* OR '
+                u'Title:{term} OR SearchableText:{term} OR metadata:{term})'
+            )
 
-        term_queries = [pattern.format(term=escape(t)) for t in term.split()]
-        solr_query = u' AND '.join(term_queries)
+            term_queries = [pattern.format(term=escape(t)) for t in term.split()]
+            solr_query = u' AND '.join(term_queries)
+        else:
+            solr_query = u'*:*'
 
         filters = [u'trashed:false']
         for key, value in query.items():
