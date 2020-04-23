@@ -1,3 +1,4 @@
+from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from ftw.table.catalog_source import CatalogTableSource
@@ -108,10 +109,26 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             elif isinstance(value, dict):
                 _query = value.get('query')
                 operator = value.get('operator')
+                range_ = value.get('range', None)
                 if query and isinstance(_query, (list, tuple)) and operator:
                     operator = ' {} '.format(operator.upper())
                     filters.append(u'{}:({})'.format(
                         key, escape(operator.join(_query))))
+                elif range_ in ['min', 'max', 'minmax']:
+                    if not isinstance(_query, (list, tuple)):
+                        _query = [_query]
+                    if range_ == 'min':
+                        filters.append(u'{}:[{} TO *]'.format(
+                            key, escape(to_iso8601(_query[0]))))
+                    elif range_ == 'max':
+                        filters.append(u'{}:[* TO {}]'.format(
+                            key, escape(to_iso8601(_query[0]))))
+                    elif range_ == 'minmax':
+                        filters.append(u'{}:[{} TO {}]'.format(
+                            key,
+                            escape(to_iso8601(_query[0])),
+                            escape(to_iso8601(_query[1])),
+                        ))
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
 

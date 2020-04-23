@@ -12,6 +12,7 @@ Changelog
 - Enable Solr by default. [buchi]
 - Fix exclusion of search root when using Solr. [buchi]
 - Add retention_expiration to Solr schema. [buchi]
+- Add support for date range queries using Solr. [buchi]
 - Fix bug in table source of trashed documents when using solr. [njohner]
 - Extend the ftw.mail.mail workflow with teamraum specific roles. [elioschmutz]
 - Extend the `meeting.json`, which will be generated for an exported meeting, with a `agenda_item_list` property which contains a link to the agenda item list document. [elioschmutz]
