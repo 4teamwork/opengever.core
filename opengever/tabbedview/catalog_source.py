@@ -26,7 +26,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
         if settings.use_solr:
-            return self.solr_results(query)
+            return self.solr_results(self.exclude_searchroot_from_query(query))
 
         return super(GeverCatalogTableSource, self).search_results(query)
 
@@ -95,6 +95,9 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                     context_depth = len(path_query.split("/")) - 1
                     max_path_depth = context_depth + depth
                     filters.append(u'path_depth:[* TO {}]'.format(max_path_depth))
+
+                if value.get('exclude_root', False):
+                    filters.append(u'-path: {}'.format(escape(path_query)))
 
             elif isinstance(value, (list, tuple)):
                 filters.append(u'{}:({})'.format(
