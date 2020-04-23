@@ -5,13 +5,13 @@ from ftw.testbrowser import browsing
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.tabbedview.helper import linked
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 
 
-class TestDossierListing(IntegrationTestCase):
+class TestDossierListing(SolrIntegrationTestCase):
 
     listing_fields = ['',
                       'Reference Number',
@@ -167,6 +167,7 @@ class TestDossierListing(IntegrationTestCase):
         self.expired_dossier.reindexObject()
         IDossier(self.inactive_dossier).end = date.today() - relativedelta(years=16)
         self.inactive_dossier.reindexObject()
+        self.commit_solr()
 
         self.open_repo_with_filter(
             browser, self.leaf_repofolder, 'filter_retention_expired')
@@ -186,6 +187,7 @@ class TestDossierListing(IntegrationTestCase):
         self.expired_dossier.reindexObject()
         IDossier(self.inactive_dossier).end = date.today() - relativedelta(years=16)
         self.inactive_dossier.reindexObject()
+        self.commit_solr()
 
         self.open_repo_with_filter(
             browser, self.leaf_repofolder, 'filter_retention_expired')
@@ -254,6 +256,7 @@ class TestDossierListing(IntegrationTestCase):
 
         IDossier(self.empty_dossier).end = date.today()
         self.empty_dossier.reindexObject()
+        self.commit_solr()
 
         self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_overdue')
         data = browser.css('.listing').first.lists()
@@ -264,10 +267,7 @@ class TestDossierListing(IntegrationTestCase):
 
     @browsing
     def test_filter_dossiers_by_subjects(self, browser):
-        self.activate_feature('solr')
         self.login(self.regular_user, browser=browser)
-
-        self.mock_solr(response_json=self.solr_response('Wichtig'))
 
         self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_all')
         self.assertLess(1, len(browser.css('.listing tbody tr')))
