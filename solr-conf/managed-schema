@@ -158,6 +158,7 @@
     <field name="receipt_date" type="pdate" indexed="true" stored="false" />
     <field name="reference" type="string" indexed="true" stored="false" />
     <field name="responsible" type="string" indexed="true" stored="false" />
+    <field name="retention_expiration" type="pdate" indexed="true" stored="false" />
     <field name="sequence_number" type="pint" indexed="true" stored="false" />
     <field name="sequence_number_string" type="string" indexed="true" stored="false" />
     <field name="start" type="pdate" indexed="true" stored="false" />

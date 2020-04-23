@@ -100,7 +100,6 @@ class TestSolr(IntegrationTestCase):
             'is_folderish',
             'meta_type',
             'predecessor',
-            'retention_expiration',
             'sortable_author',
             'total_comments',
         ]
@@ -140,7 +139,6 @@ class TestSolr(IntegrationTestCase):
             'location',
             'meta_type',
             'predecessor',
-            'retention_expiration',
             'title_de',
             'title_fr',
             'total_comments'
