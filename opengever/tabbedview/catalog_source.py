@@ -102,6 +102,13 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             elif isinstance(value, bool):
                 filters.append(u'{}:{}'.format(
                     key, 'true' if value else 'false'))
+            elif isinstance(value, dict):
+                _query = value.get('query')
+                operator = value.get('operator')
+                if query and isinstance(_query, (list, tuple)) and operator:
+                    operator = ' {} '.format(operator.upper())
+                    filters.append(u'{}:({})'.format(
+                        key, escape(operator.join(_query))))
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
 

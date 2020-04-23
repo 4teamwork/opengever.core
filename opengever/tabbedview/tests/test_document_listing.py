@@ -1,9 +1,8 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
-from Products.CMFPlone.utils import safe_unicode
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestDocumentListing(IntegrationTestCase):
+class TestDocumentListing(SolrIntegrationTestCase):
 
     @browsing
     def test_lists_documents(self, browser):
@@ -28,24 +27,14 @@ class TestDocumentListing(IntegrationTestCase):
             'Creation Date': '31.08.2016',
             'Modification Date': '31.08.2016',
             'Keywords': 'Wichtig',
-            }
+        }
 
         listings = browser.css('.listing').first.dicts()
         self.assertIn(expected_metadata, listings)
 
-    def solr_response(self, *facets):
-        solr_facets = []
-        for facet in facets:
-            solr_facets.extend([safe_unicode(facet), 1])
-
-        return {u'facet_counts': {u'facet_fields': {u'Subject': solr_facets}}}
-
     @browsing
     def test_document_keywords_are_links(self, browser):
-        self.activate_feature('solr')
         self.login(self.regular_user, browser=browser)
-
-        self.mock_solr(response_json=self.solr_response('Wichtig'))
 
         browser.visit(self.dossier, view='tabbedview_view-documents', data={'subjects': ["Wichtig"]})
         table = browser.css('.listing').first
@@ -63,14 +52,11 @@ class TestDocumentListing(IntegrationTestCase):
 
     @browsing
     def test_filter_documents_by_subjects(self, browser):
-        self.activate_feature('solr')
         self.login(self.regular_user, browser=browser)
-
-        self.mock_solr(response_json=self.solr_response('Wichtig', 'Subkeyword'))
 
         browser.visit(self.dossier, view='tabbedview_view-documents')
         table = browser.css('.listing').first
-        self.assertLess(3, len(table.rows))
+        self.assertEqual(13, len(table.rows))
 
         # self.document and self.subdocument have the 'Wichtig' keyword
         browser.visit(self.dossier, view='tabbedview_view-documents', data={'subjects': ["Wichtig"]})
@@ -95,15 +81,18 @@ class TestDocumentListing(IntegrationTestCase):
 
     @browsing
     def test_filters_is_available_on_the_no_content_page(self, browser):
-        self.activate_feature('solr')
         self.activate_feature('extjs')
         self.login(self.regular_user, browser=browser)
-
-        self.mock_solr(response_json=self.solr_response('Wichtig', 'secret'))
 
         browser.visit(self.dossier, view='tabbedview_view-documents',
                       data={'subjects': ["secret"]})
 
         self.assertEqual(
-            ['Wichtig', 'secret'],
+            [
+                u'Subkeyword',
+                u'Subkeyw\xf6rd',
+                u'Subsubkeyword',
+                u'Subsubkeyw\xf6rd',
+                u'Wichtig',
+            ],
             browser.css('select.keyword-widget option').text)
