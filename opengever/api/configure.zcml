@@ -5,6 +5,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.api">
 
+  <include file="permissions.zcml" />
+
   <include package="plone.rest" file="meta.zcml" />
   <include package="plone.restapi" file="permissions.zcml" />
   <include package="Products.CMFEditions" file="permissions.zcml" />
