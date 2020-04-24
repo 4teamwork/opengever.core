@@ -126,7 +126,6 @@ class TestSolr(IntegrationTestCase):
             'css_icon_class',
             'date_of_completion',
             'effective',
-            'email2',
             'exclude_from_nav',
             'expires',
             'getContentType',

@@ -735,7 +735,14 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
             query_string,
             IContact.__identifier__))
         for result in resp.docs:
-            self.terms.append(self.getTerm(solr_doc=result))
+            if 'email' in result:
+                self.terms.append(self.getTerm(solr_doc=result))
+            if 'email2' in result:
+                self.terms.append(self.getTerm(solr_doc={
+                    'email': result['email2'],
+                    'id': result['id'],
+                    'Title': result['Title'],
+                }))
 
     def _extend_terms_with_contacts_from_portal_catalog(self, query_string):
         catalog = api.portal.get_tool('portal_catalog')
