@@ -774,7 +774,13 @@ class AllEmailContactsAndUsersSourceBinder(object):
 
 class ContactsSource(UsersContactsInboxesSource):
 
-    def getTerm(self, value, brain=None):
+    def getTerm(self, value=None, brain=None, solr_doc=None):
+
+        if solr_doc is not None:
+            value = u'contact:{}'.format(solr_doc[u'id'])
+            title = u'{} ({})'.format(solr_doc[u'Title'], solr_doc[u'email'])
+            return SimpleTerm(value, title=title)
+
         if not ActorLookup(value).is_contact():
             raise ValueError('Value is not a contact token')
 
