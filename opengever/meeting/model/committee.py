@@ -2,10 +2,10 @@ from datetime import date
 from opengever.base.model import Base
 from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.model import UNIT_ID_LENGTH
+from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
-from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.member import Member
