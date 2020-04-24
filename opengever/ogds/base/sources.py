@@ -350,7 +350,7 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
         if solr_doc is not None:
             value = u'contact:{}'.format(solr_doc[u'id'])
-            title = solr_doc[u'Title']
+            title = u'{} ({})'.format(solr_doc[u'Title'], solr_doc[u'email'])
             return SimpleTerm(value, title=title)
 
         # Contacts
