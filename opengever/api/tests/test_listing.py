@@ -17,6 +17,7 @@ class TestListingEndpointWithoutSolr(IntegrationTestCase):
 
     @browsing
     def test_raises_an_error_if_using_the_listing_endpoint_without_solr(self, browser):
+        self.deactivate_feature('solr')
         self.login(self.regular_user, browser=browser)
 
         with browser.expect_http_error(code=400):
@@ -26,10 +27,6 @@ class TestListingEndpointWithoutSolr(IntegrationTestCase):
 
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
-    # XXX TODO: We need to add tests for the different listing endpoints
-    # once we have testing with Solr working.
-    # See # https://github.com/4teamwork/opengever.core/pull/6009 for tests
-    # we had for catalog listing endpoint.
 
     features = ('bumblebee', 'solr')
 

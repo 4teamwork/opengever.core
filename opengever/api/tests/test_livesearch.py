@@ -1,8 +1,8 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestLivesearchGet(IntegrationTestCase):
+class TestLivesearchGet(SolrIntegrationTestCase):
 
     @browsing
     def test_livesearch(self, browser):

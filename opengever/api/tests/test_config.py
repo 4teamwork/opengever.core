@@ -70,7 +70,7 @@ class TestConfig(IntegrationTestCase):
                 u'repositoryfolder_tasks_tab': True,
                 u'resolver_name': u'strict',
                 u'sablon_date_format': u'%d.%m.%Y',
-                u'solr': False,
+                u'solr': True,
                 u'tasks_pdf': False,
                 u'workspace': False,
                 u'workspace_client': False,
