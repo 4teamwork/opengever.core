@@ -8,12 +8,13 @@ from opengever.base.security import elevated_privileges
 from opengever.disposition.interfaces import IHistoryStorage
 from opengever.latex.listing import ILaTexListing
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from zope.component import getMultiAdapter
 import lxml
 
 
-class TestDispositionListing(IntegrationTestCase):
+class TestDispositionListing(SolrIntegrationTestCase):
 
     @browsing
     def test_disposition_tab_is_available_on_repositoryroots(self, browser):
@@ -46,6 +47,8 @@ class TestDispositionListing(IntegrationTestCase):
                                         .titled(u'Angebot FD 1.2.1995')
                                         .in_state('disposition-state-disposed')
                                         .within(self.leaf_repofolder))
+
+        self.commit_solr()
 
         browser.open(self.repository_root, view='tabbedview_view-dispositions')
         self.assertEquals(
@@ -101,6 +104,8 @@ class TestDispositionListing(IntegrationTestCase):
 
         self.disposition_with_sip.setTitle("Disposed")
         self.disposition_with_sip.reindexObject()
+
+        self.commit_solr()
 
         browser.open(self.leaf_repofolder, view='tabbedview_view-dispositions')
         rows = browser.css('.listing').first.dicts()
