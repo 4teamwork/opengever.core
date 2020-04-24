@@ -19,6 +19,7 @@ from opengever.ogds.models.group import Group
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from pkg_resources import resource_string
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -84,7 +85,7 @@ class TestUsersContactsInboxesSourceInt(SolrMockupTestCase):
     def test_contacts_appear_in_solr_result(self):
         query_string = u'B\xc3\xbcu'
         terms = self.source.search(query_string)
-        self.assertEquals([u'Lehner-Baum\xe4nn Maria'],
+        self.assertEquals([u'Lehner-Baum\xe4nn Maria (m@r.ia)'],
                           [term.title for term in terms])
         self.assertEquals([u'contact:lehner-baumann-maria'],
                           [term.value for term in terms])
@@ -411,7 +412,7 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         self.assertNotIn('team:2', source)
 
 
-class TestUsersContactsInboxesSource(FunctionalTestCase):
+class TestUsersContactsInboxesSource(SolrIntegrationTestCase):
 
     use_default_fixture = False
 
@@ -456,6 +457,7 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
                .having(firstname=u'Super', lastname=u'M\xe4n',
                        email='superman@example.com'))
 
+        self.commit_solr()
         self.source = UsersContactsInboxesSource(self.portal)
 
     def test_all_ogds_users_are_valid(self):
@@ -491,6 +493,8 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
         self.assertIn('contact:man-super', self.source)
 
     def test_search_contacts(self):
+        self.login(self.administrator)
+
         result = self.source.search('Lara')
 
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
@@ -741,7 +745,7 @@ class TestAllUsersSource(FunctionalTestCase):
         self.assertEquals('john.doe', result[0].token)
 
 
-class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
+class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
 
     use_default_fixture = False
 
@@ -780,6 +784,7 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
                        email='superman@example.com',
                        email2='superman@example.com'))
 
+        self.commit_solr()
         self.source = AllEmailContactsAndUsersSource(self.portal)
 
     def test_ogds_users_are_valid(self):
@@ -817,6 +822,8 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
         self.assertNotIn('notthere@example.com:man-super', self.source)
 
     def test_search_returns_one_entry_for_each_email_address(self):
+        self.login(self.administrator)
+
         ogds_result = self.source.search('Hugo')
 
         self.assertEquals(
@@ -850,7 +857,7 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
                           person_result[1].title)
 
 
-class TestContactsSource(FunctionalTestCase):
+class TestContactsSource(SolrIntegrationTestCase):
 
     use_default_fixture = False
 
@@ -871,6 +878,7 @@ class TestContactsSource(FunctionalTestCase):
                .having(firstname=u'Super', lastname=u'M\xe4n',
                        email='superman@example.com'))
 
+        self.commit_solr()
         self.source = ContactsSource(self.portal)
 
     def test_ogds_users_are_invalid(self):
@@ -890,6 +898,8 @@ class TestContactsSource(FunctionalTestCase):
         self.assertEquals(u'M\xe4n Super (superman@example.com)', term.title)
 
     def test_search_contacts(self):
+        self.login(self.administrator)
+
         result = self.source.search('Lara')
 
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
