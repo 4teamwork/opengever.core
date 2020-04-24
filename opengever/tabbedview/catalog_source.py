@@ -75,7 +75,9 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         else:
             solr_query = u'*:*'
 
-        filters = [u'trashed:false']
+        filters = []
+        if 'trashed' not in query:
+            filters.append(u'trashed:false')
         for key, value in query.items():
             if key == 'SearchableText':
                 continue
