@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 
@@ -168,6 +169,9 @@ class TestDossier(IntegrationTestCase):
         self.assertItemsEqual(('Finanzverwaltung', 'New Item',
                                'N=C3=B6i 3', 'Vertr=C3=A4ge'),
                               tuple(keywords.value))
+
+
+class TestDossierSolr(SolrIntegrationTestCase):
 
     @browsing
     def test_keywords_are_linked_to_search_on_overview(self, browser):
