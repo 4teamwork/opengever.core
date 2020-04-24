@@ -7,6 +7,7 @@ from opengever.contact.interfaces import IContactSettings
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import get_contacts_token
 
 
@@ -144,25 +145,6 @@ class TestManualJournalEntry(FunctionalTestCase):
         self.assertEquals('', row.dict().get('Comments'))
 
     @browsing
-    def test_only_documents_from_the_dossier_are_selectable(self, browser):
-        create(Builder('document')
-               .titled(u'Test A')
-               .within(self.dossier))
-
-        dossier2 = create(Builder('dossier'))
-        create(Builder('document')
-               .titled(u'Test B')
-               .within(dossier2))
-
-        browser.login().open(self.dossier, view='add-journal-entry')
-        browser.fill(
-            {'form.widgets.related_documents.widgets.query': 'test'}).submit()
-
-        self.assertEquals(
-            ['Test A'],
-            browser.css('#form-widgets-related_documents-autocomplete .option').text)
-
-    @browsing
     def test_cancel_the_form_redirects_back_to_journal_tab(self, browser):
         browser.login().open(self.dossier, view='add-journal-entry')
         browser.css('#form-buttons-cancel').first.click()
@@ -177,3 +159,26 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.login().open(self.dossier, view='add-journal-entry')
 
         self.assertIsNone(browser.find_field_by_text('Contacts'))
+
+
+class TestManualJournalEntrySolr(SolrIntegrationTestCase):
+
+    @browsing
+    def test_only_documents_from_the_dossier_are_selectable(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.resolvable_dossier, view='add-journal-entry')
+        browser.fill(
+            {'form.widgets.related_documents.widgets.query': self.resolvable_document.title}).submit()
+
+        self.assertEquals(
+            [self.resolvable_document.title],
+            browser.css('#form-widgets-related_documents-autocomplete .option').text)
+
+        browser.open(self.dossier, view='add-journal-entry')
+        browser.fill(
+            {'form.widgets.related_documents.widgets.query': self.resolvable_document.title}).submit()
+
+        self.assertEquals(
+            [],
+            browser.css('#form-widgets-related_documents-autocomplete .option').text)
