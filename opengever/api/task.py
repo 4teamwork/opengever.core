@@ -1,5 +1,6 @@
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
+from opengever.api.serializer import GeverSerializeToJson
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
@@ -9,10 +10,30 @@ from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from zExceptions import Unauthorized
 from zope.component import adapter
+from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+
+
+@implementer(ISerializeToJson)
+@adapter(ITask, Interface)
+class SerializeTaskToJson(GeverSerializeToJson):
+
+    def __call__(self, *args, **kwargs):
+        result = super(SerializeTaskToJson, self).__call__(*args, **kwargs)
+        result[u'containing_dossier'] = self._get_containing_dossier_summary()
+        return result
+
+    def _get_containing_dossier_summary(self):
+        containing_dossier = self.context.get_containing_dossier()
+        if not containing_dossier:
+            return None
+        return getMultiAdapter(
+            (containing_dossier, self.request), ISerializeToJsonSummary
+        )()
 
 
 @implementer(ISerializeToJson)

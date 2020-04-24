@@ -30,6 +30,7 @@
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
+  <adapter factory=".task.SerializeTaskToJson" />
   <adapter factory=".task.SerializeTaskResponseToJson" />
   <adapter factory=".task.TaskDeserializeFromJson" />
   <adapter factory=".proposal.SerializeProposalResponseToJson" />

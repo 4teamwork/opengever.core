@@ -141,6 +141,54 @@ class TestTaskSerialization(IntegrationTestCase):
              u'added_objects': []},
             browser.json)
 
+    @browsing
+    def test_containing_dossier_for_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.maxDiff = None
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json['containing_dossier']
+        )
+
+    @browsing
+    def test_containing_dossier_for_subtask(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.subtask, method="GET", headers=self.api_headers)
+        self.maxDiff = None
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json['containing_dossier']
+        )
+
+    @browsing
+    def test_containing_dossier_for_inbox_forwarding(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(self.inbox_forwarding, method="GET", headers=self.api_headers)
+        self.maxDiff = None
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/eingangskorb',
+                u'@type': u'opengever.inbox.inbox',
+                u'description': u'',
+                u'review_state': u'inbox-state-default',
+                u'title': u'Eingangsk\xf6rbli',
+            },
+            browser.json['containing_dossier']
+        )
+
 
 class TestTaskCommentSync(FunctionalTestCase):
 
