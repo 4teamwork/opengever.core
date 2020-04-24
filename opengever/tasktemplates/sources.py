@@ -29,7 +29,7 @@ class TaskTemplateIssuerSource(UsersContactsInboxesSource):
     extended by the interactive users.
     """
 
-    def getTerm(self, value, brain=None):
+    def getTerm(self, value=None, brain=None, solr_doc=None):
         users = interactive_users()
         if value in users:
             token = value
@@ -37,7 +37,8 @@ class TaskTemplateIssuerSource(UsersContactsInboxesSource):
 
         else:
             return super(TaskTemplateIssuerSource, self).getTerm(value,
-                                                                 brain=brain)
+                                                                 brain=brain,
+                                                                 solr_doc=solr_doc)
 
     def search(self, query_string):
         self.terms = super(TaskTemplateIssuerSource, self).search(query_string)
