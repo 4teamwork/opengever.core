@@ -47,13 +47,15 @@ class OpengeverSearch(Search):
         return api.portal.get_registry_record(
             'use_solr', interface=ISearchSettings)
 
-    def results(self, query=None, batch=True, b_size=10, b_start=0):
+    def results(self, query=None, batch=True, b_size=None, b_start=0):
+        if b_size is None:
+            b_size = self.b_size
         if self.use_solr:
             results = self.solr_results(
                 query=query, batch=batch, b_size=b_size, b_start=b_start)
         else:
             results = super(OpengeverSearch, self).results(
-                query=query, batch=batch, b_size=self.b_size, b_start=b_start)
+                query=query, batch=batch, b_size=b_size, b_start=b_start)
 
         if is_bumblebee_feature_enabled:
             self.calculate_showroom_configuration(results)
