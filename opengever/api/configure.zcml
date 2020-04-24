@@ -668,4 +668,12 @@
       permission="opengever.workspaceclient.UseWorkspaceClient"
       />
 
+  <plone:service
+      method="GET"
+      name="@allowed-roles-and-principals"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".allowed_roles_and_principals.AllowedRolesAndPrincipalsGet"
+      permission="opengever.api.ViewAllowedRolesAndPrincipals"
+      />
+
 </configure>
