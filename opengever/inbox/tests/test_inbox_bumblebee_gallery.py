@@ -1,10 +1,8 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestInboxBumblebeeGallery(IntegrationTestCase):
+class TestInboxBumblebeeGallery(SolrIntegrationTestCase):
 
     features = ('bumblebee', )
 
