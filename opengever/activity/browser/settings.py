@@ -32,10 +32,9 @@ import json
 
 TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 
-
-# The following list contains all necessary informations about the activity
-# groups which should be exposed in the notification settings form.
-ACTIVITY_GROUPS = [
+# The following list contains all necessary informations about the notification
+# setting which should be exposed in the notification settings view.
+NOTIFICATION_SETTING_TABS = [
     {'id': 'task',
      'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE],
      'activities': [
@@ -147,14 +146,23 @@ class InvalidUser(Exception):
 
 
 class NotificationSettings(BrowserView):
-    """Settings-form endpoints.
+    """This browserview provides the endpoints for the notification
+    settings form.
+
+    There are two type of settings:
+
+    1. User-Settings
+
+    The user settings provides general notification settings for the current user
+
+    2. Notification-Settings
+
+    The notification settings provides notification settings for specific
+    activities for the current user.
     """
 
-    user_settings = None
-    defaults = None
-
     def save_user_setting(self):
-        """Save global configuration change
+        """API function to save a specific user setting.
         """
         try:
             self.assert_user_in_ogds()
@@ -171,8 +179,8 @@ class NotificationSettings(BrowserView):
 
         return JSONResponse(self.request).proceed().dump()
 
-    def save(self):
-        """Save setting change
+    def save_notification_setting(self):
+        """API function to save a specific notification setting.
         """
         kind = self.request.form['kind']
         mail = json.loads(self.request.form['mail'])
@@ -186,7 +194,7 @@ class NotificationSettings(BrowserView):
 
         for kind in kinds:
             try:
-                setting = self.get_or_create_setting(kind)
+                setting = self.get_or_create_custom_notification_setting(kind)
             except InvalidUser:
                 # User with no entry in the ogds, probably zopemaster.
                 msg = "Cannot save setting for this user as he is not in the ogds"
@@ -197,8 +205,8 @@ class NotificationSettings(BrowserView):
 
         return JSONResponse(self.request).proceed().dump()
 
-    def reset(self):
-        """Reset a personal setting
+    def reset_notification_setting(self):
+        """API function to reset a notification setting of a specific type.
         """
         kind = self.request.form['kind']
 
@@ -208,33 +216,33 @@ class NotificationSettings(BrowserView):
             kinds = (kind, )
 
         for kind in kinds:
-            setting = self.get_setting(kind)
+            setting = self.custom_notification_settings.get(kind)
             create_session().delete(setting)
 
         return JSONResponse(self.request).proceed().dump()
 
     def reset_user_setting(self):
-        """Reset a personal configuration
+        """API function to reset a user setting of a specific name.
         """
         config_name = self.request.form['config_name']
-        default = self.get_default_setting_value(config_name)
+        default = self.get_default_user_setting_value(config_name)
 
         UserSettings.save_setting_for_user(
             api.user.get_current().getId(), config_name, default)
         return JSONResponse(self.request).proceed().dump()
 
     def list(self):
-        """Returns settings for the current user.
+        """API function to get all the required settings for the current user.
         """
         activities = []
-        for group in ACTIVITY_GROUPS:
+        for group in NOTIFICATION_SETTING_TABS:
             for kind in group.get('activities'):
                 kind_title = translate(
                     ACTIVITY_TRANSLATIONS[kind], context=self.request)
 
                 item = {'kind_title': kind_title,
                         'edit_mode': True,
-                        'css_class': self._get_activity_class(kind),
+                        'css_class': self._get_notification_setting_css_class(kind),
                         'kind': kind,
                         'type_id': group.get('id')}
 
@@ -248,7 +256,7 @@ class NotificationSettings(BrowserView):
             help_text = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['help_text'],
                                   context=self.request)
 
-            default = self.get_default_setting_value(config.get('id'))
+            default = self.get_default_user_setting_value(config.get('id'))
             value = UserSettings.get_setting_for_user(
                 api.user.get_current().getId(), config.get('id'))
 
@@ -271,7 +279,7 @@ class NotificationSettings(BrowserView):
 
     def get_role_translations(self):
         roles = {}
-        for group in ACTIVITY_GROUPS:
+        for group in NOTIFICATION_SETTING_TABS:
             for role in group.get('roles'):
                 if role in roles:
                     continue
@@ -284,7 +292,7 @@ class NotificationSettings(BrowserView):
     def dispatchers(self):
         return notification_center().dispatchers
 
-    def get_default_setting_value(self, setting_name):
+    def get_default_user_setting_value(self, setting_name):
         return getattr(UserSettings, setting_name).default.arg
 
     def assert_user_in_ogds(self):
@@ -293,29 +301,27 @@ class NotificationSettings(BrowserView):
         if user is None:
             raise InvalidUser
 
-    def get_user_settings(self):
+    @property
+    def custom_notification_settings(self):
         userid = api.user.get_current().getId()
-        if not self.user_settings:
-            self.user_settings = {
+        if not hasattr(self, '_custom_notification_settings'):
+            setattr(self, '_custom_notification_settings', {
                 setting.kind: setting for setting
-                in NotificationSetting.query.filter_by(userid=userid)}
+                in NotificationSetting.query.filter_by(userid=userid)})
 
-        return self.user_settings
+        return getattr(self, '_custom_notification_settings')
 
-    def get_defaults(self):
-        if not self.defaults:
-            self.defaults = {default.kind: default
-                             for default in NotificationDefault.query}
+    @property
+    def default_notification_settings(self):
+        if not hasattr(self, '_default_notification_settings'):
+            setattr(self, '_default_notification_settings', {
+                default.kind: default for default in NotificationDefault.query
+                })
 
-        return self.defaults
+        return getattr(self, '_default_notification_settings')
 
-    def get_setting(self, kind):
-        userid = api.user.get_current().getId()
-        return NotificationSetting.query.filter_by(
-            userid=userid, kind=kind).first()
-
-    def get_or_create_setting(self, kind):
-        setting = self.get_setting(kind)
+    def get_or_create_custom_notification_setting(self, kind):
+        setting = self.custom_notification_settings.get(kind)
         if not setting:
             self.assert_user_in_ogds()
             setting = NotificationSetting(
@@ -325,11 +331,11 @@ class NotificationSettings(BrowserView):
         return setting
 
     def add_values(self, kind, item, roles):
-        setting = self.get_user_settings().get(kind)
+        setting = self.custom_notification_settings.get(kind)
 
         if not setting:
             item['setting_type'] = 'default'
-            setting = self.get_defaults()[kind]
+            setting = self.default_notification_settings[kind]
         else:
             item['setting_type'] = 'personal'
 
@@ -339,7 +345,7 @@ class NotificationSettings(BrowserView):
 
         return item
 
-    def _get_activity_class(self, kind):
+    def _get_notification_setting_css_class(self, kind):
         css_class = ACTIVITIES_ICONS.get(kind)
         if not css_class:
             css_class = ResponseDescription.get(transition=kind).css_class
@@ -374,7 +380,7 @@ class NotificationSettingsForm(BrowserView):
             api.portal.get().absolute_url())
 
     def save_url(self):
-        return '{}/notification-settings/save'.format(
+        return '{}/notification-settings/save_notification_setting'.format(
             api.portal.get().absolute_url())
 
     def save_user_setting_url(self):
@@ -382,7 +388,7 @@ class NotificationSettingsForm(BrowserView):
             api.portal.get().absolute_url())
 
     def reset_url(self):
-        return '{}/notification-settings/reset'.format(
+        return '{}/notification-settings/reset_notification_setting'.format(
             api.portal.get().absolute_url())
 
     def reset_user_setting_url(self):

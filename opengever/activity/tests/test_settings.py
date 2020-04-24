@@ -104,29 +104,29 @@ class TestSaveSettings(IntegrationTestCase):
 
         with browser.expect_http_error(503):
             browser.open(
-                self.portal, view='notification-settings/save',
+                self.portal, view='notification-settings/save_notification_setting',
                 data={key: self.data[key] for key in self.data if key != 'kind'})
 
         with browser.expect_http_error(503):
             browser.open(
-                self.portal, view='notification-settings/save',
+                self.portal, view='notification-settings/save_notification_setting',
                 data={key: self.data[key] for key in self.data if key != 'mail'})
 
         with browser.expect_http_error(503):
             browser.open(
-                self.portal, view='notification-settings/save',
+                self.portal, view='notification-settings/save_notification_setting',
                 data={key: self.data[key] for key in self.data if key != 'badge'})
 
         with browser.expect_http_error(503):
             browser.open(
-                self.portal, view='notification-settings/save',
+                self.portal, view='notification-settings/save_notification_setting',
                 data={key: self.data[key] for key in self.data if key != 'digest'})
 
     @browsing
     def test_save_setting_adds_personal_setting(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.portal, view='notification-settings/save', data=self.data)
+        browser.open(self.portal, view='notification-settings/save_notification_setting', data=self.data)
 
         settings = NotificationSetting.query.filter_by(userid=self.regular_user.getId()).all()
         self.assertEquals(1, len(settings))
@@ -146,7 +146,7 @@ class TestSaveSettings(IntegrationTestCase):
         data = self.data.copy()
         data['kind'] = 'task-transition-in-progress-tested-and-closed'
 
-        browser.open(self.portal, view='notification-settings/save', data=data)
+        browser.open(self.portal, view='notification-settings/save_notification_setting', data=data)
 
         settings = NotificationSetting.query.filter_by(
             userid=self.regular_user.getId()).all()
@@ -173,7 +173,7 @@ class TestSaveSettings(IntegrationTestCase):
                        digest_notification_roles=[]))
 
         self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='notification-settings/save', data=self.data)
+        browser.open(self.portal, view='notification-settings/save_notification_setting', data=self.data)
 
         settings = NotificationSetting.query.filter_by(userid=self.regular_user.getId()).all()
         self.assertEquals(1, len(settings))
@@ -204,7 +204,7 @@ class TestResetSetting(IntegrationTestCase):
         self.assertEquals(1, query.count())
 
         self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='notification-settings/reset',
+        browser.open(self.portal, view='notification-settings/reset_notification_setting',
                      data={'kind': 'task-added'})
 
         self.assertEquals(0, query.count())
@@ -224,7 +224,7 @@ class TestResetSetting(IntegrationTestCase):
         self.assertEquals(3, query.count())
 
         self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='notification-settings/reset',
+        browser.open(self.portal, view='notification-settings/reset_notification_setting',
                      data={'kind': 'task-transition-in-progress-tested-and-closed'})
 
         self.assertEquals(0, query.count())
