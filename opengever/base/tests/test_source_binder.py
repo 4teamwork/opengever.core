@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 
 
 class TestRepositoryPathSourceBinder(IntegrationTestCase):
@@ -20,7 +21,7 @@ class TestRepositoryPathSourceBinder(IntegrationTestCase):
                          source.navigation_tree_query['path'])
 
 
-class TestDossierSourceBinder(IntegrationTestCase):
+class TestDossierSourceBinder(SolrIntegrationTestCase):
 
     def test_only_objects_inside_the_maindossier_are_selectable(self):
         self.login(self.regular_user)
@@ -30,6 +31,7 @@ class TestDossierSourceBinder(IntegrationTestCase):
         self.inactive_document.title = 'Test inactive'
         [obj.reindexObject() for obj in
          (self.document, self.subdocument, self.inactive_document)]
+        self.commit_solr()
 
         source_binder = DossierPathSourceBinder(
             portal_type=("opengever.document.document", "ftw.mail.mail"),
@@ -42,11 +44,11 @@ class TestDossierSourceBinder(IntegrationTestCase):
         )
 
         source = source_binder(self.dossier)
-        self.assertEqual(['Test open', 'Test sub'],
+        self.assertEqual(['Test sub', 'Test open'],
                          [term.title for term in source.search('Test')])
 
         source = source_binder(self.subdossier)
-        self.assertEqual(['Test open', 'Test sub'],
+        self.assertEqual(['Test sub', 'Test open'],
                          [term.title for term in source.search('Test')])
 
         source = source_binder(self.inactive_dossier)
@@ -58,7 +60,6 @@ class TestRelatedDossierAutocomplete(IntegrationTestCase):
 
     @browsing
     def test_related_dossier_autocomplete_uses_solr_when_feature_enabled(self, browser):
-        self.activate_feature('solr')
         self.solr = self.mock_solr('solr_autocomplete_dossier.json')
 
         self.login(self.dossier_responsible, browser)
@@ -77,6 +78,7 @@ class TestRelatedDossierAutocomplete(IntegrationTestCase):
 
     @browsing
     def test_related_dossier_autocomplete_uses_catalog_when_solr_disabled(self, browser):
+        self.deactivate_feature('solr')
         self.login(self.dossier_responsible, browser)
         browser.open(
             self.dossier,
@@ -92,7 +94,6 @@ class TestAddableDossierTemplatesAutocomplete(IntegrationTestCase):
 
     @browsing
     def test_addable_dossier_autocomplete_uses_solr_when_feature_enabled(self, browser):
-        self.activate_feature('solr')
         self.solr = self.mock_solr('solr_autocomplete_dossiertemplate.json')
 
         self.login(self.administrator, browser)
@@ -114,6 +115,7 @@ class TestAddableDossierTemplatesAutocomplete(IntegrationTestCase):
 
     @browsing
     def test_addable_dossier_autocomplete_uses_catalog_when_solr_disabled(self, browser):
+        self.deactivate_feature('solr')
         self.login(self.administrator, browser)
         browser.open(
             self.empty_repofolder,

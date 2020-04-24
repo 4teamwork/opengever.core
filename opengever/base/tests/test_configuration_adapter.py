@@ -67,7 +67,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('repositoryfolder_tasks_tab', True),
                 ('resolver_name', 'strict'),
                 ('sablon_date_format', u'%d.%m.%Y'),
-                ('solr', False),
+                ('solr', True),
                 ('workspace', False),
                 ('workspace_client', False),
                 ('private_tasks', True),
