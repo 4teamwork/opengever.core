@@ -2,11 +2,11 @@ from AccessControl import getSecurityManager
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.model import UNIT_ID_LENGTH
+from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import to_html_xweb_intelligent
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState

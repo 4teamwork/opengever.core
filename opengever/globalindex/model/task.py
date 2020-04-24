@@ -1,17 +1,16 @@
 from datetime import date
-from sqlalchemy import event
-from opengever.base.model import create_session
 from DateTime import DateTime as ZopeDateTime
 from opengever.base.model import Base
+from opengever.base.model import create_session
 from opengever.base.model import is_oracle
 from opengever.base.model import Session
 from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.model import USER_ID_LENGTH
+from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.query import BaseQuery
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
-from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -23,6 +22,7 @@ from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import DateTime
+from sqlalchemy import event
 from sqlalchemy import ForeignKey
 from sqlalchemy import func
 from sqlalchemy import Index

@@ -9,6 +9,7 @@ from zope.interface import implements
 import pytz
 import sqlalchemy_utils
 
+
 DEFAULT_LOCALE = 'de'
 SUPPORTED_LOCALES = ['de', 'fr', 'en']
 
@@ -27,6 +28,7 @@ UID_LENGTH = 36
 UNIT_ID_LENGTH = 30
 UNIT_TITLE_LENGTH = 255
 USER_ID_LENGTH = 255
+WORKFLOW_STATE_LENGTH = 255
 ZIP_CODE_LENGTH = 16
 
 tables = [
