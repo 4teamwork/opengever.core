@@ -44,12 +44,12 @@ class TestDossierSourceBinder(SolrIntegrationTestCase):
         )
 
         source = source_binder(self.dossier)
-        self.assertEqual(['Test sub', 'Test open'],
-                         [term.title for term in source.search('Test')])
+        self.assertItemsEqual(['Test sub', 'Test open'],
+                              [term.title for term in source.search('Test')])
 
         source = source_binder(self.subdossier)
-        self.assertEqual(['Test sub', 'Test open'],
-                         [term.title for term in source.search('Test')])
+        self.assertItemsEqual(['Test sub', 'Test open'],
+                              [term.title for term in source.search('Test')])
 
         source = source_binder(self.inactive_dossier)
         self.assertEqual(['Test inactive'],
