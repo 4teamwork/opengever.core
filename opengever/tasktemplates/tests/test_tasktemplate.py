@@ -1,11 +1,11 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 
 
-class TestTaskTemplates(IntegrationTestCase):
+class TestTaskTemplates(SolrIntegrationTestCase):
 
     @browsing
     def test_adding_a_tasktemplate(self, browser):
