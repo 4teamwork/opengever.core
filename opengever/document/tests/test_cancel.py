@@ -6,7 +6,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 from zope.component import getMultiAdapter
@@ -123,7 +123,7 @@ class TestCancelDocuments(FunctionalTestCase):
                           error_messages())
 
 
-class TestCancelDocumentCheckoutConfirmation(IntegrationTestCase):
+class TestCancelDocumentCheckoutConfirmation(SolrIntegrationTestCase):
 
     @browsing
     def test_cancel_checkout_action_needs_confirmation(self, browser):
