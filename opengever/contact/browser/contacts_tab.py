@@ -17,9 +17,11 @@ def linked(item, value):
 
     css_class = getattr(item, 'css_icon_class', '')
 
+    if isinstance(value, unicode):
+        value = value.encode('utf8')
     link = '<a href="%s">%s</a>' % (
         url_method(),
-        value and value.encode('utf-8') or '')
+        value or '')
     wrapper = '<span class="linkWrapper %s">%s</span>' % (css_class, link)
     return wrapper
 
