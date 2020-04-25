@@ -603,7 +603,11 @@ class ContentFixtureWithSolrLayer(ContentFixtureLayer):
 
     def setUpPloneSite(self, portal):
         super(ContentFixtureWithSolrLayer, self).setUpPloneSite(portal)
-        SolrServer.get_instance().commit()
+
+        # Before making a Solr backup we need to do a full commit to make sure
+        # extracting SearchableText from files get's processed. This is done in
+        # an after commit hook.
+        transaction.commit()
         SolrReplicationAPIClient.get_instance().create_backup('fixture')
 
 

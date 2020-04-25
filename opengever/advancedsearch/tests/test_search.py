@@ -80,6 +80,7 @@ class TestSearchWithContent(SolrIntegrationTestCase):
     @browsing
     def test_search_documents(self, browser):
         self.login(self.regular_user, browser=browser)
+
         browser.open(self.portal, view='advanced_search')
         browser.fill({
             'Text': u'Vertr\xe4gsentwurf',
