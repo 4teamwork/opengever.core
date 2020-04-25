@@ -16,6 +16,7 @@ Changelog
 - Add support for contact lookup by email2 using Solr. [buchi]
 - Fix title format in OGDS UsersContactsInboxesSource using Solr. [buchi]
 - Fix indexing of documents in Solr integration tests. [buchi]
+- Avoid filtering or sorting on fields that do not exist in Solr. [buchi]
 - Fix bug in table source of trashed documents when using solr. [njohner]
 - Fix bug in search view not respecting batch size when solr is deactivated and change default batch size with Solr to 25. [njohner]
 - Extend the ftw.mail.mail workflow with teamraum specific roles. [elioschmutz]

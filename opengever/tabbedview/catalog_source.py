@@ -75,11 +75,15 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         else:
             solr_query = u'*:*'
 
+        solr = getUtility(ISolrSearch)
+
         filters = []
         if 'trashed' not in query:
             filters.append(u'trashed:false')
         for key, value in query.items():
-            if key == 'SearchableText':
+            if key not in solr.manager.schema.fields:
+                continue
+            elif key == 'SearchableText':
                 continue
             elif key == 'sort_on' or key == 'sort_order':
                 continue
@@ -135,12 +139,14 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                 filters.append(u'{}:{}'.format(key, escape(value)))
 
         sort = query.get('sort_on', None)
-        if sort:
+        if sort and sort in solr.manager.schema.fields:
             sort_order = query.get('sort_order', 'ascending')
             if sort_order in ['descending', 'reverse']:
                 sort += ' desc'
             else:
                 sort += ' asc'
+        else:
+            sort = None
 
         # Todo: modified be removed once the changed metadata is filled on
         # all deployments.
@@ -153,9 +159,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             'q.op': 'AND',
         }
 
-        solr = getUtility(ISolrSearch)
         resp = solr.search(
             query=solr_query, filters=filters, start=0, rows=50, sort=sort,
             **params)
-
         return [OGSolrDocument(doc) for doc in resp.docs]

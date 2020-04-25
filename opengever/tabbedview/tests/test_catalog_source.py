@@ -68,10 +68,17 @@ class TestSolrSearch(IntegrationTestCase):
 
     def test_solr_filters_handle_strings(self):
         self.source.solr_results(
+            {'SearchableText': 'foo', 'metadata': 'FD 1 / 1'})
+        self.assertEqual(
+            self.solr.search.call_args[1]['filters'],
+            [u'trashed:false', u'metadata:FD 1 \\/ 1'])
+
+    def test_solr_filters_ignore_unknown_fields(self):
+        self.source.solr_results(
             {'SearchableText': 'foo', 'reference_number': 'FD 1 / 1'})
         self.assertEqual(
             self.solr.search.call_args[1]['filters'],
-            [u'trashed:false', u'reference_number:FD 1 \\/ 1'])
+            [u'trashed:false'])
 
     def test_solr_filters_do_not_contain_sort_parameters(self):
         self.source.solr_results({
@@ -89,6 +96,13 @@ class TestSolrSearch(IntegrationTestCase):
         self.assertEqual(
             self.solr.search.call_args[1]['sort'],
             u'sortable_title asc')
+
+    def test_solr_sort_ignores_unknown_fields(self):
+        self.source.solr_results(
+            {'SearchableText': 'foo', 'sort_on': 'getObjPositionInParent'})
+        self.assertEqual(
+            self.solr.search.call_args[1]['sort'],
+            None)
 
     def test_solr_fieldlist_contains_columns(self):
         self.source.config.columns = (
