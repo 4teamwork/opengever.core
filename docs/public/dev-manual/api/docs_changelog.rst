@@ -5,6 +5,11 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2020-04-27
+----------
+
+- Kapitel "Breadcrumbs" hinzugefügt
+
 
 2020-04-24
 ----------

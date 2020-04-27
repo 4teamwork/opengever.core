@@ -211,6 +211,20 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter
+      factory=".breadcrumbs.Breadcrumbs"
+      name="breadcrumbs"
+      />
+
+  <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".breadcrumbs.BreadcrumbsGet"
+      name="@breadcrumbs"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
   <plone:service
       method="GET"
       name="@sharing"

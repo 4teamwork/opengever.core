@@ -8,6 +8,7 @@ Changelog
 - Add is_subdossier to catalog metadata. [deiferni]
 - Add Bumblebee auto refresh feature to policy template. [2e12]
 - Task GET API: Also include info about containing dossier. [mbaechtold]
+- Enhance the API endpoint `@breadcrumbs` with more attributes. [mbaechtold]
 - Add key `is_leafnode` to the API endpoint `@navigation`. [mbaechtold]
 - Fix `task_type_helper` to respect the current language for the ram-cache. [elioschmutz]
 - Always use Solr for tabbedview listings. [buchi]

@@ -16,6 +16,7 @@ Inhalt:
    listings.rst
    listing_stats.rst
    navigation.rst
+   breadcrumbs.rst
    searching.rst
    documents.rst
    trash.rst
