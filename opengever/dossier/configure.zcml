@@ -179,6 +179,11 @@
       name="IDossierTemplate"
       />
 
+  <adapter
+      factory=".indexers.has_sametype_children"
+      name="has_sametype_children"
+      />
+
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
            OFS.interfaces.IObjectWillBeMovedEvent"

@@ -4,6 +4,9 @@ from zope.component import getUtility
 from zope.interface import implements
 
 
+DOCUMENT_NAME_PREFIX = u'document-'
+
+
 class IDocumentNameFromTitle(INameFromTitle):
     """Behavior interface.
     """
@@ -17,7 +20,7 @@ class DocumentNameFromTitle(object):
 
     implements(IDocumentNameFromTitle)
 
-    format = u'document-%i'
+    format = DOCUMENT_NAME_PREFIX + '%i'
 
     def __init__(self, context):
         self.context = context
