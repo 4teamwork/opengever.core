@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
+- Add Bumblebee auto refresh feature to policy template. [2e12]
 - Task GET API: Also include info about containing dossier. [mbaechtold]
 - Fix `task_type_helper` to respect the current language for the ram-cache. [elioschmutz]
 - Extend the ftw.mail.mail workflow with teamraum specific roles. [elioschmutz]
