@@ -220,6 +220,13 @@
                    "
       />
 
+  <!-- "opengever.api: View AllowedRolesAndPrincipals" is not used in lawgiver managed workflows -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.api: View AllowedRolesAndPrincipals,
+                   "
+      />
+
   <!-- Ignore default Plone permissions. This means we are not managing in the
        workflows. This does not mean that the permissions are disabled: disabling
        can be done in the rolemap.xml. -->

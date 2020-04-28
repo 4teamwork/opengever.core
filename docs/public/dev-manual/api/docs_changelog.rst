@@ -6,6 +6,12 @@ Changelog
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
 
+2020-04-24
+----------
+
+- Kapitel "Erlaubte Rollen, Benutzer und Gruppen" hinzugefügt
+
+
 2019-10-08
 ----------
 
