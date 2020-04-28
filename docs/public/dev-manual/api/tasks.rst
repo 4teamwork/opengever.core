@@ -385,7 +385,7 @@ Aufgabenverlauf
 Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter dem Attribut ``responses`` enthalten.
 
 
-**Beispiel-Respones auf ein GET Request**:
+**Beispiel-Response auf ein GET Request**:
 
    .. sourcecode:: http
 
@@ -425,5 +425,29 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
           },
         ]
         "responsible": "david.erni",
+        "...": "...",
+      }
+
+Übergeordnetes Dossier
+----------------------
+Angaben zum übergeordneten Dossier einer Aufgabe ist in der GET Repräsentation der Aufgaben unter dem Attribut ``containing_dossier`` enthalten. Dies ist auch bei Unteraufgaben und Weiterleitungen im Eingangskorb der Fall.
+
+
+**Beispiel-Response auf ein GET Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Accept: application/json
+
+      {
+        "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-5",
+        "@type": "opengever.task.task",
+        "UID": "3a551f6e3b62421da029dfceb71656e6",
+        "...": "...",
+        "containing_dossier": {
+          "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1",
+          "title": "Ein Dossier mit Tasks",
+        },
         "...": "...",
       }

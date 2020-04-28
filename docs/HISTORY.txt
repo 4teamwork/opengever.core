@@ -5,8 +5,12 @@ Changelog
 ------------------------
 
 - Add Bumblebee auto refresh feature to policy template. [2e12]
+- Task GET API: Also include info about containing dossier. [mbaechtold]
+- Fix `task_type_helper` to respect the current language for the ram-cache. [elioschmutz]
 - Extend the ftw.mail.mail workflow with teamraum specific roles. [elioschmutz]
 - Extend the `meeting.json`, which will be generated for an exported meeting, with a `agenda_item_list` property which contains a link to the agenda item list document. [elioschmutz]
+- Add @allowed-roles-and-principals API endpoint (callable on every context) to get the information which roles, groups or users are allowed to view an object. [tinagerber]
+- Extend @users endpoint with roles_and_principals. [tinagerber]
 
 
 2020.3.0rc1 (2020-04-09)

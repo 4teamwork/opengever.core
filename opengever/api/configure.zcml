@@ -5,6 +5,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.api">
 
+  <include file="permissions.zcml" />
+
   <include package="plone.rest" file="meta.zcml" />
   <include package="plone.restapi" file="permissions.zcml" />
   <include package="Products.CMFEditions" file="permissions.zcml" />
@@ -30,8 +32,10 @@
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
+  <adapter factory=".task.SerializeTaskToJson" />
   <adapter factory=".task.SerializeTaskResponseToJson" />
   <adapter factory=".task.TaskDeserializeFromJson" />
+  <adapter factory=".users.SerializeUserToJson" />
   <adapter factory=".proposal.SerializeProposalResponseToJson" />
   <adapter factory=".serializer.long_converter" />
   <adapter factory=".field_deserializers.PersistentDefaultFieldDeserializer" />
@@ -664,6 +668,14 @@
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.CopyDocumentFromWorkspacePost"
       permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
+      method="GET"
+      name="@allowed-roles-and-principals"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".allowed_roles_and_principals.AllowedRolesAndPrincipalsGet"
+      permission="opengever.api.ViewAllowedRolesAndPrincipals"
       />
 
 </configure>

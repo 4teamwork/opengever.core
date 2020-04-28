@@ -37,6 +37,7 @@ Inhalt:
    reminder.rst
    journal.rst
    sharing.rst
+   allowed_roles_and_principals.rst
    workspace/index
    linked_workspaces.rst
    templatefolder.rst

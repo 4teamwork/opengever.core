@@ -1,39 +1,42 @@
-_PR-Beschreibung: muss alle notwendigen Informationen enthalten, so dass ein Aussenstehender die Änderung versteht ohne den Code oder den Issue anzuschauen!_
+_PR-Description: should contain all the information necessary for an outsider to understand the change without looking at the code or the issue!_
 
-- _Grund, wieso diese Änderung notwendig ist_
-- _Was das Ziel dieser Änderung ist_
-- _Wie die Änderung erreicht wird (z.B. Design-Entscheide)_
-- _Der Autor soll im PR Body die Änderung anpreisen und verkaufen_
+- _Why the change is necessary_
+- _What the goal of the change is_
+- _How change is achieved (e.g. design decisions)_
+- _The author should advertise and sell the change in the PR body_
 
-_Screenshot: erwünscht, sollen aber immer nur unterstützend eingesetzt werden._
+_Screenshot: whenever useful, but only as a visual aid._
 
 
 Definition of Done: https://4teamwork.atlassian.net/wiki/spaces/CHX4TW/pages/917562/
 
 
-## Checkliste (Must have)
+## Checklist (Must have)
 
-_Alles muss gemacht/angehakt werden._
+_Everything has to be done/checked. Checked but not present means the author deemed it unnecessary._
 
-- [ ] Changelog-Eintrag erstellt? _Falls im PR nicht vorhanden erachtet es der PR-Ersteller als unnötig._
-- [ ] Aktualisierung Dokumentation (API/Deployment/...) aktualisiert? _Falls im PR nicht vorhanden erachtet es der PR-Ersteller als unnötig._
-- [ ] Jira Link + Backlink im Jira / Github Issue Link. _Link muss im PR-Body vorhanden sein._
+- [ ] Changelog entry_
+- [ ] Documentation updated (notably for API and deployment)
+- [ ] Link to issue (Jira or GitHub) and backlink in issue (Jira)
 
 
-## Checkliste (optional)
+## Checklist (optional)
 
-_Nur Zutreffendes soll angehakt stehengelassen werden._
+_Only applicable should be left and checked._
 
-- [ ] Gibt es neue Funktionalität mit einem `Dokument`? Funktioniert das auch mit einem `Mail`?
-- [ ] Wurde etwas an der `Aufgabe` angepasst? Funktioniert das auch mit einer `Weiterleitung`?
-- [ ] Profil angepasst? Sind UpgradeSteps vorhanden/nötig?:
-- [ ] Sind UpgradeSteps `deferrable`, oder können gewisse Schritte des Upgrades konditional ausgeführt werden?
-- [ ] Gibts es eine DB-Schema Migration?
-  - [ ] Wurde alle Columns/Änderungen aus dem Modell in einer DB-Schema Migration nachgeführt.
-  - [ ] Sind Constraint-Namen maximal 30 Zeichen lang (`Oracle`)?
-- [ ] Gibt es ein neues Feature-Flag? Wurden dafür Tests mit aktiviertem und deaktivierte Flag geschrieben?
-- [ ] Könnten Kundeninstallationen von den Änderungen betroffen sein? Müssen Policies angepasst werden?
-- [ ] Gibt es neue Übersetzungen?
-  - [ ] Sind alle msg-Strings in Übersetzungen Unicode?
-  - [ ] Wird die richtige i18n-domain verwendet (Copy-Paste Fehler sind hier häufig)?
-- [ ] Wenn bei Schema-definitionen `missing_value` spezifiziert ist muss immer auch `default` auf den gleichen Wert gesetzt werden
+- [ ] New functionality  for `document` also works for `mail`
+- [ ] New functionality  for `task` also works for `forwarding`
+- Upgrade steps (changes in profile):
+  - [ ] Make it deferrable if possible
+  - [ ] Execute as much as possible conditionally
+- DB-Schema migration
+  - [ ] All changes on a model (columns, etc) are included in a DB-schema migration.
+  - [ ] Constraint names are shorter than 30 characters (`Oracle`)
+- New feature flag:
+  - [ ] Tests with activated and deactivated feature
+- [ ] Change could impact client installations, client policies need to be adapted
+- New translations
+  - [ ] All msg-strings are unicode
+  - [ ] Correct i18n-domain was used (Copy-Paste errors are common here)
+- Change in schema definition:
+  - [ ] If `missing_value` is specified, then `default` has to be set to the same value

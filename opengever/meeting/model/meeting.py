@@ -6,10 +6,10 @@ from opengever.base.model import SQLFormSupport
 from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
+from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
-from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.exceptions import MissingAdHocTemplate
