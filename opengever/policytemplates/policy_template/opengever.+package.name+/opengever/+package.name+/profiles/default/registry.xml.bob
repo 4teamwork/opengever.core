@@ -126,10 +126,10 @@
   </records>
 
 {{% endif %}}
-  <record interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings" field="is_feature_enabled">
-    <field type="plone.registry.field.Bool" />
-    <value>True</value>
-  </record>
+  <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
+    <value key="is_feature_enabled">True</value>
+    <value key="is_auto_refresh_enabled">{{{setup.bumblebee_auto_refresh}}}</value>
+  </records>
 
   <records interface="opengever.base.interfaces.ISearchSettings">
     <value key="use_solr">True</value>
