@@ -195,10 +195,12 @@ class DossierContainer(Container):
 
         query = {
             'path': dict(query=dossier_path, depth=depth),
-            'sort_on': sort_on,
-            'sort_order': sort_order,
             'object_provides': IDossierMarker.__identifier__,
             }
+        if sort_on:
+            query['sort_on'] = sort_on
+        if sort_order:
+            query['sort_order'] = sort_order
 
         if review_state:
             query['review_state'] = review_state

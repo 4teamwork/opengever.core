@@ -368,7 +368,8 @@ class StrictDossierResolver(object):
             IDossier(dossier).end = end_date
         dossier.reindexObject(idxs=['end'])
 
-        for subdossier in dossier.get_subdossiers(depth=1):
+        for subdossier in dossier.get_subdossiers(
+                depth=1, sort_on=None, sort_order=None):
             self._recursive_resolve(
                 subdossier.getObject(), end_date, recursive=True)
 
