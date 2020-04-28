@@ -2,8 +2,7 @@ from opengever.activity import _
 from opengever.activity import ACTIVITIES_ICONS
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import notification_center
-from opengever.activity.model.settings import NotificationDefault
-from opengever.activity.model.settings import NotificationSetting
+from opengever.activity import notification_settings
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
@@ -16,7 +15,6 @@ from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.json_response import JSONResponse
-from opengever.base.model import create_session
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
@@ -160,6 +158,9 @@ class NotificationSettings(BrowserView):
     The notification settings provides notification settings for specific
     activities for the current user.
     """
+    def __init__(self, context, request):
+        super(NotificationSettings, self).__init__(context, request)
+        self.settings = notification_settings.NotificationSettings()
 
     def save_user_setting(self):
         """API function to save a specific user setting.
@@ -187,21 +188,25 @@ class NotificationSettings(BrowserView):
         badge = json.loads(self.request.form['badge'])
         digest = json.loads(self.request.form['digest'])
 
+        try:
+            self.assert_user_in_ogds()
+        except InvalidUser:
+            # User with no entry in the ogds, probably zopemaster.
+            msg = "Cannot save setting for this user as he is not in the ogds"
+            return JSONResponse(self.request).error(msg).proceed().dump()
+
+        userid = api.user.get_current().getId()
+
         if ALIASES.get(kind):
             kinds = ALIASES.get(kind)
         else:
             kinds = (kind, )
 
         for kind in kinds:
-            try:
-                setting = self.get_or_create_custom_notification_setting(kind)
-            except InvalidUser:
-                # User with no entry in the ogds, probably zopemaster.
-                msg = "Cannot save setting for this user as he is not in the ogds"
-                return JSONResponse(self.request).error(msg).proceed().dump()
-            setting.mail_notification_roles = mail
-            setting.badge_notification_roles = badge
-            setting.digest_notification_roles = digest
+            self.settings.set_custom_setting(kind, userid,
+                                             mail_roles=mail,
+                                             badge_roles=badge,
+                                             digest_roles=digest)
 
         return JSONResponse(self.request).proceed().dump()
 
@@ -215,9 +220,9 @@ class NotificationSettings(BrowserView):
         else:
             kinds = (kind, )
 
+        userid = api.user.get_current().getId()
         for kind in kinds:
-            setting = self.custom_notification_settings.get(kind)
-            create_session().delete(setting)
+            self.settings.remove_custom_setting(kind, userid)
 
         return JSONResponse(self.request).proceed().dump()
 
@@ -301,43 +306,12 @@ class NotificationSettings(BrowserView):
         if user is None:
             raise InvalidUser
 
-    @property
-    def custom_notification_settings(self):
-        userid = api.user.get_current().getId()
-        if not hasattr(self, '_custom_notification_settings'):
-            setattr(self, '_custom_notification_settings', {
-                setting.kind: setting for setting
-                in NotificationSetting.query.filter_by(userid=userid)})
-
-        return getattr(self, '_custom_notification_settings')
-
-    @property
-    def default_notification_settings(self):
-        if not hasattr(self, '_default_notification_settings'):
-            setattr(self, '_default_notification_settings', {
-                default.kind: default for default in NotificationDefault.query
-                })
-
-        return getattr(self, '_default_notification_settings')
-
-    def get_or_create_custom_notification_setting(self, kind):
-        setting = self.custom_notification_settings.get(kind)
-        if not setting:
-            self.assert_user_in_ogds()
-            setting = NotificationSetting(
-                kind=kind, userid=api.user.get_current().getId())
-            create_session().add(setting)
-
-        return setting
-
     def add_values(self, kind, item, roles):
-        setting = self.custom_notification_settings.get(kind)
+        userid = api.user.get_current().getId()
+        setting = self.settings.get_setting(kind, userid)
 
-        if not setting:
-            item['setting_type'] = 'default'
-            setting = self.default_notification_settings[kind]
-        else:
-            item['setting_type'] = 'personal'
+        is_custom_setting = self.settings.is_custom_setting(setting)
+        item['setting_type'] = 'personal' if is_custom_setting else 'default'
 
         for dispatcher in self.dispatchers():
             values = getattr(setting, dispatcher.roles_key)
