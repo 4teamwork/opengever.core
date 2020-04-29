@@ -8,7 +8,6 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
@@ -30,12 +29,6 @@ def after_resolve_jobs_pending_indexer(obj):
 
 @indexer(IDossierMarker)
 def DossierSubjectIndexer(obj):
-    aobj = IDossier(obj)
-    return aobj.keywords
-
-
-@indexer(IDossierTemplateMarker)
-def DossierTemplateSubjectIndexer(obj):
     aobj = IDossier(obj)
     return aobj.keywords
 
@@ -222,8 +215,3 @@ class SearchableTextExtender(object):
             searchable.append(searchable_external_reference.encode('utf-8'))
 
         return ' '.join(searchable)
-
-
-@adapter(IDossierTemplateMarker)
-class DossierTemplateSearchableTextExtender(SearchableTextExtender):
-    """Make dossier templates full text searchable."""

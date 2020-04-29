@@ -125,11 +125,6 @@
       />
 
   <adapter
-      factory=".indexers.DossierTemplateSubjectIndexer"
-      name="Subject"
-      />
-
-  <adapter
       factory=".indexers.startIndexer"
       name="start"
       />
@@ -172,11 +167,6 @@
   <adapter
       factory=".indexers.SearchableTextExtender"
       name="IDossier"
-      />
-
-  <adapter
-      factory=".indexers.DossierTemplateSearchableTextExtender"
-      name="IDossierTemplate"
       />
 
   <adapter
