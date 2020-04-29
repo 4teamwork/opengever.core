@@ -1,5 +1,6 @@
 from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
+from Missing import Value as MissingValue
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
@@ -9,6 +10,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
+from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
@@ -156,9 +158,15 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
 
     def __call__(self, *args, **kwargs):
         summary = super(GeverSerializeToJsonSummary, self).__call__(*args, **kwargs)
+
         summary['is_subdossier'] = None
         if IDossierMarker.providedBy(self.context) or IDossierTemplateMarker.providedBy(self.context):
             summary['is_subdossier'] = self.context.is_subdossier()
+
+        summary['is_leafnode'] = None
+        if IRepositoryFolder.providedBy(self.context):
+            summary['is_leafnode'] = self.context.is_leaf_node()
+
         return summary
 
 
@@ -168,7 +176,17 @@ class SerializeBrainToJsonSummary(DefaultJSONSummarySerializer):
 
     def __call__(self, *args, **kwargs):
         summary = super(SerializeBrainToJsonSummary, self).__call__(*args, **kwargs)
-        summary['is_subdossier'] = self.context.is_subdossier or None
+
+        if self.context.is_subdossier == MissingValue:
+            summary['is_subdossier'] = None
+        else:
+            summary['is_subdossier'] = self.context.is_subdossier
+
+        summary['is_leafnode'] = None
+        if self.context.portal_type == 'opengever.repository.repositoryfolder':
+            if self.context.has_sametype_children != MissingValue:
+                summary['is_leafnode'] = not self.context.has_sametype_children
+
         return summary
 
 

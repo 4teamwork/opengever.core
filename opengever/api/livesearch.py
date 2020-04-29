@@ -33,6 +33,9 @@ class GeverLiveSearchGet(SearchGet):
                     'filename': entry.filename,
                     '@id': entry.getURL(),
                     '@type': entry.portal_type,
+                    'review_state': entry.review_state(),
+                    'is_subdossier': entry.is_subdossier,
+                    'is_leafnode': entry.is_leafnode,
                 }
                 for entry in OGSolrContentListing(view.results())]
 
@@ -62,5 +65,8 @@ class GeverLiveSearchGet(SearchGet):
                     'filename': entry['filename'],
                     '@id': entry['@id'],
                     '@type': entry['@type'],
+                    'review_state': entry['review_state'],
+                    'is_subdossier': entry['is_subdossier'],
+                    'is_leafnode': entry['is_leafnode'],
                 }
                 for entry in results['items'][:limit]]

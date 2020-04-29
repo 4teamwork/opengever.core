@@ -51,7 +51,12 @@ class SolrSearchGet(SolrQueryBaseService):
     def parse_requested_fields(self, params):
         requested_fields = params.pop('fl', None)
         if requested_fields:
-            return requested_fields.split(',')
+            requested_fields = requested_fields.split(',')
+            if 'is_leafnode' in requested_fields:
+                # Request additional field required to determine if the repository folder is a leaf node.
+                requested_fields.append('@type')
+                requested_fields.append('has_sametype_children')
+            return requested_fields
         return requested_fields
 
     def prepare_additional_params(self, params):

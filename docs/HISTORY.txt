@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Improve performance when resolving large dossiers. [deiferni]
+- Add attributes `review_state`, `is_subdossier` and `is_leafnode` to the search results returned by `@solrsearch` and `@livesearch`. [mbaechtold]
 - Add attribute `is_subdossier` to the children for GET requests to the API. [mbaechtold]
 - Add is_subdossier to catalog metadata. [deiferni]
 - Add Bumblebee auto refresh feature to policy template. [2e12]
