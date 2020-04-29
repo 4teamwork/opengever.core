@@ -15,7 +15,7 @@ Definition of Done: https://4teamwork.atlassian.net/wiki/spaces/CHX4TW/pages/917
 
 _Everything has to be done/checked. Checked but not present means the author deemed it unnecessary._
 
-- [ ] Changelog entry_
+- [ ] Changelog entry
 - [ ] Documentation updated (notably for API and deployment)
 - [ ] Link to issue (Jira or GitHub) and backlink in issue (Jira)
 
