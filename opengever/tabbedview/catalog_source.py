@@ -138,9 +138,12 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
 
-        sort = query.get('sort_on', None)
-        if sort and sort in solr.manager.schema.fields:
-            sort_order = query.get('sort_order', 'ascending')
+        sort = query.get('sort_on', self.config.sort_on)
+        if sort in solr.manager.schema.fields:
+            if sort == self.config.sort_on:
+                sort_order = query.get('sort_order', self.config.sort_order)
+            else:
+                sort_order = query.get('sort_order', 'ascending')
             if sort_order in ['descending', 'reverse']:
                 sort += ' desc'
             else:

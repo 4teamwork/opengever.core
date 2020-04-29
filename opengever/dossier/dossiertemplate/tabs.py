@@ -20,8 +20,10 @@ class DossierTemplateDocuments(TemplateFolderDocuments):
     # all sub-docouments in the dossiertemplate.
     depth = -1
     sort_on = 'sortable_title'
+    sort_order = 'ascending'
 
 
 class DossierTemplateDocumentsGallery(DocumentsGallery):
 
     sort_on = 'sortable_title'
+    sort_order = 'ascending'
