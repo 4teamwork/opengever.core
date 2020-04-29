@@ -39,6 +39,7 @@
   <column value="containing_subdossier" />
   <column value="containing_dossier" />
   <column value="retention_expiration" />
+  <column value="is_subdossier" />
 
   <!-- TASK -->
   <column value="deadline" />
