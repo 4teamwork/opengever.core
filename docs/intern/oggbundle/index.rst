@@ -1,3 +1,5 @@
+.. _bundle-validator:
+
 Ordnungssystem Validator
 ========================
 
