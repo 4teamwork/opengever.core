@@ -61,7 +61,10 @@ class LiveSearchReplyView(BrowserView):
         params = {
             'fl': [
                 'UID', 'id', 'Title', 'getIcon', 'portal_type',
-                'path', 'Description', 'filename'
+                'path', 'Description', 'filename',
+                'has_sametype_children',
+                'is_subdossier',
+                'review_state',
             ],
         }
 

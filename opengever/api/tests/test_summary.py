@@ -110,6 +110,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'creator': u'robert.ziegler',
                 u'filename': u'Vertraegsentwurf.docx',
                 u'filesize': 27413,
+                u'is_leafnode': None,
                 u'is_subdossier': None,
                 u'mimetype': u'application/vnd.openxmlformats-officedocument.'
                 u'wordprocessingml.document',
@@ -133,6 +134,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
                 u'@type': u'opengever.document.document',
                 u'description': u'Wichtige Vertr\xe4ge',
+                u'is_leafnode': None,
                 u'is_subdossier': None,
                 u'review_state': u'document-state-draft',
                 u'title': u'Vertr\xe4gsentwurf',
@@ -159,6 +161,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
              u'filename': None,
              u'filesize': None,
+             u'is_leafnode': None,
              u'is_subdossier': None}, summary)
 
     @browsing

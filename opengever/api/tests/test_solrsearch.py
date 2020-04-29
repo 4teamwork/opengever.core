@@ -223,3 +223,76 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
                           u'2016-08-31T14:21:33+00:00',
                           u'2016-08-31T19:01:33+00:00'],
                          [item["modified"] for item in browser.json["items"]])
+
+    @browsing
+    def test_review_state(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=UID:{}&fl=review_state'.format(
+            self.portal.absolute_url(), self.subdossier.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            u'dossier-state-active',
+            browser.json['items'][0]['review_state']
+        )
+
+    @browsing
+    def test_undeterminable_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=UID:{}&fl=is_subdossier'.format(
+            self.portal.absolute_url(), self.task.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIsNone(browser.json['items'][0]['is_subdossier'])
+
+    @browsing
+    def test_branch_dossier_is_not_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=UID:{}&fl=is_subdossier'.format(
+            self.portal.absolute_url(), self.dossier.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertFalse(browser.json['items'][0]['is_subdossier'])
+
+    @browsing
+    def test_subdossier_is_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=UID:{}&fl=is_subdossier'.format(
+            self.portal.absolute_url(), self.subdossier.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertTrue(browser.json['items'][0]['is_subdossier'])
+
+    @browsing
+    def test_undeterminable_leafnode(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=UID:{}&fl=is_leafnode'.format(
+            self.portal.absolute_url(), self.subdocument.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIsNone(browser.json['items'][0]['is_leafnode'])
+
+    @browsing
+    def test_branch_repositoryfolder_is_not_leafnode(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=UID:{}&fl=is_leafnode'.format(
+            self.portal.absolute_url(), self.branch_repofolder.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertFalse(browser.json['items'][0]['is_leafnode'])
+
+    @browsing
+    def test_leaf_repositoryfolder_is_leafnode(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=UID:{}&fl=is_leafnode'.format(
+            self.portal.absolute_url(), self.leaf_repofolder.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertTrue(browser.json['items'][0]['is_leafnode'])
