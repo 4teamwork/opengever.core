@@ -8,6 +8,7 @@ Changelog
 - Bump docxcompose to 1.1.1 for non-ascii binary_type docproperty fix. [deiferni]
 - Merge notification settings for tasks. [elioschmutz]
 - Improve performance when resolving large dossiers. [deiferni]
+- Add attribute `is_subdossier` to the children for GET requests to the API. [mbaechtold]
 - Add is_subdossier to catalog metadata. [deiferni]
 - Add @watchers endpoint for tasks and inbox forwardings. [tinagerber]
 - Add Bumblebee auto refresh feature to policy template. [2e12]

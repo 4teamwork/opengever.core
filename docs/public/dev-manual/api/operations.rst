@@ -72,12 +72,14 @@ children des Objekts).
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-259",
             "@type": "opengever.document.document",
             "description": null,
+            "is_subdossier": null,
             "title": "Ein Dokument"
           },
           {
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-260",
             "@type": "opengever.document.document",
             "description": null,
+            "is_subdossier": null,
             "title": "Ein weiteres Dokument"
           }
         ],
