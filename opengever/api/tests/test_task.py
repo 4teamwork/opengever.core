@@ -32,6 +32,7 @@ class TestTaskSerialization(IntegrationTestCase):
                  {u'@id': self.subtask.absolute_url(),
                   u'@type': u'opengever.task.task',
                   u'description': u'',
+                  u'is_subdossier': None,
                   u'review_state': u'task-state-resolved',
                   u'title': self.subtask.title}
              ],
@@ -92,6 +93,7 @@ class TestTaskSerialization(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/document-13',
                 u'@type': u'opengever.document.document',
                 u'description': u'',
+                u'is_subdossier': None,
                 u'review_state': u'document-state-draft',
                 u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung'}],
               u'changes': [],
@@ -151,6 +153,7 @@ class TestTaskSerialization(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
+                u'is_subdossier': False,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -167,6 +170,7 @@ class TestTaskSerialization(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
+                u'is_subdossier': False,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -183,6 +187,7 @@ class TestTaskSerialization(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/eingangskorb',
                 u'@type': u'opengever.inbox.inbox',
                 u'description': u'',
+                u'is_subdossier': None,
                 u'review_state': u'inbox-state-default',
                 u'title': u'Eingangsk\xf6rbli',
             },

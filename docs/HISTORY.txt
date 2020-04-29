@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Improve performance when resolving large dossiers. [deiferni]
+- Add attribute `is_subdossier` to the children for GET requests to the API. [mbaechtold]
 - Add is_subdossier to catalog metadata. [deiferni]
 - Add Bumblebee auto refresh feature to policy template. [2e12]
 - Task GET API: Also include info about containing dossier. [mbaechtold]

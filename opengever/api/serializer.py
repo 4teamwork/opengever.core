@@ -3,6 +3,8 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
@@ -16,10 +18,13 @@ from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
+from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
+from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
+from zope.interface import Interface
 
 
 def extend_with_bumblebee_checksum(result, context):
@@ -143,6 +148,28 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
                 team_serializer = queryMultiAdapter(
                     (team, self.request), ISerializeToJsonSummary)
                 data['teams'].append(team_serializer())
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(Interface, IOpengeverBaseLayer)
+class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
+
+    def __call__(self, *args, **kwargs):
+        summary = super(GeverSerializeToJsonSummary, self).__call__(*args, **kwargs)
+        summary['is_subdossier'] = None
+        if IDossierMarker.providedBy(self.context) or IDossierTemplateMarker.providedBy(self.context):
+            summary['is_subdossier'] = self.context.is_subdossier()
+        return summary
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(ICatalogBrain, IOpengeverBaseLayer)
+class SerializeBrainToJsonSummary(DefaultJSONSummarySerializer):
+
+    def __call__(self, *args, **kwargs):
+        summary = super(SerializeBrainToJsonSummary, self).__call__(*args, **kwargs)
+        summary['is_subdossier'] = self.context.is_subdossier or None
+        return summary
 
 
 class SerializeSQLModelToJsonSummaryBase(object):

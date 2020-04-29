@@ -19,12 +19,14 @@
   <include package=".schema" />
 
   <adapter factory=".serializer.GeverSerializeToJson" />
+  <adapter factory=".serializer.GeverSerializeToJsonSummary" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJson" />
   <adapter factory=".serializer.SerializeUserModelToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJsonSummary" />
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
+  <adapter factory=".serializer.SerializeBrainToJsonSummary" />
 
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
