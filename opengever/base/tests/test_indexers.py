@@ -190,3 +190,97 @@ class TestHasSameTypeChildren(IntegrationTestCase):
 
         self.assert_metadata_value(False, 'has_sametype_children',
                                    self.empty_repofolder)
+
+
+class TestIsSubdossierIndexer(IntegrationTestCase):
+
+    def test_is_subdossier_for_dossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier', self.dossier)
+        self.assert_metadata_value(False, 'is_subdossier', self.dossier)
+
+    def test_is_subdossier_for_meetingdossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier', self.meeting_dossier)
+        self.assert_metadata_value(False, 'is_subdossier', self.meeting_dossier)
+
+    def test_is_subdossier_for_subdossiers(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(True, 'is_subdossier', self.subdossier)
+        self.assert_metadata_value(True, 'is_subdossier', self.subdossier)
+        self.assert_index_value(True, 'is_subdossier', self.subsubdossier)
+        self.assert_metadata_value(True, 'is_subdossier', self.subsubdossier)
+
+    def test_is_subdossier_for_dossiertemplate(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier',
+                                self.dossiertemplate)
+        self.assert_metadata_value(False, 'is_subdossier',
+                                   self.dossiertemplate)
+
+    def test_is_subdossier_for_subdossiertemplate(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(True, 'is_subdossier',
+                                self.subdossiertemplate)
+        self.assert_metadata_value(True, 'is_subdossier',
+                                   self.subdossiertemplate)
+
+    def test_is_subdossier_for_reporoot(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier',
+                                self.repository_root)
+        self.assert_metadata_value(None, 'is_subdossier',
+                                   self.repository_root)
+
+    def test_is_subdossier_for_repofolders(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier',
+                                self.branch_repofolder)
+        self.assert_metadata_value(None, 'is_subdossier',
+                                   self.branch_repofolder)
+        self.assert_index_value(False, 'is_subdossier',
+                                self.leaf_repofolder)
+        self.assert_metadata_value(None, 'is_subdossier',
+                                   self.leaf_repofolder)
+
+    def test_is_subdossier_for_tasks(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier', self.task)
+        self.assert_metadata_value(None, 'is_subdossier', self.task)
+        self.assert_index_value(False, 'is_subdossier', self.subtask)
+        self.assert_metadata_value(None, 'is_subdossier', self.subtask)
+
+    def test_is_subdossier_for_workspaces(self):
+        self.login(self.workspace_member)
+
+        self.assert_index_value(False, 'is_subdossier', self.workspace_root)
+        self.assert_metadata_value(None, 'is_subdossier', self.workspace_root)
+        self.assert_index_value(False, 'is_subdossier', self.workspace)
+        self.assert_metadata_value(None, 'is_subdossier', self.workspace)
+        self.assert_index_value(False, 'is_subdossier', self.workspace_folder)
+        self.assert_metadata_value(None, 'is_subdossier', self.workspace_folder)
+
+    def test_is_subdossier_for_private_folder(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier', self.private_root)
+        self.assert_metadata_value(None, 'is_subdossier', self.private_root)
+
+        self.assert_index_value(False, 'is_subdossier', self.private_folder)
+        self.assert_metadata_value(None, 'is_subdossier', self.private_folder)
+
+    def test_is_subdossier_for_private_dossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_value(False, 'is_subdossier',
+                                self.private_dossier)
+        self.assert_metadata_value(False, 'is_subdossier',
+                                   self.private_dossier)

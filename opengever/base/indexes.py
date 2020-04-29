@@ -92,3 +92,8 @@ def has_sametype_children(obj):
     # portal_type attribute.
     return any(obj.portal_type == getattr(aq_base(child), "portal_type", None)
                for child in obj.objectValues())
+
+
+@indexer(IDexterityContent)
+def is_subdossier(obj):
+    return None

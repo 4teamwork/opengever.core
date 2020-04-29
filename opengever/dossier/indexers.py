@@ -169,6 +169,11 @@ def containing_subdossier(obj):
     return ''
 
 
+@indexer(IDossierMarker)
+def is_subdossier(obj):
+    return obj.is_subdossier()
+
+
 @implementer(dexteritytextindexer.IDynamicTextIndexExtender)
 @adapter(IDossierMarker)
 class SearchableTextExtender(object):

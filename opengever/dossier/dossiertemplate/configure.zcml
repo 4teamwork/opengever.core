@@ -9,6 +9,11 @@
       />
 
   <adapter
+      factory=".indexers.is_subdossier"
+      name="is_subdossier"
+      />
+
+  <adapter
       factory=".indexers.DossierTemplateSearchableTextExtender"
       name="IDossierTemplate"
       />

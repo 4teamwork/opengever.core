@@ -381,6 +381,11 @@
       name="has_sametype_children"
       />
 
+  <adapter
+      factory=".indexes.is_subdossier"
+      name="is_subdossier"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
