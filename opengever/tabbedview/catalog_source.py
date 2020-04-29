@@ -159,7 +159,33 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             'q.op': 'AND',
         }
 
+        start = (self.config.batching_current_page - 1) * self.config.pagesize
         resp = solr.search(
-            query=solr_query, filters=filters, start=0, rows=50, sort=sort,
-            **params)
-        return [OGSolrDocument(doc) for doc in resp.docs]
+            query=solr_query, filters=filters, start=start,
+            rows=self.config.pagesize, sort=sort, **params)
+
+        # Avoid calling any custom sort method. This is highly inefficient and
+        # would require us to load *all* results from Solr.
+        self.config._custom_sort_method = (
+            lambda results, sort_on, sort_reverse: results
+        )
+
+        return BatchableSolrResults(resp)
+
+
+class BatchableSolrResults:
+    """A sequence of Solr docs that plays well with Plone batching"""
+    def __init__(self, resp):
+        self.actual_result_count = resp.num_found
+        self.start = resp.start
+        self.docs = [OGSolrDocument(doc) for doc in resp.docs]
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return self.docs[
+                slice(key.start - self.start, key.stop - self.start, key.step)
+            ]
+        return self.docs[key - self.start]
+
+    def __len__(self):
+        return self.actual_result_count
