@@ -114,77 +114,62 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-transition-reject',
-        'icon': 'rejected',
         'activities': ['proposal-transition-reject'],
     },
     {
         'id': 'proposal-transition-schedule',
-        'icon': 'scheduled',
         'activities': ['proposal-transition-schedule'],
     },
     {
         'id': 'proposal-transition-pull',
-        'icon': 'pulled',
         'activities': ['proposal-transition-pull'],
     },
     {
         'id': 'proposal-transition-decide',
-        'icon': 'decided',
         'activities': ['proposal-transition-decide'],
     },
     {
         'id': 'proposal-transition-submit',
-        'icon': 'submitted',
         'activities': ['proposal-transition-submit'],
     },
     {
         'id': 'proposal-commented',
-        'icon': 'commented',
         'activities': ['proposal-commented'],
     },
     {
         'id': 'proposal-attachment-updated',
-        'icon': 'documentUpdated',
         'activities': ['proposal-attachment-updated'],
     },
     {
         'id': 'proposal-additional-documents-submitted',
-        'icon': 'documentAdded',
         'activities': ['proposal-additional-documents-submitted'],
     },
     {
         'id': 'task-reminder',
-        'icon': 'taskReminder',
         'activities': ['task-reminder'],
     },
     {
         'id': 'disposition-added',
-        'icon': 'created',
         'activities': ['disposition-added'],
     },
     {
         'id': 'disposition-transition-appraise',
-        'icon': 'dispositionAppraised',
         'activities': ['disposition-transition-appraise'],
     },
     {
         'id': 'disposition-transition-archive',
-        'icon': 'dispositionArchived',
         'activities': ['disposition-transition-archive'],
     },
     {
         'id': 'disposition-transition-dispose',
-        'icon': 'dispositionDisposed',
         'activities': ['disposition-transition-dispose'],
     },
     {
         'id': 'disposition-transition-refuse',
-        'icon': 'dispositionRefused',
         'activities': ['disposition-transition-refuse'],
     },
     {
         'id': 'disposition-transition-close',
-        'icon': 'dispositionClosed',
         'activities': ['disposition-transition-close'],
     },
     {
@@ -193,7 +178,6 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'dossier-overdue',
-        'icon': 'dossierOverdue',
         'activities': ['dossier-overdue'],
     },
     {

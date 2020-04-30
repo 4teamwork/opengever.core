@@ -8,7 +8,6 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.activity.mail import PloneNotificationMailer
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
-from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -193,7 +192,6 @@ ACTIVITY_TRANSLATIONS = {
 
 # TODO: There are too many places where the activites are defined:
 # - ACTIVITE_TRANSLATIONS
-# - ACTIVITE_ICONS
 # - activity/hooks.py
 # - activity/browser/settings.py
 # - opengever/task/response_description.py
@@ -210,21 +208,3 @@ ACTIVITY_TRANSLATIONS = {
 #     }
 # }
 #
-ACTIVITIES_ICONS = {
-    'proposal-transition-reject': 'rejected',
-    'proposal-transition-schedule': 'scheduled',
-    'proposal-transition-pull': 'pulled',
-    'proposal-transition-decide': 'decided',
-    'proposal-transition-submit': 'submitted',
-    'proposal-commented': 'commented',
-    'proposal-attachment-updated': 'documentUpdated',
-    'proposal-additional-documents-submitted': 'documentAdded',
-    'task-reminder': 'taskReminder',
-    'disposition-added': 'created',
-    'disposition-transition-appraise': 'dispositionAppraised',
-    'disposition-transition-archive': 'dispositionArchived',
-    'disposition-transition-dispose': 'dispositionDisposed',
-    'disposition-transition-refuse': 'dispositionRefused',
-    'disposition-transition-close': 'dispositionClosed',
-    'dossier-overdue': 'dossierOverdue',
-}

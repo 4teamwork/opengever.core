@@ -110,48 +110,6 @@ ul.notifications-configurations-form {
 
   .notification-settings-kind span {
     font-weight: bold;
-
-    &:before {
-      font-family: 'opengever';
-      content: "x";
-      padding-right: 5px;
-    }
-
-    &.created:before { content: $refuse; }
-    &.reopen:before { content: $reopen; }
-    &.reactivate:before { content: $reactivate; }
-    &.cancelled:before { content: $cancelled; }
-    &.accept:before { content: $accept; }
-    &.reassign:before { content: $reassign; }
-    &.revise:before { content: $revise; }
-    &.skip:before { font-family: 'Font Awesome 5 Free'; content: fa-content($fa-var-step-forward); }
-    &.taskCommented:before { content: $comment; }
-    &.assignDossier:before { content: $assignDossier; }
-    &.complete:before { content: $complete; }
-    &.close:before { content: $close;}
-    &.addSubtask:before { content: $addSubtask;}
-    &.addDocument:before { content: $addDocument;}
-    &.created:before { content: $created; }
-    &.modifyDeadline:before { content: $modifyDeadline; }
-    &.reactivated:before { content: $reactivate; }
-    &.refuse:before { content: $refuse; }
-    &.delegate:before { content: $delegate; }
-    &.submitted:before { content: $submit; }
-    &.rejected:before { content: $reject; }
-    &.scheduled:before { content: $schedule; }
-    &.pulled:before { content: $removeSchedule; }
-    &.decided:before { content: $decided; }
-    &.commented:before { content: $comment; }
-    &.documentUpdated:before { content: $updateDocument; }
-    &.documentAdded:before { content: $addDocument; }
-    &.taskReminder:before { font-family: 'Font Awesome 5 Free'; content: fa-content($fa-var-clock); }
-    &.dispositionAdded:before { content: $created; }
-    &.dispositionAppraised:before { font-family: 'Font Awesome 5 Free';  content: fa-content($appraise); }
-    &.dispositionDisposed:before { font-family: 'Font Awesome 5 Free';  content: fa-content($dispose); }
-    &.dispositionArchived:before { font-family: 'Font Awesome 5 Free';  content: fa-content($archive); }
-    &.dispositionClosed:before { font-family: 'Font Awesome 5 Free';  content: fa-content($disposition-close); }
-    &.dispositionRefused:before { font-family: 'Font Awesome 5 Free';  content: fa-content($disposition-refuse); }
-    &.dossierOverdue:before { content: $time; }
   }
 
   .action {

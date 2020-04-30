@@ -1,5 +1,4 @@
 from opengever.activity import _
-from opengever.activity import ACTIVITIES_ICONS
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import notification_center
 from opengever.activity import notification_settings
@@ -18,7 +17,6 @@ from opengever.base.json_response import JSONResponse
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
-from opengever.task.response_description import ResponseDescription
 from opengever.workspace import is_workspace_feature_enabled
 from path import Path
 from plone import api
@@ -247,7 +245,6 @@ class NotificationSettings(BrowserView):
 
                 item = {'kind_title': kind_title,
                         'edit_mode': True,
-                        'css_class': self._get_notification_setting_css_class(kind),
                         'kind': kind,
                         'type_id': group.get('id')}
 
@@ -318,12 +315,6 @@ class NotificationSettings(BrowserView):
             item[dispatcher._id] = {role: bool(role in values) for role in roles}
 
         return item
-
-    def _get_notification_setting_css_class(self, kind):
-        css_class = ACTIVITIES_ICONS.get(kind)
-        if not css_class:
-            css_class = ResponseDescription.get(transition=kind).css_class
-        return css_class
 
 
 class NotificationSettingsForm(BrowserView):
