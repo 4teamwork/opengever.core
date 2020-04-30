@@ -12,6 +12,9 @@ from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
+import logging
+
+logger = logging.getLogger('opengever.tabbedview.catalog_source')
 
 
 @implementer(ITableSource)
@@ -82,6 +85,8 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             filters.append(u'trashed:false')
         for key, value in query.items():
             if key not in solr.manager.schema.fields:
+                logger.warning(
+                    'Ignoring filter criteria for unknown field %s', key)
                 continue
             elif key == 'SearchableText':
                 continue
@@ -149,6 +154,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             else:
                 sort += ' asc'
         else:
+            logger.warning('Ignoring unknown sort criteria %s', sort)
             sort = None
 
         # Todo: modified be removed once the changed metadata is filled on
