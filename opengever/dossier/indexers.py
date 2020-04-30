@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
@@ -83,6 +84,23 @@ def external_reference(obj):
 def blocked_local_roles(obj):
     """Return whether acquisition is blocked or not."""
     return bool(getattr(aq_inner(obj), '__ac_local_roles_block__', False))
+
+
+@indexer(IDossierMarker)
+def has_sametype_children(obj):
+    """Optimized indexer for dossiers that prevents loading documents.
+
+    It skips all objects that are obviously documents based on their key.
+    This potentially prevents loading all document objects of a dossier into
+    memory.
+    """
+    for key in obj.objectIds(ordered=False):
+        if key.startswith(DOCUMENT_NAME_PREFIX):
+            continue
+        if getattr(obj[key], "portal_type") == obj.portal_type:
+            return True
+
+    return False
 
 
 TYPES_WITH_CONTAINING_DOSSIER_INDEX = set(('opengever.dossier.businesscasedossier',
