@@ -1,5 +1,16 @@
 from opengever.activity import model
 from opengever.base.model import create_session
+from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
+from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
+from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
+from opengever.activity.roles import DOSSIER_RESPONSIBLE_ROLE
+from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
+from opengever.activity.roles import TASK_ISSUER_ROLE
+from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
+
 
 # The NOTIFICATION_CONFIGURATION provides the configuration for the notification
 # settings.
@@ -11,182 +22,326 @@ NOTIFICATION_CONFIGURATION = [
     {
         'id': 'task-added',
         'activities': ['task-added'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
+        },
     },
     {
         'id': 'task-transition-cancelled-open',
         'activities': ['task-transition-cancelled-open'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-rejected-open',
         'activities': ['task-transition-rejected-open'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-skipped-open',
         'activities': ['task-transition-skipped-open'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-planned-skipped',
         'activities': ['task-transition-planned-skipped'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-delegate',
         'activities': ['task-transition-delegate'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-in-progress-resolved',
         'activities': ['task-transition-in-progress-resolved'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-open-resolved',
         'activities': ['task-transition-open-resolved'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-in-progress-tested-and-closed',
         'activities': ['task-transition-in-progress-tested-and-closed'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-modify-deadline',
         'activities': ['task-transition-modify-deadline'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-open-cancelled',
         'activities': ['task-transition-open-cancelled'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-open-in-progress',
         'activities': ['task-transition-open-in-progress'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-open-rejected',
         'activities': ['task-transition-open-rejected'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-commented',
         'activities': ['task-commented'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-resolved-in-progress',
         'activities': ['task-transition-resolved-in-progress'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-open-tested-and-closed',
         'activities': ['task-transition-open-tested-and-closed'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-resolved-tested-and-closed',
         'activities': ['task-transition-resolved-tested-and-closed'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-rejected-skipped',
         'activities': ['task-transition-rejected-skipped'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'forwarding-added',
         'activities': ['forwarding-added'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
+        },
     },
     {
         'id': 'forwarding-transition-accept',
         'activities': ['forwarding-transition-accept'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'forwarding-transition-assign-to-dossier',
         'activities': ['forwarding-transition-assign-to-dossier'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'forwarding-transition-close',
         'activities': ['forwarding-transition-close'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'forwarding-transition-refuse',
         'activities': ['forwarding-transition-refuse'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+        },
     },
     {
         'id': 'task-transition-reassign',
         'activities': ['task-transition-reassign'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
+        },
     },
     {
         'id': 'forwarding-transition-reassign',
         'activities': ['forwarding-transition-reassign'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
+        },
     },
     {
         'id': 'forwarding-transition-reassign-refused',
         'activities': ['forwarding-transition-reassign-refused'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
+        },
     },
     {
         'id': 'proposal-transition-reject',
         'activities': ['proposal-transition-reject'],
+        'default_settings': {
+            'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
+        }
     },
     {
         'id': 'proposal-transition-schedule',
         'activities': ['proposal-transition-schedule'],
+        'default_settings': {
+            'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
+        }
     },
     {
         'id': 'proposal-transition-pull',
         'activities': ['proposal-transition-pull'],
+        'default_settings': {
+            'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
+        }
     },
     {
         'id': 'proposal-transition-decide',
         'activities': ['proposal-transition-decide'],
+        'default_settings': {
+            'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
+        }
     },
     {
         'id': 'proposal-transition-submit',
         'activities': ['proposal-transition-submit'],
+        'default_settings': {
+            'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE],
+        }
     },
     {
         'id': 'proposal-commented',
         'activities': ['proposal-commented'],
+        'default_settings': {
+            'badge_notification_roles': [PROPOSAL_ISSUER_ROLE,
+                                         COMMITTEE_RESPONSIBLE_ROLE],
+        }
     },
     {
         'id': 'proposal-attachment-updated',
         'activities': ['proposal-attachment-updated'],
+        'default_settings': {
+            'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]
+        }
     },
     {
         'id': 'proposal-additional-documents-submitted',
         'activities': ['proposal-additional-documents-submitted'],
+        'default_settings': {
+            'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]
+        }
     },
     {
         'id': 'task-reminder',
         'activities': ['task-reminder'],
+        'default_settings': {
+            'badge_notification_roles': [TASK_REMINDER_WATCHER_ROLE],
+        }
     },
     {
         'id': 'disposition-added',
         'activities': ['disposition-added'],
+        'default_settings': {
+            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+            'mail_notification_roles': [DISPOSITION_ARCHIVIST_ROLE],
+        }
     },
     {
         'id': 'disposition-transition-appraise',
         'activities': ['disposition-transition-appraise'],
+        'default_settings': {
+            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+        }
     },
     {
         'id': 'disposition-transition-archive',
         'activities': ['disposition-transition-archive'],
+        'default_settings': {
+            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+        }
     },
     {
         'id': 'disposition-transition-dispose',
         'activities': ['disposition-transition-dispose'],
+        'default_settings': {
+            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+        }
     },
     {
         'id': 'disposition-transition-refuse',
         'activities': ['disposition-transition-refuse'],
+        'default_settings': {
+            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+        }
     },
     {
         'id': 'disposition-transition-close',
         'activities': ['disposition-transition-close'],
+        'default_settings': {
+            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+        }
     },
     {
         'id': 'disposition-transition-appraised-to-closed',
         'activities': ['disposition-transition-appraised-to-closed'],
+        'default_settings': {
+            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+        }
     },
     {
         'id': 'dossier-overdue',
         'activities': ['dossier-overdue'],
+        'default_settings': {
+            'badge_notification_roles': [DOSSIER_RESPONSIBLE_ROLE],
+        }
     },
     {
         'id': 'todo-assigned',
         'activities': ['todo-assigned'],
+        'default_settings': {
+            'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
+            'digest_notification_roles': [WORKSPACE_MEMBER_ROLE],
+        }
     },
     {
         'id': 'todo-modified',
         'activities': ['todo-modified'],
+        'default_settings': {
+            'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
+            'digest_notification_roles': [WORKSPACE_MEMBER_ROLE],
+        }
     },
 ]
 

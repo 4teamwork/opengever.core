@@ -192,7 +192,6 @@ ACTIVITY_TRANSLATIONS = {
 
 # TODO: There are too many places where the activites are defined:
 # - ACTIVITE_TRANSLATIONS
-# - activity/hooks.py
 # - activity/browser/settings.py
 # - opengever/task/response_description.py
 #

@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.activity.hooks import DEFAULT_SETTINGS
+from opengever.activity.notification_settings import NotificationSettings
 from opengever.activity.model.settings import NotificationSetting
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
@@ -34,8 +34,8 @@ class TestListSettings(IntegrationTestCase):
 
         self.assertItemsEqual(
             [item.get('kind') for item in activities],
-            [item.get('kind') for item in DEFAULT_SETTINGS
-             if item.get('kind') not in aliased])
+            [item.get('id') for item in NotificationSettings().configuration
+             if item.get('id') not in aliased])
 
         task_added = [item for item in activities if item.get('kind') == 'task-added'][0]
         self.assertEquals({u'task_issuer': False, u'task_responsible': True},
