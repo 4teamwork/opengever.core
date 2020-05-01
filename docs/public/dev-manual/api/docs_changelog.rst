@@ -6,6 +6,12 @@ Changelog
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
 
+2020-04-29
+----------
+
+- Kapitel "Beobachter" hinzugefügt
+
+
 2020-04-24
 ----------
 
