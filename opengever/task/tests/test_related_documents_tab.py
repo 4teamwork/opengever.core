@@ -1,8 +1,8 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestTaskRelatedDocumentsTabWithoutOfficeconnector(IntegrationTestCase):
+class TestTaskRelatedDocumentsTabWithoutOfficeconnector(SolrIntegrationTestCase):
 
     features = ("!officeconnector-attach",)
 
@@ -24,7 +24,7 @@ class TestTaskRelatedDocumentsTabWithoutOfficeconnector(IntegrationTestCase):
         self.assertEqual(expected_actions, browser.css(".actionMenu a").text)
 
 
-class TestTaskRelatedDocumentsTabWithOfficeconnector(IntegrationTestCase):
+class TestTaskRelatedDocumentsTabWithOfficeconnector(SolrIntegrationTestCase):
 
     features = ("officeconnector-attach",)
 

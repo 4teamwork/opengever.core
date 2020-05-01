@@ -6,12 +6,13 @@ from ftw.zipexport.zipfilestream import ZipFile
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from StringIO import StringIO
 from zope.interface import alsoProvides
 
 
-class TestTaskOverview(IntegrationTestCase):
+class TestTaskOverview(SolrIntegrationTestCase):
 
     @browsing
     def test_issuer_is_linked_to_issuers_details_view(self, browser):

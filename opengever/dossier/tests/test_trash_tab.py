@@ -1,22 +1,19 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
+from opengever.testing.integration_test_case import SolrIntegrationTestCase
 
 
-class TestTrashTab(FunctionalTestCase):
+class TestTrashTab(SolrIntegrationTestCase):
 
     @browsing
     def test_trashed_documents_in_listing_are_linked(self, browser):
-        dossier = create(Builder('dossier'))
-        create(Builder('document')
-               .within(dossier)
-               .trashed())
+        self.login(self.regular_user, browser)
 
-        browser.login().visit(dossier, view='tabbedview_view-trash')
+        self.trash_documents(self.document)
+        self.commit_solr()
 
-        items = browser.css('table.listing a.icon-document_empty')
+        browser.visit(self.dossier, view='tabbedview_view-trash')
+        items = browser.css('table.listing a.document_link')
         self.assertEqual(1, len(items))
         self.assertEqual(
-            'http://nohost/plone/dossier-1/document-1',
+            self.document.absolute_url(),
             items.first.get('href'))

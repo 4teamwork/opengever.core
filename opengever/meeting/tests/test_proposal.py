@@ -12,13 +12,13 @@ from opengever.meeting import CLOSED_PROPOSAL_STATES
 from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.command import MIME_DOCX
-from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
 from plone import api
@@ -82,7 +82,7 @@ class TestProposalViewsDisabled(IntegrationTestCase):
             browser.visit(self.draft_proposal, view='edit')
 
 
-class TestProposal(IntegrationTestCase):
+class TestProposalSolr(SolrIntegrationTestCase):
 
     features = (
         '!officeconnector-checkout',
@@ -117,6 +117,14 @@ class TestProposal(IntegrationTestCase):
             [u'Vertr\xe4gsentwurf', 'Feedback zum Vertragsentwurf'],
             browser.css('#form-widgets-relatedItems span.label').text,
             )
+
+
+class TestProposal(IntegrationTestCase):
+
+    features = (
+        '!officeconnector-checkout',
+        'meeting',
+    )
 
     @browsing
     def test_dossier_title_is_default_value_for_proposal_title(self, browser):

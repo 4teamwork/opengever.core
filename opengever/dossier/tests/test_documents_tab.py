@@ -1,9 +1,9 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.base.behaviors.base import IOpenGeverBase
 
 
-class TestDocumentsTab(IntegrationTestCase):
+class TestDocumentsTab(SolrIntegrationTestCase):
 
     @browsing
     def test_containing_subdossiers_are_linked(self, browser):
@@ -11,6 +11,8 @@ class TestDocumentsTab(IntegrationTestCase):
         IOpenGeverBase(self.subdossier).title = u'S\xfcbdossier <Foo> Bar'
 
         self.subdocument.reindexObject()
+        self.commit_solr()
+
         browser.open(self.dossier, view='tabbedview_view-documents')
         link = browser.css('table.listing').first.css('a.subdossierLink')[-1]
         self.assertEqual(u'S\xfcbdossier &lt;Foo&gt; Bar', link.innerHTML)

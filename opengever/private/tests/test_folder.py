@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.interfaces import IReferenceNumber
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 
 
@@ -81,6 +82,11 @@ class TestPrivateFolderTabbedView(IntegrationTestCase):
         self.assertEqual(
             [u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
             browser.css('#portal-breadcrumbs li').text)
+
+
+class TestPrivateFolderTabbedViewSolr(SolrIntegrationTestCase):
+
+    features = ('private',)
 
     @browsing
     def test_dossier_tab_lists_all_containig_private_dossiers(self, browser):

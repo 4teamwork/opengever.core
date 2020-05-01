@@ -331,7 +331,7 @@ class ISearchSettings(Interface):
     use_solr = schema.Bool(
         title=u'Use Solr',
         description=u'Enables Solr for search forms.',
-        default=False,
+        default=True,
     )
 
 

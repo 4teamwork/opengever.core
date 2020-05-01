@@ -2,12 +2,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_message
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 
 
-class TestMoveProposalItems(IntegrationTestCase):
+class TestMoveProposalItems(SolrIntegrationTestCase):
 
     @browsing
     def test_move_proposal_to_new_dossier(self, browser):
@@ -101,6 +101,7 @@ class TestMoveProposalItems(IntegrationTestCase):
         create(Builder('dossier')
                .titled(safe_unicode(self.subsubdossier.title_or_id()))
                .within(sister_dossier))
+        self.commit_solr()
 
         browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.subsubdossier.title_or_id()))))
         self.assertEqual(
@@ -126,6 +127,7 @@ class TestMoveProposalItems(IntegrationTestCase):
         with self.login(self.manager):
             api.content.transition(obj=self.subsubdossier,
                                    transition="dossier-transition-resolve")
+        self.commit_solr()
 
         browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.subsubdossier.title_or_id()))))
         self.assertEqual('', browser.contents)

@@ -8,11 +8,11 @@ from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from requests_toolbelt.utils import formdata
-from tzlocal import get_localzone
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import pytz
@@ -830,7 +830,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
                         target=self.leaf_repofolder)
         assert_no_error_messages()
 
-        #transaction.begin()  # sync
+        # transaction.begin()  # sync
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
         self.assertEquals('Reference Number: Client1 1.1 / 4',
@@ -852,10 +852,11 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         dossier_intid = getUtility(IIntIds).getId(self.empty_dossier)
 
         # Move to other_repository
-        self.move_items(browser,obj=self.empty_dossier,src=self.leaf_repofolder,target=self.empty_repofolder)
+        self.move_items(browser, obj=self.empty_dossier,
+                        src=self.leaf_repofolder, target=self.empty_repofolder)
         assert_no_error_messages()
 
-        #transaction.begin()  # sync
+        # transaction.begin()  # sync
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
 
@@ -909,6 +910,9 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
             ['fuhrung', 'rechnungsprufungskommission', 'drittes-repo'],
             selectables)
 
+
+class TestMoveItemsWithTestbrowserSolr(SolrIntegrationTestCase):
+
     @browsing
     def test_move_target_autocomplete_widget_does_not_list_repo_roots(self, browser):
         self.login(self.dossier_responsible, browser)
@@ -935,7 +939,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.branch_repofolder.title_or_id()))))
         self.assertEqual('/plone/ordnungssystem/fuhrung|fuhrung', browser.contents)
 
-        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.leaf_repofolder.title_or_id()))))
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.leaf_repofolder.title_or_id().replace("-", " ")))))
         self.assertEqual(
             '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen|vertrage-und-vereinbarungen',
             browser.contents,

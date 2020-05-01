@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import FormFieldNotFound
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 import urllib
 import urlparse
 
@@ -55,7 +56,7 @@ class TestSearchFormObjectProvidesDescription(IntegrationTestCase):
             browser.css('#formfield-form-widgets-object_provides span.formHelp').text)
 
 
-class TestSearchWithContent(IntegrationTestCase):
+class TestSearchWithContent(SolrIntegrationTestCase):
 
     @browsing
     def test_search_dossiers(self, browser):
@@ -79,15 +80,19 @@ class TestSearchWithContent(IntegrationTestCase):
     @browsing
     def test_search_documents(self, browser):
         self.login(self.regular_user, browser=browser)
+
         browser.open(self.portal, view='advanced_search')
         browser.fill({
             'Text': u'Vertr\xe4gsentwurf',
             'Type': ['opengever.document.behaviors.IBaseDocument'],
         })
         browser.css('#form-buttons-button_search').first.click()
-        self.assertEqual(['3'], browser.css('#search-results-number').text)
+
+        self.assertEqual(['7'], browser.css('#search-results-number').text)
         self.assertItemsEqual(
-            [self.document.title, self.taskdocument.title, self.proposaldocument.title],
+            [self.document.title, self.taskdocument.title, self.proposaldocument.title,
+             self.private_document.title, self.recurring_agenda_item_template.title,
+             self.ad_hoc_agenda_item_template.title, self.proposal_template.title],
             browser.css('.searchResults .searchItem dt').text,
         )
 
@@ -218,7 +223,7 @@ class TestSearchWithContent(IntegrationTestCase):
         self.assertNotIn('enableUnloadProtection', browser.contents)
 
 
-class TestQueryStrings(IntegrationTestCase):
+class TestQueryStrings(SolrIntegrationTestCase):
 
     features = ('filing_number', )
 

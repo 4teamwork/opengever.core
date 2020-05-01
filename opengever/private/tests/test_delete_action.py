@@ -2,9 +2,10 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2paths
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestDeleteActionInPrivateFolderTabbedViews(IntegrationTestCase):
+class TestDeleteActionInPrivateFolderTabbedViewsSolr(SolrIntegrationTestCase):
 
     @browsing
     def test_delete_action_is_displayed_for_owner(self, browser):

@@ -3,16 +3,19 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from opengever.testing import select_current_org_unit
+from opengever.testing import SolrIntegrationTestCase
 from opengever.trash.trash import Trasher
 
 
-class TestInboxTabbedview(IntegrationTestCase):
+class TestInboxTabbedview(SolrIntegrationTestCase):
 
     @browsing
     def test_trash_listing_does_not_contain_subdossier_and_checked_out_column(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
         Trasher(self.inbox_document).trash()
+        self.commit_solr()
+
         browser.open(self.inbox, view='tabbedview_view-trash')
 
         self.assertEquals(

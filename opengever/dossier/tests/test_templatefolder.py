@@ -20,6 +20,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import get_contacts_token
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -824,7 +825,7 @@ class TestTemplateFolderUtility(FunctionalTestCase):
         self.assertEquals(templatefolder, get_template_folder())
 
 
-class TestTemplateFolderListings(IntegrationTestCase):
+class TestTemplateFolderListings(SolrIntegrationTestCase):
 
     @browsing
     def test_renders_quickupload_uploadbox(self, browser):
@@ -1028,6 +1029,9 @@ class TestTemplateFolderListings(IntegrationTestCase):
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
 
+
+class TestTemplateFolderListingsSolr(SolrIntegrationTestCase):
+
     @browsing
     def test_sablontemplates_tab_lists_only_documents_directly_beneath(self, browser):
         self.login(self.regular_user, browser)
@@ -1078,6 +1082,11 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
 
         self.assertEqual(Actor.lookup(self.administrator.id).get_label(), journal_entries[0]['Changed by'])
         self.assertEqual(u'Document added: T\xc3\xb6mpl\xc3\xb6te Normal', journal_entries[0]['Title'])
+
+
+class TestTemplateDocumentTabsSolr(SolrIntegrationTestCase):
+
+    features = ('bumblebee', )
 
     @browsing
     def test_documents_tab_shows_only_docs_directly_inside_the_folder(self, browser):
@@ -1140,7 +1149,7 @@ class TestDossierTemplateFeature(IntegrationTestCase):
         self.assertEqual('Dossier templates', browser.css('.formTab #tab-dossiertemplates').first.text)
 
 
-class TestTemplateFolderShowroomPreviews(IntegrationTestCase):
+class TestTemplateFolderShowroomPreviews(SolrIntegrationTestCase):
 
     features = ('meeting', 'bumblebee',)
 

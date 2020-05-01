@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.pages import tabbedview
 from plone import api
 
@@ -104,6 +105,19 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             )
 
     @browsing
+    def test_prefix_visible_on_private_document(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.private_document)
+
+        expected_reference_number = 'P Client1 kathi-barfuss / 1 / 36'
+        found_reference_number = browser.css('.referenceNumber .value').text[0]
+
+        self.assertEqual(expected_reference_number, found_reference_number)
+
+
+class TestPrivateReferenceNumberSolr(SolrIntegrationTestCase):
+
+    @browsing
     def test_prefix_visible_on_private_folder(self, browser):
         self.login(self.regular_user, browser)
 
@@ -132,13 +146,3 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             sorted(expected_reference_numbers),
             sorted(found_reference_numbers),
             )
-
-    @browsing
-    def test_prefix_visible_on_private_document(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(self.private_document)
-
-        expected_reference_number = 'P Client1 kathi-barfuss / 1 / 36'
-        found_reference_number = browser.css('.referenceNumber .value').text[0]
-
-        self.assertEqual(expected_reference_number, found_reference_number)

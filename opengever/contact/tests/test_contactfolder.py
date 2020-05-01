@@ -3,6 +3,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.contact.interfaces import IContactFolder
 from opengever.testing import add_languages
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from unittest import skip
 
 
@@ -41,7 +42,7 @@ class TestContactFolder(IntegrationTestCase):
             'plone.leftcolumn', self.contactfolder)
 
 
-class TestLocalContactListing(IntegrationTestCase):
+class TestLocalContactListing(SolrIntegrationTestCase):
 
     @browsing
     def test_list_active_contacts(self, browser):

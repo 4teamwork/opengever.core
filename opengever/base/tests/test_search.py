@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.base.interfaces import ISearchSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.registry.interfaces import IRegistry
@@ -11,6 +12,8 @@ from zope.component import getUtility
 
 
 class TestOpengeverSearch(IntegrationTestCase):
+
+    features = ('!solr', )
 
     def test_types_filters_list_is_limited_to_main_types(self):
         self.login(self.regular_user)
@@ -68,7 +71,65 @@ class TestOpengeverSearch(IntegrationTestCase):
         self.assertEqual(expected_url, advanced_search.get("href"))
 
 
-class TestBumblebeePreview(IntegrationTestCase):
+class TestOpengeverSearchSolr(SolrIntegrationTestCase):
+
+    def test_types_filters_list_is_limited_to_main_types(self):
+        self.login(self.regular_user)
+
+        self.assertItemsEqual(
+            ['opengever.task.task', 'ftw.mail.mail',
+             'opengever.document.document', 'opengever.inbox.forwarding',
+             'opengever.dossier.businesscasedossier'],
+            self.portal.unrestrictedTraverse('@@search').types_list())
+
+    @browsing
+    def test_batch_size_is_set_to_25(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.portal, view='@@search')
+
+        self.assertEqual(25, len(browser.css('dl.searchResults dt')))
+
+    @browsing
+    def test_sorting_on_relevance_is_handled_correctly(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search')
+
+        self.assertEqual(25, len(browser.css('dl.searchResults dt')))
+
+    @browsing
+    def test_no_bubmlebee_preview_rendered_when_feature_not_enabled(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search?SearchableText=vertrag')
+
+        self.assertEqual(0, len(browser.css('.searchImage')))
+
+    @browsing
+    def test_prefill_from_advanced_search_omits_searchable_text_keywords(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(
+            self.portal,
+            view='advanced_search?SearchableText=foo+NOT+bar+AND+qwe+OR+asd+AND+zxc+OR+dsa+NOT+rsa')
+
+        prefill = browser.css('#searchGadget').first.value
+        self.assertNotIn('AND', prefill)
+        self.assertNotIn('OR', prefill)
+        self.assertNotIn('NOT', prefill)
+
+    @browsing
+    def test_advanced_search_link_is_url_encoded(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search?SearchableText=M\xc3\xbcller and {co)')
+
+        advanced_search = browser.find("Advanced Search")
+        expected_url = (self.portal.absolute_url() +
+                        '/advanced_search?SearchableText=M%C3%BCller+and+%7Bco%29')
+
+        self.assertEqual(expected_url, advanced_search.get("href"))
+
+
+class TestBumblebeePreview(SolrIntegrationTestCase):
 
     features = ('bumblebee', )
 
@@ -90,6 +151,7 @@ class TestBumblebeePreview(IntegrationTestCase):
         self.dossier.title = 'Foosearch Dossier'
         self.document.title = 'Foosearch Document'
         [obj.reindexObject() for obj in [self.dossier, self.document]]
+        self.commit_solr()
 
         browser.open(self.portal, view='@@search?SearchableText=Foosearch&sort_on=modified')
         dossierlink, documentlink, hiddenlink = browser.css('.searchItem dt a')
@@ -286,15 +348,13 @@ class TestSolrSearch(IntegrationTestCase):
             })
 
     def test_search_uses_solr_if_enabled(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ISearchSettings)
-        settings.use_solr = True
         self.request.environ['QUERY_STRING'] = ('SearchableText=foo')
         self.request.processInputs()
         self.search.results()
         self.assertTrue(self.solr.search.called)
 
     def test_search_doesnt_use_solr_if_disabled(self):
+        self.deactivate_feature('solr')
         self.request.environ['QUERY_STRING'] = ('SearchableText=foo')
         self.request.processInputs()
         self.search.results()

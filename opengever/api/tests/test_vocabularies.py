@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import IClassification
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from urllib import urlencode
 
@@ -305,6 +306,9 @@ class TestGetQuerySources(IntegrationTestCase):
         self.assertEqual(1, response.get('items_total'))
         self.assertItemsEqual([u'secret'],
                               [item['token'] for item in response.get('items')])
+
+
+class TestGetQuerySourcesSolr(SolrIntegrationTestCase):
 
     @browsing
     def test_get_task_issuer_non_ascii_char_handling(self, browser):

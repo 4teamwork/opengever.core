@@ -1,41 +1,20 @@
 from Acquisition import aq_parent
 from datetime import date
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestAssignForwardignToDossier(FunctionalTestCase):
-
-    use_default_fixture = False
-
-    def setUp(self):
-        super(TestAssignForwardignToDossier, self).setUp()
-
-        create(Builder('fixture')
-               .with_user()
-               .with_org_unit()
-               .with_admin_unit(public_url=self.portal.absolute_url()))
-
-        self.inbox = create(Builder('inbox'))
-        self.forwarding = create(Builder('forwarding')
-                                 .titled(u'A letter from peter')
-                                 .within(self.inbox))
-        self.document = create(Builder('document')
-                               .titled(u'The letter')
-                               .with_dummy_content()
-                               .within(self.forwarding))
-
-        self.repo_root = create(Builder('repository_root'))
-        self.repo_folder = create(Builder('repository')
-                                  .titled('Repo A')
-                                  .within(self.repo_root))
+class TestAssignForwardingToDossier(SolrIntegrationTestCase):
 
     @browsing
     def test_assign_to_new_dossier(self, browser):
-        browser.login().open(self.forwarding)
+        self.login(self.secretariat_user, browser=browser)
+
+        forwarding = self.inbox_forwarding
+        document = self.inbox_forwarding_document
+        responsible = self.regular_user.getId()
+
+        browser.open(forwarding)
         browser.css('#workflow-transition-forwarding-transition-assign-to-dossier').first.click()
 
         # Step 1 - choose method
@@ -44,10 +23,11 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
              'Response': 'Sample response'}).submit()
 
         # Step 2 - choose repository
-        browser.fill(
-            {'form.widgets.repositoryfolder.widgets.query': 'Repo A'}).submit()
+        browser.fill({
+            'form.widgets.repositoryfolder.widgets.query': self.leaf_repofolder.Title()
+        }).submit()
         browser.fill({'form.widgets.repositoryfolder':
-                      '/plone/ordnungssystem/repo-a'})
+                      '/'.join(self.leaf_repofolder.getPhysicalPath())})
         browser.css('#form-buttons-save').first.click()
 
         # Step 3 - dossier add form
@@ -57,20 +37,20 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         # Step 4 - edit task form
         browser.fill({'Task Type': 'comment',
                       'Deadline': '9/24/14',
-                      'Issuer': 'inbox:org-unit-1'})
+                      'Issuer': 'inbox:fa'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(TEST_USER_ID)
+        form.find_widget('Responsible').fill(responsible)
 
         browser.css('#form-buttons-save').first.click()
 
         # Assertions
-        self.assertEquals('A letter from peter', browser.context.title,
+        self.assertEquals(forwarding.Title().decode('utf8'), browser.context.title,
                           'Forwarding title should be assumed to the new task')
-        self.assertEquals(TEST_USER_ID, browser.context.responsible)
-        self.assertEquals('inbox:org-unit-1', browser.context.issuer)
+        self.assertEquals(responsible, browser.context.responsible)
+        self.assertEquals('inbox:fa', browser.context.issuer)
 
-        self.assertEquals('The letter',
+        self.assertEquals(document.Title(),
                           browser.context.listFolderContents()[0].Title(),
                           'The forwarded document is not copied to task')
 
@@ -78,14 +58,20 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
 
         yearfolder = self.inbox.get(str(date.today().year))
         self.assertEquals(
-            self.forwarding, yearfolder.get('forwarding-1'),
+            forwarding, yearfolder.get('forwarding-1'),
             'The forwarding was not correctly moved in to the actual yearfolder')
 
     @browsing
     def test_assign_to_existing_dossier(self, browser):
-        dossier = create(Builder('dossier').titled(u'Dossier A'))
+        self.login(self.secretariat_user, browser=browser)
 
-        browser.login().open(self.forwarding)
+        forwarding = self.inbox_forwarding
+        document = self.inbox_forwarding_document
+        responsible = self.regular_user.getId()
+
+        # dossier = create(Builder('dossier').titled(u'Dossier A'))
+
+        browser.open(forwarding)
         browser.css('#workflow-transition-forwarding-transition-assign-to-dossier').first.click()
 
         # Step 1 - choose method
@@ -95,33 +81,33 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
 
         # Step 2 - choose dossier
         browser.fill(
-            {'form.widgets.dossier.widgets.query': 'Dossier A'}).submit()
-        browser.fill({'form.widgets.dossier': '/plone/dossier-1'})
+            {'form.widgets.dossier.widgets.query': self.dossier.Title()}).submit()
+        browser.fill({'form.widgets.dossier': '/'.join(self.dossier.getPhysicalPath())})
         browser.css('#form-buttons-save').first.click()
 
         # Step 3 - edit task form
         browser.fill({'Task Type': 'comment',
                       'Deadline': '9/24/14',
-                      'Issuer': 'inbox:org-unit-1'})
+                      'Issuer': 'inbox:fa'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(TEST_USER_ID)
+        form.find_widget('Responsible').fill(responsible)
 
         browser.css('#form-buttons-save').first.click()
 
         # Assertions
-        self.assertEquals('A letter from peter', browser.context.title,
+        self.assertEquals(forwarding.title, browser.context.title,
                           'Forwarding title should be assumed to the new task')
-        self.assertEquals(TEST_USER_ID, browser.context.responsible)
-        self.assertEquals('inbox:org-unit-1', browser.context.issuer)
+        self.assertEquals(responsible, browser.context.responsible)
+        self.assertEquals('inbox:fa', browser.context.issuer)
 
-        self.assertEquals('The letter',
+        self.assertEquals(document.Title(),
                           browser.context.listFolderContents()[0].Title(),
                           'The forwarded document is not copied to task')
 
-        self.assertEquals(dossier, aq_parent(browser.context))
+        self.assertEquals(self.dossier, aq_parent(browser.context))
 
         yearfolder = self.inbox.get(str(date.today().year))
         self.assertEquals(
-            self.forwarding, yearfolder.get('forwarding-1'),
+            forwarding, yearfolder.get('forwarding-1'),
             'The forwarding was not correctly moved in to the actual yearfolder')

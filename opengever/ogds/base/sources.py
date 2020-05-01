@@ -350,7 +350,7 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
         if solr_doc is not None:
             value = u'contact:{}'.format(solr_doc[u'id'])
-            title = solr_doc[u'Title']
+            title = u'{} ({})'.format(solr_doc[u'Title'], solr_doc[u'email'])
             return SimpleTerm(value, title=title)
 
         # Contacts
@@ -735,7 +735,14 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
             query_string,
             IContact.__identifier__))
         for result in resp.docs:
-            self.terms.append(self.getTerm(solr_doc=result))
+            if 'email' in result:
+                self.terms.append(self.getTerm(solr_doc=result))
+            if 'email2' in result:
+                self.terms.append(self.getTerm(solr_doc={
+                    'email': result['email2'],
+                    'id': result['id'],
+                    'Title': result['Title'],
+                }))
 
     def _extend_terms_with_contacts_from_portal_catalog(self, query_string):
         catalog = api.portal.get_tool('portal_catalog')
@@ -767,7 +774,13 @@ class AllEmailContactsAndUsersSourceBinder(object):
 
 class ContactsSource(UsersContactsInboxesSource):
 
-    def getTerm(self, value, brain=None):
+    def getTerm(self, value=None, brain=None, solr_doc=None):
+
+        if solr_doc is not None:
+            value = u'contact:{}'.format(solr_doc[u'id'])
+            title = u'{} ({})'.format(solr_doc[u'Title'], solr_doc[u'email'])
+            return SimpleTerm(value, title=title)
+
         if not ActorLookup(value).is_contact():
             raise ValueError('Value is not a contact token')
 

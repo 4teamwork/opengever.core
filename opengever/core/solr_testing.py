@@ -228,7 +228,7 @@ class SolrReplicationAPIClient(object):
 
         backup_details = dict(grouper(details.get('backup', []), 2))
 
-        if not len(backup_details) == 5:
+        if 'status' not in backup_details:
             raise Exception("Unexpected backup details response from Solr - "
                             "don't know how to parse %r" % response_data)
 

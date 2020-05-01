@@ -13,6 +13,7 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from zExceptions import Unauthorized
 
@@ -134,35 +135,6 @@ class TestDossierTemplate(IntegrationTestCase):
             browser.css('#content h1').first.text)
 
     @browsing
-    def test_dossiertemplates_tab_lists_only_dossiertemplates_without_subdossiers(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        browser.login().visit(self.templates, view="tabbedview_view-dossiertemplates")
-
-        self.assertEqual(
-            ['Bauvorhaben klein'],
-            browser.css('.listing td .linkWrapper').text)
-
-    @browsing
-    def test_documents_inside_a_dossiertemplate_will_not_be_listed_in_documents_tab(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        create(Builder('document')
-               .titled(u'Dossiertemplate document')
-               .within(self.dossiertemplate))
-
-        browser.open(self.templates, view="tabbedview_view-documents-proxy")
-
-        expected_documents = [
-            u'T\xc3\xb6mpl\xc3\xb6te Mit',
-            u'T\xc3\xb6mpl\xc3\xb6te Ohne',
-            u'T\xc3\xb6mpl\xc3\xb6te Normal',
-            u'T\xc3\xb6mpl\xc3\xb6te Leer',
-            ]
-
-        self.assertEqual(expected_documents, browser.css('.listing td .linkWrapper').text)
-
-    @browsing
     def test_show_only_whitelisted_schema_fields_in_add_form(self, browser):
         self.maxDiff = None
         self.login(self.administrator, browser=browser)
@@ -224,6 +196,38 @@ class TestDossierTemplate(IntegrationTestCase):
                            form_labels.index('Predefined Keywords'),
                            '"Restrict Keywords" should be after "Predefined '
                            'Keywords"')
+
+
+class TestDossierTemplateWithSolr(SolrIntegrationTestCase):
+
+    @browsing
+    def test_dossiertemplates_tab_lists_only_dossiertemplates_without_subdossiers(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.login().visit(self.templates, view="tabbedview_view-dossiertemplates")
+
+        self.assertEqual(
+            ['Bauvorhaben klein'],
+            browser.css('.listing td .linkWrapper').text)
+
+    @browsing
+    def test_documents_inside_a_dossiertemplate_will_not_be_listed_in_documents_tab(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        create(Builder('document')
+               .titled(u'Dossiertemplate document')
+               .within(self.dossiertemplate))
+
+        browser.open(self.templates, view="tabbedview_view-documents-proxy")
+
+        expected_documents = [
+            u'T\xc3\xb6mpl\xc3\xb6te Mit',
+            u'T\xc3\xb6mpl\xc3\xb6te Ohne',
+            u'T\xc3\xb6mpl\xc3\xb6te Normal',
+            u'T\xc3\xb6mpl\xc3\xb6te Leer',
+            ]
+
+        self.assertEqual(expected_documents, browser.css('.listing td .linkWrapper').text)
 
 
 class TestDossierTemplateAddWizard(IntegrationTestCase):
@@ -739,7 +743,7 @@ class TestDossierTemplateOverview(IntegrationTestCase):
         )
 
 
-class TestDossierTemplateSubdossiers(IntegrationTestCase):
+class TestDossierTemplateSubdossiers(SolrIntegrationTestCase):
 
     features = ('dossiertemplate', )
 
@@ -754,6 +758,7 @@ class TestDossierTemplateSubdossiers(IntegrationTestCase):
         create(Builder('dossiertemplate')
                .within(self.dossiertemplate)
                .titled(u'B Subdossier'))
+        self.commit_solr()
 
         browser.open(self.dossiertemplate, view=SUBDOSSIERS_TAB)
 
@@ -772,7 +777,7 @@ class TestDossierTemplateSubdossiers(IntegrationTestCase):
             browser.css('table.listing a.contenttype-opengever-dossier-dossiertemplate').text)
 
 
-class TestDossierTemplateDocuments(IntegrationTestCase):
+class TestDossierTemplateDocuments(SolrIntegrationTestCase):
 
     features = ('dossiertemplate', 'bumblebee')
 

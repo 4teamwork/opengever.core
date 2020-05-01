@@ -1,3 +1,4 @@
+from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from ftw.table.catalog_source import CatalogTableSource
@@ -11,6 +12,9 @@ from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
+import logging
+
+logger = logging.getLogger('opengever.tabbedview.catalog_source')
 
 
 @implementer(ITableSource)
@@ -22,11 +26,11 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
-        if 'SearchableText' in query:
-            registry = getUtility(IRegistry)
-            settings = registry.forInterface(ISearchSettings)
-            if settings.use_solr:
-                return self.solr_results(query)
+
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        if settings.use_solr:
+            return self.solr_results(self.exclude_searchroot_from_query(query))
 
         return super(GeverCatalogTableSource, self).search_results(query)
 
@@ -62,18 +66,29 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         return query
 
     def solr_results(self, query):
-        term = query['SearchableText'].rstrip('*').decode('utf8')
-        pattern = (
-            u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}* OR '
-            u'Title:{term} OR SearchableText:{term} OR metadata:{term})'
-        )
+        if 'SearchableText' in query:
+            term = query['SearchableText'].rstrip('*').decode('utf8')
+            pattern = (
+                u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}* OR '
+                u'Title:{term} OR SearchableText:{term} OR metadata:{term})'
+            )
 
-        term_queries = [pattern.format(term=escape(t)) for t in term.split()]
-        solr_query = u' AND '.join(term_queries)
+            term_queries = [pattern.format(term=escape(t)) for t in term.split()]
+            solr_query = u' AND '.join(term_queries)
+        else:
+            solr_query = u'*:*'
 
-        filters = [u'trashed:false']
+        solr = getUtility(ISolrSearch)
+
+        filters = []
+        if 'trashed' not in query:
+            filters.append(u'trashed:false')
         for key, value in query.items():
-            if key == 'SearchableText':
+            if key not in solr.manager.schema.fields:
+                logger.warning(
+                    'Ignoring filter criteria for unknown field %s', key)
+                continue
+            elif key == 'SearchableText':
                 continue
             elif key == 'sort_on' or key == 'sort_order':
                 continue
@@ -93,22 +108,54 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                     max_path_depth = context_depth + depth
                     filters.append(u'path_depth:[* TO {}]'.format(max_path_depth))
 
+                if value.get('exclude_root', False):
+                    filters.append(u'-path: {}'.format(escape(path_query)))
+
             elif isinstance(value, (list, tuple)):
                 filters.append(u'{}:({})'.format(
                     key, escape(' OR '.join(value))))
             elif isinstance(value, bool):
                 filters.append(u'{}:{}'.format(
                     key, 'true' if value else 'false'))
+            elif isinstance(value, dict):
+                _query = value.get('query')
+                operator = value.get('operator')
+                range_ = value.get('range', None)
+                if query and isinstance(_query, (list, tuple)) and operator:
+                    operator = ' {} '.format(operator.upper())
+                    filters.append(u'{}:({})'.format(
+                        key, escape(operator.join(_query))))
+                elif range_ in ['min', 'max', 'minmax']:
+                    if not isinstance(_query, (list, tuple)):
+                        _query = [_query]
+                    if range_ == 'min':
+                        filters.append(u'{}:[{} TO *]'.format(
+                            key, escape(to_iso8601(_query[0]))))
+                    elif range_ == 'max':
+                        filters.append(u'{}:[* TO {}]'.format(
+                            key, escape(to_iso8601(_query[0]))))
+                    elif range_ == 'minmax':
+                        filters.append(u'{}:[{} TO {}]'.format(
+                            key,
+                            escape(to_iso8601(_query[0])),
+                            escape(to_iso8601(_query[1])),
+                        ))
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
 
-        sort = query.get('sort_on', None)
-        if sort:
-            sort_order = query.get('sort_order', 'ascending')
+        sort = query.get('sort_on', self.config.sort_on)
+        if sort in solr.manager.schema.fields:
+            if sort == self.config.sort_on:
+                sort_order = query.get('sort_order', self.config.sort_order)
+            else:
+                sort_order = query.get('sort_order', 'ascending')
             if sort_order in ['descending', 'reverse']:
                 sort += ' desc'
             else:
                 sort += ' asc'
+        else:
+            logger.warning('Ignoring unknown sort criteria %s', sort)
+            sort = None
 
         # Todo: modified be removed once the changed metadata is filled on
         # all deployments.
@@ -121,9 +168,33 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             'q.op': 'AND',
         }
 
-        solr = getUtility(ISolrSearch)
+        start = (self.config.batching_current_page - 1) * self.config.pagesize
         resp = solr.search(
-            query=solr_query, filters=filters, start=0, rows=50, sort=sort,
-            **params)
+            query=solr_query, filters=filters, start=start,
+            rows=self.config.pagesize, sort=sort, **params)
 
-        return [OGSolrDocument(doc) for doc in resp.docs]
+        # Avoid calling any custom sort method. This is highly inefficient and
+        # would require us to load *all* results from Solr.
+        self.config._custom_sort_method = (
+            lambda results, sort_on, sort_reverse: results
+        )
+
+        return BatchableSolrResults(resp)
+
+
+class BatchableSolrResults:
+    """A sequence of Solr docs that plays well with Plone batching"""
+    def __init__(self, resp):
+        self.actual_result_count = resp.num_found
+        self.start = resp.start
+        self.docs = [OGSolrDocument(doc) for doc in resp.docs]
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return self.docs[
+                slice(key.start - self.start, key.stop - self.start, key.step)
+            ]
+        return self.docs[key - self.start]
+
+    def __len__(self):
+        return self.actual_result_count

@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.pages import tabbedview
 from plone import api
 
@@ -61,7 +62,7 @@ class TestRepositoryFolderTabs(IntegrationTestCase):
         self.assertNotIn('Tasks', tabbedview.tabs().text)
 
 
-class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
+class TestRepositoryFolderDocumentsTab(SolrIntegrationTestCase):
 
     @browsing
     def test_visible_actions(self, browser):
