@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-04 09:28+0000\n"
+"POT-Creation-Date: 2020-05-04 13:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,36 +64,43 @@ msgstr ""
 
 #. Default: "Disposition added"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "disposition-added"
 msgstr ""
 
 #. Default: "Disposition appraised"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-appraise"
 msgstr ""
 
 #. Default: "Disposition archived"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-archive"
 msgstr ""
 
 #. Default: "Disposition closed"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-close"
 msgstr ""
 
 #. Default: "Disposition disposed"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-dispose"
 msgstr ""
 
 #. Default: "Disposition refused"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-refuse"
 msgstr ""
 
 #. Default: "Overdue dossier"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "dossier-overdue"
 msgstr ""
 
@@ -167,11 +174,6 @@ msgstr ""
 msgid "label_dossiers"
 msgstr ""
 
-#. Default: "Forwardings"
-#: ./opengever/activity/browser/settings.py
-msgid "label_forwardings"
-msgstr ""
-
 #. Default: "General"
 #: ./opengever/activity/browser/settings.py
 msgid "label_general"
@@ -224,62 +226,70 @@ msgid "msg_error_not_notified"
 msgstr ""
 
 #. Default: "Activate, respectively deactivate, all notifications due to your inbox permissions."
-#: ./opengever/activity/__init__.py
+#: ./opengever/activity/browser/settings.py
 msgid "notify_inbox_actions_help"
 msgstr ""
 
 #. Default: "Enable notifications for inbox actions"
-#: ./opengever/activity/__init__.py
+#: ./opengever/activity/browser/settings.py
 msgid "notify_inbox_actions_title"
 msgstr ""
 
 #. Default: "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
-#: ./opengever/activity/__init__.py
+#: ./opengever/activity/browser/settings.py
 msgid "notify_own_actions_help"
 msgstr ""
 
 #. Default: "Enable notifications for own actions"
-#: ./opengever/activity/__init__.py
+#: ./opengever/activity/browser/settings.py
 msgid "notify_own_actions_title"
 msgstr ""
 
 #. Default: "Additional documents submitted"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-additional-documents-submitted"
 msgstr ""
 
 #. Default: "Attachment updated"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-attachment-updated"
 msgstr ""
 
 #. Default: "Proposal commented"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-commented"
 msgstr ""
 
 #. Default: "Proposal decided"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-transition-decide"
 msgstr ""
 
 #. Default: "Proposal pulled"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-transition-pull"
 msgstr ""
 
 #. Default: "Proposal rejected"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-transition-reject"
 msgstr ""
 
 #. Default: "Proposal scheduled"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-transition-schedule"
 msgstr ""
 
 #. Default: "Proposal submitted"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "proposal-transition-submit"
 msgstr ""
 
@@ -296,6 +306,11 @@ msgstr ""
 #. Default: "Watcher"
 #: ./opengever/activity/roles.py
 msgid "regular_watcher"
+msgstr ""
+
+#. Default: "State changed"
+#: ./opengever/activity/notification_settings.py
+msgid "state-changed"
 msgstr ""
 
 #. Default: "Daily Digest for ${date}"
@@ -318,13 +333,20 @@ msgstr ""
 msgid "task-added"
 msgstr ""
 
+#. Default: "Task added / reassigned"
+#: ./opengever/activity/notification_settings.py
+msgid "task-added-or-reassigned"
+msgstr ""
+
 #. Default: "Task commented"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "task-commented"
 msgstr ""
 
 #. Default: "Task reminder"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "task-reminder"
 msgstr ""
 
@@ -350,6 +372,7 @@ msgstr ""
 
 #. Default: "Task deadline modified"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "task-transition-modify-deadline"
 msgstr ""
 
@@ -440,11 +463,13 @@ msgstr ""
 
 #. Default: "ToDo assigned"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "todo-assigned"
 msgstr ""
 
 #. Default: "ToDo modified"
 #: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
 msgid "todo-modified"
 msgstr ""
 
