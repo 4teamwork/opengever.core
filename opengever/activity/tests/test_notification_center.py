@@ -489,12 +489,12 @@ class TestDispatchers(ActivityTestCase):
 
     def test_uses_personal_setting_if_exists(self):
         create(Builder('notification_default_setting')
-               .having(kind='task-added',
+               .having(kind='task-added-or-reassigned',
                        mail_notification_roles=[WATCHER_ROLE,
                                                 TASK_RESPONSIBLE_ROLE]))
 
         create(Builder('notification_setting')
-               .having(kind='task-added', userid='hugo'))
+               .having(kind='task-added-or-reassigned', userid='hugo'))
 
 
         self.center.add_activity(
@@ -513,7 +513,7 @@ class TestDispatchers(ActivityTestCase):
 
     def test_uses_notification_default_as_fallback(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added',
+                         .having(kind='task-added-or-reassigned',
                                  mail_notification_roles=[
                                      WATCHER_ROLE, TASK_RESPONSIBLE_ROLE]))
 
@@ -530,7 +530,7 @@ class TestDispatchers(ActivityTestCase):
 
     def test_only_watchers_with_configured_roles_are_dispatched(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added',
+                         .having(kind='task-added-or-reassigned',
                                  mail_notification_roles=[WATCHER_ROLE]))
 
         self.center.add_activity(
@@ -560,7 +560,7 @@ class TestDispatchers(ActivityTestCase):
 
     def test_badge_dispatcher_sets_badge_flag_depending_on_the_setting(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added',
+                         .having(kind='task-added-or-reassigned',
                                  badge_notification_roles=[TASK_RESPONSIBLE_ROLE]))
 
         self.center.add_activity(
@@ -580,7 +580,7 @@ class TestDispatchers(ActivityTestCase):
 
     def test_digest_dispatcher_sets_digest_flag_depending_on_the_setting(self):
         create(Builder('notification_default_setting')
-               .having(kind='task-added',
+               .having(kind='task-added-or-reassigned',
                        digest_notification_roles=[TASK_RESPONSIBLE_ROLE]))
 
         self.center.add_activity(

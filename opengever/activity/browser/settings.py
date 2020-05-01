@@ -34,31 +34,10 @@ NOTIFICATION_SETTING_TABS = [
     {'id': 'task',
      'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE],
      'activities': [
-         'task-added',
-         'task-transition-cancelled-open',
-         'task-transition-delegate',
-         'task-transition-in-progress-resolved',
-         'task-transition-in-progress-tested-and-closed',
+         'task-added-or-reassigned',
          'task-transition-modify-deadline',
-         'task-transition-open-cancelled',
-         'task-transition-open-in-progress',
-         'task-transition-open-rejected',
          'task-commented',
-         'task-transition-reassign',
-         'task-transition-resolved-in-progress',
-         'task-transition-rejected-skipped',
-     ]},
-
-    {'id': 'forwarding',
-     'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE],
-     'activities': [
-         'forwarding-added',
-         'forwarding-transition-accept',
-         'forwarding-transition-assign-to-dossier',
-         'forwarding-transition-close',
-         'forwarding-transition-reassign',
-         'forwarding-transition-reassign-refused',
-         'forwarding-transition-refuse'
+         'task-status-modified'
      ]},
 
     {'id': 'proposal',
@@ -111,24 +90,6 @@ GLOBAL_CONFIGURATIONS = [
 ]
 
 ALIASES = {
-    'task-transition-in-progress-tested-and-closed': (
-        'task-transition-in-progress-tested-and-closed',
-        'task-transition-open-tested-and-closed',
-        'task-transition-resolved-tested-and-closed',
-    ),
-    'task-transition-in-progress-resolved': (
-        'task-transition-in-progress-resolved',
-        'task-transition-open-resolved',
-    ),
-    'task-transition-cancelled-open': (
-        'task-transition-cancelled-open',
-        'task-transition-rejected-open',
-        'task-transition-skipped-open',
-    ),
-    'task-transition-rejected-skipped': (
-        'task-transition-rejected-skipped',
-        'task-transition-planned-skipped',
-    ),
     'disposition-transition-close': (
         'disposition-transition-close',
         'disposition-transition-appraised-to-closed',
@@ -365,9 +326,6 @@ class NotificationSettingsForm(BrowserView):
 
     def tab_title_task(self):
         return _('label_tasks', default=u'Tasks')
-
-    def tab_title_forwardings(self):
-        return _('label_forwardings', default=u'Forwardings')
 
     def tab_title_proposals(self):
         return _('label_proposals', default=u'Proposals')

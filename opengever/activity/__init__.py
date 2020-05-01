@@ -69,6 +69,8 @@ def send_digest_zopectl_handler(app, args):
 
 
 ACTIVITY_TRANSLATIONS = {
+    'task-added-or-reassigned': _('task-added-or-reassigned', default=u'Task added / reassigned'),
+    'task-status-modified': _('state-changed', default=u'State changed'),
     'task-added': _('task-added', default=u'Task added'),
     'task-transition-cancelled-open': _(
         'task-transition-cancelled-open', default=u'Task reopened'),
