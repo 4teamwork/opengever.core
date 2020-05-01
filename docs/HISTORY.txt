@@ -6,6 +6,7 @@ Changelog
 
 - Improve performance when resolving large dossiers. [deiferni]
 - Add is_subdossier to catalog metadata. [deiferni]
+- Add @watchers endpoint for tasks and inbox forwardings. [tinagerber]
 - Add Bumblebee auto refresh feature to policy template. [2e12]
 - Task GET API: Also include info about containing dossier. [mbaechtold]
 - Fix `task_type_helper` to respect the current language for the ram-cache. [elioschmutz]
