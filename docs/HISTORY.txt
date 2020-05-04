@@ -4,7 +4,6 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
-- Bump docxcompose to 1.1.1 for non-ascii binary_type docproperty fix. [deiferni]
 - Improve performance when resolving large dossiers. [deiferni]
 - Add is_subdossier to catalog metadata. [deiferni]
 - Add @watchers endpoint for tasks and inbox forwardings. [tinagerber]
@@ -33,6 +32,12 @@ Changelog
 ------------------------
 
 - Fix solr indexing bug when creating a document from a template. [njohner]
+
+
+2020.2.4 (2020-05-04)
+---------------------
+
+- Bump docxcompose to 1.1.1 for non-ascii binary_type docproperty fix. [deiferni]
 - Bump docxcompose to 1.1.0 for header/footer docproperty support. [deiferni]
 
 
