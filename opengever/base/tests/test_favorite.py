@@ -178,6 +178,30 @@ class TestHandlers(IntegrationTestCase):
             self.empty_repofolder, self.regular_user).one()
         self.assertFalse(favorite.is_leafnode)
 
+    @browsing
+    def test_is_leafnode_becomes_truthy_when_moved(self, browser):
+        # the manager can move stuff users cannot
+        self.login(self.manager)
+
+        child = create(
+            Builder('repository')
+            .within(self.empty_repofolder)
+            .having(title_de=u'Child', title_fr=u'Child')
+        )
+        create(Builder('favorite')
+               .for_object(self.empty_repofolder)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertFalse(favorite.is_leafnode)
+
+        api.content.move(child, self.branch_repofolder)
+
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertTrue(favorite.is_leafnode)
+
     def test_all_favorites_are_deleted_when_removing_object(self):
         self.login(self.manager)
 
