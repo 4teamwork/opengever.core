@@ -140,6 +140,25 @@ class TestHandlers(IntegrationTestCase):
             moved_dossier, self.regular_user).one()
         self.assertFalse(favorite.is_subdossier)
 
+    @browsing
+    def test_review_state_of_repository_folder_gets_updated(self, browser):
+        self.login(self.administrator)
+
+        create(Builder('favorite')
+               .for_object(self.empty_repofolder)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'repositoryfolder-state-active')
+
+        api.content.transition(obj=self.empty_repofolder,
+                               transition='repositoryfolder-transition-inactivate')
+
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'repositoryfolder-state-inactive')
+
     def test_all_favorites_are_deleted_when_removing_object(self):
         self.login(self.manager)
 
