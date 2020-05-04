@@ -65,8 +65,8 @@ class SolrSearchGet(SolrQueryBaseService):
         if facet_fields:
             facet_fields = [
                 facet for facet in facet_fields
-                if self.is_field_allowed(facet) and
-                self.get_field_index(facet) in self.solr_fields]
+                if self.is_field_allowed(facet) and self.get_field_index(facet) in self.solr_fields
+            ]
             params['facet.field'] = facet_fields
         return params
 
