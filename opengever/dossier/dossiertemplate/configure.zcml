@@ -3,6 +3,21 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.dossier">
 
+  <adapter
+      factory=".indexers.DossierTemplateSubjectIndexer"
+      name="Subject"
+      />
+
+  <adapter
+      factory=".indexers.is_subdossier"
+      name="is_subdossier"
+      />
+
+  <adapter
+      factory=".indexers.DossierTemplateSearchableTextExtender"
+      name="IDossierTemplate"
+      />
+
   <browser:page
       for="opengever.repository.interfaces.IRepositoryFolder"
       name="dossier_with_template"

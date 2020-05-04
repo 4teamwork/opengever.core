@@ -5,15 +5,6 @@ from plone import api
 
 class TestCatalog(IntegrationTestCase):
 
-    def test_is_subdossier_index(self):
-        """The ``is_subdossier`` index indicates whether a dossier is
-        a subdossier.
-        """
-        self.login(self.dossier_responsible)
-        self.assert_index_value(False, 'is_subdossier', self.dossier)
-        self.assert_index_value(True, 'is_subdossier', self.subdossier)
-        self.assert_index_value('', 'is_subdossier', self.leaf_repofolder)
-
     def test_reindex_is_subdossier_index_after_moving_subdossier(self):
         self.login(self.dossier_responsible)
         api.content.move(source=self.subdossier, target=self.leaf_repofolder)

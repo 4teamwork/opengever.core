@@ -135,6 +135,7 @@ class TestCopyDocuments(IntegrationTestCase):
                               'has_sametype_children',
                               'in_response_to',
                               'is_folderish',
+                              'is_subdossier',
                               'is_subtask',
                               'issuer',
                               'last_comment_date',

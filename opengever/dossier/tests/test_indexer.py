@@ -68,20 +68,6 @@ class TestDossierIndexers(IntegrationTestCase):
             obj2brain(self.document).containing_dossier,
             )
 
-    def test_is_subdossier_index(self):
-        self.login(self.regular_user)
-
-        self.dossier.reindexObject()
-        self.subdossier.reindexObject()
-        self.dossiertemplate.reindexObject()
-        self.subdossiertemplate.reindexObject()
-
-        index_name = 'is_subdossier'
-        self.assert_index_value(False, index_name, self.dossier)
-        self.assert_index_value(False, index_name, self.dossiertemplate)
-        self.assert_index_value(True, index_name, self.subdossier)
-        self.assert_index_value(True, index_name, self.subdossiertemplate)
-
     def test_containing_subdossier(self):
         self.login(self.regular_user)
 
