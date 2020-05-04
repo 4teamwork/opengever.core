@@ -142,7 +142,7 @@ class TestTaskSerialization(IntegrationTestCase):
             browser.json)
 
     @browsing
-    def test_containing_dossier_for_task(self, browser):
+    def test_containing_dossier_for_task_within_dossier(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.task, method="GET", headers=self.api_headers)
         self.maxDiff = None
@@ -151,6 +151,30 @@ class TestTaskSerialization(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json['containing_dossier']
+        )
+
+    @browsing
+    def test_containing_dossier_for_task_within_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+        task_in_subdossier = create(Builder('task')
+                                    .within(self.subdossier)
+                                    .having(
+                                        responsible_client='fa',
+                                        responsible=self.regular_user.getId(),
+                                        issuer=self.dossier_responsible.getId(),
+                                    ))
+        browser.open(task_in_subdossier, method="GET", headers=self.api_headers)
+        self.maxDiff = None
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
+                                u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
