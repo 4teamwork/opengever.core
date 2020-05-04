@@ -174,14 +174,9 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'disposition-transition-close',
-        'activities': ['disposition-transition-close'],
-        'default_settings': {
-            'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
-        }
-    },
-    {
-        'id': 'disposition-transition-appraised-to-closed',
-        'activities': ['disposition-transition-appraised-to-closed'],
+        'activities': [
+            'disposition-transition-close',
+            'disposition-transition-appraised-to-closed'],
         'default_settings': {
             'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
         }

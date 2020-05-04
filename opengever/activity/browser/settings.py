@@ -89,13 +89,6 @@ GLOBAL_CONFIGURATIONS = [
     {'id': 'notify_inbox_actions'}
 ]
 
-ALIASES = {
-    'disposition-transition-close': (
-        'disposition-transition-close',
-        'disposition-transition-appraised-to-closed',
-    )
-}
-
 
 class InvalidUser(Exception):
     """User not found in the OGDS.
@@ -156,16 +149,10 @@ class NotificationSettings(BrowserView):
 
         userid = api.user.get_current().getId()
 
-        if ALIASES.get(kind):
-            kinds = ALIASES.get(kind)
-        else:
-            kinds = (kind, )
-
-        for kind in kinds:
-            self.settings.set_custom_setting(kind, userid,
-                                             mail_roles=mail,
-                                             badge_roles=badge,
-                                             digest_roles=digest)
+        self.settings.set_custom_setting(kind, userid,
+                                         mail_roles=mail,
+                                         badge_roles=badge,
+                                         digest_roles=digest)
 
         return JSONResponse(self.request).proceed().dump()
 
@@ -174,14 +161,8 @@ class NotificationSettings(BrowserView):
         """
         kind = self.request.form['kind']
 
-        if ALIASES.get(kind):
-            kinds = ALIASES.get(kind)
-        else:
-            kinds = (kind, )
-
         userid = api.user.get_current().getId()
-        for kind in kinds:
-            self.settings.remove_custom_setting(kind, userid)
+        self.settings.remove_custom_setting(kind, userid)
 
         return JSONResponse(self.request).proceed().dump()
 

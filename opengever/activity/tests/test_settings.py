@@ -18,18 +18,15 @@ class TestListSettings(IntegrationTestCase):
     features = ('activity', )
 
     @browsing
-    def test_list_all_settings_except_aliased_objects(self, browser):
+    def test_list_all_settings(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='notification-settings/list')
 
         activities = browser.json.get('activities')
 
-        aliased = ['disposition-transition-appraised-to-closed']
-
         self.assertItemsEqual(
             [item.get('kind') for item in activities],
-            [item.get('id') for item in NotificationSettings().configuration
-             if item.get('id') not in aliased])
+            [item.get('id') for item in NotificationSettings().configuration])
 
         task_added = [item for item in activities if item.get('kind') == 'task-added-or-reassigned'][0]
         self.assertEquals({u'task_issuer': False, u'task_responsible': True},
@@ -134,29 +131,6 @@ class TestSaveSettings(IntegrationTestCase):
                           settings[0].digest_notification_roles)
 
     @browsing
-    def test_save_adds_personal_setting_also_for_aliased_kinds(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        data = self.data.copy()
-        data['kind'] = 'disposition-transition-close'
-
-        browser.open(self.portal, view='notification-settings/save_notification_setting', data=data)
-
-        settings = NotificationSetting.query.filter_by(
-            userid=self.regular_user.getId()).all()
-
-        self.assertEquals(2, len(settings))
-        self.assertEquals(
-            [u'disposition-transition-close',
-             u'disposition-transition-appraised-to-closed'],
-            [setting.kind for setting in settings])
-
-        self.assertEquals(frozenset([TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]),
-                          settings[1].mail_notification_roles)
-        self.assertEquals(frozenset([TASK_ISSUER_ROLE]),
-                          settings[1].badge_notification_roles)
-
-    @browsing
     def test_save_updates_personal_setting_when_exists(self, browser):
         create(Builder('notification_setting')
                .having(kind='task-added-or-reassigned',
@@ -199,25 +173,6 @@ class TestResetSetting(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='notification-settings/reset_notification_setting',
                      data={'kind': 'task-added-or-reassigned'})
-
-        self.assertEquals(0, query.count())
-
-    @browsing
-    def test_reset_removes_also_aliased_settings_when_exists(self, browser):
-        for kind in ['disposition-transition-close',
-                     'disposition-transition-appraised-to-closed']:
-            create(Builder('notification_setting')
-                   .having(kind=kind,
-                           userid=self.regular_user.getId(),
-                           mail_notification_roles=[],
-                           badge_notification_roles=[]))
-
-        query = NotificationSetting.query.filter_by(userid=self.regular_user.getId())
-        self.assertEquals(2, query.count())
-
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='notification-settings/reset_notification_setting',
-                     data={'kind': 'disposition-transition-close',})
 
         self.assertEquals(0, query.count())
 
