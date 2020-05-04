@@ -123,4 +123,5 @@ class FavoriteQuery(BaseQuery):
         self.update({'title': truncated_title})
 
 
+
 Favorite.query_cls = FavoriteQuery
