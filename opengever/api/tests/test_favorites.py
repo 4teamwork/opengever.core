@@ -10,6 +10,8 @@ import json
 
 class TestFavoritesGet(IntegrationTestCase):
 
+    maxDiff = None
+
     @browsing
     def test_list_all_favorites_for_the_given_userid(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -39,16 +41,22 @@ class TestFavoritesGet(IntegrationTestCase):
               u'portal_type': u'opengever.dossier.businesscasedossier',
               u'favorite_id': 1,
               u'position': 23,
+              u'is_leafnode': None,
+              u'is_subdossier': False,
               u'oguid': u'plone:1014013300',
               u'admin_unit': u'Hauptmandant',
               u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014013300',
               u'tooltip_url': None,
+              u'review_state': u'dossier-state-active',
               u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
               u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
              {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/2',
               u'uid': IUUID(self.document),
               u'portal_type': u'opengever.document.document',
               u'favorite_id': 2,
+              u'is_leafnode': None,
+              u'is_subdossier': None,
+              u'review_state': u'document-state-draft',
               u'position': 21,
               u'oguid': u'plone:1014073300',
               u'admin_unit': u'Hauptmandant',
@@ -77,6 +85,9 @@ class TestFavoritesGet(IntegrationTestCase):
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
+             u'is_leafnode': None,
+             u'is_subdossier': False,
+             u'review_state': u'dossier-state-active',
              u'position': 23,
              u'oguid': u'plone:1014013300',
              u'admin_unit': u'Hauptmandant',
@@ -119,6 +130,8 @@ class TestFavoritesGet(IntegrationTestCase):
 
 class TestFavoritesPost(IntegrationTestCase):
 
+    maxDiff = None
+
     @browsing
     def test_adding_favorite_by_oguid(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -148,9 +161,12 @@ class TestFavoritesPost(IntegrationTestCase):
              u'favorite_id': 1,
              u'oguid': u'plone:1014073300',
              u'position': 0,
+             u'review_state': u'document-state-draft',
              u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014073300',
              u'tooltip_url': u'http://nohost/plone/resolve_oguid/plone:1014073300/tooltip',
              u'icon_class': u'icon-docx',
+             u'is_leafnode': None,
+             u'is_subdossier': None,
              u'admin_unit': u'Hauptmandant',
              u'title': u'Vertr\xe4gsentwurf'}, browser.json)
 
@@ -182,6 +198,9 @@ class TestFavoritesPost(IntegrationTestCase):
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
+             u'is_leafnode': None,
+             u'is_subdossier': None,
+             u'review_state': u'document-state-draft',
              u'oguid': Oguid.for_object(self.document),
              u'position': 0,
              u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014073300',
@@ -254,9 +273,12 @@ class TestFavoritesPost(IntegrationTestCase):
              u'portal_type': u'opengever.document.document',
              u'admin_unit': u'Hauptmandant',
              u'favorite_id': 1,
+             u'is_leafnode': None,
+             u'is_subdossier': None,
+             u'review_state': u'document-state-draft',
              u'icon_class': u'icon-docx',
              u'oguid': u'plone:1014073300',
-             u'position': None,
+             u'position': 0,
              u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014073300',
              u'title': u'Vertr\xe4gsentwurf',
              u'tooltip_url': u'http://nohost/plone/resolve_oguid/plone:1014073300/tooltip'},
@@ -479,6 +501,8 @@ class TestFavoritesPatch(IntegrationTestCase):
 
     @browsing
     def test_prefer_header_is_respected_return_representation(self, browser):
+        self.maxDiff = None
+
         self.login(self.regular_user, browser=browser)
 
         create(Builder('favorite')
@@ -503,13 +527,16 @@ class TestFavoritesPatch(IntegrationTestCase):
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
+             u'is_leafnode': None,
+             u'is_subdossier': False,
+             u'review_state': u'dossier-state-active',
              u'title': u'\xdcbersicht OGIPs',
              u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014013300',
              u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
              u'tooltip_url': None,
              u'oguid': u'plone:1014013300',
              u'admin_unit': u'Hauptmandant',
-             u'position': None}, browser.json)
+             u'position': 0}, browser.json)
 
     @browsing
     def test_update_position(self, browser):

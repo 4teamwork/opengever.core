@@ -1,3 +1,4 @@
+from Acquisition._Acquisition import aq_parent
 from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
@@ -11,6 +12,7 @@ from opengever.base.touched import should_track_touches
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
+from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task.task import ITask
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -19,6 +21,7 @@ from zope.container.interfaces import IContainerModifiedEvent
 from zope.event import notify
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent import ObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectMovedEvent
 from zope.sqlalchemy.datamanager import mark_changed
 
 
@@ -78,6 +81,20 @@ def object_moved_or_added(context, event):
         if was_subdossier != is_subdossier:
             to_reindex.append('is_subdossier')
 
+    if IDossierMarker.providedBy(context) and IObjectMovedEvent.providedBy(event):
+        # The moved dossier may change from a dossier to a subdossier or vice-versa.
+        Favorite.query.update_is_subdossier(context)
+
+    if IRepositoryFolder.providedBy(context) and IObjectMovedEvent.providedBy(event):
+        # The moved repository folder may change from a branch node to a leaf
+        # node or vice-versa.
+        Favorite.query.update_is_leafnode(context)
+
+        # Its old and new parent may also change from a branch node to a leaf
+        # node or vice-versa.
+        Favorite.query.update_is_leafnode(event.oldParent)
+        Favorite.query.update_is_leafnode(event.newParent)
+
     if context.portal_type in TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX:
         to_reindex.append('containing_subdossier')
 
@@ -118,6 +135,22 @@ def object_modified(context, event):
 
     if should_track_touches(context):
         notify(ObjectTouchedEvent(context))
+
+
+def update_favorited_repositoryfolder(context, event):
+    """Some examples when this event handler is called:
+    - A favorited leaf repository folder becomes a branch node when a
+      child repository folder is added.
+    - A favorited branch node becomes a leaf node when the last same
+      type child has been removed.
+    """
+    Favorite.query.update_is_leafnode(aq_parent(context))
+
+
+def update_favorites_review_state(context, event):
+    """Workflow transactions must trigger the update of the associated favourites.
+    """
+    Favorite.query.update_review_state(context)
 
 
 def update_favorites_title(context, event):
