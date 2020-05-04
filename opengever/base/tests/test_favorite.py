@@ -122,6 +122,24 @@ class TestHandlers(IntegrationTestCase):
             moved_dossier, self.regular_user).one()
         self.assertTrue(favorite.is_subdossier)
 
+    @browsing
+    def test_is_subdossier_becomes_falsy_when_moved(self, browser):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_object(self.resolvable_subdossier)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.resolvable_subdossier, self.regular_user).one()
+        self.assertTrue(favorite.is_subdossier)
+
+        moved_dossier = api.content.move(self.resolvable_subdossier, self.leaf_repofolder)
+
+        favorite = Favorite.query.by_object_and_user(
+            moved_dossier, self.regular_user).one()
+        self.assertFalse(favorite.is_subdossier)
+
     def test_all_favorites_are_deleted_when_removing_object(self):
         self.login(self.manager)
 
