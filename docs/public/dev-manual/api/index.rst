@@ -38,6 +38,7 @@ Inhalt:
    journal.rst
    sharing.rst
    allowed_roles_and_principals.rst
+   watchers.rst
    workspace/index
    linked_workspaces.rst
    templatefolder.rst

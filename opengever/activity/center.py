@@ -99,6 +99,16 @@ class NotificationCenter(object):
         # error. In order to avoid that we consume it by making a tuple.
         return tuple(resource.watchers)
 
+    def get_subscriptions(self, oguid):
+        resource = self.fetch_resource(oguid)
+        if not resource:
+            return ()
+
+        # resources.subscriptions is an association_proxy. When not consumed properly
+        # the GC will remove things, resulting in a "stale association proxy"
+        # error. In order to avoid that we consume it by making a tuple.
+        return tuple(resource.subscriptions)
+
     def add_activity(self, oguid, kind, title, label, summary, actor_id, description):
         """Creates an activity and the related notifications..
         """
@@ -251,6 +261,10 @@ class PloneNotificationCenter(NotificationCenter):
         oguid = self._get_oguid_for(obj)
         return super(PloneNotificationCenter, self).get_watchers(oguid)
 
+    def get_subscriptions(self, obj):
+        oguid = self._get_oguid_for(obj)
+        return super(PloneNotificationCenter, self).get_subscriptions(oguid)
+
     def fetch_resource(self, obj):
         oguid = self._get_oguid_for(obj)
         return super(PloneNotificationCenter, self).fetch_resource(oguid)
@@ -305,6 +319,9 @@ class DisabledNotificationCenter(NotificationCenter):
         pass
 
     def get_watchers(self, obj):
+        return []
+
+    def get_subscriptions(self, oguid):
         return []
 
     def add_activity(self, obj, kind, title, label, summary, actor_id, description):

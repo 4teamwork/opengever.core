@@ -678,4 +678,33 @@
       permission="opengever.api.ViewAllowedRolesAndPrincipals"
       />
 
+  <plone:service
+      method="GET"
+      name="@watchers"
+      for="opengever.task.task.ITask"
+      factory=".watchers.WatchersGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@watchers"
+      for="opengever.task.task.ITask"
+      factory=".watchers.WatchersPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@watchers"
+      for="opengever.task.task.ITask"
+      factory=".watchers.WatchersDelete"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".watchers.Watchers"
+      name="watchers"
+      />
+
 </configure>
