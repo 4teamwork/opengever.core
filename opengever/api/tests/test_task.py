@@ -189,6 +189,32 @@ class TestTaskSerialization(IntegrationTestCase):
             browser.json['containing_dossier']
         )
 
+    @browsing
+    def test_task_response_contains_items(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.maxDiff = None
+        self.assertEqual(
+            [
+                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
+                            u'dossier-1/task-1/task-2',
+                    u'@type': u'opengever.task.task',
+                    u'description': u'',
+                    u'review_state': u'task-state-resolved',
+                    u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
+                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
+                            u'dossier-1/task-1/document-35',
+                    u'@type': u'opengever.document.document',
+                    u'description': u'',
+                    u'review_state': u'document-state-draft',
+                    u'title': u'Feedback zum Vertragsentwurf'
+                }
+            ],
+            browser.json['items']
+        )
+
 
 class TestTaskCommentSync(FunctionalTestCase):
 

@@ -1,6 +1,6 @@
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
-from opengever.api.serializer import GeverSerializeToJson
+from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
@@ -20,7 +20,7 @@ from zope.interface import Interface
 
 @implementer(ISerializeToJson)
 @adapter(ITask, Interface)
-class SerializeTaskToJson(GeverSerializeToJson):
+class SerializeTaskToJson(GeverSerializeFolderToJson):
 
     def __call__(self, *args, **kwargs):
         result = super(SerializeTaskToJson, self).__call__(*args, **kwargs)
