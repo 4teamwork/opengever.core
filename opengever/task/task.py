@@ -15,6 +15,7 @@ from opengever.base.response import IResponseSupported
 from opengever.base.security import as_internal_workflow_transition
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
+from opengever.dossier.utils import get_main_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import ActorLookup
@@ -493,6 +494,10 @@ class Task(Container, TaskReminderSupport):
     def get_containing_dossier(self):
         """Returns the first parent dossier or inbox"""
         return get_containing_dossier(self)
+
+    def get_main_dossier(self):
+        """Returns the main dossier or inbox"""
+        return get_main_dossier(self)
 
     def get_containing_dossier_title(self):
         """Title of the main dossier or inbox"""

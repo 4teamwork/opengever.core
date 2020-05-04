@@ -28,7 +28,7 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
         return result
 
     def _get_containing_dossier_summary(self):
-        containing_dossier = self.context.get_containing_dossier()
+        containing_dossier = self.context.get_main_dossier()
         if not containing_dossier:
             return None
         return getMultiAdapter(
