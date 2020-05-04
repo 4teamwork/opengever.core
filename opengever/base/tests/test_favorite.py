@@ -85,6 +85,25 @@ class TestManager(IntegrationTestCase):
 
 class TestHandlers(IntegrationTestCase):
 
+    @browsing
+    def test_review_state_of_dossier_gets_updated(self, browser):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_object(self.resolvable_dossier)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.resolvable_dossier, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'dossier-state-active')
+
+        api.content.transition(obj=self.resolvable_dossier,
+                               transition='dossier-transition-deactivate')
+
+        favorite = Favorite.query.by_object_and_user(
+            self.resolvable_dossier, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'dossier-state-inactive')
+
     def test_all_favorites_are_deleted_when_removing_object(self):
         self.login(self.manager)
 
