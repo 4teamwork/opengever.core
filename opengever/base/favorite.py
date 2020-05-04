@@ -1,13 +1,6 @@
-from opengever.base.browser.helper import get_css_class
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
-from opengever.base.oguid import Oguid
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.repository.interfaces import IRepositoryFolder
-from plone import api
-from plone.uuid.interfaces import IUUID
 from sqlalchemy import and_
 from zExceptions import NotFound
 
@@ -32,39 +25,10 @@ class FavoriteManager(object):
         create_session().delete(favorite)
 
     def add(self, userid, obj):
-        truncated_title = Favorite.truncate_title(obj.Title().decode('utf-8'))
-
-        is_subdossier = None
-        if IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj):
-            is_subdossier = obj.is_subdossier()
-
-        is_leafnode = None
-        if IRepositoryFolder.providedBy(obj):
-            is_leafnode = obj.is_leaf_node()
-
-        favorite = Favorite(
-            userid=userid,
-            oguid=Oguid.for_object(obj),
-            title=truncated_title,
-            portal_type=obj.portal_type,
-            icon_class=get_css_class(obj),
-            plone_uid=IUUID(obj),
-            position=self.get_next_position(userid),
-            review_state=api.content.get_state(obj),
-            is_subdossier=is_subdossier,
-            is_leafnode=is_leafnode,
-        )
-
+        favorite = Favorite.create(userid, obj)
         create_session().add(favorite)
         create_session().flush()
         return favorite
-
-    def get_next_position(self, userid):
-        position = Favorite.query.get_highest_position(userid)
-        if position is None:
-            return 0
-
-        return position + 1
 
     def update(self, userid, fav_id, title, position):
         favorite = Favorite.query.by_userid_and_id(fav_id, userid).first()

@@ -785,17 +785,17 @@ class FavoriteBuilder(SqlObjectBuilder):
     id_argument_name = 'favorite_id'
 
     def for_object(self, obj):
-        self.arguments['oguid'] = Oguid.for_object(obj)
-        self.arguments['title'] = obj.title
-        self.arguments['portal_type'] = obj.portal_type
-        self.arguments['icon_class'] = get_css_class(obj)
-        self.arguments['plone_uid'] = IUUID(obj)
-
+        self.arguments['obj'] = obj
         return self
 
     def for_user(self, user):
         self.arguments['userid'] = user.getId()
         return self
+
+    def create_object(self):
+        userid = self.arguments.pop('userid', TEST_USER_ID)
+        obj = self.arguments.pop('obj')
+        return self.mapped_class.create(userid, obj, **self.arguments)
 
 
 builder_registry.register('favorite', FavoriteBuilder)
