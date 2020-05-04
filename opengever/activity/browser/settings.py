@@ -1,5 +1,4 @@
 from opengever.activity import _
-from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import notification_center
 from opengever.activity import notification_settings
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
@@ -85,8 +84,25 @@ NOTIFICATION_SETTING_TABS = [
 ]
 
 USER_SETTINGS = [
-    {'id': 'notify_own_actions'},
-    {'id': 'notify_inbox_actions'}
+    {
+        'id': 'notify_own_actions',
+        'title': _('notify_own_actions_title',
+                   default=u'Enable notifications for own actions'),
+        'help_text': _('notify_own_actions_help',
+                       default=u'By default no notifications are emitted for a '
+                               u'users\'own actions. This option allows to modify '
+                               u'this behavior. Notwithstanding this configuration, '
+                               u'user notification settings for each action type '
+                               u'will get applied anyway.')
+    },
+    {
+        'id': 'notify_inbox_actions',
+        'title': _('notify_inbox_actions_title',
+                   default=u'Enable notifications for inbox actions'),
+        'help_text': _('notify_inbox_actions_help',
+                       default=u'Activate, respectively deactivate, all '
+                               u'notifications due to your inbox permissions.')
+    },
 ]
 
 
@@ -182,9 +198,8 @@ class NotificationSettings(BrowserView):
         notification_settings = []
         for tab in NOTIFICATION_SETTING_TABS:
             for setting_id in tab.get('settings'):
-                kind_title = translate(
-                    ACTIVITY_TRANSLATIONS[setting_id], context=self.request)
-
+                config = self.settings.get_configuration_by_id(setting_id)
+                kind_title = translate(config.get('title', setting_id), context=self.request)
                 item = {'kind_title': kind_title,
                         'edit_mode': True,
                         'kind': setting_id,
@@ -195,10 +210,8 @@ class NotificationSettings(BrowserView):
 
         user_settings = []
         for setting in USER_SETTINGS:
-            title = translate(ACTIVITY_TRANSLATIONS[setting.get('id')]['title'],
-                              context=self.request)
-            help_text = translate(ACTIVITY_TRANSLATIONS[setting.get('id')]['help_text'],
-                                  context=self.request)
+            title = translate(config.get('title'), context=self.request)
+            help_text = translate(config.get('help_text'), context=self.request)
 
             default = self.get_default_user_setting_value(setting.get('id'))
             value = UserSettings.get_setting_for_user(

@@ -69,8 +69,6 @@ def send_digest_zopectl_handler(app, args):
 
 
 ACTIVITY_TRANSLATIONS = {
-    'task-added-or-reassigned': _('task-added-or-reassigned', default=u'Task added / reassigned'),
-    'task-status-modified': _('state-changed', default=u'State changed'),
     'task-added': _('task-added', default=u'Task added'),
     'task-transition-cancelled-open': _(
         'task-transition-cancelled-open', default=u'Task reopened'),
@@ -173,39 +171,4 @@ ACTIVITY_TRANSLATIONS = {
     'todo-modified': _(
         'todo-modified',
         default=u'ToDo modified'),
-    'notify_own_actions': {
-        'title': _('notify_own_actions_title',
-                   default=u'Enable notifications for own actions'),
-        'help_text': _('notify_own_actions_help',
-                   default=u'By default no notifications are emitted for a '
-                            'users\'own actions. This option allows to modify '
-                            'this behavior. Notwithstanding this configuration, '
-                            'user notification settings for each action type '
-                            'will get applied anyway.')
-         },
-    'notify_inbox_actions': {
-        'title': _('notify_inbox_actions_title',
-                   default=u'Enable notifications for inbox actions'),
-        'help_text': _('notify_inbox_actions_help',
-                   default=u'Activate, respectively deactivate, all '
-                            'notifications due to your inbox permissions.')
-         }
 }
-
-# TODO: There are too many places where the activites are defined:
-# - ACTIVITE_TRANSLATIONS
-# - activity/browser/settings.py
-# - opengever/task/response_description.py
-#
-# All the necessary information about an activity should be defined in one place
-# and should be used everywhere.
-#
-# i.e. ACTIVITIES = {
-#     'task-added': {
-#         'id': 'task-added',
-#         'css_class': 'created',
-#         'translation': _('task-added'),
-#         'category': 'task'
-#     }
-# }
-#

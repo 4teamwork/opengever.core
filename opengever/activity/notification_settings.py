@@ -1,5 +1,4 @@
 from opengever.activity import model
-from opengever.base.model import create_session
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
@@ -10,6 +9,12 @@ from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
+from opengever.base.model import create_session
+from zope.i18nmessageid import MessageFactory
+
+
+# We can't use the message factory from the __init__.py due to circualr imports.
+_ = MessageFactory("opengever.activity")
 
 
 # The NOTIFICATION_CONFIGURATION provides the configuration for the notification
@@ -21,6 +26,7 @@ from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 NOTIFICATION_CONFIGURATION = [
     {
         'id': 'task-added-or-reassigned',
+        'title': _('task-added-or-reassigned', default=u'Task added / reassigned'),
         'activities': ['task-added',
                        'task-transition-reassign',
                        'forwarding-added',
@@ -34,6 +40,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'task-transition-modify-deadline',
+        'title': _('task-transition-modify-deadline', default=u'Task deadline modified'),
         'activities': ['task-transition-modify-deadline'],
         'default_settings': {
             'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
@@ -41,6 +48,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'task-commented',
+        'title': _('task-commented', default=u'Task commented'),
         'activities': ['task-commented'],
         'default_settings': {
             'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
@@ -48,6 +56,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'task-status-modified',
+        'title': _('state-changed', default=u'State changed'),
         'activities': ['task-transition-cancelled-open',
                        'task-transition-rejected-open',
                        'task-transition-skipped-open',
@@ -74,6 +83,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-transition-reject',
+        'title': _('proposal-transition-reject', default=u'Proposal rejected'),
         'activities': ['proposal-transition-reject'],
         'default_settings': {
             'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
@@ -81,6 +91,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-transition-schedule',
+        'title': _('proposal-transition-schedule', default=u'Proposal scheduled'),
         'activities': ['proposal-transition-schedule'],
         'default_settings': {
             'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
@@ -88,6 +99,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-transition-pull',
+        'title': _('proposal-transition-pull', default=u'Proposal pulled'),
         'activities': ['proposal-transition-pull'],
         'default_settings': {
             'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
@@ -95,6 +107,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-transition-decide',
+        'title': _('proposal-transition-decide', default=u'Proposal decided'),
         'activities': ['proposal-transition-decide'],
         'default_settings': {
             'badge_notification_roles': [PROPOSAL_ISSUER_ROLE],
@@ -102,6 +115,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-transition-submit',
+        'title': _('proposal-transition-submit', default=u'Proposal submitted'),
         'activities': ['proposal-transition-submit'],
         'default_settings': {
             'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE],
@@ -109,6 +123,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-commented',
+        'title': _('proposal-commented', default=u'Proposal commented'),
         'activities': ['proposal-commented'],
         'default_settings': {
             'badge_notification_roles': [PROPOSAL_ISSUER_ROLE,
@@ -117,6 +132,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-attachment-updated',
+        'title': _('proposal-attachment-updated', default=u'Attachment updated'),
         'activities': ['proposal-attachment-updated'],
         'default_settings': {
             'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]
@@ -124,6 +140,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'proposal-additional-documents-submitted',
+        'title': _('proposal-additional-documents-submitted', default=u'Additional documents submitted'),
         'activities': ['proposal-additional-documents-submitted'],
         'default_settings': {
             'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]
@@ -131,6 +148,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'task-reminder',
+        'title': _('task-reminder', default=u'Task reminder'),
         'activities': ['task-reminder'],
         'default_settings': {
             'badge_notification_roles': [TASK_REMINDER_WATCHER_ROLE],
@@ -138,6 +156,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'disposition-added',
+        'title': _('disposition-added', default=u'Disposition added'),
         'activities': ['disposition-added'],
         'default_settings': {
             'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
@@ -146,6 +165,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'disposition-transition-appraise',
+        'title': _('disposition-transition-appraise', default=u'Disposition appraised'),
         'activities': ['disposition-transition-appraise'],
         'default_settings': {
             'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
@@ -153,6 +173,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'disposition-transition-archive',
+        'title': _('disposition-transition-archive', default=u'Disposition archived'),
         'activities': ['disposition-transition-archive'],
         'default_settings': {
             'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
@@ -160,6 +181,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'disposition-transition-dispose',
+        'title': _('disposition-transition-dispose', default=u'Disposition disposed'),
         'activities': ['disposition-transition-dispose'],
         'default_settings': {
             'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
@@ -167,6 +189,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'disposition-transition-refuse',
+        'title': _('disposition-transition-refuse', default=u'Disposition refused'),
         'activities': ['disposition-transition-refuse'],
         'default_settings': {
             'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
@@ -174,6 +197,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'disposition-transition-close',
+        'title': _('disposition-transition-close', default=u'Disposition closed'),
         'activities': [
             'disposition-transition-close',
             'disposition-transition-appraised-to-closed'],
@@ -183,6 +207,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'dossier-overdue',
+        'title': _('dossier-overdue', default=u'Overdue dossier'),
         'activities': ['dossier-overdue'],
         'default_settings': {
             'badge_notification_roles': [DOSSIER_RESPONSIBLE_ROLE],
@@ -190,6 +215,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'todo-assigned',
+        'title': _('todo-assigned', default=u'ToDo assigned'),
         'activities': ['todo-assigned'],
         'default_settings': {
             'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
@@ -198,6 +224,7 @@ NOTIFICATION_CONFIGURATION = [
     },
     {
         'id': 'todo-modified',
+        'title': _('todo-modified', default=u'ToDo modified'),
         'activities': ['todo-modified'],
         'default_settings': {
             'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
