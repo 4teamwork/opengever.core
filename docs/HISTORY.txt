@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
+- Bump docxcompose to 1.1.1 for non-ascii binary_type docproperty fix. [deiferni]
 - Improve performance when resolving large dossiers. [deiferni]
 - Add is_subdossier to catalog metadata. [deiferni]
 - Add Bumblebee auto refresh feature to policy template. [2e12]
