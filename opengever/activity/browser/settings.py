@@ -33,7 +33,7 @@ TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 NOTIFICATION_SETTING_TABS = [
     {'id': 'task',
      'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE],
-     'activities': [
+     'settings': [
          'task-added-or-reassigned',
          'task-transition-modify-deadline',
          'task-commented',
@@ -42,7 +42,7 @@ NOTIFICATION_SETTING_TABS = [
 
     {'id': 'proposal',
      'roles': [PROPOSAL_ISSUER_ROLE, COMMITTEE_RESPONSIBLE_ROLE],
-     'activities': [
+     'settings': [
          'proposal-transition-submit',
          'proposal-transition-reject',
          'proposal-transition-schedule',
@@ -55,13 +55,13 @@ NOTIFICATION_SETTING_TABS = [
 
     {'id': 'reminder',
      'roles': [TASK_REMINDER_WATCHER_ROLE],
-     'activities': [
+     'settings': [
          'task-reminder',
      ]},
 
     {'id': 'disposition',
      'roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
-     'activities': [
+     'settings': [
          'disposition-added',
          'disposition-transition-appraise',
          'disposition-transition-archive',
@@ -72,19 +72,19 @@ NOTIFICATION_SETTING_TABS = [
 
     {'id': 'dossier',
      'roles': [DOSSIER_RESPONSIBLE_ROLE],
-     'activities': [
+     'settings': [
          'dossier-overdue',
      ]},
 
     {'id': 'workspace',
      'roles': [TODO_RESPONSIBLE_ROLE, WORKSPACE_MEMBER_ROLE],
-     'activities': [
+     'settings': [
          'todo-assigned',
          'todo-modified'
      ]},
 ]
 
-GLOBAL_CONFIGURATIONS = [
+USER_SETTINGS = [
     {'id': 'notify_own_actions'},
     {'id': 'notify_inbox_actions'}
 ]
@@ -179,46 +179,49 @@ class NotificationSettings(BrowserView):
     def list(self):
         """API function to get all the required settings for the current user.
         """
-        activities = []
-        for group in NOTIFICATION_SETTING_TABS:
-            for kind in group.get('activities'):
+        notification_settings = []
+        for tab in NOTIFICATION_SETTING_TABS:
+            for setting_id in tab.get('settings'):
                 kind_title = translate(
-                    ACTIVITY_TRANSLATIONS[kind], context=self.request)
+                    ACTIVITY_TRANSLATIONS[setting_id], context=self.request)
 
                 item = {'kind_title': kind_title,
                         'edit_mode': True,
-                        'kind': kind,
-                        'type_id': group.get('id')}
+                        'kind': setting_id,
+                        'type_id': tab.get('id')}
 
-                activities.append(
-                    self.add_values(kind, item, group.get('roles')))
+                notification_settings.append(
+                    self.add_values(setting_id, item, tab.get('roles')))
 
-        configurations = []
-        for config in GLOBAL_CONFIGURATIONS:
-            title = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['title'],
+        user_settings = []
+        for setting in USER_SETTINGS:
+            title = translate(ACTIVITY_TRANSLATIONS[setting.get('id')]['title'],
                               context=self.request)
-            help_text = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['help_text'],
+            help_text = translate(ACTIVITY_TRANSLATIONS[setting.get('id')]['help_text'],
                                   context=self.request)
 
-            default = self.get_default_user_setting_value(config.get('id'))
+            default = self.get_default_user_setting_value(setting.get('id'))
             value = UserSettings.get_setting_for_user(
-                api.user.get_current().getId(), config.get('id'))
+                api.user.get_current().getId(), setting.get('id'))
 
             if value == default:
                 setting_type = 'default'
             else:
                 setting_type = 'personal'
 
-            configurations.append({'id': config.get('id'),
-                                   'title': title,
-                                   'help_text': help_text,
-                                   'value': value,
-                                   'setting_type': setting_type
-                                   })
+            user_settings.append({'id': setting.get('id'),
+                                  'title': title,
+                                  'help_text': help_text,
+                                  'value': value,
+                                  'setting_type': setting_type
+                                  })
 
+        # The mapping here is weird because we refactored the python part but
+        # not the Handlebars (JS) part. Because we would have to update a lot
+        # of frontend-code, we'll leave it as it is.
         return JSONResponse(self.request).data(
-            activities=activities,
-            configurations=configurations,
+            activities=notification_settings,
+            configurations=user_settings,
             translations=self.get_role_translations()).dump()
 
     def get_role_translations(self):
