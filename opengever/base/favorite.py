@@ -2,7 +2,11 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.repository.interfaces import IRepositoryFolder
+from plone import api
 from plone.uuid.interfaces import IUUID
 from sqlalchemy import and_
 from zExceptions import NotFound
@@ -29,6 +33,15 @@ class FavoriteManager(object):
 
     def add(self, userid, obj):
         truncated_title = Favorite.truncate_title(obj.Title().decode('utf-8'))
+
+        is_subdossier = None
+        if IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj):
+            is_subdossier = obj.is_subdossier()
+
+        is_leafnode = None
+        if IRepositoryFolder.providedBy(obj):
+            is_leafnode = obj.is_leaf_node()
+
         favorite = Favorite(
             userid=userid,
             oguid=Oguid.for_object(obj),
@@ -36,7 +49,11 @@ class FavoriteManager(object):
             portal_type=obj.portal_type,
             icon_class=get_css_class(obj),
             plone_uid=IUUID(obj),
-            position=self.get_next_position(userid))
+            position=self.get_next_position(userid),
+            review_state=api.content.get_state(obj),
+            is_subdossier=is_subdossier,
+            is_leafnode=is_leafnode,
+        )
 
         create_session().add(favorite)
         create_session().flush()

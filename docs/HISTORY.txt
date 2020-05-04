@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
+- Add more metadata to response of favorites endpoint (`review_state`, `is_subdossier` and `is_leafnode`). [mbaechtold]
 - Improve performance when resolving large dossiers. [deiferni]
 - Add attributes `review_state`, `is_subdossier` and `is_leafnode` to the search results returned by `@solrsearch` and `@livesearch`. [mbaechtold]
 - Add attribute `is_subdossier` to the children for GET requests to the API. [mbaechtold]

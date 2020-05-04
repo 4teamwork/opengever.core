@@ -271,6 +271,12 @@
       />
 
   <subscriber
+      for="opengever.repository.interfaces.IRepositoryFolder
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.update_favourised_repositoryfolder"
+      />
+
+  <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.IObjectMovedEvent"
       handler=".handlers.object_moved_or_added"
@@ -296,6 +302,12 @@
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.IObjectRemovedEvent"
       handler=".handlers.remove_favorites"
+      />
+
+  <subscriber
+      for="opengever.repository.interfaces.IRepositoryFolder
+           zope.lifecycleevent.IObjectRemovedEvent"
+      handler=".handlers.update_favourised_repositoryfolder"
       />
 
   <subscriber
@@ -326,6 +338,12 @@
       for="opengever.base.behaviors.changed.IChangedMarker
            Products.CMFCore.interfaces.IActionSucceededEvent"
       handler=".handlers.update_changed_date"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.update_favorites_review_state"
       />
 
   <subscriber

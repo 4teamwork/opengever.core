@@ -7,10 +7,15 @@ from opengever.base.model import UID_LENGTH
 from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
+from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.query import BaseQuery
 from opengever.bumblebee import is_bumblebeeable
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.ogds.models.admin_unit import AdminUnit
+from opengever.repository.interfaces import IRepositoryFolder
+from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_
 from sqlalchemy import Boolean
@@ -52,6 +57,10 @@ class Favorite(Base):
                       default=utcnow_tz_aware,
                       onupdate=utcnow_tz_aware)
 
+    review_state = Column(String(WORKFLOW_STATE_LENGTH))
+    is_subdossier = Column(Boolean, nullable=True)
+    is_leafnode = Column(Boolean, nullable=True)
+
     def serialize(self, portal_url):
         return {
             '@id': self.api_url(portal_url),
@@ -64,7 +73,11 @@ class Favorite(Base):
             'target_url': self.get_target_url(),
             'tooltip_url': self.get_tooltip_url(),
             'position': self.position,
-            'admin_unit': AdminUnit.query.get(self.admin_unit_id).title}
+            'admin_unit': AdminUnit.query.get(self.admin_unit_id).title,
+            'review_state': self.review_state,
+            'is_subdossier': self.is_subdossier,
+            'is_leafnode': self.is_leafnode,
+        }
 
     def api_url(self, portal_url):
         return '{}/@favorites/{}/{}'.format(
@@ -97,6 +110,10 @@ class FavoriteQuery(BaseQuery):
         favorite = self.by_object_and_user(obj, user).first()
         return favorite is not None
 
+    def by_object(self, obj):
+        oguid = Oguid.for_object(obj)
+        return self.filter_by(oguid=oguid)
+
     def by_object_and_user(self, obj, user):
         oguid = Oguid.for_object(obj)
         return self.filter_by(oguid=oguid, userid=user.getId())
@@ -122,6 +139,22 @@ class FavoriteQuery(BaseQuery):
         truncated_title = Favorite.truncate_title(new_title)
         self.update({'title': truncated_title})
 
+    def update_review_state(self, obj):
+        query = self.by_object(obj)
+        review_state = api.content.get_state(obj)
+        query.update({'review_state': review_state})
+
+    def update_is_subdossier(self, obj):
+        if not (IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj)):
+            return
+        query = self.by_object(obj)
+        query.update({'is_subdossier': obj.is_subdossier()})
+
+    def update_is_leafnode(self, obj):
+        if not IRepositoryFolder.providedBy(obj):
+            return
+        query = self.by_object(obj)
+        query.update({'is_leafnode': obj.is_leaf_node()})
 
 
 Favorite.query_cls = FavoriteQuery
