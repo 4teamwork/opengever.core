@@ -1,7 +1,6 @@
-from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
-from opengever.activity.model.settings import NotificationSetting
+from opengever.activity.notification_settings import NotificationSettings
 from opengever.base.model import create_session
 from opengever.base.sentry import maybe_report_exception
 from ZODB.POSException import ConflictError
@@ -23,12 +22,8 @@ class NotificationDispatcher(object):
     roles_key = None
 
     def get_setting(self, kind, userid):
-        setting = NotificationSetting.query.filter_by(
-            kind=kind, userid=userid).first()
-        if setting:
-            return setting
-
-        return NotificationDefault.query.by_kind(kind=kind).first()
+        return NotificationSettings().get_setting_by_activity_kind(
+            kind, userid)
 
     def dispatch_needed(self, notification):
         userid = notification.userid

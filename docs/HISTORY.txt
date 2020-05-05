@@ -5,6 +5,8 @@ Changelog
 ------------------------
 
 - Bump ftw.monitor and ftw.contentstats to get performance metrics. [lgraf]
+- Bump docxcompose to 1.1.1 for non-ascii binary_type docproperty fix. [deiferni]
+- Merge notification settings for tasks. [elioschmutz]
 - Improve performance when resolving large dossiers. [deiferni]
 - Add is_subdossier to catalog metadata. [deiferni]
 - Add @watchers endpoint for tasks and inbox forwardings. [tinagerber]

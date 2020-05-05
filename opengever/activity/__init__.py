@@ -8,7 +8,6 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.activity.mail import PloneNotificationMailer
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
-from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -172,59 +171,4 @@ ACTIVITY_TRANSLATIONS = {
     'todo-modified': _(
         'todo-modified',
         default=u'ToDo modified'),
-    'notify_own_actions': {
-        'title': _('notify_own_actions_title',
-                   default=u'Enable notifications for own actions'),
-        'help_text': _('notify_own_actions_help',
-                   default=u'By default no notifications are emitted for a '
-                            'users\'own actions. This option allows to modify '
-                            'this behavior. Notwithstanding this configuration, '
-                            'user notification settings for each action type '
-                            'will get applied anyway.')
-         },
-    'notify_inbox_actions': {
-        'title': _('notify_inbox_actions_title',
-                   default=u'Enable notifications for inbox actions'),
-        'help_text': _('notify_inbox_actions_help',
-                   default=u'Activate, respectively deactivate, all '
-                            'notifications due to your inbox permissions.')
-         }
-}
-
-# TODO: There are too many places where the activites are defined:
-# - ACTIVITE_TRANSLATIONS
-# - ACTIVITE_ICONS
-# - activity/hooks.py
-# - activity/browser/settings.py
-# - opengever/task/response_description.py
-#
-# All the necessary information about an activity should be defined in one place
-# and should be used everywhere.
-#
-# i.e. ACTIVITIES = {
-#     'task-added': {
-#         'id': 'task-added',
-#         'css_class': 'created',
-#         'translation': _('task-added'),
-#         'category': 'task'
-#     }
-# }
-#
-ACTIVITIES_ICONS = {
-    'proposal-transition-reject': 'rejected',
-    'proposal-transition-schedule': 'scheduled',
-    'proposal-transition-pull': 'pulled',
-    'proposal-transition-decide': 'decided',
-    'proposal-transition-submit': 'submitted',
-    'proposal-commented': 'commented',
-    'proposal-attachment-updated': 'documentUpdated',
-    'proposal-additional-documents-submitted': 'documentAdded',
-    'task-reminder': 'taskReminder',
-    'disposition-added': 'created',
-    'disposition-transition-appraise': 'dispositionAppraised',
-    'disposition-transition-archive': 'dispositionArchived',
-    'disposition-transition-dispose': 'dispositionDisposed',
-    'disposition-transition-refuse': 'dispositionRefused',
-    'disposition-transition-close': 'dispositionClosed',
-    'dossier-overdue': 'dossierOverdue',
 }

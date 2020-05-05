@@ -1,9 +1,6 @@
 from opengever.activity import _
-from opengever.activity import ACTIVITIES_ICONS
-from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import notification_center
-from opengever.activity.model.settings import NotificationDefault
-from opengever.activity.model.settings import NotificationSetting
+from opengever.activity import notification_settings
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
@@ -16,11 +13,9 @@ from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.json_response import JSONResponse
-from opengever.base.model import create_session
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
-from opengever.task.response_description import ResponseDescription
 from opengever.workspace import is_workspace_feature_enabled
 from path import Path
 from plone import api
@@ -32,43 +27,21 @@ import json
 
 TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 
-
-# The following list contains all necessary informations about the activity
-# groups which should be exposed in the notification settings form.
-ACTIVITY_GROUPS = [
+# The following list contains all necessary informations about the notification
+# setting which should be exposed in the notification settings view.
+NOTIFICATION_SETTING_TABS = [
     {'id': 'task',
      'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE],
-     'activities': [
-         'task-added',
-         'task-transition-cancelled-open',
-         'task-transition-delegate',
-         'task-transition-in-progress-resolved',
-         'task-transition-in-progress-tested-and-closed',
+     'settings': [
+         'task-added-or-reassigned',
          'task-transition-modify-deadline',
-         'task-transition-open-cancelled',
-         'task-transition-open-in-progress',
-         'task-transition-open-rejected',
          'task-commented',
-         'task-transition-reassign',
-         'task-transition-resolved-in-progress',
-         'task-transition-rejected-skipped',
-     ]},
-
-    {'id': 'forwarding',
-     'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE],
-     'activities': [
-         'forwarding-added',
-         'forwarding-transition-accept',
-         'forwarding-transition-assign-to-dossier',
-         'forwarding-transition-close',
-         'forwarding-transition-reassign',
-         'forwarding-transition-reassign-refused',
-         'forwarding-transition-refuse'
+         'task-status-modified'
      ]},
 
     {'id': 'proposal',
      'roles': [PROPOSAL_ISSUER_ROLE, COMMITTEE_RESPONSIBLE_ROLE],
-     'activities': [
+     'settings': [
          'proposal-transition-submit',
          'proposal-transition-reject',
          'proposal-transition-schedule',
@@ -81,13 +54,13 @@ ACTIVITY_GROUPS = [
 
     {'id': 'reminder',
      'roles': [TASK_REMINDER_WATCHER_ROLE],
-     'activities': [
+     'settings': [
          'task-reminder',
      ]},
 
     {'id': 'disposition',
      'roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
-     'activities': [
+     'settings': [
          'disposition-added',
          'disposition-transition-appraise',
          'disposition-transition-archive',
@@ -98,47 +71,39 @@ ACTIVITY_GROUPS = [
 
     {'id': 'dossier',
      'roles': [DOSSIER_RESPONSIBLE_ROLE],
-     'activities': [
+     'settings': [
          'dossier-overdue',
      ]},
 
     {'id': 'workspace',
      'roles': [TODO_RESPONSIBLE_ROLE, WORKSPACE_MEMBER_ROLE],
-     'activities': [
+     'settings': [
          'todo-assigned',
          'todo-modified'
      ]},
 ]
 
-GLOBAL_CONFIGURATIONS = [
-    {'id': 'notify_own_actions'},
-    {'id': 'notify_inbox_actions'}
+USER_SETTINGS = [
+    {
+        'id': 'notify_own_actions',
+        'title': _('notify_own_actions_title',
+                   default=u'Enable notifications for own actions'),
+        'help_text': _('notify_own_actions_help',
+                       default=u'By default no notifications are emitted for a '
+                               u'users\'own actions. This option allows to modify '
+                               u'this behavior. Notwithstanding this configuration, '
+                               u'user notification settings for each action type '
+                               u'will get applied anyway.')
+    },
+    {
+        'id': 'notify_inbox_actions',
+        'title': _('notify_inbox_actions_title',
+                   default=u'Enable notifications for inbox actions'),
+        'help_text': _('notify_inbox_actions_help',
+                       default=u'Activate, respectively deactivate, all '
+                               u'notifications due to your inbox permissions.')
+    },
 ]
-
-ALIASES = {
-    'task-transition-in-progress-tested-and-closed': (
-        'task-transition-in-progress-tested-and-closed',
-        'task-transition-open-tested-and-closed',
-        'task-transition-resolved-tested-and-closed',
-    ),
-    'task-transition-in-progress-resolved': (
-        'task-transition-in-progress-resolved',
-        'task-transition-open-resolved',
-    ),
-    'task-transition-cancelled-open': (
-        'task-transition-cancelled-open',
-        'task-transition-rejected-open',
-        'task-transition-skipped-open',
-    ),
-    'task-transition-rejected-skipped': (
-        'task-transition-rejected-skipped',
-        'task-transition-planned-skipped',
-    ),
-    'disposition-transition-close': (
-        'disposition-transition-close',
-        'disposition-transition-appraised-to-closed',
-    )
-}
 
 
 class InvalidUser(Exception):
@@ -146,15 +111,27 @@ class InvalidUser(Exception):
     """
 
 
-class NotificationSettings(BrowserView):
-    """Settings-form endpoints.
-    """
+class NotificationSettingsView(BrowserView):
+    """This browserview provides the endpoints for the notification
+    settings form.
 
-    user_settings = None
-    defaults = None
+    There are two type of settings:
+
+    1. User-Settings
+
+    The user settings provides general notification settings for the current user
+
+    2. Notification-Settings
+
+    The notification settings provides notification settings for specific
+    activities for the current user.
+    """
+    def __init__(self, context, request):
+        super(NotificationSettingsView, self).__init__(context, request)
+        self.settings = notification_settings.NotificationSettings()
 
     def save_user_setting(self):
-        """Save global configuration change
+        """API function to save a specific user setting.
         """
         try:
             self.assert_user_in_ogds()
@@ -171,107 +148,98 @@ class NotificationSettings(BrowserView):
 
         return JSONResponse(self.request).proceed().dump()
 
-    def save(self):
-        """Save setting change
+    def save_notification_setting(self):
+        """API function to save a specific notification setting.
         """
         kind = self.request.form['kind']
         mail = json.loads(self.request.form['mail'])
         badge = json.loads(self.request.form['badge'])
         digest = json.loads(self.request.form['digest'])
 
-        if ALIASES.get(kind):
-            kinds = ALIASES.get(kind)
-        else:
-            kinds = (kind, )
+        try:
+            self.assert_user_in_ogds()
+        except InvalidUser:
+            # User with no entry in the ogds, probably zopemaster.
+            msg = "Cannot save setting for this user as he is not in the ogds"
+            return JSONResponse(self.request).error(msg).proceed().dump()
 
-        for kind in kinds:
-            try:
-                setting = self.get_or_create_setting(kind)
-            except InvalidUser:
-                # User with no entry in the ogds, probably zopemaster.
-                msg = "Cannot save setting for this user as he is not in the ogds"
-                return JSONResponse(self.request).error(msg).proceed().dump()
-            setting.mail_notification_roles = mail
-            setting.badge_notification_roles = badge
-            setting.digest_notification_roles = digest
+        userid = api.user.get_current().getId()
+
+        self.settings.set_custom_setting(kind, userid,
+                                         mail_roles=mail,
+                                         badge_roles=badge,
+                                         digest_roles=digest)
 
         return JSONResponse(self.request).proceed().dump()
 
-    def reset(self):
-        """Reset a personal setting
+    def reset_notification_setting(self):
+        """API function to reset a notification setting of a specific type.
         """
         kind = self.request.form['kind']
 
-        if ALIASES.get(kind):
-            kinds = ALIASES.get(kind)
-        else:
-            kinds = (kind, )
-
-        for kind in kinds:
-            setting = self.get_setting(kind)
-            create_session().delete(setting)
+        userid = api.user.get_current().getId()
+        self.settings.remove_custom_setting(kind, userid)
 
         return JSONResponse(self.request).proceed().dump()
 
     def reset_user_setting(self):
-        """Reset a personal configuration
+        """API function to reset a user setting of a specific name.
         """
         config_name = self.request.form['config_name']
-        default = self.get_default_setting_value(config_name)
+        default = self.get_default_user_setting_value(config_name)
 
         UserSettings.save_setting_for_user(
             api.user.get_current().getId(), config_name, default)
         return JSONResponse(self.request).proceed().dump()
 
     def list(self):
-        """Returns settings for the current user.
+        """API function to get all the required settings for the current user.
         """
-        activities = []
-        for group in ACTIVITY_GROUPS:
-            for kind in group.get('activities'):
-                kind_title = translate(
-                    ACTIVITY_TRANSLATIONS[kind], context=self.request)
-
+        notification_settings = []
+        for tab in NOTIFICATION_SETTING_TABS:
+            for setting_id in tab.get('settings'):
+                config = self.settings.get_configuration_by_id(setting_id)
+                kind_title = translate(config.get('title', setting_id), context=self.request)
                 item = {'kind_title': kind_title,
                         'edit_mode': True,
-                        'css_class': self._get_activity_class(kind),
-                        'kind': kind,
-                        'type_id': group.get('id')}
+                        'kind': setting_id,
+                        'type_id': tab.get('id')}
 
-                activities.append(
-                    self.add_values(kind, item, group.get('roles')))
+                notification_settings.append(
+                    self.add_values(setting_id, item, tab.get('roles')))
 
-        configurations = []
-        for config in GLOBAL_CONFIGURATIONS:
-            title = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['title'],
-                              context=self.request)
-            help_text = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['help_text'],
-                                  context=self.request)
+        user_settings = []
+        for setting in USER_SETTINGS:
+            title = translate(config.get('title'), context=self.request)
+            help_text = translate(config.get('help_text'), context=self.request)
 
-            default = self.get_default_setting_value(config.get('id'))
+            default = self.get_default_user_setting_value(setting.get('id'))
             value = UserSettings.get_setting_for_user(
-                api.user.get_current().getId(), config.get('id'))
+                api.user.get_current().getId(), setting.get('id'))
 
             if value == default:
                 setting_type = 'default'
             else:
                 setting_type = 'personal'
 
-            configurations.append({'id': config.get('id'),
-                                   'title': title,
-                                   'help_text': help_text,
-                                   'value': value,
-                                   'setting_type': setting_type
-                                   })
+            user_settings.append({'id': setting.get('id'),
+                                  'title': title,
+                                  'help_text': help_text,
+                                  'value': value,
+                                  'setting_type': setting_type
+                                  })
 
+        # The mapping here is weird because we refactored the python part but
+        # not the Handlebars (JS) part. Because we would have to update a lot
+        # of frontend-code, we'll leave it as it is.
         return JSONResponse(self.request).data(
-            activities=activities,
-            configurations=configurations,
+            activities=notification_settings,
+            configurations=user_settings,
             translations=self.get_role_translations()).dump()
 
     def get_role_translations(self):
         roles = {}
-        for group in ACTIVITY_GROUPS:
+        for group in NOTIFICATION_SETTING_TABS:
             for role in group.get('roles'):
                 if role in roles:
                     continue
@@ -284,7 +252,7 @@ class NotificationSettings(BrowserView):
     def dispatchers(self):
         return notification_center().dispatchers
 
-    def get_default_setting_value(self, setting_name):
+    def get_default_user_setting_value(self, setting_name):
         return getattr(UserSettings, setting_name).default.arg
 
     def assert_user_in_ogds(self):
@@ -293,57 +261,18 @@ class NotificationSettings(BrowserView):
         if user is None:
             raise InvalidUser
 
-    def get_user_settings(self):
-        userid = api.user.get_current().getId()
-        if not self.user_settings:
-            self.user_settings = {
-                setting.kind: setting for setting
-                in NotificationSetting.query.filter_by(userid=userid)}
-
-        return self.user_settings
-
-    def get_defaults(self):
-        if not self.defaults:
-            self.defaults = {default.kind: default
-                             for default in NotificationDefault.query}
-
-        return self.defaults
-
-    def get_setting(self, kind):
-        userid = api.user.get_current().getId()
-        return NotificationSetting.query.filter_by(
-            userid=userid, kind=kind).first()
-
-    def get_or_create_setting(self, kind):
-        setting = self.get_setting(kind)
-        if not setting:
-            self.assert_user_in_ogds()
-            setting = NotificationSetting(
-                kind=kind, userid=api.user.get_current().getId())
-            create_session().add(setting)
-
-        return setting
-
     def add_values(self, kind, item, roles):
-        setting = self.get_user_settings().get(kind)
+        userid = api.user.get_current().getId()
+        setting = self.settings.get_setting(kind, userid)
 
-        if not setting:
-            item['setting_type'] = 'default'
-            setting = self.get_defaults()[kind]
-        else:
-            item['setting_type'] = 'personal'
+        is_custom_setting = self.settings.is_custom_setting(setting)
+        item['setting_type'] = 'personal' if is_custom_setting else 'default'
 
         for dispatcher in self.dispatchers():
             values = getattr(setting, dispatcher.roles_key)
             item[dispatcher._id] = {role: bool(role in values) for role in roles}
 
         return item
-
-    def _get_activity_class(self, kind):
-        css_class = ACTIVITIES_ICONS.get(kind)
-        if not css_class:
-            css_class = ResponseDescription.get(transition=kind).css_class
-        return css_class
 
 
 class NotificationSettingsForm(BrowserView):
@@ -374,7 +303,7 @@ class NotificationSettingsForm(BrowserView):
             api.portal.get().absolute_url())
 
     def save_url(self):
-        return '{}/notification-settings/save'.format(
+        return '{}/notification-settings/save_notification_setting'.format(
             api.portal.get().absolute_url())
 
     def save_user_setting_url(self):
@@ -382,7 +311,7 @@ class NotificationSettingsForm(BrowserView):
             api.portal.get().absolute_url())
 
     def reset_url(self):
-        return '{}/notification-settings/reset'.format(
+        return '{}/notification-settings/reset_notification_setting'.format(
             api.portal.get().absolute_url())
 
     def reset_user_setting_url(self):
@@ -394,9 +323,6 @@ class NotificationSettingsForm(BrowserView):
 
     def tab_title_task(self):
         return _('label_tasks', default=u'Tasks')
-
-    def tab_title_forwardings(self):
-        return _('label_forwardings', default=u'Forwardings')
 
     def tab_title_proposals(self):
         return _('label_proposals', default=u'Proposals')

@@ -4500,42 +4500,6 @@ ul.notifications-configurations-form .formHelp { margin-left: 10px; max-width: 4
 .notifications-settings-form tr:nth-child(even) td, .notifications-configurations-form tr:nth-child(even) td { background-color: #f8f8f8; }
 .notifications-settings-form tr td, .notifications-configurations-form tr td { vertical-align: middle; }
 .notifications-settings-form .notification-settings-kind span, .notifications-configurations-form .notification-settings-kind span { font-weight: bold; }
-.notifications-settings-form .notification-settings-kind span:before, .notifications-configurations-form .notification-settings-kind span:before { font-family: 'opengever'; content: "x"; padding-right: 5px; }
-.notifications-settings-form .notification-settings-kind span.created:before, .notifications-configurations-form .notification-settings-kind span.created:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.reopen:before, .notifications-configurations-form .notification-settings-kind span.reopen:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.reactivate:before, .notifications-configurations-form .notification-settings-kind span.reactivate:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.cancelled:before, .notifications-configurations-form .notification-settings-kind span.cancelled:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.accept:before, .notifications-configurations-form .notification-settings-kind span.accept:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.reassign:before, .notifications-configurations-form .notification-settings-kind span.reassign:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.revise:before, .notifications-configurations-form .notification-settings-kind span.revise:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.skip:before, .notifications-configurations-form .notification-settings-kind span.skip:before { font-family: 'Font Awesome 5 Free'; content: "\f051"; }
-.notifications-settings-form .notification-settings-kind span.taskCommented:before, .notifications-configurations-form .notification-settings-kind span.taskCommented:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.assignDossier:before, .notifications-configurations-form .notification-settings-kind span.assignDossier:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.complete:before, .notifications-configurations-form .notification-settings-kind span.complete:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.close:before, .notifications-configurations-form .notification-settings-kind span.close:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.addSubtask:before, .notifications-configurations-form .notification-settings-kind span.addSubtask:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.addDocument:before, .notifications-configurations-form .notification-settings-kind span.addDocument:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.created:before, .notifications-configurations-form .notification-settings-kind span.created:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.modifyDeadline:before, .notifications-configurations-form .notification-settings-kind span.modifyDeadline:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.reactivated:before, .notifications-configurations-form .notification-settings-kind span.reactivated:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.refuse:before, .notifications-configurations-form .notification-settings-kind span.refuse:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.delegate:before, .notifications-configurations-form .notification-settings-kind span.delegate:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.submitted:before, .notifications-configurations-form .notification-settings-kind span.submitted:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.rejected:before, .notifications-configurations-form .notification-settings-kind span.rejected:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.scheduled:before, .notifications-configurations-form .notification-settings-kind span.scheduled:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.pulled:before, .notifications-configurations-form .notification-settings-kind span.pulled:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.decided:before, .notifications-configurations-form .notification-settings-kind span.decided:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.commented:before, .notifications-configurations-form .notification-settings-kind span.commented:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.documentUpdated:before, .notifications-configurations-form .notification-settings-kind span.documentUpdated:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.documentAdded:before, .notifications-configurations-form .notification-settings-kind span.documentAdded:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.taskReminder:before, .notifications-configurations-form .notification-settings-kind span.taskReminder:before { font-family: 'Font Awesome 5 Free'; content: "\f017"; }
-.notifications-settings-form .notification-settings-kind span.dispositionAdded:before, .notifications-configurations-form .notification-settings-kind span.dispositionAdded:before { content: ""; }
-.notifications-settings-form .notification-settings-kind span.dispositionAppraised:before, .notifications-configurations-form .notification-settings-kind span.dispositionAppraised:before { font-family: 'Font Awesome 5 Free'; content: "\f0e3"; }
-.notifications-settings-form .notification-settings-kind span.dispositionDisposed:before, .notifications-configurations-form .notification-settings-kind span.dispositionDisposed:before { font-family: 'Font Awesome 5 Free'; content: "\f0b1"; }
-.notifications-settings-form .notification-settings-kind span.dispositionArchived:before, .notifications-configurations-form .notification-settings-kind span.dispositionArchived:before { font-family: 'Font Awesome 5 Free'; content: "\f1c0"; }
-.notifications-settings-form .notification-settings-kind span.dispositionClosed:before, .notifications-configurations-form .notification-settings-kind span.dispositionClosed:before { font-family: 'Font Awesome 5 Free'; content: "\f2ed"; }
-.notifications-settings-form .notification-settings-kind span.dispositionRefused:before, .notifications-configurations-form .notification-settings-kind span.dispositionRefused:before { font-family: 'Font Awesome 5 Free'; content: "\f165"; }
-.notifications-settings-form .notification-settings-kind span.dossierOverdue:before, .notifications-configurations-form .notification-settings-kind span.dossierOverdue:before { content: ""; }
 .notifications-settings-form .action, .notifications-configurations-form .action { display: inline-block; line-height: normal !important; padding: 8px 12px; border: 1px solid #e6e6e6; margin-bottom: 1em; margin-right: 5px; border-radius: 2px; transition: background-color .2s ease-out; background-color: #fff; color: #000; }
 .notifications-settings-form .action:hover, .notifications-configurations-form .action:hover { background-color: #f5f5f5; text-decoration: none; }
 .notifications-settings-form .action:visited, .notifications-configurations-form .action:visited { text-decoration: none; color: #000; }

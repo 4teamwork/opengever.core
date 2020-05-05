@@ -17,10 +17,9 @@ class TestMyNotifications(IntegrationTestCase):
     def setUp(self):
         super(TestMyNotifications, self).setUp()
 
-        setting = NotificationDefault.query.filter_by(kind='task-added').one()
+        setting = NotificationDefault.query.filter_by(kind='task-added-or-reassigned').one()
         setting.badge_notification_roles = [WATCHER_ROLE, ]
-        setting = NotificationDefault.query.filter_by(
-            kind='task-transition-open-in-progress').one()
+        setting = NotificationDefault.query.filter_by(kind='task-reminder').one()
         setting.badge_notification_roles = [WATCHER_ROLE, ]
 
         self.center = NotificationCenter(dispatchers=[BadgeIconDispatcher()])
@@ -44,8 +43,7 @@ class TestMyNotifications(IntegrationTestCase):
             self.dossier_responsible.getId(),
             {'de': None}).get('activity')
         self.activity_2 = self.center.add_activity(
-            Oguid('fd', '123'),
-            u'task-transition-open-in-progress',
+            Oguid('fd', '123'), u'task-reminder',
             {'de': u'Kennzahlen 2014 \xfcbertragen'},
             {'de': u'Aufgabe akzeptiert'},
             {'de': u'Aufgabe akzeptiert durch Hugo B\xf6ss'},

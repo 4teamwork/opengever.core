@@ -32,10 +32,10 @@ gelöscht und somit auf den GEVER Standard zurück gesetzt werden.
 
 |img-benachrichtigungs-einstellungen-4|
 
-Benachrichtigungen für Weiterleitungen, Erinnerungen, Anträge und Teamräume
----------------------------------------------------------------------------
-Analog den Benachrichtigungen für Aufgaben, kann in den Tabs *Weiterleitungen*,
-*Erinnerungen*, *Anträge* sowie *Teamräume* (wenn *Teamräume* via Konfigurationsoption aktiviert sind)
+Benachrichtigungen für Erinnerungen, Anträge und Teamräume
+----------------------------------------------------------
+Analog den Benachrichtigungen für Aufgaben, kann in den Tabs *Erinnerungen*,
+*Anträge* sowie *Teamräume* (wenn *Teamräume* via Konfigurationsoption aktiviert sind)
 die Benachrichtigungen für diese Aktivitäten eingestellt werden.
 
 |img-benachrichtigungs-einstellungen-5|

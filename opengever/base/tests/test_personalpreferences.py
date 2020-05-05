@@ -14,7 +14,7 @@ class TestPersonalPreferencesForm(IntegrationTestCase):
         div = browser.css('#notification-settings-form').first
         self.assertEquals('http://nohost/plone/notification-settings/list',
                           div.get('data-list-url'))
-        self.assertEquals('http://nohost/plone/notification-settings/save',
+        self.assertEquals('http://nohost/plone/notification-settings/save_notification_setting',
                           div.get('data-save-url'))
-        self.assertEquals('http://nohost/plone/notification-settings/reset',
+        self.assertEquals('http://nohost/plone/notification-settings/reset_notification_setting',
                           div.get('data-reset-url'))
