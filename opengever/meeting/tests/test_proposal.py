@@ -30,6 +30,7 @@ from zc.relation.interfaces import ICatalog
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getUtility
+import json
 
 
 class TestProposalStateGlobals(IntegrationTestCase):
@@ -88,6 +89,24 @@ class TestProposalSolr(SolrIntegrationTestCase):
         '!officeconnector-checkout',
         'meeting',
     )
+
+    @browsing
+    def test_proposal_template_field_dependencies(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+
+        depends_on = json.loads(browser.css('.tableradio-widget-wrapper').first.get('data-vocabulary-depends-on'))
+        committee_input_name = depends_on[0]
+
+        self.assertEqual(1, len(depends_on), 'Only 1 dependency expected.')
+
+        self.assertEqual('form.widgets.committee_oguid', committee_input_name,
+                         'You changed the configuration of ProposalAddForm (probably). Please make sure that the field '
+                         '"committee_oguid" still exists.')
+
+        self.assertEqual(1, len(browser.css('select[name="{}:list"]'.format(committee_input_name))),
+                         'Could not find dependent field {}.'.format(committee_input_name))
 
     @browsing
     def test_create_proposal_visible_in_dossier_actions_for_regular_user_when_meeting_enabled(self, browser):

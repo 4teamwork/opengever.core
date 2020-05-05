@@ -258,9 +258,10 @@ class ProposalTemplatesForCommitteeVocabulary(object):
             oguid = Oguid.parse(context.committee_oguid)
             return Committee.query.get_by_oguid(oguid)
 
-        committees = context.REQUEST.form.get('form.widgets.committee', None)
-        if committees:
-            return Committee.query.filter_by(committee_id=int(committees[0])).one()
+        committee_oguid = context.REQUEST.form.get('form.widgets.committee_oguid', None)
+        if committee_oguid:
+            committee_oguid = Oguid.parse(committee_oguid[0])
+            return Committee.query.filter_by(oguid=committee_oguid).one()
 
         return None
 

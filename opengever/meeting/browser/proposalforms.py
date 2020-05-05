@@ -124,7 +124,7 @@ class IAddProposalSupplementaryFields(Schema):
         vocabulary='opengever.meeting.ProposalTemplatesForCommitteeVocabulary',
         required=False,
         show_filter=True,
-        vocabulary_depends_on=['form.widgets.committee'],
+        vocabulary_depends_on=['form.widgets.committee_oguid'],
         columns=(
             {'column': 'title',
              'column_title': _(u'label_title', default=u'Title'),

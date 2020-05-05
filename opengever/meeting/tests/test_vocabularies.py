@@ -137,8 +137,8 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
             [term.value for term in factory(context=self.dossier)])
 
         self.committee.allowed_proposal_templates = [IUUID(baubewilligungen)]
-        self.request.form['form.widgets.committee'] = [
-            unicode(self.committee.load_model().committee_id)]
+        self.request.form['form.widgets.committee_oguid'] = [
+            unicode(self.committee.load_model().oguid)]
         self.assertItemsEqual(
             [baubewilligungen],
             [term.value for term in factory(context=self.dossier)])
