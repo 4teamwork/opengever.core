@@ -4,6 +4,7 @@ from ftw.solr.query import escape
 from ftw.table.catalog_source import CatalogTableSource
 from ftw.table.interfaces import ITableSource
 from opengever.base.interfaces import ISearchSettings
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.base.solr import OGSolrDocument
 from opengever.tabbedview.filtered_source import FilteredTableSourceMixin
 from opengever.tabbedview.interfaces import IGeverCatalogTableSourceConfig
@@ -13,6 +14,7 @@ from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
 import logging
+
 
 logger = logging.getLogger('opengever.tabbedview.catalog_source')
 
@@ -155,6 +157,9 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                 sort += ' asc'
         else:
             logger.warning('Ignoring unknown sort criteria %s', sort)
+            log_msg_to_sentry(
+                'Ignoring unknown sort criteria', level='warning',
+                extra={'sort_criteria': sort})
             sort = None
 
         # Todo: modified be removed once the changed metadata is filled on
