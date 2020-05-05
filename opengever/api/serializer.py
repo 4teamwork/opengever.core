@@ -1,12 +1,17 @@
 from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
+from Missing import Value as MissingValue
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
+from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
@@ -16,10 +21,13 @@ from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
+from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
+from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
+from zope.interface import Interface
 
 
 def extend_with_bumblebee_checksum(result, context):
@@ -143,6 +151,43 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
                 team_serializer = queryMultiAdapter(
                     (team, self.request), ISerializeToJsonSummary)
                 data['teams'].append(team_serializer())
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(Interface, IOpengeverBaseLayer)
+class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
+
+    def __call__(self, *args, **kwargs):
+        summary = super(GeverSerializeToJsonSummary, self).__call__(*args, **kwargs)
+
+        if IDossierMarker.providedBy(self.context) or IDossierTemplateMarker.providedBy(self.context):
+            summary['is_subdossier'] = self.context.is_subdossier()
+
+        summary['is_leafnode'] = None
+        if IRepositoryFolder.providedBy(self.context):
+            summary['is_leafnode'] = self.context.is_leaf_node()
+
+        return summary
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(ICatalogBrain, IOpengeverBaseLayer)
+class SerializeBrainToJsonSummary(DefaultJSONSummarySerializer):
+
+    def __call__(self, *args, **kwargs):
+        summary = super(SerializeBrainToJsonSummary, self).__call__(*args, **kwargs)
+
+        if is_dossierish_portal_type(self.context.portal_type):
+            summary['is_subdossier'] = None
+            if self.context.is_subdossier != MissingValue:
+                summary['is_subdossier'] = self.context.is_subdossier
+
+        summary['is_leafnode'] = None
+        if self.context.portal_type == 'opengever.repository.repositoryfolder':
+            if self.context.has_sametype_children != MissingValue:
+                summary['is_leafnode'] = not self.context.has_sametype_children
+
+        return summary
 
 
 class SerializeSQLModelToJsonSummaryBase(object):

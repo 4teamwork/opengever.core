@@ -196,6 +196,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/private/kathi-barfuss',
              u'@type': u'opengever.private.folder',
              u'description': u'',
+             u'is_leafnode': None,
              u'review_state': u'folder-state-active',
              u'title': u'B\xe4rfuss K\xe4thi (kathi.barfuss)'},
             browser.json['parent'])

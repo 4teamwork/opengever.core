@@ -30,6 +30,7 @@ Standardmässig wird der Ordnungssystem-Baum zurückgegeben.
                   "current": false,
                   "current_tree": false,
                   "description": "",
+                  "is_leafnode": false,
                   "nodes": [
                       {
                           "@type": "opengever.repository.repositoryfolder",
@@ -37,6 +38,7 @@ Standardmässig wird der Ordnungssystem-Baum zurückgegeben.
                           "current": false,
                           "current_tree": false,
                           "description": "",
+                          "is_leafnode": false,
                           "nodes": [
                               {
                                   "@type": "opengever.repository.repositoryfolder",
@@ -44,6 +46,7 @@ Standardmässig wird der Ordnungssystem-Baum zurückgegeben.
                                   "current": false,
                                   "current_tree": false,
                                   "description": "",
+                                  "is_leafnode": true,
                                   "nodes": [],
                                   "text": "9.5.0. Allgemeines",
                                   "uid": "103f443655c64b01b9cec25b09f6192a",
@@ -55,6 +58,7 @@ Standardmässig wird der Ordnungssystem-Baum zurückgegeben.
                                   "current": false,
                                   "current_tree": false,
                                   "description": "",
+                                  "is_leafnode": true,
                                   "nodes": [],
                                   "text": "9.5.1. Informatik",
                                   "uid": "c68e1ebba5204d67b1c38e20aebfba7e",
@@ -66,6 +70,7 @@ Standardmässig wird der Ordnungssystem-Baum zurückgegeben.
                                   "current": false,
                                   "current_tree": false,
                                   "description": "",
+                                  "is_leafnode": true,
                                   "nodes": [],
                                   "text": "9.5.2. Telefonie",
                                   "uid": "9da54abbd5f4406f837a976fc20670a7",
@@ -123,6 +128,7 @@ Ein Navigationsbaum eines Arbeitsraumes kann wie folgt abgefragt werden:
                   "current": false,
                   "current_tree": false,
                   "description": "",
+                  "is_leafnode": null,
                   "nodes": [],
                   "text": "",
                   "uid": "8dee9268d10f4b2db742fb52ebefdd03",
@@ -161,6 +167,7 @@ Ein Navigationsbaum eines Arbeitsraumes kann wie folgt abgefragt werden:
                           "current": false,
                           "current_tree": false,
                           "description": "",
+                          "is_leafnode": null,
                           "nodes": [],
                           "text": "",
                           "uid": "8dee9268d10f4b2db742fb52ebefdd03",

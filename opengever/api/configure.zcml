@@ -19,12 +19,14 @@
   <include package=".schema" />
 
   <adapter factory=".serializer.GeverSerializeToJson" />
+  <adapter factory=".serializer.GeverSerializeToJsonSummary" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJson" />
   <adapter factory=".serializer.SerializeUserModelToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJsonSummary" />
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
+  <adapter factory=".serializer.SerializeBrainToJsonSummary" />
 
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
@@ -207,6 +209,20 @@
       for="zope.interface.Interface"
       factory=".navigation.NavigationGet"
       name="@navigation"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".breadcrumbs.Breadcrumbs"
+      name="breadcrumbs"
+      />
+
+  <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".breadcrumbs.BreadcrumbsGet"
+      name="@breadcrumbs"
       permission="zope2.View"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />

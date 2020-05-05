@@ -22,6 +22,16 @@ class OGSolrDocument(SolrDocument):
     def filename(self):
         return self.get('filename', None)
 
+    @property
+    def is_subdossier(self):
+        return self.get('is_subdossier', None)
+
+    @property
+    def is_leafnode(self):
+        if self.get('portal_type') == 'opengever.repository.repositoryfolder':
+            return not self.get('has_sametype_children')
+        return None
+
 
 class OGSolrContentListing(SolrContentListing):
 

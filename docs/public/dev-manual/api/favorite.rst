@@ -33,10 +33,12 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
               "@id": "http://localhost:8080/fd/@favorites/peter.mueller/3",
               "favorite_id": 3,
               "icon_class": "icon-dokument_word",
+              "is_leafnode": null,
               "oguid": "fd:68398212",
               "title": "Richtlinien Gesetzesentwürfe",
               "portal_type": "opengever.document.document",
               "position": 1,
+              "review_state": "document-state-draft",
               "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
           }
           ,
@@ -44,10 +46,13 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
               "@id": "http://localhost:8080/fd/@favorites/peter.mueller/57",
               "favorite_id": 57,
               "icon_class": "contenttype-opengever-dossier-businesscasedossier",
+              "is_leafnode": null,
+              "is_subdossier": false,
               "oguid": "fd:68336212",
               "title": "Anfragen 2018",
               "portal_type": "opengever.dossier.businesscasedossier",
               "position": 2,
+              "review_state": "dossier-state-active",
               "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68336212"
           }
       ]
@@ -81,10 +86,12 @@ Ein Favorit für ein beliebiges Objekt kann mittels POST Request hinzugefügt we
           "@id": "http://localhost:8080/fd/@favorites/peter.mueller/20",
           "favorite_id": 20,
           "icon_class": "icon-dokument_word",
+          "is_leafnode": null,
           "oguid": "fd:68398212",
           "title": "Anfrage 2018",
           "portal_type": "opengever.document.document",
           "position": 1,
+          "review_state": "document-state-draft",
           "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
       }
 
@@ -133,10 +140,12 @@ Es ist aber möglich bei einem PATCH request die Objekt-Repräsentation als Resp
           "@id": "http://localhost:8080/fd/@favorites/peter.mueller/20",
           "favorite_id": 20,
           "icon_class": "icon-dokument_word",
+          "is_leafnode": null,
           "oguid": "fd:68398212",
           "title": "Weekly Document",
           "portal_type": "opengever.document.document",
           "position": 35,
+          "review_state": "document-state-draft",
           "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
       }
 

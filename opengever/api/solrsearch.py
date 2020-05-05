@@ -51,7 +51,11 @@ class SolrSearchGet(SolrQueryBaseService):
     def parse_requested_fields(self, params):
         requested_fields = params.pop('fl', None)
         if requested_fields:
-            return requested_fields.split(',')
+            requested_fields = requested_fields.split(',')
+            if 'is_leafnode' in requested_fields:
+                # Requesting additional fields is required in order to determine if
+                # the repository folder is a leaf node.
+                requested_fields.extend(['@type', 'has_sametype_children'])
         return requested_fields
 
     def prepare_additional_params(self, params):
@@ -61,8 +65,8 @@ class SolrSearchGet(SolrQueryBaseService):
         if facet_fields:
             facet_fields = [
                 facet for facet in facet_fields
-                if self.is_field_allowed(facet) and
-                self.get_field_index(facet) in self.solr_fields]
+                if self.is_field_allowed(facet) and self.get_field_index(facet) in self.solr_fields
+            ]
             params['facet.field'] = facet_fields
         return params
 

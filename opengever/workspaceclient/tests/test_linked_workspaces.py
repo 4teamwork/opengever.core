@@ -327,6 +327,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                  u'UID': document.UID(),
                  u'description': u'',
                  u'filename': u'',
+                 u'is_leafnode': None,
                  u'review_state': u'document-state-draft',
                  u'title': u'Testdokum\xe4nt'},
                 documents['items'][0])

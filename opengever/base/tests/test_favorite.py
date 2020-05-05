@@ -85,6 +85,146 @@ class TestManager(IntegrationTestCase):
 
 class TestHandlers(IntegrationTestCase):
 
+    @browsing
+    def test_review_state_of_dossier_gets_updated(self, browser):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_object(self.resolvable_dossier)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.resolvable_dossier, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'dossier-state-active')
+
+        api.content.transition(obj=self.resolvable_dossier,
+                               transition='dossier-transition-deactivate')
+
+        favorite = Favorite.query.by_object_and_user(
+            self.resolvable_dossier, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'dossier-state-inactive')
+
+    @browsing
+    def test_is_subdossier_becomes_truthy_when_moved(self, browser):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_object(self.empty_dossier)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_dossier, self.regular_user).one()
+        self.assertFalse(favorite.is_subdossier)
+
+        moved_dossier = api.content.move(self.empty_dossier, self.resolvable_dossier)
+
+        favorite = Favorite.query.by_object_and_user(
+            moved_dossier, self.regular_user).one()
+        self.assertTrue(favorite.is_subdossier)
+
+    @browsing
+    def test_is_subdossier_becomes_falsy_when_moved(self, browser):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_object(self.resolvable_subdossier)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.resolvable_subdossier, self.regular_user).one()
+        self.assertTrue(favorite.is_subdossier)
+
+        moved_dossier = api.content.move(self.resolvable_subdossier, self.leaf_repofolder)
+
+        favorite = Favorite.query.by_object_and_user(
+            moved_dossier, self.regular_user).one()
+        self.assertFalse(favorite.is_subdossier)
+
+    @browsing
+    def test_review_state_of_repository_folder_gets_updated(self, browser):
+        self.login(self.administrator)
+
+        create(Builder('favorite')
+               .for_object(self.empty_repofolder)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'repositoryfolder-state-active')
+
+        api.content.transition(obj=self.empty_repofolder,
+                               transition='repositoryfolder-transition-inactivate')
+
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertEqual(favorite.review_state, 'repositoryfolder-state-inactive')
+
+    @browsing
+    def test_is_leafnode_becomes_falsy_when_moved(self, browser):
+        # the manager can move stuff users cannot
+        self.login(self.manager)
+
+        create(Builder('favorite')
+               .for_object(self.empty_repofolder)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertTrue(favorite.is_leafnode)
+
+        api.content.move(self.inactive_repofolder, self.empty_repofolder)
+
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertFalse(favorite.is_leafnode)
+
+    @browsing
+    def test_is_leafnode_becomes_falsy_when_child_added(self, browser):
+        # the manager can move stuff users cannot
+        self.login(self.administrator)
+
+        create(Builder('favorite')
+               .for_object(self.empty_repofolder)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertTrue(favorite.is_leafnode)
+
+        create(
+            Builder('repository')
+            .within(self.empty_repofolder)
+            .having(title_de=u'Child', title_fr=u'Child')
+        )
+
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertFalse(favorite.is_leafnode)
+
+    @browsing
+    def test_is_leafnode_becomes_truthy_when_moved(self, browser):
+        # the manager can move stuff users cannot
+        self.login(self.manager)
+
+        child = create(
+            Builder('repository')
+            .within(self.empty_repofolder)
+            .having(title_de=u'Child', title_fr=u'Child')
+        )
+        create(Builder('favorite')
+               .for_object(self.empty_repofolder)
+               .for_user(self.regular_user))
+        self.assertEquals(1, Favorite.query.count())
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertFalse(favorite.is_leafnode)
+
+        api.content.move(child, self.branch_repofolder)
+
+        favorite = Favorite.query.by_object_and_user(
+            self.empty_repofolder, self.regular_user).one()
+        self.assertTrue(favorite.is_leafnode)
+
     def test_all_favorites_are_deleted_when_removing_object(self):
         self.login(self.manager)
 

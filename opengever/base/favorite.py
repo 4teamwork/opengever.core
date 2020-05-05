@@ -1,9 +1,6 @@
-from opengever.base.browser.helper import get_css_class
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
-from opengever.base.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
-from plone.uuid.interfaces import IUUID
 from sqlalchemy import and_
 from zExceptions import NotFound
 
@@ -28,26 +25,10 @@ class FavoriteManager(object):
         create_session().delete(favorite)
 
     def add(self, userid, obj):
-        truncated_title = Favorite.truncate_title(obj.Title().decode('utf-8'))
-        favorite = Favorite(
-            userid=userid,
-            oguid=Oguid.for_object(obj),
-            title=truncated_title,
-            portal_type=obj.portal_type,
-            icon_class=get_css_class(obj),
-            plone_uid=IUUID(obj),
-            position=self.get_next_position(userid))
-
+        favorite = Favorite.create(userid, obj)
         create_session().add(favorite)
         create_session().flush()
         return favorite
-
-    def get_next_position(self, userid):
-        position = Favorite.query.get_highest_position(userid)
-        if position is None:
-            return 0
-
-        return position + 1
 
     def update(self, userid, fav_id, title, position):
         favorite = Favorite.query.by_userid_and_id(fav_id, userid).first()
