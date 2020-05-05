@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
+- Add live chat to online documentation. [njohner]
 - Bump ftw.monitor and ftw.contentstats to get performance metrics. [lgraf]
 - Improve performance when resolving large dossiers. [deiferni]
 - Add is_subdossier to catalog metadata. [deiferni]
