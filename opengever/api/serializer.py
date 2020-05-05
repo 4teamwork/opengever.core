@@ -6,6 +6,7 @@ from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.team import Team
@@ -159,7 +160,6 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
     def __call__(self, *args, **kwargs):
         summary = super(GeverSerializeToJsonSummary, self).__call__(*args, **kwargs)
 
-        summary['is_subdossier'] = None
         if IDossierMarker.providedBy(self.context) or IDossierTemplateMarker.providedBy(self.context):
             summary['is_subdossier'] = self.context.is_subdossier()
 
@@ -177,10 +177,10 @@ class SerializeBrainToJsonSummary(DefaultJSONSummarySerializer):
     def __call__(self, *args, **kwargs):
         summary = super(SerializeBrainToJsonSummary, self).__call__(*args, **kwargs)
 
-        if self.context.is_subdossier == MissingValue:
+        if is_dossierish_portal_type(self.context.portal_type):
             summary['is_subdossier'] = None
-        else:
-            summary['is_subdossier'] = self.context.is_subdossier
+            if self.context.is_subdossier != MissingValue:
+                summary['is_subdossier'] = self.context.is_subdossier
 
         summary['is_leafnode'] = None
         if self.context.portal_type == 'opengever.repository.repositoryfolder':

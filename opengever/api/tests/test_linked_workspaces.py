@@ -559,7 +559,6 @@ class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
                   u'description': u'',
                   u'filename': u'',
                   u'is_leafnode': None,
-                  u'is_subdossier': None,
                   u'review_state': u'document-state-draft',
                   u'title': u'Testdokum\xe4nt'}],
                 response['items'])

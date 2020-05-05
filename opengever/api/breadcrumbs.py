@@ -53,7 +53,6 @@ class Breadcrumbs(object):
                 if IRepositoryFolder.providedBy(obj):
                     item['is_leafnode'] = obj.is_leaf_node()
 
-                item['is_subdossier'] = None
                 if IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj):
                     item['is_subdossier'] = obj.is_subdossier()
 

@@ -35,7 +35,6 @@ class TestLivesearchGet(SolrIntegrationTestCase):
              u'@type': u'opengever.document.document',
              u'filename': self.proposaldocument.file.filename,
              u'is_leafnode': None,
-             u'is_subdossier': None,
              u'review_state': u'document-state-draft'},
             browser.json[0])
 
@@ -90,8 +89,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
         )
         browser.open(url, method='GET', headers=self.api_headers)
         self.assertEqual(1, len(browser.json), 'The test has become ambiguous. Please make it more robust.')
-        self.assertIsNone(browser.json[0]['is_subdossier'])
-
+        self.assertNotIn('is_subdossier', browser.json[0])
 
     @browsing
     def test_branch_dossier_is_not_subdossier(self, browser):
@@ -104,7 +102,6 @@ class TestLivesearchGet(SolrIntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
         self.assertEqual(1, len(browser.json), 'The test has become ambiguous. Please make it more robust.')
         self.assertFalse(browser.json[0]['is_subdossier'])
-
 
     @browsing
     def test_subdossier_is_subdossier(self, browser):

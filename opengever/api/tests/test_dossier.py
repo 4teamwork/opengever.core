@@ -33,7 +33,7 @@ class TestDossierSerializer(IntegrationTestCase):
             [],
             [
                 dossier["is_subdossier"] for dossier in business_case_dossiers
-                if dossier["is_subdossier"] is not None
+                if dossier.get("is_subdossier", None) is not None
             ],
             'Non-dossiers within "self.dossier" cannot be subdossiers.'
         )

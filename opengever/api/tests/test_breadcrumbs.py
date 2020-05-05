@@ -31,7 +31,6 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
                     u'@type': u'opengever.repository.repositoryroot',
                     u'description': u'',
                     u'is_leafnode': None,
-                    u'is_subdossier': None,
                     u'review_state': u'repositoryroot-state-active',
                     u'title': u'Ordnungssystem',
                 }
@@ -97,7 +96,7 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
 
         # self.leaf_repofolder: Unable to determine subdossier status.
         self.assertIsNone(getattr(self.leaf_repofolder, 'is_subdossier', None))
-        self.assertIsNone(browser.json['items'][2]['is_subdossier'])
+        self.assertNotIn('is_subdossier', browser.json['items'][2])
 
         # self.dossier: Not a subdossier.
         self.assertFalse(self.dossier.is_subdossier())
@@ -133,7 +132,6 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
                 {
                     u'description': u'',
                     u'title': u'Ordnungssystem',
-                    u'is_subdossier': None,
                     u'is_leafnode': None,
                     u'review_state': u'repositoryroot-state-active',
                     u'@id': u'http://nohost/plone/ordnungssystem',
@@ -142,7 +140,6 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
                 {
                     u'description': u'Alles zum Thema F\xfchrung.',
                     u'title': u'1. F\xfchrung',
-                    u'is_subdossier': None,
                     u'is_leafnode': False,
                     u'review_state': u'repositoryfolder-state-active',
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung',

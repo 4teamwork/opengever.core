@@ -54,3 +54,22 @@ def truncate_ellipsis(text, threshold, ellipsis=ELLIPSIS):
         return (text[:threshold] + ellipsis) if len(text) > threshold else text
     else:
         return ''
+
+
+def is_dossierish_portal_type(portal_type_name):
+    """
+    Returns a boolean indicating if the given name of the portal type
+    is considered a dossier.
+
+    Examples:
+    - opengever.dossier.businesscasedossier: True
+    - opengever.dossier.dossiertemplate: True
+    - opengever.dossier.templatefolder: False
+
+    This is a bit hackish but it's necessary when working with catalog brains
+    and Solr results.
+    """
+    segments = portal_type_name.split('.')
+    if segments[0] != 'opengever':
+        return False
+    return 'dossier' in segments[-1]

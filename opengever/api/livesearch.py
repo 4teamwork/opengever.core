@@ -1,5 +1,6 @@
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrContentListing
+from opengever.dossier.utils import is_dossierish_portal_type
 from plone import api
 from plone.restapi.services.search.get import SearchGet
 from zope.component import getMultiAdapter
@@ -27,17 +28,20 @@ class GeverLiveSearchGet(SearchGet):
             view.limit = limit
             view.path = path
 
-            return [
-                {
+            results = []
+            for entry in OGSolrContentListing(view.results()):
+                result = {
                     'title': entry.Title(),
                     'filename': entry.filename,
                     '@id': entry.getURL(),
                     '@type': entry.portal_type,
                     'review_state': entry.review_state(),
-                    'is_subdossier': entry.is_subdossier,
                     'is_leafnode': entry.is_leafnode,
                 }
-                for entry in OGSolrContentListing(view.results())]
+                if is_dossierish_portal_type(entry.portal_type):
+                    result['is_subdossier'] = entry.is_subdossier
+                results.append(result)
+            return results
 
         else:
             del self.request.form['q']
@@ -58,15 +62,19 @@ class GeverLiveSearchGet(SearchGet):
                 'metadata_fields': ['Title', 'filename', 'id', 'portal_type']
             })
 
-            results = super(GeverLiveSearchGet, self).reply()
-            return [
-                {
+            response = super(GeverLiveSearchGet, self).reply()
+
+            results = []
+            for entry in response['items'][:limit]:
+                result = {
                     'title': entry['title'],
                     'filename': entry['filename'],
                     '@id': entry['@id'],
                     '@type': entry['@type'],
                     'review_state': entry['review_state'],
-                    'is_subdossier': entry['is_subdossier'],
                     'is_leafnode': entry['is_leafnode'],
                 }
-                for entry in results['items'][:limit]]
+                if is_dossierish_portal_type(entry.get('@type', '')):
+                    result['is_subdossier'] = entry['is_subdossier']
+                results.append(result)
+            return results

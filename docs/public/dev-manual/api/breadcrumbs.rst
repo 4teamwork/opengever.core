@@ -27,7 +27,6 @@ Breadcrumbs
                   "@type": "opengever.repository.repositoryroot"
                   "description": "",
                   "is_leafnode": null,
-                  "is_subdossier": null,
                   "review_state": "repositoryroot-state-active",
                   "title": "Ordnungssystem",
               },
@@ -36,7 +35,6 @@ Breadcrumbs
                   "@type": "opengever.repository.repositoryfolder"
                   "description": "Alles zum Thema F\\u00fchrung.",
                   "is_leafnode": false,
-                  "is_subdossier": null,
                   "review_state": "repositoryfolder-state-active",
                   "title": "1. F\\u00fchrung",
               },
@@ -45,7 +43,6 @@ Breadcrumbs
                   "@type": "opengever.repository.repositoryfolder"
                   "description": "",
                   "is_leafnode": true,
-                  "is_subdossier": null,
                   "review_state": "repositoryfolder-state-active",
                   "title": "1.1. Vertr\\u00e4ge und Vereinbarungen",
               },

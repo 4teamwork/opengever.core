@@ -111,7 +111,6 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'filename': u'Vertraegsentwurf.docx',
                 u'filesize': 27413,
                 u'is_leafnode': None,
-                u'is_subdossier': None,
                 u'mimetype': u'application/vnd.openxmlformats-officedocument.'
                 u'wordprocessingml.document',
                 u'description': u'Wichtige Vertr\xe4ge',
@@ -135,7 +134,6 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'@type': u'opengever.document.document',
                 u'description': u'Wichtige Vertr\xe4ge',
                 u'is_leafnode': None,
-                u'is_subdossier': None,
                 u'review_state': u'document-state-draft',
                 u'title': u'Vertr\xe4gsentwurf',
                 u'reference_number': u'Client1 1.1 / 1 / 14',
@@ -161,8 +159,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
              u'filename': None,
              u'filesize': None,
-             u'is_leafnode': None,
-             u'is_subdossier': None}, summary)
+             u'is_leafnode': None}, summary)
 
     @browsing
     def test_summary_with_is_locked_on_tasks_containing_documents(self, browser):

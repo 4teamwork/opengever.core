@@ -39,7 +39,6 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             {'checked_out': [],
              'recently_touched': [{
                  'icon_class': 'icon-docx',
-                 'is_subdossier': None,
                  'is_leafnode': None,
                  'description': u'Wichtige Vertr\xe4ge',
                  # Because of an incorrect timezone handling in the freezer
@@ -71,7 +70,6 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'is_leafnode': None,
-                'is_subdossier': None,
                 'description': u'Wichtige Vertr\xe4ge',
                 'last_touched': '2018-04-30T00:00:00+02:00',
                 'title': u'Vertr\xe4gsentwurf',
@@ -101,7 +99,6 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'is_leafnode': None,
-                'is_subdossier': None,
                 'description': u'Wichtige Vertr\xe4ge',
                 'checked_out': self.regular_user.id,
                 'filename': 'Vertraegsentwurf.docx',
@@ -142,7 +139,6 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
              'recently_touched': [{
                  'icon_class': 'icon-docx is-checked-out',
                  'is_leafnode': None,
-                 'is_subdossier': None,
                  'description': u'Wichtige Vertr\xe4ge',
                  # Because of an incorrect timezone handling in the freezer
                  # last_touched should be `2018-04-30T00:00:00+02:00`
@@ -178,7 +174,6 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'is_leafnode': None,
-                'is_subdossier': None,
                 'description': u'Wichtige Vertr\xe4ge',
                 'last_touched': '2018-04-30T00:00:00+02:00',
                 'title': u'Vertr\xe4gsentwurf',

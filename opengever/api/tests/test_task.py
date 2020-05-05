@@ -33,7 +33,6 @@ class TestTaskSerialization(IntegrationTestCase):
                   u'@type': u'opengever.task.task',
                   u'description': u'',
                   u'is_leafnode': None,
-                  u'is_subdossier': None,
                   u'review_state': u'task-state-resolved',
                   u'title': self.subtask.title}
              ],
@@ -95,7 +94,6 @@ class TestTaskSerialization(IntegrationTestCase):
                 u'@type': u'opengever.document.document',
                 u'description': u'',
                 u'is_leafnode': None,
-                u'is_subdossier': None,
                 u'review_state': u'document-state-draft',
                 u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung'}],
               u'changes': [],
@@ -218,7 +216,6 @@ class TestTaskSerialization(IntegrationTestCase):
                 u'@type': u'opengever.inbox.inbox',
                 u'description': u'',
                 u'is_leafnode': None,
-                u'is_subdossier': None,
                 u'review_state': u'inbox-state-default',
                 u'title': u'Eingangsk\xf6rbli',
             },
@@ -238,7 +235,6 @@ class TestTaskSerialization(IntegrationTestCase):
                     u'@type': u'opengever.task.task',
                     u'description': u'',
                     u'is_leafnode': None,
-                    u'is_subdossier': None,
                     u'review_state': u'task-state-resolved',
                     u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
                 {
@@ -247,7 +243,6 @@ class TestTaskSerialization(IntegrationTestCase):
                     u'@type': u'opengever.document.document',
                     u'description': u'',
                     u'is_leafnode': None,
-                    u'is_subdossier': None,
                     u'review_state': u'document-state-draft',
                     u'title': u'Feedback zum Vertragsentwurf'
                 }
