@@ -210,8 +210,8 @@ class NotificationSettingsView(BrowserView):
 
         user_settings = []
         for setting in USER_SETTINGS:
-            title = translate(config.get('title'), context=self.request)
-            help_text = translate(config.get('help_text'), context=self.request)
+            title = translate(setting.get('title'), context=self.request)
+            help_text = translate(setting.get('help_text'), context=self.request)
 
             default = self.get_default_user_setting_value(setting.get('id'))
             value = UserSettings.get_setting_for_user(
