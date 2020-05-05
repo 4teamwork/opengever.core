@@ -111,7 +111,7 @@ class InvalidUser(Exception):
     """
 
 
-class NotificationSettings(BrowserView):
+class NotificationSettingsView(BrowserView):
     """This browserview provides the endpoints for the notification
     settings form.
 
@@ -127,7 +127,7 @@ class NotificationSettings(BrowserView):
     activities for the current user.
     """
     def __init__(self, context, request):
-        super(NotificationSettings, self).__init__(context, request)
+        super(NotificationSettingsView, self).__init__(context, request)
         self.settings = notification_settings.NotificationSettings()
 
     def save_user_setting(self):

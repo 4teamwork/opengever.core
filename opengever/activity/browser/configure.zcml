@@ -33,7 +33,7 @@
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       name="notification-settings"
-      class=".settings.NotificationSettings"
+      class=".settings.NotificationSettingsView"
       permission="zope2.View"
       allowed_attributes="list save_notification_setting reset_notification_setting save_user_setting reset_user_setting"
       />
