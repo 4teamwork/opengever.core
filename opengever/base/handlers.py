@@ -144,6 +144,13 @@ def update_favorited_repositoryfolder(context, event):
     - A favorited branch node becomes a leaf node when the last same
       type child has been removed.
     """
+
+    # Skip plone site removals. Unfortunately no deletion-order seems to be
+    # guaranteed, when removing the plone site, so it might happen that the
+    # intid utility is removed before removing content.
+    if IPloneSiteRoot.providedBy(event.object) and IObjectRemovedEvent.providedBy(event):
+        return
+
     Favorite.query.update_is_leafnode(aq_parent(context))
 
 
