@@ -111,6 +111,9 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             if key not in solr.manager.schema.fields:
                 logger.warning(
                     'Ignoring filter criteria for unknown field %s', key)
+                log_msg_to_sentry(
+                    'Ignoring filter criteria for unknown field',
+                    level='warning', extra={'field': key})
                 continue
             elif key == 'SearchableText':
                 continue
