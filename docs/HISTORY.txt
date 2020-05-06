@@ -4,10 +4,8 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
-- Bump ftw.solr to 2.8.5 to ensure solr maintenance scripts are run as system user. [njohner]
 - Add live chat to online documentation. [njohner]
 - Bump ftw.monitor and ftw.contentstats to get performance metrics. [lgraf]
-- Bump docxcompose to 1.1.1 for non-ascii binary_type docproperty fix. [deiferni]
 - Merge notification settings for tasks. [elioschmutz]
 - Add more metadata to response of favorites endpoint (`review_state`, `is_subdossier` and `is_leafnode`). [mbaechtold]
 - Improve performance when resolving large dossiers. [deiferni]
@@ -43,6 +41,12 @@ Changelog
 ------------------------
 
 - Fix solr indexing bug when creating a document from a template. [njohner]
+
+
+2020.2.5 (2020-05-06)
+---------------------
+
+- Bump ftw.solr to 2.8.5 to ensure solr maintenance scripts are run as system user. [njohner]
 
 
 2020.2.4 (2020-05-04)
