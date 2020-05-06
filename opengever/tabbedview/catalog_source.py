@@ -71,9 +71,10 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         sort = query.pop('sort_on', self.config.sort_on)
         if sort in solr.manager.schema.fields:
             if sort == self.config.sort_on:
-                sort_order = query.get('sort_order', self.config.sort_order)
+                sort_order = query.pop('sort_order', self.config.sort_order)
             else:
-                sort_order = query.get('sort_order', 'ascending')
+                sort_order = query.pop('sort_order', 'ascending')
+
             if sort_order in ['descending', 'reverse']:
                 sort += ' desc'
             else:
@@ -112,8 +113,6 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                     'Ignoring filter criteria for unknown field %s', key)
                 continue
             elif key == 'SearchableText':
-                continue
-            elif key == 'sort_order':
                 continue
             elif key == 'path':
                 path_query = value.get('query')
