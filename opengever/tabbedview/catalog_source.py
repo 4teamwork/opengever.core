@@ -68,7 +68,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         return query
 
     def _extract_sorting(self, solr, query):
-        sort = query.get('sort_on', self.config.sort_on)
+        sort = query.pop('sort_on', self.config.sort_on)
         if sort in solr.manager.schema.fields:
             if sort == self.config.sort_on:
                 sort_order = query.get('sort_order', self.config.sort_order)
@@ -113,7 +113,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                 continue
             elif key == 'SearchableText':
                 continue
-            elif key == 'sort_on' or key == 'sort_order':
+            elif key == 'sort_order':
                 continue
             elif key == 'path':
                 path_query = value.get('query')
