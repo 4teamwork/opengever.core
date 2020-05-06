@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
+- Bump ftw.solr to 2.8.5 to ensure solr maintenance scripts are run as system user. [njohner]
 - Add live chat to online documentation. [njohner]
 - Bump ftw.monitor and ftw.contentstats to get performance metrics. [lgraf]
 - Bump docxcompose to 1.1.1 for non-ascii binary_type docproperty fix. [deiferni]
