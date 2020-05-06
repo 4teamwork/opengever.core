@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.2.5 (unreleased)
+2020.2.5 (2020-05-06)
 ---------------------
 
 - Bump ftw.solr to 2.8.5 to ensure solr maintenance scripts are run as system user. [njohner]
