@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc2 (unreleased)
 ------------------------
 
+- Drop sorting by sortable_author for solr and avoid handling sorting parameters as fields. [deiferni]
 - Add live chat to online documentation. [njohner]
 - Bump ftw.monitor and ftw.contentstats to get performance metrics. [lgraf]
 - Merge notification settings for tasks. [elioschmutz]
