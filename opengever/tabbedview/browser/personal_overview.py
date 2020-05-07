@@ -3,6 +3,7 @@ from AccessControl import SecurityManagement
 from AccessControl import Unauthorized
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
+from opengever.base import utils
 from opengever.globalindex.model.task import Task
 from opengever.latex.opentaskreport import is_open_task_report_allowed
 from opengever.meeting import is_meeting_feature_enabled
@@ -103,9 +104,7 @@ class PersonalOverview(TabbedView):
         m_tool = getToolByName(self.context, 'portal_membership')
         member = m_tool.getAuthenticatedMember()
         if member:
-            if member.has_role('Administrator') \
-                    or member.has_role('Manager'):
-                return True
+            return utils.is_administrator(user=member)
         return False
 
     @property

@@ -5,6 +5,7 @@ from mocker import ANY
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.utils import escape_html
 from opengever.base.utils import file_checksum
+from opengever.base.utils import is_administrator
 from opengever.base.utils import safe_int
 from opengever.dossier.utils import find_parent_dossier
 from opengever.testing import IntegrationTestCase
@@ -184,3 +185,16 @@ class TestSafeInt(TestCase):
     def test_custom_default_value(self):
         value = 'not an int'
         self.assertEqual(7, safe_int(value, 7))
+
+
+class TestIsAdministrator(IntegrationTestCase):
+
+    def test_is_administrator_with_regular_user(self):
+        self.assertFalse(is_administrator(user=self.regular_user))
+        self.login(self.regular_user)
+        self.assertFalse(is_administrator())
+
+    def test_is_administrator_with_administrator(self):
+        self.assertTrue(is_administrator(user=self.administrator))
+        self.login(self.administrator)
+        self.assertTrue(is_administrator())
