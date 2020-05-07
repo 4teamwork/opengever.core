@@ -19,7 +19,7 @@ class TestMockSolrSearchGet(IntegrationTestCase):
             self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.assertEqual(self.solr.search.call_args[1]['sort'], 'score asc')
+        self.assertEqual(self.solr.search.call_args[1]['sort'], 'score desc')
 
         url = u'{}/@solrsearch?fl=UID,Title'.format(
             self.portal.absolute_url())
@@ -210,6 +210,32 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
         self.assertEqual(1000, browser.json["rows"])
+
+    @browsing
+    def test_default_sort_by_score(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?q=James%20Bond&fl=Title'.format(
+            self.portal.absolute_url())
+
+        self.dossier.title = 'James Bond'
+        self.dossier.reindexObject()
+
+        self.subdossier.title = 'Agent 007'
+        self.subdossier.description = 'James Bond'
+        self.subdossier.reindexObject()
+
+        self.document.title = 'James 007 Bond'
+        self.document.reindexObject()
+
+        self.commit_solr()
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual([u'James Bond',
+                          u'Agent 007',
+                          u'James 007 Bond'],
+                         [item["Title"] for item in browser.json["items"]])
 
     @browsing
     def test_custom_sort(self, browser):

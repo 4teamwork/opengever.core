@@ -45,7 +45,7 @@ class SolrSearchGet(SolrQueryBaseService):
             if query == '*:*':
                 sort = None
             else:
-                sort = 'score asc'
+                sort = 'score desc'
         return sort
 
     def parse_requested_fields(self, params):
