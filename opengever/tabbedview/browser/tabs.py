@@ -147,7 +147,6 @@ class Documents(BaseCatalogListingTab):
 
         {'column': 'document_author',
          'column_title': _('label_document_author', default="Document Author"),
-         'sort_index': 'sortable_author',
          'transform': escape_html_transform},
 
         {'column': 'document_date',

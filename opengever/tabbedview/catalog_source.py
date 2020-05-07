@@ -67,6 +67,27 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         query['path'] = path_query
         return query
 
+    def _extract_sorting(self, solr, query):
+        sort = query.pop('sort_on', self.config.sort_on)
+        if sort in solr.manager.schema.fields:
+            if sort == self.config.sort_on:
+                sort_order = query.pop('sort_order', self.config.sort_order)
+            else:
+                sort_order = query.pop('sort_order', 'ascending')
+
+            if sort_order in ['descending', 'reverse']:
+                sort += ' desc'
+            else:
+                sort += ' asc'
+        else:
+            logger.warning('Ignoring unknown sort criteria %s', sort)
+            log_msg_to_sentry(
+                'Ignoring unknown sort criteria', level='warning',
+                extra={'sort_criteria': sort})
+            sort = None
+
+        return sort
+
     def solr_results(self, query):
         if 'SearchableText' in query:
             term = query['SearchableText'].rstrip('*').decode('utf8')
@@ -81,6 +102,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             solr_query = u'*:*'
 
         solr = getUtility(ISolrSearch)
+        sort = self._extract_sorting(solr, query)
 
         filters = []
         if 'trashed' not in query:
@@ -89,10 +111,11 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             if key not in solr.manager.schema.fields:
                 logger.warning(
                     'Ignoring filter criteria for unknown field %s', key)
+                log_msg_to_sentry(
+                    'Ignoring filter criteria for unknown field',
+                    level='warning', extra={'field': key})
                 continue
             elif key == 'SearchableText':
-                continue
-            elif key == 'sort_on' or key == 'sort_order':
                 continue
             elif key == 'path':
                 path_query = value.get('query')
@@ -144,23 +167,6 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                         ))
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
-
-        sort = query.get('sort_on', self.config.sort_on)
-        if sort in solr.manager.schema.fields:
-            if sort == self.config.sort_on:
-                sort_order = query.get('sort_order', self.config.sort_order)
-            else:
-                sort_order = query.get('sort_order', 'ascending')
-            if sort_order in ['descending', 'reverse']:
-                sort += ' desc'
-            else:
-                sort += ' asc'
-        else:
-            logger.warning('Ignoring unknown sort criteria %s', sort)
-            log_msg_to_sentry(
-                'Ignoring unknown sort criteria', level='warning',
-                extra={'sort_criteria': sort})
-            sort = None
 
         # Todo: modified be removed once the changed metadata is filled on
         # all deployments.
