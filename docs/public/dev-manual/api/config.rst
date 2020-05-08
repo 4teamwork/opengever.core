@@ -51,6 +51,8 @@ GEVER-Mandanten abgefragt werden.
               "solr": true,
               "workspace": false
           },
+          "is_admin_menu_visible": false,
+          "is_emm_environment": false,
           "max_dossier_levels": 5,
           "max_repositoryfolder_levels": 3,
           "recently_touched_limit": 10,

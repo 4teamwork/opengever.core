@@ -214,3 +214,13 @@ def safe_int(value, default=0):
         return int(value)
     except (ValueError, TypeError):
         return default
+
+
+def is_administrator(user=None):
+    """
+    Returns a boolean indicating if the given user is considered a GEVER administrator.
+    If no user is given, the current user is used.
+    """
+    if not user:
+        user = api.user.get_current()
+    return bool(user.has_role('Administrator') or user.has_role('Manager'))

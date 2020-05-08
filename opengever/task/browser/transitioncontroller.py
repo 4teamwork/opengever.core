@@ -1,4 +1,5 @@
 from Acquisition import aq_parent
+from opengever.base import utils
 from opengever.base.interfaces import IInternalWorkflowTransition
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
@@ -654,9 +655,7 @@ class CurrentUserChecker(object):
 
     @property
     def is_administrator(self):
-        current = api.user.get_current()
-        return bool(current.has_role('Administrator')
-                    or current.has_role('Manager'))
+        return utils.is_administrator()
 
 
 class TaskChecker(object):

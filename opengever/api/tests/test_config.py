@@ -172,3 +172,19 @@ class TestConfig(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertIn(u'is_emm_environment', browser.json)
+
+    @browsing
+    def test_is_admin_menu_visible_is_true_for_administrators(self, browser):
+        self.login(self.administrator, browser)
+        url = self.portal.absolute_url() + '/@config'
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertTrue(browser.json.get(u'is_admin_menu_visible'))
+
+    @browsing
+    def test_is_admin_menu_visible_is_false_for_regular_user(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@config'
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertFalse(browser.json.get(u'is_admin_menu_visible'))

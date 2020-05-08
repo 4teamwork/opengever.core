@@ -5,6 +5,7 @@ from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
 from itertools import chain
 from opengever.base import _ as base_mf
+from opengever.base import utils
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -270,8 +271,8 @@ class OpengeverSharingView(SharingView):
         corresponding event. Needed for adding a Journalentry after a
         change of the inheritance
         """
-        user = api.user.get_current()
-        is_administrator = user.has_role('Administrator') or user.has_role('Manager')
+
+        is_administrator = utils.is_administrator()
 
         # Modifying local roles needs the "Sharing page: Delegate roles"
         # permission as well as "Modify portal content". However, we don't
@@ -471,9 +472,7 @@ class WorkspaceSharingView(OpengeverSharingView):
             return all_principals
 
         # Administrators can give permissions to any user
-        user = api.user.get_current()
-        is_administrator = user.has_role('Administrator') or user.has_role('Manager')
-        if is_administrator:
+        if utils.is_administrator():
             return all_principals
 
         workspace_users = set(get_workspace_user_ids(self.context, disregard_block=True))
