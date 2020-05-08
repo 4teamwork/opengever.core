@@ -26,13 +26,39 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
 
       {
         "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@watchers",
+        "referenced_users": [
+          {
+            "@id": "https://example.org/@users/peter.mueller",
+            "id": "peter.mueller",
+            "fullname": "Mueller Peter"
+          },
+          {
+            "@id": "https://example.org/@users/rolf.ziegler",
+            "id": "rolf.ziegler",
+            "fullname": "Ziegler Rolf"
+          }
+        ],
+        "referenced_watcher_roles": [
+          {
+            "id": "regular_watcher",
+            "title": "Beobachter"
+          },
+          {
+            "id": "task_issuer",
+            "title": "Auftraggeber"
+          },
+          {
+            "id": "task_responsible",
+            "title": "Auftragnehmer"
+          },
+        ],
         "watchers_and_roles": {
+          "peter.mueller": [
+            "task_issuer"
+          ],
           "rolf.ziegler": [
             "regular_watcher",
             "task_responsible"
-          ],
-          "peter.mueller": [
-            "task_issuer"
           ]
         }
       }
@@ -62,6 +88,8 @@ Die Beobachter können als Kompomente einer Aufgabe direkt über den ``expand``-
       "@components": {
         "watchers": {
           "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@listing-stats",
+          "referenced_users": ["..."],
+          "referenced_watcher_roles": ["..."],
           "watchers_and_roles": { "...": "..." }
         }
       },
