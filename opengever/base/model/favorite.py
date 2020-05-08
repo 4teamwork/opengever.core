@@ -3,6 +3,7 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import CSS_CLASS_LENGTH
+from opengever.base.model import FILENAME_LENGTH
 from opengever.base.model import PORTAL_TYPE_LENGTH
 from opengever.base.model import UID_LENGTH
 from opengever.base.model import UNIT_ID_LENGTH
@@ -39,7 +40,7 @@ class Favorite(Base):
         {})
 
     favorite_id = Column('id', Integer, Sequence("favorites_id_seq"),
-                primary_key=True)
+                         primary_key=True)
 
     admin_unit_id = Column(String(UNIT_ID_LENGTH), index=True, nullable=False)
     int_id = Column(Integer, index=True, nullable=False)
@@ -52,6 +53,7 @@ class Favorite(Base):
     is_title_personalized = Column(Boolean, default=False, nullable=False)
     portal_type = Column(String(PORTAL_TYPE_LENGTH))
     icon_class = Column(String(CSS_CLASS_LENGTH))
+    filename = Column(String(FILENAME_LENGTH))
 
     plone_uid = Column(String(UID_LENGTH))
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
