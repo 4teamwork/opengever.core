@@ -140,3 +140,82 @@ Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von
       HTTP/1.1 204 No content
 
 
+Liste von möglichen Beobachtern
+-------------------------------
+Der ``@possible-watchers``-Endpoint liefert eine Liste von Benutzern welche als Beobachter für den aktuellen Kontext hinzugefügt werden können.
+
+Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wird der eigene Benutzer in der Sortierreihenfolge immer zuoberst dargestellt. Alle restlichen Benutzer werden nach Name und Vorname sortiert. Der eigene Benutzer sowie alle anderen Benutzer werden nur dann angezeigt, wenn diese noch keine Beobachter-Rolle besitzen.
+
+**Beispiel-Request:**
+
+
+  .. sourcecode:: http
+
+    GET /task-1/@possible-watchers HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel-Response:**
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "/task-1/@possible-watchers",
+        "items": [
+          {
+            "title": "Mueller Peter (peter.mueller)",
+            "token": "peter.mueller"
+          },
+          {
+            "title": "Ziegler Rolf (rolf.ziegler)",
+            "token": "rolf.ziegler"
+          },
+          { "...": "..." },
+        ],
+        "items_total": 17
+      }
+
+Resultate filtern
+~~~~~~~~~~~~~~~~~
+Mit dem ``query``-Parameter können die Resultate gefiltert werden. Es werden die Felder:
+
+- Vorname
+- Nachname
+- E-Mail
+- Userid
+
+beim filtern berücksichtigt.
+
+**Beispiel-Request:**
+
+
+  .. sourcecode:: http
+
+    GET /task-1/@possible-watchers?query=Peter HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel-Response:**
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "/task-1/@possible-watchers",
+        "items": [
+          {
+            "title": "Mueller Peter (peter.mueller)",
+            "token": "peter.mueller"
+          }
+        ],
+        "items_total": 1
+      }
+
+Paginierung
+~~~~~~~~~~~
+Die Paginierung funktioniert gleich wie bei anderen Auflistungen auch (siehe :ref:`Kapitel Paginierung <batching>`).
