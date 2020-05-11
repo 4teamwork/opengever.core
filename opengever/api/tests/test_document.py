@@ -211,3 +211,28 @@ class TestDocumentPatch(IntegrationTestCase):
                      'Content-Type': 'application/json'})
         self.assertEqual(browser.status_code, 204)
         self.assertEqual(self.document.Description(), u'Foo bar')
+
+    @browsing
+    def test_title_and_filename_are_synced_correctly_when_patched_in_single_request(self, browser):
+        """This tests an edge case where the title is set to empty string in
+        the same request as the filename is changed. The result should be that
+        the title gets synced to the new filename, the risk being that when the
+        filename is set to empty string, it gets synced to the old filename,
+        then the filename is changed and the synced to the title, so that we
+        endup with both filename and title reflecting the old filename.
+        """
+        self.login(self.regular_user, browser)
+        manager = getMultiAdapter((self.document, self.request),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+        browser.open(
+            self.document.absolute_url(),
+            data='{"file": {"data": "foo bar", "filename": "foo.txt",'
+                 ' "content-type": "text/plain"},'
+                 ' "title": ""}',
+            method='PATCH',
+            headers={'Accept': 'application/json',
+                     'Content-Type': 'application/json'})
+        self.assertEqual(browser.status_code, 204)
+        self.assertEqual(self.document.get_filename(), 'foo.txt')
+        self.assertEqual(self.document.title, 'foo')

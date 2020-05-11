@@ -227,14 +227,20 @@ class Document(Item, BaseDocumentMixin):
 
         normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
 
-        basename, ext = os.path.splitext(self.file.filename)
-        if not self.title:
+        # Correctly handle cases where both the filename and the title are
+        # modified in the same request
+        filename = getattr(self, "_v_filename", self.file.filename)
+        title = getattr(self, "_v_title", self.title)
+
+        basename, ext = os.path.splitext(filename)
+        if not title:
             # use the filename without extension as title
             self.__dict__["title"] = basename
             self.__dict__["file"].filename = normalizer.normalize(basename, extension=ext)
-        elif self.title:
+        elif title:
             # use the title as filename
-            self.__dict__["file"].filename = normalizer.normalize(self.title, extension=ext)
+            self.__dict__["title"] = title
+            self.__dict__["file"].filename = normalizer.normalize(title, extension=ext)
 
     @property
     def title(self):
@@ -245,6 +251,7 @@ class Document(Item, BaseDocumentMixin):
         if self.title == value:
             return
         self.__dict__['title'] = value
+        self._v_title = value
         self.sync_title_and_filename()
 
     @property
@@ -273,6 +280,7 @@ class Document(Item, BaseDocumentMixin):
                 Versioner(document).create_initial_version()
 
         self.__dict__['file'] = value
+        self._v_filename = getattr(value, "filename", None)
         self.sync_title_and_filename()
 
     def related_items(self, bidirectional=False, documents_only=False):
