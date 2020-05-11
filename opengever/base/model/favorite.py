@@ -13,6 +13,7 @@ from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.query import BaseQuery
 from opengever.bumblebee import is_bumblebeeable
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.ogds.models.admin_unit import AdminUnit
@@ -77,10 +78,15 @@ class Favorite(Base):
         if IRepositoryFolder.providedBy(obj):
             is_leafnode = obj.is_leaf_node()
 
+        filename = None
+        if IBaseDocument.providedBy(obj):
+            filename = obj.get_filename()
+
         params = dict(
             userid=userid,
             oguid=Oguid.for_object(obj),
             title=truncated_title,
+            filename=filename,
             portal_type=obj.portal_type,
             icon_class=get_css_class(obj),
             plone_uid=IUUID(obj),
@@ -100,6 +106,7 @@ class Favorite(Base):
             'oguid': self.oguid.id,
             'uid': self.plone_uid,
             'title': self.title,
+            'filename': self.filename,
             'icon_class': self.icon_class,
             'target_url': self.get_target_url(),
             'tooltip_url': self.get_tooltip_url(),

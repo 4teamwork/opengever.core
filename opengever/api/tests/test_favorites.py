@@ -40,6 +40,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'uid': IUUID(self.dossier),
               u'portal_type': u'opengever.dossier.businesscasedossier',
               u'favorite_id': 1,
+              u'filename': None,
               u'position': 23,
               u'is_leafnode': None,
               u'is_subdossier': False,
@@ -54,6 +55,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'uid': IUUID(self.document),
               u'portal_type': u'opengever.document.document',
               u'favorite_id': 2,
+              u'filename': u'Vertraegsentwurf.docx',
               u'is_leafnode': None,
               u'is_subdossier': None,
               u'review_state': u'document-state-draft',
@@ -85,6 +87,7 @@ class TestFavoritesGet(IntegrationTestCase):
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
+             u'filename': None,
              u'is_leafnode': None,
              u'is_subdossier': False,
              u'review_state': u'dossier-state-active',
@@ -159,6 +162,7 @@ class TestFavoritesPost(IntegrationTestCase):
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
+             u'filename': u'Vertraegsentwurf.docx',
              u'oguid': u'plone:1014073300',
              u'position': 0,
              u'review_state': u'document-state-draft',
@@ -198,6 +202,7 @@ class TestFavoritesPost(IntegrationTestCase):
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
+             u'filename': u'Vertraegsentwurf.docx',
              u'is_leafnode': None,
              u'is_subdossier': None,
              u'review_state': u'document-state-draft',
@@ -273,6 +278,7 @@ class TestFavoritesPost(IntegrationTestCase):
              u'portal_type': u'opengever.document.document',
              u'admin_unit': u'Hauptmandant',
              u'favorite_id': 1,
+             u'filename': u'Vertraegsentwurf.docx',
              u'is_leafnode': None,
              u'is_subdossier': None,
              u'review_state': u'document-state-draft',
@@ -356,21 +362,21 @@ class TestFavoritesDelete(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         fav_on_2 = create(Builder('favorite')
-                      .for_user(self.administrator)
-                      .having(position=2)
-                      .for_object(self.dossier))
+                          .for_user(self.administrator)
+                          .having(position=2)
+                          .for_object(self.dossier))
         fav_on_0 = create(Builder('favorite')
-                      .for_user(self.administrator)
-                      .having(position=0)
-                      .for_object(self.document))
+                          .for_user(self.administrator)
+                          .having(position=0)
+                          .for_object(self.document))
         fav_on_1 = create(Builder('favorite')
-                      .for_user(self.administrator)
-                      .having(position=1)
-                      .for_object(self.leaf_repofolder))
+                          .for_user(self.administrator)
+                          .having(position=1)
+                          .for_object(self.leaf_repofolder))
         fav_on_3 = create(Builder('favorite')
-                      .for_user(self.administrator)
-                      .having(position=3)
-                      .for_object(self.meeting_dossier))
+                          .for_user(self.administrator)
+                          .having(position=3)
+                          .for_object(self.meeting_dossier))
 
         url = '{}/@favorites/{}/{}'.format(
             self.portal.absolute_url(), self.administrator.getId(),
@@ -527,6 +533,7 @@ class TestFavoritesPatch(IntegrationTestCase):
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
+             u'filename': None,
              u'is_leafnode': None,
              u'is_subdossier': False,
              u'review_state': u'dossier-state-active',
