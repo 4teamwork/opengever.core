@@ -220,6 +220,11 @@ class Document(Item, BaseDocumentMixin):
 
     @file.setter
     def file(self, value):
+        # For some reason this happens every time the edit form is saved, even
+        # when the file was not modified
+        if self.__dict__.get('file') == value:
+            return
+
         if self.__dict__.get('file'):
             # Self is not aquisition wrapped, but we need an aquisition
             # wrapped object for checking/creating an initial version.
