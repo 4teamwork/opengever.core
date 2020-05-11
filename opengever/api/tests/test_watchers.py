@@ -9,6 +9,7 @@ import json
 
 class TestWatchersGet(IntegrationTestCase):
     features = ('activity', )
+    maxDiff = None
 
     @browsing
     def test_get_watchers_for_tasks(self, browser):
@@ -23,9 +24,37 @@ class TestWatchersGet(IntegrationTestCase):
         expected_json = {
             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
                     u'dossier-1/task-1/@watchers',
+            u'referenced_users': [
+                {
+                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
+                    u'fullname': u'B\xe4rfuss K\xe4thi',
+                    u'id': u'kathi.barfuss'
+                },
+                {
+                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'fullname': u'Ziegler Robert',
+                    u'id': u'robert.ziegler'
+                }
+            ],
+            u'referenced_watcher_roles': [
+                {
+                    u'id': u'task_issuer',
+                    u'title': u'Task issuer'
+                },
+                {
+                    u'id': u'task_responsible',
+                    u'title': u'Task responsible'
+                },
+                {
+                    u'id': u'regular_watcher',
+                    u'title': u'Watcher'
+                }
+            ],
             u'watchers_and_roles': {
                 u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                u'robert.ziegler': [u'task_issuer']}}
+                u'robert.ziegler': [u'task_issuer']
+            }
+        }
 
         self.assertEqual(expected_json, browser.json)
 
@@ -53,10 +82,37 @@ class TestWatchersGet(IntegrationTestCase):
 
         expected_json = {
             u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers',
+            u'referenced_users': [
+                {
+                    u'@id': u'http://nohost/plone/@users/nicole.kohler',
+                    u'fullname': u'Kohler Nicole',
+                    u'id': u'nicole.kohler'
+                },
+                {
+                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
+                    u'fullname': u'B\xe4rfuss K\xe4thi',
+                    u'id': u'kathi.barfuss'
+                }
+            ],
+            u'referenced_watcher_roles': [
+                {
+                    u'id': u'task_issuer',
+                    u'title': u'Task issuer'
+                },
+                {
+                    u'id': u'task_responsible',
+                    u'title': u'Task responsible'
+                },
+                {
+                    u'id': u'regular_watcher',
+                    u'title': u'Watcher'
+                }
+            ],
             u'watchers_and_roles': {
                 u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                u'nicole.kohler': [u'task_issuer']}}
-
+                u'nicole.kohler': [u'task_issuer']
+            }
+        }
         self.assertEqual(expected_json, browser.json)
 
         browser.open(self.inbox_forwarding, method='GET', headers=self.api_headers)
@@ -88,10 +144,8 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({
-            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                    u'dossier-1/task-1/@watchers',
-            u'watchers_and_roles': {u'herbert.jager': [u'task_responsible']}}, browser.json)
+        self.assertEqual(
+            {u'herbert.jager': [u'task_responsible']}, browser.json['watchers_and_roles'])
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
@@ -101,11 +155,9 @@ class TestWatchersPost(IntegrationTestCase):
 
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({
-            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                    u'dossier-1/task-1/@watchers',
-            u'watchers_and_roles': {u'herbert.jager': [u'regular_watcher', u'task_responsible']}},
-            browser.json)
+        self.assertEqual(
+            {u'herbert.jager': [u'regular_watcher', u'task_responsible']},
+            browser.json['watchers_and_roles'])
 
     @browsing
     def test_post_watchers_without_data_raises_bad_request(self, browser):
@@ -140,10 +192,8 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({
-            u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers',
-            u'watchers_and_roles': {u'herbert.jager': [u'task_responsible']}},
-            browser.json)
+        self.assertEqual({u'herbert.jager': [u'task_responsible']},
+                         browser.json['watchers_and_roles'])
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
@@ -153,10 +203,8 @@ class TestWatchersPost(IntegrationTestCase):
 
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({
-            u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers',
-            u'watchers_and_roles': {
-                u'herbert.jager': [u'regular_watcher', u'task_responsible']}}, browser.json)
+        self.assertEqual({u'herbert.jager': [u'regular_watcher', u'task_responsible']},
+                         browser.json['watchers_and_roles'])
 
 
 class TestWatchersDelete(IntegrationTestCase):
@@ -172,10 +220,7 @@ class TestWatchersDelete(IntegrationTestCase):
                      method='GET', headers=self.api_headers)
 
         self.assertEqual({
-            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                    u'dossier-1/task-1/@watchers',
-            u'watchers_and_roles': {
-                u'kathi.barfuss': [u'regular_watcher', u'task_responsible']}}, browser.json)
+                u'kathi.barfuss': [u'regular_watcher', u'task_responsible']}, browser.json['watchers_and_roles'])
 
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
@@ -183,10 +228,7 @@ class TestWatchersDelete(IntegrationTestCase):
         self.assertEqual(browser.status_code, 204)
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({
-            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                    u'dossier-1/task-1/@watchers',
-            u'watchers_and_roles': {u'kathi.barfuss': [u'task_responsible']}}, browser.json)
+        self.assertEqual({u'kathi.barfuss': [u'task_responsible']}, browser.json['watchers_and_roles'])
 
     @browsing
     def test_delete_watchers_for_inbox_forwarding(self, browser):
@@ -199,10 +241,8 @@ class TestWatchersDelete(IntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
 
-        self.assertEqual({u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers',
-                          u'watchers_and_roles': {
-                              u'jurgen.konig': [u'regular_watcher', u'task_responsible']}},
-                         browser.json)
+        self.assertEqual({u'jurgen.konig': [u'regular_watcher', u'task_responsible']},
+                         browser.json['watchers_and_roles'])
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
 
@@ -210,9 +250,8 @@ class TestWatchersDelete(IntegrationTestCase):
 
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({
-            u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers',
-            u'watchers_and_roles': {u'jurgen.konig': [u'task_responsible']}}, browser.json)
+        self.assertEqual({u'jurgen.konig': [u'task_responsible']},
+                         browser.json['watchers_and_roles'])
 
     @browsing
     def test_delete_watchers_with_data_raises_bad_request(self, browser):
@@ -223,10 +262,7 @@ class TestWatchersDelete(IntegrationTestCase):
                      method='GET', headers=self.api_headers)
 
         self.assertEqual({
-            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                    u'dossier-1/task-1/@watchers',
-            u'watchers_and_roles': {
-                u'kathi.barfuss': [u'regular_watcher']}}, browser.json)
+                u'kathi.barfuss': [u'regular_watcher']}, browser.json['watchers_and_roles'])
 
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@watchers',

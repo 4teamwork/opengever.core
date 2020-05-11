@@ -1,5 +1,6 @@
 from collections import defaultdict
 from opengever.activity import notification_center
+from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.task.task import ITask
@@ -9,6 +10,7 @@ from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.component import adapter
+from zope.i18n import translate
 from zope.interface import implementer
 
 
@@ -29,14 +31,32 @@ class Watchers(object):
         if not expand:
             return result
 
-        result['watchers']['watchers_and_roles'] = self.get_watchers_and_roles()
-        return result
-
-    def get_watchers_and_roles(self):
+        roles = set()
         watchers_and_roles = defaultdict(list)
         for subscription in self.center.get_subscriptions(self.context):
             watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
-        return watchers_and_roles
+            roles.add(subscription.role)
+
+        portal_url = api.portal.get().absolute_url()
+        referenced_users = [
+            {
+                '@id': "{}/@users/{}".format(portal_url, userid),
+                'id': userid,
+                'fullname': api.user.get(userid).getProperty('fullname')
+            }
+            for userid in watchers_and_roles]
+
+        referenced_watcher_roles = [
+            {
+                'id': role,
+                'title': translate(ROLE_TRANSLATIONS[role], context=self.request)
+            }
+            for role in roles]
+
+        result['watchers']['watchers_and_roles'] = watchers_and_roles
+        result['watchers']['referenced_watcher_roles'] = referenced_watcher_roles
+        result['watchers']['referenced_users'] = referenced_users
+        return result
 
 
 class WatchersGet(Service):
