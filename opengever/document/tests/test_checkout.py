@@ -1,13 +1,11 @@
 from AccessControl import Unauthorized
 from datetime import date
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
-from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -962,9 +960,12 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         # document isn't checked out and the old object is in the history
         self.assertIsNone(manager.get_checked_out_by())
 
-        self.assertEquals(u'Document1.doc',
-                          pr.retrieve(self.doc1, 0).object.file.filename)
-        self.assertEquals(u'blubb.txt', self.doc1.file.filename)
+        file_version0 = pr.retrieve(self.doc1, 0).object.file
+        self.assertEquals(u'Document1.doc', file_version0.filename)
+        self.assertEquals('Test data', file_version0.data)
+
+        self.assertEquals(u'Document1.txt', self.doc1.file.filename)
+        self.assertEquals('blubb blubb', self.doc1.file.data)
 
         manager.checkout()
         self.assertEquals('test_user_1_', manager.get_checked_out_by())

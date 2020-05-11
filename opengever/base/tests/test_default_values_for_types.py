@@ -845,6 +845,14 @@ class TestDocumentDefaults(TestDefaultsBase):
     def get_obj_of_own_type(self):
         return self.document
 
+    def test_widgets_render_missing_values(self):
+        self.login(self.manager)
+        # We have to set the file to None, otherwise when we set
+        # the title to its default value in the test, it gets synced
+        # back to the filename...
+        self.get_obj_of_own_type().file = None
+        super(TestDocumentDefaults, self).test_widgets_render_missing_values()
+
     def test_create_content_in_container(self):
         self.login(self.regular_user)
 

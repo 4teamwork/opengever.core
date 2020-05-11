@@ -27,6 +27,7 @@ from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform import directives as form
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
@@ -214,6 +215,38 @@ class Document(Item, BaseDocumentMixin):
         """
         return False
 
+    def sync_title_and_filename(self):
+        """Syncs the document title and the filename.
+
+        - If there is no title but a file, use the filename (without extension)
+        as title.
+        - If there is a title and a file, use the normalized title as filenames
+        """
+        if not self.file:
+            return
+
+        normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
+
+        basename, ext = os.path.splitext(self.file.filename)
+        if not self.title:
+            # use the filename without extension as title
+            self.__dict__["title"] = basename
+            self.__dict__["file"].filename = normalizer.normalize(basename, extension=ext)
+        elif self.title:
+            # use the title as filename
+            self.__dict__["file"].filename = normalizer.normalize(self.title, extension=ext)
+
+    @property
+    def title(self):
+        return self.__dict__.get('title')
+
+    @title.setter
+    def title(self, value):
+        if self.title == value:
+            return
+        self.__dict__['title'] = value
+        self.sync_title_and_filename()
+
     @property
     def file(self):
         return self.__dict__.get('file')
@@ -240,6 +273,7 @@ class Document(Item, BaseDocumentMixin):
                 Versioner(document).create_initial_version()
 
         self.__dict__['file'] = value
+        self.sync_title_and_filename()
 
     def related_items(self, bidirectional=False, documents_only=False):
         _related_items = []
