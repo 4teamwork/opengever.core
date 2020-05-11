@@ -70,13 +70,13 @@
   <subscriber
       for="opengever.mail.mail.IOGMailMarker
            zope.lifecycleevent.interfaces.IObjectCreatedEvent"
-      handler=".mail.initalize_title"
+      handler=".mail.initialize_title"
       />
 
   <subscriber
       for="opengever.mail.mail.IOGMailMarker
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".mail.initalize_title"
+      handler=".mail.initialize_title"
       />
 
   <subscriber

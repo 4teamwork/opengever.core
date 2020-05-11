@@ -401,7 +401,7 @@ class OGMailBase(metadata.MetadataBase):
         'message_source'])
 
 
-def initalize_title(mail, event):
+def initialize_title(mail, event):
     title = IOGMail(mail).title
     if not title or title == NO_SUBJECT_FALLBACK_ID:
         subject = utils.get_header(mail.msg, 'Subject')
