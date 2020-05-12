@@ -255,7 +255,7 @@ class TestReverting(FunctionalTestCase):
                                .having(document_date=self.document_date)
                                .within(self.dossier)
                                .attach_file_containing(
-                                   u"INITIAL VERSION DATA", u"somefile.txt"))
+                                   u"INITIAL VERSION DATA", u"somefile.docx"))
 
         # trigger initial version creation
         self.document.file = NamedBlobFile(
@@ -306,6 +306,22 @@ class TestReverting(FunctionalTestCase):
         # GEVER's revert only retrieves the file
         self.manager.revert_to_version(2)
         self.assertEqual("New title", self.document.title)
+
+    def test_filename_is_synced_with_title_when_reverting_to_older_version(self):
+        self.assertEqual(u'Testdokum\xe4nt', self.document.title)
+        self.assertEqual(u'Testdokumaent.txt', self.document.get_filename())
+
+        self.document.title = "New title"
+        create_document_version(self.document, 3)
+        self.assertEqual(u'New title', self.document.title)
+        self.assertEqual(u'New title.txt', self.document.get_filename())
+
+        self.manager.revert_to_version(0)
+        # Reverting to older version should not change the filename
+        # as it should always be in sync with the title (which isn't
+        # affected by reverting). The extension on the other hand should
+        # get updated.
+        self.assertEqual("New title.docx", self.document.get_filename())
 
     def test_revert_disallowed_for_unprivileded_user(self):
         self.grant('Authenticated')
