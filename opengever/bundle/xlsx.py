@@ -95,3 +95,47 @@ class XLSXNode(object):
     @property
     def title(self):
         return self.item['effective_title']
+
+    @property
+    def title_fr(self):
+        return self.item['effective_title_fr'] or None
+
+    @property
+    def valid_from(self):
+        return self.item['valid_from'] or None
+
+    @property
+    def valid_until(self):
+        return self.item['valid_until'] or None
+
+    @property
+    def description(self):
+        return self.item['description'] or None
+
+    @property
+    def classification(self):
+        return self.item.get('classification') or None
+
+    @property
+    def privacy_layer(self):
+        return self.item.get('privacy_layer') or None
+
+    @property
+    def retention_period(self):
+        return self.item.get('retention_period') or None
+
+    @property
+    def retention_period_annotation(self):
+        return self.item['retention_period_annotation'] or None
+
+    @property
+    def archival_value(self):
+        return self.item.get('archival_value') or None
+
+    @property
+    def archival_value_annotation(self):
+        return self.item['archival_value_annotation'] or None
+
+    @property
+    def custody_period(self):
+        return self.item.get('custody_period') or None
