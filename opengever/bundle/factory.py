@@ -1,6 +1,5 @@
-from collections import namedtuple
-from datetime import datetime
 from datetime import date
+from datetime import datetime
 from fnmatch import fnmatch
 from os import listdir
 from os.path import basename
@@ -20,8 +19,56 @@ import platform
 IGNORES = ['*.DS_Store', '*.dll', '*.exe']
 
 
-DirectoryNode = namedtuple('Node', ['path', 'guid', 'parent_guid', 'level'])
-FileNode = namedtuple('Node', ['path', 'guid', 'parent_guid'])
+class DirectoryNode(object):
+
+    def __init__(self, path, guid, parent_guid, level):
+        self.path = path
+        self.guid = guid
+        self.parent_guid = parent_guid
+        self.level = level
+
+    def is_document(self):
+        return False
+
+    def is_root(self):
+        return self.level == 0
+
+    def is_repo(self, repo_depth):
+        return self.level <= repo_depth
+
+    @property
+    def title(self):
+        return basename(self.path.rstrip(os.path.sep))
+
+
+class FileNode(object):
+
+    def __init__(self, path, guid, parent_guid):
+        self.path = path
+        self.guid = guid
+        self.parent_guid = parent_guid
+        self.level = None
+
+    def is_document(self):
+        return True
+
+    def is_root(self):
+        return False
+
+    def is_repo(self, repo_depth):
+        return False
+
+    @property
+    def modification_date(self):
+        return datetime.fromtimestamp(os.path.getmtime(self.path)).isoformat()
+
+    @property
+    def creation_date(self):
+        return date.fromtimestamp(creation_date(self.path)).isoformat()
+
+    @property
+    def title(self):
+        return basename(self.path.rstrip(os.path.sep))
 
 
 def creation_date(path_to_file):
@@ -119,21 +166,17 @@ class OGGBundleItemCreator(object):
         self.content_only = content_only
 
     def __call__(self, node):
-        if not self.isdir(node):
+        if node.is_document():
             return OGGBundleDocument(node)
-        elif node.level == 0:
+        elif node.is_root():
             if not self.content_only:
                 return OGGBundleRepoRoot(node, self.user_group)
             else:
                 return OGGBundleDossier(node, self.responsible, self.import_reference)
-        elif node.level <= self.repo_depth and not self.content_only:
             return OGGBundleRepoFolder(node)
+        elif node.is_repo(self.repo_depth) and not self.content_only:
         else:
             return OGGBundleDossier(node, self.responsible)
-
-    @staticmethod
-    def isdir(node):
-        return isinstance(node, DirectoryNode)
 
 
 class OGGBundleItemBase(object):
@@ -147,15 +190,11 @@ class OGGBundleItemBase(object):
         self._data = {
             'guid': node.guid,
             'review_state': self.review_state,
-            'title': self.title
+            'title': self.node.title
             }
 
     def as_dict(self):
         return self._data
-
-    @property
-    def title(self):
-        return basename(self.path.rstrip(os.path.sep))
 
 
 class OGGBundleRepoRoot(OGGBundleItemBase):
@@ -213,11 +252,11 @@ class OGGBundleDocument(OGGBundleItemBase):
 
     @property
     def modification_date(self):
-        return datetime.fromtimestamp(os.path.getmtime(self.path)).isoformat()
+        return self.node.modification_date
 
     @property
     def creation_date(self):
-        return date.fromtimestamp(creation_date(self.path)).isoformat()
+        return self.node.creation_date
 
 
 class BundleFactory(object):
