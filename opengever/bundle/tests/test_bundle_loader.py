@@ -2,9 +2,9 @@ from opengever.bundle.loader import BundleLoader
 from opengever.bundle.loader import IngestionSettingsReader
 from opengever.bundle.loader import ItemPreprocessor
 from opengever.bundle.loader import unicode2bytes
+from opengever.bundle.tests import assets
 from opengever.bundle.tests.helpers import get_portal_type
 from opengever.bundle.tests.helpers import get_title
-from pkg_resources import resource_filename as rf
 from unittest import TestCase
 import collections
 import jsonschema
@@ -12,7 +12,7 @@ import tempfile
 
 
 def get_bundle_path(bundle_name):
-    return rf('opengever.bundle.tests', 'assets/%s' % bundle_name)
+    return assets.get_path(bundle_name)
 
 
 class TestBundleLoader(TestCase):
