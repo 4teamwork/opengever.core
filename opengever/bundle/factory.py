@@ -174,8 +174,8 @@ class OGGBundleItemCreator(object):
                 return OGGBundleRepoRoot(node, self.user_group)
             else:
                 return OGGBundleDossier(node, self.responsible, self.import_reference)
-            return OGGBundleRepoFolder(node)
         elif node.is_repo(self.repo_depth) and not self.content_only:
+            return OGGBundleRepoFolder(node)
         else:
             return OGGBundleDossier(node, self.responsible)
 
@@ -187,7 +187,6 @@ class OGGBundleItemBase(object):
 
     def __init__(self, node):
         self.node = node
-        self.path = node.path
         self._data = {
             'guid': node.guid,
             'review_state': self.review_state,
@@ -206,6 +205,9 @@ class OGGBundleRepoRoot(OGGBundleItemBase):
     def __init__(self, node, users_group):
         super(OGGBundleRepoRoot, self).__init__(node)
         self._data['title_de'] = self._data.pop('title')
+        self._data['title_fr'] = getattr(node, 'title_fr', None)
+        self._data['valid_from'] = getattr(node, 'valid_from', None)
+        self._data['valid_until'] = getattr(node, 'valid_until', None)
         self._data['_permissions'] = {
                 'read': [users_group],
                 'add': [users_group],
@@ -219,11 +221,30 @@ class OGGBundleRepoFolder(OGGBundleItemBase):
 
     item_type = 'repofolder'
     review_state = 'repositoryfolder-state-active'
+    attrs = (
+        'archival_value',
+        'archival_value_annotation',
+        'classification',
+        'custody_period',
+        'description',
+        'privacy_layer',
+        'reference_number_prefix',
+        'retention_period',
+        'retention_period_annotation',
+        'title_fr',
+        'valid_from',
+        'valid_until',
+    )
 
     def __init__(self, node):
         super(OGGBundleRepoFolder, self).__init__(node)
-        self._data['title_de'] = self._data.pop('title')
         self._data['parent_guid'] = self.node.parent_guid
+        self._data['title_de'] = self._data.pop('title')
+
+        for name in self.attrs:
+            value = getattr(node, name, None)
+            if value:
+                self._data[name] = value
 
 
 class OGGBundleDossier(OGGBundleItemBase):
