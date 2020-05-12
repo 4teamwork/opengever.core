@@ -11,6 +11,14 @@ import shutil
 
 class TestOggBundleFactory(IntegrationTestCase):
 
+    def setUp(self):
+        super(TestOggBundleFactory, self).setUp()
+        self.tempdir = mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.tempdir)
+        super(TestOggBundleFactory, self).tearDown()
+
     def find_item_by_title(self, items, title):
         for item in items:
             if item.get('title') or item.get('title_de') == title:
@@ -99,14 +107,6 @@ class TestOggBundleFactory(IntegrationTestCase):
              u'review_state',
              u'guid'],
             document.keys())
-
-    def setUp(self):
-        super(TestOggBundleFactory, self).setUp()
-        self.tempdir = mkdtemp()
-
-    def tearDown(self):
-        shutil.rmtree(self.tempdir)
-        super(TestOggBundleFactory, self).tearDown()
 
     def test_partial_bundle_factory(self):
         parser = get_parser()
