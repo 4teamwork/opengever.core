@@ -1,3 +1,5 @@
+.. _teamraum-connect:
+
 Teamraum einbinden
 ==================
 Der Teamraum wird als eigenes Deployment betrieben und wird in GEVER integriert.
