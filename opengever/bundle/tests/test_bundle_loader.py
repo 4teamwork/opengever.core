@@ -97,7 +97,7 @@ class TestBundleLoader(TestCase):
             self.load_bundle(bundle_path)
 
     def test_skips_missing_files_gracefully(self):
-        bundle = self.load_bundle(get_bundle_path('partial.bundle'))
+        bundle = self.load_bundle(get_bundle_path('partial.oggbundle'))
         self.assertEqual(1, len(list(bundle)))
 
 
