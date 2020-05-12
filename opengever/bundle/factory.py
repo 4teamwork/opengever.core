@@ -1,6 +1,7 @@
 from datetime import date
 from datetime import datetime
 from fnmatch import fnmatch
+from opengever.bundle.xlsx import XLSXWalker
 from os import listdir
 from os.path import basename
 from os.path import isdir
@@ -264,6 +265,7 @@ class BundleFactory(object):
     def __init__(self, args):
         self.args = args
         self.source_dir = args.source_dir
+        self.source_xlsx = args.source_xlsx
         self.target_dir = args.target_dir
         self.repo_nesting_depth = args.repo_nesting_depth
         self.users_group = args.users_group
@@ -307,9 +309,13 @@ class BundleFactory(object):
             'document': [],
         }
 
-        walker = FilesystemWalker(self.source_dir,
-                                  followlinks=True,
-                                  skip_top=self.partial_bundle)
+        if self.source_dir:
+            walker = FilesystemWalker(self.source_dir,
+                                      followlinks=True,
+                                      skip_top=self.partial_bundle)
+        elif self.source_xlsx:
+            walker = XLSXWalker(self.source_xlsx)
+
         for node in walker:
             item = self.item_creator(node)
             items[item.item_type].append(item.as_dict())
@@ -333,10 +339,10 @@ def get_var_dir():
 
 def get_parser():
     parser = argparse.ArgumentParser(
-        description='Create OGGBundle from directory structure')
+        description='Create OGGBundle from directory structure or *.xlsx')
     parser.add_argument(
-        'source_dir',
-        help='Source directory')
+        'source',
+        help='Source directory or path to *.xlsx file')
     parser.add_argument(
         'target_dir', nargs='?',
         help='Target directory where bundle will be created')
@@ -370,8 +376,7 @@ def get_parser():
 
     parser.add_argument(
         '--dossier-responsible', type=str,
-        help='User used as responsible for all dossiers',
-        required=True)
+        help='User used as responsible for all dossiers')
 
     return parser
 
@@ -390,21 +395,52 @@ def parse_args(args=None):
         mkdir_p(target_dir)
         args.target_dir = target_dir
 
-    if args.repo_nesting_depth == -1 and args.import_repository_reference is None:
+    source = args.source
+    del args.source
+    if os.path.isdir(source):
+        args.source_dir = source
+        args.source_xlsx = None
+    elif os.path.splitext(source)[-1] == '.xlsx':
+        args.source_xlsx = source
+        args.source_dir = None
+    else:
         raise parser.error(
-            "When generating a partial bundle (repo-nesting-dept = -1), "
-            "a position into which the bundle will be imported has "
-            "to be specified")
+            "Cannot handle source '{}' it must be path to a "
+            "directory or an .xlsx file containing a repository."
+            .format(source))
 
-    if args.repo_nesting_depth != -1 and args.import_repository_reference is not None:
-        raise parser.error(
-            "Partial bundles can only contain contentish items, not "
-            "repository folders or roots.")
+    if args.source_xlsx:
+        if args.import_dossier_reference:
+            raise parser.error(
+                "The argument --import-dossier-reference can only be used when"
+                "generating a bundle for a directory.")
+        if args.repo_nesting_depth != -1:
+            raise parser.error(
+                "The argument -repo-nesting-depth can only be used when"
+                "generating a bundle for a directory.")
+        args.repo_nesting_depth = None
 
-    if args.import_dossier_reference is not None and args.import_repository_reference is None:
-        raise parser.error(
-            "Can only specify import-dossier-reference if "
-            "import-repository-reference has been specified")
+    elif args.source_dir:
+        if not args.dossier_responsible:
+            raise parser.error(
+                "The argument --dossier-responsible is required when "
+                "generating a bundle for a directory")
+
+        if args.repo_nesting_depth == -1 and args.import_repository_reference is None:
+            raise parser.error(
+                "When generating a partial bundle (repo-nesting-dept = -1), "
+                "a position into which the bundle will be imported has "
+                "to be specified")
+
+        if args.repo_nesting_depth != -1 and args.import_repository_reference is not None:
+            raise parser.error(
+                "Partial bundles can only contain contentish items, not "
+                "repository folders or roots.")
+
+        if args.import_dossier_reference is not None and args.import_repository_reference is None:
+            raise parser.error(
+                "Can only specify import-dossier-reference if "
+                "import-repository-reference has been specified")
 
     return args
 
