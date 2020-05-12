@@ -1,23 +1,23 @@
 from opengever.bundle.factory import BundleFactory
 from opengever.bundle.factory import parse_args
-from opengever.testing import IntegrationTestCase
 from os.path import join as pjoin
 from pkg_resources import resource_filename
 from tempfile import mkdtemp
+from unittest import TestCase
 import json
 import os
 import shutil
 
 
-class TestOggBundleFactory(IntegrationTestCase):
+class TestOggBundleFactoryFilesystem(TestCase):
 
     def setUp(self):
-        super(TestOggBundleFactory, self).setUp()
+        super(TestOggBundleFactoryFilesystem, self).setUp()
         self.tempdir = mkdtemp()
 
     def tearDown(self):
         shutil.rmtree(self.tempdir)
-        super(TestOggBundleFactory, self).tearDown()
+        super(TestOggBundleFactoryFilesystem, self).tearDown()
 
     def find_item_by_title(self, items, title):
         for item in items:
