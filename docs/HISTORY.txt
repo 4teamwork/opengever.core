@@ -7,6 +7,7 @@ Changelog
 - Add `is_admin_menu_visible` to the `@config` API endpoint. [mbaechtold]
 - Watchers GET API: Also include info about referenced_users and referenced_watcher_roles. [tinagerber]
 - Fix @solrsearch endpoint default sort order. [elioschmutz]
+- Bump ftw.bumblebee to 3.9.0 which provides functionality for indexing checksums after bundle import. [buchi]
 
 
 2020.3.0rc2 (2020-05-07)
