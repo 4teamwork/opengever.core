@@ -201,5 +201,11 @@ class FavoriteQuery(BaseQuery):
         query = self.by_object(obj)
         query.update({'is_leafnode': obj.is_leaf_node()})
 
+    def update_filename(self, obj):
+        if not IBaseDocument.providedBy(obj):
+            return
+        query = self.by_object(obj)
+        query.update({'filename': obj.get_filename()})
+
 
 Favorite.query_cls = FavoriteQuery

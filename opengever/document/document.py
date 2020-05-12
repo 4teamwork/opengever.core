@@ -6,6 +6,7 @@ from collective import dexteritytextindexer
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
+from opengever.base.model.favorite import Favorite
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import IBaseDocument
@@ -235,12 +236,13 @@ class Document(Item, BaseDocumentMixin):
         basename, ext = os.path.splitext(filename)
         if not title:
             # use the filename without extension as title
-            self.__dict__["title"] = basename
-            self.__dict__["file"].filename = normalizer.normalize(basename, extension=ext)
-        elif title:
-            # use the title as filename
-            self.__dict__["title"] = title
-            self.__dict__["file"].filename = normalizer.normalize(title, extension=ext)
+            title = basename
+
+        self.__dict__["title"] = title
+        new_filename = normalizer.normalize(title, extension=ext)
+        if self.get_filename() != new_filename:
+            self.__dict__["file"].filename = new_filename
+            Favorite.query.update_filename(self)
 
     @property
     def title(self):

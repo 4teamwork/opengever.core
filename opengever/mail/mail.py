@@ -11,6 +11,7 @@ from opengever.base import _ as base_mf
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
+from opengever.base.model.favorite import Favorite
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
@@ -353,7 +354,11 @@ class OGMail(Mail, BaseDocumentMixin):
             ext = os.path.splitext(self.message.filename)[-1]
         else:
             ext = u'.eml'
-        self.message.filename = u'{}{}'.format(normalized_subject, ext)
+
+        new_filename = u'{}{}'.format(normalized_subject, ext)
+        if self.message.filename != new_filename:
+            self.message.filename = new_filename
+            Favorite.query.update_filename(self)
 
     def get_file(self):
         """An opengever mail has two fields for storing the mail-data.

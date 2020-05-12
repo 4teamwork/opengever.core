@@ -9,6 +9,7 @@ from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import Trasher
 from plone import api
+from plone.namedfile.file import NamedBlobFile
 from sqlalchemy.exc import IntegrityError
 
 
@@ -284,6 +285,85 @@ class TestHandlers(IntegrationTestCase):
         self.assertEquals('GEVER Weeklies',
                           Favorite.query.get(fav1.favorite_id).title)
         self.assertEquals(u'Anfragen 2018', Favorite.query.get(fav2.favorite_id).title)
+
+    @browsing
+    def test_titles_of_document_favorites_get_updated_when_title_synced_to_filename(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        fav1 = create(Builder('favorite')
+                      .for_object(self.document)
+                      .for_user(self.administrator)
+                      .having(is_title_personalized=True,
+                              title='GEVER Weeklies'))
+
+        fav2 = create(Builder('favorite')
+                      .for_object(self.document)
+                      .for_user(self.regular_user))
+
+        self.assertEquals('GEVER Weeklies', fav1.title)
+        self.assertEquals(u'Vertr\xe4gsentwurf', fav2.title)
+
+        browser.open(self.document, view='edit')
+        browser.fill({u'Title': u''})
+        browser.click_on('Save')
+
+        self.assertEquals('GEVER Weeklies',
+                          Favorite.query.get(fav1.favorite_id).title)
+        self.assertEquals(u'Vertraegsentwurf',
+                          Favorite.query.get(fav2.favorite_id).title)
+
+    @browsing
+    def test_filenames_of_document_favorites_get_updated_when_title_is_changed(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        fav1 = create(Builder('favorite')
+                      .for_object(self.document)
+                      .for_user(self.administrator)
+                      .having(is_title_personalized=True,
+                              title='GEVER Weeklies'))
+
+        fav2 = create(Builder('favorite')
+                      .for_object(self.document)
+                      .for_user(self.regular_user))
+
+        self.assertEquals('Vertraegsentwurf.docx', fav1.filename)
+        self.assertEquals('Vertraegsentwurf.docx', fav2.filename)
+
+        browser.open(self.document, view='edit')
+        browser.fill({u'Title': u'N\xe4w title'})
+        browser.click_on('Save')
+
+        self.assertEquals(u'Naew title.docx',
+                          Favorite.query.get(fav1.favorite_id).filename)
+        self.assertEquals(u'Naew title.docx',
+                          Favorite.query.get(fav2.favorite_id).filename)
+
+    @browsing
+    def test_filenames_of_document_favorites_get_updated_when_filename_is_changed(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        fav1 = create(Builder('favorite')
+                      .for_object(self.document)
+                      .for_user(self.administrator)
+                      .having(is_title_personalized=True,
+                              title='GEVER Weeklies'))
+
+        fav2 = create(Builder('favorite')
+                      .for_object(self.document)
+                      .for_user(self.regular_user))
+
+        self.assertEquals('Vertraegsentwurf.docx', fav1.filename)
+        self.assertEquals('Vertraegsentwurf.docx', fav2.filename)
+
+        self.document.file = NamedBlobFile(
+            data='New conent', filename=u'test.txt')
+
+        # filename gets synced with title but we should have the file extension
+        # of the new file
+        self.assertEquals(u'Vertraegsentwurf.txt',
+                          Favorite.query.get(fav1.favorite_id).filename)
+        self.assertEquals(u'Vertraegsentwurf.txt',
+                          Favorite.query.get(fav2.favorite_id).filename)
 
     @browsing
     def test_titles_of_favorites_get_truncated_on_update(self, browser):
