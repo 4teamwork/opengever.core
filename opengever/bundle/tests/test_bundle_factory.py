@@ -1,5 +1,5 @@
 from opengever.bundle.factory import BundleFactory
-from opengever.bundle.factory import get_parser
+from opengever.bundle.factory import parse_args
 from opengever.testing import IntegrationTestCase
 from os.path import join as pjoin
 from pkg_resources import resource_filename
@@ -109,14 +109,13 @@ class TestOggBundleFactory(IntegrationTestCase):
             document.keys())
 
     def test_partial_bundle_factory(self):
-        parser = get_parser()
         input_path = resource_filename('opengever.bundle.tests',
                                        'assets/basic_import_dossier')
 
-        args = parser.parse_args([input_path,
-                                  self.tempdir,
-                                  '--dossier-responsible', 'Test User',
-                                  '--import-repository-reference', '1', '2', '3'])
+        args = parse_args([input_path,
+                           self.tempdir,
+                           '--dossier-responsible', 'Test User',
+                           '--import-repository-reference', '1', '2', '3'])
 
         factory = BundleFactory(args)
         factory.dump_bundle()
@@ -187,14 +186,13 @@ class TestOggBundleFactory(IntegrationTestCase):
                          document['filepath'])
 
     def test_full_bundle_factory(self):
-        parser = get_parser()
         input_path = resource_filename('opengever.bundle.tests',
                                        'assets/basic_import_repository')
-        args = parser.parse_args([input_path,
-                                  self.tempdir,
-                                  '--dossier-responsible', 'Test User',
-                                  '--repo-nesting-depth', '3',
-                                  '--users-group', 'Test group'])
+        args = parse_args([input_path,
+                           self.tempdir,
+                           '--dossier-responsible', 'Test User',
+                           '--repo-nesting-depth', '3',
+                           '--users-group', 'Test group'])
 
         factory = BundleFactory(args)
         factory.dump_bundle()

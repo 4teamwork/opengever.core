@@ -376,10 +376,9 @@ def get_parser():
     return parser
 
 
-def parse_args():
+def parse_args(args=None):
     parser = get_parser()
-
-    args = parser.parse_args()
+    args = parser.parse_args(args=args)
 
     if args.target_dir is None:
         var_dir = get_var_dir()
