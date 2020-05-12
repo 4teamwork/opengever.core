@@ -8,7 +8,6 @@ from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
-from unittest import skip
 
 
 class TestListingEndpointWithoutSolr(IntegrationTestCase):
@@ -78,10 +77,6 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
                         msg="facet=true is needed to get facet counts back")
         self.assertEqual(1, params['facet.mincount'])
         self.assertEqual(['start'], params['facet.field'])
-
-    @skip("Just a reminder to test that facets also return translated labels")
-    def test_facet_labels(self):
-        pass
 
     @browsing
     def test_excludes_searchroot(self, browser):
@@ -304,6 +299,27 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual(
             [self.taskdocument.absolute_url()],
             [item['@id'] for item in browser.json['items']])
+
+    @browsing
+    def test_facet_labels_are_transformed_properly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=documents&columns:list=title'
+                '&facets:list=creator&facets:list=responsible')
+
+        browser.open(self.repository_root, view=view, method='GET',
+                     headers=self.api_headers)
+
+        self.assertIn(u'facets', browser.json)
+        facets = browser.json['facets']
+        self.assertItemsEqual([u'creator', 'responsible'], facets.keys())
+        self.assertItemsEqual(
+            {u'franzi.muller': {u'count': 4, u'label': u'M\xfcller Fr\xe4nzi'},
+             u'robert.ziegler': {u'count': 15, u'label': u'Ziegler Robert'}},
+            facets[u'creator'])
+        self.assertItemsEqual(
+            {u'kathi.barfuss': {u'count': 1, u'label': u'B\xe4rfuss K\xe4thi'}},
+            facets[u'responsible'])
 
     @browsing
     def test_current_context_is_excluded(self, browser):
