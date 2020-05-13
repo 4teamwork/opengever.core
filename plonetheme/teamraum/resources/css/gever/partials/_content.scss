@@ -11,11 +11,7 @@
 }
 
 .linkWrapper > .contenttype-opengever-dossier-businesscasedossier {
-  display: inline-block;
-
-  > span {
-    vertical-align: middle;
-  }
+  display: inline !important;
 
   &:before {
     vertical-align: middle;
