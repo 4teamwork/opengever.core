@@ -914,7 +914,7 @@ class AllGroupsSource(BaseSQLModelSource):
         return self.base_query
 
 
-class AllGroupsSourcePrefixed(AllGroupsSource):
+class AllFilteredGroupsSourcePrefixed(FilterMixin, AllGroupsSource):
     """Prefixes the term-tokens with a string. This allows us to
     distinguish the group term from other terms if you use it in a
     multi-query-source.
@@ -952,7 +952,7 @@ class AllGroupsSourceBinder(object):
 
 class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 
-    source_classes = [AllGroupsSourcePrefixed, AllUsersSource]
+    source_classes = [AllFilteredGroupsSourcePrefixed, AllUsersSource]
 
 
 @implementer(IContextSourceBinder)

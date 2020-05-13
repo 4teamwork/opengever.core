@@ -40,6 +40,8 @@ Auf der Maske unter „Schützen“ können folgende Anpassungen gemacht werden.
 Werden keine Namen in den Feldern eingetragen, bleibt die Berechtigung wie bis
 anhin. Ansonsten gilt nach dem Speichern die neu gesetzte Berechtigung.
 
+Es stehen die gleiche Auswahl wie unter Aktionen -> Freigabe zur Verfügung.
+
 Tipp
 ----
 Beim Berechtigungs-Vorgang können auch ganze Gruppen ausgewählt werden. Wird
