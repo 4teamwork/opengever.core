@@ -5,7 +5,6 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.schema import SolrSchema
 from mock import MagicMock
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
-from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllFilteredGroupsSource
 from opengever.ogds.base.sources import AllGroupsSource
@@ -14,6 +13,7 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import ContactsSource
+from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.ogds.models.group import Group
 from opengever.sharing.interfaces import ISharingConfiguration
