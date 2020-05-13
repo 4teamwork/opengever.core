@@ -54,7 +54,7 @@ def get_unknown_fields(action_data, schema):
     return errors
 
 
-def get_schema_validation_errors(action_data, schema):
+def get_schema_validation_errors(action_data, schema, allow_unknown_fields=False):
     """Validate a dict against a schema.
 
     Return a list of basic schema validation errors (required fields,
@@ -82,19 +82,21 @@ def get_schema_validation_errors(action_data, schema):
             except ValidationError as e:
                 errors.append((name, e))
 
-    # Also reject fields that are not part of the schema
-    errors.extend(get_unknown_fields(action_data, schema))
+    if not allow_unknown_fields:
+        # Also reject fields that are not part of the schema
+        errors.extend(get_unknown_fields(action_data, schema))
 
     return errors
 
 
-def get_validation_errors(action_data, schema):
+def get_validation_errors(action_data, schema, allow_unknown_fields=False):
     """Validate a dict against a schema and invariants.
 
     Return a list of all validation errors, including invariants.
     Based on zope.schema.getValidationErrors.
     """
-    errors = get_schema_validation_errors(action_data, schema)
+    errors = get_schema_validation_errors(action_data, schema,
+                                          allow_unknown_fields)
     if errors:
         return errors
 
