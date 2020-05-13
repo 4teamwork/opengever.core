@@ -61,6 +61,26 @@ class TestInvitationsPost(IntegrationTestCase):
             "same as the serialized invitation in the GET request.")
 
     @browsing
+    def test_endpoint_ignores_unknown_properties(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        url = '{}/@invitations'.format(self.workspace.absolute_url())
+
+        # The `@type` property is not defined in the IWorkspaceInvitationSchema.
+        # The endpoint should not fail if this property is present.
+        data = json.dumps({
+            '@type': 'virtual.participation.invitation',
+            'recipient_email': self.regular_user.getProperty('email'),
+            'role': {'token': WORKSPCAE_GUEST.id},
+        })
+        browser.open(url, method='POST', headers=self.api_headers, data=data)
+        item = browser.json
+        iid = item.get('token')
+        self.assertEqual(
+            u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
+            item['@id'])
+
+    @browsing
     def test_prevents_duplicate_invitation(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
