@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.activity.model import Watcher
 from opengever.testing import IntegrationTestCase
 import pytz
 
@@ -23,8 +24,8 @@ class TestNotificationViewlet(IntegrationTestCase):
 
     def setUp(self):
         super(TestNotificationViewlet, self).setUp()
-        self.regular_watcher = create(Builder('watcher').having(actorid=self.regular_user.id))
-        self.dossier_responsible_watcher = create(Builder('watcher').having(actorid=self.dossier_responsible.id))
+        self.regular_watcher = Watcher.query.get_by_actorid(self.regular_user.id)
+        self.dossier_responsible_watcher = Watcher.query.get_by_actorid(self.dossier_responsible.id)
         self.resource_a = create(
             Builder('resource')
             .oguid('fd:123')

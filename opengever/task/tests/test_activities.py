@@ -420,7 +420,9 @@ class TestTaskReassignActivity(IntegrationTestCase):
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
 
     @browsing
-    def test_notifies_old_and_new_responsible(self, browser):
+    def test_notifies_old_and_new_responsible_and_issuer(self, browser):
+        self.login(self.meeting_user, browser)
+        old_responsible = self.task.responsible
         self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         activities = Activity.query.all()
@@ -429,7 +431,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
         reassign_activity = activities[-1]
 
         self.assertItemsEqual(
-            [self.regular_user.getId(), self.meeting_user.getId()],
+            [old_responsible, self.task.responsible, self.task.issuer],
             [notes.userid for notes in reassign_activity.notifications])
 
     @browsing
@@ -442,7 +444,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'herbert.jager', TASK_RESPONSIBLE_ROLE)],
+            [(u'robert.ziegler', u'task_issuer'), (u'herbert.jager', TASK_RESPONSIBLE_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
     @browsing
@@ -481,7 +483,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals(
-            'herbert.jager@gever.local', get_header(mail, 'To'))
+            'herbert@jager.com', get_header(mail, 'To'))
 
 
 class TestSuccesssorHandling(FunctionalTestCase):

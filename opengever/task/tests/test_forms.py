@@ -73,12 +73,6 @@ class TestTaskEditForm(IntegrationTestCase):
     def test_edit_responsible_records_activity(self, browser):
         self.activate_feature('activity')
         self.login(self.administrator, browser=browser)
-
-        # register_watchers
-        center = notification_center()
-        center.add_task_responsible(self.task, self.task.responsible)
-        center.add_task_issuer(self.task, self.task.issuer)
-
         self.set_workflow_state('task-state-open', self.task)
 
         browser.open(self.task, view='edit')
@@ -87,12 +81,12 @@ class TestTaskEditForm(IntegrationTestCase):
         browser.find('Save').click()
 
         activity = Activity.query.order_by(Activity.created.desc()).first()
-
         self.assertEquals(u'task-transition-reassign', activity.kind)
         self.assertEquals(
             [(u'robert.ziegler', u'task_issuer'),
              (u'jurgen.konig', u'task_responsible')],
-            [(sub.watcher.actorid, sub.role) for sub in Subscription.query.all()])
+            [(sub.watcher.actorid, sub.role) for sub in Subscription.query.all()
+             if sub.resource.int_id == self.task.int_id])
 
     @browsing
     def test_modify_event_is_fired_but_only_once(self, browser):

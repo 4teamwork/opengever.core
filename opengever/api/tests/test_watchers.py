@@ -1,7 +1,5 @@
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
-from opengever.activity.roles import TASK_ISSUER_ROLE
-from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.testing import IntegrationTestCase
 import json
@@ -15,8 +13,6 @@ class TestWatchersGet(IntegrationTestCase):
     def test_get_watchers_for_tasks(self, browser):
         center = notification_center()
         self.login(self.regular_user, browser=browser)
-        center.add_watcher_to_resource(self.task, self.task.creators[0], TASK_ISSUER_ROLE)
-        center.add_watcher_to_resource(self.task, self.task.responsible, TASK_RESPONSIBLE_ROLE)
         center.add_watcher_to_resource(self.task, self.task.responsible, WATCHER_ROLE)
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
@@ -71,10 +67,6 @@ class TestWatchersGet(IntegrationTestCase):
     def test_get_watchers_for_inbox_forwarding(self, browser):
         center = notification_center()
         self.login(self.secretariat_user, browser=browser)
-        center.add_watcher_to_resource(self.inbox_forwarding, self.inbox_forwarding.creators[0],
-                                       TASK_ISSUER_ROLE)
-        center.add_watcher_to_resource(self.inbox_forwarding, self.inbox_forwarding.responsible,
-                                       TASK_RESPONSIBLE_ROLE)
         center.add_watcher_to_resource(self.inbox_forwarding, self.inbox_forwarding.responsible,
                                        WATCHER_ROLE)
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
@@ -84,14 +76,14 @@ class TestWatchersGet(IntegrationTestCase):
             u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers',
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/nicole.kohler',
-                    u'fullname': u'Kohler Nicole',
-                    u'id': u'nicole.kohler'
-                },
-                {
                     u'@id': u'http://nohost/plone/@users/kathi.barfuss',
                     u'fullname': u'B\xe4rfuss K\xe4thi',
                     u'id': u'kathi.barfuss'
+                },
+                {
+                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'fullname': u'Ziegler Robert',
+                    u'id': u'robert.ziegler'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -110,9 +102,10 @@ class TestWatchersGet(IntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                u'nicole.kohler': [u'task_issuer']
+                u'robert.ziegler': [u'task_issuer']
             }
         }
+
         self.assertEqual(expected_json, browser.json)
 
         browser.open(self.inbox_forwarding, method='GET', headers=self.api_headers)
@@ -138,26 +131,26 @@ class TestWatchersPost(IntegrationTestCase):
 
     @browsing
     def test_post_watchers_for_task(self, browser):
-        center = notification_center()
         self.login(self.regular_user, browser=browser)
-        center.add_watcher_to_resource(self.task, self.meeting_user.getId(), TASK_RESPONSIBLE_ROLE)
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual(
-            {u'herbert.jager': [u'task_responsible']}, browser.json['watchers_and_roles'])
+        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
+                         browser.json['watchers_and_roles'])
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.meeting_user.getId()}))
+                     data=json.dumps({"userid": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual(
-            {u'herbert.jager': [u'regular_watcher', u'task_responsible']},
-            browser.json['watchers_and_roles'])
+
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
+                         browser.json['watchers_and_roles'])
 
     @browsing
     def test_post_watchers_without_data_raises_bad_request(self, browser):
@@ -185,25 +178,25 @@ class TestWatchersPost(IntegrationTestCase):
 
     @browsing
     def test_post_watchers_for_inbox_forwarding(self, browser):
-        center = notification_center()
         self.login(self.secretariat_user, browser=browser)
-        center.add_watcher_to_resource(self.inbox_forwarding, self.meeting_user.getId(),
-                                       TASK_RESPONSIBLE_ROLE)
+
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({u'herbert.jager': [u'task_responsible']},
+        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
                          browser.json['watchers_and_roles'])
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.meeting_user.getId()}))
+                     data=json.dumps({"userid": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({u'herbert.jager': [u'regular_watcher', u'task_responsible']},
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
                          browser.json['watchers_and_roles'])
 
 
@@ -214,13 +207,12 @@ class TestWatchersDelete(IntegrationTestCase):
     def test_delete_watchers_for_task(self, browser):
         center = notification_center()
         self.login(self.regular_user, browser=browser)
-        center.add_watcher_to_resource(self.task, self.regular_user.getId(), TASK_RESPONSIBLE_ROLE)
         center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
-
-        self.assertEqual({
-                u'kathi.barfuss': [u'regular_watcher', u'task_responsible']}, browser.json['watchers_and_roles'])
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
+                         browser.json['watchers_and_roles'])
 
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
@@ -228,20 +220,22 @@ class TestWatchersDelete(IntegrationTestCase):
         self.assertEqual(browser.status_code, 204)
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({u'kathi.barfuss': [u'task_responsible']}, browser.json['watchers_and_roles'])
+        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
+                         browser.json['watchers_and_roles'])
 
     @browsing
     def test_delete_watchers_for_inbox_forwarding(self, browser):
         center = notification_center()
         self.login(self.secretariat_user, browser=browser)
         center.add_watcher_to_resource(self.inbox_forwarding, self.secretariat_user.getId(),
-                                       TASK_RESPONSIBLE_ROLE)
-        center.add_watcher_to_resource(self.inbox_forwarding, self.secretariat_user.getId(),
                                        WATCHER_ROLE)
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
-
-        self.assertEqual({u'jurgen.konig': [u'regular_watcher', u'task_responsible']},
+        self.assertEqual({
+            u'kathi.barfuss': [u'task_responsible'],
+            u'robert.ziegler': [u'task_issuer'],
+            u'jurgen.konig': [u'regular_watcher']},
                          browser.json['watchers_and_roles'])
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
@@ -250,7 +244,8 @@ class TestWatchersDelete(IntegrationTestCase):
 
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({u'jurgen.konig': [u'task_responsible']},
+        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
                          browser.json['watchers_and_roles'])
 
     @browsing
@@ -261,8 +256,9 @@ class TestWatchersDelete(IntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
 
-        self.assertEqual({
-                u'kathi.barfuss': [u'regular_watcher']}, browser.json['watchers_and_roles'])
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
+                         browser.json['watchers_and_roles'])
 
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@watchers',

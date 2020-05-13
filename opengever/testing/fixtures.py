@@ -263,6 +263,7 @@ class OpengeverContentFixture(object):
             'meeting_user',
             u'Herbert',
             u'J\xe4ger',
+            email='herbert@jager.com',
             user_settings={'_seen_tours': '["*"]'},
             )
 

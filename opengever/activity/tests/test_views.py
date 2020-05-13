@@ -26,16 +26,7 @@ class TestMarkAsRead(IntegrationTestCase):
         super(TestMarkAsRead, self).setUp()
         with self.login(self.regular_user):
             self.center = NotificationCenter()
-            self.watcher = create(
-                Builder('watcher')
-                .having(actorid=self.regular_user.id)
-            )
-            oguid = Oguid.for_object(self.task)
-            self.resource = create(
-                Builder('resource')
-                .oguid(oguid.id)
-                .watchers([self.watcher])
-            )
+            self.resource = Resource.query.get_by_oguid(Oguid.for_object(self.task))
 
             # XXX - something is wonky with the builder for activities
             with freeze(FREEZE_TIME_FIRST):
@@ -120,16 +111,7 @@ class TestListNotifications(IntegrationTestCase):
         super(TestListNotifications, self).setUp()
         with self.login(self.regular_user), freeze(FREEZE_TIME):
             self.center = NotificationCenter()
-            self.watcher = create(
-                Builder('watcher')
-                .having(actorid=self.regular_user.id)
-            )
-            oguid = Oguid.for_object(self.task)
-            self.resource = create(
-                Builder('resource')
-                .oguid(oguid.id)
-                .watchers([self.watcher])
-            )
+            self.resource = Resource.query.get_by_oguid(Oguid.for_object(self.task))
 
             self.activity = create(
                 Builder('activity')
@@ -202,8 +184,9 @@ class TestListNotifications(IntegrationTestCase):
         self.assertEqual(u'_self', target)
 
         # On foreign admin unit - 'fd'
-        Resource.query.first().admin_unit_id = 'fd'
+        Resource.query.get_by_oguid(self.task.oguid).admin_unit_id = 'fd'
         browser.open(view="notifications/list")
+
         target = browser.json.get('notifications')[0]['target']
         self.assertEqual(u'_blank', target)
 

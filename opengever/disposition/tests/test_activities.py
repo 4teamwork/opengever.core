@@ -7,6 +7,7 @@ from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -18,9 +19,8 @@ class TestDispositionNotifications(IntegrationTestCase):
 
     def test_creator_and_all_archivist_are_registered_as_watchers(self):
         self.login(self.regular_user)
-        create(Builder('disposition'))
-
-        resource = Resource.query.one()
+        disposition = create(Builder('disposition'))
+        resource = Resource.query.get_by_oguid(Oguid.for_object(disposition))
 
         archivist_watchers = [
             sub.watcher.actorid for sub in resource.subscriptions
