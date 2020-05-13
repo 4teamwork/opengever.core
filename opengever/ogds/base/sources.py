@@ -915,8 +915,8 @@ class AllGroupsSource(BaseSQLModelSource):
 
 
 class AllGroupsSourcePrefixed(AllGroupsSource):
-    """Prefixes the term-tokens with a string. This allows us to do
-    differentiate the group term from other terms if you use it in a
+    """Prefixes the term-tokens with a string. This allows us to
+    distinguish the group term from other terms if you use it in a
     multi-query-source.
     """
     GROUP_PREFIX = 'group:'
