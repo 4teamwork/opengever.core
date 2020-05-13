@@ -879,41 +879,12 @@ class CurrentAdminUnitOrgUnitsSourceBinder(object):
         return CurrentAdminUnitOrgUnitsSource(context)
 
 
-class AllGroupsSource(BaseSQLModelSource):
-
-    model_class = Group
-
-    @property
-    def base_query(self):
-        return Group.query.filter(Group.active == True)  # noqa
-
-    @property
-    def search_query(self):
-        return self.base_query
-
-
-class AllGroupsSourcePrefixed(AllGroupsSource):
-    """Prefixes the term-tokens with a string. This allows us to do
-    differentiate the group term from other terms if you use it in a
-    multi-query-source.
-    """
-    GROUP_PREFIX = 'group:'
-
-    def getTerm(self, value):
-        obj = self.model_class.get(value.split(self.GROUP_PREFIX)[-1])
-        if not obj:
-            raise LookupError
-        return SimpleTerm(obj.id(),
-                          '{}{}'.format(self.GROUP_PREFIX, obj.id()),
-                          obj.label())
-
-
-class AllFilteredGroupsSource(AllGroupsSource):
+class FilterMixin(object):
     """Filters the searched terms by white and black-listed groups
     """
 
     def search(self, query_string):
-        terms = super(AllGroupsSource, self).search(query_string)
+        terms = super(FilterMixin, self).search(query_string)
         black_list_prefix = api.portal.get_registry_record(
             'black_list_prefix', ISharingConfiguration)
         white_list_prefix = api.portal.get_registry_record(
@@ -928,6 +899,41 @@ class AllFilteredGroupsSource(AllGroupsSource):
 
         terms = filter(terms_filter, terms)
         return terms
+
+
+class AllGroupsSource(BaseSQLModelSource):
+
+    model_class = Group
+
+    @property
+    def base_query(self):
+        return Group.query.filter(Group.active == True)  # noqa
+
+    @property
+    def search_query(self):
+        return self.base_query
+
+
+class AllFilteredGroupsSourcePrefixed(FilterMixin, AllGroupsSource):
+    """Prefixes the term-tokens with a string. This allows us to
+    distinguish the group term from other terms if you use it in a
+    multi-query-source.
+    """
+    GROUP_PREFIX = 'group:'
+
+    def getTerm(self, value):
+        obj = self.model_class.get(value.split(self.GROUP_PREFIX)[-1])
+        if not obj:
+            raise LookupError
+        return SimpleTerm(obj.id(),
+                          '{}{}'.format(self.GROUP_PREFIX, obj.id()),
+                          obj.label())
+
+
+class AllFilteredGroupsSource(FilterMixin, AllGroupsSource):
+    """Filters the searched terms by white and black-listed groups
+    """
+    pass
 
 
 @implementer(IContextSourceBinder)
@@ -946,7 +952,7 @@ class AllGroupsSourceBinder(object):
 
 class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 
-    source_classes = [AllGroupsSourcePrefixed, AllUsersSource]
+    source_classes = [AllFilteredGroupsSourcePrefixed, AllUsersSource]
 
 
 @implementer(IContextSourceBinder)

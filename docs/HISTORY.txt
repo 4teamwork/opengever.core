@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc3 (unreleased)
 ------------------------
 
+- The widget used to select users or groups while protecting a business dossier now respects the sharing configuration. [mbaechtold]
 - Fix an issue where solr facet labels have not been transformed correctly. [elioschmutz]
 - Skip unknown attributes in POST @invitation endpoint. [elioschmutz]
 - Add `is_admin_menu_visible` to the `@config` API endpoint. [mbaechtold]

@@ -5,7 +5,6 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.schema import SolrSchema
 from mock import MagicMock
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
-from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllFilteredGroupsSource
 from opengever.ogds.base.sources import AllGroupsSource
@@ -14,6 +13,7 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import ContactsSource
+from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.ogds.models.group import Group
 from opengever.sharing.interfaces import ISharingConfiguration
@@ -1008,6 +1008,9 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         super(TestAllUsersAndGroupsSource, self).setUp()
         self.source = AllUsersAndGroupsSource(self.portal)
 
+    def get_groups(self):
+        return [term.value for term in self.source.search('') if term.token.startswith('group:')]
+
     def test_find_users(self):
         self.assertIn('kathi.barfuss', self.source)
         self.assertIn('herbert.jager', self.source)
@@ -1031,6 +1034,57 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
                          self.source.getTermByToken('fa_users').value)
         self.assertEqual('fa_users',
                          self.source.getTermByToken('fa_users').value)
+
+    def test_search_does_not_find_blacklisted_groups(self):
+        expected_groups = [
+            u'fa_users',
+            u'fa_inbox_users',
+            u'rk_users',
+            u'rk_inbox_users',
+            u'projekt_a',
+            u'projekt_b',
+            u'projekt_laeaer',
+            u'committee_rpk_group',
+            u'committee_ver_group',
+        ]
+        self.assertListEqual(expected_groups, self.get_groups())
+
+        # Whitelist no group explicitly.
+        api.portal.set_registry_record('white_list_prefix', u'^$', ISharingConfiguration)
+
+        # Blacklist all groups beginning with `fa_`.
+        api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
+
+        expected_groups = [
+            u'rk_users',
+            u'rk_inbox_users',
+            u'projekt_a',
+            u'projekt_b',
+            u'projekt_laeaer',
+            u'committee_rpk_group',
+            u'committee_ver_group',
+        ]
+        self.assertListEqual(expected_groups, self.get_groups())
+
+        # Blacklist all groups
+        api.portal.set_registry_record('black_list_prefix', u'^.', ISharingConfiguration)
+        self.assertEqual([], self.get_groups())
+
+    def test_search_finds_whitelisted_org_groups(self):
+        # Blacklist all groups.
+        api.portal.set_registry_record(
+            'black_list_prefix', u'^.', ISharingConfiguration
+        )
+
+        # Whitelist all groups beginning with `fa_` explicitly.
+        api.portal.set_registry_record(
+            'white_list_prefix', u'^fa_', ISharingConfiguration
+        )
+        expected_principals = [
+            u'fa_users',
+            u'fa_inbox_users',
+        ]
+        self.assertEqual(expected_principals, self.get_groups())
 
 
 class TestAllFilteredGroupsSource(TestAllGroupsSource):

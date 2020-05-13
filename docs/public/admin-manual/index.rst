@@ -15,7 +15,7 @@ Power-User und Administratoren von OneGov GEVER.
 
    rollenmodell.rst
    rollenmanager.rst
-   berechtigungoe.rst
+   berechtigungen.rst
    adminansicht.rst
    aussonderung.rst
    forcecheckin.rst
