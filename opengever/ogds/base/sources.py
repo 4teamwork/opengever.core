@@ -879,6 +879,28 @@ class CurrentAdminUnitOrgUnitsSourceBinder(object):
         return CurrentAdminUnitOrgUnitsSource(context)
 
 
+class FilterMixin(object):
+    """Filters the searched terms by white and black-listed groups
+    """
+
+    def search(self, query_string):
+        terms = super(FilterMixin, self).search(query_string)
+        black_list_prefix = api.portal.get_registry_record(
+            'black_list_prefix', ISharingConfiguration)
+        white_list_prefix = api.portal.get_registry_record(
+            'white_list_prefix', ISharingConfiguration)
+
+        def terms_filter(term):
+            if re.search(black_list_prefix, term.value):
+                if re.search(white_list_prefix, term.value):
+                    return True
+                return False
+            return True
+
+        terms = filter(terms_filter, terms)
+        return terms
+
+
 class AllGroupsSource(BaseSQLModelSource):
 
     model_class = Group
@@ -908,26 +930,10 @@ class AllGroupsSourcePrefixed(AllGroupsSource):
                           obj.label())
 
 
-class AllFilteredGroupsSource(AllGroupsSource):
+class AllFilteredGroupsSource(FilterMixin, AllGroupsSource):
     """Filters the searched terms by white and black-listed groups
     """
-
-    def search(self, query_string):
-        terms = super(AllGroupsSource, self).search(query_string)
-        black_list_prefix = api.portal.get_registry_record(
-            'black_list_prefix', ISharingConfiguration)
-        white_list_prefix = api.portal.get_registry_record(
-            'white_list_prefix', ISharingConfiguration)
-
-        def terms_filter(term):
-            if re.search(black_list_prefix, term.value):
-                if re.search(white_list_prefix, term.value):
-                    return True
-                return False
-            return True
-
-        terms = filter(terms_filter, terms)
-        return terms
+    pass
 
 
 @implementer(IContextSourceBinder)
