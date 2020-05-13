@@ -223,17 +223,7 @@ class ListingGet(SolrQueryBaseService):
             res['batching'] = batch.links
 
         res['items'] = self.prepare_response_items(resp)
-
-        facet_counts = self.extract_facets_from_response(resp)
-
-        # We map the index names back to the field names for the facets
-        mapped_facet_counts = {}
-        for field in self.facets:
-            index_name = self.get_field_index(field)
-            if index_name is None or index_name not in facet_counts:
-                continue
-            mapped_facet_counts[field] = facet_counts[index_name]
-        res['facets'] = mapped_facet_counts
+        res['facets'] = self.extract_facets_from_response(resp)
 
         return res
 

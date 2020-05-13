@@ -256,6 +256,7 @@ class SolrQueryBaseService(Service):
         self.solr_fields = set(self.solr.manager.schema.fields.keys())
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
+        self.facets = []
 
     def prepare_solr_query(self):
         """ Extract the requested parameters and prepare the solr query
@@ -306,14 +307,21 @@ class SolrQueryBaseService(Service):
         counts and labels for endpoint response.
         """
         facet_counts = {}
-        for field_name, facets in resp.facets.items():
-            field = self.get_field(field_name)
-            facet_counts[field_name] = {}
-            for facet, count in facets.items():
-                facet_counts[field_name][facet] = {
+        for facet_name in self.facets:
+            field = self.get_field(facet_name)
+            solr_facet_name = field.index
+            solr_facet = resp.facets.get(solr_facet_name)
+
+            if not solr_facet:
+                continue
+
+            facet_counts[facet_name] = {}
+            for facet, count in solr_facet.items():
+                facet_counts[field.field_name][facet] = {
                     "count": count,
                     "label": field.index_value_to_label(facet)
                     }
+
         return facet_counts
 
     def parse_requested_fields(self, params):

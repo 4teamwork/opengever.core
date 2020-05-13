@@ -173,6 +173,41 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             facet_counts[u'Subject'])
 
     @browsing
+    def test_facet_labels_are_transformed_properly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = (u'{}/@solrsearch?q=wichtig&facet=on&facet.field=creator&'
+               u'facet.field=responsible&facet.mincount=1'.format(
+                   self.portal.absolute_url()))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIn(u'facet_counts', browser.json)
+        facet_counts = browser.json['facet_counts']
+
+        self.assertItemsEqual([u'creator', 'responsible'], facet_counts.keys())
+        self.assertItemsEqual(
+            {u'robert.ziegler': {u'count': 3, u'label': u'Ziegler Robert'}},
+            facet_counts[u'creator'])
+        self.assertItemsEqual(
+            {u'robert.ziegler': {u'count': 1, u'label': u'Ziegler Robert'}},
+            facet_counts[u'responsible'])
+
+    @browsing
+    def test_using_a_solr_index_as_a_facet_works_properly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = (u'{}/@solrsearch?q=wichtig&facet=on&facet.field=Creator&'
+               u'facet.mincount=1'.format(
+                   self.portal.absolute_url()))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        facet_counts = browser.json['facet_counts']
+
+        self.assertItemsEqual(
+            {u'robert.ziegler': {u'count': 3, u'label': u'robert.ziegler'}},
+            facet_counts[u'Creator'])
+
+    @browsing
     def test_default_start_and_rows(self, browser):
         self.login(self.regular_user, browser=browser)
 

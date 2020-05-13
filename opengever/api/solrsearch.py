@@ -63,11 +63,10 @@ class SolrSearchGet(SolrQueryBaseService):
         if not isinstance(facet_fields, list):
             facet_fields = [facet_fields]
         if facet_fields:
-            facet_fields = [
-                facet for facet in facet_fields
-                if self.is_field_allowed(facet) and self.get_field_index(facet) in self.solr_fields
-            ]
-            params['facet.field'] = facet_fields
+            self.facets = [facet for facet in facet_fields
+                           if self.is_field_allowed(facet)
+                           and self.get_field_index(facet) in self.solr_fields]
+            params['facet.field'] = map(self.get_field_index, self.facets)
         return params
 
     def reply(self):
@@ -89,9 +88,7 @@ class SolrSearchGet(SolrQueryBaseService):
             "start": start,
             "rows": rows,
         }
-
-        facet_counts = self.extract_facets_from_response(resp)
-        res['facet_counts'] = facet_counts
+        res['facet_counts'] = self.extract_facets_from_response(resp)
 
         return res
 
