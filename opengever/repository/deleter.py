@@ -27,4 +27,4 @@ class RepositoryDeleter(object):
         return self.is_repository_empty()
 
     def is_repository_empty(self):
-        return len(self.repository.listFolderContents()) == 0
+        return self.repository.objectCount() == 0
