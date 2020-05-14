@@ -7,6 +7,7 @@ Changelog
 - Improve performance of the subdossier tree (on the dossier overview tab). [mbaechtold]
 - Improve performance while determining repositoryfolder emptiness. [mbaechtold]
 - Improve performance while determining leaf nodes. [mbaechtold]
+- Add watcher role to task notification setting tab. [tinagerber]
 - The widget used to select users or groups while protecting a business dossier now respects the sharing configuration. [mbaechtold]
 - Fix an issue where solr facet labels have not been transformed correctly. [elioschmutz]
 - Skip unknown attributes in POST @invitation endpoint. [elioschmutz]

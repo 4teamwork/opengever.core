@@ -39,7 +39,7 @@ class TestNotificationSettings(IntegrationTestCase):
     def test_get_settings_returns_the_settings_for_the_user(self):
         settings = NotificationSettings().get_settings(self.regular_user.getId())
         self.assertEqual(
-            frozenset([u'task_issuer', u'task_responsible']),
+            frozenset([u'regular_watcher', u'task_issuer', u'task_responsible']),
             settings.get('task-added-or-reassigned').badge_notification_roles)
 
     def test_get_settings_respects_custom_user_settings(self):
@@ -49,7 +49,7 @@ class TestNotificationSettings(IntegrationTestCase):
         settings = notification_settings.get_settings(userid)
         self.assertIsInstance(settings.get('task-added-or-reassigned'), model.NotificationDefault)
         self.assertEqual(
-            frozenset([u'task_issuer', u'task_responsible']),
+            frozenset([u'regular_watcher', u'task_issuer', u'task_responsible']),
             settings.get('task-added-or-reassigned').badge_notification_roles)
 
         notification_settings.set_custom_setting(
@@ -81,7 +81,7 @@ class TestNotificationSettings(IntegrationTestCase):
     def test_get_setting_returns_a_specific_notification_setting(self):
         setting = NotificationSettings().get_setting('task-added-or-reassigned', self.regular_user.getId())
         self.assertEqual(
-            frozenset([u'task_issuer', u'task_responsible']),
+            frozenset([u'regular_watcher', u'task_issuer', u'task_responsible']),
             setting.badge_notification_roles)
 
     def test_get_setting_respects_custom_user_settings(self):
@@ -91,7 +91,7 @@ class TestNotificationSettings(IntegrationTestCase):
         setting = notification_settings.get_setting('task-added-or-reassigned', userid)
         self.assertIsInstance(setting, model.NotificationDefault)
         self.assertEqual(
-            frozenset([u'task_issuer', u'task_responsible']),
+            frozenset([u'regular_watcher', u'task_issuer', u'task_responsible']),
             setting.badge_notification_roles)
 
         notification_settings.set_custom_setting(
@@ -107,7 +107,7 @@ class TestNotificationSettings(IntegrationTestCase):
     def test_get_setting_by_activity_kind_returns_a_specific_notification_setting_related_to_an_activity_kind(self):
         setting = NotificationSettings().get_setting_by_activity_kind('task-added', self.regular_user.getId())
         self.assertEqual(
-            frozenset([u'task_issuer', u'task_responsible']),
+            frozenset([u'regular_watcher', u'task_issuer', u'task_responsible']),
             setting.badge_notification_roles)
 
     def test_get_setting_by_activity_kind_respects_custom_user_settings(self):
@@ -117,7 +117,7 @@ class TestNotificationSettings(IntegrationTestCase):
         setting = notification_settings.get_setting_by_activity_kind('task-added', userid)
         self.assertIsInstance(setting, model.NotificationDefault)
         self.assertEqual(
-            frozenset([u'task_issuer', u'task_responsible']),
+            frozenset([u'regular_watcher', u'task_issuer', u'task_responsible']),
             setting.badge_notification_roles)
 
         notification_settings.set_custom_setting(
@@ -155,7 +155,7 @@ class TestNotificationSettings(IntegrationTestCase):
         notification_settings.set_custom_setting(
             'task-added-or-reassigned', userid,
             mail_roles=['task_responsible'],
-            badge_roles=['task_issuer'],
+            badge_roles=['regular_watcher'],
             digest_roles=['task_issuer', 'task_responsible'])
 
         setting = notification_settings.get_setting('task-added-or-reassigned', userid)
@@ -164,7 +164,7 @@ class TestNotificationSettings(IntegrationTestCase):
         self.assertEqual(frozenset([u'task_responsible']),
                          setting.mail_notification_roles)
 
-        self.assertEqual(frozenset([u'task_issuer']),
+        self.assertEqual(frozenset([u'regular_watcher']),
                          setting.badge_notification_roles)
 
         self.assertEqual(frozenset([u'task_issuer', u'task_responsible']),
@@ -191,10 +191,10 @@ class TestNotificationSettings(IntegrationTestCase):
                          setting.digest_notification_roles)
 
         notification_settings.set_custom_setting(
-            'task-added-or-reassigned', userid, mail_roles=['task_issuer'], digest_roles=[])
+            'task-added-or-reassigned', userid, mail_roles=['regular_watcher'], digest_roles=[])
 
         setting = notification_settings.get_setting('task-added-or-reassigned', userid)
-        self.assertEqual(frozenset([u'task_issuer']),
+        self.assertEqual(frozenset([u'regular_watcher']),
                          setting.mail_notification_roles)
 
         self.assertEqual(frozenset([u'task_issuer']),

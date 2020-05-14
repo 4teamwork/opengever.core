@@ -5,6 +5,7 @@ from opengever.activity.notification_settings import NotificationSettings
 from opengever.activity.model.settings import NotificationSetting
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import IntegrationTestCase
 import json
@@ -29,9 +30,10 @@ class TestListSettings(IntegrationTestCase):
             [item.get('id') for item in NotificationSettings().configuration])
 
         task_added = [item for item in activities if item.get('kind') == 'task-added-or-reassigned'][0]
-        self.assertEquals({u'task_issuer': False, u'task_responsible': True},
-                          task_added['mail'])
-        self.assertEquals({u'task_issuer': True, u'task_responsible': True},
+        self.assertEquals(
+            {u'regular_watcher': False, u'task_issuer': False, u'task_responsible': True},
+            task_added['mail'])
+        self.assertEquals({u'regular_watcher': True, u'task_issuer': True, u'task_responsible': True},
                           task_added['badge'])
         self.assertEquals('default', task_added['setting_type'])
 
@@ -43,7 +45,7 @@ class TestListSettings(IntegrationTestCase):
                        mail_notification_roles=[TASK_RESPONSIBLE_ROLE],
                        badge_notification_roles=[TASK_ISSUER_ROLE,
                                                  TASK_RESPONSIBLE_ROLE],
-                       digest_notification_roles=[TASK_ISSUER_ROLE]))
+                       digest_notification_roles=[WATCHER_ROLE]))
 
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='notification-settings/list')
@@ -53,12 +55,15 @@ class TestListSettings(IntegrationTestCase):
             item for item in activities
             if item.get('kind') == 'task-added-or-reassigned'][0]
 
-        self.assertEquals({u'task_issuer': False, u'task_responsible': True},
-                          accept['mail'])
-        self.assertEquals({u'task_issuer': True, u'task_responsible': True},
-                          accept['badge'])
-        self.assertEquals({u'task_issuer': True, u'task_responsible': False},
-                          accept['digest'])
+        self.assertEquals(
+            {u'regular_watcher': False, u'task_issuer': False, u'task_responsible': True},
+            accept['mail'])
+        self.assertEquals(
+            {u'regular_watcher': False, u'task_issuer': True, u'task_responsible': True},
+            accept['badge'])
+        self.assertEquals(
+            {u'regular_watcher': True, u'task_issuer': False, u'task_responsible': False},
+            accept['digest'])
         self.assertEquals('personal', accept['setting_type'])
 
     @browsing
@@ -85,7 +90,7 @@ class TestSaveSettings(IntegrationTestCase):
     features = ('activity', )
 
     data = {'kind': 'task-added-or-reassigned',
-            'mail': json.dumps([TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]),
+            'mail': json.dumps([TASK_RESPONSIBLE_ROLE, WATCHER_ROLE]),
             'badge': json.dumps([TASK_ISSUER_ROLE]),
             'digest': json.dumps([TASK_RESPONSIBLE_ROLE])}
 
@@ -123,7 +128,7 @@ class TestSaveSettings(IntegrationTestCase):
         self.assertEquals(1, len(settings))
 
         self.assertEquals('task-added-or-reassigned', settings[0].kind)
-        self.assertEquals(frozenset([TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]),
+        self.assertEquals(frozenset([TASK_RESPONSIBLE_ROLE, WATCHER_ROLE]),
                           settings[0].mail_notification_roles)
         self.assertEquals(frozenset([TASK_ISSUER_ROLE]),
                           settings[0].badge_notification_roles)
@@ -146,7 +151,7 @@ class TestSaveSettings(IntegrationTestCase):
         self.assertEquals(1, len(settings))
 
         self.assertEquals('task-added-or-reassigned', settings[0].kind)
-        self.assertEquals(frozenset([TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]),
+        self.assertEquals(frozenset([TASK_RESPONSIBLE_ROLE, WATCHER_ROLE]),
                           settings[0].mail_notification_roles)
         self.assertEquals(frozenset([TASK_ISSUER_ROLE]),
                           settings[0].badge_notification_roles)
