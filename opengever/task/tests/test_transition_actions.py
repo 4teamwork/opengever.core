@@ -2,14 +2,11 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
-from opengever.activity.roles import TASK_ISSUER_ROLE
-from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
 import re
 import unittest
-
 
 URL_WIHOUT_TOKEN_RE = re.compile(r'(.*)([\?, &]_authenticator=.*)')
 
@@ -125,23 +122,7 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
 
     def setUp(self):
         super(TestTaskTransitionActionsForOpen, self).setUp()
-        # XXX - we cannot yet fixturize SQL objects
-        regular_user_watcher = create(Builder('watcher').having(actorid=self.regular_user.id))
-        dossier_responsible_watcher = create(Builder('watcher').having(actorid=self.dossier_responsible.id))
         with self.login(self.regular_user):
-            task_resource = create(
-                Builder('resource')
-                .oguid(self.task.oguid.id)
-                )
-            # XXX - the subscriptions must match the fixture for the tests to make sense
-            create(
-                Builder('subscription')
-                .having(resource=task_resource, watcher=regular_user_watcher, role=TASK_RESPONSIBLE_ROLE)
-                )
-            create(
-                Builder('subscription')
-                .having(resource=task_resource, watcher=dossier_responsible_watcher, role=TASK_ISSUER_ROLE)
-                )
             self.set_workflow_state('task-state-open', self.task)
 
     @browsing

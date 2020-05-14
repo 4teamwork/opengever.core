@@ -80,7 +80,7 @@ class TestTeamTasks(IntegrationTestCase):
         # list comprehension.
         watchers = center.get_watchers(task)
         self.assertEquals(
-            [u'team:2', u'kathi.barfuss'],
+            [u'kathi.barfuss', u'team:2'],
             [watcher.actorid for watcher in watchers]
         )
 

@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import NotificationCenter
+from opengever.activity.model import Watcher
 from opengever.activity.model.notification import Notification
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.roles import WATCHER_ROLE
@@ -24,8 +25,7 @@ class TestMyNotifications(IntegrationTestCase):
 
         self.center = NotificationCenter(dispatchers=[BadgeIconDispatcher()])
 
-        self.test_watcher = create(Builder('watcher')
-                                .having(actorid=self.regular_user.getId()))
+        self.test_watcher = Watcher.query.get_by_actorid(self.regular_user.getId())
 
         self.resource_a = create(Builder('resource')
                                  .oguid('fd:123')

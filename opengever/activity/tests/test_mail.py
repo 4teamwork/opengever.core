@@ -23,8 +23,6 @@ class TestEmailNotification(IntegrationTestCase):
     def setUp(self):
         super(TestEmailNotification, self).setUp()
         # XXX - we cannot yet fixturize SQL objects
-        create(Builder('watcher').having(actorid=self.regular_user.id))
-        # XXX - we cannot yet fixturize SQL objects
         create(
             Builder('notification_setting')
             .having(
@@ -205,7 +203,6 @@ class TestNotificationMailsAndSavepoints(IntegrationTestCase):
             insert_notification_defaults(self.portal)
 
         task_responsible = self.regular_user
-        create(Builder('watcher').having(actorid=task_responsible.id))
 
         # Make sure mails to responsible are enabled for task added
         create(Builder('notification_setting')

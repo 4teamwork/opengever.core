@@ -9,21 +9,25 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import ticking_creator
+from ftw.builder.builder import original_create
 from ftw.bumblebee.interfaces import IBumblebeeUserSaltStore
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
 from ftw.tokenauth.pas.storage import CredentialStorage
+from opengever.activity.model import Watcher
+from opengever.activity.roles import TASK_ISSUER_ROLE
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
+from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.mail.tests import MAIL_DATA
 from opengever.officeconnector.helpers import get_auth_plugin
 from opengever.ogds.models.service import ogds_service
-from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
@@ -69,6 +73,27 @@ class OpengeverContentFixture(object):
         jwt_plugin = get_auth_plugin(api.portal.get())
         jwt_plugin.use_keyring = False
         jwt_plugin._secret = JWT_SECRET
+
+    def get_or_create_watcher(self, actorid):
+        watcher = Watcher.query.get_by_actorid(actorid)
+        if watcher:
+            return watcher
+        # With original_create the ticking_creator doesn't move the clock forward
+        # when an object is created
+        return original_create(Builder('watcher').having(actorid=actorid))
+
+    def create_task_subscriptions(self, obj):
+        oguid = Oguid.for_object(obj)
+        # With original_create the ticking_creator doesn't move the clock forward
+        # when an object is created
+        resource = original_create(Builder('resource').oguid(oguid.id))
+        responsible_watcher = self.get_or_create_watcher(obj.responsible)
+        issuer_watcher = self.get_or_create_watcher(obj.issuer)
+        original_create(Builder('subscription').having(resource=resource,
+                                                       watcher=responsible_watcher,
+                                                       role=TASK_RESPONSIBLE_ROLE))
+        original_create(Builder('subscription').having(resource=resource, watcher=issuer_watcher,
+                                                       role=TASK_ISSUER_ROLE))
 
     def create_fixture_content(self):
         with self.freeze_at_hour(4):
@@ -238,6 +263,7 @@ class OpengeverContentFixture(object):
             'meeting_user',
             u'Herbert',
             u'J\xe4ger',
+            email='herbert@jager.com',
             user_settings={'_seen_tours': '["*"]'},
             )
 
@@ -898,6 +924,7 @@ class OpengeverContentFixture(object):
                 issuer=self.dossier_responsible.getId(),
                 )
             ))
+        self.create_task_subscriptions(inbox_forwarding)
 
         self.register('inbox_forwarding_document', create(
             Builder('document')
@@ -1158,8 +1185,9 @@ class OpengeverContentFixture(object):
             .in_state('task-state-in-progress')
             .relate_to(self.document)
         ))
+        self.create_task_subscriptions(self.task)
 
-        self.register('subtask', create(
+        subtask = self.register('subtask', create(
             Builder('task')
             .within(self.task)
             .titled(u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
@@ -1173,6 +1201,7 @@ class OpengeverContentFixture(object):
             .in_state('task-state-resolved')
             .relate_to(self.document)
         ))
+        self.create_task_subscriptions(subtask)
 
         self.register('taskdocument', create(
             Builder('document')
@@ -1198,6 +1227,7 @@ class OpengeverContentFixture(object):
             .in_state('task-state-in-progress')
             .as_sequential_task()
         ))
+        self.create_task_subscriptions(sequential_task)
 
         seq_subtask_1 = self.register('seq_subtask_1', create(
             Builder('task')
@@ -1294,8 +1324,9 @@ class OpengeverContentFixture(object):
                 .in_state('task-state-in-progress')
                 .relate_to(self.meeting_document)
             ))
+            self.create_task_subscriptions(meeting_task)
 
-            self.register('meeting_subtask', create(
+            meeting_subtask = self.register('meeting_subtask', create(
                 Builder('task')
                 .within(meeting_task)
                 .titled(u'H\xf6rsaal reservieren')
@@ -1308,8 +1339,9 @@ class OpengeverContentFixture(object):
                 .in_state('task-state-resolved')
                 .relate_to(self.meeting_document)
             ))
+            self.create_task_subscriptions(meeting_subtask)
 
-        self.register('info_task', create(
+        info_task = self.register('info_task', create(
             Builder('task')
             .titled(u'Vertragsentw\xfcrfe 2018')
             .within(self.dossier)
@@ -1320,8 +1352,9 @@ class OpengeverContentFixture(object):
             )
             .relate_to(self.document)
         ))
+        self.create_task_subscriptions(info_task)
 
-        self.register('private_task', create(
+        private_task = self.register('private_task', create(
             Builder('task')
             .titled(u'Diskr\xe4te Dinge')
             .within(self.dossier)
@@ -1337,8 +1370,9 @@ class OpengeverContentFixture(object):
             .relate_to(self.document)
             .in_state('task-state-in-progress')
         ))
+        self.create_task_subscriptions(private_task)
 
-        self.register('inbox_task', create(
+        inbox_task = self.register('inbox_task', create(
             Builder('task')
             .titled(u're: Diskr\xe4te Dinge')
             .within(self.dossier)
@@ -1354,6 +1388,7 @@ class OpengeverContentFixture(object):
             .relate_to(self.document)
             .in_state('task-state-in-progress')
         ))
+        self.create_task_subscriptions(inbox_task)
 
     @staticuid()
     def create_expired_dossier(self):
@@ -1583,7 +1618,7 @@ class OpengeverContentFixture(object):
                 u'kunststuck.docx')
             ))
 
-        self.register('task_in_protected_dossier', create(
+        task_in_protected_dossier = self.register('task_in_protected_dossier', create(
             Builder('task')
             .within(protected_dossier_with_task)
             .titled(u'Ein notwendiges \xdcbel')
@@ -1597,6 +1632,7 @@ class OpengeverContentFixture(object):
             .in_state('task-state-in-progress')
             .relate_to(protected_document_with_task)
             ))
+        self.create_task_subscriptions(task_in_protected_dossier)
 
     @staticuid()
     def create_emails(self):

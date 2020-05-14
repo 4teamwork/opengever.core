@@ -6,6 +6,7 @@ from opengever.activity.model import Notification
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 from plone import api
+from opengever.activity.model import Resource
 
 
 class TestResolveNotificationView(IntegrationTestCase):
@@ -14,8 +15,7 @@ class TestResolveNotificationView(IntegrationTestCase):
         super(TestResolveNotificationView, self).setUp()
         # XXX - Cannot fixturise SQL objects yet.
         with self.login(self.regular_user):
-            oguid = Oguid.for_object(self.task)
-            resource = create(Builder('resource').oguid(oguid.id))
+            resource = Resource.query.get_by_oguid(Oguid.for_object(self.task))
             activity = create(Builder('activity').having(resource=resource))
             self.notification_id = 123
             create(

@@ -127,18 +127,18 @@ class TestToDoWatchers(IntegrationTestCase):
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
-            self.regular_user.getProperty('email'),
+            self.meeting_user.getProperty('email'),
             self.workspace_owner.getId(),
             'WorkspaceGuest')
 
-        self.login(self.regular_user, browser)
+        self.login(self.meeting_user, browser)
         my_invitations = browser.open(
             self.portal.absolute_url() + '/@my-workspace-invitations',
             method='GET',
             headers=self.api_headers,
             ).json
 
-        watcher = self.center.fetch_watcher(self.regular_user.getId())
+        watcher = self.center.fetch_watcher(self.meeting_user.getId())
         self.assertIsNone(watcher)
 
         # Accept invitation
@@ -147,7 +147,7 @@ class TestToDoWatchers(IntegrationTestCase):
             method='POST',
             headers=self.api_headers).json
 
-        watcher = self.center.fetch_watcher(self.regular_user.getId())
+        watcher = self.center.fetch_watcher(self.meeting_user.getId())
         self.assertIsNotNone(watcher)
 
         self.login(self.workspace_member, browser)

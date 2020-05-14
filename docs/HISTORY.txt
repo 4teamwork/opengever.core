@@ -7,6 +7,7 @@ Changelog
 - The widget used to select users or groups while protecting a business dossier now respects the sharing configuration. [mbaechtold]
 - Fix an issue where solr facet labels have not been transformed correctly. [elioschmutz]
 - Skip unknown attributes in POST @invitation endpoint. [elioschmutz]
+- Add watchers, resources and subscriptions to tasks and forwarding in fixtures. [tinagerber]
 - Add `is_admin_menu_visible` to the `@config` API endpoint. [mbaechtold]
 - Watchers GET API: Also include info about referenced_users and referenced_watcher_roles. [tinagerber]
 - Fix @solrsearch endpoint default sort order. [elioschmutz]

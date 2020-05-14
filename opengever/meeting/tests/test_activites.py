@@ -17,21 +17,15 @@ class TestMeetingActivities(IntegrationTestCase):
     @browsing
     def test_adding_proposal_adds_issuer_to_watchers(self, browser):
         self.login(self.committee_responsible, browser)
-
-        self.assertSubscribersLength(0)
-
         proposal = self.create_proposal_with_issuer(
             self.dossier_responsible, self.committee, browser)
 
-        self.assertSubscribersLength(1)
+        self.assertSubscribersLength(1, proposal)
         self.assertSubscribersForResource([self.dossier_responsible], proposal)
 
     @browsing
     def test_change_proposals_issuer_updates_watchers(self, browser):
         self.login(self.committee_responsible, browser)
-
-        self.assertSubscribersLength(0)
-
         proposal = self.create_proposal_with_issuer(
             self.dossier_responsible, self.committee, browser)
 
@@ -41,23 +35,21 @@ class TestMeetingActivities(IntegrationTestCase):
         form.save()
 
         self.assertSubscribersForResource([self.regular_user], proposal)
-        self.assertSubscribersLength(1)
+        self.assertSubscribersLength(1, proposal)
 
     @browsing
     def test_submit_proposal_adds_committee_users_to_watchers(self, browser):
         self.login(self.committee_responsible, browser)
-
-        self.assertSubscribersLength(0)
-
         proposal = self.create_proposal_with_issuer(
             self.dossier_responsible, self.committee, browser)
 
-        self.assertSubscribersLength(1)
+        self.assertSubscribersLength(1, proposal)
 
+        subscription_count = len(self.subscribers())
         submitted_proposal = self.submit_proposal(proposal, browser)
         committee_group_id = self.committee.load_model().group_id
 
-        self.assertSubscribersLength(1 + self.count_group_members(committee_group_id))
+        self.assertSubscribersLength(subscription_count + self.count_group_members(committee_group_id))
         self.assertSubscribersForResource([self.dossier_responsible], proposal)
         self.assertSubscribersForResource(
             self.get_group_members(committee_group_id),
@@ -66,23 +58,21 @@ class TestMeetingActivities(IntegrationTestCase):
     @browsing
     def test_reject_submitted_proposal_removes_committee_users_as_watchers(self, browser):
         self.login(self.committee_responsible, browser)
-
-        self.assertSubscribersLength(0)
-
         proposal = self.create_proposal_with_issuer(
             self.dossier_responsible, self.committee, browser)
 
-        self.assertSubscribersLength(1)
+        self.assertSubscribersLength(1, proposal)
 
+        subscription_count = len(self.subscribers())
         submitted_proposal = self.submit_proposal(proposal, browser)
         committee_group_id = self.committee.load_model().group_id
 
-        self.assertSubscribersLength(1 + self.count_group_members(committee_group_id))
+        self.assertSubscribersLength(subscription_count + self.count_group_members(committee_group_id))
 
         self.reject_proposal(submitted_proposal, browser)
 
         self.assertSubscribersForResource([self.dossier_responsible], proposal)
-        self.assertSubscribersLength(1)
+        self.assertSubscribersLength(subscription_count)
 
     @browsing
     def test_record_activity_on_comment_for_proposal_and_submitted_proposal(self, browser):
@@ -322,8 +312,8 @@ class TestMeetingActivities(IntegrationTestCase):
             [subscriber.id for subscriber in subscribers],
             self.subscribers(resource))
 
-    def assertSubscribersLength(self, length):
-        self.assertEqual(length, len(self.subscribers()))
+    def assertSubscribersLength(self, length, resource=None):
+        self.assertEqual(length, len(self.subscribers(resource)))
 
     def clear_subscribers(self):
         Subscription.query.delete()
