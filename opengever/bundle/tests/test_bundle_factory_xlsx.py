@@ -9,6 +9,17 @@ import os
 
 class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
 
+    def test_xlsx_bundle_factory_fails_with_grouped_by_three(self):
+        input_path = assets.get_path('invalid_repository_grouped_by_three.xlsx')
+
+        args = parse_args([input_path,
+                           self.tempdir,
+                           '--users-group', 'Test group'])
+
+        with self.assertRaises(InvalidXLSXException):
+            factory = BundleFactory(args)
+            factory.dump_bundle()
+
     def test_xlsx_bundle_factory_fails_with_invalid_parents(self):
         input_path = assets.get_path('invalid_repository_missing_parent.xlsx')
 

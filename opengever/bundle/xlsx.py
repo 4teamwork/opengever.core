@@ -49,6 +49,12 @@ class XLSXNode(object):
         if reference_number:
             level = len(reference_number.split('.'))
             reference_number_prefix = reference_number.split('.')[-1]
+            parts = reference_number.split('.')
+            if any(len(part) >= 3 for part in parts):
+                raise InvalidXLSXException(
+                    "It looks like reference number {} uses the"
+                    "'grouped_by_three' formatter which is currently not "
+                    "supported by bundle factory".format(reference_number))
         else:
             level = 0
             reference_number = None
