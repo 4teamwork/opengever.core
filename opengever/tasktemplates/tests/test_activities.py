@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.model import Activity
 from opengever.testing import IntegrationTestCase
-from plone import api
 
 
 class TestTaskTemplateActivites(IntegrationTestCase):
@@ -37,11 +36,11 @@ class TestTaskTemplateActivites(IntegrationTestCase):
         seq1, seq2 = main_task.objectValues()
 
         self.assertItemsEqual(
-            [main_task, seq1, seq2],
+            [main_task, main_task, seq1, seq2],
             [activity.resource.oguid.resolve_object() for activity in Activity.query.all()])
 
         self.assertItemsEqual(
-            [u'task-transition-open-in-progress', u'task-added', u'task-added'],
+            [u'task-added', u'task-transition-open-in-progress', u'task-added', u'task-added'],
             [activity.kind for activity in Activity.query.all()])
 
     @browsing
@@ -72,6 +71,9 @@ class TestTaskTemplateActivites(IntegrationTestCase):
         main_task = self.dossier.objectValues()[-1]
         seq1, seq2 = main_task.objectValues()
 
-        self.assertItemsEqual([main_task, seq1],
-                              [activity.resource.oguid.resolve_object()
-                               for activity in Activity.query.all()])
+        self.assertItemsEqual([
+          (u'task-added', main_task),
+          (u'task-transition-open-in-progress', main_task),
+          (u'task-added', seq1)],
+          [(activity.kind, activity.resource.oguid.resolve_object())
+           for activity in Activity.query.all()])

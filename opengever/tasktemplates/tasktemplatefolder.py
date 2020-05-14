@@ -53,8 +53,8 @@ class TaskTemplateFolderTrigger(object):
         self.request = getRequest()
 
     def generate(self):
-        alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         main_task = self.create_main_task()
+        alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         self.create_subtasks(main_task)
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
 
