@@ -10,6 +10,7 @@ Changelog
 - Skip unknown attributes in POST @invitation endpoint. [elioschmutz]
 - Add watchers, resources and subscriptions to tasks and forwarding in fixtures. [tinagerber]
 - Fix activity bug when creating tasks with tasktemplates. [tinagerber]
+- Add basic support for xlsx sources to bundle factory. [deiferni]
 - Add `is_admin_menu_visible` to the `@config` API endpoint. [mbaechtold]
 - Watchers GET API: Also include info about referenced_users and referenced_watcher_roles. [tinagerber]
 - Fix @solrsearch endpoint default sort order. [elioschmutz]

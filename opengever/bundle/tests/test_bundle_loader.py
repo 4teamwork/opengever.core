@@ -2,9 +2,9 @@ from opengever.bundle.loader import BundleLoader
 from opengever.bundle.loader import IngestionSettingsReader
 from opengever.bundle.loader import ItemPreprocessor
 from opengever.bundle.loader import unicode2bytes
+from opengever.bundle.tests import assets
 from opengever.bundle.tests.helpers import get_portal_type
 from opengever.bundle.tests.helpers import get_title
-from pkg_resources import resource_filename as rf
 from unittest import TestCase
 import collections
 import jsonschema
@@ -12,7 +12,7 @@ import tempfile
 
 
 def get_bundle_path(bundle_name):
-    return rf('opengever.bundle.tests', 'assets/%s' % bundle_name)
+    return assets.get_path(bundle_name)
 
 
 class TestBundleLoader(TestCase):
@@ -97,7 +97,7 @@ class TestBundleLoader(TestCase):
             self.load_bundle(bundle_path)
 
     def test_skips_missing_files_gracefully(self):
-        bundle = self.load_bundle(get_bundle_path('partial.bundle'))
+        bundle = self.load_bundle(get_bundle_path('partial.oggbundle'))
         self.assertEqual(1, len(list(bundle)))
 
 
