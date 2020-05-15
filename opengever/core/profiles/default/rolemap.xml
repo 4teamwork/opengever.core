@@ -54,6 +54,10 @@
       <role name="Manager" />
     </permission>
 
+    <permission name="opengever.api: View AllowedRolesAndPrincipals" acquire="False">
+      <role name="ServiceKeyUser" />
+    </permission>
+
     <!-- CMFEDITIONS -->
     <permission name="CMFEditions: Save new version" acquire="True">
       <role name="Administrator" />

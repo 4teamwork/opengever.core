@@ -1,0 +1,11 @@
+<rolemap>
+
+  <permissions>
+
+    <permission name="opengever.api: View AllowedRolesAndPrincipals" acquire="False">
+      <role name="ServiceKeyUser" />
+    </permission>
+
+  </permissions>
+
+</rolemap>

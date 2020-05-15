@@ -28,7 +28,8 @@ Lese-Berechtigung.
 Auslesen der "allowed roles and principals" eines Objekts (GET)
 ---------------------------------------------------------------
 
-Benötigte Berechtigung: ``opengever.api.ViewAllowedRolesAndPrincipals``
+Benötigte Berechtigung: ``opengever.api.ViewAllowedRolesAndPrincipals`` (standardmässig
+der Rolle `ServiceKeyUser` zugewiesen).
 
 
 .. http:get:: /(path)/@allowed-roles-and-principals
