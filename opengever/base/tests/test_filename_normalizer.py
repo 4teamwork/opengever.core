@@ -1,5 +1,6 @@
-from unittest import TestCase
+from opengever.base.model import FILENAME_LENGTH
 from opengever.base.filename import GeverFileNameNormalizer
+from unittest import TestCase
 import string
 import sys
 import unicodedata
@@ -16,26 +17,47 @@ class TestFilenameNormalizer(TestCase):
                          self.normalizer.normalize_name(unicode(string.ascii_letters)))
 
     def test_maximal_filename_length(self):
-        filename = u''.join('a' for i in range(2*self.max_length))
-        self.assertEqual(self.max_length, len(self.normalizer.normalize_name(filename)))
+        filename = u''.join('a' for i in range(2 * self.max_length))
+        self.assertEqual(self.max_length,
+                         len(self.normalizer.normalize_name(filename)))
+
+    def test_filename_in_favorites_can_handle_long_filename(self):
+        filename = u''.join('a' for i in range(2 * self.max_length))
+        self.assertTrue(
+            len(self.normalizer.normalize_name(filename)) < FILENAME_LENGTH)
+
+    def test_filename_in_favorites_can_handle_long_filename_with_extension(self):
+        filename = u''.join('a' for i in range(2 * self.max_length)) + ".jpeg"
+        self.assertTrue(
+            len(self.normalizer.normalize_name(filename)) < FILENAME_LENGTH)
+
+    def test_filename_in_favorites_can_handle_long_filename_with_long_extension(self):
+        basename = u''.join('a' for i in range(2 * self.max_length))
+        filename = ".".join((basename, basename))
+        self.assertTrue(
+            len(self.normalizer.normalize_name(filename)) < FILENAME_LENGTH)
 
     def test_filename_cropping_happens_after_character_mapping(self):
-        filename = u''.join(u'\xe4' for i in range(2*self.max_length))
-        self.assertEqual(self.max_length, len(self.normalizer.normalize_name(filename)))
+        filename = u''.join(u'\xe4' for i in range(2 * self.max_length))
+        self.assertEqual(self.max_length,
+                         len(self.normalizer.normalize_name(filename)))
 
     def test_filename_cropping_happens_after_character_decoding(self):
-        filename = u''.join(u'\xe6' for i in range(2*self.max_length))
-        self.assertEqual(self.max_length, len(self.normalizer.normalize_name(filename)))
+        filename = u''.join(u'\xe6' for i in range(2 * self.max_length))
+        self.assertEqual(self.max_length,
+                         len(self.normalizer.normalize_name(filename)))
 
     def test_filename_cropping_happens_after_consecutive_spaces_elimination(self):
-        filename = u''.join(u'  aa' for i in range(2*self.max_length))
-        self.assertEqual(self.max_length, len(self.normalizer.normalize_name(filename)))
+        filename = u''.join(u'  aa' for i in range(2 * self.max_length))
+        self.assertEqual(self.max_length,
+                         len(self.normalizer.normalize_name(filename)))
 
     def test_filename_cropped_length_does_not_include_file_extension(self):
-        filename = u''.join(u'\xe4' for i in range(2*self.max_length))
+        filename = u''.join(u'\xe4' for i in range(2 * self.max_length))
         extension = '.txt'
         expected_length = self.max_length + len(extension)
-        self.assertEqual(expected_length, len(self.normalizer.normalize(filename+extension)))
+        self.assertEqual(expected_length,
+                         len(self.normalizer.normalize(filename+extension)))
 
     def test_normalizer_handles_non_unicode_strings(self):
         self.assertTrue(isinstance(self.normalizer.normalize("a non unicode string"), unicode))
@@ -104,13 +126,20 @@ class TestFilenameNormalizer(TestCase):
             self.assertEqual(extension,
                              self.normalizer.normalize_extension(extension))
 
-    def test_split_filename_extension(self):
+    def test_split_filename_extension_works_for_length_up_to_4_characters(self):
         self.assertEqual((u'filename', u'txt'),
                          self.normalizer.split_filename_extension(u'filename.txt'))
         self.assertEqual((u'filename', u'jpeg'),
                          self.normalizer.split_filename_extension(u'filename.jpeg'))
-        self.assertEqual((u'my.filename', ''),
-                         self.normalizer.split_filename_extension(u'my.filename'))
+        self.assertEqual((u'my.jpegs', ''),
+                         self.normalizer.split_filename_extension(u'my.jpegs'))
+
+    def test_normalizer_handles_dotted_filenames(self):
+        filename = "my.dotted.file.name.ext"
+        self.assertEqual(u'my.dotted.file.name.ext',
+                         self.normalizer.normalize_name(filename))
+        self.assertEqual((u'my.dotted.file.name', 'ext'),
+                         self.normalizer.split_filename_extension(filename))
 
     def test_filename_normalization(self):
         self.assertEqual(u'Uebersicht.txt', self.normalizer.normalize(u'\xdcbersicht.txt'))

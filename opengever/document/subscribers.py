@@ -1,10 +1,7 @@
 from opengever.document import _
 from opengever.ogds.models.service import ogds_service
-from plone.i18n.normalizer.interfaces import IFileNameNormalizer
-from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-import os.path
 
 
 def resolve_document_author(document, event):
@@ -23,29 +20,6 @@ def set_digitally_available(doc, event):
         doc.digitally_available = True
     else:
         doc.digitally_available = False
-
-
-def sync_title_and_filename_handler(doc, event):
-    """Syncs the document and the filename (#586):
-
-    - If there is no title but a file, use the filename (without extension) as
-    title.
-    - If there is a title and a file, use the normalized title as filename
-
-    """
-    normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
-
-    if not doc.file:
-        return
-
-    basename, ext = os.path.splitext(doc.file.filename)
-    if not doc.title:
-        # use the filename without extension as title
-        doc.title = basename
-        doc.file.filename = normalizer.normalize(basename, extension=ext)
-    elif doc.title:
-        # use the title as filename
-        doc.file.filename = normalizer.normalize(doc.title, extension=ext)
 
 
 def set_copyname(doc, event):

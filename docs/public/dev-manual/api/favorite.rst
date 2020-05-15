@@ -32,6 +32,7 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
           {
               "@id": "http://localhost:8080/fd/@favorites/peter.mueller/3",
               "favorite_id": 3,
+              "filename": "Richtlinien Gesetzesentwuerfe.docx",
               "icon_class": "icon-dokument_word",
               "is_leafnode": null,
               "oguid": "fd:68398212",
@@ -45,6 +46,7 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
           {
               "@id": "http://localhost:8080/fd/@favorites/peter.mueller/57",
               "favorite_id": 57,
+              "filename": null,
               "icon_class": "contenttype-opengever-dossier-businesscasedossier",
               "is_leafnode": null,
               "is_subdossier": false,
@@ -85,6 +87,7 @@ Ein Favorit für ein beliebiges Objekt kann mittels POST Request hinzugefügt we
       {
           "@id": "http://localhost:8080/fd/@favorites/peter.mueller/20",
           "favorite_id": 20,
+          "filename": "Anfrage 2018.docx",
           "icon_class": "icon-dokument_word",
           "is_leafnode": null,
           "oguid": "fd:68398212",
@@ -139,6 +142,7 @@ Es ist aber möglich bei einem PATCH request die Objekt-Repräsentation als Resp
       {
           "@id": "http://localhost:8080/fd/@favorites/peter.mueller/20",
           "favorite_id": 20,
+          "filename": "Weekly Document.docx",
           "icon_class": "icon-dokument_word",
           "is_leafnode": null,
           "oguid": "fd:68398212",

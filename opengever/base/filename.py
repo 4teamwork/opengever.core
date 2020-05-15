@@ -126,7 +126,9 @@ class GeverFileNameNormalizer(GeverBaseStringNormalizer):
     * Only keep safe characters (letters, digits, whitespace and _.,=()+-)
     * Replace all other characters with whitespace
     * Replace consecutive spaces with a single space
-    * Truncate the length of the filename to 100 characters, not including the extension
+    * Truncate the length of the filename to 100 characters, not including the
+      extension (which which is limited to 5 characters with the current regex
+      used to determine it), so 105 total.
 
     In addition to the above, the filename extension normalization includes:
     * make the string lowercase
@@ -136,6 +138,9 @@ class GeverFileNameNormalizer(GeverBaseStringNormalizer):
 
     def __init__(self):
         super(GeverFileNameNormalizer, self).__init__()
+
+        # This maximal length should not be changed without also adapting
+        # the favorite model (opengever/base/favorite.py)
         self.max_length = 100
 
         self.unicode_mapping = {196: u'Ae', 198: u'Ae', 214: u'Oe', 220: u'Ue',
@@ -152,6 +157,8 @@ class GeverFileNameNormalizer(GeverBaseStringNormalizer):
         self.regex_substitution_list = ((forbidden_chars_regex, ' '),
                                         (multiple_spaces_regex, ' '))
 
+        # changing this regex and allowing longer extensions will have an
+        # influence on the total filename length
         self.filename_extension_regex = re.compile(r"^(.+)\.(\w{,4})$")
 
     def split_filename_extension(self, filename):

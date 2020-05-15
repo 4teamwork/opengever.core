@@ -9,8 +9,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
-from opengever.document.subscribers import sync_title_and_filename_handler
-from opengever.mail.mail import initalize_title
+from opengever.mail.mail import initialize_title
 from opengever.mail.mail import initialize_metadata
 from opengever.mail.mail import IOGMail
 from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
@@ -205,9 +204,8 @@ class FileLoaderSection(object):
             if obj.title == NO_SUBJECT_TITLE_FALLBACK:
                 # Reset the [No Subject] placeholder
                 obj.title = None
-                initalize_title(obj, None)
+                initialize_title(obj, None)
         else:
-            sync_title_and_filename_handler(obj, None)
             set_digitally_available(obj, None)
 
     def get_abs_filepath(self, item, filepath_key, path):

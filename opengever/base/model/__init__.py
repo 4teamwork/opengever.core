@@ -17,6 +17,8 @@ CONTENT_TITLE_LENGTH = 255
 # Sortable title length is a bit larger than content title due to number
 # padding (we make room for 5 numbers separated by dots and then some margin).
 SORTABLE_TITLE_LENGTH = CONTENT_TITLE_LENGTH + 45
+# Filenames are truncated to 100 characters plus the filename extension
+FILENAME_LENGTH = 105
 CSS_CLASS_LENGTH = 100
 EMAIL_LENGTH = 255
 FIRSTNAME_LENGTH = 255

@@ -191,6 +191,7 @@ class TestRepositoryFavoritesPost(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/@favorites/nicole.kohler/1',
              u'admin_unit': u'Hauptmandant',
              u'favorite_id': 1,
+             u'filename': u'Vertraegsentwurf.docx',
              u'icon_class': u'icon-docx',
              u'is_leafnode': None,
              u'is_subdossier': None,

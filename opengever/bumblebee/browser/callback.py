@@ -51,9 +51,9 @@ class ReceiveDocumentPDF(BaseDemandCallbackView):
         document_owner_id = IAnnotations(self.context)[PDF_SAVE_OWNER_ID_KEY]
         user = api.user.get(userid=document_owner_id)
         with api.env.adopt_user(user=user):
-            # filename will then be reset by the sync_title_and_filename_handler
+            # filename will be reset by the sync_title_and_filename
             self.get_document().update_file(file_upload, mimetype, filename=u"temp.pdf")
-            # This will notably call the sync_title_and_filename_handler
+            # Make sure all handlers are executed properly
             notify(ObjectModifiedEvent(self.context))
             IAnnotations(self.context)[PDF_SAVE_STATUS_KEY] = 'conversion-successful'
             IAnnotations(self.context).pop(PDF_SAVE_TOKEN_KEY)

@@ -1,6 +1,6 @@
 from ftw.mail.mail import IMail
 from opengever.base.transforms.msg2mime import Msg2MimeTransform
-from opengever.mail.mail import initalize_title
+from opengever.mail.mail import initialize_title
 from opengever.mail.mail import initialize_metadata
 from plone.namedfile.file import NamedBlobFile
 from plone.restapi.deserializer import json_body
@@ -37,7 +37,7 @@ class DeserializeMailFromJson(DeserializeFromJson):
         if create and 'message' in data:
             if not data.get('title'):
                 context._update_title_from_message_subject()
-                initalize_title(context, None)
+                initialize_title(context, None)
 
             initialize_metadata(context, None)
 

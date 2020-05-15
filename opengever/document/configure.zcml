@@ -203,18 +203,6 @@
 
   <subscriber
       for="opengever.document.document.IDocumentSchema
-           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
-      handler=".subscribers.sync_title_and_filename_handler"
-      />
-
-  <subscriber
-      for="opengever.document.document.IDocumentSchema
-           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".subscribers.sync_title_and_filename_handler"
-      />
-
-  <subscriber
-      for="opengever.document.document.IDocumentSchema
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.unshadow_on_upload"
       />

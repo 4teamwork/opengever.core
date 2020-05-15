@@ -6,6 +6,7 @@ from collective import dexteritytextindexer
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
+from opengever.base.model.favorite import Favorite
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import IBaseDocument
@@ -27,6 +28,7 @@ from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform import directives as form
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
@@ -214,12 +216,57 @@ class Document(Item, BaseDocumentMixin):
         """
         return False
 
+    def sync_title_and_filename(self):
+        """Syncs the document title and the filename.
+
+        - If there is no title but a file, use the filename (without extension)
+        as title.
+        - If there is a title and a file, use the normalized title as filenames
+        """
+        if not self.file:
+            return
+
+        normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
+
+        # Correctly handle cases where both the filename and the title are
+        # modified in the same request
+        filename = getattr(self, "_v_filename", self.file.filename)
+        title = getattr(self, "_v_title", self.title)
+
+        basename, ext = os.path.splitext(filename)
+        if not title:
+            # use the filename without extension as title
+            title = basename
+
+        self.__dict__["title"] = title
+        new_filename = normalizer.normalize(title, extension=ext)
+        if self.get_filename() != new_filename:
+            self.__dict__["file"].filename = new_filename
+            Favorite.query.update_filename(self)
+
+    @property
+    def title(self):
+        return self.__dict__.get('title')
+
+    @title.setter
+    def title(self, value):
+        if self.title == value:
+            return
+        self.__dict__['title'] = value
+        self._v_title = value
+        self.sync_title_and_filename()
+
     @property
     def file(self):
         return self.__dict__.get('file')
 
     @file.setter
     def file(self, value):
+        # For some reason this happens every time the edit form is saved, even
+        # when the file was not modified
+        if self.__dict__.get('file') == value:
+            return
+
         if self.__dict__.get('file'):
             # Self is not aquisition wrapped, but we need an aquisition
             # wrapped object for checking/creating an initial version.
@@ -235,6 +282,8 @@ class Document(Item, BaseDocumentMixin):
                 Versioner(document).create_initial_version()
 
         self.__dict__['file'] = value
+        self._v_filename = getattr(value, "filename", None)
+        self.sync_title_and_filename()
 
     def related_items(self, bidirectional=False, documents_only=False):
         _related_items = []

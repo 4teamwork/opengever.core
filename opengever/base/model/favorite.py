@@ -3,6 +3,7 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import CSS_CLASS_LENGTH
+from opengever.base.model import FILENAME_LENGTH
 from opengever.base.model import PORTAL_TYPE_LENGTH
 from opengever.base.model import UID_LENGTH
 from opengever.base.model import UNIT_ID_LENGTH
@@ -12,6 +13,7 @@ from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.query import BaseQuery
 from opengever.bumblebee import is_bumblebeeable
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.ogds.models.admin_unit import AdminUnit
@@ -39,7 +41,7 @@ class Favorite(Base):
         {})
 
     favorite_id = Column('id', Integer, Sequence("favorites_id_seq"),
-                primary_key=True)
+                         primary_key=True)
 
     admin_unit_id = Column(String(UNIT_ID_LENGTH), index=True, nullable=False)
     int_id = Column(Integer, index=True, nullable=False)
@@ -52,6 +54,7 @@ class Favorite(Base):
     is_title_personalized = Column(Boolean, default=False, nullable=False)
     portal_type = Column(String(PORTAL_TYPE_LENGTH))
     icon_class = Column(String(CSS_CLASS_LENGTH))
+    filename = Column(String(FILENAME_LENGTH))
 
     plone_uid = Column(String(UID_LENGTH))
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
@@ -75,10 +78,15 @@ class Favorite(Base):
         if IRepositoryFolder.providedBy(obj):
             is_leafnode = obj.is_leaf_node()
 
+        filename = None
+        if IBaseDocument.providedBy(obj):
+            filename = obj.get_filename()
+
         params = dict(
             userid=userid,
             oguid=Oguid.for_object(obj),
             title=truncated_title,
+            filename=filename,
             portal_type=obj.portal_type,
             icon_class=get_css_class(obj),
             plone_uid=IUUID(obj),
@@ -98,6 +106,7 @@ class Favorite(Base):
             'oguid': self.oguid.id,
             'uid': self.plone_uid,
             'title': self.title,
+            'filename': self.filename,
             'icon_class': self.icon_class,
             'target_url': self.get_target_url(),
             'tooltip_url': self.get_tooltip_url(),
@@ -191,6 +200,12 @@ class FavoriteQuery(BaseQuery):
             return
         query = self.by_object(obj)
         query.update({'is_leafnode': obj.is_leaf_node()})
+
+    def update_filename(self, obj):
+        if not IBaseDocument.providedBy(obj):
+            return
+        query = self.by_object(obj)
+        query.update({'filename': obj.get_filename()})
 
 
 Favorite.query_cls = FavoriteQuery

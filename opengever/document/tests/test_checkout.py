@@ -1,13 +1,11 @@
 from AccessControl import Unauthorized
 from datetime import date
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
-from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -255,7 +253,7 @@ class TestReverting(FunctionalTestCase):
                                .having(document_date=self.document_date)
                                .within(self.dossier)
                                .attach_file_containing(
-                                   u"INITIAL VERSION DATA", u"somefile.txt"))
+                                   u"INITIAL VERSION DATA", u"somefile.docx"))
 
         # trigger initial version creation
         self.document.file = NamedBlobFile(
@@ -306,6 +304,22 @@ class TestReverting(FunctionalTestCase):
         # GEVER's revert only retrieves the file
         self.manager.revert_to_version(2)
         self.assertEqual("New title", self.document.title)
+
+    def test_filename_is_synced_with_title_when_reverting_to_older_version(self):
+        self.assertEqual(u'Testdokum\xe4nt', self.document.title)
+        self.assertEqual(u'Testdokumaent.txt', self.document.get_filename())
+
+        self.document.title = "New title"
+        create_document_version(self.document, 3)
+        self.assertEqual(u'New title', self.document.title)
+        self.assertEqual(u'New title.txt', self.document.get_filename())
+
+        self.manager.revert_to_version(0)
+        # Reverting to older version should not change the filename
+        # as it should always be in sync with the title (which isn't
+        # affected by reverting). The extension on the other hand should
+        # get updated.
+        self.assertEqual("New title.docx", self.document.get_filename())
 
     def test_revert_disallowed_for_unprivileded_user(self):
         self.grant('Authenticated')
@@ -946,9 +960,12 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         # document isn't checked out and the old object is in the history
         self.assertIsNone(manager.get_checked_out_by())
 
-        self.assertEquals(u'Document1.doc',
-                          pr.retrieve(self.doc1, 0).object.file.filename)
-        self.assertEquals(u'blubb.txt', self.doc1.file.filename)
+        file_version0 = pr.retrieve(self.doc1, 0).object.file
+        self.assertEquals(u'Document1.doc', file_version0.filename)
+        self.assertEquals('Test data', file_version0.data)
+
+        self.assertEquals(u'Document1.txt', self.doc1.file.filename)
+        self.assertEquals('blubb blubb', self.doc1.file.data)
 
         manager.checkout()
         self.assertEquals('test_user_1_', manager.get_checked_out_by())
