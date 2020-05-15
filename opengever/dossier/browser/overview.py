@@ -96,10 +96,6 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
             'text/html', self.context.description,
             mimetype='text/x-web-intelligent').getData()
 
-    def is_subdossier_navigation_available(self):
-        main_dossier = self.context.get_main_dossier()
-        return main_dossier.has_subdossiers()
-
     def navigation_json_url(self):
         return '{}/dossier_navigation.json'.format(
             self.context.get_main_dossier().absolute_url())

@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc3 (unreleased)
 ------------------------
 
+- Improve performance of the subdossier tree (on the dossier overview tab). [mbaechtold]
 - Improve performance while determining repositoryfolder emptiness. [mbaechtold]
 - Improve performance while determining leaf nodes. [mbaechtold]
 - The widget used to select users or groups while protecting a business dossier now respects the sharing configuration. [mbaechtold]

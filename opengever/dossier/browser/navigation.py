@@ -30,12 +30,12 @@ class JSONNavigation(BrowserView):
                 'uid': api.content.get_uuid(obj=self.context)}
 
     def _tree(self):
-        subdossier_nodes = map(
+        nodes = map(
             self._brain_to_node,
             self.context.get_subdossiers(sort_on='sortable_title',
                                          review_state=DOSSIER_STATES_OPEN))
-        nodes = [self._context_as_node()] + subdossier_nodes
-
+        if nodes:
+            nodes = [self._context_as_node()] + nodes
         return make_tree_by_url(nodes)
 
     def _brain_to_node(self, brain):

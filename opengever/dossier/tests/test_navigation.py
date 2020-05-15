@@ -40,6 +40,11 @@ class TestNavigation(FunctionalTestCase):
             browser.json)
 
     @browsing
+    def test_empty_dossier_navigation(self, browser):
+        browser.login().visit(self.main_dossier, view='dossier_navigation.json')
+        self.assertEqual([], browser.json)
+
+    @browsing
     def test_dossiers_are_sorted_by_title(self, browser):
         sub1 = create(Builder('dossier')
                       .titled(u'XXX')

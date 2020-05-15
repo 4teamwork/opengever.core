@@ -7,7 +7,7 @@
     <div class="box" id="subdossiersBox">
       <h2 i18n:translate="">Dossier structure</h2>
 
-      <tal:block tal:condition="view/is_subdossier_navigation_available">
+      <tal:block>
         <div id="dossier-tree"
              tal:attributes="data-dossier-navigation-url view/navigation_json_url;
                              data-context-url context_url;"
@@ -24,9 +24,8 @@
         </script>
       </tal:block>
 
-      <tal:block tal:condition="not: view/is_subdossier_navigation_available">
-        <span i18n:translate="" >No Subdossiers</span>
-      </tal:block>
+      <!-- Will be made visible through JavaScript if the tree is empty. -->
+      <span id="dossier-tree-empty" i18n:translate="" style="display:none">No Subdossiers</span>
 
     </div>
   </div>
