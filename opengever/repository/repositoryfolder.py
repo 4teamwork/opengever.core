@@ -149,9 +149,13 @@ class RepositoryFolder(content.Container, RepositoryMixin):
     def is_leaf_node(self):
         """ Checks if the current repository folder is a leaf-node.
         """
-        for id, obj in self.contentItems():
+        for obj in self.objectValues():
+            # A repository folder cannot contain other repository folders and
+            # items of other content types at the same time.
             if obj.portal_type == self.portal_type:
                 return False
+            else:
+                return True
         return True
 
 
