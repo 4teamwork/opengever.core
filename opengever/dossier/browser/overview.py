@@ -4,7 +4,6 @@ from opengever.base.browser.helper import get_css_class
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Participation
 from opengever.dossier import _
-from opengever.dossier import _ as _dossier
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -150,7 +149,7 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
             pass
 
         responsible = ResponsibleParticipant()
-        responsible.roles = _dossier(u'label_responsible', 'Responsible')
+        responsible.roles = _(u'label_responsible', 'Responsible')
         responsible.role_list = responsible.roles
 
         dossier_adpt = IDossier(self.context)
