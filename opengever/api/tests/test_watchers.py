@@ -268,3 +268,46 @@ class TestWatchersDelete(IntegrationTestCase):
             {"message": "DELETE does not take any data",
              "type": "BadRequest"},
             browser.json)
+
+
+class TestPossibleWatchers(IntegrationTestCase):
+
+    features = ('activity', )
+
+    @browsing
+    def test_get_possible_watchers_for_and_object(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+        url = self.task.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'items': [{
+                u'title': u'Fr\xfchling F\xe4ivel (faivel.fruhling)',
+                u'token': u'faivel.fruhling'
+                }],
+            u'items_total': 1}
+
+        self.assertEqual(expected_json, browser.json)
+
+        center.add_watcher_to_resource(self.task, self.dossier_manager.getId(), WATCHER_ROLE)
+        browser.open(url, method='GET', headers=self.api_headers)
+        expected_json = {
+            u'@id': url,
+            u'items': [],
+            u'items_total': 0}
+
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_response_is_batched(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = self.task.absolute_url() + '/@possible-watchers?b_size=5'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(5, len(browser.json.get('items')))
+        self.assertEqual(16, browser.json.get('items_total'))
+        self.assertIn('batching', browser.json)

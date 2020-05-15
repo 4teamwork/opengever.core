@@ -13,6 +13,7 @@ Changelog
 - Fix activity bug when creating tasks with tasktemplates. [tinagerber]
 - Add basic support for xlsx sources to bundle factory. [deiferni]
 - Add new filename column to Favorites. [njohner]
+- Implement @possible-watchers endpoint. [elioschmutz]
 - Add `is_admin_menu_visible` to the `@config` API endpoint. [mbaechtold]
 - Watchers GET API: Also include info about referenced_users and referenced_watcher_roles. [tinagerber]
 - Fix @solrsearch endpoint default sort order. [elioschmutz]

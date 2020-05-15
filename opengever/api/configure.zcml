@@ -718,6 +718,14 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@possible-watchers"
+      for="opengever.task.task.ITask"
+      factory=".watchers.PossibleWatchers"
+      permission="zope2.View"
+      />
+
   <adapter
       factory=".watchers.Watchers"
       name="watchers"
