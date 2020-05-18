@@ -16,19 +16,6 @@ def date_of_completion(obj):
 
 
 @indexer(ITask)
-def assigned_client(obj):
-    """Indexes the client of the responsible. Since the he may be assigned
-    to multiple clients, we need to use the client which was selected in the
-    task.
-    """
-
-    if not obj.responsible or not obj.responsible_client:
-        return ''
-    else:
-        return obj.responsible_client
-
-
-@indexer(ITask)
 def sequence_number(obj):
     """ Indexer for the sequence_number """
     return obj._sequence_number
