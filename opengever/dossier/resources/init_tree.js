@@ -14,6 +14,11 @@ $(function() {
   }
 
   function render_tree(tree_data) {
+    if (tree_data.length === 0 ) {
+      $('#dossier-tree').hide();
+      $('#dossier-tree-empty').show();
+      return;
+    }
     var navtree = make_tree(tree_data, {
       components: [new BusinessCaseDossierIconLinks()],
       expandActive: true
