@@ -11,6 +11,7 @@ class RemoveDiscussionIndexesAndMetadataColumns(UpgradeStep):
             'client_id',
             'commentators',
             'total_comments',
+            'in_reply_to',
         ]
         columns = [
             'commentators',
