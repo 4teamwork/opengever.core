@@ -23,9 +23,6 @@ class TestCatalog(FunctionalTestCase):
     def test_task_type_index_registered(self):
         self.assertIn('task_type', self.catalog.indexes())
 
-    def test_client_id_index_registered(self):
-        self.assertIn('client_id', self.catalog.indexes())
-
     def test_sequence_number_index_registered(self):
         self.assertIn('sequence_number', self.catalog.indexes())
 
