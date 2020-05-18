@@ -30,21 +30,14 @@ class PopulateFilenameColumnInFavorites(SQLUpgradeStep):
             .where(favorites_table.c.admin_unit_id == current_admin_unit_id)
             .distinct()
         ).fetchall()
-        plone_uids = [row[0] for row in rows]
+        favorite_uids = [row[0] for row in rows]
 
-        for plone_uid in plone_uids:
-            brains = self.catalog_unrestricted_search({'UID': plone_uid})
-            if len(brains) != 1:
-                LOG.error(
-                    'Could not find a unique brain for the UID={}'.format(plone_uid)
-                )
-                continue
-            brain = brains[0]
-
-            filename = brain.filename
+        query = {"object_provides": "opengever.document.behaviors.IBaseDocument",
+                 "UID": favorite_uids}
+        for brain in self.catalog_unrestricted_search(query=query):
+            filename = brain.filename or u""
             self.execute(
                 favorites_table.update()
                 .values(filename=filename)
-                .where(favorites_table.c.plone_uid == plone_uid)
-                .where(favorites_table.c.admin_unit_id == current_admin_unit_id)
-            )
+                .where(favorites_table.c.plone_uid == brain.UID)
+                .where(favorites_table.c.admin_unit_id == current_admin_unit_id))
