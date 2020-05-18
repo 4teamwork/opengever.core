@@ -5,7 +5,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 
 
-class TestRepositoryPathSourceBinder(IntegrationTestCase):
+class TestRepositoryPathSourceBinderSolr(SolrIntegrationTestCase):
 
     def test_navigation_tree_query_is_limited_to_current_repository(self):
         self.login(self.regular_user)
@@ -19,6 +19,56 @@ class TestRepositoryPathSourceBinder(IntegrationTestCase):
         source = source_binder(self.leaf_repofolder)
         self.assertEqual({'query': '/plone/ordnungssystem'},
                          source.navigation_tree_query['path'])
+
+    def test_query_is_limited_to_current_repository(self):
+        self.login(self.manager)
+
+        source_binder = RepositoryPathSourceBinder()
+        source = source_binder(self.branch_repofolder)
+
+        self.document.title = 'source test document'
+        self.document.reindexObject()
+
+        self.proposaldocument.title = 'source test proposal document'
+        self.proposaldocument.reindexObject()
+
+        self.inbox_document.title = 'source test inbox document'
+        self.inbox_document.reindexObject()
+
+        self.private_document.title = 'source test private document'
+        self.private_document.reindexObject()
+        self.commit_solr()
+
+        self.assertItemsEqual(
+            ['source test document', 'source test proposal document'],
+            [term.title for term in source.search("source")])
+
+
+class TestRepositoryPathSourceBinder(IntegrationTestCase):
+
+    features = ('!solr', )
+
+    def test_query_is_limited_to_current_repository(self):
+        self.login(self.manager)
+
+        source_binder = RepositoryPathSourceBinder()
+        source = source_binder(self.branch_repofolder)
+
+        self.document.title = 'source test document'
+        self.document.reindexObject()
+
+        self.proposaldocument.title = 'source test proposal document'
+        self.proposaldocument.reindexObject()
+
+        self.inbox_document.title = 'source test inbox document'
+        self.inbox_document.reindexObject()
+
+        self.private_document.title = 'source test private document'
+        self.private_document.reindexObject()
+
+        self.assertItemsEqual(
+            ['source test document', 'source test proposal document'],
+            [term.title for term in source.search("source")])
 
 
 class TestDossierSourceBinder(SolrIntegrationTestCase):
