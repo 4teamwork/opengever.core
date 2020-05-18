@@ -91,7 +91,6 @@ class TestSolr(IntegrationTestCase):
             'getObjPositionInParent',
             'is_default_page',
             'is_folderish',
-            'meta_type',
             'predecessor',
             'sortable_author',
         ]
@@ -119,7 +118,6 @@ class TestSolr(IntegrationTestCase):
             'in_response_to',
             'is_folderish',
             'listCreators',
-            'meta_type',
             'predecessor',
             'title_de',
             'title_fr',

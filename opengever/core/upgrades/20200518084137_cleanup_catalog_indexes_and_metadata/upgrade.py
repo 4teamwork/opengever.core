@@ -10,6 +10,7 @@ INDEXES_TO_REMOVE = [
     'expires',
     'getRawRelatedItems',
     'in_reply_to',
+    'meta_type',
     'total_comments',
 ]
 
@@ -22,6 +23,7 @@ METADATA_TO_REMOVE = [
     'expires',
     'last_comment_date',
     'location',
+    'meta_type',
     'ModificationDate',
     'total_comments',
 ]

@@ -118,6 +118,7 @@ def remove_unused_catalog_indexes(site):
         'expires',
         'getRawRelatedItems',
         'in_reply_to',
+        'meta_type',
         'total_comments',
     ]
     catalog = api.portal.get_tool('portal_catalog')
@@ -135,6 +136,7 @@ def remove_unused_catalog_metadata(site):
         'expires',
         'last_comment_date',
         'location',
+        'meta_type',
         'ModificationDate',
         'total_comments',
     ]
