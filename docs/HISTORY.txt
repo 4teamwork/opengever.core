@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc3 (unreleased)
 ------------------------
 
+- Limit query to current repository in RepositoryPathSourceBinder. [njohner]
 - Improve performance of the subdossier tree (on the dossier overview tab). [mbaechtold]
 - Improve performance while determining repositoryfolder emptiness. [mbaechtold]
 - Improve performance while determining leaf nodes. [mbaechtold]

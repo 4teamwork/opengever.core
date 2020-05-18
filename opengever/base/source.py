@@ -152,6 +152,12 @@ class RepositoryPathSourceBinder(SolrObjPathSourceBinder):
             self.navigation_tree_query['path'] = {}
 
         self.navigation_tree_query['path']['query'] = root_path
+        # We also add the path filter to the selectable_filter as the
+        # navigation_tree_query is not used when querying the source and
+        # we need to only allow to query objects in the root_path.
+        if "path" not in self.selectable_filter.criteria:
+            self.selectable_filter.criteria['path'] = {}
+        self.selectable_filter.criteria['path']['query'] = root_path
 
         modificator = queryMultiAdapter((
             context, context.REQUEST),

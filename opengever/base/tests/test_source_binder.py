@@ -123,7 +123,8 @@ class TestRelatedDossierAutocomplete(IntegrationTestCase):
         )
         self.assert_solr_called(
             self.solr, 'empty', rows=20, fl=['path'],
-            filters=[u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker']
+            filters=[u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
+                     u'path_parent:\\/plone\\/ordnungssystem']
         )
 
     @browsing
