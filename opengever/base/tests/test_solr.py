@@ -84,7 +84,6 @@ class TestSolr(IntegrationTestCase):
             'blocked_local_roles',
             'client_id',
             'cmf_uid',
-            'commentators',
             'contactid',
             'date_of_completion',
             'effective',
@@ -100,7 +99,6 @@ class TestSolr(IntegrationTestCase):
             'meta_type',
             'predecessor',
             'sortable_author',
-            'total_comments',
         ]
 
         for index in catalog.indexes():
@@ -117,9 +115,7 @@ class TestSolr(IntegrationTestCase):
             'ExpirationDate',
             'ModificationDate',
             'Type',
-            'author_name',
             'cmf_uid',
-            'commentators',
             'contactid',
             'css_icon_class',
             'date_of_completion',
@@ -131,14 +127,12 @@ class TestSolr(IntegrationTestCase):
             'getRemoteUrl',
             'in_response_to',
             'is_folderish',
-            'last_comment_date',
             'listCreators',
             'location',
             'meta_type',
             'predecessor',
             'title_de',
             'title_fr',
-            'total_comments'
         ]
 
         for metadata in catalog.schema():
