@@ -167,11 +167,9 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'ExpirationDate',
                               'Subject',
                               'Type',
-                              'author_name',
                               'bumblebee_checksum',
                               'checked_out',
                               'cmf_uid',
-                              'commentators',
                               'contactid',
                               'css_icon_class',
                               'date_of_completion',
@@ -198,7 +196,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'is_subdossier',
                               'is_subtask',
                               'issuer',
-                              'last_comment_date',
                               'lastname',
                               'location',
                               'meta_type',
@@ -214,7 +211,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'task_type',
                               'title_de',
                               'title_fr',
-                              'total_comments',
                               'trashed']
 
         # Make sure no metadata key is in both lists of unchanged and modified metadata
@@ -302,7 +298,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'checked_out',
                                'client_id',
                                'cmf_uid',
-                               'commentators',
                                'contactid',
                                'created',
                                'date_of_completion',
@@ -340,7 +335,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'review_state',
                                'sortable_author',
                                'task_type',
-                               'total_comments',
                                'trashed']
 
         # Make sure no index is in both lists of unchanged and modified indexdata
