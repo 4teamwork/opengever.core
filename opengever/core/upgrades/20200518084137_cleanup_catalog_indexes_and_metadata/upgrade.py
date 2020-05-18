@@ -6,6 +6,7 @@ INDEXES_TO_REMOVE = [
     'assigned_client',
     'commentators',
     'total_comments',
+    'expires',
 ]
 
 METADATA_TO_REMOVE = [
@@ -14,6 +15,7 @@ METADATA_TO_REMOVE = [
     'commentators',
     'last_comment_date',
     'total_comments',
+    'expires',
 ]
 
 
