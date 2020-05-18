@@ -4371,8 +4371,7 @@ html { font-size: 12px; }
 .documentMetadata td { word-break: break-word; }
 .documentMetadata td .filename { word-break: break-all; }
 
-.linkWrapper > .contenttype-opengever-dossier-businesscasedossier { display: inline-block; }
-.linkWrapper > .contenttype-opengever-dossier-businesscasedossier > span { vertical-align: middle; }
+.linkWrapper > .contenttype-opengever-dossier-businesscasedossier { display: inline !important; }
 .linkWrapper > .contenttype-opengever-dossier-businesscasedossier:before { vertical-align: middle; padding-bottom: 6px; }
 
 .horizontal-spacer { border: 0; margin-bottom: 1.5em; }
