@@ -8,6 +8,7 @@ class RemoveDiscussionIndexesAndMetadataColumns(UpgradeStep):
 
     def __call__(self):
         indexes = [
+            'client_id',
             'commentators',
             'total_comments',
         ]

@@ -302,7 +302,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'assigned_client',
                                'blocked_local_roles',
                                'checked_out',
-                               'client_id',
                                'cmf_uid',
                                'commentators',
                                'contactid',

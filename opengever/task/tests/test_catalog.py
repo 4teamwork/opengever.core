@@ -26,9 +26,6 @@ class TestCatalog(FunctionalTestCase):
     def test_assigned_client_index_registered(self):
         self.assertIn('assigned_client', self.catalog.indexes())
 
-    def test_client_id_index_registered(self):
-        self.assertIn('client_id', self.catalog.indexes())
-
     def test_sequence_number_index_registered(self):
         self.assertIn('sequence_number', self.catalog.indexes())
 

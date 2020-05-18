@@ -114,6 +114,7 @@ def remove_unused_catalog_indexes_and_columns(context):
     indexes = [
         'commentators',
         'total_comments',
+        'client_id',
     ]
     columns = [
         'commentators',
