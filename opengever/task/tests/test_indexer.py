@@ -33,17 +33,6 @@ class TestTaskIndexers(FunctionalTestCase):
             obj2brain(self.task).date_of_completion,
             datetime(2012, 2, 2))
 
-    def test_assigned_client(self):
-        self.assertEquals(
-            obj2brain(self.task).assigned_client, 'org-unit-1')
-
-        self.task.responsible = 'hugo.boss'
-        self.task.responsible_client = 'org-unit-2'
-        self.task.reindexObject()
-
-        self.assertEquals(
-            obj2brain(self.task).assigned_client, 'org-unit-2')
-
     def test_is_subtask(self):
         self.subtask = create(Builder("task").within(self.task)
                                              .titled("Test task 1")
