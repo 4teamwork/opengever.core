@@ -1,3 +1,4 @@
+from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite
 import logging
@@ -81,6 +82,8 @@ def should_prevent_duplicate_installation(profile):
 def installed(site):
     trigger_subpackage_hooks(site)
     enable_secure_flag_for_cookies(site)
+    remove_unused_catalog_indexes(site)
+    remove_unused_catalog_metadata(site)
 
 
 def trigger_subpackage_hooks(site):
@@ -106,3 +109,49 @@ def trigger_subpackage_hooks(site):
 def enable_secure_flag_for_cookies(context):
     session_plugin = context.acl_users.session
     session_plugin.secure = True
+
+
+def remove_unused_catalog_indexes(site):
+    indexes_to_remove = [
+        'assigned_client',
+    ]
+    catalog = api.portal.get_tool('portal_catalog')
+    for index in indexes_to_remove:
+        if index in catalog._catalog.indexes:
+            catalog._catalog.delIndex(index)
+
+
+def remove_unused_catalog_metadata(site):
+    columns_to_remove = [
+        'assigned_client',
+    ]
+    catalog = api.portal.get_tool('portal_catalog')
+    schema = catalog._catalog.schema
+    names = list(catalog._catalog.names)
+    del_indexes = []
+    del_column_numbers = []
+    for column in columns_to_remove:
+        if column in names and column in schema:
+            del_indexes.append(names.index(column))
+            del_column_numbers.append(schema[column])
+
+    # Remove columns from names
+    for del_index in del_indexes:
+        del names[del_index]
+
+    # Rebuild the schema
+    schema = {}
+    for i, name in enumerate(names):
+        schema[name] = i
+
+    catalog._catalog.schema = schema
+    catalog._catalog.names = tuple(names)
+
+    catalog._catalog.updateBrains()
+
+    # Remove the column values from each record
+    del_column_numbers.sort(reverse=True)
+    for key, value in catalog._catalog.data.items():
+        for column_number in del_column_numbers:
+            value = value[:column_number] + value[column_number + 1:]
+        catalog._catalog.data[key] = value
