@@ -1,3 +1,4 @@
+from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite
 import logging
@@ -81,6 +82,7 @@ def should_prevent_duplicate_installation(profile):
 def installed(site):
     trigger_subpackage_hooks(site)
     enable_secure_flag_for_cookies(site)
+    remove_unused_catalog_indexes_and_columns(site)
 
 
 def trigger_subpackage_hooks(site):
@@ -106,3 +108,24 @@ def trigger_subpackage_hooks(site):
 def enable_secure_flag_for_cookies(context):
     session_plugin = context.acl_users.session
     session_plugin.secure = True
+
+
+def remove_unused_catalog_indexes_and_columns(context):
+    indexes = [
+        'commentators',
+        'total_comments',
+    ]
+    columns = [
+        'commentators',
+        'last_comment_date',
+        'total_comments',
+    ]
+
+    catalog = api.portal.get_tool('portal_catalog')
+
+    for index in indexes:
+        catalog.delIndex(index)
+
+    for column in columns:
+        if column in catalog.schema():
+            catalog.delColumn(column)
