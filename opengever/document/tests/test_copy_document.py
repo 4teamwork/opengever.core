@@ -243,7 +243,6 @@ class TestCopyDocuments(IntegrationTestCase):
                                'allowedRolesAndUsers',
                                'blocked_local_roles',
                                'checked_out',
-                               'client_id',
                                'cmf_uid',
                                'contactid',
                                'date_of_completion',
