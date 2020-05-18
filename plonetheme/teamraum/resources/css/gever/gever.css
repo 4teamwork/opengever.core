@@ -4001,7 +4001,7 @@ body.template-protocol #form-buttons-save { display: none; }
 .tabbedview_view #tabbedview-body #selection_container .select2-container.select2-container--default .select2-selection:hover, .tabbedview_view #tabbedview-body #message_no_contents .select2-container.select2-container--default .select2-selection:hover { border: 1px solid #aaa; }
 .tabbedview_view #tabbedview-body #selection_container .select2-container.select2-container--focus .select2-selection, .tabbedview_view #tabbedview-body #message_no_contents .select2-container.select2-container--focus .select2-selection { border: 1px solid #aaa; min-height: inherit; }
 .tabbedview_view #tabbedview-body #selection_container .select2-container li, .tabbedview_view #tabbedview-body #message_no_contents .select2-container li { margin-top: 0; margin-bottom: 0; }
-.tabbedview_view #tabbedview-body #selection_container .select2-container li.select2-selection__choice, .tabbedview_view #tabbedview-body #message_no_contents .select2-container li.select2-selection__choice { line-height: 1.4em; margin-top: 5px; }
+.tabbedview_view #tabbedview-body #selection_container .select2-container li.select2-selection__choice, .tabbedview_view #tabbedview-body #message_no_contents .select2-container li.select2-selection__choice { line-height: 1.4em; margin-top: 5px; word-wrap: unset; max-width: 100%; text-overflow: ellipsis; overflow: hidden; box-sizing: border-box; }
 .tabbedview_view #tabbedview-body #message_no_contents .select2-selection--multiple .select2-search--inline:first-child { width: 100%; }
 .tabbedview_view #tabbedview-body #message_no_contents .select2-selection--multiple .select2-search--inline:first-child .select2-search__field { width: 100% !important; }
 
