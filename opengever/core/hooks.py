@@ -118,11 +118,13 @@ def remove_unused_catalog_indexes_and_columns(context):
         'in_reply_to',
         'getRemoteUrl',
         'getRawRelatedItems',
+        'meta_type',
     ]
     columns = [
         'commentators',
         'last_comment_date',
         'total_comments',
+        'meta_type',
     ]
 
     catalog = api.portal.get_tool('portal_catalog')

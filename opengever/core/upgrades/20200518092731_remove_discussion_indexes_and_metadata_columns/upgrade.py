@@ -14,11 +14,13 @@ class RemoveDiscussionIndexesAndMetadataColumns(UpgradeStep):
             'in_reply_to',
             'getRemoteUrl',
             'getRawRelatedItems',
+            'meta_type',
         ]
         columns = [
             'commentators',
             'last_comment_date',
             'total_comments',
+            'meta_type',
         ]
 
         for index in indexes:
