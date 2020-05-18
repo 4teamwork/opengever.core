@@ -21,6 +21,7 @@ class RemoveDiscussionIndexesAndMetadataColumns(UpgradeStep):
             'last_comment_date',
             'total_comments',
             'meta_type',
+            'location',
         ]
 
         for index in indexes:
