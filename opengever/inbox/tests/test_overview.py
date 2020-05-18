@@ -149,12 +149,10 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
     @browsing
     def test_lists_only_the_local_one_when_having_predecessor_successor_couples(self, browser):
         predecessor = create(Builder('forwarding')
-                             .having(responsible='inbox:org-unit-2',
-                                     assigned_client='org-unit-2')
+                             .having(responsible='inbox:org-unit-2')
                              .titled(u'Predecessor'))
         create(Builder('forwarding')
-               .having(responsible='inbox:org-unit-1',
-                       assigned_client='org-unit-1')
+               .having(responsible='inbox:org-unit-1')
                .successor_from(predecessor)
                .titled(u'Successor'))
 
