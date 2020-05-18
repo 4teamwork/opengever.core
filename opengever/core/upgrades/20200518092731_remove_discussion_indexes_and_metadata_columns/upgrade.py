@@ -15,6 +15,7 @@ class RemoveDiscussionIndexesAndMetadataColumns(UpgradeStep):
             'getRemoteUrl',
             'getRawRelatedItems',
             'meta_type',
+            'SearchableText',
         ]
         columns = [
             'commentators',

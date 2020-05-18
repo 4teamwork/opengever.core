@@ -119,6 +119,7 @@ def remove_unused_catalog_indexes_and_columns(context):
         'getRemoteUrl',
         'getRawRelatedItems',
         'meta_type',
+        'SearchableText',
     ]
     columns = [
         'commentators',
