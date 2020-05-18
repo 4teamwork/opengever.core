@@ -115,6 +115,7 @@ def remove_unused_catalog_indexes(site):
     indexes_to_remove = [
         'commentators',
         'total_comments',
+        'expires',
     ]
     catalog = api.portal.get_tool('portal_catalog')
     for index in indexes_to_remove:
@@ -128,6 +129,7 @@ def remove_unused_catalog_metadata(site):
         'commentators',
         'last_comment_date',
         'total_comments',
+        'expires',
     ]
     catalog = api.portal.get_tool('portal_catalog')
     schema = catalog._catalog.schema
