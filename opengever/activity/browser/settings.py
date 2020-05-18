@@ -10,6 +10,7 @@ from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.json_response import JSONResponse
@@ -31,7 +32,7 @@ TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 # setting which should be exposed in the notification settings view.
 NOTIFICATION_SETTING_TABS = [
     {'id': 'task',
-     'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE],
+     'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE, WATCHER_ROLE],
      'settings': [
          'task-added-or-reassigned',
          'task-transition-modify-deadline',

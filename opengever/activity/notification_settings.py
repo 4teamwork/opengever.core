@@ -8,6 +8,7 @@ from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.model import create_session
 from zope.i18nmessageid import MessageFactory
@@ -34,7 +35,7 @@ NOTIFICATION_CONFIGURATION = [
                        'forwarding-transition-reassign-refused',
                        ],
         'default_settings': {
-            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
             'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
         },
     },
@@ -43,7 +44,7 @@ NOTIFICATION_CONFIGURATION = [
         'title': _('task-transition-modify-deadline', default=u'Task deadline modified'),
         'activities': ['task-transition-modify-deadline'],
         'default_settings': {
-            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
         },
     },
     {
@@ -51,7 +52,7 @@ NOTIFICATION_CONFIGURATION = [
         'title': _('task-commented', default=u'Task commented'),
         'activities': ['task-commented'],
         'default_settings': {
-            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
         },
     },
     {
@@ -78,7 +79,7 @@ NOTIFICATION_CONFIGURATION = [
                        'forwarding-transition-refuse',
                        ],
         'default_settings': {
-            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
+            'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
         },
     },
     {
