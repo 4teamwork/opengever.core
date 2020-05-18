@@ -321,7 +321,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'filesize',
                                'firstname',
                                'getObjPositionInParent',
-                               'getRawRelatedItems',
                                'is_default_page',
                                'is_folderish',
                                'is_subtask',
