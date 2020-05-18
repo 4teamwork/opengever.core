@@ -4,7 +4,6 @@ INDEXES = (
     ('responsible', 'FieldIndex'),
     ('issuer', 'FieldIndex'),
     ('task_type', 'FieldIndex'),
-    ('client_id', "KeywordIndex"),
     ('sequence_number', 'FieldIndex'),
     ('is_subtask', 'BooleanIndex'),
     ('predecessor', 'FieldIndex'),

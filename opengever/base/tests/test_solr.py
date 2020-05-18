@@ -82,7 +82,6 @@ class TestSolr(IntegrationTestCase):
             'Type',
             'after_resolve_jobs_pending',
             'blocked_local_roles',
-            'client_id',
             'cmf_uid',
             'contactid',
             'date_of_completion',
