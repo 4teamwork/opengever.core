@@ -4,10 +4,16 @@ from ftw.upgrade import UpgradeStep
 
 INDEXES_TO_REMOVE = [
     'assigned_client',
+    'commentators',
+    'total_comments',
 ]
 
 METADATA_TO_REMOVE = [
+    'author_name',
     'assigned_client',
+    'commentators',
+    'last_comment_date',
+    'total_comments',
 ]
 
 
