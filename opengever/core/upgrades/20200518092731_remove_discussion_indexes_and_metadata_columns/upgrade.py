@@ -12,6 +12,7 @@ class RemoveDiscussionIndexesAndMetadataColumns(UpgradeStep):
             'commentators',
             'total_comments',
             'in_reply_to',
+            'getRemoteUrl',
         ]
         columns = [
             'commentators',

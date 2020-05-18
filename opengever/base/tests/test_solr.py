@@ -129,7 +129,6 @@ class TestSolr(IntegrationTestCase):
             'expires',
             'getContentType',
             'getId',
-            'getRemoteUrl',
             'in_response_to',
             'is_folderish',
             'last_comment_date',
