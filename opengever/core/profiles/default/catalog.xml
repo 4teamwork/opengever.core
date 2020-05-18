@@ -48,7 +48,6 @@
   <column value="issuer" />
   <column value="task_type" />
   <column value="sequence_number" />
-  <column value="assigned_client" />
   <column value="is_subtask" />
   <column value="predecessor" />
 
