@@ -26,6 +26,7 @@ METADATA_TO_REMOVE = [
     'EffectiveDate',
     'ExpirationDate',
     'expires',
+    'getRemoteUrl',
     'last_comment_date',
     'location',
     'meta_type',
