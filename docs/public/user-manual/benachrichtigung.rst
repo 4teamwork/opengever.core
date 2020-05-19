@@ -55,7 +55,9 @@ zwei Schritte beachtet werden:
 
 Allgemeine Einstellungen für Benachrichtigungen
 -----------------------------------------------
-Im Reiter "Allgemein" befinden sich die globalen Einstellungen. Dort können Sie einstellen, ob Sie auch für Ihre eigenen Aktionen und benachrichtigt werden wollen. Sie können hier auch einstellen, ob Sie als Mitglied einer Eingangskorbgruppe benachrichtigt werden wollen, wenn eine Benachrichtigung an alle Benutzer dieses Eingangskorbes gesendet wird.
+Im Reiter "Allgemein" befinden sich die globalen Einstellungen. Dort können Sie einstellen, ob Sie auch über Ihre eigenen Aktionen benachrichtigt werden wollen. Sie können hier auch einstellen, ob Sie als Mitglied einer Eingangskorbgruppe benachrichtigt werden wollen, wenn eine Benachrichtigung an alle Benutzer dieses Eingangskorbes gesendet wird.
+
+Ausserdem können Sie in diesem Reiter festlegen, über welche Kanäle Sie benachrichtigt werden wollen, wenn Sie als Beobachter hinzugefügt worden sind.
 
 .. |img-benachrichtigungs-einstellungen-1| image:: img/media/img-benachrichtigungs-einstellungen-1.png
 .. |img-benachrichtigungs-einstellungen-2| image:: img/media/img-benachrichtigungs-einstellungen-2.png
