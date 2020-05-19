@@ -133,6 +133,7 @@ def remove_unused_catalog_metadata(site):
         'commentators',
         'CreationDate',
         'effective',
+        'EffectiveDate',
         'expires',
         'last_comment_date',
         'location',

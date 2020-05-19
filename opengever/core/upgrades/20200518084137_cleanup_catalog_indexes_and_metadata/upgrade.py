@@ -20,6 +20,7 @@ METADATA_TO_REMOVE = [
     'commentators',
     'CreationDate',
     'effective',
+    'EffectiveDate',
     'expires',
     'last_comment_date',
     'location',
