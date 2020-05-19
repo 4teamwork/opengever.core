@@ -9,6 +9,7 @@ INDEXES_TO_REMOVE = [
     'expires',
     'effective',
     'effectiveRange',
+    'Date',
 ]
 
 METADATA_TO_REMOVE = [
@@ -21,6 +22,7 @@ METADATA_TO_REMOVE = [
     'effective',
     'EffectiveDate',
     'ExpirationDate',
+    'Date',
 ]
 
 

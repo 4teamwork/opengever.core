@@ -93,7 +93,6 @@ class TestCopyDocuments(IntegrationTestCase):
                              'start': self.PASTE_TIME.date(),
                              'modified': ZOPE_PASTE_TIME,
                              'ModificationDate': ZOPE_PASTE_TIME_STR,
-                             'Date': ZOPE_PASTE_TIME_STR,
                              'changed': self.PASTE_TIME,
                              # containing dossier and subdossier
                              'containing_dossier': self.empty_dossier.Title(),
@@ -225,7 +224,6 @@ class TestCopyDocuments(IntegrationTestCase):
             'modified': paste_time_index,
             'start': paste_time_index,
             'created': paste_time_index,
-            'Date': paste_time_index,
 
             # containing dossier and subdossier
             'containing_dossier': self.empty_dossier.Title(),
