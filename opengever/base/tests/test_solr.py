@@ -111,7 +111,6 @@ class TestSolr(IntegrationTestCase):
         CATALOG_ONLY_METADATA = [
             'CreationDate',
             'Date',
-            'EffectiveDate',
             'ExpirationDate',
             'ModificationDate',
             'Type',

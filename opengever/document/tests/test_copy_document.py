@@ -103,7 +103,6 @@ class TestCopyDocuments(IntegrationTestCase):
                              'filename': u'copy of {}'.format(self.subdocument.get_filename())}
 
         unchanged_metadata = ['Description',
-                              'EffectiveDate',
                               'ExpirationDate',
                               'Subject', 'Type',
                               'bumblebee_checksum',
