@@ -115,7 +115,6 @@ class TestSolr(IntegrationTestCase):
             'exclude_from_nav',
             'getContentType',
             'getId',
-            'getRemoteUrl',
             'in_response_to',
             'is_folderish',
             'listCreators',

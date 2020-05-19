@@ -20,6 +20,7 @@ METADATA_TO_REMOVE = [
     'CreationDate',
     'effective',
     'expires',
+    'getRemoteUrl',
     'last_comment_date',
     'ModificationDate',
     'total_comments',

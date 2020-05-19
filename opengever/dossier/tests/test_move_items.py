@@ -185,7 +185,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'getContentType',
                               'getIcon',
                               'getObjSize',
-                              'getRemoteUrl',
                               'has_sametype_children',
                               'in_response_to',
                               'is_folderish',

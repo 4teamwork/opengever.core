@@ -124,7 +124,6 @@ class TestCopyDocuments(IntegrationTestCase):
                               'getContentType',
                               'getIcon',
                               'getObjSize',
-                              'getRemoteUrl',
                               'has_sametype_children',
                               'in_response_to',
                               'is_folderish',
