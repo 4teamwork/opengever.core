@@ -83,6 +83,15 @@ NOTIFICATION_CONFIGURATION = [
         },
     },
     {
+        'id': 'added-as-watcher',
+        'title': _('added-as-watcher', default=u'Added as watcher'),
+        'activities': ['task-watcher-added', 'forwarding-watcher-added'],
+        'default_settings': {
+            'badge_notification_roles': [WATCHER_ROLE],
+        },
+    },
+
+    {
         'id': 'proposal-transition-reject',
         'title': _('proposal-transition-reject', default=u'Proposal rejected'),
         'activities': ['proposal-transition-reject'],
