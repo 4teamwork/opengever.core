@@ -115,6 +115,7 @@ def remove_unused_catalog_indexes(site):
     indexes_to_remove = [
         'commentators',
         'getRawRelatedItems',
+        'in_reply_to',
         'total_comments',
         'expires',
     ]
