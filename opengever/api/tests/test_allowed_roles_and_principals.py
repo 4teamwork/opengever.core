@@ -16,7 +16,7 @@ class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
 
     @browsing
     def test_get_returns_allowed_roles_and_principals(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.service_user, browser)
         browser.open(self.dossier.absolute_url() + '/@allowed-roles-and-principals',
                      method='GET', headers={'Accept': 'application/json'})
 
