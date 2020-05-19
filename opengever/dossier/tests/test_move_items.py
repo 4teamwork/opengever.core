@@ -193,7 +193,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'is_subtask',
                               'issuer',
                               'lastname',
-                              'location',
                               'meta_type',
                               'phone_office',
                               'portal_type',

@@ -119,7 +119,6 @@ class TestSolr(IntegrationTestCase):
             'in_response_to',
             'is_folderish',
             'listCreators',
-            'location',
             'meta_type',
             'predecessor',
             'title_de',
