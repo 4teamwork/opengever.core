@@ -121,6 +121,7 @@ def remove_unused_catalog_indexes(site):
         'getRawRelatedItems',
         'in_reply_to',
         'meta_type',
+        'SearchableText',
         'total_comments',
     ]
     catalog = api.portal.get_tool('portal_catalog')

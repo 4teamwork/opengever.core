@@ -272,7 +272,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'is_subdossier',
                                'Title',
                                'sortable_title',
-                               'SearchableText',
                                'changed',
                                'start',
                                'Creator',
@@ -344,10 +343,10 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
             reindexed_moved_indexdata = self.get_catalog_indexdata(moved)
 
         # Some index data is not up to date, but does not have to be
-        # Other data should be up to date but is not. For example the SearchableText
+        # Other data should be up to date but is not. For example the 'reference'
         # is not reindexed on purpose for efficiency, but it actually changes
         # because the reference number changes...
-        not_up_to_date = ['SearchableText', 'reference', 'start']
+        not_up_to_date = ['reference', 'start']
         for key in not_up_to_date:
             self.assertNotEqual(moved_indexdata.pop(key),
                                 reindexed_moved_indexdata.pop(key))
