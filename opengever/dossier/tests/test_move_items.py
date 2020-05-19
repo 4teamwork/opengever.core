@@ -302,7 +302,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'document_author',
                                'document_date',
                                'document_type',
-                               'effectiveRange',
                                'email',
                                'end',
                                'external_reference',

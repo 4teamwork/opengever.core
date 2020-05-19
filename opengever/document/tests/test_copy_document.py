@@ -249,7 +249,6 @@ class TestCopyDocuments(IntegrationTestCase):
                                'document_author',
                                'document_date',
                                'document_type',
-                               'effectiveRange',
                                'email',
                                'end',
                                'external_reference',

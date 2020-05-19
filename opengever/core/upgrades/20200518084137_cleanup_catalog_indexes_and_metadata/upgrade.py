@@ -8,6 +8,7 @@ INDEXES_TO_REMOVE = [
     'total_comments',
     'expires',
     'effective',
+    'effectiveRange',
 ]
 
 METADATA_TO_REMOVE = [

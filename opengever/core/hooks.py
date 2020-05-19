@@ -117,6 +117,7 @@ def remove_unused_catalog_indexes(site):
         'total_comments',
         'expires',
         'effective',
+        'effectiveRange',
     ]
     catalog = api.portal.get_tool('portal_catalog')
     for index in indexes_to_remove:

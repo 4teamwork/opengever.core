@@ -86,7 +86,6 @@ class TestSolr(IntegrationTestCase):
             'cmf_uid',
             'contactid',
             'date_of_completion',
-            'effectiveRange',
             'external_reference',
             'getId',
             'getObjPositionInParent',
