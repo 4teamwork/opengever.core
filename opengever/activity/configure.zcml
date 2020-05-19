@@ -27,4 +27,10 @@
       handler=".handlers.log_activity"
       />
 
+  <subscriber
+      for="opengever.task.task.ITask
+           opengever.activity.interfaces.IWatcherAddedEvent"
+      handler=".handlers.notify_watcher"
+      />
+
 </configure>

@@ -1,4 +1,5 @@
 from opengever.activity.error_handling import NotificationErrorHandler
+from opengever.activity.events import WatcherAddedEvent
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
@@ -15,6 +16,7 @@ from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.expression import true
+from zope.event import notify
 
 
 class NotificationCenter(object):
@@ -223,10 +225,13 @@ class PloneNotificationCenter(NotificationCenter):
             return Oguid.for_object(item)
         return item
 
-    def add_watcher_to_resource(self, obj, actorid, role):
+    def add_watcher_to_resource(self, obj, actorid, role=WATCHER_ROLE):
+        """The WatcherAddedEvent is fired to prevent circular dependencies."""
         oguid = self._get_oguid_for(obj)
-        return super(PloneNotificationCenter, self).add_watcher_to_resource(
+        super(PloneNotificationCenter, self).add_watcher_to_resource(
             oguid, actorid, role)
+        if role == WATCHER_ROLE:
+            notify(WatcherAddedEvent(oguid, actorid))
 
     def remove_watcher_from_resource(self, obj, userid, role):
         oguid = self._get_oguid_for(obj)

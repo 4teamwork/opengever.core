@@ -6,6 +6,7 @@ Changelog
 
 - Assign permission to role "ServiceKeyUser". [mbaechtold]
 - Bump ftw.structlog to 1.3.0 to get SQL query time and view name logging. [lgraf]
+- Notify added watchers. [tinagerber]
 - Limit query to current repository in RepositoryPathSourceBinder. [njohner]
 - Improve performance of the subdossier tree (on the dossier overview tab). [mbaechtold]
 - Truncate overflow in keyword and other selection choices. [2e12]
