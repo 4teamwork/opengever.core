@@ -12,5 +12,6 @@ Inhalt:
    herunterladen.rst
    notizen.rst
    aktualisieren.rst
+   sitzungsunterlagen.rst
 
 .. disqus::
