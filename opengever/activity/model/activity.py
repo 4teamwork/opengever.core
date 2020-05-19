@@ -36,8 +36,8 @@ class Activity(Base, Translatable):
     def __repr__(self):
         return u'<Activity {} on {} >'.format(self.kind, repr(self.resource))
 
-    def create_notifications(self):
-        """Create a notification for every resource watcher.
+    def create_notifications(self, notification_recipients=None):
+        """Create a notification either for all notification_recipients or for every resource watcher.
         For the activity's actor, who has created the activity, a notification
         is usually unnecessary or disruptive. We therefore only create a
         notification for the activity's actor if he has enabled the
@@ -45,7 +45,13 @@ class Activity(Base, Translatable):
         """
 
         notifications = []
-        for userid in self.get_users_for_watchers():
+        if notification_recipients:
+            # We should consider to test if notification_recipients are valid watchers
+            userids = notification_recipients
+        else:
+            userids = self.get_users_for_watchers()
+
+        for userid in userids:
             if (self.is_current_user(userid) and not
                     self.user_wants_own_action_notifications(userid)):
                 continue

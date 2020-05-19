@@ -109,17 +109,18 @@ class NotificationCenter(object):
         # error. In order to avoid that we consume it by making a tuple.
         return tuple(resource.subscriptions)
 
-    def add_activity(self, oguid, kind, title, label, summary, actor_id, description):
+    def add_activity(self, oguid, kind, title, label, summary, actor_id,
+                     description, notification_recipients=None):
         """Creates an activity and the related notifications..
         """
         activity = self._add_activity(
             oguid, kind, title, label, summary, actor_id, description)
 
-        errors = self.create_notifications(activity)
+        errors = self.create_notifications(activity, notification_recipients)
         return {'activity': activity, 'errors': errors}
 
-    def create_notifications(self, activity):
-        activity.create_notifications()
+    def create_notifications(self, activity, notification_recipients=None):
+        activity.create_notifications(notification_recipients)
         errors = []
         for dispatcher in self.dispatchers:
             result = dispatcher.dispatch_notifications(activity)
@@ -249,11 +250,12 @@ class PloneNotificationCenter(NotificationCenter):
     def remove_task_issuer(self, obj, actorid):
         self.remove_watcher_from_resource(obj, actorid, TASK_ISSUER_ROLE)
 
-    def add_activity(self, obj, kind, title, label, summary, actor_id, description):
+    def add_activity(self, obj, kind, title, label, summary, actor_id, description,
+                     notification_recipients=None):
         oguid = self._get_oguid_for(obj)
         with NotificationErrorHandler() as handler:
             result = super(PloneNotificationCenter, self).add_activity(
-                oguid, kind, title, label, summary, actor_id, description)
+                oguid, kind, title, label, summary, actor_id, description, notification_recipients)
             if result.get('errors'):
                 handler.show_not_notified_message()
 
@@ -324,7 +326,8 @@ class DisabledNotificationCenter(NotificationCenter):
     def get_subscriptions(self, oguid):
         return []
 
-    def add_activity(self, obj, kind, title, label, summary, actor_id, description):
+    def add_activity(self, obj, kind, title, label, summary, actor_id, description,
+                     notification_recipients=None):
         pass
 
     def get_users_notifications(self, userid, only_unread=False, limit=None):
