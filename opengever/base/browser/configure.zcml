@@ -278,4 +278,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <browser:page
+      for="*"
+      name="portal_tabs_view"
+      class=".navigation.CustomizedCatalogNavigationTabs"
+      permission="zope.Public"
+      allowed_attributes="topLevelTabs"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
