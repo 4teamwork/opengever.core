@@ -1,4 +1,5 @@
 from opengever.activity.events import NotificationEvent
+from opengever.activity.events import WatcherAddedEvent
 from opengever.activity.model import Activity
 from opengever.testing import IntegrationTestCase
 from zope.event import notify
@@ -41,3 +42,18 @@ class TestDisabledNotificationEventHandler(IntegrationTestCase):
             'Lorem ipsum',
         ))
         self.assertEquals(0, Activity.query.count())
+
+
+class TestWatcherAddedEventHandler(IntegrationTestCase):
+    features = ('activity',)
+
+    def test_adds_watcher_added_activity(self):
+        self.login(self.regular_user)
+        notify(WatcherAddedEvent(self.task.oguid, self.meeting_user.getId()))
+        activity = Activity.query.first()
+        self.assertEqual('task-watcher-added', activity.kind)
+        self.assertEqual('Added as watcher of the task', activity.label)
+        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual(u'Added as watcher of the task by <a href="http://nohost/plone/'
+                         u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         activity.summary)
