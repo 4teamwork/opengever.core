@@ -132,6 +132,7 @@ def remove_unused_catalog_metadata(site):
         'total_comments',
         'expires',
         'effective',
+        'EffectiveDate',
     ]
     catalog = api.portal.get_tool('portal_catalog')
     schema = catalog._catalog.schema

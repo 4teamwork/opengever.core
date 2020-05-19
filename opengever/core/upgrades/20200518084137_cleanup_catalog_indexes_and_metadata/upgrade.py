@@ -18,6 +18,7 @@ METADATA_TO_REMOVE = [
     'total_comments',
     'expires',
     'effective',
+    'EffectiveDate',
 ]
 
 

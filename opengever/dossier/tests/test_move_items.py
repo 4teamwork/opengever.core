@@ -163,7 +163,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'Title',
                               'filename',
                               'Description',
-                              'EffectiveDate',
                               'ExpirationDate',
                               'Subject',
                               'Type',
