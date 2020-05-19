@@ -161,7 +161,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'Title',
                               'filename',
                               'Description',
-                              'ExpirationDate',
                               'Subject',
                               'Type',
                               'bumblebee_checksum',
