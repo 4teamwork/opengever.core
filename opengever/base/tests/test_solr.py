@@ -78,7 +78,6 @@ class TestSolr(IntegrationTestCase):
 
         # indexes
         CATALOG_ONLY_INDEXES = [
-            'Date',
             'Type',
             'after_resolve_jobs_pending',
             'blocked_local_roles',
@@ -102,7 +101,6 @@ class TestSolr(IntegrationTestCase):
                     'catalog only index?'.format(index))
 
         CATALOG_ONLY_METADATA = [
-            'Date',
             'Type',
             'cmf_uid',
             'contactid',
