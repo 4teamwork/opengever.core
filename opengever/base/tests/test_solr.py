@@ -91,7 +91,6 @@ class TestSolr(IntegrationTestCase):
             'external_reference',
             'getId',
             'getObjPositionInParent',
-            'getRawRelatedItems',
             'in_reply_to',
             'is_default_page',
             'is_folderish',

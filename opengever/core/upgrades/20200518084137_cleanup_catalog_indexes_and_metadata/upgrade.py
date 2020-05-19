@@ -5,6 +5,7 @@ from ftw.upgrade import UpgradeStep
 INDEXES_TO_REMOVE = [
     'assigned_client',
     'commentators',
+    'getRawRelatedItems',
     'total_comments',
     'expires',
 ]
