@@ -105,11 +105,9 @@ class TestSolr(IntegrationTestCase):
                     'catalog only index?'.format(index))
 
         CATALOG_ONLY_METADATA = [
-            'CreationDate',
             'Date',
             'EffectiveDate',
             'ExpirationDate',
-            'ModificationDate',
             'Type',
             'cmf_uid',
             'contactid',

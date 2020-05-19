@@ -89,10 +89,8 @@ class TestCopyDocuments(IntegrationTestCase):
                              'Creator': self.regular_user.id,
                              # dates
                              'created': ZOPE_PASTE_TIME,
-                             'CreationDate': ZOPE_PASTE_TIME_STR,
                              'start': self.PASTE_TIME.date(),
                              'modified': ZOPE_PASTE_TIME,
-                             'ModificationDate': ZOPE_PASTE_TIME_STR,
                              'Date': ZOPE_PASTE_TIME_STR,
                              'changed': self.PASTE_TIME,
                              # containing dossier and subdossier

@@ -114,10 +114,10 @@ def enable_secure_flag_for_cookies(context):
 def remove_unused_catalog_indexes(site):
     indexes_to_remove = [
         'commentators',
+        'effective',
+        'expires',
         'getRawRelatedItems',
         'total_comments',
-        'expires',
-        'effective',
     ]
     catalog = api.portal.get_tool('portal_catalog')
     for index in indexes_to_remove:
@@ -129,10 +129,12 @@ def remove_unused_catalog_metadata(site):
     columns_to_remove = [
         'author_name',
         'commentators',
-        'last_comment_date',
-        'total_comments',
-        'expires',
+        'CreationDate',
         'effective',
+        'expires',
+        'last_comment_date',
+        'ModificationDate',
+        'total_comments',
     ]
     catalog = api.portal.get_tool('portal_catalog')
     for column in columns_to_remove:

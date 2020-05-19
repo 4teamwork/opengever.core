@@ -145,7 +145,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                              # dates
                              'start': self.MOVE_TIME.date(),  # acquisition is responsible here
                              'modified': ZOPE_MOVE_TIME,
-                             'ModificationDate': ZOPE_MOVE_TIME_STR,
                              'Date': ZOPE_MOVE_TIME_STR,
                              # containing dossier and subdossier
                              'reference': 'Client1 1.1 / 4 / 22',
@@ -158,7 +157,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'sequence_number',
                               'Creator',
                               'created',
-                              'CreationDate',
                               'changed',
                               'Title',
                               'filename',
