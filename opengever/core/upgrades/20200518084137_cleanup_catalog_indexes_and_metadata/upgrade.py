@@ -7,6 +7,7 @@ INDEXES_TO_REMOVE = [
     'client_id',
     'commentators',
     'effective',
+    'effectiveRange',
     'expires',
     'getRawRelatedItems',
     'in_reply_to',
