@@ -258,6 +258,7 @@ class PloneNotificationCenter(NotificationCenter):
                 oguid, kind, title, label, summary, actor_id, description, notification_recipients)
             if result.get('errors'):
                 handler.show_not_notified_message()
+            return result
 
     def get_watchers(self, obj):
         oguid = self._get_oguid_for(obj)

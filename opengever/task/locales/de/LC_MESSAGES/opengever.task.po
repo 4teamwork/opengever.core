@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-11-18 10:28+0000\n"
+"POT-Creation-Date: 2020-05-05 13:15+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -437,6 +437,7 @@ msgid "label_complete_documents"
 msgstr "Dokumente"
 
 #. Default: "Containing tasks"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
 msgstr "Hauptaufgabe"
@@ -664,6 +665,11 @@ msgstr "Aufgabentitel"
 msgid "label_task_type"
 msgstr "Auftragstyp"
 
+#. Default: "Added as watcher of the task"
+#: ./opengever/task/activities.py
+msgid "label_task_watcher_added"
+msgstr "Als Beobachter der Aufgabe hinzugefügt"
+
 #. Default: "Tasktemplate Position"
 #: ./opengever/task/task.py
 msgid "label_tasktemplate_position"
@@ -845,6 +851,11 @@ msgstr "Schritt 3"
 #: ./opengever/task/browser/accept/newdossier.py
 msgid "step_4"
 msgstr "Schritt 4"
+
+#. Default: "Added as watcher of the task by ${user}"
+#: ./opengever/task/activities.py
+msgid "summary_task_watcher_added"
+msgstr "Als Beobachter der Aufgabe hinzugefügt durch ${user}"
 
 #. Default: "Deadline is on ${deadline}"
 #: ./opengever/task/activities.py

@@ -2,6 +2,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.inbox import _
 from opengever.task import _ as tmf
 from opengever.task.activities import TaskAddedActivity
+from opengever.task.activities import TaskWatcherAddedActivity
 from plone import api
 from Products.CMFPlone import PloneMessageFactory
 
@@ -35,3 +36,23 @@ class ForwardingAddedActivity(TaskAddedActivity):
              api.portal.get_localized_time(str(self.context.deadline))],
             [tmf('label_text', u'Text'), self.context.text]
         ]
+
+
+class ForwardingWatcherAddedActivity(TaskWatcherAddedActivity):
+
+    @property
+    def kind(self):
+        return PloneMessageFactory(u'forwarding-watcher-added',
+                                   default=u'Watcher added to forwarding')
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('summary_forwarding_watcher_added', u'Added as watcher of the forwarding by ${user}',
+              mapping={'user': Actor.lookup(self.actor_id).get_link()}))
+
+    @property
+    def label(self):
+        msg = _('label_forwarding_watcher_added',
+                u'Added as watcher of the forwarding')
+        return self.translate_to_all_languages(msg)

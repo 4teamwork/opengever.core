@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-01-31 18:37+0000\n"
+"POT-Creation-Date: 2020-05-18 08:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,6 +77,11 @@ msgstr ""
 msgid "label_forwarding_added"
 msgstr ""
 
+#. Default: "Added as watcher of the forwarding"
+#: ./opengever/inbox/activities.py
+msgid "label_forwarding_watcher_added"
+msgstr ""
+
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py
 msgid "label_inbox_group"
@@ -105,6 +110,11 @@ msgstr ""
 #. Default: "New forwarding added by ${user}"
 #: ./opengever/inbox/activities.py
 msgid "msg_forwarding_added"
+msgstr ""
+
+#. Default: "Added as watcher of the forwarding by ${user}"
+#: ./opengever/inbox/activities.py
+msgid "summary_forwarding_watcher_added"
 msgstr ""
 
 #. Default: "Assign Forwarding"
