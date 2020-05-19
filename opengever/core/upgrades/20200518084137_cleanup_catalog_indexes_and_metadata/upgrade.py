@@ -6,21 +6,23 @@ INDEXES_TO_REMOVE = [
     'assigned_client',
     'client_id',
     'commentators',
+    'effective',
+    'expires',
     'getRawRelatedItems',
     'in_reply_to',
     'total_comments',
-    'expires',
-    'effective',
 ]
 
 METADATA_TO_REMOVE = [
-    'author_name',
     'assigned_client',
+    'author_name',
     'commentators',
-    'last_comment_date',
-    'total_comments',
-    'expires',
+    'CreationDate',
     'effective',
+    'expires',
+    'last_comment_date',
+    'ModificationDate',
+    'total_comments',
 ]
 
 

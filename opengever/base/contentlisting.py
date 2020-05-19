@@ -203,6 +203,20 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         self.context = self
         return self.simple_link_template(self, self.request)
 
+    def CreationDate(self, zone=None):
+        return self._dcmi_date('created', zone=zone)
+
+    def ModificationDate(self, zone=None):
+        return self._dcmi_date('modified', zone=zone)
+
+    def _dcmi_date(self, attr, zone=None):
+        dt = getattr(self._brain, attr)
+        if dt is None:
+            return None
+        if zone is not None:
+            return dt.toZone(zone).ISO8601()
+        return dt.ISO8601()
+
 
 class OpengeverRealContentListingObject(RealContentListingObject):
 
