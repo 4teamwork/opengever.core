@@ -104,7 +104,6 @@ class TestSolr(IntegrationTestCase):
 
         CATALOG_ONLY_METADATA = [
             'Date',
-            'ExpirationDate',
             'Type',
             'cmf_uid',
             'contactid',

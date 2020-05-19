@@ -21,6 +21,7 @@ METADATA_TO_REMOVE = [
     'CreationDate',
     'effective',
     'EffectiveDate',
+    'ExpirationDate',
     'expires',
     'last_comment_date',
     'location',
