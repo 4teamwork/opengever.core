@@ -19,6 +19,7 @@ METADATA_TO_REMOVE = [
     'expires',
     'effective',
     'EffectiveDate',
+    'ExpirationDate',
 ]
 
 
