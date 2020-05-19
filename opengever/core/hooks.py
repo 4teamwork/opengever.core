@@ -135,32 +135,6 @@ def remove_unused_catalog_metadata(site):
         'effective',
     ]
     catalog = api.portal.get_tool('portal_catalog')
-    schema = catalog._catalog.schema
-    names = list(catalog._catalog.names)
-    del_indexes = []
-    del_column_numbers = []
     for column in columns_to_remove:
-        if column in names and column in schema:
-            del_indexes.append(names.index(column))
-            del_column_numbers.append(schema[column])
-
-    # Remove columns from names
-    for del_index in del_indexes:
-        del names[del_index]
-
-    # Rebuild the schema
-    schema = {}
-    for i, name in enumerate(names):
-        schema[name] = i
-
-    catalog._catalog.schema = schema
-    catalog._catalog.names = tuple(names)
-
-    catalog._catalog.updateBrains()
-
-    # Remove the column values from each record
-    del_column_numbers.sort(reverse=True)
-    for key, value in catalog._catalog.data.items():
-        for column_number in del_column_numbers:
-            value = value[:column_number] + value[column_number + 1:]
-        catalog._catalog.data[key] = value
+        if column in catalog._catalog.schema:
+            catalog._catalog.delColumn(column)
