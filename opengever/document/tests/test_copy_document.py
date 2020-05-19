@@ -207,9 +207,6 @@ class TestCopyDocuments(IntegrationTestCase):
             # title and serchable text
             'Title': ['copy', 'of', 'ubersicht', 'der', 'vertrage', 'von', u'2016'],
             'sortable_title': 'copy of ubersicht der vertrage von 2016',
-            'SearchableText': ['copy', 'of', 'ubersicht', 'der', 'vertrage',
-                               'von', u'2016', 'client1', u'1', u'1', u'4',
-                               u'41', u'41', 'wichtig', 'subkeyword'],
 
             # dates
             'changed': paste_time_index,
