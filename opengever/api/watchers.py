@@ -4,6 +4,7 @@ from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.sources import PossibleWatchersSource
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.ogds.base.actor import ActorLookup
 from opengever.task.task import ITask
 from plone import api
 from plone.restapi.batching import HypermediaBatch
@@ -43,13 +44,15 @@ class Watchers(object):
             roles.add(subscription.role)
 
         portal_url = api.portal.get().absolute_url()
-        referenced_users = [
-            {
-                '@id': "{}/@users/{}".format(portal_url, userid),
-                'id': userid,
-                'fullname': api.user.get(userid).getProperty('fullname')
-            }
-            for userid in watchers_and_roles]
+        referenced_users = []
+        for actor_id in watchers_and_roles:
+            actor = ActorLookup(actor_id).lookup()
+            referenced_users.append(
+                {
+                    '@id': "{}/@users/{}".format(portal_url, actor_id),
+                    'id': actor_id,
+                    'fullname': actor.get_label(with_principal=False)
+                })
 
         referenced_watcher_roles = [
             {

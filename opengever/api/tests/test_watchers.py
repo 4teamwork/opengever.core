@@ -117,6 +117,87 @@ class TestWatchersGet(IntegrationTestCase):
         self.assertEqual(expected_json, browser.json['@components']['watchers'])
 
     @browsing
+    def test_watchers_endpoint_supports_teams(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+
+        center.remove_task_responsible(self.task, u"kathi.barfuss")
+        center.remove_task_issuer(self.task, u"robert.ziegler")
+        center.add_task_responsible(self.task, u'team:1')
+
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='GET', headers=self.api_headers)
+
+        # @id for the referenced_users is not correct for teams,
+        # this will have to be fixed.
+        expected_json = {
+            u'@id': u"{}/@watchers".format(self.task.absolute_url()),
+            u'referenced_users': [
+                {
+                    u'@id': u'http://nohost/plone/@users/team:1',
+                    u'fullname': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
+                    u'id': u'team:1'
+                },
+            ],
+            u'referenced_watcher_roles': [
+                {
+                    u'id': u'task_responsible',
+                    u'title': u'Task responsible'
+                },
+            ],
+            u'watchers_and_roles': {
+                u'team:1': [u'task_responsible'],
+            }
+        }
+
+        self.assertEqual(expected_json, browser.json)
+
+        browser.open(self.task.absolute_url() + '?expand=watchers',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual(expected_json, browser.json['@components']['watchers'])
+
+    @browsing
+    def test_watchers_endpoint_supports_inboxes(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+
+        center.remove_task_responsible(self.task, u"kathi.barfuss")
+        center.remove_task_issuer(self.task, u"robert.ziegler")
+
+        center.add_task_responsible(self.task, u'inbox:fa')
+
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='GET', headers=self.api_headers)
+
+        # @id for the referenced_users is not correct for inboxes,
+        # this will have to be fixed.
+        expected_json = {
+            u'@id': u"{}/@watchers".format(self.task.absolute_url()),
+            u'referenced_users': [
+                {
+                    u'@id': u'http://nohost/plone/@users/inbox:fa',
+                    u'fullname': u'Inbox: Finanz\xe4mt',
+                    u'id': u'inbox:fa'
+                },
+            ],
+            u'referenced_watcher_roles': [
+                {
+                    u'id': u'task_responsible',
+                    u'title': u'Task responsible'
+                },
+            ],
+            u'watchers_and_roles': {
+                u'inbox:fa': [u'task_responsible'],
+            }
+        }
+
+        self.assertEqual(expected_json, browser.json)
+
+        browser.open(self.task.absolute_url() + '?expand=watchers',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual(expected_json, browser.json['@components']['watchers'])
+
+    @browsing
     def test_watchers_not_available_for_dossier(self, browser):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(404):
