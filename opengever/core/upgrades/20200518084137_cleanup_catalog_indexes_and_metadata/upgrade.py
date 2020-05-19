@@ -13,6 +13,7 @@ INDEXES_TO_REMOVE = [
     'getRawRelatedItems',
     'in_reply_to',
     'meta_type',
+    'SearchableText'
     'total_comments',
 ]
 
