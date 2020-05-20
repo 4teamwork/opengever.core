@@ -270,4 +270,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="portal_tabs_view"
+      class=".navigation.CustomizedCatalogNavigationTabs"
+      permission="zope2.View"
+      allowed_attributes="topLevelTabs"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>

@@ -1,9 +1,14 @@
 from AccessControl import getSecurityManager
+from Acquisition import aq_inner
 from opengever.base.utils import get_preferred_language_code
 from opengever.repository.repositoryfolder import REPOSITORY_FOLDER_STATE_INACTIVE
 from pkg_resources import get_distribution
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import utils
+from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
+from Products.CMFPlone.browser.navigation import get_view_url
 from Products.Five import BrowserView
+from zope.component import getMultiAdapter
 import json
 import os.path
 
@@ -146,3 +151,56 @@ class JSONNavigation(BrowserView):
             previous = brain.modified
 
         return str(newest.millis())
+
+
+class CustomizedCatalogNavigationTabs(CatalogNavigationTabs):
+    """
+    Plone's default implementation requires the `getRemoteUrl` metadata from the
+    catalog. As we removed this metadata, we need a custom implementation that
+    does not depend on it and thus doesn't support external links.
+    """
+
+    def topLevelTabs(self, actions=None, category='portal_tabs'):
+        context = aq_inner(self.context)
+
+        portal_properties = getToolByName(context, 'portal_properties')
+        self.navtree_properties = getattr(portal_properties,
+                                          'navtree_properties')
+        self.site_properties = getattr(portal_properties,
+                                       'site_properties')
+        self.portal_catalog = getToolByName(context, 'portal_catalog')
+
+        if actions is None:
+            context_state = getMultiAdapter((context, self.request),
+                                            name=u'plone_context_state')
+            actions = context_state.actions(category)
+
+        # Build result dict
+        result = []
+        # first the actions
+        if actions is not None:
+            for actionInfo in actions:
+                data = actionInfo.copy()
+                data['name'] = data['title']
+                result.append(data)
+
+        # check whether we only want actions
+        if self.site_properties.getProperty('disable_folder_sections', False):
+            return result
+
+        query = self._getNavQuery()
+
+        rawresult = self.portal_catalog.searchResults(query)
+
+        # now add the content to results
+        idsNotToList = self.navtree_properties.getProperty('idsNotToList', ())
+        for item in rawresult:
+            if not (item.getId in idsNotToList or item.exclude_from_nav):
+                id, item_url = get_view_url(item)
+                data = {'name': utils.pretty_title_or_id(context, item),
+                        'id': item.getId,
+                        'url': item_url,
+                        'description': item.Description}
+                result.append(data)
+
+        return result
