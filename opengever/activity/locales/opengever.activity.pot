@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-05-04 13:28+0000\n"
+"POT-Creation-Date: 2020-05-19 15:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,11 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.activity\n"
+
+#. Default: "Added as watcher"
+#: ./opengever/activity/notification_settings.py
+msgid "added-as-watcher"
+msgstr ""
 
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
@@ -142,6 +147,11 @@ msgstr ""
 #. Default: "Forwarding refused"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-refuse"
+msgstr ""
+
+#. Default: "Added as watcher to forwarding"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-watcher-added"
 msgstr ""
 
 #. Default: "Notifications"
@@ -434,6 +444,11 @@ msgstr ""
 #. Default: "Task reopened"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-skipped-open"
+msgstr ""
+
+#. Default: "Added as watcher to task"
+#: ./opengever/activity/__init__.py
+msgid "task-watcher-added"
 msgstr ""
 
 #. Default: "Task issuer"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-05-04 13:28+0000\n"
+"POT-Creation-Date: 2020-05-19 15:22+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -18,6 +18,11 @@ msgstr ""
 "Domain: DOMAIN\n"
 "Language: fr\n"
 "X-Generator: Weblate 2.13.1\n"
+
+#. Default: "Added as watcher"
+#: ./opengever/activity/notification_settings.py
+msgid "added-as-watcher"
+msgstr ""
 
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
@@ -145,6 +150,11 @@ msgstr "transmission réassignée et refusée"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-refuse"
 msgstr "transmission refusée"
+
+#. Default: "Added as watcher to forwarding"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-watcher-added"
+msgstr ""
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -437,6 +447,11 @@ msgstr "tâche clôturée"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-skipped-open"
 msgstr "tâche rouverte"
+
+#. Default: "Added as watcher to task"
+#: ./opengever/activity/__init__.py
+msgid "task-watcher-added"
+msgstr ""
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py

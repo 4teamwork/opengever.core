@@ -1,9 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
+from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Activity
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.inbox.activities import ForwardingWatcherAddedActivity
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -209,3 +213,38 @@ class TestForwardingActivitesIntegration(IntegrationTestCase):
              (u'inbox:fa', u'task_issuer')],
             [(subscription.watcher.actorid, subscription.role)
              for subscription in resource.subscriptions])
+
+
+class TestWatcherAddedActivity(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def setUp(self):
+        super(TestWatcherAddedActivity, self).setUp()
+        self.center = notification_center()
+
+    def test_watcher_added_activity_attributes(self):
+        self.login(self.secretariat_user)
+        ForwardingWatcherAddedActivity(self.inbox_forwarding, self.request,
+                                       self.meeting_user.getId()).record()
+        activity = Activity.query.first()
+        self.assertEqual('forwarding-watcher-added', activity.kind)
+        self.assertEqual('Added as watcher of the forwarding', activity.label)
+        self.assertEqual(u'F\xf6rw\xe4rding', activity.title)
+        self.assertEqual('jurgen.konig', activity.actor_id)
+        self.assertEqual(u'Added as watcher of the forwarding by <a href="http://nohost/plone/'
+                         u'@@user-details/jurgen.konig">K\xf6nig J\xfcrgen (jurgen.konig)</a>',
+                         activity.summary)
+
+    def test_watcher_added_activity_notifies_watcher(self):
+        self.login(self.secretariat_user)
+        self.center.add_watcher_to_resource(self.inbox_forwarding, self.meeting_user.getId(),
+                                            WATCHER_ROLE)
+        activity = Activity.query.first()
+        self.assertEqual('forwarding-watcher-added', activity.kind)
+        notification = activity.notifications[0]
+        self.assertTrue(notification.is_badge)
+        self.assertFalse(notification.is_digest)
+        process_mail_queue()
+        mails = Mailing(self.portal).get_messages()
+        self.assertEqual([], mails)

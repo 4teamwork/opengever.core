@@ -79,7 +79,7 @@ class BaseActivity(object):
     def translate(self, msg, language):
         return translate(msg, context=self.request, target_language=language)
 
-    def add_activity(self):
+    def add_activity(self, notification_recipients=None):
         return self.center.add_activity(
             self.context,
             self.kind,
@@ -87,7 +87,8 @@ class BaseActivity(object):
             self.label,
             self.summary,
             SYSTEM_ACTOR_ID if self.system_activity else self.actor_id,
-            self.description)
+            self.description,
+            notification_recipients)
 
     def _get_supported_languages(self):
         """Returns a list of codes of all supported language.

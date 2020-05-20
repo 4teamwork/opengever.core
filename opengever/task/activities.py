@@ -130,6 +130,38 @@ class TaskAddedActivity(BaseTaskActivity):
         self.center.add_task_issuer(self.context, self.context.issuer)
 
 
+class TaskWatcherAddedActivity(BaseTaskActivity):
+    """Activity representation for a watcher being added to a task.
+    """
+
+    def __init__(self, context, request, watcherid):
+        super(TaskWatcherAddedActivity, self).__init__(context, request)
+        self.watcherid = watcherid
+
+    @property
+    def kind(self):
+        return PloneMessageFactory(u'task-watcher-added', default=u'Watcher added to task')
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('summary_task_watcher_added', u'Added as watcher of the task by ${user}',
+              mapping={'user': Actor.lookup(self.actor_id).get_link()}))
+
+    @property
+    def description(self):
+        return {}
+
+    @property
+    def label(self):
+        msg = _('label_task_watcher_added', u'Added as watcher of the task')
+        return self.translate_to_all_languages(msg)
+
+    def add_activity(self):
+        return super(TaskWatcherAddedActivity, self).add_activity(
+            notification_recipients=[self.watcherid])
+
+
 class BaseTaskResponseActivity(BaseTaskActivity):
     """Abstract base class for all task-response related activities.
 

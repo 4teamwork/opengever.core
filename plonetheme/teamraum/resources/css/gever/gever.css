@@ -4492,6 +4492,8 @@ ul.notifications-configurations-form input { margin-top: 20px; margin-left: 10px
 ul.notifications-configurations-form label { font-weight: bold; margin-left: 5px; margin-right: 10px; }
 ul.notifications-configurations-form .formHelp { margin-left: 10px; max-width: 45em; }
 
+#tab-general .notifications-settings-form { margin-top: 20px; }
+
 .notifications-settings-form .actions-column, .notifications-configurations-form .actions-column { width: 450px; }
 .notifications-settings-form .badge-title:before, .notifications-configurations-form .badge-title:before { padding-right: 5px; }
 .notifications-settings-form .mail-title:before, .notifications-configurations-form .mail-title:before { padding-right: 5px; }

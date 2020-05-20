@@ -86,7 +86,8 @@
       var tabs = [
         {tabId: 'general',
          tabTitle: this.getDataAttribute('tab-title-general'),
-         configurations: configurations},
+         configurations: configurations,
+         activities: this.filterActivitiesByType(values, 'watcher')},
         {tabId: 'tasks',
          tabTitle: this.getDataAttribute('tab-title-task'),
          activities: this.filterActivitiesByType(values, 'task')},

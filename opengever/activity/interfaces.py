@@ -12,6 +12,12 @@ class INotificationEvent(IObjectEvent):
     description = Attribute("The description of the activity")
 
 
+class IWatcherAddedEvent(IObjectEvent):
+
+    oguid = Attribute("The oguid of the object to which a watcher is added")
+    watcherid = Attribute("The userid of the added watcher")
+
+
 class IActivitySettings(Interface):
 
     is_feature_enabled = schema.Bool(

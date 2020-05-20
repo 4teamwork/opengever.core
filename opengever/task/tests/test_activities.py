@@ -7,8 +7,10 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
+from opengever.activity.digest import DigestMailer
 from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Activity
+from opengever.activity.model import Notification
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
@@ -16,7 +18,10 @@ from opengever.base.model import create_session
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.ogds.models.user import User
+from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.task.activities import TaskReminderActivity
+from opengever.task.activities import TaskWatcherAddedActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import FunctionalTestCase
@@ -561,3 +566,85 @@ class TestTaskReminderActivity(IntegrationTestCase):
           activity.title)
         self.assertEqual(SYSTEM_ACTOR_ID, activity.actor_id)
         self.assertEquals(u'Deadline is on Nov 01, 2016', activity.summary)
+
+
+class TestWatcherAddedActivity(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def setUp(self):
+        super(TestWatcherAddedActivity, self).setUp()
+        self.center = notification_center()
+
+    def test_watcher_added_activity_attributes(self):
+        self.login(self.regular_user)
+        TaskWatcherAddedActivity(self.task, self.request, self.meeting_user.getId()).record()
+        activity = Activity.query.first()
+        self.assertEqual('task-watcher-added', activity.kind)
+        self.assertEqual('Added as watcher of the task', activity.label)
+        self.assertEqual(
+          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
+          activity.title)
+        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual(u'Added as watcher of the task by <a href="http://nohost/plone/'
+                         u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         activity.summary)
+
+    def test_watcher_added_activity_notifies_watcher(self):
+        self.login(self.regular_user)
+        self.center.add_watcher_to_resource(self.task, self.meeting_user.getId(), WATCHER_ROLE)
+        activity = Activity.query.first()
+        self.assertEqual('task-watcher-added', activity.kind)
+        notification = activity.notifications[0]
+        self.assertTrue(notification.is_badge)
+        self.assertFalse(notification.is_digest)
+        process_mail_queue()
+        mails = Mailing(self.portal).get_messages()
+        self.assertEqual([], mails)
+
+    def test_added_watcher_receives_bage_mail_and_digest_notification(self):
+        self.login(self.regular_user)
+        create(
+            Builder('notification_setting')
+            .having(
+                kind='added-as-watcher',
+                userid=self.meeting_user.getId(),
+                mail_notification_roles=[WATCHER_ROLE],
+                badge_notification_roles=[WATCHER_ROLE],
+                digest_notification_roles=[WATCHER_ROLE],
+                ),
+            )
+        self.center.add_watcher_to_resource(self.task, self.meeting_user.getId(), WATCHER_ROLE)
+
+        activity = Activity.query.first()
+        notification = activity.notifications[0]
+        self.assertTrue(notification.is_badge)
+
+        process_mail_queue()
+        mails = Mailing(self.portal).get_messages()
+        self.assertEqual(1, len(mails))
+        self.assertIn('Added as watcher of the task by', mails[0])
+
+        DigestMailer().send_digests()
+        process_mail_queue()
+        mails = Mailing(self.portal).get_messages()
+
+        self.assertEqual(2, len(mails))
+        self.assertIn('Daily Digest', mails[1])
+        self.assertIn('Added as watcher of the task by', mails[1])
+
+    def test_only_added_watcher_is_notified(self):
+        self.login(self.regular_user)
+        self.center.add_watcher_to_resource(self.task, self.meeting_user.getId(), WATCHER_ROLE)
+        notifications = Notification.query.all()
+        self.assertEqual(1, len(notifications))
+        self.center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(),
+                                            WATCHER_ROLE)
+        notifications = Notification.query.all()
+        self.assertEquals(2, len(notifications))
+
+    def test_notify_only_watcher_with_watcher_role(self):
+        self.login(self.regular_user)
+        self.center.add_watcher_to_resource(self.task, self.meeting_user.getId(), TASK_ISSUER_ROLE)
+        activities = Activity.query.all()
+        self.assertEqual([], activities)

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-05-04 13:28+0000\n"
+"POT-Creation-Date: 2020-05-19 15:22+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,11 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#. Default: "Added as watcher"
+#: ./opengever/activity/notification_settings.py
+msgid "added-as-watcher"
+msgstr "Als Beobachter hinzugefügt worden"
 
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
@@ -143,6 +148,11 @@ msgstr "Weiterleitung neu zugewiesen und abgelehnt"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-refuse"
 msgstr "Weiterleitung abgelehnt"
+
+#. Default: "Added as watcher to forwarding"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-watcher-added"
+msgstr "Als Beobachter hinzugefügt zu Weiterleitung"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -435,6 +445,11 @@ msgstr "Aufgabe abgeschlossen"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-skipped-open"
 msgstr "Aufgabe wieder eröffnet"
+
+#. Default: "Added as watcher to task"
+#: ./opengever/activity/__init__.py
+msgid "task-watcher-added"
+msgstr "Als Beobachter hinzugefügt zu Aufgabe"
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-18 10:28+0000\n"
+"POT-Creation-Date: 2020-05-05 13:15+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -439,6 +439,7 @@ msgid "label_complete_documents"
 msgstr "Documents"
 
 #. Default: "Containing tasks"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
 msgstr "Tâche principale"
@@ -666,6 +667,11 @@ msgstr "Titre de la tâche"
 msgid "label_task_type"
 msgstr "Type de mandat"
 
+#. Default: "Added as watcher of the task"
+#: ./opengever/task/activities.py
+msgid "label_task_watcher_added"
+msgstr ""
+
 #. Default: "Tasktemplate Position"
 #: ./opengever/task/task.py
 msgid "label_tasktemplate_position"
@@ -847,6 +853,11 @@ msgstr "Troisième étape"
 #: ./opengever/task/browser/accept/newdossier.py
 msgid "step_4"
 msgstr "Quatrième étape"
+
+#. Default: "Added as watcher of the task by ${user}"
+#: ./opengever/task/activities.py
+msgid "summary_task_watcher_added"
+msgstr ""
 
 #. Default: "Deadline is on ${deadline}"
 #: ./opengever/task/activities.py

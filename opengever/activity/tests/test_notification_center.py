@@ -231,7 +231,6 @@ class TestAddActivity(ActivityTestCase):
             'hugo.boss',
             {'en': None})
 
-
         resource = self.center.fetch_resource(Oguid('fd', '123'))
         self.assertEquals('fd', resource.admin_unit_id)
         self.assertEquals(123, resource.int_id)
@@ -261,6 +260,26 @@ class TestAddActivity(ActivityTestCase):
         self.assertEquals(activity, notification.activity)
         self.assertEquals(resource_a, notification.activity.resource)
         self.assertFalse(notification.is_read)
+
+    def test_only_creates_notifications_for_specific_users(self):
+        peter = create(Builder('watcher').having(actorid='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+        nadja = create(Builder('watcher').having(actorid='nadja'))
+
+        create(Builder('resource').oguid('fd:123').watchers([hugo, peter, nadja]))
+        activity = self.center.add_activity(
+            Oguid('fd', '123'),
+            'TASK_ADDED',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task bla added'},
+            {'en': 'Task bla added by Hugo'},
+            'hugo.boss',
+            {'en': None},
+            notification_recipients=[peter, nadja]).get('activity')
+
+        self.assertEqual(2, len(activity.notifications))
+        self.assertEqual(['peter', 'nadja'],
+                         [notification.userid.actorid for notification in activity.notifications])
 
     def test_does_not_create_notification_for_actor_if_notify_own_actions_disabled(self):
         create(Builder('ogds_user').id('peter'))
