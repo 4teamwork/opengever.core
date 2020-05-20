@@ -29,6 +29,11 @@
     li.select2-selection__choice {
       line-height: 1.4em;
       margin-top: 5px;
+      word-wrap: unset;
+      max-width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      box-sizing: border-box;
     }
   }
 

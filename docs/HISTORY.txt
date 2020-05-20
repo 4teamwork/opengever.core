@@ -8,6 +8,7 @@ Changelog
 - Bump ftw.structlog to 1.3.0 to get SQL query time and view name logging. [lgraf]
 - Limit query to current repository in RepositoryPathSourceBinder. [njohner]
 - Improve performance of the subdossier tree (on the dossier overview tab). [mbaechtold]
+- Truncate overflow in keyword and other selection choices. [2e12]
 - Improve performance while determining repositoryfolder emptiness. [mbaechtold]
 - Improve performance while determining leaf nodes. [mbaechtold]
 - Add watcher role to task notification setting tab. [tinagerber]
