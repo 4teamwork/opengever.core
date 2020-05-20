@@ -6,7 +6,6 @@ from ftw.testing import freeze
 from OFS.CopySupport import CopyError
 from opengever.testing import IntegrationTestCase
 from plone import api
-from tzlocal import get_localzone
 import pytz
 
 
@@ -75,8 +74,6 @@ class TestCopyDocuments(IntegrationTestCase):
         original_metadata = self.get_catalog_metadata(self.subdocument)
         copy_metadata = self.get_catalog_metadata(copy)
 
-        ZOPE_PASTE_TIME_STR = ZOPE_PASTE_TIME.toZone(DateTime().localZone()).ISO()
-
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {'UID': copy.UID(),
                              # sequence numbers and such
@@ -91,7 +88,6 @@ class TestCopyDocuments(IntegrationTestCase):
                              'created': ZOPE_PASTE_TIME,
                              'start': self.PASTE_TIME.date(),
                              'modified': ZOPE_PASTE_TIME,
-                             'Date': ZOPE_PASTE_TIME_STR,
                              'changed': self.PASTE_TIME,
                              # containing dossier and subdossier
                              'containing_dossier': self.empty_dossier.Title(),
@@ -101,8 +97,6 @@ class TestCopyDocuments(IntegrationTestCase):
                              'filename': u'copy of {}'.format(self.subdocument.get_filename())}
 
         unchanged_metadata = ['Description',
-                              'EffectiveDate',
-                              'ExpirationDate',
                               'Subject', 'Type',
                               'bumblebee_checksum',
                               'checked_out',
@@ -223,7 +217,6 @@ class TestCopyDocuments(IntegrationTestCase):
             'modified': paste_time_index,
             'start': paste_time_index,
             'created': paste_time_index,
-            'Date': paste_time_index,
 
             # containing dossier and subdossier
             'containing_dossier': self.empty_dossier.Title(),
@@ -246,7 +239,6 @@ class TestCopyDocuments(IntegrationTestCase):
                                'document_author',
                                'document_date',
                                'document_type',
-                               'effectiveRange',
                                'email',
                                'end',
                                'external_reference',

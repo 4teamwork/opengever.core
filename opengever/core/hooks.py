@@ -114,7 +114,9 @@ def enable_secure_flag_for_cookies(context):
 def remove_unused_catalog_indexes(site):
     indexes_to_remove = [
         'commentators',
+        'Date',
         'effective',
+        'effectiveRange',
         'expires',
         'getRawRelatedItems',
         'in_reply_to',
@@ -132,7 +134,10 @@ def remove_unused_catalog_metadata(site):
         'author_name',
         'commentators',
         'CreationDate',
+        'Date',
         'effective',
+        'EffectiveDate',
+        'ExpirationDate',
         'expires',
         'last_comment_date',
         'location',

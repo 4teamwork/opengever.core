@@ -78,14 +78,12 @@ class TestSolr(IntegrationTestCase):
 
         # indexes
         CATALOG_ONLY_INDEXES = [
-            'Date',
             'Type',
             'after_resolve_jobs_pending',
             'blocked_local_roles',
             'cmf_uid',
             'contactid',
             'date_of_completion',
-            'effectiveRange',
             'external_reference',
             'getId',
             'getObjPositionInParent',
@@ -103,9 +101,6 @@ class TestSolr(IntegrationTestCase):
                     'catalog only index?'.format(index))
 
         CATALOG_ONLY_METADATA = [
-            'Date',
-            'EffectiveDate',
-            'ExpirationDate',
             'Type',
             'cmf_uid',
             'contactid',

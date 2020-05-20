@@ -136,8 +136,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         moved = children['added'].pop()
         moved_metadata = self.get_catalog_metadata(moved)
 
-        ZOPE_MOVE_TIME_STR = ZOPE_MOVE_TIME.toZone(DateTime().localZone()).ISO()
-
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {'UID': moved.UID(),
                              # creator
@@ -145,7 +143,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                              # dates
                              'start': self.MOVE_TIME.date(),  # acquisition is responsible here
                              'modified': ZOPE_MOVE_TIME,
-                             'Date': ZOPE_MOVE_TIME_STR,
                              # containing dossier and subdossier
                              'reference': 'Client1 1.1 / 4 / 22',
                              'containing_dossier': self.empty_dossier.Title(),
@@ -161,8 +158,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'Title',
                               'filename',
                               'Description',
-                              'EffectiveDate',
-                              'ExpirationDate',
                               'Subject',
                               'Type',
                               'bumblebee_checksum',
@@ -263,7 +258,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
 
             # dates
             'modified': paste_time_index,
-            'Date': paste_time_index,
             # 'start': paste_time_index,
 
             # containing dossier and subdossier
@@ -299,7 +293,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'document_author',
                                'document_date',
                                'document_type',
-                               'effectiveRange',
                                'email',
                                'end',
                                'external_reference',
