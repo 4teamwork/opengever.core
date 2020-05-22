@@ -1,13 +1,33 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.mail.mail import IOGMail
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
 from plone.namedfile.file import NamedBlobFile
+from plone.uuid.interfaces import IUUID
 import base64
 import json
 
 
 class TestGetMail(IntegrationTestCase):
+
+    @browsing
+    def test_additional_metadata_for_mails(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+
+        self.assertIsNone(browser.json['checked_out'])
+        self.assertIsNone(browser.json['checked_out_fullname'])
+        self.assertFalse(browser.json['is_locked'])
+        self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+                         browser.json['containing_dossier'])
+        self.assertIsNone(browser.json['containing_subdossier'])
+        self.assertFalse(browser.json['trashed'])
+        self.assertFalse(browser.json['is_shadow_document'])
+        self.assertFalse(0, browser.json['current_version_id'])
+        self.assertEqual([], browser.json['attachments'])
 
     @browsing
     def test_contains_also_original_message(self, browser):
@@ -27,6 +47,34 @@ class TestGetMail(IntegrationTestCase):
             u'size': 8,
         }
         self.assertEqual(expected_message, browser.json.get('original_message'))
+
+    @browsing
+    def test_mail_serialization_contains_attachments(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+        doc = mail.extract_attachment_into_parent(4)
+
+        browser.open(mail, headers={'Accept': 'application/json'})
+        expected = [
+            {u'content-type': u'message/rfc822',
+             u'filename': u'Inneres Testma\u0308il ohne Attachments.eml',
+             u'position': 2,
+             u'size': 930},
+            {u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+             u'extracted': True,
+             u'extracted_document_uid': IUUID(doc),
+             u'extracted_document_url': doc.absolute_url(),
+             u'filename': u'word_document.docx',
+             u'position': 4,
+             u'size': 22962},
+            {u'content-type': u'text/plain',
+             u'filename': u'Text.txt',
+             u'position': 5,
+             u'size': 26}]
+        self.assertEqual(expected, browser.json['attachments'])
 
 
 class TestCreateMail(IntegrationTestCase):

@@ -82,22 +82,6 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertTrue(browser.json['is_collaborative_checkout'])
 
     @browsing
-    def test_additional_metadata_for_mails(self, browser):
-        self.login(self.regular_user, browser)
-
-        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
-
-        self.assertIsNone(browser.json['checked_out'])
-        self.assertIsNone(browser.json['checked_out_fullname'])
-        self.assertFalse(browser.json['is_locked'])
-        self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
-                         browser.json['containing_dossier'])
-        self.assertIsNone(browser.json['containing_subdossier'])
-        self.assertFalse(browser.json['trashed'])
-        self.assertFalse(browser.json['is_shadow_document'])
-        self.assertFalse(0, browser.json['current_version_id'])
-
-    @browsing
     def test_respects_version_id_when_traversing_on_older_version(self, browser):
         self.login(self.regular_user, browser)
 

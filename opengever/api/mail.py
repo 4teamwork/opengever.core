@@ -1,11 +1,13 @@
 from ftw.mail.mail import IMail
+from opengever.api.document import SerializeDocumentToJson
 from opengever.base.transforms.msg2mime import Msg2MimeTransform
-from opengever.mail.mail import initialize_title
 from opengever.mail.mail import initialize_metadata
+from opengever.mail.mail import initialize_title
 from plone.namedfile.file import NamedBlobFile
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.interfaces import ISerializeToJson
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -42,3 +44,13 @@ class DeserializeMailFromJson(DeserializeFromJson):
             initialize_metadata(context, None)
 
         return context
+
+
+@implementer(ISerializeToJson)
+@adapter(IMail, Interface)
+class SerializeMailToJson(SerializeDocumentToJson):
+
+    def __call__(self, *args, **kwargs):
+        result = super(SerializeMailToJson, self).__call__(*args, **kwargs)
+        result[u'attachments'] = self.context.get_attachments()
+        return result
