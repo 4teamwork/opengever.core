@@ -4,13 +4,14 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from opengever.base.interfaces import ISequenceNumber
-from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from zope.component import getUtility
 import json
 
 
-class TestToDoList(IntegrationTestCase):
+class TestToDoList(SolrIntegrationTestCase):
 
     @browsing
     def test_todolist_is_addable_in_workspace(self, browser):
@@ -45,9 +46,9 @@ class TestToDoList(IntegrationTestCase):
 
     def test_todolist_is_searchable_by_title(self):
         self.login(self.workspace_member)
-        self.assertItemsEqual(
-            ['allgemeine', 'informationen'],
-            index_data_for(self.todolist_general).get('SearchableText'))
+
+        self.assertIn(self.todolist_general.title,
+                      solr_data_for(self.todolist_general, 'SearchableText'))
 
     def test_todolist_uses_a_global_and_separate_sequencenumber_counter(self):
         self.login(self.workspace_member)
