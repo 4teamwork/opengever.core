@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.solr.interfaces import ISolrSearch
 from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from opengever.base.model import CONTENT_TITLE_LENGTH
@@ -13,10 +14,13 @@ from opengever.document.interfaces import IDocumentIndexer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 from zope.component import getAdapter
 from zope.component.hooks import setSite
 import datetime
@@ -158,20 +162,6 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertEquals(
             obj2brain(doc1).checked_out, 'TEST_USER_ID')
 
-    def test_searchable_text(self):
-        doc1 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            title=u"Doc One",
-            document_author=u'Hugo Boss',
-            keywords=('foo', 'bar'),
-            document_date=datetime.date(2011, 1, 1),
-            receipt_date=datetime.date(2011, 2, 1))
-
-        self.assertItemsEqual(
-            ['doc', 'one', 'foo', 'bar', 'hugo', 'boss', 'client1', '1', '1'],
-            index_data_for(doc1).get('SearchableText')
-            )
-
     def test_external_reference(self):
         doc = create(Builder('document').having(
             author=u'Hugo Boss',
@@ -181,18 +171,6 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertEquals(
             u'qpr-900-9001-\xf8',
             index_data_for(doc).get('external_reference'))
-
-    def test_full_text_indexing_with_plain_text(self):
-        sample_file = NamedBlobFile('foobar barfoo', filename=u'test.txt')
-        doc1 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            title=u"Doc One",
-            document_author=u'Hugo Boss',
-            file=sample_file)
-
-        searchable_text = index_data_for(doc1).get('SearchableText')
-        self.assertIn('foobar', searchable_text)
-        self.assertIn('barfoo', searchable_text)
 
     def test_indexer_picks_correct_doc_indexer_adapter_by_default(self):
         sample_file = NamedBlobFile('foo', filename=u'test.txt')
@@ -232,6 +210,34 @@ class TestDocumentIndexers(FunctionalTestCase):
     def test_metadata_contains_foreign_reference(self):
         doc = create(Builder("document").having(foreign_reference=u'Ref 123'))
         self.assertEqual(metadata(doc)(), 'Client1 / 1 Ref 123')
+
+
+class SolrDocumentIndexer(SolrIntegrationTestCase):
+
+    def test_full_text_indexing_with_plain_text(self):
+        self.login(self.regular_user)
+        self.assertIn('Komentar text',
+                      solr_data_for(self.proposaldocument, 'SearchableText'))
+
+    def test_full_text_indexing_with_word_document(self):
+        self.login(self.regular_user)
+        self.assertIn('Example word document.',
+                      solr_data_for(self.document, 'SearchableText'))
+
+    def test_searchable_text(self):
+        self.login(self.regular_user)
+        document = create(Builder("document").within(self.dossier)
+                          .titled(u"Doc One")
+                          .having(keywords=(u'foo', 'bar',),
+                                  document_author=u'Hugo Boss',
+                                  ))
+        self.commit_solr()
+        solr = getUtility(ISolrSearch)
+
+        response = solr.search(filters=("UID:{}".format(document.UID())))
+        indexed_value = response.docs[0].get('SearchableText')
+        self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 41 41 foo bar',
+                      indexed_value)
 
 
 class TestDefaultDocumentIndexer(MockTestCase):
