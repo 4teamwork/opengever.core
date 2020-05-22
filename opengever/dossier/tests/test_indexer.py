@@ -5,8 +5,9 @@ from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.testing import index_data_for
-from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from zope.event import notify
 from zope.interface import Interface
@@ -14,7 +15,7 @@ from zope.lifecycleevent import Attributes
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class TestDossierIndexers(IntegrationTestCase):
+class TestDossierIndexers(SolrIntegrationTestCase):
 
     def test_sortable_title_indexer_accomodates_padding_for_five_numbers(self):
         self.login(self.regular_user)
@@ -164,52 +165,25 @@ class TestDossierIndexers(IntegrationTestCase):
     def test_dossier_searchable_text_contains_keywords(self):
         self.login(self.regular_user)
 
-        self.dossier.reindexObject()
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
 
-        self.assertIn(
-            'finanzverwaltung',
-            index_data_for(self.dossier).get('SearchableText'),
-            )
-
-        self.assertIn(
-            'vertrage',
-            index_data_for(self.dossier).get('SearchableText'),
-            )
+        self.assertIn(u'Finanzverwaltung', indexed_value)
+        self.assertIn(u'Vertr\xe4ge', indexed_value)
 
     def test_dossier_searchable_text_contains_external_reference(self):
         self.login(self.regular_user)
 
-        self.dossier.reindexObject()
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
 
-        self.assertIn(
-            'qpr',
-            index_data_for(self.dossier).get('SearchableText'),
-            )
-
-        self.assertIn(
-            u'900',
-            index_data_for(self.dossier).get('SearchableText'),
-            )
-
-        self.assertIn(
-            u'9001',
-            index_data_for(self.dossier).get('SearchableText'),
-            )
+        self.assertIn(u'qpr-900-9001', indexed_value)
 
     def test_dossiertemplate_searchable_text_contains_keywords(self):
         self.login(self.regular_user)
 
-        self.dossiertemplate.reindexObject()
+        indexed_value = solr_data_for(self.dossiertemplate, 'SearchableText')
 
-        self.assertIn(
-            'secret',
-            index_data_for(self.dossiertemplate).get('SearchableText'),
-        )
-
-        self.assertIn(
-            'special',
-            index_data_for(self.dossiertemplate).get('SearchableText'),
-        )
+        self.assertIn(u'secret', indexed_value)
+        self.assertIn(u'special', indexed_value)
 
     def test_external_reference(self):
         self.login(self.regular_user)
@@ -240,7 +214,7 @@ class TestDossierIndexers(IntegrationTestCase):
         self.assert_index_value(True, 'blocked_local_roles', self.dossier)
 
 
-class TestDossierFilingNumberIndexer(IntegrationTestCase):
+class TestDossierFilingNumberIndexer(SolrIntegrationTestCase):
 
     features = ('filing_number', )
 
@@ -292,14 +266,14 @@ class TestDossierFilingNumberIndexer(IntegrationTestCase):
         self.assert_index_value(self.filing_no, 'filing_no', self.dossier)
         self.assert_index_value(self.searchable_filing_no, 'searchable_filing_no', self.dossier)
 
-    def test_filing_no_is_also_in_searchable_text(self):
+    def test_filing_no_is_in_searchable_text(self):
         self.login(self.regular_user)
 
         IDossier(self.dossier).filing_prefix = self.filing_prefix
         IFilingNumber(self.dossier).filing_no = self.filing_no
         self.dossier.reindexObject()
+        self.commit_solr()
 
-        searchable_text_data = index_data_for(self.dossier).get('SearchableText')
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
 
-        for segment in self.searchable_filing_no:
-            self.assertIn(segment, searchable_text_data)
+        self.assertIn('SKA ARCH-Administration-2016-11', indexed_value)
