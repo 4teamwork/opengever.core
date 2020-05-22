@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.mail.mail import IOGMail
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
+from plone.app.uuid.utils import uuidToObject
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
 import base64
@@ -204,3 +205,62 @@ class TestPatchMail(IntegrationTestCase):
         self.assertEqual(browser.status_code, 204)
         self.assertEqual(self.mail_eml.title, u'Die B\xfcrgschaft')
         self.assertEqual(self.mail_eml.description, 'Lorem ipsum')
+
+
+class TestExtractAttachments(IntegrationTestCase):
+
+    @browsing
+    def test_extracts_all_when_no_positions_specified(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(
+                "/".join([mail.absolute_url(), "@extract-attachments"]),
+                data=json.dumps({}),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(3, len(mail.attachment_infos))
+        self.assertEqual(3, len(children['added']))
+        self.assertEqual(3, len(browser.json))
+
+        expected_response = []
+        for info in mail.attachment_infos:
+            doc = uuidToObject(info['extracted_document_uid'])
+            expected_response.append({
+                'position': info['position'],
+                'extracted_document_url': info['extracted_document_url'],
+                'extracted_document_title': doc.title})
+
+        self.assertItemsEqual(expected_response, browser.json)
+
+    @browsing
+    def test_extracts_attachment_specified_by_position(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(
+                "/".join([mail.absolute_url(), "@extract-attachments"]),
+                data=json.dumps({'positions': [4]}),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(1, len(children['added']))
+        doc = children['added'].pop()
+        info = mail._get_attachment_info(4)
+
+        expected_response = [{
+            'position': info['position'],
+            'extracted_document_url': info['extracted_document_url'],
+            'extracted_document_title': doc.title}]
+        self.assertEqual(expected_response, browser.json)

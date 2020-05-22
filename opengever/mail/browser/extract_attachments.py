@@ -149,7 +149,7 @@ class ExtractAttachments(BrowserView):
 
     def extract_attachments(self, positions):
         docs = self.context.extract_attachments_into_parent(positions)
-        for document in docs:
+        for document in docs.values():
             msg = _(u'info_extracted_document',
                     default=u'Created document ${title}',
                     mapping={'title': document.Title().decode('utf-8')})

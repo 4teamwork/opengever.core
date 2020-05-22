@@ -185,9 +185,9 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
-        docs = []
+        docs = {}
         for position in positions:
-            docs.append(self.extract_attachment_into_parent(position))
+            docs[position] = self.extract_attachment_into_parent(position)
         return docs
 
     def extract_attachment_into_parent(self, position):

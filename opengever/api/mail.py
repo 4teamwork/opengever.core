@@ -4,11 +4,14 @@ from opengever.base.transforms.msg2mime import Msg2MimeTransform
 from opengever.mail.mail import initialize_metadata
 from opengever.mail.mail import initialize_title
 from plone.namedfile.file import NamedBlobFile
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.services import Service
 from zope.component import adapter
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -53,4 +56,27 @@ class SerializeMailToJson(SerializeDocumentToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeMailToJson, self).__call__(*args, **kwargs)
         result[u'attachments'] = self.context.get_attachments()
+        return result
+
+
+class ExtractAttachments(Service):
+
+    def reply(self):
+
+        # Disable CSRF protection, as POST requests cannot include the needed
+        # X-CSRF-TOKEN to pass plone's autoprotect.
+        alsoProvides(self.request, IDisableCSRFProtection)
+        data = json_body(self.request)
+        if 'positions' in data:
+            positions = data.get('positions')
+        else:
+            positions = [attachment['position'] for attachment in
+                         self.context.get_attachments(unextracted_only=True)]
+
+        docs = self.context.extract_attachments_into_parent(positions)
+        result = []
+        for position, doc in docs.items():
+            result.append({'position': position,
+                           'extracted_document_url': doc.absolute_url(),
+                           'extracted_document_title': doc.Title()})
         return result

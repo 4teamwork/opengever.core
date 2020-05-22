@@ -238,7 +238,7 @@ class TestExtractMailInDossier(FunctionalTestCase):
         positions = [attachment['position'] for attachment in
                      mail.get_attachments()]
 
-        extracted = mail.extract_attachments_into_parent(positions)
+        extracted = mail.extract_attachments_into_parent(positions).values()
         self.assertEqual(6, len(extracted))
 
         outer_mail = extracted[0]
@@ -258,7 +258,7 @@ class TestExtractMailInDossier(FunctionalTestCase):
         positions = [attachment['position'] for attachment in
                      mail.get_attachments()]
 
-        extracted = mail.extract_attachments_into_parent(positions)
+        extracted = mail.extract_attachments_into_parent(positions).values()
         self.assertEqual(3, len(extracted))
         extracted_mail = extracted[0]
         doc = extracted[1]

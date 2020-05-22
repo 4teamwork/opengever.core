@@ -741,4 +741,12 @@
       name="watchers"
       />
 
+  <plone:service
+      method="POST"
+      name="@extract-attachments"
+      for="opengever.mail.mail.IOGMailMarker"
+      factory=".mail.ExtractAttachments"
+      permission="opengever.document.AddDocument"
+      />
+
 </configure>
