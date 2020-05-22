@@ -16,6 +16,7 @@ else:
     from opengever.testing.helpers import obj2brain
     from opengever.testing.helpers import obj2paths
     from opengever.testing.helpers import set_preferred_language
+    from opengever.testing.helpers import solr_data_for
     from opengever.testing.sql import assign_user_to_client
     from opengever.testing.sql import create_ogds_user
     from opengever.testing.sql import select_current_org_unit
