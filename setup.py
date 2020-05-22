@@ -4,7 +4,7 @@ from setuptools import setup
 import os
 
 
-version = '2020.3.0rc3'
+version = '2020.3.0rc4.dev0'
 maintainer = '4teamwork AG'
 
 
