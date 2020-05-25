@@ -1,78 +1,57 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser import InsufficientPrivileges
 from ftw.testbrowser.pages import factoriesmenu
-from opengever.contact.interfaces import IContactSettings
-from opengever.testing import add_languages
-from opengever.testing import FunctionalTestCase
-from opengever.testing import obj2brain
-from plone import api
-import transaction
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestContact(FunctionalTestCase):
+class TestContact(SolrIntegrationTestCase):
 
-    def setUp(self):
-        super(TestContact, self).setUp()
-        self.grant('Member', 'Contributor', 'Manager')
-
-        add_languages(['de-ch', 'fr-ch'])
-
-    @browsing
-    def test_add_a_contact(self, browser):
-        contactfolder = create(Builder('contactfolder'))
-        browser.login().open(contactfolder)
-        factoriesmenu.add('Contact')
-        browser.fill({'Firstname': 'Hanspeter',
-                      'Lastname': 'D\xc3\xbcrr',
-                      'Description': 'Lorem ipsum, bla bla'})
-        browser.find('Save').click()
-
-        self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/durr-hanspeter/contact_view',
-            browser.url)
-        self.assertEquals(u'D\xfcrr Hanspeter', browser.css('h1').first.text)
+    features = ('contact', )
 
     @browsing
     def test_cannot_add_a_contact_with_contact_feature_enabled(self, browser):
-        contactfolder = create(Builder('contactfolder'))
+        self.login(self.regular_user, browser)
 
-        browser.login().open(contactfolder)
-        self.assertIn('Contact', factoriesmenu.addable_types())
-        browser.visit(contactfolder, view="++add++opengever.contact.contact")
+        browser.open(self.contactfolder)
 
-        api.portal.set_registry_record(
-          'is_feature_enabled', True, interface=IContactSettings)
-        transaction.commit()
+        with self.assertRaises(ValueError) as err:
+            factoriesmenu.addable_types()
 
-        browser.open(contactfolder)
-        self.assertNotIn('Contact', factoriesmenu.addable_types())
+        self.assertEqual(
+            'Factories menu is not visible.',
+            str(err.exception))
+
         with self.assertRaises(InsufficientPrivileges):
-            browser.visit(contactfolder, view="++add++opengever.contact.contact")
+            browser.visit(self.contactfolder, view="++add++opengever.contact.contact")
+
+    @browsing
+    def test_can_add_a_contact_with_contact_feature_disabled(self, browser):
+        self.login(self.regular_user, browser)
+        self.deactivate_feature('contact')
+
+        browser.open(self.contactfolder)
+        factoriesmenu.add('Contact')
+        browser.fill({'Firstname': 'Hanspeter',
+                      'Lastname': 'D\xc3\xbcrr'})
+        browser.find('Save').click()
+
+        self.assertEqual(
+            'http://nohost/plone/kontakte/durr-hanspeter-1/contact_view',
+            browser.url)
+        self.assertEqual(u'D\xfcrr Hanspeter', browser.css('h1').first.text)
 
     @browsing
     def test_edit_a_contact(self, browser):
-        contactfolder = create(Builder('contactfolder'))
-        contact = create(Builder('contact')
-                         .within(contactfolder)
-                         .having(firstname=u'Hanspeter',
-                                 lastname='D\xc3\xbcrr'.decode('utf-8'),
-                                 description=u'Lorem ipsum, bla bla'))
+        self.login(self.regular_user)
 
-        browser.login().open(contact, view='edit')
+        browser.login().open(self.hanspeter_duerr, view='edit')
         browser.fill({'Lastname': 'Walter'})
         browser.find('Save').click()
 
-        self.assertEquals('Walter Hanspeter', browser.css('h1').first.text)
+        self.assertEqual('Walter Hanspeter', browser.css('h1').first.text)
 
     def test_searchable_text(self):
-        contact = create(Builder('contact')
-                         .having(firstname=u'Hanspeter',
-                                 lastname='D\xc3\xbcrr'.decode('utf-8'),
-                                 description=u'Lorem ipsum, bla bla'))
-
-        brain = obj2brain(contact)
-        catalog = api.portal.get_tool('portal_catalog')
-        data = catalog.getIndexDataForRID(brain.getRID())
-        self.assertEquals(['durr', 'hanspeter'], data['SearchableText'])
+        self.login(self.regular_user)
+        self.assertEqual(u'D\xfcrr Hanspeter',
+                          solr_data_for(self.hanspeter_duerr, 'SearchableText'))
