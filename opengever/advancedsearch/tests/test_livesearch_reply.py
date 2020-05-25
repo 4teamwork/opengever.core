@@ -1,8 +1,8 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestLivesearchReply(IntegrationTestCase):
+class TestLivesearchReply(SolrIntegrationTestCase):
 
     @browsing
     def test_livesearch_reply_escapes_title(self, browser):
@@ -10,6 +10,7 @@ class TestLivesearchReply(IntegrationTestCase):
 
         self.dossier.title = u"<script>alert('evil');</script>"
         self.dossier.reindexObject()
+        self.commit_solr()
 
         browser.open(view='@@livesearch_reply?q=evil')
 
