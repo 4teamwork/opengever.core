@@ -1,5 +1,4 @@
 from ftw.solr.interfaces import ISolrSearch
-from opengever.base import is_solr_feature_enabled
 from opengever.base.model import create_session
 from opengever.base.query import extend_query_with_textfilter
 from opengever.contact.contact import IContact
@@ -421,30 +420,12 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
         return self.terms
 
     def _extend_terms_with_contacts(self, query_string):
-        if is_solr_feature_enabled():
-            self._extend_terms_with_contacts_from_solr(query_string)
-        else:
-            self._extend_terms_with_contacts_from_portal_catalog(query_string)
-
-    def _extend_terms_with_contacts_from_solr(self, query_string):
         solr = getUtility(ISolrSearch)
         resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
             query_string,
             IContact.__identifier__))
         for result in resp.docs:
             self.terms.append(self.getTerm(solr_doc=result))
-
-    def _extend_terms_with_contacts_from_portal_catalog(self, query_string):
-        catalog = api.portal.get_tool('portal_catalog')
-
-        if not query_string.endswith('*'):
-            query_string += '*'
-
-        query = {'portal_type': CONTACT_TYPE,
-                 'SearchableText': query_string}
-
-        for brain in catalog.unrestrictedSearchResults(**query):
-            self.terms.append(self.getTerm(brain.contactid, brain))
 
 
 @implementer(IContextSourceBinder)
@@ -724,12 +705,6 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
         return self.terms
 
     def _extend_terms_with_contacts(self, query_string):
-        if is_solr_feature_enabled():
-            self._extend_terms_with_contacts_from_solr(query_string)
-        else:
-            self._extend_terms_with_contacts_from_portal_catalog(query_string)
-
-    def _extend_terms_with_contacts_from_solr(self, query_string):
         solr = getUtility(ISolrSearch)
         resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
             query_string,
@@ -743,26 +718,6 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
                     'id': result['id'],
                     'Title': result['Title'],
                 }))
-
-    def _extend_terms_with_contacts_from_portal_catalog(self, query_string):
-        catalog = api.portal.get_tool('portal_catalog')
-
-        if not query_string.endswith('*'):
-            query_string += '*'
-
-        query = {'portal_type': CONTACT_TYPE,
-                 'SearchableText': query_string}
-
-        for brain in catalog.unrestrictedSearchResults(**query):
-            if brain.email:
-                self.terms.append(self.getTerm(
-                    u'{}:{}'.format(brain.email, brain.id.decode('utf-8')),
-                    brain))
-
-            if brain.email2:
-                self.terms.append(self.getTerm(
-                    u'{}:{}'.format(brain.email2, brain.id.decode('utf-8')),
-                    brain))
 
 
 @implementer(IContextSourceBinder)
