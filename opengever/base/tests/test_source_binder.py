@@ -59,7 +59,7 @@ class TestDossierSourceBinder(SolrIntegrationTestCase):
 class TestRelatedDossierAutocomplete(IntegrationTestCase):
 
     @browsing
-    def test_related_dossier_autocomplete_uses_solr_when_feature_enabled(self, browser):
+    def test_related_dossier_autocomplete_uses_solr(self, browser):
         self.solr = self.mock_solr('solr_autocomplete_dossier.json')
 
         self.login(self.dossier_responsible, browser)
@@ -74,19 +74,6 @@ class TestRelatedDossierAutocomplete(IntegrationTestCase):
         self.assert_solr_called(
             self.solr, 'empty', rows=20, fl=['path'],
             filters=[u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker']
-        )
-
-    @browsing
-    def test_related_dossier_autocomplete_uses_catalog_when_solr_disabled(self, browser):
-        self.deactivate_feature('solr')
-        self.login(self.dossier_responsible, browser)
-        browser.open(
-            self.dossier,
-            view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty'
-        )
-        self.assertEqual(
-            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-7|An empty dossier',
-            browser.contents
         )
 
 
