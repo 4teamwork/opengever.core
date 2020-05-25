@@ -18,6 +18,7 @@ from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
@@ -137,6 +138,81 @@ class TestProposalSolr(SolrIntegrationTestCase):
             browser.css('#form-widgets-relatedItems span.label').text,
             )
 
+    @browsing
+    def test_creating_proposal_from_proposal_template(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill(
+            {'Title': u'Baugesuch Kreuzachkreisel',
+             'Description': u'Ein n\xf6tiger Bau',
+             'Committee': u'Rechnungspr\xfcfungskommission',
+             'Proposal template': u'Geb\xfchren',
+             'Edit after creation': True,
+             'Attachments': [self.document]},
+             ).save()
+
+        statusmessages.assert_no_error_messages()
+        self.commit_solr()
+
+        self.assertIn('external_edit', browser.css('.redirector').first.text,
+                      'External editor should have been triggered.')
+
+        proposal = browser.context
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'Baugesuch Kreuzachkreisel'],
+             ['Description', u'Ein n\xf6tiger Bau'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Meeting', ''],
+             ['Issuer', 'Ziegler Robert (robert.ziegler)'],
+             ['Proposal document', 'Baugesuch Kreuzachkreisel'],
+             ['State', 'Pending'],
+             ['Decision number', ''],
+             ['Attachments', u'Vertr\xe4gsentwurf'],
+             ['Excerpt', '']],
+            browser.css('table.listing').first.lists())
+        self.assertEqual(u'en', proposal.language)
+        self.assertEqual(self.document, proposal.relatedItems[0].to_object)
+        self.assert_workflow_state('proposal-state-active', proposal)
+
+        model = proposal.load_model()
+        self.assertEqual(u'Baugesuch Kreuzachkreisel', model.title)
+        self.assertEqual(u'Ein n\xf6tiger Bau', model.description)
+        self.assertIsNone(model.submitted_title)
+        self.assertIsNone(model.submitted_description)
+        self.assertEqual(Oguid.for_object(proposal), model.oguid)
+        self.assertEqual('robert.ziegler', model.issuer)
+        self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
+                         model.repository_folder_title)
+        self.assertEqual(u'en', model.language)
+        self.assertEqual(u'Client1 1.1 / 1', model.dossier_reference_number)
+
+        indexed_searchable_text = solr_data_for(proposal, 'SearchableText')
+        self.assertIn('Baugesuch Kreuzachkreisel', indexed_searchable_text)
+        self.assertIn(u'Ein n\xf6tiger Bau', indexed_searchable_text)
+
+        browser.click_on('Baugesuch Kreuzachkreisel')
+        browser.open(browser.context, view='tabbedview_view-overview')
+        self.assertDictContainsSubset(
+            {'Title': u'Baugesuch Kreuzachkreisel'},
+            dict(browser.css('table.listing').first.lists()))
+
+        self.assertEquals(
+            self.proposal_template.file.data,
+            proposal.get_proposal_document().file.data)
+
+        self.assertFalse(
+            is_officeconnector_checkout_feature_enabled(),
+            'Office connector checkout feature is now active: this means'
+            ' that the document will no longer be checked out in the proposal'
+            ' creation wizard and therefore the assertion "document is checked'
+            ' out" will therefore fail.')
+        self.assertEquals(
+            self.dossier_responsible.getId(),
+            self.get_checkout_manager(
+                proposal.get_proposal_document()).get_checked_out_by())
+
 
 class TestProposal(IntegrationTestCase):
 
@@ -191,79 +267,6 @@ class TestProposal(IntegrationTestCase):
              ['Attachments', u'Vertr\xe4gsentwurf'],
              ['Excerpt', '']],
             browser.css('table.listing').first.lists())
-
-    @browsing
-    def test_creating_proposal_from_proposal_template(self, browser):
-        self.login(self.dossier_responsible, browser)
-        browser.open(self.dossier)
-        factoriesmenu.add('Proposal')
-        browser.fill(
-            {'Title': u'Baugesuch Kreuzachkreisel',
-             'Description': u'Ein n\xf6tiger Bau',
-             'Committee': u'Rechnungspr\xfcfungskommission',
-             'Proposal template': u'Geb\xfchren',
-             'Edit after creation': True,
-             'Attachments': [self.document]},
-             ).save()
-
-        statusmessages.assert_no_error_messages()
-        self.assertIn('external_edit', browser.css('.redirector').first.text,
-                      'External editor should have been triggered.')
-
-        proposal = browser.context
-        browser.open(proposal, view='tabbedview_view-overview')
-        self.assertEquals(
-            [['Title', u'Baugesuch Kreuzachkreisel'],
-             ['Description', u'Ein n\xf6tiger Bau'],
-             ['Committee', u'Rechnungspr\xfcfungskommission'],
-             ['Meeting', ''],
-             ['Issuer', 'Ziegler Robert (robert.ziegler)'],
-             ['Proposal document', 'Baugesuch Kreuzachkreisel'],
-             ['State', 'Pending'],
-             ['Decision number', ''],
-             ['Attachments', u'Vertr\xe4gsentwurf'],
-             ['Excerpt', '']],
-            browser.css('table.listing').first.lists())
-        self.assertEqual(u'en', proposal.language)
-        self.assertEqual(self.document, proposal.relatedItems[0].to_object)
-        self.assert_workflow_state('proposal-state-active', proposal)
-
-        model = proposal.load_model()
-        self.assertEqual(u'Baugesuch Kreuzachkreisel', model.title)
-        self.assertEqual(u'Ein n\xf6tiger Bau', model.description)
-        self.assertIsNone(model.submitted_title)
-        self.assertIsNone(model.submitted_description)
-        self.assertEqual(Oguid.for_object(proposal), model.oguid)
-        self.assertEqual('robert.ziegler', model.issuer)
-        self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
-                         model.repository_folder_title)
-        self.assertEqual(u'en', model.language)
-        self.assertEqual(u'Client1 1.1 / 1', model.dossier_reference_number)
-
-        self.assertTrue(set(['baugesuch', 'kreuzachkreisel',
-                             'ein', 'notiger', 'bau']).issubset(
-            set(index_data_for(proposal)['SearchableText'])))
-
-        browser.click_on('Baugesuch Kreuzachkreisel')
-        browser.open(browser.context, view='tabbedview_view-overview')
-        self.assertDictContainsSubset(
-            {'Title': u'Baugesuch Kreuzachkreisel'},
-            dict(browser.css('table.listing').first.lists()))
-
-        self.assertEquals(
-            self.proposal_template.file.data,
-            proposal.get_proposal_document().file.data)
-
-        self.assertFalse(
-            is_officeconnector_checkout_feature_enabled(),
-            'Office connector checkout feature is now active: this means'
-            ' that the document will no longer be checked out in the proposal'
-            ' creation wizard and therefore the assertion "document is checked'
-            ' out" will therefore fail.')
-        self.assertEquals(
-            self.dossier_responsible.getId(),
-            self.get_checkout_manager(
-                proposal.get_proposal_document()).get_checked_out_by())
 
     @browsing
     def test_proposal_can_be_created_in_browser_from_document(self, browser):
