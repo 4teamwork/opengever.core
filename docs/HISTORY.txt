@@ -4,7 +4,7 @@ Changelog
 2020.3.0rc4 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Avoid object lookup in DocumentLinkWidget for catalog brains. [buchi]
 
 
 2020.3.0rc3 (2020-05-22)

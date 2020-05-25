@@ -1,5 +1,6 @@
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
+from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.globalrequest import getRequest
 
@@ -39,4 +40,8 @@ class DocumentLinkWidget(object):
         return self.template(self, self.request)
 
     def is_view_allowed(self):
+        # Avoid object lookup for catalog brains as catalog searches are
+        # security aware anyway.
+        if ICatalogBrain.providedBy(self.context.getDataOrigin()):
+            return True
         return api.user.has_permission('View', obj=self.context.getObject())
