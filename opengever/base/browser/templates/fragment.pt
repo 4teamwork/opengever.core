@@ -1,0 +1,9 @@
+<ul i18n:domain="opengever.base" style="display:none"
+    tal:define="level options/level|python:0; children options/children|nothing"
+    tal:attributes="class python:'navTree navTreeLevel'+str(level)"
+    tal:condition="python: len(children) > 0">
+    <span tal:replace="structure python:view.recurse_template(children=children, level=level+1)" />
+    <li tal:condition="options/has_more" class="navTreeFolderish loadMore">
+    	<a href="#" tal:attributes="data-bstart options/b_start" i18n:translate="label_load_more">Load more entries…</a>
+    </li>
+</ul>

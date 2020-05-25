@@ -25,6 +25,7 @@ WHITELIST = (
     'opengever.base.widgets.GeverRenderWidget',
     'opengever.base.browser.jsvariables.GeverJSVariables',
     'opengever.base.browser.ploneview.GeverPloneView',
+    'opengever.base.browser.contenttree.Fetch',
 
     # The bumblebee token is verified in these views:
     'opengever.bumblebee.browser.callback.ReceiveDocumentPDF',

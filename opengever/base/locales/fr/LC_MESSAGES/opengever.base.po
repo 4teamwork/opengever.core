@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-05 09:16+0000\n"
+"POT-Creation-Date: 2020-05-25 15:04+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -295,6 +295,11 @@ msgstr "Dossier:"
 msgid "label_last_modified"
 msgstr "Dernière modification"
 
+#. Default: "Load more entries…"
+#: ./opengever/base/browser/templates/fragment.pt
+msgid "label_load_more"
+msgstr "Charger plus…"
+
 #. Default: "No checked out documents"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_no_checked_out_docs"
@@ -316,7 +321,7 @@ msgid "label_none"
 msgstr "Aucune valeur"
 
 #. Default: "Null"
-#: ./opengever/base/helper.py
+#: ./opengever/base/helpers.py
 msgid "label_null"
 msgstr "Aucune valeur"
 

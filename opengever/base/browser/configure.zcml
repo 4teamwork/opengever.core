@@ -270,4 +270,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="contenttree-fetch"
+      for="plone.formwidget.contenttree.interfaces.IContentTreeWidget"
+      permission="zope.Public"
+      class=".contenttree.Fetch"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
