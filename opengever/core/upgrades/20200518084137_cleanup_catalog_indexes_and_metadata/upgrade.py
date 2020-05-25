@@ -61,6 +61,7 @@ class CleanupCatalogIndexesAndMetadata(UpgradeStep):
                 del_column_numbers.append(schema[column])
 
         # Remove columns from names
+        del_indexes.sort(reverse=True)
         for del_index in del_indexes:
             del names[del_index]
 
