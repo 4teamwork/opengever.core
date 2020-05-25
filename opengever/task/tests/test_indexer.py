@@ -1,10 +1,10 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
-from opengever.testing import index_data_for
 from opengever.testing import obj2brain
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 
 
 class TestTaskIndexers(FunctionalTestCase):
@@ -42,17 +42,22 @@ class TestTaskIndexers(FunctionalTestCase):
 
         self.assertTrue(obj2brain(self.subtask).is_subtask)
 
-    def test_searchable_text(self):
-        self.task.title = u'Test Aufgabe'
-        self.task.text = u'Lorem ipsum olor sit amet'
-        self.task.task_type = 'comment'
 
-        create_ogds_user('hboss', firstname=u'Hugo', lastname=u'B\xf6ss')
-        self.task.responsible = 'hboss'
+class TestTaskSolrIndexer(SolrIntegrationTestCase):
+
+    def test_searchable_text(self):
+        self.login(self.regular_user)
+
+        self.task.title = u'Test Aufgabe'
+        self.task.text = u'Lorem ipsum'
+        self.task.task_type = u'comment'
+        self.task.responsible = self.regular_user.getId()
 
         self.task.reindexObject()
+        self.commit_solr()
 
-        self.assertEquals(
-            ['test', 'aufgabe', 'lorem', 'ipsum', 'olor', 'sit',
-             'amet', 'to', 'comment', '1', 'boss', 'hugo', 'hboss'],
-            index_data_for(self.task).get('SearchableText'))
+        indexed_value = solr_data_for(self.task, 'SearchableText')
+
+        self.assertIn(u'Test Aufgabe', indexed_value)
+        self.assertIn(u'comment', indexed_value)
+        self.assertIn(u'B\xe4rfuss K\xe4thi (kathi.barfuss)', indexed_value)
