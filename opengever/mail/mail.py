@@ -6,7 +6,6 @@ from ftw.mail import utils
 from ftw.mail.mail import IMail
 from ftw.mail.mail import Mail
 from ftw.mail.utils import get_filename
-from ftw.mail.utils import remove_attachments
 from opengever.base import _ as base_mf
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
@@ -17,15 +16,12 @@ from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _ as dossier_mf
 from opengever.mail import _
-from opengever.mail.events import AttachmentsDeleted
-from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.namedfile import field
-from plone.namedfile import NamedBlobFile
 from plone.supermodel import model
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
@@ -35,12 +31,10 @@ from z3c.relationfield.relation import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.component.hooks import getSite
-from zope.event import notify
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -220,63 +214,6 @@ class OGMail(Mail, BaseDocumentMixin):
             doc.reindexObject()
 
         return doc
-
-    def is_delete_attachment_supported(self):
-        """Return wheter this mail supports deleting attachments.
-
-        Signed mails do not support deleting attachments as that would
-        invalidate the attached signature.
-        """
-
-        message = self.get_file()
-        if not message:
-            return False
-
-        return message.contentType != 'application/pkcs7-mime'
-
-    def delete_all_attachments(self):
-        """Delete all of mail's attachments.
-
-        The attachments will be removed from the attached message.
-        """
-        assert self.is_delete_attachment_supported()
-
-        self._delete_attachments(self.get_attachments())
-
-    def delete_attachments(self, positions):
-        """Delete all specified attachments from the mails message.
-
-        Positions must be a list of integer attachment positions. The position
-        can be obtained from the attachment description returned by
-        `get_attachments`.
-        """
-        assert self.is_delete_attachment_supported()
-
-        attachments = [attachment for attachment in self.get_attachments()
-                       if attachment.get('position') in positions]
-        self._delete_attachments(attachments)
-
-    def _delete_attachments(self, attachments):
-        assert self.is_delete_attachment_supported()
-
-        if not attachments:
-            return
-
-        attachment_names = [
-            attachment.get('filename', '[no filename]').decode('utf-8')
-            for attachment in attachments]
-        positions = [attachment['position'] for attachment in attachments]
-
-        # set the new message file
-        msg = remove_attachments(self.msg, positions)
-        self.message = NamedBlobFile(
-            data=msg.as_string(),
-            contentType=self.message.contentType,
-            filename=self.message.filename)
-
-        # Flag the `message` attribute as having changed
-        desc = Attributes(IAttachmentsDeletedEvent, "message")
-        notify(AttachmentsDeleted(self, attachment_names, desc))
 
     def _get_attachment_data(self, pos):
         """Return a tuple: file-data, content-type and filename extracted from

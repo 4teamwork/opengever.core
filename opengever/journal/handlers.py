@@ -10,7 +10,6 @@ from opengever.base.oguid import Oguid
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.journal import _
-from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.sharing.behaviors import IStandard
 from opengever.sharing.browser.sharing import ROLE_MAPPING
@@ -299,21 +298,6 @@ def doc_properties_updated(context):
                                   default=u'DocProperties updated.'))
 
 
-# ----------------------- MAIL -----------------------
-ATTACHMENTS_DELETED_ACTION = 'Attachments deleted'
-
-
-def attachments_deleted(context, event):
-    attachment_names = event.attachments
-    title = _(
-        u'label_attachments_deleted',
-        default=u'Attachments deleted: ${filenames}',
-        mapping={'filenames': ', '.join(attachment_names)})
-
-    journal_entry_factory(context, ATTACHMENTS_DELETED_ACTION, title)
-    return
-
-
 # ----------------------- DOCUMENT -----------------------
 DOCUMENT_ADDED_ACTION = 'Document added'
 
@@ -342,12 +326,6 @@ PUBLIC_TRIAL_MODIFIED_ACTION = 'Public trial modified'
 
 
 def document_modified(context, event):
-
-    if IAttachmentsDeletedEvent.providedBy(event):
-        # AttachmentsDeleted is a special kind of ObjectModified event
-        # and is handled elsewhere - don't journalize it twice.
-        return
-
     # we need to distinguish between "metadata modified"
     # and "public_trial modified"
     metadata_changed = False

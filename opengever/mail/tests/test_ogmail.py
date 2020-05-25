@@ -152,25 +152,6 @@ class TestOGMailAddition(FunctionalTestCase):
                       .with_message(MAIL_DATA))
         self.assertFalse(mail.has_attachments())
 
-    def test_delete_all_attachments(self):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_asset_message(
-                          'mail_with_multiple_attachments.eml'))
-
-        mail.delete_all_attachments()
-        self.assertFalse(mail.has_attachments())
-
-    def test_delete_one_attachment(self):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_asset_message(
-                          'mail_with_multiple_attachments.eml'))
-
-        self.assertEqual(3, len(mail.get_attachments()))
-        mail.delete_attachments([2])
-        self.assertEqual(2, len(mail.get_attachments()))
-
     def test_extracting_into_unsupported_container_raises_error(self):
         mail = create(Builder('mail')
                       .with_asset_message('mail_with_one_mail_attachment.eml'))
