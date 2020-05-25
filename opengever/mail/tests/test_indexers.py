@@ -1,12 +1,15 @@
 from collective.dexteritytextindexer.interfaces import IDynamicTextIndexExtender  # noqa
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.mail.indexer import checked_out
 from opengever.testing import index_data_for
-from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from zope.component import getAdapter
 
 
-class TestMailIndexers(IntegrationTestCase):
+class TestMailIndexers(SolrIntegrationTestCase):
 
     def test_sortable_title_indexer_accomodates_padding_for_five_numbers(self):
         self.login(self.regular_user)
@@ -41,14 +44,15 @@ class TestMailIndexers(IntegrationTestCase):
 
     def test_mail_searchable_text_contains_keywords(self):
         self.login(self.regular_user)
-        self.mail_eml.keywords = (u'Pick me!', u'Keyw\xf6rd')
-        self.mail_eml.reindexObject()
 
-        index_data = index_data_for(self.mail_eml).get('SearchableText')
+        mail = create(Builder("mail").within(self.dossier)
+                      .having(keywords=(u'Pick me!', u'Keyw\xf6rd'),
+                              ))
+        self.commit_solr()
+        indexed_value = solr_data_for(mail, 'SearchableText')
 
-        self.assertIn('pick', index_data)
-        self.assertIn('me', index_data)
-        self.assertIn('keyword', index_data)
+        self.assertIn(u'Pick me!', indexed_value)
+        self.assertIn(u'Keyw\xf6rd', indexed_value)
 
     def test_checked_out(self):
         self.assertEqual(checked_out(None)(), '')
