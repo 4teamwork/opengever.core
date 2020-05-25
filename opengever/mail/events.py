@@ -8,13 +8,11 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class DocumentSent(ObjectEvent):
-    """Local Roles has been modified"""
+    """Document has been sent"""
 
     implements(IDocumentSent)
 
-    def __init__(
-        self, object, sender, receiver, subject, message, attachments):
-        """adf"""
+    def __init__(self, object, sender, receiver, subject, message, attachments):
         self.object = object
         self.sender = sender
         self.receiver = receiver.encode('utf-8')

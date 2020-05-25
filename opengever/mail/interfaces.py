@@ -22,7 +22,7 @@ class ISendDocumentConf(Interface):
 
 
 class IDocumentSent(IObjectEvent):
-    """Local Roles has been modified"""
+    """Document has been sent"""
 
     sender = Attribute("The Mailsender")
     receiver = Attribute("The Mailreceiver")
