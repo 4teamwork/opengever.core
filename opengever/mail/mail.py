@@ -16,6 +16,7 @@ from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _ as dossier_mf
 from opengever.mail import _
+from opengever.mail.exceptions import AlreadyExtractedError
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
@@ -25,6 +26,7 @@ from plone.namedfile import field
 from plone.supermodel import model
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
+from plone.uuid.interfaces import IUUID
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from z3c.relationfield.relation import RelationValue
@@ -148,16 +150,29 @@ class OGMail(Mail, BaseDocumentMixin):
         """Return the parent that accepts extracted attachments."""
         return self.get_parent_dossier() or self.get_parent_inbox()
 
-    def get_attachments(self):
+    def get_attachments(self, unextracted_only=False):
         """Returns a list of dicts describing the attachements.
 
         Only attachments with a filename are returned.
         """
+        if unextracted_only:
+            return tuple(info for info in self.attachment_infos if not info.get('extracted'))
         return self.attachment_infos
 
     def has_attachments(self):
         """Return whether this mail has attachments."""
         return len(self.get_attachments()) > 0
+
+    def _get_attachment_info(self, position, write_modus=False):
+        """Return the attachment info for attachment at given position.
+        If write_modus is True, return the actual persistent mapping"""
+        for info in self._attachment_infos:
+            if info['position'] == position:
+                if not write_modus:
+                    return dict(info)
+                self._p_changed = True
+                return info
+        return None
 
     def extract_attachments_into_parent(self, positions):
         """Extract all specified attachments into the mails parent dossier or
@@ -184,6 +199,10 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
+        info = self._get_attachment_info(position, write_modus=True)
+        if info.get('extracted'):
+            raise AlreadyExtractedError(info)
+
         parent = self.get_extraction_parent()
         if parent is None:
             raise RuntimeError(
@@ -212,6 +231,11 @@ class OGMail(Mail, BaseDocumentMixin):
 
             IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
             doc.reindexObject()
+
+        # mark attachment as extracted
+        info['extracted'] = True
+        info['extracted_document_url'] = doc.absolute_url()
+        info['extracted_document_uid'] = IUUID(doc)
 
         return doc
 

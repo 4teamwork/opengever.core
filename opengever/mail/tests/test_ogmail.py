@@ -3,12 +3,14 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import IDocumentSettings
+from opengever.mail.exceptions import AlreadyExtractedError
 from opengever.mail.mail import IOGMailMarker
 from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.registry.interfaces import IRegistry
+from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 import transaction
 
@@ -157,7 +159,40 @@ class TestOGMailAddition(FunctionalTestCase):
                       .with_asset_message('mail_with_one_mail_attachment.eml'))
 
         with self.assertRaises(RuntimeError):
-            mail.extract_attachment_into_parent(position=1)
+            mail.extract_attachment_into_parent(position=2)
+
+
+class TestExtractMail(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestExtractMail, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_asset_message(
+                               'mail_with_multiple_attachments.eml'))
+
+    def test_attachment_can_only_be_extracted_once(self):
+        self.mail.extract_attachment_into_parent(4)
+        with self.assertRaises(AlreadyExtractedError):
+            self.mail.extract_attachment_into_parent(4)
+
+    def test_extracting_attachment_updates_attachment_info(self):
+        info = self.mail._get_attachment_info(4)
+        expected_info = {
+            'content-type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'filename': 'word_document.docx',
+            'position': 4,
+            'size': 22962}
+        self.assertEqual(info, expected_info)
+
+        doc = self.mail.extract_attachment_into_parent(4)
+        info = self.mail._get_attachment_info(4)
+        expected_info.update({
+            'extracted': True,
+            'extracted_document_url': doc.absolute_url(),
+            'extracted_document_uid': IUUID(doc)})
+        self.assertEqual(info, expected_info)
 
 
 class TestExtractMailInDossier(FunctionalTestCase):
