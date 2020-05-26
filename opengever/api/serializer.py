@@ -131,6 +131,22 @@ class SerializeTeamModelToJson(SerializeSQLModelToJsonBase):
 
 
 @implementer(ISerializeToJson)
+@adapter(Group, IOpengeverBaseLayer)
+class SerializeGroupModelToJson(SerializeSQLModelToJsonBase):
+
+    content_type = 'virtual.ogds.group'
+
+    def add_additional_metadata(self, data):
+        """Add the team members, group summary and org_unit_title"""
+
+        data['users'] = []
+        for user in self.context.users:
+            user_serializer = queryMultiAdapter(
+                (user, self.request), ISerializeToJsonSummary)
+            data['users'].append(user_serializer())
+
+
+@implementer(ISerializeToJson)
 @adapter(User, IOpengeverBaseLayer)
 class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
 
@@ -283,4 +299,4 @@ class SerializeGroupModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     content_type = 'virtual.ogds.group'
     id_attribute_name = 'groupid'
-    endpoint_name = '@group'
+    endpoint_name = '@ogds-groups'
