@@ -10,6 +10,7 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
 - ``@team`` Endpunkt umbenannt in ``@teams``
 - ``@ogds-user`` Endpunkt umbenannt in ``@ogds-users``
+- Kapitel "Gruppen" hinzugefügt
 
 
 2020-04-27

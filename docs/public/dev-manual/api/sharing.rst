@@ -40,6 +40,13 @@ Die lokalen Rollen können mit dem ``@sharing`` Endpoint abgefragt werden. Um di
                 "disabled": false,
                 "id": "og_demo-ftw_users",
                 "login": null,
+                "ogds_summary": {
+                    "@id": "http://localhost:8080/fd/kontakte/@ogds-groups/og_demo-ftw_users",
+                    "@type": "virtual.ogds.group",
+                    "active": true,
+                    "groupid": "og_demo-ftw_users",
+                    "title": null
+                },
                 "roles": {
                     "Contributor": false,
                     "Reader": false
