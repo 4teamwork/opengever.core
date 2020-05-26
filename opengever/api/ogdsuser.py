@@ -10,7 +10,7 @@ from zope.publisher.interfaces import IPublishTraverse
 class OGDSUserGet(Service):
     """API Endpoint that returns a single user from ogds.
 
-    GET /@ogds-user/user.id HTTP/1.1
+    GET /@ogds-users/user.id HTTP/1.1
     """
 
     implements(IPublishTraverse)

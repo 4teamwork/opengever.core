@@ -287,7 +287,7 @@ Beispiel: Auflistung aller Benutzer:
       "facets": {},
       "items": [
         {
-          "@id": "http://localhost:8080/fd/kontakte/@ogds-user/sandro.ackermann",
+          "@id": "http://localhost:8080/fd/kontakte/@ogds-users/sandro.ackermann",
           "@type": "virtual.ogds.user",
           "active": true,
           "department": null,

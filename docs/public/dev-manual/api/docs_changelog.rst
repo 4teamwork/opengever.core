@@ -5,6 +5,12 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2020-05-26
+----------
+
+- ``@ogds-user`` Endpunkt umbenannt in ``@ogds-users``
+
+
 2020-04-27
 ----------
 

@@ -10,12 +10,12 @@ class TestOGDSUserGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.contactfolder,
-                     view='@ogds-user/kathi.barfuss',
+                     view='@ogds-users/kathi.barfuss',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-user/kathi.barfuss',
+            {u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
              u'@type': u'virtual.ogds.user',
              u'active': True,
              u'address1': u'Kappelenweg 13',
@@ -65,7 +65,7 @@ class TestOGDSUserGet(IntegrationTestCase):
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.contactfolder,
-                         view='@ogds-user',
+                         view='@ogds-users',
                          headers=self.api_headers)
 
     @browsing
@@ -74,5 +74,5 @@ class TestOGDSUserGet(IntegrationTestCase):
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.contactfolder,
-                         view='@ogds-user/kathi.barfuss/foobar',
+                         view='@ogds-users/kathi.barfuss/foobar',
                          headers=self.api_headers)
