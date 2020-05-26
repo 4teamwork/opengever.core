@@ -16,8 +16,12 @@ def attachment_checkbox_helper(item, value):
              'id': 'attachment%s' % str(item['position']),
              'value': str(item['position'])}
 
-    return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
-                                      for k, v in attrs.items()])
+    if item.get("extracted"):
+        tag = '<span %s />'
+    else:
+        tag = '<input %s />'
+
+    return tag % ' '.join(['%s="%s"' % (k, v) for k, v in attrs.items()])
 
 
 def content_type_helper(item, content_type):
