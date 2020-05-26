@@ -46,7 +46,7 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'phone_mobile': u'012 34 56 76',
              u'phone_office': u'012 34 56 78',
              u'salutation': u'Prof. Dr.',
-             u'teams': [{u'@id': u'http://nohost/plone/kontakte/@team/1',
+             u'teams': [{u'@id': u'http://nohost/plone/kontakte/@teams/1',
                          u'@type': u'virtual.ogds.team',
                          u'active': True,
                          u'groupid': u'projekt_a',

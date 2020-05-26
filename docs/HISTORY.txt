@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc4 (unreleased)
 ------------------------
 
+- Rename @team API endpoint to @teams. [tinagerber]
 - Avoid object lookup in DocumentLinkWidget for catalog brains. [buchi]
 - Improve contenttree widget in handling a large amount of items. [buchi]
 - Rename @ogds-user API endpoint to @ogds-users. [tinagerber]

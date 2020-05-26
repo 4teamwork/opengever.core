@@ -10,7 +10,7 @@ from zope.publisher.interfaces import IPublishTraverse
 class TeamGet(Service):
     """API Endpoint that returns a single team from ogds.
 
-    GET /@team/team.id HTTP/1.1
+    GET /@teams/team.id HTTP/1.1
     """
 
     implements(IPublishTraverse)
