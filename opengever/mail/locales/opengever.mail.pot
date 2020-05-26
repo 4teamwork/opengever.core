@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-14 16:05+0000\n"
+"POT-Creation-Date: 2020-05-26 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,6 +49,11 @@ msgstr ""
 #. Default: "Cancel"
 #: ./opengever/mail/browser/send_document.py
 msgid "cancel_back"
+msgstr ""
+
+#. Default: "Already extracted"
+#: ./opengever/mail/browser/extract_attachments.py
+msgid "column_already_extracted"
 msgstr ""
 
 #. Default: "Filename"
@@ -96,11 +101,6 @@ msgstr ""
 msgid "help_attachments_to_save"
 msgstr ""
 
-#. Default: "Select which attachments should be deleted."
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "help_delete_action"
-msgstr ""
-
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
 #: ./opengever/mail/browser/send_document.py
 msgid "help_extern_receiver"
@@ -129,26 +129,6 @@ msgstr ""
 #. Default: "Attachments to save"
 #: ./opengever/mail/browser/templates/extract_attachments.pt
 msgid "label_attachments_to_save"
-msgstr ""
-
-#. Default: "Delete attachments"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action"
-msgstr ""
-
-#. Default: "Delete all attachments"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action_all"
-msgstr ""
-
-#. Default: "Delete nothing"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action_nothing"
-msgstr ""
-
-#. Default: "Delete all selected attachments"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action_selected"
 msgstr ""
 
 #. Default: "Attachments"
@@ -203,6 +183,11 @@ msgstr ""
 msgid "label_message_source_mailin"
 msgstr ""
 
+#. Default: "No"
+#: ./opengever/mail/browser/extract_attachments.py
+msgid "label_no"
+msgstr ""
+
 #. Default: "Message"
 #: ./opengever/mail/browser/mail.py
 msgid "label_org_message"
@@ -241,6 +226,11 @@ msgstr ""
 #. Default: "Subject"
 #: ./opengever/mail/browser/send_document.py
 msgid "label_subject"
+msgstr ""
+
+#. Default: "Yes"
+#: ./opengever/mail/browser/extract_attachments.py
+msgid "label_yes"
 msgstr ""
 
 #: ./opengever/mail/browser/send_document.py

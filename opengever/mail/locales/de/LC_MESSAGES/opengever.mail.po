@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-14 16:05+0000\n"
+"POT-Creation-Date: 2020-05-26 15:45+0000\n"
 "PO-Revision-Date: 2016-07-22 16:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/de/>\n"
@@ -50,6 +50,11 @@ msgstr "Senden"
 msgid "cancel_back"
 msgstr "Abbrechen"
 
+#. Default: "Already extracted"
+#: ./opengever/mail/browser/extract_attachments.py
+msgid "column_already_extracted"
+msgstr "Schon gespeichert"
+
 #. Default: "Filename"
 #: ./opengever/mail/browser/extract_attachments.py
 msgid "column_attachment_filename"
@@ -95,11 +100,6 @@ msgstr "Dokumente als E-Mail versenden"
 msgid "help_attachments_to_save"
 msgstr "Wählen Sie die Anhänge aus, die gespeichert werden sollen. Aus jedem ausgewähltem Anhang wird ein Dokument im übergeordneten Dossier erzeugt."
 
-#. Default: "Select which attachments should be deleted."
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "help_delete_action"
-msgstr "Wählen Sie aus, ob und welche Anhänge aus dieser E-Mail gelöscht werden sollen."
-
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
 #: ./opengever/mail/browser/send_document.py
 msgid "help_extern_receiver"
@@ -129,26 +129,6 @@ msgstr "Interne Empfänger"
 #: ./opengever/mail/browser/templates/extract_attachments.pt
 msgid "label_attachments_to_save"
 msgstr "Zu speichernde Anhänge"
-
-#. Default: "Delete attachments"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action"
-msgstr "Anhänge löschen"
-
-#. Default: "Delete all attachments"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action_all"
-msgstr "Alle Anhänge in dieser E-Mail löschen"
-
-#. Default: "Delete nothing"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action_nothing"
-msgstr "Keine Anhänge löschen"
-
-#. Default: "Delete all selected attachments"
-#: ./opengever/mail/browser/templates/extract_attachments.pt
-msgid "label_delete_action_selected"
-msgstr "Alle oben ausgewählten Anhänge aus dieser E-Mail löschen"
 
 #. Default: "Attachments"
 #: ./opengever/mail/browser/mail.py
@@ -202,6 +182,11 @@ msgstr "Drag & Drop Upload"
 msgid "label_message_source_mailin"
 msgstr "Mail-In"
 
+#. Default: "No"
+#: ./opengever/mail/browser/extract_attachments.py
+msgid "label_no"
+msgstr "Nein"
+
 #. Default: "Message"
 #: ./opengever/mail/browser/mail.py
 msgid "label_org_message"
@@ -241,6 +226,11 @@ msgstr "Info"
 #: ./opengever/mail/browser/send_document.py
 msgid "label_subject"
 msgstr "Betreff"
+
+#. Default: "Yes"
+#: ./opengever/mail/browser/extract_attachments.py
+msgid "label_yes"
+msgstr "Ja"
 
 #: ./opengever/mail/browser/send_document.py
 msgid "mails"
