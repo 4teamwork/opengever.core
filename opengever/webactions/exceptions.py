@@ -15,3 +15,14 @@ class UnknownField(ValidationError):
 class InvalidBase64DataURI(InvalidURI):
     """The given URI is not a valid data URI using Base64 encoding.
     """
+
+
+class ForbiddenTargetUrlParam(ValidationError):
+    """The target url contains an invalid query parameter, e.g. a query
+    parameter which is already appended to the target url by default.
+    """
+
+
+class UnsupportedTargetUrlPlaceholder(ValidationError):
+    """The target url contains unsupported placeholders in the querystring.
+    """

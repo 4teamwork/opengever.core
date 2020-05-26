@@ -6,8 +6,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
+from opengever.webactions.exceptions import ForbiddenTargetUrlParam
+from opengever.webactions.exceptions import UnsupportedTargetUrlPlaceholder
 from opengever.webactions.interfaces import IWebActionsStorage
 from opengever.webactions.storage import ActionAlreadyExists
+from opengever.webactions.storage import ALLOWED_QUERY_PLACEHOLDERS
+from opengever.webactions.storage import DEFAULT_QUERY_PARAMS
 from opengever.webactions.storage import get_storage
 from opengever.webactions.storage import WebActionsStorage
 from zope.annotation import IAnnotations
@@ -324,6 +328,101 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
             "WebAction doesn't conform to schema (First error: ('action_id', UnknownField('action_id'))).",
             str(cm.exception))
 
+    def test_can_add_webaction_not_having_query_param_in_target_url(self):
+        storage = get_storage()
+        action = {
+            'title': u'Not important for this test',
+            'target_url': 'http://example.org/endpoint',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        action_id = storage.add(action)
+        self.assertEqual(
+            'http://example.org/endpoint',
+            storage.get(action_id)['target_url']
+        )
+
+    def test_can_add_webaction_having_arbitrary_query_param_in_target_url(self):
+        storage = get_storage()
+        action = {
+            'title': u'Not important for this test',
+            'target_url': 'http://example.org/endpoint?mode=1',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        action_id = storage.add(action)
+        self.assertEqual(
+            'http://example.org/endpoint?mode=1',
+            storage.get(action_id)['target_url']
+        )
+
+    def test_can_add_webaction_having_duplicate_query_params_in_target_url(self):
+        storage = get_storage()
+        action = {
+            'title': u'Not important for this test',
+            'target_url': 'http://example.org/endpoint?geverid=55&geverid=75',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        action_id = storage.add(action)
+        self.assertEqual(
+            'http://example.org/endpoint?geverid=55&geverid=75',
+            storage.get(action_id)['target_url']
+        )
+
+    def test_cant_add_webaction_having_default_query_param_in_target_url(self):
+        storage = get_storage()
+
+        for query_param in DEFAULT_QUERY_PARAMS:
+            action = {
+                'title': u'Not important for this test',
+                'target_url': 'http://example.org/endpoint?{}=something'.format(query_param),
+                'display': 'actions-menu',
+                'mode': 'self',
+                'order': 0,
+                'scope': 'global',
+            }
+
+            with self.assertRaises(ForbiddenTargetUrlParam) as cm:
+                storage.add(action)
+
+            self.assertEqual(
+                'The query parameter "{}" is not allowed because it will be '
+                'provided automatically.'.format(query_param),
+                str(cm.exception))
+
+    def test_cant_add_webaction_having_unsupported_placeholder_in_target_url(self):
+        storage = get_storage()
+
+        # If the placeholder used in this test will ever become allowed,
+        # we need to update the list of allowed placeholders.
+        self.assertNotIn('{something}', ALLOWED_QUERY_PLACEHOLDERS)
+
+        action = {
+            'title': u'Not important for this test',
+            'target_url': 'http://example.org/endpoint?geverid=45&geverid={something}',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        with self.assertRaises(UnsupportedTargetUrlPlaceholder) as cm:
+            storage.add(action)
+
+        self.assertEqual(
+            'The placeholder "{something}" of the query parameter "geverid" is not supported.',
+            str(cm.exception))
+
 
 class TestWebActionsStorageRetrieval(IntegrationTestCase):
 
@@ -506,6 +605,79 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
 
         self.assertEqual(
             "WebAction doesn't conform to schema (First error: ('action_id', UnknownField('action_id'))).",
+            str(cm.exception))
+
+    def test_can_update_webaction_target_url_to_url_with_empty_querystring(self):
+        storage = get_storage()
+        action = create(Builder('webaction'))
+
+        storage.update(
+            action['action_id'],
+            {'target_url': 'http://example.org/endpoint2'}
+        )
+        self.assertEqual(
+            'http://example.org/endpoint2',
+            storage.get(action['action_id'])['target_url']
+        )
+
+    def test_can_update_webaction_target_url_to_url_with_arbitrary_query_param(self):
+        storage = get_storage()
+        action = create(Builder('webaction'))
+
+        storage.update(
+            action['action_id'],
+            {'target_url': 'http://example.org/endpoint?mode=1'}
+        )
+        self.assertEqual(
+            'http://example.org/endpoint?mode=1',
+            storage.get(action['action_id'])['target_url']
+        )
+
+    def test_can_update_webaction_target_url_to_url_with_duplicate_query_params(self):
+        storage = get_storage()
+        action = create(Builder('webaction'))
+
+        storage.update(
+            action['action_id'],
+            {'target_url': 'http://example.org/endpoint?geverid=55&geverid=75'}
+        )
+        self.assertEqual(
+            'http://example.org/endpoint?geverid=55&geverid=75',
+            storage.get(action['action_id'])['target_url']
+        )
+
+    def test_cant_update_webaction_target_url_to_url_with_default_query_param(self):
+        storage = get_storage()
+        action = create(Builder('webaction'))
+
+        for query_param in DEFAULT_QUERY_PARAMS:
+            with self.assertRaises(ForbiddenTargetUrlParam) as cm:
+                storage.update(
+                    action['action_id'],
+                    {'target_url': 'http://example.org/endpoint?{}=something'.format(query_param)}
+                )
+
+            self.assertEqual(
+                'The query parameter "{}" is not allowed because it will be '
+                'provided automatically.'.format(query_param),
+                str(cm.exception))
+
+    def test_cant_update_webaction_target_url_to_url_with_unsupported_placeholder(self):
+        storage = get_storage()
+        action = create(Builder('webaction'))
+
+        # If the placeholder used in this test will ever become allowed,
+        # we need to update the list of allowed placeholders.
+        self.assertNotIn('{something}', ALLOWED_QUERY_PLACEHOLDERS)
+
+        with self.assertRaises(UnsupportedTargetUrlPlaceholder) as cm:
+            storage.update(
+                action['action_id'],
+                {'target_url': 'http://example.org/endpoint?geverid=45&geverid={something}'}
+            )
+
+        self.assertEqual(
+            'The placeholder "{something}" of the query parameter "geverid" is not supported.',
             str(cm.exception))
 
 

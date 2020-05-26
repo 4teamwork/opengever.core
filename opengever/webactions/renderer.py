@@ -1,18 +1,24 @@
+from collections import OrderedDict
 from opengever.base.utils import escape_html
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.webactions.interfaces import IWebActionsProvider
 from opengever.webactions.interfaces import IWebActionsRenderer
 from urllib import urlencode
+from urlparse import parse_qs
+from urlparse import urlparse
+from urlparse import urlunparse
 from zope.component import adapter
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 class WebActionsSafeDataGetter(object):
 
-    _attributes_not_to_escape = ["mode", "action_id", "icon_name", "icon_data"]
+    _attributes_not_to_escape = ["mode", "action_id", "icon_name", "icon_data", "target_url"]
 
     def __init__(self, context, request, display):
         self.context = context
@@ -35,14 +41,56 @@ class WebActionsSafeDataGetter(object):
     def _prepare_webaction_data(self, action):
         data = {key: value if key in self._attributes_not_to_escape else escape_html(value)
                 for key, value in action.items()}
-
-        data['target_url'] = "{}?{}".format(
-            data['target_url'], urlencode(self._get_webaction_parameters()))
+        data['target_url'] = self._sanitize_target_url(
+            self._interpolate_target_url(data['target_url'])
+        )
         return data
 
-    def _get_webaction_parameters(self):
-        return {'context': self.context.absolute_url(),
-                'orgunit': get_current_org_unit().id()}
+    def _sanitize_target_url(self, target_url):
+        # Split the url in its components, so we can handle the HTML
+        # escape individually (base url vs. query params).
+        parsed_target_url = urlparse(target_url)
+
+        # Sanitize the querystring parameters (names and values) because
+        # they may contain evil stuff (user input).
+        parsed_query = parse_qs(parsed_target_url.query)
+        sanitized_query = OrderedDict({
+            escape_html(key): [escape_html(item) for item in value]
+            for key, value in parsed_query.items()
+        })
+
+        # Enhance the query with the default query params. They don't need
+        # to be sanitize because they are not user input.
+        sanitized_query.update(self._get_default_webaction_parameters())
+
+        # Sanitize the target url. We need to remove the query params so
+        # we don't convert the separating ampersand to a HTML entity.
+        target_url_without_query = escape_html(
+            urlunparse(parsed_target_url._replace(query=""))
+        )
+
+        # Put back the sanitized query params into the target url.
+        target_url = urlparse(target_url_without_query)
+        target_url = target_url._replace(
+            query=urlencode(sanitized_query, doseq=True)
+        )
+        target_url = urlunparse(target_url)
+
+        return target_url
+
+    def _interpolate_target_url(self, target_url):
+        # Replace the placeholders with the actual values.
+        return target_url.format(
+            intid=getUtility(IIntIds).getId(self.context),
+            path='/'.join(self.context.getPhysicalPath()),
+            uid=self.context.UID(),
+        )
+
+    def _get_default_webaction_parameters(self):
+        return OrderedDict({
+            'context': self.context.absolute_url(),
+            'orgunit': get_current_org_unit().id(),
+        })
 
 
 @implementer(IWebActionsRenderer)

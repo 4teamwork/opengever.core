@@ -5,6 +5,8 @@ from datetime import datetime
 from opengever.api.validation import validate_no_unknown_fields
 from opengever.api.validation import validate_schema
 from opengever.webactions.exceptions import ActionAlreadyExists
+from opengever.webactions.exceptions import ForbiddenTargetUrlParam
+from opengever.webactions.exceptions import UnsupportedTargetUrlPlaceholder
 from opengever.webactions.interfaces import IWebActionsStorage
 from opengever.webactions.schema import IPersistedWebActionSchema
 from opengever.webactions.schema import IWebActionSchema
@@ -12,6 +14,8 @@ from persistent.mapping import PersistentMapping
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
+from urlparse import parse_qs
+from urlparse import urlparse
 from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -21,10 +25,26 @@ from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
+DEFAULT_QUERY_PARAMS = [
+    'context',
+    'orgunit',
+]
+
+ALLOWED_QUERY_PLACEHOLDERS = [
+    '{intid}',
+    '{path}',
+    '{uid}',
+]
+
+
 def get_storage():
     """Convencience function to easily get the IWebActionsStorage storage.
     """
     return getMultiAdapter((getSite(), getRequest()), IWebActionsStorage)
+
+
+def is_placeholder(placeholder):
+    return placeholder.startswith('{') and placeholder.endswith('}')
 
 
 @implementer(IWebActionsStorage)
@@ -87,6 +107,7 @@ class WebActionsStorage(object):
         validate_schema(action_data, IWebActionSchema)
 
         self._enforce_unique_name_uniqueness(action_data)
+        self._enforce_valid_query_params(action_data)
 
         action_id = self.issue_new_action_id()
 
@@ -136,6 +157,7 @@ class WebActionsStorage(object):
         validate_no_unknown_fields(action_data, IWebActionSchema)
 
         self._enforce_unique_name_uniqueness(action_data)
+        self._enforce_valid_query_params(action_data)
 
         # Validate schema of the final resulting action on a copy
         action_copy = persisted_action.copy()
@@ -176,3 +198,23 @@ class WebActionsStorage(object):
                 raise ActionAlreadyExists(
                     'An action with the unique_name %r already '
                     'exists' % action_data['unique_name'])
+
+    def _enforce_valid_query_params(self, action_data):
+        target_url = action_data.get('target_url')
+        if not target_url:
+            return
+        query = parse_qs(urlparse(target_url).query)
+        if not query:
+            return
+        for param, value in query.items():
+            if param in DEFAULT_QUERY_PARAMS:
+                raise ForbiddenTargetUrlParam(
+                    'The query parameter "{}" is not allowed because it will be '
+                    'provided automatically.'.format(param)
+                )
+            for placeholder in value:
+                if is_placeholder(placeholder) and placeholder not in ALLOWED_QUERY_PLACEHOLDERS:
+                    raise UnsupportedTargetUrlPlaceholder(
+                        'The placeholder "{}" of the query parameter "{}" is not '
+                        'supported.'.format(placeholder, param)
+                    )
