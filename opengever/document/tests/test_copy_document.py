@@ -117,7 +117,6 @@ class TestCopyDocuments(IntegrationTestCase):
                               'firstname',
                               'getContentType',
                               'getIcon',
-                              'getObjSize',
                               'has_sametype_children',
                               'in_response_to',
                               'is_folderish',
