@@ -632,4 +632,20 @@
       inline="False"
       />
 
+  <!-- Replace Plone's contenttree.js with our own -->
+  <javascript
+      id="++resource++opengever.base/contenttree.js"
+      insert-after="++resource++plone.formwidget.contenttree/contenttree.js"
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      enabled="True"
+      expression=""
+      inline="False"
+      />
+  <javascript
+      id="++resource++plone.formwidget.contenttree/contenttree.js"
+      remove="True"
+      />
+
 </object>

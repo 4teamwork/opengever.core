@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Avoid object lookup in DocumentLinkWidget for catalog brains. [buchi]
+- Improve contenttree widget in handling a large amount of items. [buchi]
 
 
 2020.3.0rc3 (2020-05-22)

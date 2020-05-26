@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-09-05 09:16+0000\n"
+"POT-Creation-Date: 2020-05-25 15:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -293,6 +293,11 @@ msgstr ""
 msgid "label_last_modified"
 msgstr ""
 
+#. Default: "Load more entries…"
+#: ./opengever/base/browser/templates/fragment.pt
+msgid "label_load_more"
+msgstr ""
+
 #. Default: "No checked out documents"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_no_checked_out_docs"
@@ -314,7 +319,7 @@ msgid "label_none"
 msgstr ""
 
 #. Default: "Null"
-#: ./opengever/base/helper.py
+#: ./opengever/base/helpers.py
 msgid "label_null"
 msgstr ""
 
