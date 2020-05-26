@@ -355,7 +355,15 @@ class RoleAssignmentManager(object):
         self._update_local_roles()
 
     def clear(self, cause, principal, reference, reindex=True):
-        item = self.storage.get(principal, cause, Oguid.for_object(reference).id)
+        """Clear one assignment, if it still exists.
+
+        Clear an assignment of the given cause, principal and reference.
+        Reference may either be a plone content object or an oguid string
+        representation.
+        """
+        if reference and not isinstance(reference, basestring):
+            reference = Oguid.for_object(reference).id
+        item = self.storage.get(principal, cause, reference)
         if not item:
             return
 
