@@ -2,9 +2,14 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from opengever.usermigration.localroles import migrate_localroles
+from ftw.usermigration.browser import migration
 
 
 class TestMigrateLocalRoles(IntegrationTestCase):
+
+    def test_patch_applied(self):
+        self.assertIs(
+            migration.BUILTIN_MIGRATIONS['localroles'], migrate_localroles)
 
     def test_move_inbox_local_roles_of_existing_user(self):
         self.login(self.manager)
