@@ -7,6 +7,7 @@ from opengever.mail.browser.extract_attachments import content_type_helper
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from pkg_resources import resource_string
+import transaction
 
 
 MESSAGE_TEXT = 'Mime-Version: 1.0\nContent-Type: multipart/mixed; boundary=908752978\nTo: to@example.org\nFrom: from@example.org\nSubject: Attachment Test\nDate: Thu, 01 Jan 1970 01:00:00 +0100\nMessage-Id: <1>\n\n\n--908752978\nContent-Disposition: attachment;\n	filename*=iso-8859-1\'\'B%FCcher.txt\nContent-Type: text/plain;\n	name="=?iso-8859-1?Q?B=FCcher.txt?="\nContent-Transfer-Encoding: base64\n\nw6TDtsOcCg==\n\n--908752978--\n'
@@ -22,6 +23,35 @@ class TestExtractAttachmentView(FunctionalTestCase):
         self.mail = create(Builder('mail')
                            .within(self.dossier)
                            .with_message(MESSAGE_TEXT))
+
+    @browsing
+    def test_extract_attachment_view_content(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        table = browser.css('table').first
+        self.assertEqual(
+            [['', 'Already extracted', 'Type', 'Filename', 'Size'],
+             ['', 'No', '', u'B\xfccher.txt', '1 KB']],
+            table.lists())
+
+        self.mail.extract_attachment_into_parent(1)
+        transaction.commit()
+
+        browser.open(self.mail, view='extract_attachments')
+        table = browser.css('table').first
+        self.assertEqual(
+            [['', 'Already extracted', 'Type', 'Filename', 'Size'],
+             ['', 'Yes', '', u'B\xfccher.txt', '1 KB']],
+            table.lists())
+
+    @browsing
+    def test_attachment_only_selectable_when_not_already_extracted(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        self.assertEqual('input', browser.css("#attachment1").first.tag)
+        self.mail.extract_attachment_into_parent(1)
+        transaction.commit()
+
+        browser.login().open(self.mail, view='extract_attachments')
+        self.assertEqual('span', browser.css("#attachment1").first.tag)
 
     @browsing
     def test_without_selecting_attachments_shows_error_statusmessage(self, browser):

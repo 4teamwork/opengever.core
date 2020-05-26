@@ -73,6 +73,12 @@ def human_readable_filesize_helper(context):
     return _helper
 
 
+def extracted_helper(item, extracted):
+    if extracted:
+        return _(u'label_yes', default=u'Yes')
+    return _(u'label_no', default=u'No')
+
+
 class ExtractAttachments(BrowserView):
     """View for extracting attachments from a `ftw.mail` Mail object into
     `opengever.document` Documents in a `IMailInAddressMarker` container.
@@ -86,6 +92,11 @@ class ExtractAttachments(BrowserView):
             {'column': '',
              'transform': attachment_checkbox_helper,
              'width': 30},
+
+            {'column': 'extracted',
+             'column_title': _(u'column_already_extracted',
+                               default=u'Already extracted'),
+             'transform': extracted_helper},
 
             {'column': 'content-type',
              'column_title': _(u'column_attachment_type',
