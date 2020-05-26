@@ -1,6 +1,8 @@
+from collections import defaultdict
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.base.model import create_session
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -284,62 +286,70 @@ class TestWatchersPost(IntegrationTestCase):
 class TestWatchersDelete(IntegrationTestCase):
     features = ('activity', )
 
+    def get_watchers_and_roles(self, context):
+        center = notification_center()
+        watchers_and_roles = defaultdict(list)
+        resource = center.fetch_resource(context)
+        create_session().refresh(resource)
+        for subscription in resource.subscriptions:
+            watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
+        return watchers_and_roles
+
     @browsing
     def test_delete_watchers_for_task(self, browser):
-        center = notification_center()
         self.login(self.regular_user, browser=browser)
-        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
-        browser.open(self.task.absolute_url() + '/@watchers',
-                     method='GET', headers=self.api_headers)
+        notification_center().add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+        watchers_and_roles = self.get_watchers_and_roles(self.task)
         self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
                           u'robert.ziegler': [u'task_issuer']},
-                         browser.json['watchers_and_roles'])
+                         watchers_and_roles)
 
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 204)
-        browser.open(self.task.absolute_url() + '/@watchers', method='GET',
-                     headers=self.api_headers)
+        watchers_and_roles = self.get_watchers_and_roles(self.task)
         self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
                           u'robert.ziegler': [u'task_issuer']},
-                         browser.json['watchers_and_roles'])
+                         watchers_and_roles)
 
     @browsing
     def test_delete_watchers_for_inbox_forwarding(self, browser):
-        center = notification_center()
         self.login(self.secretariat_user, browser=browser)
-        center.add_watcher_to_resource(self.inbox_forwarding, self.secretariat_user.getId(),
-                                       WATCHER_ROLE)
-        browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
-                     method='GET', headers=self.api_headers)
+
+        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
+        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
+                          u'robert.ziegler': [u'task_issuer']},
+                         watchers_and_roles)
+
+        notification_center().add_watcher_to_resource(
+            self.inbox_forwarding, self.secretariat_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({
             u'kathi.barfuss': [u'task_responsible'],
             u'robert.ziegler': [u'task_issuer'],
             u'jurgen.konig': [u'regular_watcher']},
-                         browser.json['watchers_and_roles'])
+                         watchers_and_roles)
+
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
-
         self.assertEqual(browser.status_code, 204)
-
-        browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
-                     headers=self.api_headers)
+        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
                           u'robert.ziegler': [u'task_issuer']},
-                         browser.json['watchers_and_roles'])
+                         watchers_and_roles)
 
     @browsing
     def test_delete_watchers_with_data_raises_bad_request(self, browser):
-        center = notification_center()
         self.login(self.regular_user, browser=browser)
-        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
-        browser.open(self.task.absolute_url() + '/@watchers',
-                     method='GET', headers=self.api_headers)
+        notification_center().add_watcher_to_resource(
+            self.task, self.regular_user.getId(), WATCHER_ROLE)
+        watchers_and_roles = self.get_watchers_and_roles(self.task)
 
         self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
                           u'robert.ziegler': [u'task_issuer']},
-                         browser.json['watchers_and_roles'])
+                         watchers_and_roles)
 
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@watchers',
