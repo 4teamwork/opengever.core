@@ -4,6 +4,8 @@ from Missing import Value as MissingValue
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.base.sentry import log_msg_to_sentry
+from opengever.contact.utils import get_contactfolder_url
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import is_dossierish_portal_type
@@ -240,9 +242,25 @@ class SerializeSQLModelToJsonSummaryBase(object):
         pass
 
 
+class SerializeContactModelToJsonSummaryBase(SerializeSQLModelToJsonSummaryBase):
+
+    @property
+    def get_url(self):
+        try:
+            base_url = get_contactfolder_url()
+        except Exception as e:
+            log_msg_to_sentry(e.message, request=self.request)
+            return None
+        return '{}/{}/{}'.format(
+            base_url,
+            self.endpoint_name,
+            getattr(self.context, self.id_attribute_name)
+            )
+
+
 @implementer(ISerializeToJsonSummary)
 @adapter(Team, IOpengeverBaseLayer)
-class SerializeTeamModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+class SerializeTeamModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
 
     item_columns = (
         'active',
@@ -262,7 +280,7 @@ class SerializeTeamModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
 @implementer(ISerializeToJsonSummary)
 @adapter(User, IOpengeverBaseLayer)
-class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+class SerializeUserModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
 
     item_columns = (
         'active',
@@ -289,7 +307,7 @@ class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
 @implementer(ISerializeToJsonSummary)
 @adapter(Group, IOpengeverBaseLayer)
-class SerializeGroupModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+class SerializeGroupModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
 
     item_columns = (
         'groupid',
