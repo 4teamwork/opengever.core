@@ -103,4 +103,10 @@
       handler=".subscribers.extracted_attachment_deleted"
       />
 
+  <subscriber
+      for="opengever.mail.mail.IOGMailMarker
+           zope.lifecycleevent.IObjectRemovedEvent"
+      handler=".subscribers.mail_deleted"
+      />
+
 </configure>

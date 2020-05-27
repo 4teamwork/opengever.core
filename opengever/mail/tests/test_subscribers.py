@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.security import elevated_privileges
+from opengever.mail.interfaces import IExtractedFromMail
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -65,3 +66,16 @@ class TestSubscribers(FunctionalTestCase):
         self.assertFalse(info.get("extracted"))
         self.assertIsNone(info.get("extracted_document_url"))
         self.assertIsNone(info.get("extracted_document_uid"))
+
+    @browsing
+    def test_extracted_documents_are_unmarked_when_mail_is_deleted(self, browser):
+        self.login()
+        doc = self.mail.extract_attachment_into_parent(4)
+        transaction.commit()
+
+        self.assertTrue(IExtractedFromMail.providedBy(doc))
+
+        with elevated_privileges():
+            api.content.delete(self.mail)
+
+        self.assertFalse(IExtractedFromMail.providedBy(doc))

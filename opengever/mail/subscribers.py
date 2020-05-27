@@ -1,8 +1,11 @@
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.subscribers import resolve_document_author
 from opengever.mail.exceptions import SourceMailNotFound
+from opengever.mail.interfaces import IExtractedFromMail
 from opengever.mail.mail import IOGMailMarker
+from plone.app.uuid.utils import uuidToObject
 from plone.uuid.interfaces import IUUID
+from zope.interface import noLongerProvides
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 
@@ -57,3 +60,15 @@ def extracted_attachment_deleted(doc, event):
     write_info.pop('extracted')
     write_info.pop('extracted_document_url')
     write_info.pop('extracted_document_uid')
+
+
+def mail_deleted(doc, event):
+    """Documents extracted from mails are marked with the IExtractedFromMail
+    interface. This interface should be removed if the corresponding mail
+    is deleted.
+    """
+    for info in doc.get_attachments():
+        if not info.get('extracted'):
+            continue
+        extracted_doc = uuidToObject(info.get('extracted_document_uid'))
+        noLongerProvides(extracted_doc, IExtractedFromMail)
