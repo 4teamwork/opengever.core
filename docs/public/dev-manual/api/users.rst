@@ -42,7 +42,7 @@ Ein Benutzer wird lediglich durch einen Eintrag in der SQL Datenbank repräsenti
         ],
         "teams": [
             {
-                "@id": "http://example.org/fd/kontakte/@team/90",
+                "@id": "http://example.org/fd/kontakte/@teams/90",
                 "@type": "virtual.ogds.team",
                 "active": true,
                 "groupid": "afi_benutzer",
@@ -61,9 +61,9 @@ Ein Benutzer wird lediglich durch einen Eintrag in der SQL Datenbank repräsenti
 Teams
 =====
 
-Team Daten werden mit dem ``@team`` Endpoint abgefragt. Dieser Endpoint unterstützt nur das GET und erwartet als Pfad-Argument die ID des Teams und wird auf dem Kontakt Folder abgefragt. Die URL setzt sich somit folgendermassen zusammen:
+Team Daten werden mit dem ``@teams`` Endpoint abgefragt. Dieser Endpoint unterstützt nur das GET und erwartet als Pfad-Argument die ID des Teams und wird auf dem Kontakt Folder abgefragt. Die URL setzt sich somit folgendermassen zusammen:
 
-``http://example.org/fd/kontakte/@team/90``
+``http://example.org/fd/kontakte/@teams/90``
 
 Ein Team wird lediglich durch einen Eintrag in der SQL Datenbank repräsentiert und ist kein Plone Inhaltstyp. Deshalb beinhaltet die Response weniger Information als für andere Inhaltstypen.
 
@@ -71,7 +71,7 @@ Ein Team wird lediglich durch einen Eintrag in der SQL Datenbank repräsentiert 
 
    .. sourcecode:: http
 
-      GET /@team/a-team HTTP/1.1
+      GET /@teams/a-team HTTP/1.1
       Accept: application/json
 
 **Beispiel-Response**:
@@ -83,7 +83,7 @@ Ein Team wird lediglich durch einen Eintrag in der SQL Datenbank repräsentiert 
       Content-Type: application/json
 
       {
-        "@id": "http://localhost:8080/fd/kontakte/@team/90",
+        "@id": "http://localhost:8080/fd/kontakte/@teams/90",
         "@type": "virtual.ogds.team",
         "active": true,
         "groupid": "afi_benutzer",

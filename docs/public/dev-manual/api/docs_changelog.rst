@@ -8,6 +8,7 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 2020-05-26
 ----------
 
+- ``@team`` Endpunkt umbenannt in ``@teams``
 - ``@ogds-user`` Endpunkt umbenannt in ``@ogds-users``
 
 

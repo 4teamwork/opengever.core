@@ -238,7 +238,7 @@ class SerializeTeamModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     content_type = 'virtual.ogds.team'
     id_attribute_name = 'team_id'
-    endpoint_name = '@team'
+    endpoint_name = '@teams'
 
     def add_additional_metadata(self, data):
         data['org_unit_title'] = self.context.org_unit.title

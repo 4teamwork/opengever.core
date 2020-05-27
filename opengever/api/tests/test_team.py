@@ -15,12 +15,12 @@ class TestTeamGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.contactfolder,
-                     view='@team/{}'.format(self.team_id),
+                     view='@teams/{}'.format(self.team_id),
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/kontakte/@team/1',
+            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'group': {u'@id': u'http://nohost/plone/kontakte/@group/projekt_a',
@@ -69,7 +69,7 @@ class TestTeamGet(IntegrationTestCase):
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.contactfolder,
-                         view='@team',
+                         view='@teams',
                          headers=self.api_headers)
 
     @browsing
@@ -78,5 +78,5 @@ class TestTeamGet(IntegrationTestCase):
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.contactfolder,
-                         view='@team/{}/foobar'.format(self.team_id),
+                         view='@teams/{}/foobar'.format(self.team_id),
                          headers=self.api_headers)

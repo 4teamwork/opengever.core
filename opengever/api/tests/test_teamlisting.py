@@ -16,7 +16,7 @@ class TestTeamListingGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@team/1',
+            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_a',
@@ -24,7 +24,7 @@ class TestTeamListingGet(IntegrationTestCase):
              u'org_unit_title': u'Finanz\xe4mt',
              u'team_id': 1,
              u'title': u'Projekt \xdcberbaung Dorfmatte'},
-            {u'@id': u'http://nohost/plone/kontakte/@team/3',
+            {u'@id': u'http://nohost/plone/kontakte/@teams/3',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_laeaer',
@@ -32,7 +32,7 @@ class TestTeamListingGet(IntegrationTestCase):
              u'org_unit_title': u'Finanz\xe4mt',
              u'team_id': 3,
              u'title': u'Sekretariat Abteilung Null'},
-            {u'@id': u'http://nohost/plone/kontakte/@team/2',
+            {u'@id': u'http://nohost/plone/kontakte/@teams/2',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_b',
@@ -158,7 +158,7 @@ class TestTeamListingGet(IntegrationTestCase):
 
         self.assertEqual(1, len(browser.json['items']))
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@team/1',
+            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_a',

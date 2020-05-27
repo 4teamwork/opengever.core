@@ -343,7 +343,7 @@
       method="GET"
       for="opengever.contact.interfaces.IContactFolder"
       factory=".team.TeamGet"
-      name="@team"
+      name="@teams"
       permission="zope2.View"
       />
 
