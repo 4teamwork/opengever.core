@@ -36,3 +36,7 @@ class IMailTabbedviewSettings(Interface):
         title=u'Is the preview tab in the mail tabbedview visible',
         default=True,
     )
+
+
+class IExtractedFromMail(Interface):
+    """Used to mark documents extracted from a Mail"""

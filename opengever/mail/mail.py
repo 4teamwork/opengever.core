@@ -17,6 +17,7 @@ from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _ as dossier_mf
 from opengever.mail import _
 from opengever.mail.exceptions import AlreadyExtractedError
+from opengever.mail.interfaces import IExtractedFromMail
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
@@ -230,6 +231,7 @@ class OGMail(Mail, BaseDocumentMixin):
             iid = intids.getId(self)
 
             IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
+            alsoProvides(doc, IExtractedFromMail)
             doc.reindexObject()
 
         # mark attachment as extracted

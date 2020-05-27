@@ -90,4 +90,11 @@
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".subscribers.resolve_mail_author"
       />
+
+  <subscriber
+      for="opengever.mail.interfaces.IExtractedFromMail
+           zope.lifecycleevent.IObjectMovedEvent"
+      handler=".subscribers.extracted_attachment_moved"
+      />
+
 </configure>
