@@ -1,3 +1,4 @@
+from opengever.base.interfaces import IOGSolrDocument
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.ZCatalog.interfaces import ICatalogBrain
@@ -40,8 +41,9 @@ class DocumentLinkWidget(object):
         return self.template(self, self.request)
 
     def is_view_allowed(self):
-        # Avoid object lookup for catalog brains as catalog searches are
-        # security aware anyway.
-        if ICatalogBrain.providedBy(self.context.getDataOrigin()):
+        # Avoid object lookup for Solr documents and catalog brains as those
+        # are security aware anyway.
+        origin = self.context.getDataOrigin()
+        if IOGSolrDocument.providedBy(origin) or ICatalogBrain.providedBy(origin):
             return True
         return api.user.has_permission('View', obj=self.context.getObject())
