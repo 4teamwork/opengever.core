@@ -51,3 +51,9 @@ def extracted_attachment_moved(doc, event):
     write_info = find_corresponding_mail_info_in_write_modus(doc)
     write_info["extracted_document_url"] = doc.absolute_url()
 
+
+def extracted_attachment_deleted(doc, event):
+    write_info = find_corresponding_mail_info_in_write_modus(doc)
+    write_info.pop('extracted')
+    write_info.pop('extracted_document_url')
+    write_info.pop('extracted_document_uid')

@@ -1,7 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.security import elevated_privileges
 from opengever.testing import FunctionalTestCase
+from plone import api
+from plone.uuid.interfaces import IUUID
 import transaction
 
 
@@ -43,3 +46,22 @@ class TestSubscribers(FunctionalTestCase):
         self.assertNotEqual(doc_url, moved_doc.absolute_url())
         self.assertEqual(moved_doc.absolute_url(),
                          info.get("extracted_document_url"))
+
+    @browsing
+    def test_attachment_info_is_updated_when_extracted_document_is_deleted(self, browser):
+        self.login()
+        doc = self.mail.extract_attachment_into_parent(4)
+        transaction.commit()
+
+        info = self.mail._get_attachment_info(4)
+        self.assertTrue(info.get("extracted"))
+        self.assertEqual(doc.absolute_url(), info.get("extracted_document_url"))
+        self.assertEqual(IUUID(doc), info.get("extracted_document_uid"))
+
+        with elevated_privileges():
+            api.content.delete(doc)
+
+        info = self.mail._get_attachment_info(4)
+        self.assertFalse(info.get("extracted"))
+        self.assertIsNone(info.get("extracted_document_url"))
+        self.assertIsNone(info.get("extracted_document_uid"))

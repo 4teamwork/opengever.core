@@ -97,4 +97,10 @@
       handler=".subscribers.extracted_attachment_moved"
       />
 
+  <subscriber
+      for="opengever.mail.interfaces.IExtractedFromMail
+           zope.lifecycleevent.IObjectRemovedEvent"
+      handler=".subscribers.extracted_attachment_deleted"
+      />
+
 </configure>
