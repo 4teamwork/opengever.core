@@ -17,7 +17,7 @@ class TestGetMail(IntegrationTestCase):
     def test_additional_metadata_for_mails(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+        browser.open(self.mail_eml, headers=self.api_headers)
 
         self.assertIsNone(browser.json['checked_out'])
         self.assertIsNone(browser.json['checked_out_fullname'])
@@ -37,8 +37,7 @@ class TestGetMail(IntegrationTestCase):
             data='__DATA__', filename=u'testmail.msg')
 
         browser.open(self.mail_eml.absolute_url(), method='GET',
-                     headers={'Accept': 'application/json',
-                              'Content-Type': 'application/json'})
+                     headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         expected_message = {
             u'content-type': u'application/vnd.ms-outlook',
@@ -58,7 +57,7 @@ class TestGetMail(IntegrationTestCase):
                           'mail_with_multiple_attachments.eml'))
         doc = mail.extract_attachment_into_parent(4)
 
-        browser.open(mail, headers={'Accept': 'application/json'})
+        browser.open(mail, headers=self.api_headers)
         expected = [
             {u'content-type': u'message/rfc822',
              u'filename': u'Inneres Testma\u0308il ohne Attachments.eml',
@@ -92,8 +91,7 @@ class TestCreateMail(IntegrationTestCase):
                      '"message": {"data": "%s", "encoding": "base64", '
                      '"filename": "testmail.msg"}}' % msg,
                 method='POST',
-                headers={'Accept': 'application/json',
-                         'Content-Type': 'application/json'})
+                headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 201)
         self.assertEqual(1, len(children.get('added')))
@@ -116,8 +114,7 @@ class TestCreateMail(IntegrationTestCase):
                      '"message": {"data": "%s", "encoding": "base64", '
                      '"filename": "testmail.eml"}}' % msg,
                 method='POST',
-                headers={'Accept': 'application/json',
-                         'Content-Type': 'application/json'})
+                headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 201)
         self.assertEqual(1, len(children.get('added')))
@@ -139,8 +136,7 @@ class TestCreateMail(IntegrationTestCase):
                      '"message": {"data": "%s", "encoding": "base64", '
                      '"filename": "signed.p7m"}}' % mail_file,
                 method='POST',
-                headers={'Accept': 'application/json',
-                         'Content-Type': 'application/json'})
+                headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 201)
         self.assertEqual(1, len(children.get('added')))
@@ -164,8 +160,7 @@ class TestCreateMail(IntegrationTestCase):
                                              "filename": "testmail.eml"},
                                  "title": "Separate title"}),
                 method='POST',
-                headers={'Accept': 'application/json',
-                         'Content-Type': 'application/json'})
+                headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 201)
         self.assertEqual(1, len(children.get('added')))
@@ -185,8 +180,7 @@ class TestPatchMail(IntegrationTestCase):
             self.mail_eml.absolute_url(),
             data=json.dumps({'title': u'New title'}),
             method='PATCH',
-            headers={'Accept': 'application/json',
-                     'Content-Type': 'application/json'})
+            headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 204)
         self.assertEqual(self.mail_eml.Title(), 'New title')
@@ -199,8 +193,7 @@ class TestPatchMail(IntegrationTestCase):
             self.mail_eml.absolute_url(),
             data=json.dumps({'description': u'Lorem ipsum'}),
             method='PATCH',
-            headers={'Accept': 'application/json',
-                     'Content-Type': 'application/json'})
+            headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 204)
         self.assertEqual(self.mail_eml.title, u'Die B\xfcrgschaft')
