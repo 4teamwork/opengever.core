@@ -1,5 +1,4 @@
 from ftw.testbrowser import browsing
-from plone.app.testing import setRoles
 from opengever.testing import IntegrationTestCase
 import json
 
