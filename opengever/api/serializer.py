@@ -301,7 +301,6 @@ class SerializeUserModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
         'email',
         'email2',
         'firstname',
-        'firstname',
         'lastname',
         'phone_office',
         'phone_mobile',
