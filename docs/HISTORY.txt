@@ -8,6 +8,7 @@ Changelog
 - Avoid object lookup in DocumentLinkWidget for Solr documents and catalog brains. [buchi]
 - Improve contenttree widget in handling a large amount of items. [buchi]
 - Rename @ogds-user API endpoint to @ogds-users. [tinagerber]
+- Update ftw.testing to version 1.20.2. This improves the performance of the testserver significantly. [buchi]
 
 
 2020.3.0rc3 (2020-05-22)
