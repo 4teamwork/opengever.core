@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
@@ -29,11 +31,7 @@ class TestTeamGet(IntegrationTestCase):
                         u'groupid': u'projekt_a',
                         u'title': u'Projekt A'},
              u'groupid': u'projekt_a',
-             u'org_unit_id': u'fa',
-             u'org_unit_title': u'Finanz\xe4mt',
-             u'team_id': 1,
-             u'title': u'Projekt \xdcberbaung Dorfmatte',
-             u'users': [{u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
+             u'items': [{u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
                          u'@type': u'virtual.ogds.user',
                          u'active': True,
                          u'department': u'Staatskanzlei',
@@ -60,7 +58,12 @@ class TestTeamGet(IntegrationTestCase):
                          u'phone_mobile': None,
                          u'phone_office': None,
                          u'title': u'Ziegler Robert',
-                         u'userid': u'robert.ziegler'}]},
+                         u'userid': u'robert.ziegler'}],
+             u'items_total': 2,
+             u'org_unit_id': u'fa',
+             u'org_unit_title': u'Finanz\xe4mt',
+             u'team_id': 1,
+             u'title': u'Projekt \xdcberbaung Dorfmatte'},
             browser.json)
 
     @browsing
@@ -80,3 +83,22 @@ class TestTeamGet(IntegrationTestCase):
             browser.open(self.contactfolder,
                          view='@teams/{}/foobar'.format(self.team_id),
                          headers=self.api_headers)
+
+    @browsing
+    def test_batching_for_teams(self, browser):
+        self.login(self.regular_user, browser=browser)
+        team = Team.get_one(groupid='projekt_a')
+
+        url = self.contactfolder.absolute_url() + '/@teams/{}?b_size=2'.format(team.team_id)
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertNotIn('batching', browser.json)
+        self.assertEquals(2, browser.json['items_total'])
+        self.assertEquals(2, len(browser.json['items']))
+
+        create(Builder('ogds_user').id('peter').in_group(team.group))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIn('batching', browser.json)
+        self.assertEquals(3, browser.json['items_total'])
+        self.assertEquals(2, len(browser.json['items']))

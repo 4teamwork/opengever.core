@@ -1,4 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
 
@@ -18,7 +21,7 @@ class TestOGDSGroupsGet(IntegrationTestCase):
              u'active': True,
              u'groupid': u'projekt_a',
              u'title': u'Projekt A',
-             u'users': [{u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
+             u'items': [{u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
                          u'@type': u'virtual.ogds.user',
                          u'active': True,
                          u'department': u'Staatskanzlei',
@@ -45,7 +48,8 @@ class TestOGDSGroupsGet(IntegrationTestCase):
                          u'phone_mobile': None,
                          u'phone_office': None,
                          u'title': u'Ziegler Robert',
-                         u'userid': u'robert.ziegler'}]},
+                         u'userid': u'robert.ziegler'}],
+             u'items_total': 2},
             browser.json)
 
     @browsing
@@ -62,3 +66,21 @@ class TestOGDSGroupsGet(IntegrationTestCase):
         with self.assertRaises(BadRequest):
             browser.open(self.contactfolder, view='@ogds-groups/projekt_a/foobar',
                          headers=self.api_headers)
+
+    @browsing
+    def test_batching_for_ogds_groups(self, browser):
+        self.login(self.regular_user, browser=browser)
+        projekt_a = ogds_service().fetch_group('projekt_a')
+        url = self.contactfolder.absolute_url() + '/@ogds-groups/projekt_a?b_size=2'
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertNotIn('batching', browser.json)
+        self.assertEquals(2, browser.json['items_total'])
+        self.assertEquals(2, len(browser.json['items']))
+
+        create(Builder('ogds_user').id('peter').in_group(projekt_a))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIn('batching', browser.json)
+        self.assertEquals(3, browser.json['items_total'])
+        self.assertEquals(2, len(browser.json['items']))

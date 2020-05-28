@@ -1,6 +1,7 @@
 from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from Missing import Value as MissingValue
+from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
@@ -11,6 +12,7 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.repository.interfaces import IRepositoryFolder
@@ -100,6 +102,7 @@ class SerializeSQLModelToJsonBase(object):
 
         data['@type'] = self.content_type
         data['@id'] = self.request.URL
+        self.add_batched_items(data)
         self.add_additional_metadata(data)
         return data
 
@@ -109,6 +112,23 @@ class SerializeSQLModelToJsonBase(object):
     def add_additional_metadata(self, data):
         pass
 
+    def get_item_query(self):
+        pass
+
+    def add_batched_items(self, data):
+        query = self.get_item_query()
+        if not query:
+            return
+        batch = SQLHypermediaBatch(self.request, query)
+        items = [queryMultiAdapter((item, self.request), ISerializeToJsonSummary)()
+                 for item in batch]
+
+        data['items_total'] = batch.items_total
+        data['items'] = items
+
+        if batch.links:
+            data['batching'] = batch.links
+
 
 @implementer(ISerializeToJson)
 @adapter(Team, IOpengeverBaseLayer)
@@ -116,15 +136,12 @@ class SerializeTeamModelToJson(SerializeSQLModelToJsonBase):
 
     content_type = 'virtual.ogds.team'
 
+    def get_item_query(self):
+        # The teammembers are the items of the team
+        return User.query.join(groups_users).filter_by(groupid=self.context.groupid)
+
     def add_additional_metadata(self, data):
-        """Add the team members, group summary and org_unit_title"""
-
-        data['users'] = []
-        for user in self.context.group.users:
-            user_serializer = queryMultiAdapter(
-                (user, self.request), ISerializeToJsonSummary)
-            data['users'].append(user_serializer())
-
+        """Add group summary and org_unit_title"""
         data['org_unit_title'] = self.context.org_unit.title
 
         group_serializer = queryMultiAdapter(
@@ -138,14 +155,9 @@ class SerializeGroupModelToJson(SerializeSQLModelToJsonBase):
 
     content_type = 'virtual.ogds.group'
 
-    def add_additional_metadata(self, data):
-        """Add the team members, group summary and org_unit_title"""
-
-        data['users'] = []
-        for user in self.context.users:
-            user_serializer = queryMultiAdapter(
-                (user, self.request), ISerializeToJsonSummary)
-            data['users'].append(user_serializer())
+    def get_item_query(self):
+        # The group members are the items of the group
+        return User.query.join(groups_users).filter_by(groupid=self.context.groupid)
 
 
 @implementer(ISerializeToJson)
