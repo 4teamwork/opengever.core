@@ -219,8 +219,7 @@ class TestCopyDocuments(IntegrationTestCase):
             'is_subdossier': 0,  # acquisition is responsible here
         }
 
-        unchanged_indexdata = ['Description',
-                               'Subject',
+        unchanged_indexdata = ['Subject',
                                'Type',
                                'after_resolve_jobs_pending',
                                'allowedRolesAndUsers',
