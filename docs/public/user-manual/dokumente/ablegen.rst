@@ -45,11 +45,8 @@ Mail-Anhänge separat speichern
 
 Öffnet man in OneGov GEVER die E-Mail, werden die Mitteilung
 und eventuelle Anhänge angezeigt. Mit der Aktion *Anhänge speichern* können
-die E-Mail-Anhänge separat als Dokumente gespeichert werden. Wahlweise können
-die Anhänge der E-Mail gelöscht werden.
-
-*(Für signierte E-Mails (Dateiendung *.p7m) können Anhänge nicht gelöscht
-werden, weil dadurch sonst die Signatur invalidiert würde)*
+die E-Mail-Anhänge separat als Dokumente gespeichert werden. Jeder Anhang kann
+nur einmal als separates Dokument gespeichert werden.
 
 |img-dokumente-31|
 

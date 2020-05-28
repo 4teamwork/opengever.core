@@ -19,6 +19,7 @@ Inhalt:
    breadcrumbs.rst
    searching.rst
    documents.rst
+   extract_attachments.rst
    trash.rst
    workflow.rst
    scanin.rst
