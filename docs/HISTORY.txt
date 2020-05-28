@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc4 (unreleased)
 ------------------------
 
+- Fix the upgradestep to merge notification settings from release 2020.3.0rc2 to use it's own configruation copy to not depend on future adjustments. [elioschmutz]
 - Rename @team API endpoint to @teams. [tinagerber]
 - Avoid object lookup in DocumentLinkWidget for Solr documents and catalog brains. [buchi]
 - Improve contenttree widget in handling a large amount of items. [buchi]
