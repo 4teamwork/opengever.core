@@ -1,6 +1,8 @@
 from ftw.mail.mail import IMail
 from opengever.api.document import SerializeDocumentToJson
 from opengever.base.transforms.msg2mime import Msg2MimeTransform
+from opengever.mail.exceptions import AlreadyExtractedError
+from opengever.mail.exceptions import InvalidAttachmentPosition
 from opengever.mail.mail import initialize_metadata
 from opengever.mail.mail import initialize_title
 from plone.namedfile.file import NamedBlobFile
@@ -67,13 +69,19 @@ class ExtractAttachments(Service):
         # X-CSRF-TOKEN to pass plone's autoprotect.
         alsoProvides(self.request, IDisableCSRFProtection)
         data = json_body(self.request)
+
         if 'positions' in data:
             positions = data.get('positions')
         else:
             positions = [attachment['position'] for attachment in
                          self.context.get_attachments(unextracted_only=True)]
 
-        docs = self.context.extract_attachments_into_parent(positions)
+        try:
+            docs = self.context.extract_attachments_into_parent(positions)
+        except (AlreadyExtractedError, InvalidAttachmentPosition) as exc:
+            self.request.response.setStatus(400)
+            return dict(error=dict(type="BadRequest", message=str(exc)))
+
         result = []
         for position, doc in docs.items():
             result.append({'position': position,

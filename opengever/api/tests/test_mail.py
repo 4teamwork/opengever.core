@@ -257,3 +257,48 @@ class TestExtractAttachments(IntegrationTestCase):
             'extracted_document_url': info['extracted_document_url'],
             'extracted_document_title': doc.title}]
         self.assertEqual(expected_response, browser.json)
+
+    @browsing
+    def test_returns_error_when_specified_positions_are_not_valid_for_extraction(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.dossier) as children:
+            with browser.expect_http_error(code=400, reason='Bad Request'):
+                browser.open(
+                    "/".join([mail.absolute_url(), "@extract-attachments"]),
+                    data=json.dumps({'positions': [1]}),
+                    method='POST',
+                    headers=self.api_headers)
+
+        self.assertEqual(0, len(children['added']))
+        self.assertEqual({u'message': u'No attachment found at position 1.',
+                          u'type': u'BadRequest'},
+                         browser.json['error'])
+
+    @browsing
+    def test_returns_error_when_specified_attachment_is_already_extracted(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        info = mail._get_attachment_info(4, write_modus=True)
+        info['extracted'] = True
+        with self.observe_children(self.dossier) as children:
+            with browser.expect_http_error(code=400, reason='Bad Request'):
+                browser.open(
+                    "/".join([mail.absolute_url(), "@extract-attachments"]),
+                    data=json.dumps({'positions': [4]}),
+                    method='POST',
+                    headers=self.api_headers)
+
+        self.assertEqual(0, len(children['added']))
+        self.assertEqual(
+            {u'message': u'Attachment at position 4 has already been extracted to None.',
+             u'type': u'BadRequest'},
+            browser.json['error'])

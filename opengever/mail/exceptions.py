@@ -10,6 +10,16 @@ class AlreadyExtractedError(Exception):
         self.info = info
 
 
+class InvalidAttachmentPosition(Exception):
+    """No attachement found at the given position.
+    """
+    message = "No attachment found at position {}."
+
+    def __init__(self, position):
+        super(InvalidAttachmentPosition, self).__init__(self.message.format(
+            position))
+
+
 class SourceMailNotFound(Exception):
     """Raised when a document extracted from a Mail is modified and its
     info cannot be updated in the Mail from which it was extracted because

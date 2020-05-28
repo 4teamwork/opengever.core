@@ -17,6 +17,7 @@ from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _ as dossier_mf
 from opengever.mail import _
 from opengever.mail.exceptions import AlreadyExtractedError
+from opengever.mail.exceptions import InvalidAttachmentPosition
 from opengever.mail.interfaces import IExtractedFromMail
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
@@ -201,6 +202,9 @@ class OGMail(Mail, BaseDocumentMixin):
         `get_attachments`.
         """
         info = self._get_attachment_info(position, write_modus=True)
+        if info is None:
+            raise InvalidAttachmentPosition(position)
+
         if info.get('extracted'):
             raise AlreadyExtractedError(info)
 
