@@ -1,8 +1,7 @@
+from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.model import create_session
-from opengever.base.utils import safe_int
 from opengever.tabbedview.sqlsource import cast_to_string
 from opengever.tabbedview.sqlsource import sort_column_exists
-from plone.restapi.batching import HypermediaBatch
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
@@ -10,7 +9,6 @@ from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
-from zExceptions import BadRequest
 from zope.component import queryMultiAdapter
 from ZPublisher.HTTPRequest import record
 
@@ -30,31 +28,28 @@ class OGDSListingBaseService(Service):
     model_class = None
 
     def reply(self):
-        sort_on, sort_order, search, filters, b_start, b_size = self.extract_params()
+        sort_on, sort_order, search, filters = self.extract_params()
         query = self.get_base_query()
         query = self.extend_query_with_sorting(query, sort_on, sort_order)
         query = self.extend_query_with_search(query, search)
         query = self.extend_query_with_filters(query, filters)
-        items_total = query.count()
-        query = self.extend_query_with_batching(query, b_start, b_size)
 
+        batch = SQLHypermediaBatch(self.request, query)
         items = []
-        for model in query.all():
+        for item in batch:
             serializer = queryMultiAdapter(
-                (model, self.request), ISerializeToJsonSummary)
+                (item, self.request), ISerializeToJsonSummary)
             items.append(serializer())
 
-        # We use HypermediaBatch for the canonical url only
-        batch = HypermediaBatch(self.request, items)
+        result = {}
+        result['@id'] = batch.canonical_url
+        result['items'] = items
+        result['items_total'] = batch.items_total
+        if batch.links:
+            result['batching'] = batch.links
         # return empty facet dict to keep response structure consistent
-        return {
-          "@id": batch.canonical_url,
-          "b_size": b_size,
-          "b_start": b_start,
-          "facets": {},
-          "items": items,
-          "items_total": items_total
-        }
+        result['facets'] = {}
+        return result
 
     def extract_params(self):
         params = self.request.form.copy()
@@ -72,14 +67,7 @@ class OGDSListingBaseService(Service):
         if not isinstance(filters, record):
             filters = {}
 
-        b_start = safe_int(params.get('b_start', 0), 0)
-        if b_start < 0:
-            raise BadRequest("The parameter 'b_start' can't be negative.")
-        b_size = min(safe_int(params.get('b_size', 25), 25), 100)
-        if b_size < 0:
-            raise BadRequest("The parameter 'b_size' can't be negative.")
-
-        return sort_on, sort_order, search, filters, b_start, b_size
+        return sort_on, sort_order, search, filters
 
     def get_base_query(self):
         session = create_session()
@@ -118,9 +106,4 @@ class OGDSListingBaseService(Service):
         return query
 
     def extend_query_with_filters(self, query, filters):
-        return query
-
-    def extend_query_with_batching(self, query, b_start, b_size):
-        query = query.offset(b_start)
-        query = query.limit(b_size)
         return query

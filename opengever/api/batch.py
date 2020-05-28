@@ -2,6 +2,7 @@ from plone.batching.batch import BaseBatch
 from plone.restapi.batching import DEFAULT_BATCH_SIZE
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
+from zExceptions import BadRequest
 
 
 class SQLBatch(BaseBatch):
@@ -56,6 +57,11 @@ class SQLHypermediaBatch(HypermediaBatch):
             or int(self.request.form.get("b_start", 0))
         self.b_size = int(json_body(self.request).get('b_size', False)) \
             or int(self.request.form.get("b_size", DEFAULT_BATCH_SIZE))
+
+        if self.b_start < 0:
+            raise BadRequest("The parameter 'b_start' can't be negative.")
+        if self.b_size < 0:
+            raise BadRequest("The parameter 'b_size' can't be negative.")
 
         self.batch = SQLBatch(results, self.b_size, self.b_start)
 

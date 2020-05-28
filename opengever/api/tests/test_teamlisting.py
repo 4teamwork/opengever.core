@@ -41,8 +41,6 @@ class TestTeamListingGet(IntegrationTestCase):
              u'team_id': 2,
              u'title': u'Sekretariat Abteilung XY'}],
             browser.json.get('items'))
-        self.assertEqual(25, browser.json['b_size'])
-        self.assertEqual(0, browser.json['b_start'])
         self.assertEqual({}, browser.json['facets'])
         self.assertEqual(3, browser.json['items_total'])
 
@@ -60,8 +58,6 @@ class TestTeamListingGet(IntegrationTestCase):
             [u'projekt_laeaer',
              u'projekt_b'],
             [each['groupid'] for each in browser.json['items']])
-        self.assertEqual(2, browser.json['b_size'])
-        self.assertEqual(1, browser.json['b_start'])
         self.assertEqual(3, browser.json['items_total'])
 
     @browsing
@@ -74,18 +70,7 @@ class TestTeamListingGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(0, len(browser.json['items']))
-        self.assertEqual(25, browser.json['b_size'])
-        self.assertEqual(999, browser.json['b_start'])
         self.assertEqual(3, browser.json['items_total'])
-
-    @browsing
-    def test_batch_size_maximum_is_100(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
-                     view='@team-listing?b_size=999',
-                     headers=self.api_headers)
-        self.assertEqual(200, browser.status_code)
-        self.assertEqual(100, browser.json['b_size'])
 
     @browsing
     def test_batch_disallows_negative_size(self, browser):
@@ -115,8 +100,6 @@ class TestTeamListingGet(IntegrationTestCase):
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
-        self.assertEqual(25, browser.json['b_size'])
-        self.assertEqual(0, browser.json['b_start'])
         self.assertEqual(1, browser.json['items_total'])
 
     @browsing
@@ -129,8 +112,6 @@ class TestTeamListingGet(IntegrationTestCase):
                      headers=self.api_headers)
 
         self.assertEqual(2, len(browser.json['items']))
-        self.assertEqual(25, browser.json['b_size'])
-        self.assertEqual(0, browser.json['b_start'])
         self.assertEqual(2, browser.json['items_total'])
 
     @browsing
@@ -145,8 +126,6 @@ class TestTeamListingGet(IntegrationTestCase):
                      headers=self.api_headers)
 
         self.assertEqual(3, len(browser.json['items']))
-        self.assertEqual(25, browser.json['b_size'])
-        self.assertEqual(0, browser.json['b_start'])
         self.assertEqual(3, browser.json['items_total'])
 
     @browsing

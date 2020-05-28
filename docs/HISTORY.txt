@@ -15,6 +15,7 @@ Changelog
 - Extend @sharing endpoint with ogds_summary. [tinagerber]
 - Add @ogds-groups API endpoint. [tinagerber]
 - Implement custom RoleAssignmentManager based local role migration for ftw.usermigration. [deiferni]
+- Fix batching in OGDSListingBaseService, properly use SQLHypermediaBatch. [deiferni]
 
 
 2020.3.0rc3 (2020-05-22)
