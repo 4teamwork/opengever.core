@@ -7,6 +7,7 @@ INDEXES_TO_REMOVE = [
     'client_id',
     'commentators',
     'Date',
+    'Description',
     'effective',
     'effectiveRange',
     'expires',

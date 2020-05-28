@@ -274,7 +274,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'changed',
                                'start',
                                'Creator',
-                               'Description',
                                'Subject',
                                'Type',
                                'after_resolve_jobs_pending',
