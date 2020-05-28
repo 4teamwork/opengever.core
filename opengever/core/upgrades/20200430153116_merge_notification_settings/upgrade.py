@@ -231,6 +231,8 @@ class MergeNotificationSettings(SchemaMigration):
                     default_settings.get('mail_notification_roles', []))
             setattr(setting, 'badge_notification_roles',
                     default_settings.get('badge_notification_roles', []))
+            setattr(setting, 'digest_notification_roles',
+                    default_settings.get('digest_notification_roles', []))
 
     def migrate_custom_settings(self):
         # Get a list of distinct userids of users that have any settings stored
