@@ -225,12 +225,13 @@ class PloneNotificationCenter(NotificationCenter):
             return Oguid.for_object(item)
         return item
 
-    def add_watcher_to_resource(self, obj, actorid, role=WATCHER_ROLE):
+    def add_watcher_to_resource(self, obj, actorid, role=WATCHER_ROLE,
+                                omit_watcher_added_event=False):
         """The WatcherAddedEvent is fired to prevent circular dependencies."""
         oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).add_watcher_to_resource(
             oguid, actorid, role)
-        if role == WATCHER_ROLE:
+        if role == WATCHER_ROLE and not omit_watcher_added_event:
             notify(WatcherAddedEvent(oguid, actorid))
 
     def remove_watcher_from_resource(self, obj, userid, role):

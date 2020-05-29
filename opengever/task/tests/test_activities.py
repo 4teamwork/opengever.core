@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -11,15 +12,15 @@ from opengever.activity.digest import DigestMailer
 from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
+from opengever.activity.model import Resource
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import create_session
+from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.ogds.models.user import User
-from opengever.ogds.models.user import User
-from opengever.ogds.models.user_settings import UserSettings
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.activities import TaskWatcherAddedActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
@@ -66,6 +67,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
           u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
+        self.assertEqual(1, len(activity.notifications))
 
         browser.open_html(activity.description)
         rows = browser.css('table').first.rows
@@ -79,6 +81,63 @@ class TestTaskActivites(FunctionalTestCase):
              ['Responsible', 'Boss Hugo (hugo.boss)'],
              ['Issuer', 'Test User (test_user_1_)']],
             [row.css('td').text for row in rows])
+
+    @browsing
+    def test_informed_principals_are_notified_of_added_task(self, browser):
+        create(
+            Builder('ogds_user').id('watcher.user')
+                                .assign_to_org_units([self.org_unit])
+                                .having(firstname=u'Watcher', lastname=u'User'))
+
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Task Type': 'comment',
+                      'Deadline': '13.02.2015',
+                      'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('hugo.boss')
+        form.find_widget('Info at').fill('watcher.user')
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.one()
+        self.assertEqual('task-added', activity.kind)
+        self.assertEqual(2, len(activity.notifications))
+        self.assertItemsEqual(
+          ['hugo.boss', 'watcher.user'],
+          [notification.userid for notification in activity.notifications])
+
+    @browsing
+    def test_informed_principals_not_permanently_added_as_watchers_to_task(self, browser):
+        create(
+            Builder('ogds_user').id('watcher.user')
+                                .assign_to_org_units([self.org_unit])
+                                .having(firstname=u'Watcher', lastname=u'User'))
+
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Task Type': 'comment',
+                      'Deadline': '13.02.2015',
+                      'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('hugo.boss')
+        form.find_widget('Info at').fill('watcher.user')
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEqual(1, len(self.dossier.values()))
+        task = self.dossier.values()[0]
+
+        resource = Resource.query.get_by_oguid(Oguid.for_object(task))
+        create_session().refresh(resource)
+        watchers_and_roles = defaultdict(list)
+        for subscription in resource.subscriptions:
+            watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
+
+        self.assertEqual(
+            {u'hugo.boss': [u'task_responsible'],
+             u'test_user_1_': [u'task_issuer']},
+            watchers_and_roles)
 
     @browsing
     def test_private_task_added(self, browser):
