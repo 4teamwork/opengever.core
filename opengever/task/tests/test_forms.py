@@ -11,22 +11,17 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 class TestFormFields(IntegrationTestCase):
 
     @browsing
-    def test_show_date_of_completion_field_in_edit_form(self, browser):
+    def test_date_of_completion_field_is_only_shown_in_edit_form(self, browser):
         self.login(self.dossier_responsible, browser=browser)
 
-        # seq_subtask_1 is a task with state 'open' and allows editing
-        browser.visit(self.seq_subtask_1, view="edit")
-
-        self.assertNotEqual(
+        browser.open(self.dossier, view='++add++opengever.task.task')
+        self.assertEqual(
             'hidden',
             browser.css('input#form-widgets-date_of_completion').first.type)
 
-    @browsing
-    def test_hide_date_of_completion_field_in_add_form(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier, view='++add++opengever.task.task')
-
-        self.assertEqual(
+        # seq_subtask_1 is a task with state 'open' and allows editing
+        browser.visit(self.seq_subtask_1, view="edit")
+        self.assertNotEqual(
             'hidden',
             browser.css('input#form-widgets-date_of_completion').first.type)
 
