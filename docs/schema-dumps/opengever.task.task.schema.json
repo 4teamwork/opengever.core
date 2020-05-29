@@ -47,6 +47,13 @@
             "_zope_schema_type": "Choice",
             "_vocabulary": "<User-ID eines g\u00fcltigen Auftragnehmers>"
         },
+        "informed_principals": {
+            "type": "array",
+            "title": "Info an",
+            "description": "Die ausgew\u00e4hlten Benutzer und Gruppen werden \u00fcber die Erstellung dieser Aufgabe benachrichtigt.",
+            "_zope_schema_type": "List",
+            "default": []
+        },
         "is_private": {
             "type": "boolean",
             "title": "Pers\u00f6nliche Aufgabe",
@@ -146,6 +153,7 @@
         "task_type",
         "responsible_client",
         "responsible",
+        "informed_principals",
         "is_private",
         "revoke_permissions",
         "deadline",
