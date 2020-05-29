@@ -19,6 +19,7 @@ from opengever.dossier.utils import get_main_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -97,6 +98,7 @@ class ITask(model.Schema):
             u'deadline',
             u'text',
             u'relatedItems',
+            u'informed_principals'
             ],
         )
 
@@ -164,6 +166,25 @@ class ITask(model.Schema):
         description=_(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
         required=True,
+        )
+
+    form.widget(
+        'informed_principals',
+        KeywordFieldWidget,
+        async=True,
+        template_selection='usersAndGroups',
+        template_result='usersAndGroups',
+    )
+
+    informed_principals = schema.List(
+        title=_(u"label_informed_principals", default=u"Info at"),
+        description=_(u"help_informed_principals", default=u""),
+        value_type=schema.Choice(
+            source=AllUsersAndGroupsSourceBinder(),
+            ),
+        required=False,
+        missing_value=[],
+        default=[]
         )
 
     form.widget(deadline=DatePickerFieldWidget)
