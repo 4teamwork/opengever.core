@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-05-05 13:15+0000\n"
+"POT-Creation-Date: 2020-05-29 14:07+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -334,6 +334,10 @@ msgstr "Coûts effectifs en CHF"
 msgid "help_expectedDuration"
 msgstr "Durée effective en h"
 
+#: ./opengever/task/task.py
+msgid "help_informed_principals"
+msgstr "Les utilisateurs et les groupes séléctionnés seront notifiés de la création de cette tâche."
+
 #. Default: "Deactivates the inbox-group permission."
 #: ./opengever/task/task.py
 msgid "help_is_private"
@@ -507,6 +511,11 @@ msgstr "Durée estimée (h)"
 #: ./opengever/task/task.py
 msgid "label_expectedStartOfWork"
 msgstr "Début du travail"
+
+#. Default: "Info at"
+#: ./opengever/task/task.py
+msgid "label_informed_principals"
+msgstr "Info à"
 
 #. Default: "Private task"
 #: ./opengever/task/task.py

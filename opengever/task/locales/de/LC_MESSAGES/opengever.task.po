@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-05-05 13:15+0000\n"
+"POT-Creation-Date: 2020-05-29 14:07+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -333,6 +333,10 @@ msgstr "Kosten in CHF"
 msgid "help_expectedDuration"
 msgstr "Dauer in h"
 
+#: ./opengever/task/task.py
+msgid "help_informed_principals"
+msgstr "Die ausgewählten Benutzer und Gruppen werden über die Erstellung dieser Aufgabe benachrichtigt."
+
 #. Default: "Deactivates the inbox-group permission."
 #: ./opengever/task/task.py
 msgid "help_is_private"
@@ -505,6 +509,11 @@ msgstr "Geschätzte Dauer (h)"
 #: ./opengever/task/task.py
 msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
+
+#. Default: "Info at"
+#: ./opengever/task/task.py
+msgid "label_informed_principals"
+msgstr "Info an"
 
 #. Default: "Private task"
 #: ./opengever/task/task.py
