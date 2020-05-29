@@ -137,7 +137,8 @@ class TestOpengeverSharing(IntegrationTestCase):
         acl_users.userFolderEditUser(self.dossier_responsible.id, None, list(roles), [])
 
         data = json.dumps({"entries": [], "inherit": False})
-        browser.open(self.empty_dossier, data, view='@sharing', method='POST',headers={'Accept': 'application/json','Content-Type': 'application/json'})
+        browser.open(self.empty_dossier, data, view='@sharing', method='POST',
+                     headers={'Accept': 'application/json', 'Content-Type': 'application/json'})
 
         self.assertTrue(self.empty_dossier.__ac_local_roles_block__)
         self.assertEquals(
@@ -198,6 +199,20 @@ class TestOpengeverSharing(IntegrationTestCase):
                   u'title': u'Ziegler Robert',
                   u'url': u'http://nohost/plone/@@user-details-plain/robert.ziegler',
                   u'login': u'robert.ziegler',
+                  u'ogds_summary': {u'@id': u'http://nohost/plone/kontakte/@ogds-users/robert.ziegler',
+                                    u'@type': u'virtual.ogds.user',
+                                    u'active': True,
+                                    u'department': None,
+                                    u'directorate': None,
+                                    u'email': u'robert.ziegler@gever.local',
+                                    u'email2': None,
+                                    u'firstname': u'Robert',
+                                    u'lastname': u'Ziegler',
+                                    u'phone_fax': None,
+                                    u'phone_mobile': None,
+                                    u'phone_office': None,
+                                    u'title': u'Ziegler Robert',
+                                    u'userid': u'robert.ziegler'},
                   u'type': u'user',
                   u'id': u'robert.ziegler'}]},
             browser.json)
@@ -213,13 +228,16 @@ class TestOpengeverSharing(IntegrationTestCase):
         manager.add_or_update_assignment(
             SharingRoleAssignment(
                 self.regular_user.id, ['Reader', 'Editor', 'Contributor']))
+        manager.add_or_update_assignment(
+            SharingRoleAssignment(
+                u'projekt_a', ['Reader']))
 
         browser.open(self.empty_dossier, view='@sharing',
                      method='Get', headers={'Accept': 'application/json'})
 
         entries = browser.json['entries']
 
-        self.assertEquals(
+        self.assertEqual(
             {u'automatic_roles': {u'Contributor': True,
                                   u'Editor': False,
                                   u'Publisher': False,
@@ -233,6 +251,20 @@ class TestOpengeverSharing(IntegrationTestCase):
              u'disabled': False,
              u'id': u'kathi.barfuss',
              u'login': u'kathi.barfuss',
+             u'ogds_summary': {u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
+                               u'@type': u'virtual.ogds.user',
+                               u'active': True,
+                               u'department': u'Staatskanzlei',
+                               u'directorate': u'Staatsarchiv',
+                               u'email': u'foo@example.com',
+                               u'email2': u'bar@example.com',
+                               u'firstname': u'K\xe4thi',
+                               u'lastname': u'B\xe4rfuss',
+                               u'phone_fax': u'012 34 56 77',
+                               u'phone_mobile': u'012 34 56 76',
+                               u'phone_office': u'012 34 56 78',
+                               u'title': u'B\xe4rfuss K\xe4thi',
+                               u'userid': u'kathi.barfuss'},
              u'roles': {u'Contributor': True,
                         u'Editor': True,
                         u'Publisher': False,
@@ -242,6 +274,34 @@ class TestOpengeverSharing(IntegrationTestCase):
              u'type': u'user',
              u'url': u'http://nohost/plone/@@user-details-plain/kathi.barfuss'},
             [item for item in entries if item['id'] == self.regular_user.id][0])
+
+        self.assertEqual(
+          {u'automatic_roles': {u'Contributor': False,
+                                u'Editor': False,
+                                u'Publisher': False,
+                                u'Reader': False,
+                                u'Reviewer': False},
+           u'computed_roles': {u'Contributor': False,
+                               u'Editor': False,
+                               u'Publisher': False,
+                               u'Reader': True,
+                               u'Reviewer': False},
+           u'disabled': False,
+           u'id': u'projekt_a',
+           u'ogds_summary': {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/projekt_a',
+                             u'@type': u'virtual.ogds.group',
+                             u'active': True,
+                             u'groupid': u'projekt_a',
+                             u'title': u'Projekt A'},
+           u'roles': {u'Contributor': False,
+                      u'Editor': False,
+                      u'Publisher': False,
+                      u'Reader': True,
+                      u'Reviewer': False},
+           u'title': u'projekt_a',
+           u'type': u'user',
+           u'url': u'http://nohost/plone/@@list_groupmembers?group=projekt_a'},
+          [item for item in entries if item['id'] == u'projekt_a'][0])
 
     @browsing
     def test_sharing_view_handles_groupids_with_spaces(self, browser):
@@ -321,7 +381,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.login(self.secretariat_user, browser=browser)
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add_or_update(self.regular_user.id, ['Editor'],
-                    ASSIGNMENT_VIA_TASK, reference=self.task)
+                              ASSIGNMENT_VIA_TASK, reference=self.task)
         manager.add_or_update(self.regular_user.id, ['Reader'],
                               ASSIGNMENT_VIA_TASK_AGENCY)
 

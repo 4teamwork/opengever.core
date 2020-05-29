@@ -10,6 +10,10 @@ Changelog
 - Improve contenttree widget in handling a large amount of items. [buchi]
 - Rename @ogds-user API endpoint to @ogds-users. [tinagerber]
 - Update ftw.testing to version 1.20.2. This improves the performance of the testserver significantly. [buchi]
+- Rename `users` attribute of @teams endpoint to `items`. [tinagerber]
+- Add batching for ogds team and group serializer. [tinagerber]
+- Extend @sharing endpoint with ogds_summary. [tinagerber]
+- Add @ogds-groups API endpoint. [tinagerber]
 
 
 2020.3.0rc3 (2020-05-22)

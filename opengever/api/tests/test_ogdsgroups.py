@@ -1,36 +1,26 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.ogds.models.team import Team
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
 
 
-class TestTeamGet(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestTeamGet, self).setUp()
-        self.team_id = Team.get_one(groupid='projekt_a').team_id
+class TestOGDSGroupsGet(IntegrationTestCase):
 
     @browsing
-    def test_team_default_response(self, browser):
+    def test_ogds_groups_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
-                     view='@teams/{}'.format(self.team_id),
-                     headers=self.api_headers)
+        browser.open(self.contactfolder, view='@ogds-groups/projekt_a', headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
-             u'@type': u'virtual.ogds.team',
+            {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/projekt_a',
+             u'@type': u'virtual.ogds.group',
              u'active': True,
-             u'group': {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/projekt_a',
-                        u'@type': u'virtual.ogds.group',
-                        u'active': True,
-                        u'groupid': u'projekt_a',
-                        u'title': u'Projekt A'},
              u'groupid': u'projekt_a',
+             u'title': u'Projekt A',
              u'items': [{u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
                          u'@type': u'virtual.ogds.user',
                          u'active': True,
@@ -59,44 +49,36 @@ class TestTeamGet(IntegrationTestCase):
                          u'phone_office': None,
                          u'title': u'Ziegler Robert',
                          u'userid': u'robert.ziegler'}],
-             u'items_total': 2,
-             u'org_unit_id': u'fa',
-             u'org_unit_title': u'Finanz\xe4mt',
-             u'team_id': 1,
-             u'title': u'Projekt \xdcberbaung Dorfmatte'},
+             u'items_total': 2},
             browser.json)
 
     @browsing
-    def test_raises_bad_request_when_userid_is_missing(self, browser):
+    def test_raises_bad_request_when_groupid_is_missing(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
-                         view='@teams',
-                         headers=self.api_headers)
+            browser.open(self.contactfolder, view='@ogds-groups', headers=self.api_headers)
 
     @browsing
     def test_raises_bad_request_when_too_many_params_are_given(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
-                         view='@teams/{}/foobar'.format(self.team_id),
+            browser.open(self.contactfolder, view='@ogds-groups/projekt_a/foobar',
                          headers=self.api_headers)
 
     @browsing
-    def test_batching_for_teams(self, browser):
+    def test_batching_for_ogds_groups(self, browser):
         self.login(self.regular_user, browser=browser)
-        team = Team.get_one(groupid='projekt_a')
-
-        url = self.contactfolder.absolute_url() + '/@teams/{}?b_size=2'.format(team.team_id)
+        projekt_a = ogds_service().fetch_group('projekt_a')
+        url = self.contactfolder.absolute_url() + '/@ogds-groups/projekt_a?b_size=2'
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertNotIn('batching', browser.json)
         self.assertEquals(2, browser.json['items_total'])
         self.assertEquals(2, len(browser.json['items']))
 
-        create(Builder('ogds_user').id('peter').in_group(team.group))
+        create(Builder('ogds_user').id('peter').in_group(projekt_a))
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertIn('batching', browser.json)

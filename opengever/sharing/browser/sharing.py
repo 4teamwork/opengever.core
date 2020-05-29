@@ -29,6 +29,7 @@ from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import clearafter
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import normalizeString
@@ -36,6 +37,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
+from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
 import json
@@ -203,7 +205,7 @@ class OpengeverSharingView(SharingView):
 
         manager = RoleAssignmentManager(self.context)
         for result in results:
-            result['url'] = self.get_detail_view_url(result)
+            self.extend_with_detail_view_infos(result)
             result['computed_roles'] = result['roles']
             self.extend_with_assignment_infos(result, manager)
             self.update_computed_info(result)
@@ -220,23 +222,31 @@ class OpengeverSharingView(SharingView):
 
         return results
 
-    def get_detail_view_url(self, item):
-        """Returns the url to the detail view for users or group.
-
-        We do not use item['type'] to determine whether it is a group or a user,
+    def extend_with_detail_view_infos(self, item):
+        """We do not use item['type'] to determine whether it is a group or a user,
         as this was determined from the acl_users which wrongly identifies
         inactive groups (groups that were deleted from the LDAP) as users.
         Instead we check using the ogds service.
         """
-        if ogds_service().fetch_group(item['id']):
-            return '{}/@@list_groupmembers?{}'.format(
+        ogds_summary = None
+        url = None
+        service = ogds_service()
+        group = service.fetch_group(item['id'])
+        user = service.fetch_user(item['id'])
+        if group:
+            serializer = queryMultiAdapter((group, self.request), ISerializeToJsonSummary)
+            ogds_summary = serializer()
+            url = '{}/@@list_groupmembers?{}'.format(
                 api.portal.get().absolute_url(),
                 urlencode({'group': item['id']}))
-        elif ogds_service().fetch_user(item['id']):
-            return '{}/@@user-details-plain/{}'.format(
+        elif user:
+            serializer = queryMultiAdapter((user, self.request), ISerializeToJsonSummary)
+            ogds_summary = serializer()
+            url = '{}/@@user-details-plain/{}'.format(
                 api.portal.get().absolute_url(), item['id'])
-        else:
-            return None
+
+        item['ogds_summary'] = ogds_summary
+        item['url'] = url
 
     def extend_with_assignment_infos(self, item, manager):
         local_roles = {role['id']: False for role in self.roles()}
