@@ -25,6 +25,16 @@ class TestFormFields(IntegrationTestCase):
             'hidden',
             browser.css('input#form-widgets-date_of_completion').first.type)
 
+    @browsing
+    def test_informed_principals_is_only_shown_in_add_form(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.dossier, view='++add++opengever.task.task')
+        self.assertEqual(1, len(browser.css('select#form-widgets-informed_principals')))
+
+        browser.open(self.seq_subtask_1, view='edit')
+        self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
+
 
 class TestTaskAddForm(IntegrationTestCase):
 

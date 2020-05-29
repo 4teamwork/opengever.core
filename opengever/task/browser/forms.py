@@ -38,6 +38,12 @@ def hide_feature_flagged_fields(groups):
         common_group.fields = common_group.fields.omit('revoke_permissions')
 
 
+def omit_informed_principals(groups):
+    common_group = next(
+        group for group in groups if group.__name__ == u'common')
+    common_group.fields = common_group.fields.omit('informed_principals')
+
+
 class TaskAddForm(DefaultAddForm):
 
     def __init__(self, *args, **kwargs):
@@ -165,6 +171,7 @@ class TaskEditForm(DefaultEditForm):
         super(TaskEditForm, self).updateFieldsFromSchemata()
 
         hide_feature_flagged_fields(self.groups)
+        omit_informed_principals(self.groups)
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
