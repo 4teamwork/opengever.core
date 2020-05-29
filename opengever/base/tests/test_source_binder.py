@@ -44,33 +44,6 @@ class TestRepositoryPathSourceBinderSolr(SolrIntegrationTestCase):
             [term.title for term in source.search("source")])
 
 
-class TestRepositoryPathSourceBinder(IntegrationTestCase):
-
-    features = ('!solr', )
-
-    def test_query_is_limited_to_current_repository(self):
-        self.login(self.manager)
-
-        source_binder = RepositoryPathSourceBinder()
-        source = source_binder(self.branch_repofolder)
-
-        self.document.title = 'source test document'
-        self.document.reindexObject()
-
-        self.proposaldocument.title = 'source test proposal document'
-        self.proposaldocument.reindexObject()
-
-        self.inbox_document.title = 'source test inbox document'
-        self.inbox_document.reindexObject()
-
-        self.private_document.title = 'source test private document'
-        self.private_document.reindexObject()
-
-        self.assertItemsEqual(
-            ['source test document', 'source test proposal document'],
-            [term.title for term in source.search("source")])
-
-
 class TestDossierSourceBinder(SolrIntegrationTestCase):
 
     def test_only_objects_inside_the_maindossier_are_selectable(self):
