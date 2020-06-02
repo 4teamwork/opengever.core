@@ -658,7 +658,7 @@ DOCUMENTS_LIST_TAB = 'tabbedview_view-documents'
 DOCUMENTS_GALLERY_TAB = 'tabbedview_view-documents-gallery'
 
 
-class TestDossierTemplateOverview(IntegrationTestCase):
+class TestDossierTemplateOverview(SolrIntegrationTestCase):
 
     features = ('dossiertemplate', )
 
@@ -711,6 +711,7 @@ class TestDossierTemplateOverview(IntegrationTestCase):
                    .within(self.dossiertemplate)
                    .titled(u'A Document %s' % i))
 
+        self.commit_solr()
         browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
         expected_titles = [
             'A Document 1',
