@@ -138,7 +138,11 @@ class SerializeTeamModelToJson(SerializeSQLModelToJsonBase):
 
     def get_item_query(self):
         # The teammembers are the items of the team
-        return User.query.join(groups_users).filter_by(groupid=self.context.groupid)
+        return (
+            User.query.join(groups_users)
+            .filter_by(groupid=self.context.groupid)
+            .order_by(User.lastname)
+        )
 
     def add_additional_metadata(self, data):
         """Add group summary and org_unit_title"""
@@ -157,7 +161,12 @@ class SerializeGroupModelToJson(SerializeSQLModelToJsonBase):
 
     def get_item_query(self):
         # The group members are the items of the group
-        return User.query.join(groups_users).filter_by(groupid=self.context.groupid)
+
+        return (
+            User.query.join(groups_users)
+            .filter_by(groupid=self.context.groupid)
+            .order_by(User.lastname)
+        )
 
 
 @implementer(ISerializeToJson)
