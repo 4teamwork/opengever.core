@@ -6,7 +6,6 @@ from ftw.testing import freeze
 from OFS.CopySupport import CopyError
 from opengever.testing import IntegrationTestCase
 from plone import api
-from tzlocal import get_localzone
 import pytz
 
 
@@ -75,8 +74,6 @@ class TestCopyDocuments(IntegrationTestCase):
         original_metadata = self.get_catalog_metadata(self.subdocument)
         copy_metadata = self.get_catalog_metadata(copy)
 
-        ZOPE_PASTE_TIME_STR = ZOPE_PASTE_TIME.toZone(DateTime().localZone()).ISO()
-
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {'UID': copy.UID(),
                              # sequence numbers and such
@@ -89,11 +86,8 @@ class TestCopyDocuments(IntegrationTestCase):
                              'Creator': self.regular_user.id,
                              # dates
                              'created': ZOPE_PASTE_TIME,
-                             'CreationDate': ZOPE_PASTE_TIME_STR,
                              'start': self.PASTE_TIME.date(),
                              'modified': ZOPE_PASTE_TIME,
-                             'ModificationDate': ZOPE_PASTE_TIME_STR,
-                             'Date': ZOPE_PASTE_TIME_STR,
                              'changed': self.PASTE_TIME,
                              # containing dossier and subdossier
                              'containing_dossier': self.empty_dossier.Title(),
@@ -103,15 +97,10 @@ class TestCopyDocuments(IntegrationTestCase):
                              'filename': u'copy of {}'.format(self.subdocument.get_filename())}
 
         unchanged_metadata = ['Description',
-                              'EffectiveDate',
-                              'ExpirationDate',
                               'Subject', 'Type',
-                              'assigned_client',
-                              'author_name',
                               'bumblebee_checksum',
                               'checked_out',
                               'cmf_uid',
-                              'commentators',
                               'contactid',
                               'css_icon_class',
                               'date_of_completion',
@@ -119,29 +108,22 @@ class TestCopyDocuments(IntegrationTestCase):
                               'delivery_date',
                               'document_author',
                               'document_date',
-                              'effective',
                               'email',
                               'email2',
                               'end',
                               'exclude_from_nav',
-                              'expires',
                               'file_extension',
                               'filesize',
                               'firstname',
                               'getContentType',
                               'getIcon',
-                              'getObjSize',
-                              'getRemoteUrl',
                               'has_sametype_children',
                               'in_response_to',
                               'is_folderish',
                               'is_subdossier',
                               'is_subtask',
                               'issuer',
-                              'last_comment_date',
                               'lastname',
-                              'location',
-                              'meta_type',
                               'phone_office',
                               'portal_type',
                               'predecessor',
@@ -154,7 +136,6 @@ class TestCopyDocuments(IntegrationTestCase):
                               'task_type',
                               'title_de',
                               'title_fr',
-                              'total_comments',
                               'trashed']
 
         # Make sure no metadata key is in both lists of unchanged and modified metadata
@@ -225,16 +206,12 @@ class TestCopyDocuments(IntegrationTestCase):
             # title and serchable text
             'Title': ['copy', 'of', 'ubersicht', 'der', 'vertrage', 'von', u'2016'],
             'sortable_title': 'copy of ubersicht der vertrage von 2016',
-            'SearchableText': ['copy', 'of', 'ubersicht', 'der', 'vertrage',
-                               'von', u'2016', 'client1', u'1', u'1', u'4',
-                               u'41', u'41', 'wichtig', 'subkeyword'],
 
             # dates
             'changed': paste_time_index,
             'modified': paste_time_index,
             'start': paste_time_index,
             'created': paste_time_index,
-            'Date': paste_time_index,
 
             # containing dossier and subdossier
             'containing_dossier': self.empty_dossier.Title(),
@@ -242,17 +219,13 @@ class TestCopyDocuments(IntegrationTestCase):
             'is_subdossier': 0,  # acquisition is responsible here
         }
 
-        unchanged_indexdata = ['Description',
-                               'Subject',
+        unchanged_indexdata = ['Subject',
                                'Type',
                                'after_resolve_jobs_pending',
                                'allowedRolesAndUsers',
-                               'assigned_client',
                                'blocked_local_roles',
                                'checked_out',
-                               'client_id',
                                'cmf_uid',
-                               'commentators',
                                'contactid',
                                'date_of_completion',
                                'deadline',
@@ -260,24 +233,18 @@ class TestCopyDocuments(IntegrationTestCase):
                                'document_author',
                                'document_date',
                                'document_type',
-                               'effective',
-                               'effectiveRange',
                                'email',
                                'end',
-                               'expires',
                                'external_reference',
                                'file_extension',
                                'filesize',
                                'firstname',
                                'getObjPositionInParent',
-                               'getRawRelatedItems',
-                               'in_reply_to',
                                'is_default_page',
                                'is_folderish',
                                'is_subtask',
                                'issuer',
                                'lastname',
-                               'meta_type',
                                'object_provides',
                                'phone_office',
                                'portal_type',
@@ -289,7 +256,6 @@ class TestCopyDocuments(IntegrationTestCase):
                                'review_state',
                                'sortable_author',
                                'task_type',
-                               'total_comments',
                                'trashed']
 
         # Make sure no index is in both lists of unchanged and modified indexdata

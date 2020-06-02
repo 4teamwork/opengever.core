@@ -22,6 +22,7 @@ Changelog
 - Add @ogds-groups API endpoint. [tinagerber]
 - Implement custom RoleAssignmentManager based local role migration for ftw.usermigration. [deiferni]
 - Fix batching in OGDSListingBaseService, properly use SQLHypermediaBatch. [deiferni]
+- Remove various unneeded catalog indexes and metadata columns. [buchi,elioschmutz,mbaechtold]
 
 
 2020.3.0rc3 (2020-05-22)

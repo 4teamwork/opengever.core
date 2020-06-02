@@ -5,8 +5,9 @@ from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from opengever.workspace.todo import IToDoSchema
 from plone import api
 from unittest import skip
@@ -15,7 +16,7 @@ import json
 import opengever.workspace.subscribers
 
 
-class TestToDo(IntegrationTestCase):
+class TestToDo(SolrIntegrationTestCase):
 
     def create_to_do(self, browser, workspace, title, responsible=None):
         browser.visit(workspace)
@@ -93,10 +94,11 @@ class TestToDo(IntegrationTestCase):
         self.assertEqual([], getSchemaValidationErrors(IToDoSchema, todo))
 
     def test_searchable_text(self):
-        self.login(self.workspace_admin)
-        self.assertItemsEqual(
-            ['fix', 'user', 'login', 'authentication', 'is', 'no', 'longer', 'possible'],
-            index_data_for(self.todo).get('SearchableText'))
+        self.login(self.workspace_member)
+
+        indexed_searchable_text = solr_data_for(self.todo, 'SearchableText')
+        self.assertIn(self.todo.title, indexed_searchable_text)
+        self.assertIn(self.todo.text, indexed_searchable_text)
 
     @browsing
     def test_todo_number_hard_limit(self, browser):

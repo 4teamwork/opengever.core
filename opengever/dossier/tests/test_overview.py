@@ -9,7 +9,8 @@ from opengever.contact.interfaces import IContactSettings
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
@@ -18,7 +19,7 @@ from zope.intid.interfaces import IIntIds
 import json
 
 
-class TestOverview(IntegrationTestCase):
+class TestOverview(SolrIntegrationTestCase):
 
     @property
     def tested_dossier(self):
@@ -330,20 +331,22 @@ class TestOverview(IntegrationTestCase):
     def test_dossier_save_comments_endpoint(self, browser):
         self.login(self.regular_user, browser=browser)
 
+        self.assertNotIn('New comment',
+                         solr_data_for(self.tested_dossier, 'SearchableText'))
+
         payload = '{"comments": "New comment http://example.org"}'
         browser.open(self.tested_dossier, view='save_comments',
                      data={'data': payload, '_authenticator': createToken()})
+        self.commit_solr()
 
         self.assertEquals(
             {u'comment': u'New comment <a href="http://example.org" '
              'rel="nofollow">http://example.org</a>'},
             browser.json)
-
         self.assertEquals("New comment http://example.org",
                           IDossier(self.tested_dossier).comments)
-
-        result = self.portal.portal_catalog({'SearchableText': 'New comment'})
-        self.assertEquals(self.tested_dossier, result[0].getObject())
+        self.assertIn('New comment',
+                      solr_data_for(self.tested_dossier, 'SearchableText'))
 
     @browsing
     def test_dossier_save_comments_endpoint_with_invalid_key_raises_KeyError(self, browser):

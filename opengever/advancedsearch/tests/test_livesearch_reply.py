@@ -1,8 +1,8 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 
 
-class TestLivesearchReply(IntegrationTestCase):
+class TestLivesearchReply(SolrIntegrationTestCase):
 
     @browsing
     def test_livesearch_reply_escapes_title(self, browser):
@@ -10,8 +10,9 @@ class TestLivesearchReply(IntegrationTestCase):
 
         self.dossier.title = u"<script>alert('evil');</script>"
         self.dossier.reindexObject()
+        self.commit_solr()
 
-        browser.open(view='livesearch_reply?q=evil')
+        browser.open(view='@@livesearch_reply?q=evil')
 
         link_node = browser.css('.LSRow').first
         # lxml unescapes attributes for us. we want to test that the title
@@ -25,7 +26,7 @@ class TestLivesearchReply(IntegrationTestCase):
     @browsing
     def test_livesearch_empty_result(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(view='livesearch_reply?q=blablabla')
+        browser.open(view='@@livesearch_reply?q=blablabla')
 
         link_node = browser.css('.dropdown-list-item').first
         self.assertEqual('LSNothingFound', link_node.get("id"))

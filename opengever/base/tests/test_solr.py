@@ -78,30 +78,19 @@ class TestSolr(IntegrationTestCase):
 
         # indexes
         CATALOG_ONLY_INDEXES = [
-            'Date',
             'Type',
             'after_resolve_jobs_pending',
-            'assigned_client',
             'blocked_local_roles',
-            'client_id',
             'cmf_uid',
-            'commentators',
             'contactid',
             'date_of_completion',
-            'effective',
-            'effectiveRange',
-            'expires',
             'external_reference',
             'getId',
             'getObjPositionInParent',
-            'getRawRelatedItems',
-            'in_reply_to',
             'is_default_page',
             'is_folderish',
-            'meta_type',
             'predecessor',
             'sortable_author',
-            'total_comments',
         ]
 
         for index in catalog.indexes():
@@ -112,35 +101,20 @@ class TestSolr(IntegrationTestCase):
                     'catalog only index?'.format(index))
 
         CATALOG_ONLY_METADATA = [
-            'CreationDate',
-            'Date',
-            'EffectiveDate',
-            'ExpirationDate',
-            'ModificationDate',
             'Type',
-            'assigned_client',
-            'author_name',
             'cmf_uid',
-            'commentators',
             'contactid',
             'css_icon_class',
             'date_of_completion',
-            'effective',
             'exclude_from_nav',
-            'expires',
             'getContentType',
             'getId',
-            'getRemoteUrl',
             'in_response_to',
             'is_folderish',
-            'last_comment_date',
             'listCreators',
-            'location',
-            'meta_type',
             'predecessor',
             'title_de',
             'title_fr',
-            'total_comments'
         ]
 
         for metadata in catalog.schema():

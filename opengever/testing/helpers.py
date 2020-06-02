@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from datetime import datetime
+from ftw.solr.interfaces import ISolrSearch
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from opengever.contact.sources import ContactsSource
@@ -115,6 +116,14 @@ def obj2brain(obj, unrestricted=False):
 def index_data_for(obj):
     catalog = getToolByName(obj, 'portal_catalog')
     return catalog.getIndexDataForRID(obj2brain(obj, unrestricted=True).getRID())
+
+
+def solr_data_for(obj, field=None):
+    solr = getUtility(ISolrSearch)
+    response = solr.search(filters=("UID:{}".format(obj.UID())))
+
+    doc = response.docs[0]
+    return doc.get(field) if field else doc
 
 
 def set_preferred_language(request, code):

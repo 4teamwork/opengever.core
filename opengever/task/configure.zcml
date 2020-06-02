@@ -152,11 +152,6 @@
       />
 
   <adapter
-      factory=".indexers.assigned_client"
-      name="assigned_client"
-      />
-
-  <adapter
       factory=".indexers.sequence_number"
       name="sequence_number"
       />

@@ -219,6 +219,20 @@ class TestOpengeverContentListing(IntegrationTestCase):
                 self.proposal)).responsible_fullname(),
             u'Rechnungspr\xfcfungskommission')
 
+    def test_creationdate_from_created(self):
+        self.login(self.regular_user)
+        self.assertEqual(
+            IContentListingObject(obj2brain(
+                self.dossier)).CreationDate(),
+            '2016-08-31T16:01:33+02:00')
+
+    def test_modificationdate_from_modified(self):
+        self.login(self.regular_user)
+        self.assertEqual(
+            IContentListingObject(obj2brain(
+                self.dossier)).ModificationDate(),
+            '2016-08-31T20:15:33+02:00')
+
 
 class TestBrainContentListingRenderLink(IntegrationTestCase):
     """Test we render appropriate content listing links per content type."""

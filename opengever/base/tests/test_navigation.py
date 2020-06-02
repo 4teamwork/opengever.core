@@ -129,3 +129,52 @@ class TestNavigation(IntegrationTestCase):
         yield
         after = value_callback()
         self.assertNotEqual(before, after, msg)
+
+
+class TestCatalogNavigationTabs(IntegrationTestCase):
+
+    @browsing
+    def test_catalog_tabs(self, browser):
+        self.login(self.manager, browser=browser)
+        view = self.portal.unrestrictedTraverse('@@portal_tabs_view')
+        self.assertEqual(
+            [
+                {
+                    'description': '',
+                    'id': 'kontakte',
+                    'name': 'kontakte',
+                    'url': 'http://nohost/plone/kontakte',
+                },
+                {
+                    'description': '',
+                    'id': 'ordnungssystem',
+                    'name': 'ordnungssystem',
+                    'url': 'http://nohost/plone/ordnungssystem',
+                },
+                {
+                    'description': '',
+                    'id': 'vorlagen',
+                    'name': 'vorlagen',
+                    'url': 'http://nohost/plone/vorlagen',
+                },
+                {
+                    'description': '',
+                    'id': 'opengever-meeting-committeecontainer',
+                    'name': 'opengever-meeting-committeecontainer',
+                    'url': 'http://nohost/plone/opengever-meeting-committeecontainer',
+                },
+                {
+                    'description': '',
+                    'id': 'eingangskorb',
+                    'name': 'eingangskorb',
+                    'url': 'http://nohost/plone/eingangskorb',
+                },
+                {
+                    'description': '',
+                    'id': 'workspaces',
+                    'name': 'workspaces',
+                    'url': 'http://nohost/plone/workspaces',
+                }
+            ],
+            view.topLevelTabs(actions=[])
+        )

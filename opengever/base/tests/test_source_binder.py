@@ -44,33 +44,6 @@ class TestRepositoryPathSourceBinderSolr(SolrIntegrationTestCase):
             [term.title for term in source.search("source")])
 
 
-class TestRepositoryPathSourceBinder(IntegrationTestCase):
-
-    features = ('!solr', )
-
-    def test_query_is_limited_to_current_repository(self):
-        self.login(self.manager)
-
-        source_binder = RepositoryPathSourceBinder()
-        source = source_binder(self.branch_repofolder)
-
-        self.document.title = 'source test document'
-        self.document.reindexObject()
-
-        self.proposaldocument.title = 'source test proposal document'
-        self.proposaldocument.reindexObject()
-
-        self.inbox_document.title = 'source test inbox document'
-        self.inbox_document.reindexObject()
-
-        self.private_document.title = 'source test private document'
-        self.private_document.reindexObject()
-
-        self.assertItemsEqual(
-            ['source test document', 'source test proposal document'],
-            [term.title for term in source.search("source")])
-
-
 class TestDossierSourceBinder(SolrIntegrationTestCase):
 
     def test_only_objects_inside_the_maindossier_are_selectable(self):
@@ -109,7 +82,7 @@ class TestDossierSourceBinder(SolrIntegrationTestCase):
 class TestRelatedDossierAutocomplete(IntegrationTestCase):
 
     @browsing
-    def test_related_dossier_autocomplete_uses_solr_when_feature_enabled(self, browser):
+    def test_related_dossier_autocomplete_uses_solr(self, browser):
         self.solr = self.mock_solr('solr_autocomplete_dossier.json')
 
         self.login(self.dossier_responsible, browser)
@@ -125,19 +98,6 @@ class TestRelatedDossierAutocomplete(IntegrationTestCase):
             self.solr, 'empty', rows=20, fl=['path'],
             filters=[u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
                      u'path_parent:\\/plone\\/ordnungssystem']
-        )
-
-    @browsing
-    def test_related_dossier_autocomplete_uses_catalog_when_solr_disabled(self, browser):
-        self.deactivate_feature('solr')
-        self.login(self.dossier_responsible, browser)
-        browser.open(
-            self.dossier,
-            view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty'
-        )
-        self.assertEqual(
-            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-7|An empty dossier',
-            browser.contents
         )
 
 

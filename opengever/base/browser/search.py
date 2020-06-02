@@ -257,8 +257,6 @@ class OpengeverSearch(Search):
         if 'query' in types:
             types = types['query']
         query['portal_type'] = self.filter_types(types)
-        # respect effective/expiration date
-        query['show_inactive'] = False
         # respect navigation root
         if 'path' not in query:
             query['path'] = getNavigationRoot(self.context)

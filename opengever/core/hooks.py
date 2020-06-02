@@ -1,3 +1,4 @@
+from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite
 import logging
@@ -81,6 +82,8 @@ def should_prevent_duplicate_installation(profile):
 def installed(site):
     trigger_subpackage_hooks(site)
     enable_secure_flag_for_cookies(site)
+    remove_unused_catalog_indexes(site)
+    remove_unused_catalog_metadata(site)
 
 
 def trigger_subpackage_hooks(site):
@@ -106,3 +109,47 @@ def trigger_subpackage_hooks(site):
 def enable_secure_flag_for_cookies(context):
     session_plugin = context.acl_users.session
     session_plugin.secure = True
+
+
+def remove_unused_catalog_indexes(site):
+    indexes_to_remove = [
+        'commentators',
+        'Date',
+        'Description',
+        'effective',
+        'effectiveRange',
+        'expires',
+        'getRawRelatedItems',
+        'in_reply_to',
+        'meta_type',
+        'SearchableText',
+        'total_comments',
+    ]
+    catalog = api.portal.get_tool('portal_catalog')
+    for index in indexes_to_remove:
+        if index in catalog._catalog.indexes:
+            catalog._catalog.delIndex(index)
+
+
+def remove_unused_catalog_metadata(site):
+    columns_to_remove = [
+        'author_name',
+        'commentators',
+        'CreationDate',
+        'Date',
+        'effective',
+        'EffectiveDate',
+        'ExpirationDate',
+        'expires',
+        'getObjSize',
+        'getRemoteUrl',
+        'last_comment_date',
+        'location',
+        'meta_type',
+        'ModificationDate',
+        'total_comments',
+    ]
+    catalog = api.portal.get_tool('portal_catalog')
+    for column in columns_to_remove:
+        if column in catalog._catalog.schema:
+            catalog._catalog.delColumn(column)
