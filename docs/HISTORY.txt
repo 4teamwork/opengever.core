@@ -8,6 +8,7 @@ Changelog
 - Fix p7m attachment extraction from mails. [deiferni]
 - Fix bug with setting issuer and informed_principals on forwardings. [njohner]
 - Allow notifying users and groups when creating a new task. [njohner]
+- Add last login information to user. [tinagerber]
 - Bump ftw.casauth to 1.3.0 to handle login similar to PlonePAS in @caslogin endpoint. [tinagerber]
 - Enable API endpoint `@document-from-template` for tasks. [mbaechtold]
 - Support combined notation for task responsible in workflow transitions. [elioschmutz]

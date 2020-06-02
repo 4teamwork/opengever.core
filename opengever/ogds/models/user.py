@@ -7,12 +7,16 @@ from opengever.base.query import BaseQuery
 from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
+from sqlalchemy import Date
 from sqlalchemy import String
 
 
 class UserQuery(BaseQuery):
 
     searchable_fields = ['userid', 'firstname', 'lastname', 'email']
+
+    def get_by_userid(self, userid):
+        return self.filter_by(userid=userid).first()
 
 
 class User(Base):
@@ -50,6 +54,7 @@ class User(Base):
     country = Column(String(20))
 
     import_stamp = Column(String(26))
+    last_login = Column(Date, index=True)
 
     def __init__(self, userid, **kwargs):
         self.userid = userid
