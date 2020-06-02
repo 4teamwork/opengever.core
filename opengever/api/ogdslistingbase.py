@@ -47,8 +47,6 @@ class OGDSListingBaseService(Service):
         result['items_total'] = batch.items_total
         if batch.links:
             result['batching'] = batch.links
-        # return empty facet dict to keep response structure consistent
-        result['facets'] = {}
         return result
 
     def extract_params(self):

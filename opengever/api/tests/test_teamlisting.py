@@ -41,7 +41,6 @@ class TestTeamListingGet(IntegrationTestCase):
              u'team_id': 2,
              u'title': u'Sekretariat Abteilung XY'}],
             browser.json.get('items'))
-        self.assertEqual({}, browser.json['facets'])
         self.assertEqual(3, browser.json['items_total'])
 
     @browsing

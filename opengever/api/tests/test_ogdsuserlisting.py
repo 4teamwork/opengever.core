@@ -44,7 +44,6 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'title': u'B\xf6nd James',
              u'userid': u'james.bond'}],
             browser.json.get('items')[:2])
-        self.assertEqual({}, browser.json['facets'])
         self.assertEqual(19, browser.json['items_total'])
 
     @browsing

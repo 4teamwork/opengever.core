@@ -282,7 +282,6 @@ Beispiel: Auflistung aller Benutzer:
 
     {
       "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
-      "facets": {},
       "batching": {
         "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
         "first": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=0",
