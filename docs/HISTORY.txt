@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc4 (unreleased)
 ------------------------
 
+- Add `bumblebee_app_id` to the `@config` API endpoint. [mbaechtold]
 - Bump ftw.solr to 2.8.6 to get logging improvements and filter helpers. [lgraf]
 - Support placeholders in the target url of the webactions. [mbaechtold]
 - Fix the upgradestep to merge notification settings from release 2020.3.0rc2 to use it's own configruation copy to not depend on future adjustments. [elioschmutz]

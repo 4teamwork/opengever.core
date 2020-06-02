@@ -1,3 +1,4 @@
+from ftw.bumblebee.config import bumblebee_config
 from opengever.base import utils
 from opengever.base.interfaces import IGeverSettings
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
@@ -23,3 +24,4 @@ class Config(Service):
         """
         config['is_emm_environment'] = is_client_ip_in_office_connector_disallowed_ip_ranges()
         config['is_admin_menu_visible'] = utils.is_administrator()
+        config['bumblebee_app_id'] = bumblebee_config.app_id

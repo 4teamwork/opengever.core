@@ -22,6 +22,7 @@ GEVER-Mandanten abgefragt werden.
 
       {
           "@id": "http://localhost:8080/fd/@config",
+          "bumblebee_app_id": "gever_dev",
           "cas_url": "https://cas.server.net/",
           "features": {
               "activity": true,
