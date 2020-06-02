@@ -303,9 +303,9 @@ class RoleAssignmentManager(object):
 
         self._update_local_roles(reindex=reindex)
 
-    def add_or_update(self, principal, roles, cause, reference=None):
+    def add_or_update(self, principal, roles, cause, reference=None, reindex=True):
         self.storage.add_or_update(principal, roles, cause, reference)
-        self._update_local_roles()
+        self._update_local_roles(reindex=reindex)
 
     def get_assignments_by_cause(self, cause):
         return self.storage.get_by_cause(cause)
@@ -355,7 +355,15 @@ class RoleAssignmentManager(object):
         self._update_local_roles()
 
     def clear(self, cause, principal, reference, reindex=True):
-        item = self.storage.get(principal, cause, Oguid.for_object(reference).id)
+        """Clear one assignment, if it still exists.
+
+        Clear an assignment of the given cause, principal and reference.
+        Reference may either be a plone content object or an oguid string
+        representation.
+        """
+        if reference and not isinstance(reference, basestring):
+            reference = Oguid.for_object(reference).id
+        item = self.storage.get(principal, cause, reference)
         if not item:
             return
 
