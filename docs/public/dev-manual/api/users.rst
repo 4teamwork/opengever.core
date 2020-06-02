@@ -118,7 +118,8 @@ Details über Gruppen können mit dem ``@ogds-groups`` Endpoint abgefragt werden
 
 ``http://example.org/kontakte/@ogds-groups/stv_benutzer``
 
-Dieser Endpoint unterstützt Batching.
+Dieser Endpoint unterstützt Batching. Die Gruppenmitglieder werden nach
+Nachnamen sortiert zurückgegeben.
 
 
 **Beispiel-Request**:

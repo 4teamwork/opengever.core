@@ -157,7 +157,9 @@ class SerializeGroupModelToJson(SerializeSQLModelToJsonBase):
 
     def get_item_query(self):
         # The group members are the items of the group
-        return User.query.join(groups_users).filter_by(groupid=self.context.groupid)
+        users = User.query.join(groups_users).filter_by(
+            groupid=self.context.groupid).order_by(User.lastname)
+        return users
 
 
 @implementer(ISerializeToJson)
