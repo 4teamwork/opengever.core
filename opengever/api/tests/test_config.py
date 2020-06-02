@@ -188,3 +188,14 @@ class TestConfig(IntegrationTestCase):
         browser.open(url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertFalse(browser.json.get(u'is_admin_menu_visible'))
+
+    @browsing
+    def test_config_contains_bumblebee_app_id(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@config'
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            'local',
+            browser.json.get(u'bumblebee_app_id')
+        )
