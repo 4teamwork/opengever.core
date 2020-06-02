@@ -6,8 +6,6 @@ from opengever.mail.mail import IOGMailMarker
 from plone.app.uuid.utils import uuidToObject
 from plone.uuid.interfaces import IUUID
 from zope.interface import noLongerProvides
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 
 
 def set_digitally_available(mail, event):
@@ -39,26 +37,9 @@ def find_corresponding_mail_info_in_write_modus(doc):
     raise SourceMailNotFound("Source Mail not found when Extracted attachment moved.")
 
 
-def extracted_attachment_moved(doc, event):
-    """Mails keep track of their attachments extracted to documents.
-    When such a document is moved, the corresponding information has to
-    be updated on the Mail."""
-
-    # Since IObjectAddedEvent and IObjectRemovedEvent subclasses
-    # IObjectMovedEvent this event handler is also called for
-    # IObjectAddedEvent and IObjectRemovedEvent but we should not
-    # do anything in these cases.
-    if IObjectAddedEvent.providedBy(event) or IObjectRemovedEvent.providedBy(event):
-        return
-
-    write_info = find_corresponding_mail_info_in_write_modus(doc)
-    write_info["extracted_document_url"] = doc.absolute_url()
-
-
 def extracted_attachment_deleted(doc, event):
     write_info = find_corresponding_mail_info_in_write_modus(doc)
     write_info.pop('extracted')
-    write_info.pop('extracted_document_url')
     write_info.pop('extracted_document_uid')
 
 

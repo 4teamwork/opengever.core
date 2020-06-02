@@ -227,7 +227,7 @@ class TestExtractAttachments(IntegrationTestCase):
             doc = uuidToObject(info['extracted_document_uid'])
             expected_response.append({
                 'position': info['position'],
-                'extracted_document_url': info['extracted_document_url'],
+                'extracted_document_url': doc.absolute_url(),
                 'extracted_document_title': doc.title})
 
         self.assertItemsEqual(expected_response, browser.json)
@@ -254,7 +254,7 @@ class TestExtractAttachments(IntegrationTestCase):
 
         expected_response = [{
             'position': info['position'],
-            'extracted_document_url': info['extracted_document_url'],
+            'extracted_document_url': doc.absolute_url(),
             'extracted_document_title': doc.title}]
         self.assertEqual(expected_response, browser.json)
 

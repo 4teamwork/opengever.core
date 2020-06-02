@@ -190,7 +190,6 @@ class TestExtractMail(FunctionalTestCase):
         info = self.mail._get_attachment_info(4)
         expected_info.update({
             'extracted': True,
-            'extracted_document_url': doc.absolute_url(),
             'extracted_document_uid': IUUID(doc)})
         self.assertEqual(info, expected_info)
 

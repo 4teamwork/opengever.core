@@ -240,7 +240,6 @@ class OGMail(Mail, BaseDocumentMixin):
 
         # mark attachment as extracted
         info['extracted'] = True
-        info['extracted_document_url'] = doc.absolute_url()
         info['extracted_document_uid'] = IUUID(doc)
 
         return doc

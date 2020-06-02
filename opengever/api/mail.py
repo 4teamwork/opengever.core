@@ -5,6 +5,7 @@ from opengever.mail.exceptions import AlreadyExtractedError
 from opengever.mail.exceptions import InvalidAttachmentPosition
 from opengever.mail.mail import initialize_metadata
 from opengever.mail.mail import initialize_title
+from plone.app.uuid.utils import uuidToURL
 from plone.namedfile.file import NamedBlobFile
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -57,8 +58,16 @@ class SerializeMailToJson(SerializeDocumentToJson):
 
     def __call__(self, *args, **kwargs):
         result = super(SerializeMailToJson, self).__call__(*args, **kwargs)
-        result[u'attachments'] = self.context.get_attachments()
+        result[u'attachments'] = self.get_attachments()
         return result
+
+    def get_attachments(self):
+        attachments = self.context.get_attachments()
+        for attachment in attachments:
+            if attachment.get('extracted'):
+                attachment['extracted_document_url'] = uuidToURL(
+                    attachment.get('extracted_document_uid'))
+        return attachments
 
 
 class ExtractAttachments(Service):
