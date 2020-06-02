@@ -19,6 +19,9 @@ solr-core-name = {{{package.name}}}
 raven_tags = {"cluster": "{{{base.domain}}}"}
 develop = .
 
+supervisor-client-startsecs = 10
+supervisor-client-stopwaitsecs = 5
+
 parts -= gems
 sablon-executable = /opt/sablon/bin/sablon
 
