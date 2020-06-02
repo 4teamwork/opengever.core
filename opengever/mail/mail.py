@@ -6,7 +6,6 @@ from ftw.mail import utils
 from ftw.mail.mail import IMail
 from ftw.mail.mail import Mail
 from ftw.mail.utils import get_filename
-from ftw.mail.utils import remove_attachments
 from opengever.base import _ as base_mf
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
@@ -17,30 +16,29 @@ from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _ as dossier_mf
 from opengever.mail import _
-from opengever.mail.events import AttachmentsDeleted
-from opengever.mail.interfaces import IAttachmentsDeletedEvent
+from opengever.mail.exceptions import AlreadyExtractedError
+from opengever.mail.exceptions import InvalidAttachmentPosition
+from opengever.mail.interfaces import IExtractedFromMail
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.namedfile import field
-from plone.namedfile import NamedBlobFile
 from plone.supermodel import model
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
+from plone.uuid.interfaces import IUUID
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from z3c.relationfield.relation import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.component.hooks import getSite
-from zope.event import notify
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -154,16 +152,34 @@ class OGMail(Mail, BaseDocumentMixin):
         """Return the parent that accepts extracted attachments."""
         return self.get_parent_dossier() or self.get_parent_inbox()
 
-    def get_attachments(self):
+    def get_attachments(self, unextracted_only=False):
         """Returns a list of dicts describing the attachements.
 
         Only attachments with a filename are returned.
         """
+        if unextracted_only:
+            return tuple(info for info in self.attachment_infos if not info.get('extracted'))
         return self.attachment_infos
 
     def has_attachments(self):
         """Return whether this mail has attachments."""
         return len(self.get_attachments()) > 0
+
+    def _get_attachment_info(self, position):
+        """Return the attachment info for attachment at given position.
+        This should not be modified as it is not a persistent mapping"""
+        for info in self._attachment_infos:
+            if info['position'] == position:
+                return info
+        raise InvalidAttachmentPosition(position)
+
+    def _modify_attachment_info(self, position, **kwargs):
+        """update the info at the given position with all passed
+        keyword arguments"""
+        info = self._get_attachment_info(position)
+        info.update(kwargs)
+        self._p_changed = True
+        return dict(info)
 
     def extract_attachments_into_parent(self, positions):
         """Extract all specified attachments into the mails parent dossier or
@@ -175,9 +191,9 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
-        docs = []
+        docs = {}
         for position in positions:
-            docs.append(self.extract_attachment_into_parent(position))
+            docs[position] = self.extract_attachment_into_parent(position)
         return docs
 
     def extract_attachment_into_parent(self, position):
@@ -190,6 +206,11 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
+        info = self._get_attachment_info(position)
+
+        if info.get('extracted'):
+            raise AlreadyExtractedError(info)
+
         parent = self.get_extraction_parent()
         if parent is None:
             raise RuntimeError(
@@ -217,66 +238,14 @@ class OGMail(Mail, BaseDocumentMixin):
             iid = intids.getId(self)
 
             IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
+            alsoProvides(doc, IExtractedFromMail)
             doc.reindexObject()
 
+        # mark attachment as extracted
+        self._modify_attachment_info(
+            position, extracted=True, extracted_document_uid=IUUID(doc))
+
         return doc
-
-    def is_delete_attachment_supported(self):
-        """Return wheter this mail supports deleting attachments.
-
-        Signed mails do not support deleting attachments as that would
-        invalidate the attached signature.
-        """
-
-        message = self.get_file()
-        if not message:
-            return False
-
-        return message.contentType != 'application/pkcs7-mime'
-
-    def delete_all_attachments(self):
-        """Delete all of mail's attachments.
-
-        The attachments will be removed from the attached message.
-        """
-        assert self.is_delete_attachment_supported()
-
-        self._delete_attachments(self.get_attachments())
-
-    def delete_attachments(self, positions):
-        """Delete all specified attachments from the mails message.
-
-        Positions must be a list of integer attachment positions. The position
-        can be obtained from the attachment description returned by
-        `get_attachments`.
-        """
-        assert self.is_delete_attachment_supported()
-
-        attachments = [attachment for attachment in self.get_attachments()
-                       if attachment.get('position') in positions]
-        self._delete_attachments(attachments)
-
-    def _delete_attachments(self, attachments):
-        assert self.is_delete_attachment_supported()
-
-        if not attachments:
-            return
-
-        attachment_names = [
-            attachment.get('filename', '[no filename]').decode('utf-8')
-            for attachment in attachments]
-        positions = [attachment['position'] for attachment in attachments]
-
-        # set the new message file
-        msg = remove_attachments(self.msg, positions)
-        self.message = NamedBlobFile(
-            data=msg.as_string(),
-            contentType=self.message.contentType,
-            filename=self.message.filename)
-
-        # Flag the `message` attribute as having changed
-        desc = Attributes(IAttachmentsDeletedEvent, "message")
-        notify(AttachmentsDeleted(self, attachment_names, desc))
 
     def _get_attachment_data(self, pos):
         """Return a tuple: file-data, content-type and filename extracted from

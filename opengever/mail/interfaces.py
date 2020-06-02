@@ -1,7 +1,6 @@
 from zope import schema
 from zope.component.interfaces import IObjectEvent
 from zope.interface import Interface, Attribute
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 DEFAULT_MAIL_MAX_SIZE = 5
@@ -22,7 +21,7 @@ class ISendDocumentConf(Interface):
 
 
 class IDocumentSent(IObjectEvent):
-    """Local Roles has been modified"""
+    """Document has been sent"""
 
     sender = Attribute("The Mailsender")
     receiver = Attribute("The Mailreceiver")
@@ -31,16 +30,13 @@ class IDocumentSent(IObjectEvent):
     attachments = Attribute("The Attachments")
 
 
-class IAttachmentsDeletedEvent(IObjectModifiedEvent):
-    """One or more attachments have been deleted from a ftw.mail.mail message.
-    """
-
-    attachments = Attribute("List of attachments that have been removed")
-
-
 class IMailTabbedviewSettings(Interface):
 
     preview_tab_visible = schema.Bool(
         title=u'Is the preview tab in the mail tabbedview visible',
         default=True,
     )
+
+
+class IExtractedFromMail(Interface):
+    """Used to mark documents extracted from a Mail"""

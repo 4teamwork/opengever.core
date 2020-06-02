@@ -124,12 +124,6 @@
       />
 
   <subscriber
-      for="ftw.mail.mail.IMail
-           opengever.mail.interfaces.IAttachmentsDeletedEvent"
-      handler=".handlers.attachments_deleted"
-      />
-
-  <subscriber
       for="opengever.document.behaviors.IBaseDocument
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".handlers.document_added"

@@ -61,47 +61,6 @@
               <table tal:replace="structure view/render_attachment_table" />
             </div>
 
-
-            <div class="field" tal:condition="view/is_delete_attachment_supported">
-              <label i18n:translate="label_delete_action"
-                     class="horizontal">
-                Delete attachments
-              </label>
-
-              <div class="formHelp" i18n:translate="help_delete_action">
-                Select which attachments should be deleted.
-              </div>
-
-              <div>
-                <input type="radio" id="delete_action_nothing"
-                       name="delete_action" value="nothing"
-                       checked="cheked" />
-                <label for="delete_action_nothing"
-                       i18n:translate="label_delete_action_nothing">
-                  Delete nothing
-                </label>
-              </div>
-
-              <div>
-                <input type="radio" id="delete_action_all"
-                       name="delete_action" value="all" />
-                <label for="delete_action_all"
-                       i18n:translate="label_delete_action_all">
-                  Delete all attachments
-                </label>
-              </div>
-
-              <div>
-                <input type="radio" id="delete_action_selected"
-                       name="delete_action" value="selected" />
-                <label for="delete_action_selected"
-                       i18n:translate="label_delete_action_selected">
-                  Delete all selected attachments
-                </label>
-              </div>
-
-            </div>
-
             <div class="formControls">
               <input type="submit" name="form.submitted"
                      value="Save attachments"

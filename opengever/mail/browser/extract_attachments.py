@@ -16,8 +16,12 @@ def attachment_checkbox_helper(item, value):
              'id': 'attachment%s' % str(item['position']),
              'value': str(item['position'])}
 
-    return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
-                                      for k, v in attrs.items()])
+    if item.get("extracted"):
+        tag = '<span %s />'
+    else:
+        tag = '<input %s />'
+
+    return tag % ' '.join(['%s="%s"' % (k, v) for k, v in attrs.items()])
 
 
 def content_type_helper(item, content_type):
@@ -69,12 +73,16 @@ def human_readable_filesize_helper(context):
     return _helper
 
 
+def extracted_helper(item, extracted):
+    if extracted:
+        return _(u'label_yes', default=u'Yes')
+    return _(u'label_no', default=u'No')
+
+
 class ExtractAttachments(BrowserView):
     """View for extracting attachments from a `ftw.mail` Mail object into
     `opengever.document` Documents in a `IMailInAddressMarker` container.
     """
-
-    allowed_delete_actions = ('nothing', 'all', 'selected')
 
     def render_attachment_table(self):
         """Renders a ftw-table of attachments.
@@ -84,6 +92,11 @@ class ExtractAttachments(BrowserView):
             {'column': '',
              'transform': attachment_checkbox_helper,
              'width': 30},
+
+            {'column': 'extracted',
+             'column_title': _(u'column_already_extracted',
+                               default=u'Already extracted'),
+             'transform': extracted_helper},
 
             {'column': 'content-type',
              'column_title': _(u'column_attachment_type',
@@ -127,37 +140,20 @@ class ExtractAttachments(BrowserView):
                     msg, request=self.request, type='error')
             else:
                 attachments = [int(pos) for pos in attachments]
-                delete_action = self.request.get('delete_action', 'nothing')
-                if delete_action not in self.allowed_delete_actions:
-                    raise ValueError('Expected delete action to be one of '
-                                     + str(self.allowed_delete_actions))
-
-                self.extract_attachments(attachments, delete_action)
+                self.extract_attachments(attachments)
                 return self.request.RESPONSE.redirect(
                     "{}/#documents".format(
                         self.context.get_extraction_parent().absolute_url()))
 
         return super(ExtractAttachments, self).__call__()
 
-    def is_delete_attachment_supported(self):
-        return self.context.is_delete_attachment_supported()
-
-    def extract_attachments(self, positions, delete_action):
+    def extract_attachments(self, positions):
         docs = self.context.extract_attachments_into_parent(positions)
-        for document in docs:
+        for document in docs.values():
             msg = _(u'info_extracted_document',
                     default=u'Created document ${title}',
                     mapping={'title': document.Title().decode('utf-8')})
             api.portal.show_message(msg, request=self.request, type='info')
-
-        if not self.is_delete_attachment_supported():
-            return
-
-        # delete the attachments from the email message, if needed
-        if delete_action == 'selected':
-            self.context.delete_attachments(positions)
-        elif delete_action == 'all':
-            self.context.delete_all_attachments()
 
     def get_number_of_attachments(self):
         return len(self.context.get_attachments())

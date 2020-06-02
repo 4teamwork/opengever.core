@@ -90,4 +90,17 @@
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".subscribers.resolve_mail_author"
       />
+
+  <subscriber
+      for="opengever.mail.interfaces.IExtractedFromMail
+           zope.lifecycleevent.IObjectRemovedEvent"
+      handler=".subscribers.extracted_attachment_deleted"
+      />
+
+  <subscriber
+      for="opengever.mail.mail.IOGMailMarker
+           zope.lifecycleevent.IObjectRemovedEvent"
+      handler=".subscribers.mail_deleted"
+      />
+
 </configure>

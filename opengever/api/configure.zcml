@@ -32,6 +32,7 @@
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
+  <adapter factory=".mail.SerializeMailToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
@@ -738,6 +739,14 @@
   <adapter
       factory=".watchers.Watchers"
       name="watchers"
+      />
+
+  <plone:service
+      method="POST"
+      name="@extract-attachments"
+      for="opengever.mail.mail.IOGMailMarker"
+      factory=".mail.ExtractAttachments"
+      permission="opengever.document.AddDocument"
       />
 
 </configure>
