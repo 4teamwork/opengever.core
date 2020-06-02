@@ -22,7 +22,7 @@ def resolve_mail_author(mail, event):
     resolve_document_author(mail, event)
 
 
-def find_corresponding_mail_info_in_write_modus(doc):
+def extracted_attachment_deleted(doc, event):
     uid = IUUID(doc)
     for related_item in IRelatedDocuments(doc).relatedItems:
         related_obj = related_item.to_object
@@ -31,16 +31,12 @@ def find_corresponding_mail_info_in_write_modus(doc):
 
         for info in related_obj.get_attachments():
             if info.get("extracted_document_uid") == uid:
-                write_info = related_obj._get_attachment_info(
-                    info.get("position"), write_modus=True)
-                return write_info
+                related_obj._modify_attachment_info(
+                     info.get("position"),
+                     extracted=False,
+                     extracted_document_uid=None)
+                return
     raise SourceMailNotFound("Source Mail not found when Extracted attachment moved.")
-
-
-def extracted_attachment_deleted(doc, event):
-    write_info = find_corresponding_mail_info_in_write_modus(doc)
-    write_info.pop('extracted')
-    write_info.pop('extracted_document_uid')
 
 
 def mail_deleted(doc, event):

@@ -165,16 +165,21 @@ class OGMail(Mail, BaseDocumentMixin):
         """Return whether this mail has attachments."""
         return len(self.get_attachments()) > 0
 
-    def _get_attachment_info(self, position, write_modus=False):
+    def _get_attachment_info(self, position):
         """Return the attachment info for attachment at given position.
-        If write_modus is True, return the actual persistent mapping"""
+        This should not be modified as it is not a persistent mapping"""
         for info in self._attachment_infos:
             if info['position'] == position:
-                if not write_modus:
-                    return dict(info)
-                self._p_changed = True
                 return info
-        return None
+        raise InvalidAttachmentPosition(position)
+
+    def _modify_attachment_info(self, position, **kwargs):
+        """update the info at the given position with all passed
+        keyword arguments"""
+        info = self._get_attachment_info(position)
+        info.update(kwargs)
+        self._p_changed = True
+        return dict(info)
 
     def extract_attachments_into_parent(self, positions):
         """Extract all specified attachments into the mails parent dossier or
@@ -201,9 +206,7 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
-        info = self._get_attachment_info(position, write_modus=True)
-        if info is None:
-            raise InvalidAttachmentPosition(position)
+        info = self._get_attachment_info(position)
 
         if info.get('extracted'):
             raise AlreadyExtractedError(info)
@@ -239,8 +242,8 @@ class OGMail(Mail, BaseDocumentMixin):
             doc.reindexObject()
 
         # mark attachment as extracted
-        info['extracted'] = True
-        info['extracted_document_uid'] = IUUID(doc)
+        self._modify_attachment_info(
+            position, extracted=True, extracted_document_uid=IUUID(doc))
 
         return doc
 

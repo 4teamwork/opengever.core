@@ -287,8 +287,7 @@ class TestExtractAttachments(IntegrationTestCase):
                       .with_asset_message(
                           'mail_with_multiple_attachments.eml'))
 
-        info = mail._get_attachment_info(4, write_modus=True)
-        info['extracted'] = True
+        mail._modify_attachment_info(4, extracted=True)
         with self.observe_children(self.dossier) as children:
             with browser.expect_http_error(code=400, reason='Bad Request'):
                 browser.open(
