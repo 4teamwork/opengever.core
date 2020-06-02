@@ -19,6 +19,9 @@ solr-core-name = {{{package.name}}}
 raven_tags = {"cluster": "{{{base.domain}}}"}
 develop = .
 
+parts -= gems
+sablon-executable = /opt/sablon/bin/sablon
+
 [instance0]
 environment-vars +=
     BUMBLEBEE_APP_ID gever_{{{package.name}}}
