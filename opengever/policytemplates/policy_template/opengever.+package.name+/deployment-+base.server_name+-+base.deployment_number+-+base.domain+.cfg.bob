@@ -22,6 +22,9 @@ develop = .
 supervisor-client-startsecs = 10
 supervisor-client-stopwaitsecs = 5
 
+supervisor-memmon-instance-size = 1200MB
+supervisor-memmon-options = -p instance1=${buildout:supervisor-memmon-instance-size} -p instance2=${buildout:supervisor-memmon-instance-size} -p instance3=${buildout:supervisor-memmon-instance-size} -p instance4=${buildout:supervisor-memmon-instance-size} -m ${buildout:supervisor-email}
+
 parts -= gems
 sablon-executable = /opt/sablon/bin/sablon
 
