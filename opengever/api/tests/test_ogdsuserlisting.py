@@ -47,6 +47,15 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.assertEqual(19, browser.json['items_total'])
 
     @browsing
+    def test_last_login_is_visible_in_ogds_user_listing(self, browser):
+        self.login(self.administrator, browser=browser)
+        browser.open(self.contactfolder,
+                     view='@ogds-user-listing',
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertIn('last_login', browser.json.get('items')[0])
+
+    @browsing
     def test_batch_userlisting_offset(self, browser):
         self.login(self.regular_user, browser=browser)
 

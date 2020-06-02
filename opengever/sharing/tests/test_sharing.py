@@ -259,6 +259,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                                u'email': u'foo@example.com',
                                u'email2': u'bar@example.com',
                                u'firstname': u'K\xe4thi',
+                               u'last_login': None,
                                u'lastname': u'B\xe4rfuss',
                                u'phone_fax': u'012 34 56 77',
                                u'phone_mobile': u'012 34 56 76',
