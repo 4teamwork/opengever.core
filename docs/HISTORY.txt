@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Add `bumblebee_app_id` to the `@config` API endpoint. [mbaechtold]
+- @teams: Order team members by last name. [lgraf]
 - @ogds-groups: Order group members by last name. [lgraf]
 - Bump ftw.solr to 2.8.6 to get logging improvements and filter helpers. [lgraf]
 - Support placeholders in the target url of the webactions. [mbaechtold]
