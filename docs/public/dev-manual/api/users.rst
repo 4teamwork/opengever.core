@@ -40,6 +40,7 @@ Ein Benutzer wird lediglich durch einen Eintrag in der SQL Datenbank repräsenti
             },
             {"...": "..."}
         ],
+        "last_login": "2020-05-03",
         "teams": [
             {
                 "@id": "http://example.org/fd/kontakte/@teams/90",
@@ -56,6 +57,8 @@ Ein Benutzer wird lediglich durch einen Eintrag in der SQL Datenbank repräsenti
         "userid": "peter.mueller",
         "zip_code": null
       }
+
+Das Attribut `last_login` ist nur für Administratoren und Manager sichtbar.
 
 
 Teams
