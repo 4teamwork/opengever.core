@@ -282,9 +282,12 @@ Beispiel: Auflistung aller Benutzer:
 
     {
       "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
-      "b_size": 25,
-      "b_start": 0,
-      "facets": {},
+      "batching": {
+        "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
+        "first": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=0",
+        "last": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=25",
+        "next": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=1"
+      },
       "items": [
         {
           "@id": "http://localhost:8080/fd/kontakte/@ogds-users/sandro.ackermann",
@@ -303,7 +306,7 @@ Beispiel: Auflistung aller Benutzer:
           "userid": "sandro.ackermann"
         },
       ],
-      "items_total": 1
+      "items_total": 25
     }
 
 
