@@ -1,4 +1,6 @@
+from datetime import date
 from ftw.testbrowser import browsing
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
 
@@ -143,6 +145,29 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
         self.assertEqual(19, len(browser.json['items']))
         self.assertEqual(19, browser.json['items_total'])
+
+    @browsing
+    def test_last_login_filter(self, browser):
+        self.login(self.regular_user, browser=browser)
+        filters_expression = 'filters.last_login:record:list=2020-01-01%20TO%202020-04-04'
+        browser.open(self.contactfolder,
+                     view='@ogds-user-listing?{}'.format(filters_expression),
+                     headers=self.api_headers)
+        self.assertEqual(0, len(browser.json['items']))
+
+        User.query.get_by_userid(self.meeting_user.getId()).last_login = date(2020, 3, 2)
+        User.query.get_by_userid(self.dossier_responsible.getId()).last_login = date(2020, 2, 5)
+        browser.open(self.contactfolder,
+                     view='@ogds-user-listing?{}'.format(filters_expression),
+                     headers=self.api_headers)
+
+        self.assertEqual(2, len(browser.json['items']))
+
+        User.query.get_by_userid(self.dossier_responsible.getId()).last_login = date(2020, 5, 5)
+        browser.open(self.contactfolder,
+                     view='@ogds-user-listing?{}'.format(filters_expression),
+                     headers=self.api_headers)
+        self.assertEqual(1, len(browser.json['items']))
 
     @browsing
     def test_search_firstname(self, browser):
