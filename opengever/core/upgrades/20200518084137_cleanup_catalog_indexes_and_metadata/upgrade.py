@@ -42,6 +42,8 @@ class CleanupCatalogIndexesAndMetadata(UpgradeStep):
     """Cleanup catalog indexes and metadata.
     """
 
+    deferrable = True
+
     def __call__(self):
         self.remove_indexes()
         self.remove_metadata()
