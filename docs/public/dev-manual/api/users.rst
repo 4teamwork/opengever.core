@@ -65,7 +65,8 @@ Team-Daten werden mit dem ``@teams`` Endpoint abgefragt. Dieser Endpoint unterst
 
 ``http://example.org/fd/kontakte/@teams/90``
 
-Ein Team wird lediglich durch einen Eintrag in der SQL Datenbank repräsentiert und ist kein Plone Inhaltstyp. Deshalb beinhaltet die Response weniger Information als für andere Inhaltstypen. Dieser Endpoint unterstützt Batching.
+Ein Team wird lediglich durch einen Eintrag in der SQL Datenbank repräsentiert und ist kein Plone Inhaltstyp. Deshalb beinhaltet die Response weniger Information als für andere Inhaltstypen. Dieser Endpoint unterstützt Batching. Die Teammitglieder werden nach Nachnamen
+sortiert zurückgegeben.
 
 **Beispiel-Request**:
 
@@ -118,7 +119,8 @@ Details über Gruppen können mit dem ``@ogds-groups`` Endpoint abgefragt werden
 
 ``http://example.org/kontakte/@ogds-groups/stv_benutzer``
 
-Dieser Endpoint unterstützt Batching.
+Dieser Endpoint unterstützt Batching. Die Gruppenmitglieder werden nach
+Nachnamen sortiert zurückgegeben.
 
 
 **Beispiel-Request**:
