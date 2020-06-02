@@ -311,7 +311,8 @@ Folgend ist eine Auflistung aller von Webaktionen unterstützten Felder und dere
 | ``unique_name`` | String, optional              | Eindeutiger, vom Ersteller der Webaktion kontrollierter Name                |
 |                 |                               | (siehe :ref:`Eindeutiger Name <webactions-unique-name>` )                   |
 +-----------------+-------------------------------+-----------------------------------------------------------------------------+
-| ``target_url``  | String, obligatorisch         | Ziel-URL auf den Endpoint der Drittanwendung                                |
+| ``target_url``  | String, obligatorisch         | Ziel-URL auf den Endpoint der Drittanwendung mit optionalen Platzhaltern    |
+|                 |                               | für die Querystring-Parameter (siehe :ref:`Ziel-URL <target-url>` )         |
 +-----------------+-------------------------------+-----------------------------------------------------------------------------+
 | ``enabled``     | Boolean, optional             | Kann verwendet werden, um registrierte WebActions temporär zu deaktivieren, |
 |                 |                               | i.e. wenn kein Wert gesetzt ist, wird die Webaktion als aktiviert behandelt.|
@@ -499,3 +500,49 @@ antwortet der Server mit ``400 Bad Request``:
      "type": "BadRequest",
      "message": "[('unique_name', ActionAlreadyExists(\"An action with the unique_name u'existing-unique-name' already exists\",))]"
    }
+
+
+.. _target-url:
+
+Ziel-URL
+--------
+
+Wenn die Webaktionen an ihrem Darstellungsort in GEVER angezeigt werden, werden
+der Ziel-URL zwei Querystring-Parameter angehängt:
+
+- `context`: Die URL des Inhaltsobjekts, auf welchem die Webaktion angezeigt wird
+- `orgunit`: Die ID (Kürzel) der aktuellen Organisationseinheit
+
+Beim Anlegen oder Aktualisieren von Webactions können in der Ziel-URL weitere
+Querystring-Parameter definiert werden, deren Wert als ein Platzhalter
+betrachtet wird, welcher bei der Anzeige der Webaktion durch die richtigen
+Werte ersetzt werden.
+
+**Request**:
+
+.. sourcecode:: http
+
+  POST /@webactions HTTP/1.1
+  Accept: application/json
+  Content-Type: application/json
+
+  {
+    "title": "Open in ExternalApp",
+    "target_url": "http://example.org/endpoint?geverid={uid}",
+    "display": "actions-menu",
+    "mode": "self",
+    "order": 0,
+    "scope": "global"
+  }
+
+Bei der Anzeige der Webaktion im Menu «Aktionen» auf dem Inhaltsobjekt
+`http://gever/dossier1` wird der Platzhalter `{uid}` durch den richtigen Wert
+ersetzt und die standardmässigen Querystring-Parameter angehängt. Der Link der
+Webaction wäre in diesem Fall also
+`http://example.org/endpoint?geverid=0d12c12a9d4f43e78eba39da93c0080c&context=http://gever/dossier1&orgunit=direktion`.
+
+Unterstützte Platzhalter (case-sensitiv):
+
+- `{intid}`: Die GEVER-interne numerische ID eines Inhaltsobjekts
+- `{uid}`: Die GEVER-interne UID eines Inhaltsobjekts
+- `{path}`: Der Pfad eines Inhaltsobjekts im GEVER-Objektbaum
