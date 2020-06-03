@@ -307,7 +307,8 @@ class DisabledNotificationCenter(NotificationCenter):
     def fetch_watcher(self, actorid):
         return None
 
-    def add_watcher_to_resource(self, obj, userid, role):
+    def add_watcher_to_resource(self, obj, userid, role=WATCHER_ROLE,
+                                omit_watcher_added_event=False):
         pass
 
     def remove_watcher_from_resource(self, obj, userid, role):
