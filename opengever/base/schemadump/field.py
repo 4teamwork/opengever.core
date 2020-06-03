@@ -245,6 +245,7 @@ class SQLFieldDumper(object):
         'String': 'Text',
         'UnicodeCoercingText': 'Text',
         'Boolean': 'Bool',
+        'Date': 'Date'
     }
 
     def __init__(self, klass):
