@@ -86,3 +86,23 @@ class TestNavigation(SolrIntegrationTestCase):
                 }],
             }],
             browser.json)
+
+    @browsing
+    def test_dossier_navigation_for_dossier_templates(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.visit(self.dossiertemplate, view='dossier_navigation.json')
+        self.assertEqual(
+            [{
+                "text": self.dossiertemplate.Title(),
+                "description": self.dossiertemplate.Description(),
+                "uid": IUUID(self.dossiertemplate),
+                "url": self.dossiertemplate.absolute_url(),
+                "nodes": [{
+                    "text": self.subdossiertemplate.Title(),
+                    "description": self.subdossiertemplate.Description(),
+                    "nodes": [],
+                    "uid": IUUID(self.subdossiertemplate),
+                    "url": self.subdossiertemplate.absolute_url(),
+                }],
+            }],
+            browser.json)
