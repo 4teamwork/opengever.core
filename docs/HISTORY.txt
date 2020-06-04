@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc4 (unreleased)
 ------------------------
 
+- Move the ogds groups import logger more up in the script to make debugging easier. [elioschmutz]
 - Add `bumblebee_app_id` to the `@config` API endpoint. [mbaechtold]
 - @teams: Order team members by last name. [lgraf]
 - @ogds-groups: Order group members by last name. [lgraf]
