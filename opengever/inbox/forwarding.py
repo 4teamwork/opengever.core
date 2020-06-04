@@ -9,6 +9,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
 from opengever.task.browser.forms import hide_feature_flagged_fields
+from opengever.task.browser.forms import omit_informed_principals
 from opengever.task.task import ITask
 from opengever.task.task import Task
 from opengever.task.util import update_reponsible_field_data
@@ -194,6 +195,7 @@ class ForwardingEditForm(DefaultEditForm):
         _drop_empty_additional_fieldset(self.groups)
 
         hide_feature_flagged_fields(self.groups)
+        omit_informed_principals(self.groups)
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.

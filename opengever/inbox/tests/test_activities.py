@@ -52,11 +52,42 @@ class TestForwardingActivites(FunctionalTestCase):
 
         browser.find('Save').click()
 
-        activity = Activity.query.first()
+        activity = Activity.query.one()
         self.assertEquals('forwarding-added', activity.kind)
+        self.assertEqual(2, len(activity.notifications))
+        self.assertItemsEqual(
+          ['hugo.boss', 'peter.mueller'],
+          [notification.userid for notification in activity.notifications])
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New forwarding added by Test User',
                           activity.summary)
+
+    @browsing
+    def test_informed_principals_are_notified_of_added_forwarding(self, browser):
+        create(
+            Builder('ogds_user').id('watcher.user')
+                                .assign_to_org_units([self.org_unit])
+                                .having(firstname=u'Watcher', lastname=u'User'))
+
+        browser.login().open(
+            self.inbox, view='++add++opengever.inbox.forwarding',
+            data={'paths': ['/'.join(self.document.getPhysicalPath())]})
+
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Deadline': '13.02.2015',
+                      'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('org-unit-1:hugo.boss')
+        form.find_widget('Info at').fill('watcher.user')
+        browser.find('Save').click()
+
+        activity = Activity.query.one()
+        self.assertEqual('forwarding-added', activity.kind)
+        self.assertEqual(3, len(activity.notifications))
+        self.assertItemsEqual(
+          ['hugo.boss', 'peter.mueller', 'watcher.user'],
+          [notification.userid for notification in activity.notifications])
 
     @browsing
     def test_accepting_forwarding_with_successor_updated_responsibles(self, browser):
