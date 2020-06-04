@@ -4,7 +4,7 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Enable API endpoint `@document-from-template` for tasks. [mbaechtold]
 
 
 2020.3.0rc4 (2020-06-05)

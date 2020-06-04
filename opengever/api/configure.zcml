@@ -681,6 +681,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@document-from-template"
+      for="opengever.task.task.ITask"
+      factory=".templatefolder.DocumentFromTemplatePost"
+      permission="opengever.document.AddDocument"
+      />
+
+  <plone:service
       method="GET"
       name="@list-documents-in-linked-workspace"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"

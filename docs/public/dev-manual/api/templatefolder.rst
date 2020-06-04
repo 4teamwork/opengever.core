@@ -3,17 +3,17 @@
 Dokumente ab Vorlage erstellen
 ==============================
 
-In einem Dosser kann über den Endpoint ``@document-from-template`` ein neues
+In einem Dossier oder einer Aufgabe kann über den Endpoint ``@document-from-template`` ein neues
 Dokument ab Vorlage erstellt werden.
 
-Der Endpoint steht auf einem Dossier zur Verfügung. Der Endpoint ist mit der
-Berechtigung ``opengever.document: Add document`` geschützt, kann also verwendet
-werden wenn der Benutzer Dokumente hinzufügen kann.
+Der Endpoint steht auf Dossiers und Aufgaben zur Verfügung und ist mit der
+Berechtigung ``opengever.document: Add document`` geschützt. Er kann also nur verwendet
+werden, wenn der Benutzer Dokumente hinzufügen kann.
 
 Der Endpoint erwartet zwei Parameter:
 
-- ``template`` das zu verwendende template aus dem Vokabular ``opengever.dossier.DocumentTemplatesVocabulary``
-- ``title`` Titel des zu erstellenden Dokumentes
+- ``template``: Das zu verwendende Template aus dem Vokabular ``opengever.dossier.DocumentTemplatesVocabulary``
+- ``title``: Der Titel des zu erstellenden Dokumentes
 
 
 **Beispiel-Request**:
@@ -29,5 +29,5 @@ Der Endpoint erwartet zwei Parameter:
        }
 
 
-Als Reponse wird die JSON-Repräsentation des neu erstellen Dokuments geliefert,
+Als Response wird die JSON-Repräsentation des neu erstellten Dokuments geliefert,
 siehe :ref:`Inhaltstypen <content-types>`.

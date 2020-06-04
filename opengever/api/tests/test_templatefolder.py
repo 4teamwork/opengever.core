@@ -10,7 +10,7 @@ import json
 class TestDocumentFromTemplatePost(IntegrationTestCase):
 
     @browsing
-    def test_creates_document_from_template(self, browser):
+    def test_creates_document_from_template_within_dossier(self, browser):
         self.login(self.regular_user, browser)
 
         browser.open(
@@ -25,6 +25,56 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
         with self.observe_children(self.dossier) as children:
             browser.open('{}/@document-from-template'.format(
                          self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+
+        self.assertEqual(u'New d\xf6cument', document.title)
+        self.assertEquals(date.today(), document.document_date)
+
+    @browsing
+    def test_creates_document_from_template_within_task(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(
+            '{}/@vocabularies/opengever.dossier.DocumentTemplatesVocabulary'.format(
+                self.portal.absolute_url()),
+            headers=self.api_headers)
+        template = browser.json['items'][0]
+
+        data = {'template': template,
+                'title': u'New d\xf6cument'}
+
+        with self.observe_children(self.task) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.task.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+
+        self.assertEqual(u'New d\xf6cument', document.title)
+        self.assertEquals(date.today(), document.document_date)
+
+    @browsing
+    def test_creates_document_from_template_within_forwarding(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(
+            '{}/@vocabularies/opengever.dossier.DocumentTemplatesVocabulary'.format(
+                self.portal.absolute_url()),
+            headers=self.api_headers)
+        template = browser.json['items'][0]
+
+        data = {'template': template,
+                'title': u'New d\xf6cument'}
+
+        with self.observe_children(self.inbox_forwarding) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.inbox_forwarding.absolute_url()),
                          data=json.dumps(data),
                          headers=self.api_headers)
 
