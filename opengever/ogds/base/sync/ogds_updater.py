@@ -300,6 +300,8 @@ class OGDSUpdater(object):
                             u"Skipping duplicate group '{}'!".format(groupid))
                         continue
 
+                logger.info(u"Importing group '{}'...".format(groupid))
+
                 # Iterate over all SQL columns and update their values
                 columns = Group.__table__.columns
                 for col in columns:
@@ -315,7 +317,6 @@ class OGDSUpdater(object):
                 contained_users = []
                 group_members = ldap_util.get_group_members(info)
 
-                logger.info(u"Importing group '{}'...".format(groupid))
                 for user_dn in group_members:
                     ldap_user = ldap_util.entry_by_dn(user_dn)
 
