@@ -166,8 +166,11 @@ Zusätzliche Metadaten:
    .. py:attribute:: responsible_client
 
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       :Pflichtfeld: Nur wenn ``responsible`` den Client nicht bereits enthält. :required:`(*)`
 
+Hinweis:
+
+Das Attribut ``responsible`` kann einen kombinierten Wert im Format ``responsible_client:responsible`` enthalten. Z.b. ``fd:hans.muster`` oder ``team:musterteam``. Wird das Feld ``responsible_client`` mit einem kombinierten Wert befüllt, muss das Feld ``responsile_client`` nicht mehr mitgeschickt werden.
 
 Erledigen
 ~~~~~~~~~

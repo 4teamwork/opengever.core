@@ -50,7 +50,7 @@ class GEVERWorkflowTransition(WorkflowTransition):
     def recurse_transition(self, objs, comment, publication_dates,
                            include_children=False):
 
-        data = json_body(self.request)
+        data = self.request_data()
 
         for obj in objs:
             if publication_dates:
@@ -71,6 +71,9 @@ class GEVERWorkflowTransition(WorkflowTransition):
                 self.recurse_transition(
                     obj.objectValues(), comment, publication_dates,
                     include_children)
+
+    def request_data(self):
+        return json_body(self.request)
 
 
 class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
@@ -253,3 +256,19 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
         if 'expirationDate' in data:
             publication_dates['expirationDate'] = data['expirationDate']
         return publication_dates
+
+
+class GEVERTaskWorkflowTransition(GEVERWorkflowTransition):
+    """This endpoint handles workflow transitions for tasks.
+    """
+    def request_data(self):
+        """Extract responsible_client when a combined value is used (client,
+        responsible separated by a colon) in the responsible field
+        """
+        data = super(GEVERTaskWorkflowTransition, self).request_data()
+        task_deserializer = queryMultiAdapter((self.context, self.request),
+                                              IDeserializeFromJson)
+
+        task_deserializer.update_reponsible_field_data(data)
+
+        return data
