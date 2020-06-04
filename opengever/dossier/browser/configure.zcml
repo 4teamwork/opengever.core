@@ -22,14 +22,14 @@
   <browser:page
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       name="dossier_navigation.json"
-      class=".navigation.JSONNavigation"
+      class=".navigation.DossierJSONNavigation"
       permission="zope2.View"
       />
 
   <browser:page
       for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
       name="dossier_navigation.json"
-      class=".navigation.JSONNavigation"
+      class=".navigation.DossierTemplateJSONNavigation"
       permission="zope2.View"
       />
 

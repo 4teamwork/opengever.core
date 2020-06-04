@@ -203,6 +203,7 @@ class TestOverview(SolrIntegrationTestCase):
                    .within(self.empty_dossier)
                    .with_modification_date(DateTime(2010, 1, 1) + i)
                    .titled(u'Document %s' % i))
+        self.commit_solr()
 
         browser.open(self.empty_dossier, view='tabbedview_view-overview')
         self.assertSequenceEqual(

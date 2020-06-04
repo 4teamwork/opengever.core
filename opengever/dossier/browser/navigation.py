@@ -1,17 +1,28 @@
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.base.browser.navigation import make_tree_by_url
+from opengever.base.solr import OGSolrContentListing
 from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from plone import api
 from Products.Five import BrowserView
+from zope.component import getUtility
 import json
 
 
-class JSONNavigation(BrowserView):
+class DossierJSONNavigation(BrowserView):
     """Return a JSON-navigation structure for a dossier (context) and its
     subdossiers.
 
     The navigation starts at the current context, i.e. the dossier.
 
     """
+
+    filters = {
+        'object_provides': IDossierMarker.__identifier__,
+        'review_state': DOSSIER_STATES_OPEN,
+    }
 
     def __call__(self):
         response = self.request.response
@@ -30,16 +41,38 @@ class JSONNavigation(BrowserView):
                 'uid': api.content.get_uuid(obj=self.context)}
 
     def _tree(self):
-        nodes = map(
-            self._brain_to_node,
-            self.context.get_subdossiers(sort_on='sortable_title',
-                                         review_state=DOSSIER_STATES_OPEN))
-        if nodes:
-            nodes = [self._context_as_node()] + nodes
+        solr = getUtility(ISolrSearch)
+        filters = make_filters(
+            trashed=False,
+            path={
+                'query': '/'.join(self.context.getPhysicalPath()),
+                'depth': -1,
+            },
+            **self.filters
+        )
+        fieldlist = ['UID', 'Title', 'Description', 'path']
+        resp = solr.search(
+            filters=filters, start=0, rows=100000, sort='sortable_title asc',
+            fl=fieldlist)
+
+        def contentlisting_object_to_node(obj):
+            return {
+                'text': obj.Title(),
+                'description': obj.Description(),
+                'url': obj.getURL(),
+                'uid': obj.UID,
+            }
+
+        if resp.num_found > 1:
+            nodes = map(
+                contentlisting_object_to_node, OGSolrContentListing(resp))
+        else:
+            nodes = []
+
         return make_tree_by_url(nodes)
 
-    def _brain_to_node(self, brain):
-        return {'text': brain.Title,
-                'description': brain.Description,
-                'url': brain.getURL(),
-                'uid': brain.UID}
+
+class DossierTemplateJSONNavigation(DossierJSONNavigation):
+    filters = {
+        'object_provides': IDossierTemplateMarker.__identifier__,
+    }

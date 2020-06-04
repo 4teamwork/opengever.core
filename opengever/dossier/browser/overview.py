@@ -1,6 +1,9 @@
 from Acquisition import aq_inner
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
+from opengever.base.solr import OGSolrContentListing
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Participation
 from opengever.dossier import _
@@ -12,7 +15,6 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import GeverTabMixin
 from plone import api
-from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from sqlalchemy import desc
@@ -27,15 +29,6 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
 
     show_searchform = False
     document_limit = 10
-
-    def catalog(self, types, showTrashed=False,
-                depth=2, sort_on='modified', sort_order='reverse'):
-        return self.context.portal_catalog(
-            portal_type=types,
-            path=dict(depth=depth,
-                      query='/'.join(self.context.getPhysicalPath())),
-            sort_on=sort_on,
-            sort_order=sort_order)
 
     def boxes(self):
         can_modify = api.user.has_permission('Modify portal content',
@@ -114,10 +107,24 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
                          .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
-        return IContentListing(
-            self.catalog(
-                ['opengever.document.document',
-                 'ftw.mail.mail', ])[:self.document_limit])
+        return self.solr_results(
+            ['opengever.document.document', 'ftw.mail.mail'])
+
+    def solr_results(self, types, depth=2, sort='modified desc'):
+        solr = getUtility(ISolrSearch)
+        filters = make_filters(
+            trashed=False,
+            portal_type=types,
+            path={
+                'query': '/'.join(self.context.getPhysicalPath()),
+                'depth': depth,
+            },
+        )
+        fieldlist = ['UID', 'Title', 'getIcon', 'portal_type', 'path']
+        resp = solr.search(
+            filters=filters, start=0, rows=self.document_limit, sort=sort,
+            fl=fieldlist)
+        return OGSolrContentListing(resp)
 
     def sql_participations(self):
         participations = []
@@ -238,6 +245,7 @@ class DossierTemplateOverview(DossierOverview):
                     label=_(u'filing_prefix', default="filing prefix"))
 
     def documents(self):
-        return IContentListing(self.catalog(
-            ['opengever.document.document', 'ftw.mail.mail', ],
-            sort_on='sortable_title', sort_order='asc')[:self.document_limit])
+        return self.solr_results(
+            ['opengever.document.document', 'ftw.mail.mail'],
+            sort='sortable_title asc',
+        )
