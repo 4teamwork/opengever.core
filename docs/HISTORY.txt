@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
+- Fix p7m attachment extraction from mails. [deiferni]
 - Fix bug with setting issuer and informed_principals on forwardings. [njohner]
 - Allow notifying users and groups when creating a new task. [njohner]
 - Enable API endpoint `@document-from-template` for tasks. [mbaechtold]

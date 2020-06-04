@@ -229,6 +229,14 @@ class TestExtractMailInDossier(FunctionalTestCase):
         self.assertEquals(u'Inneres Testm\xe4il ohne Attachments',
                           extracted.Title().decode('utf-8'))
 
+    def test_extract_p7m_from_mail_creates_mail(self):
+        mail = create(Builder('mail')
+                      .within(self.parent)
+                      .with_asset_message('mail_with_one_p7m_attachment.eml'))
+
+        extracted = mail.extract_attachment_into_parent(position=2)
+        self.assertEqual(extracted.portal_type, 'ftw.mail.mail')
+
     def test_extract_nested_mail_from_mail_with_attachments(self):
         mail = create(Builder('mail')
                       .within(self.parent)
