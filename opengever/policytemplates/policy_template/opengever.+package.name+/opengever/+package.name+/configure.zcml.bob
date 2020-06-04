@@ -89,8 +89,8 @@
       admin_unit_id="{{{adminunit.id}}}"
       rolemanager_group="{{{deployment.rolemanager_group}}}"
       records_manager_group="{{{deployment.records_manager_group}}}"
-      workspace_creators_group="{{{deployment.workspace_creators_group}}}"
-      workspace_users_group="{{{deployment.workspace_users_group}}}"
+      workspace_creator_group="{{{deployment.workspace_creators_group}}}"
+      workspace_user_group="{{{deployment.workspace_users_group}}}"
       mail_domain="{{{deployment.mail_domain}}}"
       mail_from_address="{{{deployment.mail_from_address}}}"
       />
