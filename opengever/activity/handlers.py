@@ -1,9 +1,9 @@
 from opengever.activity import is_activity_feature_enabled
 from opengever.activity import notification_center
-from opengever.activity.roles import WATCHER_ROLE
-from opengever.inbox.forwarding import IForwarding
 from opengever.inbox.activities import ForwardingWatcherAddedActivity
+from opengever.inbox.forwarding import IForwarding
 from opengever.task.activities import TaskWatcherAddedActivity
+from opengever.task.task import ITask
 from zope.globalrequest import getRequest
 
 
@@ -25,6 +25,6 @@ def log_activity(task, event):
 def notify_watcher(obj, event):
     if IForwarding.providedBy(obj):
         activity = ForwardingWatcherAddedActivity(obj, getRequest(), event.watcherid)
-    else:
+    elif ITask.providedBy(obj):
         activity = TaskWatcherAddedActivity(obj, getRequest(), event.watcherid)
     activity.record()

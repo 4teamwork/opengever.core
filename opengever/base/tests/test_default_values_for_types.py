@@ -199,6 +199,7 @@ TASK_REQUIREDS = {
 TASK_DEFAULTS = {
     'deadline': FROZEN_TODAY + timedelta(days=5),
     'relatedItems': [],
+    'informed_principals': [],
     'is_private': False,
     'revoke_permissions': True
 }

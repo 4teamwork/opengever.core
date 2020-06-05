@@ -52,6 +52,9 @@ class BaseQuerySoure(object):
     def __len__(self):
         return len(self.terms)
 
+    def __nonzero__(self):
+        return True
+
     def search(self):
         raise NotImplementedError()
 

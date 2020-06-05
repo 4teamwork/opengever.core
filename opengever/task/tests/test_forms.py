@@ -1,5 +1,4 @@
 from ftw.testbrowser import browsing
-from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.activity.model import Subscription
 from opengever.testing import IntegrationTestCase
@@ -7,6 +6,41 @@ from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
 from requests_toolbelt.utils import formdata
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
+
+class TestFormFields(IntegrationTestCase):
+
+    @browsing
+    def test_date_of_completion_field_is_only_shown_in_edit_form(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.dossier, view='++add++opengever.task.task')
+        self.assertEqual(
+            'hidden',
+            browser.css('input#form-widgets-date_of_completion').first.type)
+
+        # seq_subtask_1 is a task with state 'open' and allows editing
+        browser.visit(self.seq_subtask_1, view="edit")
+        self.assertNotEqual(
+            'hidden',
+            browser.css('input#form-widgets-date_of_completion').first.type)
+
+    @browsing
+    def test_informed_principals_is_only_shown_in_add_form_with_activity_enabled(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.dossier, view='++add++opengever.task.task')
+        self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
+
+        browser.open(self.seq_subtask_1, view='edit')
+        self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
+
+        self.activate_feature('activity')
+        browser.open(self.dossier, view='++add++opengever.task.task')
+        self.assertEqual(1, len(browser.css('select#form-widgets-informed_principals')))
+
+        browser.open(self.seq_subtask_1, view='edit')
+        self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
 
 
 class TestTaskAddForm(IntegrationTestCase):

@@ -90,7 +90,8 @@ class TestWatcherHandling(ActivityTestCase):
         peter = create(Builder('watcher').having(actorid='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
 
-        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
+        self.center.add_watcher_to_resource(
+            Oguid('fd', '123'), 'peter', omit_watcher_added_event=True)
 
         self.assertEquals([peter], list(resource.watchers))
 
@@ -98,23 +99,27 @@ class TestWatcherHandling(ActivityTestCase):
         peter = create(Builder('watcher').having(actorid='peter'))
         resource = create(Builder('resource').oguid('fd:123'))
 
-        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
-        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
+        self.center.add_watcher_to_resource(
+            Oguid('fd', '123'), 'peter', omit_watcher_added_event=True)
+        self.center.add_watcher_to_resource(
+            Oguid('fd', '123'), 'peter', omit_watcher_added_event=True)
 
         self.assertEquals([peter], list(resource.watchers))
 
-    def test_add_watcher_to_resource_creates_resource_when_not_exitst(self):
+    def test_add_watcher_to_resource_creates_resource_when_not_exists(self):
         peter = create(Builder('watcher').having(actorid='peter'))
 
-        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
+        self.center.add_watcher_to_resource(
+            Oguid('fd', '123'), 'peter', omit_watcher_added_event=True)
 
         resource = peter.resources[0]
         self.assertEquals('fd:123', resource.oguid)
 
-    def test_add_watcher_to_resource_creates_watcher_when_not_exitst(self):
+    def test_add_watcher_to_resource_creates_watcher_when_not_exists(self):
         resource = create(Builder('resource').oguid('fd:123'))
 
-        self.center.add_watcher_to_resource(Oguid('fd', '123'), 'peter')
+        self.center.add_watcher_to_resource(
+            Oguid('fd', '123'), 'peter', omit_watcher_added_event=True)
 
         watcher = list(resource.watchers)[0]
         self.assertEquals('peter', watcher.actorid)

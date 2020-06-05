@@ -6,6 +6,7 @@ from opengever.activity.base import BaseActivity
 from opengever.activity.model.notification import Notification
 from opengever.activity.roles import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
@@ -128,6 +129,14 @@ class TaskAddedActivity(BaseTaskActivity):
         self.center.add_task_responsible(self.context,
                                          self.context.responsible)
         self.center.add_task_issuer(self.context, self.context.issuer)
+        for principal in self.context.informed_principals:
+            self.center.add_watcher_to_resource(
+                self.context, principal, omit_watcher_added_event=True)
+
+    def after_recording(self):
+        for principal in self.context.informed_principals:
+            self.center.remove_watcher_from_resource(
+                self.context, principal, WATCHER_ROLE)
 
 
 class TaskWatcherAddedActivity(BaseTaskActivity):

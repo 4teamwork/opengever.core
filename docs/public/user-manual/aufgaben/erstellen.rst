@@ -72,6 +72,10 @@ Reiter Allgemein
    *Dokumente* erzeugt, sind die ausgewählten Dokumente bereits als
    Verweise aufgeführt.
 
+8. **Info an:** Die ausgewählten Benutzer und Gruppen werden über die
+   Erstellung dieser Aufgabe benachrichtigt.
+
+
 Reiter Erweitert
 ~~~~~~~~~~~~~~~~
 

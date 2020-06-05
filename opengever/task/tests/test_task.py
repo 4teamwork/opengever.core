@@ -102,26 +102,6 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         self.assertTrue(len(self.dossier.objectValues()),
                         'Expect one item in dossier')
 
-    @browsing
-    def test_hide_date_of_completion_field_in_add_form(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier, view='++add++opengever.task.task')
-
-        self.assertEqual(
-            'hidden',
-            browser.css('input#form-widgets-date_of_completion').first.type)
-
-    @browsing
-    def test_show_date_of_completion_field_in_edit_form(self, browser):
-        self.login(self.dossier_responsible, browser=browser)
-
-        # seq_subtask_1 is a task with state 'open' and allows editing
-        browser.visit(self.seq_subtask_1, view="edit")
-
-        self.assertNotEqual(
-            'hidden',
-            browser.css('input#form-widgets-date_of_completion').first.type)
-
     def test_relateddocuments(self):
         self.login(self.dossier_responsible)
 
@@ -166,7 +146,7 @@ class TestTaskIntegration(SolrIntegrationTestCase):
             u'bidirectional_by_reference', self.task.task_type_category)
 
     @browsing
-    def test_task_with_invalid_unicode_character_charakter_in_text_is_displayed(self, browser):
+    def test_task_with_invalid_unicode_character_in_text_is_displayed(self, browser):
         self.login(self.dossier_responsible, browser=browser)
 
         task = self.task.get_sql_object()

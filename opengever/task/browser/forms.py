@@ -1,11 +1,11 @@
-from opengever.task import is_private_task_feature_enabled
+from opengever.activity import is_activity_feature_enabled
 from opengever.task import is_optional_task_permissions_revoking_enabled
+from opengever.task import is_private_task_feature_enabled
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import update_reponsible_field_data
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.browser.edit import DefaultEditForm
@@ -26,6 +26,12 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 # thus we use an add form hack by injecting the values into the request.
 
 
+def omit_informed_principals(groups):
+    common_group = next(
+        group for group in groups if group.__name__ == u'common')
+    common_group.fields = common_group.fields.omit('informed_principals')
+
+
 def hide_feature_flagged_fields(groups):
     if not is_private_task_feature_enabled():
         common_group = next(
@@ -36,6 +42,9 @@ def hide_feature_flagged_fields(groups):
         common_group = next(
             group for group in groups if group.__name__ == u'common')
         common_group.fields = common_group.fields.omit('revoke_permissions')
+
+    if not is_activity_feature_enabled():
+        omit_informed_principals(groups)
 
 
 class TaskAddForm(DefaultAddForm):
@@ -165,6 +174,7 @@ class TaskEditForm(DefaultEditForm):
         super(TaskEditForm, self).updateFieldsFromSchemata()
 
         hide_feature_flagged_fields(self.groups)
+        omit_informed_principals(self.groups)
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.

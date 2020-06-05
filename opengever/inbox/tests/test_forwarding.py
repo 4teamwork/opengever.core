@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.factoriesmenu import addable_types
-from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import IntegrationTestCase
 
@@ -190,3 +189,21 @@ class TestForwarding(IntegrationTestCase):
         self.deactivate_feature('private-tasks')
         browser.open(self.inbox, data, view='++add++opengever.inbox.forwarding')
         self.assertNotIn('Private task', browser.forms['form'].field_labels)
+
+    @browsing
+    def test_informed_principals_is_only_shown_in_add_form_with_activity_enabled(self, browser):
+        self.login(self.manager, browser=browser)
+        data = {'paths': ['/'.join(self.inbox_document.getPhysicalPath())]}
+
+        browser.open(self.inbox, data, view='++add++opengever.inbox.forwarding')
+        self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
+
+        browser.open(self.inbox_forwarding, view='edit')
+        self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
+
+        self.activate_feature('activity')
+        browser.open(self.inbox, data, view='++add++opengever.inbox.forwarding')
+        self.assertEqual(1, len(browser.css('select#form-widgets-informed_principals')))
+
+        browser.open(self.inbox_forwarding, view='edit')
+        self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
