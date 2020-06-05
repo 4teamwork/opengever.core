@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.3.0rc4 (unreleased)
+2020.3.0rc4 (2020-06-05)
 ------------------------
 
 - Move the ogds groups import logger more up in the script to make debugging easier. [elioschmutz]
