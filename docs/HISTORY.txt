@@ -8,6 +8,7 @@ Changelog
 - Bump ftw.mail to 2.7.0 for signed/multipart handling. [deiferni]
 - Bump ftw.mail to 2.6.2 to get improved email header decoding. [mbaechtold]
 - Fix p7m attachment extraction from mails. [deiferni]
+- Avoid sending mails with From-Addresses other than our own. [lgraf]
 - Fix bug with setting issuer and informed_principals on forwardings. [njohner]
 - Allow notifying users and groups when creating a new task. [njohner]
 - Enable API endpoint `@document-from-template` for tasks. [mbaechtold]

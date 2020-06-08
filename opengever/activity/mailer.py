@@ -85,14 +85,20 @@ class Mailer(object):
             data = {}
 
         msg = MIMEMultipart('related')
+
         actor = ogds_service().fetch_user(from_userid) if from_userid else None
+        noreply_gever_address = api.portal.get().email_from_address
 
         if actor:
+            # Set From: header to full name of actor, but 'noreply' address
+            # of the GEVER deployment. Sending mails with the From-address of
+            # the actor would lead to them getting rejected in modern mail
+            # setup, e.g. when DKIM is being used.
             msg['From'] = make_addr_header(actor.fullname(),
-                                           actor.email, 'utf-8')
+                                           noreply_gever_address, 'utf-8')
         else:
             msg['From'] = make_addr_header(
-                self.default_addr_header, api.portal.get().email_from_address, 'utf-8')
+                self.default_addr_header, noreply_gever_address, 'utf-8')
 
         if to_userid:
             to_email = ogds_service().fetch_user(to_userid).email
