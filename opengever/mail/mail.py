@@ -6,6 +6,7 @@ from ftw.mail import utils
 from ftw.mail.mail import IMail
 from ftw.mail.mail import Mail
 from ftw.mail.utils import get_filename
+from ftw.mail.utils import walk
 from opengever.base import _ as base_mf
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
@@ -264,7 +265,7 @@ class OGMail(Mail, BaseDocumentMixin):
         """
         # get attachment at position pos
         attachment = None
-        for i, part in enumerate(self.msg.walk()):
+        for i, part in enumerate(walk(self.msg)):
             if i == pos:
                 attachment = part
                 continue
