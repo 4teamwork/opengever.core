@@ -93,12 +93,12 @@ class ITask(model.Schema):
             u'task_type',
             u'responsible_client',
             u'responsible',
+            u'informed_principals',
             u'is_private',
             u'revoke_permissions',
             u'deadline',
             u'text',
             u'relatedItems',
-            u'informed_principals'
             ],
         )
 
