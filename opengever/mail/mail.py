@@ -18,7 +18,9 @@ from opengever.dossier import _ as dossier_mf
 from opengever.mail import _
 from opengever.mail.events import AttachmentsDeleted
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
+from opengever.mail.utils import is_rfc822_ish_mimetype
 from opengever.ogds.models.user import User
+from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -198,7 +200,16 @@ class OGMail(Mail, BaseDocumentMixin):
         data, content_type, filename = self._get_attachment_data(position)
         title = os.path.splitext(filename)[0]
 
-        if content_type == 'message/rfc822':
+        # try to guess content-type based on mimetype registry first, then
+        # fall back to what is provided in the mail as second option.
+        # this will consistently set the mimetype the same way as when d&d
+        # uploading files and also correctly handle p7m mails.
+        mtr = api.portal.get_tool('mimetypes_registry')
+        mimetype = mtr.classify(data, filename=filename)
+        if mimetype is not None:
+            content_type = str(mimetype)
+
+        if is_rfc822_ish_mimetype(content_type):
             doc = CreateEmailCommand(
                 parent, filename, data,
                 title=title,
