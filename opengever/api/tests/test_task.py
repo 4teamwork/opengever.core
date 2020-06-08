@@ -462,3 +462,82 @@ class TestTaskPatch(IntegrationTestCase):
 
         self.assertEqual('rk', self.task.responsible_client)
         self.assertEqual('james.bond', self.task.responsible)
+
+
+class TestTaskTransitions(IntegrationTestCase):
+
+    @browsing
+    def test_reassign_task_with_combined_responsible_value(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.assertEqual('fa', self.task.responsible_client)
+        self.assertEqual('kathi.barfuss', self.task.responsible)
+
+        data = {
+            'responsible': {
+                'token': 'rk:james.bond',
+                'title': u'Ratskanzlei: James Bond'
+            }
+        }
+        browser.open(self.task.absolute_url() + '/@workflow/task-transition-reassign',
+                     json.dumps(data),
+                     method="POST", headers=self.api_headers)
+
+        self.assertEqual('rk', self.task.responsible_client)
+        self.assertEqual('james.bond', self.task.responsible)
+
+    @browsing
+    def test_reassign_task_without_combined_responsible_value(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.assertEqual('fa', self.task.responsible_client)
+        self.assertEqual('kathi.barfuss', self.task.responsible)
+
+        data = {
+            'responsible': 'james.bond',
+            'responsible_client': 'rk',
+        }
+        browser.open(self.task.absolute_url() + '/@workflow/task-transition-reassign',
+                     json.dumps(data),
+                     method="POST", headers=self.api_headers)
+
+        self.assertEqual('rk', self.task.responsible_client)
+        self.assertEqual('james.bond', self.task.responsible)
+
+    @browsing
+    def test_reassign_forwarding_with_combined_responsible_value(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        self.assertEqual('fa', self.inbox_forwarding.responsible_client)
+        self.assertEqual('kathi.barfuss', self.inbox_forwarding.responsible)
+
+        data = {
+            'responsible': {
+                'token': 'rk:james.bond',
+                'title': u'Ratskanzlei: James Bond'
+            }
+        }
+        browser.open(self.inbox_forwarding.absolute_url() + '/@workflow/forwarding-transition-reassign',
+                     json.dumps(data),
+                     method="POST", headers=self.api_headers)
+
+        self.assertEqual('rk', self.inbox_forwarding.responsible_client)
+        self.assertEqual('james.bond', self.inbox_forwarding.responsible)
+
+    @browsing
+    def test_reassign_forwarding_without_combined_responsible_value(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        self.assertEqual('fa', self.inbox_forwarding.responsible_client)
+        self.assertEqual('kathi.barfuss', self.inbox_forwarding.responsible)
+
+        data = {
+            'responsible': 'james.bond',
+            'responsible_client': 'rk',
+        }
+        browser.open(self.inbox_forwarding.absolute_url() + '/@workflow/forwarding-transition-reassign',
+                     json.dumps(data),
+                     method="POST", headers=self.api_headers)
+
+        self.assertEqual('rk', self.inbox_forwarding.responsible_client)
+        self.assertEqual('james.bond', self.inbox_forwarding.responsible)
