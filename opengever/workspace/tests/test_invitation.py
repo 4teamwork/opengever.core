@@ -76,6 +76,9 @@ class TestInvitationMail(IntegrationTestCase):
 
             self.assertIn('test@localhost', mail.get("From"))
             self.assertEqual(self.regular_user.getProperty('email'), mail.get("To"))
+            self.assertEqual(
+                '=?utf-8?q?Hugentobler_Fridolin?= <fridolin.hugentobler@gever.local>',
+                mail.get("Reply-To"))
 
             payload = {"iid": iid}
             payload = serialize_and_sign_payload(payload)

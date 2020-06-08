@@ -96,6 +96,10 @@ class Mailer(object):
             # setup, e.g. when DKIM is being used.
             msg['From'] = make_addr_header(actor.fullname(),
                                            noreply_gever_address, 'utf-8')
+
+            # Set the Reply-To header to the actual user's address
+            msg['Reply-To'] = make_addr_header(actor.fullname(),
+                                               actor.email, 'utf-8')
         else:
             msg['From'] = make_addr_header(
                 self.default_addr_header, noreply_gever_address, 'utf-8')
