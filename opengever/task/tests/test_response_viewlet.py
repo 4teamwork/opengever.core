@@ -28,7 +28,7 @@ class TestResponseViewlet(IntegrationTestCase):
         browser.open(self.subtask, view='tabbedview_view-overview')
 
         answer = browser.css('div.answers .answer').first
-        self.assertEqual('Created by Ziegler Robert (robert.ziegler)',
+        self.assertEqual('Created by Ziegler Robert (robert.ziegler).',
                          answer.css('h3').first.text)
         self.assertEqual('http://nohost/plone/@@user-details/robert.ziegler',
                          answer.css('h3 a').first.get('href'))
