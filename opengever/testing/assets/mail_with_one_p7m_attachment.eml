@@ -1,0 +1,83 @@
+Return-Path: <foo@example.com>
+Received: from [1.2.3.4] (mail.example.com. [1.2.3.4])
+        by mx.example.com with ESMTPSA id ei8sm68862854wjd.32.2015.06.30.05.59.07
+        for <foo@example.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Tue, 30 Jun 2015 05:59:07 -0700 (PDT)
+From: Somebody <foo@example.com>
+Content-Type: multipart/mixed; boundary="Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C"
+Subject: =?utf-8?Q?=C3=84usseres_Testm=C3=A4il?=
+Message-Id: <53417074-8D58-4EFE-A94B-637822DB675D@example.com>
+Date: Tue, 30 Jun 2015 14:59:05 +0200
+To: Somebody <foo@example.com>
+Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2098\))
+X-Mailer: Apple Mail (2.2098)
+
+
+--Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=utf-8
+
+=C3=84usseres Testm=C3=A4il hat ein M=C3=A4il Attachment:
+
+--Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C
+Content-ID:
+MIME-Version: 1.0
+Content-Type: multipart/signed; name="smime.p7m"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="smime.p7m"
+
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha1"; boundary="----A93158B83C471711B0FC9D2C93588756"
+
+This is an S/MIME signed message
+
+------A93158B83C471711B0FC9D2C93588756
+Content-Type: multipart/mixed; boundary="===============6640147427061326256=="
+MIME-Version: 1.0
+
+--===============6640147427061326256==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+Hello, i'm a signed mail.
+--===============6640147427061326256==--
+
+------A93158B83C471711B0FC9D2C93588756
+Content-Type: application/x-pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+
+MIIFJQYJKoZIhvcNAQcCoIIFFjCCBRICAQExCzAJBgUrDgMCGgUAMAsGCSqGSIb3
+DQEHAaCCAvAwggLsMIICVaADAgECAgkA7RBtNW52X5cwDQYJKoZIhvcNAQELBQAw
+bzELMAkGA1UEBhMCQ0gxDTALBgNVBAgMBEJlcm4xEDAOBgNVBAoMB0NBIENvcnAx
+GTAXBgNVBAMMEGNlcnQuZXhhbXBsZS5jb20xJDAiBgkqhkiG9w0BCQEWFWNlcnRA
+Y2VydC5leGFtcGxlLmNvbTAeFw0xOTA5MTkxNTUwMDBaFw0yMDA5MTgxNTUwMDBa
+MIGDMQswCQYDVQQGEwJDSDENMAsGA1UECAwEQmVybjENMAsGA1UEBwwEQmVybjEP
+MA0GA1UECgwGTWFpbGVyMRswGQYDVQQDDBJtYWlsZXIuZXhhbXBsZS5vcmcxKDAm
+BgkqhkiG9w0BCQEWGW1haWxlckBtYWlsZXIuZXhhbXBsZS5vcmcwgZ8wDQYJKoZI
+hvcNAQEBBQADgY0AMIGJAoGBAMGa6uCsFqdmr3r77NwhUPnwP0pEiHV3xG2PcOtY
+hG4LPMNC4NwUlGzHMex3FCZfXmOe9BvO6BJJj0mhk2MRF8kY+pwwQm/VTS9CHU4G
+K9DcIAMpmvmQJJH1VxUKg1iGmUSPQQMiwjHmnsGpCe6bWrw2nUdvs3o8gd78smlR
+e9wFAgMBAAGjezB5MAkGA1UdEwQCMAAwLAYJYIZIAYb4QgENBB8WHU9wZW5TU0wg
+R2VuZXJhdGVkIENlcnRpZmljYXRlMB0GA1UdDgQWBBR9wyBAEVcTjzJRT/06EwiU
+8ypA/zAfBgNVHSMEGDAWgBS23o44t1MXnCPW833YJGdEuEl/EDANBgkqhkiG9w0B
+AQsFAAOBgQBu6M2Mv0iLIWFy7ppyD/uoYhgqyqRISj/sVgzAzbiggHXYcr92Fvtx
+eqNLTg34suBe7G5B7602kZbZFntib2OF9WcjzuKAQxlnYyAgu7Am9QhG/Xk3snG3
+ywJMC02Li9864duYedkpXiz5FqoP/qydb4AMN37xzfgRgl5GuVc9XjGCAf0wggH5
+AgEBMHwwbzELMAkGA1UEBhMCQ0gxDTALBgNVBAgMBEJlcm4xEDAOBgNVBAoMB0NB
+IENvcnAxGTAXBgNVBAMMEGNlcnQuZXhhbXBsZS5jb20xJDAiBgkqhkiG9w0BCQEW
+FWNlcnRAY2VydC5leGFtcGxlLmNvbQIJAO0QbTVudl+XMAkGBSsOAwIaBQCggdgw
+GAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwOTIz
+MDk1MjMxWjAjBgkqhkiG9w0BCQQxFgQULdS2wW0o6qJSAGIThNNR+/a7Yh8weQYJ
+KoZIhvcNAQkPMWwwajALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+AwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAw
+BwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEgYCeeh1eF3pl
+H4VEY93Fr8CxoaHMsZmAVI1k5w/3eIHwilb1pwfkx0fkBML/7cLo42Y0VnfVMuJP
+Am/3ZRTReQuZXoreaCkHWry9xSsP/FvwmcSPJZiLpqyCLw1//Qy1PPUL7p4BpmB1
+rCPMYndwTrRkQAA0oVxbtHtfbcO9XSjw7g==
+
+
+--Apple-Mail=_128924F8-3F55-4C77-A678-0691ABDF392C--

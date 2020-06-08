@@ -8,6 +8,7 @@ from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
 from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
+from opengever.mail.utils import is_rfc822_ish_mimetype
 from opengever.quota.exceptions import ForbiddenByQuota
 from plone.protect import createToken
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -100,8 +101,7 @@ class OGQuickUploadCapableFileFactory(object):
     def is_email_upload(self, filename):
         extension = os.path.splitext(filename)[1].lower()
         mimetype = self._get_mimetype(extension)
-        return extension == '.msg' or mimetype in ('message/rfc822',
-                                                   'application/pkcs7-mime')
+        return extension == '.msg' or is_rfc822_ish_mimetype(mimetype)
 
     def _get_mimetype(self, extension):
         return mimetypes.types_map.get(extension)

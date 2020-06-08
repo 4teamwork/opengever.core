@@ -19,3 +19,7 @@ def make_addr_header(fullname, address, charset='utf-8'):
          (u'<{}>'.format(address), None)])
 
     return header
+
+
+def is_rfc822_ish_mimetype(mimetype):
+    return mimetype in ('message/rfc822', 'application/pkcs7-mime')
