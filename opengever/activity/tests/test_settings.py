@@ -31,7 +31,7 @@ class TestListSettings(IntegrationTestCase):
 
         task_added = [item for item in activities if item.get('kind') == 'task-added-or-reassigned'][0]
         self.assertEquals(
-            {u'regular_watcher': False, u'task_issuer': False, u'task_responsible': True},
+            {u'regular_watcher': True, u'task_issuer': False, u'task_responsible': True},
             task_added['mail'])
         self.assertEquals({u'regular_watcher': True, u'task_issuer': True, u'task_responsible': True},
                           task_added['badge'])
