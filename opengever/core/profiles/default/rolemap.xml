@@ -58,6 +58,11 @@
       <role name="ServiceKeyUser" />
     </permission>
 
+    <permission name="opengever.api: Transfer Assignment" acquire="False">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
     <!-- CMFEDITIONS -->
     <permission name="CMFEditions: Save new version" acquire="True">
       <role name="Administrator" />
