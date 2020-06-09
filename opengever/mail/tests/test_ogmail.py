@@ -237,6 +237,15 @@ class TestExtractMailInDossier(FunctionalTestCase):
         extracted = mail.extract_attachment_into_parent(position=2)
         self.assertEqual(extracted.portal_type, 'ftw.mail.mail')
 
+    def test_extract_attachments_from_signed_multipart_subpart(self):
+        mail = create(Builder('mail')
+                      .within(self.parent)
+                      .with_asset_message('signed_nested_with_attachments.eml'))
+
+        doc1, doc2 = mail.extract_attachments_into_parent([12, 13]).values()
+        self.assertEqual(u'Testdatei.pdf', doc1.get_filename())
+        self.assertEqual(u'Testdatei.docx', doc2.get_filename())
+
     def test_extract_nested_mail_from_mail_with_attachments(self):
         mail = create(Builder('mail')
                       .within(self.parent)

@@ -4,6 +4,8 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
+- Add special handling for signed/multipart message attachments. [deiferni]
+- Bump ftw.mail to 2.7.0 for signed/multipart handling. [deiferni]
 - Bump ftw.mail to 2.6.2 to get improved email header decoding. [mbaechtold]
 - Fix p7m attachment extraction from mails. [deiferni]
 - Fix bug with setting issuer and informed_principals on forwardings. [njohner]
