@@ -4,6 +4,8 @@ Changelog
 2020.2.6 (unreleased)
 ---------------------
 
+- Add special handling for signed/multipart message attachments. [deiferni]
+- Bump ftw.mail to 2.7.0 for signed/multipart handling. [deiferni]
 - Fix p7m attachment extraction from mails. [deiferni]
 
 

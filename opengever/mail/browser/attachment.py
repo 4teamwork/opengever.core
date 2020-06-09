@@ -1,5 +1,6 @@
 from ftw.mail import utils
 from ftw.mail.attachment import AttachmentView as FtwAtachmentView
+from ftw.mail.utils import walk
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from Products.CMFCore.utils import getToolByName
 from zExceptions import NotFound
@@ -29,7 +30,7 @@ class AttachmentView(FtwAtachmentView):
 
         # get attachment at position pos
         attachment = None
-        for i, part in enumerate(message.walk()):
+        for i, part in enumerate(walk(message)):
             if i == pos:
                 attachment = part
                 continue
