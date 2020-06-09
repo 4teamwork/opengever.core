@@ -11,6 +11,7 @@ Changelog
 - Handle depth filter in solrsearch endpoint. [njohner]
 - Add OGDSGroupActor class. [njohner]
 - Explicitly log to sentry for two `ftw.solr` modules we want to monitor well at the moment. [deiferni]
+- Add possibility to suppress notification with X-GEVER-SuppressNotifications header. [tinagerber]
 - Add @assigned-users endpoint to get all active users of the client. [tinagerber]
 - Set Reply-To header from mails sent on behalf of users. [lgraf]
 - Avoid sending mails with From-Addresses other than our own. [lgraf]

@@ -112,3 +112,22 @@ Durch einen PATCH-Request kann eine Benachrichtigung als gelesen markiert werden
    .. sourcecode:: http
 
       HTTP/1.1 204 No Content
+
+
+Benachrichtigungen unterdrücken
+-------------------------------
+Viele Aktionen lösen Benachrichtigungen aus, beispielsweise das Kommentieren einer Aufgabe. Um Benachrichtigungen zu unterdrücken, kann der ``X-GEVER-SuppressNotifications``-Header mitgeschickt werden. Akzeptiert werden folgende Werte (case insensitive): ``yes, y, true, t, 1``
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /task-1/@responses HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+      X-GEVER-SuppressNotifications: true
+
+      {
+        "text": "Bitte rasch anschauen. Danke.",
+      }
