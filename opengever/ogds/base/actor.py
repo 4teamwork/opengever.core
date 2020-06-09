@@ -27,6 +27,7 @@ from opengever.base.utils import escape_html
 from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
+from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.team import Team
@@ -60,6 +61,14 @@ class Actor(object):
             return lookup.create_null_actor()
 
         return lookup.create_user_actor(user=user)
+
+    @classmethod
+    def group(cls, identifier, group=None):
+        lookup = ActorLookup(identifier)
+        if not identifier:
+            return lookup.create_null_actor()
+
+        return lookup.create_group_actor(group=group)
 
     @classmethod
     def inbox(cls, identifier, org_unit=None):
@@ -332,6 +341,29 @@ class OGDSUserActor(Actor):
         return [self.user]
 
 
+class OGDSGroupActor(Actor):
+
+    def __init__(self, identifier, group=None):
+        super(OGDSGroupActor, self).__init__(identifier)
+        self.group = group
+
+    def corresponds_to(self, user):
+        return user in self.representatives()
+
+    def get_label(self, with_principal=True):
+        return self.group.label()
+
+    def get_profile_url(self):
+        return groupmembers_url(self.group.groupid)
+
+    @property
+    def permission_identifier(self):
+        return self.identifier
+
+    def representatives(self):
+        return self.group.users
+
+
 class ActorLookup(object):
 
     def __init__(self, identifier):
@@ -415,6 +447,17 @@ class ActorLookup(object):
         else:
             return self.create_null_actor()
 
+    def load_group(self):
+        return ogds_service().fetch_group(self.identifier)
+
+    def create_group_actor(self, group=None):
+        if not group:
+            group = self.load_group()
+        if group:
+            return OGDSGroupActor(self.identifier, group=group)
+        else:
+            return self.create_null_actor()
+
     def create_null_actor(self):
         return NullActor(self.identifier)
 
@@ -440,4 +483,12 @@ class ActorLookup(object):
         elif self.is_committee():
             return self.create_committee_actor()
 
-        return self.create_user_actor()
+        user = self.load_user()
+        if user:
+            return self.create_user_actor(user)
+
+        group = self.load_group()
+        if group:
+            return self.create_group_actor(group)
+
+        return self.create_null_actor()

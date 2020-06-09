@@ -5,6 +5,7 @@ from opengever.ogds.base.actor import CommitteeActor
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
 from opengever.ogds.base.actor import NullActor
+from opengever.ogds.base.actor import OGDSGroupActor
 from opengever.ogds.base.actor import OGDSUserActor
 from opengever.ogds.base.actor import TeamActor
 from opengever.testing import FunctionalTestCase
@@ -122,6 +123,26 @@ class TestActorLookup(IntegrationTestCase):
             u'(jurgen.konig)</a>',
             actor.get_link(with_icon=True))
 
+    def test_group_actor_lookup(self):
+        self.login(self.regular_user)
+        actor = Actor.lookup('projekt_a')
+
+        self.assertIsInstance(actor, OGDSGroupActor)
+        self.assertEqual(u'Projekt A',
+                         actor.get_label())
+        self.assertEqual('http://nohost/plone/@@list_groupmembers?group=projekt_a',
+                         actor.get_profile_url())
+
+        self.assertEqual(
+            u'<a href="http://nohost/plone/@@list_groupmembers?group=projekt_a" '
+            'class="actor-label actor-user">Projekt A</a>',
+            actor.get_link(with_icon=True))
+
+        self.assertEqual(
+            u'<a href="http://nohost/plone/@@list_groupmembers?group=projekt_a">'
+            'Projekt A</a>',
+            actor.get_link())
+
     def test_get_link_returns_safe_html(self):
         self.login(self.regular_user)
 
@@ -176,6 +197,16 @@ class TestActorCorresponding(IntegrationTestCase):
         self.assertFalse(
             actor.corresponds_to(self.get_ogds_user(self.dossier_responsible)))
 
+    def test_group_corresponds_to_all_group_members(self):
+        actor = Actor.lookup('projekt_a')
+
+        self.assertTrue(
+            actor.corresponds_to(self.get_ogds_user(self.regular_user)))
+        self.assertTrue(
+            actor.corresponds_to(self.get_ogds_user(self.dossier_responsible)))
+        self.assertFalse(
+            actor.corresponds_to(self.get_ogds_user(self.secretariat_user)))
+
 
 class TestActorRepresentatives(IntegrationTestCase):
 
@@ -200,6 +231,13 @@ class TestActorRepresentatives(IntegrationTestCase):
 
     def test_all_group_members_are_team_representatives(self):
         actor = Actor.lookup('team:1')
+        self.assertItemsEqual(
+            [self.get_ogds_user(self.regular_user),
+             self.get_ogds_user(self.dossier_responsible)],
+            actor.representatives())
+
+    def test_all_group_members_are_group_representatives(self):
+        actor = Actor.lookup('projekt_a')
         self.assertItemsEqual(
             [self.get_ogds_user(self.regular_user),
              self.get_ogds_user(self.dossier_responsible)],
