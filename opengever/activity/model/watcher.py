@@ -34,7 +34,7 @@ class Watcher(Base):
         representatives = [user.userid for user in
                            actor_lookup.lookup().representatives()]
 
-        if actor_lookup.is_inbox() or actor_lookup.is_team():
+        if actor_lookup.is_inbox():
             return [userid for userid in representatives
                     if UserSettings.get_setting_for_user(
                         userid, 'notify_inbox_actions')]

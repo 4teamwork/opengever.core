@@ -61,3 +61,26 @@ class TestWatcher(FunctionalTestCase):
         watcher = create(Builder('watcher').having(actorid=group_id))
         self.assertEqual(['hugo.boss', 'peter.michel'],
                          watcher.get_user_ids())
+
+    def test_get_user_ids_returns_userids_of_team_users_for_team_watcher(self):
+        create(Builder('admin_unit').id('fd'))
+
+        orgunit = create(Builder('org_unit').id('fd').having(
+          admin_unit_id='fd'))
+
+        group = create(Builder('ogds_group').having(
+          groupid='informed_users'))
+
+        team = create(Builder('ogds_team').having(
+          group=group,
+          title='Test Team',
+          org_unit=orgunit))
+
+        create(Builder('ogds_user').id(u'hugo.boss').in_group(group))
+        create(Builder('ogds_user').id(u'peter.michel').in_group(group))
+        create(Builder('ogds_user').id(u'james.bond'))
+
+        actorid = 'team:{}'.format(team.team_id)
+        watcher = create(Builder('watcher').having(actorid=actorid))
+        self.assertEqual(['hugo.boss', 'peter.michel'],
+                         watcher.get_user_ids())
