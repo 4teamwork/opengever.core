@@ -36,6 +36,12 @@ class ListingStats(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+
+        queries = self.request.form.get("queries", [])
+        if isinstance(queries, basestring):
+            queries = [queries]
+        self.facet_queries = queries
+
         self.solr = getUtility(ISolrSearch)
 
     def __call__(self, expand=False):
@@ -60,7 +66,7 @@ class ListingStats(object):
         return pivots
 
     def _get_listing_name_pivot(self):
-        """Reurns the `listing_name` pivot section which depends on the FILTER
+        """Returns the `listing_name` pivot section which depends on the FILTER
         values of the @listing endpoint.
         """
         solr_pivot = 'object_provides'
@@ -86,11 +92,17 @@ class ListingStats(object):
                   "field":"object_provides",
                   "value":"opengever.document.behaviors.IBaseDocument",
                   "count":310,
+                  "queries": {
+                    "{!tag=q1}responsible:hugo.boss":1
+                  },
                   "pivot":[
                     {
                       "field":"review_state",
                       "value":"document-state-draft",
-                      "count":310
+                      "count":310,
+                      "queries": {
+                        "{!tag=q1}responsible:hugo.boss":1
+                      },
                     }
                   ]
                 }
@@ -116,7 +128,20 @@ class ListingStats(object):
             'facet.pivot': pivot,
         }
 
+        if self.facet_queries:
+            facet_queries = [self._to_solr_facet_query(query)
+                             for query in self.facet_queries]
+            params['facet.pivot'] = self._add_query_to_pivot(pivot)
+            params['facet.query'] = facet_queries
         return self.solr.search(filters=fq, **params)
+
+    @staticmethod
+    def _to_solr_facet_query(query):
+        return "{{!tag=q1}}{}".format(query)
+
+    @staticmethod
+    def _add_query_to_pivot(pivot):
+        return "{{!query=q1}}{}".format(pivot)
 
     def _create_listing_name_pivot(self, solr_response, pivot):
         """Processes solr_response to extract the statistics and format them
@@ -131,6 +156,9 @@ class ListingStats(object):
                   "field":"object_provides",
                   "value":"opengever.document.behaviors.IBaseDocument",
                   "count":310,
+                  "queries": {
+                    "{!tag=q1}responsible:hugo.boss":1
+                  },
                 },
               ]
             }
@@ -145,6 +173,9 @@ class ListingStats(object):
                 "field":"documents",
                 "value":"opengever.document.behaviors.IBaseDocument",
                 "count":310,
+                "queries":{
+                  "responsible:hugo.boss":1,
+                },
               }
             ]
           }
@@ -167,6 +198,15 @@ class ListingStats(object):
             pivot = pivot_by_value.get(pivot_value, {})
             if not pivot:
                 pivot = {'count': 0}
+
+            if self.facet_queries:
+                # Remove the tag from the facet query names:
+                # {!tag=q1}responsible:hugo.boss -> responsible:hugo.boss
+                pivot['queries'] = {
+                    facet_query: pivot.get('queries', {}).get(
+                        self._to_solr_facet_query(facet_query), 0)
+                    for facet_query in self.facet_queries
+                }
 
             pivot['field'] = 'listing_name'
             pivot['value'] = listing_name
