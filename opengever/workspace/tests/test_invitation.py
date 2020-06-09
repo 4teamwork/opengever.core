@@ -57,8 +57,9 @@ class TestInvitationMail(IntegrationTestCase):
     def test_adding_invitation_sends_mail(self):
         self.login(self.workspace_admin)
 
-        mailing = Mailing(self.portal)
         process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
         self.assertFalse(mailing.has_messages())
 
         with freeze(datetime(2019, 12, 27)):
@@ -73,8 +74,11 @@ class TestInvitationMail(IntegrationTestCase):
             self.assertEqual(1, len(mails))
             mail = email.message_from_string(mails[0])
 
-            self.assertIn(self.workspace_admin.getProperty('email'), mail.get("From"))
+            self.assertIn('test@localhost', mail.get("From"))
             self.assertEqual(self.regular_user.getProperty('email'), mail.get("To"))
+            self.assertEqual(
+                '=?utf-8?q?Hugentobler_Fridolin?= <fridolin.hugentobler@gever.local>',
+                mail.get("Reply-To"))
 
             payload = {"iid": iid}
             payload = serialize_and_sign_payload(payload)

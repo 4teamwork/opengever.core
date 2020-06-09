@@ -6,9 +6,11 @@ from ftw.testing.mailing import Mailing
 from opengever.activity.hooks import insert_notification_defaults
 from opengever.activity.mailer import process_mail_queue
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.base.interfaces import IOGMailSettings
 from opengever.globalindex.model.task import Task
 from opengever.task.activities import TaskAddedActivity
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.globalrequest import getRequest
 import email
 import transaction
@@ -140,6 +142,19 @@ class TestEmailNotification(IntegrationTestCase):
 
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals('foo@example.com', mail.get('To'))
+        self.assertEquals('Ziegler Robert <test@localhost>', get_header(mail, 'From'))
+        self.assertEquals('Ziegler Robert <robert.ziegler@gever.local>', get_header(mail, 'Reply-To'))
+
+    @browsing
+    def test_from_address_with_send_with_actor_from_address_enabled(self, browser):
+        api.portal.set_registry_record(
+            'send_with_actor_from_address', True, IOGMailSettings)
+        self.login(self.dossier_responsible, browser)
+
+        self.create_task_via_browser(browser)
+        process_mail_queue()
+
+        mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals('Ziegler Robert <robert.ziegler@gever.local>', get_header(mail, 'From'))
 
     @browsing

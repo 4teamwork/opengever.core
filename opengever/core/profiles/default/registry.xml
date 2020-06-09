@@ -10,6 +10,7 @@
   <records interface="opengever.base.interfaces.IFavoritesSettings" />
   <records interface="opengever.base.behaviors.classification.IClassificationSettings" />
   <records interface="opengever.base.interfaces.IRecentlyTouchedSettings" />
+  <records interface="opengever.base.interfaces.IOGMailSettings" />
 
   <!-- BUMBLEBEE -->
   <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings" />

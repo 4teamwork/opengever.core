@@ -2,6 +2,7 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from opengever.activity.error_handling import NotificationErrorHandler
+from opengever.base.interfaces import IOGMailSettings
 from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
 from opengever.ogds.models.service import ogds_service
@@ -85,14 +86,35 @@ class Mailer(object):
             data = {}
 
         msg = MIMEMultipart('related')
+
         actor = ogds_service().fetch_user(from_userid) if from_userid else None
+        noreply_gever_address = api.portal.get().email_from_address
+
+        send_with_actor_from_address = api.portal.get_registry_record(
+            name='send_with_actor_from_address', interface=IOGMailSettings)
 
         if actor:
-            msg['From'] = make_addr_header(actor.fullname(),
-                                           actor.email, 'utf-8')
+            if not send_with_actor_from_address:
+                # Set From: header to full name of actor, but 'noreply' address
+                # of the GEVER deployment. Sending mails with the From-address of
+                # the actor would lead to them getting rejected in modern mail
+                # setup, e.g. when DKIM is being used.
+                msg['From'] = make_addr_header(actor.fullname(),
+                                               noreply_gever_address, 'utf-8')
+
+                # Set the Reply-To header to the actual user's address
+                msg['Reply-To'] = make_addr_header(actor.fullname(),
+                                                   actor.email, 'utf-8')
+            else:
+                # Use the actor's email address for the From: header.
+                # This might be caught in spam filters because it's effectively
+                # sender address spoofing, but is sometimes desired by
+                # customers for compatibility with autoresponders.
+                msg['From'] = make_addr_header(actor.fullname(),
+                                               actor.email, 'utf-8')
         else:
             msg['From'] = make_addr_header(
-                self.default_addr_header, api.portal.get().email_from_address, 'utf-8')
+                self.default_addr_header, noreply_gever_address, 'utf-8')
 
         if to_userid:
             to_email = ogds_service().fetch_user(to_userid).email

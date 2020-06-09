@@ -352,6 +352,18 @@ class IRecentlyTouchedSettings(Interface):
         default=10)
 
 
+class IOGMailSettings(Interface):
+
+    send_with_actor_from_address = schema.Bool(
+        title=u"Send mails with actor's email address in From: header",
+        description=u"Whether mails sent on behalf of actors (users) should "
+                    u"be sent with the user's email address in the From: "
+                    u"header. The default (False) is to use the system's "
+                    u"'noreply' address instead (to avoid sender address "
+                    u"spoofing).",
+        default=False)
+
+
 class IGeverUI(Interface):
 
     is_feature_enabled = schema.Bool(
