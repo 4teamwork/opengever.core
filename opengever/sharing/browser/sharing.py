@@ -10,6 +10,7 @@ from opengever.base.handlebars import get_handlebars_template
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
@@ -452,9 +453,7 @@ class OpengeverSharingView(SharingView):
         return results
 
     def groupmembers_url(self, groupid):
-        portal = api.portal.get()
-        qs = urlencode({'group': groupid})
-        return '/'.join((portal.portal_url(), '@@list_groupmembers?%s' % qs))
+        return groupmembers_url(groupid)
 
 
 class WorkspaceSharingView(OpengeverSharingView):
