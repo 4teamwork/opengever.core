@@ -108,6 +108,32 @@ class TestTaskActivites(FunctionalTestCase):
           [notification.userid for notification in activity.notifications])
 
     @browsing
+    def test_all_users_are_notified_of_added_task_when_informed_principals_is_group(self, browser):
+        group_id = 'informed_users'
+        group = create(Builder('ogds_group').having(groupid=group_id))
+
+        create(Builder('ogds_user').id(u'peter.michel').in_group(group))
+        create(Builder('ogds_user').id(u'james.bond').in_group(group))
+
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Task Type': 'comment',
+                      'Deadline': '13.02.2015',
+                      'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('hugo.boss')
+        form.find_widget('Info at').fill(group_id)
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.one()
+        self.assertEqual('task-added', activity.kind)
+        self.assertEqual(3, len(activity.notifications))
+        self.assertItemsEqual(
+          ['hugo.boss', 'peter.michel', 'james.bond'],
+          [notification.userid for notification in activity.notifications])
+
+    @browsing
     def test_informed_principals_not_permanently_added_as_watchers_to_task(self, browser):
         create(
             Builder('ogds_user').id('watcher.user')
