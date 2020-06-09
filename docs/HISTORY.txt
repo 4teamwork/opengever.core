@@ -4,10 +4,6 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
-- Add special handling for signed/multipart message attachments. [deiferni]
-- Bump ftw.mail to 2.7.0 for signed/multipart handling. [deiferni]
-- Bump ftw.mail to 2.6.2 to get improved email header decoding. [mbaechtold]
-- Fix p7m attachment extraction from mails. [deiferni]
 - Set Reply-To header from mails sent on behalf of users. [lgraf]
 - Avoid sending mails with From-Addresses other than our own. [lgraf]
 - Fix bug with setting issuer and informed_principals on forwardings. [njohner]
@@ -114,6 +110,15 @@ Changelog
 ------------------------
 
 - Fix solr indexing bug when creating a document from a template. [njohner]
+
+
+2020.2.6 (2020-06-09)
+---------------------
+
+- Add special handling for signed/multipart message attachments. [deiferni]
+- Bump ftw.mail to 2.7.0 for signed/multipart handling. [deiferni]
+- Fix p7m attachment extraction from mails. [deiferni]
+- Bump ftw.mail to 2.6.2 to get improved email header decoding. [mbaechtold]
 
 
 2020.2.5 (2020-05-06)
