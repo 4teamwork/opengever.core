@@ -549,6 +549,26 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             item)
 
     @browsing
+    def test_task_type_facets_are_translated(self, browser):
+        self.enable_languages()
+
+        self.login(self.workspace_member, browser=browser)
+        browser.open(self.dossier, view='@listing?name=tasks&facets:list=task_type',
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'de-ch'})
+
+        self.assertDictEqual(
+            {u'task_type':
+                 {
+                     u'information': {u'count': 1, u'label': u'Zur Kenntnisnahme'},
+                     u'correction': {u'count': 2, u'label': u'Zur Pr\xfcfung / Korrektur'},
+                     u'direct-execution': {u'count': 6, u'label': u'Zur direkten Erledigung'}
+                 }
+            },
+            browser.json['facets']
+        )
+
+    @browsing
     def test_filter_by_is_subtask(self, browser):
         self.login(self.regular_user, browser=browser)
 
