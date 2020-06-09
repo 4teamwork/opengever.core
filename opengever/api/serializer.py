@@ -6,6 +6,7 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.sentry import log_msg_to_sentry
+from opengever.base.utils import is_administrator
 from opengever.contact.utils import get_contactfolder_url
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
@@ -186,6 +187,12 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
                     (team, self.request), ISerializeToJsonSummary)
                 data['teams'].append(team_serializer())
 
+    def __call__(self, *args, **kwargs):
+        data = super(SerializeUserModelToJson, self).__call__(*args, **kwargs)
+        if not is_administrator():
+            del data['last_login']
+        return data
+
 
 @implementer(ISerializeToJsonSummary)
 @adapter(Interface, IOpengeverBaseLayer)
@@ -318,6 +325,8 @@ class SerializeUserModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
 
     def add_additional_metadata(self, data):
         data['title'] = self.context.fullname()
+        if is_administrator():
+            data['last_login'] = json_compatible(getattr(self.context, 'last_login'))
 
 
 @implementer(ISerializeToJsonSummary)

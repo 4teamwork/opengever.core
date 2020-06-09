@@ -23,6 +23,7 @@ Beispiel: Liste der Dokumente innerhalb eines Dossiers mit den Feldern `Titel`,
       "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/dossier-23/@listing?name=documents&columns%3Alist=title&columns%3Alist=modified&columns%3Alist=filesize",
       "b_size": 25,
       "b_start": 0,
+      "facets": {},
       "items": [
         {
           "@id": "http://localhost:8080/fd//ordnungssystem/fuehrung/dossier-23/document-59",
@@ -266,13 +267,14 @@ aber nur ein Subset der Parameter. Im Moment ist es nicht möglich die
 untertstützten Attribute zurückgegeben. Des weiteren ist der ``depth``
 Paremeter nicht implementiert, ``facets`` werden ebenfalls nicht unterstützt.
 Dies weil die Datenquelle eine SQL-Datenbank und nicht Solr ist.
+Das ``last_login`` Attribut ist nur für Administratoren und Manager sichtbar.
 
 
 Beispiel: Auflistung aller Benutzer:
 
   .. sourcecode:: http
 
-    GET /kontakte/kontakte/@ogds-user-listing HTTP/1.1
+    GET /kontakte/kontakte/@ogds-user-listing?b_size=1 HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
@@ -283,10 +285,10 @@ Beispiel: Auflistung aller Benutzer:
     {
       "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
       "batching": {
-        "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
-        "first": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=0",
-        "last": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=25",
-        "next": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=1"
+        "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_size=1",
+        "first": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=0&b_size=1",
+        "last": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=24&b_size=1",
+        "next": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=1&b_size=1"
       },
       "items": [
         {
@@ -299,6 +301,7 @@ Beispiel: Auflistung aller Benutzer:
           "email2": null,
           "firstname": "Sandro",
           "lastname": "Ackermann",
+          "last_login": "2020-05-31",
           "phone_office": null,
           "phone_mobile": null,
           "phone_fax": null,
@@ -324,9 +327,9 @@ Folgende Parameter werden im Moment unterstützt:
 
 Filtern:
 --------
-Im Moment ist für beide Endpoinst nur ein Filter nach Status (aktiv/inaktiv)
-implementiert. Mit ``filters.state:record:list`` können die gewünschten Status
-angegeben werden:
+Im Moment ist für beide Endpoinst ein Filter nach Status (aktiv/inaktiv) und ein Filter nach dem Zeitpunkt des letzten Logins implementiert.
+
+Mit ``filters.state:record:list`` können die gewünschten Status angegeben werden:
 
 - ``active``: aktive Benutzer/Teams
 - ``inactive``: inaktive Benutzer/Teams
@@ -345,5 +348,15 @@ angegeben werden:
   .. sourcecode:: http
 
     GET /kontakte/@team-listing?filters.state:record:list=active&filters.state:record:list=inactive HTTP/1.1
+    Accept: application/json
+
+Mit ``filters.last_login:record:list`` kann nach dem Zeitpunkt des letzten Logins gefiltert werden:
+
+
+**Beispiel: Filtern nach Benutzer mit Datum des letzten Logins zwischen dem 27.5.2020 und 2.6.2020**
+
+  .. sourcecode:: http
+
+    GET /kontakte/@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%202020-06-02 HTTP/1.1
     Accept: application/json
 

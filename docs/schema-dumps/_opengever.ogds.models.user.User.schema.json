@@ -156,6 +156,13 @@
             "maxLength": 26,
             "description": "",
             "_zope_schema_type": "Text"
+        },
+        "last_login": {
+            "type": "string",
+            "title": "last_login",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
         }
     },
     "required": [
@@ -183,6 +190,7 @@
         "zip_code",
         "city",
         "country",
-        "import_stamp"
+        "import_stamp",
+        "last_login"
     ]
 }

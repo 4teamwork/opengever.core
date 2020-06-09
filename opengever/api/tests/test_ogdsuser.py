@@ -60,6 +60,16 @@ class TestOGDSUserGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_last_login_is_visible(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.contactfolder,
+                     view='@ogds-users/{}'.format(self.administrator.getId()),
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertIn('last_login', browser.json)
+
+    @browsing
     def test_raises_bad_request_when_userid_is_missing(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True

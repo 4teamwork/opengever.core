@@ -27,6 +27,11 @@
       handler=".events.setup_engine_options"
       />
 
+  <subscriber
+      for="Products.PluggableAuthService.interfaces.events.IUserLoggedInEvent"
+      handler=".handlers.user_logged_in"
+      />
+
   <utility
       factory=".vocabularies.OrgUnitsVocabularyFactory"
       name="opengever.ogds.base.OrgUnitsVocabularyFactory"
