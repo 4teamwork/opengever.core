@@ -21,6 +21,16 @@ class FileActionsTestBase(IntegrationTestCase):
         return browser.json['file_actions']
 
 
+class ObjectButtonsTestBase(IntegrationTestCase):
+
+    maxDiff = None
+
+    def get_object_buttons(self, browser, context):
+        browser.open(context.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        return browser.json['object_buttons']
+
+
 class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
 
     @browsing
@@ -694,3 +704,36 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
             self.grant(*roles)
 
             self.assert_workspace_actions_not_available(browser, self.dossier)
+
+
+class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
+
+    @browsing
+    def test_document_does_not_have_delete_object_button(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+        ]
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.document),
+        )
+
+
+class TestObjectButtonsGetForTemplates(ObjectButtonsTestBase):
+
+    @browsing
+    def test_template_has_delete_object_button(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+        ]
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.normal_template),
+        )
