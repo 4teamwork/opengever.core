@@ -54,6 +54,16 @@
        :Wertebereich: <User-ID eines gültigen Auftragnehmers>
 
 
+   .. py:attribute:: informed_principals
+
+       :Feldname: :field-title:`Info an`
+       :Datentyp: ``List``
+       
+       :Default: []
+       :Beschreibung: Die ausgewählten Benutzer und Gruppen werden über die Erstellung dieser Aufgabe benachrichtigt.
+       
+
+
    .. py:attribute:: is_private
 
        :Feldname: :field-title:`Persönliche Aufgabe`
