@@ -1,4 +1,6 @@
 from Acquisition import aq_parent
+from opengever.dossier.templatedossier import ITemplateDossier
+from opengever.dossier.templatefolder import ITemplateFolder
 from opengever.meeting.interfaces import IParagraphTemplate
 from opengever.private.interfaces import IPrivateContainer
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
@@ -20,6 +22,8 @@ class IsDeleteAvailable(BrowserView):
     )
 
     authorized_parent_interfaces = (
+        ITemplateDossier,
+        ITemplateFolder,
         IPrivateContainer,
     )
 

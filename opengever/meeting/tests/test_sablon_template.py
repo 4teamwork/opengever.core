@@ -55,14 +55,14 @@ class TestSablonTemplateMenus(IntegrationTestCase):
 
     @browsing
     def test_action_menu_contents_for_administrator(self, browser):
-        expected_menu = ['Checkout', 'Copy Item', 'Properties']
+        expected_menu = ['Checkout', 'Copy Item', 'Delete', 'Properties']
         self.login(self.administrator, browser)
         browser.open(self.sablon_template)
         self.assertItemsEqual(expected_menu, editbar.menu_options("Actions"))
 
     @browsing
     def test_action_menu_contents_for_manager(self, browser):
-        expected_menu = ['Checkout', 'Copy Item', 'Fill meeting template', 'Properties', 'Policy...']
+        expected_menu = ['Checkout', 'Copy Item', 'Delete', 'Fill meeting template', 'Properties', 'Policy...']
         self.login(self.manager, browser)
         browser.open(self.sablon_template)
         self.assertItemsEqual(expected_menu, editbar.menu_options("Actions"))
