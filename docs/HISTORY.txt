@@ -8,6 +8,7 @@ Changelog
 - Drop import_stamp column from user model. [tinagerber]
 - Define a set of columns that get synchronized in user and group model. [tinagerber]
 - Add OGDSGroupActor class. [njohner]
+- Explicitly log to sentry for two `ftw.solr` modules we want to monitor well at the moment. [deiferni]
 - Set Reply-To header from mails sent on behalf of users. [lgraf]
 - Avoid sending mails with From-Addresses other than our own. [lgraf]
 - Fix bug with setting issuer and informed_principals on forwardings. [njohner]
