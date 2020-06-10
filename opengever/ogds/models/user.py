@@ -53,7 +53,6 @@ class User(Base):
 
     country = Column(String(20))
 
-    import_stamp = Column(String(26))
     last_login = Column(Date, index=True)
 
     column_names_to_sync = {'active', 'firstname', 'lastname', 'directorate',

@@ -40,7 +40,6 @@ class TestOGDSUserGet(IntegrationTestCase):
                           u'active': True,
                           u'groupid': u'projekt_a',
                           u'title': u'Projekt A'}],
-             u'import_stamp': None,
              u'lastname': u'B\xe4rfuss',
              u'phone_fax': u'012 34 56 77',
              u'phone_mobile': u'012 34 56 76',

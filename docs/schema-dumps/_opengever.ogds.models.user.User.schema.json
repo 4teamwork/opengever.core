@@ -150,13 +150,6 @@
             "description": "",
             "_zope_schema_type": "Text"
         },
-        "import_stamp": {
-            "type": "string",
-            "title": "import_stamp",
-            "maxLength": 26,
-            "description": "",
-            "_zope_schema_type": "Text"
-        },
         "last_login": {
             "type": "string",
             "title": "last_login",
@@ -190,7 +183,6 @@
         "zip_code",
         "city",
         "country",
-        "import_stamp",
         "last_login"
     ]
 }
