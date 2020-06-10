@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Make available the delete action for templates. [mbaechtold]
+- Define a set of columns that get synchronized in user and group model. [tinagerber]
 - Add OGDSGroupActor class. [njohner]
 - Set Reply-To header from mails sent on behalf of users. [lgraf]
 - Avoid sending mails with From-Addresses other than our own. [lgraf]

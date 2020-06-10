@@ -5,12 +5,16 @@ from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
+from opengever.ogds.models.group import Group
 from opengever.ogds.models.service import ogds_service
+from opengever.ogds.models.user import User
 from opengever.testing import FunctionalTestCase
 from plone import api
 
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
+BLACKLISTED_USER_COLUMNS = {'userid', 'last_login'}
+BLACKLISTED_GROUP_COLUMNS = set()
 
 
 class TestOGDSUpdater(FunctionalTestCase):
@@ -50,6 +54,29 @@ class TestOGDSUpdater(FunctionalTestCase):
         self.assertTrue(ogds_service().fetch_user('hugo.boss').active)
         self.assertTrue(ogds_service().fetch_user('new.user').active)
 
+    def test_mismapped_user_columns(self):
+        all_column_names = {column.name for column in User.__table__.columns}
+
+        self.assertEqual(set(),
+                         User.column_names_to_sync.intersection(BLACKLISTED_USER_COLUMNS),
+                         'Column found in both lists. The column should either be in the '
+                         'column_names_to_sync list of the user model if it needs syncing with the '
+                         'LDAP, or in the BLACKLISTED_USER_COLUMNS list here.')
+
+        self.assertEqual(set(),
+                         all_column_names.difference(
+                            User.column_names_to_sync.union(BLACKLISTED_USER_COLUMNS)),
+                         'A new column was added to the User model, it should either be added to '
+                         'the column_names_to_sync list of the user model if it needs syncing with '
+                         'the LDAP, or in the BLACKLISTED_USER_COLUMNS list here.')
+
+        self.assertEqual(set(),
+                         User.column_names_to_sync.union(BLACKLISTED_USER_COLUMNS).difference(
+                            all_column_names),
+                         'A column was deleted from the user model, but is still either in the '
+                         'column_names_to_sync list of the user model or in the '
+                         'BLACKLISTED_USER_COLUMNS list here')
+
     def test_imports_groups(self):
         FAKE_LDAP_USERFOLDER.groups = [
             create(Builder('ldapgroup').named('og_mandant1_users'))]
@@ -58,6 +85,29 @@ class TestOGDSUpdater(FunctionalTestCase):
 
         updater.import_groups()
         self.assertIsNotNone(ogds_service().fetch_group('og_mandant1_users'))
+
+    def test_mismapped_group_columns(self):
+        all_column_names = {column.name for column in Group.__table__.columns}
+
+        self.assertEqual(set(),
+                         Group.column_names_to_sync.intersection(BLACKLISTED_GROUP_COLUMNS),
+                         'Column found in both lists. The column should either be in the '
+                         'column_names_to_sync list of the group model if it needs syncing with the'
+                         ' LDAP, or in the BLACKLISTED_USER_COLUMNS list here.')
+
+        self.assertEqual(set(),
+                         all_column_names.difference(
+                            Group.column_names_to_sync.union(BLACKLISTED_GROUP_COLUMNS)),
+                         'A new column was added to the group model, it should either be added to '
+                         'the column_names_to_sync list of the group model if it needs syncing with'
+                         ' the LDAP, or in the BLACKLISTED_GROUP_COLUMNS list here.')
+
+        self.assertEqual(set(),
+                         Group.column_names_to_sync.union(BLACKLISTED_GROUP_COLUMNS).difference(
+                            all_column_names),
+                         'A column was deleted from the group model, but is still either in the '
+                         'column_names_to_sync list of the group model or in the '
+                         'BLACKLISTED_GROUP_COLUMNS list here')
 
     def test_uses_title_attribute_for_group_title_when_set(self):
         FAKE_LDAP_USERFOLDER.groups = [
