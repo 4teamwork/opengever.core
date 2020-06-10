@@ -146,8 +146,8 @@ def set_roles_after_modifying(context, event):
 
 
 def record_added_activity(task, event):
-    """Record task added activity, which also sets wathcers and
-    create notifications.
+    """Record task added activity, which also sets watchers and
+    creates notifications.
     """
     # Skip tasks created during successor creation, those are handled manually
     if getRequest().get('X-CREATING-SUCCESSOR', None):

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-05-29 14:07+0000\n"
+"POT-Creation-Date: 2020-06-09 10:06+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -963,10 +963,15 @@ msgstr "Tâche annulée"
 msgid "transition_label_close"
 msgstr "Tâche clôturée"
 
-#. Default: "Created by ${user}"
+#. Default: "Created by ${user}."
 #: ./opengever/task/viewlets/response.py
 msgid "transition_label_created"
-msgstr "Créé par ${user}"
+msgstr "Créé par ${user}."
+
+#. Default: "Created by ${user}. Info at ${informed_principals}."
+#: ./opengever/task/viewlets/response.py
+msgid "transition_label_created_info_an"
+msgstr "Créé par ${user}. Info à ${informed_principals}."
 
 #. Default: "Task opened"
 #: ./opengever/task/activities.py

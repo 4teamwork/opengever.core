@@ -68,9 +68,19 @@ class ResponseView(ViewletBase, Base):
             self.context.absolute_url(), id)
 
     def get_created_header(self):
-        return _('transition_label_created', 'Created by ${user}',
-                 mapping={
-                     'user': Actor.lookup(self.context.Creator()).get_link()})
+        creator = Actor.lookup(self.context.Creator()).get_link()
+        informed_principals = [
+            Actor.lookup(principal).get_link()
+            for principal in self.context.informed_principals]
+        if informed_principals:
+            return _('transition_label_created_info_an',
+                     'Created by ${user}. Info at ${informed_principals}.',
+                     mapping={
+                         'user': creator,
+                         'informed_principals': ", ".join(informed_principals)})
+        return _('transition_label_created',
+                 'Created by ${user}.',
+                 mapping={'user': creator})
 
     def get_created_date(self):
         adapter = getMultiAdapter((self.context, self.request), name="plone")

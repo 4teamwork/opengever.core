@@ -1,6 +1,5 @@
 from opengever.base.model import Base
 from opengever.base.model import USER_ID_LENGTH
-from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.user_settings import UserSettings
 from sqlalchemy import Column
@@ -27,15 +26,16 @@ class Watcher(Base):
     def get_user_ids(self):
         """Returns a list of userids which represents the given watcher:
 
-        Means for a single user, a list with the user_id and for a inbox
+        Means for a single user, a list with the user_id and for an inbox
         watcher, a list of the userids of all inbox_group users who have
         notify_inbox_actions set to True.
         """
         actor_lookup = ActorLookup(self.actorid)
-        if actor_lookup.is_inbox() or actor_lookup.is_team():
-            return [user.userid for user in
-                    Actor.lookup(self.actorid).representatives()
-                    if UserSettings.get_setting_for_user(
-                        user.userid, 'notify_inbox_actions')]
+        representatives = [user.userid for user in
+                           actor_lookup.lookup().representatives()]
 
-        return [self.actorid]
+        if actor_lookup.is_inbox():
+            return [userid for userid in representatives
+                    if UserSettings.get_setting_for_user(
+                        userid, 'notify_inbox_actions')]
+        return representatives

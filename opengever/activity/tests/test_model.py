@@ -31,6 +31,8 @@ class TestNotification(ActivityTestCase):
         activity = create(Builder('activity').having(
             title=u'Bitte \xc4nderungen nachvollziehen', resource=resource))
 
+        create(Builder('ogds_user').id(u'h\xfcgo'))
+        create(Builder('ogds_user').id('peter'))
         hugo = create(Builder('watcher').having(actorid=u'h\xfcgo'))
         peter = create(Builder('watcher').having(actorid=u'peter'))
 

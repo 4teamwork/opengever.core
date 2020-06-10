@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-05-29 14:07+0000\n"
+"POT-Creation-Date: 2020-06-09 10:06+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -959,9 +959,14 @@ msgstr ""
 msgid "transition_label_close"
 msgstr ""
 
-#. Default: "Created by ${user}"
+#. Default: "Created by ${user}."
 #: ./opengever/task/viewlets/response.py
 msgid "transition_label_created"
+msgstr ""
+
+#. Default: "Created by ${user}. Info at ${informed_principals}."
+#: ./opengever/task/viewlets/response.py
+msgid "transition_label_created_info_an"
 msgstr ""
 
 #. Default: "Task opened"

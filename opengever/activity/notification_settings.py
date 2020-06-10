@@ -36,7 +36,7 @@ NOTIFICATION_CONFIGURATION = [
                        ],
         'default_settings': {
             'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
-            'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
+            'mail_notification_roles': [TASK_RESPONSIBLE_ROLE, WATCHER_ROLE],
         },
     },
     {

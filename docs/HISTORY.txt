@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
+- Add OGDSGroupActor class. [njohner]
 - Set Reply-To header from mails sent on behalf of users. [lgraf]
 - Avoid sending mails with From-Addresses other than our own. [lgraf]
 - Fix bug with setting issuer and informed_principals on forwardings. [njohner]

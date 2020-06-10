@@ -9,6 +9,7 @@ from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from urllib import urlencode
 from UserDict import DictMixin
 from zope.component import getUtility
 from zope.component.hooks import getSite
@@ -210,3 +211,9 @@ def encode_after_json(value):
     # other types
     else:
         return value
+
+
+def groupmembers_url(groupid):
+    portal = getSite()
+    qs = urlencode({'group': groupid})
+    return '/'.join((portal.portal_url(), '@@list_groupmembers?%s' % qs))
