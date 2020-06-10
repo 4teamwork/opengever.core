@@ -129,7 +129,7 @@ class TestListingStats(SolrIntegrationTestCase):
         self.assertEqual(0, self.get_facet_by_value(pivot, 'documents').get('count'))
 
     @browsing
-    def test_listing_stats_pivot_queries_support(self, browser):
+    def test_listing_stats_pivot_queries_full_response(self, browser):
         self.login(self.regular_user, browser)
         browser.open(
             '{}/@listing-stats?queries=responsible:{}'.format(
@@ -177,3 +177,35 @@ class TestListingStats(SolrIntegrationTestCase):
                     ]
                 }
             }, browser.json)
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_depth(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats?queries=depth:1'.format(self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertDictEqual(
+            {u'count': 12,
+             u'field': u'listing_name',
+             u'value': u'documents',
+             u'queries': {u'depth:1': 4}
+             },
+            browser.json['facet_pivot']['listing_name'][0])
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_multiple_queries(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats?queries=responsible:{}&queries=depth:1'.format(
+                self.dossier.absolute_url(), self.regular_user.id),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertDictEqual(
+            {u'count': 12,
+             u'field': u'listing_name',
+             u'value': u'documents',
+             u'queries': {u'responsible:kathi.barfuss': 1,
+                          u'depth:1': 4}
+             },
+            browser.json['facet_pivot']['listing_name'][0])

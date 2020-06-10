@@ -1,9 +1,11 @@
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.listing import FILTERS
+from opengever.api.listing import get_path_depth
 from opengever.base.interfaces import IOpengeverBaseLayer
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
+from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
@@ -135,8 +137,16 @@ class ListingStats(object):
             params['facet.query'] = facet_queries
         return self.solr.search(filters=fq, **params)
 
-    @staticmethod
-    def _to_solr_facet_query(query):
+    def _to_solr_facet_query(self, query):
+        if query.startswith("depth:"):
+            try:
+                depth = int(query.rsplit(":", 1)[1])
+            except (ValueError, IndexError):
+                raise BadRequest("Could not parse depth query: {}".format(query))
+
+            context_depth = get_path_depth(self.context)
+            max_path_depth = context_depth + depth
+            return "{{!tag=q1}}path_depth:[* TO {}]".format(max_path_depth)
         return "{{!tag=q1}}{}".format(query)
 
     @staticmethod
