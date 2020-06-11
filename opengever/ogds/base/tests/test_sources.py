@@ -454,8 +454,7 @@ class TestUsersContactsInboxesSource(SolrIntegrationTestCase):
                .having(firstname=u'Lara', lastname=u'Croft',
                        email=u'lara.croft@example.com'))
         create(Builder('contact')
-               .having(firstname=u'Super', lastname=u'M\xe4n',
-                       email='superman@example.com'))
+               .having(firstname=u'Super', lastname=u'M\xe4n'))
 
         self.commit_solr()
         self.source = UsersContactsInboxesSource(self.portal)
@@ -483,6 +482,16 @@ class TestUsersContactsInboxesSource(SolrIntegrationTestCase):
         self.assertEquals('hugo.boss', term.token)
         self.assertEquals('hugo.boss', term.value)
         self.assertEquals('Boss Hugo (hugo.boss)', term.title)
+
+    def test_search_contact_without_email(self):
+        self.login(self.administrator)
+        result = self.source.search("super")
+
+        self.assertEqual(1, len(result))
+        term = result.pop()
+        self.assertEqual('contact:man-super', term.value)
+        self.assertEqual('contact:man-super', term.token)
+        self.assertEqual(u'M\xe4n Super', term.title)
 
     def test_inboxes_are_valid(self):
         self.assertIn('inbox:org-unit-1', self.source)
