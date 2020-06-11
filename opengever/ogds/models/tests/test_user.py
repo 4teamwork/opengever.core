@@ -60,7 +60,6 @@ class TestUserModel(OGDSTestCase):
             'zip_code': '1234',
             'city': 'Bossingen',
             'country': 'Schweiz',
-            'import_stamp': 'stamp',
         }
 
         user = User(**attrs)

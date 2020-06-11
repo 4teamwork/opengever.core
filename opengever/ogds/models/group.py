@@ -46,6 +46,8 @@ class Group(Base):
                      backref=backref('groups', order_by='Group.groupid'))
     teams = relationship(Team, back_populates="group")
 
+    column_names_to_sync = {'groupid', 'active', 'title'}
+
     def __init__(self, groupid, **kwargs):
         self.groupid = groupid
         super(Group, self).__init__(**kwargs)
@@ -63,6 +65,10 @@ class Group(Base):
         if result is NotImplemented:
             return result
         return not result
+
+    @property
+    def columns_to_sync(self):
+        return {col for col in self.__table__.columns if col.name in self.column_names_to_sync}
 
     def id(self):
         return self.groupid

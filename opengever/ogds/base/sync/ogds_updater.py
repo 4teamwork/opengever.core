@@ -203,9 +203,8 @@ class OGDSUpdater(object):
                             u"Skipping duplicate user '{}'!".format(userid))
                         continue
 
-                # Iterate over all SQL columns and update their values
-                columns = User.__table__.columns
-                for col in columns:
+                # Iterate over all SQL columns to be synchronized and update their values
+                for col in user.columns_to_sync:
                     if col.name == 'userid':
                         # We already set the userid when creating the user
                         # object, and it may not be called the same in LDAP as
@@ -302,9 +301,8 @@ class OGDSUpdater(object):
 
                 logger.info(u"Importing group '{}'...".format(groupid))
 
-                # Iterate over all SQL columns and update their values
-                columns = Group.__table__.columns
-                for col in columns:
+                # Iterate over all SQL columns to be synchronized and update their values
+                for col in group.columns_to_sync:
                     setattr(group, col.name,
                             self._convert_value(info.get(col.name)))
 

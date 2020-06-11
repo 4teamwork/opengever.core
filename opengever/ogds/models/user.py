@@ -53,8 +53,13 @@ class User(Base):
 
     country = Column(String(20))
 
-    import_stamp = Column(String(26))
     last_login = Column(Date, index=True)
+
+    column_names_to_sync = {'active', 'firstname', 'lastname', 'directorate',
+                            'directorate_abbr', 'department', 'department_abbr',
+                            'email', 'email2', 'url', 'phone_office', 'phone_fax',
+                            'phone_mobile', 'salutation', 'description', 'address1',
+                            'address2', 'zip_code', 'city', 'country'}
 
     def __init__(self, userid, **kwargs):
         self.userid = userid
@@ -73,6 +78,10 @@ class User(Base):
         if result is NotImplemented:
             return result
         return not result
+
+    @property
+    def columns_to_sync(self):
+        return {col for col in self.__table__.columns if col.name in self.column_names_to_sync}
 
     def label(self, with_principal=True):
         if not with_principal:
