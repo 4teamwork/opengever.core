@@ -7,6 +7,7 @@ Changelog
 - Make available the delete action for templates. [mbaechtold]
 - Drop import_stamp column from user model. [tinagerber]
 - Define a set of columns that get synchronized in user and group model. [tinagerber]
+- Handle depth filter in solrsearch endpoint. [njohner]
 - Add OGDSGroupActor class. [njohner]
 - Explicitly log to sentry for two `ftw.solr` modules we want to monitor well at the moment. [deiferni]
 - Set Reply-To header from mails sent on behalf of users. [lgraf]

@@ -214,4 +214,12 @@ Beispiel für ein Suchabfrage mit Facetten für ``responsible`` und ``portal_typ
       "start": 0
     }
 
+Pfadtiefe
+~~~~~~~~~
+``depth``: Limitierung der maximalen Pfadtiefe, relativ zum Kontext oder angegebener Pfad (mit ``fq=path:/path/to/container``)
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?depth=1 HTTP/1.1
+
 .. disqus::

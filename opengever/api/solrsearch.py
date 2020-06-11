@@ -1,3 +1,4 @@
+from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
@@ -32,10 +33,30 @@ class SolrSearchGet(SolrQueryBaseService):
     def extract_filters(self, params):
         if 'fq' in params:
             filters = params['fq']
+            if isinstance(filters, basestring):
+                filters = [filters]
             del params['fq']
         else:
             filters = []
+
+        self.add_path_filters(filters, params)
+
         return filters
+
+    def extract_path_filter_value(self, filters):
+        """If path is not specified we search in the current context
+        """
+        for query in filters:
+            if query.startswith("path:"):
+                path = query.rsplit(":", 1)[1]
+                filters.remove(query)
+                return path
+        return '/'.join(self.context.getPhysicalPath())
+
+    def add_path_filters(self, filters, params):
+        depth = self.extract_depth(params)
+        path = self.extract_path_filter_value(filters)
+        filters.extend(make_path_filter(path, depth))
 
     def extract_sort(self, params, query):
         if 'sort' in params:

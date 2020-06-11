@@ -16,6 +16,7 @@ from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFPlone.utils import safe_unicode
+from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -350,6 +351,17 @@ class SolrQueryBaseService(Service):
             # certain fields require data from other solr fields to be computed.
             requested_solr_fields.update(set(field.additional_required_fields))
         return list(requested_solr_fields & self.solr_fields)
+
+    def extract_depth(self, params):
+        """If depth is not specified we search recursively
+        """
+        # By default search recursively
+        depth = params.get('depth', -1)
+        try:
+            depth = int(depth)
+        except ValueError:
+            raise BadRequest("Could not parse depth: {}".format(depth))
+        return depth
 
     def prepare_additional_params(self, params):
         return params
