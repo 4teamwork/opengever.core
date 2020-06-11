@@ -5,6 +5,7 @@ from opengever.api.listing import get_path_depth
 from opengever.base.interfaces import IOpengeverBaseLayer
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
+from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getUtility
@@ -42,9 +43,13 @@ class ListingStats(object):
         queries = self.request.form.get("queries", [])
         if isinstance(queries, basestring):
             queries = [queries]
-        self.facet_queries = queries
+        self.facet_queries = [self._escape_query(query) for query in queries]
 
         self.solr = getUtility(ISolrSearch)
+
+    @staticmethod
+    def _escape_query(query):
+        return u":".join(escape(safe_unicode(el)) for el in query.split(":"))
 
     def __call__(self, expand=False):
         result = {
