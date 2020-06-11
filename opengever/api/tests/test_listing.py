@@ -602,6 +602,14 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             [u'2015', u'2016'],
             [item['title'] for item in browser.json['items']])
 
+        # depth 0 does not return anything as the context itself is excluded
+        view = ('@listing?name=dossiers&'
+                'columns:list=title'
+                '&depth=0')
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        self.assertEqual(0, browser.json['items_total'])
+        self.assertEqual(0, len(browser.json['items']))
+
     @browsing
     def test_filter_by_is_subdossier(self, browser):
         self.login(self.regular_user, browser=browser)
