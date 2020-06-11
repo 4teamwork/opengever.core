@@ -127,3 +127,102 @@ class TestListingStats(SolrIntegrationTestCase):
 
         pivot = self.get_facet_pivot_for(dossier, 'listing_name', browser)
         self.assertEqual(0, self.get_facet_by_value(pivot, 'documents').get('count'))
+
+    @browsing
+    def test_listing_stats_pivot_queries_full_response(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats?queries=responsible:{}'.format(
+                self.dossier.absolute_url(), self.regular_user.id),
+            headers={'Accept': 'application/json'},
+        )
+
+        self.assertDictEqual(
+            {
+                u'@id': u'{}/@listing-stats'.format(self.dossier.absolute_url()),
+                u'facet_pivot': {
+                    u'listing_name': [
+                        {u'count': 12, u'field':
+                         u'listing_name',
+                         u'value': u'documents',
+                         u'queries': {u'responsible:kathi.barfuss': 1}},
+                        {u'count': 0,
+                         u'field': u'listing_name',
+                         u'value': u'workspaces',
+                         u'queries': {u'responsible:kathi.barfuss': 0}},
+                        {u'count': 3,
+                         u'field': u'listing_name',
+                         u'value': u'dossiers',
+                         u'queries': {u'responsible:kathi.barfuss': 0}},
+                        {u'count': 0,
+                         u'field': u'listing_name',
+                         u'value': u'contacts',
+                         u'queries': {u'responsible:kathi.barfuss': 0}},
+                        {u'count': 9,
+                         u'field': u'listing_name',
+                         u'value': u'tasks',
+                         u'queries': {u'responsible:kathi.barfuss': 8}},
+                        {u'count': 0,
+                         u'field': u'listing_name',
+                         u'value': u'workspace_folders',
+                         u'queries': {u'responsible:kathi.barfuss': 0}},
+                        {u'count': 3,
+                         u'field': u'listing_name',
+                         u'value': u'proposals',
+                         u'queries': {u'responsible:kathi.barfuss': 0}},
+                        {u'count': 0,
+                         u'field': u'listing_name',
+                         u'value': u'todos',
+                         u'queries': {u'responsible:kathi.barfuss': 0}},
+                    ]
+                }
+            }, browser.json)
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_depth(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats?queries=depth:1'.format(self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertDictEqual(
+            {u'count': 12,
+             u'field': u'listing_name',
+             u'value': u'documents',
+             u'queries': {u'depth:1': 4}
+             },
+            browser.json['facet_pivot']['listing_name'][0])
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_unicode(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats?queries=responsible:{}&queries=depth:1'.format(
+                self.dossier.absolute_url(), self.regular_user.id),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertDictEqual(
+            {u'count': 12,
+             u'field': u'listing_name',
+             u'value': u'documents',
+             u'queries': {u'responsible:kathi.barfuss': 1,
+                          u'depth:1': 4}
+             },
+            browser.json['facet_pivot']['listing_name'][0])
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_special_characters(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            u'{}/@listing-stats?queries=Title:Vertr\xe4ge'.format(
+                self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+
+        self.assertDictEqual(
+            {u'count': 12,
+             u'field': u'listing_name',
+             u'value': u'documents',
+             u'queries': {u'Title:Vertr\xe4ge': 3}
+             },
+            browser.json['facet_pivot']['listing_name'][0])

@@ -418,6 +418,24 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual('2016-09-05T00:00:00Z', deadlines[0])
 
     @browsing
+    def test_filter_supports_unicode(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = (u'@listing?name=dossiers&columns:list=title'
+                u'&filters.title:record=Vertr\xe4ge')
+        browser.open(self.repository_root, view=view,
+                     headers=self.api_headers)
+
+        items = browser.json['items']
+        titles = map(lambda x: x['title'], items)
+        self.assertEqual(3, len(titles))
+        self.assertItemsEqual(
+            [u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+             u'Inaktive Vertr\xe4ge',
+             u'Abgeschlossene Vertr\xe4ge'],
+            titles)
+
+    @browsing
     def test_workspaces_listing(self, browser):
         self.login(self.workspace_member, browser=browser)
         query_string = '&'.join((

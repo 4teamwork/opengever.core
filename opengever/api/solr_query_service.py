@@ -125,7 +125,7 @@ class SimpleListingField(object):
             value = map(safe_unicode, value)
             value = u' OR '.join(value)
         else:
-            value = escape(value)
+            value = escape(safe_unicode(value))
         return u'{}:({})'.format(escape(self.index), value)
 
     def index_value_to_label(self, value):
