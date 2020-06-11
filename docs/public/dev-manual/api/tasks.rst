@@ -305,6 +305,32 @@ Zusätzliche Metadaten:
 
        :Datentyp: ``Text``
 
+Aufgabe übertragen
+------------------
+
+Sowohl Auftraggeber, als auch Auftragnehmer können mit dem ``@transfer-task`` Endpoint gewechselt werden. Dabei wird überprüft, ob ``old_userid`` der User-ID des Auftraggebers und/oder des Auftragnehmers entspricht. Ist dies der Fall, wird der Benutzer mit der User-ID ``new_userid`` als Auftraggeber und/oder Auftragnehmer gesetzt. Benachrichtigungen, die normalerweise bei einer Änderung ausgelöst werden, werden unterdrückt. Dieser Endpoint wird mit einer Berechtigung beschützt: ``opengever.api.TransferAssignment``
+Die Berechtigung ist standardmässig den Rollen `Administrator` und `Manager` zugewiesen.
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /task-1/@transfer-task HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+      {
+        "old_userid": "john.doe",
+        "new_userid": "robert.ziegler"
+      }
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No content
 
 Aufgabe kommentieren
 --------------------
