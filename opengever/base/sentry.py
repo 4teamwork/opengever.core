@@ -29,6 +29,39 @@ else:
 log = logging.getLogger('opengever.base.sentry')
 
 
+class SentryHandler(logging.Handler):
+    """Minimalistic log handler to also log records to sentry.
+
+    For simplicity contains a hard-coded mapping of log-levels we are
+    currently interested in.
+
+    Not intented to stay around for long but rather a quick way to get logging
+    to sentry for potentially critical solr errors *now*. Should go away again
+    once we have proper logging for non-exceptions to sentry.
+    """
+
+    logging_level_to_sentry_level = {
+        logging.ERROR: 'error',
+        logging.WARNING: 'warning',
+        logging.CRITICAL: 'critical',
+        logging.FATAL: 'fatal',
+    }
+
+    def emit(self, record):
+        level = self.logging_level_to_sentry_level.get(record.levelno)
+        if not level:
+            return
+
+        message = record.getMessage()
+        log_msg_to_sentry(message, level=level)
+
+
+# explicitly register sentry logging for some special loggers we are currently
+# interested in
+logging.getLogger('ftw.solr.connection').addHandler(SentryHandler())
+logging.getLogger('ftw.solr.handlers').addHandler(SentryHandler())
+
+
 def context_from_request(request):
     """Find the context from the request.
 
