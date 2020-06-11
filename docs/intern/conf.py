@@ -12,8 +12,9 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -302,8 +303,6 @@ texinfo_documents = [
 
 
 def setup(app):
-    app.add_javascript("custom.js")
-    app.add_stylesheet("custom.css")
 
     # The SPHINX_PUBLICATION_LEVEL environment variable (made available as
     # Sphinx config value 'publication_level' here) controls whether a build
