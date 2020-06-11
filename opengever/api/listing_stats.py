@@ -143,7 +143,7 @@ class ListingStats(object):
         return self.solr.search(filters=fq, **params)
 
     def _to_solr_facet_query(self, query):
-        if query.startswith("depth:"):
+        if query.startswith(u"depth:"):
             try:
                 depth = int(query.rsplit(":", 1)[1])
             except (ValueError, IndexError):
@@ -151,12 +151,12 @@ class ListingStats(object):
 
             context_depth = get_path_depth(self.context)
             max_path_depth = context_depth + depth
-            return "{{!tag=q1}}path_depth:[* TO {}]".format(max_path_depth)
-        return "{{!tag=q1}}{}".format(query)
+            return u"{{!tag=q1}}path_depth:[* TO {}]".format(max_path_depth)
+        return u"{{!tag=q1}}{}".format(query)
 
     @staticmethod
     def _add_query_to_pivot(pivot):
-        return "{{!query=q1}}{}".format(pivot)
+        return u"{{!query=q1}}{}".format(pivot)
 
     def _create_listing_name_pivot(self, solr_response, pivot):
         """Processes solr_response to extract the statistics and format them

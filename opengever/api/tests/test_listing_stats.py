@@ -194,7 +194,7 @@ class TestListingStats(SolrIntegrationTestCase):
             browser.json['facet_pivot']['listing_name'][0])
 
     @browsing
-    def test_listing_stats_pivot_queries_supports_multiple_queries(self, browser):
+    def test_listing_stats_pivot_queries_supports_unicode(self, browser):
         self.login(self.regular_user, browser)
         browser.open(
             '{}/@listing-stats?queries=responsible:{}&queries=depth:1'.format(
@@ -207,5 +207,22 @@ class TestListingStats(SolrIntegrationTestCase):
              u'value': u'documents',
              u'queries': {u'responsible:kathi.barfuss': 1,
                           u'depth:1': 4}
+             },
+            browser.json['facet_pivot']['listing_name'][0])
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_special_characters(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            u'{}/@listing-stats?queries=Title:Vertr\xe4ge'.format(
+                self.dossier.absolute_url()),
+            headers={'Accept': 'application/json'},
+        )
+
+        self.assertDictEqual(
+            {u'count': 12,
+             u'field': u'listing_name',
+             u'value': u'documents',
+             u'queries': {u'Title:Vertr\xe4ge': 3}
              },
             browser.json['facet_pivot']['listing_name'][0])
