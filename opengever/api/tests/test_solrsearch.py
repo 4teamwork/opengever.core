@@ -419,3 +419,33 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertTrue(browser.json['items'][0]['is_leafnode'])
+
+    @browsing
+    def test_batching(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@solrsearch'
+        browser.open(
+            self.repository_root, view=view, headers=self.api_headers)
+        all_items = browser.json['items']
+
+        # batched no start point
+        view = '@solrsearch?b_size=3'
+        browser.open(
+            self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(all_items[0:3], browser.json['items'])
+
+        # Next batch
+        browser.open(
+            browser.json.get('batching').get('next'), headers=self.api_headers)
+
+        self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(all_items[3:6], browser.json['items'])
+
+        # Previous batch
+        browser.open(
+            browser.json.get('batching').get('prev'), headers=self.api_headers)
+
+        self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(all_items[0:3], browser.json['items'])

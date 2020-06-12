@@ -4,10 +4,8 @@ from opengever.api.solr_query_service import REQUIRED_RESPONSE_FIELDS as DEFAULT
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from plone.registry.interfaces import IRegistry
-from plone.restapi.batching import HypermediaBatch
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
-from Products.ZCatalog.Lazy import LazyMap
 from zExceptions import BadRequest
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
@@ -197,18 +195,10 @@ class ListingGet(SolrQueryBaseService):
             query=query, filters=filters, start=start, rows=rows, sort=sort,
             fl=field_list, **params)
 
-        # We use the HypermediaBatch only to generate the links,
-        # we therefore do not need the real sequence of objects here
-        items = LazyMap(None, [], actual_result_count=resp.num_found)
-        batch = HypermediaBatch(self.request, items)
         res = {}
-        res['@id'] = batch.canonical_url
-        res['items_total'] = batch.items_total
+        self.extend_with_batching(res, resp)
         res['b_start'] = start
         res['b_size'] = rows
-        if batch.links:
-            res['batching'] = batch.links
-
         res['items'] = self.prepare_response_items(resp)
         res['facets'] = self.extract_facets_from_response(resp)
 
