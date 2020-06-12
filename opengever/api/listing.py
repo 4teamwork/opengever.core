@@ -1,4 +1,5 @@
 from ftw.solr.query import escape
+from ftw.solr.query import make_path_filter
 from opengever.api.solr_query_service import REQUIRED_RESPONSE_FIELDS as DEFAULT_REQUIRED_RESPONSE_FIELDS
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
@@ -10,11 +11,6 @@ from Products.ZCatalog.Lazy import LazyMap
 from zExceptions import BadRequest
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
-
-
-def get_path_depth(context):
-    # This mirrors the implementation in ftw.solr
-    return len(context.getPhysicalPath()) - 1
 
 
 # Fields with no mapping but allowed in the listing endpoint.
@@ -131,21 +127,12 @@ class ListingGet(SolrQueryBaseService):
         # By default exclude trashed content
         if 'trashed' not in filters:
             filter_queries.append(u'trashed:false')
+
         filter_queries.extend(FILTERS[self.listing_name])
-        filter_queries.append(u'path_parent:{}'.format(escape(
-            '/'.join(self.context.getPhysicalPath()))))
 
-        # By default search recursively
-        depth = self.request.form.get('depth', -1)
-        try:
-            depth = int(depth)
-        except ValueError:
-            depth = -1
-
-        if depth > 0:
-            context_depth = get_path_depth(self.context)
-            max_path_depth = context_depth + depth
-            filter_queries.append(u'path_depth:[* TO {}]'.format(max_path_depth))
+        depth = self.extract_depth(params)
+        filter_queries.extend(make_path_filter(
+            '/'.join(self.context.getPhysicalPath()), depth))
 
         # Add requested filters
         for key, value in filters.items():

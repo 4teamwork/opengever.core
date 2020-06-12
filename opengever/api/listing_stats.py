@@ -1,7 +1,6 @@
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.listing import FILTERS
-from opengever.api.listing import get_path_depth
 from opengever.base.interfaces import IOpengeverBaseLayer
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
@@ -11,6 +10,11 @@ from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
+
+
+def get_path_depth(context):
+    # This mirrors the implementation in ftw.solr
+    return len(context.getPhysicalPath()) - 1
 
 
 @implementer(IExpandableElement)

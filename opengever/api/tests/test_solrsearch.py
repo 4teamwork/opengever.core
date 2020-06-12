@@ -98,6 +98,68 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
                               browser.json['items'][0].keys())
 
     @browsing
+    def test_searches_in_context_if_path_is_not_specified(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch'.format(self.subdossier.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        search_on_context = browser.json
+
+        self.assertEqual(5, search_on_context['items_total'])
+        for doc in search_on_context['items']:
+            self.assertIn(self.subdossier.absolute_url(), doc['@id'])
+
+        url = u'{}/@solrsearch?fq=path:{}'.format(
+            self.portal.absolute_url(), self.subdossier.absolute_url_path())
+        browser.open(url, method='GET', headers=self.api_headers)
+        search_with_path = browser.json
+
+        self.assertEqual(search_on_context['items_total'],
+                         search_with_path['items_total'])
+        self.assertEqual(search_on_context['items'],
+                         search_with_path['items'])
+
+    @browsing
+    def test_search_respects_depth_parameter(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        base_url = u'{}/@solrsearch?'\
+            'fq=portal_type:opengever.dossier.businesscasedossier'.format(
+                self.dossier.absolute_url())
+        browser.open(
+            "{}&depth=2".format(base_url),
+            method='GET',
+            headers=self.api_headers)
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertItemsEqual(
+            [self.subdossier.absolute_url(),
+             self.subdossier2.absolute_url(),
+             self.subsubdossier.absolute_url()],
+            [doc['@id'] for doc in browser.json['items']])
+
+        browser.open(
+            "{}&depth=1".format(base_url),
+            method='GET',
+            headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            [self.subdossier.absolute_url(),
+             self.subdossier2.absolute_url()],
+            [doc['@id'] for doc in browser.json['items']])
+
+        browser.open(
+            "{}&depth=0".format(base_url),
+            method='GET',
+            headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertItemsEqual(
+            [self.dossier.absolute_url()],
+            [doc['@id'] for doc in browser.json['items']])
+
+    @browsing
     def test_filter_queries(self, browser):
         self.login(self.regular_user, browser=browser)
         url = (u'{}/@solrsearch?q=wichtig'.format(
