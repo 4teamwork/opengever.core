@@ -723,6 +723,14 @@
 
   <plone:service
       method="GET"
+      name="@assigned-users"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".assigned_users.AssignedUsersGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
       name="@watchers"
       for="opengever.task.task.ITask"
       factory=".watchers.WatchersGet"

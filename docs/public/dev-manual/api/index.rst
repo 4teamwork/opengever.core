@@ -32,6 +32,7 @@ Inhalt:
    preview.rst
    webactions.rst
    users.rst
+   assigned_users.rst
    usersettings.rst
    tasks.rst
    globalindex.rst
