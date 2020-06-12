@@ -180,8 +180,26 @@
       />
 
   <subscriber
-      for="opengever.dossier.behaviors.dossier.IDossierMarker
+      for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectRemovedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
       handler=".handlers.update_dossier_touched_date"
       />
 
