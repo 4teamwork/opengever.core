@@ -44,6 +44,13 @@
             "description": "",
             "_zope_schema_type": "Date"
         },
+        "touched": {
+            "type": "string",
+            "title": "\u00c4nderungsdatum des Dossiers oder seines Inhalts",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
+        },
         "comments": {
             "type": "string",
             "title": "Kommentar",
@@ -240,6 +247,7 @@
         "keywords",
         "start",
         "end",
+        "touched",
         "comments",
         "responsible",
         "external_reference",

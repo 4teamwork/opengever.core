@@ -181,6 +181,12 @@
 
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
            OFS.interfaces.IObjectWillBeMovedEvent"
       handler=".handlers.set_former_reference_before_moving"
       />

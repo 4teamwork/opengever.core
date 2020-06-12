@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from datetime import date
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
@@ -146,3 +147,9 @@ def purge_reference_number_mappings(copied_dossier, event):
     """
     prefix_adapter = IReferenceNumberPrefix(copied_dossier)
     prefix_adapter.purge_mappings()
+
+
+def update_dossier_touched_date(dossier, event):
+    today = date.today()
+    if IDossier(dossier).touched != today:
+        IDossier(dossier).touched = today

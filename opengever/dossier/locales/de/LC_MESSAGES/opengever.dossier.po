@@ -447,7 +447,9 @@ msgstr "Geben Sie die vollständige Ablagenummer an."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_keywords"
-msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition.\nACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen)."
+msgstr ""
+"Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition.\n"
+"ACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen)."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_number_of_containers"
@@ -855,6 +857,11 @@ msgstr "Titel"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_title_help"
 msgstr "Titelhilfe"
+
+#. Default: "Date of modification of the dossier or its content"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_touched"
+msgstr "Änderungsdatum des Dossiers oder seines Inhalts"
 
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py
