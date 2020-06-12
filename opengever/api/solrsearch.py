@@ -5,7 +5,6 @@ from opengever.base.interfaces import ISearchSettings
 from plone import api
 from zExceptions import BadRequest
 
-
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
     'getObject',
@@ -102,14 +101,12 @@ class SolrSearchGet(SolrQueryBaseService):
             fl=field_list, **params)
 
         res = {
-            "@id": "{}?{}".format(
-                self.request['ACTUAL_URL'], self.request['QUERY_STRING']),
             "items": self.prepare_response_items(resp),
-            "items_total": resp.num_found,
             "start": start,
             "rows": rows,
+            "facet_counts": self.extract_facets_from_response(resp)
         }
-        res['facet_counts'] = self.extract_facets_from_response(resp)
+        self.extend_with_batching(res, resp)
 
         return res
 

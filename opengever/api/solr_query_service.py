@@ -12,10 +12,12 @@ from opengever.base.utils import safe_int
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.task.helper import task_type_helper
 from plone import api
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFPlone.utils import safe_unicode
+from Products.ZCatalog.Lazy import LazyMap
 from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.component.hooks import getSite
@@ -406,3 +408,16 @@ class SolrQueryBaseService(Service):
         for doc in docs:
             items.append(self._create_list_item(doc))
         return items
+
+    def extend_with_batching(self, response, solr_response):
+        """Extends the current response-dict with batching links
+        """
+        # We use the HypermediaBatch only to generate the links,
+        # we therefore do not need the real sequence of objects here
+        items = LazyMap(None, [], actual_result_count=solr_response.num_found)
+        batch = HypermediaBatch(self.request, items)
+
+        response['@id'] = batch.canonical_url
+        response['items_total'] = batch.items_total
+        if batch.links:
+            response['batching'] = batch.links
