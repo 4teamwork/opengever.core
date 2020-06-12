@@ -791,7 +791,7 @@ class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
         create(Builder('contact')
                .having(firstname=u'Super', lastname=u'M\xe4n',
                        email='superman@example.com',
-                       email2='superman@example.com'))
+                       email2='superman2@example.com'))
 
         self.commit_solr()
         self.source = AllEmailContactsAndUsersSource(self.portal)
@@ -823,7 +823,7 @@ class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
         self.assertIn('lara.croft@example.com:croft-lara', self.source)
 
         self.assertIn('superman@example.com:man-super', self.source)
-        self.assertIn('superman@example.com:man-super', self.source)
+        self.assertIn('superman2@example.com:man-super', self.source)
 
     def test_invalid_contact_tokens(self):
         self.assertNotIn('lara.croft@example.com:lara-croft', self.source)
@@ -860,9 +860,9 @@ class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
         self.assertEquals(u'M\xe4n Super (superman@example.com)',
                           person_result[0].title)
 
-        self.assertEquals('superman@example.com:man-super', person_result[1].token)
-        self.assertEquals('superman@example.com:man-super', person_result[1].value)
-        self.assertEquals(u'M\xe4n Super (superman@example.com)',
+        self.assertEquals('superman2@example.com:man-super', person_result[1].token)
+        self.assertEquals('superman2@example.com:man-super', person_result[1].value)
+        self.assertEquals(u'M\xe4n Super (superman2@example.com)',
                           person_result[1].title)
 
 
