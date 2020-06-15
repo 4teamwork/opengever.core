@@ -289,6 +289,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@transfer-task"
+      for="opengever.task.task.ITask"
+      factory=".transfer.TransferTaskPost"
+      permission="opengever.api.TransferAssignment"
+      />
+
+  <plone:service
       method="GET"
       name="@notifications"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
@@ -719,6 +727,14 @@
       for="Products.CMFCore.interfaces.IContentish"
       factory=".allowed_roles_and_principals.AllowedRolesAndPrincipalsGet"
       permission="opengever.api.ViewAllowedRolesAndPrincipals"
+      />
+
+  <plone:service
+      method="GET"
+      name="@assigned-users"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".assigned_users.AssignedUsersGet"
+      permission="zope2.View"
       />
 
   <plone:service

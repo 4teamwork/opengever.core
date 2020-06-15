@@ -1,0 +1,8 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.api: Transfer Assignment" acquire="False">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+  </permissions>
+</rolemap>

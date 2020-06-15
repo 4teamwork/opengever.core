@@ -227,6 +227,13 @@
                    "
       />
 
+  <!-- Transfer Assignment is only managed globally in rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.api: Transfer Assignment,
+                   "
+      />
+
   <!-- Ignore default Plone permissions. This means we are not managing in the
        workflows. This does not mean that the permissions are disabled: disabling
        can be done in the rolemap.xml. -->

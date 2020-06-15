@@ -954,6 +954,11 @@ msgstr ""
 msgid "transition_label_cancelled"
 msgstr ""
 
+#. Default: "Issuer of task changed"
+#: ./opengever/task/response_description.py
+msgid "transition_label_change_issuer"
+msgstr ""
+
 #. Default: "Task closed"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
@@ -1040,6 +1045,11 @@ msgstr ""
 msgid "transition_msg_cancel"
 msgstr ""
 
+#. Default: "Issuer changed from ${issuer_old} to ${issuer_new}"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_change_issuer"
+msgstr ""
+
 #. Default: "Closed by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_close"
@@ -1048,6 +1058,11 @@ msgstr ""
 #. Default: "Response added"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_default"
+msgstr ""
+
+#. Default: "Issuer changed from ${issuer_old} to ${issuer_new} by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_delegated_change_issuer"
 msgstr ""
 
 #. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"

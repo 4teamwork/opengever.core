@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.activity import base_notification_center
 from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import NotificationCenter
 from opengever.activity.digest import DigestDispatcher
@@ -14,6 +15,7 @@ from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.user_settings import UserSettings
+from opengever.testing import IntegrationTestCase
 from sqlalchemy.exc import IntegrityError
 import transaction
 import unittest
@@ -623,3 +625,34 @@ class TestDispatchers(ActivityTestCase):
 
         self.assertFalse(hugos_note.is_digest)
         self.assertTrue(peters_note.is_digest)
+
+
+class TestSuppressNotifications(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def setUp(self):
+        super(TestSuppressNotifications, self).setUp()
+        self.center = base_notification_center()
+
+    def test_header_suppresses_notifications(self):
+        self.login(self.regular_user)
+        activity = self.center._add_activity(
+            Oguid.for_object(self.task),
+            'task-commented',
+            {'en': 'A title'},
+            {'en': 'A label'},
+            {'en': 'A summary'},
+            self.regular_user.getId(),
+            {'en': 'A summary'})
+        notifications = Notification.query.filter_by(userid=self.meeting_user.getId())
+
+        self.center.create_notifications(activity, [self.meeting_user.getId()])
+        self.assertEqual(1, notifications.count())
+
+        self.center.create_notifications(activity, [self.meeting_user.getId()])
+        self.assertEqual(2, notifications.count())
+
+        self.request.environ['HTTP_X_GEVER_SUPPRESSNOTIFICATIONS'] = 'True'
+        self.center.create_notifications(activity, [self.meeting_user.getId()])
+        self.assertEqual(2, notifications.count())

@@ -17,6 +17,7 @@ from sqlalchemy.sql.expression import desc
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.expression import true
 from zope.event import notify
+from zope.globalrequest import getRequest
 
 
 class NotificationCenter(object):
@@ -125,8 +126,13 @@ class NotificationCenter(object):
         return {'activity': activity, 'errors': errors}
 
     def create_notifications(self, activity, notification_recipients=None):
-        activity.create_notifications(notification_recipients)
         errors = []
+        request = getRequest()
+        if request:
+            header = request.getHeader('X-GEVER-SuppressNotifications', default='')
+            if header.lower() in ("yes", "y", "true", "t", "1"):
+                return errors
+        activity.create_notifications(notification_recipients)
         for dispatcher in self.dispatchers:
             result = dispatcher.dispatch_notifications(activity)
             errors += result

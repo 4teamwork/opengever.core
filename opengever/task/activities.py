@@ -213,8 +213,10 @@ class TaskTransitionActivity(BaseTaskResponseActivity):
     IGNORED_TRANSITIONS = [
         'transition-add-subtask',
         'task-transition-reassign',
+        'task-transition-change-issuer',
         'forwarding-transition-reassign',
         'forwarding-transition-reassign-refused',
+        'forwarding-transition-change-issuer',
     ]
 
     @property
@@ -229,6 +231,20 @@ class TaskTransitionActivity(BaseTaskResponseActivity):
 
     def _is_ignored_transition(self):
         return self.response.transition in self.IGNORED_TRANSITIONS
+
+
+class TaskChangeIssuerActivity(TaskTransitionActivity):
+
+    def before_recording(self):
+        change = ResponseDescription.get(response=self.response).get_change('issuer')
+        if not change or change.get('before') == self.context.issuer:
+            return
+
+        self.center.add_task_issuer(self.context, self.context.issuer)
+        self.center.remove_task_issuer(self.context, change.get('before'))
+
+    def _is_ignored_transition(self):
+        return False
 
 
 class TaskReassignActivity(TaskTransitionActivity):

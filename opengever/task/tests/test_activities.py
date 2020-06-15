@@ -21,9 +21,12 @@ from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.ogds.models.user import User
+from opengever.task.activities import TaskChangeIssuerActivity
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.activities import TaskWatcherAddedActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.task.task import ITask
+from opengever.task.util import add_simple_response
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -574,6 +577,66 @@ class TestTaskReassignActivity(IntegrationTestCase):
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals(
             'herbert@jager.com', get_header(mail, 'To'))
+
+
+class TestTaskChangeIssuerActivity(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def test_properties(self):
+        self.login(self.regular_user)
+        self.request.environ['HTTP_X_GEVER_SUPPRESSNOTIFICATIONS'] = 'True'
+        issuer_changes = [(ITask['issuer'], self.meeting_user.getId())]
+
+        response = add_simple_response(
+                        self.task, transition='task-transition-change-issuer',
+                        field_changes=issuer_changes,
+                        supress_events=True)
+
+        TaskChangeIssuerActivity(self.task, self.task.REQUEST, response).record()
+        activity = Activity.query.one()
+        self.assertEqual('task-transition-change-issuer', activity.kind)
+        self.assertEqual(u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
+                         activity.title)
+        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual(u'Issuer changed from <a href="http://nohost/plone/@@user-details'
+                         u'/robert.ziegler">Ziegler Robert (robert.ziegler)</a> to '
+                         u'<a href="http://nohost/plone/@@user-details/herbert.jager">J\xe4ger '
+                         u'Herbert (herbert.jager)</a> by <a href="http://nohost/plone'
+                         u'/@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         activity.summary)
+        self.assertEqual(u'Issuer of task changed', activity.label)
+
+    @browsing
+    def test_changes_issuer_watcher_in_subscriptions_list(self, browser):
+        self.login(self.regular_user)
+        self.request.environ['HTTP_X_GEVER_SUPPRESSNOTIFICATIONS'] = 'True'
+        old_issuer = self.task.issuer
+
+        resource = notification_center().fetch_resource(self.task)
+        subscriptions = resource.subscriptions
+
+        self.assertItemsEqual(
+            [(u'kathi.barfuss', u'task_responsible'), (u'robert.ziegler', u'task_issuer')],
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
+
+        issuer_changes = [(ITask['issuer'], self.meeting_user.getId())]
+
+        response = add_simple_response(
+                        self.task, transition='task-transition-change-issuer',
+                        field_changes=issuer_changes,
+                        supress_events=True)
+        self.task.issuer = self.meeting_user.getId()
+
+        TaskChangeIssuerActivity(self.task, self.task.REQUEST, response).record()
+        activity = Activity.query.one()
+
+        create_session().refresh(resource)
+        subscriptions = resource.subscriptions
+
+        self.assertItemsEqual(
+            [(u'kathi.barfuss', u'task_responsible'), ('herbert.jager', 'task_issuer')],
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
 
 class TestSuccesssorHandling(FunctionalTestCase):

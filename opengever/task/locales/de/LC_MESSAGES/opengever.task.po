@@ -956,6 +956,11 @@ msgstr "Weiterleitung zu einem Dossier hinzugefügt"
 msgid "transition_label_cancelled"
 msgstr "Aufgabe abgebrochen"
 
+#. Default: "Issuer of task changed"
+#: ./opengever/task/response_description.py
+msgid "transition_label_change_issuer"
+msgstr "Auftraggeber der Aufgabe gewechselt"
+
 #. Default: "Task closed"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
@@ -1042,6 +1047,11 @@ msgstr "Einem Dossier zugewiesen durch ${user} Nachfolgeaufgabe=${successor}"
 msgid "transition_msg_cancel"
 msgstr "Abgebrochen durch ${user}"
 
+#. Default: "Issuer changed from ${issuer_old} to ${issuer_new}"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_change_issuer"
+msgstr "Auftraggeber gewechselt von ${issuer_old} zu ${issuer_new}"
+
 #. Default: "Closed by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_close"
@@ -1051,6 +1061,11 @@ msgstr "Abgeschlossen durch ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_default"
 msgstr "Antwort hinzugefügt"
+
+#. Default: "Issuer changed from ${issuer_old} to ${issuer_new} by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_delegated_change_issuer"
+msgstr "Auftraggeber gewechselt von ${issuer_old} zu ${issuer_new} durch ${user}"
 
 #. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
 #: ./opengever/task/response_description.py
