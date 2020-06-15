@@ -129,7 +129,17 @@ class SimpleListingField(object):
             value = u' OR '.join(value)
         else:
             value = escape(safe_unicode(value))
-        return u'{}:({})'.format(escape(self.index), value)
+
+
+        # Escaping the Solr field name is done for security reasons
+        # (to prevent attempts to circumvent the security filter by injection
+        # of a maliciously crafted field name)
+        key = escape(self.index)
+        # Don't escape the '-' at the beginning as it's used to negate a filter query
+        if key.startswith('\\-'):
+            key = key[1:]
+
+        return u'{}:({})'.format(key, value)
 
     def index_value_to_label(self, value):
         return value

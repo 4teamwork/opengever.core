@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
+- Allow negation of a filter query in @listing endpoint. [tinagerber]
 - Implement batching for the @solrsearch endpoint. [elioschmutz]
 - Make available the delete action for templates. [mbaechtold]
 - Drop import_stamp column from user model. [tinagerber]

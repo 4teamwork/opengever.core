@@ -364,6 +364,23 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual('dossier-state-active', review_states[0])
 
     @browsing
+    def test_negate_filter_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+        view = ('@listing?name=dossiers')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(17, browser.json['items_total'])
+
+        view = ('@listing?name=dossiers&facets:list=review_state'
+                '&filters.review_state:record:list=dossier-state-active')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(12, browser.json['items_total'])
+
+        view = ('@listing?name=dossiers&facets:list=review_state'
+                '&filters.-review_state:record:list=dossier-state-active')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(5, browser.json['items_total'])
+
+    @browsing
     def test_filter_by_multiple_review_states(self, browser):
         self.login(self.regular_user, browser=browser)
 
