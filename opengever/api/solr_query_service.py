@@ -130,6 +130,9 @@ class SimpleListingField(object):
         else:
             value = escape(safe_unicode(value))
 
+        # Convert python empty string to solr empty string
+        if value == u'':
+            value = u'""'
 
         # Escaping the Solr field name is done for security reasons
         # (to prevent attempts to circumvent the security filter by injection
