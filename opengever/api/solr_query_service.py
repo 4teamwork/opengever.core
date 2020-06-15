@@ -196,7 +196,6 @@ DEFAULT_FIELDS = set([
 REQUIRED_RESPONSE_FIELDS = set(['UID'])
 
 FIELDS_WITH_MAPPING = [
-    ListingField('checked_out', 'checked_out', transform=display_name),
     ListingField('bumblebee_checksum', 'bumblebee_checksum', sort_index=DEFAULT_SORT_INDEX),
     ListingField('checked_out', 'checked_out', transform=display_name),
     ListingField('checked_out_fullname', 'checked_out', 'checked_out_fullname'),
