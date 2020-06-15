@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Implement batching for the @solrsearch endpoint. [elioschmutz]
+- Fix contact query sources for contacts without an E-mail. [njohner]
 - Make available the delete action for templates. [mbaechtold]
 - Drop import_stamp column from user model. [tinagerber]
 - Define a set of columns that get synchronized in user and group model. [tinagerber]
