@@ -18,12 +18,10 @@ class TestDossierTouched(IntegrationTestCase):
         self.assertIsNone(IDossier(dossier).touched)
 
     @browsing
-    def test_touched_date_is_not_updated_on_the_same_day(self, browser):
+    def test_touched_date_is_only_updated_when_set_to_different_date(self, browser):
         self.login(self.administrator, browser=browser)
 
-        # Multiple modifications on the same day result in the same touched
-        # date. This is mostly implicit by the usage of a date field instead
-        # of a datetime field.
+        # Multiple modifications on the same day result in the same touched date.
         with freeze(datetime(2020, 6, 12)):
             browser.open(self.dossier, view="edit")
             browser.fill({u"Title": "First modification"}).save()

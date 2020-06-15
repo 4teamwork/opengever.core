@@ -138,6 +138,7 @@
     <field name="document_date" type="pdate" indexed="true" stored="false" />
     <field name="document_type" type="string" indexed="true" stored="false" />
     <field name="dossier_review_state" type="string" indexed="true" stored="false" />
+    <field name="touched" type="pdate" indexed="true" stored="false" />
     <field name="email" type="string" indexed="true" stored="false" />
     <field name="email2" type="string" indexed="true" stored="false" />
     <field name="end" type="pdate" indexed="true" stored="false" />

@@ -179,6 +179,11 @@
       name="has_sametype_children"
       />
 
+  <adapter
+      factory=".indexers.dossier_touched_indexer"
+      name="touched"
+      />
+
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"

@@ -220,3 +220,8 @@ class SearchableTextExtender(object):
             searchable.append(searchable_external_reference.encode('utf-8'))
 
         return ' '.join(searchable)
+
+
+@indexer(IDossierMarker)
+def dossier_touched_indexer(obj):
+    return IDossier(obj).touched

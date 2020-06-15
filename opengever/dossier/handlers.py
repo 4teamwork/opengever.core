@@ -159,4 +159,6 @@ def update_dossier_touched_date(obj, event):
                 and IDossier(obj).touched != today
                 and (not (IObjectAddedEvent.providedBy(event) and obj == event.object))):
             IDossier(obj).touched = today
+            # Prevent reindexing all indexes by indexing `UID` too.
+            obj.reindexObject(idxs=['UID', 'touched'])
         obj = aq_parent(aq_inner(obj))
