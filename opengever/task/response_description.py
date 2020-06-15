@@ -307,6 +307,39 @@ class Reassign(ResponseDescription):
 ResponseDescription.add_description(Reassign)
 
 
+class ChangeIssuer(ResponseDescription):
+    # fake transitions to generate a response for TaskChangeIssuerActivity
+    transitions = ['task-transition-change-issuer',
+                   'forwarding-transition-change-issuer']
+
+    css_class = 'reassign'
+
+    def msg(self):
+        change = self.get_change('issuer')
+        issuer_new = Actor.lookup(change.get('after')).get_link()
+        issuer_old = Actor.lookup(change.get('before')).get_link()
+
+        if not change.get('before') == self.response.creator:
+            return _('transition_msg_delegated_change_issuer',
+                     u'Issuer changed from ${issuer_old} to '
+                     u'${issuer_new} by ${user}',
+                     mapping={'user': self.creator_link(),
+                              'issuer_new': issuer_new,
+                              'issuer_old': issuer_old})
+
+        return _('transition_msg_change_issuer',
+                 u'Issuer changed from ${issuer_old} to '
+                 u'${issuer_new}',
+                 mapping={'issuer_new': issuer_new,
+                          'issuer_old': issuer_old})
+
+    def label(self):
+        return _('transition_label_change_issuer', u'Issuer of task changed')
+
+
+ResponseDescription.add_description(ChangeIssuer)
+
+
 class ModifyDeadline(ResponseDescription):
 
     transition = 'task-transition-modify-deadline'
