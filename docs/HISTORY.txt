@@ -20,6 +20,7 @@ Changelog
 - Enable API endpoint `@document-from-template` for tasks. [mbaechtold]
 - Support combined notation for task responsible in workflow transitions. [elioschmutz]
 - Bump docxcompose to 1.1.2 to fix issues with external image references and drawing properties. [buchi]
+- Always use configured solr port in tests. [2e12]
 
 
 2020.3.0rc4 (2020-06-05)

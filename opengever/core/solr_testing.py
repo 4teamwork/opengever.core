@@ -115,7 +115,7 @@ class SolrServer(object):
     def _run_server_process(self):
         command = [BUILDOUT_DIR.joinpath('bin/solr'), 'fg']
         env = os.environ.copy()
-        env.setdefault('SOLR_PORT', str(self.port))
+        env['SOLR_PORT'] = str(self.port)
         self._stdout = io.StringIO()
         self._process = subprocess.Popen(command, stdout=subprocess.PIPE, env=env)
         while True:
