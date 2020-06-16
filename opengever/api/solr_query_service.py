@@ -232,7 +232,7 @@ FIELDS_WITH_MAPPING = [
                  transform=lambda state: translate(
                     state, domain='plone', context=getRequest())),
     ListingField('review_state_label', 'review_state', 'translated_review_state'),
-    ListingField('task_type', 'task_type', translated_task_type),
+    ListingField('task_type', 'task_type', accessor=translated_task_type, transform=translate_task_type),
     ListingField('thumbnail_url', None, 'preview_image_url', DEFAULT_SORT_INDEX,
                  additional_required_fields=['bumblebee_checksum', 'path']),
     ListingField('title', 'Title', translated_title, 'sortable_title'),
