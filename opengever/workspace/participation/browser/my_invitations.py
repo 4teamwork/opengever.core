@@ -6,12 +6,13 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.workspace import _
 from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.activities import WorkspaceWatcherManager
+from opengever.workspace.interfaces import IWorkspaceSettings
 from opengever.workspace.participation import load_signed_payload
 from opengever.workspace.participation import serialize_and_sign_payload
 from opengever.workspace.participation.storage import IInvitationStorage
@@ -89,11 +90,16 @@ class MyWorkspaceInvitations(BrowserView):
 
         return invitation
 
+    def get_group_dn(self):
+        group_dn = api.portal.get_registry_record(
+            'invitation_group_dn', interface=IWorkspaceSettings)
+        return group_dn or self._get_orgunit_group_dn()
+
     def _get_orgunit_group_dn(self):
         """get the dn of the group associated with the current orgunit
         """
         portal = api.portal.get()
-        org_units = get_current_admin_unit().org_units
+        org_units = [ou for ou in get_current_admin_unit().org_units if ou.enabled]
         if len(org_units) > 1:
             raise InternalError("Workspace installation can only have a "
                                 "single enabled org_unit")
@@ -143,7 +149,7 @@ class MyWorkspaceInvitations(BrowserView):
                 accept_params['new_user'] = 1
                 accept_url = "{}?invitation={}".format(
                     accept_url, serialize_and_sign_payload(accept_params))
-                group_dn = self._get_orgunit_group_dn()
+                group_dn = self.get_group_dn()
 
                 params = {'email': invitation['recipient_email'],
                           'callback': accept_url,
