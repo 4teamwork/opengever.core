@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-29 14:10+0000\n"
+"POT-Creation-Date: 2020-06-16 09:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,11 +91,11 @@ msgid "Export selection"
 msgstr ""
 
 #: ./opengever/dossier/move_items.py
-msgid "Failed to copy following objects: ${failed_objects}"
+msgid "Failed to move following objects: ${failed_objects}"
 msgstr ""
 
 #: ./opengever/dossier/move_items.py
-msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
+msgid "Failed to move following objects: ${failed_objects}. They are currently being edited in the Office Connector."
 msgstr ""
 
 #: ./opengever/dossier/move_items.py
@@ -765,8 +765,8 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/overview.py
 #: ./opengever/dossier/browser/participants.py
-#: ./opengever/dossier/browser/report.py
 msgid "label_responsible"
 msgstr ""
 
