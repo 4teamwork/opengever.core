@@ -4,6 +4,8 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
+- Allow filtering for empty strings in @listing endpoint. [tinagerber]
+- Allow negation of a filter query in @listing endpoint. [tinagerber]
 - Implement batching for the @solrsearch endpoint. [elioschmutz]
 - Fix contact query sources for contacts without an E-mail. [njohner]
 - Make available the delete action for templates. [mbaechtold]

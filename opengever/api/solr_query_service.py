@@ -129,7 +129,20 @@ class SimpleListingField(object):
             value = u' OR '.join(value)
         else:
             value = escape(safe_unicode(value))
-        return u'{}:({})'.format(escape(self.index), value)
+
+        # Convert python empty string to solr empty string
+        if value == u'':
+            value = u'""'
+
+        # Escaping the Solr field name is done for security reasons
+        # (to prevent attempts to circumvent the security filter by injection
+        # of a maliciously crafted field name)
+        key = escape(self.index)
+        # Don't escape the '-' at the beginning as it's used to negate a filter query
+        if key.startswith('\\-'):
+            key = key[1:]
+
+        return u'{}:({})'.format(key, value)
 
     def index_value_to_label(self, value):
         return value
@@ -196,7 +209,6 @@ DEFAULT_FIELDS = set([
 REQUIRED_RESPONSE_FIELDS = set(['UID'])
 
 FIELDS_WITH_MAPPING = [
-    ListingField('checked_out', 'checked_out', transform=display_name),
     ListingField('bumblebee_checksum', 'bumblebee_checksum', sort_index=DEFAULT_SORT_INDEX),
     ListingField('checked_out', 'checked_out', transform=display_name),
     ListingField('checked_out_fullname', 'checked_out', 'checked_out_fullname'),

@@ -5,9 +5,11 @@ from opengever.api.solr_query_service import filename
 from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from zope.component import getMultiAdapter
 
 
 class TestListingEndpointWithoutSolr(IntegrationTestCase):
@@ -362,6 +364,41 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         review_states = list(set(map(lambda x: x['review_state'], items)))
         self.assertEqual(1, len(review_states))
         self.assertEqual('dossier-state-active', review_states[0])
+
+    @browsing
+    def test_filter_by_empty_string(self, browser):
+        self.login(self.regular_user, browser=browser)
+        manager = getMultiAdapter((self.document, self.request), ICheckinCheckoutManager)
+        manager.checkout()
+        self.document.reindexObject()
+        self.commit_solr()
+        view = ('@listing?name=documents&facets:list=checked_out')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(19, browser.json['items_total'])
+        self.assertEqual(18, browser.json['facets']['checked_out']['']['count'])
+
+        view = ('@listing?name=documents&facets:list=checked_out'
+                '&filters.checked_out:record=')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(18, browser.json['items_total'])
+        self.assertEqual(18, browser.json['facets']['checked_out']['']['count'])
+
+    @browsing
+    def test_negate_filter_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+        view = ('@listing?name=dossiers')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(17, browser.json['items_total'])
+
+        view = ('@listing?name=dossiers&facets:list=review_state'
+                '&filters.review_state:record:list=dossier-state-active')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(12, browser.json['items_total'])
+
+        view = ('@listing?name=dossiers&facets:list=review_state'
+                '&filters.-review_state:record:list=dossier-state-active')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(5, browser.json['items_total'])
 
     @browsing
     def test_filter_by_multiple_review_states(self, browser):
