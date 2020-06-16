@@ -4,15 +4,18 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from mock import Mock
+from mock import patch
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.interfaces import IWorkspaceSettings
 from opengever.workspace.participation import load_signed_payload
 from opengever.workspace.participation import serialize_and_sign_payload
 from opengever.workspace.participation.browser.my_invitations import MyWorkspaceInvitations
 from opengever.workspace.participation.storage import IInvitationStorage
+from plone import api
 from zope.component import getUtility
 import urlparse
 
@@ -247,3 +250,21 @@ class TestMyInvitationsView(IntegrationTestCase):
         self.deactivate_feature('workspace')
         browser.reload()
         self.assertFalse(browser.css('[href$="@@my-invitations"]'))
+
+    def test_get_default_group_dn(self):
+        with patch(
+            'opengever.workspace.participation.browser.my_invitations.'
+            'MyWorkspaceInvitations._get_orgunit_group_dn'
+        ) as mocked_get_orgunit_group_dn:
+            mocked_get_orgunit_group_dn.return_value = 'CN=Some Group'
+            view = self.portal.unrestrictedTraverse('@@my-invitations')
+            self.assertEqual(view.get_group_dn(), 'CN=Some Group')
+
+    def test_get_group_dn_from_registry(self):
+        api.portal.set_registry_record(
+            'invitation_group_dn',
+            interface=IWorkspaceSettings,
+            value=u'CN=External Users',
+        )
+        view = self.portal.unrestrictedTraverse('@@my-invitations')
+        self.assertEqual(view.get_group_dn(), 'CN=External Users')

@@ -29,6 +29,7 @@ Changelog
 - Bump docxcompose to 1.1.2 to fix issues with external image references and drawing properties. [buchi]
 - Always use configured solr port in tests. [2e12]
 - Fix translations of task types in API GET. [2e12]
+- Allow customizing group dn for invitations. [buchi]
 
 
 2020.3.0rc4 (2020-06-05)
