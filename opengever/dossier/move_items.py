@@ -189,14 +189,14 @@ class MoveItemsForm(form.Form):
                 msg, type='info')
 
         if failed_objects:
-            msg = _(u'Failed to copy following objects: ${failed_objects}',
+            msg = _(u'Failed to move following objects: ${failed_objects}',
                     mapping=dict(failed_objects=','.join(failed_objects)))
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
         if failed_resource_locked_objects:
-            msg = _(u'Failed to copy following objects: ${failed_objects}. '
-                    u'Locked via WebDAV',
+            msg = _(u'Failed to move following objects: ${failed_objects}. '
+                    u'They are currently being edited in the Office Connector.',
                     mapping=dict(failed_objects=','.join(
                         failed_resource_locked_objects)))
             IStatusMessage(self.request).addStatusMessage(

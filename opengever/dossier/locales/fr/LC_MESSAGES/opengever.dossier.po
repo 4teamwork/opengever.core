@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-29 14:10+0000\n"
+"POT-Creation-Date: 2020-06-16 09:06+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -90,12 +90,12 @@ msgid "Export selection"
 msgstr "Exporter la sélection"
 
 #: ./opengever/dossier/move_items.py
-msgid "Failed to copy following objects: ${failed_objects}"
+msgid "Failed to move following objects: ${failed_objects}"
 msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 
 #: ./opengever/dossier/move_items.py
-msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
-msgstr "Les objets suivants ne peuvent pas être copiés: ${failed_objects}. Ils sont verrouillés par WebDAV."
+msgid "Failed to move following objects: ${failed_objects}. They are currently being edited in the Office Connector."
+msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}. Ils sont actuellement en cours d'édition dans Office Connector."
 
 #: ./opengever/dossier/move_items.py
 msgid "It isn't allowed to add such items there."
@@ -764,8 +764,8 @@ msgstr "Dossiers liés"
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/overview.py
 #: ./opengever/dossier/browser/participants.py
-#: ./opengever/dossier/browser/report.py
 msgid "label_responsible"
 msgstr "Responsable"
 
