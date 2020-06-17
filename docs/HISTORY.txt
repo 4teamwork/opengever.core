@@ -4,6 +4,7 @@ Changelog
 2020.3.0rc5 (unreleased)
 ------------------------
 
+- Bump setuptools to 44.1.1 and zc.buildout to 2.13.3. [tinagerber]
 - Update translations of error messages when moving objects. [tinagerber]
 - Allow filtering for empty strings in @listing endpoint. [tinagerber]
 - Allow negation of a filter query in @listing endpoint. [tinagerber]
