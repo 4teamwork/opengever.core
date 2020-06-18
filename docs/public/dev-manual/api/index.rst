@@ -45,6 +45,7 @@ Inhalt:
    workspace/index
    linked_workspaces.rst
    templatefolder.rst
+   trigger_task_template.rst
    examples/index.rst
    docs_changelog.rst
 
