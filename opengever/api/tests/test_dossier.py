@@ -65,3 +65,162 @@ class TestDossierSerializer(IntegrationTestCase):
         self.assertFalse(
             browser.json["relatedDossier"][0]["is_subdossier"]
         )
+
+
+class TestMainDossierExpansion(IntegrationTestCase):
+
+    @browsing
+    def test_main_dossier_expansion_on_repository_root(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.repository_root.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertIsNone(
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_leaf_repofolder(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.leaf_repofolder.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertIsNone(
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_dossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.dossier.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
+                                u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.document.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
+                                u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.task.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
+                                u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.subdossier.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
+                                u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_subdocument(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.subdocument.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
+                                u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_subsubdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.subsubdossier.absolute_url() + '?expansion=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
+                                u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': u'dossier-state-active',
+                u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
