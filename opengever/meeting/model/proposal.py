@@ -455,9 +455,13 @@ class Proposal(Base):
             self.physical_path).execute()
         return response['intid']
 
-    def get_meeting_link(self):
+    def get_meeting(self):
         agenda_item = self.agenda_item
-        if not agenda_item:
-            return u''
+        if agenda_item:
+            return agenda_item.meeting
 
-        return agenda_item.meeting.get_link()
+    def get_meeting_link(self):
+        meeting = self.get_meeting()
+        if meeting is not None:
+            return meeting.get_link()
+        return u''

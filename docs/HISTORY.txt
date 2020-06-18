@@ -4,9 +4,11 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+
+- Include additional data in Proposal GET API endpoint. [njohner]
 - Add API endpoint `@trigger-task-template` to create tasks in a dossier from a template. [deiferni]
 - Extend the @favorites endpoint to let it return already resolved favorites. [elioschmutz]
-- Use correct response type for proposal comment responses. [njoher]
+- Use correct response type for proposal comment responses. [njohner]
 - Add expandable endpoint @tasktree for getting task hierarchy. [buchi]
 
 

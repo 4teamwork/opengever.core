@@ -41,6 +41,7 @@
   <adapter factory=".task.TaskDeserializeFromJson" />
   <adapter factory=".users.SerializeUserToJson" />
   <adapter factory=".proposal.SerializeProposalResponseToJson" />
+  <adapter factory=".proposal.SerializeProposalToJson" />
   <adapter factory=".serializer.long_converter" />
   <adapter factory=".field_deserializers.PersistentDefaultFieldDeserializer" />
   <adapter factory=".field_deserializers.PersistentDatetimeFieldDeserializer" />
