@@ -1,10 +1,11 @@
 from opengever.base import advancedjson
 from opengever.base.request import tracebackify
-from opengever.base.utils import ok_response
-from Products.Five import BrowserView
+from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
-from opengever.meeting.proposalhistory import ProposalResponse
+from opengever.base.utils import ok_response
 from opengever.meeting.activity.activities import ProposalCommentedActivity
+from opengever.meeting.proposalhistory import ProposalResponse
+from Products.Five import BrowserView
 
 
 @tracebackify
@@ -32,5 +33,5 @@ class ReceiveProposalHistory(BrowserView):
     def generate_activity_if_necessary(self, response):
         """When a submitted proposal is commented, we need to generate
         a corresponding activity on the proposal."""
-        if response.response_type == 'commented':
+        if response.response_type == COMMENT_RESPONSE_TYPE:
             ProposalCommentedActivity(self.context, self.request).record()

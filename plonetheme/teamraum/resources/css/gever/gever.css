@@ -3094,7 +3094,7 @@ div.answer.revised div.answerType:before { content: ""; }
 
 div.answer.reopened div.answerType:before { content: ""; }
 
-div.answer.commented div.answerType:before { content: ""; }
+div.answer.comment div.answerType:before { content: ""; }
 
 /* meeting action buttons */
 form span.inputIcon input { padding-left: 30px; }

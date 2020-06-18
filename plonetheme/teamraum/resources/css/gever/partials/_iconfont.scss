@@ -717,7 +717,7 @@ div.answer.documentUnlocked div.answerType:before { content: $unlockDocument; }
 div.answer.rejected div.answerType:before { content: $reject; }
 div.answer.revised div.answerType:before { content: $decided; }
 div.answer.reopened div.answerType:before { content: $reopen; }
-div.answer.commented div.answerType:before { content: $comment; }
+div.answer.comment div.answerType:before { content: $comment; }
 
 
 /* meeting action buttons */
