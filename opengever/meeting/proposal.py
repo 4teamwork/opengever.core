@@ -7,6 +7,7 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.oguid import Oguid
+from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.security import elevated_privileges
@@ -294,7 +295,7 @@ class ProposalBase(object):
 
     def comment(self, text):
         ProposalCommentedActivity(self, self.REQUEST).record()
-        response = ProposalResponse(u'commented', text=text)
+        response = ProposalResponse(COMMENT_RESPONSE_TYPE, text=text)
         IResponseContainer(self).add(response)
         return response
 

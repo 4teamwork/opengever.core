@@ -56,9 +56,9 @@ class ProposalResponseDescription(object):
                          u'Created by ${user}',
                          self.mapping),
 
-            u'commented': _(u'proposal_history_label_commented',
-                            u'Proposal commented by ${user}',
-                            self.mapping),
+            u'comment': _(u'proposal_history_label_commented',
+                          u'Proposal commented by ${user}',
+                          self.mapping),
 
             u'cancelled': _(u'proposal_history_label_cancelled',
                             u'Proposal cancelled by ${user}',
@@ -145,9 +145,9 @@ class ProposalResponse(Response):
 
     implements(IProposalResponse)
 
-    NEED_SYNCING = (u'revised', u'reopened', u'commented', 'document_unlocked')
+    NEED_SYNCING = (u'revised', u'reopened', u'comment', 'document_unlocked')
 
-    def __init__(self, response_type='commented', text=u'', needs_syncing=None, **kwargs):
+    def __init__(self, response_type='comment', text=u'', needs_syncing=None, **kwargs):
         super(ProposalResponse, self).__init__(response_type=response_type)
 
         # Because during transport creation time gets rounded down to seconds

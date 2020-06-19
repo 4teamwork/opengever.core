@@ -4,7 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Use correct response type for proposal comment responses. [njoher]
 
 
 2020.3.0 (2020-06-18)
