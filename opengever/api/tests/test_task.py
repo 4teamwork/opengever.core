@@ -10,12 +10,13 @@ from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone.restapi.serializer.converters import json_compatible
 from zope.component import getMultiAdapter
 import json
 
 
-class TestTaskSerialization(IntegrationTestCase):
+class TestTaskSerialization(SolrIntegrationTestCase):
 
     maxDiff = None
 
@@ -250,6 +251,32 @@ class TestTaskSerialization(IntegrationTestCase):
             browser.json['items']
         )
 
+    @browsing
+    def test_task_response_contains_task_tree(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertIn('task_tree', browser.json)
+        self.assertEqual(
+            browser.json['task_tree'],
+            [
+                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
+                    u'@type': u'opengever.task.task',
+                    u'children': [
+                        {
+                            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
+                            u'@type': u'opengever.task.task',
+                            u'children': [],
+                            u'review_state': u'task-state-resolved',
+                            u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+                        },
+                    ],
+                    u'review_state': u'task-state-in-progress',
+                    u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
+                },
+            ]
+        )
+
 
 class TestTaskCommentSync(FunctionalTestCase):
 
@@ -280,7 +307,7 @@ class TestTaskCommentSync(FunctionalTestCase):
         self.assertEqual(1, len(predecessor_response_container))
 
 
-class TestTaskCreation(IntegrationTestCase):
+class TestTaskCreation(SolrIntegrationTestCase):
 
     data = {
         "@type": "opengever.task.task",

@@ -4,10 +4,11 @@ from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 import json
 
 
-class TestWatchersGet(IntegrationTestCase):
+class TestWatchersGet(SolrIntegrationTestCase):
     features = ('activity', )
     maxDiff = None
 

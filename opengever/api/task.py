@@ -1,6 +1,11 @@
+from Acquisition import aq_parent
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.base.browser.navigation import make_tree_by_url
+from opengever.base.solr import OGSolrContentListing
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
@@ -14,6 +19,7 @@ from plone.restapi.interfaces import ISerializeToJsonSummary
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -25,6 +31,7 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeTaskToJson, self).__call__(*args, **kwargs)
         result[u'containing_dossier'] = self._get_containing_dossier_summary()
+        result[u'task_tree'] = self.task_tree()
         return result
 
     def _get_containing_dossier_summary(self):
@@ -34,6 +41,36 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
         return getMultiAdapter(
             (containing_dossier, self.request), ISerializeToJsonSummary
         )()
+
+    def task_tree(self):
+        main_task = self.context
+        parent = aq_parent(main_task)
+        while ITask.providedBy(parent):
+            main_task = parent
+            parent = aq_parent(main_task)
+
+        solr = getUtility(ISolrSearch)
+        filters = make_filters(
+            path={
+                'query': '/'.join(main_task.getPhysicalPath()),
+                'depth': -1,
+            },
+            object_provides=ITask.__identifier__,
+        )
+        fieldlist = ['Title', 'portal_type', 'path', 'review_state']
+        resp = solr.search(
+            filters=filters, start=0, rows=1000, sort='created asc',
+            fl=fieldlist)
+
+        nodes = [
+            {
+                '@id': obj.getURL(),
+                '@type': obj.PortalType(),
+                'review_state': obj.review_state(),
+                'title': obj.Title(),
+            } for obj in OGSolrContentListing(resp)
+        ]
+        return make_tree_by_url(nodes, url_key='@id', children_key='children')
 
 
 @implementer(ISerializeToJson)
