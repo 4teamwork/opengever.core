@@ -128,7 +128,7 @@ class TestMailDownloadCopy(FunctionalTestCase):
             'status': '200 Ok',
             'content-length': str(len(browser.contents)),
             'content-type': 'application/vnd.ms-outlook',
-            'content-disposition': 'attachment; filename="testm\xc3\xa4il.msg"',
+            'content-disposition': 'attachment; filename="No Subject.msg"',
             },
             browser.headers)
 

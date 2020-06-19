@@ -20,6 +20,6 @@ class TestMailZipExport(IntegrationTestCase):
                                          interface=IZipRepresentation)
 
         path, file_ = tuple(representation.get_files())[0]
-        self.assertEquals(u'/testm\xe4il.msg', path)
+        self.assertEquals(u'/No Subject.msg', path)
         self.assertEquals(self.mail_msg.original_message.open().read(),
                           file_.read())

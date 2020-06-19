@@ -28,7 +28,7 @@ class TestMailDocumentAdapter(FunctionalTestCase):
 
         bumblebee_document = IBumblebeeDocument(mail_with_original_message)
         self.assertEqual(
-            'dummy.msg',
+            'No Subject.msg',
             bumblebee_document.get_primary_field().filename)
 
     def test_use_default_primary_field_without_original_message_available(self):

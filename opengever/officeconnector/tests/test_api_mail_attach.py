@@ -77,7 +77,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
                              u"document-30",
             u"download": u"@@download/original_message",
-            u"filename": u"testm\xe4il.msg",
+            u"filename": u"No Subject.msg",
             u"title": u"[No Subject]",
             u"uuid": u"createemails00000000000000000002",
         }]
@@ -136,7 +136,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
                 u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
                                  u"document-30",
                 u"download": u"@@download/original_message",
-                u"filename": u"testm\xe4il.msg",
+                u"filename": u"No Subject.msg",
                 u"title": u"[No Subject]",
                 u"uuid": u"createemails00000000000000000002",
             },

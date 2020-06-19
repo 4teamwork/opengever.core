@@ -122,6 +122,19 @@ class TestOGMailAddition(FunctionalTestCase):
         mail.update_filename()
         self.assertEqual(u'Foo Baer.eml', mail.message.filename)
 
+    def test_update_filename_sets_normalized_filename_for_msg_mails(self):
+        very_long_filename = u'Dies ist ein wahnsinnig langer Name f\xfcr eine Mail, der ' \
+                             u'l\xe4nger ist als 100 Zeichen und gek\xfcrzt werden muss.msg'
+
+        mail = create(Builder('mail').with_dummy_message().with_dummy_original_message())
+        mail.title = very_long_filename
+        mail.update_filename()
+
+        self.assertEqual('Dies ist ein wahnsinnig langer Name fuer eine Mail, der laenger '
+                         'ist als 100 Zeichen und gekuerzt wer.msg', mail.original_message.filename)
+        self.assertEqual('Dies ist ein wahnsinnig langer Name fuer eine Mail, der laenger '
+                         'ist als 100 Zeichen und gekuerzt wer.eml', mail.message.filename)
+
     def test_get_attachments_returns_correct_descriptor_dict(self):
         mail = create(Builder('mail')
                       .within(self.dossier)
