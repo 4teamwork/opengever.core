@@ -487,6 +487,67 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             [item.title for item in main_task.listFolderContents()])
 
     @browsing
+    def test_set_relateditems_on_every_subtask_when_selected(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser),
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url()
+                }
+            ],
+            'related_documents': [
+                {
+                    '@id': self.document.absolute_url()
+                }
+            ],
+            'start_immediately': False
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        subtask = children['added'].pop().listFolderContents()[0]
+        self.assertEqual(
+            [self.document],
+            [relation.to_object for relation in subtask.relatedItems])
+
+    @browsing
+    def test_disallows_related_documents_outside_dossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser),
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url()
+                }
+            ],
+            'related_documents': [
+                {
+                    '@id': self.private_document.absolute_url()
+                }
+            ],
+            'start_immediately': True
+        }
+
+        with browser.expect_http_error(400):
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {"message":
+                u"The following related_documents are invalid: "
+                "{{u'@id': u'{}'}}".format(self.private_document.absolute_url()),
+             "type": "BadRequest"},
+            browser.json)
+
+    @browsing
     def test_override_task_responsible_with_different_user(self, browser):
         self.login(self.regular_user, browser)
 

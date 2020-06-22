@@ -1,5 +1,6 @@
 from opengever.api.task import deserialize_responsible
 from opengever.api.validation import get_validation_errors
+from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
@@ -11,6 +12,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from plone.supermodel import model
 from z3c.form.field import Fields
+from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
@@ -18,6 +20,7 @@ from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
+from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.interfaces import RequiredMissing
@@ -95,6 +98,24 @@ class ITriggerTaskTemplateSources(model.Schema):
         required=True,
         )
 
+    related_documents = RelationList(
+        required=False,
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'review_state': {'not': 'document-state-shadow'},
+                    'object_provides':
+                    ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                     'opengever.document.document.IDocumentSchema',
+                     'opengever.task.task.ITask',
+                     'ftw.mail.mail.IMail', ],
+                }),
+            )
+    )
+
 
 class TriggerTaskTemplatePost(Service):
     """API Endpoint to trigger a task template in a dossier.
@@ -128,10 +149,18 @@ class TriggerTaskTemplatePost(Service):
         if errors:
             raise BadRequest(', '.join(errors))
 
+        # process vocabulary based related_documents
+        related_documents, invalid_urls = self._validate_related_documents(
+            data.get('related_documents', []))
+        if invalid_urls:
+            raise BadRequest(
+                "The following related_documents are invalid: {}".format(
+                    ', '.join(invalid_urls)))
+
         start_immediately = data['start_immediately']
 
         task = tasktemplatefolder.trigger(
-            self.context, tasktemplates, [], responsibles,
+            self.context, tasktemplates, related_documents, responsibles,
             start_immediately)
         serializer = queryMultiAdapter((task, self.request), ISerializeToJson)
         return serializer()
@@ -196,3 +225,22 @@ class TriggerTaskTemplatePost(Service):
                         by_template.update(deserialized)
 
         return tasktemplates, responsibles, errors
+
+    def _validate_related_documents(self, data):
+        field = Fields(
+            ITriggerTaskTemplateSources)['related_documents'].field
+        deserializer = queryMultiAdapter(
+            (field, self.context, self.request), IFieldDeserializer)
+
+        documents = []
+        invalid_urls = []
+
+        for doc_url in data:
+            try:
+                doc = deserializer(doc_url)[0]
+            except (RequiredMissing, ConstraintNotSatisfied):
+                invalid_urls.append(str(doc_url))
+            else:
+                documents.append(RelationValue(getUtility(IIntIds).getId(doc)))
+
+        return documents, invalid_urls
