@@ -153,12 +153,12 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
 
 class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
-    def _get_task_template_item(self, browser):
+    def _get_task_template_item(self, browser, item=0):
         browser.open(
             '{}/@vocabularies/opengever.tasktemplates.active_tasktemplatefolders'.format(
                 self.portal.absolute_url()),
             headers=self.api_headers)
-        return browser.json['items'][0]
+        return browser.json['items'][item]
 
     @browsing
     def test_trigger_with_minimal_required_input(self, browser):
@@ -312,6 +312,51 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.assertEqual(
             {"message": "[('start_immediately', RequiredMissing('start_immediately'))]",
              "type": "BadRequest"},
+            browser.json)
+
+    @browsing
+    def test_task_templates_outside_selected_templatefolder_are_invalid(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        foreign_task_template_folder = create(
+            Builder('tasktemplatefolder')
+            .titled(u'Geheim')
+            .in_state('tasktemplatefolder-state-activ')
+            .having(sequence_type='parallel')
+            .within(self.templates)
+        )
+        foreign_task_template = create(
+            Builder('tasktemplate')
+            .titled(u'Sag ich nicht')
+            .having(**{
+                'issuer': 'responsible',
+                'responsible_client': 'fa',
+                'responsible': 'robert.ziegler',
+                'deadline': 10,
+                })
+            .within(foreign_task_template_folder)
+            )
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser, item=1),
+            'tasktemplates': [
+                {
+                    '@id': foreign_task_template.absolute_url(),
+                }
+            ],
+            'start_immediately': True
+        }
+
+        with browser.expect_http_error(400):
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {'message': 'The tasktemplate {} is outside the selected '
+                        'template folder'.format(
+                            foreign_task_template.absolute_url()),
+             'type': 'BadRequest'},
             browser.json)
 
     @browsing

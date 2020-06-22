@@ -188,6 +188,8 @@ class TriggerTaskTemplatePost(Service):
         if not data:
             errors.append('At least one tasktemplate is required')
 
+        valid_templates = tasktemplatefolder.objectValues()
+
         for template_data in data:
             raw_responsible = template_data.pop('responsible', None)
 
@@ -197,7 +199,12 @@ class TriggerTaskTemplatePost(Service):
                 errors.append(
                     u'The tasktemplate {} is invalid'.format(template))
             else:
-                tasktemplates.append(template)
+                if template not in valid_templates:
+                    errors.append(
+                        u'The tasktemplate {} is outside the selected '
+                        'template folder'.format(template.absolute_url()))
+                else:
+                    tasktemplates.append(template)
 
                 # prefill defaults. the users can be interactive but need to
                 # be present.
