@@ -1,13 +1,24 @@
+from opengever.api.validation import get_validation_errors
+from opengever.base.source import SolrObjPathSourceBinder
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
+from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import IFieldDeserializer
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
+from plone.supermodel import model
+from z3c.form.field import Fields
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
+from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
+from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.interfaces import RequiredMissing
 
 
 class DocumentFromTemplatePost(Service):
@@ -42,3 +53,114 @@ class DocumentFromTemplatePost(Service):
 
         serializer = queryMultiAdapter((document, self.request), ISerializeToJson)
         return serializer()
+
+
+class ITriggerTaskTemplate(model.Schema):
+
+    tasktemplatefolder = schema.Choice(
+        required=True,
+        source='opengever.tasktemplates.active_tasktemplatefolders'
+    )
+
+    start_immediately = schema.Bool(
+        required=True,
+        default=True
+    )
+
+
+class ITriggerTaskTemplateSources(model.Schema):
+
+    tasktemplates = RelationList(
+        required=True,
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            source=SolrObjPathSourceBinder(
+                portal_type=('opengever.tasktemplates.tasktemplate'),
+                navigation_tree_query={
+                    'object_provides':
+                        ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
+                         'opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema',
+                         'opengever.tasktemplates.content.tasktemplate.ITaskTemplate',
+                         ]
+                    }
+                )
+        )
+    )
+
+
+class TriggerTaskTemplatePost(Service):
+    """API Endpoint to trigger a task template in a dossier.
+    """
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        data = json_body(self.request)
+
+        # pre-process vocabulary token for tasktemplatefolder
+        token = data.get('tasktemplatefolder')
+        if isinstance(token, dict):
+            data['tasktemplatefolder'] = token.get('token')
+
+        # use schema validation for basic fields
+        errors = get_validation_errors(data, ITriggerTaskTemplate,
+                                       allow_unknown_fields=True)
+        if errors:
+            raise BadRequest(errors)
+
+        # post-process vocabulary based tasktemplatefolder
+        tasktemplatefolder = self._get_tasktemplatefolder(
+            data['tasktemplatefolder'])
+
+        tasktemplate_data = data.get('tasktemplates', [])
+        # process vocabulary based tasktemplates
+        tasktemplates, responsibles, errors = self._validate_tasktemplates(
+            tasktemplatefolder, tasktemplate_data)
+        if errors:
+            raise BadRequest(', '.join(errors))
+
+        start_immediately = data['start_immediately']
+
+        task = tasktemplatefolder.trigger(
+            self.context, tasktemplates, [], responsibles,
+            start_immediately)
+        serializer = queryMultiAdapter((task, self.request), ISerializeToJson)
+        return serializer()
+
+    def _get_tasktemplatefolder(self, token):
+        return api.content.get(UID=token)
+
+    def _validate_tasktemplates(self, tasktemplatefolder, data):
+        tasktemplates_field = Fields(
+            ITriggerTaskTemplateSources)['tasktemplates'].field
+        tasktemplates_deserializer = queryMultiAdapter(
+            (tasktemplates_field, self.context, self.request),
+            IFieldDeserializer)
+
+        tasktemplates = []
+        responsibles = {}
+        errors = []
+
+        if not data:
+            errors.append('At least one tasktemplate is required')
+
+        for template_data in data:
+            try:
+                template = tasktemplates_deserializer(template_data)[0]
+            except (RequiredMissing, ConstraintNotSatisfied):
+                errors.append(
+                    u'The tasktemplate {} is invalid'.format(template))
+            else:
+                tasktemplates.append(template)
+
+                # prefill defaults. the users can be interactive but need to
+                # be present.
+                by_template = {
+                    'responsible': template.responsible,
+                    'responsible_client': template.responsible_client
+                }
+                responsibles[template.id] = by_template
+
+        return tasktemplates, responsibles, errors

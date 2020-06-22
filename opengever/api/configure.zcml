@@ -706,6 +706,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@trigger-task-template"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".templatefolder.TriggerTaskTemplatePost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
       method="GET"
       name="@list-documents-in-linked-workspace"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
