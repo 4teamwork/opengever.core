@@ -487,6 +487,110 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             [item.title for item in main_task.listFolderContents()])
 
     @browsing
+    def test_override_task_responsible_with_different_user(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser),
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                    'responsible': 'fa:{}'.format(self.dossier_manager.getId())
+                }
+            ],
+            'start_immediately': True,
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+
+        self.assertEqual(self.regular_user.getId(), main_task.issuer)
+        self.assertEqual(self.regular_user.getId(), main_task.responsible)
+        self.assertEqual('fa', main_task.responsible_client)
+
+        subtask = main_task.listFolderContents().pop()
+        self.assertEqual('robert.ziegler', subtask.issuer)
+        self.assertEqual(self.dossier_manager.getId(), subtask.responsible)
+        self.assertEqual('fa', subtask.responsible_client)
+
+    @browsing
+    def test_override_task_responsible_with_team(self, browser):
+        self.login(self.regular_user, browser)
+
+        team = Team.get_by(groupid='projekt_a')
+        team_id = 'team:{}'.format(team.team_id)
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser),
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                    'responsible': team_id
+                }
+            ],
+            'start_immediately': True,
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+
+        self.assertEqual(self.regular_user.getId(), main_task.issuer)
+        self.assertEqual(self.regular_user.getId(), main_task.responsible)
+        self.assertEqual('fa', main_task.responsible_client)
+
+        subtask = main_task.listFolderContents().pop()
+        self.assertEqual('robert.ziegler', subtask.issuer)
+        self.assertEqual(team_id, subtask.responsible)
+        self.assertEqual('fa', subtask.responsible_client)
+
+    @browsing
+    def test_override_task_responsible_with_inbox(self, browser):
+        self.login(self.regular_user, browser)
+
+        inbox_id = 'inbox:fa'
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser),
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                    'responsible': inbox_id
+                }
+            ],
+            'start_immediately': True,
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+
+        self.assertEqual(self.regular_user.getId(), main_task.issuer)
+        self.assertEqual(self.regular_user.getId(), main_task.responsible)
+        self.assertEqual('fa', main_task.responsible_client)
+
+        subtask = main_task.listFolderContents().pop()
+        self.assertEqual('robert.ziegler', subtask.issuer)
+        self.assertEqual(inbox_id, subtask.responsible)
+        self.assertEqual('fa', subtask.responsible_client)
+
+    @browsing
     def test_sets_task_templatefolder_predecessor(self, browser):
         self.login(self.regular_user, browser=browser)
         self.tasktemplatefolder.sequence_type = u'sequential'

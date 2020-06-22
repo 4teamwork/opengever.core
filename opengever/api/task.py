@@ -43,6 +43,35 @@ class SerializeTaskResponseToJson(SerializeResponseToJson):
     model = ITaskResponse
 
 
+def deserialize_responsible(data):
+    """Extract responsible_client when a combined value is used (client,
+       responsible separated by a colon).
+    """
+    if isinstance(data, dict):
+        responsible = data['token']
+    else:
+        responsible = data
+
+    # Skip values without the orgunit prefix
+    if not responsible or ':' not in responsible:
+        return None
+
+    if ActorLookup(responsible).is_inbox():
+        responsible_client = responsible.split(':', 1)[1]
+
+    elif ActorLookup(responsible).is_team():
+        team = Team.query.get_by_actor_id(responsible)
+        responsible_client = team.org_unit.unit_id
+
+    else:
+        responsible_client, responsible = responsible.split(':', 1)
+
+    return {
+        'responsible': responsible,
+        'responsible_client': responsible_client
+    }
+
+
 @implementer(IDeserializeFromJson)
 @adapter(ITask, Interface)
 class TaskDeserializeFromJson(DeserializeFromJson):
@@ -61,34 +90,9 @@ class TaskDeserializeFromJson(DeserializeFromJson):
             validate_all=validate_all, data=data, create=create)
 
     def update_reponsible_field_data(self, data):
-        """Extract responsible_client when a combined value is used (client,
-        responsible separated by a colon).
-        """
-
-        if not data.get('responsible'):
-            return
-
-        if isinstance(data['responsible'], dict):
-            responsible = data['responsible']['token']
-        else:
-            responsible = data['responsible']
-
-        # Skip values without the orgunit prefix
-        if ':' not in responsible:
-            return
-
-        if ActorLookup(responsible).is_inbox():
-            responsible_client = responsible.split(':', 1)[1]
-
-        elif ActorLookup(responsible).is_team():
-            team = Team.query.get_by_actor_id(responsible)
-            responsible_client = team.org_unit.unit_id
-
-        else:
-            responsible_client, responsible = responsible.split(':', 1)
-
-        data['responsible'] = responsible
-        data['responsible_client'] = responsible_client
+        responsible = deserialize_responsible(data.get('responsible'))
+        if responsible:
+            data.update(responsible)
 
 
 class TaskResponsePost(ResponsePost):

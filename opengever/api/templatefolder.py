@@ -1,6 +1,8 @@
+from opengever.api.task import deserialize_responsible
 from opengever.api.validation import get_validation_errors
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -88,6 +90,11 @@ class ITriggerTaskTemplateSources(model.Schema):
         )
     )
 
+    responsible = schema.Choice(
+        source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
+        required=True,
+        )
+
 
 class TriggerTaskTemplatePost(Service):
     """API Endpoint to trigger a task template in a dossier.
@@ -139,6 +146,12 @@ class TriggerTaskTemplatePost(Service):
             (tasktemplates_field, self.context, self.request),
             IFieldDeserializer)
 
+        responsible_field = Fields(
+                ITriggerTaskTemplateSources)['responsible'].field
+        responsible_deserializer = queryMultiAdapter(
+            (responsible_field, self.context, self.request),
+            IFieldDeserializer)
+
         tasktemplates = []
         responsibles = {}
         errors = []
@@ -147,6 +160,8 @@ class TriggerTaskTemplatePost(Service):
             errors.append('At least one tasktemplate is required')
 
         for template_data in data:
+            raw_responsible = template_data.pop('responsible', None)
+
             try:
                 template = tasktemplates_deserializer(template_data)[0]
             except (RequiredMissing, ConstraintNotSatisfied):
@@ -162,5 +177,22 @@ class TriggerTaskTemplatePost(Service):
                     'responsible_client': template.responsible_client
                 }
                 responsibles[template.id] = by_template
+                if not raw_responsible:
+                    continue
+                try:
+                    responsible = responsible_deserializer(raw_responsible)
+                except (RequiredMissing, ConstraintNotSatisfied):
+                    errors.append(
+                        u'invalid responsible {} for template {}'.format(
+                        raw_responsible, template))
+                else:
+                    by_template['responsible'] = responsible
+
+                    # it seems we need one additional deserialization step
+                    # where we remove the client prefix from users but not
+                    # from teams and inboxes
+                    deserialized = deserialize_responsible(responsible)
+                    if deserialized:
+                        by_template.update(deserialized)
 
         return tasktemplates, responsibles, errors
