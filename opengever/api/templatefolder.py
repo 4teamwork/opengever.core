@@ -162,8 +162,15 @@ class TriggerTaskTemplatePost(Service):
         task = tasktemplatefolder.trigger(
             self.context, tasktemplates, related_documents, responsibles,
             start_immediately)
+
         serializer = queryMultiAdapter((task, self.request), ISerializeToJson)
-        return serializer()
+        result = serializer()
+        # the folder serializer uses the current url to display the @id. this
+        # wont work as we are using the serializer outside a request to the
+        # actual item, we are in the @trigger-task-template service. thus we
+        # have to make sure to return the correct id.
+        result['@id'] = task.absolute_url()
+        return result
 
     def _get_tasktemplatefolder(self, token):
         return api.content.get(UID=token)

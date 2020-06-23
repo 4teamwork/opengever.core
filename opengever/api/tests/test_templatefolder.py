@@ -186,6 +186,8 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.assertEqual(1, len(children['added']))
         main_task = children['added'].pop()
 
+        self.assertEqual(browser.json['@id'], main_task.absolute_url())
+
         self.assertEqual(u'Verfahren Neuanstellung', main_task.title)
         self.assertEqual(self.regular_user.getId(), main_task.issuer)
         self.assertEqual(self.regular_user.getId(), main_task.responsible)
