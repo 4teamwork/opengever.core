@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Add API endpoint `@trigger-task-template` to create tasks in a dossier from a template. [deiferni]
 - Use correct response type for proposal comment responses. [njoher]
 
 

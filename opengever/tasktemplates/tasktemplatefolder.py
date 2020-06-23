@@ -37,7 +37,7 @@ class TaskTemplateFolder(Container):
         trigger = TaskTemplateFolderTrigger(
             self, dossier, templates, related_documents,
             values, start_immediately)
-        trigger.generate()
+        return trigger.generate()
 
 
 class TaskTemplateFolderTrigger(object):
@@ -57,6 +57,7 @@ class TaskTemplateFolderTrigger(object):
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         self.create_subtasks(main_task)
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
+        return main_task
 
     def add_task(self, container, data):
         task = createContent('opengever.task.task', **data)
