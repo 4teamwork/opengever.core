@@ -227,13 +227,25 @@ class Proposal(Base):
             return ''
         return '/'.join((admin_unit.public_url, physical_path))
 
-    def get_link(self, include_icon=True):
+    def display_proposal_link(self):
         proposal_ = self.resolve_proposal()
-        as_link = proposal_ is None or api.user.has_permission('View', obj=proposal_)
+        # The proposal cannot be resolved when it is on another
+        # client, in that case we cannot determine whether the user has
+        # permission to see it and hence default to displaying the link.
+        return proposal_ is None or api.user.has_permission('View', obj=proposal_)
+
+    def display_submitted_proposal_link(self):
+        proposal_ = self.resolve_submitted_proposal()
+        # The submitted proposal cannot be resolved when it is on another
+        # client, in that case we cannot determine whether the user has
+        # permission to see it and hence default to displaying the link.
+        return proposal_ is None or api.user.has_permission('View', obj=proposal_)
+
+    def get_link(self, include_icon=True):
         return self._get_link(self.get_url(),
                               self.title,
                               include_icon=include_icon,
-                              as_link=as_link)
+                              as_link=self.display_proposal_link())
 
     def get_description(self):
         proposal_ = self.resolve_proposal()
@@ -245,11 +257,10 @@ class Proposal(Base):
 
     def get_submitted_link(self, include_icon=True):
         proposal_ = self.resolve_submitted_proposal()
-        as_link = proposal_ is None or api.user.has_permission('View', obj=proposal_)
         return self._get_link(self.get_submitted_url(),
                               proposal_.title,
                               include_icon=include_icon,
-                              as_link=as_link)
+                              as_link=self.display_submitted_proposal_link())
 
     def _get_link(self, url, title, include_icon=True, as_link=True):
         title = escape_html(title)

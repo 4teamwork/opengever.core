@@ -51,6 +51,21 @@ class TestProposalSerialization(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_scheduled_response_contains_meeting_title_and_url(self, browser):
+        self.login(self.meeting_user, browser=browser)
+        response_id = 1472649453000000
+        url = pjoin(self.decided_proposal.absolute_url(), '@responses', str(response_id))
+        browser.open(url, method="GET", headers=self.api_headers)
+
+        self.maxDiff = None
+        self.assertEqual(u'scheduled', browser.json['response_type'])
+        self.assertDictEqual(
+            {u'meeting_id': self.decided_meeting.model.meeting_id,
+             u'meeting_title': self.decided_meeting.get_title(),
+             u'meeting_url': self.decided_meeting.absolute_url()},
+            browser.json['additional_data'])
+
+    @browsing
     def test_submitted_proposal_contains_a_list_of_responses(self, browser):
         self.login(self.meeting_user, browser=browser)
         browser.open(self.submitted_proposal, method="GET", headers=self.api_headers)
