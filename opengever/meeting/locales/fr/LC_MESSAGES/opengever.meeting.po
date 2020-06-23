@@ -1737,7 +1737,7 @@ msgstr "Document ${title} soumis par ${user} en version ${version}."
 #. Default: "Submitted document ${title} permanently unlocked by ${user}"
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_document_unlocked"
-msgstr ""
+msgstr "Document soumis ${title} découplé par ${user}"
 
 #. Default: "Submitted document ${title} updated to version ${version} by ${user}"
 #: ./opengever/meeting/proposalhistory.py
