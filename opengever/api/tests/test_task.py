@@ -251,32 +251,6 @@ class TestTaskSerialization(SolrIntegrationTestCase):
             browser.json['items']
         )
 
-    @browsing
-    def test_task_response_contains_task_tree(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.task, method="GET", headers=self.api_headers)
-        self.assertIn('task_tree', browser.json)
-        self.assertEqual(
-            browser.json['task_tree'],
-            [
-                {
-                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
-                    u'@type': u'opengever.task.task',
-                    u'children': [
-                        {
-                            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
-                            u'@type': u'opengever.task.task',
-                            u'children': [],
-                            u'review_state': u'task-state-resolved',
-                            u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                        },
-                    ],
-                    u'review_state': u'task-state-in-progress',
-                    u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
-                },
-            ]
-        )
-
 
 class TestTaskCommentSync(FunctionalTestCase):
 
