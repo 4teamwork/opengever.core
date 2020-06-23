@@ -1,6 +1,10 @@
 from ftw.table import helper
+from ftw.table.interfaces import ITableSource
+from opengever.base import ISearchSettings
 from opengever.tabbedview import BaseCatalogListingTab
+from opengever.tabbedview import GeverCatalogTableSource
 from opengever.tabbedview.helper import linked
+from opengever.tabbedview.interfaces import IGeverCatalogTableSourceConfig
 from opengever.task import _ as taskmsg
 from opengever.task.helper import task_type_helper
 from opengever.tasktemplates import _
@@ -8,9 +12,15 @@ from opengever.tasktemplates.browser.helper import interactive_user_helper
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone import api
 from plone.dexterity.browser.view import DefaultView
+from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.utils import safe_unicode
+from zope.component import adapter
+from zope.component._api import getUtility
 from zope.component.hooks import getSite
 from zope.i18n import translate
+from zope.interface import implementer
+from zope.interface import implements
+from zope.interface import Interface
 
 
 def preselected_helper(item, value):
@@ -22,7 +32,36 @@ def preselected_helper(item, value):
         return ''
 
 
+class ITaskTemplatesCatalogTableSourceConfig(IGeverCatalogTableSourceConfig):
+    pass
+
+
+@implementer(ITableSource)
+@adapter(ITaskTemplatesCatalogTableSourceConfig, Interface)
+class TaskTemplatesCatalogTableSource(GeverCatalogTableSource):
+
+    def search_results(self, query):
+        # Backup the sort on parameter because it will be gone after the call
+        # to the super class.
+        sort_on = query.get('sort_on')
+
+        search_results = super(TaskTemplatesCatalogTableSource, self).search_results(query)
+
+        # Manually sort the Solr search results by their position in the parent
+        # because Solr does not support `getObjPositionInParent` for sorting.
+        if self.use_solr and sort_on == 'getObjPositionInParent':
+            parent = api.content.get(query['path']['query'])
+            search_results.docs = sorted(
+                search_results.docs,
+                key=lambda doc: parent.objectIds().index(doc['id'])
+            )
+
+        return search_results
+
+
 class TaskTemplates(BaseCatalogListingTab):
+
+    implements(ITaskTemplatesCatalogTableSourceConfig)
 
     columns = (
         {'column': '',

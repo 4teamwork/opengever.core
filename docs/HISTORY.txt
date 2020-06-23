@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Fix sort order within task template folder. [mbaechtold]
 - Fix deadline of task templates no longer shown in tabular listing. [mbaechtold]
 - Add API expansion `main-dossier`. [mbaechtold]
 - Make "populate_filename_column_in_favorites" UpgradeStep more robust. [lgraf]

@@ -46,4 +46,6 @@
       permission="cmf.AddPortalContent"
       />
 
+  <adapter factory=".tasktemplates.TaskTemplatesCatalogTableSource" />
+
 </configure>

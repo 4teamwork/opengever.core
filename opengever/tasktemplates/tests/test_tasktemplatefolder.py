@@ -4,7 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser import InsufficientPrivileges
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.tabbedview import GeverCatalogTableSource
+from opengever.tasktemplates.browser.tasktemplates import TaskTemplatesCatalogTableSource
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
@@ -112,7 +112,7 @@ class TaskTemplatesOrderingInTabbedView(SolrIntegrationTestCase):
             request=self.request
         )
         self.assertTrue(
-            isinstance(tabbed_view.table_source, GeverCatalogTableSource)
+            isinstance(tabbed_view.table_source, TaskTemplatesCatalogTableSource)
         )
         search_results = tabbed_view.table_source.search_results({
             'path': {'query': '/'.join(self.tasktemplatefolder.getPhysicalPath()), 'depth': -1},
@@ -120,7 +120,7 @@ class TaskTemplatesOrderingInTabbedView(SolrIntegrationTestCase):
             'sort_on': 'getObjPositionInParent',
         })
 
-        # The view does not know about the correct ordering. This is what needs to be fixed.
+        # Make sure the items are sorted.
         self.assertEquals(
             [
                 'task-create-user',
