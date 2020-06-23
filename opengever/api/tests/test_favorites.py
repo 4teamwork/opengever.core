@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
 import json
@@ -42,6 +43,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'favorite_id': 1,
               u'filename': None,
               u'position': 23,
+              u'resolved': False,
               u'is_leafnode': None,
               u'is_subdossier': False,
               u'oguid': u'plone:1014013300',
@@ -55,6 +57,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'uid': IUUID(self.document),
               u'portal_type': u'opengever.document.document',
               u'favorite_id': 2,
+              u'resolved': False,
               u'filename': u'Vertraegsentwurf.docx',
               u'is_leafnode': None,
               u'is_subdossier': None,
@@ -87,6 +90,7 @@ class TestFavoritesGet(IntegrationTestCase):
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
+             u'resolved': False,
              u'filename': None,
              u'is_leafnode': None,
              u'is_subdossier': False,
@@ -130,6 +134,114 @@ class TestFavoritesGet(IntegrationTestCase):
              u'type': u'Unauthorized'},
             browser.json)
 
+    @browsing
+    def test_list_resolved_favorites_for_the_given_userid(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('favorite')
+               .for_user(self.regular_user)
+               .for_object(self.dossier)
+               .having(position=23))
+
+        url = '{}/@favorites/{}'.format(self.portal.absolute_url(),
+                                        self.regular_user.getId())
+
+        browser.open(url, view="?resolve=true", method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+
+        self.assertEquals(
+            [{u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+              u'uid': IUUID(self.dossier),
+              u'portal_type': u'opengever.dossier.businesscasedossier',
+              u'favorite_id': 1,
+              u'filename': None,
+              u'position': 23,
+              u'resolved': True,
+              u'is_leafnode': None,
+              u'is_subdossier': False,
+              u'oguid': u'plone:1014013300',
+              u'admin_unit': u'Hauptmandant',
+              u'target_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+              u'tooltip_url': None,
+              u'review_state': u'dossier-state-active',
+              u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
+              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'}],
+            browser.json)
+
+    @browsing
+    def test_list_resolved_favorites_of_foreign_admin_unit_for_the_given_userid(self, browser):
+        self.login(self.regular_user, browser=browser)
+        create(Builder('admin_unit').id("additional"))
+
+        favorite = create(Builder('favorite')
+                          .for_user(self.regular_user)
+                          .for_object(self.dossier)
+                          .having(position=21))
+        favorite.admin_unit_id = 'additional'
+
+        url = '{}/@favorites/{}'.format(self.portal.absolute_url(),
+                                        self.regular_user.getId())
+
+        browser.open(url, view="?resolve=true", method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+
+        self.assertEquals(
+            [{u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+              u'admin_unit': None,
+              u'favorite_id': 1,
+              u'filename': None,
+              u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
+              u'is_leafnode': None,
+              u'is_subdossier': False,
+              u'oguid': u'additional:1014013300',
+              u'portal_type': u'opengever.dossier.businesscasedossier',
+              u'position': 21,
+              u'resolved': False,
+              u'review_state': u'dossier-state-active',
+              u'target_url': u'http://example.com/public/resolve_oguid/additional:1014013300',
+              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+              u'tooltip_url': None,
+              u'uid': u'createtreatydossiers000000000001'}],
+            browser.json)
+
+    @browsing
+    def test_returns_serialized_resolved_favorite_for_the_given_userid_and_favorite_id(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('favorite')
+               .for_user(self.regular_user)
+               .for_object(self.dossier)
+               .having(position=23))
+
+        url = '{}/@favorites/{}/1'.format(
+            self.portal.absolute_url(), self.regular_user.getId())
+        browser.open(url, view="?resolve=true", method='GET',
+                     headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEquals(
+            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'uid': IUUID(self.dossier),
+             u'portal_type': u'opengever.dossier.businesscasedossier',
+             u'favorite_id': 1,
+             u'resolved': True,
+             u'filename': None,
+             u'is_leafnode': None,
+             u'is_subdossier': False,
+             u'review_state': u'dossier-state-active',
+             u'position': 23,
+             u'oguid': u'plone:1014013300',
+             u'admin_unit': u'Hauptmandant',
+             u'target_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+             u'tooltip_url': None,
+             u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
+             u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
+            browser.json)
+
 
 class TestFavoritesPost(IntegrationTestCase):
 
@@ -162,6 +274,7 @@ class TestFavoritesPost(IntegrationTestCase):
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
+             u'resolved': False,
              u'filename': u'Vertraegsentwurf.docx',
              u'oguid': u'plone:1014073300',
              u'position': 0,
@@ -202,6 +315,7 @@ class TestFavoritesPost(IntegrationTestCase):
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
+             u'resolved': False,
              u'filename': u'Vertraegsentwurf.docx',
              u'is_leafnode': None,
              u'is_subdossier': None,
@@ -278,6 +392,7 @@ class TestFavoritesPost(IntegrationTestCase):
              u'portal_type': u'opengever.document.document',
              u'admin_unit': u'Hauptmandant',
              u'favorite_id': 1,
+             u'resolved': False,
              u'filename': u'Vertraegsentwurf.docx',
              u'is_leafnode': None,
              u'is_subdossier': None,
@@ -533,6 +648,7 @@ class TestFavoritesPatch(IntegrationTestCase):
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
+             u'resolved': False,
              u'filename': None,
              u'is_leafnode': None,
              u'is_subdossier': False,
