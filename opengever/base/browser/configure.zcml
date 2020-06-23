@@ -240,6 +240,14 @@
       />
 
   <browser:page
+      name="logout"
+      for="*"
+      class=".logout.LogoutView"
+      permission="zope2.View"
+      />
+
+
+  <browser:page
       for="*"
       name="get_setting"
       class=".config.GetSettingView"

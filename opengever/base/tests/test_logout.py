@@ -7,11 +7,28 @@ from plone import api
 class TestLogoutWithoutCASAuth(IntegrationTestCase):
 
     @browsing
-    def test_url_is_plone_logout(self, browser):
+    def test_redirects_to_plone_logged_out_page(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(view='logout_url')
-        self.assertEquals('http://nohost/plone/logout', browser.contents)
+        browser.open(view='@@logout')
+        self.assertEquals('http://nohost/plone/logged_out', browser.url)
+
+    @browsing
+    def test_deletes_ac_cookie(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.allow_redirects = False
+        browser.open(view='@@logout')
+        response = browser.get_driver().response
+
+        self.assertEqual(
+            {'__ac': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'}},
+            response.cookies)
 
 
 class TestLogoutWithCASAuth(IntegrationTestCase):
@@ -26,8 +43,28 @@ class TestLogoutWithCASAuth(IntegrationTestCase):
         acl_users.plugins.removePluginById('cas_auth')
 
     @browsing
-    def test_url_is_cas_server_logout(self, browser):
+    def test_deletes_ac_cookie(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(view='logout_url')
-        self.assertEquals('http://nohost/portal/logout', browser.contents)
+        browser.allow_redirects = False
+        browser.open(view='@@logout')
+        response = browser.get_driver().response
+
+        self.assertEqual(
+            {'__ac': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'}},
+            response.cookies)
+
+    @browsing
+    def test_redirects_to_cas_logout(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.raise_http_errors = False
+        browser.open(view='@@logout')
+
+        cas_server_url = 'http://nohost/portal'
+        self.assertEquals('/'.join((cas_server_url, 'logout')), browser.url)
