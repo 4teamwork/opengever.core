@@ -99,6 +99,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``task_type``: Aufgaben-Typ
 - ``thumbnail_url``: URL für Vorschaubild
 - ``title``: Titel
+- ``trashed``: Ob das Objekt im Papierkorb ist
 - ``type``: Inhaltstyp
 - ``@type``: Inhaltstyp
 - ``UID``: UID des Objektes
@@ -198,6 +199,8 @@ siehe Tabelle:
     |``thumbnail_url``         |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     |``title``                 |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
+    |``trashed``               |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     |``type``                  |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
