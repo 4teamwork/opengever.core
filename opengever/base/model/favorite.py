@@ -98,7 +98,21 @@ class Favorite(Base):
         params.update(kwargs)
         return cls(**params)
 
-    def serialize(self, portal_url):
+    def serialize(self, portal_url, resolve=False):
+        """Serializes a favorite.
+
+        Favorites are unresolved by default. The `target_url` contains a link
+        to resolve a favorite. Resolving a favorite means, we lookup the favorite
+        object by its oguid.
+
+        The serializer can also return already resolved favorites. The target url
+        will then contain the url to the object itself.
+
+        If the favorite cannot be resolved, i.e. because it does not exist on the
+        current admin-unit, the unresolved favorite will be returned instead.
+        """
+        resolved_obj = self.oguid.resolve_object() if resolve else None
+
         return {
             '@id': self.api_url(portal_url),
             'portal_type': self.portal_type,
@@ -108,13 +122,14 @@ class Favorite(Base):
             'title': self.title,
             'filename': self.filename,
             'icon_class': self.icon_class,
-            'target_url': self.get_target_url(),
+            'target_url': self.get_target_url(resolved_obj),
             'tooltip_url': self.get_tooltip_url(),
             'position': self.position,
             'admin_unit': AdminUnit.query.get(self.admin_unit_id).title,
             'review_state': self.review_state,
             'is_subdossier': self.is_subdossier,
             'is_leafnode': self.is_leafnode,
+            'resolved': bool(resolved_obj)
         }
 
     def api_url(self, portal_url):
@@ -133,7 +148,10 @@ class Favorite(Base):
 
         return None
 
-    def get_target_url(self):
+    def get_target_url(self, resolved_obj=None):
+        if resolved_obj:
+            return resolved_obj.absolute_url()
+
         admin_unit = AdminUnit.query.get(self.admin_unit_id)
         return u'{}/resolve_oguid/{}'.format(admin_unit.public_url, self.oguid)
 

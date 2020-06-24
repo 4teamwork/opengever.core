@@ -39,6 +39,7 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
               "title": "Richtlinien Gesetzesentwürfe",
               "portal_type": "opengever.document.document",
               "position": 1,
+              "resolved": false,
               "review_state": "document-state-draft",
               "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
           }
@@ -54,10 +55,64 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
               "title": "Anfragen 2018",
               "portal_type": "opengever.dossier.businesscasedossier",
               "position": 2,
+              "resolved": false,
               "review_state": "dossier-state-active",
               "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68336212"
           }
       ]
+
+Favoriten sind standardmässig nicht aufgelöst. D.h. es ist nicht bekannt, wo sich das Favoriten-Objekt genau befindet. Über die ``target_url`` kann das Objekt aufgelöst werden.
+
+Benötigt man die bereits aufgelösten Favoriten, können diese mit dem ``resolve=true`` Query-Parameter abegfragt werden:
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /@favorites/peter.mueller?resolve=true HTTP/1.1
+       Accept: application/json
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      [
+          {
+              "@id": "http://localhost:8080/fd/@favorites/peter.mueller/3",
+              "favorite_id": 3,
+              "filename": "Richtlinien Gesetzesentwuerfe.docx",
+              "icon_class": "icon-dokument_word",
+              "is_leafnode": null,
+              "oguid": "fd:68398212",
+              "title": "Richtlinien Gesetzesentwürfe",
+              "portal_type": "opengever.document.document",
+              "position": 1,
+              "resolved": true,
+              "review_state": "document-state-draft",
+              "target_url": "http://localhost:8080/fd/document-1"
+          },
+          {
+              "@id": "http://localhost:8080/fd/@favorites/peter.mueller/57",
+              "favorite_id": 57,
+              "filename": null,
+              "icon_class": "contenttype-opengever-dossier-businesscasedossier",
+              "is_leafnode": null,
+              "is_subdossier": false,
+              "oguid": "rk:68336212",
+              "title": "Anfragen 2018",
+              "portal_type": "opengever.dossier.businesscasedossier",
+              "position": 2,
+              "resolved": false,
+              "review_state": "dossier-state-active",
+              "target_url": "http://localhost:8080/fd/resolve_oguid/rk:68336212"
+          }
+      ]
+
+Dabei ist zu beachten, dass ein Mandant immer nur seine eigenen Favoriten auflösen kann. Favoriten von fremden Mandanten werden deshalb immer unaufgelöst zurückgegeben.
 
 Favorit hinzufügen:
 -------------------
@@ -94,6 +149,7 @@ Ein Favorit für ein beliebiges Objekt kann mittels POST Request hinzugefügt we
           "title": "Anfrage 2018",
           "portal_type": "opengever.document.document",
           "position": 1,
+          "resolved": false,
           "review_state": "document-state-draft",
           "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
       }

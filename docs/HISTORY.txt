@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Add API endpoint `@trigger-task-template` to create tasks in a dossier from a template. [deiferni]
+- Extend the @favorites endpoint to let it return already resolved favorites. [elioschmutz]
 - Use correct response type for proposal comment responses. [njoher]
 - Add expandable endpoint @tasktree for getting task hierarchy. [buchi]
 

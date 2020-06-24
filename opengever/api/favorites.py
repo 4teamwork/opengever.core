@@ -37,6 +37,7 @@ class FavoritesGet(Service):
                 "It's not allowed to access favorites of other users.")
 
         portal_url = api.portal.get().absolute_url()
+        resolve = self.request.form.get("resolve", False)
 
         if fav_id:
             favorite = Favorite.query.by_userid_and_id(fav_id, userid).first()
@@ -44,10 +45,10 @@ class FavoritesGet(Service):
                 # inexistent favorite-id or not ownded by given user
                 raise NotFound
 
-            return favorite.serialize(portal_url)
+            return favorite.serialize(portal_url, resolve=resolve)
         else:
             favorites = FavoriteManager().list_all(userid)
-            return [fav.serialize(portal_url) for fav in favorites]
+            return [fav.serialize(portal_url, resolve=resolve) for fav in favorites]
 
     def read_params(self):
         if len(self.params) not in [1, 2]:
