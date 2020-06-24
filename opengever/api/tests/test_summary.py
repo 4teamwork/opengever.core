@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from ftw.testbrowser import browsing
 from opengever.api.testing import RelativeSession
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 
 
-class TestGeverJSONSummarySerializer(IntegrationTestCase):
+class TestGeverJSONSummarySerializer(SolrIntegrationTestCase):
 
     def setUp(self):
         super(TestGeverJSONSummarySerializer, self).setUp()

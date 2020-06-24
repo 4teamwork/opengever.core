@@ -790,4 +790,17 @@
       permission="opengever.document.AddDocument"
       />
 
+  <plone:service
+      method="GET"
+      name="@tasktree"
+      for="opengever.task.task.ITask"
+      factory=".tasktree.TaskTreeGet"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".tasktree.TaskTree"
+      name="tasktree"
+      />
+
 </configure>

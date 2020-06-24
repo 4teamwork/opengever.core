@@ -480,3 +480,51 @@ Angaben zum übergeordneten Dossier einer Aufgabe ist in der GET Repräsentation
         },
         "...": "...",
       }
+
+
+Aufgabenhierarchie
+-------------------
+Zu einer Aufgabe kann die Aufgabenhierarchie bestehend aus Hauptaufgabe und allen Unteraufgaben abgefragt werden.
+Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1/@tasktree HTTP/1.1
+      Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-1/@tasktree",
+        "children":             [
+          {
+            "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-1",
+            "@type": "opengever.task.task",
+            "children": [
+              {
+                "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-1/task-2",
+                "@type": "opengever.task.task",
+                "children": [],
+                "review_state": "task-state-resolved",
+                "title": "Eine Unteraufgabe"
+              },
+            ],
+            "review_state": "task-state-in-progress",
+            "title": "Eine Aufgabe"
+          }
+        ]
+      }
+
+Die Aufgabenhierarchie kann auch direkt über den GET-Request eines Tasks mittels Expansion angefordert werden.
+
+  .. sourcecode:: http
+
+     GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1?expand=tasktree HTTP/1.1
+     Accept: application/json

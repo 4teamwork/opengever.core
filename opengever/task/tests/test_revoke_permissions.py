@@ -10,6 +10,7 @@ from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task.browser.revoke_permissions import RevokePermissions
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from urlparse import urlparse
@@ -352,7 +353,7 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         self.assertEquals(['Changes saved'], info_messages())
 
 
-class TestRevokePermissionsDefault(IntegrationTestCase):
+class TestRevokePermissionsDefault(SolrIntegrationTestCase):
 
     def test_feature_is_deactivated(self):
         self.assertFalse(is_optional_task_permissions_revoking_enabled())

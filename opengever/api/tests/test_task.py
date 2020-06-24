@@ -10,12 +10,13 @@ from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone.restapi.serializer.converters import json_compatible
 from zope.component import getMultiAdapter
 import json
 
 
-class TestTaskSerialization(IntegrationTestCase):
+class TestTaskSerialization(SolrIntegrationTestCase):
 
     maxDiff = None
 
@@ -280,7 +281,7 @@ class TestTaskCommentSync(FunctionalTestCase):
         self.assertEqual(1, len(predecessor_response_container))
 
 
-class TestTaskCreation(IntegrationTestCase):
+class TestTaskCreation(SolrIntegrationTestCase):
 
     data = {
         "@type": "opengever.task.task",

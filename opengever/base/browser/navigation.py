@@ -13,26 +13,26 @@ import json
 import os.path
 
 
-def make_tree_by_url(nodes):
+def make_tree_by_url(nodes, url_key='url', children_key='nodes'):
     """Creates a nested tree of nodes from a flat list-like object of nodes.
     Each node is expected to be a dict with a url-like string stored
-    under the key ``url``.
-    Each node will end up with a ``nodes`` key, containing a list
+    under the ``url_key``.
+    Each node will end up with a ``children_key``, containing a list
     of children nodes.
     The nodes are changed in place, be sure to make copies first when
     necessary.
     """
 
     for node in nodes:
-        node['nodes'] = []
+        node[children_key] = []
 
-    nodes_by_url = dict((node['url'], node) for node in nodes)
+    nodes_by_url = dict((node[url_key], node) for node in nodes)
     root = []
 
     for node in nodes:
-        parent_url = os.path.dirname(node['url'])
+        parent_url = os.path.dirname(node[url_key])
         if parent_url in nodes_by_url:
-            nodes_by_url[parent_url]['nodes'].append(node)
+            nodes_by_url[parent_url][children_key].append(node)
         else:
             root.append(node)
 

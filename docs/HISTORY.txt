@@ -6,6 +6,7 @@ Changelog
 
 - Add API endpoint `@trigger-task-template` to create tasks in a dossier from a template. [deiferni]
 - Use correct response type for proposal comment responses. [njoher]
+- Add expandable endpoint @tasktree for getting task hierarchy. [buchi]
 
 
 2020.3.0 (2020-06-18)
