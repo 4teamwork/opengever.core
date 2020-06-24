@@ -507,10 +507,13 @@ class Meeting(Base, SQLFormSupport):
         return self._get_link(self.get_submitted_admin_unit(),
                               self.submitted_physical_path)
 
+    def can_view(self):
+        return api.user.has_permission(
+            'View', obj=self.committee.resolve_committee())
+
     def get_link(self):
-        url = self.get_url()
-        if api.user.has_permission('View',
-                                   obj=self.committee.resolve_committee()):
+        if self.can_view():
+            url = self.get_url()
             link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
                 url, escape_html(self.get_title()), self.css_class)
         else:
