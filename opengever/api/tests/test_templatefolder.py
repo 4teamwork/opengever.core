@@ -153,12 +153,24 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
 
 class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
-    def _get_task_template_item(self, browser, item=0):
+    def _get_task_template_item(self, browser, title=None):
+        """Return a task template folder vocabulary item.
+
+        Return the first task template folder item from the vocabulary if no
+        title is given, otherwise return the specified item.
+        """
         browser.open(
             '{}/@vocabularies/opengever.tasktemplates.active_tasktemplatefolders'.format(
                 self.portal.absolute_url()),
             headers=self.api_headers)
-        return browser.json['items'][item]
+
+        if title:
+            for item in browser.json['items']:
+                if item['title'] == title:
+                    return item
+            raise ValueError(u'no item with title {} found'.format(title))
+
+        return browser.json['items'][0]
 
     @browsing
     def test_trigger_with_minimal_required_input(self, browser):
@@ -340,7 +352,8 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             )
 
         data = {
-            'tasktemplatefolder': self._get_task_template_item(browser, item=1),
+            'tasktemplatefolder': self._get_task_template_item(
+                browser, title=u'Verfahren Neuanstellung'),
             'tasktemplates': [
                 {
                     '@id': foreign_task_template.absolute_url(),
