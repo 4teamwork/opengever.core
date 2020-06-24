@@ -2,7 +2,8 @@ from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.oguid import Oguid
 from opengever.meeting.model import Meeting
-from opengever.meeting.proposal import IBaseProposal
+from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposalhistory import IProposalResponse
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
@@ -40,11 +41,11 @@ class SerializeProposalResponseToJson(SerializeResponseToJson):
 
 
 @implementer(ISerializeToJson)
-@adapter(IBaseProposal, Interface)
-class SerializeProposalToJson(GeverSerializeFolderToJson):
+@adapter(ISubmittedProposal, Interface)
+class SerializeSubmittedProposalToJson(GeverSerializeFolderToJson):
 
     def __call__(self, *args, **kwargs):
-        result = super(SerializeProposalToJson, self).__call__(*args, **kwargs)
+        result = super(SerializeSubmittedProposalToJson, self).__call__(*args, **kwargs)
 
         excerpt = self.context.get_excerpt()
         if excerpt:
@@ -65,5 +66,24 @@ class SerializeProposalToJson(GeverSerializeFolderToJson):
             result[u'meeting'] = None
 
         result[u'decision_number'] = self.context.load_model().get_decision_number()
+
+        return result
+
+
+@implementer(ISerializeToJson)
+@adapter(IProposal, Interface)
+class SerializeProposalToJson(SerializeSubmittedProposalToJson):
+
+    def __call__(self, *args, **kwargs):
+        result = super(SerializeProposalToJson, self).__call__(*args, **kwargs)
+
+        successor_proposals = []
+        for successor in self.context.get_successor_proposals():
+            serializer = getMultiAdapter(
+                 (successor, self.request), interface=ISerializeToJsonSummary
+            )
+            successor_proposals.append(serializer())
+
+        result['successor_proposals'] = successor_proposals
 
         return result

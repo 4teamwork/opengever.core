@@ -6,6 +6,10 @@ from plone.restapi.serializer.converters import json_compatible
 
 class TestProposalSerialization(IntegrationTestCase):
 
+    features = (
+        'meeting',
+    )
+
     @browsing
     def test_proposal_contains_a_list_of_responses(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -62,7 +66,7 @@ class TestProposalSerialization(IntegrationTestCase):
         self.assertDictEqual(
             {u'meeting_id': self.decided_meeting.model.meeting_id,
              u'meeting_title': self.decided_meeting.get_title(),
-             u'meeting_url': self.decided_meeting.absolute_url()},
+             u'meeting_url': "{}/view".format(self.decided_meeting.absolute_url())},
             browser.json['additional_data'])
 
     @browsing
@@ -92,6 +96,33 @@ class TestProposalSerialization(IntegrationTestCase):
     @browsing
     def test_decided_proposal_contains_meeting_decision_number_and_excerpt(self, browser):
         self.login(self.meeting_user, browser=browser)
+        proposal = self.decided_proposal.load_model().resolve_proposal()
+
+        browser.open(proposal, method="GET", headers=self.api_headers)
+
+        self.assertIn(u'meeting', browser.json)
+        self.assertDictEqual(
+            {u'@id': self.decided_meeting.absolute_url(),
+             u'title': self.decided_meeting.get_title()},
+            browser.json[u'meeting'])
+
+        self.assertIn(u'decision_number', browser.json)
+        self.assertEqual(u'2016 / 1', browser.json[u'decision_number'])
+
+        excerpt = proposal.get_excerpt()
+        self.assertDictEqual(
+            {u'@id': excerpt.absolute_url(),
+             u'@type': u'opengever.document.document',
+             u'description': u'',
+             u'is_leafnode': None,
+             u'review_state': u'document-state-draft',
+             u'title': excerpt.title},
+            browser.json[u'excerpt'])
+
+    @browsing
+    def test_decided_submitted_proposal_contains_meeting_decision_number_and_excerpt(self, browser):
+        self.login(self.meeting_user, browser=browser)
+
         browser.open(self.decided_proposal, method="GET", headers=self.api_headers)
 
         self.assertIn(u'meeting', browser.json)
@@ -112,3 +143,42 @@ class TestProposalSerialization(IntegrationTestCase):
              u'review_state': u'document-state-draft',
              u'title': excerpt.title},
             browser.json[u'excerpt'])
+
+    @browsing
+    def test_proposals_contain_successor_and_predecessor(self, browser):
+        self.login(self.meeting_user, browser=browser)
+        proposal = self.decided_proposal.load_model().resolve_proposal()
+
+        browser.open(proposal, view='tabbedview_view-overview')
+        browser.click_on('Create successor proposal')
+        successor_title = u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'
+        browser.fill({
+            'Title': successor_title,
+            'Proposal template': proposal.get_proposal_document().Title(),
+        }).save()
+
+        successor_proposal = browser.context
+
+        browser.open(proposal, method="GET", headers=self.api_headers)
+        self.assertIsNone(browser.json['predecessor_proposal'])
+        self.assertEqual(1, len(browser.json['successor_proposals']))
+        self.assertDictEqual(
+            {u'@id': successor_proposal.absolute_url(),
+             u'@type': u'opengever.meeting.proposal',
+             u'description': u'',
+             u'is_leafnode': None,
+             u'review_state': u'proposal-state-active',
+             u'title': successor_title},
+            browser.json['successor_proposals'][0])
+
+        browser.open(successor_proposal, method="GET", headers=self.api_headers)
+        self.assertIsNotNone(browser.json['predecessor_proposal'])
+        self.assertEqual(0, len(browser.json['successor_proposals']))
+        self.assertDictEqual(
+            {u'@id': proposal.absolute_url(),
+             u'@type': u'opengever.meeting.proposal',
+             u'description': u'',
+             u'is_leafnode': None,
+             u'review_state': u'proposal-state-decided',
+             u'title': proposal.title},
+            browser.json['predecessor_proposal'])

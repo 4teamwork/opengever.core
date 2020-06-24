@@ -617,6 +617,14 @@ class Proposal(Container, ProposalBase):
 
         ProposalSubmittedActivity(self, self.REQUEST).record()
 
+    def get_successor_proposals(self):
+        catalog = getUtility(ICatalog)
+        doc_id = getUtility(IIntIds).getId(aq_inner(self))
+        relations = catalog.findRelations({
+            'to_id': doc_id,
+            'from_attribute': 'predecessor_proposal'})
+        return [relation.from_object for relation in relations]
+
     def get_overview_attributes(self):
         data = super(Proposal, self).get_overview_attributes()
 
@@ -627,14 +635,10 @@ class Proposal(Container, ProposalBase):
                 'value': predecessor_model.get_link(),
                 'is_html': True})
 
-        catalog = getUtility(ICatalog)
-        doc_id = getUtility(IIntIds).getId(aq_inner(self))
         successor_html_items = []
-        for relation in catalog.findRelations({
-                'to_id': doc_id,
-                'from_attribute': 'predecessor_proposal'}):
+        for successor in self.get_successor_proposals():
             successor_html_items.append(u'<li>{}</li>'.format(
-                relation.from_object.load_model().get_link()))
+                successor.load_model().get_link()))
         if successor_html_items:
             data.append({
                 'label': _('label_successors', default=u'Successors'),
