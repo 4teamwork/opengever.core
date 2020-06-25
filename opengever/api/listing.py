@@ -41,6 +41,7 @@ OTHER_ALLOWED_FIELDS = set([
     'receipt_date',
     'created',
     'changed',
+    'trashed',
     'delivery_date'])
 
 

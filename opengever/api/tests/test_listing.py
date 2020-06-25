@@ -168,6 +168,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=review_state',
             'columns=relative_path',
             'columns=UID',
+            'columns=trashed',
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
@@ -187,6 +188,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             {u'review_state': u'dossier-state-active',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'UID': IUUID(self.dossier),
+             u'trashed': False,
              u'reference': u'Client1 1.1 / 1',
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
@@ -205,6 +207,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=bumblebee_checksum',
             'columns=relative_path',
             'columns=UID',
+            'columns=trashed',
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
@@ -215,11 +218,37 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'document_author': u'test_user_1_',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
              u'UID': IUUID(self.document),
+             u'trashed': False,
              u'modified': u'2016-08-31T14:07:33+00:00',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'bumblebee_checksum': DOCX_CHECKSUM,
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14'},
             browser.json['items'][-1])
+
+    @browsing
+    def test_mail_listing(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query_string = '&'.join((
+            'name=documents',
+            'columns=reference',
+            'columns=title',
+            'columns=modified',
+            'columns=containing_dossier',
+            'columns=UID',
+            'columns=trashed',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.private_dossier, view=view, headers=self.api_headers)
+        self.assertEqual(
+            {u'reference': u'P Client1 kathi-barfuss / 1 / 37',
+             u'title': u'[No Subject]',
+             u'@id': u'http://nohost/plone/private/kathi-barfuss/dossier-14/document-37',
+             u'UID': IUUID(self.private_mail),
+             u'trashed': False,
+             u'modified': u'2016-08-31T17:11:33+00:00',
+             u'containing_dossier': u'Mein Dossier 1'},
+            browser.json['items'][0])
 
     @browsing
     def test_document_listing_preview_url(self, browser):
