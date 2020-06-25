@@ -378,6 +378,7 @@ class VersionsTab(BaseListingTab):
 
     sort_on = 'version'
     sort_reverse = True
+    show_searchform = False
 
     show_selects = False
     enabled_actions = []
