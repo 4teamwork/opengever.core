@@ -4,7 +4,7 @@ Changelog
 2020.3.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Make "populate_filename_column_in_favorites" UpgradeStep more robust. [lgraf]
 
 
 2020.3.0 (2020-06-18)
