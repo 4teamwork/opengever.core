@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Add API expansion `main-dossier`. [mbaechtold]
 - Make "populate_filename_column_in_favorites" UpgradeStep more robust. [lgraf]
 - Include additional data in @responses GET for proposal responses. [njohner]
 - Include additional data in Proposal GET API endpoint. [njohner]

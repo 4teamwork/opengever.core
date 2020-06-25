@@ -1,4 +1,4 @@
-.. listing_stats:
+.. _listing_stats:
 
 Statistik zu Auflistungen
 =========================

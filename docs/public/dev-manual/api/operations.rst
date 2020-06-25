@@ -114,6 +114,79 @@ children des Objekts).
     .. literalinclude:: examples/example_get.py
 
 
+Erweiterbare Komponente (Expansion)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Eine erweiterbare Komponente (auch "Expansion" genannt) ist ein Mechanismus, um in einem GET-Request
+einer Ressource weitere Information anzufordern, z.B. die Navigation, Breadcrumbs, etc. Damit kann verhindert
+werden, dass ein weiterer Request abgesetzt werden muss, um diese Angaben abzuholen. Weitere Informationen
+zu diesem Mechanismus findet man unter https://plonerestapi.readthedocs.io/en/latest/expansion.html.
+
+Die erweiterbaren Komponenten können über den Parameter `expand` in die Response eingebettet werden.
+
+Folgende erweiterbaren Komponente stehen zur Verfügung und sind in den entsprechenden Kapiteln beschrieben:
+
+- :ref:`navigation`
+- :ref:`breadcrumbs`
+- :ref:`listing_stats`
+
+Eine weitere erweiterbare Komponente erlaubt es, Informationen zum *Hautpdossier* einer Ressource
+abzufragen.
+
+**Beispiel-Request**:
+
+.. sourcecode:: http
+
+  GET /ordnungssystem/dossier/subdossier/document?expand=main-dossier HTTP/1.1
+  Accept: application/json
+
+**Beispiel-Response**:
+
+.. sourcecode:: http
+
+   HTTP/1.1 200 OK
+
+   {
+     "@components": {
+       "main-dossier": {
+         "@id": "https://example.org/ordnungssystem/dossier",
+         "@type": "opengever.dossier.businesscasedossier",
+         "description": "",
+         "is_leafnode": null,
+         "is_subdossier": false,
+         "review_state": "dossier-state-active",
+         "title": "Gesetzesentwürfe"
+       },
+     },
+     "@id": "https://example.org/ordnungssystem/dossier/subdossier/document?expand=main-dossier",
+     "..."
+   }
+
+Falls die Frage, welches das Hauptdossier einer Ressource ist, nicht beantwortet werden kann, dann
+ist der Wert in der Response nicht definiert.
+
+**Beispiel-Request**:
+
+.. sourcecode:: http
+
+   GET /ordnungssystem?expand=main-dossier HTTP/1.1
+   Accept: application/json
+
+**Beispiel-Response**:
+
+.. sourcecode:: http
+
+   HTTP/1.1 200 OK
+
+   {
+     "@components": {
+       "main-dossier": null,
+     },
+     "@id": "https://example.org/ordnungssystem?expand=main-dossier",
+     "..."
+   }
+
+
 .. _content-post:
 
 Inhalte erstellen (POST)
