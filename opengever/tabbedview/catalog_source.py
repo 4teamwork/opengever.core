@@ -25,13 +25,17 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
     """Default catalog tablesource extended with filter functionality.
     """
 
+    @property
+    def use_solr(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        return settings.use_solr
+
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
 
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ISearchSettings)
-        if settings.use_solr:
+        if self.use_solr:
             return self.solr_results(self.exclude_searchroot_from_query(query))
 
         return super(GeverCatalogTableSource, self).search_results(query)
