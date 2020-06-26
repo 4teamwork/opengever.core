@@ -59,7 +59,7 @@ class TaskTemplates(BaseCatalogListingTab):
          'sortable': False,
          'transform': interactive_user_helper},
 
-        {'column': 'deadline',
+        {'column': 'period',
          'sortable': False,
          'column_title': _(u"label_deadline", default=u"Deadline in Days")},
 

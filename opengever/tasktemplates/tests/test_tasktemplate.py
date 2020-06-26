@@ -185,3 +185,19 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         tasktemplate = self.tasktemplatefolder.listFolderContents()[-1]
         self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
         self.assertEquals(None, tasktemplate.responsible)
+
+    @browsing
+    def test_view_displays_deadline(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.tasktemplate)
+
+        # Get the cells in the column "deadline".
+        cells = [row.css('td').first
+                 for row in browser.css('.task-listing tr')
+                 if len(row.css('th')) and row.css('th').first.text == 'Deadline in Days']
+
+        self.assertEquals(
+            ["10"],
+            [cell.text for cell in cells]
+        )
