@@ -162,7 +162,7 @@ class TestFileLoader(FunctionalTestCase):
         list(section)
 
         self.assertEqual(
-            u'sample.msg', IOGMail(mail).original_message.filename)
+            u'Lorem Ipsum.msg', IOGMail(mail).original_message.filename)
         self.assertEqual(13824, len(IOGMail(mail).original_message.data))
         self.assertEqual(u'Lorem Ipsum', mail.title)
 
@@ -180,7 +180,7 @@ class TestFileLoader(FunctionalTestCase):
         list(section)
 
         self.assertEqual(
-            u'sample.msg', IOGMail(mail).original_message.filename)
+            u'Test attachment.msg', IOGMail(mail).original_message.filename)
         self.assertEqual(13824, len(IOGMail(mail).original_message.data))
 
         self.assertEqual('message/rfc822', mail.message.contentType)

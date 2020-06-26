@@ -13,6 +13,7 @@ Changelog
 - Extend the @favorites endpoint to let it return already resolved favorites. [elioschmutz]
 - Use correct response type for proposal comment responses. [njohner]
 - Add expandable endpoint @tasktree for getting task hierarchy. [buchi]
+- Also normalise filename of original_message when present. [tinagerber]
 
 
 2020.3.0 (2020-06-18)

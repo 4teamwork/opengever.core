@@ -338,6 +338,9 @@ class OGMail(Mail, BaseDocumentMixin):
 
         new_filename = u'{}{}'.format(normalized_subject, ext)
         if self.message.filename != new_filename:
+            if self.original_message:
+                ext = os.path.splitext(self.original_message.filename)[-1]
+                self.original_message.filename = u'{}{}'.format(normalized_subject, ext)
             self.message.filename = new_filename
             Favorite.query.update_filename(self)
 

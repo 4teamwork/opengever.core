@@ -73,7 +73,7 @@ class TestMessageModel(IntegrationTestCase):
             u'files/dossier-1/dossier-2/Uebersicht der Vertraege von 2016.xlsx',
             u'files/dossier-1/Vertraegsentwurf.docx',
             u'files/dossier-1/Die Buergschaft.eml',
-            u'files/dossier-1/testm\xe4il.msg',
+            u'files/dossier-1/No Subject.msg',
             u'files/dossier-1/Initialvertrag fuer Bearbeitung.docx',
             u'files/Vertraegsentwurf.docx',
         ]

@@ -175,7 +175,7 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
         mail = self.send_documents(dossier, [mail])
 
-        self.assert_attachment(mail, 'dummy.msg', 'application/vnd.ms-outlook')
+        self.assert_attachment(mail, 'No Subject.msg', 'application/vnd.ms-outlook')
 
 
     @browsing
