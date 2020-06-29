@@ -5,6 +5,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.helpers import display_name
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import Document
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
@@ -239,3 +240,6 @@ class OpengeverRealContentListingObject(RealContentListingObject):
     def translated_review_state(self):
         return translate(
             self.review_state(), domain='plone', context=self.request)
+
+    def creator(self):
+        return self.getObject().Creator()

@@ -60,3 +60,14 @@ class DocumentContentListingObject(OpengeverRealContentListingObject):
 
     def get_overlay_title(self):
         return self.Title().decode('utf-8')
+
+    def mimetype(self):
+        return self.getObject().content_type()
+
+    def filename(self):
+        return self.getObject().get_filename()
+
+    def filesize(self):
+        file_ = self.getObject().get_file()
+        if file_:
+            return file_.getSize()
