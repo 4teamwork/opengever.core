@@ -205,16 +205,16 @@ class TestExcerptOverview(IntegrationTestCase):
         excerpt1 = agenda_item.generate_excerpt('excerpt 1')
         agenda_item.return_excerpt(excerpt1)
 
-        # block access to `proposal` for `regular_user`
+        # block access to `proposal` for `committee_responsible`
         self.dossier.__ac_local_roles_block__ = True
 
         expected_fields = [
             'Submitted Proposal',
             'Meeting'
         ]
-        self.login(self.regular_user, browser)
         browser.open(excerpt1, view='tabbedview_view-overview')
         fields = meeting_fields(browser)
+
         self.assertItemsEqual(expected_fields, fields.keys(),
             msg='The user we test with should see a link to submitted '
                 'proposal and meeting, but not to the proposal')
@@ -227,6 +227,54 @@ class TestExcerptOverview(IntegrationTestCase):
         self.assertEqual(
             u'9. Sitzung der Rechnungspr\xfcfungskommission',
             fields['Meeting'].text)
+        self.assertEqual(
+            self.meeting.model.get_url(),
+            fields['Meeting'].css('a').first.get('href'))
+
+    @browsing
+    def test_no_link_to_submitted_proposal_visible_if_no_access_to_committee(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.return_excerpt(excerpt1)
+
+        self.login(self.regular_user, browser)
+
+        expected_fields = [
+            'Proposal',
+            'Meeting'
+        ]
+        browser.open(excerpt1, view='tabbedview_view-overview')
+        fields = meeting_fields(browser)
+        self.assertItemsEqual(expected_fields, fields.keys(),
+            msg='The dossier responsible cannot view the submitted proposal')
+
+        self.assertEqual(u'Vertr\xe4ge', fields['Proposal'].text)
+        self.assertEqual(
+            self.proposal.absolute_url(),
+            fields['Proposal'].css('a').first.get('href'))
+
+        self.assertEqual(
+            u'9. Sitzung der Rechnungspr\xfcfungskommission',
+            fields['Meeting'].text)
         self.assertEqual([], fields['Meeting'].css('a'),
-            'The meeting is not visible to dossier_responsible and thus not '
-            'linked')
+            'The meeting is not visible to regular_user and thus should not '
+            'be linked')
+
+    @browsing
+    def test_excerpt_overview_hides_link_to_proposal_when_insufficient_privileges(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.return_excerpt(excerpt1)
+
+        # block access to `proposal` for `regular_user`
+        self.dossier.__ac_local_roles_block__ = True
+
+        expected_fields = []
+        self.login(self.regular_user, browser)
+        browser.open(excerpt1, view='tabbedview_view-overview')
+        fields = meeting_fields(browser)
+        self.assertItemsEqual(expected_fields, fields.keys())

@@ -71,33 +71,59 @@ class BaseDocumentMixin(object):
 
         return None
 
+    def get_submitted_proposal(self, check_security=True):
+        """Return the submitted  proposal to which this document belongs.
+
+        Return submitted proposal when self is an excerpt document in the
+        meeting dossier.
+        """
+        relations = list(getUtility(ICatalog).findRelations({
+                'to_id': getUtility(IIntIds).getId(aq_inner(self)),
+                'from_attribute': 'excerpts'}))
+
+        # We expect that there are 0 or 1 relation, because this document
+        # cannot be the excerpt of multiple proposals.
+        if relations:
+            relation = relations[0]
+            submitted_proposal = relation.from_object
+            assert(ISubmittedProposal.providedBy(submitted_proposal))
+            if check_security:
+                if api.user.has_permission('View', obj=submitted_proposal):
+                    return submitted_proposal
+            else:
+                return submitted_proposal
+
+        return None
+
     def get_proposal(self):
         """Return the proposal to which this document belongs.
 
-        This may return a "proposal" or a "submitted proposal".
+        Handles the following cases:
+        - the document is inside a proposal, return the parent
+        - the document is an excerpt in the meeting dossier, find proposal via
+          submitted porposal relation
+        - the document is an excerpt in the case dossier
+
         """
         if self.is_inside_a_proposal():
             return aq_parent(aq_inner(self))
 
-        # Find submitted proposal when self is an excerpt document in the
-        # meeting dossier.
-        for relation in getUtility(ICatalog).findRelations({
-                'to_id': getUtility(IIntIds).getId(aq_inner(self)),
-                'from_attribute': 'excerpts'}):
-            # We expect that there are 0 or 1 relation, because this document
-            # cannot be the excerpt of multiple proposals.
-            submitted_proposal = relation.from_object
-            assert(ISubmittedProposal.providedBy(submitted_proposal))
-            if api.user.has_permission('View', obj=submitted_proposal):
-                return submitted_proposal
-            return None
+        # Find proposal via submitted proposal when self is an excerpt document
+        # in the meeting dossier.
+        submitted_proposal = self.get_submitted_proposal(check_security=False)
+        if submitted_proposal:
+            proposal = submitted_proposal.load_model().resolve_proposal()
+            if api.user.has_permission('View', obj=proposal):
+                return proposal
 
         # Find proposal when self is an excerpt in the case dossier.
         generated_excerpts = GeneratedExcerpt.query.by_document(self).all()
         if generated_excerpts:
-            proposal = generated_excerpts[0].proposal.resolve_proposal()
-            if api.user.has_permission('View', obj=proposal):
-                return proposal
+            proposal_model = generated_excerpts[0].proposal
+            if proposal_model:
+                proposal = proposal_model.resolve_proposal()
+                if api.user.has_permission('View', obj=proposal):
+                    return proposal
 
         return None
 

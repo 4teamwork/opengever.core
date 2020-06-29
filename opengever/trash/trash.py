@@ -151,5 +151,9 @@ class Trasher(object):
         return False
 
     def is_returned_excerpt(self):
-        return (self.context.get_proposal() is not None
-                and self.context.get_proposal().get_excerpt() == self.context)
+        submitted_proposal = self.context.get_submitted_proposal(
+            check_security=False)
+        if not submitted_proposal:
+            return False
+
+        return submitted_proposal.get_excerpt() == self.context
