@@ -7,7 +7,9 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.models.team import Team
+from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
@@ -709,6 +711,78 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         subtask = main_task.listFolderContents().pop()
         self.assertEqual('robert.ziegler', subtask.issuer)
         self.assertEqual(inbox_id, subtask.responsible)
+        self.assertEqual('fa', subtask.responsible_client)
+
+    @browsing
+    def test_override_task_responsible_with_interactive_responsible(self, browser):
+        self.login(self.regular_user, browser)
+        IDossier(self.dossier).responsible = self.secretariat_user.getId()
+
+        interactive_responsible = '{}:responsible'.format(INTERACTIVE_USERS)
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser),
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                    'responsible': interactive_responsible
+                }
+            ],
+            'start_immediately': True,
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+
+        self.assertEqual(self.regular_user.getId(), main_task.issuer)
+        self.assertEqual(self.regular_user.getId(), main_task.responsible)
+        self.assertEqual('fa', main_task.responsible_client)
+
+        subtask = main_task.listFolderContents().pop()
+        self.assertEqual(self.secretariat_user.getId(), subtask.issuer)
+        self.assertEqual(self.secretariat_user.getId(), subtask.responsible)
+        self.assertEqual('fa', subtask.responsible_client)
+
+    @browsing
+    def test_override_task_responsible_with_interactive_current_user(self, browser):
+        self.login(self.regular_user, browser)
+        IDossier(self.dossier).responsible = self.secretariat_user.getId()
+
+        interactive_responsible = '{}:current_user'.format(INTERACTIVE_USERS)
+
+        data = {
+            'tasktemplatefolder': self._get_task_template_item(browser),
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                    'responsible': interactive_responsible
+                }
+            ],
+            'start_immediately': True,
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+
+        self.assertEqual(self.regular_user.getId(), main_task.issuer)
+        self.assertEqual(self.regular_user.getId(), main_task.responsible)
+        self.assertEqual('fa', main_task.responsible_client)
+
+        subtask = main_task.listFolderContents().pop()
+        self.assertEqual('jurgen.konig', subtask.issuer)
+        self.assertEqual(self.regular_user.getId(), subtask.responsible)
         self.assertEqual('fa', subtask.responsible_client)
 
     @browsing
