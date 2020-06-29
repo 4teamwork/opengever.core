@@ -4,21 +4,34 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 
 
+class TestLogoutAction(IntegrationTestCase):
+
+    @browsing
+    def test_logout_action_points_to_custom_browserview(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
+
+        logout_url = browser.find('Log out').attrib['href']
+        self.assertEqual('http://nohost/plone/@@logout', logout_url)
+
+
 class TestLogoutWithoutCASAuth(IntegrationTestCase):
 
     @browsing
     def test_redirects_to_plone_logged_out_page(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
 
-        browser.open(view='@@logout')
+        browser.find('Log out').click()
         self.assertEquals('http://nohost/plone/logged_out', browser.url)
 
     @browsing
     def test_deletes_ac_cookie(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
 
         browser.allow_redirects = False
-        browser.open(view='@@logout')
+        browser.find('Log out').click()
         response = browser.get_driver().response
 
         self.assertEqual(
@@ -45,9 +58,10 @@ class TestLogoutWithCASAuth(IntegrationTestCase):
     @browsing
     def test_deletes_ac_cookie(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
 
         browser.allow_redirects = False
-        browser.open(view='@@logout')
+        browser.find('Log out').click()
         response = browser.get_driver().response
 
         self.assertEqual(
@@ -62,9 +76,10 @@ class TestLogoutWithCASAuth(IntegrationTestCase):
     @browsing
     def test_redirects_to_cas_logout(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
 
         browser.raise_http_errors = False
-        browser.open(view='@@logout')
+        browser.find('Log out').click()
 
         cas_server_url = 'http://nohost/portal'
         self.assertEquals('/'.join((cas_server_url, 'logout')), browser.url)
