@@ -3,7 +3,7 @@ from opengever.api.validation import get_validation_errors
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
-from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
+from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -94,7 +94,7 @@ class ITriggerTaskTemplateSources(model.Schema):
     )
 
     responsible = schema.Choice(
-        source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
+        source=TaskResponsibleSourceBinder(include_teams=True),
         required=True,
         )
 

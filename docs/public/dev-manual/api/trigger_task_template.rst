@@ -40,3 +40,33 @@ Der Endpoint erwartet folgende Parameter:
 
 Als Response wird die JSON-Repräsentation der neu erstellten Aufgabe geliefert,
 siehe :ref:`Inhaltstypen <content-types>`.
+
+
+Interaktive Auftragnehmer
+-------------------------
+
+Bei jeder ausgewählten Aufgabenvorlage kann der Auftragnehmer überschrieben
+werden. Der Auftragnehmer kann durch einen interaktiven Benutzer ersetzt
+werden. Es gibt dabei folgende Möglichkeiten:
+
+- ``interactive_users:current_user``: Der aktuelle Benutzer
+- ``interactive_users:responsible``:  Die Federführende Person des Dossiers, in dem die Aufgabe erstellt wird
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+        POST /ordnungssystem/fuehrung/dossier-23/@trigger-task-template HTTP/1.1
+        Accept: application/json
+
+        {
+            "tasktemplatefolder": "67a25fc941354568950439f08f7af3ed",
+            "tasktemplates": [
+                {
+                    "@id": "http://localhost:8080/fd/vorlagen/tasktemplatefolder-1/tasktemplate-1",
+                    "responsible": "interactive_users:current_user"
+                }
+            ],
+            "start_immediately": false
+        }
