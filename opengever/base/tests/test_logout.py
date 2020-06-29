@@ -74,6 +74,34 @@ class TestLogoutWithCASAuth(IntegrationTestCase):
             response.cookies)
 
     @browsing
+    def test_deletes_all_ac_cookies_when_using_custom_cookie_name(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # Customize cookie name, like we do in production
+        self.portal.acl_users.session.cookie_name = '__ac_fd'
+
+        browser.open(self.portal)
+
+        browser.allow_redirects = False
+        browser.find('Log out').click()
+        response = browser.get_driver().response
+
+        self.assertEqual(
+            {'__ac': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'},
+             '__ac_fd': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'}},
+            response.cookies)
+
+    @browsing
     def test_redirects_to_cas_logout(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal)

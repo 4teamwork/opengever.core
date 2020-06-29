@@ -16,6 +16,10 @@ class LogoutView(BrowserView):
         mt = getToolByName(self.context, 'portal_membership')
         mt.logoutUser(self.request)
 
+        # Also expire any __ac cookie that might have been issued by the
+        # CookieAuthHelper on the Zope root (e.g. for zopemaster)
+        self.request.response.expireCookie('__ac', path='/')
+
         transaction_note('Logged out')
 
         if is_cas_auth_enabled():
