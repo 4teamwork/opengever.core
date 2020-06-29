@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-06-09 10:06+0000\n"
+"POT-Creation-Date: 2020-06-29 14:27+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -985,6 +985,11 @@ msgstr ""
 msgid "transition_label_modify_deadline"
 msgstr ""
 
+#. Default: "Task opened automatically"
+#: ./opengever/task/response_description.py
+msgid "transition_label_opened"
+msgstr ""
+
 #. Default: "Task reactivated"
 #: ./opengever/task/response_description.py
 msgid "transition_label_reactivate"
@@ -1073,6 +1078,11 @@ msgstr ""
 #. Default: "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_modify_deadline"
+msgstr ""
+
+#. Default: "Task opened automatically"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_opened"
 msgstr ""
 
 #. Default: "Reactivate by ${user}"

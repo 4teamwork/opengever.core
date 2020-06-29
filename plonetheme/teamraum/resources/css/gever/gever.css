@@ -3069,6 +3069,8 @@ div.answer.reactivated div.answerType:before { content: ""; }
 
 div.answer.skip div.answerType:before { font-family: 'Font Awesome 5 Free'; content: "\f051"; font-weight: 900; }
 
+div.answer.open div.answerType:before { font-family: 'Font Awesome 5 Free'; content: "\f04b"; font-weight: 900; }
+
 /* @group language selector in personaltools */
 #portal-personaltools.actionMenu dd ul li.category-language.currentLanguage a:before { font-family: "opengever"; content: ""; }
 
