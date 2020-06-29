@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Make favorites upgrade more robust in case catalog is not up to date. [deiferni]
 - Also allow replacing concrete responsibles with interactive responsibles when triggering task templates. [deiferni]
 - Introduce a new property `touched` on dossiers. [mbaechtold]
 - Add support for metadata_fields in OpengeverRealContentListingObject. [njohner]

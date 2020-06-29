@@ -45,7 +45,7 @@ class PopulateAdditionalMetadataOfFavorites(SQLUpgradeStep):
             brain = brains[0]
             obj = self.catalog_unrestricted_get_object(brain)
 
-            review_state = brain.review_state
+            review_state = api.content.get_state(obj)
 
             is_subdossier = None
             if hasattr(aq_base(obj), 'is_subdossier'):
