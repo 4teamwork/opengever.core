@@ -5,7 +5,6 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.document import Document
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
-from opengever.trash.trash import ITrashed
 from plone import api
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
