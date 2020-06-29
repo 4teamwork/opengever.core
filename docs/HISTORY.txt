@@ -6,6 +6,7 @@ Changelog
 
 - Also allow replacing concrete responsibles with interactive responsibles when triggering task templates. [deiferni]
 - Introduce a new property `touched` on dossiers. [mbaechtold]
+- Add support for metadata_fields in OpengeverRealContentListingObject. [njohner]
 - Fix sort order within task template folder. [mbaechtold]
 - Fix deadline of task templates no longer shown in tabular listing. [mbaechtold]
 - Add API expansion `main-dossier`. [mbaechtold]

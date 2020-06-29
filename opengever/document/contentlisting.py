@@ -5,7 +5,6 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.document import Document
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
-from opengever.trash.trash import ITrashed
 from plone import api
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
@@ -61,3 +60,14 @@ class DocumentContentListingObject(OpengeverRealContentListingObject):
 
     def get_overlay_title(self):
         return self.Title().decode('utf-8')
+
+    def mimetype(self):
+        return self.getObject().content_type()
+
+    def filename(self):
+        return self.getObject().get_filename()
+
+    def filesize(self):
+        file_ = self.getObject().get_file()
+        if file_:
+            return file_.getSize()
