@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Introduce a new property `touched` on dossiers. [mbaechtold]
 - Fix sort order within task template folder. [mbaechtold]
 - Fix deadline of task templates no longer shown in tabular listing. [mbaechtold]
 - Add API expansion `main-dossier`. [mbaechtold]

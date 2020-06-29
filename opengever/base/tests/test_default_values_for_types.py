@@ -386,6 +386,11 @@ class TestDefaultsBase(IntegrationTestCase):
                     # for all intents and purposes.
                     continue
 
+                if name == 'touched':
+                    # touched is a special field. It never gets set by the
+                    # user but only by an event handler.
+                    continue
+
                 names.append(name)
         return names
 

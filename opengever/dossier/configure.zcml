@@ -179,6 +179,35 @@
       name="has_sametype_children"
       />
 
+  <adapter
+      factory=".indexers.dossier_touched_indexer"
+      name="touched"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectRemovedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
            OFS.interfaces.IObjectWillBeMovedEvent"

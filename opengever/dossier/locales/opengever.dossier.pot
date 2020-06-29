@@ -855,6 +855,11 @@ msgstr ""
 msgid "label_title_help"
 msgstr ""
 
+#. Default: "Date of modification of the dossier or its content"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_touched"
+msgstr ""
+
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_trash"

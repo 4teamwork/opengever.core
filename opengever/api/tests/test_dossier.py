@@ -66,6 +66,21 @@ class TestDossierSerializer(IntegrationTestCase):
             browser.json["relatedDossier"][0]["is_subdossier"]
         )
 
+    @browsing
+    def test_response_contains_dossier_touched_date(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # The "touched" date is empty for newly created dossiers.
+        new_dossier = create(Builder("dossier")
+                             .within(self.branch_repofolder))
+        browser.open(new_dossier, method="GET", headers=self.api_headers)
+        self.assertEqual(None, browser.json["touched"])
+
+        # The dossier from the fixture must have been edited somewhere
+        # because the "touched" date is not empty.
+        browser.open(self.dossier, method="GET", headers=self.api_headers)
+        self.assertEqual(u"2016-08-31", browser.json["touched"])
+
 
 class TestMainDossierExpansion(IntegrationTestCase):
 

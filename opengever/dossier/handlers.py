@@ -1,9 +1,11 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from datetime import date
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
@@ -11,9 +13,11 @@ from opengever.meeting.handlers import ProposalSqlSyncer
 from opengever.task.task import ITask
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import getAdapter
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
 
 
 def set_former_reference_before_moving(obj, event):
@@ -146,3 +150,15 @@ def purge_reference_number_mappings(copied_dossier, event):
     """
     prefix_adapter = IReferenceNumberPrefix(copied_dossier)
     prefix_adapter.purge_mappings()
+
+
+def update_dossier_touched_date(obj, event):
+    today = date.today()
+    while obj and not IPloneSiteRoot.providedBy(obj):
+        if (IDossierMarker.providedBy(obj)
+                and IDossier(obj).touched != today
+                and (not (IObjectAddedEvent.providedBy(event) and obj == event.object))):
+            IDossier(obj).touched = today
+            # Prevent reindexing all indexes by indexing `UID` too.
+            obj.reindexObject(idxs=['UID', 'touched'])
+        obj = aq_parent(aq_inner(obj))

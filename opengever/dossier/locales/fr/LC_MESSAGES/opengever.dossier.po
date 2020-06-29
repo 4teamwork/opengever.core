@@ -445,7 +445,9 @@ msgstr "Saisir le numéro d'inventaire complet."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_keywords"
-msgstr "Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de classement.\nATTENTION: Veuillez vous conformer aux directives de Protection des Données lors de l'utilisation de Mots-clés (par ex. pas de noms propres)."
+msgstr ""
+"Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de classement.\n"
+"ATTENTION: Veuillez vous conformer aux directives de Protection des Données lors de l'utilisation de Mots-clés (par ex. pas de noms propres)."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_number_of_containers"
@@ -853,6 +855,11 @@ msgstr "Titre"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_title_help"
 msgstr "Aide pour le choix du titre"
+
+#. Default: "Date of modification of the dossier or its content"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_touched"
+msgstr ""
 
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py

@@ -252,6 +252,7 @@ date_fields = set([
     'receipt_date',
     'start',
     'deadline',
+    'touched',
 ])
 
 FIELDS_WITH_MAPPING.extend(
