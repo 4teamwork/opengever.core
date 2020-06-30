@@ -11,6 +11,7 @@ Changelog
 - Add support for metadata_fields in OpengeverRealContentListingObject. [njohner]
 - Fix sort order within task template folder. [mbaechtold]
 - Fix deadline of task templates no longer shown in tabular listing. [mbaechtold]
+- Fix permission issue with resolving subtask of tasktemplates. [njohner]
 - Add API expansion `main-dossier`. [mbaechtold]
 - Make "populate_filename_column_in_favorites" UpgradeStep more robust. [lgraf]
 - Disable the searchbox on the tabbed view which lists the versions of a document. [mbaechtold]

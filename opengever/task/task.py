@@ -13,6 +13,7 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseSupported
 from opengever.base.security import as_internal_workflow_transition
+from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.dossier.utils import get_main_dossier
@@ -65,7 +66,6 @@ from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
 from zope.schema.vocabulary import getVocabularyRegistry
-
 
 _marker = object()
 TASKTEMPLATE_PREDECESSOR_KEY = 'tasktemplate_predecessor'
@@ -664,9 +664,12 @@ class Task(Container, TaskReminderSupport):
 
         next_task = next_task.oguid.resolve_object()
         if api.content.get_state(obj=next_task) == TASK_STATE_PLANNED:
-            with as_internal_workflow_transition():
-                api.content.transition(
-                    obj=next_task, transition='task-transition-planned-open')
+            # There is no guarantee that the current user has any permissions
+            # on next task, we therefore need to use elevated_privileges here.
+            with elevated_privileges():
+                with as_internal_workflow_transition():
+                    api.content.transition(
+                        obj=next_task, transition='task-transition-planned-open')
 
             next_task.sync()
 

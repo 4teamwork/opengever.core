@@ -145,6 +145,40 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
+    def test_handles_missing_permissions_on_next_task(self):
+        self.login(self.regular_user)
+
+        # create subtasks
+        subtask1 = create(Builder('task')
+                          .within(self.task_in_protected_dossier)
+                          .having(responsible_client='fa',
+                                  responsible=self.regular_user.getId(),
+                                  issuer=self.dossier_responsible.getId(),
+                                  task_type='correction',
+                                  deadline=date(2016, 11, 1))
+                          .in_state('task-state-open'))
+
+        subtask2 = create(Builder('task')
+                          .within(self.task_in_protected_dossier)
+                          .having(responsible_client='fa',
+                                  responsible=self.dossier_responsible.getId(),
+                                  issuer=self.dossier_responsible.getId(),
+                                  task_type='correction',
+                                  deadline=date(2016, 11, 1))
+                          .in_state('task-state-planned'))
+
+        alsoProvides(subtask1, IFromSequentialTasktemplate)
+        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        self.task_in_protected_dossier.set_tasktemplate_order([subtask1, subtask2])
+
+        api.content.transition(
+            obj=subtask1, transition='task-transition-open-resolved')
+
+        self.assertEquals(
+            'task-state-resolved', api.content.get_state(subtask1))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subtask2))
+
     def test_record_activity_when_open_next_task(self):
         self.login(self.regular_user)
 
