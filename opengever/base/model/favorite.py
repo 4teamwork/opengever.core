@@ -12,6 +12,7 @@ from opengever.base.model import UTCDateTime
 from opengever.base.model import WORKFLOW_STATE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.base.query import BaseQuery
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.bumblebee import is_bumblebeeable
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -20,6 +21,7 @@ from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.uuid.interfaces import IUUID
+from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_
 from sqlalchemy import Boolean
@@ -82,6 +84,15 @@ class Favorite(Base):
         if IBaseDocument.providedBy(obj):
             filename = obj.get_filename()
 
+        review_state = None
+        try:
+            review_state = api.content.get_state(obj)
+        except WorkflowException:
+            log_msg_to_sentry(
+                "Could not retrieve object workflow state while creating "
+                "favorite.",
+                extra={'failing_object': repr(obj)})
+
         params = dict(
             userid=userid,
             oguid=Oguid.for_object(obj),
@@ -91,7 +102,7 @@ class Favorite(Base):
             icon_class=get_css_class(obj),
             plone_uid=IUUID(obj),
             position=cls.query.get_next_position(userid),
-            review_state=api.content.get_state(obj),
+            review_state=review_state,
             is_subdossier=is_subdossier,
             is_leafnode=is_leafnode,
         )
