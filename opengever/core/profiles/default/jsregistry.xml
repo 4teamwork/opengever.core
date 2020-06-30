@@ -342,7 +342,7 @@
       enabled="True"
       id="++resource++opengever.document/download_confirmation.js"
       inline="False"
-      insert-after="++resource++opengever.base/logoutClient.js"
+      insert-after="++resource++opengever.base/keywordwidget.js"
       />
 
   <javascript
@@ -501,28 +501,6 @@
       id="++resource++opengever.base/keywordwidget.js"
       inline="False"
       insert-before="++resource++ftw.keywordwidget/js/keywordwidget.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="none"
-      cookable="True"
-      expression=""
-      enabled="True"
-      id="++resource++opengever.base/logoutClient.js"
-      inline="False"
-      insert-after="++resource++opengever.base/keywordwidget.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="none"
-      cookable="True"
-      expression=""
-      enabled="True"
-      id="++resource++opengever.base/logout.js"
-      inline="False"
-      insert-after="++resource++opengever.base/logoutClient.js"
       />
 
   <javascript

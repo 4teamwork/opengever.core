@@ -4,14 +4,44 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 
 
+class TestLogoutAction(IntegrationTestCase):
+
+    @browsing
+    def test_logout_action_points_to_custom_browserview(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
+
+        logout_url = browser.find('Log out').attrib['href']
+        self.assertEqual('http://nohost/plone/@@logout', logout_url)
+
+
 class TestLogoutWithoutCASAuth(IntegrationTestCase):
 
     @browsing
-    def test_url_is_plone_logout(self, browser):
+    def test_redirects_to_plone_logged_out_page(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
 
-        browser.open(view='logout_url')
-        self.assertEquals('http://nohost/plone/logout', browser.contents)
+        browser.find('Log out').click()
+        self.assertEqual('http://nohost/plone/logged_out', browser.url)
+
+    @browsing
+    def test_deletes_ac_cookie(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
+
+        browser.allow_redirects = False
+        browser.find('Log out').click()
+        response = browser.get_driver().response
+
+        self.assertEqual(
+            {'__ac': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'}},
+            response.cookies)
 
 
 class TestLogoutWithCASAuth(IntegrationTestCase):
@@ -26,8 +56,58 @@ class TestLogoutWithCASAuth(IntegrationTestCase):
         acl_users.plugins.removePluginById('cas_auth')
 
     @browsing
-    def test_url_is_cas_server_logout(self, browser):
+    def test_deletes_ac_cookie(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
+
+        browser.allow_redirects = False
+        browser.find('Log out').click()
+        response = browser.get_driver().response
+
+        self.assertEqual(
+            {'__ac': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'}},
+            response.cookies)
+
+    @browsing
+    def test_deletes_all_ac_cookies_when_using_custom_cookie_name(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(view='logout_url')
-        self.assertEquals('http://nohost/portal/logout', browser.contents)
+        # Customize cookie name, like we do in production
+        self.portal.acl_users.session.cookie_name = '__ac_fd'
+
+        browser.open(self.portal)
+
+        browser.allow_redirects = False
+        browser.find('Log out').click()
+        response = browser.get_driver().response
+
+        self.assertEqual(
+            {'__ac': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'},
+             '__ac_fd': {
+                'expires': 'Wed, 31-Dec-97 23:59:59 GMT',
+                'max_age': 0,
+                'path': '/',
+                'quoted': True,
+                'value': 'deleted'}},
+            response.cookies)
+
+    @browsing
+    def test_redirects_to_cas_logout(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal)
+
+        browser.raise_http_errors = False
+        browser.find('Log out').click()
+
+        cas_server_url = 'http://nohost/portal'
+        self.assertEqual('/'.join((cas_server_url, 'logout')), browser.url)

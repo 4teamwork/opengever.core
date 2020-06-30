@@ -1,0 +1,13 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript
+      remove="True"
+      id="++resource++opengever.base/logout.js"
+      />
+
+  <javascript
+      remove="True"
+      id="++resource++opengever.base/logoutClient.js"
+      />
+
+</object>

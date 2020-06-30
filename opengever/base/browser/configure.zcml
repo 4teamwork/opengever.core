@@ -233,11 +233,12 @@
       />
 
   <browser:page
+      name="logout"
       for="*"
-      name="logout_url"
-      class=".logout_url.LogoutURL"
+      class=".logout.LogoutView"
       permission="zope2.View"
       />
+
 
   <browser:page
       for="*"
