@@ -244,6 +244,21 @@ class Accept(ResponseDescription):
 ResponseDescription.add_description(Accept)
 
 
+class Open(ResponseDescription):
+    transition = 'task-transition-planned-open'
+    css_class = 'open'
+
+    def msg(self):
+        return _('transition_msg_opened', u'Task opened automatically',
+                 mapping=self._msg_mapping)
+
+    def label(self):
+        return _('transition_label_opened', u'Task opened automatically')
+
+
+ResponseDescription.add_description(Open)
+
+
 class Reopen(ResponseDescription):
     transition = 'task-transition-rejected-open'
     css_class = 'reopen'

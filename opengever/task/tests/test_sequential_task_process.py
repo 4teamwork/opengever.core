@@ -2,11 +2,11 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
-from ftw.testbrowser.pages import factoriesmenu
-from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.interface import alsoProvides
@@ -213,6 +213,51 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(u'New task opened by B\xe4rfuss K\xe4thi',
                           activity.summary)
         self.assertEquals(Oguid.for_object(subtask2), activity.resource.oguid)
+
+    @browsing
+    def test_automatically_opened_task_has_icon_and_message_in_history(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # The second subtask is in the state "planned" by default. This fact is useful for
+        # understanding the purpose of this test. It's not something we "need" to test.
+        # Its state will change when the first subtask is completed (later on in this test).
+        self.assertEquals(
+            'task-state-planned',
+            api.content.get_state(self.seq_subtask_2)
+        )
+
+        # Complete the first subtask. This will trigger a state change
+        # of the second subtask. This is just for the understanding of this test.
+        browser.open(self.seq_subtask_1)
+        browser.click_on('task-transition-open-in-progress')
+        browser.click_on('Save')
+        browser.click_on('task-transition-in-progress-tested-and-closed')
+        browser.click_on('Save')
+
+        # The state of the second subtask has changed. No we can assert some things.
+        self.assertEquals(
+            'task-state-open',
+            api.content.get_state(self.seq_subtask_2)
+        )
+        browser.open(self.seq_subtask_2, view='tabbedview_view-overview')
+
+        # The response history has two items, one for the initial "planned" and
+        # one for the "open" state. We're only interested in the "open" state.
+        answer = browser.css('.answer').first
+
+        # The answer now has a class "open". This was not the case until now and
+        # this is what we are fixing in this pull request.
+        self.assertEquals(
+            'answer open',
+            answer.attrib['class']
+        )
+
+        # The answer also features a message. This was not the case until now and
+        # this is what we are fixing in this pull request.
+        self.assertEquals(
+            [u'Task opened automatically'],
+            answer.css('h3').text
+        )
 
 
 class TestInitialStateForSubtasks(IntegrationTestCase):
