@@ -23,7 +23,7 @@ class TestLogoutWithoutCASAuth(IntegrationTestCase):
         browser.open(self.portal)
 
         browser.find('Log out').click()
-        self.assertEquals('http://nohost/plone/logged_out', browser.url)
+        self.assertEqual('http://nohost/plone/logged_out', browser.url)
 
     @browsing
     def test_deletes_ac_cookie(self, browser):
@@ -110,4 +110,4 @@ class TestLogoutWithCASAuth(IntegrationTestCase):
         browser.find('Log out').click()
 
         cas_server_url = 'http://nohost/portal'
-        self.assertEquals('/'.join((cas_server_url, 'logout')), browser.url)
+        self.assertEqual('/'.join((cas_server_url, 'logout')), browser.url)
