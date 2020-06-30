@@ -8,11 +8,19 @@ from opengever.testing import IntegrationTestCase
 from opengever.trash.remover import Remover
 from opengever.trash.trash import ITrashable
 from opengever.trash.trash import TrashError
-from operator import attrgetter
+from z3c.relationfield.event import _relations
 from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
-from z3c.relationfield.event import _relations
+
+
+def meeting_fields(browser):
+    result = {}
+    for row in browser.css('tr.meetinglink'):
+        label = row.css('th')[0].text
+        node = row.css('td')[0]
+        result[label] = node
+    return result
 
 
 class TestTrashReturnedExcerpt(IntegrationTestCase):
@@ -154,7 +162,7 @@ class TestExcerptOverview(IntegrationTestCase):
     maxDiff = None
 
     @browsing
-    def test_excerpt_overview_displays_link_to_proposal(self, browser):
+    def test_excerpt_overview_displays_link_to_proposal_and_submitted_proposal(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
         agenda_item.decide()
@@ -162,51 +170,97 @@ class TestExcerptOverview(IntegrationTestCase):
         agenda_item.return_excerpt(excerpt1)
 
         expected_fields = [
-            'Title',
-            'Document Date',
-            'Document Type',
-            'Author',
-            'creator',
-            'Description',
-            'Foreign Reference',
-            'Keywords',
-            'Checked out',
-            'File',
-            'Digital Available',
-            'Preserved as paper',
-            'Date of receipt',
-            'Date of delivery',
-            'Related Documents',
-            'Classification',
-            'Privacy layer',
-            'Public Trial',
-            'Public trial statement',
-            'Submitted with',
-            'Created',
-            'Modified',
+            'Submitted Proposal',
             'Proposal',
             'Meeting'
         ]
         browser.open(excerpt1, view='tabbedview_view-overview')
-        fields = dict(zip(
-            browser.css('.documentMetadata th').text,
-            map(attrgetter('innerHTML'), browser.css('.documentMetadata td')),
-        ))
-        self.assertItemsEqual(expected_fields, fields.keys())
+        fields = meeting_fields(browser)
+        self.assertItemsEqual(expected_fields, fields.keys(),
+            msg='The committee responsible can view the meeting and the case '
+                'dossier thus all links should appear')
 
-        self.assertEquals(
-            u'<a href="http://nohost/plone/opengever-meeting-committeecontainer'
-            u'/committee-1/meeting-1/view" title="9. Sitzung der '
-            u'Rechnungspr\xfcfungskommission" class="'
-            u'contenttype-opengever-meeting-meeting">9. Sitzung der '
-            u'Rechnungspr\xfcfungskommission</a>',
-            fields['Meeting'],
-            )
-        self.assertEquals(
-            u'<a href="http://nohost/plone/ordnungssystem/fuhrung/'
-            u'vertrage-und-vereinbarungen/dossier-1/proposal-1" title="Vertr\xe4ge"'
-            u' class="contenttype-opengever-meeting-proposal">Vertr\xe4ge</a>',
-            fields['Proposal'])
+        self.assertEqual(u'Vertr\xe4ge', fields['Submitted Proposal'].text)
+        self.assertEqual(
+            self.submitted_proposal.absolute_url(),
+            fields['Submitted Proposal'].css('a').first.get('href'))
+
+        self.assertEqual(
+            u'9. Sitzung der Rechnungspr\xfcfungskommission',
+            fields['Meeting'].text)
+        self.assertEqual(
+            self.meeting.model.get_url(),
+            fields['Meeting'].css('a').first.get('href'))
+
+        self.assertEqual(u'Vertr\xe4ge', fields['Proposal'].text)
+        self.assertEqual(
+            self.proposal.absolute_url(),
+            fields['Proposal'].css('a').first.get('href'))
+
+    @browsing
+    def test_no_link_to_proposal_visible_if_no_access_to_dossier(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.return_excerpt(excerpt1)
+
+        # block access to `proposal` for `committee_responsible`
+        self.dossier.__ac_local_roles_block__ = True
+
+        expected_fields = [
+            'Submitted Proposal',
+            'Meeting'
+        ]
+        browser.open(excerpt1, view='tabbedview_view-overview')
+        fields = meeting_fields(browser)
+
+        self.assertItemsEqual(expected_fields, fields.keys(),
+            msg='The user we test with should see a link to submitted '
+                'proposal and meeting, but not to the proposal')
+
+        self.assertEqual(u'Vertr\xe4ge', fields['Submitted Proposal'].text)
+        self.assertEqual(
+            self.submitted_proposal.absolute_url(),
+            fields['Submitted Proposal'].css('a').first.get('href'))
+
+        self.assertEqual(
+            u'9. Sitzung der Rechnungspr\xfcfungskommission',
+            fields['Meeting'].text)
+        self.assertEqual(
+            self.meeting.model.get_url(),
+            fields['Meeting'].css('a').first.get('href'))
+
+    @browsing
+    def test_no_link_to_submitted_proposal_visible_if_no_access_to_committee(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.return_excerpt(excerpt1)
+
+        self.login(self.regular_user, browser)
+
+        expected_fields = [
+            'Proposal',
+            'Meeting'
+        ]
+        browser.open(excerpt1, view='tabbedview_view-overview')
+        fields = meeting_fields(browser)
+        self.assertItemsEqual(expected_fields, fields.keys(),
+            msg='The dossier responsible cannot view the submitted proposal')
+
+        self.assertEqual(u'Vertr\xe4ge', fields['Proposal'].text)
+        self.assertEqual(
+            self.proposal.absolute_url(),
+            fields['Proposal'].css('a').first.get('href'))
+
+        self.assertEqual(
+            u'9. Sitzung der Rechnungspr\xfcfungskommission',
+            fields['Meeting'].text)
+        self.assertEqual([], fields['Meeting'].css('a'),
+            'The meeting is not visible to regular_user and thus should not '
+            'be linked')
 
     @browsing
     def test_excerpt_overview_hides_link_to_proposal_when_insufficient_privileges(self, browser):
@@ -216,34 +270,11 @@ class TestExcerptOverview(IntegrationTestCase):
         excerpt1 = agenda_item.generate_excerpt('excerpt 1')
         agenda_item.return_excerpt(excerpt1)
 
-        expected_fields = [
-            'Title',
-            'Document Date',
-            'Document Type',
-            'Author',
-            'creator',
-            'Description',
-            'Foreign Reference',
-            'Keywords',
-            'Checked out',
-            'File',
-            'Digital Available',
-            'Preserved as paper',
-            'Date of receipt',
-            'Date of delivery',
-            'Related Documents',
-            'Classification',
-            'Privacy layer',
-            'Public Trial',
-            'Public trial statement',
-            'Submitted with',
-            'Created',
-            'Modified'
-        ]
+        # block access to `proposal` for `regular_user`
+        self.dossier.__ac_local_roles_block__ = True
+
+        expected_fields = []
         self.login(self.regular_user, browser)
         browser.open(excerpt1, view='tabbedview_view-overview')
-        fields = dict(zip(
-            browser.css('.documentMetadata th').text,
-            map(attrgetter('innerHTML'), browser.css('.documentMetadata td')),
-        ))
+        fields = meeting_fields(browser)
         self.assertItemsEqual(expected_fields, fields.keys())

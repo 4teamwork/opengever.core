@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-03-22 12:27+0000\n"
+"POT-Creation-Date: 2020-06-29 10:52+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -620,6 +620,11 @@ msgstr "Laufnummer"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
 msgstr "Dokumentdatum"
+
+#. Default: "Submitted Proposal"
+#: ./opengever/document/browser/overview.py
+msgid "label_submitted_proposal"
+msgstr "Eingereichter Antrag"
 
 #. Default: "Thumbnail"
 #: ./opengever/document/behaviors/metadata.py

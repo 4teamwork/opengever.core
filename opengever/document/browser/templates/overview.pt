@@ -11,7 +11,7 @@
                     <th tal:content="row/label">Label</th>
                     <td tal:content="structure row/content">Content</td>
                 </tr>
-                <tr tal:repeat="row view/get_meeting_links">
+                <tr tal:repeat="row view/get_meeting_links" class="meetinglink">
                     <th tal:content="row/label">Label</th>
                     <td tal:content="structure row/content">Content</td>
                 </tr>

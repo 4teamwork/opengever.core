@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-03-22 12:27+0000\n"
+"POT-Creation-Date: 2020-06-29 10:52+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -617,6 +617,11 @@ msgstr "Numéro courant"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
 msgstr "Date du document"
+
+#. Default: "Submitted Proposal"
+#: ./opengever/document/browser/overview.py
+msgid "label_submitted_proposal"
+msgstr "Requête soumise"
 
 #. Default: "Thumbnail"
 #: ./opengever/document/behaviors/metadata.py

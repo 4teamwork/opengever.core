@@ -12,6 +12,7 @@ Changelog
 - Add @@logout view to clear Plone session and redirect to CAS logout if necessary. [lgraf]
 - Introduce a new property `touched` on dossiers. [mbaechtold]
 - Add support for metadata_fields in OpengeverRealContentListingObject. [njohner]
+- Fix linking to proposal/submitted proposal from documents in various places. [deiferni]
 - Fix sort order within task template folder. [mbaechtold]
 - Fix deadline of task templates no longer shown in tabular listing. [mbaechtold]
 - Fix permission issue with resolving subtask of tasktemplates. [njohner]

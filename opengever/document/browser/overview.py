@@ -225,28 +225,36 @@ class Overview(DefaultView, GeverTabMixin, VisibleActionButtonRendererMixin):
             yield data
 
     def get_meeting_links(self):
+        proposal_model = None
 
         proposal = self.context.get_proposal()
-        if proposal is None:
-            return
+        if proposal:
+            proposal_model = proposal.load_model()
+            proposal_link = proposal_model.get_link()
+            if proposal_link:
+                yield {
+                    'label': _('label_proposal', default='Proposal'),
+                    'content': proposal_link,
+                }
 
-        proposal_model = proposal.load_model()
+        submitted_proposal = self.context.get_submitted_proposal()
+        if submitted_proposal:
+            proposal_model = submitted_proposal.load_model()
+            submitted_proposal_link = proposal_model.get_submitted_link()
+            if submitted_proposal_link:
+                yield {
+                    'label': _('label_submitted_proposal',
+                               default='Submitted Proposal'),
+                    'content': submitted_proposal_link,
+                }
 
-        proposal_link = proposal_model.get_link()
-        if proposal_link:
-            yield {
-                'label': _('label_proposal', default='Proposal'),
-                'content': proposal_link,
-            }
-        else:
-            return
-
-        meeting_link = proposal_model.get_meeting_link()
-        if meeting_link:
-            yield {
-                'label': _('label_meeting', default='Meeting'),
-                'content': meeting_link,
-            }
+        if proposal_model:
+            meeting_link = proposal_model.get_meeting_link()
+            if meeting_link:
+                yield {
+                    'label': _('label_meeting', default='Meeting'),
+                    'content': meeting_link,
+                }
 
     def submitted_documents(self):
         return SubmittedDocument.query.by_source(self.context).all()

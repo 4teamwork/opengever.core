@@ -18,7 +18,7 @@ class TestDocumentProposal(IntegrationTestCase):
         proposal = self.submitted_proposal
         self.assertEquals(proposal, proposal.get_proposal_document().get_proposal())
 
-    def test_get_proposal_of_excerpt_document_in_committee(self):
+    def test_get_submitted_proposal_of_excerpt_document_in_committee(self):
         self.login(self.committee_responsible)
         agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
         agenda_item.decide()
@@ -26,7 +26,8 @@ class TestDocumentProposal(IntegrationTestCase):
             agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
 
         excerpt_document, = children['added']
-        self.assertEquals(self.submitted_proposal, excerpt_document.get_proposal())
+        self.assertEquals(self.submitted_proposal,
+                          excerpt_document.get_submitted_proposal())
 
     def test_get_proposal_of_excerpt_document_in_case_dossier(self):
         self.login(self.committee_responsible)
