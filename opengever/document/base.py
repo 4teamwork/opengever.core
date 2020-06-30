@@ -262,6 +262,7 @@ class BaseDocumentMixin(object):
 
         return dossier.title
 
+
 def mimetype_lookup(mtr, contenttype):
     """Reimplemented as case insensitive from Products.MimetypesRegistry."""
     __traceback_info__ = (repr(contenttype), str(contenttype))
