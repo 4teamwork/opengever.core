@@ -56,6 +56,7 @@ GEVER-Mandanten abgefragt werden.
           "is_emm_environment": false,
           "max_dossier_levels": 5,
           "max_repositoryfolder_levels": 3,
+          "private_folder_url": "http://localhost:8080/fd/private/kathi.barfuss",
           "recently_touched_limit": 10,
           "root_url": "http://localhost:8080/fd",
           "sharing_configuration": {

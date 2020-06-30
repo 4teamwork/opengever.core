@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.interfaces import IReferenceNumber
+from opengever.private import get_private_folder_url
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
@@ -60,6 +61,56 @@ class TestPrivateFolder(IntegrationTestCase):
         folder = mtool.getHomeFolder(id='peter-mustermann')
         self.assertEquals(
             'Mustermann Peter (peter-mustermann)', folder.Title())
+
+    @browsing
+    def test_handles_at_sign_in_userids(self, browser):
+        peter = create(Builder('user').with_userid('peter@mustermann'))
+        create(Builder('ogds_user')
+               .having(userid='peter@mustermann',
+                       firstname='Peter',
+                       lastname='Mustermann'))
+
+        # Create the private folder (this is not triggered by authenticating
+        # the user, it must be done manually).
+        self.login(peter, browser)
+        membership_tool = api.portal.get_tool('portal_membership')
+        membership_tool.createMemberArea()
+
+        # Make sure the private folder has been created.
+        folder = membership_tool.getHomeFolder()
+        self.assertEquals(
+            'Mustermann Peter (peter@mustermann)',
+            folder.Title()
+        )
+        self.assertEquals(
+            'peter-40mustermann',
+            folder.id
+        )
+
+    @browsing
+    def test_get_private_folder_url(self, browser):
+        # Create a user which does not have private folder yet. Please note
+        # the @ sign in the username. It will be normalised and used for the
+        # id of the private folder later on.d
+        jane = create(Builder('user').with_userid("jane@bond"))
+        self.assertNotIn('jane-40bond', self.portal.private.objectIds())
+        self.assertEquals(
+            None,
+            get_private_folder_url()
+        )
+
+        # Create the private folder (this is not triggered by authenticating
+        # the user, it must be done manually).
+        self.login(jane, browser)
+        membership_tool = api.portal.get_tool('portal_membership')
+        membership_tool.createMemberarea()
+
+        # Make sure the private folder has been created.
+        self.assertIn('jane-40bond', self.portal.private.objectIds())
+        self.assertEquals(
+            'http://nohost/plone/private/jane-40bond',
+            get_private_folder_url()
+        )
 
 
 class TestPrivateFolderTabbedView(IntegrationTestCase):

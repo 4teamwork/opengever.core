@@ -1,7 +1,9 @@
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from ftw.testbrowser import browsing
+from opengever.private import enable_opengever_private
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
+from plone import api
 
 
 class TestConfig(IntegrationTestCase):
@@ -198,4 +200,25 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(
             'local',
             browser.json.get(u'bumblebee_app_id')
+        )
+
+    @browsing
+    def test_config_contains_url_to_private_folder(self, browser):
+        # Enable member area creation in Plone.
+        membership_tool = api.portal.get_tool('portal_membership')
+        enable_opengever_private()
+        self.assertTrue(membership_tool.getMemberareaCreationFlag())
+
+        # Create the user's private folder (this is not triggered by
+        # authenticating the user, it must be done manually).
+        self.login(self.regular_user, browser)
+        membership_tool.createMemberarea()
+
+        # Finally test our implementation.
+        url = self.portal.absolute_url() + '/@config'
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            u'http://nohost/plone/private/kathi.barfuss',
+            browser.json.get(u'private_folder_url')
         )

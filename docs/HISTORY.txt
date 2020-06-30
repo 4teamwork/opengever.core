@@ -7,6 +7,7 @@ Changelog
 - Make creating favorites more robust in case of workflow issues. [deiferni]
 - Improve response history for (automatically) opened subtasks in sequential task templates. [mbaechtold]
 - Fix contenttree.js so that it is also supported by IE. [njohner]
+- Expose the url to the user's private folder in the `@config` API endpoint. Serves as feature flag too. [mbaechtold]
 - Also allow replacing concrete responsibles with interactive responsibles when triggering task templates. [deiferni]
 - Remove cross-tab logout functionality. [lgraf]
 - Add @@logout view to clear Plone session and redirect to CAS logout if necessary. [lgraf]
