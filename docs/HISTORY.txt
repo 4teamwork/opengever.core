@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Make creating favorites more robust in case of workflow issues. [deiferni]
 - Improve response history for (automatically) opened subtasks in sequential task templates. [mbaechtold]
 - Fix contenttree.js so that it is also supported by IE. [njohner]
 - Also allow replacing concrete responsibles with interactive responsibles when triggering task templates. [deiferni]
