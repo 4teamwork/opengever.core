@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Fix contenttree.js so that it is also supported by IE. [njohner]
 - Also allow replacing concrete responsibles with interactive responsibles when triggering task templates. [deiferni]
 - Remove cross-tab logout functionality. [lgraf]
 - Add @@logout view to clear Plone session and redirect to CAS logout if necessary. [lgraf]
