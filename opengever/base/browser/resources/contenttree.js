@@ -71,9 +71,9 @@ if(jQuery) (function($){
                 o.multiSelect = false;
             }
 
-            function loadTree(c, t, r, b_start=0) {
+            function loadTree(c, t, r, b_start) {
                 $(c).addClass('wait');
-                $.post(o.script, {href: t, rel: r, b_start: b_start}, function(data) {
+                $.post(o.script, {href: t, rel: r, b_start: b_start || 0}, function(data) {
                     $(c).removeClass('wait').append(data);
                     $(c).find('ul:hidden').slideDown({
                         duration: o.expandSpeed
@@ -113,7 +113,7 @@ if(jQuery) (function($){
                         pli,
                         escape(a.attr('href')),
                         escape(a.attr('rel')),
-                        $(this).data('bstart'),
+                        $(this).data('bstart')
                     );
                     li.remove();
                 } else {
