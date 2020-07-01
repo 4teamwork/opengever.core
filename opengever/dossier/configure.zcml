@@ -209,6 +209,24 @@
       />
 
   <subscriber
+      for="opengever.meeting.proposal.IBaseProposal
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.update_dossier_touched_date"
+      />
+
+  <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
            OFS.interfaces.IObjectWillBeMovedEvent"
       handler=".handlers.set_former_reference_before_moving"

@@ -90,3 +90,73 @@ class TestDossierTouched(IntegrationTestCase):
             self.assertEqual("2020-06-12", str(IDossier(self.dossier).touched))
             self.assertEqual("2020-06-12", str(IDossier(self.subdossier).touched))
             self.assertEqual("2020-06-12", str(IDossier(self.subdossier2).touched))
+
+    @browsing
+    def test_modifying_proposal_touches_containing_dossier(self, browser):
+        self.activate_feature('meeting')
+
+        self.login(self.administrator, browser)
+        self.assertEqual("2016-08-31", str(IDossier(self.empty_dossier).touched))
+
+        with freeze(datetime(2020, 6, 12)):
+            proposal = create(Builder('proposal')
+                              .within(self.empty_dossier)
+                              .titled(u'My Proposal')
+                              .having(committee=self.committee.load_model()))
+            self.assertEqual("2020-06-12", str(IDossier(self.empty_dossier).touched))
+
+        with freeze(datetime(2020, 6, 13)):
+            browser.open(proposal, view="edit")
+            browser.fill({u"Title": "Modified proposal"}).save()
+            self.assertEqual("2020-06-13", str(IDossier(self.empty_dossier).touched))
+
+    @browsing
+    def test_changing_state_of_proposal_touches_containing_dossier(self, browser):
+        self.activate_feature('meeting')
+
+        self.login(self.administrator, browser)
+        self.assertEqual("2016-08-31", str(IDossier(self.empty_dossier).touched))
+
+        with freeze(datetime(2020, 6, 12)):
+            proposal = create(Builder('proposal')
+                              .within(self.empty_dossier)
+                              .titled(u'My Proposal')
+                              .having(committee=self.committee.load_model()))
+            self.assert_workflow_state('proposal-state-active', proposal)
+            self.assertEqual("2020-06-12", str(IDossier(self.empty_dossier).touched))
+
+        with freeze(datetime(2020, 6, 13)):
+            browser.open(proposal, view='tabbedview_view-overview')
+            browser.click_on("proposal-transition-cancel")
+            browser.click_on("Confirm")
+            self.assert_workflow_state('proposal-state-cancelled', proposal)
+
+            self.assertEqual("2020-06-13", str(IDossier(self.empty_dossier).touched))
+
+    @browsing
+    def test_changing_state_of_subdossier_touches_containing_dossier(self, browser):
+        self.login(self.administrator, browser)
+        self.assertEqual("2016-08-31", str(IDossier(self.dossier).touched))
+        self.assertEqual("2016-08-31", str(IDossier(self.subdossier).touched))
+        self.assert_workflow_state('dossier-state-active', self.subdossier)
+
+        with freeze(datetime(2020, 6, 12)):
+            browser.open(self.subdossier)
+            browser.click_on("dossier-transition-resolve")
+            self.assert_workflow_state('dossier-state-resolved', self.subdossier)
+            self.assertEqual("2020-06-12", str(IDossier(self.dossier).touched))
+            self.assertEqual("2020-06-12", str(IDossier(self.subdossier).touched))
+
+    @browsing
+    def test_changing_state_of_task_touches_containing_dossier(self, browser):
+        self.login(self.administrator, browser)
+        self.set_workflow_state('task-state-open', self.task)  # So we can cancel it later.
+        self.assertEqual("2016-08-31", str(IDossier(self.dossier).touched))
+
+        with freeze(datetime(2020, 6, 13)):
+            browser.open(self.task)
+            browser.click_on("task-transition-open-cancelled")
+            browser.click_on("Save")
+
+            self.assert_workflow_state('task-state-cancelled', self.task)
+            self.assertEqual("2020-06-13", str(IDossier(self.dossier).touched))
