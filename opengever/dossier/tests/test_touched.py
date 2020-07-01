@@ -11,11 +11,12 @@ from plone import api
 class TestDossierTouched(IntegrationTestCase):
 
     @browsing
-    def test_touched_date_is_empty_by_default(self, browser):
-        self.login(self.administrator, browser)
-        dossier = create(Builder("dossier")
-                         .within(self.branch_repofolder))
-        self.assertIsNone(IDossier(dossier).touched)
+    def test_touched_date_is_set_correctly_on_new_dossiers(self, browser):
+        self.login(self.regular_user, browser)
+        with freeze(datetime(2020, 6, 12)):
+            dossier = create(Builder("dossier")
+                             .within(self.leaf_repofolder))
+            self.assertEqual("2020-06-12", str(IDossier(dossier).touched))
 
     @browsing
     def test_touched_date_is_only_updated_when_set_to_different_date(self, browser):
@@ -82,7 +83,7 @@ class TestDossierTouched(IntegrationTestCase):
 
         self.assertEqual("2016-08-31", str(IDossier(self.dossier).touched))
         self.assertEqual("2016-08-31", str(IDossier(self.subdossier).touched))
-        self.assertIsNone(IDossier(self.subdossier2).touched)
+        self.assertEqual("2016-08-31", str(IDossier(self.subdossier2).touched))
 
         with freeze(datetime(2020, 6, 12)):
             api.content.move(source=self.subdocument, target=self.subdossier2)
