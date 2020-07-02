@@ -155,9 +155,7 @@ def purge_reference_number_mappings(copied_dossier, event):
 def update_dossier_touched_date(obj, event):
     today = date.today()
     while obj and not IPloneSiteRoot.providedBy(obj):
-        if (IDossierMarker.providedBy(obj)
-                and IDossier(obj).touched != today
-                and (not (IObjectAddedEvent.providedBy(event) and obj == event.object))):
+        if IDossierMarker.providedBy(obj) and IDossier(obj).touched != today:
             IDossier(obj).touched = today
             # Prevent reindexing all indexes by indexing `UID` too.
             obj.reindexObject(idxs=['UID', 'touched'])

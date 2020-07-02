@@ -103,6 +103,7 @@ DOSSIER_DEFAULTS = {
     'reading': [],
     'reading_and_writing': [],
     'dossier_manager': None,
+    'touched': FROZEN_TODAY,
 }
 DOSSIER_FORM_DEFAULTS = {
     'responsible': 'kathi.barfuss',
@@ -384,11 +385,6 @@ class TestDefaultsBase(IntegrationTestCase):
                     # reference_number is a special field. It never gets
                     # set directly, but instead acts as a computed field
                     # for all intents and purposes.
-                    continue
-
-                if name == 'touched':
-                    # touched is a special field. It never gets set by the
-                    # user but only by an event handler.
                     continue
 
                 names.append(name)

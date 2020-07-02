@@ -1,6 +1,8 @@
+from datetime import datetime
 from ftw.builder.builder import Builder
 from ftw.builder.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing.freezer import freeze
 from opengever.testing import IntegrationTestCase
 
 
@@ -70,11 +72,12 @@ class TestDossierSerializer(IntegrationTestCase):
     def test_response_contains_dossier_touched_date(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        # The "touched" date is empty for newly created dossiers.
-        new_dossier = create(Builder("dossier")
-                             .within(self.branch_repofolder))
-        browser.open(new_dossier, method="GET", headers=self.api_headers)
-        self.assertEqual(None, browser.json["touched"])
+        # The "touched" date is set correctly for newly created dossiers.
+        with freeze(datetime(2020, 6, 12)):
+            new_dossier = create(Builder("dossier")
+                                 .within(self.branch_repofolder))
+            browser.open(new_dossier, method="GET", headers=self.api_headers)
+            self.assertEqual(u'2020-06-12', browser.json["touched"])
 
         # The dossier from the fixture must have been edited somewhere
         # because the "touched" date is not empty.
