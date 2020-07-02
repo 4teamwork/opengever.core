@@ -91,6 +91,7 @@
       <replace css:content-children=".gever-portal-control" css:theme-children="#gever-portal-controls" />
 
       <!-- header -->
+      <replace css:content=".teasers" css:theme-children="#teaser-wrapper" />
       <replace css:content-children="#portal-personaltools" css:theme-children="#portal-personaltools" />
 
       <!-- banner image -->

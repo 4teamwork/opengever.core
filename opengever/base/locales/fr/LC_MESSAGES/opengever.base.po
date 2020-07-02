@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-05-25 15:04+0000\n"
+"POT-Creation-Date: 2020-07-03 11:25+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -462,6 +462,11 @@ msgstr "Les objets du presse-papier ont été ajoutés."
 #: ./opengever/base/browser/confirm.pt
 msgid "msg_verify_you_performed_this_action"
 msgstr "Veuillez confirmer que vous êtes à l'origine de cette action et que la requête ne provient ni d'un lien courriel, ni d'un site web externe à GEVER. Cette mesure de protection permet de prévenir les éventuelles attaques CSRF. Si ce message apparaît suite à une action entreprise dans l'espace GEVER, veuillez en informer le support (avec capture d'écran du message et le lien URL correspondant)."
+
+#. Default: "Do you already know the new user interface of OneGov GEVER? <a href=\"javascript:switchUI()\">Try it out</a> now."
+#: ./opengever/base/viewlets/teaser.pt
+msgid "new_frontend_teaser"
+msgstr "Connaissez-vous déjà la nouvelle interface de OneGov GEVER? <a href=\"javascript:switchUI()\">Testez la</a> maintenant."
 
 #. Default ""
 #: opengever/repository/classification.py

@@ -307,6 +307,17 @@
       cookable="True"
       expression=""
       enabled="True"
+      id="++resource++opengever.base/teaser.js"
+      inline="False"
+      insert-before="++resource++opengever.base/base.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
       id="++resource++opengever.base/base.js"
       inline="False"
       insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"

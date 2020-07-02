@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-05-25 15:04+0000\n"
+"POT-Creation-Date: 2020-07-03 11:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -458,6 +458,11 @@ msgstr ""
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt
 msgid "msg_verify_you_performed_this_action"
+msgstr ""
+
+#. Default: "Do you already know the new user interface of OneGov GEVER? <a href=\"javascript:switchUI()\">Try it out</a> now."
+#: ./opengever/base/viewlets/teaser.pt
+msgid "new_frontend_teaser"
 msgstr ""
 
 #. Default ""
