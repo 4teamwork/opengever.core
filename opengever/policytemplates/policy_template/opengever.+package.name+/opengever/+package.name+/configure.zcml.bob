@@ -71,6 +71,7 @@
                            opengever.setup:casauth
                           "
       admin_unit_id="{{{adminunit.id}}}"
+      administrator_group="{{{deployment.administrator_group}}}"
       rolemanager_group="{{{deployment.rolemanager_group}}}"
       records_manager_group="{{{deployment.records_manager_group}}}"
       archivist_group="{{{deployment.archivist_group}}}"
@@ -87,6 +88,7 @@
                            opengever.setup:casauth
                           "
       admin_unit_id="{{{adminunit.id}}}"
+      administrator_group="{{{deployment.administrator_group}}}"
       rolemanager_group="{{{deployment.rolemanager_group}}}"
       records_manager_group="{{{deployment.records_manager_group}}}"
       workspace_creator_group="{{{deployment.workspace_creators_group}}}"
