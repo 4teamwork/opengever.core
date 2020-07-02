@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (unreleased)
 ---------------------
 
+- Improve check if solr has started to prevent an issue during the testserver startup. [sebastianmanger]
 - Make creating favorites more robust in case of workflow issues. [deiferni]
 - Improve response history for (automatically) opened subtasks in sequential task templates. [mbaechtold]
 - Fix contenttree.js so that it is also supported by IE. [njohner]
