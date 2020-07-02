@@ -992,7 +992,7 @@ msgstr "Délai de la tâche modifié"
 #. Default: "Task opened automatically"
 #: ./opengever/task/response_description.py
 msgid "transition_label_opened"
-msgstr ""
+msgstr "Tâche commencée automatiquement"
 
 #. Default: "Task reactivated"
 #: ./opengever/task/response_description.py
