@@ -1,0 +1,4 @@
+<registry>
+  <!-- Usersnap -->
+  <records interface="opengever.base.interfaces.IUserSnapSettings" />
+</registry>

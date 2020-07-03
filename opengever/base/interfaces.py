@@ -372,6 +372,14 @@ class IGeverUI(Interface):
         default=False)
 
 
+class IUserSnapSettings(Interface):
+
+    api_key = schema.TextLine(
+        title=u"API key",
+        description=u"API key for the usersnap widget.",
+        default=u"")
+
+
 class IDocPropertyProvider(Interface):
     """A provider for DocProperties."""
 
