@@ -3,11 +3,10 @@ function setTourAsSeen(tourKey) {
   var requester = axios.create();
   requester.defaults.headers.common['Accept'] = 'application/json';
   requester.defaults.headers.common['Content-Type'] = 'application/json';
-
-  requester.get(url).then(function(data) {
+  return requester.get(url).then(function(data) {
     var seenTours = data.data.seen_tours;
-    if(!(tourKey in seenTours)) {
-      requester.patch(url, { 'seen_tours': seenTours.concat([tourKey]) });
+    if((seenTours.indexOf(tourKey) === -1) && (seenTours.indexOf('*') === -1)) {
+      return requester.patch(url, { 'seen_tours': seenTours.concat([tourKey]) });
     }
   });
 }
