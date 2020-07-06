@@ -71,10 +71,14 @@ if(jQuery) (function($){
                 o.multiSelect = false;
             }
 
-            function loadTree(c, t, r, b_start) {
+            function loadTree(c, t, r, b_start, extend) {
                 $(c).addClass('wait');
                 $.post(o.script, {href: t, rel: r, b_start: b_start || 0}, function(data) {
-                    $(c).removeClass('wait').append(data);
+                    if (extend) {
+                        $(c).removeClass('wait').append($(data).contents());
+                    } else {
+                        $(c).removeClass('wait').append(data);
+                    }
                     $(c).find('ul:hidden').slideDown({
                         duration: o.expandSpeed
                     });
@@ -107,14 +111,25 @@ if(jQuery) (function($){
                         });
                     li.removeClass('collapsed').addClass('expanded');
                 } else if (li.hasClass('loadMore')) {
-                    var pli = li.parent().closest('li');
-                    var a = pli.find('a');
-                    loadTree(
-                        pli,
-                        escape(a.attr('href')),
-                        escape(a.attr('rel')),
-                        $(this).data('bstart')
-                    );
+                    var a = li.parent().closest('li').find('a');
+                    var ul = li.parent();
+                    if (a.length > 0) {
+                        loadTree(
+                            ul,
+                            escape(a.attr('href')),
+                            escape(a.attr('rel')),
+                            $(this).data('bstart'),
+                            true
+                        );
+                    } else {
+                        loadTree(
+                            ul,
+                            escape(o.rootUrl),
+                            '0',
+                            $(this).data('bstart'),
+                            true
+                        );
+                    }
                     li.remove();
                 } else {
                     li.find('ul').slideUp({
