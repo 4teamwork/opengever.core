@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-12-30 15:00+0000\n"
+"POT-Creation-Date: 2020-07-06 14:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,20 +98,25 @@ msgstr "Membre du team"
 msgid "invitation"
 msgstr "Invitation"
 
-#. Default: "Accept: ${accept_link}"
-#: ./opengever/workspace/participation/invitation_mailer.py
-msgid "invitation_accept"
-msgstr "Accepter: ${accept_link}"
-
 #. Default: "You were invited by ${user} to the workspace \"${title}\"."
 #: ./opengever/workspace/participation/invitation_mailer.py
 msgid "invitation_mail_description"
 msgstr "Vous avez été invité par ${user} pour le teamraum \"${title}\"."
 
+#. Default: "Message from ${user}:"
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_message_title"
+msgstr "Message de ${user}:"
+
 #. Default: "Invitation to workspace \"${title}\""
 #: ./opengever/workspace/participation/invitation_mailer.py
 msgid "invitation_mail_subject"
 msgstr "Invitation pour le teamraum \"${title}\""
+
+#. Default: "Hello,\n\nYou were invited by ${user} to the workspace \"${title}\" at ${platform}.\n\nPlease click the following link if you want to accept the invitation:\n${accept_url}"
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_summary"
+msgstr "Bonjour,\n\n${user} vous a invité, à participer à \"${title}\", sur la plateforme ${platform}.\n\nPour accepter cette invitation, veuillez cliquer sur le lien suivant:\n${accept_url}"
 
 #. Default: "Completed"
 #: ./opengever/workspace/todo.py

@@ -4,6 +4,7 @@ Changelog
 2020.5.0 (unreleased)
 ---------------------
 
+- Improve design and content of workspace invitation e-mail. [mbaechtold]
 - Add question for `administrator_group` to the policy template. [mbaechtold]
 - Add teaser viewlet to promote the new frontend. [tinagerber]
 
