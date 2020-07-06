@@ -45,8 +45,9 @@ $(document).delegate('body', 'tabbedview.unknownresponse', function(event, overv
  * to the new gever-ui.
  */
 function switchUI(){
-  setTourAsSeen('be_new_frontend_teaser');
-  var pathname = new URL($('body').data('portal-url')).pathname;
-  Cookies.set('geverui', '1', {path: pathname, expires: 365});
-  window.location.reload(true);
+  setTourAsSeen('be_new_frontend_teaser').then(function() {
+    var pathname = new URL($('body').data('portal-url')).pathname;
+    Cookies.set('geverui', '1', {path: pathname, expires: 365});
+    window.location.reload(true);
+  });
 }
