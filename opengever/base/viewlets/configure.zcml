@@ -101,6 +101,13 @@
       />
 
   <browser:viewlet
+      name="opengever.base.teaser"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      class=".teaser.TeaserViewlet"
+      permission="zope2.View"
+      />
+
+  <browser:viewlet
       name="opengever.base.recently_touched_menu"
       manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
       class=".recently_touched_menu.RecentlyTouchedMenuViewlet"

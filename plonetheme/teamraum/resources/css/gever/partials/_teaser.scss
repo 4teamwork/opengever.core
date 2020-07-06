@@ -1,0 +1,23 @@
+.teaser {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: $gever-green;
+    padding: 1em;
+    font-size: 125%;
+    color: $white;
+
+    a {
+        color: $white;
+        text-decoration: underline;
+    }
+    .teaser-close {
+        padding-left: 1em;
+        text-decoration: none;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}

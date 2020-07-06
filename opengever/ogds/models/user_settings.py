@@ -7,6 +7,7 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy import Text
+from sqlalchemy.orm import backref
 from sqlalchemy.orm import relationship
 from zope import schema
 from zope.interface import Interface
@@ -26,7 +27,7 @@ class UserSettings(Base):
     __tablename__ = 'user_settings'
 
     userid = Column(String(USER_ID_LENGTH), ForeignKey(User.userid), primary_key=True)
-    user = relationship(User, backref="user_settings")
+    user = relationship(User, backref=backref("user_settings", uselist=False))
 
     notify_own_actions = Column(Boolean, default=False, nullable=False)
     notify_inbox_actions = Column(Boolean, default=True, nullable=False)

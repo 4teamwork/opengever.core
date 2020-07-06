@@ -4606,4 +4606,9 @@ a.webaction_button img { height: 18px; vertical-align: middle; margin-right: 4px
 #webactions-list li.webaction img { height: 18px; }
 #webactions-list li.webaction hr { margin-top: 10px; }
 
+.teaser { box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; background-color: #3387a1; padding: 1em; font-size: 125%; color: #fff; }
+.teaser a { color: #fff; text-decoration: underline; }
+.teaser .teaser-close { padding-left: 1em; text-decoration: none; }
+.teaser .teaser-close:hover { text-decoration: none; }
+
 /*# sourceMappingURL=gever.css.map */

@@ -1,0 +1,12 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+    <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/teaser.js"
+      inline="False"
+      insert-before="++resource++opengever.base/base.js"
+      />
+</object>
