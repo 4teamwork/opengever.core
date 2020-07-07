@@ -26,3 +26,5 @@ Ein Benutzer kann mittels POST-Requests als neuer Besitzer eines Teamraums festg
 .. sourcecode:: http
 
    HTTP/1.1 204 No content
+
+Nur Administratoren eines Teamraums können den Besitzer eines Teamraums ändern.

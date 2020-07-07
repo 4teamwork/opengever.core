@@ -86,6 +86,18 @@ class TestChangeWorkspaceResponsiblePost(IntegrationTestCase):
         )
 
     @browsing
+    def test_setting_workspace_responsible_raises_unauthorized_when_permission_missing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace.absolute_url() + "/@change-responsible",
+                method="POST",
+                headers=self.api_headers,
+                data=json.dumps({"userid": u"kathi.barfuss"})
+            )
+
+    @browsing
     def test_changing_responsible_requires_a_userid(self, browser):
         self.login(self.workspace_owner, browser=browser)
         with browser.expect_http_error(400):

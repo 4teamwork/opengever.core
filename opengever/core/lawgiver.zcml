@@ -278,6 +278,10 @@
       permissions="opengever.workspace: Update Content Order"
       />
 
+  <lawgiver:ignore
+      permissions="opengever.workspace: Change Workspace Responsible"
+      />
+
   <lawgiver:workflow name="opengever_committeecontainer_workflow">
     <lawgiver:ignore
         permissions="
@@ -352,6 +356,11 @@
     <lawgiver:map_permissions
         action_group="update_order"
         permissions="opengever.workspace: Update Content Order"
+        />
+
+    <lawgiver:map_permissions
+        action_group="change workspace responsible"
+        permissions="opengever.workspace: Change Workspace Responsible"
         />
 
   </lawgiver:workflow>

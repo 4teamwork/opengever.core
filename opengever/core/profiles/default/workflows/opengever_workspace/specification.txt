@@ -39,4 +39,5 @@ Status Active:
   A workspace member can add.
   A workspace member can update_order.
   A workspace admin can edit.
+  A workspace admin can change workspace responsible.
   A workspace admin can manage security.

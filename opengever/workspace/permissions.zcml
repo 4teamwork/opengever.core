@@ -12,4 +12,6 @@
 
   <permission id="opengever.workspace.UpdateContentOrder" title="opengever.workspace: Update Content Order" />
 
+  <permission id="opengever.workspace.ChangeWorkspaceResponsible" title="opengever.workspace: Change Workspace Responsible" />
+
 </configure>

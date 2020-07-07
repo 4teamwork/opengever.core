@@ -815,7 +815,7 @@
       name="@change-responsible"
       for="opengever.workspace.interfaces.IWorkspace"
       factory=".workspace.ChangeResponsible"
-      permission="zope2.View"
+      permission="opengever.workspace.ChangeWorkspaceResponsible"
       />
 
 </configure>
