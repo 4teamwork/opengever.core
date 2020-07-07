@@ -1,5 +1,5 @@
 <div class="teasers" tal:define="unseen_tours view/unseen_tours" i18n:domain="opengever.base">
-  <tal:teaser define="tourkey string:be_new_frontend_teaser">
+  <tal:teaser define="tourkey string:be_new_frontend_teaser" tal:condition="view/is_ui_feature_enabled">
     <div class="teaser" id="new-frontend-teaser"
          tal:condition="python:tourkey in unseen_tours"
          tal:attributes="data-tourkey tourkey">

@@ -1,3 +1,4 @@
+from opengever.base.interfaces import IGeverUI
 from opengever.ogds.models.user import User
 from plone import api
 from plone.app.layout.viewlets.common import ViewletBase
@@ -20,3 +21,6 @@ class TeaserViewlet(ViewletBase):
                 if key not in seen_tours:
                     unseen_tours.append(key)
         return unseen_tours
+
+    def is_ui_feature_enabled(self):
+        return api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
