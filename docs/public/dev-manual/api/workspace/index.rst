@@ -14,5 +14,6 @@ Hier werden alle Teamraum-Schnittstellen beschrieben, welche von OneGov GEVER un
    role_inheritance
    todos
    todolists
+   responsibles
 
 .. disqus::
