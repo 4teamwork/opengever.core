@@ -7,6 +7,7 @@ Changelog
 - Improve design and content of workspace invitation e-mail. [mbaechtold]
 - Add question for `administrator_group` to the policy template. [mbaechtold]
 - Add teaser viewlet to promote the new frontend. [tinagerber]
+- Fix loading of more items in contenttree widget for toplevel items. [buchi]
 
 
 2020.4.0 (2020-07-02)
