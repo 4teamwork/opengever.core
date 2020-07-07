@@ -2,17 +2,35 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    i18n:domain="opengever.workspace">
+    i18n:domain="opengever.workspace"
+    metal:use-macro="context/notification_mail_macros/macros/mail_template">
 
-    <h1 style="text-align: center; margin: 0 0 10px 0; font-family: Arial, sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;" tal:content="options/title">
-    </h1>
+    <metal:styles metal:fill-slot="style_slot">
+      <style>
+        .email-content table {
+          width: 100%;
+        }
+      </style>
+    </metal:styles>
 
-    <tal:block tal:condition="options/description">
-      <tal:block tal:repeat="paragraph options/description">
-        <p tal:content="structure paragraph" />
-      </tal:block>
-    </tal:block>
+    <metal:title metal:fill-slot="title">
+        <p tal:content="options/title" />
+    </metal:title>
 
-    <p tal:content="options/accept" />
+    <metal:content metal:fill-slot="content">
+      <p>
+        <tal:summary tal:repeat="line options/content">
+          <tal:last tal:define="is_last repeat/line/end">
+            <tal:line tal:replace="line" /><br tal:condition="not: is_last" />
+          </tal:last>
+        </tal:summary>
+      </p>
+      <tal:comment tal:condition="options/comment">
+          <p><strong tal:content="options/comment_title"/></p>
+        <tal:block tal:repeat="line options/comment">
+          <p tal:content="line" />
+        </tal:block>
+      </tal:comment>
 
+    </metal:content>
 </html>
