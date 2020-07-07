@@ -1,9 +1,10 @@
 from collective.elephantvocabulary import wrap_vocabulary
+from copy import copy
 from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
-from ftw.solr.query import escape
+from ftw.solr.query import SPECIAL_CHARS
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
@@ -24,6 +25,20 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import Missing
+
+
+TO_ESCAPE = copy(SPECIAL_CHARS)
+TO_ESCAPE.append(' ')
+
+
+def filter_escape(term):
+    """Copy of ftw.solr.query.escape, but using the above defined TO_ESCAPE
+    instead of SPECIAL_CHARS, additionally including a white space. For queries,
+    whitespaces should not be escaped, but for filters they should be.
+    """
+    for char in TO_ESCAPE:
+        term = term.replace(char, '\\' + char)
+    return term
 
 
 def translate_task_type(task_type):
@@ -124,11 +139,11 @@ class SimpleListingField(object):
         if self.index is None:
             return
         if isinstance(value, list):
-            value = map(escape, value)
+            value = map(filter_escape, value)
             value = map(safe_unicode, value)
             value = u' OR '.join(value)
         else:
-            value = escape(safe_unicode(value))
+            value = filter_escape(safe_unicode(value))
 
         # Convert python empty string to solr empty string
         if value == u'':
@@ -137,7 +152,7 @@ class SimpleListingField(object):
         # Escaping the Solr field name is done for security reasons
         # (to prevent attempts to circumvent the security filter by injection
         # of a maliciously crafted field name)
-        key = escape(self.index)
+        key = filter_escape(self.index)
         # Don't escape the '-' at the beginning as it's used to negate a filter query
         if key.startswith('\\-'):
             key = key[1:]
@@ -192,7 +207,7 @@ class DateListingField(SimpleListingField):
         if date_from is not None and date_to is not None:
             value = u'[{} TO {}]'.format(
                 to_iso8601(date_from), to_iso8601(date_to))
-        return u'{}:({})'.format(escape(self.index), value)
+        return u'{}:({})'.format(filter_escape(self.index), value)
 
 
 DEFAULT_SORT_INDEX = 'modified'
