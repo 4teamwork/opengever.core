@@ -64,6 +64,8 @@ Der Server antwortet mit einem JSON-Objekt welches das neue Token enthält:
    :language: http
 
 
+.. _label-invalidate-jwt:
+
 Invalidieren
 ^^^^^^^^^^^^
 
