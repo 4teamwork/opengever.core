@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Add @role-assignment-reports endpoint to list, add and delete role assignment reports. [tinagerber]
+- Nullify text docproperties in word files when updating instead of deleting them. [deiferni]
 - Overwrite logout API endpoint to also expire the user's cookies. [njohner]
 - Translate activities in @notifications endpoint. [njohner]
 - Fix contact workflow state variable name. [deiferni]

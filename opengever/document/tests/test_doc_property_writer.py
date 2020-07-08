@@ -256,6 +256,27 @@ class TestDocPropertyWriter(IntegrationTestCase):
                 dict(properties),
                 )
 
+    def test_text_properties_are_nullified_when_none(self):
+        self.login(self.regular_user)
+        self.with_asset_file('with_gever_properties.docx')
+
+        DocPropertyWriter(self.document).update_doc_properties(only_existing=False)
+
+        with TemporaryDocFile(self.document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+        self.assertIn(('ogg.document.document_type', 'Contract'), properties)
+
+        self.document.document_type = None
+        DocPropertyWriter(self.document).update_doc_properties(only_existing=False)
+
+        with TemporaryDocFile(self.document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+        # while the property is stored as empty string, it will be considered
+        # None while reading the element <vt:lpwstr/>
+        # this is ok as we are interested in the fact that the property is
+        # still present in the file
+        self.assertIn(('ogg.document.document_type', None), properties)
+
     def test_document_with_content_controls_gets_updated(self):
         self.login(self.regular_user)
         self.with_asset_file('content_controls.docx')
