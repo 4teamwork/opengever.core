@@ -2,7 +2,7 @@
     workflow_id="opengever_contact_workflow"
     title="Contact Workflow"
     description=""
-    state_variable="review_state"
+    state_variable="state"
     initial_state="contact-state-active"
     manager_bypass="False">
   <permission>Access contents information</permission>
