@@ -67,6 +67,7 @@ class GeverSettingsAdpaterV1(object):
         if user.getId():
             info['userid'] = user.getId()
             info['user_fullname'] = user.getProperty('fullname')
+            info['user_email'] = user.getProperty('email')
         return info
 
     def get_user_settings(self):

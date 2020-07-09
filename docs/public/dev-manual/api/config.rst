@@ -84,6 +84,7 @@ GEVER-Mandanten abgefragt werden.
               "white_list_prefix": "^.+"
           },
           "user_fullname": "Johner Niklaus",
+          "user_email": "niklaus.johner@example.com"
           "user_settings": {
               "notify_inbox_actions": true,
               "notify_own_actions": false,
