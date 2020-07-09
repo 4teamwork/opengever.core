@@ -64,6 +64,16 @@
        
 
 
+   .. py:attribute:: touched
+
+       :Feldname: :field-title:`Änderungsdatum des Dossiers oder seines Inhalts`
+       :Datentyp: ``Date``
+       
+       
+       
+       
+
+
    .. py:attribute:: comments
 
        :Feldname: :field-title:`Kommentar`
