@@ -33,4 +33,6 @@
       </tal:comment>
 
     </metal:content>
+
+    <metal:footer metal:fill-slot="footer" />
 </html>
