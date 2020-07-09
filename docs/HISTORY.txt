@@ -4,7 +4,6 @@ Changelog
 2020.5.0 (unreleased)
 ---------------------
 
-- Fix update mail filename upgrade step. [njohner]
 - Fix contact workflow state variable name. [deiferni]
 - Fix contact folder workflow state variable name. [deiferni]
 - Improve design and content of workspace invitation e-mail. [mbaechtold]
@@ -13,6 +12,11 @@ Changelog
 - Add teaser viewlet to promote the new frontend. [tinagerber]
 - Fix loading of more items in contenttree widget for toplevel items. [buchi]
 - Add UserSnap API key to registry. [njohner]
+
+2020.4.1 (2020-07-09)
+---------------------
+
+- Fix update mail filename upgrade step. [njohner]
 
 
 2020.4.0 (2020-07-02)
