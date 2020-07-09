@@ -4,6 +4,7 @@ Changelog
 2020.4.0 (2020-07-02)
 ---------------------
 
+- Fix update mail filename upgrade step. [njohner]
 - Improve check if solr has started to prevent an issue during the testserver startup. [sebastianmanger]
 - Make creating favorites more robust in case of workflow issues. [deiferni]
 - Improve response history for (automatically) opened subtasks in sequential task templates. [mbaechtold]
