@@ -233,6 +233,7 @@
           </tr>
           <!-- 1 Column Text + Button : END -->
 
+          <metal:footer define-slot="footer">
           <!-- Clear Spacer : BEGIN -->
           <tr>
             <td aria-hidden="true" height="40" style="font-size: 0; line-height: 0; border-bottom: 5px solid #3387a1;">
@@ -268,6 +269,8 @@
             </td>
           </tr>
           <!-- 1 Column Text : END -->
+          </metal:footer>
+
         </table>
         <!-- Email Body : END -->
 
