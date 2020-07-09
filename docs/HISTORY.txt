@@ -4,6 +4,7 @@ Changelog
 2020.5.0 (unreleased)
 ---------------------
 
+- Fix update mail filename upgrade step. [njohner]
 - Fix contact workflow state variable name. [deiferni]
 - Fix contact folder workflow state variable name. [deiferni]
 - Improve design and content of workspace invitation e-mail. [mbaechtold]
