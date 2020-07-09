@@ -5,6 +5,7 @@ from opengever.api.solr_query_service import filename
 from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
@@ -750,6 +751,43 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertItemsEqual(
             [task.absolute_url() for task in expected_tasks],
             [item.get("@id") for item in filtered_tasks])
+
+    @browsing
+    def test_filter_by_author_with_whitespace(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        IDocumentMetadata(self.subdocument).document_author = "Some User"
+        IDocumentMetadata(self.subsubdocument).document_author = "Some User2"
+        self.subdocument.reindexObject()
+        self.subsubdocument.reindexObject()
+        self.commit_solr()
+
+        # all documents
+        view = '@listing?name=documents&columns:list=document_author'
+        browser.open(self.subdossier, view=view, headers=self.api_headers)
+        all_documents = browser.json['items']
+        self.assertIn(self.subdocument.absolute_url(),
+                      [item.get("@id") for item in all_documents])
+        self.assertIn(self.subsubdocument.absolute_url(),
+                      [item.get("@id") for item in all_documents])
+
+        # only documents with specific author
+        view = view + '&filters.document_author:record:list={}'.format("Some User")
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        filtered_documents = browser.json['items']
+
+        self.assertTrue(len(all_documents) > len(filtered_documents) > 0)
+        # Make sure that filtering by document_author filtered according to
+        # the document_author field
+        self.assertItemsEqual(
+            [item for item in all_documents if item.get("document_author") == "Some User"],
+            filtered_documents)
+
+        # Make sure that document_author is the right user for the expected objects.
+        expected_documents = (self.subdocument, )
+        self.assertItemsEqual(
+            [document.absolute_url() for document in expected_documents],
+            [item.get("@id") for item in filtered_documents])
 
     @browsing
     def test_todos_listing(self, browser):
