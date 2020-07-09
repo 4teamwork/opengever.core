@@ -3,8 +3,8 @@ from ftw.builder import create
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
 from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
 from opengever.testing import IntegrationTestCase
 
 

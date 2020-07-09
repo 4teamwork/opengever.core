@@ -818,4 +818,12 @@
       permission="opengever.workspace.ChangeWorkspaceResponsible"
       />
 
+  <plone:service
+      method="GET"
+      name="@possible-responsibles"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".workspace.PossibleWorkspaceResponsibles"
+      permission="opengever.workspace.ChangeWorkspaceResponsible"
+      />
+
 </configure>

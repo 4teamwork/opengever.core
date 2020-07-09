@@ -1,4 +1,6 @@
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 from plone import api
 import json
@@ -132,3 +134,82 @@ class TestChangeWorkspaceResponsiblePost(IntegrationTestCase):
             },
             browser.json
         )
+
+
+class TestPossibleWorkspaceResponsibles(IntegrationTestCase):
+
+    def _make_user_workspaces_admin(self, userid):
+        RoleAssignmentManager(self.workspace).add_or_update(
+            userid, ['WorkspaceAdmin'], ASSIGNMENT_VIA_SHARING)
+        self.workspace.reindexObjectSecurity()
+
+    @browsing
+    def test_endpoint_requires_permission(self, browser):
+        self.login(self.workspace_guest.id, browser=browser)
+        url = self.workspace.absolute_url() + '/@possible-responsibles'
+        with browser.expect_http_error(401):
+            browser.open(url, method='GET', headers=self.api_headers)
+
+        self._make_user_workspaces_admin(self.workspace_guest.id)
+        self.login(self.workspace_guest.id, browser=browser)
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEquals(200, browser.status_code)
+
+    @browsing
+    def test_get_all_possible_responsibles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        url = self.workspace.absolute_url() + '/@possible-responsibles'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        expected_json = {
+            u'@id': url,
+            u'items': [
+                {
+                    u'title': u'Fr\xf6hlich G\xfcnther',
+                    u'token': u'gunther.frohlich'
+                },
+                {
+                    u'title': u'Hugentobler Fridolin',
+                    u'token': u'fridolin.hugentobler'
+                },
+                {
+                    u'title': u'Peter Hans',
+                    u'token': u'hans.peter'
+                },
+                {
+                    u'title': u'Schr\xf6dinger B\xe9atrice',
+                    u'token': u'beatrice.schrodinger'
+                }
+            ],
+            u'items_total': 4,
+        }
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_search_for_possible_responsibles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        url = self.workspace.absolute_url() + '/@possible-responsibles?query=Hans'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        expected_json = {
+            u'@id': url,
+            u'items': [
+                {
+                    u'title': u'Peter Hans',
+                    u'token': u'hans.peter'
+                },
+            ],
+            u'items_total': 1,
+        }
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_response_is_batched(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        url = self.workspace.absolute_url() + '/@possible-responsibles?b_size=2'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(2, len(browser.json.get('items')))
+        self.assertEqual(4, browser.json.get('items_total'))
+        self.assertIn('batching', browser.json)

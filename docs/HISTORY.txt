@@ -4,6 +4,7 @@ Changelog
 2020.5.0 (unreleased)
 ---------------------
 
+- Add API endpoint `@possible-responsible` returning data of the workspace admins. [mbaechtold]
 - Add API endpoint `@change-responsible` for setting a different responsible of workspaces. [mbaechtold]
 - Add question for `administrator_group` to the policy template. [mbaechtold]
 - Add teaser viewlet to promote the new frontend. [tinagerber]

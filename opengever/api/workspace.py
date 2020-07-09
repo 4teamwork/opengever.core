@@ -1,18 +1,21 @@
-from opengever.api.serializer import GeverSerializeFolderToJson
-from opengever.ogds.base.actor import Actor
-from opengever.workspace.interfaces import IWorkspace
-from opengever.workspace.participation import can_manage_member
-from opengever.workspace.subscribers import assign_admin_role_to_workspace_creator
+import plone.protect.interfaces
+from Products.CMFPlone.utils import safe_unicode
 from plone import api
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.component import adapter
+from zope.component import getMultiAdapter
+from zope.interface import Interface
 from zope.interface import alsoProvides
 from zope.interface import implementer
-from zope.interface import Interface
-import plone.protect.interfaces
+from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.workspace.interfaces import IWorkspace
+from opengever.workspace.participation import can_manage_member
 
 
 @implementer(ISerializeToJson)
@@ -65,3 +68,29 @@ class ChangeResponsible(Service):
         if not api.user.get(userid):
             raise BadRequest("userid '{}' does not exist".format(userid))
         return userid
+
+
+class PossibleWorkspaceResponsibles(Service):
+    def reply(self):
+        source = ActualWorkspaceMembersSource(self.context)
+        query = safe_unicode(self.request.form.get('query', ''))
+        results = source.search(query)
+
+        batch = HypermediaBatch(self.request, results)
+
+        serialized_terms = []
+        for term in batch:
+            serializer = getMultiAdapter(
+                (term, self.request), interface=ISerializeToJson
+            )
+            serialized_terms.append(serializer())
+
+        result = {
+            "@id": batch.canonical_url,
+            "items": serialized_terms,
+            "items_total": batch.items_total,
+        }
+        links = batch.links
+        if links:
+            result["batching"] = links
+        return result
