@@ -6,7 +6,6 @@ class UpdateFilenameOfMailsWithFileExtensionMsg(UpgradeStep):
     """
 
     def __call__(self):
-        self.install_upgrade_profile()
         query = {'portal_type': 'ftw.mail.mail', 'file_extension': '.msg'}
         for mail in self.objects(query, 'Update filename'):
             mail.update_filename()

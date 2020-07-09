@@ -1,10 +1,10 @@
 Changelog
 =========
 
-2020.5.0 (unreleased)
+2020.4.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix update mail filename upgrade step. [njohner]
 
 
 2020.4.0 (2020-07-02)
