@@ -1,5 +1,6 @@
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from ftw.testbrowser import browsing
+from opengever.base.interfaces import IUserSnapSettings
 from opengever.private import enable_opengever_private
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
@@ -222,3 +223,18 @@ class TestConfig(IntegrationTestCase):
             u'http://nohost/plone/private/kathi.barfuss',
             browser.json.get(u'private_folder_url')
         )
+
+    @browsing
+    def test_config_contains_usersnap_api_key(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'usersnap_api_key'), u'')
+
+        api.portal.set_registry_record('api_key', u'some key', interface=IUserSnapSettings)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'usersnap_api_key'), u'some key')

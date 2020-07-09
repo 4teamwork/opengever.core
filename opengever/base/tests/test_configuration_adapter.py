@@ -18,6 +18,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('max_repositoryfolder_levels', 3),
             ('recently_touched_limit', 10),
             ('document_preserved_as_paper_default', True),
+            ('usersnap_api_key', ''),
             ('nightly_jobs', OrderedDict([
                 ('start_time', u'1:00:00'),
                 ('end_time', u'5:00:00'),

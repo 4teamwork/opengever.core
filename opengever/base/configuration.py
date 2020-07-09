@@ -9,6 +9,7 @@ from opengever.base.interfaces import IGeverSettings
 from opengever.base.interfaces import IGeverUI
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.interfaces import ISearchSettings
+from opengever.base.interfaces import IUserSnapSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.contact.interfaces import IContactSettings
 from opengever.disposition.interfaces import IFilesystemTransportSettings
@@ -78,6 +79,7 @@ class GeverSettingsAdpaterV1(object):
         settings['max_repositoryfolder_levels'] = api.portal.get_registry_record('maximum_repository_depth', interface=IRepositoryFolderRecords)  # noqa
         settings['recently_touched_limit'] = api.portal.get_registry_record('limit', interface=IRecentlyTouchedSettings)  # noqa
         settings['document_preserved_as_paper_default'] = api.portal.get_registry_record('preserved_as_paper_default', interface=IDocumentSettings)  # noqa
+        settings['usersnap_api_key'] = api.portal.get_registry_record('api_key', interface=IUserSnapSettings)  # noqa
         settings['nightly_jobs'] = self.get_nightly_jobs_settings()
         settings['oneoffixx_settings'] = self.get_oneoffixx_settings()
         settings['user_settings'] = self.get_user_settings()
