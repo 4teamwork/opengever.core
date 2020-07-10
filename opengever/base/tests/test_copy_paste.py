@@ -574,6 +574,8 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         assignment_class = RoleAssignment.registry[assignment_type]
 
         self.login(self.administrator, browser=browser)
+        manager = RoleAssignmentManager(self.subsubdossier)
+        assignments = manager.clear_all()
 
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
@@ -606,6 +608,8 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         assignment_class = RoleAssignment.registry[assignment_type]
 
         self.login(self.administrator, browser=browser)
+        manager = RoleAssignmentManager(self.subsubdossier)
+        assignments = manager.clear_all()
 
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")

@@ -5,6 +5,7 @@ from opengever.testing import IntegrationTestCase
 
 
 class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
+    maxDiff = None
 
     @browsing
     def test_raises_unauthorized_when_user_accessing_allowed_roles_and_principals(self, browser):
@@ -29,7 +30,8 @@ class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
                 u'Manager',
                 u'Editor',
                 u'Reader',
-                u'Contributor'],
+                u'Contributor',
+                u'principal:jurgen.fischer'],
             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
                     u'/dossier-1/@allowed-roles-and-principals'}
 
