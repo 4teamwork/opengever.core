@@ -402,3 +402,32 @@ class ITeasersSettings(Interface):
                                   default=[],
                                   value_type=schema.TextLine(),
                                   )
+
+
+class IRoleAssignmentReportsStorage(Interface):
+    """Storage abstraction for role assignment reports.
+    """
+
+    def initialize_storage():
+        """If not present already, initialize internal storage data structures.
+        """
+
+    def add(principal_id):
+        """Add a role assignment report for the given principal_id.
+        """
+
+    def get(report_uid):
+        """Return the corresponding role assignment report.
+        """
+
+    def update(report_uid, report_data):
+        """Update the corresponding role assignment report.
+        """
+
+    def list():
+        """List all role assignment reports in storage.
+        """
+
+    def delete(report_uid):
+        """Delete the corresponding role assignment report.
+        """

@@ -52,6 +52,8 @@
     <implements interface="opengever.base.interfaces.IOpengeverCatalogBrain" />
   </class>
 
+  <adapter factory=".storage.RoleAssignmentReportsStorage" />
+
   <adapter
       factory=".contentlisting.OpengeverCatalogContentListingObject"
       for="opengever.base.interfaces.IOpengeverCatalogBrain"
