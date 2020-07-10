@@ -234,6 +234,13 @@
                    "
       />
 
+  <!-- Manage Role Assignment Reports is only managed globally in rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.api: Manage Role Assignment Reports,
+                   "
+      />
+
   <!-- Ignore default Plone permissions. This means we are not managing in the
        workflows. This does not mean that the permissions are disabled: disabling
        can be done in the rolemap.xml. -->

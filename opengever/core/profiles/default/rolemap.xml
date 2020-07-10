@@ -63,6 +63,11 @@
       <role name="Administrator" />
     </permission>
 
+    <permission name="opengever.api: Manage Role Assignment Reports" acquire="False">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
     <!-- CMFEDITIONS -->
     <permission name="CMFEditions: Save new version" acquire="True">
       <role name="Administrator" />

@@ -4,5 +4,6 @@
 
   <permission id="opengever.api.ViewAllowedRolesAndPrincipals" title="opengever.api: View AllowedRolesAndPrincipals" />
   <permission id="opengever.api.TransferAssignment" title="opengever.api: Transfer Assignment" />
+  <permission id="opengever.api.ManageRoleAssignmentReports" title="opengever.api: Manage Role Assignment Reports" />
 
 </configure>
