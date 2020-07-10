@@ -22,7 +22,8 @@ von OneGov GEVER unterstützt werden.
    :maxdepth: 1
 
    basic_auth
-   jwt
    oauth2_token_auth
+   jwt
+   logout
 
 .. disqus::

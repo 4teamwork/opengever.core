@@ -4,6 +4,7 @@ Changelog
 2020.5.0 (unreleased)
 ---------------------
 
+- Overwrite logout API endpoint to also expire the user's cookies. [njohner]
 - Fix contact workflow state variable name. [deiferni]
 - Fix contact folder workflow state variable name. [deiferni]
 - Expose the current logged in users'email address in the @config endpoint. [elioschmutz]

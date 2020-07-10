@@ -810,4 +810,13 @@
       name="main-dossier"
       />
 
+  <plone:service
+      method="POST"
+      name="@logout"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".logout.GeverLogout"
+      permission="zope.Public"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
