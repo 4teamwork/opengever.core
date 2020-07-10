@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Overwrite logout API endpoint to also expire the user's cookies. [njohner]
+- Translate activities in @notifications endpoint. [njohner]
 - Fix contact workflow state variable name. [deiferni]
 - Fix contact folder workflow state variable name. [deiferni]
 - Expose the current logged in users'email address in the @config endpoint. [elioschmutz]

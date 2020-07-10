@@ -64,24 +64,16 @@ class DigestMailer(Mailer):
 
     def prepare_data(self, notifications):
         items = []
-        language = self.get_users_language()
         data = self.group_by_resource(notifications).items()
         for resource, notifications in data:
             activities = [
-                self.serialize_activity(notification.activity, language)
+                notification.activity.serialize(with_description=True)
                 for notification in notifications]
             items.append({
                 'title': activities[0]['title'],
                 'url': ResolveOGUIDView.url_for(resource.oguid),
                 'activities': activities})
         return items
-
-    def serialize_activity(self, activity, language):
-        return {
-            'title': activity.translations[language].title,
-            'label': activity.translations[language].label,
-            'summary': activity.translations[language].summary,
-            'description': activity.translations[language].description}
 
     def send_digests(self):
         logger.info('Sending digests...')

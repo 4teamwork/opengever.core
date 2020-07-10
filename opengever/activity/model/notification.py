@@ -1,7 +1,5 @@
 from opengever.base.model import Base
 from opengever.base.model import USER_ID_LENGTH
-from opengever.ogds.base.actor import Actor
-from plone.restapi.serializer.converters import json_compatible
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -36,19 +34,14 @@ class Notification(Base):
             repr(self.activity.resource))
 
     def serialize(self, portal_url):
-        actor = Actor.lookup(self.activity.actor_id)
-        return {
+        data = self.activity.serialize()
+        data.update({
             '@id': self._api_url(portal_url),
             'notification_id': self.notification_id,
-            'actor_id': self.activity.actor_id,
-            'actor_label': actor.get_label(with_principal=False),
-            'created': json_compatible(self.activity.created),
             'read': self.is_read,
-            'title': self.activity.title,
-            'label': self.activity.label,
             'link': self._resolve_notification_link(portal_url),
-            'summary': self.activity.summary,
-        }
+            })
+        return data
 
     def _resolve_notification_link(self, portal_url):
         return '{}/@@resolve_notification?notification_id={}'.format(

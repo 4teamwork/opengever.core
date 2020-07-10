@@ -70,8 +70,6 @@ class TestNotificationsGet(IntegrationTestCase):
     def test_batch_notifications(self, browser):
         self.login(self.administrator, browser=browser)
 
-        center = notification_center()
-
         self.assertEqual(0,  Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
@@ -127,6 +125,36 @@ class TestNotificationsGet(IntegrationTestCase):
              u'notification_id': 1,
              u'read': False,
              u'summary': u'New task opened by Ziegler Robert',
+             u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
+            browser.json)
+
+    @browsing
+    def test_returned_notifications_are_translated(self, browser):
+        self.enable_languages()
+
+        self.login(self.dossier_responsible, browser=browser)
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            TaskAddedActivity(self.task, self.request).record()
+
+        url = '{}/@notifications/{}/1'.format(self.portal.absolute_url(),
+                                              self.regular_user.getId())
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(url, method='GET', headers={'Accept': 'application/json',
+                                                 'Accept-Language': 'fr-ch'})
+
+        self.assertEqual(200, browser.status_code)
+
+        self.assertEquals(
+            {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
+             u'actor_id': u'robert.ziegler',
+             u'actor_label': u'Ziegler Robert',
+             u'created': u'2017-10-16T00:00:00+00:00',
+             u'label': u'T\xe2che ouverte',
+             u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
+             u'notification_id': 1,
+             u'read': False,
+             u'summary': u'Nouvelle t\xe2che ouverte par Ziegler Robert',
              u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
             browser.json)
 

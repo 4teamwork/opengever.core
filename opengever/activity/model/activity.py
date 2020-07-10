@@ -2,11 +2,14 @@ from opengever.activity.model.notification import Notification
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import DEFAULT_LOCALE
+from opengever.base.model import get_locale
 from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.types import UnicodeCoercingText
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.user_settings import UserSettings
+from plone.restapi.serializer.converters import json_compatible
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -60,6 +63,20 @@ class Activity(Base, Translatable):
                 Notification(userid=userid, activity=self))
 
         return notifications
+
+    def serialize(self, with_description=False):
+        actor = Actor.lookup(self.actor_id)
+        language = get_locale()
+        data = {
+            'title': self.translations[language].title,
+            'label': self.translations[language].label,
+            'summary': self.translations[language].summary,
+            'created': json_compatible(self.created),
+            'actor_id': self.actor_id,
+            'actor_label': actor.get_label(with_principal=False)}
+        if with_description:
+            data['description'] = self.translations[language].description
+        return data
 
     def get_users_for_watchers(self):
         users = []
