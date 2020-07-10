@@ -84,6 +84,11 @@
       for="* opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter
+      factory=".nightly_role_assignment_reports.NightlyRoleAssignmentReports"
+      name="complete-role-assignment-reports"
+      />
+
   <configure package="collective.quickupload.browser">
     <browser:page
         class="opengever.base.quickupload.OGQuickUploadView"
