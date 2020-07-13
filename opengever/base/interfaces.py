@@ -389,3 +389,16 @@ class IDocPropertyProvider(Interface):
         All keys will be prefixed by the default application prefix, followed
         by the optional prefix argument.
         """
+
+
+class ITeasersSettings(Interface):
+
+    show_teasers = schema.Bool(
+        title=u'Show teasers',
+        description=u'Whether the teasers should be shown',
+        default=True)
+
+    teasers_to_hide = schema.List(title=u"Teasers to hide",
+                                  default=[],
+                                  value_type=schema.TextLine(),
+                                  )

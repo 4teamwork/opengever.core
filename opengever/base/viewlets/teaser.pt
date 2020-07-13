@@ -1,7 +1,7 @@
-<div class="teasers" tal:define="unseen_tours view/unseen_tours" i18n:domain="opengever.base">
+<div class="teasers" tal:define="tours_to_show view/tours_to_show" i18n:domain="opengever.base" tal:condition="view/show_viewlet">
   <tal:teaser define="tourkey string:be_new_frontend_teaser" tal:condition="view/is_ui_feature_enabled">
     <div class="teaser" id="new-frontend-teaser"
-         tal:condition="python:tourkey in unseen_tours"
+         tal:condition="python:tourkey in tours_to_show"
          tal:attributes="data-tourkey tourkey">
         <div class="teaser-content" i18n:translate="new_frontend_teaser">
           Do you already know the new user interface of OneGov GEVER? <a href="javascript:switchUI()">Try it out</a> now.

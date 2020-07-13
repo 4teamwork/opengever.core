@@ -1,0 +1,4 @@
+<registry>
+  <!-- Teasers -->
+  <records interface="opengever.base.interfaces.ITeasersSettings" />
+</registry>
