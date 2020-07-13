@@ -22,28 +22,25 @@ class PloneNotificationMailer(NotificationDispatcher, Mailer):
     template = ViewPageTemplateFile("templates/notification.pt")
 
     def dispatch_notification(self, notification):
+        data = self.get_data(notification)
         msg = self.prepare_mail(
-            subject=self.get_subject(notification),
+            subject=data.get('subject'),
             to_userid=notification.userid,
             from_userid=notification.activity.actor_id,
-            data=self.get_data(notification)
+            data=data
         )
         self.send_mail(msg)
 
-    def get_subject(self, notification):
+    def get_subject(self, notification_data):
         prefix = translate(_(u'subject_prefix', default=u'GEVER Activity'),
                            context=self.request)
-        title = notification.activity.translations[self.get_users_language()].title
+        title = notification_data.get('title')
         return u'{}: {}'.format(prefix, title)
 
     def get_data(self, notification):
-        language = self.get_users_language()
-        return {
-            'subject': self.get_subject(notification),
-            'title': notification.activity.translations[language].title,
-            'label': notification.activity.translations[language].label,
-            'summary': notification.activity.translations[language].summary,
-            'description': notification.activity.translations[language].description,
+        data = notification.activity.serialize(with_description=True)
+        data.update({
+            'subject': self.get_subject(data),
             'link': resolve_notification_url(notification),
-            'public_url': get_current_admin_unit().public_url,
-        }
+            'public_url': get_current_admin_unit().public_url})
+        return data
