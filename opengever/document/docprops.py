@@ -133,7 +133,7 @@ class DocPropertyWriter(object):
                     # as the property may get a value in a later update.
                     if value is None:
                         if key in props:
-                            del props[key]
+                            props.nullify(key)
                         props.update(key, u'')
                     else:
                         props[key] = value
