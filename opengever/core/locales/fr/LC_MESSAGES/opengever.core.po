@@ -185,7 +185,7 @@ msgstr "Invitations Teamraum"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "My repository"
-msgstr "Mon référentiel"
+msgstr "Mon dépôt"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.paragraphtemplate.xml
 #: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.paragraphtemplate.xml
