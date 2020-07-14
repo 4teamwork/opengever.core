@@ -182,6 +182,16 @@ class ListingField(SimpleListingField):
 
 class DateListingField(SimpleListingField):
 
+    @staticmethod
+    def _to_solr_date_string(value, rounding_function):
+        value = value.strip()
+        if value == "*":
+            return value
+        try:
+            return to_iso8601(getattr(DateTime(value), rounding_function)())
+        except DateTimeError:
+            raise BadRequest("Could not parse date: {}".format(value))
+
     def _parse_dates(self, value):
         if isinstance(value, list):
             value = value[0]
@@ -189,13 +199,12 @@ class DateListingField(SimpleListingField):
             return None, None
 
         dates = value.split('TO')
+
         if len(dates) == 2:
-            try:
-                date_from = DateTime(dates[0]).earliestTime()
-                date_to = DateTime(dates[1]).latestTime()
-            except DateTimeError:
-                return None, None
-        return date_from, date_to
+            date_from = self._to_solr_date_string(dates[0], 'earliestTime')
+            date_to = self._to_solr_date_string(dates[1], 'latestTime')
+            return date_from, date_to
+        raise BadRequest("Only date ranges are supported: {}".format(value))
 
     def listing_to_solr_filter(self, value):
         """transforms the filter value from the request to
@@ -205,8 +214,7 @@ class DateListingField(SimpleListingField):
             return
         date_from, date_to = self._parse_dates(value)
         if date_from is not None and date_to is not None:
-            value = u'[{} TO {}]'.format(
-                to_iso8601(date_from), to_iso8601(date_to))
+            value = u'[{} TO {}]'.format(date_from, date_to)
         return u'{}:({})'.format(filter_escape(self.index), value)
 
 

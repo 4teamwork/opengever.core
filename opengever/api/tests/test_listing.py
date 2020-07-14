@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from mock import Mock
@@ -7,6 +8,7 @@ from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
@@ -461,6 +463,78 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         start_dates = list(set(map(lambda x: x['start'], items)))
         self.assertEqual(1, len(start_dates))
         self.assertEqual('2016-01-01T00:00:00Z', start_dates[0])
+
+    @browsing
+    def test_wildcard_is_supported_by_date_filters(self, browser):
+        self.login(self.regular_user, browser=browser)
+        IDossier(self.subdossier).start = date(2016, 1, 1)
+        IDossier(self.subsubdossier).start = date(2016, 2, 1)
+        IDossier(self.subdossier2).start = date(2016, 3, 1)
+        self.subdossier.reindexObject()
+        self.subsubdossier.reindexObject()
+        self.subdossier2.reindexObject()
+        self.commit_solr()
+
+        base_query = '@listing?name=dossiers&columns:list=start'
+        browser.open(self.dossier, view=base_query, headers=self.api_headers)
+        self.assertEqual(3, browser.json['items_total'])
+
+        filtered_query = base_query + '&filters.start:record={}'
+
+        browser.open(self.dossier, view=filtered_query.format('2016-01-02TO*'),
+                     headers=self.api_headers)
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            map(IUUID, [self.subsubdossier, self.subdossier2]),
+            map(lambda item: item['UID'], browser.json['items']))
+
+        browser.open(self.dossier, view=filtered_query.format('*TO2016-02-02'),
+                     headers=self.api_headers)
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            map(IUUID, [self.subdossier, self.subsubdossier]),
+            map(lambda item: item['UID'], browser.json['items']))
+
+        browser.open(self.dossier, view=filtered_query.format('*TO*'),
+                     headers=self.api_headers)
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertItemsEqual(
+            map(IUUID, [self.subdossier, self.subsubdossier, self.subdossier2]),
+            map(lambda item: item['UID'], browser.json['items']))
+
+    @browsing
+    def test_date_filters_raise_bad_request_if_no_range_is_provided(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=start'
+                '&filters.start:record=2016-01-01')
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Only date ranges are supported: 2016-01-01',
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_date_filters_raise_bad_request_for_invalid_dates(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=start'
+                '&filters.start:record=nowTO2016-01-01')
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Could not parse date: now',
+             u'type': u'BadRequest'},
+            browser.json)
 
     @browsing
     def test_filter_by_deadline(self, browser):

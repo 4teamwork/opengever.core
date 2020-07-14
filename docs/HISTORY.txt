@@ -4,7 +4,7 @@ Changelog
 2020.6.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Handle wildcard in date filters in listing endpoint. [njohner]
 
 
 2020.5.0 (2020-07-14)
