@@ -40,6 +40,7 @@ Inhalt:
    reminder.rst
    journal.rst
    sharing.rst
+   role_assignment_reports.rst
    allowed_roles_and_principals.rst
    watchers.rst
    workspace/index

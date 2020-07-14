@@ -52,6 +52,8 @@
     <implements interface="opengever.base.interfaces.IOpengeverCatalogBrain" />
   </class>
 
+  <adapter factory=".storage.RoleAssignmentReportsStorage" />
+
   <adapter
       factory=".contentlisting.OpengeverCatalogContentListingObject"
       for="opengever.base.interfaces.IOpengeverCatalogBrain"
@@ -80,6 +82,11 @@
   <adapter
       factory=".language.NegotiateLanguage"
       for="* opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".nightly_role_assignment_reports.NightlyRoleAssignmentReports"
+      name="complete-role-assignment-reports"
       />
 
   <configure package="collective.quickupload.browser">

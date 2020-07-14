@@ -1,0 +1,8 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.api: Manage Role Assignment Reports" acquire="False">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+  </permissions>
+</rolemap>

@@ -4,6 +4,7 @@ Changelog
 2020.5.0 (unreleased)
 ---------------------
 
+- Add @role-assignment-reports endpoint to list, add and delete role assignment reports. [tinagerber]
 - Overwrite logout API endpoint to also expire the user's cookies. [njohner]
 - Translate activities in @notifications endpoint. [njohner]
 - Fix contact workflow state variable name. [deiferni]

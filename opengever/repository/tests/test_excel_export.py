@@ -26,7 +26,7 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
                 '_type': u'opengever.repository.repositoryroot',
                 u'Blocked inheritance': u'No',
                 u'Close dossiers': u'jurgen.konig',
-                u'Create dossiers': u'fa_users',
+                u'Create dossiers': u'jurgen.fischer,fa_users',
                 u'Edit dossiers': u'fa_users',
                 u'label_archival_value_annotation': u'',
                 u'label_archival_value': u'',
