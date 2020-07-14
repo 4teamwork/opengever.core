@@ -19,6 +19,6 @@ Index:
    chapitre11-boitereception
    taches/index
    chapitre13-deroulements-standards
-   chapitre14-referentiel
+   chapitre14-depot
    spv/index
    app-seances/index.rst

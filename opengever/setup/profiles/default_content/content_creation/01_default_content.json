@@ -3,7 +3,7 @@
         "_path": "private",
         "_type": "opengever.private.root",
         "title_de": "Meine Ablage",
-        "title_fr": "Mon depot",
+        "title_fr": "Mon dépôt",
         "_placefulworkflow": ["opengever_private_policy",
                               "opengever_private_policy"]
     },
