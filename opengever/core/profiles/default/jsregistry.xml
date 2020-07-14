@@ -307,9 +307,9 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.base/teaser.js"
+      id="++resource++opengever.base/base.js"
       inline="False"
-      insert-before="++resource++opengever.base/base.js"
+      insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
       />
 
   <javascript
@@ -318,9 +318,9 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.base/base.js"
+      id="++resource++opengever.base/teaser.js"
       inline="False"
-      insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
+      insert-before="++resource++opengever.base/base.js"
       />
 
   <javascript
