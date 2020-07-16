@@ -4,6 +4,7 @@ from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from plone import api
 from zExceptions import BadRequest
+from zExceptions import InternalError
 
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
@@ -99,6 +100,9 @@ class SolrSearchGet(SolrQueryBaseService):
         resp = self.solr.search(
             query=query, filters=filters, start=start, rows=rows, sort=sort,
             fl=field_list, **params)
+
+        if not resp.is_ok():
+            raise InternalError(resp.error_msg())
 
         res = {
             "items": self.prepare_response_items(resp),
