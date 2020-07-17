@@ -363,3 +363,9 @@ Mit ``filters.last_login:record:list`` kann nach dem Zeitpunkt des letzten Login
     GET /kontakte/@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%202020-06-02 HTTP/1.1
     Accept: application/json
 
+**Beispiel: Filtern nach Benutzer mit Datum des letzten Logins nach dem 27.5.2020**
+
+  .. sourcecode:: http
+
+    GET /kontakte/@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%20* HTTP/1.1
+    Accept: application/json
