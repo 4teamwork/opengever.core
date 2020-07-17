@@ -4,6 +4,7 @@ Changelog
 2020.6.0 (unreleased)
 ---------------------
 
+- Allow workspace members to trash and untrash documents in workspaces. [tinagerber]
 - Handle wildcard in date filters in listing endpoint. [njohner]
 
 
