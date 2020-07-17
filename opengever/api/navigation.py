@@ -104,16 +104,22 @@ class Navigation(object):
         The interfaces provided in `content_interfaces` are used as navigation
         items.
         """
-        interface = self.request.form.get('content_interfaces')
-        try:
-            content_interfaces = self._lookup_iface_by_identifier(
-                interface) or IRepositoryFolder
-        except ImportError:
-            raise BadRequest("The provided `content_interfaces` could not be "
-                             "looked up: {}".format(interface))
+        interfaces = self.request.form.get('content_interfaces')
+        if not interfaces:
+            return [IRepositoryFolder]
 
-        return content_interfaces if isinstance(content_interfaces, list) \
-            else [content_interfaces]
+        if not isinstance(interfaces, list):
+            interfaces = [interfaces]
+
+        content_interfaces = []
+        for interface in interfaces:
+            try:
+                content_interfaces.append(
+                    self._lookup_iface_by_identifier(interface))
+            except ImportError:
+                raise BadRequest("The provided `content_interfaces` could not be "
+                                 "looked up: {}".format(interface))
+        return content_interfaces
 
     def brain_to_node(self, brain):
         node = {

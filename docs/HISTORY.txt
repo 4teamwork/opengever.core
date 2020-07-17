@@ -6,6 +6,7 @@ Changelog
 
 - Allow workspace members to trash and untrash documents in workspaces. [tinagerber]
 - Handle wildcard in date filters in listing endpoint. [njohner]
+- Handle multiple content interfaces in @navigation endpoint. [njohner]
 
 
 2020.5.0 (2020-07-14)

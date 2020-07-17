@@ -111,6 +111,26 @@ class TestNavigation(IntegrationTestCase):
             [item.get('uid') for item in items])
 
     @browsing
+    def test_navigation_handles_multiple_content_interfaces(self, browser):
+        self.login(self.workspace_member, browser)
+        params = [
+            ('root_interface', 'opengever.workspace.interfaces.IWorkspaceRoot'),
+            ('content_interfaces', 'opengever.workspace.interfaces.IWorkspace'),
+            ('content_interfaces', 'opengever.workspace.interfaces.IWorkspaceFolder')
+        ]
+        browser.open(
+            self.workspace.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        items = flatten_tree(browser.json.get('tree'))
+
+        self.assertEqual(
+            [self.workspace.UID(), self.workspace_folder.UID()],
+            [item.get('uid') for item in items])
+
+    @browsing
     def test_lookup_propper_root_if_root_interface_is_within_content_interfaces(self, browser):
         self.login(self.workspace_member, browser)
         params = [
