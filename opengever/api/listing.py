@@ -43,6 +43,7 @@ OTHER_ALLOWED_FIELDS = set([
     'start',
     'trashed',
     'UID',
+    'watchers',
 ])
 
 
