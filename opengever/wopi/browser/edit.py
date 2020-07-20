@@ -66,9 +66,13 @@ class EditOnlineView(BrowserView):
                 params_with_values.append(
                     param.replace(placeholder, self.params[placeholder]))
 
-        portal_state = queryMultiAdapter(
-            (self.context, self.request), name=u'plone_portal_state')
-        wopi_src = '{}/wopi/files/{}'.format(portal_state.portal_url(), uuid)
+        base_url = api.portal.get_registry_record(
+            name='base_url', interface=IWOPISettings)
+        if not base_url:
+            portal_state = queryMultiAdapter(
+                (self.context, self.request), name=u'plone_portal_state')
+            base_url = portal_state.portal_url()
+        wopi_src = '{}/wopi/files/{}'.format(base_url.rstrip('/'), uuid)
         params_with_values.append('WOPISrc={}&'.format(wopi_src))
         self.urlsrc = '?'.join([url, ''.join(params_with_values)])
 

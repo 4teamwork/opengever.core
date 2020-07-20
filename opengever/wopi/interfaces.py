@@ -21,3 +21,10 @@ class IWOPISettings(Interface):
         description=u"Whether the business user flow is enabled.",
         default=True,
     )
+
+    base_url = schema.TextLine(
+        title=u"WOPI Base URL",
+        description=u"The base URL used for WOPISrc URLs.",
+        default=u'',
+        required=False,
+    )

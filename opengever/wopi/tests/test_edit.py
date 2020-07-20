@@ -44,6 +44,19 @@ class TestEditView(IntegrationTestCase):
         )
 
     @browsing
+    def test_edit_view_returns_form_action_with_custom_base_url(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.portal.set_registry_record(name='base_url', interface=IWOPISettings, value=u'https://wopi.example.org/')
+        browser.open(self.document, view="office_online_edit")
+        action = browser.css("#office_form").first.get("action")
+        self.assertEqual(
+            action,
+            "https://FFC-word-edit.officeapps.live.com/we/wordeditorframe.aspx"
+            "?ui=&rs=&dchat=1&IsLicensedUser=1&WOPISrc=https://wopi.example.org"
+            "/wopi/files/createtreatydossiers000000000002&",
+        )
+
+    @browsing
     def test_edit_view_adds_additional_collaborator_if_needed(self, browser):
         self.login(self.regular_user, browser=browser)
 
