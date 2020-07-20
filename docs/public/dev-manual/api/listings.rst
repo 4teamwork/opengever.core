@@ -57,10 +57,11 @@ Aktuell werden folgende Auflistungen unterstützt:
 Für jede Auflistung können verschiedene Felder (Parameter ``columns``) abgefragt
 werden. Folgende Felder stehen zur Verfügung:
 
+- ``@type``: Inhaltstyp
 - ``bumblebee_checksum``: SHA-256 Checksumme
 - ``changed``: Änderungsdatum
-- ``checked_out``: Benutzername des Benutzers, der das Dokument ausgechecked hat
 - ``checked_out_fullname``: Anzeigename des Benutzers, der das Dokument ausgechecked hat
+- ``checked_out``: Benutzername des Benutzers, der das Dokument ausgechecked hat
 - ``completed``: Zeigt an ob eine Aufgabe erledigt ist.
 - ``containing_dossier``: Titel des Hauptdossier in dem das Element enthalten ist
 - ``containing_subdossier``: Titel des Subdossiers in dem das Dokument enthalten ist
@@ -72,28 +73,32 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``document_author``: Dokumentauthor
 - ``document_date``: Dokumentdatum
 - ``document_type``: Dokumenttyp
+- ``email``: E-Mail Adresse
 - ``end``: Enddatum des Dossiers
 - ``file_extension``: Datei-Endung
 - ``filename``: Dateiname
 - ``filesize``: Dateigrösse
+- ``firstname``: Vorname
 - ``has_sametype_children``: Ob es Objekte vom selben Inhaltstyp enthält.
-- ``issuer_fullname``: Auftraggeber (Anzeigename)
-- ``issuer``: Auftraggeber (Benutzername)
 - ``is_subdossier``: Ob das Dossier ein Subdossier ist.
 - ``is_sutask``: Ob die Aufgabe eine Unteraufgabe ist.
+- ``issuer_fullname``: Auftraggeber (Anzeigename)
+- ``issuer``: Auftraggeber (Benutzername)
 - ``keywords``: Schlagwörter
+- ``lastname``: Nachname
 - ``mimetype``: Mimetype
 - ``modified``: Modifikationsdatum
 - ``pdf_url``: URL für Vorschau-PDF
+- ``phone_office``: Telefonnummer
 - ``preview_url``: URL für Vorschau
 - ``receipt_date``: Eingangsdatum
-- ``reference``: Referenz
 - ``reference_number``: Aktenzeichen
+- ``reference``: Referenz
 - ``relative_path``: Pfad
-- ``responsible``: Federführung (Benutzername)
 - ``responsible_fullname``: Federführung oder Auftragnehmer (Anzeigename)
-- ``review_state``: Status
+- ``responsible``: Federführung (Benutzername)
 - ``review_state_label``: Status (Anzeigewert)
+- ``review_state``: Status
 - ``sequence_number``: Laufnummer
 - ``start``: Startdatum des Dossiers
 - ``task_type``: Aufgaben-Typ
@@ -101,12 +106,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``title``: Titel
 - ``trashed``: Ob das Objekt im Papierkorb ist
 - ``type``: Inhaltstyp
-- ``@type``: Inhaltstyp
 - ``UID``: UID des Objektes
-- ``firstname``: Vorname
-- ``lastname``: Nachname
-- ``email``: E-Mail Adresse
-- ``phone_office``: Telefonnummer
 
 Je nach Auflistungstyp und Inhalt sind bestimmte Felder nicht verfügbar. In diesem
 Fall wird der Wert ``none`` zurückgegeben. So haben Dossiers bspw. keinen Dateinamen,
@@ -118,6 +118,8 @@ siehe Tabelle:
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     | Feld                     | Document | Dossier | Arbeitsraume | Arbeitsraum Ordner | Aufgabe |  ToDo   | Anträge | Kontakte |
     +==========================+==========+=========+==============+====================+=========+=========+=========+==========+
+    |``@type``                 |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     |``bumblebee_checksum``    |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     |``changed``               |    ja    |    ja   |      ja      |         ja         |   ja    |  nein   |   ja    |    ja    |
@@ -203,8 +205,6 @@ siehe Tabelle:
     |``trashed``               |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     |``type``                  |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |
-    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
-    |``@type``                 |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     |``UID``                   |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
