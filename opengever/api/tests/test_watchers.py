@@ -4,6 +4,7 @@ from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 import json
 
@@ -208,6 +209,75 @@ class TestWatchersGet(SolrIntegrationTestCase):
                          headers=self.api_headers)
         browser.open(self.dossier, method='GET', headers=self.api_headers)
         self.assertNotIn('watchers', browser.json['@components'])
+
+
+class TestWatchersSolr(SolrIntegrationTestCase):
+    features = ('activity', )
+    maxDiff = None
+
+    @browsing
+    def test_post_watchers_for_task_adds_watcher_to_solr(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.assertIsNone(solr_data_for(self.task, 'watchers'))
+
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"userid": self.regular_user.getId()}))
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.task, 'watchers'))
+
+    @browsing
+    def test_post_watchers_for_inbox_forwarding_adds_watcher_to_solr(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        self.assertIsNone(solr_data_for(self.inbox_forwarding, 'watchers'))
+
+        browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"userid": self.regular_user.getId()}))
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.inbox_forwarding, 'watchers'))
+
+    @browsing
+    def test_delete_watchers_for_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.task, self.regular_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.task, 'watchers'))
+
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertIsNone(solr_data_for(self.task, 'watchers'))
+
+    @browsing
+    def test_delete_watchers_for_inbox_forwarding(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.inbox_forwarding, self.secretariat_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+
+        self.assertEqual([self.secretariat_user.getId()],
+                         solr_data_for(self.inbox_forwarding, 'watchers'))
+
+        browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertIsNone(solr_data_for(self.inbox_forwarding, 'watchers'))
 
 
 class TestWatchersPost(IntegrationTestCase):
