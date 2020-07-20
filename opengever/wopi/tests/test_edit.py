@@ -19,7 +19,7 @@ class TestEditView(IntegrationTestCase):
         self.assertEqual(
             action,
             "https://FFC-word-edit.officeapps.live.com/we/wordeditorframe.aspx"
-            "?ui=de-DE&rs=de-DE&dchat=1&IsLicensedUser=1&WOPISrc=http://nohost"
+            "?ui=&rs=&dchat=1&IsLicensedUser=1&WOPISrc=http://nohost"
             "/plone/wopi/files/createtreatydossiers000000000002&",
         )
 
@@ -39,7 +39,7 @@ class TestEditView(IntegrationTestCase):
         self.assertEqual(
             action,
             "https://FFC-word-edit.officeapps.live.com/we/wordeditorframe.aspx"
-            "?ui=de-DE&rs=de-DE&dchat=1&IsLicensedUser=0&WOPISrc=http://nohost"
+            "?ui=&rs=&dchat=1&IsLicensedUser=0&WOPISrc=http://nohost"
             "/plone/wopi/files/createtreatydossiers000000000002&",
         )
 

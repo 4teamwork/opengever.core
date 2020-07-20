@@ -45,8 +45,8 @@ class EditOnlineView(BrowserView):
         self.access_token_ttl = int(time() + 43200) * 1000
 
         self.params = {
-            'UI_LLCC': 'de-DE',
-            'DC_LLCC': 'de-DE',
+            'UI_LLCC': '',
+            'DC_LLCC': '',
             'DISABLE_CHAT': '1',
             'BUSINESS_USER': '0',
         }
