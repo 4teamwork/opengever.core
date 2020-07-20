@@ -6,7 +6,6 @@ from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import SORTABLE_TITLE_LENGTH
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
-from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.i18n.normalizer.base import mapUnicode
 from plone.indexer import indexer
@@ -97,3 +96,8 @@ def has_sametype_children(obj):
 @indexer(IDexterityContent)
 def is_subdossier(obj):
     return None
+
+
+@indexer(IDexterityContent)
+def watchers(obj):
+    return []

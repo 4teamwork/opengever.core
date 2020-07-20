@@ -69,7 +69,7 @@ class TestToDoWatchers(IntegrationTestCase):
     def test_responsible_is_registered_as_watcher_when_todo_is_assigned(self, browser):
         self.login(self.workspace_owner, browser)
 
-        self.assertEqual(tuple(), self.center.get_watchers(self.todo))
+        self.assertEqual([], self.center.get_watchers(self.todo))
 
         # Assigning a responsible adds him as watcher
         browser.open(self.todo, method='PATCH',
