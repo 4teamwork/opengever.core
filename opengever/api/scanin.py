@@ -78,7 +78,7 @@ class ScanIn(Service):
                 obj = createContentInContainer(
                     private_folder,
                     'opengever.private.dossier',
-                    title='Scaneingang')
+                    title=u'Scaneingang')
                 return obj
 
         return self.error(
