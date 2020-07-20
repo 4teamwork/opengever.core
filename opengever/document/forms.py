@@ -254,7 +254,7 @@ class SavePDFUnderForm(form.Form):
                 if name in fields_to_skip:
                     continue
                 field_instance = schema_field.bind(self.context)
-                metadata[name] = field_instance.get(self.context)
+                metadata[name] = field_instance.get(field_instance.interface(self.context))
 
         command = CreateDocumentCommand(self.destination, None, None, **metadata)
         destination_document = command.execute()
