@@ -234,6 +234,18 @@ class PloneNotificationCenter(NotificationCenter):
             return Oguid.for_object(item)
         return item
 
+    def _reindex_watchers(self, obj_or_oguid):
+        # watchers is only in solr, prevent reindexing all catalog indexes
+        # by picking a cheap catalog index `UID`.
+
+        if isinstance(obj_or_oguid, Oguid):
+            obj = obj_or_oguid.resolve_object()
+        else:
+            obj = obj_or_oguid
+
+        if obj:
+            obj.reindexObject(idxs=['UID', 'watchers'])
+
     def add_watcher_to_resource(self, obj, actorid, role=WATCHER_ROLE,
                                 omit_watcher_added_event=False):
         """The WatcherAddedEvent is fired to prevent circular dependencies."""
@@ -241,15 +253,21 @@ class PloneNotificationCenter(NotificationCenter):
         super(PloneNotificationCenter, self).add_watcher_to_resource(
             oguid, actorid, role, omit_watcher_added_event)
 
+        self._reindex_watchers(obj)
+
     def remove_watcher_from_resource(self, obj, userid, role):
         oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
             oguid, userid, role)
 
+        self._reindex_watchers(obj)
+
     def remove_watchers_from_resource_by_role(self, obj, role):
         oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).remove_watchers_from_resource_by_role(
             oguid, role)
+
+        self._reindex_watchers(obj)
 
     def add_task_responsible(self, obj, actorid):
         self.add_watcher_to_resource(obj, actorid, TASK_RESPONSIBLE_ROLE)

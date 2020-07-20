@@ -6,12 +6,35 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.activity import notification_center
 from opengever.activity.hooks import insert_notification_defaults
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 import transaction
+
+
+class TestPloneNotificationCenterWatchersAreUpdatedInSolr(SolrIntegrationTestCase):
+
+    features = ('activity',)
+
+    def test_adding_watcher_to_resource_adds_watcher_to_solr(self):
+        self.login(self.regular_user)
+        self.assertIsNone(solr_data_for(self.task, 'watchers'))
+
+        notification_center().add_watcher_to_resource(
+            self.task, self.regular_user.getId())
+        self.commit_solr()
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.task, 'watchers'))
+
+        notification_center().remove_watcher_from_resource(
+            self.task, self.regular_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+        self.assertIsNone(solr_data_for(self.task, 'watchers'))
 
 
 class TestPloneNotificationCenter(FunctionalTestCase):

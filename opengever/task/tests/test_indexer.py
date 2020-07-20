@@ -71,7 +71,6 @@ class TestTaskSolrIndexer(SolrIntegrationTestCase):
         center = notification_center()
         center.add_watcher_to_resource(
             self.task, self.regular_user.getId(), WATCHER_ROLE)
-        self.task.reindexObject(idxs=['UID', 'watchers'])
         self.commit_solr()
 
         indexed_value = solr_data_for(self.task, 'watchers')
