@@ -107,6 +107,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``trashed``: Ob das Objekt im Papierkorb ist
 - ``type``: Inhaltstyp
 - ``UID``: UID des Objektes
+- ``watchers``: Liste von Beobachtern des Objekts (Benutzernamen)
 
 Je nach Auflistungstyp und Inhalt sind bestimmte Felder nicht verfügbar. In diesem
 Fall wird der Wert ``none`` zurückgegeben. So haben Dossiers bspw. keinen Dateinamen,
@@ -208,6 +209,9 @@ siehe Tabelle:
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
     |``UID``                   |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
+    |``watchers``              |   nein   |   nein  |     nein     |        nein        |   ja    |  nein   |  nein   |   nein   |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+
+
 
 
 Optionale Parameter:
