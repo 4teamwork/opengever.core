@@ -89,7 +89,7 @@ class ConstructorSection(object):
         title_args = {}
         for key in title_keys:
             value = item.get(key)
-            if value and not isinstance(value, unicode):
+            if value is not None and not isinstance(value, unicode):
                 value = value.decode('utf-8')
 
             title_args[key] = value
