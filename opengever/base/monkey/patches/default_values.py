@@ -2,10 +2,12 @@ from copy import deepcopy
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.base.monkey.patching import MonkeyPatch
 from plone.dexterity.content import _marker
+from plone.dexterity.utils import iterSchemataForType
 from plone.registry.recordsproxy import RecordsProxy
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
+from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -132,7 +134,18 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
             # existing type, but wants a unique portal_type!
             content.portal_type = fti.getId()
 
-            for (key, value) in kw.items():
+            fields = dict(kw)  # create a copy
+
+            # Here we diverge from the implementation in plone.dexterity.utils.createContent
+            # to correctly handle behaviors, and make sure the correct storage
+            # is used for each field.
+            for schema in iterSchemataForType(portal_type):
+                for name, field in getFieldsInOrder(schema):
+                    if name in fields:
+                        value = fields.pop(name)
+                        field.set(field.interface(content), value)
+
+            for (key, value) in fields.items():
                 setattr(content, key, value)
 
             notify(ObjectCreatedEvent(content))

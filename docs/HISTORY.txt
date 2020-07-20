@@ -5,6 +5,194 @@ Changelog
 ---------------------
 
 - Nothing changed yet.
+- Fix createContentInContainer to respect behaviors. [njohner]
+- Allow workspace members to trash and untrash documents in workspaces. [tinagerber]
+- Handle wildcard in date filters in listing endpoint. [njohner]
+
+
+2020.5.0 (2020-07-14)
+---------------------
+
+- Change french translation of private root. [tinagerber]
+- Add @role-assignment-reports endpoint to list, add and delete role assignment reports. [tinagerber]
+- Nullify text docproperties in word files when updating instead of deleting them. [deiferni]
+- Overwrite logout API endpoint to also expire the user's cookies. [njohner]
+- Translate activities in @notifications endpoint. [njohner]
+- Fix contact workflow state variable name. [deiferni]
+- Fix contact folder workflow state variable name. [deiferni]
+- Expose the current logged in users'email address in the @config endpoint. [elioschmutz]
+- Improve design and content of workspace invitation e-mail. [mbaechtold]
+- Fix filtering on values containing spaces in listing endpoint. [njohner]
+- Add question for `administrator_group` to the policy template. [mbaechtold]
+- Add teaser viewlet to promote the new frontend. [tinagerber, njohner]
+- Fix loading of more items in contenttree widget for toplevel items. [buchi]
+- Add UserSnap API key to registry. [njohner]
+
+
+2020.4.1 (2020-07-09)
+---------------------
+
+- Fix update mail filename upgrade step. [njohner]
+
+
+2020.4.0 (2020-07-02)
+---------------------
+
+- Improve check if solr has started to prevent an issue during the testserver startup. [sebastianmanger]
+- Make creating favorites more robust in case of workflow issues. [deiferni]
+- Improve response history for (automatically) opened subtasks in sequential task templates. [mbaechtold]
+- Fix contenttree.js so that it is also supported by IE. [njohner]
+- Expose the url to the user's private folder in the `@config` API endpoint. Serves as feature flag too. [mbaechtold]
+- Also allow replacing concrete responsibles with interactive responsibles when triggering task templates. [deiferni]
+- Remove cross-tab logout functionality. [lgraf]
+- Add @@logout view to clear Plone session and redirect to CAS logout if necessary. [lgraf]
+- Introduce a new property `touched` on dossiers. [mbaechtold]
+- Add support for metadata_fields in OpengeverRealContentListingObject. [njohner]
+- Fix linking to proposal/submitted proposal from documents in various places. [deiferni]
+- Fix sort order within task template folder. [mbaechtold]
+- Fix deadline of task templates no longer shown in tabular listing. [mbaechtold]
+- Fix permission issue with resolving subtask of tasktemplates. [njohner]
+- Add API expansion `main-dossier`. [mbaechtold]
+- Make "populate_filename_column_in_favorites" UpgradeStep more robust. [lgraf]
+- Disable the searchbox on the tabbed view which lists the versions of a document. [mbaechtold]
+- Include additional data in @responses GET for proposal responses. [njohner]
+- Include additional data in Proposal GET API endpoint. [njohner]
+- Allow `trashed` as field in @listing endpoint. [tinagerber]
+- Add API endpoint `@trigger-task-template` to create tasks in a dossier from a template. [deiferni]
+- Extend the @favorites endpoint to let it return already resolved favorites. [elioschmutz]
+- Use correct response type for proposal comment responses. [njohner]
+- Add expandable endpoint @tasktree for getting task hierarchy. [buchi]
+- Also normalise filename of original_message when present. [tinagerber]
+
+
+2020.3.0 (2020-06-18)
+---------------------
+
+- Bump setuptools to 44.1.1 and zc.buildout to 2.13.3. [tinagerber]
+- Update translations of error messages when moving objects. [tinagerber]
+- Allow filtering for empty strings in @listing endpoint. [tinagerber]
+- Allow negation of a filter query in @listing endpoint. [tinagerber]
+- Implement batching for the @solrsearch endpoint. [elioschmutz]
+- Fix contact query sources for contacts without an E-mail. [njohner]
+- Make available the delete action for templates. [mbaechtold]
+- Drop import_stamp column from user model. [tinagerber]
+- Define a set of columns that get synchronized in user and group model. [tinagerber]
+- Handle depth filter in solrsearch endpoint. [njohner]
+- Add OGDSGroupActor class. [njohner]
+- Explicitly log to sentry for two `ftw.solr` modules we want to monitor well at the moment. [deiferni]
+- Add @transfer-task endpoint to change issuer and responsible of a task. [tinagerber]
+- Add possibility to suppress notification with X-GEVER-SuppressNotifications header. [tinagerber]
+- Add @assigned-users endpoint to get all active users of the client. [tinagerber]
+- Set Reply-To header from mails sent on behalf of users. [lgraf]
+- Avoid sending mails with From-Addresses other than our own. [lgraf]
+- Fix bug with setting issuer and informed_principals on forwardings. [njohner]
+- Allow notifying users and groups when creating a new task. [njohner]
+- Add last login information to user. [tinagerber]
+- Bump ftw.casauth to 1.3.0 to handle login similar to PlonePAS in @caslogin endpoint. [tinagerber]
+- Enable API endpoint `@document-from-template` for tasks. [mbaechtold]
+- Support combined notation for task responsible in workflow transitions. [elioschmutz]
+- Bump docxcompose to 1.1.2 to fix issues with external image references and drawing properties. [buchi]
+- Always use configured solr port in tests. [2e12]
+- Fix translations of task types in API GET. [2e12]
+- Allow customizing group dn for invitations. [buchi]
+
+
+2020.3.0rc4 (2020-06-05)
+------------------------
+
+- Move the ogds groups import logger more up in the script to make debugging easier. [elioschmutz]
+- Add `bumblebee_app_id` to the `@config` API endpoint. [mbaechtold]
+- @teams: Order team members by last name. [lgraf]
+- @ogds-groups: Order group members by last name. [lgraf]
+- Bump ftw.solr to 2.8.6 to get logging improvements and filter helpers. [lgraf]
+- Support placeholders in the target url of the webactions. [mbaechtold]
+- Fix the upgradestep to merge notification settings from release 2020.3.0rc2 to use it's own configruation copy to not depend on future adjustments. [elioschmutz]
+- Add @extract-attachments endpoint to extract mail attachments. [njohner]
+- Only allow to extract each mail attachment once. [njohner]
+- Do not allow deleting mail attachments anymore. [njohner]
+- Rename @team API endpoint to @teams. [tinagerber]
+- Avoid object lookup in DocumentLinkWidget for Solr documents and catalog brains. [buchi]
+- Improve contenttree widget in handling a large amount of items. [buchi]
+- Rename @ogds-user API endpoint to @ogds-users. [tinagerber]
+- Update ftw.testing to version 1.20.2. This improves the performance of the testserver significantly. [buchi]
+- Rename `users` attribute of @teams endpoint to `items`. [tinagerber]
+- Add batching for ogds team and group serializer. [tinagerber]
+- Extend @sharing endpoint with ogds_summary. [tinagerber]
+- Add @ogds-groups API endpoint. [tinagerber]
+- Implement custom RoleAssignmentManager based local role migration for ftw.usermigration. [deiferni]
+- Fix batching in OGDSListingBaseService, properly use SQLHypermediaBatch. [deiferni]
+- Remove various unneeded catalog indexes and metadata columns. [buchi,elioschmutz,mbaechtold]
+- Use Solr to get documents and dossier navigation in dossier overview. [buchi]
+
+
+2020.3.0rc3 (2020-05-22)
+------------------------
+
+- Assign permission to role "ServiceKeyUser". [mbaechtold]
+- Bump ftw.structlog to 1.3.0 to get SQL query time and view name logging. [lgraf]
+- Notify added watchers. [tinagerber]
+- Limit query to current repository in RepositoryPathSourceBinder. [njohner]
+- Improve performance of the subdossier tree (on the dossier overview tab). [mbaechtold]
+- Truncate overflow in keyword and other selection choices. [2e12]
+- Improve performance while determining repositoryfolder emptiness. [mbaechtold]
+- Improve performance while determining leaf nodes. [mbaechtold]
+- Add watcher role to task notification setting tab. [tinagerber]
+- The widget used to select users or groups while protecting a business dossier now respects the sharing configuration. [mbaechtold]
+- Fix an issue where solr facet labels have not been transformed correctly. [elioschmutz]
+- Skip unknown attributes in POST @invitation endpoint. [elioschmutz]
+- Add watchers, resources and subscriptions to tasks and forwarding in fixtures. [tinagerber]
+- Fix activity bug when creating tasks with tasktemplates. [tinagerber]
+- Add basic support for xlsx sources to bundle factory. [deiferni]
+- Add new filename column to Favorites. [njohner]
+- Implement @possible-watchers endpoint. [elioschmutz]
+- Fix dossier link in chrome. [2e12]
+- Add `is_admin_menu_visible` to the `@config` API endpoint. [mbaechtold]
+- Watchers GET API: Also include info about referenced_users and referenced_watcher_roles. [tinagerber]
+- Fix @solrsearch endpoint default sort order. [elioschmutz]
+- Bump ftw.bumblebee to 3.9.0 which provides functionality for indexing checksums after bundle import. [buchi]
+
+
+2020.3.0rc2 (2020-05-07)
+------------------------
+
+- Drop sorting by sortable_author for solr and avoid handling sorting parameters as fields. [deiferni]
+- Add live chat to online documentation. [njohner]
+- Bump ftw.monitor and ftw.contentstats to get performance metrics. [lgraf]
+- Merge notification settings for tasks. [elioschmutz]
+- Add more metadata to response of favorites endpoint (`review_state`, `is_subdossier` and `is_leafnode`). [mbaechtold]
+- Improve performance when resolving large dossiers. [deiferni]
+- Add attributes `review_state`, `is_subdossier` and `is_leafnode` to the search results returned by `@solrsearch` and `@livesearch`. [mbaechtold]
+- Add attribute `is_subdossier` to the children for GET requests to the API. [mbaechtold]
+- Add is_subdossier to catalog metadata. [deiferni]
+- Add @watchers endpoint for tasks and inbox forwardings. [tinagerber]
+- Fix show proposal templates corresponding to the committee. [2e12]
+- Add Bumblebee auto refresh feature to policy template. [2e12]
+- Task GET API: Also include info about containing dossier. [mbaechtold]
+- Enhance the API endpoint `@breadcrumbs` with more attributes. [mbaechtold]
+- Add key `is_leafnode` to the API endpoint `@navigation`. [mbaechtold]
+- Fix `task_type_helper` to respect the current language for the ram-cache. [elioschmutz]
+- Always use Solr for tabbedview listings. [buchi]
+- Enable Solr by default. [buchi]
+- Fix exclusion of search root when using Solr. [buchi]
+- Add retention_expiration to Solr schema. [buchi]
+- Add support for date range queries using Solr. [buchi]
+- Add support for contact lookup by email2 using Solr. [buchi]
+- Fix title format in OGDS UsersContactsInboxesSource using Solr. [buchi]
+- Fix indexing of documents in Solr integration tests. [buchi]
+- Avoid filtering or sorting on fields that do not exist in Solr. [buchi]
+- Implement pagination for Solr based listings. [buchi]
+- Fix bug in table source of trashed documents when using solr. [njohner]
+- Fix bug in search view not respecting batch size when solr is deactivated and change default batch size with Solr to 25. [njohner]
+- Extend the ftw.mail.mail workflow with teamraum specific roles. [elioschmutz]
+- Extend the `meeting.json`, which will be generated for an exported meeting, with a `agenda_item_list` property which contains a link to the agenda item list document. [elioschmutz]
+- Add @allowed-roles-and-principals API endpoint (callable on every context) to get the information which roles, groups or users are allowed to view an object. [tinagerber]
+- Extend @users endpoint with roles_and_principals. [tinagerber]
+
+
+2020.3.0rc1 (2020-04-09)
+------------------------
+
+- Fix solr indexing bug when creating a document from a template. [njohner]
 
 
 2020.2.6 (2020-06-09)
