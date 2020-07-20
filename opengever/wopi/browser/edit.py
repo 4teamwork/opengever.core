@@ -3,6 +3,7 @@ from base64 import urlsafe_b64encode
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.wopi import _
 from opengever.wopi.discovery import actions_by_extension
+from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.token import create_access_token
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -49,6 +50,11 @@ class EditOnlineView(BrowserView):
             'DISABLE_CHAT': '1',
             'BUSINESS_USER': '0',
         }
+
+        if api.portal.get_registry_record(
+            name='business_user', interface=IWOPISettings
+        ):
+            self.params['BUSINESS_USER'] = '1'
 
         url, qs = urlsrc.split('?')
         params = qs.split('><')
