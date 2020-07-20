@@ -142,12 +142,45 @@ class TestWatcherHandling(ActivityTestCase):
         self.assertEquals(123, resource_1.int_id)
         self.assertEquals(456, resource_2.int_id)
 
-        self.assertEquals((hugo, fritz), self.center.get_watchers(Oguid('fd', '123')))
-        self.assertEquals((peter,),
+        self.assertEquals([hugo, fritz], self.center.get_watchers(Oguid('fd', '123')))
+        self.assertEquals([peter],
                           self.center.get_watchers(Oguid('fd', '456')))
 
+    def test_get_watchers_can_be_limited_to_certain_role(self):
+        peter = create(Builder('watcher').having(actorid='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+        marie = create(Builder('watcher').having(actorid='marie'))
+        resource_1 = create(Builder('resource').oguid('fd:123'))
+        resource_2 = create(Builder('resource').oguid('fd:789'))
+        create(Builder('subscription')
+               .having(resource=resource_1, watcher=peter, role=WATCHER_ROLE))
+        create(Builder('subscription')
+               .having(resource=resource_1, watcher=marie, role=WATCHER_ROLE))
+        create(Builder('subscription')
+               .having(resource=resource_1, watcher=hugo, role=TASK_ISSUER_ROLE))
+        create(Builder('subscription')
+               .having(resource=resource_2, watcher=peter, role=WATCHER_ROLE))
+
+        watchers = self.center.get_watchers(
+            Oguid('fd', '123'), role=WATCHER_ROLE)
+        self.assertItemsEqual([peter, marie], watchers)
+
+    def test_get_watchers_returns_empty_list_when_no_watchers_are_present(self):
+        create(Builder('resource').oguid('fd:123'))
+
+        self.assertEquals([], self.center.get_watchers(Oguid('fd', '123')))
+
+    def test_get_watchers_returns_empty_list_when_role_does_not_exist(self):
+        marie = create(Builder('watcher').having(actorid='marie'))
+        resource = create(Builder('resource').oguid('fd:123'))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=marie, role=WATCHER_ROLE))
+
+        self.assertEquals(
+            [], self.center.get_watchers(Oguid('fd', '123'), role='foo'))
+
     def test_get_watchers_returns_empty_list_when_resource_not_exists(self):
-        self.assertEquals((), self.center.get_watchers(Oguid('fd', '123')))
+        self.assertEquals([], self.center.get_watchers(Oguid('fd', '123')))
 
     def test_remove_watcher_from_resource_will_be_ignored_when_watcher_not_exists(self):
         create(Builder('resource').oguid('fd:123'))

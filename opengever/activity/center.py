@@ -93,17 +93,17 @@ class NotificationCenter(object):
             # for more information about this issue.
             self.session.expire(resource)
 
-    def get_watchers(self, oguid):
-        """Returns a read-only tuple of watchers for a given oguid.
-        """
-        resource = Resource.query.get_by_oguid(oguid)
-        if not resource:
-            return ()
+    def get_watchers(self, oguid, role=None):
+        """Returns watchers for a given resource identified by oguid.
 
-        # resources.watchers is an association_proxy. When not consumed properly
-        # the GC will remove things, resulting in a "stale association proxy"
-        # error. In order to avoid that we consume it by making a tuple.
-        return tuple(resource.watchers)
+        Allows to filter by role to return only watchers of a certain role.
+        """
+        query = Watcher.query.join(Subscription).join(Resource)
+        query = query.filter(Resource.oguid == oguid)
+        if role:
+            query = query.filter(Subscription.role == role)
+
+        return query.all()
 
     def get_subscriptions(self, oguid):
         resource = self.fetch_resource(oguid)
@@ -273,9 +273,10 @@ class PloneNotificationCenter(NotificationCenter):
                 handler.show_not_notified_message()
             return result
 
-    def get_watchers(self, obj):
+    def get_watchers(self, obj, role=None):
         oguid = self._get_oguid_for(obj)
-        return super(PloneNotificationCenter, self).get_watchers(oguid)
+        return super(PloneNotificationCenter, self).get_watchers(
+            oguid, role=role)
 
     def get_subscriptions(self, obj):
         oguid = self._get_oguid_for(obj)
@@ -335,7 +336,7 @@ class DisabledNotificationCenter(NotificationCenter):
     def remove_task_issuer(self, obj, actorid):
         pass
 
-    def get_watchers(self, obj):
+    def get_watchers(self, obj, role=None):
         return []
 
     def get_subscriptions(self, oguid):
