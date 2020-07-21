@@ -47,6 +47,15 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
              u'type': u'BadRequest'}, browser.json)
 
     @browsing
+    def test_raises_internal_error_for_invalid_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+        with browser.expect_http_error(500):
+            url = u'{}/@solrsearch?q=OR'.format(self.portal.absolute_url())
+            browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(u'InternalError', browser.json['type'])
+
+    @browsing
     def test_simple_search_query(self, browser):
         self.login(self.regular_user, browser=browser)
 
