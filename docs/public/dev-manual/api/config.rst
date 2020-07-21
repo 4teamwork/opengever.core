@@ -76,6 +76,7 @@ GEVER-Mandanten abgefragt werden.
               "fake_sid": "",
               "scope": "oo_V1WebApi"
           },
+          "portal_url": "https://dev.onegovgever.ch/portal",
           "private_folder_url": "http://localhost:8080/fd/private/niklaus.johner",
           "recently_touched_limit": 10,
           "root_url": "http://localhost:8080/fd",
@@ -218,6 +219,9 @@ nightly_jobs
 
     end_time
         Endzeit für NightlyJobs
+
+portal_url
+  URL des Portals
 
 sharing_configuration
 

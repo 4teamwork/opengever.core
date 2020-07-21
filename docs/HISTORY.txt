@@ -4,6 +4,7 @@ Changelog
 2020.6.0 (unreleased)
 ---------------------
 
+- Add portal_url to configuration endpoint and view. [njohner]
 - Fix id normalization when setting up a repository. [tinagerber]
 - Allow workspace members to trash and untrash documents in workspaces. [tinagerber]
 - Handle wildcard in date filters in listing endpoint. [njohner]

@@ -76,6 +76,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('optional_task_permissions_revoking', False),
                 ])),
             ('root_url', 'http://nohost/plone'),
+            ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', None),
             ])
@@ -89,6 +90,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('@id', 'http://nohost/plone/@config'),
             ('version', get_distribution('opengever.core').version),
             ('root_url', 'http://nohost/plone'),
+            ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', None),
             ])
@@ -115,6 +117,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('@id', 'http://nohost/plone/@config'),
             ('version', get_distribution('opengever.core').version),
             ('root_url', 'http://nohost/plone'),
+            ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', 'http://example.com/api/apps'),
             ])

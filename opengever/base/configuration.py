@@ -4,6 +4,7 @@ from collections import OrderedDict
 from opengever.activity.interfaces import IActivitySettings
 from opengever.api.user_settings import serialize_setting
 from opengever.base.casauth import get_cas_server_url
+from opengever.base.casauth import get_gever_portal_url
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
 from opengever.base.interfaces import IGeverUI
@@ -55,6 +56,7 @@ class GeverSettingsAdpaterV1(object):
             config.update(self.get_settings())
             config['features'] = self.get_features()
         config['root_url'] = api.portal.get().absolute_url()
+        config['portal_url'] = get_gever_portal_url()
         config['cas_url'] = get_cas_server_url()
         config['apps_url'] = os.environ.get('APPS_ENDPOINT_URL')
         return config
