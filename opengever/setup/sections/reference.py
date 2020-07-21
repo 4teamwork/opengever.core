@@ -125,10 +125,10 @@ class PathFromReferenceNumberSection(object):
         # Avoid id conflicts
         parent = traverse(self.context, parent_path)
         chooser = INameChooser(parent)
-        if not chooser.checkName(title.encode('utf-8'), parent):
+        if not chooser.checkName(normalized_id, parent):
             # namechooser expect the object itself as second paremter, but it's
             # only used for getting the request, therefore we use the parent.
-            normalized_id = INameChooser(parent).chooseName(
+            normalized_id = chooser.chooseName(
                 normalized_id, parent)
 
         return normalized_id
