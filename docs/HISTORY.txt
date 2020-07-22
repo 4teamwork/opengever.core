@@ -8,6 +8,7 @@ Changelog
 - Always return @id in navigation endpoint when not expanding. [njohner]
 - Allow deletion of documents only if they are in the trash. [tinagerber]
 - Add portal_url to configuration endpoint and view. [njohner]
+- Fix transitions via @workflow service when executing user has no permission in target state. [tinagerber, deiferni]
 - Fix id normalization when setting up a repository. [tinagerber]
 - Fix createContentInContainer to respect behaviors. [njohner]
 - Add watchers solr field and indexers, currently for tasks only. [deiferni]
