@@ -4,6 +4,7 @@ Changelog
 2020.6.0 (unreleased)
 ---------------------
 
+- Add portal_url to configuration endpoint and view. [njohner]
 - Fix id normalization when setting up a repository. [tinagerber]
 - Fix createContentInContainer to respect behaviors. [njohner]
 - Allow workspace members to trash and untrash documents in workspaces. [tinagerber]

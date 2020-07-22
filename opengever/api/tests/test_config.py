@@ -126,6 +126,15 @@ class TestConfig(IntegrationTestCase):
             browser.json.get(u'cas_url'), 'https://cas.server.local')
 
     @browsing
+    def test_config_contains_portal_url(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'portal_url'), 'http://nohost/portal')
+
+    @browsing
     def test_config_contains_oneoffixx_settings(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.portal.absolute_url() + '/@config', headers={'Accept': 'application/json'})
