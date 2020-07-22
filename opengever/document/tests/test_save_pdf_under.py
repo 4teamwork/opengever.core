@@ -3,14 +3,14 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import STATE_CONVERTED
-from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.behaviors.metadata import IDocumentMetadata
-from opengever.document.versioner import Versioner
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_SOURCE_UUID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.document.browser.save_pdf_document_under import SavePDFDocumentUnder
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from zope.annotation import IAnnotations
