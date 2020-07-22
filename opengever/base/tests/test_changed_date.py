@@ -1,4 +1,3 @@
-from datetime import date
 from datetime import datetime
 from DateTime import DateTime
 from ftw.builder import Builder
@@ -10,6 +9,7 @@ from opengever.base.indexes import changed_indexer
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrashable
 from plone import api
 from zope.component import getMultiAdapter
 import pytz
@@ -64,6 +64,7 @@ class TestChangedUpdateForDocument(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self, browser):
         self.login(self.manager, browser)
         with freeze(FREEZING_TIME):
+            ITrashable(self.document).trash()
             api.content.transition(obj=self.document, transition="document-transition-remove")
         self.assert_changed_value(self.document, FREEZING_TIME)
 
@@ -126,6 +127,7 @@ class TestChangedUpdateForMail(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self):
         self.login(self.manager)
         with freeze(FREEZING_TIME):
+            ITrashable(self.mail_eml).trash()
             api.content.transition(obj=self.mail_eml, transition="mail-transition-remove")
         self.assert_changed_value(self.mail_eml, FREEZING_TIME)
 
@@ -226,6 +228,7 @@ class TestChangedUpdateForSablonTemplate(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self):
         self.login(self.manager)
         with freeze(FREEZING_TIME):
+            ITrashable(self.sablon_template).trash()
             api.content.transition(obj=self.sablon_template, transition="document-transition-remove")
         self.assert_changed_value(self.sablon_template, FREEZING_TIME)
 
@@ -246,6 +249,7 @@ class TestChangedUpdateForProposalTemplate(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self):
         self.login(self.manager)
         with freeze(FREEZING_TIME):
+            ITrashable(self.proposal_template).trash()
             api.content.transition(obj=self.proposal_template, transition="document-transition-remove")
         self.assert_changed_value(self.proposal_template, FREEZING_TIME)
 

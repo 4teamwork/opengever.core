@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Always return @id in navigation endpoint when not expanding. [njohner]
+- Allow deletion of documents only if they are in the trash. [tinagerber]
 - Add portal_url to configuration endpoint and view. [njohner]
 - Fix id normalization when setting up a repository. [tinagerber]
 - Fix createContentInContainer to respect behaviors. [njohner]

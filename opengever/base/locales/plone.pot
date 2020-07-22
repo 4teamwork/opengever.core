@@ -404,3 +404,6 @@ msgstr ""
 
 msgid "proposal-transition-submit"
 msgstr ""
+
+msgid "mail-transition-remove"
+msgstr ""

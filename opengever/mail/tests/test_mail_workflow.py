@@ -22,16 +22,23 @@ class TestMailWorkflow(FunctionalTestCase):
         self.assertEquals(OGMail.active_state, api.content.get_state(obj=mail))
 
     def test_mail_can_be_removed_with_remove_gever_content_permission(self):
-        mail = create(Builder('mail'))
         self.grant('Manager')
+        mail = create(Builder('mail').trashed())
         api.content.transition(obj=mail, transition='mail-transition-remove')
 
         self.assertEquals(OGMail.removed_state,
                           api.content.get_state(obj=mail))
 
+    def test_mail_cant_be_removed_if_it_is_not_trashed(self):
+        mail = create(Builder('mail'))
+        self.grant('Manager')
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(obj=mail, transition='mail-transition-remove')
+
     def test_mail_cant_be_removed_without_remove_gever_content_permission(self):
         # Only manager has 'Delete GEVER content' permission by default
-        mail = create(Builder('mail'))
+        self.grant('Manager')
+        mail = create(Builder('mail').trashed())
         self.change_user()
         with self.assertRaises(InvalidParameterError):
             api.content.transition(obj=mail, transition='mail-transition-remove')
