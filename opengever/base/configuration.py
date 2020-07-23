@@ -25,6 +25,8 @@ from opengever.meeting.interfaces import IMeetingSettings
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.repository.interfaces import IRepositoryFolderRecords
@@ -65,6 +67,9 @@ class GeverSettingsAdpaterV1(object):
         info = OrderedDict()
         info['@id'] = self.context.absolute_url() + '/@config'
         info['version'] = get_distribution('opengever.core').version
+        info['admin_unit'] = get_current_admin_unit().id()
+        info['org_unit'] = get_current_org_unit().id()
+
         user = api.user.get_current()
         if user.getId():
             info['userid'] = user.getId()
