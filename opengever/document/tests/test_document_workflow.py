@@ -25,15 +25,22 @@ class TestDocumentWorkflow(FunctionalTestCase):
 
     def test_document_can_be_removed_with_remove_gever_content_permission(self):
         self.grant('Manager')
-        doc = create(Builder('document'))
+        doc = create(Builder('document').trashed())
         api.content.transition(obj=doc,
                                transition='document-transition-remove')
         self.assertEquals(Document.removed_state,
                           api.content.get_state(obj=doc))
 
+    def test_document_cant_be_removed_if_it_is_not_trashed(self):
+        doc = create(Builder('document'))
+        self.grant('Manager')
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(obj=doc, transition='mail-transition-remove')
+
     def test_document_cant_be_removed_without_remove_gever_content_permission(self):
         # Only manager has 'Delete GEVER content' permission by default
-        doc = create(Builder('document'))
+        self.grant('Manager')
+        doc = create(Builder('document').trashed())
         self.change_user()
         with self.assertRaises(InvalidParameterError):
             api.content.transition(obj=doc, transition='document-transition-remove')

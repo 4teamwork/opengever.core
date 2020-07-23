@@ -1,8 +1,8 @@
 from ftw.upgrade import UpgradeStep
 
 
-class AllowToTrashAndUntrashDocumentsInWorkspace(UpgradeStep):
-    """Allow to trash and untrash documents in workspace
+class AllowToTrashUntrashAndDeleteDocumentsInWorkspace(UpgradeStep):
+    """Allow to trash, untrash and delete documents in workspace.
     """
 
     def __call__(self):

@@ -264,6 +264,12 @@ msgstr "Fehler bei der Verarbeitung Ihrer Suchanfrage. Bitte beachten Sie, dass 
 msgid "label_reset"
 msgstr "zurücksetzen"
 
+msgid "mail-transition-remove"
+msgstr "Löschen"
+
+msgid "mail-transition-restore"
+msgstr "Wiederherstellen"
+
 msgid "proposal-transition-cancel"
 msgstr "Stornieren"
 

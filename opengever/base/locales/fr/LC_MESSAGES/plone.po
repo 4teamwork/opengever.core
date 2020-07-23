@@ -264,6 +264,12 @@ msgstr "Erreur lors du traitement de votre demande de recherche. Veuillez noter 
 msgid "label_reset"
 msgstr "Remettre"
 
+msgid "mail-transition-remove"
+msgstr "Effacer"
+
+msgid "mail-transition-restore"
+msgstr "Récupérer"
+
 msgid "proposal-transition-cancel"
 msgstr "Annuler"
 

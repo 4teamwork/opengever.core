@@ -30,6 +30,7 @@ General:
   A systems administrator can always view.
   A systems administrator can always edit.
   A systems administrator can always trash.
+  A systems administrator can always soft delete.
   A systems administrator can always manage security.
   A systems administrator can always use the developer tools.
 
@@ -40,5 +41,6 @@ Status Active:
   A workspace member can add.
   A workspace member can trash.
   A workspace member can update_order.
+  A workspace member can soft delete.
   A workspace admin can edit.
   A workspace admin can manage security.
