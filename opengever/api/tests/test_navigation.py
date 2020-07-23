@@ -20,28 +20,30 @@ class TestNavigation(IntegrationTestCase):
     @browsing
     def test_navigation_contains_respository(self, browser):
         self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@navigation'
         browser.open(
-            self.portal.absolute_url() + '/@navigation',
+            url,
             headers={'Accept': 'application/json'},
         )
         self.assertEqual(browser.status_code, 200)
         self.assertIn(u'tree', browser.json)
         self.assertEqual(
             browser.json['@id'],
-            u'http://nohost/plone/ordnungssystem/@navigation')
+            u'http://nohost/plone/@navigation')
 
     @browsing
     def test_navigation_on_subcontext(self, browser):
         self.login(self.regular_user, browser)
+        url = self.document.absolute_url() + '/@navigation'
         browser.open(
-            self.document.absolute_url() + '/@navigation',
+            url,
             headers={'Accept': 'application/json'},
         )
         self.assertEqual(browser.status_code, 200)
         self.assertIn(u'tree', browser.json)
         self.assertEqual(
             browser.json['@id'],
-            u'http://nohost/plone/ordnungssystem/@navigation')
+            url)
 
     @browsing
     def test_navigation_id_in_components(self, browser):
@@ -53,7 +55,37 @@ class TestNavigation(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json['@components']['navigation']['@id'],
-            u'http://nohost/plone/ordnungssystem/@navigation')
+            self.document.absolute_url() + '/@navigation')
+
+    @browsing
+    def test_navigation_id_is_present_in_components_even_if_no_root_is_found(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('root_interface', 'opengever.base.interfaces.IGeverUI'),
+        ]
+
+        # when not expanding, @id of navigation should always be in the response
+        browser.open(
+            self.document.absolute_url() + '?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json['@components']['navigation']['@id'],
+            self.document.absolute_url() + '/@navigation')
+
+        # when expanding, not finding the root will raise a BadRequest
+        params.append(('expand', 'navigation'))
+        with browser.expect_http_error(400):
+            browser.open(
+                self.document.absolute_url() + '?{}'.format(urlencode(params)),
+                headers={'Accept': 'application/json'},
+            )
+        self.assertEqual(
+            {"message": "No root found for interface: opengever.base.interfaces.IGeverUI",
+             "type": "BadRequest"},
+            browser.json)
 
     @browsing
     def test_current_context_item_is_marked(self, browser):
@@ -182,6 +214,24 @@ class TestNavigation(IntegrationTestCase):
 
         self.assertEqual(
             {"message": "The provided `content_interfaces` could not be looked up: not.existing.Interface",
+             "type": "BadRequest"},
+            browser.json)
+
+    @browsing
+    def test_raises_bad_request_when_root_not_found(self, browser):
+        self.login(self.workspace_member, browser)
+        params = [
+            ('root_interface', 'opengever.base.interfaces.IGeverUI'),
+        ]
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.repository_root.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+                headers={'Accept': 'application/json'},
+            )
+
+        self.assertEqual(
+            {"message": "No root found for interface: opengever.base.interfaces.IGeverUI",
              "type": "BadRequest"},
             browser.json)
 
