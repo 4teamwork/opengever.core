@@ -26,6 +26,15 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(browser.json.get(u'version'), get_distribution('opengever.core').version)
 
     @browsing
+    def test_config_contains_admin_and_org_unit(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@config'
+        browser.open(url, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'admin_unit'), 'plone')
+        self.assertEqual(browser.json.get(u'org_unit'), 'fa')
+
+    @browsing
     def test_config_contains_userinfo(self, browser):
         self.login(self.regular_user, browser)
         url = self.portal.absolute_url() + '/@config'

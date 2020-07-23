@@ -12,6 +12,8 @@ class TestConfigurationAdapter(IntegrationTestCase):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
             ('version', get_distribution('opengever.core').version),
+            ('admin_unit', 'plone'),
+            ('org_unit', 'fa'),
             ('userid', 'kathi.barfuss'),
             ('user_fullname', 'B\xc3\xa4rfuss K\xc3\xa4thi'),
             ('user_email', 'kathi.barfuss@gever.local'),
@@ -89,6 +91,8 @@ class TestConfigurationAdapter(IntegrationTestCase):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
             ('version', get_distribution('opengever.core').version),
+            ('admin_unit', 'plone'),
+            ('org_unit', '__dummy_unit_id__'),
             ('root_url', 'http://nohost/plone'),
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
@@ -116,6 +120,8 @@ class TestConfigurationAdapter(IntegrationTestCase):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
             ('version', get_distribution('opengever.core').version),
+            ('admin_unit', 'plone'),
+            ('org_unit', '__dummy_unit_id__'),
             ('root_url', 'http://nohost/plone'),
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
