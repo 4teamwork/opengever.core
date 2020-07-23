@@ -352,6 +352,10 @@
                      "
         />
     <lawgiver:map_permissions
+        action_group="soft delete"
+        permissions="Remove GEVER content"
+        />
+    <lawgiver:map_permissions
         action_group="add"
         permissions="opengever.workspace: Add WorkspaceFolder"
         />
@@ -372,6 +376,10 @@
                      Sharing page: Delegate MeetingUser role,
                      opengever.workspace: Add Workspace,
                      "
+        />
+    <lawgiver:map_permissions
+        action_group="soft delete"
+        permissions="Remove GEVER content"
         />
     <lawgiver:map_permissions
         action_group="add"

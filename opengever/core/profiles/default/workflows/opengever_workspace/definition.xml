@@ -26,6 +26,7 @@
   <permission>Poi: Modify issue watchers</permission>
   <permission>Poi: Upload attachment</permission>
   <permission>Portlets: Manage portlets</permission>
+  <permission>Remove GEVER content</permission>
   <permission>Sharing page: Delegate Administrator role</permission>
   <permission>Sharing page: Delegate Contributor role</permission>
   <permission>Sharing page: Delegate DossierManager role</permission>
@@ -211,6 +212,12 @@
     </permission-map>
     <permission-map name="Portlets: Manage portlets" acquired="False">
       <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Remove GEVER content" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate Administrator role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>

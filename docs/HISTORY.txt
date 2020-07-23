@@ -9,7 +9,7 @@ Changelog
 - Fix id normalization when setting up a repository. [tinagerber]
 - Fix createContentInContainer to respect behaviors. [njohner]
 - Add watchers solr field and indexers, currently for tasks only. [deiferni]
-- Allow workspace members to trash and untrash documents in workspaces. [tinagerber]
+- Allow workspace members to trash, untrash and delete documents in workspaces. [tinagerber]
 - Handle wildcard in date filters in listing endpoint. [njohner]
 - Handle multiple content interfaces in @navigation endpoint. [njohner]
 - Handle errors in solrsearch endpoint. [njohner]
