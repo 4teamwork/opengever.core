@@ -166,6 +166,11 @@
       name="ITask"
       />
 
+  <adapter
+      factory=".indexers.watchers"
+      name="watchers"
+      />
+
   <subscriber
       for="opengever.task.task.ITask
            zope.lifecycleevent.interfaces.IObjectAddedEvent"

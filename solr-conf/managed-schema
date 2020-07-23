@@ -167,6 +167,7 @@
     <field name="start" type="pdate" indexed="true" stored="false" />
     <field name="task_type" type="string" indexed="true" stored="false" />
     <field name="trashed" type="boolean" indexed="true" stored="false" />
+    <field name="watchers" type="string" indexed="true" stored="false" multiValued="true"/>
 
     <copyField source="path" dest="path_parent"/>
     <copyField source="sequence_number" dest="sequence_number_string"/>

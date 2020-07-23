@@ -1,5 +1,7 @@
 from collective import dexteritytextindexer
 from datetime import datetime
+from opengever.activity import notification_center
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.task.task import ITask
 from plone import api
 from plone.indexer import indexer
@@ -54,3 +56,12 @@ class SearchableTextExtender(object):
             self.context.get_responsible_actor().get_label().encode('utf-8'))
 
         return ' '.join(searchable)
+
+
+@indexer(ITask)
+def watchers(obj):
+    """Index all userids that watch this task in the default watcher role."""
+
+    center = notification_center()
+    watchers = center.get_watchers(obj, role=WATCHER_ROLE)
+    return [watcher.actorid for watcher in watchers]

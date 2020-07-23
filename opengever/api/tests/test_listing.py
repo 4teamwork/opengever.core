@@ -2,6 +2,7 @@ from datetime import date
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from mock import Mock
+from opengever.activity import notification_center
 from opengever.api.solr_query_service import filename
 from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
@@ -617,6 +618,10 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.enable_languages()
 
         self.login(self.workspace_member, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.task, self.workspace_member.getId())
+        self.commit_solr()
+
         query_string = '&'.join((
             'name=tasks',
             'columns=review_state_label',
@@ -629,6 +634,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=UID',
             'columns=created',
             'columns=is_subtask',
+            'columns=watchers',
         ))
         view = '?'.join(('@listing', query_string))
         browser.open(self.dossier, view=view,
@@ -649,7 +655,10 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
              u'UID': IUUID(self.task),
-             u'is_subtask': False},
+             u'is_subtask': False,
+             u'watchers': [self.workspace_member.getId()],
+             },
+
             item)
 
     @browsing

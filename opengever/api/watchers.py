@@ -7,6 +7,7 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.ogds.base.actor import ActorLookup
 from opengever.task.task import ITask
 from plone import api
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IExpandableElement
@@ -17,6 +18,7 @@ from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implementer
 
 
@@ -77,6 +79,8 @@ class WatchersGet(Service):
 class WatchersPost(Service):
 
     def reply(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         self.extract_data()
         self.center = notification_center()
         self.center.add_watcher_to_resource(self.context, self.userid, WATCHER_ROLE)
@@ -93,7 +97,10 @@ class WatchersPost(Service):
 
 
 class WatchersDelete(Service):
+
     def reply(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         self.extract_data()
         self.userid = api.user.get_current().getId()
         self.center = notification_center()

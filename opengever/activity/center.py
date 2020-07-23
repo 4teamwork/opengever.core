@@ -93,17 +93,17 @@ class NotificationCenter(object):
             # for more information about this issue.
             self.session.expire(resource)
 
-    def get_watchers(self, oguid):
-        """Returns a read-only tuple of watchers for a given oguid.
-        """
-        resource = Resource.query.get_by_oguid(oguid)
-        if not resource:
-            return ()
+    def get_watchers(self, oguid, role=None):
+        """Returns watchers for a given resource identified by oguid.
 
-        # resources.watchers is an association_proxy. When not consumed properly
-        # the GC will remove things, resulting in a "stale association proxy"
-        # error. In order to avoid that we consume it by making a tuple.
-        return tuple(resource.watchers)
+        Allows to filter by role to return only watchers of a certain role.
+        """
+        query = Watcher.query.join(Subscription).join(Resource)
+        query = query.filter(Resource.oguid == oguid)
+        if role:
+            query = query.filter(Subscription.role == role)
+
+        return query.all()
 
     def get_subscriptions(self, oguid):
         resource = self.fetch_resource(oguid)
@@ -234,6 +234,18 @@ class PloneNotificationCenter(NotificationCenter):
             return Oguid.for_object(item)
         return item
 
+    def _reindex_watchers(self, obj_or_oguid):
+        # watchers is only in solr, prevent reindexing all catalog indexes
+        # by picking a cheap catalog index `UID`.
+
+        if isinstance(obj_or_oguid, Oguid):
+            obj = obj_or_oguid.resolve_object()
+        else:
+            obj = obj_or_oguid
+
+        if obj:
+            obj.reindexObject(idxs=['UID', 'watchers'])
+
     def add_watcher_to_resource(self, obj, actorid, role=WATCHER_ROLE,
                                 omit_watcher_added_event=False):
         """The WatcherAddedEvent is fired to prevent circular dependencies."""
@@ -241,15 +253,21 @@ class PloneNotificationCenter(NotificationCenter):
         super(PloneNotificationCenter, self).add_watcher_to_resource(
             oguid, actorid, role, omit_watcher_added_event)
 
+        self._reindex_watchers(obj)
+
     def remove_watcher_from_resource(self, obj, userid, role):
         oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
             oguid, userid, role)
 
+        self._reindex_watchers(obj)
+
     def remove_watchers_from_resource_by_role(self, obj, role):
         oguid = self._get_oguid_for(obj)
         super(PloneNotificationCenter, self).remove_watchers_from_resource_by_role(
             oguid, role)
+
+        self._reindex_watchers(obj)
 
     def add_task_responsible(self, obj, actorid):
         self.add_watcher_to_resource(obj, actorid, TASK_RESPONSIBLE_ROLE)
@@ -273,9 +291,10 @@ class PloneNotificationCenter(NotificationCenter):
                 handler.show_not_notified_message()
             return result
 
-    def get_watchers(self, obj):
+    def get_watchers(self, obj, role=None):
         oguid = self._get_oguid_for(obj)
-        return super(PloneNotificationCenter, self).get_watchers(oguid)
+        return super(PloneNotificationCenter, self).get_watchers(
+            oguid, role=role)
 
     def get_subscriptions(self, obj):
         oguid = self._get_oguid_for(obj)
@@ -335,7 +354,7 @@ class DisabledNotificationCenter(NotificationCenter):
     def remove_task_issuer(self, obj, actorid):
         pass
 
-    def get_watchers(self, obj):
+    def get_watchers(self, obj, role=None):
         return []
 
     def get_subscriptions(self, oguid):

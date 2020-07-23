@@ -411,6 +411,11 @@
       name="is_subdossier"
       />
 
+  <adapter
+      factory=".indexes.watchers"
+      name="watchers"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />

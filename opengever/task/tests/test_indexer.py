@@ -1,6 +1,8 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.activity import notification_center
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
@@ -61,3 +63,15 @@ class TestTaskSolrIndexer(SolrIntegrationTestCase):
         self.assertIn(u'Test Aufgabe', indexed_value)
         self.assertIn(u'comment', indexed_value)
         self.assertIn(u'B\xe4rfuss K\xe4thi (kathi.barfuss)', indexed_value)
+
+    def test_task_watchers_are_indexed_in_solr(self):
+        self.activate_feature('activity')
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(
+            self.task, self.regular_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.task, 'watchers')
+        self.assertEqual([self.regular_user.getId()], indexed_value)
