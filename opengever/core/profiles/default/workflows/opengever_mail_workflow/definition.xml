@@ -179,9 +179,9 @@
       before_script=""
       after_script="">
     <action
-        url="%(content_url)s/content_status_modify?workflow_action=mail-transition-remove"
+        url="%(content_url)s/content_status_modify?workflow_action=mail-transition-restore"
         category="workflow"
-        icon="">mail-transition-remove</action>
+        icon="">mail-transition-restore</action>
     <guard>
       <guard-permission>Manage portal content</guard-permission>
     </guard>

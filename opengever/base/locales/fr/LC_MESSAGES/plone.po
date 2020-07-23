@@ -267,6 +267,9 @@ msgstr "Remettre"
 msgid "mail-transition-remove"
 msgstr "Effacer"
 
+msgid "mail-transition-restore"
+msgstr "Récupérer"
+
 msgid "proposal-transition-cancel"
 msgstr "Annuler"
 

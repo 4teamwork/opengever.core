@@ -407,3 +407,6 @@ msgstr ""
 
 msgid "mail-transition-remove"
 msgstr ""
+
+msgid "mail-transition-restore"
+msgstr ""
