@@ -72,3 +72,40 @@ class TestWorkflowPost(IntegrationTestCase):
              u'review_state': u'document-state-removed'},
             browser.json
         )
+
+    @browsing
+    def test_calling_endpoint_without_transition_gives_400(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(code=400):
+            browser.open(
+                self.dossier.absolute_url() + '/@workflow',
+                method='POST', headers=self.api_headers)
+
+        self.assertEqual('Bad Request', browser.json['error']['type'])
+        self.assertIn(u"Invalid transition 'None'",
+                      browser.json['error']['message'])
+
+    @browsing
+    def test_calling_workflow_with_additional_path_segments_results_in_404(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(code=404):
+            browser.open(
+                self.dossier.absolute_url() + '/@workflow/dossier-transition-resolve/invalid',
+                method='POST', headers=self.api_headers)
+
+        self.assertEqual('NotFound', browser.json['type'])
+
+    @browsing
+    def test_invalid_transition_results_in_400(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(code=400):
+            browser.open(
+                self.dossier.absolute_url() + '/@workflow/invalid-transition',
+                method='POST', headers=self.api_headers)
+
+        self.assertEqual('Bad Request', browser.json['error']['type'])
+        self.assertIn(u"Invalid transition 'invalid-transition'",
+                      browser.json['error']['message'])
