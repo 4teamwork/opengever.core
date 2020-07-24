@@ -1,6 +1,7 @@
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.base.request import dispatch_request
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
@@ -11,11 +12,21 @@ from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
+from plone.restapi.services import Service
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+from opengever.base.favorite import FavoriteManager
+from opengever.base.model.favorite import Favorite
+from plone import api
+from zExceptions import BadRequest
+from zExceptions import NotFound
+from zope.interface import implements
+from zope.publisher.interfaces import IPublishTraverse
+from opengever.globalindex.model.task import Task
+import requests
 
 
 @implementer(ISerializeToJson)
@@ -106,3 +117,36 @@ class TaskResponsePost(ResponsePost):
                 "The current user is not allowed to add comments")
 
         return response_handler.add_response(text)
+
+
+class CrossClientTaskGet(Service):
+
+    implements(IPublishTraverse)
+
+    def __init__(self, context, request):
+        super(CrossClientTaskGet, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@cross-client-task-summary as parameters
+        self.params.append(name)
+        return self
+
+    def reply(self):
+        task_id = self.read_params()
+        task_model = Task.query.by_id(task_id)
+        headers={'Accept': 'application/json', 'Content-Type': 'application/json'}
+        from plone import api
+        user = api.user.get_current()
+        key = 'X-OGDS-AC'
+        headers[key] = user.getId()
+        from opengever.ogds.base.utils import get_current_admin_unit
+        headers['X-OGDS-AUID'] = get_current_admin_unit().id()
+        resp = requests.get(task_model.absolute_url(), headers=headers)
+        return resp.json()
+
+    def read_params(self):
+        if len(self.params) != 1:
+            raise BadRequest("Must supply task_id as path parameter.")
+
+        return self.params[0]

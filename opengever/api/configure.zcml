@@ -692,6 +692,14 @@
       />
 
   <plone:service
+      method="GET"
+      name="@cross-client-task-summary"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".task.CrossClientTaskGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       name="@create-linked-workspace"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"

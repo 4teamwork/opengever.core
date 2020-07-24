@@ -75,6 +75,10 @@ def dispatch_request(target_admin_unit_id, viewname, path='',
     if isinstance(path, unicode):
         path = path.encode('utf-8')
 
+    if headers.get('Accept') == 'application/json':
+        return _remote_request(target_admin_unit_id, viewname, path,
+                               data, headers)
+
     if get_current_admin_unit().id() == target_admin_unit_id:
         return _local_request(viewname, path, data)
     else:
@@ -146,11 +150,12 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
     handler = urllib2.ProxyHandler({})
     opener = urllib2.build_opener(handler)
 
-    viewname = viewname if viewname.startswith(
-        '@@') else '@@{}'.format(viewname)
+    url = target_unit.site_url
     if path:
-        url = os.path.join(target_unit.site_url, path, viewname)
-    else:
+        url = os.path.join(target_unit.site_url, path)
+    if viewname:
+        viewname = viewname if viewname.startswith(
+            '@@') else '@@{}'.format(viewname)
         url = os.path.join(target_unit.site_url, viewname)
 
     request = urllib2.Request(url,
