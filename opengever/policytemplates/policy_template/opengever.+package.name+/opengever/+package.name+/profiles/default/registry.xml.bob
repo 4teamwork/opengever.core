@@ -42,46 +42,38 @@
   </records>
 
 {{% endif %}}
-
 {{% if setup.officeatwork %}}
   <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings">
     <value key="is_feature_enabled">True</value>
   </records>
 
 {{% endif %}}
-{{% if setup.officeconnector_attach %}}
+{{% if setup.officeconnector_attach or setup.officeconnector_checkout%}}
   <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
+{{% if setup.officeconnector_attach %}}
     <value key="attach_to_outlook_enabled">True</value>
-  </records>
-
 {{% endif %}}
 {{% if setup.officeconnector_checkout %}}
-  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
     <value key="direct_checkout_and_edit_enabled">True</value>
+{{% endif %}}
   </records>
 
 {{% endif %}}
-{{% if setup.maximum_repository_depth %}}
+{{% if setup.maximum_repository_depth or setup.repositoryfolder_documents_tab or setup.repositoryfolder_tasks_tab
+    or setup.repositoryfolder_proposals_tab %}}
   <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
+{{% if setup.maximum_repository_depth %}}
     <value key="maximum_repository_depth">{{{setup.maximum_repository_depth}}}</value>
-  </records>
-
 {{% endif %}}
 {{% if setup.repositoryfolder_documents_tab %}}
-  <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
     <value key="show_documents_tab">True</value>
-  </records>
-
 {{% endif %}}
 {{% if setup.repositoryfolder_tasks_tab %}}
-  <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
     <value key="show_tasks_tab">True</value>
-  </records>
-
 {{% endif %}}
 {{% if setup.repositoryfolder_proposals_tab %}}
-  <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
     <value key="show_proposals_tab">True</value>
+{{% endif %}}
   </records>
 
 {{% endif %}}
@@ -93,12 +85,12 @@
 {{% endif %}}
 {{% if setup.reference_number_formatter or setup.reference_prefix_starting_point %}}
   <records interface="opengever.base.interfaces.IReferenceNumberSettings">
-  {{% if setup.reference_number_formatter %}}
+{{% if setup.reference_number_formatter %}}
     <value key="formatter">{{{setup.reference_number_formatter}}}</value>
-  {{% endif %}}
-  {{% if setup.reference_prefix_starting_point %}}
+{{% endif %}}
+{{% if setup.reference_prefix_starting_point %}}
     <value key="reference_prefix_starting_point">{{{setup.reference_prefix_starting_point}}}</value>
-  {{% endif %}}
+{{% endif %}}
   </records>
 
 {{% endif %}}
