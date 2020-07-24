@@ -1,3 +1,4 @@
+from opengever.base.security import elevated_privileges
 from opengever.base.transition import ITransitionExtender
 from opengever.dossier.activate import DossierActivator
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
@@ -40,12 +41,67 @@ class GEVERWorkflowTransition(WorkflowTransition):
                                          '\n'.join(sorted(action_ids))))
 
     def reply(self):
+        """Access review history with elevated privileges, if necessary.
+
+        There is an issue in the `WorkflowTransition` service when the user
+        performs a transition into a state where his access is revoked. The
+        service will raise a `WorkflowException` when attempting to access
+        `review_history` while rendering the response. This will prevent the
+        transition from being executed.
+
+        We work around this issue when we read the history with elevated privileges.
+        """
+
         error = self.check_action_available()
         if error:
             self.request.response.setStatus(400)
             return dict(error=error)
 
-        return super(GEVERWorkflowTransition, self).reply()
+        if self.transition is None:
+            self.request.response.setStatus(400)
+            return dict(error=dict(type="BadRequest", message="Missing transition"))
+
+        data = json_body(self.request)
+
+        # Disable CSRF protection
+        if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
+            alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
+
+        comment = data.get("comment", "")
+        include_children = data.get("include_children", False)
+        publication_dates = {}
+        if "effective" in data:
+            publication_dates["effective"] = data["effective"]
+        if "expires" in data:
+            publication_dates["expires"] = data["expires"]
+
+        try:
+            self.recurse_transition(
+                [self.context], comment, publication_dates, include_children
+            )
+
+        except WorkflowException as e:
+            self.request.response.setStatus(400)
+            return dict(
+                error=dict(
+                    type="WorkflowException",
+                    message=translate(str(e), context=self.request),
+                )
+            )
+        except BadRequest as e:
+            self.request.response.setStatus(400)
+            return dict(error=dict(type="Bad Request", message=str(e)))
+
+        with elevated_privileges():
+            history = self.wftool.getInfoFor(self.context, "review_history")
+        action = history[-1]
+
+        action["title"] = self.context.translate(
+            self.wftool.getTitleForStateOnType(
+                action["review_state"], self.context.portal_type
+            ).decode("utf8")
+        )
+        return json_compatible(action)
 
     def recurse_transition(self, objs, comment, publication_dates,
                            include_children=False):
