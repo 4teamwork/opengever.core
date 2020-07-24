@@ -1,9 +1,7 @@
-from mrbob.hooks import to_boolean
 from mrbob.hooks import to_integer
 from mrbob.hooks import validate_choices
 from opengever.base.interfaces import DEFAULT_FORMATTER
 from opengever.base.interfaces import DEFAULT_PREFIX_STARTING_POINT
-from opengever.document.interfaces import PRESERVED_AS_PAPER_DEFAULT
 from opengever.dossier.interfaces import DEFAULT_DOSSIER_DEPTH
 from opengever.mail.interfaces import DEFAULT_MAIL_MAX_SIZE
 from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
@@ -20,7 +18,6 @@ def init_defaults(configurator, question):
         'setup.maximum_dossier_depth': DEFAULT_DOSSIER_DEPTH,
         'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
         'setup.maximum_repository_depth': DEFAULT_REPOSITORY_DEPTH,
-        'setup.preserved_as_paper': PRESERVED_AS_PAPER_DEFAULT,
         'setup.reference_number_formatter': DEFAULT_FORMATTER,
         'setup.reference_prefix_starting_point': DEFAULT_PREFIX_STARTING_POINT,
     })
@@ -136,17 +133,6 @@ def post_maximum_mail_size(configurator, question, answer):
 
     answer = to_integer(configurator, question, answer)
     if answer == DEFAULT_MAIL_MAX_SIZE:
-        return ''
-
-    return answer
-
-
-def post_preserved_as_paper(configurator, question, answer):
-    if not answer:
-        return ''
-
-    answer = to_boolean(configurator, question, str(answer))
-    if answer == PRESERVED_AS_PAPER_DEFAULT:
         return ''
 
     return answer

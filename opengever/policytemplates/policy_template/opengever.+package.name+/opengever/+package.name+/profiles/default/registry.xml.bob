@@ -106,9 +106,9 @@
   </records>
 
 {{% endif %}}
-{{% if setup.preserved_as_paper != '' %}}
+{{% if not setup.preserved_as_paper %}}
   <records interface="opengever.document.interfaces.IDocumentSettings">
-      <value key="preserved_as_paper_default">{{{setup.preserved_as_paper}}}</value>
+      <value key="preserved_as_paper_default">False</value>
   </records>
 
 {{% endif %}}
