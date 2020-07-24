@@ -4,6 +4,7 @@ Changelog
 2020.6.0 (unreleased)
 ---------------------
 
+- Improve policy creation. [tinagerber]
 - Always return @id in navigation endpoint when not expanding. [njohner]
 - Allow deletion of documents only if they are in the trash. [tinagerber]
 - Add portal_url to configuration endpoint and view. [njohner]
