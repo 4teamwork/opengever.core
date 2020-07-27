@@ -7,6 +7,7 @@ from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
+from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.base.schemadump.config import SEQUENCE_NUMBER_LABELS
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
@@ -325,7 +326,7 @@ class OGGBundleJSONSchemaBuilder(object):
     def _add_guid_properties(self):
         self.ct_schema.add_property('guid', {'type': 'string'}, required=True)
 
-        if self.portal_type != 'opengever.repository.repositoryroot':
+        if self.portal_type not in ROOT_TYPES:
             # Everything except repository roots needs a parent GUID
             self.ct_schema.add_property('parent_guid', {'type': 'string'})
 

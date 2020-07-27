@@ -21,6 +21,12 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.repository.repositoryroot': 'reporoot',
 }
 
+# Types that don't need a parent_guid / parent_reference during import, but
+# instead will (always) be created directly below the Plone site root.
+ROOT_TYPES = [
+    'opengever.repository.repositoryroot',
+]
+
 # Workflow states allowed in JSON schemas. The state that's listed first
 # indicates the initial workflow state (i.e. default state).
 #

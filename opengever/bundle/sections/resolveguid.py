@@ -3,6 +3,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.loader import PORTAL_TYPES_TO_JSON_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from plone import api
@@ -202,10 +203,11 @@ class ResolveGUIDSection(object):
             # that's outside the bundle tree (i.e. Plone)
             elif parent_guid and existing_parent_guid:
                 roots.append(item)
+
             elif parent_reference is not None:
                 roots.append(item)
 
-            elif item['_type'] == 'opengever.repository.repositoryroot':
+            elif item['_type'] in ROOT_TYPES:
                 # Repo roots are the only type without a parent pointer
                 roots.append(item)
             else:

@@ -5,6 +5,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.interfaces import IDontIssueDossierReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
@@ -213,7 +214,7 @@ class ConstructorSection(object):
         elif formatted_parent_refnum is not None:
             parent_path = self.path_from_refnum(formatted_parent_refnum)
 
-        elif item['_type'] == 'opengever.repository.repositoryroot':
+        elif item['_type'] in ROOT_TYPES:
             # Repo roots are the only type that don't require a parent
             # pointer, and get constructed directly in the Plone site
             container = self.site
