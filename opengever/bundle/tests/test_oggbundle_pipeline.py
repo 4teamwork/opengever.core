@@ -641,6 +641,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             set([
                 'opengever.repository.repositoryroot',
                 'opengever.repository.repositoryfolder',
+                'opengever.workspace.root',
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
                 'ftw.mail.mail']),
