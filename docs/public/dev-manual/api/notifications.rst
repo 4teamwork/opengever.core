@@ -37,6 +37,7 @@ Mittels eines GET-Request können Benachrichtigungen des Benutzers abgefragt wer
               "label": "Task opened",
               "link": "http://nohost/plone/@@resolve_notification?notification_id=3",
               "notification_id": 3,
+              "oguid": "plone:1016273300",
               "read": false,
               "summary": "New task opened by Ziegler Robert",
               "title": "Important task"
@@ -49,6 +50,7 @@ Mittels eines GET-Request können Benachrichtigungen des Benutzers abgefragt wer
               "label": "Task opened",
               "link": "http://nohost/plone/@@resolve_notification?notification_id=1",
               "notification_id": 1,
+              "oguid": "plone:1016273300",
               "read": true,
               "summary": "New task opened by Ziegler Robert",
               "title": "Important task"
@@ -84,6 +86,7 @@ Eine einzelne Benarchrichtigung kann durch hinzufügen der Benachrichtigungs-ID 
           "label": "Task opened",
           "link": "http://nohost/plone/@@resolve_notification?notification_id=3",
           "notification_id": 3,
+          "oguid": "plone:1016273300",
           "read": false,
           "summary": "New task opened by Ziegler Robert",
           "title": "Important task"
