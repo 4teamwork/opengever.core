@@ -55,11 +55,23 @@ class TestRepositoryAPI(IntegrationTestCase):
             u'items_total': 3,
             u'layout': u'tabbed_view',
             u'modified': u'2016-08-31T07:11:33+00:00',
+            u'next_item': {
+                u'@id': u'http://nohost/plone/vorlagen',
+                u'@type': u'opengever.dossier.templatefolder',
+                u'description': u'',
+                u'title': u'Vorlagen',
+            },
             u'parent': {
                 u'@id': u'http://nohost/plone',
                 u'@type': u'Plone Site',
                 u'description': u'',
                 u'title': u'Plone site',
+            },
+            u'previous_item': {
+                u'@id': 'http://nohost/plone/kontakte',
+                u'@type': 'opengever.contact.contactfolder',
+                u'description': '',
+                u'title': 'Kontakte',
             },
             u'relative_path': u'ordnungssystem',
             u'review_state': u'repositoryroot-state-active',
