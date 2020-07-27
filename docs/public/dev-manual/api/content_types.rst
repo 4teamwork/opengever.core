@@ -81,4 +81,12 @@ Anträge
 
 .. include:: schemas/opengever.meeting.proposal.inc
 
+
+Teamraum-Root
+^^^^^^^^^^^^^
+
+.. include:: schemas/opengever.workspace.root.inc
+
+--------------------
+
 .. disqus::

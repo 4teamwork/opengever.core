@@ -106,6 +106,13 @@ Diese Datei beinhaltet die einzelnen Ordnungspositionen, die in den Ordnungssyst
 
 JSON Schema: :ref:`repofolders.schema.json <repofolders_schema_json>`
 
+workspaceroots.json
+~~~~~~~~~~~~~~~~~~~
+
+Diese Datei beinhaltet ein Teamraum-Root.
+
+JSON Schema: :ref:`workspaceroots.schema.json <workspaceroots_schema_json>`
+
 dossiers.json
 ~~~~~~~~~~~~~
 
@@ -450,6 +457,22 @@ Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten defini
        Schema anzeigen
 
     .. literalinclude:: ../../../../opengever/bundle/schemas/reporoots.schema.json
+       :language: json
+
+----------
+
+.. _workspaceroots_schema_json:
+
+:download:`workspaceroots.schema.json <../../../../opengever/bundle/schemas/workspaceroots.schema.json>`
+
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/workspaceroots.schema.json
        :language: json
 
 

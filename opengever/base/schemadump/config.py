@@ -11,6 +11,7 @@ GEVER_TYPES = [
     'opengever.task.task',
     'opengever.repository.repositoryfolder',
     'opengever.repository.repositoryroot',
+    'opengever.workspace.root',
     'opengever.meeting.proposal',
 ]
 
@@ -19,6 +20,7 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.dossier.businesscasedossier': 'dossier',
     'opengever.repository.repositoryfolder': 'repofolder',
     'opengever.repository.repositoryroot': 'reporoot',
+    'opengever.workspace.root': 'workspaceroot',
 }
 
 # Types that don't need a parent_guid / parent_reference during import, but
@@ -39,6 +41,9 @@ ALLOWED_REVIEW_STATES = {
     'opengever.repository.repositoryfolder': [
         'repositoryfolder-state-active',
         # 'repositoryfolder-state-inactive',
+    ],
+    'opengever.workspace.root': [
+        'opengever_workspace_root--STATUS--active',
     ],
     'opengever.dossier.businesscasedossier': [
         'dossier-state-active',

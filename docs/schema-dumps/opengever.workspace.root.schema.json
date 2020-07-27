@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Teamr\u00e4ume",
+    "additionalProperties": false,
+    "properties": {
+        "title_de": {
+            "type": "string",
+            "title": "Titel (deutsch)",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "title_fr": {
+            "type": "string",
+            "title": "Titel (franz\u00f6sisch)",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        }
+    },
+    "allOf": [
+        {
+            "anyOf": [
+                {
+                    "required": [
+                        "title_de"
+                    ]
+                },
+                {
+                    "required": [
+                        "title_fr"
+                    ]
+                }
+            ]
+        }
+    ],
+    "field_order": [
+        "title_de",
+        "title_fr"
+    ]
+}

@@ -1,0 +1,141 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "$ref": "#/definitions/workspaceroot"
+    },
+    "definitions": {
+        "workspaceroot": {
+            "type": "object",
+            "title": "Teamr\u00e4ume",
+            "additionalProperties": false,
+            "properties": {
+                "title_de": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (deutsch)",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "title_fr": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (franz\u00f6sisch)",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "review_state": {
+                    "type": "string",
+                    "enum": [
+                        "opengever_workspace_root--STATUS--active"
+                    ]
+                },
+                "guid": {
+                    "type": "string"
+                },
+                "parent_guid": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "parent_reference": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array"
+                    }
+                },
+                "_permissions": {
+                    "$ref": "#/definitions/permission"
+                }
+            },
+            "required": [
+                "review_state",
+                "guid"
+            ],
+            "allOf": [
+                {
+                    "anyOf": [
+                        {
+                            "required": [
+                                "title_de"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "title_fr"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "anyOf": [
+                        {
+                            "required": [
+                                "parent_guid"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "parent_reference"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "field_order": [
+                "title_de",
+                "title_fr"
+            ]
+        },
+        "permission": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "block_inheritance": {
+                    "type": "boolean"
+                },
+                "read": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "add": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "edit": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "close": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reactivate": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
