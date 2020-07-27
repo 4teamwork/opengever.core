@@ -215,8 +215,9 @@ class ConstructorSection(object):
             parent_path = self.path_from_refnum(formatted_parent_refnum)
 
         elif item['_type'] in ROOT_TYPES:
-            # Repo roots are the only type that don't require a parent
-            # pointer, and get constructed directly in the Plone site
+            # Repo roots and workspace roots are the only types that don't
+            # require a parent pointer, and get constructed directly in
+            # the Plone site
             container = self.site
             parent_path = '/'
 

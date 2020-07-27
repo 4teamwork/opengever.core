@@ -27,6 +27,7 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
 # instead will (always) be created directly below the Plone site root.
 ROOT_TYPES = [
     'opengever.repository.repositoryroot',
+    'opengever.workspace.root'
 ]
 
 # Workflow states allowed in JSON schemas. The state that's listed first

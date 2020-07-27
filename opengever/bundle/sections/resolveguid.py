@@ -208,7 +208,8 @@ class ResolveGUIDSection(object):
                 roots.append(item)
 
             elif item['_type'] in ROOT_TYPES:
-                # Repo roots are the only type without a parent pointer
+                # Repo roots and workspace roots are the only types
+                # without a parent pointer
                 roots.append(item)
             else:
                 raise MissingParentPointer(

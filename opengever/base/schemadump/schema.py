@@ -327,7 +327,8 @@ class OGGBundleJSONSchemaBuilder(object):
         self.ct_schema.add_property('guid', {'type': 'string'}, required=True)
 
         if self.portal_type not in ROOT_TYPES:
-            # Everything except repository roots needs a parent GUID
+            # Everything except repository roots or workspace roots
+            # needs a parent_guid or a parent_reference
             self.ct_schema.add_property('parent_guid', {'type': 'string'})
 
             array_of_ints = {

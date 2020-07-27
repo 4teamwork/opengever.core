@@ -37,24 +37,6 @@
                 "guid": {
                     "type": "string"
                 },
-                "parent_guid": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
-                "parent_reference": {
-                    "type": [
-                        "null",
-                        "array"
-                    ],
-                    "items": {
-                        "items": {
-                            "type": "integer"
-                        },
-                        "type": "array"
-                    }
-                },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 }
@@ -74,20 +56,6 @@
                         {
                             "required": [
                                 "title_fr"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "anyOf": [
-                        {
-                            "required": [
-                                "parent_guid"
-                            ]
-                        },
-                        {
-                            "required": [
-                                "parent_reference"
                             ]
                         }
                     ]
