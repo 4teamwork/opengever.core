@@ -240,7 +240,7 @@ Pleace note that the default database-name for multi-admin environment is ``open
     $ ln -s development-multi-admin.cfg buildout.cfg
     $ python bootstrap.py
     $ bin/buildout
-    $ bin/instance fg
+    $ bin/start_all
 
 Go to ``http://localhost:8080/manage_main`` and click on ``Install OneGov GEVER``,
 
@@ -280,6 +280,16 @@ After installing both admin-units, you have to set a shared session-secret to sh
 
 - Goto: ``{admin-unit}/acl_users/session/manage_secret``
 - Set a ``Shared secret``
+
+Then make sure you can login without cas re-enabling ldap as authentication plugin:
+
+- Go to ``{admin-unit}/acl_users/ldap/manage_activateInterfacesForm``
+- Make sure ``Authentication`` is enabled
+
+It is also wise to change the CAS server URL:
+
+- Go to ``{admin-unit}/acl_users/cas_auth/manage_config``
+- Set ``CAS Server URL`` to e.g. ``https://localhost:1234/portal/cas``
 
 Lastly you have to change the admin-unit urls in the database to localhost.
 
