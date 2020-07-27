@@ -1,22 +1,15 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
-from zope.interface import classProvides, implements
+from opengever.base.schemadump.config import ROLES_BY_SHORTNAME
+from zope.interface import classProvides
+from zope.interface import implements
 import logging
 
 
 BLOCK_INHERITANCE_KEY = 'block_inheritance'
 ROLEMAP_KEY = '_permissions'
-ROLE_NAME_MAPPING = {
-    'read': 'Reader',
-    'add': 'Contributor',
-    'edit': 'Editor',
-    'close': 'Reviewer',
-    'reactivate': 'Publisher',
-    'manage_dossiers': 'DossierManager',
-}
 
-# Inverted mapping of the above
-NAME_ROLE_MAPPING = {v: k for k, v in ROLE_NAME_MAPPING.iteritems()}
+# See opengever.base.schemadump.config for short role name definitions
 
 
 class MapLocalRolesSection(object):
@@ -59,7 +52,7 @@ class MapLocalRolesSection(object):
                 # Map short names to actual role names, and invert the mapping
                 # from {role: principals} to {principal: roles}
                 roles_by_principal = {}
-                for role_shortname, role in ROLE_NAME_MAPPING.items():
+                for role_shortname, role in ROLES_BY_SHORTNAME.items():
                     principals = rolemap.get(role_shortname, [])
                     for principal in principals:
                         if principal not in roles_by_principal:

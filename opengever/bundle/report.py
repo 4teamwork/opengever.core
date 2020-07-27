@@ -5,9 +5,9 @@ from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.schemadump.config import SHORTNAMES_BY_ROLE
 from opengever.bundle.loader import BUNDLE_JSON_TYPES
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
-from opengever.bundle.sections.map_local_roles import NAME_ROLE_MAPPING
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from openpyxl import Workbook
@@ -176,7 +176,7 @@ class DataCollector(object):
             for rolename in roles:
                 if rolename == 'Owner':
                     continue
-                short_role_name = NAME_ROLE_MAPPING[rolename]
+                short_role_name = SHORTNAMES_BY_ROLE[rolename]
                 assert short_role_name in principal_roles
                 principal_roles[short_role_name] = True
             principal_role_rows.append(principal_roles)

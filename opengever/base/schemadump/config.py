@@ -64,6 +64,34 @@ ALLOWED_REVIEW_STATES = {
     ],
 }
 
+ROLES_BY_SHORTNAME = {
+    'read': 'Reader',
+    'add': 'Contributor',
+    'edit': 'Editor',
+    'close': 'Reviewer',
+    'reactivate': 'Publisher',
+    'manage_dossiers': 'DossierManager',
+}
+
+# Inverted mapping of the above
+SHORTNAMES_BY_ROLE = {v: k for k, v in ROLES_BY_SHORTNAME.iteritems()}
+
+DEFAULT_MANAGEABLE_ROLES = [
+    'read',
+    'add',
+    'edit',
+    'close',
+    'reactivate',
+]
+
+MANAGEABLE_ROLES_BY_TYPE = {
+    'opengever.repository.repositoryroot':
+        DEFAULT_MANAGEABLE_ROLES + ['manage_dossiers'],
+    'opengever.repository.repositoryfolder':
+        DEFAULT_MANAGEABLE_ROLES + ['manage_dossiers'],
+}
+
+
 GEVER_SQL_TYPES = [
     '_opengever.contact.models.Address',
     '_opengever.contact.models.MailAddress',
