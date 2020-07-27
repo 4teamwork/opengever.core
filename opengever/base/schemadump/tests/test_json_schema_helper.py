@@ -346,7 +346,7 @@ class TestJSONSchema(unittest.TestCase):
                 "foo"
             ]
         }
-        """).strip()
+        """).strip() + '\n'
 
         dump_path = join(self.tempdir, 'test.schema.json')
         schema.dump(dump_path)

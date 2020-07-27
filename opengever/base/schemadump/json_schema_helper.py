@@ -171,7 +171,7 @@ class JSONSchema(object):
         """
         with open(dump_path, 'w') as dump_file:
             json_dump = pretty_json(self.serialize())
-            dump_file.write(json_dump)
+            dump_file.write(json_dump.strip() + '\n')
 
         log.info('Dumped: %s\n' % dump_path)
 
