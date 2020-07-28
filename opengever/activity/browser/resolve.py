@@ -1,5 +1,6 @@
 from opengever.activity import notification_center
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
+from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.ogds.models.service import ogds_service
 from plone import api
 from zExceptions import NotFound
@@ -43,7 +44,7 @@ class ResolveNotificationView(ResolveOGUIDView):
         if oguid.is_on_current_admin_unit:
             try:
                 url = oguid.resolve_object().absolute_url()
-            except KeyError:
+            except InvalidOguidIntIdPart:
                 raise NotFound('Requested object has been deleted')
 
         else:

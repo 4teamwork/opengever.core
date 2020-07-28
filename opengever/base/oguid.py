@@ -1,3 +1,5 @@
+from opengever.base.exceptions import MalformedOguid
+from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from zope.component import getUtility
@@ -42,6 +44,8 @@ class Oguid(object):
 
         """
         parts = oguid.split(cls.SEPARATOR)
+        if len(parts) != 2:
+            raise MalformedOguid(oguid)
         admin_unit_id, int_id = parts[0], int(parts[1])
         return cls(admin_unit_id, int_id)
 
@@ -70,7 +74,11 @@ class Oguid(object):
     def resolve_object(self):
         if self.admin_unit_id != get_current_admin_unit().id():
             return None
-        return getUtility(IIntIds).getObject(self.int_id)
+        intids = getUtility(IIntIds)
+        try:
+            return intids.getObject(self.int_id)
+        except KeyError:
+            raise InvalidOguidIntIdPart(self.int_id)
 
     @property
     def is_on_current_admin_unit(self):

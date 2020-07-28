@@ -203,6 +203,14 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@resolve-oguid"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".resolve_oguid.ResolveOguidGet"
+      permission="zope2.View"
+      />
+
   <adapter
       factory=".navigation.Navigation"
       name="navigation"
