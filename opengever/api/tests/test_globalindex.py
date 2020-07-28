@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 
 
@@ -21,14 +22,16 @@ class TestGlobalIndexGet(IntegrationTestCase):
              u'is_private': True,
              u'is_subtask': False,
              u'issuer': u'robert.ziegler',
+             u'issuer_fullname': u'Ziegler Robert',
              u'issuing_org_unit': u'fa',
              u'modified': u'2016-08-31T18:27:33',
+             u'oguid': str(Oguid.for_object(self.inbox_task)),
              u'predecessor_id': None,
              u'responsible': u'inbox:fa',
              u'responsible_fullname': u'Inbox: Finanz\xe4mt',
              u'review_state': u'task-state-in-progress',
              u'task_id': 14,
-             u'task_type': u'direct-execution',
+             u'task_type': u'For direct execution',
              u'title': u're: Diskr\xe4te Dinge',
              },
             browser.json['items'][0])

@@ -26,14 +26,16 @@ Der globale, also über den ganzen Mandantenverbund verteilte, Aufgabenindex kan
           "is_private": true,
           "is_subtask": false,
           "issuer": "robert.ziegler",
+          "issuer_fullname": "Ziegler Robert",
           "issuing_org_unit": "fa",
           "modified": "2016-08-31T18:27:33",
+          "oguid": "plone:1016273300",
           "predecessor_id": null,
           "responsible": "Eingangskorb Finanzamt",
           "responsible": "inbox:fa",
           "review_state": "task-state-in-progress",
           "task_id": 14,
-          "task_type": "direct-execution",
+          "task_type": "For direct execution",
           "title": "re: Direkte Anfrage"
         }
       ]
