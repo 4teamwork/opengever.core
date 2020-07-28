@@ -110,8 +110,11 @@ class TestDocumentSerializer(IntegrationTestCase):
 
 class TestDocumentPost(IntegrationTestCase):
 
+    maxDiff = None
+
     @browsing
     def test_does_not_allow_mails_as_file(self, browser):
+        self.maxDiff = None
         self.login(self.regular_user, browser)
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
@@ -122,8 +125,7 @@ class TestDocumentPost(IntegrationTestCase):
 
         self.assertEqual(
             u"[{'message': 'It is not possible to add E-mails as document, use portal_type ftw.mail.mail"
-            " instead.', 'error': Invalid(u'It is not possible to add E-mails as document, use portal_type "
-            "ftw.mail.mail instead.',)}]",
+            " instead.', 'error': 'ValidationError'}]",
             browser.json['message'])
 
 
