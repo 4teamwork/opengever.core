@@ -14,22 +14,23 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(15, len(browser.json['items']))
         self.assertEqual(
             {u'@id': self.inbox_task.absolute_url(),
-             u'title': u're: Diskr\xe4te Dinge',
-             u'task_type': u'direct-execution',
+             u'assigned_org_unit': u'fa',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
-             u'task_id': 14,
              u'created': u'2016-08-31T18:27:33',
+             u'deadline': u'2020-01-01',
+             u'is_private': True,
+             u'is_subtask': False,
+             u'issuer': u'robert.ziegler',
              u'issuing_org_unit': u'fa',
+             u'modified': u'2016-08-31T18:27:33',
+             u'predecessor_id': None,
              u'responsible': u'inbox:fa',
              u'responsible_fullname': u'Inbox: Finanz\xe4mt',
-             u'modified': u'2016-08-31T18:27:33',
-             u'is_subtask': False,
-             u'deadline': u'2020-01-01',
              u'review_state': u'task-state-in-progress',
-             u'assigned_org_unit': u'fa',
-             u'is_private': True,
-             u'predecessor_id': None,
-             u'issuer': u'robert.ziegler'},
+             u'task_id': 14,
+             u'task_type': u'direct-execution',
+             u'title': u're: Diskr\xe4te Dinge',
+             },
             browser.json['items'][0])
 
         # default row size is 25
