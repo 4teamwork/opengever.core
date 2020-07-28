@@ -15,3 +15,16 @@ class IWOPISettings(Interface):
         default=u'https://ffc-onenote.officeapps.live.com/hosting/discovery',
         required=False,
     )
+
+    business_user = schema.Bool(
+        title=u"Business User Flow",
+        description=u"Whether the business user flow is enabled.",
+        default=True,
+    )
+
+    base_url = schema.TextLine(
+        title=u"WOPI Base URL",
+        description=u"The base URL used for WOPISrc URLs.",
+        default=u'',
+        required=False,
+    )

@@ -1,6 +1,9 @@
 from Acquisition import aq_parent
+from base64 import b64encode
 from base64 import urlsafe_b64decode
+from opengever.base.utils import file_checksum
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.lock import create_lock
 from opengever.wopi.lock import get_lock_token
 from opengever.wopi.lock import refresh_lock
@@ -132,12 +135,15 @@ class WOPIView(BrowserView):
         modified_iso9601 = (
             modified_dt.replace(tzinfo=None) - modified_dt.utcoffset()
             ).isoformat() + 'Z'
+        _alg, sha256_checksum = file_checksum(
+            self.obj.file._blob.committed(), algorithm=u'SHA256')
         data = {
             'BaseFileName': self.obj.file.filename,
             'OwnerId': self.obj.Creator(),
             'Size': self.obj.file.size,
             'UserId': member.getId(),
             'Version': self._file_version(),
+            'SHA256': b64encode(sha256_checksum.decode('hex')),
             'UserFriendlyName': member.getProperty('fullname') or member.getId(),
             'SupportsUpdate': True,
             'SupportsLocks': True,
@@ -145,6 +151,7 @@ class WOPIView(BrowserView):
             'UserCanNotWriteRelative': True,
             'UserCanWrite': True,
             'CloseUrl': self.obj.absolute_url(),
+            'HostEditUrl': '{}/office_online_edit'.format(self.obj.absolute_url()),
             'BreadcrumbBrandName': 'OneGov GEVER',
             'BreadcrumbBrandUrl': self.portal_state.portal_url(),
             'BreadcrumbDocName': self.obj.Title(),
@@ -152,6 +159,10 @@ class WOPIView(BrowserView):
             'BreadcrumbFolderUrl': dossier.absolute_url(),
             'LastModifiedTime': modified_iso9601,
         }
+        if api.portal.get_registry_record(
+            name='business_user', interface=IWOPISettings
+        ):
+            data['LicenseCheckForEditIsEnabled'] = True
         return self.render_json(data)
 
     def get_file(self):

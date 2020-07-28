@@ -3,6 +3,7 @@ from base64 import urlsafe_b64encode
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.wopi import _
 from opengever.wopi.discovery import actions_by_extension
+from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.token import create_access_token
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -44,11 +45,16 @@ class EditOnlineView(BrowserView):
         self.access_token_ttl = int(time() + 43200) * 1000
 
         self.params = {
-            'UI_LLCC': 'de-DE',
-            'DC_LLCC': 'de-DE',
+            'UI_LLCC': '',
+            'DC_LLCC': '',
             'DISABLE_CHAT': '1',
             'BUSINESS_USER': '0',
         }
+
+        if api.portal.get_registry_record(
+            name='business_user', interface=IWOPISettings
+        ):
+            self.params['BUSINESS_USER'] = '1'
 
         url, qs = urlsrc.split('?')
         params = qs.split('><')
@@ -60,9 +66,13 @@ class EditOnlineView(BrowserView):
                 params_with_values.append(
                     param.replace(placeholder, self.params[placeholder]))
 
-        portal_state = queryMultiAdapter(
-            (self.context, self.request), name=u'plone_portal_state')
-        wopi_src = '{}/wopi/files/{}'.format(portal_state.portal_url(), uuid)
+        base_url = api.portal.get_registry_record(
+            name='base_url', interface=IWOPISettings)
+        if not base_url:
+            portal_state = queryMultiAdapter(
+                (self.context, self.request), name=u'plone_portal_state')
+            base_url = portal_state.portal_url()
+        wopi_src = '{}/wopi/files/{}'.format(base_url.rstrip('/'), uuid)
         params_with_values.append('WOPISrc={}&'.format(wopi_src))
         self.urlsrc = '?'.join([url, ''.join(params_with_values)])
 

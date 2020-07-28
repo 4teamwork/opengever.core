@@ -2,7 +2,9 @@ from base64 import urlsafe_b64decode
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
+from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.token import validate_access_token
+from plone import api
 from zope.component import getMultiAdapter
 
 
@@ -17,7 +19,7 @@ class TestEditView(IntegrationTestCase):
         self.assertEqual(
             action,
             "https://FFC-word-edit.officeapps.live.com/we/wordeditorframe.aspx"
-            "?ui=de-DE&rs=de-DE&dchat=1&IsLicensedUser=0&WOPISrc=http://nohost"
+            "?ui=&rs=&dchat=1&IsLicensedUser=1&WOPISrc=http://nohost"
             "/plone/wopi/files/createtreatydossiers000000000002&",
         )
 
@@ -27,6 +29,32 @@ class TestEditView(IntegrationTestCase):
                 urlsafe_b64decode(access_token),
                 'createtreatydossiers000000000002'),
             'kathi.barfuss')
+
+    @browsing
+    def test_edit_view_returns_form_action_for_non_business_users(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.portal.set_registry_record(name='business_user', interface=IWOPISettings, value=False)
+        browser.open(self.document, view="office_online_edit")
+        action = browser.css("#office_form").first.get("action")
+        self.assertEqual(
+            action,
+            "https://FFC-word-edit.officeapps.live.com/we/wordeditorframe.aspx"
+            "?ui=&rs=&dchat=1&IsLicensedUser=0&WOPISrc=http://nohost"
+            "/plone/wopi/files/createtreatydossiers000000000002&",
+        )
+
+    @browsing
+    def test_edit_view_returns_form_action_with_custom_base_url(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.portal.set_registry_record(name='base_url', interface=IWOPISettings, value=u'https://wopi.example.org/')
+        browser.open(self.document, view="office_online_edit")
+        action = browser.css("#office_form").first.get("action")
+        self.assertEqual(
+            action,
+            "https://FFC-word-edit.officeapps.live.com/we/wordeditorframe.aspx"
+            "?ui=&rs=&dchat=1&IsLicensedUser=1&WOPISrc=https://wopi.example.org"
+            "/wopi/files/createtreatydossiers000000000002&",
+        )
 
     @browsing
     def test_edit_view_adds_additional_collaborator_if_needed(self, browser):
