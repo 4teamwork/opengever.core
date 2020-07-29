@@ -146,3 +146,13 @@ class TestDocumentSerializer(IntegrationTestCase):
             browser.json.get(u'relative_path'),
             u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/{}'.format(
                 self.mail_eml.getId()))
+
+
+class TestInboxSerializer(IntegrationTestCase):
+
+    @browsing
+    def test_inbox_serialization_contains_email(self, browser):
+        self.login(self.secretariat_user, browser)
+        browser.open(self.inbox, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'email'), u'1011013300@example.org')
