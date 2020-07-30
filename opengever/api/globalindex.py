@@ -72,5 +72,7 @@ class GlobalIndexGet(Service):
         result['items'] = items
         result['batching'] = batch.links
         result['items_total'] = batch.items_total
+        result['b_start'] = start
+        result['b_size'] = rows
 
         return result

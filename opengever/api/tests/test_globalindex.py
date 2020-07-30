@@ -47,6 +47,8 @@ class TestGlobalIndexGet(IntegrationTestCase):
 
         self.assertEqual(15, browser.json['items_total'])
         self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(0, browser.json['b_start'])
+        self.assertEqual(3, browser.json['b_size'])
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@globalindex?b_size=3',
              u'first': u'http://nohost/plone/@globalindex?b_start=0&b_size=3',
