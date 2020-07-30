@@ -36,6 +36,7 @@ Inhalt:
    usersettings.rst
    tasks.rst
    globalindex.rst
+   resolve_oguid.rst
    proposals.rst
    reminder.rst
    journal.rst
