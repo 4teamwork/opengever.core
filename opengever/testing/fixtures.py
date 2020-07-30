@@ -917,7 +917,7 @@ class OpengeverContentFixture(object):
             .having(
                 id='eingangskorb',
                 responsible_org_unit='fa',
-                inbox_group=self.org_unit_fd.inbox_group,
+                inbox_group=self.org_unit_fd.inbox_group.groupid,
                 )
             ))
 
