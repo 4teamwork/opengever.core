@@ -133,6 +133,22 @@ class TestResolveOguidGet(IntegrationTestCase):
             self.assertEqual(response, browser.json)
 
     @browsing
+    def test_remote_request_sets_http_header(self, browser):
+        self.setup_remote_admin_unit()
+        remote_url, local_url = self.get_resolve_urls()
+
+        self.login(self.regular_user, browser)
+        with requests_mock.Mocker() as mocker:
+            response = {'foo': 'bar'}
+            mocker.get(remote_url, text=json.dumps(response))
+
+            browser.open(local_url, method='GET', headers=self.api_headers)
+            self.assertEqual(
+                'http://nohost/remote/@resolve-oguid',
+                browser.headers.get('x-gever-remoterequest')
+            )
+
+    @browsing
     def test_remote_400_raises_local_400(self, browser):
         self.setup_remote_admin_unit()
         remote_url, local_url = self.get_resolve_urls()

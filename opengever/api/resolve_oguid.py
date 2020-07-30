@@ -72,6 +72,8 @@ class ResolveOguidGet(Service):
                    'X-OGDS-AUID': get_current_admin_unit().id()}
         url = '/'.join([target_unit.site_url, '@resolve-oguid'])
 
+        self.request.response.setHeader('X-GEVER-RemoteRequest', url)
+
         # we pass all query string parameters to the remote request
         response = requests.get(url, params=params, headers=headers)
         if not response.ok:
