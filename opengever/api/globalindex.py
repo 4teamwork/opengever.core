@@ -54,6 +54,7 @@ class GlobalIndexGet(Service):
                 query = query.filter(getattr(Task, key).in_(value))
             else:
                 query = query.filter(getattr(Task, key) == value)
+        query = query.avoid_duplicates()
 
         tasks = query
         batch = SQLHypermediaBatch(self.request, tasks)
