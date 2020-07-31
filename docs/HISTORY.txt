@@ -4,6 +4,7 @@ Changelog
 2020.14.0 (unreleased)
 ----------------------
 
+- Provide a StatelessScriptUpdateProcessor to sync solr documents to a remote solr. [Kevin Bieri]
 - Prevent documents from being copied to workspace when checked out. [lgraf]
 - Link documents copied via Teamraum Connect. [lgraf]
 - Use a dedicated endpoint to upload document copy to workspace. [lgraf]

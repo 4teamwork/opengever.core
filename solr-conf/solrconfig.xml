@@ -374,11 +374,11 @@
   <query>
 
     <!-- Maximum number of clauses allowed when parsing a boolean query string.
-         
+
          This limit only impacts boolean queries specified by a user as part of a query string,
          and provides per-collection controls on how complex user specified boolean queries can
          be.  Query strings that specify more clauses then this will result in an error.
-         
+
          If this per-collection limit is greater then the global `maxBooleanClauses` limit
          specified in `solr.xml`, it will have no effect, as that setting also limits the size
          of user specified boolean queries.
@@ -777,7 +777,7 @@
     </lst>
   </requestHandler>
 
-  <initParams path="/update/**,/query,/select,/spell">
+  <initParams name="/update/**,/query,/select,/spell" path="/update/**,/query,/select,/spell">
     <lst name="defaults">
       <str name="df">SearchableText</str>
     </lst>
@@ -1073,6 +1073,19 @@
       </boundaryScanner>
     </highlighting>
   </searchComponent>
+
+  <updateRequestProcessorChain name="sync.chain">
+    <processor class="solr.processor.StatelessScriptUpdateProcessorFactory">
+      <str name="script">sync-solr.js</str>
+      <str name="engine">js</str>
+      <lst name="params">
+        <str name="remoteCoreURL">${remoteCoreURL:}</str>
+        <str name="portalTypes">${portalTypes:}</str>
+      </lst>
+    </processor>
+    <processor class="solr.LogUpdateProcessorFactory" />
+    <processor class="solr.RunUpdateProcessorFactory" />
+  </updateRequestProcessorChain>
 
 
   <!-- Deduplication
