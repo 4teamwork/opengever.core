@@ -1,3 +1,4 @@
+from copy import copy
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -147,6 +148,25 @@ class TestResolveOguidGet(IntegrationTestCase):
                 'http://nohost/remote/@resolve-oguid',
                 browser.headers.get('x-gever-remoterequest')
             )
+
+    @browsing
+    def test_request_gets_proxied_only_once(self, browser):
+        self.setup_remote_admin_unit()
+        remote_url, local_url = self.get_resolve_urls()
+
+        self.login(self.regular_user, browser)
+        with browser.expect_http_error(500):
+            headers = copy(self.api_headers)
+            headers['X-GEVER-RemoteRequestFrom'] = 'http://nohost/foo/'
+            browser.open(local_url, method='GET', headers=headers)
+
+        err_msg = (
+            u'Trying to proxy a request to http://nohost/remote/@resolve-oguid,'
+            u' although the request was already proxied from http://nohost/foo/'
+            )
+        self.assertEqual(
+            {u'message': err_msg, u'type': u'InternalError'},
+            browser.json)
 
     @browsing
     def test_remote_400_raises_local_400(self, browser):

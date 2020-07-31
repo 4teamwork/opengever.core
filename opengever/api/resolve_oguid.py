@@ -7,6 +7,7 @@ from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import Unauthorized
+from zExceptions import InternalError
 from zope.component import queryMultiAdapter
 import requests
 
@@ -66,11 +67,19 @@ class ResolveOguidGet(Service):
                 400, reason='Invalid admin unit id "{}".'.format(
                     oguid.admin_unit_id))
 
+        url = '/'.join([target_unit.site_url, '@resolve-oguid'])
+
+        proxied_from = self.request.getHeader('X-GEVER-RemoteRequestFrom')
+        if proxied_from:
+            err_msg = "Trying to proxy a request to {}, although the request"\
+                      " was already proxied from {}".format(url, proxied_from)
+            raise InternalError(err_msg)
+
         headers = {'Accept': 'application/json',
                    'Content-Type': 'application/json',
                    'X-OGDS-AC': api.user.get_current().getId(),
-                   'X-OGDS-AUID': get_current_admin_unit().id()}
-        url = '/'.join([target_unit.site_url, '@resolve-oguid'])
+                   'X-OGDS-AUID': get_current_admin_unit().id(),
+                   'X-GEVER-RemoteRequestFrom': self.request.URL}
 
         self.request.response.setHeader('X-GEVER-RemoteRequest', url)
 
