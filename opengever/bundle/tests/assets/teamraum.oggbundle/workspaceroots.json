@@ -5,20 +5,11 @@
     "title_de": "Teamr\u00e4ume",
     "title_fr": "Espace partag\u00e9",
     "_permissions": {
-      "read": [
-        "all_users"
-      ],
-      "add": [
-        "all_users"
-      ],
-      "edit": [
-        "all_users"
-      ],
-      "close": [
-        "all_users"
-      ],
-      "reactivate": [
+      "workspaces_creator": [
         "admin_users"
+      ],
+      "workspaces_user": [
+        "all_users"
       ]
     }
   }

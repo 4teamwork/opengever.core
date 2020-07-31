@@ -73,31 +73,13 @@
                 "block_inheritance": {
                     "type": "boolean"
                 },
-                "read": {
+                "workspaces_creator": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "add": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "edit": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "close": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "reactivate": {
+                "workspaces_user": {
                     "type": "array",
                     "items": {
                         "type": "string"

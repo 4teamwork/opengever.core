@@ -71,6 +71,8 @@ ROLES_BY_SHORTNAME = {
     'close': 'Reviewer',
     'reactivate': 'Publisher',
     'manage_dossiers': 'DossierManager',
+    'workspaces_creator': 'WorkspacesCreator',
+    'workspaces_user': 'WorkspacesUser',
 }
 
 # Inverted mapping of the above
@@ -89,6 +91,8 @@ MANAGEABLE_ROLES_BY_TYPE = {
         DEFAULT_MANAGEABLE_ROLES + ['manage_dossiers'],
     'opengever.repository.repositoryfolder':
         DEFAULT_MANAGEABLE_ROLES + ['manage_dossiers'],
+    'opengever.workspace.root':
+        ['workspaces_creator', 'workspaces_user'],
 }
 
 

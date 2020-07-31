@@ -217,6 +217,16 @@ Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob d
 
 Berechtigungen werden an einen oder mehrere “Principals” vergeben, dies entspricht einem Benutzer oder einer Gruppe.
 
+--------------
+
+Für **Teamräume** gibt es separate Rollen welche auf unterschiedlichen Stufen gesetzt werden können.
+
+Auf der Ebene des Teamraum-Roots können folgende Rollen vergeben werden:
+
+-  ``workspaces_creator`` (Teamräume erstellen)
+-  ``workspaces_user`` (Teamräume auflisten)
+
+
 Setzen von Werten
 -----------------
 

@@ -12,6 +12,7 @@ from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_filename
 from plone import api
+from Products.CMFPlone.utils import safe_hasattr
 from zope.annotation import IAnnotations
 
 
@@ -67,6 +68,14 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             'opengever_workspace_root--STATUS--active',
             api.content.get_state(root))
+
+        self.assertDictContainsSubset(
+            {'admin_users': ['WorkspacesCreator']},
+            root.__ac_local_roles__)
+        self.assertDictContainsSubset(
+            {'all_users': ['WorkspacesUser']},
+            root.__ac_local_roles__)
+        self.assertFalse(safe_hasattr(root, '__ac_local_roles_block__'))
 
         self.assertEqual(
             IAnnotations(root)[BUNDLE_GUID_KEY],
