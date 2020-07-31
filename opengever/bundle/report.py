@@ -5,6 +5,8 @@ from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.schemadump.config import DEFAULT_MANAGEABLE_ROLES
+from opengever.base.schemadump.config import MANAGEABLE_ROLES_BY_TYPE
 from opengever.base.schemadump.config import SHORTNAMES_BY_ROLE
 from opengever.bundle.loader import BUNDLE_JSON_TYPES
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
@@ -145,40 +147,43 @@ class DataCollector(object):
         local_roles = obj.get_local_roles()
         inheritance_blocked = getattr(obj, '__ac_local_roles_block__', False)
 
+        manageable_roles_for_type = MANAGEABLE_ROLES_BY_TYPE.get(
+            obj.portal_type, DEFAULT_MANAGEABLE_ROLES)
+
+        # Prepare a template to use as a base for rows, in order to make sure
+        # we always have exactly the same columns in the same order
+        row_template = OrderedDict([
+            ('guid', guid),
+            ('principal', None)]
+            + [(role, None) for role in manageable_roles_for_type]
+            + [('blocked_inheritance', None)],
+        )
+
         # Always include at least one row per object with the info whether
         # or not inheritance is blocked
-        inheritance_blocked_row = OrderedDict([
-            ('guid', guid),
-            ('principal', None),
-            ('read', None),
-            ('edit', None),
-            ('add', None),
-            ('close', None),
-            ('reactivate', None),
-            ('blocked_inheritance', inheritance_blocked),
-        ])
+        inheritance_blocked_row = row_template.copy()
+        inheritance_blocked_row['blocked_inheritance'] = inheritance_blocked
 
         # If local role assignments are present, include them as additional
         # rows (using GUID as key), one row per principal and their roles
         principal_role_rows = []
         for principal, roles in dict(local_roles).items():
-            principal_roles = OrderedDict([
-                ('guid', guid),
-                ('principal', principal),
-                ('read', False),
-                ('edit', False),
-                ('add', False),
-                ('close', False),
-                ('reactivate', False),
-                ('manage_dossiers', False),
-                ('blocked_inheritance', None),
-            ])
+
+            # Prepare row with principal name and False for all roles
+            principal_roles = row_template.copy()
+            principal_roles['principal'] = principal
+            for role in manageable_roles_for_type:
+                principal_roles[role] = False
+
+            # Update with data from actual local roles
             for rolename in roles:
                 if rolename == 'Owner':
                     continue
+
                 short_role_name = SHORTNAMES_BY_ROLE[rolename]
                 assert short_role_name in principal_roles
                 principal_roles[short_role_name] = True
+
             principal_role_rows.append(principal_roles)
 
         return [inheritance_blocked_row] + principal_role_rows
