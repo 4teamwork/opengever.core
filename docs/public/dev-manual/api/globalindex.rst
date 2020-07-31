@@ -42,13 +42,28 @@ Der globale, also über den ganzen Mandantenverbund verteilte, Aufgabenindex kan
     }
 
 
+Optionale Parameter:
+--------------------
+
 Paginierung
 ~~~~~~~~~~~
 Die Paginierung funktioniert gleich wie bei anderen Auflistungen auch (siehe :ref:`Kapitel Paginierung <batching>`).
 
+- ``b_start``: Das erste zurückzugebende Element
+- ``b_size``: Die maximale Anzahl der zurückzugebenden Elemente
 
-Filter
-~~~~~~
+Sortierung
+~~~~~~~~~~
+
+- ``sort_on``: Sortierung nach einem indexierten Feld
+- ``sort_order``: Sortierreihenfolge: ``ascending`` (aufsteigend) oder ``descending`` (absteigend)
+
+Filter und Suche
+~~~~~~~~~~~~~~~~
+
+- ``search``: Filterung nach einem beliebigen Suchbegriff
+- ``filters``: Einschränkung nach einem bestimmten Wert eines Feldes
+
 
 **Beispiel: Filtern nach erledigten und abgeschlossenen Aufgaben:**
 
@@ -62,4 +77,11 @@ Filter
   .. sourcecode:: http
 
     GET /@globalindex?filters.responsible:record=peter.muser HTTP/1.1
+    Accept: application/json
+
+**Beispiel: Suche**
+
+  .. sourcecode:: http
+
+    GET /@globalindex?search=vertrag HTTP/1.1
     Accept: application/json

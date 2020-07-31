@@ -120,6 +120,23 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(9, len(browser.json['items']))
 
     @browsing
+    def test_handles_search_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = u'@globalindex'
+        browser.open(self.portal, view=view.format(''), headers=self.api_headers)
+        self.assertEqual(15, browser.json['items_total'])
+        all_tasks = browser.json.get('items')
+
+        search_term = u'Vertr\xe4ge'
+        view = u'@globalindex?search={}'.format(search_term)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertEqual(
+            filter(lambda task: u'Vertr\xe4ge' in task.get('title'), all_tasks),
+            browser.json['items'])
+
+    @browsing
     def test_query_is_restricted(self, browser):
         self.login(self.regular_user, browser=browser)
 

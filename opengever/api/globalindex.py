@@ -3,10 +3,12 @@ from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.api.solr_query_service import translate_task_type
 from opengever.base.helpers import display_name
 from opengever.globalindex.model.task import Task
+from opengever.tabbedview.sqlsource import cast_to_string
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from sqlalchemy import asc
 from sqlalchemy import desc
+from sqlalchemy import or_
 
 
 class GlobalIndexGet(Service):
@@ -24,6 +26,9 @@ class GlobalIndexGet(Service):
         'oguid': lambda task: str(task.oguid),
         '@id': lambda task: task.absolute_url()}
 
+    searchable_columns = [Task.title, Task.text,
+                          Task.sequence_number, Task.responsible]
+
     def reply(self):
         sort_on = self.request.form.get('sort_on', DEFAULT_SORT_INDEX)
         if sort_on not in Task.__table__.columns:
@@ -35,6 +40,8 @@ class GlobalIndexGet(Service):
         rows = self.request.form.get('b_size', '25')
 
         filters = self.request.form.get('filters', {})
+
+        search = self.request.form.get('search')
 
         try:
             start = int(start)
@@ -56,6 +63,9 @@ class GlobalIndexGet(Service):
                 query = query.filter(getattr(Task, key) == value)
         query = query.avoid_duplicates()
 
+        if search:
+            query = self.extend_query_with_textfilter(query, search)
+
         tasks = query
         batch = SQLHypermediaBatch(self.request, tasks)
         items = []
@@ -76,3 +86,36 @@ class GlobalIndexGet(Service):
         result['b_size'] = rows
 
         return result
+
+    def extend_query_with_textfilter(self, query, text):
+        """Extends the given `query` with text filters.
+        This is a copy from opengever.tabbedview.sqlsource.SqlTableSource
+        """
+        if len(text):
+            if isinstance(text, str):
+                text = text.decode('utf-8')
+
+            # remove trailing asterisk
+            if text.endswith(u'*'):
+                text = text[:-1]
+
+            # lets split up the search term into words, extend them with
+            # the default wildcards and then search for every word
+            # seperately
+            for word in text.strip().split(' '):
+                term = u'%%%s%%' % word
+
+                # XXX check if the following hack is still necessary
+
+                # Fixed Problems with the collation with the Oracle DB
+                # the case insensitive worked just every second time
+                # now it works fine
+                # Issue #759
+                query.session
+
+                expressions = []
+                for field in self.searchable_columns:
+                    expressions.append(cast_to_string(field).ilike(term))
+                query = query.filter(or_(*expressions))
+
+        return query

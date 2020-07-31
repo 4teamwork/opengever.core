@@ -4,6 +4,7 @@ Changelog
 2020.6.1 (unreleased)
 ---------------------
 
+- Handle search queries in GlobalIndexGet endpoint. [njohner]
 - Add @resolve-oguid endpoint. [deiferni]
 - Include oguid in @notifications endpoint. [deiferni]
 - Extend @globalindex endpoint, avoid duplicate tasks, add batching information. [deiferni]
