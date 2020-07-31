@@ -60,7 +60,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         self.assert_report_data_collected(bundle)
 
     def assert_workspaceroot_created(self):
-        root = self.portal.get('opengever-workspace.root')
+        root = self.portal.get('workspaces')
 
         self.assertEqual(u'Teamr\xe4ume', root.title_de)
         self.assertEqual(u'Espace partag\xe9', root.title_fr)
