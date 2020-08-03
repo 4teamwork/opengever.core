@@ -87,6 +87,12 @@ Teamraum-Root
 
 .. include:: schemas/opengever.workspace.root.inc
 
+
+Teamraum
+^^^^^^^^
+
+.. include:: schemas/opengever.workspace.workspace.inc
+
 --------------------
 
 .. disqus::

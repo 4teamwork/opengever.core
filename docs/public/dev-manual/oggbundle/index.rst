@@ -226,6 +226,12 @@ Auf der Ebene des Teamraum-Roots können folgende Rollen vergeben werden:
 -  ``workspaces_creator`` (Teamräume erstellen)
 -  ``workspaces_user`` (Teamräume auflisten)
 
+Auf der Ebene eines einzelnen Teamraums oder eines Teamraum-Ordners können die folgenden Rollen vergeben werden:
+
+-  ``workspace_admin`` (Admin)
+-  ``workspace_member`` (Teammitglied)
+-  ``workspace_guest`` (Gast)
+
 
 Setzen von Werten
 -----------------
