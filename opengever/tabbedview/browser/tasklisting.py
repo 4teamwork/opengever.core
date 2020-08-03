@@ -147,17 +147,5 @@ class GlobalTaskTableSource(SqlTableSource):
         """
         # initalize config
         query = super(GlobalTaskTableSource, self).build_query()
-
-        query = self.avoid_duplicates(query)
-        return query
-
-    def avoid_duplicates(self, query):
-        """If a task has a successor task, list only one of them.
-
-        List only the one which is assigned to this client.
-        """
-        query = query.filter(
-            or_(
-                and_(Task.predecessor == None, Task.successors == None),  # noqa
-                Task.admin_unit_id == get_current_admin_unit().id()))
+        query = query.avoid_duplicates()
         return query

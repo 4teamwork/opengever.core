@@ -4,7 +4,12 @@ Changelog
 2020.6.1 (unreleased)
 ---------------------
 
+- Handle search queries in GlobalIndexGet endpoint. [njohner]
+- Add @resolve-oguid endpoint. [deiferni]
+- Include oguid in @notifications endpoint. [deiferni]
+- Extend @globalindex endpoint, avoid duplicate tasks, add batching information. [deiferni]
 - Add upgrade to fix docs only partially indexed in solr. [deiferni]
+- Extend @config with admin-unit and org-unit. [njohner]
 
 
 2020.6.0 (2020-07-29)

@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 
 
@@ -14,22 +15,25 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(15, len(browser.json['items']))
         self.assertEqual(
             {u'@id': self.inbox_task.absolute_url(),
-             u'title': u're: Diskr\xe4te Dinge',
-             u'task_type': u'direct-execution',
+             u'assigned_org_unit': u'fa',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
-             u'task_id': 14,
              u'created': u'2016-08-31T18:27:33',
+             u'deadline': u'2020-01-01',
+             u'is_private': True,
+             u'is_subtask': False,
+             u'issuer': u'robert.ziegler',
+             u'issuer_fullname': u'Ziegler Robert',
              u'issuing_org_unit': u'fa',
+             u'modified': u'2016-08-31T18:27:33',
+             u'oguid': str(Oguid.for_object(self.inbox_task)),
+             u'predecessor_id': None,
              u'responsible': u'inbox:fa',
              u'responsible_fullname': u'Inbox: Finanz\xe4mt',
-             u'modified': u'2016-08-31T18:27:33',
-             u'is_subtask': False,
-             u'deadline': u'2020-01-01',
              u'review_state': u'task-state-in-progress',
-             u'assigned_org_unit': u'fa',
-             u'is_private': True,
-             u'predecessor_id': None,
-             u'issuer': u'robert.ziegler'},
+             u'task_id': 14,
+             u'task_type': u'For direct execution',
+             u'title': u're: Diskr\xe4te Dinge',
+             },
             browser.json['items'][0])
 
         # default row size is 25
@@ -43,6 +47,8 @@ class TestGlobalIndexGet(IntegrationTestCase):
 
         self.assertEqual(15, browser.json['items_total'])
         self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(0, browser.json['b_start'])
+        self.assertEqual(3, browser.json['b_size'])
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@globalindex?b_size=3',
              u'first': u'http://nohost/plone/@globalindex?b_start=0&b_size=3',
@@ -112,6 +118,23 @@ class TestGlobalIndexGet(IntegrationTestCase):
 
         self.assertEqual(9, browser.json['items_total'])
         self.assertEqual(9, len(browser.json['items']))
+
+    @browsing
+    def test_handles_search_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = u'@globalindex'
+        browser.open(self.portal, view=view.format(''), headers=self.api_headers)
+        self.assertEqual(15, browser.json['items_total'])
+        all_tasks = browser.json.get('items')
+
+        search_term = u'Vertr\xe4ge'
+        view = u'@globalindex?search={}'.format(search_term)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertEqual(
+            filter(lambda task: u'Vertr\xe4ge' in task.get('title'), all_tasks),
+            browser.json['items'])
 
     @browsing
     def test_query_is_restricted(self, browser):

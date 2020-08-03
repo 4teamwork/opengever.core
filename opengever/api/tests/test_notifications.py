@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity import notification_center
 from opengever.activity.model import Notification
+from opengever.base.oguid import Oguid
 from opengever.task.activities import TaskAddedActivity
 from opengever.testing import IntegrationTestCase
 import json
@@ -19,7 +20,7 @@ class TestNotificationsGet(IntegrationTestCase):
 
         center = notification_center()
 
-        self.assertEqual(0,  Notification.query.count())
+        self.assertEqual(0, Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             TaskAddedActivity(self.task, self.request).record()
@@ -33,7 +34,7 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(2, len(center.get_watchers(self.task)))
 
         # two notifications for each watcher, the responsible and the issuer
-        self.assertEqual(4,  Notification.query.count())
+        self.assertEqual(4, Notification.query.count())
 
         self.login(self.regular_user, browser=browser)
 
@@ -51,6 +52,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'label': u'Task opened',
               u'link': u'http://nohost/plone/@@resolve_notification?notification_id=3',
               u'notification_id': 3,
+              u'oguid': str(Oguid.for_object(self.task)),
               u'read': False,
               u'summary': u'New task opened by Ziegler Robert',
               u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
@@ -61,6 +63,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'label': u'Task opened',
               u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
               u'notification_id': 1,
+              u'oguid': str(Oguid.for_object(self.task)),
               u'read': True,
               u'summary': u'New task opened by Ziegler Robert',
               u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'}],
@@ -70,7 +73,7 @@ class TestNotificationsGet(IntegrationTestCase):
     def test_batch_notifications(self, browser):
         self.login(self.administrator, browser=browser)
 
-        self.assertEqual(0,  Notification.query.count())
+        self.assertEqual(0, Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             for i in range(5):
@@ -102,7 +105,7 @@ class TestNotificationsGet(IntegrationTestCase):
     def test_returns_serialized_notifications_for_the_given_userid_and_notification_id(self, browser):
         self.login(self.dossier_responsible, browser=browser)
 
-        self.assertEqual(0,  Notification.query.count())
+        self.assertEqual(0, Notification.query.count())
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             TaskAddedActivity(self.task, self.request).record()
@@ -123,6 +126,7 @@ class TestNotificationsGet(IntegrationTestCase):
              u'label': u'Task opened',
              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
              u'notification_id': 1,
+             u'oguid': str(Oguid.for_object(self.task)),
              u'read': False,
              u'summary': u'New task opened by Ziegler Robert',
              u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
@@ -153,6 +157,7 @@ class TestNotificationsGet(IntegrationTestCase):
              u'label': u'T\xe2che ouverte',
              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
              u'notification_id': 1,
+             u'oguid': str(Oguid.for_object(self.task)),
              u'read': False,
              u'summary': u'Nouvelle t\xe2che ouverte par Ziegler Robert',
              u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
@@ -238,7 +243,7 @@ class TestNotificationsPatch(IntegrationTestCase):
         url = '{}/@notifications/{}/1'.format(self.portal.absolute_url(),
                                               self.dossier_responsible.getId())
 
-        self.assertEqual(0,  Notification.query.count())
+        self.assertEqual(0, Notification.query.count())
 
         with browser.expect_http_error(404):
             browser.open(url, method='PATCH', data=json.dumps({}),

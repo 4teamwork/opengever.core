@@ -40,6 +40,7 @@ class Notification(Base):
             'notification_id': self.notification_id,
             'read': self.is_read,
             'link': self._resolve_notification_link(portal_url),
+            'oguid': str(self.activity.resource.oguid),
             })
         return data
 
