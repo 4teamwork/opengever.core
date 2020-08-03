@@ -35,6 +35,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         # Reset sequence number counters
         seq_counters = IAnnotations(self.portal)['ISequenceNumber.sequence_number']
         del seq_counters['WorkspaceSequenceNumberGenerator']
+        del seq_counters['WorkspaceFolderSequenceNumberGenerator']
 
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
@@ -61,6 +62,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
 
         workspaceroot = self.assert_workspaceroot_created()
         workspace = self.assert_workspace_created(workspaceroot)
+        workspacefolder = self.assert_workspacefolder_created(workspace)
 
         self.assert_report_data_collected(bundle)
 
@@ -116,6 +118,35 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
             index_data_for(workspace)[GUID_INDEX_NAME])
         return workspace
 
+    def assert_workspacefolder_created(self, workspace):
+        workspacefolder = workspace.get('folder-1')
+
+        self.assertEqual(u'Teamraum Folder B\xe4rengraben', workspacefolder.title)
+        self.assertEqual(u'Lorem Ipsum Folder B\xe4rengraben', workspacefolder.description)
+        self.assertEqual(
+            datetime(2020, 8, 3, 12, 35, 30, 123456, tzinfo=pytz.UTC),
+            workspacefolder.changed)
+
+        self.assertEqual(
+            'opengever_workspace_folder--STATUS--active',
+            api.content.get_state(workspacefolder))
+
+        self.assertDictContainsSubset(
+            {'admin_users': ['WorkspaceAdmin']},
+            workspacefolder.__ac_local_roles__)
+        self.assertDictContainsSubset(
+            {'privileged_users': ['WorkspaceMember']},
+            workspacefolder.__ac_local_roles__)
+        self.assertDictContainsSubset(
+            {'all_users': ['WorkspaceGuest']},
+            workspacefolder.__ac_local_roles__)
+        self.assertFalse(safe_hasattr(workspacefolder, '__ac_local_roles_block__'))
+
+        self.assertEqual(
+            IAnnotations(workspacefolder)[BUNDLE_GUID_KEY],
+            index_data_for(workspacefolder)[GUID_INDEX_NAME])
+        return workspacefolder
+
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
         metadata = report_data['metadata']
@@ -126,6 +157,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
                 'opengever.repository.repositoryfolder',
                 'opengever.workspace.root',
                 'opengever.workspace.workspace',
+                'opengever.workspace.folder',
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
                 'ftw.mail.mail']),
@@ -133,6 +165,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
 
         workspaceroots = metadata['opengever.workspace.root']
         workspaces = metadata['opengever.workspace.workspace']
+        workspacefolders = metadata['opengever.workspace.folder']
         reporoots = metadata['opengever.repository.repositoryroot']
         repofolders = metadata['opengever.repository.repositoryfolder']
         dossiers = metadata['opengever.dossier.businesscasedossier']
@@ -141,6 +174,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
 
         self.assertEqual(1, len(workspaceroots))
         self.assertEqual(1, len(workspaces))
+        self.assertEqual(1, len(workspacefolders))
         self.assertEqual(0, len(reporoots))
         self.assertEqual(0, len(repofolders))
         self.assertEqual(0, len(dossiers))
