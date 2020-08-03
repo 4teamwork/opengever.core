@@ -93,6 +93,12 @@ Teamraum
 
 .. include:: schemas/opengever.workspace.workspace.inc
 
+
+Teamraum-Ordner
+^^^^^^^^^^^^^^^
+
+.. include:: schemas/opengever.workspace.folder.inc
+
 --------------------
 
 .. disqus::

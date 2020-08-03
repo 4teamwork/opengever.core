@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Ordner",
+    "additionalProperties": false,
+    "properties": {
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        },
+        "title": {
+            "type": "string",
+            "title": "Titel",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "description": {
+            "type": "string",
+            "title": "Beschreibung",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "title"
+    ],
+    "field_order": [
+        "changed",
+        "title",
+        "description"
+    ]
+}

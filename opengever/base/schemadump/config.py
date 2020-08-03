@@ -13,6 +13,7 @@ GEVER_TYPES = [
     'opengever.repository.repositoryroot',
     'opengever.workspace.root',
     'opengever.workspace.workspace',
+    'opengever.workspace.folder',
     'opengever.meeting.proposal',
 ]
 
@@ -23,6 +24,7 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.repository.repositoryroot': 'reporoot',
     'opengever.workspace.root': 'workspaceroot',
     'opengever.workspace.workspace': 'workspace',
+    'opengever.workspace.folder': 'workspacefolder',
 }
 
 # Types that don't need a parent_guid / parent_reference during import, but
@@ -50,6 +52,9 @@ ALLOWED_REVIEW_STATES = {
     ],
     'opengever.workspace.workspace': [
         'opengever_workspace--STATUS--active',
+    ],
+    'opengever.workspace.folder': [
+        'opengever_workspace_folder--STATUS--active',
     ],
     'opengever.dossier.businesscasedossier': [
         'dossier-state-active',
@@ -102,6 +107,8 @@ MANAGEABLE_ROLES_BY_TYPE = {
     'opengever.workspace.root':
         ['workspaces_creator', 'workspaces_user'],
     'opengever.workspace.workspace':
+        ['workspace_admin', 'workspace_member', 'workspace_guest'],
+    'opengever.workspace.folder':
         ['workspace_admin', 'workspace_member', 'workspace_guest'],
 }
 
