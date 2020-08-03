@@ -642,6 +642,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
                 'opengever.repository.repositoryroot',
                 'opengever.repository.repositoryfolder',
                 'opengever.workspace.root',
+                'opengever.workspace.workspace',
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
                 'ftw.mail.mail']),
@@ -649,12 +650,16 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         reporoots = metadata['opengever.repository.repositoryroot']
         repofolders = metadata['opengever.repository.repositoryfolder']
+        workspaceroots = metadata['opengever.workspace.root']
+        workspaces = metadata['opengever.workspace.workspace']
         dossiers = metadata['opengever.dossier.businesscasedossier']
         documents = metadata['opengever.document.document']
         mails = metadata['ftw.mail.mail']
 
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))
+        self.assertEqual(0, len(workspaceroots))
+        self.assertEqual(0, len(workspaces))
         self.assertEqual(3, len(dossiers))
         self.assertEqual(5, len(documents))
         self.assertEqual(4, len(mails))

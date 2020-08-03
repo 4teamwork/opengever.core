@@ -14,6 +14,7 @@ from pkg_resources import resource_filename
 from plone import api
 from Products.CMFPlone.utils import safe_hasattr
 from zope.annotation import IAnnotations
+import pytz
 
 
 FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
@@ -31,6 +32,9 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
             aq_parent(todo).manage_delObjects([todo.id])
 
         self.portal.manage_delObjects(['workspaces'])
+        # Reset sequence number counters
+        seq_counters = IAnnotations(self.portal)['ISequenceNumber.sequence_number']
+        del seq_counters['WorkspaceSequenceNumberGenerator']
 
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
@@ -55,7 +59,8 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         transmogrifier(u'opengever.bundle.oggbundle')
         bundle = annotations[BUNDLE_KEY]
 
-        self.assert_workspaceroot_created()
+        workspaceroot = self.assert_workspaceroot_created()
+        workspace = self.assert_workspace_created(workspaceroot)
 
         self.assert_report_data_collected(bundle)
 
@@ -82,6 +87,35 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
             index_data_for(root)[GUID_INDEX_NAME])
         return root
 
+    def assert_workspace_created(self, workspaceroot):
+        workspace = workspaceroot.get('workspace-1')
+
+        self.assertEqual(u'Teamraum B\xe4rengraben', workspace.title)
+        self.assertEqual(u'Lorem Ipsum B\xe4rengraben', workspace.description)
+        self.assertEqual(
+            datetime(2020, 8, 3, 11, 45, 30, 123456, tzinfo=pytz.UTC),
+            workspace.changed)
+
+        self.assertEqual(
+            'opengever_workspace--STATUS--active',
+            api.content.get_state(workspace))
+
+        self.assertDictContainsSubset(
+            {'admin_users': ['WorkspaceAdmin']},
+            workspace.__ac_local_roles__)
+        self.assertDictContainsSubset(
+            {'privileged_users': ['WorkspaceMember']},
+            workspace.__ac_local_roles__)
+        self.assertDictContainsSubset(
+            {'all_users': ['WorkspaceGuest']},
+            workspace.__ac_local_roles__)
+        self.assertFalse(safe_hasattr(workspace, '__ac_local_roles_block__'))
+
+        self.assertEqual(
+            IAnnotations(workspace)[BUNDLE_GUID_KEY],
+            index_data_for(workspace)[GUID_INDEX_NAME])
+        return workspace
+
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
         metadata = report_data['metadata']
@@ -91,12 +125,14 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
                 'opengever.repository.repositoryroot',
                 'opengever.repository.repositoryfolder',
                 'opengever.workspace.root',
+                'opengever.workspace.workspace',
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
                 'ftw.mail.mail']),
             set(metadata.keys()))
 
         workspaceroots = metadata['opengever.workspace.root']
+        workspaces = metadata['opengever.workspace.workspace']
         reporoots = metadata['opengever.repository.repositoryroot']
         repofolders = metadata['opengever.repository.repositoryfolder']
         dossiers = metadata['opengever.dossier.businesscasedossier']
@@ -104,6 +140,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         mails = metadata['ftw.mail.mail']
 
         self.assertEqual(1, len(workspaceroots))
+        self.assertEqual(1, len(workspaces))
         self.assertEqual(0, len(reporoots))
         self.assertEqual(0, len(repofolders))
         self.assertEqual(0, len(dossiers))
