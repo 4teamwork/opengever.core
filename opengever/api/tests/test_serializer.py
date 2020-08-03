@@ -1,6 +1,7 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
+from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -156,3 +157,27 @@ class TestInboxSerializer(IntegrationTestCase):
         browser.open(self.inbox, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'email'), u'1011013300@example.org')
+
+    @browsing
+    def test_inbox_serialization_contains_inbox_id(self, browser):
+        self.login(self.secretariat_user, browser)
+        browser.open(self.inbox, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'inbox_id'), u'inbox:fa')
+
+    @browsing
+    def test_inbox_id_defaults_to_current_orgunit(self, browser):
+        self.login(self.manager, browser)
+        IResponsibleOrgUnit(self.inbox).responsible_org_unit = None
+
+        browser.open(self.inbox, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'inbox_id'), u'inbox:fa')
+
+        # change orgunit
+        browser.open(self.repository_root)
+        browser.css('.orgunitMenuContent a')[0].click()
+
+        browser.open(self.inbox, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'inbox_id'), u'inbox:rk')
