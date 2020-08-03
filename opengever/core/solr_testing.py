@@ -47,18 +47,24 @@ class SolrServer(object):
         self._running = True
         return self
 
-    def commit(self):
-        """Commit any pending updates in Solr.
+    @property
+    def connection(self):
+        """Provide access to the currently active solr connection.
         """
-        conn = getUtility(ISolrConnectionManager)
+        manager = getUtility(ISolrConnectionManager)
 
-        if not self._configured or conn.connection is None:
+        if not self._configured or manager.connection is None:
             raise Exception("Attempt to commit Solr in a test that didn't set "
                             "up Solr (properly). Make sure your test case uses "
                             "the OPENGEVER_SOLR_INTEGRATION_TESTING layer.")
 
         processQueue()
-        conn.connection.commit()
+        return manager.connection
+
+    def commit(self):
+        """Commit any pending updates in Solr.
+        """
+        self.connection.commit()
 
     def stop(self):
         """Make sure the solr server is stopped.
