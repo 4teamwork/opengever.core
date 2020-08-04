@@ -773,3 +773,6 @@ class SolrIntegrationTestCase(IntegrationTestCase):
 
     def commit_solr(self):
         SolrServer.get_instance().commit()
+
+    def get_solr_connection(self):
+        return SolrServer.get_instance().connection
