@@ -105,7 +105,7 @@ class DossierMigrator(object):
         # (participations don't affect indexes however)
         for obj in self.dossiers_to_reindex:
             logger.info("Reindexing dossier: %r" % obj)
-            obj.reindexObject(idxs=['responsible'])
+            obj.reindexObject(idxs=['responsible', 'SearchableText'])
 
         results = {
             'responsibles': {
