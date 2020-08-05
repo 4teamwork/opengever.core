@@ -2,6 +2,7 @@ from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.dossier.interfaces import IDossierArchiver
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.testing import index_data_for
@@ -277,3 +278,16 @@ class TestDossierFilingNumberIndexer(SolrIntegrationTestCase):
         indexed_value = solr_data_for(self.dossier, 'SearchableText')
 
         self.assertIn('SKA ARCH-Administration-2016-11', indexed_value)
+
+    def test_filing_no_is_in_searchable_text_when_dossier_is_archived(self):
+        self.login(self.regular_user)
+
+        IDossierArchiver(self.dossier).archive('administration', '2013')
+        self.commit_solr()
+
+        expected_filing_no = 'Hauptmandant-Administration-2013-1'
+        self.assertEqual(IFilingNumber(self.dossier).filing_no,
+                         expected_filing_no)
+
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
+        self.assertIn(expected_filing_no, indexed_value)
