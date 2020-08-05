@@ -3,6 +3,8 @@ from ftw.builder import create
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.testing import FunctionalTestCase
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import obj2brain
 from opengever.usermigration.dossier import DossierMigrator
 from opengever.usermigration.exceptions import UserMigrationException
@@ -64,6 +66,32 @@ class TestDossierMigratorForResponsible(FunctionalTestCase):
             [('/plone/dossier-1', 'old.user', 'new.user')],
             results['responsibles']['moved']
         )
+
+
+class TestDossierMigratorForResponsibleSolr(SolrIntegrationTestCase):
+
+    def test_searchable_text_index_gets_updated(self):
+        self.login(self.manager)
+
+        searchable_text = solr_data_for(self.dossier).get('SearchableText')
+        self.assertEqual(self.dossier_responsible.id,
+                         IDossier(self.dossier).responsible)
+        self.assertIn(self.dossier_responsible.id, searchable_text)
+        self.assertNotIn(self.regular_user.id, searchable_text)
+
+        migrator = DossierMigrator(
+            self.portal,
+            {self.dossier_responsible.id: self.regular_user.id},
+            'move'
+            )
+        migrator.migrate()
+        self.commit_solr()
+
+        searchable_text = solr_data_for(self.dossier).get('SearchableText')
+        self.assertEqual(self.regular_user.id,
+                         IDossier(self.dossier).responsible)
+        self.assertNotIn(self.dossier_responsible.id, searchable_text)
+        self.assertIn(self.regular_user.id, searchable_text)
 
 
 class TestDossierMigratorForParticipants(FunctionalTestCase):

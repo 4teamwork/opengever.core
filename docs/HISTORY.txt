@@ -4,6 +4,7 @@ Changelog
 2020.6.1 (unreleased)
 ---------------------
 
+- Also reindex searchable text of dossier when migrating responsible user. [njohner]
 - Bump `ftw.solr` to treat docs with no `created` field as out of sync. [deiferni]
 - Handle search queries in GlobalIndexGet endpoint. [njohner]
 - Add @resolve-oguid endpoint. [deiferni]
