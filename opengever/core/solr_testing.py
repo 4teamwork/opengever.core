@@ -87,8 +87,11 @@ class SolrServer(object):
     def is_ready(self):
         """Check whether the solr server is ready to accept connections.
         """
-        response = requests.get(url='http://localhost:{}/solr/{}/admin/ping'.format(self.port, self.core))
-        return response.ok
+        try:
+            response = requests.get(url='http://localhost:{}/solr/{}/admin/ping'.format(self.port, self.core))
+            return response.ok
+        except:
+            return False
 
     def await_ready(self, timeout=60, interval=0.1, verbose=False):
         """Wait until the solr server has bound the port.
