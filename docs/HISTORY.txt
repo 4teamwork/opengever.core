@@ -5,6 +5,8 @@ Changelog
 ---------------------
 
 - Also reindex searchable text of dossier when migrating responsible user. [njohner]
+- Use filing_no field in advanced search form. [njohner]
+- Reindex SearchableText when filing number is set. [njohner]
 - Bump `ftw.solr` to treat docs with no `created` field as out of sync. [deiferni]
 - Handle search queries in GlobalIndexGet endpoint. [njohner]
 - Add @resolve-oguid endpoint. [deiferni]

@@ -320,7 +320,7 @@ class Archiver(object):
 
     def _recursive_update_prefix(self, dossier, prefix):
         IDossier(dossier).filing_prefix = prefix
-        dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
+        dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no', 'SearchableText'])
         for subdossier in dossier.get_subdossiers(depth=1):
             self._recursive_update_prefix(subdossier.getObject(), prefix)
 
@@ -337,7 +337,7 @@ class Archiver(object):
         IFilingNumber(dossier).filing_no = number
 
         IDossier(self.context).filing_prefix = prefix
-        dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
+        dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no', 'SearchableText'])
 
         for i, subdossier in enumerate(dossier.get_subdossiers(depth=1),
                                        start=1):
