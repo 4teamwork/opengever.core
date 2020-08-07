@@ -16,4 +16,9 @@
       permission="opengever.task.AddTask"
       />
 
+  <utility
+      factory=".vocabulary.AttachableDocumentsVocabularyFactory"
+      name="opengever.task.attachable_documents_vocabulary"
+      />
+
 </configure>
