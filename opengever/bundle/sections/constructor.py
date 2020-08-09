@@ -5,6 +5,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.interfaces import IDontIssueDossierReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -215,11 +216,15 @@ class ConstructorSection(object):
             parent_path = self.path_from_refnum(formatted_parent_refnum)
 
         elif item['_type'] in ROOT_TYPES:
-            # Repo roots and workspace roots are the only types that don't
-            # require a parent pointer, and get constructed directly in
-            # the Plone site
+            # Repo roots and workspace roots don't require a parent pointer,
+            # and get constructed directly in the Plone site
             container = self.site
             parent_path = '/'
+
+        elif item['_type'] in PARENTABLE_TYPES:
+            # Workspaces may be parented to existing workspace roots
+            parent_path = item['_parent_path']
+            container = traverse(self.site, parent_path, None)
 
         else:
             # Should never happen - schema requires a parent pointer

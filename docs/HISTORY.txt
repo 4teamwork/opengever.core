@@ -4,6 +4,7 @@ Changelog
 2020.6.1 (unreleased)
 ---------------------
 
+- Add support for importing teamraum bundles. [lgraf]
 - Also reindex searchable text of dossier when migrating responsible user. [njohner]
 - Use filing_no field in advanced search form. [njohner]
 - Reindex SearchableText when filing number is set. [njohner]

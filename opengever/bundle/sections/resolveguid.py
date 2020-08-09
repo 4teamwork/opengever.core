@@ -3,6 +3,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.loader import PORTAL_TYPES_TO_JSON_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
@@ -27,6 +28,10 @@ class DuplicateGuid(Exception):
 
 
 class MissingParent(Exception):
+    pass
+
+
+class ParentContainerNotFound(Exception):
     pass
 
 
@@ -211,12 +216,53 @@ class ResolveGUIDSection(object):
                 # Repo roots and workspace roots are the only types
                 # without a parent pointer
                 roots.append(item)
+
+            elif item['_type'] in PARENTABLE_TYPES:
+                parent = self.find_existing_parent_container(item)
+                if parent is None:
+                    raise ParentContainerNotFound(
+                        "Failed to find parent container for item with "
+                        "GUID %s (type %s)" % (item['guid'], item['_type']))
+
+                # Path must *relative to Plone site* for our custom traverse
+                # function in the constructor section to work properly
+                parent_path = '/'.join(parent.getPhysicalPath()[2:])
+                item['_parent_path'] = parent_path
+                roots.append(item)
+
             else:
                 raise MissingParentPointer(
                     "No parent pointer for item with GUID %s" % item['guid'])
 
         self.display_actual_stats()
         return roots
+
+    def find_existing_parent_container(self, item):
+        """Locate an unambiguous parent container for the given item.
+
+        This will look for an appropriate parent container as part of the
+        existing site content where the given item could be parented to.
+
+        This assumes that such a target container can be unambiguously
+        identified using a heuristic that depends on the item's portal_type.
+        """
+        if item['_type'] == 'opengever.workspace.workspace':
+            # Look for a *single* workspace root
+            brains = self.catalog.unrestrictedSearchResults(
+                portal_type='opengever.workspace.root')
+
+            if len(brains) > 1:
+                raise ParentContainerNotFound(
+                    "Unable to determine parent for item with GUID %s, "
+                    "multiple workspace roots found" % item['guid'])
+
+            if len(brains) < 1:
+                raise ParentContainerNotFound(
+                    "Unable to determine parent for item with GUID %s, "
+                    "no workspace roots found" % item['guid'])
+
+            workspace_root = brains[0].getObject()
+            return workspace_root
 
     def visit_in_pre_order(self, items, level, previous_type):
         """Visit list of items depth first, always yield parent before its
