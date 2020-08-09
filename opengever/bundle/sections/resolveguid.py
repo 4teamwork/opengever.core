@@ -134,8 +134,8 @@ class ResolveGUIDSection(object):
             parent_reference = item.get('parent_reference')
 
             if parent_guid is not None:
-                if not (parent_guid in self.bundle.item_by_guid or
-                        parent_guid in self.bundle.existing_guids):
+                if not any((parent_guid in self.bundle.item_by_guid,
+                            parent_guid in self.bundle.existing_guids)):
                     raise MissingParent(
                         "Couldn't find item/container with GUID %s "
                         "(referenced as parent by item by GUID %s ) in either "
