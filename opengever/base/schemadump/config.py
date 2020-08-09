@@ -34,6 +34,12 @@ ROOT_TYPES = [
     'opengever.workspace.root'
 ]
 
+# Types that can unambiguously be parented to an existing container, and
+# therefore don't require a parent_guid / parent_reference
+PARENTABLE_TYPES = [
+    'opengever.workspace.workspace'
+]
+
 # Workflow states allowed in JSON schemas. The state that's listed first
 # indicates the initial workflow state (i.e. default state).
 #

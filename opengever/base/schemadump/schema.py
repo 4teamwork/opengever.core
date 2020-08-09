@@ -9,6 +9,7 @@ from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
 from opengever.base.schemadump.config import MANAGEABLE_ROLES_BY_TYPE
+from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.base.schemadump.config import SEQUENCE_NUMBER_LABELS
 from opengever.base.schemadump.field import FieldDumper
@@ -330,7 +331,7 @@ class OGGBundleJSONSchemaBuilder(object):
 
         if self.portal_type not in ROOT_TYPES:
             # Everything except repository roots or workspace roots
-            # needs a parent_guid or a parent_reference
+            # supports a parent_guid or a parent_reference.
             self.ct_schema.add_property('parent_guid', {'type': 'string'})
 
             array_of_ints = {
@@ -340,7 +341,10 @@ class OGGBundleJSONSchemaBuilder(object):
             self.ct_schema.add_property(
                 'parent_reference', {'type': 'array', 'items': array_of_ints})
 
-            self.ct_schema.require_any_of(['parent_guid', 'parent_reference'])
+            if self.portal_type not in PARENTABLE_TYPES:
+                # Parent pointers are optional for parentable types. For any
+                # other non-root types, they're required
+                self.ct_schema.require_any_of(['parent_guid', 'parent_reference'])
 
     def _add_permissions_property(self):
         if not self.portal_type == 'opengever.document.document':

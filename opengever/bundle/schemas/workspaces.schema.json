@@ -71,22 +71,6 @@
                 "review_state",
                 "guid"
             ],
-            "allOf": [
-                {
-                    "anyOf": [
-                        {
-                            "required": [
-                                "parent_guid"
-                            ]
-                        },
-                        {
-                            "required": [
-                                "parent_reference"
-                            ]
-                        }
-                    ]
-                }
-            ],
             "field_order": [
                 "changed",
                 "title",
