@@ -18,8 +18,11 @@ def assign_admin_role_to_workspace_creator(workspace, event):
     so that the she / he can access the workspace.
     """
     owner_userid = workspace.Creator()
-    assignment = SharingRoleAssignment(owner_userid, ['WorkspaceAdmin'])
-    RoleAssignmentManager(workspace).add_or_update_assignment(assignment)
+    if owner_userid:
+        # During bundle import, Creator() may return the empty string.
+        # Make sure to not assign any local roles in that case.
+        assignment = SharingRoleAssignment(owner_userid, ['WorkspaceAdmin'])
+        RoleAssignmentManager(workspace).add_or_update_assignment(assignment)
 
 
 def check_delete_preconditions(todolist, event):
