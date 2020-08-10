@@ -11,6 +11,8 @@ Changelog:
 +---------------+--------------+-------------+--------------------------------------------------------+
 | **Version**   | **Datum**    | **Autor**   | **Kommentar**                                          |
 +===============+==============+=============+========================================================+
+| 1.1           | 10.08.2020   | LG          | Import von Teamräumen                                  |
++---------------+--------------+-------------+--------------------------------------------------------+
 | 1.0           | 16.10.2017   | LG, PG      | Referenzierung von bestehendem Inhalt via Aktenzeichen |
 +---------------+--------------+-------------+--------------------------------------------------------+
 | 0.1.3         | 10.02.2017   | LG          | Ergänzt: Setzen des Workflow-Status                    |
@@ -26,13 +28,19 @@ Status: In Arbeit
 
 Die hier beschriebene Schnittstelle dient dem einmaligen Import eines Ordnungssystems, seiner Ordnungspositionen, Dossiers/Subdossiers und Dokumente/Mails nach OneGov GEVER. Die Migration findet ab einem JSON-basierten Zwischenformat statt. Dieses muss einem validen Schema entsprechen, und die darin enthaltenen Daten müssen die in OneGov GEVER geltenden Geschäftsregeln erfüllen.
 
-Zu migrierende Inhaltstypen
----------------------------
+Importierbare Inhaltstypen
+--------------------------
 
 +------------------------------+-------------+
 | **Ordnungssysteme**          | Ja          |
-+==============================+=============+
++------------------------------+-------------+
 | **Ordnungspositionen**       | Ja          |
++------------------------------+-------------+
+| **Teamraum-Roots**           | Ja          |
++------------------------------+-------------+
+| **Teamräume**                | Ja          |
++------------------------------+-------------+
+| **Teamraum-Ordner**          | Ja          |
 +------------------------------+-------------+
 | **Dossiers**                 | Ja          |
 +------------------------------+-------------+
@@ -111,7 +119,29 @@ workspaceroots.json
 
 Diese Datei beinhaltet ein Teamraum-Root.
 
+Falls auf der Installation, in welche ein OGGBundle mit Teamräumen importiert wird, bereits ein Teamraum-Root existiert, kann diese Datei weggelassen werden. Beim Import wird dann vorausgesetzt, dass genau ein Teamraum-Root bereits existiert, und die Teamräume werden in dieses Teamraum-Root importiert.
+
+In diesem Fall dürfen die Teamräume keine ``parent_guid`` gesetzt haben.
+
 JSON Schema: :ref:`workspaceroots.schema.json <workspaceroots_schema_json>`
+
+workspaces.json
+~~~~~~~~~~~~~~~
+
+Diese Datei beinhaltet einen oder mehrere Teamräume.
+
+Die Teamräume werden über die ``parent_guid`` einem Teamraum-Root zugeordnet, welches ebenfalls im Bundle enthalten ist.
+
+Alternativ kann die ``parent_guid`` für Teamräume, und die Definition eines Workspace-Roots im ``workspaceroots.json`` weggelassen werden - die Teamräume werden dann in ein bereits existierendes Workspace-Root importiert.
+
+JSON Schema: :ref:`workspaces.schema.json <workspaces_schema_json>`
+
+workspacefolders.json
+~~~~~~~~~~~~~~~~~~~~~
+
+Diese Datei beinhaltet einen oder mehrere Teamraum-Ordner.
+
+JSON Schema: :ref:`workspacefolders.schema.json <workspacefolders_schema_json>`
 
 dossiers.json
 ~~~~~~~~~~~~~
@@ -157,7 +187,7 @@ parent_guid
 
 Da die Daten in den JSON-Dateien nicht verschachtelt abgelegt werden, ist es nötig diese Verschachtelung während dem Import aufzulösen. Diese Verschachtelung wird mittels global eindeutiger ID (GUID) und einem Pointer von Children auf das enthaltende Parent abgebildet. Dazu muss jedes Objekt über eine GUID verfügen. Diese muss im Attribut **guid** gespeichert werden. Die Verschachtelung wird mittels einer Referenz auf das Parent hergestellt, dazu muss jedes Objekt, das ein Parent besitzt, das Attribut **parent\_guid** definieren, und damit auf das Parent referenzieren:
 
-code::
+.. code::
 
   {
   "guid": "7777-0000-0000-0000",
@@ -183,7 +213,7 @@ Alternativ zur GUID kann auch das Akzenzeichen eines Objekts als eindeutige Refe
 
 Wird zur Referenzierung das Aktenzeichen verwendet, muss dazu das Attribut **parent\_reference** (statt **parent\_guid**) gesetzt werden. Das Aktenzeichen in diesem Attribut wird als verschachtelte Arrays von Integern erwartet, welche die einzelnen Komponenten des Aktenzeichens (ohne Formatierung) abbilden. Beispiel: `[[1, 3, 5], [472, 9]` entspricht dem Aktenzeichen `1.3.5 / 472.9` (Position 1.3.5, Dossier 472, Subdossier 9):
 
-code::
+.. code::
 
   {
   "guid": "9999-0000-0000-0000",
@@ -199,6 +229,37 @@ Berechtigungen
 
 Berechtigungen werden in OneGov GEVER standardmässig auf die Children vererbt. Es ist auf den Stufen Ordnungssystem, Ordnungsposition und Dossier erlaubt die Berechtigungen zu setzen, wobei Berechtigungen auf Stufe Dossier die Ausnahme sein sollten.
 
+Die möglichen Berechtigungen sind grundsätzlich vom jeweiligen Inhaltstyp abhängig. Die konkret erlaubten Werte können dem JSON Schema für den Typ entnommen werden. Für die meisten GEVER Inhalte sind die steuerbaren Berechtigungen jedoch identisch - die Ausnahme bilden Teamraum-Inhalte.
+
+Berechtigungen werden gesetzt, indem im ``_permissions`` Property des ensprechenden Items ein Mapping gemäss Schema angegeben wird.
+
+Beispiel:
+
+.. code::
+
+  {
+  "guid": "9999-0000-0000-0000",
+  ...
+
+    "_permissions": {
+      "read": [
+        "all_users"
+      ],
+      "add": [
+        "privileged_users"
+      ],
+      "edit": [
+        "privileged_users"
+      ],
+      "close": [
+        "admin_users"
+      ],
+      "reactivate": [
+        "admin_users"
+      ]
+    }
+  }
+
 Die Berechtigungen können granular für die folgenden Rollen vergeben werden:
 
 -  ``read`` (Lesen)
@@ -213,7 +274,14 @@ Die Berechtigungen können granular für die folgenden Rollen vergeben werden:
 
 -  ``manage_dossiers`` (Dossiers verwalten)
 
-Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob die Vererbung der Berechtigungen auf dieser Stufe unterbrochen werden soll. Dies führt dazu, dass ab dieser Stufe nur die explizit definierten Zugriffsberechtigungen gültig sind, und keine Berechtigungen mehr via Vererbung vom Parent übernommen werden.
+Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob die Vererbung der Berechtigungen auf dieser Stufe unterbrochen werden soll. Dies führt dazu, dass ab dieser Stufe nur die explizit definierten Zugriffsberechtigungen gültig sind, und keine Berechtigungen mehr via Vererbung vom Parent übernommen werden:
+
+.. code::
+
+  "_permissions": {
+    "block_inheritance": true,
+    ...
+  }
 
 Berechtigungen werden an einen oder mehrere “Principals” vergeben, dies entspricht einem Benutzer oder einer Gruppe.
 
@@ -231,6 +299,8 @@ Auf der Ebene eines einzelnen Teamraums oder eines Teamraum-Ordners können die 
 -  ``workspace_admin`` (Admin)
 -  ``workspace_member`` (Teammitglied)
 -  ``workspace_guest`` (Gast)
+   
+**Beteiligungen** (participations) in Teamräumen werden über lokale Rollen abgebildet. Um eine Beteiligung eines Benutzers an einem Teamraum zu importieren, genügt es daher die Art der Beteiligung über ein entsprechendes local role assignment im ``_permissions`` property auszudrücken. 
 
 
 Setzen von Werten
@@ -489,6 +559,38 @@ Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten defini
        Schema anzeigen
 
     .. literalinclude:: ../../../../opengever/bundle/schemas/workspaceroots.schema.json
+       :language: json
+
+----------
+
+.. _workspaces_schema_json:
+
+:download:`workspaces.schema.json <../../../../opengever/bundle/schemas/workspaces.schema.json>`
+
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/workspaces.schema.json
+       :language: json
+
+----------
+
+.. _workspacefolders_schema_json:
+
+:download:`workspacefolders.schema.json <../../../../opengever/bundle/schemas/workspacefolders.schema.json>`
+
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/workspacefolders.schema.json
        :language: json
 
 
