@@ -46,6 +46,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.ogds.base.OrgUnitsVocabularyFactory',
     'opengever.ogds.base.OtherAssignedClientsVocabulary',
     'opengever.repository.RestrictedAddableDossiersVocabulary',
+    'opengever.task.attachable_documents_vocabulary',
     'opengever.task.bidirectional_by_reference',
     'opengever.task.bidirectional_by_value',
     'opengever.task.reminder.TaskReminderOptionsVocabulary',
@@ -95,7 +96,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'wicked.vocabularies.CacheConfigurationsOptions',
 ]
 
-# This vocabularies are listet by the @vocabularies endpoint but should not be
+# These vocabularies are listed by the @vocabularies endpoint but should not be
 # tested if they are accessable by the user or not.
 IGNORED_VOCABULARIES = [
     'Behaviors',

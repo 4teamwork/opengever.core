@@ -1,7 +1,10 @@
+from opengever.task.task import ITask
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.interface import implementer
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 
@@ -37,3 +40,13 @@ def attachable_documents_vocabulary(context):
         terms.append(SimpleVocabulary.createTerm(key, key, label))
 
     return SimpleVocabulary(terms)
+
+
+@implementer(IVocabularyFactory)
+class AttachableDocumentsVocabularyFactory(object):
+
+    def __call__(self, context):
+        if not ITask.providedBy(context):
+            return SimpleVocabulary([])
+
+        return attachable_documents_vocabulary(context)

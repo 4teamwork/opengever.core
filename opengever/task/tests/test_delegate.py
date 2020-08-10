@@ -1,8 +1,11 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.task.browser.delegate.vocabulary import attachable_documents_vocabulary
 from opengever.testing import IntegrationTestCase
 from plone import api
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
 
 
 class TestDelegateTaskToInbox(IntegrationTestCase):
@@ -94,3 +97,15 @@ class TestDelegateTaskForm(IntegrationTestCase):
 
         self.assertEqual(
             ['1 subtasks were create.'], statusmessages.info_messages())
+
+
+class TestAttachableDocumentsVocabulary(IntegrationTestCase):
+
+    def test_attachable_documents_vocabulary_lists_contained_and_related_documents(self):
+        self.login(self.regular_user)
+        intids = getUtility(IIntIds)
+        terms = attachable_documents_vocabulary(self.task)
+
+        self.assertItemsEqual(
+            [str(intids.getId(el)) for el in [self.document, self.taskdocument]],
+            [term.value for term in terms])

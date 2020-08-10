@@ -12,7 +12,9 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone.restapi.serializer.converters import json_compatible
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 import json
 
 
@@ -542,3 +544,48 @@ class TestTaskTransitions(IntegrationTestCase):
 
         self.assertEqual('rk', self.inbox_forwarding.responsible_client)
         self.assertEqual('james.bond', self.inbox_forwarding.responsible)
+
+    @browsing
+    def test_delegate_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        intids = getUtility(IIntIds)
+
+        data = {
+            "responsibles": ["fa:{}".format(self.regular_user.id),
+                             "fa:{}".format(self.dossier_responsible.id)],
+            "issuer": self.dossier_responsible.id,
+            "title": "Delegated task",
+            "deadline": "2019-11-30",
+            "documents": [str(intids.getId(self.taskdocument))]
+            }
+
+        with self.observe_children(self.task) as children:
+            browser.open(
+                self.task.absolute_url() + '/@workflow/task-transition-delegate',
+                json.dumps(data),
+                method="POST",
+                headers=self.api_headers)
+
+        added_tasks = children['added']
+        self.assertEqual(2, len(children['added']))
+        self.assertItemsEqual(
+            [self.regular_user.id, self.dossier_responsible.id],
+            [task.responsible for task in added_tasks])
+
+        for added_task in added_tasks:
+            self.assertEqual(1, len(added_task.relatedItems))
+            self.assertEqual(self.taskdocument, added_task.relatedItems[0].to_object)
+
+    @browsing
+    def test_attachable_documents_vocabulary_lists_contained_and_related_documents(self, browser):
+        intids = getUtility(IIntIds)
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.task.absolute_url() + '/@vocabularies/opengever.task.attachable_documents_vocabulary',
+            headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            [str(intids.getId(el)) for el in [self.document, self.taskdocument]],
+            [term['token'] for term in browser.json['items']])
