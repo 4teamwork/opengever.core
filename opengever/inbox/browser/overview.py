@@ -68,8 +68,7 @@ class InboxOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
 
         catalog = api.portal.get_tool(name='portal_catalog')
 
-        query = {'isWorkingCopy': 0,
-                 'path': {'depth': 1,
+        query = {'path': {'depth': 1,
                           'query': '/'.join(self.context.getPhysicalPath())},
                  'object_provides': [
                      'opengever.document.behaviors.IBaseDocument', ],

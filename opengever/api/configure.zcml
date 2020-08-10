@@ -30,6 +30,7 @@
   <adapter factory=".serializer.SerializeBrainToJsonSummary" />
 
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
+  <adapter factory=".inbox.SerializeInboxToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
   <adapter factory=".mail.SerializeMailToJson" />
