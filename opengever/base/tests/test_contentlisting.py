@@ -2,12 +2,21 @@ from ftw.testbrowser import browsing
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from opengever.testing import set_preferred_language
 from opengever.trash.trash import Trasher
+from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 
 
 class TestOpengeverContentListing(IntegrationTestCase):
     """Test basic content listing functionality."""
+
+    def setUp(self):
+        super(TestOpengeverContentListing, self).setUp()
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.setDefaultLanguage('de-ch')
+        lang_tool.supported_langs = ['fr-ch', 'de-ch']
 
     def assertCropping(self, size, value):
         self.assertEquals(
@@ -232,6 +241,42 @@ class TestOpengeverContentListing(IntegrationTestCase):
             IContentListingObject(obj2brain(
                 self.dossier)).ModificationDate(),
             '2016-08-31T20:15:33+02:00')
+
+    def test_translated_review_state(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'In Bearbeitung',
+            IContentListingObject(obj2brain(self.dossier))
+            .translated_review_state(),
+        )
+
+    def test_translated_review_state_for_proposal(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(
+            u'Eingereicht',
+            IContentListingObject(obj2brain(self.proposal))
+            .translated_review_state(),
+        )
+
+    def test_translated_review_state_for_submittedproposal(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(
+            u'Eingereicht',
+            IContentListingObject(obj2brain(self.submitted_proposal))
+            .translated_review_state(),
+        )
+
+    def test_translated_review_state_for_committee(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(
+            u'Aktiv',
+            IContentListingObject(obj2brain(self.committee))
+            .translated_review_state(),
+        )
 
 
 class TestBrainContentListingRenderLink(IntegrationTestCase):
