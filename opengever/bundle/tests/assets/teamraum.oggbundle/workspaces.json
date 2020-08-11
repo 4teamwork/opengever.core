@@ -1,0 +1,21 @@
+[
+  {
+    "guid": "48ae5c96b6814da8b5c22e16bd8f9025",
+    "parent_guid": "4c2afa47bdeb47d689f675d123369dcf",
+    "changed": "2020-08-03T13:45:30.123456",
+    "title": "Teamraum B\u00e4rengraben",
+    "description": "Lorem Ipsum B\u00e4rengraben",
+    "review_state": "opengever_workspace--STATUS--active",
+    "_permissions": {
+      "workspace_admin": [
+        "admin_users"
+      ],
+      "workspace_member": [
+        "privileged_users"
+      ],
+      "workspace_guest": [
+        "all_users"
+      ]
+    }
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "guid": "0feeddda8367493091e1427a68ba7f25",
+    "parent_guid": "b48a827a050f482db9dd14b02f78b54a",
+    "document_author": "david.erni",
+    "document_date": "2007-01-01",
+    "changed": "2019-12-05T14:09:59.240726",
+    "filepath": "files/bewerbung_pesche.docx",
+    "keywords": [],
+    "preserved_as_paper": true,
+    "relatedItems": [],
+    "review_state": "document-state-draft",
+    "title": "Bewerbung Hanspeter Müller"
+  },
+  {
+    "guid": "0318fcc28cde44708837fa92cb665f7a",
+    "parent_guid": "48ae5c96b6814da8b5c22e16bd8f9025",
+    "filepath": "files/sample.eml",
+    "review_state": "document-state-draft",
+    "title": "Ein Mail",
+    "document_date": "2011-01-01",
+    "changed": "2019-12-05"
+  }
+]

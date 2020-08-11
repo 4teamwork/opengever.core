@@ -1,12 +1,16 @@
 from collections import OrderedDict
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.schemadump.config import ALLOWED_REVIEW_STATES
+from opengever.base.schemadump.config import DEFAULT_MANAGEABLE_ROLES
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
+from opengever.base.schemadump.config import MANAGEABLE_ROLES_BY_TYPE
+from opengever.base.schemadump.config import PARENTABLE_TYPES
+from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.base.schemadump.config import SEQUENCE_NUMBER_LABELS
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
@@ -325,8 +329,9 @@ class OGGBundleJSONSchemaBuilder(object):
     def _add_guid_properties(self):
         self.ct_schema.add_property('guid', {'type': 'string'}, required=True)
 
-        if self.portal_type != 'opengever.repository.repositoryroot':
-            # Everything except repository roots needs a parent GUID
+        if self.portal_type not in ROOT_TYPES:
+            # Everything except repository roots or workspace roots
+            # supports a parent_guid or a parent_reference.
             self.ct_schema.add_property('parent_guid', {'type': 'string'})
 
             array_of_ints = {
@@ -336,7 +341,10 @@ class OGGBundleJSONSchemaBuilder(object):
             self.ct_schema.add_property(
                 'parent_reference', {'type': 'array', 'items': array_of_ints})
 
-            self.ct_schema.require_any_of(['parent_guid', 'parent_reference'])
+            if self.portal_type not in PARENTABLE_TYPES:
+                # Parent pointers are optional for parentable types. For any
+                # other non-root types, they're required
+                self.ct_schema.require_any_of(['parent_guid', 'parent_reference'])
 
     def _add_permissions_property(self):
         if not self.portal_type == 'opengever.document.document':
@@ -358,15 +366,13 @@ class OGGBundleJSONSchemaBuilder(object):
         }
 
         subschema.add_property('block_inheritance', {"type": "boolean"})
-        subschema.add_property('read', string_array)
-        subschema.add_property('add', string_array)
-        subschema.add_property('edit', string_array)
-        subschema.add_property('close', string_array)
-        subschema.add_property('reactivate', string_array)
 
-        if self.portal_type in ['opengever.repository.repositoryroot',
-                                'opengever.repository.repositoryfolder']:
-            subschema.add_property('manage_dossiers', string_array)
+        manageable_roles = MANAGEABLE_ROLES_BY_TYPE.get(
+            self.portal_type, DEFAULT_MANAGEABLE_ROLES)
+
+        for role_name in manageable_roles:
+            subschema.add_property(role_name, string_array)
+
         return subschema
 
     def _add_file_properties(self):

@@ -1,0 +1,21 @@
+[
+  {
+    "guid": "rootless_b48a827a050f482db9dd14b02f78b54a",
+    "parent_guid": "rootless_48ae5c96b6814da8b5c22e16bd8f9025",
+    "changed": "2020-08-03T14:35:30.123456",
+    "title": "Rootless Teamraum Folder B\u00e4rengraben",
+    "description": "Lorem Ipsum Folder B\u00e4rengraben",
+    "review_state": "opengever_workspace_folder--STATUS--active",
+    "_permissions": {
+      "workspace_admin": [
+        "admin_users"
+      ],
+      "workspace_member": [
+        "privileged_users"
+      ],
+      "workspace_guest": [
+        "all_users"
+      ]
+    }
+  }
+]

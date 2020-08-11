@@ -52,6 +52,7 @@
     <implements interface="opengever.base.interfaces.IOpengeverCatalogBrain" />
   </class>
 
+  <adapter factory=".namechooser.GEVERRootNameChooser" />
   <adapter factory=".storage.RoleAssignmentReportsStorage" />
 
   <adapter

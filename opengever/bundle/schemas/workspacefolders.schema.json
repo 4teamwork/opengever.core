@@ -2,75 +2,72 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "array",
     "items": {
-        "$ref": "#/definitions/reporoot"
+        "$ref": "#/definitions/workspacefolder"
     },
     "definitions": {
-        "reporoot": {
+        "workspacefolder": {
             "type": "object",
-            "title": "Ordnungssystem",
+            "title": "Ordner",
             "additionalProperties": false,
             "properties": {
-                "valid_from": {
+                "changed": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "G\u00fcltig ab",
-                    "format": "date",
+                    "title": "Zuletzt ver\u00e4ndert",
+                    "format": "datetime",
                     "description": "",
-                    "_zope_schema_type": "Date"
+                    "_zope_schema_type": "Datetime"
                 },
-                "valid_until": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "G\u00fcltig bis",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "version": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Version",
+                "title": {
+                    "type": "string",
+                    "title": "Titel",
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
-                "title_de": {
+                "description": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Titel (deutsch)",
+                    "title": "Beschreibung",
                     "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
-                "title_fr": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Titel (franz\u00f6sisch)",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
+                    "_zope_schema_type": "Text"
                 },
                 "review_state": {
                     "type": "string",
                     "enum": [
-                        "repositoryroot-state-active"
+                        "opengever_workspace_folder--STATUS--active"
                     ]
                 },
                 "guid": {
                     "type": "string"
+                },
+                "parent_guid": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "parent_reference": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array"
+                    }
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 }
             },
             "required": [
+                "title",
                 "review_state",
                 "guid"
             ],
@@ -79,23 +76,21 @@
                     "anyOf": [
                         {
                             "required": [
-                                "title_de"
+                                "parent_guid"
                             ]
                         },
                         {
                             "required": [
-                                "title_fr"
+                                "parent_reference"
                             ]
                         }
                     ]
                 }
             ],
             "field_order": [
-                "valid_from",
-                "valid_until",
-                "version",
-                "title_de",
-                "title_fr"
+                "changed",
+                "title",
+                "description"
             ]
         },
         "permission": {
@@ -105,37 +100,19 @@
                 "block_inheritance": {
                     "type": "boolean"
                 },
-                "read": {
+                "workspace_admin": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "add": {
+                "workspace_member": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "edit": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "close": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "reactivate": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "manage_dossiers": {
+                "workspace_guest": {
                     "type": "array",
                     "items": {
                         "type": "string"

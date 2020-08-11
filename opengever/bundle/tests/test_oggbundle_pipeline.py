@@ -419,7 +419,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {'admin_users':
-                ['Contributor', 'Publisher', 'Reviewer', 'Editor', 'Reader']},
+                ['Contributor', 'Reviewer', 'Publisher', 'Editor', 'Reader']},
             dossier.__ac_local_roles__)
         self.assertTrue(dossier.__ac_local_roles_block__)
 
@@ -641,6 +641,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
             set([
                 'opengever.repository.repositoryroot',
                 'opengever.repository.repositoryfolder',
+                'opengever.workspace.root',
+                'opengever.workspace.workspace',
+                'opengever.workspace.folder',
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
                 'ftw.mail.mail']),
@@ -648,12 +651,18 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         reporoots = metadata['opengever.repository.repositoryroot']
         repofolders = metadata['opengever.repository.repositoryfolder']
+        workspaceroots = metadata['opengever.workspace.root']
+        workspaces = metadata['opengever.workspace.workspace']
+        workspacefolders = metadata['opengever.workspace.folder']
         dossiers = metadata['opengever.dossier.businesscasedossier']
         documents = metadata['opengever.document.document']
         mails = metadata['ftw.mail.mail']
 
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))
+        self.assertEqual(0, len(workspaceroots))
+        self.assertEqual(0, len(workspaces))
+        self.assertEqual(0, len(workspacefolders))
         self.assertEqual(3, len(dossiers))
         self.assertEqual(5, len(documents))
         self.assertEqual(4, len(mails))

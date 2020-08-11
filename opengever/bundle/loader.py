@@ -19,6 +19,9 @@ log.setLevel(logging.INFO)
 BUNDLE_JSON_TYPES = OrderedDict([
     ('reporoots.json', 'opengever.repository.repositoryroot'),
     ('repofolders.json', 'opengever.repository.repositoryfolder'),
+    ('workspaceroots.json', 'opengever.workspace.root'),
+    ('workspaces.json', 'opengever.workspace.workspace'),
+    ('workspacefolders.json', 'opengever.workspace.folder'),
     ('dossiers.json', 'opengever.dossier.businesscasedossier'),
     ('documents.json', 'opengever.document.document'),   # document or mail
 ])
@@ -28,6 +31,9 @@ BUNDLE_JSON_TYPES = OrderedDict([
 PORTAL_TYPES_TO_JSON_NAME = OrderedDict([
     ('opengever.repository.repositoryroot', 'reporoots.json'),
     ('opengever.repository.repositoryfolder', 'repofolders.json'),
+    ('opengever.workspace.root', 'workspaceroots.json'),
+    ('opengever.workspace.workspace', 'workspaces.json'),
+    ('opengever.workspace.folder', 'workspacefolders.json'),
     ('opengever.dossier.businesscasedossier', 'dossiers.json'),
     ('opengever.document.document', 'documents.json'),
     ('ftw.mail.mail', 'documents.json'),

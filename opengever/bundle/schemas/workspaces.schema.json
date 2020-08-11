@@ -1,0 +1,108 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "$ref": "#/definitions/workspace"
+    },
+    "definitions": {
+        "workspace": {
+            "type": "object",
+            "title": "Teamraum",
+            "additionalProperties": false,
+            "properties": {
+                "changed": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Zuletzt ver\u00e4ndert",
+                    "format": "datetime",
+                    "description": "",
+                    "_zope_schema_type": "Datetime"
+                },
+                "title": {
+                    "type": "string",
+                    "title": "Titel",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "description": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Beschreibung",
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "review_state": {
+                    "type": "string",
+                    "enum": [
+                        "opengever_workspace--STATUS--active"
+                    ]
+                },
+                "guid": {
+                    "type": "string"
+                },
+                "parent_guid": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "parent_reference": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array"
+                    }
+                },
+                "_permissions": {
+                    "$ref": "#/definitions/permission"
+                }
+            },
+            "required": [
+                "title",
+                "review_state",
+                "guid"
+            ],
+            "field_order": [
+                "changed",
+                "title",
+                "description"
+            ]
+        },
+        "permission": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "block_inheritance": {
+                    "type": "boolean"
+                },
+                "workspace_admin": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "workspace_member": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "workspace_guest": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

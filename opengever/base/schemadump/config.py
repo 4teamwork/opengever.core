@@ -11,6 +11,9 @@ GEVER_TYPES = [
     'opengever.task.task',
     'opengever.repository.repositoryfolder',
     'opengever.repository.repositoryroot',
+    'opengever.workspace.root',
+    'opengever.workspace.workspace',
+    'opengever.workspace.folder',
     'opengever.meeting.proposal',
 ]
 
@@ -19,7 +22,23 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.dossier.businesscasedossier': 'dossier',
     'opengever.repository.repositoryfolder': 'repofolder',
     'opengever.repository.repositoryroot': 'reporoot',
+    'opengever.workspace.root': 'workspaceroot',
+    'opengever.workspace.workspace': 'workspace',
+    'opengever.workspace.folder': 'workspacefolder',
 }
+
+# Types that don't need a parent_guid / parent_reference during import, but
+# instead will (always) be created directly below the Plone site root.
+ROOT_TYPES = [
+    'opengever.repository.repositoryroot',
+    'opengever.workspace.root'
+]
+
+# Types that can unambiguously be parented to an existing container, and
+# therefore don't require a parent_guid / parent_reference
+PARENTABLE_TYPES = [
+    'opengever.workspace.workspace'
+]
 
 # Workflow states allowed in JSON schemas. The state that's listed first
 # indicates the initial workflow state (i.e. default state).
@@ -33,6 +52,15 @@ ALLOWED_REVIEW_STATES = {
     'opengever.repository.repositoryfolder': [
         'repositoryfolder-state-active',
         # 'repositoryfolder-state-inactive',
+    ],
+    'opengever.workspace.root': [
+        'opengever_workspace_root--STATUS--active',
+    ],
+    'opengever.workspace.workspace': [
+        'opengever_workspace--STATUS--active',
+    ],
+    'opengever.workspace.folder': [
+        'opengever_workspace_folder--STATUS--active',
     ],
     'opengever.dossier.businesscasedossier': [
         'dossier-state-active',
@@ -51,6 +79,45 @@ ALLOWED_REVIEW_STATES = {
         # 'mail-state-removed',
     ],
 }
+
+ROLES_BY_SHORTNAME = {
+    'read': 'Reader',
+    'add': 'Contributor',
+    'edit': 'Editor',
+    'close': 'Reviewer',
+    'reactivate': 'Publisher',
+    'manage_dossiers': 'DossierManager',
+    'workspaces_creator': 'WorkspacesCreator',
+    'workspaces_user': 'WorkspacesUser',
+    'workspace_admin': 'WorkspaceAdmin',
+    'workspace_member': 'WorkspaceMember',
+    'workspace_guest': 'WorkspaceGuest',
+}
+
+# Inverted mapping of the above
+SHORTNAMES_BY_ROLE = {v: k for k, v in ROLES_BY_SHORTNAME.iteritems()}
+
+DEFAULT_MANAGEABLE_ROLES = [
+    'read',
+    'add',
+    'edit',
+    'close',
+    'reactivate',
+]
+
+MANAGEABLE_ROLES_BY_TYPE = {
+    'opengever.repository.repositoryroot':
+        DEFAULT_MANAGEABLE_ROLES + ['manage_dossiers'],
+    'opengever.repository.repositoryfolder':
+        DEFAULT_MANAGEABLE_ROLES + ['manage_dossiers'],
+    'opengever.workspace.root':
+        ['workspaces_creator', 'workspaces_user'],
+    'opengever.workspace.workspace':
+        ['workspace_admin', 'workspace_member', 'workspace_guest'],
+    'opengever.workspace.folder':
+        ['workspace_admin', 'workspace_member', 'workspace_guest'],
+}
+
 
 GEVER_SQL_TYPES = [
     '_opengever.contact.models.Address',

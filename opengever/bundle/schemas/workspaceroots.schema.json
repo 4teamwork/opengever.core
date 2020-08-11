@@ -2,43 +2,14 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "array",
     "items": {
-        "$ref": "#/definitions/reporoot"
+        "$ref": "#/definitions/workspaceroot"
     },
     "definitions": {
-        "reporoot": {
+        "workspaceroot": {
             "type": "object",
-            "title": "Ordnungssystem",
+            "title": "Teamr\u00e4ume",
             "additionalProperties": false,
             "properties": {
-                "valid_from": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "G\u00fcltig ab",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "valid_until": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "G\u00fcltig bis",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "version": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Version",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
                 "title_de": {
                     "type": [
                         "null",
@@ -60,7 +31,7 @@
                 "review_state": {
                     "type": "string",
                     "enum": [
-                        "repositoryroot-state-active"
+                        "opengever_workspace_root--STATUS--active"
                     ]
                 },
                 "guid": {
@@ -91,9 +62,6 @@
                 }
             ],
             "field_order": [
-                "valid_from",
-                "valid_until",
-                "version",
                 "title_de",
                 "title_fr"
             ]
@@ -105,37 +73,13 @@
                 "block_inheritance": {
                     "type": "boolean"
                 },
-                "read": {
+                "workspaces_creator": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "add": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "edit": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "close": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "reactivate": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "manage_dossiers": {
+                "workspaces_user": {
                     "type": "array",
                     "items": {
                         "type": "string"

@@ -1,29 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
-    "title": "Ordnungssystem",
+    "title": "Teamr\u00e4ume",
     "additionalProperties": false,
     "properties": {
-        "valid_from": {
-            "type": "string",
-            "title": "G\u00fcltig ab",
-            "format": "date",
-            "description": "",
-            "_zope_schema_type": "Date"
-        },
-        "valid_until": {
-            "type": "string",
-            "title": "G\u00fcltig bis",
-            "format": "date",
-            "description": "",
-            "_zope_schema_type": "Date"
-        },
-        "version": {
-            "type": "string",
-            "title": "Version",
-            "description": "",
-            "_zope_schema_type": "TextLine"
-        },
         "title_de": {
             "type": "string",
             "title": "Titel (deutsch)",
@@ -54,9 +34,6 @@
         }
     ],
     "field_order": [
-        "valid_from",
-        "valid_until",
-        "version",
         "title_de",
         "title_fr"
     ]
