@@ -1,10 +1,10 @@
 from opengever.testing import FunctionalTestCase
-from opengever.{{{package.name}}}.testing import OPENGEVER_{{{package.name_upper}}}_FUNCTIONAL_TESTING
+from opengever.{{{package.name}}}.testing import OPENGEVER_{{{adminunit.id_upper}}}_FUNCTIONAL_TESTING
 
 
-class Test{{{package.name_capitalized}}}Setup(FunctionalTestCase):
+class Test{{{adminunit.id_capitalized}}}Setup(FunctionalTestCase):
 
-    layer = OPENGEVER_{{{package.name_upper}}}_FUNCTIONAL_TESTING
+    layer = OPENGEVER_{{{adminunit.id_upper}}}_FUNCTIONAL_TESTING
 
     def test_smoke_setup_works(self):
         """If this test fails your default profile is f***ed."""

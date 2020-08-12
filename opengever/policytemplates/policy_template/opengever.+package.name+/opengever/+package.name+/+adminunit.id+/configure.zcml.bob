@@ -10,7 +10,7 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="opengever.{{{package.name}}}:default"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
       description="Policy for {{{package.title}}}"
       directory="profiles/default"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -19,20 +19,20 @@
 
   <genericsetup:registerProfile
       name="default_content"
-      title="opengever.{{{package.name}}}:default_content"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content"
       description="Default content for {{{package.title}}}."
       directory="profiles/default_content"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <profilehook:hook
-      profile="opengever.{{{package.name}}}:default_content"
+      profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content"
       handler=".hooks.default_content_installed"
       />
 
   <genericsetup:registerProfile
       name="units"
-      title="opengever.{{{package.name}}}:units"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:units"
       description="Units content for {{{package.title}}}."
       directory="profiles/units"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -40,7 +40,7 @@
 
   <genericsetup:registerProfile
       name="ldap"
-      title="opengever.{{{package.name}}}:ldap"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:ldap"
       description="LDAP profile for {{{package.title}}}."
       directory="profiles/ldap"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -48,14 +48,14 @@
 
   <opengever:registerLDAP
       title="OneGov GEVER {{{package.title}}} LDAP"
-      ldap_profile="opengever.{{{package.name}}}:ldap"
+      ldap_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:ldap"
       is_default="True"
       />
 
 {{% if setup.workspace %}}
   <genericsetup:registerProfile
       name="workspaces_content"
-      title="opengever.{{{package.name}}}:workspaces_content"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:workspaces_content"
       description="Default content for {{{package.title}}}."
       directory="profiles/workspaces_content"
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -65,9 +65,9 @@
   <!-- deployments -->
   <opengever:registerDeployment
       title="OneGov GEVER {{{package.title}}}"
-      policy_profile="opengever.{{{package.name}}}:default"
-      additional_profiles="opengever.{{{package.name}}}:units
-                           opengever.{{{package.name}}}:default_content
+      policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
+      additional_profiles="opengever.{{{package.name}}}.{{{adminunit.id}}}:units
+                           opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content
                            opengever.setup:casauth
                           "
       admin_unit_id="{{{adminunit.id}}}"
@@ -83,8 +83,8 @@
 {{% if setup.workspace %}}
   <opengever:registerDeployment
       title="Teamraum {{{package.title}}}"
-      policy_profile="opengever.{{{package.name}}}:default"
-      additional_profiles="opengever.{{{package.name}}}:workspaces_content
+      policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
+      additional_profiles="opengever.{{{package.name}}}.{{{adminunit.id}}}:workspaces_content
                            opengever.setup:casauth
                           "
       admin_unit_id="{{{adminunit.id}}}"
