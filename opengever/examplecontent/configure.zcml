@@ -13,7 +13,7 @@
   <opengever:registerDeployment
       title="Development with examplecontent (FD)"
       policy_profile="opengever.examplecontent:default"
-      additional_profiles="opengever.setup:default_content
+      additional_profiles="opengever.examplecontent:default_content
                            opengever.examplecontent:empty_templates
                            opengever.examplecontent:repository_minimal
                            opengever.examplecontent:municipality_content
@@ -57,6 +57,13 @@
       name="default-ska"
       title="opengever.examplecontent: default-ska"
       directory="profiles/default-ska"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="default_content"
+      title="opengever.examplecontent: default_content"
+      directory="profiles/default_content"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
