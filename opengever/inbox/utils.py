@@ -10,5 +10,7 @@ def get_current_inbox(context):
     if inbox_container:
         return inbox_container[0].get_current_inbox()
 
-    return portal.listFolderContents(
-        contentFilter={'portal_type': 'opengever.inbox.inbox'})[0]
+    inbox = portal.listFolderContents(
+        contentFilter={'portal_type': 'opengever.inbox.inbox'})
+
+    return inbox[0] if inbox else None

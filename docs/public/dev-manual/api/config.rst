@@ -63,6 +63,7 @@ GEVER-Mandanten abgefragt werden.
               "workspace": false,
               "workspace_client": false
           },
+          "inbox_folder_url": "https://dev.onegovgever.ch/fd/eingangskorb/eingangskorb_afi"
           "is_admin_menu_visible": false,
           "is_emm_environment": false,
           "max_dossier_levels": 5,
