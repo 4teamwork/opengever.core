@@ -257,3 +257,19 @@ class TestConfig(IntegrationTestCase):
                      headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'usersnap_api_key'), u'some key')
+
+    @browsing
+    def test_config_contains_current_inbox_url_if_available(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'inbox_folder_url'), u'http://nohost/plone/eingangskorb')
+
+        self.login(self.regular_user, browser)
+
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'inbox_folder_url'), u'')
