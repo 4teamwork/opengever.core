@@ -89,11 +89,11 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         browser.open(
             self.inbox_forwarding, method="GET", headers=self.api_headers)
         self.assertEquals(
-            [{u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@responses/1472634453000000',
-              u'response_id': 1472634453000000,
+            [{u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@responses/1472634573000000',
+              u'response_id': 1472634573000000,
               u'response_type': u'default',
               u'added_objects': [{
-                u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/document-13',
+                u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/document-13',
                 u'@type': u'opengever.document.document',
                 u'description': u'',
                 u'is_leafnode': None,
@@ -103,7 +103,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
               u'creator': {
                   u'token': u'nicole.kohler',
                   u'title': u'Kohler Nicole'},
-              u'created': u'2016-08-31T11:07:33',
+              u'created': u'2016-08-31T11:09:33',
               u'related_items': [],
               u'text': u'',
               u'mimetype': u'',
@@ -215,12 +215,12 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         self.maxDiff = None
         self.assertDictEqual(
             {
-                u'@id': u'http://nohost/plone/eingangskorb',
+                u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa',
                 u'@type': u'opengever.inbox.inbox',
                 u'description': u'',
                 u'is_leafnode': None,
                 u'review_state': u'inbox-state-default',
-                u'title': u'Eingangsk\xf6rbli',
+                u'title': u'Eingangsk\xf6rbli FA',
             },
             browser.json['containing_dossier']
         )

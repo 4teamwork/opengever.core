@@ -156,7 +156,7 @@ class TestInboxSerializer(IntegrationTestCase):
         self.login(self.secretariat_user, browser)
         browser.open(self.inbox, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'email'), u'1011013300@example.org')
+        self.assertEqual(browser.json.get(u'email'), u'1011033300@example.org')
 
     @browsing
     def test_inbox_serialization_contains_inbox_id(self, browser):

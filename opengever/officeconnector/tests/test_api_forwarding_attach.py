@@ -36,7 +36,7 @@ class TestOfficeconnectorForwardingAPIWithAttach(OCIntegrationTestCase):
 
         expected_token = {
             u'action': u'attach',
-            u'documents': [u'createinbox000000000000000000004'],
+            u'documents': [u'createinboxfa0000000000000000004'],
             u'exp': 4121033100,
             u'sub': u'jurgen.konig',
             u'url': u'http://nohost/plone/oc_attach',
@@ -48,11 +48,11 @@ class TestOfficeconnectorForwardingAPIWithAttach(OCIntegrationTestCase):
         expected_payloads = [{
             u'content-type': u'text/plain',
             u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
-            u'document-url': u'http://nohost/plone/eingangskorb/forwarding-1/document-13',
+            u'document-url': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/document-13',
             u'download': u'download',
             u'filename': u'Dokument im Eingangskoerbliweiterleitung.txt',
             u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung',
-            u'uuid': u'createinbox000000000000000000004',
+            u'uuid': u'createinboxfa0000000000000000004',
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)

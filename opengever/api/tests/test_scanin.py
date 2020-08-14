@@ -1,8 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from functools import wraps
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.base.security import elevated_privileges
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from plone import api
@@ -11,6 +13,14 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 
 class TestScanIn(IntegrationTestCase):
+
+    def no_initial_inboxes(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            with elevated_privileges():
+                api.content.delete(obj=self.inbox_container)
+            return func(self, *args, **kwargs)
+        return wrapper
 
     def create_single_inbox(self):
         inbox = create(Builder('inbox').titled(u'Inbox'))
@@ -55,9 +65,10 @@ class TestScanIn(IntegrationTestCase):
         }
 
     @browsing
+    @no_initial_inboxes
     def test_scanin_to_inbox(self, browser):
         self.login(self.regular_user, browser)
-        self.create_single_inbox()
+        inbox = self.create_single_inbox()
         body, headers = self.prepare_request()
 
         browser.open(self.portal.absolute_url() + '/@scan-in',
@@ -68,7 +79,7 @@ class TestScanIn(IntegrationTestCase):
         self.assertEqual(201, browser.status_code)
         self.login(self.administrator, browser)
 
-        doc = self.inbox.objectValues()[-1]
+        doc = inbox.objectValues()[-1]
         self.assertEqual('mydocument', doc.Title())
 
     @browsing
@@ -87,6 +98,7 @@ class TestScanIn(IntegrationTestCase):
         self.assertEqual(expected_message, browser.json.get('error').get('message'))
 
     @browsing
+    @no_initial_inboxes
     def test_scanin_to_org_unit_inbox(self, browser):
         self.login(self.regular_user, browser)
         inbox = self.create_org_unit_inbox()
@@ -102,6 +114,7 @@ class TestScanIn(IntegrationTestCase):
         self.assertEqual('mydocument', doc.Title())
 
     @browsing
+    @no_initial_inboxes
     def test_scanin_to_org_unit_inbox_by_title(self, browser):
         self.login(self.regular_user, browser)
         inbox = self.create_org_unit_inbox()

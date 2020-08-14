@@ -77,7 +77,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
                      method='GET', headers=self.api_headers)
 
         expected_json = {
-            u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers',
+            u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@watchers',
             u'referenced_users': [
                 {
                     u'@id': u'http://nohost/plone/@users/kathi.barfuss',
@@ -114,7 +114,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
 
         browser.open(self.inbox_forwarding, method='GET', headers=self.api_headers)
 
-        self.assertEqual({u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/@watchers'},
+        self.assertEqual({u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@watchers'},
                          browser.json['@components']['watchers'])
         browser.open(self.inbox_forwarding.absolute_url() + '?expand=watchers',
                      method='GET', headers=self.api_headers)

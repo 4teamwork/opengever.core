@@ -265,7 +265,7 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@config',
                      headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'inbox_folder_url'), u'http://nohost/plone/eingangskorb')
+        self.assertEqual(browser.json.get(u'inbox_folder_url'), u'http://nohost/plone/eingangskorb/eingangskorb_fa')
 
         self.login(self.regular_user, browser)
 

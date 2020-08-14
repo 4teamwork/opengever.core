@@ -26,7 +26,7 @@ class TestMigrateLocalRoles(IntegrationTestCase):
         results = migrate_localroles(self.inbox, mapping, mode='move')
 
         self.assertEqual(
-            [('/plone/eingangskorb', old_id, 'new_user.id')],
+            [('/plone/eingangskorb/eingangskorb_fa', old_id, 'new_user.id')],
             results['moved'])
         self.assertEqual([], results['copied'])
         self.assertEqual([], results['deleted'])
@@ -62,7 +62,7 @@ class TestMigrateLocalRoles(IntegrationTestCase):
         self.assertEqual([], results['moved'])
         self.assertEqual([], results['copied'])
         self.assertEqual(
-            [('/plone/eingangskorb', old_id, None)],
+            [('/plone/eingangskorb/eingangskorb_fa', old_id, None)],
             results['deleted'])
 
         self.assertEqual([], manager.get_assignments_by_principal_id(old_id))
@@ -84,7 +84,7 @@ class TestMigrateLocalRoles(IntegrationTestCase):
 
         self.assertEqual([], results['moved'])
         self.assertEqual(
-            [('/plone/eingangskorb', old_id, 'new_user.id')],
+            [('/plone/eingangskorb/eingangskorb_fa', old_id, 'new_user.id')],
             results['copied'])
         self.assertEqual([], results['deleted'])
 
