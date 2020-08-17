@@ -83,4 +83,9 @@
       name="opengever.bundle.report"
       />
 
+  <utility
+      component=".sections.reindex_containers.ReindexContainersSection"
+      name="opengever.bundle.reindex_containers"
+      />
+
 </configure>
