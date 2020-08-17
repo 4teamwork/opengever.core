@@ -48,6 +48,7 @@ Inhalt:
    linked_workspaces.rst
    templatefolder.rst
    trigger_task_template.rst
+   remote_workflow.rst
    examples/index.rst
    docs_changelog.rst
 

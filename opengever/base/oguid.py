@@ -1,5 +1,7 @@
-from opengever.base.exceptions import MalformedOguid
 from opengever.base.exceptions import InvalidOguidIntIdPart
+from opengever.base.exceptions import MalformedOguid
+from opengever.base.exceptions import NonRemoteOguid
+from opengever.base.exceptions import UnsupportedTypeForRemoteURL
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from zope.component import getUtility
@@ -70,6 +72,39 @@ class Oguid(object):
         # XXX have some kind ouf routes to avoid cyclic dependecies
         from opengever.base.browser.resolveoguid import ResolveOGUIDView
         return ResolveOGUIDView.url_for(self, admin_unit=admin_unit)
+
+    def get_remote_url(self, public=False):
+        """Return the URL for a remote object.
+
+        If `public` is False (the default), this will return the internal
+        URL, intended for server-to-server requests behind the scenes.
+
+        If `public` is True, the publicly accessible URL is returned. This URL
+        is should be accessible from the system's users' location, and is
+        the one intended to be communicated / displayed to end users.
+        """
+        if self.admin_unit_id == get_current_admin_unit().id():
+            raise NonRemoteOguid('Not a remote OGUID. Use get_url() instead')
+
+        admin_unit = ogds_service().fetch_admin_unit(self.admin_unit_id)
+
+        if public:
+            # Public URL - used for user-facing URLs
+            au_url = admin_unit.public_url
+        else:
+            # Site URL - used for server-to-server requests
+            au_url = admin_unit.site_url
+
+        # Local import to avoid circular dependency
+        from opengever.globalindex.model.task import Task
+
+        sql_task = Task.query.by_intid(self.int_id, admin_unit.id())
+        if not sql_task:
+            raise UnsupportedTypeForRemoteURL(
+                'OGUID %r does not refer to a task. '
+                'get_remote_url() is only supported for tasks.')
+
+        return '/'.join((au_url, sql_task.physical_path))
 
     def resolve_object(self):
         if self.admin_unit_id != get_current_admin_unit().id():

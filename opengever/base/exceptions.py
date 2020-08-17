@@ -12,3 +12,15 @@ class MalformedOguid(Exception):
 class InvalidOguidIntIdPart(Exception):
     """The int_id part of the oguid is invalid and does not exist.
     """
+
+
+class UnsupportedTypeForRemoteURL(Exception):
+    """The Oguid does not refer to one of the types that get_remote_url() is
+    supported for.
+    """
+
+
+class NonRemoteOguid(Exception):
+    """An attempt was made to use get_remote_url() on a Oguid for an object
+    that is located on the current AdminUnit.
+    """
