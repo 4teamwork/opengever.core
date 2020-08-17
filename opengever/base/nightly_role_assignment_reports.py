@@ -54,8 +54,8 @@ class NightlyRoleAssignmentReports(object):
         # to remove these without affecting the max memory consumed too much.)
 
     def run_job(self, job, interrupt_if_necessary):
-        principalid = job['principalid']
-        reportid = job['reportid']
+        principalid = job['principal_id']
+        reportid = job['report_id']
         items = []
 
         # if Anonymous or Authenticated have View permission,

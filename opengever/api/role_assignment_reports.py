@@ -35,11 +35,11 @@ class RoleAssignmentReportsGet(Service):
         storage = IRoleAssignmentReportsStorage(self.context)
         # a single report
         if len(self.params) == 1:
-            reportid = self.params[0]
+            report_id = self.params[0]
             try:
-                result = storage.get(reportid)
+                result = storage.get(report_id)
             except KeyError:
-                raise BadRequest("Invalid reportid '{}'".format(reportid))
+                raise BadRequest("Invalid report_id '{}'".format(report_id))
             for item in result['items']:
                 item['url'] = uuidToObject(item['UID']).absolute_url()
         # all reports
@@ -48,9 +48,9 @@ class RoleAssignmentReportsGet(Service):
             for report in result['items']:
                 del report['items']
                 report['@id'] = '/'.join([self.context.absolute_url(), '@role-assignment-reports',
-                                          report['reportid']])
+                                          report['report_id']])
         else:
-            raise BadRequest("Too many parameters. Only principalid is allowed.")
+            raise BadRequest("Too many parameters. Only principal_id is allowed.")
 
         batch = HypermediaBatch(self.request, result['items'])
         result['items'] = [item for item in batch]
@@ -68,18 +68,18 @@ class RoleAssignmentReportsPost(Service):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
         storage = IRoleAssignmentReportsStorage(self.context)
-        reportid = storage.add(self.principalid)
-        report = storage.get(reportid)
+        report_id = storage.add(self.principal_id)
+        report = storage.get(report_id)
         report['@id'] = '/'.join([self.context.absolute_url(), '@role-assignment-reports',
-                                  reportid])
+                                  report_id])
         report['items_total'] = 0
         return report
 
     def extract_data(self):
         data = json_body(self.request)
-        self.principalid = data.get("principalid", None)
-        if not self.principalid:
-            raise BadRequest("Property 'principalid' is required")
+        self.principal_id = data.get("principal_id", None)
+        if not self.principal_id:
+            raise BadRequest("Property 'principal_id' is required")
 
 
 class RoleAssignmentReportsDelete(Service):
@@ -96,18 +96,18 @@ class RoleAssignmentReportsDelete(Service):
 
     def reply(self):
         if len(self.params) != 1:
-            raise BadRequest("reportid is required")
-        reportid = self.params[0]
+            raise BadRequest("report_id is required")
+        report_id = self.params[0]
         storage = IRoleAssignmentReportsStorage(self.context)
         try:
-            storage.get(reportid)
+            storage.get(report_id)
         except KeyError:
-            raise BadRequest("Invalid reportid '{}'".format(reportid))
+            raise BadRequest("Invalid report_id '{}'".format(report_id))
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
         storage = IRoleAssignmentReportsStorage(self.context)
-        storage.delete(reportid)
+        storage.delete(report_id)
         self.request.response.setStatus(204)
         return super(RoleAssignmentReportsDelete, self).reply()

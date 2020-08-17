@@ -31,16 +31,16 @@ Mittels eines GET-Requests können alle Berichte abgefragt werden.
             "@id": "http://localhost:8080/fd/@role-assignment-reports/report_2",
             "modified": "2020-07-08T14:17:30+00:00",
             "principal_type": "user",
-            "principalid": "robert.ziegler",
-            "reportid": "report_2",
+            "principal_id": "robert.ziegler",
+            "report_id": "report_2",
             "state": "in progress"
           },
           {
             "@id": "http://localhost:8080/fd/@role-assignment-reports/report_1",
             "modified": "2020-04-03T01:34:27+00:00",
             "principal_type": "group",
-            "principalid": "afi_benutzer",
-            "reportid": "report_1",
+            "principal_id": "afi_benutzer",
+            "report_id": "report_1",
             "state": "ready"
           }
         ],
@@ -95,8 +95,8 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
         "items_total": 3,
         "modified": "2020-04-03T01:34:27+00:00",
         "principal_type": "group",
-        "principalid": "afi_benutzer",
-        "reportid": "report_1",
+        "principal_id": "afi_benutzer",
+        "report_id": "report_1",
         "state": "ready"
       }
 
@@ -115,7 +115,7 @@ Ein Bericht kann mittels POST-Requests angefordert werden. Danach erscheint der 
        Accept: application/json
 
        {
-         "principalid": "robert.ziegler"
+         "principal_id": "robert.ziegler"
        }
 
 **Beispiel-Response**:
@@ -131,8 +131,8 @@ Ein Bericht kann mittels POST-Requests angefordert werden. Danach erscheint der 
         "items_total": 0,
         "modified": "2020-07-13T11:43:18+00:00",
         "principal_type": "user",
-        "principalid": "robert.ziegler",
-        "reportid": "report_7",
+        "principal_id": "robert.ziegler",
+        "report_id": "report_7",
         "state": "in progress"
       }
 
