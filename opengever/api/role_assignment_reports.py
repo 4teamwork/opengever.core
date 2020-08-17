@@ -18,6 +18,8 @@ class RoleAssignmentReportsBase(Service):
     def add_additional_data_to_report(self, report):
         report['@type'] = ROLE_ASSIGNMENT_REPORT_TYPE
         report['principal_label'] = Actor.lookup(report['principal_id']).get_label()
+        report['@id'] = '/'.join([self.context.absolute_url(), '@role-assignment-reports',
+                                  report['report_id']])
 
 
 class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
@@ -58,8 +60,6 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
             result = {'items': storage.list()}
             for report in result['items']:
                 del report['items']
-                report['@id'] = '/'.join([self.context.absolute_url(), '@role-assignment-reports',
-                                          report['report_id']])
                 self.add_additional_data_to_report(report)
         else:
             raise BadRequest("Too many parameters. Only principal_id is allowed.")
@@ -82,8 +82,6 @@ class RoleAssignmentReportsPost(RoleAssignmentReportsBase):
         storage = IRoleAssignmentReportsStorage(self.context)
         report_id = storage.add(self.principal_id)
         report = storage.get(report_id)
-        report['@id'] = '/'.join([self.context.absolute_url(), '@role-assignment-reports',
-                                  report_id])
         self.add_additional_data_to_report(report)
         report['items_total'] = 0
         return report
