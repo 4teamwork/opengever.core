@@ -18,14 +18,18 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/@role-assignment-reports',
              u'items': [
                 {u'@id': u'http://nohost/plone/@role-assignment-reports/report_1',
+                 u'@type': u'virtual.report.roleassignmentreport',
                  u'modified': u'2016-08-31T20:01:33+00:00',
                  u'principal_type': u'user',
+                 u'principal_label': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
                  u'principal_id': u'kathi.barfuss',
                  u'report_id': u'report_1',
                  u'state': u'in progress'},
                 {u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
+                 u'@type': u'virtual.report.roleassignmentreport',
                  u'modified': u'2016-08-31T20:01:33+00:00',
                  u'principal_type': u'user',
+                 u'principal_label': u'Fischer J\xfcrgen (jurgen.fischer)',
                  u'principal_id': u'jurgen.fischer',
                  u'report_id': u'report_0',
                  u'state': u'ready'}],
@@ -39,6 +43,7 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
 
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
+             u'@type': u'virtual.report.roleassignmentreport',
              u'items': [{u'UID': u'createrepositorytree000000000001',
                          u'roles': [u'Contributor'],
                          u'url': u'http://nohost/plone/ordnungssystem'},
@@ -52,6 +57,7 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
              u'items_total': 3,
              u'modified': u'2016-08-31T20:01:33+00:00',
              u'principal_type': u'user',
+             u'principal_label': u'Fischer J\xfcrgen (jurgen.fischer)',
              u'principal_id': u'jurgen.fischer',
              u'report_id': u'report_0',
              u'state': u'ready'}, browser.json)
@@ -90,10 +96,12 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
 
         self.assertEqual(browser.status_code, 200)
         self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
+                          u'@type': u'virtual.report.roleassignmentreport',
                           u'items': [],
                           u'items_total': 0,
                           u'modified': u'2020-04-18T00:00:00+00:00',
                           u'principal_type': 'user',
+                          u'principal_label': u'J\xe4ger Herbert (herbert.jager)',
                           u'principal_id': self.meeting_user.getId(),
                           u'report_id': u'report_2',
                           u'state': u'in progress'}, browser.json)
@@ -109,10 +117,12 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
 
         self.assertEqual(browser.status_code, 200)
         self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
+                          u'@type': u'virtual.report.roleassignmentreport',
                           u'items': [],
                           u'items_total': 0,
                           u'modified': u'2020-04-18T00:00:00+00:00',
                           u'principal_type': u'group',
+                          u'principal_label': u'Projekt A',
                           u'principal_id': u'projekt_a',
                           u'report_id': u'report_2',
                           u'state': u'in progress'}, browser.json)
@@ -128,10 +138,12 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
 
         self.assertEqual(browser.status_code, 200)
         self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
+                          u'@type': u'virtual.report.roleassignmentreport',
                           u'items': [],
                           u'items_total': 0,
                           u'modified': u'2020-04-18T00:00:00+00:00',
                           u'principal_type': u'unknown principal',
+                          u'principal_label': u'chaosqueen',
                           u'principal_id': u'chaosqueen',
                           u'report_id': u'report_2',
                           u'state': u'in progress'}, browser.json)

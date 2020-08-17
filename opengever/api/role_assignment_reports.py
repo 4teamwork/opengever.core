@@ -1,4 +1,5 @@
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
+from opengever.ogds.base.actor import Actor
 from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
@@ -9,8 +10,17 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
+ROLE_ASSIGNMENT_REPORT_TYPE = 'virtual.report.roleassignmentreport'
 
-class RoleAssignmentReportsGet(Service):
+
+class RoleAssignmentReportsBase(Service):
+
+    def add_additional_data_to_report(self, report):
+        report['@type'] = ROLE_ASSIGNMENT_REPORT_TYPE
+        report['principal_label'] = Actor.lookup(report['principal_id']).get_label()
+
+
+class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
     """API Endpoint which returns a list of all role assignment reports
 
     GET /@role-assignment-reports HTTP/1.1
@@ -42,6 +52,7 @@ class RoleAssignmentReportsGet(Service):
                 raise BadRequest("Invalid report_id '{}'".format(report_id))
             for item in result['items']:
                 item['url'] = uuidToObject(item['UID']).absolute_url()
+            self.add_additional_data_to_report(result)
         # all reports
         elif len(self.params) == 0:
             result = {'items': storage.list()}
@@ -49,6 +60,7 @@ class RoleAssignmentReportsGet(Service):
                 del report['items']
                 report['@id'] = '/'.join([self.context.absolute_url(), '@role-assignment-reports',
                                           report['report_id']])
+                self.add_additional_data_to_report(report)
         else:
             raise BadRequest("Too many parameters. Only principal_id is allowed.")
 
@@ -61,7 +73,7 @@ class RoleAssignmentReportsGet(Service):
         return result
 
 
-class RoleAssignmentReportsPost(Service):
+class RoleAssignmentReportsPost(RoleAssignmentReportsBase):
 
     def reply(self):
         self.extract_data()
@@ -72,6 +84,7 @@ class RoleAssignmentReportsPost(Service):
         report = storage.get(report_id)
         report['@id'] = '/'.join([self.context.absolute_url(), '@role-assignment-reports',
                                   report_id])
+        self.add_additional_data_to_report(report)
         report['items_total'] = 0
         return report
 
