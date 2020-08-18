@@ -3,8 +3,10 @@ from ftw.builder import create
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_cluster_base_url
 from opengever.base.casauth import get_gever_portal_url
+from opengever.base.interfaces import IPortalSettings
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
+from plone import api
 from plone.app.testing import applyProfile
 
 
@@ -78,3 +80,10 @@ class TestGEVERPortalURL(IntegrationTestCase):
         get_current_admin_unit().public_url = 'http://example.com/foobar'
         self.assertEquals(
             'http://example.com/foobar/portal', get_gever_portal_url())
+
+    def test_use_the_portal_url_in_the_plone_registry_if_set(self):
+        api.portal.set_registry_record(
+            'portal_url', u'http://example.com/my-special-portal', IPortalSettings)
+
+        self.assertEquals(
+            'http://example.com/my-special-portal', get_gever_portal_url())

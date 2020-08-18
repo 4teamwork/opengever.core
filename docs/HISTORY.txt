@@ -4,6 +4,7 @@ Changelog
 2020.7.1 (unreleased)
 ---------------------
 
+- Make the portal_url configurable through the portal_registry. [elioschmutz]
 - Extend the @config endpoint with the current inbox_folder_url. [elioschmutz]
 
 
