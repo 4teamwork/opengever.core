@@ -13,6 +13,7 @@ import logging
 class TestNightlyRoleAssignmentReports(IntegrationTestCase):
 
     features = ('nightly-jobs', )
+    maxDiff = None
 
     def execute_nightly_jobs(self):
 
@@ -57,7 +58,7 @@ class TestNightlyRoleAssignmentReports(IntegrationTestCase):
 
         report = storage.get('report_2')
         self.assertEqual(STATE_READY, report['state'])
-        self.assertEqual(
+        self.assertItemsEqual(
             [{'UID': IUUID(self.repository_root),
               'roles': ['Contributor', 'Reader', 'Publisher']},
              {'UID': IUUID(self.leaf_repofolder),
