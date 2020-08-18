@@ -861,4 +861,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="POST"
+      name="@accept-remote-task"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".accept_remote_task.AcceptRemoteTaskPost"
+      permission="cmf.AddPortalContent"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
