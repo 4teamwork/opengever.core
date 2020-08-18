@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Extend the @config endpoint with the current inbox_folder_url. [elioschmutz]
+- Complement @role-assignment-reports responses with type, principal label, title and referenced roles. [tinagerber]
 
 
 2020.7.0 (2020-08-12)
