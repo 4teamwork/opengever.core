@@ -72,7 +72,8 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
             "roles": [
               "Editor"
             ],
-            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-1/dossier-2"
+            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-1/dossier-2",
+            "title": "Aktuelle Situation"
           },
           {
             "UID": "63bf84e9e07b4702abaf3bd78ca45326",
@@ -80,7 +81,8 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
               "Contributor",
               "Reader"
             ],
-            "url": "http://localhost:8080/fd/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-3"
+            "url": "http://localhost:8080/fd/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-3",
+            "title": "Wichtige Information"
           },
           {
             "UID": "3761453132dc4ced9b0a758c3b978802",
@@ -89,7 +91,8 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
               "Reviewer",
               "Editor"
             ],
-            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen"
+            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen",
+            "title": "Einbürgerungen"
           }
         ],
         "items_total": 3,

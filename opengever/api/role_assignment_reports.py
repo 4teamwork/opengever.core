@@ -53,7 +53,9 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
             except KeyError:
                 raise BadRequest("Invalid report_id '{}'".format(report_id))
             for item in result['items']:
-                item['url'] = uuidToObject(item['UID']).absolute_url()
+                obj = uuidToObject(item['UID'])
+                item['title'] = obj.Title()
+                item['url'] = obj.absolute_url()
             self.add_additional_data_to_report(result)
         # all reports
         elif len(self.params) == 0:
