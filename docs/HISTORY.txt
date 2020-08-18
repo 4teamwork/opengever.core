@@ -4,6 +4,7 @@ Changelog
 2020.7.1 (unreleased)
 ---------------------
 
+- Add solr to development.cfg in policy templates. [njohner]
 - Extend the @config endpoint with the current inbox_folder_url. [elioschmutz]
 
 

@@ -3,5 +3,8 @@ extends =
     test-policy.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-dev.cfg
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/bumblebee.cfg
+    https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/solr.cfg
 
 ogds-db-name = opengever{{{package.name}}}
+solr-core-name = development_{{{package.name}}}
+solr-port = 8983
