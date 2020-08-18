@@ -6,6 +6,7 @@ from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
@@ -47,15 +48,19 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
         storage = IRoleAssignmentReportsStorage(self.context)
         # a single report
         if len(self.params) == 1:
+            referenced_roles = set()
             report_id = self.params[0]
             try:
                 result = storage.get(report_id)
             except KeyError:
                 raise BadRequest("Invalid report_id '{}'".format(report_id))
             for item in result['items']:
+                referenced_roles.update(item['roles'])
                 obj = uuidToObject(item['UID'])
                 item['title'] = obj.Title()
                 item['url'] = obj.absolute_url()
+            result['referenced_roles'] = [{'id': role, 'title': translate(
+                role, context=self.request, domain='plone')} for role in referenced_roles]
             self.add_additional_data_to_report(result)
         # all reports
         elif len(self.params) == 0:

@@ -66,6 +66,24 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
 
       {
         "@id": "http://localhost:8080/fd/@role-assignment-reports/report_1",
+        "referenced_roles": [
+          {
+            "id": "Contributor",
+            "title": "Hinzufügen"
+          },
+          {
+            "id": "Reviewer",
+            "title": "Veröffentlichen"
+          },
+          {
+            "id": "Editor",
+            "title": "Bearbeiten"
+          },
+          {
+            "id": "Reader",
+            "title": "Ansehen"
+          }
+        ],
         "items": [
           {
             "UID": "ea02348a43fd4c9ebcf86f0a1f739923",

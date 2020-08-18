@@ -44,6 +44,11 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
              u'@type': u'virtual.report.roleassignmentreport',
+             u'referenced_roles': [{u'id': u'Contributor', u'title': u'Contributor'},
+                                   {u'id': u'Publisher', u'title': u'Publisher'},
+                                   {u'id': u'Reviewer', u'title': u'Reviewer'},
+                                   {u'id': u'Editor', u'title': u'Editor'},
+                                   {u'id': u'Reader', u'title': u'Reader'}],
              u'items': [{u'UID': u'createrepositorytree000000000001',
                          u'roles': [u'Contributor'],
                          u'title': u'Ordnungssystem',
