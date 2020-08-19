@@ -3,6 +3,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from Missing import Value as MissingValue
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.sentry import log_msg_to_sentry
@@ -33,6 +34,20 @@ from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+import logging
+
+
+logger = logging.getLogger('opengever.api.serializer')
+
+
+def extend_with_oguid(result, context):
+    try:
+        oguid = Oguid.for_object(context).id
+    except Exception as exc:
+        logger.warn('Failed to determine Oguid for %r - %r' % (context, exc))
+        oguid = None
+
+    result['oguid'] = oguid
 
 
 def extend_with_bumblebee_checksum(result, context):
@@ -59,6 +74,7 @@ class GeverSerializeToJson(SerializeToJson):
     def __call__(self, *args, **kwargs):
         result = super(GeverSerializeToJson, self).__call__(*args, **kwargs)
 
+        extend_with_oguid(result, self.context)
         extend_with_bumblebee_checksum(result, self.context)
         extend_with_relative_path(result, self.context)
         extend_with_responses(result, self.context, self.request)
@@ -72,6 +88,7 @@ class GeverSerializeFolderToJson(SerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(GeverSerializeFolderToJson, self).__call__(*args, **kwargs)
 
+        extend_with_oguid(result, self.context)
         extend_with_relative_path(result, self.context)
         extend_with_responses(result, self.context, self.request)
 

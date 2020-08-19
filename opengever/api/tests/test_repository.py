@@ -1,5 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 
 
 class TestRepositoryAPI(IntegrationTestCase):
@@ -9,6 +11,8 @@ class TestRepositoryAPI(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.repository_root, method="GET", headers={"Accept": "application/json"})
         self.assertEqual(200, browser.status_code)
+
+        int_id = getUtility(IIntIds).getId(self.repository_root)
         expected_repository_root = {
             u'@components': {
                 u'actions': {u'@id': u'http://nohost/plone/ordnungssystem/@actions'},
@@ -55,6 +59,7 @@ class TestRepositoryAPI(IntegrationTestCase):
             u'items_total': 3,
             u'layout': u'tabbed_view',
             u'modified': u'2016-08-31T07:11:33+00:00',
+            u'oguid': 'plone:%s' % int_id,
             u'parent': {
                 u'@id': u'http://nohost/plone',
                 u'@type': u'Plone Site',

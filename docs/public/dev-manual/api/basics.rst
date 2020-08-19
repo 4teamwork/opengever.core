@@ -92,6 +92,7 @@ Wenn eine Response einen Body hat, ist dies immer ein JSON-Dokument:
       "@context": "http://www.w3.org/ns/hydra/context.jsonld",
       "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23",
       "@type": "opengever.dossier.businesscasedossier",
+      "oguid": "fd:12345",
       "title": "Titel des Objekts",
       "review_state": "dossier-state-active",
        "...": "..."

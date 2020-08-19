@@ -425,6 +425,7 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
         "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-5",
         "@type": "opengever.task.task",
         "UID": "3a551f6e3b62421da029dfceb71656e6",
+        "oguid": "fd:12345",
         "items": [],
         "responses": [
           {
@@ -473,6 +474,7 @@ Angaben zum übergeordneten Dossier einer Aufgabe ist in der GET Repräsentation
         "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-5",
         "@type": "opengever.task.task",
         "UID": "3a551f6e3b62421da029dfceb71656e6",
+        "oguid": "fd:12345",
         "...": "...",
         "containing_dossier": {
           "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1",
