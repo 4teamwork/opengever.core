@@ -431,3 +431,13 @@ class IRoleAssignmentReportsStorage(Interface):
     def delete(report_uid):
         """Delete the corresponding role assignment report.
         """
+
+
+class IPortalSettings(Interface):
+
+    portal_url = schema.TextLine(
+        title=u'Portal url',
+        description=u'This url will be exposed in the @config endpoint and will '
+                    u'be used to generate the workspace invitation url. '
+                    u'Leave it blank to use an auto generated portal url to '
+                    u'[cluster-base-url]/portal')

@@ -1,0 +1,6 @@
+<registry>
+
+  <!-- BASE -->
+  <records interface="opengever.base.interfaces.IPortalSettings" />
+
+</registry>

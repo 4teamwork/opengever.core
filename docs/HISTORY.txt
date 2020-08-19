@@ -4,6 +4,7 @@ Changelog
 2020.7.1 (unreleased)
 ---------------------
 
+- Make the portal_url configurable through the portal_registry. [elioschmutz]
 - Extend the @config endpoint with the current inbox_folder_url. [elioschmutz]
 - Complement @role-assignment-reports responses with type, principal label, title and referenced roles. [tinagerber]
 - Add another nesting level to simple saas policy templates. [deiferni]

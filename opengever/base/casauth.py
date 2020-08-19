@@ -1,4 +1,5 @@
 from ftw.casauth.plugin import CASAuthenticationPlugin
+from opengever.base.interfaces import IPortalSettings
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
@@ -38,8 +39,10 @@ def get_cluster_base_url():
 def get_gever_portal_url():
     """Get the URL of the GEVER portal.
     """
+    portal_url = api.portal.get_registry_record('portal_url', IPortalSettings, '')
     base_url = get_cluster_base_url()
-    return urljoin(base_url, 'portal')
+
+    return portal_url if portal_url else urljoin(base_url, 'portal')
 
 
 def get_cas_server_url():
