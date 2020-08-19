@@ -7,7 +7,7 @@
   <include package="ftw.upgrade" file="meta.zcml" />
 
   <upgrade-step:directory
-      profile="opengever.{{{package.name}}}:default"
+      profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
       directory="."
       soft_dependencies="opengever.core:default"
       />

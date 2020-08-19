@@ -65,6 +65,8 @@ def post_adminunit_abbreviation(configurator, question, answer):
 
 def post_adminunit_id(configurator, question, answer):
     configurator.variables['adminunit.ac_cookie_name'] = answer.replace('-', '_')
+    configurator.variables['adminunit.id_capitalized'] = answer.capitalize()
+    configurator.variables['adminunit.id_upper'] = answer.upper()
     return answer
 
 
@@ -144,10 +146,11 @@ def post_render(configurator):
     has_workspace = configurator.variables['setup.workspace']
 
     package_name = configurator.variables['package.name']
+    adminunit_id = configurator.variables['adminunit.id']
     profiles_path = os.path.join(
         configurator.target_directory,
         'opengever.{}'.format(package_name),
-        'opengever', package_name, 'profiles')
+        'opengever', package_name, adminunit_id, 'profiles')
 
     content_path = os.path.join(
         profiles_path,

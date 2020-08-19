@@ -5,21 +5,23 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PloneSandboxLayer
 import opengever.{{{package.name}}}
+import opengever.{{{package.name}}}.{{{adminunit.id}}}
 
 
-class {{{package.name_capitalized}}}FunctionalLayer(PloneSandboxLayer):
+class {{{adminunit.id_capitalized}}}FunctionalLayer(PloneSandboxLayer):
 
     defaultBases = (OPENGEVER_FIXTURE, )
 
     def setUpZope(self, app, configurationContext):
         self.loadZCML('configure.zcml', package=opengever.{{{package.name}}})
+        self.loadZCML('configure.zcml', package=opengever.{{{package.name}}}.{{{adminunit.id}}})
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'opengever.{{{package.name}}}:default')
+        applyProfile(portal, 'opengever.{{{package.name}}}.{{{adminunit.id}}}:default')
 
 
-OPENGEVER_{{{package.name_upper}}}_FIXTURE = {{{package.name_capitalized}}}FunctionalLayer()
-OPENGEVER_{{{package.name_upper}}}_FUNCTIONAL_TESTING = FunctionalTesting(
+OPENGEVER_{{{package.name_upper}}}_FIXTURE = {{{adminunit.id_capitalized}}}FunctionalLayer()
+OPENGEVER_{{{adminunit.id_upper}}}_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_{{{package.name_upper}}}_FIXTURE,
            set_builder_session_factory(functional_session_factory)),
-    name="opengever-{{{package.name}}}:functional")
+    name="opengever-{{{adminunit.id}}}:functional")
