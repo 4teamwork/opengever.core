@@ -21,8 +21,8 @@ class TestRoleAssignmentReportsStorage(IntegrationTestCase):
             [{'items': [],
               'modified': u'2016-08-31T20:01:33+00:00',
               'principal_type': PRINCIPAL_TYPE_USER,
-              'principalid': self.regular_user.getId(),
-              'reportid': 'report_1',
+              'principal_id': self.regular_user.getId(),
+              'report_id': 'report_1',
               'state': STATE_IN_PROGRESS},
              {'items': [{'UID': IUUID(self.repository_root),
                          'roles': ['Contributor']},
@@ -32,8 +32,8 @@ class TestRoleAssignmentReportsStorage(IntegrationTestCase):
                          'roles': ['Reader', 'Editor', 'Reviewer']}],
               'modified': u'2016-08-31T20:01:33+00:00',
               'principal_type': PRINCIPAL_TYPE_USER,
-              'principalid': self.archivist.getId(),
-              'reportid': 'report_0',
+              'principal_id': self.archivist.getId(),
+              'report_id': 'report_0',
               'state': STATE_READY}], self.storage.list())
 
     def test_get_report(self):
@@ -47,8 +47,8 @@ class TestRoleAssignmentReportsStorage(IntegrationTestCase):
                         'roles': ['Reader', 'Editor', 'Reviewer']}],
              'modified': u'2016-08-31T20:01:33+00:00',
              'principal_type': PRINCIPAL_TYPE_USER,
-             'principalid': self.archivist.getId(),
-             'reportid': 'report_0',
+             'principal_id': self.archivist.getId(),
+             'report_id': 'report_0',
              'state': STATE_READY}, report)
 
         report = self.storage.get('report_1')
@@ -56,8 +56,8 @@ class TestRoleAssignmentReportsStorage(IntegrationTestCase):
             {'items': [],
              'modified': u'2016-08-31T20:01:33+00:00',
              'principal_type': PRINCIPAL_TYPE_USER,
-             'principalid': self.regular_user.getId(),
-             'reportid': 'report_1',
+             'principal_id': self.regular_user.getId(),
+             'report_id': 'report_1',
              'state': STATE_IN_PROGRESS}, report)
 
     def test_delete_report(self):
@@ -76,8 +76,8 @@ class TestRoleAssignmentReportsStorage(IntegrationTestCase):
              'state': STATE_IN_PROGRESS,
              'modified': '2018-04-30T00:00:00+00:00',
              'principal_type': PRINCIPAL_TYPE_USER,
-             'principalid': self.administrator.getId(),
-             'reportid': reportid}, self.storage.get(reportid))
+             'principal_id': self.administrator.getId(),
+             'report_id': reportid}, self.storage.get(reportid))
 
     def test_add_two_reports_for_the_same_principal(self):
         with freeze(datetime(2018, 4, 30)) as clock:
@@ -89,14 +89,14 @@ class TestRoleAssignmentReportsStorage(IntegrationTestCase):
             [{'items': [],
               'modified': u'2018-05-02T00:00:00+00:00',
               'principal_type': PRINCIPAL_TYPE_USER,
-              'principalid': self.administrator.getId(),
-              'reportid': reportid_2,
+              'principal_id': self.administrator.getId(),
+              'report_id': reportid_2,
               'state': STATE_IN_PROGRESS},
              {'items': [],
               'modified': u'2018-04-30T00:00:00+00:00',
               'principal_type': PRINCIPAL_TYPE_USER,
-              'principalid': self.administrator.getId(),
-              'reportid': reportid_1,
+              'principal_id': self.administrator.getId(),
+              'report_id': reportid_1,
               'state': STATE_IN_PROGRESS}], self.storage.list()[:2])
 
     def test_update_report(self):
@@ -112,8 +112,8 @@ class TestRoleAssignmentReportsStorage(IntegrationTestCase):
                         'roles': ['Contributor']}],
              'modified': u'2018-04-30T00:00:00+00:00',
              'principal_type': PRINCIPAL_TYPE_USER,
-             'principalid': self.regular_user.getId(),
-             'reportid': 'report_1',
+             'principal_id': self.regular_user.getId(),
+             'report_id': 'report_1',
              'state': STATE_READY}, self.storage.get('report_1'))
 
     def test_new_reportid_is_based_on_a_counter_in_storage(self):

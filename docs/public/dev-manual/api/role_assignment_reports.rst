@@ -31,16 +31,16 @@ Mittels eines GET-Requests können alle Berichte abgefragt werden.
             "@id": "http://localhost:8080/fd/@role-assignment-reports/report_2",
             "modified": "2020-07-08T14:17:30+00:00",
             "principal_type": "user",
-            "principalid": "robert.ziegler",
-            "reportid": "report_2",
+            "principal_id": "robert.ziegler",
+            "report_id": "report_2",
             "state": "in progress"
           },
           {
             "@id": "http://localhost:8080/fd/@role-assignment-reports/report_1",
             "modified": "2020-04-03T01:34:27+00:00",
             "principal_type": "group",
-            "principalid": "afi_benutzer",
-            "reportid": "report_1",
+            "principal_id": "afi_benutzer",
+            "report_id": "report_1",
             "state": "ready"
           }
         ],
@@ -66,13 +66,32 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
 
       {
         "@id": "http://localhost:8080/fd/@role-assignment-reports/report_1",
+        "referenced_roles": [
+          {
+            "id": "Contributor",
+            "title": "Hinzufügen"
+          },
+          {
+            "id": "Reviewer",
+            "title": "Veröffentlichen"
+          },
+          {
+            "id": "Editor",
+            "title": "Bearbeiten"
+          },
+          {
+            "id": "Reader",
+            "title": "Ansehen"
+          }
+        ],
         "items": [
           {
             "UID": "ea02348a43fd4c9ebcf86f0a1f739923",
             "roles": [
               "Editor"
             ],
-            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-1/dossier-2"
+            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-1/dossier-2",
+            "title": "Aktuelle Situation"
           },
           {
             "UID": "63bf84e9e07b4702abaf3bd78ca45326",
@@ -80,7 +99,8 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
               "Contributor",
               "Reader"
             ],
-            "url": "http://localhost:8080/fd/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-3"
+            "url": "http://localhost:8080/fd/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-3",
+            "title": "Wichtige Information"
           },
           {
             "UID": "3761453132dc4ced9b0a758c3b978802",
@@ -89,14 +109,15 @@ Mittels eines GET-Requests können auch einzelne Berichte abgefragt werden.
               "Reviewer",
               "Editor"
             ],
-            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen"
+            "url": "http://localhost:8080/fd/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen",
+            "title": "Einbürgerungen"
           }
         ],
         "items_total": 3,
         "modified": "2020-04-03T01:34:27+00:00",
         "principal_type": "group",
-        "principalid": "afi_benutzer",
-        "reportid": "report_1",
+        "principal_id": "afi_benutzer",
+        "report_id": "report_1",
         "state": "ready"
       }
 
@@ -115,7 +136,7 @@ Ein Bericht kann mittels POST-Requests angefordert werden. Danach erscheint der 
        Accept: application/json
 
        {
-         "principalid": "robert.ziegler"
+         "principal_id": "robert.ziegler"
        }
 
 **Beispiel-Response**:
@@ -131,8 +152,8 @@ Ein Bericht kann mittels POST-Requests angefordert werden. Danach erscheint der 
         "items_total": 0,
         "modified": "2020-07-13T11:43:18+00:00",
         "principal_type": "user",
-        "principalid": "robert.ziegler",
-        "reportid": "report_7",
+        "principal_id": "robert.ziegler",
+        "report_id": "report_7",
         "state": "in progress"
       }
 

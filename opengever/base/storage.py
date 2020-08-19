@@ -69,9 +69,9 @@ class RoleAssignmentReportsStorage(object):
         self._reports[report_id] = PersistentMapping({
             'items': [],
             'modified': json_compatible(utcnow_tz_aware()),
-            'principalid': principalid,
+            'principal_id': principalid,
             'principal_type': self._get_principal_type(principalid),
-            'reportid': report_id,
+            'report_id': report_id,
             'state': STATE_IN_PROGRESS
         })
         return report_id
