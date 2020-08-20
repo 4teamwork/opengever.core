@@ -990,7 +990,7 @@ class OpengeverContentFixture(object):
             ))
 
         self.inbox_rk.__ac_local_roles_block__ = True
-        self.set_roles(self.inbox, self.secretariat_user.getId(),
+        self.set_roles(self.inbox_rk, self.secretariat_user.getId(),
                        ['Contributor', 'Editor', 'Reader'])
 
         self.inbox_rk.reindexObjectSecurity()
