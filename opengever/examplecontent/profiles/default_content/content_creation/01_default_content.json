@@ -1,0 +1,42 @@
+[
+    {
+        "_path": "private",
+        "_type": "opengever.private.root",
+        "title_de": "Meine Ablage",
+        "title_fr": "Mon dépôt",
+        "_placefulworkflow": ["opengever_private_policy",
+                              "opengever_private_policy"]
+    },
+    {
+        "_path": "eingangskorb",
+        "_type": "opengever.inbox.container",
+        "title_de": "Eingangskorb",
+        "title_fr": "Boîte de réception",
+        "_placefulworkflow": ["opengever_inbox_policy",
+                              "opengever_inbox_policy"],
+        "_ac_local_roles": {
+            "og_demo-ftw_users": [
+                "Reader"
+            ]
+        }
+    },
+    {
+        "_path": "vorlagen",
+        "_type": "opengever.dossier.templatefolder",
+        "title_de": "Vorlagen",
+        "title_fr": "Modèles"
+    },
+    {
+        "_path": "kontakte",
+        "_type": "opengever.contact.contactfolder",
+        "title_de": "Kontakte",
+        "title_fr": "Contacts",
+        "_transitions": "publish"
+    },
+    {
+        "_path": "workspaces",
+        "_type": "opengever.workspace.root",
+        "title_de": "Teamräume",
+        "title_fr": "Espace partagé"
+    }
+]

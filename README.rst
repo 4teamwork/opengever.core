@@ -552,10 +552,12 @@ Objects
   - self.contactfolder
     - self.franz_meier
     - self.hanspeter_duerr
-  - self.inbox
-    - self.inbox_document
-    - self.inbox_forwarding
-      - self.inbox_forwarding_document
+  - self.inbox_container
+    - self.inbox
+      - self.inbox_document
+      - self.inbox_forwarding
+        - self.inbox_forwarding_document
+    - self.inbox_rk
   - self.private_root
     - self.private_folder
       - self.private_dossier
