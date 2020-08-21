@@ -45,6 +45,15 @@ IGNORED_DIRECTORIES = {
     'gever': ['workspaces_content']
     }
 
+VARIABLE_VALUES = {
+    'teamraum': {
+        'setup.geverui': True,
+        'setup.bumblebee_auto_refresh': True,
+        'setup.enable_activity_feature': True,
+        },
+    'gever': {}
+    }
+
 
 def policy_type(configurator):
     return configurator.variables.get('policy.type')
@@ -57,6 +66,7 @@ def initialize(configurator, question):
     configurator.variables['is_teamraum'] = configurator.variables.get('policy.type') == 'teamraum'
     configurator.variables['is_gever'] = configurator.variables.get('policy.type') == 'gever'
     init_defaults(configurator)
+    init_values(configurator)
     filter_questions(configurator)
     add_ignored_directories(configurator)
 
@@ -84,6 +94,10 @@ def init_defaults(configurator):
         'setup.reference_number_formatter': DEFAULT_FORMATTER,
         'setup.reference_prefix_starting_point': DEFAULT_PREFIX_STARTING_POINT,
     })
+
+
+def init_values(configurator):
+    configurator.variables.update(VARIABLE_VALUES[policy_type(configurator)])
 
 
 def post_package_name(configurator, question, answer):
