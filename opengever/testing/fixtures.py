@@ -928,6 +928,7 @@ class OpengeverContentFixture(object):
         policy_config.setPolicyIn(inbox_policy_id, update_security=False)
         policy_config.setPolicyBelow(inbox_policy_id, update_security=False)
         self.set_roles(self.inbox_container, self.secretariat_user.getId(), ['Reader'])
+        self.set_roles(self.inbox_container, self.dossier_manager.getId(), ['Reader'])
 
         self.inbox_container.reindexObjectSecurity()
 
@@ -953,6 +954,8 @@ class OpengeverContentFixture(object):
 
         self.inbox.__ac_local_roles_block__ = True
         self.set_roles(self.inbox, self.secretariat_user.getId(),
+                       ['Contributor', 'Editor', 'Reader'])
+        self.set_roles(self.inbox, self.dossier_manager.getId(),
                        ['Contributor', 'Editor', 'Reader'])
 
         self.inbox.reindexObjectSecurity()
