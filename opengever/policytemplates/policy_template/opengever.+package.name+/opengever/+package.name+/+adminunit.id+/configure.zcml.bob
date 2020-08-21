@@ -17,6 +17,7 @@
       />
   <include package=".upgrades" />
 
+{{% if is_gever %}}
   <genericsetup:registerProfile
       name="default_content"
       title="opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content"
@@ -29,6 +30,7 @@
       profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content"
       handler=".hooks.default_content_installed"
       />
+{{% endif %}}
 
   <genericsetup:registerProfile
       name="units"
@@ -52,7 +54,7 @@
       is_default="True"
       />
 
-{{% if setup.workspace %}}
+{{% if is_teamraum %}}
   <genericsetup:registerProfile
       name="workspaces_content"
       title="opengever.{{{package.name}}}.{{{adminunit.id}}}:workspaces_content"
@@ -63,6 +65,7 @@
 {{% endif %}}
 
   <!-- deployments -->
+{{% if is_gever %}}
   <opengever:registerDeployment
       title="OneGov GEVER {{{package.title}}}"
       policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
@@ -80,7 +83,8 @@
       mail_from_address="{{{deployment.mail_from_address}}}"
       />
 
-{{% if setup.workspace %}}
+{{% endif %}}
+{{% if is_teamraum %}}
   <opengever:registerDeployment
       title="Teamraum {{{package.title}}}"
       policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
@@ -96,5 +100,6 @@
       mail_domain="{{{deployment.mail_domain}}}"
       mail_from_address="{{{deployment.mail_from_address}}}"
       />
+
 {{% endif %}}
 </configure>

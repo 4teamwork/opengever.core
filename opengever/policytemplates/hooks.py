@@ -10,6 +10,12 @@ import os
 import shutil
 
 
+IGNORED_DIRECTORIES = {
+    'teamraum': ['default_content'],
+    'gever': ['workspaces_content']
+    }
+
+
 def policy_type(configurator):
     return configurator.variables.get('policy.type')
 
@@ -21,6 +27,13 @@ def initialize(configurator, question):
     configurator.variables['is_teamraum'] = configurator.variables.get('policy.type') == 'teamraum'
     configurator.variables['is_gever'] = configurator.variables.get('policy.type') == 'gever'
     init_defaults(configurator)
+    add_ignored_directories(configurator)
+
+
+def add_ignored_directories(configurator):
+    configurator.ignored_directories.extend(
+        IGNORED_DIRECTORIES[policy_type(configurator)]
+        )
 
 
 def init_defaults(configurator):
@@ -153,7 +166,6 @@ def post_maximum_mail_size(configurator, question, answer):
 def post_render(configurator):
     has_templates = configurator.variables['include_templates']
     has_meeting = configurator.variables['setup.enable_meeting_feature']
-    has_workspace = configurator.variables['setup.workspace']
 
     package_name = configurator.variables['package.name']
     adminunit_id = configurator.variables['adminunit.id']
@@ -175,9 +187,6 @@ def post_render(configurator):
 
         if not has_templates:
             _delete_templates_files(configurator, content_path)
-
-    if not has_workspace:
-        _delete_workspaces_content_profile(profiles_path)
 
 
 def _delete_templates_files(configurator, content_path):
@@ -210,7 +219,3 @@ def _get_sablon_template_paths():
                 filename)))
 
     return paths
-
-
-def _delete_workspaces_content_profile(profiles_path):
-    shutil.rmtree(os.path.join(profiles_path, 'workspaces_content'))
