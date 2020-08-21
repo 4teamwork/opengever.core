@@ -10,10 +10,20 @@ import os
 import shutil
 
 
-def init_defaults(configurator, question):
+def policy_type(configurator):
+    return configurator.variables.get('policy.type')
+
+
+def initialize(configurator, question):
     """Could not find another hook to init stuff, so we abuse the first
     question."""
+    # For convenience we store is_teamraum and is_gever variables
+    configurator.variables['is_teamraum'] = configurator.variables.get('policy.type') == 'teamraum'
+    configurator.variables['is_gever'] = configurator.variables.get('policy.type') == 'gever'
+    init_defaults(configurator)
 
+
+def init_defaults(configurator):
     configurator.defaults.update({
         'setup.maximum_dossier_depth': DEFAULT_DOSSIER_DEPTH,
         'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
