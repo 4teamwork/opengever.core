@@ -45,6 +45,11 @@ IGNORED_DIRECTORIES = {
     'gever': ['workspaces_content']
     }
 
+IGNORED_FILES = {
+    'teamraum': ['hooks.py.bob'],
+    'gever': []
+    }
+
 VARIABLE_VALUES = {
     'teamraum': {
         'setup.geverui': True,
@@ -85,6 +90,7 @@ def initialize(configurator, question):
     init_values(configurator)
     filter_questions(configurator)
     add_ignored_directories(configurator)
+    add_ignored_files(configurator)
 
 
 def filter_questions(configurator):
@@ -100,6 +106,10 @@ def add_ignored_directories(configurator):
     configurator.ignored_directories.extend(
         IGNORED_DIRECTORIES[policy_type(configurator)]
         )
+
+
+def add_ignored_files(configurator):
+    configurator.ignored_files.extend(IGNORED_FILES[policy_type(configurator)])
 
 
 def init_defaults(configurator):
