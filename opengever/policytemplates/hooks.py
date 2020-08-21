@@ -1,3 +1,4 @@
+from mrbob.hooks import to_boolean
 from mrbob.hooks import to_integer
 from mrbob.hooks import validate_choices
 from opengever.base.interfaces import DEFAULT_FORMATTER
@@ -212,7 +213,11 @@ def post_nof_templates(configurator, question, answer):
         return ''
 
     answer = to_integer(configurator, question, answer)
-    configurator.variables['include_templates'] = bool(answer)
+
+    if not bool(answer):
+        configurator.ignored_directories.append('templates')
+        configurator.ignored_files.append('02-templates.json.bob')
+
     return answer
 
 
@@ -267,10 +272,16 @@ def post_maximum_mail_size(configurator, question, answer):
     return answer
 
 
+def post_enable_meeting_feature(configurator, question, answer):
+    answer = to_boolean(configurator, question, answer)
+    if not answer:
+        configurator.ignored_files.append('03_committees.json.bob')
+    return answer
+
+
 def post_render(configurator):
     if configurator.variables['is_teamraum']:
         return
-    has_templates = configurator.variables['include_templates']
     has_meeting = configurator.variables['setup.enable_meeting_feature']
 
     package_name = configurator.variables['package.name']
@@ -287,22 +298,6 @@ def post_render(configurator):
 
     if has_meeting:
         _copy_sablon_templates(content_path)
-
-    else:
-        _delete_committees_configuration(content_path)
-
-        if not has_templates:
-            _delete_templates_files(configurator, content_path)
-
-
-def _delete_templates_files(configurator, content_path):
-    os.remove(os.path.join(content_path, '02-templates.json'))
-    os.remove(os.path.join(content_path, 'templates/.gitignore'))
-    os.rmdir(os.path.join(content_path, 'templates'))
-
-
-def _delete_committees_configuration(content_path):
-    os.remove(os.path.join(content_path, '03_committees.json'))
 
 
 def _copy_sablon_templates(content_path):
