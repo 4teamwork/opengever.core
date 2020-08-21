@@ -268,6 +268,8 @@ def post_maximum_mail_size(configurator, question, answer):
 
 
 def post_render(configurator):
+    if configurator.variables['is_teamraum']:
+        return
     has_templates = configurator.variables['include_templates']
     has_meeting = configurator.variables['setup.enable_meeting_feature']
 
