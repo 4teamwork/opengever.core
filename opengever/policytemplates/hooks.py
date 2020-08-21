@@ -39,6 +39,7 @@ IGNORED_QUESTIONS = {
         'deployment.workspace_administrators_group',
         'deployment.workspace_creators_group',
         'deployment.workspace_users_group',
+        'base.apps_endpoint_url',
         ]
     }
 
@@ -204,6 +205,7 @@ def post_base_domain(configurator, question, answer):
         'adminunit.public_url': 'https://{}'.format(answer),
         'deployment.mail_domain': answer,
         'deployment.mail_from_address': 'info@{}'.format(answer),
+        'base.apps_endpoint_url': 'https://{}/api/apps'.format(answer),
     }
     update_defaults(configurator, new_defaults)
     return answer
