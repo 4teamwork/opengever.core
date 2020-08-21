@@ -9,6 +9,36 @@ from pkg_resources import resource_filename
 import os
 import shutil
 
+IGNORED_QUESTIONS = {
+    'teamraum': [
+        'orgunit.inbox_group'
+        'deployment.rolemanager_group',
+        'deployment.records_manager_group',
+        'deployment.archivist_group',
+        'setup.enable_activity_feature',
+        'setup.enable_meeting_feature',
+        'setup.enable_docproperty_feature',
+        'setup.nof_templates',
+        'setup.maximum_repository_depth',
+        'setup.reference_prefix_starting_point',
+        'setup.reference_number_formatter',
+        'setup.maximum_dossier_depth',
+        'setup.preserved_as_paper',
+        'setup.enable_private_folder',
+        'setup.dossier_templates',
+        'setup.ech0147_export',
+        'setup.ech0147_import',
+        'setup.officeatwork',
+        'setup.repositoryfolder_documents_tab',
+        'setup.repositoryfolder_tasks_tab',
+        'setup.repositoryfolder_proposals_tab',
+        'setup.bumblebee_auto_refresh',
+        ],
+    'gever': [
+        'deployment.workspace_creators_group',
+        'deployment.workspace_users_group',
+        ]
+    }
 
 IGNORED_DIRECTORIES = {
     'teamraum': ['default_content'],
@@ -27,7 +57,17 @@ def initialize(configurator, question):
     configurator.variables['is_teamraum'] = configurator.variables.get('policy.type') == 'teamraum'
     configurator.variables['is_gever'] = configurator.variables.get('policy.type') == 'gever'
     init_defaults(configurator)
+    filter_questions(configurator)
     add_ignored_directories(configurator)
+
+
+def filter_questions(configurator):
+    to_remove = []
+    for question in configurator.questions:
+        if question.name in IGNORED_QUESTIONS[policy_type(configurator)]:
+            to_remove.append(question)
+    for question in to_remove:
+        configurator.questions.remove(question)
 
 
 def add_ignored_directories(configurator):
