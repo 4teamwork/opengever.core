@@ -6,6 +6,7 @@ from opengever.wopi.interfaces import IWOPISettings
 from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+import time
 
 
 class TestDocumentTooltip(IntegrationTestCase):
@@ -78,8 +79,10 @@ class TestDocumentTooltip(IntegrationTestCase):
         settings.enabled = True
         settings.discovery_url = u'http://localhost/hosting/discovery'
 
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
+        discovery._WOPI_DISCOVERY = {
+            'timestamp': time.time(),
+            'url': settings.discovery_url,
+            'editable-extensions': set(['docx', 'xlsx', 'pptx']),
         }
 
         browser.open(self.document, view='tooltip')

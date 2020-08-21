@@ -18,6 +18,7 @@ from base64 import urlsafe_b64encode
 from distutils.spawn import find_executable
 from ftw.builder import Builder
 from ftw.builder import create
+from mock import patch
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.testing.test_case import FunctionalTestCase
 from opengever.wopi.token import create_access_token
@@ -89,11 +90,17 @@ class TestWOPIValidation(FunctionalTestCase):
         if not ZSERVER_HOST:
             cmd[4:4] = ['--network', 'host']
 
-        try:
-            output = subprocess.check_output(cmd)
-            print(output)
-        except subprocess.CalledProcessError as exc:
-            output = exc.output
-            self.fail(output)
+        # Disable proof key validation as long as it's not supported by
+        # wopi-validator-core
+        with patch(
+            'opengever.wopi.browser.wopi.validate_wopi_proof'
+        ) as mocked_validate_wopi_proof:
+            mocked_validate_wopi_proof.return_value = True
+            try:
+                output = subprocess.check_output(cmd)
+                print(output)
+            except subprocess.CalledProcessError as exc:
+                output = exc.output
+                self.fail(output)
         self.assertIn('Pass', output, 'Has passed tests')
         self.assertNotIn('Fail', output, 'Has no failed tests')

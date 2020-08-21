@@ -14,6 +14,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.interface.verify import verifyClass
+import time
 
 
 class TestFileActionsInterface(TestCase):
@@ -73,8 +74,10 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         settings = registry.forInterface(IWOPISettings)
         settings.enabled = True
         settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
+        discovery._WOPI_DISCOVERY = {
+            'timestamp': time.time(),
+            'url': settings.discovery_url,
+            'editable-extensions': set(['docx', 'xlsx', 'pptx']),
         }
         self.login(self.regular_user)
         actions = getMultiAdapter((self.document, self.request), IFileActions)
@@ -85,8 +88,10 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         settings = registry.forInterface(IWOPISettings)
         settings.enabled = True
         settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['xlsx', 'pptx'])
+        discovery._WOPI_DISCOVERY = {
+            'timestamp': time.time(),
+            'url': settings.discovery_url,
+            'editable-extensions': set(['xlsx', 'pptx']),
         }
         self.login(self.regular_user)
         actions = getMultiAdapter((self.document, self.request), IFileActions)
@@ -97,8 +102,10 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         settings = registry.forInterface(IWOPISettings)
         settings.enabled = True
         settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
+        discovery._WOPI_DISCOVERY = {
+            'timestamp': time.time(),
+            'url': settings.discovery_url,
+            'editable-extensions': set(['docx', 'xlsx', 'pptx']),
         }
         self.login(self.regular_user)
         manager = getMultiAdapter((self.document, self.request),
@@ -112,8 +119,10 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         settings = registry.forInterface(IWOPISettings)
         settings.enabled = True
         settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
+        discovery._WOPI_DISCOVERY = {
+            'timestamp': time.time(),
+            'url': settings.discovery_url,
+            'editable-extensions': set(['docx', 'xlsx', 'pptx']),
         }
         self.login(self.regular_user)
         manager = getMultiAdapter((self.document, self.request),

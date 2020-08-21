@@ -3,10 +3,17 @@ from opengever.wopi.interfaces import IWOPISettings
 from plone import api
 from xml.etree import cElementTree as ET
 import requests
+import time
 
 
-_ACTIONS = {}
-_EDITABLE_EXTENSIONS = {}
+WOPI_DISCOVERY_REFRESH_INTERVAL = 60 * 60 * 24
+_WOPI_DISCOVERY = {
+    'timestamp': 0,
+    'url': None,
+    'proof-key': None,
+    'actions': {},
+    'editable-extensions': {},
+}
 
 
 def etree_to_dict(t):
@@ -30,14 +37,17 @@ def etree_to_dict(t):
     return d
 
 
-def actions_by_extension(net_zone='external-https', url=None):
-    global _ACTIONS
-
+def run_discovery(net_zone='external-https', url=None):
     if url is None:
         url = api.portal.get_registry_record(
             name='discovery_url', interface=IWOPISettings)
-    if url in _ACTIONS:
-        return _ACTIONS[url]
+
+    now = int(time.time())
+    if (
+        url == _WOPI_DISCOVERY['url']
+        and _WOPI_DISCOVERY['timestamp'] + WOPI_DISCOVERY_REFRESH_INTERVAL > now
+    ):
+        return
 
     resp = requests.get(url)
     tree = ET.XML(resp.text)
@@ -65,23 +75,29 @@ def actions_by_extension(net_zone='external-https', url=None):
                         'urlsrc': urlsrc,
                         'favicon_url': favicon_url,
                     }
-    _ACTIONS[url] = actions
-    return _ACTIONS[url]
-
-
-def editable_extensions(net_zone='external-https', url=None):
-    global _EDITABLE_EXTENSIONS
-
-    if url is None:
-        url = api.portal.get_registry_record(
-            name='discovery_url', interface=IWOPISettings)
-    if url in _EDITABLE_EXTENSIONS:
-        return _EDITABLE_EXTENSIONS[url]
+    _WOPI_DISCOVERY['actions'] = actions
 
     extensions = set()
-    for extension, actions in actions_by_extension(net_zone=net_zone,
-                                                   url=url).items():
+    for extension, actions in actions.items():
         if 'edit' in actions:
             extensions.add(extension)
-    _EDITABLE_EXTENSIONS[url] = extensions
-    return _EDITABLE_EXTENSIONS[url]
+    _WOPI_DISCOVERY['editable-extensions'] = extensions
+
+    _WOPI_DISCOVERY['proof-key'] = wopi_discovery['proof-key']
+    _WOPI_DISCOVERY['url'] = url
+    _WOPI_DISCOVERY['timestamp'] = now
+
+
+def actions_by_extension():
+    run_discovery()
+    return _WOPI_DISCOVERY['actions']
+
+
+def editable_extensions():
+    run_discovery()
+    return _WOPI_DISCOVERY['editable-extensions']
+
+
+def proof_key():
+    run_discovery()
+    return _WOPI_DISCOVERY['proof-key']

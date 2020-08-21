@@ -1,13 +1,72 @@
+from base64 import b64encode
 from base64 import urlsafe_b64encode
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.asymmetric import rsa
+from datetime import datetime
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.wopi import discovery
 from opengever.wopi.interfaces import IWOPISettings
+from opengever.wopi.proof_key import create_message
 from opengever.wopi.token import create_access_token
 from plone import api
 from plone.uuid.interfaces import IUUID
+import time
+
+
+def int2bytes(val, num_bytes):
+    return ''.join([
+        chr((val & (0xff << pos * 8)) >> pos * 8)
+        for pos in reversed(range(num_bytes))
+    ])
 
 
 class TestWOPIView(IntegrationTestCase):
+
+    private_key = None
+
+    def setUp(self):
+        super(TestWOPIView, self).setUp()
+        self.setup_proof_keys()
+
+    def setup_proof_keys(self):
+        if self.private_key is not None:
+            return
+        self.private_key = rsa.generate_private_key(
+            public_exponent=65537, key_size=2048, backend=default_backend())
+        public_key = self.private_key.public_key()
+        modulus = b64encode(int2bytes(public_key.public_numbers().n, 256))
+        discovery._WOPI_DISCOVERY = {
+            'timestamp': time.time(),
+            'url': api.portal.get_registry_record(
+                name='discovery_url', interface=IWOPISettings),
+            'proof-key': {
+                '@exponent': 'AQAB',
+                '@modulus': modulus,
+                '@oldexponent': 'AQAB',
+                '@oldmodulus': modulus,
+            },
+            'actions': {},
+            'editable-extensions': {},
+        }
+
+    def get_signature(self, access_token, url, timestamp):
+        return b64encode(self.private_key.sign(
+            create_message(access_token, url, timestamp),
+            padding.PKCS1v15(),
+            hashes.SHA256(),
+        ))
+
+    def wopi_headers(self, access_token, url):
+        timestamp = str(int(
+            (datetime.utcnow() - datetime(1, 1, 1)).total_seconds() * 10000000))
+        return {
+            'X-WOPI-TimeStamp': timestamp,
+            'X-WOPI-Proof': self.get_signature(access_token, url, timestamp),
+            'X-WOPI-ProofOld': self.get_signature(access_token, url, timestamp),
+        }
 
     @browsing
     def check_file_info(self, browser):
@@ -16,9 +75,10 @@ class TestWOPIView(IntegrationTestCase):
 
         access_token = urlsafe_b64encode(
             create_access_token(self.regular_user.getId(), uuid))
+        url = '{}/wopi/files/{}?access_token={}'.format(
+            self.portal.absolute_url(), uuid, access_token)
 
-        browser.open('{}/wopi/files/{}?access_token={}'.format(
-            self.portal.absolute_url(), uuid, access_token))
+        browser.open(url, headers=self.wopi_headers(access_token, url))
         return browser.json
 
     def test_check_file_info_contains_sha256_checksum(self):
