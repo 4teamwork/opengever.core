@@ -1,10 +1,45 @@
 <registry>
 
+  <records interface="opengever.latex.interfaces.ILaTeXSettings">
+    <value key="location">{{{adminunit.title}}}</value>
+  </records>
+
+  <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
+    <value key="is_feature_enabled">True</value>
+    <value key="is_auto_refresh_enabled">{{{setup.bumblebee_auto_refresh}}}</value>
+  </records>
+
+  <records interface="opengever.base.interfaces.ISearchSettings">
+    <value key="use_solr">True</value>
+  </records>
 {{% if not setup.enable_activity_feature %}}
   <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
     <value>False</value>
   </record>
+
+{{% endif %}}
+{{% if setup.officeconnector_attach or setup.officeconnector_checkout%}}
+  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
+{{% if setup.officeconnector_attach %}}
+    <value key="attach_to_outlook_enabled">True</value>
+{{% endif %}}
+{{% if setup.officeconnector_checkout %}}
+    <value key="direct_checkout_and_edit_enabled">True</value>
+{{% endif %}}
+  </records>
+
+{{% endif %}}
+{{% if setup.maximum_mail_size %}}
+  <records interface="opengever.mail.interfaces.ISendDocumentConf">
+    <value key="max_size">{{{setup.maximum_mail_size}}}</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.geverui %}}
+  <records interface="opengever.base.interfaces.IGeverUI">
+    <value key="is_feature_enabled">True</value>
+  </records>
 
 {{% endif %}}
 {{% if setup.enable_meeting_feature %}}
@@ -20,9 +55,7 @@
   </records>
 
 {{% endif %}}
-  <records interface="opengever.latex.interfaces.ILaTeXSettings">
-    <value key="location">{{{adminunit.title}}}</value>
-  </records>
+
 
 {{% if setup.dossier_templates %}}
   <records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings">
@@ -48,17 +81,6 @@
   </records>
 
 {{% endif %}}
-{{% if setup.officeconnector_attach or setup.officeconnector_checkout%}}
-  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
-{{% if setup.officeconnector_attach %}}
-    <value key="attach_to_outlook_enabled">True</value>
-{{% endif %}}
-{{% if setup.officeconnector_checkout %}}
-    <value key="direct_checkout_and_edit_enabled">True</value>
-{{% endif %}}
-  </records>
-
-{{% endif %}}
 {{% if setup.maximum_repository_depth or setup.repositoryfolder_documents_tab or setup.repositoryfolder_tasks_tab
     or setup.repositoryfolder_proposals_tab %}}
   <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
@@ -74,12 +96,6 @@
 {{% if setup.repositoryfolder_proposals_tab %}}
     <value key="show_proposals_tab">True</value>
 {{% endif %}}
-  </records>
-
-{{% endif %}}
-{{% if setup.workspace %}}
-  <records interface="opengever.workspace.interfaces.IWorkspaceSettings">
-    <value key="is_feature_enabled">True</value>
   </records>
 
 {{% endif %}}
@@ -100,31 +116,16 @@
   </records>
 
 {{% endif %}}
-{{% if setup.maximum_mail_size %}}
-  <records interface="opengever.mail.interfaces.ISendDocumentConf">
-    <value key="max_size">{{{setup.maximum_mail_size}}}</value>
-  </records>
-
-{{% endif %}}
 {{% if not setup.preserved_as_paper %}}
   <records interface="opengever.document.interfaces.IDocumentSettings">
       <value key="preserved_as_paper_default">False</value>
   </records>
 
 {{% endif %}}
-{{% if setup.geverui %}}
-  <records interface="opengever.base.interfaces.IGeverUI">
+{{% if setup.workspace %}}
+  <records interface="opengever.workspace.interfaces.IWorkspaceSettings">
     <value key="is_feature_enabled">True</value>
   </records>
 
 {{% endif %}}
-  <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
-    <value key="is_feature_enabled">True</value>
-    <value key="is_auto_refresh_enabled">{{{setup.bumblebee_auto_refresh}}}</value>
-  </records>
-
-  <records interface="opengever.base.interfaces.ISearchSettings">
-    <value key="use_solr">True</value>
-  </records>
-
 </registry>
