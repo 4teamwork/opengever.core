@@ -4,7 +4,7 @@ import sys
 
 
 class CreatePolicyCLI(object):
-    """Command Line Interface that will by available through the
+    """Command Line Interface that will be available through the
     bin/create-policy script in the development buildout directory.
 
     For now it's a simple wrapper around bin/mrbob.
@@ -21,9 +21,19 @@ class CreatePolicyCLI(object):
         args.append('-O')
         args.append(target_dir)
 
+        policy = input("What policy type do you want to create?\n 1: GEVER \n 2: Teamraum\n")
+        if policy == 1:
+            init_file = 'opengever/policytemplates/gever.ini'
+        elif policy == 2:
+            init_file = 'opengever/policytemplates/teamraum.ini'
+        else:
+            print('Invalid choice')
+            sys.exit()
+
         template = 'opengever.policytemplates:policy_template'
         args.append(template)
 
+        args.append('--config={}'.format(init_file))
         if remainder:
             args.extend(remainder)
 

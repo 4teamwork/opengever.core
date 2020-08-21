@@ -2,7 +2,7 @@
   <permissions>
     <permission name="Remove GEVER content" acquire="True">
       <role name="Manager" />
-      <role name="Editor" />
+      <role name="Administrator" />
     </permission>
   </permissions>
 </rolemap>
