@@ -4,7 +4,7 @@ import sys
 
 
 class CreatePolicyCLI(object):
-    """Command Line Interface that will by available through the
+    """Command Line Interface that will be available through the
     bin/create-policy script in the development buildout directory.
 
     For now it's a simple wrapper around bin/mrbob.
