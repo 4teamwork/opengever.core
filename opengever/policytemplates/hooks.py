@@ -54,6 +54,22 @@ VARIABLE_VALUES = {
     'gever': {}
     }
 
+DEFAULT_VALUES = {
+    'teamraum': {
+        'adminunit.title': 'Teamraum',
+        'adminunit.abbreviation': 'tr',
+        'adminunit.id': 'tr',
+        'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
+    },
+    'gever': {
+        'setup.maximum_dossier_depth': DEFAULT_DOSSIER_DEPTH,
+        'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
+        'setup.maximum_repository_depth': DEFAULT_REPOSITORY_DEPTH,
+        'setup.reference_number_formatter': DEFAULT_FORMATTER,
+        'setup.reference_prefix_starting_point': DEFAULT_PREFIX_STARTING_POINT,
+    }
+}
+
 
 def policy_type(configurator):
     return configurator.variables.get('policy.type')
@@ -87,47 +103,52 @@ def add_ignored_directories(configurator):
 
 
 def init_defaults(configurator):
-    configurator.defaults.update({
-        'setup.maximum_dossier_depth': DEFAULT_DOSSIER_DEPTH,
-        'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
-        'setup.maximum_repository_depth': DEFAULT_REPOSITORY_DEPTH,
-        'setup.reference_number_formatter': DEFAULT_FORMATTER,
-        'setup.reference_prefix_starting_point': DEFAULT_PREFIX_STARTING_POINT,
-    })
+    configurator.defaults.update(DEFAULT_VALUES[policy_type(configurator)])
 
 
 def init_values(configurator):
     configurator.variables.update(VARIABLE_VALUES[policy_type(configurator)])
 
 
+def update_defaults(configurator, new_defaults):
+    """We only update the defaults if they are not set for the given policy
+    """
+    policy_defaults = DEFAULT_VALUES[policy_type(configurator)]
+    for key, value in new_defaults.items():
+        if key in policy_defaults:
+            continue
+        configurator.defaults[key] = value
+
+
 def post_package_name(configurator, question, answer):
-    configurator.defaults.update({
+    new_defaults = {
         'package.url': 'https://github.com/4teamwork/opengever.{}'.format(
             answer),
         'adminunit.abbreviation': answer,
         'adminunit.id': answer,
-    })
+    }
+    update_defaults(configurator, new_defaults)
     configurator.variables['package.name_capitalized'] = answer.capitalize()
     configurator.variables['package.name_upper'] = answer.upper()
     return answer
 
 
 def post_package_title(configurator, question, answer):
-    configurator.defaults.update({
-        'adminunit.title': answer,
-    })
+    update_defaults(configurator, {
+        'adminunit.title': answer
+        })
     return answer
 
 
 def post_adminunit_title(configurator, question, answer):
-    configurator.defaults.update({
-        'orgunit.title': answer,
-    })
+    update_defaults(configurator, {
+        'orgunit.title': answer
+        })
     return answer
 
 
 def post_adminunit_abbreviation(configurator, question, answer):
-    configurator.defaults.update({
+    new_defaults = {
         'adminunit.id': answer.lower(),
         'deployment.ldap_ou': '{}'.format(answer.capitalize()),
         'deployment.rolemanager_group': '{}_admins'.format(answer),
@@ -136,7 +157,8 @@ def post_adminunit_abbreviation(configurator, question, answer):
         'orgunit.users_group': '{}_users'.format(answer),
         'orgunit.inbox_group': '{}_inbox'.format(answer),
         'orgunit.id': answer.lower()
-    })
+    }
+    update_defaults(configurator, new_defaults)
     return answer
 
 
@@ -148,12 +170,13 @@ def post_adminunit_id(configurator, question, answer):
 
 
 def post_base_domain(configurator, question, answer):
-    configurator.defaults.update({
+    new_defaults = {
         'adminunit.site_url': 'https://{}'.format(answer),
         'adminunit.public_url': 'https://{}'.format(answer),
         'deployment.mail_domain': answer,
         'deployment.mail_from_address': 'info@{}'.format(answer),
-    })
+    }
+    update_defaults(configurator, new_defaults)
     return answer
 
 
