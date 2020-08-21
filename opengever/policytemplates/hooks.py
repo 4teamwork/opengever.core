@@ -131,11 +131,16 @@ def update_defaults(configurator, new_defaults):
 
 
 def post_package_name(configurator, question, answer):
+    domain_default = '{}.{}.ch'.format(
+        answer,
+        'onegovgever' if configurator.variables['is_gever'] else 'teamraum'
+        )
     new_defaults = {
         'package.url': 'https://github.com/4teamwork/opengever.{}'.format(
             answer),
         'adminunit.abbreviation': answer,
         'adminunit.id': answer,
+        'base.domain': domain_default,
     }
     update_defaults(configurator, new_defaults)
     configurator.variables['package.name_capitalized'] = answer.capitalize()
