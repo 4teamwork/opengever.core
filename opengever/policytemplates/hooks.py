@@ -159,6 +159,12 @@ def post_adminunit_title(configurator, question, answer):
     update_defaults(configurator, {
         'orgunit.title': answer
         })
+    if configurator.variables['is_teamraum']:
+        # Teamraum does not support more than one orgunit, so there is
+        # no reason to have a discrepency between orgunit and adminunit
+        configurator.variables.update({
+            'orgunit.title': answer
+            })
     return answer
 
 
@@ -174,6 +180,12 @@ def post_adminunit_abbreviation(configurator, question, answer):
         'orgunit.id': answer.lower()
     }
     update_defaults(configurator, new_defaults)
+    if configurator.variables['is_teamraum']:
+        # Teamraum does not support more than one orgunit, so there is
+        # no reason to have a discrepency between orgunit and adminunit
+        configurator.variables.update({
+            'orgunit.id': answer.lower()
+            })
     return answer
 
 
