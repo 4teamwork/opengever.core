@@ -279,6 +279,7 @@ class WOPIView(BrowserView):
         # The current version of the file.
         # This value must change when the file changes, and version values must
         # never repeat for a given file. Thus we use the ZODB transaction id.
+        getattr(self.obj.file._blob, '_', None)  # Unghostify
         version = str(u64(self.obj.file._blob._p_serial))
         if version == '0':
             version = str(u64(self.obj._p_serial))

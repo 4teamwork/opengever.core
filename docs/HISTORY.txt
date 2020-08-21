@@ -12,6 +12,7 @@ Changelog
 - Complement @role-assignment-reports responses with type, principal label, title and referenced roles. [tinagerber]
 - Add another nesting level to simple saas policy templates. [deiferni]
 - Add missing inboxes for multi orgunit setups in the examplecontent fd profile and testing fixture [elioschmutz]
+- Fix WOPI version if object is a ghost. [buchi]
 
 
 2020.7.0 (2020-08-12)
