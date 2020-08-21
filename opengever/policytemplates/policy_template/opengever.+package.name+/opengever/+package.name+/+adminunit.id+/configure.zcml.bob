@@ -89,6 +89,7 @@
       title="Teamraum {{{package.title}}}"
       policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
       additional_profiles="opengever.{{{package.name}}}.{{{adminunit.id}}}:workspaces_content
+                           opengever.{{{package.name}}}.{{{adminunit.id}}}:units
                            opengever.setup:casauth
                           "
       admin_unit_id="{{{adminunit.id}}}"
