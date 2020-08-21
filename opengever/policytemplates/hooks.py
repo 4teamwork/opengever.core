@@ -36,6 +36,7 @@ IGNORED_QUESTIONS = {
         'setup.bumblebee_auto_refresh',
         ],
     'gever': [
+        'deployment.workspace_administrators_group',
         'deployment.workspace_creators_group',
         'deployment.workspace_users_group',
         ]

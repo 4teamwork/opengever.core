@@ -85,6 +85,11 @@ class IDeploymentDirective(Interface):
         required=False,
         max_length=GROUP_ID_LENGTH)
 
+    workspace_administrator_group = TextLine(
+        title=u'Workspace administrator group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
     workspace_creator_group = TextLine(
         title=u'Workspace creator group',
         required=False,

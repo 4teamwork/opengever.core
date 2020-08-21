@@ -182,6 +182,8 @@ class GeverDeployment(object):
                                   'workspace_user_group', 'WorkspacesUser')
         self.assign_group_to_role(self.site, self.config,
                                   'workspace_creator_group', 'WorkspacesCreator')
+        self.assign_group_to_role(self.site, self.config,
+                                  'workspace_administrator_group', 'WorkspaceAdmin')
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.
