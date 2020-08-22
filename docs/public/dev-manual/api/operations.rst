@@ -85,6 +85,7 @@ children des Objekts).
         ],
         "modified": "2016-01-19T11:15:22+00:00",
         "number_of_containers": null,
+        "oguid": "fd:12345",
         "parent": {
           "@id": "https://example.org/ordnungssystem/fuehrung",
           "@type": "opengever.repository.repositoryfolder",

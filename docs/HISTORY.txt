@@ -6,6 +6,7 @@ Changelog
 
 - Add policy template for teamraum policies. [njohner]
 - Make the portal_url configurable through the portal_registry. [elioschmutz]
+- Include OGUID in all API content GET responses. [lgraf]
 - Extend the @config endpoint with the current inbox_folder_url. [elioschmutz]
 - Complement @role-assignment-reports responses with type, principal label, title and referenced roles. [tinagerber]
 - Add another nesting level to simple saas policy templates. [deiferni]

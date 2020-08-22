@@ -76,6 +76,7 @@ Der Verlauf eines Antrags ist in der GET Repräsentation eines Antrags unter dem
         "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/proposal-5",
         "@type": "opengever.meeting.proposal",
         "UID": "3a551f6e3b62421da029dfceb71656e6",
+        "oguid": "fd:12345",
         "items": [],
         "responses": [
           {
