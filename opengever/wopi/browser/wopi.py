@@ -325,7 +325,6 @@ class WOPIView(BrowserView):
             contentType=content_type)
         self.request.response.setHeader(
             'X-WOPI-ItemVersion', self._file_version())
-        logger.info('X-WOPI-ItemVersion: %s', self._file_version())
 
         # Track collaborators
         editors = self.request.getHeader('X-WOPI-Editors')
