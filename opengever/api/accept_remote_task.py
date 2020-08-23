@@ -1,17 +1,13 @@
+from opengever.api.remote_task_base import RemoteTaskBaseService
 from opengever.base.exceptions import MalformedOguid
 from opengever.base.oguid import Oguid
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from plone.protect.interfaces import IDisableCSRFProtection
-from plone.restapi.deserializer import json_body
-from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.services import Service
 from zExceptions import BadRequest
-from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
-import json
 
 
-class AcceptRemoteTaskPost(Service):
+class AcceptRemoteTaskPost(RemoteTaskBaseService):
     """Accepts a task on a remote admin unit by creating a successor copy
     in the dossier the endpoint was invoked on.
 
@@ -34,8 +30,8 @@ class AcceptRemoteTaskPost(Service):
     *must* be on a different admin unit than the current one.
     """
 
-    def _format_exception(self, exc):
-        return '%s: %s' % (exc.__class__.__name__, str(exc))
+    required_params = ('task_oguid', )
+    optional_params = ('text', )
 
     def is_remote(self, oguid):
         return not oguid.is_on_current_admin_unit
@@ -44,23 +40,11 @@ class AcceptRemoteTaskPost(Service):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        # Extract and validate parameters
-        json_data = json_body(self.request)
+        # Extract and validate parameters, assign defaults
+        params = self.extract_params()
 
-        raw_task_oguid = json_data.pop('task_oguid', None)
-        if not raw_task_oguid:
-            raise BadRequest(
-                'Required parameter "task_oguid" is missing in body')
-
-        response_text = json_data.pop('text', u'')
-
-        # Reject any unexpected parameters
-        unexpected_params = json_data.keys()
-        if unexpected_params:
-            raise BadRequest(
-                'Unexpected parameter(s) in JSON '
-                'body: %s. Supported parameters are: '
-                '["task_oguid", "text"]' % json.dumps(unexpected_params))
+        raw_task_oguid = params['task_oguid']
+        response_text = params.get('text', u'')
 
         # Validate that Oguid is well-formed and refers to a task that is
         # actually remote. Turn any Python exceptions into proper
@@ -68,7 +52,7 @@ class AcceptRemoteTaskPost(Service):
         try:
             task_oguid = Oguid.parse(raw_task_oguid)
         except MalformedOguid as exc:
-            raise BadRequest(self._format_exception(exc))
+            raise BadRequest(self.format_exception(exc))
 
         if not self.is_remote(task_oguid):
             raise BadRequest(
@@ -87,7 +71,5 @@ class AcceptRemoteTaskPost(Service):
         self.request.response.setStatus(201)
         self.request.response.setHeader("Location", successor.absolute_url())
 
-        serializer = queryMultiAdapter((successor, self.request), ISerializeToJson)
-        serialized_successor = serializer()
-        serialized_successor["@id"] = successor.absolute_url()
+        serialized_successor = self.serialize(successor)
         return serialized_successor

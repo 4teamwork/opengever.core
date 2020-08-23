@@ -1,21 +1,18 @@
+from opengever.api.remote_task_base import RemoteTaskBaseService
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.task.browser.complete_utils import complete_task_and_deliver_documents
+from opengever.task.exceptions import TaskRemoteRequestError
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
-from plone.restapi.deserializer import json_body
-from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.services import Service
 from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import BadRequest
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
 from zope.intid import IIntIds
-import json
 
 
-class CompleteSuccessorTaskPost(Service):
+class CompleteSuccessorTaskPost(RemoteTaskBaseService):
     """Completes a successor task, its remote predecessor and optionally
     delivers back documents to the remote predecessor task.
 
@@ -36,8 +33,8 @@ class CompleteSuccessorTaskPost(Service):
     transported back to the remote predecessor task.
     """
 
-    def _format_exception(self, exc):
-        return '%s: %s' % (exc.__class__.__name__, str(exc))
+    required_params = ('transition', )
+    optional_params = ('documents', 'text')
 
     @staticmethod
     def _resolve_doc_ref_to_intid(doc_ref):
@@ -63,25 +60,12 @@ class CompleteSuccessorTaskPost(Service):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        # Extract and validate parameters
-        json_data = json_body(self.request)
+        # Extract and validate parameters, assign defaults
+        params = self.extract_params()
 
-        transition = json_data.pop('transition', None)
-        if not transition:
-            raise BadRequest(
-                'Required parameter "transition" is missing in body')
-
-        docs_to_deliver = json_data.pop('documents', [])
-        response_text = json_data.pop('text', u'')
-
-        # Reject any unexpected parameters
-        unexpected_params = json_data.keys()
-        if unexpected_params:
-            raise BadRequest(
-                'Unexpected parameter(s) in JSON '
-                'body: %s. Supported parameters are: '
-                '["transition", "documents", "text"]'
-                % json.dumps(unexpected_params))
+        transition = params['transition']
+        docs_to_deliver = params.get('documents', [])
+        response_text = params.get('text', u'')
 
         # Map any supported document reference type to an IntId
         docs_to_deliver = map(self._resolve_doc_ref_to_intid, docs_to_deliver)
@@ -103,11 +87,9 @@ class CompleteSuccessorTaskPost(Service):
 
         remote_response_body = remote_response.read()
         if remote_response_body.strip() != 'OK':
-            raise Exception('Delivering documents and updating task failed '
-                            'on remote client %s.' % predecessor.admin_unit_id)
+            raise TaskRemoteRequestError(
+                'Delivering documents and updating task failed '
+                'on remote client %s.' % predecessor.admin_unit_id)
 
-        serializer = queryMultiAdapter(
-            (successor_task, self.request), ISerializeToJson)
-        serialized_successor = serializer()
-        serialized_successor["@id"] = successor_task.absolute_url()
+        serialized_successor = self.serialize(successor_task)
         return serialized_successor
