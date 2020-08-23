@@ -870,4 +870,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="POST"
+      name="@complete-successor-task"
+      for="opengever.task.task.ITask"
+      factory=".complete_successor_task.CompleteSuccessorTaskPost"
+      permission="cmf.ModifyPortalContent"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
