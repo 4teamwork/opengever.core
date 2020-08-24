@@ -3,12 +3,14 @@ from base64 import b64encode
 from base64 import urlsafe_b64decode
 from opengever.base.utils import file_checksum
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.wopi.discovery import proof_key
 from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.lock import create_lock
 from opengever.wopi.lock import get_lock_token
 from opengever.wopi.lock import refresh_lock
 from opengever.wopi.lock import unlock
 from opengever.wopi.lock import validate_lock
+from opengever.wopi.proof_key import validate_wopi_proof
 from opengever.wopi.token import validate_access_token
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -109,6 +111,12 @@ class WOPIView(BrowserView):
 
         # Disable CSRF protection - WOPI client can't supply a CSRF token
         alsoProvides(self.request, IDisableCSRFProtection)
+
+        if not self.validate_proof():
+            self.request.response.setStatus(500)
+            self.request.response.setHeader(
+                'X-WOPI-ServerError', 'WOPI Proof validation failed.')
+            return
 
         method = getattr(self, operation)
         with api.env.adopt_user(username=userid):
@@ -275,10 +283,33 @@ class WOPIView(BrowserView):
                                   ICheckinCheckoutManager)
         manager.checkin(collaborative=True)
 
+    def validate_proof(self):
+        access_token = self.request.form.get('access_token', '')
+
+        url = '{}?{}'.format(
+            self.request['ACTUAL_URL'], self.request['QUERY_STRING'])
+        base_url = api.portal.get_registry_record(
+            name='base_url', interface=IWOPISettings).encode('utf8')
+        if base_url:
+            portal_state = queryMultiAdapter(
+                (self.context, self.request), name=u'plone_portal_state')
+            portal_url = portal_state.portal_url()
+            url = url.replace(portal_url, base_url)
+
+        timestamp = self.request.getHeader('X-WOPI-TimeStamp', '')
+        current_signature = self.request.getHeader('X-WOPI-Proof', '')
+        old_signature = self.request.getHeader('X-WOPI-ProofOld', '')
+
+        return validate_wopi_proof(
+            access_token, url, timestamp, proof_key(), current_signature,
+            old_signature,
+        )
+
     def _file_version(self):
         # The current version of the file.
         # This value must change when the file changes, and version values must
         # never repeat for a given file. Thus we use the ZODB transaction id.
+        getattr(self.obj.file._blob, '_', None)  # Unghostify
         version = str(u64(self.obj.file._blob._p_serial))
         if version == '0':
             version = str(u64(self.obj._p_serial))
@@ -294,7 +325,6 @@ class WOPIView(BrowserView):
             contentType=content_type)
         self.request.response.setHeader(
             'X-WOPI-ItemVersion', self._file_version())
-        logger.info('X-WOPI-ItemVersion: %s', self._file_version())
 
         # Track collaborators
         editors = self.request.getHeader('X-WOPI-Editors')

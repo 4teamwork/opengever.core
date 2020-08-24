@@ -6,13 +6,10 @@ from opengever.document.interfaces import IFileActions
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing.test_case import TestCase
-from opengever.wopi import discovery
-from opengever.wopi.interfaces import IWOPISettings
+from opengever.wopi.testing import mock_wopi_discovery
 from opengever.wopi.lock import create_lock
 from plone import api
-from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.interface.verify import verifyClass
 
 
@@ -69,37 +66,19 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         self.assertFalse(actions.is_office_online_edit_action_available())
 
     def test_editable_if_enabled_and_supported_document(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IWOPISettings)
-        settings.enabled = True
-        settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
-        }
+        mock_wopi_discovery()
         self.login(self.regular_user)
         actions = getMultiAdapter((self.document, self.request), IFileActions)
         self.assertTrue(actions.is_office_online_edit_action_available())
 
     def test_not_editable_if_enabled_and_not_supported_document(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IWOPISettings)
-        settings.enabled = True
-        settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['xlsx', 'pptx'])
-        }
+        mock_wopi_discovery(extensions=['xlsx', 'pptx'])
         self.login(self.regular_user)
         actions = getMultiAdapter((self.document, self.request), IFileActions)
         self.assertFalse(actions.is_office_online_edit_action_available())
 
     def test_not_editable_if_checked_out_by_other(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IWOPISettings)
-        settings.enabled = True
-        settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
-        }
+        mock_wopi_discovery()
         self.login(self.regular_user)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
@@ -108,13 +87,7 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         self.assertFalse(actions.is_office_online_edit_action_available())
 
     def test_editable_if_checked_out_by_wopi(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IWOPISettings)
-        settings.enabled = True
-        settings.discovery_url = u'http://localhost/hosting/discovery'
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
-        }
+        mock_wopi_discovery()
         self.login(self.regular_user)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)

@@ -6,17 +6,14 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
-from opengever.wopi import discovery
-from opengever.wopi.interfaces import IWOPISettings
+from opengever.wopi.testing import mock_wopi_discovery
 from opengever.wopi.lock import create_lock as create_wopi_lock
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
-from plone.registry.interfaces import IRegistry
 from urllib import urlencode
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.component import queryMultiAdapter
 
 
@@ -886,15 +883,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
 
     def setUp(self):
         super(TestDocumentOverviewWithOfficeOnline, self).setUp()
-
-        # Enable WOPI / Office Online support
-        settings = getUtility(IRegistry).forInterface(IWOPISettings)
-        settings.enabled = True
-        settings.discovery_url = u'http://localhost/hosting/discovery'
-
-        discovery._EDITABLE_EXTENSIONS = {
-            'http://localhost/hosting/discovery': set(['docx', 'xlsx', 'pptx'])
-        }
+        mock_wopi_discovery()
 
     @browsing
     def test_has_additional_office_online_edit_button(self, browser):
