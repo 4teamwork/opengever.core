@@ -8,16 +8,15 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
-from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
+from opengever.base.response import IResponseContainer
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.document.versioner import Versioner
 from opengever.globalindex.model.task import Task
-from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
-from opengever.base.response import IResponseContainer
+from opengever.task.browser.complete_utils import complete_task_and_deliver_documents
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.validators import NoCheckedoutDocsValidator
 from plone.supermodel.model import Schema
@@ -31,7 +30,6 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
-from z3c.relationfield import RelationValue
 from zExceptions import Unauthorized
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
@@ -125,16 +123,7 @@ class CompleteSuccessorTaskForm(Form):
         data, errors = self.extractData()
 
         if not errors:
-            # Syncing the workflow change is done during document delivery
-            # (see deliver_documents_and_complete_task) therefore we skip
-            # the workflow syncing.
-            util.change_task_workflow_state(self.context,
-                                            data['transition'],
-                                            disable_sync=True,
-                                            text=data['text'])
-
-            response = IResponseContainer(self.context).list()[-1]
-            self.deliver_documents_and_complete_task(data, response)
+            self.deliver_documents_and_complete_task(data)
 
             msg = _(u'The documents were delivered to the issuer and the '
                     u'tasks were completed.')
@@ -166,7 +155,7 @@ class CompleteSuccessorTaskForm(Form):
 
         self.widgets['transition'].mode = HIDDEN_MODE
 
-    def deliver_documents_and_complete_task(self, formdata, response):
+    def deliver_documents_and_complete_task(self, formdata):
         """Delivers the selected documents to the predecesser task and
         complete the task:
 
@@ -175,63 +164,17 @@ class CompleteSuccessorTaskForm(Form):
         - Add a new response indicating the workflow transition, the added
         documents and containing the entered response text.
         """
-
         predecessor = Task.query.by_oguid(self.context.predecessor)
 
-        transporter = Transporter()
-        intids = getUtility(IIntIds)
+        task = self.context
+        transition = formdata['transition']
+        documents = formdata['documents']
+        response_text = formdata['text']
 
-        data = {'documents': [],
-                'text': formdata['text'],
-                'transition': formdata['transition']}
-
-        related_ids = []
-        if getattr(self.context, 'relatedItems'):
-            related_ids = [item.to_id for item in self.context.relatedItems]
-
-        for doc_intid in formdata['documents']:
-            doc = intids.getObject(int(doc_intid))
-            data['documents'].append(transporter.extract(doc))
-
-            # add a releation when a document from the dossier was selected
-            if int(doc_intid) not in related_ids:
-                # check if its a relation
-                if aq_parent(aq_inner(doc)) != self.context:
-                    # add relation to doc on task
-                    if self.context.relatedItems:
-                        self.context.relatedItems.append(
-                            RelationValue(int(doc_intid)))
-                    else:
-                        self.context.relatedItems = [
-                            RelationValue(int(doc_intid))]
-
-                    # add response change entry for this relation
-                    response.add_related_item(RelationValue(int(doc_intid)))
-
-                    # set relation flag
-                    doc._v__is_relation = True
-                    response.add_change('related_items',
-                        '',
-                        linked(doc, doc.Title()),
-                        _(u'label_related_items', default=u"Related Items"))
-
-                else:
-                    # add entry to the response for this document
-                    response.added_objects.append(RelationValue(int(doc_intid)))
-            else:
-                # append only the relation on the response
-                doc._v__is_relation = True
-                response.add_change('related_items',
-                    '',
-                    linked(doc, doc.Title()),
-                    _(u'label_related_items', default=u"Related Items"))
-
-        request_data = {'data': json.dumps(data)}
-        response = dispatch_request(
-            predecessor.admin_unit_id,
-            '@@complete_successor_task-receive_delivery',
-            predecessor.physical_path,
-            data=request_data)
+        response = complete_task_and_deliver_documents(
+            task, transition,
+            docs_to_deliver=documents,
+            response_text=response_text)
 
         response_body = response.read()
         if response_body.strip() != 'OK':

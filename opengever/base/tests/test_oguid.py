@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 from unittest import TestCase
@@ -34,6 +36,14 @@ class TestOguid(TestCase):
 
 class TestOguidFunctional(IntegrationTestCase):
 
+    def create_remote_au(self):
+        au = create(Builder('admin_unit')
+                    .id(u'remote')
+                    .having(
+                        site_url='http://internal/remote',
+                        public_url='http://public/remote'))
+        return au
+
     def test_oguid_for_object(self):
         self.login(self.regular_user)
 
@@ -55,6 +65,43 @@ class TestOguidFunctional(IntegrationTestCase):
         self.assertEqual(
             'http://nohost/plone/@@resolve_oguid?oguid=foo:1234',
             oguid.get_url())
+
+    def test_oguid_get_remote_url_raises_if_not_remote(self):
+        self.login(self.regular_user)
+
+        oguid = Oguid.for_object(self.task)
+        with self.assertRaises(Exception) as cm:
+            oguid.get_remote_url()
+        self.assertEqual(
+            'Not a remote OGUID. Use get_url() instead', str(cm.exception))
+
+    def test_oguid_get_remote_url_internal(self):
+        self.login(self.regular_user)
+
+        remote_au = self.create_remote_au()
+        sql_task = self.task.get_sql_object()
+
+        # Trick Oguid into thinking the task is a remote one
+        sql_task.admin_unit_id = u'remote'
+        oguid = Oguid.for_object(self.task)
+        oguid.admin_unit_id = u'remote'
+
+        expected_url = '/'.join((remote_au.site_url, sql_task.physical_path))
+        self.assertEqual(expected_url, oguid.get_remote_url(public=False))
+
+    def test_oguid_get_remote_url_public(self):
+        self.login(self.regular_user)
+
+        remote_au = self.create_remote_au()
+        sql_task = self.task.get_sql_object()
+
+        # Trick Oguid into thinking the task is a remote one
+        sql_task.admin_unit_id = u'remote'
+        oguid = Oguid.for_object(self.task)
+        oguid.admin_unit_id = u'remote'
+
+        expected_url = '/'.join((remote_au.public_url, sql_task.physical_path))
+        self.assertEqual(expected_url, oguid.get_remote_url(public=True))
 
     def test_oguid_register_registers_intid(self):
         self.login(self.regular_user)
