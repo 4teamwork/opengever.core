@@ -1,12 +1,8 @@
 from ftw import bumblebee
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-from opengever.wopi import discovery
-from opengever.wopi.interfaces import IWOPISettings
+from opengever.wopi.testing import mock_wopi_discovery
 from plone.protect import createToken
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-import time
 
 
 class TestDocumentTooltip(IntegrationTestCase):
@@ -74,16 +70,7 @@ class TestDocumentTooltip(IntegrationTestCase):
     def test_tooltip_actions_with_office_online_enabled(self, browser):
         self.login(self.regular_user, browser)
 
-        # Enable WOPI / Office Online support
-        settings = getUtility(IRegistry).forInterface(IWOPISettings)
-        settings.enabled = True
-        settings.discovery_url = u'http://localhost/hosting/discovery'
-
-        discovery._WOPI_DISCOVERY = {
-            'timestamp': time.time(),
-            'url': settings.discovery_url,
-            'editable-extensions': set(['docx', 'xlsx', 'pptx']),
-        }
+        mock_wopi_discovery()
 
         browser.open(self.document, view='tooltip')
         metadata, checkout, edit_in_office_online, download, details = browser.css(

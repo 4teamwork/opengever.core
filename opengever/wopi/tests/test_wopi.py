@@ -7,20 +7,12 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from datetime import datetime
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-from opengever.wopi import discovery
 from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.proof_key import create_message
+from opengever.wopi.testing import mock_wopi_discovery
 from opengever.wopi.token import create_access_token
 from plone import api
 from plone.uuid.interfaces import IUUID
-import time
-
-
-def int2bytes(val, num_bytes):
-    return ''.join([
-        chr((val & (0xff << pos * 8)) >> pos * 8)
-        for pos in reversed(range(num_bytes))
-    ])
 
 
 class TestWOPIView(IntegrationTestCase):
@@ -36,21 +28,7 @@ class TestWOPIView(IntegrationTestCase):
             return
         self.private_key = rsa.generate_private_key(
             public_exponent=65537, key_size=2048, backend=default_backend())
-        public_key = self.private_key.public_key()
-        modulus = b64encode(int2bytes(public_key.public_numbers().n, 256))
-        discovery._WOPI_DISCOVERY = {
-            'timestamp': time.time(),
-            'url': api.portal.get_registry_record(
-                name='discovery_url', interface=IWOPISettings),
-            'proof-key': {
-                '@exponent': 'AQAB',
-                '@modulus': modulus,
-                '@oldexponent': 'AQAB',
-                '@oldmodulus': modulus,
-            },
-            'actions': {},
-            'editable-extensions': {},
-        }
+        mock_wopi_discovery(public_key=self.private_key.public_key())
 
     def get_signature(self, access_token, url, timestamp):
         return b64encode(self.private_key.sign(
