@@ -434,6 +434,21 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual(5, browser.json['items_total'])
 
     @browsing
+    def test_filter_by_keywords(self, browser):
+        self.login(self.regular_user, browser=browser)
+        view = ('@listing?name=documents')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(19, browser.json['items_total'])
+
+        view = ('@listing?name=documents&filters.keywords:record:list=Wichtig')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(2, browser.json['items_total'])
+
+        view = ('@listing?name=documents&filters.-keywords:record:list=Wichtig')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(17, browser.json['items_total'])
+
+    @browsing
     def test_filter_by_multiple_review_states(self, browser):
         self.login(self.regular_user, browser=browser)
 

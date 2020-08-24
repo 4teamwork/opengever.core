@@ -1,5 +1,6 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from copy import copy
+from copy import deepcopy
 from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
@@ -280,6 +281,16 @@ date_fields = set([
 
 FIELDS_WITH_MAPPING.extend(
     [DateListingField(field_name) for field_name in date_fields])
+
+# Currently, operators and field names are not separated when determining the field.
+# Therefore the correct field is not found when a negating filter is queried (e.g. "-keywords")
+# To get the correct field for negating filters,
+# all fields are copied and a "-" is placed at the beginning of the field name and index.
+copied_fields = deepcopy(FIELDS_WITH_MAPPING)
+for field in copied_fields:
+    field.field_name = '-' + field.field_name
+    field.index = '-' + field.index if field.index else None
+FIELDS_WITH_MAPPING.extend(copied_fields)
 
 
 class SolrQueryBaseService(Service):

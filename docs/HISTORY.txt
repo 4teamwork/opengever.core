@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Add policy template for teamraum policies. [njohner]
+- Fix filtering with exclusion filters if the field has a mapping. [tinagerber]
 - Make the portal_url configurable through the portal_registry. [elioschmutz]
 - Include OGUID in all API content GET responses. [lgraf]
 - Extend the @config endpoint with the current inbox_folder_url. [elioschmutz]
