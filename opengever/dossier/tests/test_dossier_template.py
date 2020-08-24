@@ -461,6 +461,22 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.assertEqual(expected_role_assignments, role_assignments)
 
     @browsing
+    def test_handles_utf8_descriptions_correctly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # Create via browser
+        self.dossiertemplate.description = ''
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+
+        self.assertEqual('Bauvorhaben klein', browser.context.title)
+
+    @browsing
     def test_unseen_by_user_subdossier_is_not_copied_from_template(self, browser):
         self.login(self.regular_user, browser)
 

@@ -55,7 +55,11 @@ class OpenGeverBase(metadata.MetadataBase):
     title = property(_get_title, _set_title)
 
     def _get_description(self):
-        return self.context.description
+        description = self.context.description
+        if isinstance(description, str):
+            return description.decode('utf-8')
+
+        return description
 
     def _set_description(self, value):
         if isinstance(value, str):
