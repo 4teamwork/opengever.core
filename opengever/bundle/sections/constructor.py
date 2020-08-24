@@ -70,6 +70,10 @@ class ConstructorSection(object):
         self.bundle.path_by_refnum_cache = {}
         self.bundle.constructed_guids = set()
 
+        # stores containers that will need reindexing at the end of the bundle
+        # import because they were modified by adding children into them.
+        self.bundle.containers_to_reindex = set()
+
     def _has_translated_title(self, fti):
         return ITranslatedTitle.__identifier__ in fti.behaviors
 
@@ -253,6 +257,7 @@ class ConstructorSection(object):
             try:
                 obj = self._construct_object(container, item)
                 self.bundle.constructed_guids.add(item['guid'])
+                self.bundle.containers_to_reindex.add(parent_path)
                 logger.info(u'Constructed %r' % obj)
             except ValueError as e:
                 logger.warning(

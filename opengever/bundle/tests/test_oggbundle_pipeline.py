@@ -17,6 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from pkg_resources import resource_filename
 from plone import api
 from plone.portlets.interfaces import IPortletAssignmentMapping
@@ -49,6 +50,47 @@ class TestOggBundlePipeline(IntegrationTestCase):
             1, len(matching_children),
             msg="found more than one object with title: {}".format(title))
         return matching_children[0]
+
+    def test_oggbundle_transmogrifier_catalog_consistency(self):
+        self.login(self.manager)
+
+        # Create the 'bundle_guid' index. In production, this will be done
+        # by the "bin/instance import" command in opengever.bundle.console
+        add_guid_index()
+
+        # load pipeline
+        transmogrifier = Transmogrifier(api.portal.get())
+        annotations = IAnnotations(transmogrifier)
+        annotations[BUNDLE_PATH_KEY] = resource_filename(
+            'opengever.bundle.tests', 'assets/basic.oggbundle')
+
+        unc_share_asset_directory = resource_filename(
+            'opengever.bundle.tests', 'assets/files_outside_bundle')
+
+        ingestion_settings = {
+            'unc_mounts': {
+                u'\\\\host\\mount': unc_share_asset_directory.decode('utf-8')
+            },
+        }
+
+        # Shove ingestion settings through JSON deserialization to be as
+        # close as possible to the real thing (unicode strings!).
+        ingestion_settings = json.loads(json.dumps(ingestion_settings))
+        annotations[BUNDLE_INGESTION_SETTINGS_KEY] = ingestion_settings
+
+        # We need to add documents to dossiers that have already been created
+        # in the 'closed' state, which isn't allowed for anyone except users
+        # inheriting from `UnrestrictedUser` -> we need elevated privileges
+        with elevated_privileges():
+            transmogrifier(u'opengever.bundle.oggbundle')
+
+        reporoot = self.portal.get('ordnungssystem-1')
+        branch_repofolder = reporoot.get('organisation')
+        leaf_repofolder = branch_repofolder.get('personal')
+        leaf_repofolder = self.assert_leaf_repofolder_created(branch_repofolder)
+        dossier = self.find_by_title(leaf_repofolder, u'Hanspeter M\xfcller')
+        dossier_brain = obj2brain(dossier)
+        self.assertEqual(dossier.modified(), dossier_brain.modified)
 
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
