@@ -435,6 +435,9 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
     def test_add_recursive_documents_and_subdossiers(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.leaf_repofolder)
+
+        self.subdossiertemplate.description = ''
+
         factoriesmenu.add('Dossier with template')
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
