@@ -674,6 +674,8 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         expected = self.get_type_defaults()
         expected['addable_dossier_types'] = None
         expected['title_fr'] = u'French Title'
+        # when setting description via rest api it seems to become a bytestring
+        expected['description'] = ''
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -763,7 +765,10 @@ class TestDossierDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
-        expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible']
+        # when setting responsible via rest api it seems to become unicode
+        expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible'].decode('utf-8')
+        # when setting description via rest api it seems to become a bytestring
+        expected['description'] = ''
 
         self.assert_default_values_equal(expected, persisted_values)
 
