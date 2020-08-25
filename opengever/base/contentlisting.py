@@ -5,7 +5,6 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.helpers import display_name
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
-from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import Document
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
@@ -174,6 +173,13 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return self._render_simplelink()
 
     def translated_review_state(self):
+        if self.portal_type in ('opengever.meeting.proposal',
+                                'opengever.meeting.submittedproposal'):
+            # Some meeting content has a custom workflow implementation
+            state = self.get_state().title
+            return translate(
+                state, domain='opengever.meeting', context=self.request)
+
         review_state = self.review_state()
         if review_state:
             return translate(
