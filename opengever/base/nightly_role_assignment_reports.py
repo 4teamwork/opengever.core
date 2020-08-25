@@ -77,7 +77,9 @@ class NightlyRoleAssignmentReports(object):
             sharing_assignments = [assignment for assignment in assignments
                                    if assignment.cause == ASSIGNMENT_VIA_SHARING]
             if sharing_assignments:
-                items.append({'UID': obj.UID(), 'roles': sharing_assignments[0].roles})
+                roles = filter(lambda r: r != 'Owner', sharing_assignments[0].roles)
+                if roles:
+                    items.append({'UID': obj.UID(), 'roles': roles})
 
         report_data = {'state': STATE_READY, 'items': items}
         self.storage.update(reportid, report_data)
