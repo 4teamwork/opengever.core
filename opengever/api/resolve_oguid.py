@@ -82,8 +82,18 @@ class ResolveOguidGet(Service):
 
         # we pass all query string parameters to the remote request
         response = requests.get(url, params=params, headers=headers)
-        if not response.ok:
-            # transparently return non-ok responses
-            return self.request.response.setStatus(
-                response.status_code, reason=response.reason)
-        return response.json()
+
+        # Transparently proxy back response status line and body
+        self.request.response.setStatus(
+            response.status_code, reason=response.reason)
+
+        try:
+            response_json = response.json()
+        except ValueError:
+            response_json = {
+                u'type': u'ValueError',
+                u'message': u'Remote side returned a non-JSON response',
+                u'remote_response_body': response.text,
+            }
+
+        return response_json

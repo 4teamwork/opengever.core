@@ -123,6 +123,31 @@ class TestResolveOguidGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_gracefully_wraps_remote_non_json_responses(self, browser):
+        self.setup_remote_admin_unit()
+        remote_url, local_url = self.get_resolve_urls()
+
+        self.login(self.regular_user, browser)
+        with requests_mock.Mocker() as mocker:
+            mocker.register_uri(
+                'GET',
+                remote_url,
+                status_code=500,
+                headers={'Content-Type': 'application/maybe_json_maybe_not'},
+                text="Here's some plain text")
+
+            with browser.expect_http_error(500):
+                browser.open(local_url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'ValueError',
+             u'message': u'Remote side returned a non-JSON response',
+             u'remote_response_body': u"Here's some plain text"},
+            browser.json)
+
+        self.assertEqual('application/json', browser.headers['Content-Type'])
+
+    @browsing
     def test_resolve_remote_oguid_proxies_remote_response(self, browser):
         self.setup_remote_admin_unit()
         remote_url, local_url = self.get_resolve_urls()

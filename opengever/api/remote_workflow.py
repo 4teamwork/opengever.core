@@ -107,4 +107,13 @@ class RemoteWorkflowPost(Service):
         self.request.response.setStatus(
             response.status_code, reason=response.reason)
 
-        return response.json()
+        try:
+            response_json = response.json()
+        except ValueError:
+            response_json = {
+                u'type': u'ValueError',
+                u'message': u'Remote side returned a non-JSON response',
+                u'remote_response_body': response.text,
+            }
+
+        return response_json
