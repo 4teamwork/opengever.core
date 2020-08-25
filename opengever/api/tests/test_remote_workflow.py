@@ -69,6 +69,36 @@ class TestRemoteWorkflowPost(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_gracefully_wraps_remote_non_json_responses(self, browser):
+        self.setup_remote_admin_unit()
+        self.login(self.regular_user, browser)
+        sql_task = self.prep_remote_task()
+
+        expected_remote_url, local_url = self.construct_url_pair(sql_task)
+
+        with requests_mock.Mocker() as remote_server_mock:
+            remote_server_mock.register_uri(
+                'POST',
+                expected_remote_url,
+                status_code=500,
+                headers={'Content-Type': 'application/maybe_json_maybe_not'},
+                text="Here's some plain text")
+
+            with browser.expect_http_error(500):
+                browser.open(
+                    local_url, method='POST',
+                    data=json.dumps({'remote_oguid': 'remote:%s' % sql_task.int_id}),
+                    headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'ValueError',
+             u'message': u'Remote side returned a non-JSON response',
+             u'remote_response_body': u"Here's some plain text"},
+            browser.json)
+
+        self.assertEqual('application/json', browser.headers['Content-Type'])
+
+    @browsing
     def test_requires_valid_remote_oguid(self, browser):
         self.login(self.regular_user, browser)
         url = '{}/@remote-workflow'.format(self.portal.absolute_url())
