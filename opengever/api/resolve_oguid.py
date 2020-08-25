@@ -6,8 +6,9 @@ from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
-from zExceptions import Unauthorized
+from zExceptions import BadRequest
 from zExceptions import InternalError
+from zExceptions import Unauthorized
 from zope.component import queryMultiAdapter
 import requests
 
@@ -23,14 +24,12 @@ class ResolveOguidGet(Service):
         raw_oguid = params.get('oguid', '').strip()
 
         if not raw_oguid:
-            return self.request.response.setStatus(
-                400, reason='Missing oguid query string parameter.')
+            raise BadRequest('Missing oguid query string parameter.')
 
         try:
             oguid = Oguid.parse(raw_oguid)
         except MalformedOguid:
-            return self.request.response.setStatus(
-                400, reason='Malformed oguid "{}".'.format(str(raw_oguid)))
+            raise BadRequest('Malformed oguid "{}".'.format(str(raw_oguid)))
 
         if oguid.is_on_current_admin_unit:
             return self._serialize_object(oguid)
@@ -44,9 +43,8 @@ class ResolveOguidGet(Service):
             obj = None
         # obj could be `None` due to exception or as returned by resolve
         if not obj:
-            return self.request.response.setStatus(
-                400, reason='No object found for oguid "{}".'.format(
-                    str(oguid)))
+            raise BadRequest('No object found for oguid "{}".'.format(
+                str(oguid)))
 
         if not api.user.has_permission('View', obj=obj):
             raise Unauthorized()
@@ -63,9 +61,8 @@ class ResolveOguidGet(Service):
     def _get_remote_serialized_object(self, oguid, params):
         target_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)
         if not target_unit:
-            return self.request.response.setStatus(
-                400, reason='Invalid admin unit id "{}".'.format(
-                    oguid.admin_unit_id))
+            raise BadRequest('Invalid admin unit id "{}".'.format(
+                oguid.admin_unit_id))
 
         url = '/'.join([target_unit.site_url, '@resolve-oguid'])
 

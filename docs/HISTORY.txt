@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Fix translated review state for meeting content. [lgraf]
+- Bring @resolve-oguid error responses in line with REST API style. [lgraf]
 - Introduce POST @complete-successor-task on tasks. [lgraf]
 - Introduce POST @accept-remote-task endpoint for dossiers. [lgraf]
 - Introduce POST @remote-workflow endpoint. [lgraf]

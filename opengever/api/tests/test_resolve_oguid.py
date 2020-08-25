@@ -75,36 +75,52 @@ class TestResolveOguidGet(IntegrationTestCase):
         self.login(self.regular_user, browser)
         url = '{}/@resolve-oguid'.format(self.portal.absolute_url())
 
-        with browser.expect_http_error(
-                code=400, reason='Missing oguid query string parameter.'):
+        with browser.expect_http_error(code=400):
             browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'BadRequest',
+             u'message': u'Missing oguid query string parameter.'},
+            browser.json)
 
     @browsing
     def test_requires_valid_oguid(self, browser):
         self.login(self.regular_user, browser)
         url = '{}/@resolve-oguid?oguid=qux'.format(self.portal.absolute_url())
 
-        with browser.expect_http_error(
-                code=400, reason='Malformed oguid "qux".'):
+        with browser.expect_http_error(code=400):
             browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'BadRequest',
+             u'message': u'Malformed oguid "qux".'},
+            browser.json)
 
     @browsing
     def test_requires_resolvable_oguid(self, browser):
         self.login(self.regular_user, browser)
         url = '{}/@resolve-oguid?oguid=plone:1234'.format(self.portal.absolute_url())
 
-        with browser.expect_http_error(
-                code=400, reason='No object found for oguid "plone:1234".'):
+        with browser.expect_http_error(code=400):
             browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'BadRequest',
+             u'message': u'No object found for oguid "plone:1234".'},
+            browser.json)
 
     @browsing
     def test_requires_valid_admin_unit_id(self, browser):
         self.login(self.regular_user, browser)
         url = '{}/@resolve-oguid?oguid=qux:1234'.format(self.portal.absolute_url())
 
-        with browser.expect_http_error(
-                code=400, reason='Invalid admin unit id "qux".'):
+        with browser.expect_http_error(code=400):
             browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'BadRequest',
+             u'message': u'Invalid admin unit id "qux".'},
+            browser.json)
 
     @browsing
     def test_resolve_remote_oguid_proxies_remote_response(self, browser):
