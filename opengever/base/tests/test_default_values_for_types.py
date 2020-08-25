@@ -172,7 +172,7 @@ MAIL_DEFAULTS = {
     'public_trial': u'unchecked',
     'public_trial_statement': u'',
     'receipt_date': FROZEN_TODAY,
-    'title': 'Lorem Ipsum',
+    'title': u'Lorem Ipsum',
 }
 MAIL_FORM_DEFAULTS = {}
 MAIL_MISSING_VALUES = {
@@ -192,7 +192,7 @@ MAIL_MISSING_VALUES = {
 TASK_REQUIREDS = {
     'changed': FROZEN_NOW,
     'issuer': 'kathi.barfuss',
-    'responsible': 'kathi.barfuss',
+    'responsible': u'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
     'task_type': u'information',
     'title': DEFAULT_TITLE,
@@ -205,7 +205,7 @@ TASK_DEFAULTS = {
     'revoke_permissions': True
 }
 TASK_FORM_DEFAULTS = {
-    'issuer': 'kathi.barfuss',
+    'issuer': u'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
 }
 TASK_MISSING_VALUES = {
