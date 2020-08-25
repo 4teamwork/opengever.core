@@ -8,6 +8,7 @@ Changelog
 - Introduce POST @accept-remote-task endpoint for dossiers. [lgraf]
 - Introduce POST @remote-workflow endpoint. [lgraf]
 - Role Assignment Reports: Ensure stable sort order for report items. [lgraf] 
+- Fix dossier template description, ensure unicode. [deiferni]
 - Add policy template for teamraum policies. [njohner]
 - Fix filtering with exclusion filters if the field has a mapping. [tinagerber]
 - Make the portal_url configurable through the portal_registry. [elioschmutz]
