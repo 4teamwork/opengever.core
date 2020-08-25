@@ -194,7 +194,7 @@ TASK_REQUIREDS = {
     'issuer': 'kathi.barfuss',
     'responsible': u'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
-    'task_type': u'information',
+    'task_type': 'information',
     'title': DEFAULT_TITLE,
 }
 TASK_DEFAULTS = {
