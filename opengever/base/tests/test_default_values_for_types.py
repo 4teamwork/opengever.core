@@ -260,7 +260,7 @@ PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'description': u'',
     'title': u'Containing Dossier Title',
-    'language': 'en',
+    'language': u'en',
 }
 PROPOSAL_FORM_DEFAULTS = {
     'description': u''
@@ -280,7 +280,7 @@ SUBMITTED_PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'description': u'',
     'title': u'',
-    'language': 'en',
+    'language': u'en',
 }
 SUBMITTED_PROPOSAL_MISSING_VALUES = {
     'date_of_submission': None,
