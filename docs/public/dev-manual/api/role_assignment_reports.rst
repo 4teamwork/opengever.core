@@ -1,7 +1,7 @@
-Rollenzuweisungs-Berichte
-=========================
+Berechtigungsreports
+====================
 
-Der ``@role-assignment-reports`` bietet Funktionen für die Auflistung, das Erstellen und das Löschen von Rollenzuweisungs-Berichten. Der Endpoint steht nur auf Stufe PloneSite zur Verfügung und ist mit einer Berechtigung geschützt: ``opengever.api.ManageRoleAssignmentReports``
+Der ``@role-assignment-reports`` bietet Funktionen für die Auflistung, das Erstellen und das Löschen von Berechtigungsreports. Der Endpoint steht nur auf Stufe PloneSite zur Verfügung und ist mit einer Berechtigung geschützt: ``opengever.api.ManageRoleAssignmentReports``
 Die Berechtigung ist standardmässig den Rollen `Administrator` und `Manager` zugewiesen.
 
 

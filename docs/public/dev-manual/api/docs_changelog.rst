@@ -8,7 +8,7 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 2020-07-10
 ----------
 
-- Kapitel "Rollenzuweisungs-Berichte" hinzugefügt
+- Kapitel "Berechtigungsreports" hinzugefügt
 
 
 2020-06-11
