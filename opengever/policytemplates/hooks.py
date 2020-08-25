@@ -180,7 +180,6 @@ def post_adminunit_title(configurator, question, answer):
 def post_adminunit_abbreviation(configurator, question, answer):
     new_defaults = {
         'adminunit.id': answer.lower(),
-        'deployment.ldap_ou': '{}'.format(answer.capitalize()),
         'deployment.rolemanager_group': '{}_admins'.format(answer),
         'deployment.records_manager_group': '{}_admins'.format(answer),
         'deployment.archivist_group': '{}_admins'.format(answer),
