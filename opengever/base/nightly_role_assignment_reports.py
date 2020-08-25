@@ -61,6 +61,7 @@ class NightlyRoleAssignmentReports(object):
         # if Anonymous or Authenticated have View permission,
         # no other users are set in allowedRolesAndUsers
         brains = self.catalog.unrestrictedSearchResults(
+            sort_on='path',
             portal_type=['opengever.dossier.businesscasedossier',
                          'opengever.repository.repositoryfolder',
                          'opengever.repository.repositoryroot'],
