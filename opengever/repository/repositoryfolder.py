@@ -43,6 +43,7 @@ class IRepositoryFolderSchema(model.Schema):
             u'help_description',
             default=u'A short summary of the content.'),
         required=False,
+        default=u'',
         missing_value=u'',
         )
 
