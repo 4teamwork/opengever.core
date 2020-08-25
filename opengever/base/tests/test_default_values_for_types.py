@@ -62,7 +62,7 @@ REPOFOLDER_DEFAULTS = {
     'description': u'',
     'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
-    'public_trial_statement': '',
+    'public_trial_statement': u'',
     'reference_number_prefix': u'1',
     'retention_period': 5,
 }
@@ -140,7 +140,7 @@ DOCUMENT_DEFAULTS = {
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
-    'public_trial_statement': '',
+    'public_trial_statement': u'',
     'relatedItems': [],
 }
 DOCUMENT_FORM_DEFAULTS = {}
@@ -170,7 +170,7 @@ MAIL_DEFAULTS = {
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
-    'public_trial_statement': '',
+    'public_trial_statement': u'',
     'receipt_date': FROZEN_TODAY,
     'title': 'Lorem Ipsum',
 }
@@ -647,9 +647,6 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_z3c_form_defaults()
 
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
-
         self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
@@ -741,9 +738,6 @@ class TestDossierDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_z3c_form_defaults()
 
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
-
         self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
@@ -794,9 +788,6 @@ class TestDossierDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_z3c_form_defaults()
-
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -935,9 +926,6 @@ class TestDocumentDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_z3c_form_defaults()
         expected['file'] = doc.file
-
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -1109,9 +1097,6 @@ class TestMailDefaults(TestDefaultsBase):
         expected = self.get_z3c_form_defaults()
 
         expected['message'] = mail._message
-
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 
