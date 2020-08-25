@@ -38,6 +38,8 @@ class IDossierTemplateSchema(model.Schema):
                               u'displayed as a help text if you create '
                               u'a dossier from template'),
         required=False,
+        missing_value=u'',
+        default=u'',
     )
 
     form.order_after(predefined_keywords='IDossierTemplate.keywords')
