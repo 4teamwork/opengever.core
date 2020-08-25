@@ -2,6 +2,7 @@ from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from xml.sax.saxutils import escape
 from zope.component import getMultiAdapter
 from zope.component.hooks import getSite
@@ -73,7 +74,7 @@ def get_preferred_language_code():
     language_code = ltool.getPreferredLanguage()
 
     # Special handling for combined languages, but works for regular ones too.
-    return language_code.split('-')[0]
+    return safe_unicode(language_code.split('-')[0])
 
 
 def get_hostname(request):

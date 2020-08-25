@@ -165,8 +165,7 @@
             "type": "string",
             "title": "Bearbeitungsinformation",
             "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
-            "_zope_schema_type": "Text",
-            "default": ""
+            "_zope_schema_type": "Text"
         },
         "retention_period": {
             "type": "integer",

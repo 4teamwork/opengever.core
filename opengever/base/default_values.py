@@ -96,7 +96,8 @@ from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import iterSchemataForType
 from zope.schema import getFieldsInOrder
 from zope.schema._bootstrapinterfaces import IContextAwareDefaultFactory
-
+from zope.schema.interfaces import ISequence
+from zope.schema.interfaces import IText
 
 NO_DEFAULT_MARKER = object()
 
@@ -120,6 +121,7 @@ def get_persisted_value_for_field(context, field):
     to be found in the class dict instead of the instance dict).
     """
     name = field.getName()
+
     if not IPersistent.providedBy(context):
         raise Exception(
             "Attempt to get persisted field value for a non-persistent object "
@@ -190,6 +192,21 @@ def get_persisted_value_for_field(context, field):
             value = context.__dict__[name]
         except KeyError:
             raise AttributeError
+
+        # DCFieldProperty does some on the fly decoding when accessing values
+        # we need to mirror that behavior when accessing the underlying storage
+        # to get the correct type
+        field_impl = getattr(storage_impl.__class__, name, None)
+        if isinstance(field_impl, metadata.DCFieldProperty):
+            if IText.providedBy(field):
+                value = value.decode('utf-8')
+
+            if ISequence.providedBy(field):
+                if IText.providedBy(field.value_type):
+                    value = type(value)(
+                        item.decode('utf-8') for item in value
+                    )
+
         return value
     else:
         # Unknown storage - bail

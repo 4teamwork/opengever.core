@@ -62,7 +62,7 @@ REPOFOLDER_DEFAULTS = {
     'description': u'',
     'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
-    'public_trial_statement': '',
+    'public_trial_statement': u'',
     'reference_number_prefix': u'1',
     'retention_period': 5,
 }
@@ -140,7 +140,7 @@ DOCUMENT_DEFAULTS = {
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
-    'public_trial_statement': '',
+    'public_trial_statement': u'',
     'relatedItems': [],
 }
 DOCUMENT_FORM_DEFAULTS = {}
@@ -170,9 +170,9 @@ MAIL_DEFAULTS = {
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',
     'public_trial': u'unchecked',
-    'public_trial_statement': '',
+    'public_trial_statement': u'',
     'receipt_date': FROZEN_TODAY,
-    'title': 'Lorem Ipsum',
+    'title': u'Lorem Ipsum',
 }
 MAIL_FORM_DEFAULTS = {}
 MAIL_MISSING_VALUES = {
@@ -192,9 +192,9 @@ MAIL_MISSING_VALUES = {
 TASK_REQUIREDS = {
     'changed': FROZEN_NOW,
     'issuer': 'kathi.barfuss',
-    'responsible': 'kathi.barfuss',
+    'responsible': u'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
-    'task_type': u'information',
+    'task_type': 'information',
     'title': DEFAULT_TITLE,
 }
 TASK_DEFAULTS = {
@@ -205,7 +205,7 @@ TASK_DEFAULTS = {
     'revoke_permissions': True
 }
 TASK_FORM_DEFAULTS = {
-    'issuer': 'kathi.barfuss',
+    'issuer': u'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
 }
 TASK_MISSING_VALUES = {
@@ -260,7 +260,7 @@ PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'description': u'',
     'title': u'Containing Dossier Title',
-    'language': 'en',
+    'language': u'en',
 }
 PROPOSAL_FORM_DEFAULTS = {
     'description': u''
@@ -280,7 +280,7 @@ SUBMITTED_PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'description': u'',
     'title': u'',
-    'language': 'en',
+    'language': u'en',
 }
 SUBMITTED_PROPOSAL_MISSING_VALUES = {
     'date_of_submission': None,
@@ -318,6 +318,35 @@ PERIOD_DEFAULTS = {
 PERIOD_FORM_DEFAULTS = {
 }
 PERIOD_MISSING_VALUES = {
+}
+
+DOSSIER_TEMPLATE_REQUIREDS = {
+    'title': DEFAULT_TITLE,
+}
+DOSSIER_TEMPLATE_DEFAULTS = {
+    'changed': FROZEN_NOW,
+    'description': u'',
+    'keywords': (),
+    'predefined_keywords': True,
+    'relatedDossier': [],
+    'restrict_keywords': False,
+    'start': FROZEN_TODAY,
+    'title_help': u'',
+}
+DOSSIER_TEMPLATE_FORM_DEFAULTS = {
+}
+DOSSIER_TEMPLATE_MISSING_VALUES = {
+    'comments': None,
+    'container_location': None,
+    'container_type': None,
+    'end': None,
+    'external_reference': None,
+    'filing_prefix': None,
+    'former_reference_number': None,
+    'number_of_containers': None,
+    'responsible': None,
+    'temporary_former_reference_number': None,
+    'touched': None,
 }
 
 
@@ -485,6 +514,16 @@ class TestDefaultsBase(IntegrationTestCase):
                     field_value_from_widget, missing_value,
                     widget, obj.portal_type))
 
+    def assert_default_values_equal(self, expected, actual):
+        expected_with_type = dict(
+            (key, (val, type(val))) for key, val in expected.items()
+        )
+        actual_with_type = dict(
+            (key, (val, type(val))) for key, val in actual.items()
+        )
+
+        self.assertDictEqual(expected_with_type, actual_with_type)
+
 
 class TestRepositoryRootDefaults(TestDefaultsBase):
     """Test our repository roots come with expected default values."""
@@ -512,7 +551,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(reporoot)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.manager)
@@ -528,7 +567,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(reporoot)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -544,7 +583,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(reporoot)
         expected = self.get_z3c_form_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_rest_api(self, browser):
@@ -571,7 +610,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         expected = self.get_type_defaults()
         expected['title_fr'] = u'French Title'
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestRepositoryFolderDefaults(TestDefaultsBase):
@@ -602,7 +641,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         # XXX: Don't know why this happens
         expected['addable_dossier_types'] = None
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.administrator)
@@ -621,7 +660,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         # XXX: Don't know why this happens
         expected['addable_dossier_types'] = None
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -637,10 +676,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_z3c_form_defaults()
 
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
-
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_rest_api(self, browser):
@@ -667,8 +703,10 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         expected = self.get_type_defaults()
         expected['addable_dossier_types'] = None
         expected['title_fr'] = u'French Title'
+        # when setting description via rest api it seems to become a bytestring
+        expected['description'] = ''
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestDossierDefaults(TestDefaultsBase):
@@ -699,7 +737,7 @@ class TestDossierDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.regular_user)
@@ -715,7 +753,7 @@ class TestDossierDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -731,10 +769,7 @@ class TestDossierDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_z3c_form_defaults()
 
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
-
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_rest_api(self, browser):
@@ -759,9 +794,12 @@ class TestDossierDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
-        expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible']
+        # when setting responsible via rest api it seems to become unicode
+        expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible'].decode('utf-8')
+        # when setting description via rest api it seems to become a bytestring
+        expected['description'] = ''
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_dossier_from_template(self, browser):
@@ -785,10 +823,7 @@ class TestDossierDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_z3c_form_defaults()
 
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
-
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_subdossier_from_template(self, browser):
@@ -819,7 +854,7 @@ class TestDossierDefaults(TestDefaultsBase):
         # A subdossier has the type_defaults with addiional form_defaults
         expected.update(self.form_defaults)
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestDocumentDefaults(TestDefaultsBase):
@@ -875,7 +910,7 @@ class TestDocumentDefaults(TestDefaultsBase):
         expected = self.get_type_defaults()
         expected['file'] = doc.file
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.regular_user)
@@ -899,7 +934,7 @@ class TestDocumentDefaults(TestDefaultsBase):
         expected = self.get_type_defaults()
         expected['file'] = doc.file
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -926,10 +961,7 @@ class TestDocumentDefaults(TestDefaultsBase):
         expected = self.get_z3c_form_defaults()
         expected['file'] = doc.file
 
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
-
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_rest_api(self, browser):
@@ -965,7 +997,7 @@ class TestDocumentDefaults(TestDefaultsBase):
         expected = self.get_type_defaults()
         expected['file'] = doc.file
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_document_from_dossiertemplate(self, browser):
@@ -996,7 +1028,7 @@ class TestDocumentDefaults(TestDefaultsBase):
         expected['digitally_available'] = True
         expected['file'] = doc.file
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestMailDefaults(TestDefaultsBase):
@@ -1052,7 +1084,7 @@ class TestMailDefaults(TestDefaultsBase):
 
         expected['message'] = mail._message
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.regular_user)
@@ -1075,7 +1107,7 @@ class TestMailDefaults(TestDefaultsBase):
 
         expected['message'] = mail._message
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -1100,10 +1132,7 @@ class TestMailDefaults(TestDefaultsBase):
 
         expected['message'] = mail._message
 
-        # XXX: Don't know why this happens
-        expected['public_trial_statement'] = None
-
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_rest_api(self, browser):
@@ -1139,7 +1168,7 @@ class TestMailDefaults(TestDefaultsBase):
 
         expected['message'] = mail._message
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestTaskDefaults(TestDefaultsBase):
@@ -1172,7 +1201,7 @@ class TestTaskDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.regular_user)
@@ -1193,7 +1222,7 @@ class TestTaskDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -1218,7 +1247,7 @@ class TestTaskDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_z3c_form_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestContactDefaults(TestDefaultsBase):
@@ -1248,7 +1277,7 @@ class TestContactDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.regular_user)
@@ -1265,7 +1294,7 @@ class TestContactDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -1282,7 +1311,7 @@ class TestContactDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_z3c_form_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_rest_api(self, browser):
@@ -1308,7 +1337,7 @@ class TestContactDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestProposalDefaults(TestDefaultsBase):
@@ -1345,7 +1374,7 @@ class TestProposalDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.meeting_user)
@@ -1362,7 +1391,7 @@ class TestProposalDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -1381,7 +1410,7 @@ class TestProposalDefaults(TestDefaultsBase):
         expected = self.get_z3c_form_defaults()
         expected['committee_oguid'] = Oguid.for_object(self.committee).id
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestSubmittedProposalDefaults(TestDefaultsBase):
@@ -1412,7 +1441,7 @@ class TestSubmittedProposalDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.manager)
@@ -1428,7 +1457,7 @@ class TestSubmittedProposalDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def get_obj_of_own_type(self):
         pass
@@ -1467,7 +1496,7 @@ class TestPrivateFolderDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(private_folder)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
 
 class TestPeriodDefaults(TestDefaultsBase):
@@ -1497,7 +1526,7 @@ class TestPeriodDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(period)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
         self.login(self.committee_responsible)
@@ -1512,7 +1541,7 @@ class TestPeriodDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(period)
         expected = self.get_type_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
@@ -1529,4 +1558,109 @@ class TestPeriodDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(period)
         expected = self.get_z3c_form_defaults()
 
-        self.assertDictEqual(expected, persisted_values)
+        self.assert_default_values_equal(expected, persisted_values)
+
+
+class TestDossierTemplateDefaults(TestDefaultsBase):
+    """Test dossiertemplates come with expected default values."""
+
+    portal_type = 'opengever.dossier.dossiertemplate'
+
+    requireds = DOSSIER_TEMPLATE_REQUIREDS
+    type_defaults = DOSSIER_TEMPLATE_DEFAULTS
+    form_defaults = DOSSIER_TEMPLATE_FORM_DEFAULTS
+    missing_values = DOSSIER_TEMPLATE_MISSING_VALUES
+
+    features = ('dossiertemplate', )
+
+    def get_obj_of_own_type(self):
+        return self.dossiertemplate
+
+    def test_create_content_in_container(self):
+        self.login(self.administrator)
+
+        with freeze(FROZEN_NOW):
+            dossier = createContentInContainer(
+                self.templates,
+                self.portal_type,
+                title=DOSSIER_TEMPLATE_REQUIREDS['title'],
+            )
+
+        persisted_values = get_persisted_values_for_obj(dossier)
+        expected = self.get_type_defaults()
+        # we don't set that field for dossier templates, it seems
+        del expected['touched']
+
+        self.assert_default_values_equal(expected, persisted_values)
+
+    def test_invoke_factory(self):
+        self.login(self.administrator)
+
+        with freeze(FROZEN_NOW):
+            new_id = self.templates.invokeFactory(
+                self.portal_type,
+                'dossiertemplate-999',
+                title=DOSSIER_TEMPLATE_REQUIREDS['title'],
+            )
+        dossier = self.templates[new_id]
+
+        persisted_values = get_persisted_values_for_obj(dossier)
+        expected = self.get_type_defaults()
+        # we don't set that field for dossier templates, it seems
+        del expected['touched']
+
+        self.assert_default_values_equal(expected, persisted_values)
+
+    @browsing
+    def test_z3c_add_form(self, browser):
+        self.login(self.administrator, browser)
+
+        with freeze(FROZEN_NOW):
+            browser.open(self.templates)
+            factoriesmenu.add(u'Dossier template')
+            browser.fill({u'Title': DOSSIER_TEMPLATE_REQUIREDS['title']}).save()
+
+        dossier = browser.context
+
+        persisted_values = get_persisted_values_for_obj(dossier)
+        expected = self.get_z3c_form_defaults()
+        # we don't set that field for dossier templates, it seems
+        del expected['touched']
+
+        self.assert_default_values_equal(expected, persisted_values)
+
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.administrator, browser)
+
+        payload = {
+            u'@type': self.portal_type,
+            u'title': DOSSIER_TEMPLATE_REQUIREDS['title'],
+            # the dossier template expects a responsible, even though unused
+            # in the form. we just give it the one from dossier
+            u'responsible': DOSSIER_FORM_DEFAULTS['responsible'],
+        }
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.templates.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(201, response.status_code)
+
+        new_object_id = str(response.json['id'])
+        dossier = self.templates.restrictedTraverse(new_object_id)
+
+        persisted_values = get_persisted_values_for_obj(dossier)
+        expected = self.get_type_defaults()
+        # we don't set that field for dossier templates, it seems
+        del expected['touched']
+        # the dossier template expects a responsible, even though unused
+        # in the form. we just give it the one from dossier
+        # when setting responsible via rest api it seems to become unicode
+        expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible'].decode('utf-8')
+        # when setting description via rest api it seems to become a bytestring
+        expected['description'] = ''
+
+        self.assert_default_values_equal(expected, persisted_values)

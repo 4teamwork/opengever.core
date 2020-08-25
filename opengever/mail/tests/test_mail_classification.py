@@ -20,9 +20,7 @@ class TestMailMetadata(FunctionalTestCase):
         self.assertEquals(mail.privacy_layer, PRIVACY_LAYER_NO)
         self.assertEquals(mail.public_trial, PUBLIC_TRIAL_UNCHECKED)
 
-        # XXX: imho this should be a empty string, not None, since the field
-        # has a default value (empty string)
-        self.assertIsNone(mail.public_trial_statement)
+        self.assertEqual(u'', mail.public_trial_statement)
 
     def test_public_trial_default_is_configurable(self):
         registry = getUtility(IRegistry)
