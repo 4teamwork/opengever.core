@@ -1,27 +1,24 @@
+from opengever.api.proxy_base import ProxyingEndpointBase
 from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.base.exceptions import MalformedOguid
 from opengever.base.oguid import Oguid
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.services import Service
 from zExceptions import BadRequest
-from zExceptions import InternalError
 from zExceptions import Unauthorized
 from zope.component import queryMultiAdapter
-import requests
 
 
-class ResolveOguidGet(Service):
+class ResolveOguidGet(ProxyingEndpointBase):
     """Return serialized content for an object identified by an Oguid.
 
     GET /@resolve-oguid?oguid=foo:1234 HTTP/1.1
     """
 
     def reply(self):
-        params = self.request.form.copy()
-        raw_oguid = params.get('oguid', '').strip()
+        qs_params = self.extract_query_string_params()
+        raw_oguid = qs_params.get('oguid', '').strip()
 
         if not raw_oguid:
             raise BadRequest('Missing oguid query string parameter.')
@@ -34,7 +31,7 @@ class ResolveOguidGet(Service):
         if oguid.is_on_current_admin_unit:
             return self._serialize_object(oguid)
         else:
-            return self._get_remote_serialized_object(oguid, params)
+            return self._get_remote_serialized_object(oguid, qs_params)
 
     def _serialize_object(self, oguid):
         try:
@@ -58,42 +55,26 @@ class ResolveOguidGet(Service):
         json['@id'] = obj.absolute_url()
         return json
 
-    def _get_remote_serialized_object(self, oguid, params):
+    def _get_remote_serialized_object(self, oguid, qs_params):
         target_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)
         if not target_unit:
             raise BadRequest('Invalid admin unit id "{}".'.format(
                 oguid.admin_unit_id))
 
-        url = '/'.join([target_unit.site_url, '@resolve-oguid'])
+        remote_url = '/'.join([target_unit.site_url, '@resolve-oguid'])
 
-        proxied_from = self.request.getHeader('X-GEVER-RemoteRequestFrom')
-        if proxied_from:
-            err_msg = "Trying to proxy a request to {}, although the request"\
-                      " was already proxied from {}".format(url, proxied_from)
-            raise InternalError(err_msg)
+        # Detect and break proxying cycles
+        self.detect_proxying_cycles(remote_url)
 
-        headers = {'Accept': 'application/json',
-                   'Content-Type': 'application/json',
-                   'X-OGDS-AC': api.user.get_current().getId(),
-                   'X-OGDS-AUID': get_current_admin_unit().id(),
-                   'X-GEVER-RemoteRequestFrom': self.request.URL}
+        # Set up authentication and proxy request to the remote admin unit
+        headers = self.prepare_proxying_headers()
 
-        self.request.response.setHeader('X-GEVER-RemoteRequest', url)
-
-        # we pass all query string parameters to the remote request
-        response = requests.get(url, params=params, headers=headers)
+        # Proxy the request
+        response = self.remote_request(
+            'GET',
+            remote_url,
+            params=qs_params,
+            headers=headers)
 
         # Transparently proxy back response status line and body
-        self.request.response.setStatus(
-            response.status_code, reason=response.reason)
-
-        try:
-            response_json = response.json()
-        except ValueError:
-            response_json = {
-                u'type': u'ValueError',
-                u'message': u'Remote side returned a non-JSON response',
-                u'remote_response_body': response.text,
-            }
-
-        return response_json
+        return self.stream_back(response)
