@@ -230,6 +230,7 @@ class PatchZ3CFormChangedField(MonkeyPatch):
             """Figure if a field's value changed
 
             Comparing the value of the context attribute and the given value"""
+
             if context is None:
                 context = field.context
             if context is None:
@@ -268,6 +269,14 @@ class PatchZ3CFormChangedField(MonkeyPatch):
 
             if stored_value != value:
                 return True
+
+            # Work around the fact that unicode and bytestrings are considered
+            # equal in python 2 for emtpy default values u'' and '' by also
+            # checking if the type changed for all basestrings. If the type
+            # changes we consider the field to have changed.
+            if isinstance(value, basestring):
+                if not isinstance(stored_value, type(value)):
+                    return True
 
             return False
 
