@@ -8,8 +8,7 @@
             "type": "string",
             "title": "Beschreibung",
             "description": "Eine kurze Beschreibung des Inhalts.",
-            "_zope_schema_type": "Text",
-            "default": null
+            "_zope_schema_type": "Text"
         },
         "valid_from": {
             "type": "string",
@@ -102,8 +101,7 @@
             "type": "string",
             "title": "Bearbeitungsinformation",
             "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
-            "_zope_schema_type": "Text",
-            "default": ""
+            "_zope_schema_type": "Text"
         },
         "title_de": {
             "type": "string",
