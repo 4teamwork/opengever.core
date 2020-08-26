@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.7.1 (unreleased)
+2020.8.0 (2020-08-26)
 ---------------------
 
 - Filter out owner role in role assignment reports. [tinagerber]
