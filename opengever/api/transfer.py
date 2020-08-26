@@ -15,27 +15,32 @@ from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class TransferTaskPost(Service):
-
-    def extract_data(self):
+class ExtractOldNewUserMixin(Service):
+    """This mixin privdes a method to extract and validate the old and the new
+    userid from the request body.
+    """
+    def extract_userids(self):
         data = json_body(self.request)
-        self.old_userid = data.get("old_userid")
-        self.new_userid = data.get("new_userid")
+        old_userid = data.get("old_userid")
+        new_userid = data.get("new_userid")
 
-        if not self.old_userid:
+        if not old_userid:
             raise BadRequest("Property 'old_userid' is required")
-        if not self.new_userid:
+        if not new_userid:
             raise BadRequest("Property 'new_userid' is required")
-        if not User.query.get_by_userid(self.old_userid):
-            raise BadRequest("userid '{}' does not exist".format(self.old_userid))
-        if not User.query.get_by_userid(self.new_userid):
-            raise BadRequest("userid '{}' does not exist".format(self.new_userid))
-        if self.old_userid == self.new_userid:
+        if not User.query.get_by_userid(old_userid):
+            raise BadRequest("userid '{}' does not exist".format(old_userid))
+        if not User.query.get_by_userid(new_userid):
+            raise BadRequest("userid '{}' does not exist".format(new_userid))
+        if old_userid == new_userid:
             raise BadRequest("'old_userid' and 'new_userid' should not be the same")
 
-    def reply(self):
+        return old_userid, new_userid
 
-        self.extract_data()
+
+class TransferTaskPost(ExtractOldNewUserMixin, Service):
+    def reply(self):
+        self.old_userid, self.new_userid = self.extract_userids()
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
