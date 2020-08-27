@@ -314,6 +314,108 @@ class TestGetQuerySources(IntegrationTestCase):
         self.assertItemsEqual([u'secret'],
                               [item['token'] for item in response.get('items')])
 
+    @browsing
+    def test_query_source_by_token_for_add(self, browser):
+        self.login(self.secretariat_user, browser)
+        url = self.query_source_url(
+            self.inbox,
+            'responsible',
+            add='opengever.inbox.forwarding',
+            token='inbox:fa',
+        )
+        response = browser.open(
+            url,
+            method='GET',
+            headers=self.api_headers,
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(1, response.get('items_total'))
+        self.assertItemsEqual([u'inbox:fa'],
+                              [item['token'] for item in response.get('items')])
+
+    @browsing
+    def test_query_source_by_token_for_edit(self, browser):
+        self.login(self.secretariat_user, browser)
+        url = self.query_source_url(
+            self.task,
+            'issuer',
+            token='nicole.kohler',
+        )
+        response = browser.open(
+            url,
+            method='GET',
+            headers=self.api_headers,
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(1, response.get('items_total'))
+        self.assertItemsEqual([u'nicole.kohler'],
+                              [item['token'] for item in response.get('items')])
+
+    @browsing
+    def test_query_source_returns_empty_list_for_inexisting_token(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.query_source_url(
+            self.dossier,
+            'responsible',
+            token='i.do.not.exist',
+        )
+        response = browser.open(
+            url,
+            method='GET',
+            headers=self.api_headers,
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(0, response.get('items_total'))
+        self.assertItemsEqual([], response.get('items'))
+
+    @browsing
+    def test_query_source_disallows_no_query_parameter(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.query_source_url(
+            self.dossier,
+            'responsible',
+        )
+        with browser.expect_http_error(400):
+            browser.open(
+                url,
+                method='GET',
+                headers=self.api_headers,
+            )
+        self.assertEqual(
+            {u'error':
+                {u'message': u'Enumerating querysources is not supported. '
+                              'Please search the source using the ?query= or '
+                              '?token = QS parameters',
+                 u'type': u'Bad Request'}},
+            browser.json)
+
+    @browsing
+    def test_query_source_disallows_both_query_parameter(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.query_source_url(
+            self.dossier,
+            'responsible',
+            query='foo',
+            token='bar',
+        )
+        with browser.expect_http_error(400):
+            browser.open(
+                url,
+                method='GET',
+                headers=self.api_headers,
+            )
+        self.assertEqual(
+            {u'error':
+                {u'message': u'Please only search the source using either '
+                               'the ?query= or ?token = QS parameters, using '
+                               'both parameters at the same time is '
+                               'unsupported',
+                 u'type': u'Bad Request'}},
+            browser.json)
+
 
 class TestGetQuerySourcesSolr(SolrIntegrationTestCase):
 

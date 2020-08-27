@@ -75,15 +75,31 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
                 "Field %r does not have an IQuerySource" % fieldname
             )
 
-        if 'query' not in self.request.form:
+        query = self.request.form.get("query", None)
+        token = self.request.form.get("token", None)
+        if not query and not token:
             return self._error(
-                400, "Bad Request",
-                u'Enumerating querysources is not supported. Please search '
-                u'the source using the ?query= QS parameter'
+                400,
+                "Bad Request",
+                u"Enumerating querysources is not supported. Please search "
+                u"the source using the ?query= or ?token = QS parameters"
+            )
+        if query and token:
+            return self._error(
+                400,
+                "Bad Request",
+                u"Please only search the source using either the ?query= or "
+                "?token = QS parameters, using both parameters at the same "
+                "time is unsupported"
             )
 
-        query = safe_unicode(self.request.form['query'])
-        result = source.search(query)
+        if query:
+            result = source.search(safe_unicode(query))
+        else:
+            try:
+                result = [source.getTermByToken(safe_unicode(token))]
+            except LookupError:
+                result = []
 
         terms = []
         for term in result:

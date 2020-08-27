@@ -38,3 +38,39 @@ oder Vocabulary geholt wird, unterschiedlich bestimmt werden:
 
 - Edit - es soll der ``portal_type`` des context ausgelesen werden
 - Add - es soll der ``portal_type`` Pfad-Parameter verwendet werden
+
+
+Eine Query-Source nach token abfragen
+-------------------------------------
+
+Zusätzlich zum schon in ``plone.restapi`` zur Verfügung gestellten Paremeter
+``query`` lässt sich eine ``@querysource`` in GEVER auch nach einem bereits
+bekannten ``token`` abfragen. Dieses muss als Query-String Paremeter angegeben
+werden. Es darf nur entweder ``token`` oder ``query`` verwendet werden, nicht
+beides zugleich.
+
+**Beispiel-Request**:
+
+.. sourcecode:: http
+
+   GET /dossier-15/@querysources/responsible?token=hans.muster HTTP/1.1
+   Accept: application/json
+
+
+**Beispiel-Response**:
+
+.. sourcecode:: http
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+
+   {
+     "@id": "/dossier-15/@querysources/responsible?token=hans.muster",
+     "items": [
+       {
+         "title": "Hans Muster (hans.muster)",
+         "token": "hans.muster"
+       }
+     ],
+     "items_total": 1
+   }
