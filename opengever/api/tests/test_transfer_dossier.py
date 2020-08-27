@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.activity.model import Notification
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.resolve import LockingResolveManager
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -93,3 +94,97 @@ class TestTransferDossierPost(IntegrationTestCase):
             {"message": "'old_userid' and 'new_userid' should not be the same",
              "type": "BadRequest"},
             browser.json)
+
+    @browsing
+    def test_transfer_dossier_changes_responsible(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.assertEqual(self.dossier_responsible.getId(),
+                         IDossier(self.dossier).responsible)
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+
+    @browsing
+    def test_transfer_dossier_changes_responsible_of_all_subdossiers(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        IDossier(self.subdossier).responsible = self.dossier_responsible.getId()
+        self.subdossier.reindexObject()
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.subdossier).responsible)
+
+    @browsing
+    def test_transfer_dossier_changes_responsible_only_if_its_set_to_the_old_user(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        IDossier(self.subdossier).responsible = self.regular_user.getId()
+        self.subdossier.reindexObject()
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+        self.assertEqual(self.regular_user.getId(), IDossier(self.subdossier).responsible)
+
+    @browsing
+    def test_transfer_dossier_allows_to_exclude_subdossiers(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        IDossier(self.subdossier).responsible = self.dossier_responsible.getId()
+        self.subdossier.reindexObject()
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId(),
+                          "recursive": False}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+        self.assertEqual(self.dossier_responsible.getId(), IDossier(self.subdossier).responsible)
+
+    @browsing
+    def test_transfer_dossier_is_only_allowed_for_not_resolved_dossiers(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        LockingResolveManager(self.resolvable_dossier).resolve()
+
+        with browser.expect_http_error(400):
+            browser.open(self.resolvable_dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                         headers=self.api_headers, data=json.dumps(
+                             {"old_userid": self.dossier_responsible.getId(),
+                              "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(
+            {"message": "Only open dossiers can be transfered to another user",
+             "type": "BadRequest"},
+            browser.json)
+
+    @browsing
+    def test_transfer_subdossiers_will_skip_resolved_dossiers(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        IDossier(self.subdossier).responsible = self.dossier_responsible.getId()
+        self.subdossier.reindexObject()
+
+        LockingResolveManager(self.subdossier).resolve()
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+        self.assertEqual(self.dossier_responsible.getId(), IDossier(self.subdossier).responsible)

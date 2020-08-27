@@ -1,3 +1,6 @@
+from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.models.user import User
 from opengever.task.activities import TaskChangeIssuerActivity
@@ -6,6 +9,7 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
@@ -95,14 +99,41 @@ class TransferTaskPost(ExtractOldNewUserMixin, Service):
 
 
 class TransferDossierPost(ExtractOldNewUserMixin, Service):
+    """Transfers a dossier and optionally all of its subdossiers from one
+    responsible to another.
+    """
 
     def reply(self):
-        self.old_userid, self.new_userid = self.extract_userids()
+        old_userid, new_userid = self.extract_userids()
+        recursive = json_body(self.request).get('recursive', True)
+
+        if not self.context.is_open():
+            raise BadRequest("Only open dossiers can be transfered to another user")
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
         self.request.environ['HTTP_X_GEVER_SUPPRESSNOTIFICATIONS'] = 'True'
 
+        self.transfer_dossier(self.context, old_userid, new_userid, recursive)
+
         self.request.response.setStatus(204)
         return super(TransferDossierPost, self).reply()
+
+    def transfer_dossier(self, dossier, old_userid, new_userid, recursive=True):
+        if recursive:
+            catalog = api.portal.get_tool('portal_catalog')
+            dossiers_to_transfer = [brain.getObject() for brain in catalog(
+                path='/'.join(self.context.getPhysicalPath()),
+                object_provides=IDossierMarker.__identifier__,
+                responsible=old_userid,
+                review_state=DOSSIER_STATES_OPEN)]
+        else:
+            dossiers_to_transfer = [self.context]
+
+        for dossier in dossiers_to_transfer:
+            IDossier(dossier).responsible = new_userid
+            dossier.reindexObject(idxs=['responsible'])
+
+            # We have to trigger an object modified event to get a jorunal entry
+            notify(ObjectModifiedEvent(dossier))
