@@ -92,3 +92,17 @@ class TransferTaskPost(ExtractOldNewUserMixin, Service):
 
         self.request.response.setStatus(204)
         return super(TransferTaskPost, self).reply()
+
+
+class TransferDossierPost(ExtractOldNewUserMixin, Service):
+
+    def reply(self):
+        self.old_userid, self.new_userid = self.extract_userids()
+
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        self.request.environ['HTTP_X_GEVER_SUPPRESSNOTIFICATIONS'] = 'True'
+
+        self.request.response.setStatus(204)
+        return super(TransferDossierPost, self).reply()
