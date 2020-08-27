@@ -11,8 +11,8 @@ extends =
 
 
 deployment-number = {{{base.deployment_number}}}
-ogds-db-name = ogds_{{{package.name}}}
-client-policy = opengever.{{{package.name}}}
+ogds-db-name = {{{base.ogds_db_name}}}
+client-policy = opengever.{{{package.name}}}.{{{adminunit.id}}}
 usernamelogger_ac_cookie_name = __ac_{{{adminunit.ac_cookie_name}}}
 instance-eggs += opengever.{{{package.name}}}
 solr-core-name = {{{package.name}}}
@@ -30,10 +30,11 @@ sablon-executable = /opt/sablon/bin/sablon
 
 [instance0]
 environment-vars +=
-    BUMBLEBEE_APP_ID gever_{{{package.name}}}
+    BUMBLEBEE_APP_ID {{{base.bumblebee_app_id}}}
     BUMBLEBEE_INTERNAL_PLONE_URL https://{{{base.domain}}}/
     BUMBLEBEE_PUBLIC_URL https://{{{base.domain}}}/
-    BUMBLEBEE_SECRET XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    BUMBLEBEE_SECRET {{{base.bumblebee_secret}}}
 {{% if is_teamraum %}}
     APPS_ENDPOINT_URL {{{base.apps_endpoint_url}}}
+    WORKSPACE_SECRET {{{base.workspace_secret}}}
 {{% endif %}}

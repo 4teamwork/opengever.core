@@ -29,7 +29,10 @@ IGNORED_QUESTIONS = {
         'setup.dossier_templates',
         'setup.ech0147_export',
         'setup.ech0147_import',
+        'setup.maximum_mail_size',
         'setup.officeatwork',
+        'setup.officeconnector_attach',
+        'setup.officeconnector_checkout',
         'setup.repositoryfolder_documents_tab',
         'setup.repositoryfolder_tasks_tab',
         'setup.repositoryfolder_proposals_tab',
@@ -40,6 +43,7 @@ IGNORED_QUESTIONS = {
         'deployment.workspace_creators_group',
         'deployment.workspace_users_group',
         'base.apps_endpoint_url',
+        'base.workspace_secret',
         ]
     }
 
@@ -58,6 +62,9 @@ VARIABLE_VALUES = {
         'setup.geverui': True,
         'setup.bumblebee_auto_refresh': True,
         'setup.enable_activity_feature': True,
+        'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
+        'setup.officeconnector_attach': True,
+        'setup.officeconnector_checkout': True,
         },
     'gever': {}
     }
@@ -67,7 +74,6 @@ DEFAULT_VALUES = {
         'adminunit.title': 'Teamraum',
         'adminunit.abbreviation': 'tr',
         'adminunit.id': 'tr',
-        'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
     },
     'gever': {
         'setup.maximum_dossier_depth': DEFAULT_DOSSIER_DEPTH,
@@ -174,7 +180,6 @@ def post_adminunit_title(configurator, question, answer):
 def post_adminunit_abbreviation(configurator, question, answer):
     new_defaults = {
         'adminunit.id': answer.lower(),
-        'deployment.ldap_ou': '{}'.format(answer.capitalize()),
         'deployment.rolemanager_group': '{}_admins'.format(answer),
         'deployment.records_manager_group': '{}_admins'.format(answer),
         'deployment.archivist_group': '{}_admins'.format(answer),
@@ -204,8 +209,8 @@ def post_base_domain(configurator, question, answer):
         'adminunit.site_url': 'https://{}'.format(answer),
         'adminunit.public_url': 'https://{}'.format(answer),
         'deployment.mail_domain': answer,
-        'deployment.mail_from_address': 'info@{}'.format(answer),
-        'base.apps_endpoint_url': 'https://{}/api/apps'.format(answer),
+        'deployment.mail_from_address': 'noreply@{}'.format(answer),
+        'base.apps_endpoint_url': 'https://{}/portal/api/apps'.format(answer),
     }
     update_defaults(configurator, new_defaults)
     return answer

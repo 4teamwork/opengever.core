@@ -4,7 +4,7 @@ Changelog
 2020.8.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Adjust the policy generator for easier policy generation. [elioschmutz]
 
 
 2020.8.0 (2020-08-26)
