@@ -18,6 +18,7 @@ Inhalt:
    navigation.rst
    breadcrumbs.rst
    searching.rst
+   dossiers.rst
    documents.rst
    extract_attachments.rst
    trash.rst
