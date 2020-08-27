@@ -160,4 +160,14 @@
     <permission value="View" />
   </action>
 
+  <action
+      action_id="create_forwarding"
+      visible="True"
+      title="Forward"
+      url_expr="string:++add++opengever.inbox.forwarding:method"
+      condition_expr=""
+      category="object_buttons">
+    <permission value="opengever.inbox: Add Forwarding" />
+  </action>
+
 </object>
