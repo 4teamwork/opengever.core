@@ -32,3 +32,10 @@ class TestRedirectToMainDossier(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.login().open(self.subsubdocument, view='redirect_to_main_dossier')
         self.assertEquals(self.dossier, browser.context)
+
+    @browsing
+    def test_redirect_preserves_the_query_string(self, browser):
+        self.login(self.regular_user, browser)
+        browser.login().open(self.subdossier, view='redirect_to_main_dossier?foo=bar')
+
+        self.assertEqual('foo=bar', browser.url.split('?')[1])

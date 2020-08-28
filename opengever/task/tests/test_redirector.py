@@ -64,6 +64,13 @@ class TestRedirectToContainingMainDossier(IntegrationTestCase):
 
         self.assertEqual(self.dossier, browser.context)
 
+    @browsing
+    def test_redirect_preserves_the_query_string(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.task, view='redirect_to_main_dossier?foo=bar')
+
+        self.assertEqual('foo=bar', browser.url.split('?')[1])
+
 
 class TestRedirectToContainingDossier(IntegrationTestCase):
 

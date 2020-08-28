@@ -24,7 +24,11 @@ class RedirectToContainingMainDossier(BrowserView):
     """
     def __call__(self):
         self.request.RESPONSE.redirect(
-            get_main_dossier(self.context).absolute_url())
+            "?".join([
+                get_main_dossier(self.context).absolute_url(),
+                self.request["QUERY_STRING"]
+            ])
+        )
 
 
 class RedirectToContainingDossier(BrowserView):
