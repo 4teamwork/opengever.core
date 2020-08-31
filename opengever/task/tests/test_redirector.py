@@ -83,3 +83,9 @@ class TestRedirectToContainingDossier(IntegrationTestCase):
 
         self.assertEqual(self.subdossier, browser.context)
 
+    @browsing
+    def test_redirect_preserves_the_query_string(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.subdocument, view='redirect_to_parent_dossier?foo=bar')
+
+        self.assertEqual('foo=bar', browser.url.split('?')[1])
