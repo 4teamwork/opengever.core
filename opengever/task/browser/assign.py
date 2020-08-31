@@ -1,4 +1,9 @@
 from ftw.keywordwidget.widget import KeywordWidget
+from opengever.activity.model.watcher import Watcher
+from opengever.base.model import create_session
+from opengever.base.sentry import log_msg_to_sentry
+from opengever.base.txnutils import registered_objects
+from opengever.base.txnutils import txn_is_dirty
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
@@ -24,6 +29,11 @@ from zope import schema
 from zope.event import notify
 from zope.interface import Invalid
 from zope.lifecycleevent import ObjectModifiedEvent
+import logging
+import transaction
+
+
+logger = logging.getLogger('opengever.task')
 
 
 class IAssignSchema(Schema):
@@ -126,8 +136,15 @@ class AssignTaskForm(Form):
 
         if not errors:
             update_reponsible_field_data(data)
+            new_responsible = data['responsible']
+
+            # Create watcher for new responsible if it doesn't exist yet
+            # and commit, in order to avoid a deadlock when both sides of an
+            # inter-admin-unit would attempt to do this. See GEVER-946.
+            self.create_watcher_and_commit_if_needed(new_responsible)
+
             if self.context.responsible_client == data['responsible_client'] \
-                    and self.context.responsible == data['responsible']:
+                    and self.context.responsible == new_responsible:
                 # no changes
                 msg = _(u'error_same_responsible',
                         default=u'No changes: same responsible selected')
@@ -139,6 +156,39 @@ class AssignTaskForm(Form):
             self.reassign_task(**data)
 
             return self.redirect()
+
+    def create_watcher_and_commit_if_needed(self, new_responsible):
+        """If we don't have an entry in the 'watchers' table for the
+        new responsible, that would lead to a deadlock when reassigning an
+        inter-admin-unit task, because both sides would attempt to create
+        it (with the second txn not seeing the pending changes of the
+        first one, because of isolation).
+
+        We therefore create it here to be sure, and immediately commit, making
+        sure the txn is in a clean state so we don't commit any unexpected
+        changes by accident (otherwise we log to Sentry).
+        """
+        watcher = Watcher.query.get_by_actorid(new_responsible)
+        if not watcher:
+            if txn_is_dirty():
+                # Creating and committing the watcher should always be the
+                # first thing that's being done in the txn when reassigning.
+                # Otherwise we would be committing unrelated, unexpected
+                # changes.
+                #
+                # Detect if that happens, but still proceed and log to sentry.
+                msg = 'Dirty transaction when creating and committing watcher'
+                logger.warn(msg)
+                logger.warn('Registered objects: %r' % registered_objects())
+                log_msg_to_sentry(msg, level='warning', extra={
+                    'registered_objects': repr(registered_objects())}
+                )
+
+            session = create_session()
+            watcher = Watcher(actorid=new_responsible)
+            session.add(watcher)
+            transaction.commit()
+            transaction.begin()
 
     def redirect(self):
         """Redirects to task if the current user still has View permission,
