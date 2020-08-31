@@ -4,6 +4,7 @@ Changelog
 2020.8.1 (unreleased)
 ---------------------
 
+- Prevent deadlock when reassigning inter-admin-unit tasks. [lgraf]
 - Adjust the policy generator for easier policy generation. [elioschmutz]
 - Provide create_forwarding action in API for documents in inboxes. [deiferni]
 - Allow to query by token in @querysources API endpoint. [deiferni]
