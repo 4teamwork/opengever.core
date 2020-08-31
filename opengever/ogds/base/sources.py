@@ -8,6 +8,7 @@ from opengever.ogds.base import _
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
@@ -243,6 +244,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
     def search(self, query_string):
         self.terms = []
+
         # Ignore colons to support queries on inboxes-id.
         query_string = query_string.replace(':', ' ')
 
@@ -304,11 +306,11 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         """
 
         request = getRequest()
-        client_id = request.get('client',
-                                request.get('form.widgets.responsible_client',
-                                            getattr(self.context,
-                                                    'responsible_client',
-                                                    None)))
+        client_id = request.get('client')
+        if client_id is None:
+            client_id = request.get('form.widgets.responsible_client')
+        if client_id is None:
+            client_id = getattr(self.context, 'responsible_client', None)
 
         if not client_id:
             return None
