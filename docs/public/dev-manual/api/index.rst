@@ -23,6 +23,7 @@ Inhalt:
    extract_attachments.rst
    trash.rst
    workflow.rst
+   vocabularies.rst
    scanin.rst
    content_types.rst
    metadata.rst
