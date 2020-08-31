@@ -110,6 +110,15 @@ class PloneSitePostFactoryMenu(FilteredPostFactoryMenu):
 
 class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
 
+    def getActionsMenuItems(self, context, request):
+        results = super(OGCombinedActionsWorkflowMenu, self).getActionsMenuItems(
+            context, request)
+        return filter(
+            lambda item: (item.get('extra', {}).get('id', None)
+                != 'create_forwarding'),
+            results
+        )
+
     def getWorkflowMenuItems(self, context, request):
         """ftw.contentmenu >= 2.2.2 does no longer protect the workflows
         "Advanced..." action with "Manage portal".

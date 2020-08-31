@@ -721,6 +721,20 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
             self.get_object_buttons(browser, self.document),
         )
 
+    @browsing
+    def test_document_in_inbox_has_create_forwarding_button(self, browser):
+        self.login(self.secretariat_user, browser)
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'create_forwarding', u'title': u'Forward'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+        ]
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.inbox_document),
+        )
+
 
 class TestObjectButtonsGetForTemplates(ObjectButtonsTestBase):
 

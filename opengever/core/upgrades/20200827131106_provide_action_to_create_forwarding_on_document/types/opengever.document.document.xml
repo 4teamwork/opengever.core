@@ -1,0 +1,13 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.document.document" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <action
+      action_id="create_forwarding"
+      visible="True"
+      title="Forward"
+      url_expr="string:++add++opengever.inbox.forwarding:method"
+      condition_expr=""
+      category="object_buttons">
+    <permission value="opengever.inbox: Add Forwarding" />
+  </action>
+
+</object>
