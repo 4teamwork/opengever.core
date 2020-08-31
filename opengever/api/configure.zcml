@@ -308,6 +308,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@transfer-dossier"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".transfer.TransferDossierPost"
+      permission="opengever.api.TransferAssignment"
+      />
+
+  <plone:service
       method="GET"
       name="@role-assignment-reports"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
