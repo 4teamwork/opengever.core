@@ -1,4 +1,5 @@
 from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
 from opengever.base.model import create_session
 from opengever.base.query import extend_query_with_textfilter
 from opengever.contact.contact import IContact
@@ -15,6 +16,7 @@ from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.workspace.utils import get_workspace_user_ids
 from plone import api
+from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import func
 from sqlalchemy import orm
 from sqlalchemy import sql
@@ -428,9 +430,10 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
     def _extend_terms_with_contacts(self, query_string):
         solr = getUtility(ISolrSearch)
-        resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
-            query_string,
-            IContact.__identifier__))
+        query = u'SearchableText:{}* AND object_provides:{}'.format(
+            escape(safe_unicode(query_string)),
+            IContact.__identifier__)
+        resp = solr.search(query=query)
         for result in resp.docs:
             self.terms.append(self.getTerm(solr_doc=result))
 
@@ -713,9 +716,10 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
 
     def _extend_terms_with_contacts(self, query_string):
         solr = getUtility(ISolrSearch)
-        resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
-            query_string,
-            IContact.__identifier__))
+        query = u'SearchableText:{}* AND object_provides:{}'.format(
+            escape(safe_unicode(query_string)),
+            IContact.__identifier__)
+        resp = solr.search(query=query)
         for result in resp.docs:
             if 'email' in result:
                 self.terms.append(self.getTerm(solr_doc=result))

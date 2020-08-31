@@ -7,6 +7,7 @@ Changelog
 - Adjust the policy generator for easier policy generation. [elioschmutz]
 - Provide create_forwarding action in API for documents in inboxes. [deiferni]
 - Allow to query by token in @querysources API endpoint. [deiferni]
+- Fix escaping solr literal queries. [deiferni]
 
 
 2020.8.0 (2020-08-26)
