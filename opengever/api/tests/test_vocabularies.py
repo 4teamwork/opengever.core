@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import IClassification
+from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
@@ -415,6 +416,31 @@ class TestGetQuerySources(IntegrationTestCase):
                                'unsupported',
                  u'type': u'Bad Request'}},
             browser.json)
+
+    @browsing
+    def test_add_forwarding_responsible_query_source_falls_back_to_current_org_unit_cookie(self, browser):
+        self.login(self.secretariat_user, browser)
+        url = self.query_source_url(
+            self.inbox,
+            'responsible',
+            add='opengever.inbox.forwarding',
+            query='nicole',
+        )
+
+        # set the cookie which is uses as a fallback
+        driver = browser.get_driver()
+        driver.requests_session.cookies.set(CURRENT_ORG_UNIT_KEY, 'fa')
+
+        response = browser.open(
+            url,
+            method='GET',
+            headers=self.api_headers,
+        ).json
+
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(1, response.get('items_total'))
+        self.assertItemsEqual([u'fa:nicole.kohler'],
+                              [item['token'] for item in response.get('items')])
 
 
 class TestGetQuerySourcesSolr(SolrIntegrationTestCase):

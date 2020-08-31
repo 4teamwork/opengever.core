@@ -311,6 +311,8 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
             client_id = request.get('form.widgets.responsible_client')
         if client_id is None:
             client_id = getattr(self.context, 'responsible_client', None)
+        if client_id is None:
+            client_id = get_current_org_unit().id()
 
         if not client_id:
             return None
