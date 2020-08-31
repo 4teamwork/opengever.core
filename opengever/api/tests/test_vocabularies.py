@@ -431,6 +431,23 @@ class TestGetQuerySourcesSolr(SolrIntegrationTestCase):
         self.assertEqual(url, response.get('@id'))
         self.assertEqual(0, response.get('items_total'))
 
+    @browsing
+    def test_get_task_issuer_escaping_for_solr(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        self.franz_meier.firstname = 'Super:franz'
+        self.franz_meier.reindexObject()
+        self.commit_solr()
+
+        url = self.query_source_url(self.task, 'issuer', query=u'Super:fr')
+        response = browser.open(
+            url,
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        self.assertEqual(url, response.get('@id'))
+        self.assertEqual(1, response.get('items_total'))
+
 
 class TestGetSources(IntegrationTestCase):
 
