@@ -9,7 +9,7 @@
        :Feldname: :field-title:`Beschreibung`
        :Datentyp: ``Text``
        
-       :Default: null
+       
        :Beschreibung: Eine kurze Beschreibung des Inhalts.
        
 
@@ -129,7 +129,7 @@
        :Feldname: :field-title:`Bearbeitungsinformation`
        :Datentyp: ``Text``
        
-       :Default: ""
+       
        :Beschreibung: Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier
        
 
