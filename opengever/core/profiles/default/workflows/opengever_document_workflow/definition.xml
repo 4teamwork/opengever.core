@@ -143,8 +143,6 @@
     <permission-map
         name="Modify portal content"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="Request review"
@@ -204,20 +202,14 @@
     <permission-map
         name="opengever.document: Cancel"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="opengever.document: Checkin"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="opengever.document: Checkout"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
   </state>
   <state
