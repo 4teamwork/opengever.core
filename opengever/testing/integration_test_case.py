@@ -26,8 +26,8 @@ from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.service import ogds_service
 from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -47,7 +47,9 @@ from plone.namedfile.file import NamedBlobFile
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
+from Products.CMFDiffTool.utils import safe_utf8
 from sqlalchemy.sql.expression import desc
+from urllib import urlencode
 from z3c.relationfield.relation import RelationValue
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -641,6 +643,19 @@ class IntegrationTestCase(TestCase):
             agenda_item.meeting.get_url(view=None),
             agenda_item.agenda_item_id,
             endpoint)
+
+    def query_source_url(self, context, field, add=None, **kwargs):
+        base_url = context.absolute_url()
+        if add:
+            components = [base_url, '@querysources', add, field]
+        else:
+            components = [base_url, '@querysources', field]
+
+        params = {key: safe_utf8(value) for key, value in kwargs.items()}
+        url = '/'.join(components)
+        if params:
+            return '{}?{}'.format(url, urlencode(params))
+        return url
 
     def get_ogds_user(self, user):
         return ogds_service().fetch_user(user.getId())

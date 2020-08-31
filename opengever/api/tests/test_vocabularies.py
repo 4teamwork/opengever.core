@@ -3,7 +3,6 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
-from urllib import urlencode
 
 
 NON_SENSITIVE_VOCABUALRIES = [
@@ -266,7 +265,8 @@ class TestGetQuerySources(IntegrationTestCase):
     @browsing
     def test_get_querysource_for_edit(self, browser):
         self.login(self.regular_user, browser)
-        url = self.empty_dossier.absolute_url() + '/@querysources/responsible?query=nicole'
+        url = self.query_source_url(
+            self.empty_dossier, 'responsible', query='nicole')
         response = browser.open(
             url,
             method='GET',
@@ -281,7 +281,12 @@ class TestGetQuerySources(IntegrationTestCase):
     @browsing
     def test_get_vocabulary_for_add(self, browser):
         self.login(self.regular_user, browser)
-        url = self.leaf_repofolder.absolute_url() + '/@querysources/opengever.dossier.businesscasedossier/responsible?query=nicole'
+        url = self.query_source_url(
+            self.leaf_repofolder,
+            'responsible',
+            add='opengever.dossier.businesscasedossier',
+            query='nicole',
+        )
         response = browser.open(
             url,
             method='GET',
@@ -296,7 +301,8 @@ class TestGetQuerySources(IntegrationTestCase):
     @browsing
     def test_get_keywords_querysource_for_edit(self, browser):
         self.login(self.regular_user, browser)
-        url = self.empty_dossier.absolute_url() + '/@querysources/keywords?query=secret'
+        url = self.query_source_url(
+            self.empty_dossier, 'keywords', query='secret')
         response = browser.open(
             url,
             method='GET',
@@ -314,8 +320,7 @@ class TestGetQuerySourcesSolr(SolrIntegrationTestCase):
     @browsing
     def test_get_task_issuer_non_ascii_char_handling(self, browser):
         self.login(self.regular_user, browser)
-        url = self.task.absolute_url() + '/@querysources/issuer?{}'.format(
-            urlencode({'query': u'k\xf6vin'.encode('utf-8')}))
+        url = self.query_source_url(self.task, 'issuer', query=u'k\xf6vin')
         response = browser.open(
             url,
             method='GET',
