@@ -1,12 +1,15 @@
+from opengever.activity.model.watcher import Watcher
+from opengever.base.model import create_session
+from opengever.base.sentry import log_msg_to_sentry
+from opengever.base.txnutils import registered_objects
+from opengever.base.txnutils import txn_is_dirty
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.models.user import User
 from opengever.task.activities import TaskChangeIssuerActivity
-from opengever.task.activities import TaskReassignActivity
-from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.localroles import LocalRolesSetter
+from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone import api
@@ -17,6 +20,11 @@ from zExceptions import BadRequest
 from zope.event import notify
 from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectModifiedEvent
+import logging
+import transaction
+
+
+logger = logging.getLogger('opengever.api')
 
 
 class ExtractOldNewUserMixin(Service):
@@ -43,15 +51,17 @@ class ExtractOldNewUserMixin(Service):
 
 
 class TransferTaskPost(ExtractOldNewUserMixin, Service):
+
     def reply(self):
         self.old_userid, self.new_userid = self.extract_userids()
 
+        # Create watcher for new issuer/responsible if it doesn't exist yet
+        # and commit, in order to avoid a deadlock when both sides of an
+        # inter-admin-unit would attempt to do this. See GEVER-946.
+        self.create_watcher_and_commit_if_needed(self.new_userid)
+
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
-
-        task_controller = ISuccessorTaskController(self.context)
-        if task_controller.get_predecessor() or task_controller.get_successors():
-            raise BadRequest("Cross-client tasks cannot be transferred")
 
         self.request.environ['HTTP_X_GEVER_SUPPRESSNOTIFICATIONS'] = 'True'
 
@@ -62,40 +72,99 @@ class TransferTaskPost(ExtractOldNewUserMixin, Service):
             responsible_transition = 'task-transition-reassign'
             issuer_transition = 'task-transition-change-issuer'
 
-        if self.context.revoke_permissions:
-            LocalRolesSetter(self.context).revoke_roles()
-
+        # Clear any potential reminders for the old user
         self.context.clear_reminder(self.old_userid)
 
-        issuer_changed = self.old_userid == self.context.issuer
-        responsible_changed = self.old_userid == self.context.responsible
+        issuer_change = self.old_userid == self.context.issuer
+        responsible_change = self.old_userid == self.context.responsible
 
-        if issuer_changed:
-            issuer_changes = [(ITask['issuer'], self.new_userid)]
-            issuer_response = add_simple_response(
-                        self.context, transition=issuer_transition,
-                        field_changes=issuer_changes,
-                        supress_events=True)
-            self.context.issuer = self.new_userid
+        if issuer_change:
+            self.change_issuer(
+                transition=issuer_transition,
+                new_issuer=self.new_userid)
 
-        if responsible_changed:
-            responsible_changes = [(ITask['responsible'], self.new_userid)]
-            responsible_response = add_simple_response(
-                        self.context, transition=responsible_transition,
-                        field_changes=responsible_changes,
-                        supress_events=True)
-            self.context.responsible = self.new_userid
-
-        if issuer_changed or responsible_changed:
-            notify(ObjectModifiedEvent(self.context))
-
-        if issuer_changed:
-            TaskChangeIssuerActivity(self.context, self.context.REQUEST, issuer_response).record()
-        if responsible_changed:
-            TaskReassignActivity(self.context, self.context.REQUEST, responsible_response).record()
+        if responsible_change:
+            self.change_responsible(
+                transition=responsible_transition,
+                new_responsible=self.new_userid)
 
         self.request.response.setStatus(204)
         return super(TransferTaskPost, self).reply()
+
+    def change_responsible(self, transition, new_responsible):
+        """Change the responsible by reusing the "reassign task" mechanism.
+
+        This will trigger the *-transition-reassign WF transition, and all
+        necessary changes plus syncing to potential predecessors / succeessors
+        will be done in the respective ITransitionExtender.
+        """
+        wftool = api.portal.get_tool('portal_workflow')
+
+        # It's implied that the responsible OrgUnit should never change
+        # when transferring a task.
+        old_responsible_client = self.context.responsible_client
+        params = {
+            'responsible': new_responsible,
+            'responsible_client': old_responsible_client
+        }
+        wftool.doActionFor(self.context, transition, transition_params=params)
+
+    def change_issuer(self, transition, new_issuer):
+        """Change the issuer by emulating some of the 'reassign' behavior.
+
+        The main difference is that we don't have a real workflow transition
+        that we need to invoke for an issuer change - instead we use a
+        pseudo-transition that is just a translated string that is used to
+        make it look like a state change in the task's response timeline.
+        """
+        changes = [(ITask['issuer'], new_issuer)]
+
+        issuer_response = add_simple_response(
+            self.context, transition=transition,
+            field_changes=changes,
+            supress_events=True)
+
+        self.context.issuer = new_issuer
+        notify(ObjectModifiedEvent(self.context))
+        TaskChangeIssuerActivity(self.context, self.context.REQUEST, issuer_response).record()
+
+        sync_task_response(
+            self.context, self.request, 'issuer-change',
+            transition, text=None, new_issuer=new_issuer)
+
+    def create_watcher_and_commit_if_needed(self, new_responsible):
+        """If we don't have an entry in the 'watchers' table for the
+        new responsible, that would lead to a deadlock when reassigning an
+        inter-admin-unit task, because both sides would attempt to create
+        it (with the second txn not seeing the pending changes of the
+        first one, because of isolation).
+
+        We therefore create it here to be sure, and immediately commit, making
+        sure the txn is in a clean that so we don't commit any unexpected
+        changes by accident (otherwise we log to Sentry).
+        """
+        watcher = Watcher.query.get_by_actorid(new_responsible)
+        if not watcher:
+
+            if txn_is_dirty():
+                # Creating and committing the watcher should always be the
+                # first thing that's being done in the txn when reassigning.
+                # Otherwise we would be committing unrelated, unexpected
+                # changes.
+                #
+                # Detect if that happens, but still proceed and log to sentry.
+                msg = 'Dirty transaction when creating and committing watcher'
+                logger.warn(msg)
+                logger.warn('Registered objects: %r' % registered_objects())
+                log_msg_to_sentry(msg, level='warning', extra={
+                    'registered_objects': repr(registered_objects())}
+                )
+
+            session = create_session()
+            watcher = Watcher(actorid=new_responsible)
+            session.add(watcher)
+            transaction.commit()
+            transaction.begin()
 
 
 class TransferDossierPost(ExtractOldNewUserMixin, Service):
