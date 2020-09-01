@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.testing import FunctionalTestCase
 
 
@@ -15,7 +16,7 @@ class TestTaskCssClass(FunctionalTestCase):
     def test_forwarding_class(self):
         forwarding = create(Builder('globalindex_task')
                             .having(int_id=123, sequence_number=123,
-                                    task_type='forwarding_task_type',
+                                    task_type=FORWARDING_TASK_TYPE_ID,
                                     assigned_org_unit='org-unit-1',
                                     issuing_org_unit='org-unit-1',
                                     admin_unit_id='foo'))
@@ -27,7 +28,7 @@ class TestTaskCssClass(FunctionalTestCase):
         remote_forwarding = create(Builder('globalindex_task')
                                    .having(int_id=123, sequence_number=123,
                                            admin_unit_id='admin-unit-1',
-                                           task_type='forwarding_task_type',
+                                           task_type=FORWARDING_TASK_TYPE_ID,
                                            issuing_org_unit='org-unit-1',
                                            assigned_org_unit=u'additional'))
 

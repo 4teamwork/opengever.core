@@ -12,6 +12,7 @@ from opengever.base.query import BaseQuery
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.globalindex.model.reminder_settings import ReminderSetting
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
@@ -270,7 +271,7 @@ class Task(Base):
 
     @property
     def is_forwarding(self):
-        return self.task_type == 'forwarding_task_type'
+        return self.task_type == FORWARDING_TASK_TYPE_ID
 
     @property
     def is_overdue(self):

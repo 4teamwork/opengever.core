@@ -6,6 +6,7 @@ from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.util import getTaskTypeVocabulary
 from Products.statusmessages.interfaces import IStatusMessage
@@ -17,8 +18,8 @@ def task_type_helper(value):
     """XLS Reporter helper method which returns the translated
     value stored in the vdex files"""
 
-    if value == 'forwarding_task_type':
-        return _(u'forwarding_task_type', default=u'Forwarding')
+    if value == FORWARDING_TASK_TYPE_ID:
+        return _(FORWARDING_TASK_TYPE_ID, default=u'Forwarding')
 
     voc = getTaskTypeVocabulary(getSite())
     try:

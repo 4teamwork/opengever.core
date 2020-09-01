@@ -4,6 +4,7 @@ from datetime import datetime
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.inbox import _
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import get_ou_selector
@@ -21,6 +22,8 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.i18n import translate
 from zope.interface import implements
+
+
 
 
 class IForwarding(ITask):
@@ -79,7 +82,7 @@ class Forwarding(Task):
         """Provide a marker string, which will be translated
         in the tabbedview helper method.
         """
-        return 'forwarding_task_type'
+        return FORWARDING_TASK_TYPE_ID
 
     def set_static_task_type(self, value):
         """Marker set function"""
@@ -89,7 +92,7 @@ class Forwarding(Task):
     task_type = property(get_static_task_type, set_static_task_type)
 
     def get_task_type_label(self, language=None):
-        label = _('forwarding_task_type', default=u'Forwarding')
+        label = _(FORWARDING_TASK_TYPE_ID, default=u'Forwarding')
         if language:
             return translate(
                 label,

@@ -27,6 +27,7 @@ from zope.interface import Invalid
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 
 
 class AcceptWizardFormMixin(BaseWizardStepForm):
@@ -49,7 +50,7 @@ def method_vocabulary_factory(context):
     org_unit = context.get_responsible_org_unit()
 
     # decision it's a forwarding or a task
-    if context.task_type == 'forwarding_task_type':
+    if context.task_type == FORWARDING_TASK_TYPE_ID:
         return SimpleVocabulary([
                 SimpleTerm(
                     value=u'forwarding_participate',
@@ -136,7 +137,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
 
     @property
     def label(self):
-        if self.context.task_type == 'forwarding_task_type':
+        if self.context.task_type == FORWARDING_TASK_TYPE_ID:
             _(u'title_accept_forwarding', u'Accept forwarding')
 
         return _(u'title_accept_task', u'Accept task')
@@ -150,7 +151,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
             oguid = ISuccessorTaskController(self.context).get_oguid()
 
             # set forwarding flag
-            if self.context.task_type == 'forwarding_task_type':
+            if self.context.task_type == FORWARDING_TASK_TYPE_ID:
                 is_forwarding = True
             else:
                 is_forwarding = False
@@ -225,7 +226,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 self.request.set('form.widgets.text', text)
 
         super(ChooseMethodStepForm, self).updateWidgets()
-        if self.context.task_type == 'forwarding_task_type':
+        if self.context.task_type == FORWARDING_TASK_TYPE_ID:
             self.widgets.get('method').label = _(
                 u'label_accept_forwarding_choose_method',
                 default="Accept forwarding and ...")

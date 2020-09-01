@@ -2,6 +2,7 @@ from datetime import date
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.actor import InboxActor
 from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
@@ -171,7 +172,7 @@ class TestGlobalindexTask(TestCase):
     def test_is_forwarding(self):
         forwarding = create(
             Builder('globalindex_task')
-            .having(int_id=1, task_type='forwarding_task_type')
+            .having(int_id=1, task_type=FORWARDING_TASK_TYPE_ID)
             )
 
         task = create(

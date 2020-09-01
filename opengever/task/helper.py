@@ -3,6 +3,7 @@ from opengever.task.util import getTaskTypeVocabulary
 from plone.api.portal import get_current_language
 from plone.memoize import ram
 from zope.component.hooks import getSite
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 
 
 @ram.cache(lambda m, i, value: '{}-{}'.format(value, get_current_language()))
@@ -11,9 +12,9 @@ def task_type_helper(item, value):
     its own translations stored in the vdex files.
     """
     portal = getSite()
-    if value == 'forwarding_task_type':
+    if value == FORWARDING_TASK_TYPE_ID:
         return portal.translate(
-            _(u'forwarding_task_type', default=u'Forwarding'))
+            _(FORWARDING_TASK_TYPE_ID, default=u'Forwarding'))
 
     voc = getTaskTypeVocabulary(portal)
     try:
