@@ -9,6 +9,7 @@ Changelog
 - Provide create_forwarding action in API for documents in inboxes. [deiferni]
 - Allow to query by token in @querysources API endpoint. [deiferni]
 - Fix escaping solr literal queries. [deiferni]
+- Consider cookie when figuring out current orgunit in AllUsersInboxesAndTeamsSource. [deiferni]
 
 
 2020.8.0 (2020-08-26)

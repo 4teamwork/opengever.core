@@ -23,12 +23,6 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
     def setUp(self):
         super(TestDossierCoverRenderArguments, self).setUp()
 
-        create(Builder('admin_unit')
-               .having(unit_id=u'OG',
-                       title=u'Department of forest & hunt',
-                       abbreviation=u'DoFH')
-               .as_current_admin_unit())
-
         self.user = create_ogds_user('hugo.boss')
         self.repository = create(
             Builder('repository_root')
@@ -55,12 +49,13 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
         browser.login().visit(dossier, view='dossier_cover_pdf')
 
     def test_contains_converted_configured_clienttitle(self):
+        get_current_admin_unit().title = u'Department of forest & hunt'
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals('Department of forest \\& hunt',
                           arguments.get('clienttitle'))
 
     def test_empty_client_title(self):
-        get_current_admin_unit().title = ''
+        get_current_admin_unit().title = u''
 
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals('', arguments.get('clienttitle'))
@@ -77,6 +72,7 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
                           arguments.get('repositoryversion'))
 
     def test_contains_referencenr(self):
+        get_current_admin_unit().abbreviation = u'DoFH'
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals(u'DoFH 1 / 1', arguments.get('referencenr'))
 
