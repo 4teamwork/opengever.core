@@ -5,6 +5,12 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2020-09-01
+----------
+
+- Kapitel "Teamraum-Mitglieder" hinzugefügt
+
+
 2020-07-10
 ----------
 
