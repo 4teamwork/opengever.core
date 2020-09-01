@@ -5,7 +5,10 @@ from Products.Five.browser import BrowserView
 
 
 class RedirectToMainDossier(BrowserView):
+    """Redirects to the main dossier of any content.
 
+    Caution: this view will be used by GEVER-UI/RIS/VM
+    """
     def __call__(self):
         main_dossier = get_main_dossier(self.context)
         if not main_dossier:
@@ -15,4 +18,9 @@ class RedirectToMainDossier(BrowserView):
             api.portal.show_message(msg, request=self.request, type='error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-        return self.request.RESPONSE.redirect(main_dossier.absolute_url())
+        url_parts = [main_dossier.absolute_url()]
+        qs = self.request['QUERY_STRING']
+        if qs:
+            url_parts.append(qs)
+        redirect_url = '?'.join(url_parts)
+        return self.request.RESPONSE.redirect(redirect_url)

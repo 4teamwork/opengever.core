@@ -24,12 +24,21 @@ class RedirectToContainingMainDossier(BrowserView):
     """
     def __call__(self):
         self.request.RESPONSE.redirect(
-            get_main_dossier(self.context).absolute_url())
+            "?".join([
+                get_main_dossier(self.context).absolute_url(),
+                self.request["QUERY_STRING"]
+            ])
+        )
 
 
 class RedirectToContainingDossier(BrowserView):
     """Redirects the user to the containing dossier.
     """
     def __call__(self):
-        self.request.RESPONSE.redirect(
-            self.context.get_containing_dossier().absolute_url())
+        url_parts = [self.context.get_containing_dossier().absolute_url()]
+        qs = self.request['QUERY_STRING']
+        if qs:
+            url_parts.append(qs)
+        redirect_url = '?'.join(url_parts)
+
+        return self.request.RESPONSE.redirect(redirect_url)

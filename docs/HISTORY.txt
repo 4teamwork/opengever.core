@@ -5,6 +5,8 @@ Changelog
 ---------------------
 
 - Prevent deadlock when reassigning inter-admin-unit tasks. [lgraf]
+- Preserves the query string for the redirect_to_parent_dossier view. [elioschmutz]
+- Preserves the query string for the redirect_to_main_dossier view. [elioschmutz]
 - Adjust the policy generator for easier policy generation. [elioschmutz]
 - Provide create_forwarding action in API for documents in inboxes. [deiferni]
 - Allow to query by token in @querysources API endpoint. [deiferni]

@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 
 
@@ -51,27 +53,39 @@ class TestTaskRedirector(FunctionalTestCase):
                           browser.url)
 
 
-class TestRedirectToContainingMainDossier(FunctionalTestCase):
+class TestRedirectToContainingMainDossier(IntegrationTestCase):
 
     @browsing
     def test_redirect_to_the_containing_main_dossier(self, browser):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        task = create(Builder('task').within(subdossier))
+        self.login(self.dossier_responsible, browser)
+        task = api.content.move(self.task, self.subdossier)
 
-        browser.login().open(task, view='redirect_to_main_dossier')
+        browser.open(task, view='redirect_to_main_dossier')
 
-        self.assertEqual(dossier, browser.context)
+        self.assertEqual(self.dossier, browser.context)
+
+    @browsing
+    def test_redirect_preserves_the_query_string(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.task, view='redirect_to_main_dossier?foo=bar')
+
+        self.assertEqual('foo=bar', browser.url.split('?')[1])
 
 
-class TestRedirectToContainingDossier(FunctionalTestCase):
+class TestRedirectToContainingDossier(IntegrationTestCase):
 
     @browsing
     def test_redirect_to_the_containing_dossier(self, browser):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        task = create(Builder('task').within(subdossier))
+        self.login(self.dossier_responsible, browser)
+        task = api.content.move(self.task, self.subdossier)
 
-        browser.login().open(task, view='redirect_to_parent_dossier')
+        browser.open(task, view='redirect_to_parent_dossier')
 
-        self.assertEqual(subdossier, browser.context)
+        self.assertEqual(self.subdossier, browser.context)
+
+    @browsing
+    def test_redirect_preserves_the_query_string(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.subdocument, view='redirect_to_parent_dossier?foo=bar')
+
+        self.assertEqual('foo=bar', browser.url.split('?')[1])
