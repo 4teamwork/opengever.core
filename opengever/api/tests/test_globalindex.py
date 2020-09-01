@@ -146,3 +146,15 @@ class TestGlobalIndexGet(IntegrationTestCase):
         with self.login(self.secretariat_user, browser=browser):
             browser.open(self.portal, view='@globalindex', headers=self.api_headers)
             self.assertEqual(14, browser.json['items_total'])
+
+    @browsing
+    def test_forwarding_task_type_is_translated(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        search_term = u'F\xf6rw\xe4rding'
+        view = u'@globalindex?search={}'.format(search_term)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertEqual(1, len(browser.json['items']))
+        self.assertEqual(u'Forwarding', browser.json['items'][0]['task_type'])

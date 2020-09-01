@@ -11,6 +11,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.util import getTaskTypeVocabulary
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
@@ -19,7 +20,8 @@ def task_type_helper(value):
     value stored in the vdex files"""
 
     if value == FORWARDING_TASK_TYPE_ID:
-        return _(FORWARDING_TASK_TYPE_ID, default=u'Forwarding')
+        return translate(u'forwarding_task_type', domain='opengever.inbox',
+                         context=getRequest(), default=u'Forwarding')
 
     voc = getTaskTypeVocabulary(getSite())
     try:

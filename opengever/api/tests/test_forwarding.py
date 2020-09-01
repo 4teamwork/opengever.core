@@ -55,6 +55,16 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
             browser.json['containing_dossier']
         )
 
+    @browsing
+    def test_forwarding_task_type_serialization_provides_object(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(self.inbox_forwarding, method="GET", headers=self.api_headers)
+
+        self.assertEqual(
+            {u'token': u'forwarding_task_type', u'title': u'Forwarding'},
+            browser.json['task_type']
+        )
+
 
 class TestForwardingTransitions(IntegrationTestCase):
 

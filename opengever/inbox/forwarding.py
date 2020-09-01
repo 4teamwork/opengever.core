@@ -22,8 +22,21 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.i18n import translate
 from zope.interface import implements
+from zope.interface import provider
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
+@provider(IContextSourceBinder)
+def forwarding_task_type_vocabulary_factory(context):
+    return SimpleVocabulary([
+        SimpleTerm(
+            FORWARDING_TASK_TYPE_ID,
+            title=_(u'forwarding_task_type',
+                    default=u'Forwarding')
+        )
+    ])
 
 
 class IForwarding(ITask):
@@ -56,6 +69,14 @@ class IForwarding(ITask):
         title=task_mf(u"label_deadline", default=u"Deadline"),
         description=task_mf(u"help_deadline", default=u""),
         required=False,
+    )
+
+    # task type only allows one value, make it not required with a default
+    task_type = schema.Choice(
+        title=task_mf(u'label_task_type', default=u'Task Type'),
+        required=False,
+        default=FORWARDING_TASK_TYPE_ID,
+        source=forwarding_task_type_vocabulary_factory,
     )
 
     form.widget('responsible', KeywordFieldWidget, async=True)
@@ -92,7 +113,7 @@ class Forwarding(Task):
     task_type = property(get_static_task_type, set_static_task_type)
 
     def get_task_type_label(self, language=None):
-        label = _(FORWARDING_TASK_TYPE_ID, default=u'Forwarding')
+        label = _(u'forwarding_task_type', default=u'Forwarding')
         if language:
             return translate(
                 label,
