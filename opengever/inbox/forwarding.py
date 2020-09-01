@@ -75,7 +75,9 @@ class IForwarding(ITask):
     task_type = schema.Choice(
         title=task_mf(u'label_task_type', default=u'Task Type'),
         required=False,
+        readonly=False,
         default=FORWARDING_TASK_TYPE_ID,
+        missing_value=None,
         source=forwarding_task_type_vocabulary_factory,
     )
 
@@ -98,19 +100,6 @@ class Forwarding(Task):
     def task_type_category(self):
         """Generates a Property for task categories"""
         return None
-
-    def get_static_task_type(self):
-        """Provide a marker string, which will be translated
-        in the tabbedview helper method.
-        """
-        return FORWARDING_TASK_TYPE_ID
-
-    def set_static_task_type(self, value):
-        """Marker set function"""
-        # do not fail when trying to set the task type - but ignore
-        return
-
-    task_type = property(get_static_task_type, set_static_task_type)
 
     def get_task_type_label(self, language=None):
         label = _(u'forwarding_task_type', default=u'Forwarding')
