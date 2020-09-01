@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-06-29 14:27+0000\n"
+"POT-Creation-Date: 2020-09-01 11:03+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -250,11 +250,6 @@ msgstr "Erweitert"
 #: ./opengever/task/task.py
 msgid "fieldset_common"
 msgstr "Allgemein"
-
-#. Default: "Forwarding"
-#: ./opengever/task/helper.py
-msgid "forwarding_task_type"
-msgstr "Weiterleitung"
 
 #. Default: "Select the target dossier where you like to handle the task."
 #: ./opengever/task/browser/accept/existingdossier.py
@@ -584,7 +579,7 @@ msgid "label_private_task_added"
 msgstr "Neue Aufgabe (persönlich) eröffnet durch ${user}"
 
 #. Default: "Related Items"
-#: ./opengever/task/browser/complete.py
+#: ./opengever/task/browser/complete_utils.py
 #: ./opengever/task/response.py
 #: ./opengever/task/task.py
 msgid "label_related_items"
