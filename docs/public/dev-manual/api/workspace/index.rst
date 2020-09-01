@@ -15,5 +15,6 @@ Hier werden alle Teamraum-Schnittstellen beschrieben, welche von OneGov GEVER un
    todos
    todolists
    actual_workspace_members
+   share_content
 
 .. disqus::

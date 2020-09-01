@@ -4,6 +4,7 @@ Changelog
 2020.8.1 (unreleased)
 ---------------------
 
+- Add @share-content endpoint to share content in workspace. [tinagerber]
 - Add @actual-workspace-members endpoint. [tinagerber]
 - Prevent deadlock when reassigning inter-admin-unit tasks. [lgraf]
 - Preserves the query string for the redirect_to_parent_dossier view. [elioschmutz]
