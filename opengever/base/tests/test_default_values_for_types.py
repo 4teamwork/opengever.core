@@ -1282,6 +1282,37 @@ class TestTaskDefaults(TestDefaultsBase):
 
         self.assert_default_values_equal(expected, persisted_values)
 
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.regular_user, browser)
+
+        payload = {
+            u'@type': self.portal_type,
+            u'title': TASK_REQUIREDS['title'],
+            u'issuer': TASK_REQUIREDS['issuer'],
+            u'task_type': TASK_REQUIREDS['task_type'],
+            u'responsible': TASK_REQUIREDS['responsible'],
+            u'responsible_client': TASK_REQUIREDS['responsible_client'],
+        }
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.dossier.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(201, response.status_code)
+
+        new_object_id = str(response.json['id'])
+        task = self.dossier.restrictedTraverse(new_object_id)
+
+        persisted_values = get_persisted_values_for_obj(task)
+        expected = self.get_type_defaults()
+        # when setting issuer via rest api it seems to become unicode
+        expected['issuer'] = expected['issuer'].decode('utf-8')
+
+        self.assert_default_values_equal(expected, persisted_values)
+
 
 class TestForwardingDefaults(TestDefaultsBase):
     """Test forwarding come with expected default values."""
