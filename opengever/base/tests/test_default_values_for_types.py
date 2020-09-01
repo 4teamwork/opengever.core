@@ -10,6 +10,7 @@ from hashlib import sha256
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.base.oguid import Oguid
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import fake_interaction
@@ -22,6 +23,8 @@ from z3c.form.browser.checkbox import CheckBoxWidget
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from z3c.form.interfaces import IDataConverter
 from z3c.form.interfaces import IGroupForm
+from zope.component import getUtility
+from zope.intid import IIntIds
 from zope.schema import getFieldsInOrder
 from zope.schema import List
 import json
@@ -209,6 +212,36 @@ TASK_FORM_DEFAULTS = {
     'responsible_client': DEFAULT_CLIENT,
 }
 TASK_MISSING_VALUES = {
+    'date_of_completion': None,
+    'effectiveCost': None,
+    'effectiveDuration': None,
+    'expectedCost': None,
+    'expectedDuration': None,
+    'expectedStartOfWork': None,
+    'predecessor': None,
+    'text': None,
+}
+
+
+FORWARDING_REQUIREDS = {
+    'changed': FROZEN_NOW,
+    'issuer': 'inbox:{}'.format(DEFAULT_CLIENT),
+    'responsible': 'inbox:{}'.format(DEFAULT_CLIENT),
+    'responsible_client': DEFAULT_CLIENT,
+    'title': DEFAULT_TITLE,
+}
+FORWARDING_DEFAULTS = {
+    'deadline': None,
+    'relatedItems': [],
+    'task_type': FORWARDING_TASK_TYPE_ID,
+    'informed_principals': [],
+    'is_private': False,
+    'revoke_permissions': True
+}
+FORWARDING_FORM_DEFAULTS = {
+    'responsible': 'inbox:{}'.format(DEFAULT_CLIENT),
+}
+FORWARDING_MISSING_VALUES = {
     'date_of_completion': None,
     'effectiveCost': None,
     'effectiveDuration': None,
@@ -1246,6 +1279,75 @@ class TestTaskDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_z3c_form_defaults()
+
+        self.assert_default_values_equal(expected, persisted_values)
+
+
+class TestForwardingDefaults(TestDefaultsBase):
+    """Test forwarding come with expected default values."""
+
+    portal_type = 'opengever.inbox.forwarding'
+
+    requireds = FORWARDING_REQUIREDS
+    type_defaults = FORWARDING_DEFAULTS
+    form_defaults = FORWARDING_FORM_DEFAULTS
+    missing_values = FORWARDING_MISSING_VALUES
+
+    def get_obj_of_own_type(self):
+        return self.inbox_forwarding
+
+    @browsing
+    def test_z3c_add_form(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        with freeze(FROZEN_NOW):
+            with self.observe_children(self.inbox) as children:
+                paths = ['/'.join(self.inbox_document.getPhysicalPath())]
+                # document how forwardings are created through the browser,
+                # this currently happens in a POST request from the tabbedview
+                # document listing
+                browser.open(self.inbox,
+                            view='++add++opengever.inbox.forwarding',
+                            method='POST',
+                            data={'paths:list': paths})
+                browser.fill({
+                    u'Title': FORWARDING_REQUIREDS['title']
+                }).save()
+
+        forwarding, = children.get('added')
+
+        persisted_values = get_persisted_values_for_obj(forwarding)
+        expected = self.get_z3c_form_defaults()
+        # the form sets a bytestring and in don't know why
+        expected['responsible_client'] = expected['responsible_client'].encode('utf-8')
+
+        self.assert_default_values_equal(expected, persisted_values)
+
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.manager, browser)
+
+        payload = {
+            u'@type': self.portal_type,
+            u'title': FORWARDING_REQUIREDS['title'],
+            u'issuer': FORWARDING_REQUIREDS['issuer'],
+            u'responsible': FORWARDING_REQUIREDS['responsible'],
+            u'relatedItems': [getUtility(IIntIds).getId(self.inbox_document)],
+        }
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.inbox.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(201, response.status_code)
+
+        new_object_id = str(response.json['id'])
+        forwarding = self.inbox.restrictedTraverse(new_object_id)
+
+        persisted_values = get_persisted_values_for_obj(forwarding)
+        expected = self.get_type_defaults()
 
         self.assert_default_values_equal(expected, persisted_values)
 
