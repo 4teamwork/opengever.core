@@ -126,7 +126,7 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
     def setUp(self):
         super(TestAllUsersInboxesAndTeamsSource, self).setUp()
 
-        self.admin_unit = create(Builder('admin_unit'))
+        self.admin_unit = create(Builder('admin_unit').as_current_admin_unit())
         self.org_unit1 = create(Builder('org_unit')
                                 .id('org-unit-1')
                                 .having(title=u'Informatik',
