@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-06 08:45+0000\n"
+"POT-Creation-Date: 2020-09-01 14:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,11 +24,6 @@ msgstr ""
 #. Default: "You have not selected any items."
 #: ./opengever/globalindex/browser/report.py
 msgid "error_no_items"
-msgstr ""
-
-#. Default: "Forwarding"
-#: ./opengever/globalindex/browser/report.py
-msgid "forwarding_task_type"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py

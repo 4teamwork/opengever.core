@@ -4,6 +4,7 @@ from datetime import datetime
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.inbox import _
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import get_ou_selector
@@ -21,6 +22,21 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.i18n import translate
 from zope.interface import implements
+from zope.interface import provider
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
+
+
+@provider(IContextSourceBinder)
+def forwarding_task_type_vocabulary_factory(context):
+    return SimpleVocabulary([
+        SimpleTerm(
+            FORWARDING_TASK_TYPE_ID,
+            title=_(u'forwarding_task_type',
+                    default=u'Forwarding')
+        )
+    ])
 
 
 class IForwarding(ITask):
@@ -55,6 +71,16 @@ class IForwarding(ITask):
         required=False,
     )
 
+    # task type only allows one value, make it not required with a default
+    task_type = schema.Choice(
+        title=task_mf(u'label_task_type', default=u'Task Type'),
+        required=False,
+        readonly=False,
+        default=FORWARDING_TASK_TYPE_ID,
+        missing_value=None,
+        source=forwarding_task_type_vocabulary_factory,
+    )
+
     form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
@@ -75,21 +101,8 @@ class Forwarding(Task):
         """Generates a Property for task categories"""
         return None
 
-    def get_static_task_type(self):
-        """Provide a marker string, which will be translated
-        in the tabbedview helper method.
-        """
-        return 'forwarding_task_type'
-
-    def set_static_task_type(self, value):
-        """Marker set function"""
-        # do not fail when trying to set the task type - but ignore
-        return
-
-    task_type = property(get_static_task_type, set_static_task_type)
-
     def get_task_type_label(self, language=None):
-        label = _('forwarding_task_type', default=u'Forwarding')
+        label = _(u'forwarding_task_type', default=u'Forwarding')
         if language:
             return translate(
                 label,

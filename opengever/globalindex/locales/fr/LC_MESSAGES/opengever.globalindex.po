@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-06 08:45+0000\n"
+"POT-Creation-Date: 2020-09-01 14:23+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/fr/>\n"
@@ -24,11 +24,6 @@ msgstr "Exporter la sélection"
 #: ./opengever/globalindex/browser/report.py
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun élément."
-
-#. Default: "Forwarding"
-#: ./opengever/globalindex/browser/report.py
-msgid "forwarding_task_type"
-msgstr "Transmission"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_admin_unit_id"

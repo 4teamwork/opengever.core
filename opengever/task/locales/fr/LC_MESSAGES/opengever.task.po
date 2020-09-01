@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-06-29 14:27+0000\n"
+"POT-Creation-Date: 2020-09-01 11:03+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -252,11 +252,6 @@ msgstr "Avancé"
 #: ./opengever/task/task.py
 msgid "fieldset_common"
 msgstr "Général"
-
-#. Default: "Forwarding"
-#: ./opengever/task/helper.py
-msgid "forwarding_task_type"
-msgstr "Transmission"
 
 #. Default: "Select the target dossier where you like to handle the task."
 #: ./opengever/task/browser/accept/existingdossier.py
@@ -586,7 +581,7 @@ msgid "label_private_task_added"
 msgstr "Nouvelle tâche (personnelle) ouverte par ${user}"
 
 #. Default: "Related Items"
-#: ./opengever/task/browser/complete.py
+#: ./opengever/task/browser/complete_utils.py
 #: ./opengever/task/response.py
 #: ./opengever/task/task.py
 msgid "label_related_items"
