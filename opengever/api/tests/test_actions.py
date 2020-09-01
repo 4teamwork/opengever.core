@@ -698,7 +698,7 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
             self.assert_workspace_actions_not_available(browser, self.dossier)
 
     @browsing
-    def test_workspaces_actions_only_available_if_user_has_permission(self, browser):
+    def test_workspaces_actions_only_available_if_user_has_permission_to_use_workspace_client(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
@@ -710,6 +710,37 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
             self.grant(*roles)
 
             self.assert_workspace_actions_not_available(browser, self.dossier)
+
+    @browsing
+    def test_workspaces_actions_not_available_if_user_has_no_permission(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+
+            self.assert_workspace_actions_available(browser, self.dossier)
+
+            # global permissions are setup in a weird way
+            self.grant('WorkspaceClientUser', 'Member')
+            self.dossier.__ac_local_roles_block__ = True
+            self.grant('Reader', on=self.dossier)
+
+            self.assert_workspace_actions(browser, self.dossier,
+                                          [self.list_workspaces_action])
+
+    @browsing
+    def test_workspaces_actions_not_available_if_dossier_is_not_open(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+
+            #self.assert_workspace_actions_available(browser, self.dossier)
+
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-deactivate')
+            transaction.commit()
+
+            self.assert_workspace_actions(browser, self.dossier,
+                                          [self.list_workspaces_action])
 
 
 class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
