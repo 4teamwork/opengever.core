@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from opengever.api.move import Move
 from opengever.base.response import AutoResponseChangesTracker
 from opengever.base.response import IResponseContainer
@@ -5,8 +6,10 @@ from opengever.base.response import MOVE_RESPONSE_TYPE
 from opengever.base.response import Response
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
+from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
+from plone.restapi.services import Service
 from zope.component import adapter
 from zope.interface import Interface
 
@@ -65,3 +68,17 @@ class ToDoMove(Move):
 
     def _get_changes_text(self, obj):
         return obj.title if IToDoList.providedBy(obj) else ''
+
+
+class TodoDelete(Service):
+    """Deletes todos and todo lists."""
+
+    def reply(self):
+
+        parent = aq_parent(self.context)
+        try:
+            parent._delObject(self.context.getId())
+        except LinkIntegrityNotificationException:
+            pass
+
+        return self.reply_no_content()

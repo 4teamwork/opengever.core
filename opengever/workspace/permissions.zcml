@@ -12,4 +12,8 @@
 
   <permission id="opengever.workspace.UpdateContentOrder" title="opengever.workspace: Update Content Order" />
 
+  <permission id="opengever.workspace.ModifyWorkspace" title="opengever.workspace: Modify Workspace" />
+
+  <permission id="opengever.workspace.DeleteTodos" title="opengever.workspace: Delete Todos" />
+
 </configure>

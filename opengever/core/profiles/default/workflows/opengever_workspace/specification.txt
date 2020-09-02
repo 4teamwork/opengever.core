@@ -25,6 +25,7 @@ General:
   A workspace member can perform the same actions as a workspace guest.
   A workspace admin can perform the same actions as a workspace member.
   An admin can always perform the same actions as a workspace admin.
+  A systems administrator can always perform the same actions as an admin.
 
   A systems administrator can always view.
   A systems administrator can always manage security.
@@ -35,10 +36,12 @@ Initial Status: Active
 Status Active:
   A workspace guest can view.
   A workspace member can add.
+  A workspace member can edit.
   A workspace member can trash.
   A workspace member can update_order.
   A workspace member can soft delete.
-  A workspace admin can edit.
+  A workspace member can delete todos.
+  A workspace admin can modify workspace.
   A workspace admin can manage security.
   A workspace admin can deactivate.
 Status Inactive:

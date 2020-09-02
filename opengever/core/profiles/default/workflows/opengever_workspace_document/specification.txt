@@ -1,4 +1,4 @@
-[Workspace folder workflow]
+[Workspace document workflow]
 Role mapping:
   workspace guest => WorkspaceGuest
   workspace member => WorkspaceMember

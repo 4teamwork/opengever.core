@@ -2109,6 +2109,16 @@ class OpengeverContentFixture(object):
                 )
             ))
 
+        # Enable placeful workflow policy for workspace root
+        self.workspace_root.manage_addProduct[
+            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
+        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
+        policy_config = pwf_tool.getWorkflowPolicyConfig(self.workspace_root)
+        policy_config.setPolicyIn(
+            'opengever_workspace_policy', update_security=False)
+        policy_config.setPolicyBelow(
+            'opengever_workspace_policy', update_security=False)
+
         self.set_roles(
             self.workspace_root, self.workspace_owner.getId(),
             ['WorkspacesUser', 'WorkspacesCreator'])

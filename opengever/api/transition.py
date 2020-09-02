@@ -22,8 +22,6 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 import plone.protect.interfaces
-import six
-import transaction
 
 
 class GEVERWorkflowTransition(WorkflowTransition):
@@ -330,86 +328,3 @@ class GEVERTaskWorkflowTransition(GEVERWorkflowTransition):
         task_deserializer.update_reponsible_field_data(data)
 
         return data
-
-
-WORKSPACE_TRANSITION_MAPPING = {
-    'opengever_workspace--TRANSITION--deactivate--active_inactive': {
-        'opengever.workspace.folder':
-            'opengever_workspace_folder--TRANSITION--deactivate--active_inactive',
-        'opengever.workspace.todo':
-            'opengever_workspace_todo--TRANSITION--deactivate--active_inactive',
-        'opengever.workspace.todolist':
-            'opengever_workspace_todolist--TRANSITION--deactivate--active_inactive',
-        'opengever.workspace.workspace':
-            'opengever_workspace--TRANSITION--deactivate--active_inactive',
-    },
-    'opengever_workspace--TRANSITION--reactivate--inactive_active': {
-        'opengever.workspace.folder':
-            'opengever_workspace_folder--TRANSITION--reactivate--inactive_active',
-        'opengever.workspace.todo':
-            'opengever_workspace_todo--TRANSITION--reactivate--inactive_active',
-        'opengever.workspace.todolist':
-            'opengever_workspace_todolist--TRANSITION--reactivate--inactive_active',
-        'opengever.workspace.workspace':
-            'opengever_workspace--TRANSITION--reactivate--inactive_active',
-    },
-}
-
-
-class WorkspaceWorkflowTransition(WorkflowTransition):
-    """Handles workflow transitions for workspaces.
-
-       Always executes transitions recursively for all workspace folders.
-    """
-
-    def reply(self):
-        if self.transition is None:
-            self.request.response.setStatus(400)
-            return dict(error=dict(type="BadRequest", message="Missing transition"))
-
-        data = json_body(self.request)
-
-        # Disable CSRF protection
-        if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
-            alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
-
-        comment = data.get("comment", "")
-
-        try:
-            self.recurse_transition([self.context], comment)
-
-        except WorkflowException as e:
-            self.request.response.setStatus(400)
-            transaction.abort()
-            return dict(
-                error=dict(
-                    type="WorkflowException",
-                    message=translate(str(e), context=self.request),
-                )
-            )
-        except BadRequest as e:
-            transaction.abort()
-            self.request.response.setStatus(400)
-            return dict(error=dict(type="Bad Request", message=str(e)))
-
-        history = self.wftool.getInfoFor(self.context, "review_history")
-        action = history[-1]
-        action["title"] = self.context.translate(
-            self.wftool.getTitleForStateOnType(
-                action["review_state"], self.context.portal_type
-            )
-        )
-        if six.PY2:
-            action["title"] = action["title"].decode("utf8")
-
-        return json_compatible(action)
-
-    def recurse_transition(self, objs, comment):
-        for obj in objs:
-            transition = WORKSPACE_TRANSITION_MAPPING[self.transition][
-                obj.portal_type]
-            self.wftool.doActionFor(obj, transition, comment=comment)
-
-            if IFolderish.providedBy(obj):
-                self.recurse_transition(
-                    obj.objectValues(spec='Dexterity Container'), comment)

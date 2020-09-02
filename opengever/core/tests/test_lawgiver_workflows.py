@@ -23,3 +23,7 @@ class TestWorkspaceFolderWorkflow(GeverWorkflowTest):
 
 class TestWorkspaceWorkflow(GeverWorkflowTest):
     workflow_name = 'opengever_workspace'
+
+
+class TestWorkspaceDocumentWorkflow(GeverWorkflowTest):
+    workflow_name = 'opengever_workspace_document'

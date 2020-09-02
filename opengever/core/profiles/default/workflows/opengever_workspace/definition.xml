@@ -88,6 +88,8 @@
   <permission>opengever.trash: Trash content</permission>
   <permission>opengever.trash: Untrash content</permission>
   <permission>opengever.workspace: Add WorkspaceFolder</permission>
+  <permission>opengever.workspace: Delete Todos</permission>
+  <permission>opengever.workspace: Modify Workspace</permission>
   <permission>opengever.workspace: Update Content Order</permission>
   <permission>plone.portlet.collection: Add collection portlet</permission>
   <permission>plone.portlet.static: Add static portlet</permission>
@@ -102,6 +104,7 @@
     </permission-map>
     <permission-map name="Add portal content" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -114,19 +117,27 @@
     </permission-map>
     <permission-map name="CMFEditions: Apply version control" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Checkout to location" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Save new version" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Change local roles" acquired="False">
       <permission-role>Administrator</permission-role>
@@ -138,67 +149,92 @@
     </permission-map>
     <permission-map name="Edit comments" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Edit date of cassation" acquired="False"/>
     <permission-map name="Edit date of submission" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="List folder contents" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Manage properties" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Modify constrain types" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Modify portal content" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Modify view template" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Edit response" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue assignment" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue severity" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue state" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue tags" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue target release" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue watchers" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Poi: Upload attachment" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Portlets: Manage portlets" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Remove GEVER content" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -245,29 +281,38 @@
     </permission-map>
     <permission-map name="ftw.keywordwidget: Add new term" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="ftw.mail: Add Mail" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="iterate : Check in content" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="iterate : Check out content" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Add contact" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -276,53 +321,70 @@
     </permission-map>
     <permission-map name="opengever.contact: Add person" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Edit person" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.disposition: Add disposition" acquired="False"/>
     <permission-map name="opengever.disposition: Download SIP Package" acquired="False"/>
     <permission-map name="opengever.disposition: Edit transfer number" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Add document" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Cancel" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Checkin" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Checkout" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Force Checkin" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Modify archival file" acquired="False"/>
     <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Add templatefolder" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -330,6 +392,7 @@
     <permission-map name="opengever.dossier: Protect dossier" acquired="False"/>
     <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -338,16 +401,19 @@
     </permission-map>
     <permission-map name="opengever.inbox: Add Year Folder" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.inbox: Scan In" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Committee" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -356,31 +422,37 @@
     </permission-map>
     <permission-map name="opengever.meeting: Add Member" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Period" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Proposal" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Proposal Template" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Sablon Template" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.private: Add private dossier" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -397,35 +469,54 @@
     <permission-map name="opengever.repository: Unlock Reference Prefix" acquired="False"/>
     <permission-map name="opengever.task: Add task" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.task: Add task comment" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.task: Edit task" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.trash: Trash content" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.trash: Untrash content" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="opengever.workspace: Add WorkspaceFolder" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
+    <permission-map name="opengever.workspace: Delete Todos" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
+    </permission-map>
+    <permission-map name="opengever.workspace: Modify Workspace" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+    </permission-map>
     <permission-map name="opengever.workspace: Update Content Order" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
@@ -590,6 +681,8 @@
     <permission-map name="opengever.trash: Trash content" acquired="False"/>
     <permission-map name="opengever.trash: Untrash content" acquired="False"/>
     <permission-map name="opengever.workspace: Add WorkspaceFolder" acquired="False"/>
+    <permission-map name="opengever.workspace: Delete Todos" acquired="False"/>
+    <permission-map name="opengever.workspace: Modify Workspace" acquired="False"/>
     <permission-map name="opengever.workspace: Update Content Order" acquired="False"/>
     <permission-map name="plone.portlet.collection: Add collection portlet" acquired="False">
       <permission-role>Manager</permission-role>
@@ -602,6 +695,7 @@
     <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace--TRANSITION--deactivate--active_inactive">deactivate</action>
     <guard>
       <guard-role>Administrator</guard-role>
+      <guard-role>Manager</guard-role>
       <guard-role>WorkspaceAdmin</guard-role>
     </guard>
   </transition>
@@ -609,6 +703,7 @@
     <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace--TRANSITION--reactivate--inactive_active">reactivate</action>
     <guard>
       <guard-role>Administrator</guard-role>
+      <guard-role>Manager</guard-role>
       <guard-role>WorkspaceAdmin</guard-role>
     </guard>
   </transition>
