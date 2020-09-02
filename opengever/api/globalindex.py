@@ -3,12 +3,24 @@ from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.api.solr_query_service import translate_task_type
 from opengever.base.helpers import display_name
 from opengever.globalindex.model.task import Task
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.tabbedview.sqlsource import cast_to_string
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from sqlalchemy import asc
 from sqlalchemy import desc
 from sqlalchemy import or_
+
+
+def add_portal_type(task):
+    """Figure out a tasks portal type from the task_type column.
+
+    We don't store the portal_type in globalindex but task_type is distinct
+    and we can use it to figure out the portal type.
+    """
+    if task.task_type == FORWARDING_TASK_TYPE_ID:
+        return 'opengever.inbox.forwarding'
+    return 'opengever.task.task'
 
 
 class GlobalIndexGet(Service):
@@ -24,7 +36,8 @@ class GlobalIndexGet(Service):
         'responsible_fullname': lambda task: display_name(task.responsible),
         'issuer_fullname': lambda task: display_name(task.issuer),
         'oguid': lambda task: str(task.oguid),
-        '@id': lambda task: task.absolute_url()}
+        '@id': lambda task: task.absolute_url(),
+        '@type': add_portal_type}
 
     searchable_columns = [Task.title, Task.text,
                           Task.sequence_number, Task.responsible]

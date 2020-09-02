@@ -5,6 +5,8 @@ from opengever.testing import IntegrationTestCase
 
 class TestGlobalIndexGet(IntegrationTestCase):
 
+    maxDiff = None
+
     @browsing
     def test_lists_all_task(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -15,6 +17,7 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(15, len(browser.json['items']))
         self.assertEqual(
             {u'@id': self.inbox_task.absolute_url(),
+             u'@type': u'opengever.task.task',
              u'assigned_org_unit': u'fa',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'created': u'2016-08-31T18:27:33',
@@ -158,3 +161,21 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(1, browser.json['items_total'])
         self.assertEqual(1, len(browser.json['items']))
         self.assertEqual(u'Forwarding', browser.json['items'][0]['task_type'])
+
+    @browsing
+    def test_adds_portal_type_to_globalindex_items(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = (
+            '@globalindex?filters.task_type:record:list=information'
+            '&filters.task_type:record:list=forwarding_task_type'
+            '&sort_on=title'
+        )
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertEqual(2, len(browser.json['items']))
+        items = browser.json['items']
+        self.assertEqual(items[0]['@type'], u'opengever.task.task')
+        self.assertEqual(items[1]['@type'], u'opengever.inbox.forwarding')
+
