@@ -48,4 +48,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="is_within_workspace"
+      class=".is_within_workspace.IsWithinWorkspaceView"
+      permission="zope2.View"
+      />
+
 </configure>

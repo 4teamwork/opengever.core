@@ -1,0 +1,38 @@
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="opengever.workspace"
+    metal:use-macro="context/notification_mail_macros/macros/mail_template">
+
+    <metal:styles metal:fill-slot="style_slot">
+      <style>
+        .email-content table {
+          width: 100%;
+        }
+      </style>
+    </metal:styles>
+
+    <metal:title metal:fill-slot="title">
+        <p><a href="" tal:content="options/title" tal:attributes="href options/link"></a></p>
+    </metal:title>
+
+    <metal:content metal:fill-slot="content">
+      <p>
+        <tal:summary tal:repeat="line options/content">
+          <tal:last tal:define="is_last repeat/line/end">
+            <tal:line tal:replace="line" /><br tal:condition="not: is_last" />
+          </tal:last>
+        </tal:summary>
+      </p>
+      <tal:comment tal:condition="options/comment">
+          <p><strong tal:content="options/comment_title"/></p>
+        <tal:block tal:repeat="line options/comment">
+          <p tal:content="line" />
+        </tal:block>
+      </tal:comment>
+
+    </metal:content>
+
+    <metal:footer metal:fill-slot="footer" />
+</html>

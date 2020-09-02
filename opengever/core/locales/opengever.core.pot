@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-03-10 07:31+0000\n"
+"POT-Creation-Date: 2020-09-01 07:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,6 +78,7 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200309163442_add_copy_documents_from_workspace_action/actions.xml
+#: ./opengever/core/upgrades/20200311140946_move_copy_documents_from_workspace_to_folder_actions/actions.xml
 msgid "Copy documents from workspace"
 msgstr ""
 
@@ -272,6 +273,11 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Send as email"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20200827160546_add_share_content_action/actions.xml
+msgid "Share content"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml

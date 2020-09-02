@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-07-06 14:45+0000\n"
+"POT-Creation-Date: 2020-09-01 07:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,6 +199,21 @@ msgstr "Papierkorb"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
 msgstr "Teamräume"
+
+#. Default: "Comment"
+#: ./opengever/workspace/content_sharing_mailer.py
+msgid "share_mail_comment_title"
+msgstr "Kommentar"
+
+#. Default: "Notification to \"${title}\""
+#: ./opengever/workspace/content_sharing_mailer.py
+msgid "share_mail_subject"
+msgstr "Hinweis zu \"${title}\""
+
+#. Default: "${user} has sent you a notification:"
+#: ./opengever/workspace/content_sharing_mailer.py
+msgid "share_mail_summary"
+msgstr "${user} hat einen Hinweis an Sie versendet:"
 
 #. Default: "Assigned to ${responsible} by ${user}"
 #: ./opengever/workspace/activities.py

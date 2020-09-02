@@ -790,6 +790,14 @@
 
   <plone:service
       method="GET"
+      name="@actual-workspace-members"
+      for="*"
+      factory=".actual_workspace_members.ActualWorkspaceMembersGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
       name="@watchers"
       for="opengever.task.task.ITask"
       factory=".watchers.WatchersGet"
@@ -865,6 +873,15 @@
       name="@remote-workflow"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".remote_workflow.RemoteWorkflowPost"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="POST"
+      name="@share-content"
+      for="*"
+      factory=".share_content.ShareContentPost"
       permission="zope2.View"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
