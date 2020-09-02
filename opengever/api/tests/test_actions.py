@@ -632,15 +632,21 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         manager.storage.add(self.workspace.UID())
         transaction.commit()
 
-    def assert_workspace_actions_available(self, browser, dossier):
-        actions = self.get_actions(browser, dossier)
-        for action in self.workspace_actions:
-            self.assertIn(action, actions)
+    def assert_workspace_actions(self, browser, context, expected):
+        all_actions = self.get_actions(browser, context)
+        workspace_action_ids = {each['id'] for each in self.workspace_actions}
+        available = [
+            action for action in all_actions
+            if action['id'] in workspace_action_ids
+        ]
 
-    def assert_workspace_actions_not_available(self, browser, dossier):
-        actions = self.get_actions(browser, dossier)
-        for action in self.workspace_actions:
-            self.assertNotIn(action, actions)
+        self.assertEqual(sorted(available), sorted(expected))
+
+    def assert_workspace_actions_available(self, browser, context):
+        self.assert_workspace_actions(browser, context, self.workspace_actions)
+
+    def assert_workspace_actions_not_available(self, browser, context):
+        self.assert_workspace_actions(browser, context, [])
 
     @browsing
     def test_copy_documents_actions_available_in_dossier_with_linked_workspaces(self, browser):
