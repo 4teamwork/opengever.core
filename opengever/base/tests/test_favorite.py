@@ -65,6 +65,20 @@ class TestFavoriteModel(IntegrationTestCase):
         self.assertFalse(
             Favorite.query.is_marked_as_favorite(self.dossier, self.regular_user))
 
+    def test_serialize_favorite_returns_unresolved_target_link_if_target_doesnt_exist_anymore(self):
+        self.login(self.manager)
+        favorite = create(Builder('favorite')
+                          .for_user(self.manager)
+                          .for_object(self.document))
+
+        self.assertEqual(self.document.absolute_url(),
+                         favorite.serialize(self.portal.absolute_url(), resolve=True)['target_url'])
+        favorite.serialize(self.portal.absolute_url(), resolve=True)
+
+        api.content.delete(self.document)
+        self.assertEqual(u'http://nohost/plone/resolve_oguid/plone:1014073300',
+                         favorite.serialize(self.portal.absolute_url(), resolve=True)['target_url'])
+
 
 class TestManager(IntegrationTestCase):
 

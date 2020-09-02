@@ -1,5 +1,6 @@
 from opengever.base.browser.helper import get_css_class
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import CSS_CLASS_LENGTH
@@ -32,6 +33,10 @@ from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import composite
 from sqlalchemy.schema import Sequence
+import logging
+
+
+logger = logging.getLogger('opengever.base')
 
 
 class Favorite(Base):
@@ -122,7 +127,12 @@ class Favorite(Base):
         If the favorite cannot be resolved, i.e. because it does not exist on the
         current admin-unit, the unresolved favorite will be returned instead.
         """
-        resolved_obj = self.oguid.resolve_object() if resolve else None
+        resolved_obj = None
+        if resolve:
+            try:
+                resolved_obj = self.oguid.resolve_object()
+            except InvalidOguidIntIdPart:
+                logger.warn('Failed to resolve Oguid %s', self.oguid.id)
 
         return {
             '@id': self.api_url(portal_url),
