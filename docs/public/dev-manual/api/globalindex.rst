@@ -19,6 +19,7 @@ Der globale, also über den ganzen Mandantenverbund verteilte, Aufgabenindex kan
       "batching": null,
       "items": [
         { "@id": "http://localhost:8080//ordnungssystem/dossier-23/document-123/task-1",
+          "@type": "opengever.task.task",
           "assigned_org_unit": "fa",
           "containing_dossier": "Anfragen 2019",
           "created": "2016-08-31T18:27:33",
