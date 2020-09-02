@@ -25,6 +25,13 @@
       class=".deadline.ModifyDeadlineResponseSyncerReceiver"
       />
 
+  <browser:page
+      name="sync-task-issuer-change-response"
+      for="opengever.task.task.ITask"
+      permission="zope.Public"
+      class=".issuer_change.IssuerChangeResponseSyncerReceiver"
+      />
+
   <adapter
       factory=".comment.CommentResponseSyncerSender"
       for="opengever.task.task.ITask *"
@@ -43,6 +50,13 @@
       factory=".deadline.ModifyDeadlineResponseSyncerSender"
       for="opengever.task.task.ITask *"
       name="deadline"
+      provides="opengever.task.interfaces.IResponseSyncerSender"
+      />
+
+  <adapter
+      factory=".issuer_change.IssuerChangeResponseSyncerSender"
+      for="opengever.task.task.ITask *"
+      name="issuer-change"
       provides="opengever.task.interfaces.IResponseSyncerSender"
       />
 </configure>

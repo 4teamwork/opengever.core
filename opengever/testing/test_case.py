@@ -3,8 +3,10 @@ from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.keywordwidget.tests import widget  # keep!
+from opengever.activity.model import Notification
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.oguid import Oguid
+from opengever.base.response import IResponseContainer
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
@@ -75,6 +77,44 @@ class TestCase(unittest.TestCase):
         children['after'] = filter(allowed, obj.objectValues())
         children['added'] = set(children['after']) - set(children['before'])
         children['removed'] = set(children['before']) - set(children['after'])
+
+    @contextmanager
+    def observe_responses(self, obj):
+        """Observe responses on an object for testing that responses were
+        added or removed within the context manager.
+        """
+        responses = {'before': IResponseContainer(obj).list()}
+        yield responses
+
+        # Using list comprehensions instead of sets here to preserve order
+        responses['after'] = IResponseContainer(obj).list()
+        responses['added'] = [r for r in responses['after'] if r not in responses['before']]
+        responses['removed'] = [r for r in responses['before'] if r not in responses['after']]
+
+    @contextmanager
+    def observe_notifications(self):
+        """Observe notifications for testing which ones were generated within
+        the context manager.
+        """
+        notifications = {'before': Notification.query.all()}
+        yield notifications
+
+        # Using list comprehensions instead of sets here to preserve order
+        notifications['after'] = Notification.query.all()
+        notifications['added'] = [r for r in notifications['after'] if r not in notifications['before']]
+
+    @contextmanager
+    def observe_reminders(self, obj):
+        """Observe reminders on an object for testing that reminders were
+        added or removed within the context manager.
+        """
+        reminders = {'before': obj.get_reminders()}
+        yield reminders
+
+        # Using list comprehensions instead of sets here to preserve order
+        reminders['after'] = obj.get_reminders()
+        reminders['added'] = [r for r in reminders['after'] if r not in reminders['before']]
+        reminders['removed'] = [r for r in reminders['before'] if r not in reminders['after']]
 
 
 class FunctionalTestCase(TestCase):
