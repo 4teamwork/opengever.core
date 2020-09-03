@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-01 07:50+0000\n"
+"POT-Creation-Date: 2020-09-03 12:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -329,6 +329,7 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.workspace.xml
 #: ./opengever/core/upgrades/20171213174551_add_workspace_content_type/types/opengever.workspace.workspace.xml
+#: ./opengever/core/upgrades/20200827114625_update_workspace_workflow/types/opengever.workspace.workspace.xml
 msgid "Workspace"
 msgstr ""
 
