@@ -91,6 +91,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'opengever_period_workflow--STATUS--active',
             'opengever_workspace--STATUS--active',
             'opengever_workspace--STATUS--inactive',
+            'opengever_workspace_document--STATUS--active',
             'opengever_workspace_folder--STATUS--active',
             'opengever_workspace_todo--STATUS--active',
             'opengever_workspace_todolist--STATUS--active',

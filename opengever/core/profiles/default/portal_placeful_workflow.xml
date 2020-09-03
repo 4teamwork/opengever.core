@@ -1,4 +1,5 @@
 <object name="portal_placeful_workflow" meta_type="Placeful Workflow Tool">
   <object name="opengever_private_policy" meta_type="WorkflowPolicy" />
   <object name="opengever_inbox_policy" meta_type="WorkflowPolicy" />
+  <object name="opengever_workspace_policy" meta_type="WorkflowPolicy" />
 </object>

@@ -1,0 +1,38 @@
+[Workspace document workflow]
+Role mapping:
+  workspace guest => WorkspaceGuest
+  workspace member => WorkspaceMember
+  workspace admin => WorkspaceAdmin
+  admin => Administrator
+  systems administrator => Manager
+
+workspace guest role description:
+  A workspace guest has read access to the content but cannot change anything.
+
+workspace member role description:
+  Workspace members can read and modify all contents of the workspace.
+
+workspace admin role description:
+  Workspace admins can manage the team as well as read and modify all contents.
+
+
+Visible roles:
+  workspace guest
+  workspace member
+  workspace admin
+
+
+General:
+  A workspace member can perform the same actions as a workspace guest.
+  A workspace admin can perform the same actions as a workspace member.
+  An admin can perform the same actions as a workspace admin.
+
+  A systems administrator can always view.
+  A systems administrator can always manage security.
+  A systems administrator can always use the developer tools.
+
+
+Initial Status: Active
+Status Active:
+  A workspace guest can view.
+  A workspace admin can manage security.
