@@ -36,10 +36,11 @@ Initial Status: Active
 Status Active:
   A workspace guest can view.
   A workspace member can add.
+  A workspace member can edit.
   A workspace member can trash.
   A workspace member can update_order.
   A workspace member can soft delete.
-  A workspace admin can edit.
+  A workspace admin can modify workspace.
   A workspace admin can manage security.
   A workspace admin can deactivate.
 Status Inactive:

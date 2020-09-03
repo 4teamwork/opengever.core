@@ -282,7 +282,10 @@
 
   <!-- Ignore only relevant in workspace workflow-->
   <lawgiver:ignore
-      permissions="opengever.workspace: Update Content Order"
+      permissions="
+                   opengever.workspace: Update Content Order,
+                   opengever.workspace: Modify Workspace,
+                   "
       />
 
   <lawgiver:workflow name="opengever_committeecontainer_workflow">
@@ -363,6 +366,11 @@
     <lawgiver:map_permissions
         action_group="update_order"
         permissions="opengever.workspace: Update Content Order"
+        />
+
+    <lawgiver:map_permissions
+        action_group="modify workspace"
+        permissions="opengever.workspace: Modify Workspace"
         />
 
   </lawgiver:workflow>
