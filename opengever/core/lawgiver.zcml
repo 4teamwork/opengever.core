@@ -285,6 +285,7 @@
       permissions="
                    opengever.workspace: Update Content Order,
                    opengever.workspace: Modify Workspace,
+                   opengever.workspace: Delete Todos,
                    "
       />
 
@@ -371,6 +372,11 @@
     <lawgiver:map_permissions
         action_group="modify workspace"
         permissions="opengever.workspace: Modify Workspace"
+        />
+
+    <lawgiver:map_permissions
+        action_group="delete todos"
+        permissions="opengever.workspace: Delete Todos"
         />
 
   </lawgiver:workflow>

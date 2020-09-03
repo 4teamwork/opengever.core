@@ -61,6 +61,20 @@
       />
 
   <plone:service
+      method="DELETE"
+      for="opengever.workspace.interfaces.IToDo"
+      factory=".todo.TodoDelete"
+      permission="opengever.workspace.DeleteTodos"
+      />
+
+  <plone:service
+      method="DELETE"
+      for="opengever.workspace.interfaces.IToDoList"
+      factory=".todo.TodoDelete"
+      permission="opengever.workspace.DeleteTodos"
+      />
+
+  <plone:service
       method="POST"
       name="@checkout"
       for="opengever.document.document.IDocumentSchema"
