@@ -1,0 +1,86 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.workspace.workspace" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <!-- Basic metadata -->
+  <property name="title" i18n:translate="">Workspace</property>
+  <property name="description" i18n:translate="" />
+  <property name="icon_expr" />
+  <property name="allow_discussion">False</property>
+  <property name="global_allow">False</property>
+  <property name="filter_content_types">True</property>
+  <property name="allowed_content_types">
+    <element value="opengever.document.document" />
+    <element value="ftw.mail.mail" />
+    <element value="opengever.workspace.todo" />
+    <element value="opengever.workspace.todolist" />
+    <element value="opengever.workspace.folder" />
+  </property>
+
+  <!-- Schema interface -->
+  <property name="schema">opengever.workspace.workspace.IWorkspaceSchema</property>
+
+  <!-- Class used for content items -->
+  <property name="klass">opengever.workspace.workspace.Workspace</property>
+
+  <!-- Add permission -->
+  <property name="add_permission">opengever.workspace.AddWorkspace</property>
+
+  <!-- Enabled behaviors -->
+  <property name="behaviors">
+    <element value="opengever.base.behaviors.changed.IChanged" />
+    <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+    <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+    <element value="opengever.base.behaviors.base.IOpenGeverBase" />
+    <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+    <element value="opengever.workspace.behaviors.namefromtitle.IWorkspaceNameFromTitle" />
+    <element value="opengever.mail.behaviors.ISendableDocsContainer" />
+    <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    <element value="opengever.trash.trash.ITrashable" />
+    <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+  </property>
+
+  <!-- View information -->
+  <property name="immediate_view">tabbed_view</property>
+  <property name="default_view">tabbed_view</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="tabbed_view" />
+  </property>
+
+  <!-- Method aliases -->
+  <alias from="(Default)" to="(selected layout)" />
+  <alias from="edit" to="@@edit" />
+  <alias from="sharing" to="@@sharing" />
+  <alias from="view" to="@@view" />
+
+  <!-- Actions -->
+  <action
+      title="View"
+      action_id="view"
+      category="object"
+      condition_expr=""
+      url_expr="string:${object_url}"
+      visible="False">
+    <permission value="View" />
+  </action>
+
+  <action
+      title="Edit"
+      action_id="edit"
+      category="object"
+      condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
+      url_expr="string:${object_url}/edit"
+      visible="True">
+      <permission value="opengever.workspace: Modify Workspace" />
+  </action>
+
+  <action
+      action_id="add_invitation"
+      visible="True"
+      title="Add invitation"
+      url_expr="string:${object_url}/@invitations"
+      condition_expr=""
+      category="object_buttons">
+    <permission value="Sharing page: Delegate WorkspaceAdmin role" />
+  </action>
+
+</object>
