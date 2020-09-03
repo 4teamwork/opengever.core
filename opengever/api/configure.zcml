@@ -856,6 +856,19 @@
       name="tasktree"
       />
 
+  <plone:service
+      method="GET"
+      name="@predecessor"
+      for="opengever.task.task.ITask"
+      factory=".task.TaskPredecessorGet"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".task.TaskPredecessor"
+      name="predecessor"
+      />
+
   <adapter
       factory=".dossier.MainDossier"
       name="main-dossier"

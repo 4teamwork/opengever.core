@@ -15,8 +15,10 @@ from opengever.task.task_response import ITaskResponse
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
+from plone.restapi.services import Service
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -181,3 +183,40 @@ class TaskResponsePost(ResponsePost):
                 "The current user is not allowed to add comments")
 
         return response_handler.add_response(text)
+
+
+@implementer(IExpandableElement)
+@adapter(ITask, IOpengeverBaseLayer)
+class TaskPredecessor(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, expand=False):
+        result = {
+            "predecessor": {
+                "@id": "{}/@predecessor".format(self.context.absolute_url())
+            }
+        }
+        if not expand:
+            return result
+
+        predecessor = self.context.get_sql_object().predecessor
+        if predecessor:
+            serializer = getMultiAdapter(
+                (predecessor, self.request), ISerializeToJsonSummary
+            )
+            result['predecessor']['item'] = serializer()
+        else:
+            result['predecessor']['item'] = None
+
+        return result
+
+
+class TaskPredecessorGet(Service):
+
+    def reply(self):
+        predecessor = TaskPredecessor(self.context, self.request)
+        return predecessor(expand=True)['predecessor']
+
