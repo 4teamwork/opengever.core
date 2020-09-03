@@ -40,6 +40,7 @@
   <adapter factory=".task.SerializeTaskToJson" />
   <adapter factory=".task.SerializeTaskResponseToJson" />
   <adapter factory=".task.TaskDeserializeFromJson" />
+  <adapter factory=".task.SerializeTaskModelToJson" />
   <adapter factory=".users.SerializeUserToJson" />
   <adapter factory=".proposal.SerializeProposalResponseToJson" />
   <adapter factory=".proposal.SerializeProposalToJson" />

@@ -1,6 +1,12 @@
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.api.serializer import SerializeSQLModelToJsonBase
+from opengever.base.helpers import display_name
+from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.globalindex.browser.report import task_type_helper
+from opengever.globalindex.model.task import Task
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
@@ -93,6 +99,62 @@ class TaskDeserializeFromJson(DeserializeFromJson):
         responsible = deserialize_responsible(data.get('responsible'))
         if responsible:
             data.update(responsible)
+
+
+@implementer(ISerializeToJson)
+@adapter(Task, IOpengeverBaseLayer)
+class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
+
+    ADDITIONAL_METADATA = {
+        '@id': lambda task: task.absolute_url(),
+        'issuer_fullname': lambda task: display_name(task.issuer),
+        'oguid': lambda task: str(task.oguid),
+        'responsible_fullname': lambda task: display_name(task.responsible),
+        'task_type': lambda task: task_type_helper(task.task_type),
+    }
+
+    # Some columns were ignored in @globalindex from where this serializer
+    # has been exctracted. When refactoring, that behavior was preserved, but
+    # if we encounter issues with missing data adding all columns should
+    # not pose any issues.
+    IGNORED_COLUMNS = [
+        'admin_unit_id',
+        'breadcrumb_title',
+        'completed',
+        'containing_subdossier',
+        'dossier_sequence_number',
+        'icon',
+        'int_id',
+        'physical_path',
+        'reference_number',
+        'sequence_number',
+        'tasktemplate_predecessor_id',
+        'text',
+    ]
+
+    def get_columns(self):
+        ignored_columns = set(
+            self.ADDITIONAL_METADATA.keys() + self.IGNORED_COLUMNS
+        )
+        return [
+            column for column in self.context.__table__.columns
+            if column.name not in ignored_columns
+        ]
+
+    def add_additional_metadata(self, data):
+        for key, value in self.ADDITIONAL_METADATA.items():
+            data[key] = value(self.context)
+
+    @property
+    def content_type(self):
+        """Figure out a tasks content type from the task_type column.
+
+        We don't store the content type in globalindex but task_type is
+        distinct and we can use it to figure out the content type.
+        """
+        if self.context.task_type == FORWARDING_TASK_TYPE_ID:
+            return 'opengever.inbox.forwarding'
+        return 'opengever.task.task'
 
 
 class TaskResponsePost(ResponsePost):
