@@ -2,11 +2,11 @@ from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.api.serializer import SerializeSQLModelToJsonBase
+from opengever.api.serializer import SerializeSQLModelToJsonSummaryBase
 from opengever.base.helpers import display_name
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.globalindex.browser.report import task_type_helper
 from opengever.globalindex.model.task import Task
-from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
@@ -105,14 +105,6 @@ class TaskDeserializeFromJson(DeserializeFromJson):
 @adapter(Task, IOpengeverBaseLayer)
 class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
 
-    ADDITIONAL_METADATA = {
-        '@id': lambda task: task.absolute_url(),
-        'issuer_fullname': lambda task: display_name(task.issuer),
-        'oguid': lambda task: str(task.oguid),
-        'responsible_fullname': lambda task: display_name(task.responsible),
-        'task_type': lambda task: task_type_helper(task.task_type),
-    }
-
     # Some columns were ignored in @globalindex from where this serializer
     # has been exctracted. When refactoring, that behavior was preserved, but
     # if we encounter issues with missing data adding all columns should
@@ -133,28 +125,49 @@ class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
     ]
 
     def get_columns(self):
-        ignored_columns = set(
-            self.ADDITIONAL_METADATA.keys() + self.IGNORED_COLUMNS
-        )
+        ignored_columns = set(self.IGNORED_COLUMNS)
         return [
             column for column in self.context.__table__.columns
             if column.name not in ignored_columns
         ]
 
     def add_additional_metadata(self, data):
-        for key, value in self.ADDITIONAL_METADATA.items():
-            data[key] = value(self.context)
+        data.update({
+            '@id': self.context.absolute_url(),
+            'issuer_fullname': display_name(self.context.issuer),
+            'oguid': str(self.context.oguid),
+            'responsible_fullname': display_name(self.context.responsible),
+            'task_type': task_type_helper(self.context.task_type),
+        })
 
     @property
     def content_type(self):
-        """Figure out a tasks content type from the task_type column.
+        return self.context.content_type
 
-        We don't store the content type in globalindex but task_type is
-        distinct and we can use it to figure out the content type.
-        """
-        if self.context.task_type == FORWARDING_TASK_TYPE_ID:
-            return 'opengever.inbox.forwarding'
-        return 'opengever.task.task'
+
+@implementer(ISerializeToJsonSummary)
+@adapter(Task, IOpengeverBaseLayer)
+class SerializeTaskModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+
+    item_columns = (
+        'review_state',
+        'task_id',
+        'title',
+    )
+
+    def add_additional_metadata(self, data):
+        data.update({
+            'oguid': str(self.context.oguid),
+            'task_type': task_type_helper(self.context.task_type),
+        })
+
+    @property
+    def get_url(self):
+        return self.context.absolute_url()
+
+    @property
+    def content_type(self):
+        return self.context.content_type
 
 
 class TaskResponsePost(ResponsePost):
