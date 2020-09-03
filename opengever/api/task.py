@@ -220,3 +220,37 @@ class TaskPredecessorGet(Service):
         predecessor = TaskPredecessor(self.context, self.request)
         return predecessor(expand=True)['predecessor']
 
+
+@implementer(IExpandableElement)
+@adapter(ITask, IOpengeverBaseLayer)
+class TaskSuccessors(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, expand=False):
+        result = {
+                "successors": {
+                    "@id": "{}/@successors".format(self.context.absolute_url())
+                }
+            }
+        if not expand:
+            return result
+
+        items = []
+        result['successors']['items'] = items
+        for successor in self.context.get_sql_object().successors:
+            serializer = getMultiAdapter(
+                (successor, self.request), ISerializeToJsonSummary
+            )
+            items.append(serializer())
+
+        return result
+
+
+class TaskSuccessorsGet(Service):
+
+    def reply(self):
+        successors = TaskSuccessors(self.context, self.request)
+        return successors(expand=True)['successors']
