@@ -383,6 +383,14 @@
                      Sharing page: Delegate CommitteeResponsible role,
                      Sharing page: Delegate MeetingUser role,
                      opengever.workspace: Add Workspace,
+                     opengever.workspace: Add WorkspaceFolder,
+                     opengever.document: Add document,
+                     opengever.document: Cancel,
+                     opengever.document: Checkin,
+                     opengever.document: Checkout,
+                     opengever.document: Force Checkin,
+                     Add portal content,
+                     Modify portal content,
                      "
         />
     <lawgiver:map_permissions
@@ -396,10 +404,23 @@
   </lawgiver:workflow>
 
   <lawgiver:workflow name="opengever_workspace_todolist">
+    <lawgiver:ignore
+        permissions="
+                     Add portal content,
+                     Modify portal content,
+                     Delete objects,
+                     "
+        />
 
-    <lawgiver:map_permissions
-        action_group="delete"
-        permissions="Delete objects"
+  </lawgiver:workflow>
+
+  <lawgiver:workflow name="opengever_workspace_todo">
+    <lawgiver:ignore
+        permissions="
+                     Add portal content,
+                     Modify portal content,
+                     Delete objects,
+                     "
         />
 
   </lawgiver:workflow>

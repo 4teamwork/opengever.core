@@ -11,16 +11,11 @@ General:
   A workspace admin can perform the same actions as a workspace member.
   An admin can perform the same actions as a workspace admin.
 
-  A systems administrator can always add.
   A systems administrator can always view.
-  A systems administrator can always edit.
-  A systems administrator can always delete.
   A systems administrator can always manage security.
   A systems administrator can always use the developer tools.
 
 Initial Status: Active
 Status Active:
   A workspace guest can view.
-  A workspace member can add.
-  A workspace member can edit.
-  A workspace member can delete.
+  A workspace admin can manage security.
