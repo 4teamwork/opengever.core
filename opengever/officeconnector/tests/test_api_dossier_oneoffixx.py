@@ -41,7 +41,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
         expected_payloads = [{
             u'connect-xml': u'@@oneoffix_connect_xml',
             u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-38',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-39',
             u'filename': None,
             u'uuid': u'createshadowdocument000000000001',
             }]
@@ -88,7 +88,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             u'checkin': u'@checkin',
             u'checkout': u'@checkout',
             u'content-type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-38',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-39',
             u'download': u'download',
             u'filename': None,
             u'lock': u'@lock',

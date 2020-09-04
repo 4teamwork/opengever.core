@@ -240,7 +240,7 @@ class TestOpengeverContentListing(IntegrationTestCase):
         self.assertEqual(
             IContentListingObject(obj2brain(
                 self.dossier)).ModificationDate(),
-            '2016-08-31T20:15:33+02:00')
+            '2016-08-31T20:17:33+02:00')
 
     def test_translated_review_state(self):
         self.login(self.regular_user)

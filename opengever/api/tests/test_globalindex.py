@@ -90,7 +90,7 @@ class TestGlobalIndexGet(IntegrationTestCase):
 
         self.assertEqual(15, browser.json['items_total'])
         self.assertEqual(u'Ein notwendiges \xdcbel', browser.json['items'][0]['title'])
-        self.assertEqual(u'2016-08-31T20:25:33', browser.json['items'][0]['modified'])
+        self.assertEqual(u'2016-08-31T20:27:33', browser.json['items'][0]['modified'])
 
     @browsing
     def test_filter_by_single_value(self, browser):
