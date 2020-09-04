@@ -15,6 +15,7 @@ from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services.workflow.transition import WorkflowTransition
 from Products.CMFCore.interfaces import IFolderish
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import WorkflowException
 from zExceptions import BadRequest
 from zope.component import queryMultiAdapter
@@ -328,3 +329,30 @@ class GEVERTaskWorkflowTransition(GEVERWorkflowTransition):
         task_deserializer.update_reponsible_field_data(data)
 
         return data
+
+
+class WorkspaceWorkflowTransition(GEVERWorkflowTransition):
+    """Handles workflow transitions for workspaces.
+
+       Checks if workspace doesn't contain any checked out documents before
+       deactivation.
+    """
+
+    def reply(self):
+        if self.transition == 'opengever_workspace--TRANSITION--deactivate--active_inactive':
+            catalog = getToolByName(self.context, 'portal_catalog')
+            checked_out_docs = catalog.unrestrictedSearchResults(
+                portal_type="opengever.document.document",
+                path={
+                    'query': '/'.join(self.context.getPhysicalPath()),
+                    'depth': -1,
+                },
+                checked_out={'not': ''}
+            )
+            if len(checked_out_docs) > 0:
+                self.request.response.setStatus(400)
+                return dict(error=dict(
+                    type='PreconditionsViolated',
+                    message='Workspace contains checked out documents.'))
+
+        return super(WorkspaceWorkflowTransition, self).reply()
