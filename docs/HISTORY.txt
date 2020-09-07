@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2020.8.1 (unreleased)
+---------------------
+
+- Revert adding missing value for public_trial_statement. [njohner]
+
+
 2020.8.0 (2020-08-26)
 ---------------------
 
