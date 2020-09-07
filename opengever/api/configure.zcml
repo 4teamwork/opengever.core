@@ -40,6 +40,8 @@
   <adapter factory=".task.SerializeTaskToJson" />
   <adapter factory=".task.SerializeTaskResponseToJson" />
   <adapter factory=".task.TaskDeserializeFromJson" />
+  <adapter factory=".task.SerializeTaskModelToJson" />
+  <adapter factory=".task.SerializeTaskModelToJsonSummary" />
   <adapter factory=".users.SerializeUserToJson" />
   <adapter factory=".proposal.SerializeProposalResponseToJson" />
   <adapter factory=".proposal.SerializeProposalToJson" />
@@ -852,6 +854,32 @@
   <adapter
       factory=".tasktree.TaskTree"
       name="tasktree"
+      />
+
+  <plone:service
+      method="GET"
+      name="@predecessor"
+      for="opengever.task.task.ITask"
+      factory=".task.TaskPredecessorGet"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".task.TaskPredecessor"
+      name="predecessor"
+      />
+
+  <plone:service
+      method="GET"
+      name="@successors"
+      for="opengever.task.task.ITask"
+      factory=".task.TaskSuccessorsGet"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".task.TaskSuccessors"
+      name="successors"
       />
 
   <adapter

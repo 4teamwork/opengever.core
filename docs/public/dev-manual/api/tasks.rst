@@ -530,3 +530,83 @@ Die Aufgabenhierarchie kann auch direkt über den GET-Request eines Tasks mittel
 
      GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1?expand=tasktree HTTP/1.1
      Accept: application/json
+
+
+Ursprüngliche Aufgabe
+---------------------
+Bei mandantenübergreifenden Aufgaben kann bei einer Aufgabe die ursprüngliche Aufgabe
+(Vorgänger) abgefragt werden. Dazu steht ein spezifischer Endpoint `@predecessor` zur Verfügung.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-2/@predecessor HTTP/1.1
+      Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-2/@predecessor",
+        "item": {
+          "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-1",
+          "@type": "opengever.task.task",
+          "oguid": "fd:1234",
+          "review_state": "task-state-in-progress",
+          "task_id": 1234,
+          "task_type": "Zum Bericht / Antrag",
+          "title": "Eine Aufgabe"
+        }
+      }
+
+Die ursprüngliche Aufgabe kann auch direkt über den GET-Request eines Tasks mittels Expansion angefordert werden.
+
+  .. sourcecode:: http
+
+     GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-2?expand=predecessor HTTP/1.1
+     Accept: application/json
+
+
+Kopierte Aufgabe
+----------------
+Bei mandantenübergreifenden Aufgaben können bei einer Aufgabe die kopierten Aufgaben
+(Nachfolger) abgefragt werden. Dazu steht ein spezifischer Endpoint `@successors` zur Verfügung.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1/@successors HTTP/1.1
+      Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-1/@successors",
+        "items": [{
+          "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-2",
+          "@type": "opengever.task.task",
+          "oguid": "fd:2345",
+          "review_state": "task-state-in-progress",
+          "task_id": 2345,
+          "task_type": "Zum Bericht / Antrag",
+          "title": "Eine Aufgabe"
+        }]
+      }
+
+Die kopierten Aufgaben können auch direkt über den GET-Request eines Tasks mittels Expansion angefordert werden.
+
+  .. sourcecode:: http
+
+     GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1?expand=successors HTTP/1.1
+     Accept: application/json

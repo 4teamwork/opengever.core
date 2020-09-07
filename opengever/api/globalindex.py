@@ -1,43 +1,16 @@
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
-from opengever.api.solr_query_service import translate_task_type
-from opengever.base.helpers import display_name
 from opengever.globalindex.model.task import Task
-from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.tabbedview.sqlsource import cast_to_string
-from plone.restapi.serializer.converters import json_compatible
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from sqlalchemy import asc
 from sqlalchemy import desc
 from sqlalchemy import or_
-
-
-def add_portal_type(task):
-    """Figure out a tasks portal type from the task_type column.
-
-    We don't store the portal_type in globalindex but task_type is distinct
-    and we can use it to figure out the portal type.
-    """
-    if task.task_type == FORWARDING_TASK_TYPE_ID:
-        return 'opengever.inbox.forwarding'
-    return 'opengever.task.task'
+from zope.component import queryMultiAdapter
 
 
 class GlobalIndexGet(Service):
-
-    METADATA = [
-        'task_id', 'title', 'review_state', 'responsible', 'issuer',
-        'is_private', 'is_subtask', 'assigned_org_unit',
-        'issuing_org_unit', 'deadline', 'modified', 'created',
-        'predecessor_id', 'containing_dossier']
-
-    ADDITIONAL_METADATA = {
-        'task_type': lambda task: translate_task_type(task.task_type),
-        'responsible_fullname': lambda task: display_name(task.responsible),
-        'issuer_fullname': lambda task: display_name(task.issuer),
-        'oguid': lambda task: str(task.oguid),
-        '@id': lambda task: task.absolute_url(),
-        '@type': add_portal_type}
 
     searchable_columns = [Task.title, Task.text,
                           Task.sequence_number, Task.responsible]
@@ -83,13 +56,9 @@ class GlobalIndexGet(Service):
         batch = SQLHypermediaBatch(self.request, tasks)
         items = []
         for task in batch:
-            data = {
-                key: json_compatible(getattr(task, key)) for (key) in self.METADATA}
-
-            for key, value in self.ADDITIONAL_METADATA.items():
-                data[key] = value(task)
-
-            items.append(data)
+            serializer = queryMultiAdapter(
+                (task, self.request), ISerializeToJson)
+            items.append(serializer())
 
         result = {}
         result['items'] = items

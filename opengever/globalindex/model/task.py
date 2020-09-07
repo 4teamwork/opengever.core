@@ -175,6 +175,17 @@ class Task(Base):
     def issuing_org_unit_label(self):
         return self.get_issuing_org_unit().label()
 
+    @property
+    def content_type(self):
+        """Figure out a tasks content type from the task_type column.
+
+        We don't store the content type in globalindex but task_type is
+        distinct and we can use it to figure out the content type.
+        """
+        if self.task_type == FORWARDING_TASK_TYPE_ID:
+            return 'opengever.inbox.forwarding'
+        return 'opengever.task.task'
+
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 
