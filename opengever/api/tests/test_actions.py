@@ -632,15 +632,21 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         manager.storage.add(self.workspace.UID())
         transaction.commit()
 
-    def assert_workspace_actions_available(self, browser, dossier):
-        actions = self.get_actions(browser, dossier)
-        for action in self.workspace_actions:
-            self.assertIn(action, actions)
+    def assert_workspace_actions(self, browser, context, expected):
+        all_actions = self.get_actions(browser, context)
+        workspace_action_ids = {each['id'] for each in self.workspace_actions}
+        available = [
+            action for action in all_actions
+            if action['id'] in workspace_action_ids
+        ]
 
-    def assert_workspace_actions_not_available(self, browser, dossier):
-        actions = self.get_actions(browser, dossier)
-        for action in self.workspace_actions:
-            self.assertNotIn(action, actions)
+        self.assertEqual(sorted(available), sorted(expected))
+
+    def assert_workspace_actions_available(self, browser, context):
+        self.assert_workspace_actions(browser, context, self.workspace_actions)
+
+    def assert_workspace_actions_not_available(self, browser, context):
+        self.assert_workspace_actions(browser, context, [])
 
     @browsing
     def test_copy_documents_actions_available_in_dossier_with_linked_workspaces(self, browser):
@@ -692,7 +698,7 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
             self.assert_workspace_actions_not_available(browser, self.dossier)
 
     @browsing
-    def test_workspaces_actions_only_available_if_user_has_permission(self, browser):
+    def test_workspaces_actions_only_available_if_user_has_permission_to_use_workspace_client(self, browser):
         browser.login()
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
@@ -704,6 +710,37 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
             self.grant(*roles)
 
             self.assert_workspace_actions_not_available(browser, self.dossier)
+
+    @browsing
+    def test_workspaces_actions_not_available_if_user_has_no_permission(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+
+            self.assert_workspace_actions_available(browser, self.dossier)
+
+            # global permissions are setup in a weird way
+            self.grant('WorkspaceClientUser', 'Member')
+            self.dossier.__ac_local_roles_block__ = True
+            self.grant('Reader', on=self.dossier)
+
+            self.assert_workspace_actions(browser, self.dossier,
+                                          [self.list_workspaces_action])
+
+    @browsing
+    def test_workspaces_actions_not_available_if_dossier_is_not_open(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+
+            #self.assert_workspace_actions_available(browser, self.dossier)
+
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-deactivate')
+            transaction.commit()
+
+            self.assert_workspace_actions(browser, self.dossier,
+                                          [self.list_workspaces_action])
 
 
 class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):

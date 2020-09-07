@@ -31,6 +31,20 @@ class FolderButtonsAvailabilityView(BrowserView):
 
         return True
 
+    def _is_open_dossier(self):
+        if not IDossierMarker.providedBy(self.context):
+            return False
+
+        return self.context.is_open()
+
+    def _can_modify_dossier(self):
+        return api.user.has_permission(
+            'Modify portal content', obj=self.context)
+
+    def _can_add_content_to_dossier(self):
+        return api.user.has_permission(
+            'Add portal content', obj=self.context)
+
     def _can_use_workspace_client(self):
         return (is_workspace_client_feature_available()
                 and api.user.has_permission('opengever.workspaceclient: '
@@ -43,6 +57,9 @@ class FolderButtonsAvailabilityView(BrowserView):
         if not self._is_main_dossier():
             return False
 
+        if not self._is_open_dossier():
+            return False
+
         if not self._can_use_workspace_client():
             return False
 
@@ -53,7 +70,13 @@ class FolderButtonsAvailabilityView(BrowserView):
         return self._is_main_dossier() and self._can_use_workspace_client()
 
     def is_copy_documents_to_workspace_available(self):
-        return self._can_copy_between_workspace_and_dossier()
+        return (
+            self._can_copy_between_workspace_and_dossier()
+            and self._can_modify_dossier()
+        )
 
     def is_copy_documents_from_workspace_available(self):
-        return self._can_copy_between_workspace_and_dossier()
+        return (
+            self._can_copy_between_workspace_and_dossier()
+            and self._can_add_content_to_dossier()
+        )

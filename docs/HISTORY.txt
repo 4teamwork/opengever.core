@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Add @successors and @predecessor expansion for tasks. [deiferni]
+- Don't show workspace actions for non-open dossiers or when the user can only view. [deiferni]
 - Add @share-content endpoint to share content in workspace. [tinagerber]
 - Add @actual-workspace-members endpoint. [tinagerber]
 - Add support for transferring inter-admin-unit tasks. [lgraf]
