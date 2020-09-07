@@ -57,7 +57,8 @@
             "type": "string",
             "title": "Bearbeitungsinformation",
             "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
-            "_zope_schema_type": "Text"
+            "_zope_schema_type": "Text",
+            "default": ""
         },
         "description": {
             "type": "string",

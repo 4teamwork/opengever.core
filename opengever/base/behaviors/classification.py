@@ -94,7 +94,6 @@ class IClassification(model.Schema):
                 default=u'Public trial statement'),
         description=_(u'help_public_trial_statement', default=u''),
         required=False,
-        missing_value=u'',
         default=u'',
     )
 
