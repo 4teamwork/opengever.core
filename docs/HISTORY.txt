@@ -6,7 +6,6 @@ Changelog
 
 - Add @successors and @predecessor expansion for tasks. [deiferni]
 - Don't show workspace actions for non-open dossiers or when the user can only view. [deiferni]
-- Revert adding missing value for public_trial_statement. [njohner]
 - Add @share-content endpoint to share content in workspace. [tinagerber]
 - Add @actual-workspace-members endpoint. [tinagerber]
 - Add support for transferring inter-admin-unit tasks. [lgraf]
@@ -21,6 +20,12 @@ Changelog
 - Consider cookie when figuring out current orgunit in AllUsersInboxesAndTeamsSource. [deiferni]
 - Fix forwarding requiring task_type in API, fix forwarding task_type translations. [deiferni]
 - Add @type to @globalindex items, figure out portal type from task type. [deiferni]
+
+
+2020.8.1 (2020-09-07)
+---------------------
+
+- Revert adding missing value for public_trial_statement. [njohner]
 
 
 2020.8.0 (2020-08-26)
