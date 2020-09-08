@@ -169,6 +169,21 @@ class TestDeactivateWorkspace(IntegrationTestCase):
             )
 
     @browsing
+    def test_cannot_add_mail_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.deactivate_workspace(browser)
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace, method='POST', headers=self.api_headers,
+                data=json.dumps({'@type': 'ftw.mail.mail'}),
+            )
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace_folder, method='POST', headers=self.api_headers,
+                data=json.dumps({'@type': 'ftw.mail.mail'}),
+            )
+
+    @browsing
     def test_cannot_modify_document_in_deactivated_workspace(self, browser):
         self.login(self.workspace_admin, browser)
         self.deactivate_workspace(browser)

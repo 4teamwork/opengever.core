@@ -395,6 +395,8 @@
                      opengever.document: Checkin,
                      opengever.document: Checkout,
                      opengever.document: Force Checkin,
+                     ftw.mail: Add Mail,
+                     ftw.mail: Add Inbound Mail,
                      Add portal content,
                      Modify portal content,
                      "

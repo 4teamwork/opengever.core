@@ -41,8 +41,6 @@
   <permission>Take ownership</permission>
   <permission>View</permission>
   <permission>ftw.keywordwidget: Add new term</permission>
-  <permission>ftw.mail: Add Inbound Mail</permission>
-  <permission>ftw.mail: Add Mail</permission>
   <permission>iterate : Check in content</permission>
   <permission>iterate : Check out content</permission>
   <permission>opengever.contact: Add contact</permission>
@@ -176,8 +174,6 @@
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="ftw.keywordwidget: Add new term" acquired="False"/>
-    <permission-map name="ftw.mail: Add Inbound Mail" acquired="False"/>
-    <permission-map name="ftw.mail: Add Mail" acquired="False"/>
     <permission-map name="iterate : Check in content" acquired="False"/>
     <permission-map name="iterate : Check out content" acquired="False"/>
     <permission-map name="opengever.contact: Add contact" acquired="False"/>
