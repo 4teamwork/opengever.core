@@ -27,6 +27,7 @@ class OGDDSUserListingGet(OGDSListingBaseService):
         User.directorate,
     )
 
+    unique_sort_on = 'userid'
     default_sort_on = 'lastname'
     model_class = User
     default_state_filter = tuple()
