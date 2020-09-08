@@ -40,7 +40,7 @@ class TestGlobalIndexGet(IntegrationTestCase):
             browser.json['items'][0])
 
         # default row size is 25
-        self.assertIsNone(browser.json['batching'])
+        self.assertIsNone(browser.json.get('batching'))
 
     @browsing
     def test_respect_batching_parameters(self, browser):
@@ -83,14 +83,16 @@ class TestGlobalIndexGet(IntegrationTestCase):
             [item['title'] for item in browser.json['items']])
 
     @browsing
-    def test_fallback_to_default_sort_if_sort_on_does_not_exist(self, browser):
+    def test_ignores_sort_on_if_sort_on_does_not_exist(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='@globalindex?sort_on=notexisting&b_size=3',
+        browser.open(self.portal, view='@globalindex?sort_on=notexisting',
                      headers=self.api_headers)
 
         self.assertEqual(15, browser.json['items_total'])
-        self.assertEqual(u'Ein notwendiges \xdcbel', browser.json['items'][0]['title'])
-        self.assertEqual(u'2016-08-31T20:27:33', browser.json['items'][0]['modified'])
+
+        # items are sorted only by the unique_sort_on in that case
+        task_ids = [item['task_id'] for item in browser.json['items']]
+        self.assertEqual(task_ids, sorted(task_ids, reverse=True))
 
     @browsing
     def test_filter_by_single_value(self, browser):

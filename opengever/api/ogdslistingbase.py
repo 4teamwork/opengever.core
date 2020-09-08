@@ -32,6 +32,7 @@ class OGDSListingBaseService(Service):
     default_sort_on = None
     default_sort_order = 'ascending'
     model_class = None
+    serializer_interface = ISerializeToJsonSummary
 
     def reply(self):
         sort_on, sort_order, search, filters = self.extract_params()
@@ -49,7 +50,7 @@ class OGDSListingBaseService(Service):
         items = []
         for item in batch:
             serializer = queryMultiAdapter(
-                (item, self.request), ISerializeToJsonSummary)
+                (item, self.request), self.serializer_interface)
             items.append(serializer())
 
         result = {}
