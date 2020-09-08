@@ -61,6 +61,20 @@
       />
 
   <plone:service
+      method="DELETE"
+      for="opengever.workspace.interfaces.IToDo"
+      factory=".todo.TodoDelete"
+      permission="opengever.workspace.DeleteTodos"
+      />
+
+  <plone:service
+      method="DELETE"
+      for="opengever.workspace.interfaces.IToDoList"
+      factory=".todo.TodoDelete"
+      permission="opengever.workspace.DeleteTodos"
+      />
+
+  <plone:service
       method="POST"
       name="@checkout"
       for="opengever.document.document.IDocumentSchema"
@@ -505,6 +519,15 @@
       name="@workflow"
       for="opengever.task.task.ITask"
       factory=".transition.GEVERTaskWorkflowTransition"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@workflow"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".transition.WorkspaceWorkflowTransition"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       permission="zope2.View"
       />

@@ -1,0 +1,25 @@
+<object name="opengever_workspace_policy" meta_type="WorkflowPolicy">
+  <property name="title">Workspace Policy</property>
+  <bindings>
+
+    <type type_id="opengever.document.document">
+      <bound-workflow workflow_id="opengever_workspace_document" />
+    </type>
+    <type type_id="opengever.workspace.root">
+      <bound-workflow workflow_id="opengever_workspace_root" />
+    </type>
+    <type type_id="opengever.workspace.workspace">
+      <bound-workflow workflow_id="opengever_workspace" />
+    </type>
+    <type type_id="opengever.workspace.folder">
+      <bound-workflow workflow_id="opengever_workspace_folder" />
+    </type>
+    <type type_id="opengever.workspace.todo">
+      <bound-workflow workflow_id="opengever_workspace_todo" />
+    </type>
+    <type type_id="opengever.workspace.todolist">
+      <bound-workflow workflow_id="opengever_workspace_todolist" />
+    </type>
+
+  </bindings>
+</object>

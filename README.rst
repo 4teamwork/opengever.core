@@ -646,6 +646,7 @@ Objects
       - self.todolist_introduction
         - self.assigned_todo
         - self.completed_todo
+      - self.workspace_document
       - self.workspace_folder
 
 .. </fixture:objects>

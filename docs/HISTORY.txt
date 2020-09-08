@@ -20,6 +20,7 @@ Changelog
 - Consider cookie when figuring out current orgunit in AllUsersInboxesAndTeamsSource. [deiferni]
 - Fix forwarding requiring task_type in API, fix forwarding task_type translations. [deiferni]
 - Add @type to @globalindex items, figure out portal type from task type. [deiferni]
+- Add option to deactivate a workspace. [buchi]
 
 
 2020.8.1 (2020-09-07)

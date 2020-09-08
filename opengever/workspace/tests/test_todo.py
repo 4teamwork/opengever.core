@@ -196,24 +196,34 @@ class TestAPISupportForTodo(IntegrationTestCase):
             last_response.changes)
 
     @browsing
-    def test_deletion_is_only_possible_for_managers(self, browser):
+    def test_members_can_delete_todos(self, browser):
         self.login(self.workspace_member, browser)
-        with browser.expect_http_error(401):
-            browser.open(self.todo, method='DELETE', headers=self.api_headers)
+        todo_id = self.todo.id
+        browser.open(self.todo, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(todo_id, self.workspace.objectIds())
 
+    @browsing
+    def test_admins_can_delete_todos(self, browser):
         self.login(self.workspace_admin, browser)
-        with browser.expect_http_error(401):
-            browser.open(self.todo, method='DELETE', headers=self.api_headers)
+        todo_id = self.todo.id
+        browser.open(self.todo, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(todo_id, self.workspace.objectIds())
 
-        self.login(self.workspace_owner, browser)
-        with browser.expect_http_error(401):
-            browser.open(self.todo, method='DELETE', headers=self.api_headers)
-
+    @browsing
+    def test_managers_can_delete_todos(self, browser):
         self.login(self.manager, browser)
         todo_id = self.todo.id
         browser.open(self.todo, method='DELETE', headers=self.api_headers)
         self.assertEqual(204, browser.status_code)
         self.assertNotIn(todo_id, self.workspace.objectIds())
+
+    @browsing
+    def test_guests_cannot_delete_todos(self, browser):
+        self.login(self.workspace_guest, browser)
+        with browser.expect_http_error(401):
+            browser.open(self.todo, method='DELETE', headers=self.api_headers)
 
     @browsing
     def test_move_todo_adds_response_object_with_changes(self, browser):

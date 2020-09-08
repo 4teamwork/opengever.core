@@ -55,4 +55,12 @@
       permission="zope2.View"
       />
 
+  <!-- Protect edit form for workspace with custom modify permission -->
+  <browser:page
+      for="opengever.workspace.interfaces.IWorkspace"
+      name="edit"
+      class="plone.dexterity.browser.edit.DefaultEditView"
+      permission="opengever.workspace.ModifyWorkspace"
+      />
+
 </configure>

@@ -31,7 +31,7 @@ class WorkspaceContentPatch(ContentPatch):
     def reply(self):
         data = json_body(self.request)
         if data.keys() != ['ordering']:
-            if not api.user.has_permission('Modify portal content',
+            if not api.user.has_permission('opengever.workspace: Modify Workspace',
                                            obj=self.context):
                 raise Unauthorized()
 

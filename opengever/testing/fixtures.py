@@ -2109,6 +2109,16 @@ class OpengeverContentFixture(object):
                 )
             ))
 
+        # Enable placeful workflow policy for workspace root
+        self.workspace_root.manage_addProduct[
+            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
+        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
+        policy_config = pwf_tool.getWorkflowPolicyConfig(self.workspace_root)
+        policy_config.setPolicyIn(
+            'opengever_workspace_policy', update_security=False)
+        policy_config.setPolicyBelow(
+            'opengever_workspace_policy', update_security=False)
+
         self.set_roles(
             self.workspace_root, self.workspace_owner.getId(),
             ['WorkspacesUser', 'WorkspacesCreator'])
@@ -2146,6 +2156,13 @@ class OpengeverContentFixture(object):
             .titled(u'WS F\xc3lder')
             .having(description=u'A Workspace folder description')
             .within(self.workspace)
+            ))
+
+        self.register('workspace_document', create(
+            Builder('document')
+            .within(self.workspace)
+            .titled(u'Teamraumdokument')
+            .with_asset_file('text.txt')
             ))
 
     def create_todos(self):

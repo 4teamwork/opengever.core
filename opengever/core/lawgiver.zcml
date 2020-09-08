@@ -282,7 +282,11 @@
 
   <!-- Ignore only relevant in workspace workflow-->
   <lawgiver:ignore
-      permissions="opengever.workspace: Update Content Order"
+      permissions="
+                   opengever.workspace: Update Content Order,
+                   opengever.workspace: Modify Workspace,
+                   opengever.workspace: Delete Todos,
+                   "
       />
 
   <lawgiver:workflow name="opengever_committeecontainer_workflow">
@@ -365,6 +369,16 @@
         permissions="opengever.workspace: Update Content Order"
         />
 
+    <lawgiver:map_permissions
+        action_group="modify workspace"
+        permissions="opengever.workspace: Modify Workspace"
+        />
+
+    <lawgiver:map_permissions
+        action_group="delete todos"
+        permissions="opengever.workspace: Delete Todos"
+        />
+
   </lawgiver:workflow>
 
   <lawgiver:workflow name="opengever_workspace_folder">
@@ -375,23 +389,60 @@
                      Sharing page: Delegate CommitteeResponsible role,
                      Sharing page: Delegate MeetingUser role,
                      opengever.workspace: Add Workspace,
+                     opengever.workspace: Add WorkspaceFolder,
+                     opengever.document: Add document,
+                     opengever.document: Cancel,
+                     opengever.document: Checkin,
+                     opengever.document: Checkout,
+                     opengever.document: Force Checkin,
+                     ftw.mail: Add Mail,
+                     ftw.mail: Add Inbound Mail,
+                     Add portal content,
+                     Modify portal content,
                      "
         />
     <lawgiver:map_permissions
         action_group="soft delete"
         permissions="Remove GEVER content"
         />
-    <lawgiver:map_permissions
-        action_group="add"
-        permissions="opengever.workspace: Add WorkspaceFolder"
+
+  </lawgiver:workflow>
+
+  <lawgiver:workflow name="opengever_workspace_document">
+    <lawgiver:ignore
+        permissions="
+                     opengever.document: Cancel,
+                     opengever.document: Checkin,
+                     opengever.document: Checkout,
+                     opengever.document: Force Checkin,
+                     Modify portal content,
+                     "
         />
+    <lawgiver:map_permissions
+        action_group="soft delete"
+        permissions="Remove GEVER content"
+        />
+
   </lawgiver:workflow>
 
   <lawgiver:workflow name="opengever_workspace_todolist">
+    <lawgiver:ignore
+        permissions="
+                     Add portal content,
+                     Modify portal content,
+                     Delete objects,
+                     "
+        />
 
-    <lawgiver:map_permissions
-        action_group="delete"
-        permissions="Delete objects"
+  </lawgiver:workflow>
+
+  <lawgiver:workflow name="opengever_workspace_todo">
+    <lawgiver:ignore
+        permissions="
+                     Add portal content,
+                     Modify portal content,
+                     Delete objects,
+                     "
         />
 
   </lawgiver:workflow>

@@ -33,6 +33,7 @@ msgstr ""
 
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "Inactive"
 msgstr ""
 
@@ -41,6 +42,7 @@ msgstr ""
 
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "deactivate"
 msgstr ""
 
@@ -194,6 +196,66 @@ msgstr ""
 msgid "opengever_workspace--STATUS--active"
 msgstr ""
 
+#. Default: "Inactive"
+#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
+msgid "opengever_workspace--STATUS--inactive"
+msgstr ""
+
+#. Default: "deactivate"
+#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
+msgid "opengever_workspace--TRANSITION--deactivate--active_inactive"
+msgstr ""
+
+#. Default: "reactivate"
+#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
+msgid "opengever_workspace--TRANSITION--reactivate--inactive_active"
+msgstr ""
+
+#. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE--Administrator"
+msgstr ""
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE--Manager"
+msgstr ""
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE--WorkspaceGuest"
+msgstr ""
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE--WorkspaceMember"
+msgstr ""
+
+#. Default: "Workspace admins can manage the team as well as read and modify all contents."
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE-DESCRIPTION--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "A workspace guest has read access to the content but cannot change anything."
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE-DESCRIPTION--WorkspaceGuest"
+msgstr ""
+
+#. Default: "Workspace members can read and modify all contents of the workspace."
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--ROLE-DESCRIPTION--WorkspaceMember"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--STATUS--active"
+msgstr ""
+
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--Administrator"
@@ -336,6 +398,7 @@ msgstr ""
 
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "reactivate"
 msgstr ""
 
