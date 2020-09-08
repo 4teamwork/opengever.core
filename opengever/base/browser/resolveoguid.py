@@ -57,6 +57,10 @@ class ResolveOGUIDView(BrowserView):
         """
         if url.endswith('?'):
             return ''.join((url, qs))
+        elif '?' in url:
+            # In the url_for method we add a new query string parameter so
+            # url might already contain a query string.
+            return '&'.join((url, qs))
         return '?'.join((url, qs))
 
     @classmethod

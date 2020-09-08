@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Bump ftw.monitor to get bin/dump-perf-metrics script. [lgraf]
+- Correctly handle query strings for oguid on remote admin units in ResolveOGUIDView. [njohner]
 - Add @successors and @predecessor expansion for tasks. [deiferni]
 - Don't show workspace actions for non-open dossiers or when the user can only view. [deiferni]
 - Add @share-content endpoint to share content in workspace. [tinagerber]
