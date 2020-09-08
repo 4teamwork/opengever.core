@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.8.1 (unreleased)
+2020.9.0 (unreleased)
 ---------------------
 
 - Bump ftw.monitor to get bin/dump-perf-metrics script. [lgraf]
