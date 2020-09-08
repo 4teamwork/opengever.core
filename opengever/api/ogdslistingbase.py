@@ -58,6 +58,8 @@ class OGDSListingBaseService(Service):
         result['items_total'] = batch.items_total
         if batch.links:
             result['batching'] = batch.links
+        result['b_start'] = batch.b_start
+        result['b_size'] = batch.b_size
         return result
 
     def extract_params(self):
