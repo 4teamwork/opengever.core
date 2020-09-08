@@ -4,6 +4,7 @@ Changelog
 2020.8.1 (unreleased)
 ---------------------
 
+- Bump ftw.monitor to get bin/dump-perf-metrics script. [lgraf]
 - Add @successors and @predecessor expansion for tasks. [deiferni]
 - Don't show workspace actions for non-open dossiers or when the user can only view. [deiferni]
 - Add @share-content endpoint to share content in workspace. [tinagerber]
