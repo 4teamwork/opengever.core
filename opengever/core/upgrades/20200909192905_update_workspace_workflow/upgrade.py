@@ -3,6 +3,7 @@ from Acquisition import aq_base
 from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
 from ftw.upgrade.helpers import update_security_for
+from ftw.upgrade.placefulworkflow import PlacefulWorkflowPolicyActivator
 from ftw.upgrade.utils import SavepointIterator
 from ftw.upgrade.utils import SizedGenerator
 from ftw.upgrade.workflow import WorkflowSecurityUpdater
@@ -87,12 +88,16 @@ class UpdateWorkspaceWorkflow(UpgradeStep):
             full_objects=True,
         )
         for root in workspace_roots:
-            if '.wf_policy_config' not in root.objectIds():
-                root.manage_addProduct[
-                    'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
-            config = root['.wf_policy_config']
-            config.setPolicyIn('opengever_workspace_policy')
-            config.setPolicyBelow('opengever_workspace_policy')
+            activator = PlacefulWorkflowPolicyActivator(root)
+            activator.activate_policy(
+                'opengever_workspace_policy',
+                review_state_mapping={
+                    ('opengever_dossier_workflow', 'opengever_workspace_document'): {
+                        'document-state-draft': 'opengever_workspace_document--STATUS--active',
+                    },
+                },
+                update_security=False,
+            )
 
     def update_workflow_security(self, workflow_names, reindex_security=True,
                                  savepoints=1000):
