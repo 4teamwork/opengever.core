@@ -1,4 +1,4 @@
-<object name="workspace-policy" meta_type="WorkflowPolicy">
+<object name="opengever_workspace_policy" meta_type="WorkflowPolicy">
   <property name="title">Workspace Policy</property>
   <bindings>
 
