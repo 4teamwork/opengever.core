@@ -11,7 +11,6 @@
   <permission>Edit date of cassation</permission>
   <permission>Edit date of submission</permission>
   <permission>List folder contents</permission>
-  <permission>Manage properties</permission>
   <permission>Modify constrain types</permission>
   <permission>Modify view template</permission>
   <permission>Poi: Edit response</permission>
@@ -119,7 +118,6 @@
     <permission-map name="List folder contents" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Manage properties" acquired="False"/>
     <permission-map name="Modify constrain types" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>

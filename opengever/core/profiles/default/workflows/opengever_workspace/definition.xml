@@ -13,7 +13,6 @@
   <permission>Edit date of cassation</permission>
   <permission>Edit date of submission</permission>
   <permission>List folder contents</permission>
-  <permission>Manage properties</permission>
   <permission>Modify constrain types</permission>
   <permission>Modify portal content</permission>
   <permission>Modify view template</permission>
@@ -162,12 +161,6 @@
     </permission-map>
     <permission-map name="List folder contents" acquired="False">
       <permission-role>Manager</permission-role>
-    </permission-map>
-    <permission-map name="Manage properties" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="Modify constrain types" acquired="False">
       <permission-role>Manager</permission-role>
@@ -562,7 +555,6 @@
     <permission-map name="List folder contents" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Manage properties" acquired="False"/>
     <permission-map name="Modify constrain types" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
