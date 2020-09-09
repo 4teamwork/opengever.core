@@ -91,8 +91,8 @@ class UpdateWorkspaceWorkflow(UpgradeStep):
                 root.manage_addProduct[
                     'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
             config = root['.wf_policy_config']
-            config.setPolicyIn('workspace-policy')
-            config.setPolicyBelow('workspace-policy')
+            config.setPolicyIn('opengever_workspace_policy')
+            config.setPolicyBelow('opengever_workspace_policy')
 
     def update_workflow_security(self, workflow_names, reindex_security=True,
                                  savepoints=1000):
