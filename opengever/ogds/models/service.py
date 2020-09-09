@@ -71,6 +71,7 @@ class OGDSService(object):
     def assigned_groups(self, userid):
         query = Group.query.join(Group.users)
         query = query.filter(User.userid == userid)
+        query = query.order_by(Group.title)
         return query.all()
 
     def fetch_org_unit(self, unit_id):

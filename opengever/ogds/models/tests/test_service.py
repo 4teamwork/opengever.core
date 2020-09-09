@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.tests.base import OGDSTestCase
 
@@ -57,6 +59,20 @@ class TestOGDSServiceGroupMethods(OGDSTestCase):
     def test_assigned_groups_returns_a_list_of_multiple_groups(self):
         groups = self.service.assigned_groups('john')
         self.assertSequenceEqual([self.members_a, self.inbox_members], groups)
+
+    def test_assigned_groups_is_ordered_by_group_title(self):
+        self.members_a.title = 'Group B'
+        self.inbox_members.title = 'Group C'
+
+        create(Builder("ogds_group").id("members_1")
+               .having(title='Group A', users=[self.john]))
+        create(Builder("ogds_group").id("members_z")
+               .having(title='Group D', users=[self.john]))
+
+        groups = self.service.assigned_groups('john')
+
+        self.assertSequenceEqual(['Group A', 'Group B', 'Group C', 'Group D'],
+                                 [group.title for group in groups])
 
 
 class TestOGDSServiceAdminUnitMethods(OGDSTestCase):
