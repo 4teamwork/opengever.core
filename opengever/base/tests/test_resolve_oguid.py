@@ -118,7 +118,7 @@ class TestResolveOGUIDView(IntegrationTestCase):
         browser.raise_http_errors = False
         browser.open(url)
         self.assertEqual(
-            'http://nohost/remote-au/@@resolve_oguid?oguid=remote-admin-unit:12345?foo=bar&key=value',  # noqa
+            'http://nohost/remote-au/@@resolve_oguid?oguid=remote-admin-unit:12345&foo=bar&key=value',  # noqa
             browser.url)
 
     @browsing
@@ -132,7 +132,7 @@ class TestResolveOGUIDView(IntegrationTestCase):
         browser.raise_http_errors = False
         browser.open(url)
         self.assertEqual(
-            'http://nohost/remote-au/@@resolve_oguid?oguid=remote-admin-unit:12345?foo=bar&key=value',  # noqa
+            'http://nohost/remote-au/@@resolve_oguid?oguid=remote-admin-unit:12345&foo=bar&key=value',  # noqa
             browser.url)
 
     @browsing
