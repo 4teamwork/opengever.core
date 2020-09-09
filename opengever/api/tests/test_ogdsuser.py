@@ -1,4 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
 
@@ -8,6 +12,26 @@ class TestOGDSUserGet(IntegrationTestCase):
     @browsing
     def test_user_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
+
+        group_a = Group.query.filter(Group.groupid == 'projekt_a').one()
+
+        create(
+            Builder('ogds_team')
+            .having(
+                title=u'Analyse Systemumgebung',
+                group=group_a,
+                org_unit=get_current_org_unit(),
+                )
+            )
+
+        create(
+            Builder('ogds_team')
+            .having(
+                title=u'Zentrale Dienste',
+                group=group_a,
+                org_unit=get_current_org_unit(),
+                )
+            )
 
         browser.open(self.contactfolder,
                      view='@ogds-users/kathi.barfuss',
@@ -45,14 +69,30 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'phone_mobile': u'012 34 56 76',
              u'phone_office': u'012 34 56 78',
              u'salutation': u'Prof. Dr.',
-             u'teams': [{u'@id': u'http://nohost/plone/kontakte/@teams/1',
+             u'teams': [{u'@id': u'http://nohost/plone/kontakte/@teams/4',
+                         u'@type': u'virtual.ogds.team',
+                         u'active': True,
+                         u'groupid': 'projekt_a',
+                         u'org_unit_id': u'fa',
+                         u'org_unit_title': u'Finanz\xe4mt',
+                         u'team_id': 4,
+                         u'title': u'Analyse Systemumgebung'},
+                        {u'@id': u'http://nohost/plone/kontakte/@teams/1',
                          u'@type': u'virtual.ogds.team',
                          u'active': True,
                          u'groupid': u'projekt_a',
                          u'org_unit_id': u'fa',
                          u'org_unit_title': u'Finanz\xe4mt',
                          u'team_id': 1,
-                         u'title': u'Projekt \xdcberbaung Dorfmatte'}],
+                         u'title': u'Projekt \xdcberbaung Dorfmatte'},
+                        {u'@id': u'http://nohost/plone/kontakte/@teams/5',
+                         u'@type': u'virtual.ogds.team',
+                         u'active': True,
+                         u'groupid': 'projekt_a',
+                         u'org_unit_id': u'fa',
+                         u'org_unit_title': u'Finanz\xe4mt',
+                         u'team_id': 5,
+                         u'title': u'Zentrale Dienste'}],
              u'url': u'http://www.example.com',
              u'userid': u'kathi.barfuss',
              u'zip_code': u'1234'},
