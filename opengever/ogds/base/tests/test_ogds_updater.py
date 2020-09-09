@@ -14,7 +14,7 @@ from plone import api
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
 BLACKLISTED_USER_COLUMNS = {'userid', 'last_login'}
-BLACKLISTED_GROUP_COLUMNS = set()
+BLACKLISTED_GROUP_COLUMNS = {'is_local'}
 
 
 class TestOGDSUpdater(FunctionalTestCase):

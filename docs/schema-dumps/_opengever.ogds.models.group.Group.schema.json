@@ -24,6 +24,13 @@
             "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
+        },
+        "is_local": {
+            "type": "boolean",
+            "title": "is_local",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": false
         }
     },
     "required": [
@@ -32,6 +39,7 @@
     "field_order": [
         "groupid",
         "active",
-        "title"
+        "title",
+        "is_local"
     ]
 }
