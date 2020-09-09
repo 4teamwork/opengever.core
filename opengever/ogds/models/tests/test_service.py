@@ -75,6 +75,50 @@ class TestOGDSServiceGroupMethods(OGDSTestCase):
                                  [group.title for group in groups])
 
 
+class TestOGDSServiceTeamMethods(OGDSTestCase):
+
+    def test_assigned_teams_returns_empty_list_if_no_teams_are_assigned(self):
+        self.assertEqual([], self.service.assigned_teams('bob'))
+
+    def test_assigned_teams_returns_a_list_of_multiple_teams(self):
+        team_a = create(Builder("ogds_team").having(title="Team A",
+                                                    group=self.members_a,
+                                                    org_unit=self.org_unit_a))
+
+        team_b = create(Builder("ogds_team").having(title="Team B",
+                                                    group=self.members_a,
+                                                    org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team C",
+                                           group=self.members_b,
+                                           org_unit=self.org_unit_a))
+
+        teams = self.service.assigned_teams('john')
+        self.assertItemsEqual([team_a, team_b], teams)
+
+    def test_assigned_teams_is_ordered_by_team_title(self):
+        create(Builder("ogds_team").having(title="Team A",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team C",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team D",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team B",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        teams = self.service.assigned_teams('john')
+
+        self.assertSequenceEqual(['Team A', 'Team B', 'Team C', 'Team D'],
+                                 [team.title for team in teams])
+
+
 class TestOGDSServiceAdminUnitMethods(OGDSTestCase):
 
     def test_has_multiple_admin_units(self):
