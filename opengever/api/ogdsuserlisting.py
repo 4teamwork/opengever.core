@@ -5,7 +5,7 @@ from opengever.ogds.models.user import User
 import re
 
 
-class OGDDSUserListingGet(OGDSListingBaseService):
+class OGDSUserListingGet(OGDSListingBaseService):
     """API Endpoint that returns users from ogds.
 
     GET /@ogds-user-listing HTTP/1.1
