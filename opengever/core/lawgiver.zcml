@@ -353,6 +353,7 @@
                      Sharing page: Delegate CommitteeResponsible role,
                      Sharing page: Delegate MeetingUser role,
                      opengever.workspace: Add Workspace,
+                     Manage properties,
                      "
         />
     <lawgiver:map_permissions
@@ -399,6 +400,7 @@
                      ftw.mail: Add Inbound Mail,
                      Add portal content,
                      Modify portal content,
+                     Manage properties,
                      "
         />
     <lawgiver:map_permissions
@@ -416,6 +418,7 @@
                      opengever.document: Checkout,
                      opengever.document: Force Checkin,
                      Modify portal content,
+                     Manage properties,
                      "
         />
     <lawgiver:map_permissions
@@ -431,6 +434,7 @@
                      Add portal content,
                      Modify portal content,
                      Delete objects,
+                     Manage properties,
                      "
         />
 
@@ -442,6 +446,7 @@
                      Add portal content,
                      Modify portal content,
                      Delete objects,
+                     Manage properties,
                      "
         />
 
