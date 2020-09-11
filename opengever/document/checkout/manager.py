@@ -16,6 +16,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.trash.trash import ITrashed
 from persistent.list import PersistentList
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from zope.annotation.interfaces import IAnnotations
@@ -364,6 +365,21 @@ class CheckinCheckoutManager(object):
         if lockable and lockable.locked():
             return True
 
+        return False
+
+    def is_locked_by_other(self):
+        """Returns True if the object is locked and the request doesn't contain
+           the lock token.
+        """
+        lockable = ILockable(self.context, None)
+        if lockable is None:
+            return False
+        if lockable.locked():
+            token = self.request.getHeader("Lock-Token", "")
+            lock_info = lockable.lock_info()
+            if len(lock_info) > 0 and lock_info[0]["token"] == token:
+                return False
+            return True
         return False
 
     def clear_locks(self):

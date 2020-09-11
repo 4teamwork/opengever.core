@@ -11,6 +11,7 @@ Changelog
 - Not only documents, but also mails in tasks and proposals may not be moved. [tinagerber]
 - Include is_subdossier and review_state in @navigation endpoint nodes. [elioschmutz]
 - Order groups and teams in User serializer by title. [elioschmutz]
+- Do not allow @tus-replace if document is not checked out by current user. [buchi]
 
 
 2020.9.0 (2020-09-10)
