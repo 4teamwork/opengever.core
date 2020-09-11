@@ -667,6 +667,17 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         self.assertNotIn(self.taskdocument, self.empty_dossier.objectValues())
 
     @browsing
+    def test_mail_inside_a_task_is_not_movable(self, browser):
+        self.login(self.regular_user)
+        mail = create(Builder('mail').titled('Good news').within(self.task))
+        self.move_items(browser, src=self.task, obj=mail, target=self.empty_dossier)
+
+        self.assertEqual('Document {} is inside a task and therefore not movable. Move the task'
+                         ' instead'.format(mail.title), error_messages()[0])
+        self.assertIn(mail, self.task.objectValues())
+        self.assertNotIn(mail, self.empty_dossier.objectValues())
+
+    @browsing
     def test_document_inside_closed_dossier_is_not_movable(self, browser):
         self.login(self.dossier_manager)
         self.move_items(

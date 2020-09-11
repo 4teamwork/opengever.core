@@ -4,7 +4,7 @@ from Acquisition import aq_parent
 from OFS.CopySupport import CopyError, ResourceLockedError
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -114,7 +114,7 @@ class MoveItemsForm(form.Form):
             for obj in objs:
                 parent = aq_parent(aq_inner(obj))
 
-                if IDocumentSchema.providedBy(obj) and not obj.is_movable():
+                if IBaseDocument.providedBy(obj) and not obj.is_movable():
                     if obj.is_inside_a_task():
                         msg = _(
                             'label_not_movable_since_inside_task',
@@ -132,7 +132,7 @@ class MoveItemsForm(form.Form):
                     else:
                         raise Exception(
                             'Failed to determine the reason for unmovable document. '
-                            'Did IDocumentSchema.is_moveable change?'
+                            'Did IBaseDocument.is_moveable change?'
                         )
                     IStatusMessage(self.request).addStatusMessage(msg, type='error')
                     continue

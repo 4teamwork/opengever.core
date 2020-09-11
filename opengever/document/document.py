@@ -413,13 +413,6 @@ class Document(Item, BaseDocumentMixin):
     def is_checked_out(self):
         return self.checked_out_by() is not None
 
-    def is_movable(self):
-        return not self.is_inside_a_task() and not self.is_inside_a_proposal()
-
-    def is_inside_a_task(self):
-        parent = aq_parent(aq_inner(self))
-        return ITask.providedBy(parent)
-
     def is_submitted_document(self):
         parent = aq_parent(aq_inner(self))
         return ISubmittedProposal.providedBy(parent)
