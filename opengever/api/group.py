@@ -143,18 +143,21 @@ class GeverGroupsPatch(Service):
         portal_groups = getToolByName(portal, "portal_groups")
         return portal_groups.getGroupById(group_id)
 
+    def check_preconditions(self):
+        if not self.group:
+            raise BadRequest("Trying to update a non-existing group.")
+
     def reply(self):
         data = json_body(self.request)
-        group = self._get_group(self._get_group_id)
-
-        if not group:
-            raise BadRequest("Trying to update a non-existing group.")
+        self.group = self._get_group(self._get_group_id)
 
         title = data.get("title", None)
         description = data.get("description", None)
         roles = data.get("roles", None)
         groups = data.get("groups", None)
         users = data.get("users", {})
+
+        self.check_preconditions()
 
         # Disable CSRF protection
         if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
@@ -171,20 +174,20 @@ class GeverGroupsPatch(Service):
         )
 
         properties = {}
-        for id, property in group.propertyItems():
+        for id, property in self.group.propertyItems():
             if data.get(id, False):
                 properties[id] = data[id]
 
-        group.setGroupProperties(properties)
+        self.group.setGroupProperties(properties)
 
         # Add/remove members
-        memberids = group.getGroupMemberIds()
+        memberids = self.group.getGroupMemberIds()
         for userid, allow in users.items():
             if allow:
                 if userid not in memberids:
-                    group.addMember(userid)
+                    self.group.addMember(userid)
             else:
                 if userid in memberids:
-                    group.removeMember(userid)
+                    self.group.removeMember(userid)
 
         return self.reply_no_content()
