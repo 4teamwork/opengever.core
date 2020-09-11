@@ -1,4 +1,5 @@
 from opengever.base.model import create_session
+from opengever.base.security import elevated_privileges
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from plone.restapi.deserializer import json_body
@@ -30,7 +31,12 @@ def raise_for_unassignable_roles(roles):
 def get_sql_user(userid):
     """Returns the OGDS user object identified by `userid`.
     """
-    return User.query.filter_by(userid=userid).one_or_none()
+    user = User.query.filter_by(userid=userid).one_or_none()
+    if user is None:
+        raise BadRequest(
+            "User {} not found in OGDS.".format(userid)
+            )
+    return user
 
 
 class GeverGroupsPost(Service):
@@ -103,10 +109,6 @@ class GeverGroupsPost(Service):
         ogds_group = Group(groupname, is_local=True)
         for userid in users:
             user = get_sql_user(userid)
-            if user is None:
-                raise BadRequest(
-                    "User {} not found in OGDS.".format(userid)
-                    )
             ogds_group.users.append(user)
         session.add(ogds_group)
 
@@ -120,7 +122,8 @@ class GeverGroupsPost(Service):
 
 @implementer(IPublishTraverse)
 class GeverGroupsPatch(Service):
-    """Copy of plone.restapi.services.groups.update.GroupsPatch
+    """Copy of plone.restapi.services.groups.update.GroupsPatch modified
+    to update the corresponding group in the OGDS.
     """
 
     def __init__(self, context, request):
@@ -146,6 +149,19 @@ class GeverGroupsPatch(Service):
     def check_preconditions(self):
         if not self.group:
             raise BadRequest("Trying to update a non-existing group.")
+        if not self.ogds_group:
+            raise BadRequest('Group not found in OGDS.'.format(self._get_group_id))
+        if not self.ogds_group.is_local:
+            raise BadRequest('Can only modify local groups.')
+        raise_for_unassignable_roles(self.roles)
+
+    def update_ogds_group(self, title, description, users):
+        if title:
+            self.ogds_group.title = title
+        if description:
+            self.ogds_group.description = description
+        if users:
+            self.ogds_group.users = map(get_sql_user, users)
 
     def reply(self):
         data = json_body(self.request)
@@ -153,10 +169,10 @@ class GeverGroupsPatch(Service):
 
         title = data.get("title", None)
         description = data.get("description", None)
-        roles = data.get("roles", None)
+        self.roles = data.get("roles", None)
         groups = data.get("groups", None)
         users = data.get("users", {})
-
+        self.ogds_group = Group.query.get(self._get_group_id)
         self.check_preconditions()
 
         # Disable CSRF protection
@@ -167,7 +183,7 @@ class GeverGroupsPatch(Service):
 
         portal_groups.editGroup(
             self._get_group_id,
-            roles=roles,
+            roles=self.roles,
             groups=groups,
             title=title,
             description=description,
@@ -185,9 +201,13 @@ class GeverGroupsPatch(Service):
         for userid, allow in users.items():
             if allow:
                 if userid not in memberids:
-                    self.group.addMember(userid)
+                    with elevated_privileges():
+                        self.group.addMember(userid)
             else:
                 if userid in memberids:
-                    self.group.removeMember(userid)
+                    with elevated_privileges():
+                        self.group.removeMember(userid)
+
+        self.update_ogds_group(title, description, self.group.getGroupMemberIds() if users.items() else None)
 
         return self.reply_no_content()

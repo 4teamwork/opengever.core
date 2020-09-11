@@ -972,4 +972,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@groups"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".group.GeverGroupsPatch"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
