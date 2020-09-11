@@ -212,15 +212,19 @@ class MoveItemsFormView(layout.FormWrapper):
     """
 
     form = MoveItemsForm
+    template_form = MoveTemplateItemsForm
 
     def __init__(self, context, request):
         if self.within_template_folder(context):
-            self.form = MoveTemplateItemsForm
+            self.form = self.template_form
 
         super(MoveItemsFormView, self).__init__(context, request)
 
+    def get_container(self):
+        return self.context
+
     def assert_valid_container_state(self):
-        container = self.context
+        container = self.get_container()
         if not self.within_template_folder(container) and \
                 IDossierMarker.providedBy(container) and not container.is_open():
             msg = _(u'Can only move objects from open dossiers!')
@@ -229,8 +233,7 @@ class MoveItemsFormView(layout.FormWrapper):
             self.request.RESPONSE.redirect(
                 '%s#documents' % container.absolute_url())
 
-    def render(self):
-        self.assert_valid_container_state()
+    def assert_items_selected(self):
         if not self.request.get('paths') and not \
                 self.form_instance.widgets['request_paths'].value:
             msg = _(u'You have not selected any items')
@@ -246,6 +249,12 @@ class MoveItemsFormView(layout.FormWrapper):
             else:
                 return self.request.RESPONSE.redirect(
                     '%s#documents' % self.context.absolute_url())
+
+    def render(self):
+        self.assert_valid_container_state()
+        redirect = self.assert_items_selected()
+        if redirect:
+            return redirect
         return super(MoveItemsFormView, self).render()
 
     def within_template_folder(self, context):
