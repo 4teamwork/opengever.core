@@ -1,3 +1,6 @@
+from opengever.base.model import create_session
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.user import User
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
@@ -9,11 +12,31 @@ from zope.interface import alsoProvides
 import plone.protect.interfaces
 
 
+ASSIGNABLE_ROLES = ['workspace_guest', 'workspace_member', 'workspace_admin']
+
+
+def raise_for_unassignable_roles(roles):
+    if roles is None:
+        return
+    for role in roles:
+        if role not in ASSIGNABLE_ROLES:
+            raise BadRequest(
+                'Role {} cannot be assigned. Permitted roles are: {}'
+                ''.format(role, ", ".join(ASSIGNABLE_ROLES)))
+
+
+def get_sql_user(userid):
+    """Returns the OGDS user object identified by `userid`.
+    """
+    return User.query.filter_by(userid=userid).one_or_none()
+
+
 class GeverGroupsPost(Service):
-    """Copy of plone.restapi.services.groups.add.GroupsPost
+    """Copy of plone.restapi.services.groups.add.GroupsPost modified
+    to also add the created group into the OGDS.
     """
 
-    def check_preconditions(self, groupname):
+    def check_preconditions(self, groupname, roles):
         if not groupname:
             raise BadRequest("Property 'groupname' is required")
 
@@ -26,6 +49,11 @@ class GeverGroupsPost(Service):
         already_exists = gtool.getGroupById(groupname)
         if already_exists:
             raise BadRequest("The group name you entered already exists.")
+
+        if Group.query.filter(Group.groupid == groupname).count() != 0:
+            raise BadRequest('Group {} already exists in OGDS.'.format(groupname))
+
+        raise_for_unassignable_roles(roles)
 
     def reply(self):
         portal = getSite()
@@ -41,7 +69,7 @@ class GeverGroupsPost(Service):
 
         properties = {"title": title, "description": description, "email": email}
 
-        self.check_preconditions(groupname)
+        self.check_preconditions(groupname, roles)
 
         # Disable CSRF protection
         if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
@@ -64,7 +92,21 @@ class GeverGroupsPost(Service):
         # Add members
         group = gtool.getGroupById(groupname)
         for userid in users:
-            group.addMember(userid)
+            with elevated_privileges():
+                group.addMember(userid)
+
+        # Add group to ogds
+        session = create_session()
+
+        ogds_group = Group(groupname, is_local=True)
+        for userid in users:
+            user = get_sql_user(userid)
+            if user is None:
+                raise BadRequest(
+                    "User {} not found in OGDS.".format(userid)
+                    )
+            ogds_group.users.append(user)
+        session.add(ogds_group)
 
         self.request.response.setStatus(201)
         self.request.response.setHeader(

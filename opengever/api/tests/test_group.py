@@ -1,4 +1,7 @@
 from ftw.testbrowser import browsing
+from opengever.api.group import ASSIGNABLE_ROLES
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -8,8 +11,13 @@ class TestGroupPost(IntegrationTestCase):
     @browsing
     def test_group_creation_is_allowed_for_administrators(self, browser):
         self.login(self.workspace_owner, browser)
+        portal_groups = getToolByName(self.portal, "portal_groups")
+
+        self.groupid = u'test_group'
+        self.assertIsNone(portal_groups.getGroupById(self.groupid))
+
         payload = {
-            u'groupname': u'test_group',
+            u'groupname': self.groupid,
         }
 
         with browser.expect_unauthorized():
@@ -19,6 +27,8 @@ class TestGroupPost(IntegrationTestCase):
                 data=json.dumps(payload),
                 method='POST',
                 headers=self.api_headers)
+
+        self.assertIsNone(portal_groups.getGroupById(self.groupid))
 
         self.login(self.administrator, browser)
         response = browser.open(
@@ -42,3 +52,101 @@ class TestGroupPost(IntegrationTestCase):
                         u'items_total': 0}},
             response.json
             )
+        self.assertIsNotNone(portal_groups.getGroupById(self.groupid))
+
+    @browsing
+    def test_group_creation_adds_it_in_the_ogds(self, browser):
+        self.login(self.manager, browser)
+
+        ogds_group = Group.query.get('test_group')
+        self.assertIsNone(ogds_group)
+
+        payload = {
+            u'groupname': u'test_group',
+            u'users': [self.workspace_guest.getId(), self.workspace_member.getId()]
+        }
+        response = browser.open(
+            self.portal,
+            view='@groups',
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(201, response.status_code)
+        ogds_group = Group.query.get('test_group')
+        self.assertIsNotNone(ogds_group)
+        self.assertTrue(ogds_group.is_local)
+        self.assertTrue(ogds_group.active)
+        self.assertItemsEqual(
+            [User.query.get(self.workspace_guest.getId()),
+             User.query.get(self.workspace_member.getId())],
+            ogds_group.users)
+
+    @browsing
+    def test_cannot_create_group_that_already_exists_in_ogds(self, browser):
+        self.login(self.manager, browser)
+
+        ogds_group = Group.query.get('projekt_a')
+        self.assertIsNotNone(ogds_group)
+
+        payload = {
+            u'groupname': 'projekt_a',
+        }
+        with browser.expect_http_error(400):
+            browser.open(
+                self.portal,
+                view='@groups',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            browser.json[u'message'],
+            'Group projekt_a already exists in OGDS.')
+        self.assertEqual(browser.json[u'type'], u'BadRequest')
+
+    @browsing
+    def test_group_creation_fails_when_assigning_dissallowed_roles(self, browser):
+        self.login(self.manager, browser)
+
+        roles = ['Administrator']
+        self.assertNotIn(roles[0], ASSIGNABLE_ROLES)
+
+        payload = {
+            u'groupname': u'test_group',
+            u'roles': roles
+        }
+        with browser.expect_http_error(400):
+            browser.open(
+                self.portal,
+                view='@groups',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            browser.json[u'message'],
+            'Role Administrator cannot be assigned. Permitted '
+            'roles are: workspace_guest, workspace_member, workspace_admin')
+        self.assertEqual(browser.json[u'type'], u'BadRequest')
+
+    @browsing
+    def test_group_creation_fails_when_assigning_user_not_in_ogds(self, browser):
+        self.login(self.manager, browser)
+
+        payload = {
+            u'groupname': u'test_group',
+            u'users': ['unknown']
+        }
+        with browser.expect_http_error(400):
+            browser.open(
+                self.portal,
+                view='@groups',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            browser.json[u'message'],
+            "User unknown not found in OGDS.")
+        self.assertEqual(browser.json[u'type'], u'BadRequest')
