@@ -1046,6 +1046,19 @@ The ports used by the testserver can easily be changed through environment varia
 - ``ZSERVER_PORT`` - the port of the GEVER http server (default: ``55001``)
 - ``TESTSERVER_CTL_PORT`` - the port of the XMLRPC control server (default: ``55002``).
 - ``SOLR_PORT`` - the port of the Solr server which is controlled by the testserver (default: ``55003``).
+- ``TESTSERVER_REUSE_RUNNING_SOLR`` -  reuse the solr on the given port (default: ``None``).
+
+Special case for local development:
+
+A running solr is blocking all of its cores. Thus, running two solr servers on different ports with the same configuration is not possible. The first running server is blocking the core of the second one. This happens if you try to run the testserver with an `opengever.core` checkout where you already started a solr server manually. This is normally the case while developing.
+
+You can tell the testserver to reuse the already running solr instead of starting an own server. To do this, set the ``SOLR_PORT`` to the running solr and the ``TESTSERVER_REUSE_RUNNING_SOLR`` to the same port.
+
+This will tell the testserver to run a solr on port ``SOLR_PORT`` but reuse the existing server if there is already a running server.
+
+.. code::
+
+   SOLR_PORT=8983 TESTSERVER_REUSE_RUNNING_SOLR=8983 ./bin/testserver
 
 
 Custom fixtures

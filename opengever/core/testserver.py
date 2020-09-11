@@ -15,6 +15,7 @@ from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.testing import z2
+from requests.exceptions import ConnectionError
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
 import imp
@@ -25,13 +26,29 @@ import transaction
 
 SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
+REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
 
 
 class TestserverLayer(OpengeverFixture):
     defaultBases = (COMPONENT_REGISTRY_ISOLATION,)
 
     def setUpZope(self, app, configurationContext):
-        SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
+        solr = SolrServer.get_instance()
+        solr.configure(SOLR_PORT, SOLR_CORE)
+
+        try:
+            solr.is_ready()
+
+            if REUSE_RUNNING_SOLR != SOLR_PORT:
+                raise Exception(
+                    "There is already a running solr on port {}. "
+                    "Run the script with 'TESTSERVER_REUSE_RUNNING_SOLR={} bin/testserver'"
+                    " to reuse the running solr instance.".format(SOLR_PORT, SOLR_PORT))
+            print 'Using already running solr on port {}'.format(SOLR_PORT)
+        except ConnectionError:
+            print 'Starting solr on port {}'.format(SOLR_PORT)
+            solr.start()
+
         import collective.indexing.monkey  # noqa
         import ftw.solr.patches  # noqa
 
@@ -39,7 +56,7 @@ class TestserverLayer(OpengeverFixture):
 
         # Solr must be started before registering the connection since ftw.solr
         # will get the schema from solr and cache it.
-        SolrServer.get_instance().await_ready()
+        solr.await_ready()
         xmlconfig.string(
             '<configure xmlns:solr="http://namespaces.plone.org/solr">'
             '  <solr:connection host="localhost"'
