@@ -291,3 +291,42 @@ class TestNavigation(IntegrationTestCase):
              'The repo folder "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen" '
              'has no children and thus must be a leaf node.',
         )
+
+    @browsing
+    def test_include_the_review_state(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('content_interfaces', 'opengever.dossier.businesscase.IBusinessCaseDossier')
+        ]
+        browser.open(
+            self.portal.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json['tree'][0]['review_state'],
+            'dossier-state-active',
+        )
+
+    @browsing
+    def test_includes_is_subdossier(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('content_interfaces', 'opengever.dossier.businesscase.IBusinessCaseDossier')
+        ]
+        browser.open(
+            self.portal.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        self.assertFalse(
+            browser.json.get('tree')[0]['is_subdossier'],
+            'The dossier "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8"'
+            'is not a subdossier',
+        )
+        self.assertTrue(
+            browser.json.get('tree')[0]['nodes'][0]['is_subdossier'],
+            'The dossier "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9" '
+            'is a subdossier.',
+        )
