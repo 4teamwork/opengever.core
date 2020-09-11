@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
@@ -7,7 +6,6 @@ from zExceptions import BadRequest
 from zope.component import queryMultiAdapter
 from zope.component.hooks import getSite
 from zope.interface import alsoProvides
-
 import plone.protect.interfaces
 
 
@@ -15,23 +13,9 @@ class GeverGroupsPost(Service):
     """Copy of plone.restapi.services.groups.add.GroupsPost
     """
 
-    def reply(self):
-        portal = getSite()
-        data = json_body(self.request)
-
-        groupname = data.get("groupname", None)
-
+    def check_preconditions(self, groupname):
         if not groupname:
             raise BadRequest("Property 'groupname' is required")
-
-        email = data.get("email", None)
-        title = data.get("title", None)
-        description = data.get("description", None)
-        roles = data.get("roles", None)
-        groups = data.get("groups", None)
-        users = data.get("users", [])
-
-        properties = {"title": title, "description": description, "email": email}
 
         gtool = getToolByName(self.context, "portal_groups")
         regtool = getToolByName(self.context, "portal_registration")
@@ -43,10 +27,27 @@ class GeverGroupsPost(Service):
         if already_exists:
             raise BadRequest("The group name you entered already exists.")
 
+    def reply(self):
+        portal = getSite()
+        data = json_body(self.request)
+
+        groupname = data.get("groupname", None)
+        email = data.get("email", None)
+        title = data.get("title", None)
+        description = data.get("description", None)
+        roles = data.get("roles", None)
+        groups = data.get("groups", None)
+        users = data.get("users", [])
+
+        properties = {"title": title, "description": description, "email": email}
+
+        self.check_preconditions(groupname)
+
         # Disable CSRF protection
         if "IDisableCSRFProtection" in dir(plone.protect.interfaces):
             alsoProvides(self.request, plone.protect.interfaces.IDisableCSRFProtection)
 
+        gtool = getToolByName(self.context, "portal_groups")
         success = gtool.addGroup(
             groupname,
             roles,
