@@ -193,16 +193,18 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
 
         service = ogds_service()
         groups = service.assigned_groups(self.context.userid)
+        teams = service.assigned_teams(self.context.userid)
         data['groups'] = []
         data['teams'] = []
         for group in groups:
             group_serializer = queryMultiAdapter(
                 (group, self.request), ISerializeToJsonSummary)
             data['groups'].append(group_serializer())
-            for team in group.teams:
-                team_serializer = queryMultiAdapter(
-                    (team, self.request), ISerializeToJsonSummary)
-                data['teams'].append(team_serializer())
+
+        for team in teams:
+            team_serializer = queryMultiAdapter(
+                (team, self.request), ISerializeToJsonSummary)
+            data['teams'].append(team_serializer())
 
     def __call__(self, *args, **kwargs):
         data = super(SerializeUserModelToJson, self).__call__(*args, **kwargs)
