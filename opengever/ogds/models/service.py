@@ -6,6 +6,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from plone import api
+from sqlalchemy import func
 
 
 def ogds_service():
@@ -72,7 +73,10 @@ class OGDSService(object):
     def assigned_groups(self, userid):
         query = Group.query.join(Group.users)
         query = query.filter(User.userid == userid)
-        query = query.order_by(Group.title)
+
+        # Order by title or groupid if no title is given.
+        query = query.order_by(func.coalesce(Group.title, Group.groupid))
+
         return query.all()
 
     def assigned_teams(self, userid):

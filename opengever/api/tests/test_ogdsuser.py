@@ -15,6 +15,16 @@ class TestOGDSUserGet(IntegrationTestCase):
 
         group_a = Group.query.filter(Group.groupid == 'projekt_a').one()
 
+        # Groups without a title
+        create(
+            Builder('ogds_group')
+            .having(groupid='a_project', title=None, users=group_a.users)
+            )
+        create(
+            Builder('ogds_group')
+            .having(groupid='z_project', title=None, users=group_a.users)
+            )
+
         create(
             Builder('ogds_team')
             .having(
@@ -59,11 +69,21 @@ class TestOGDSUserGet(IntegrationTestCase):
                           u'active': True,
                           u'groupid': u'projekt_a',
                           u'title': u'Projekt A'},
+                         {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/a_project',
+                          u'@type': u'virtual.ogds.group',
+                          u'active': True,
+                          u'groupid': u'a_project',
+                          u'title': None},
                          {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/fa_users',
                           u'@type': u'virtual.ogds.group',
                           u'active': True,
                           u'groupid': u'fa_users',
-                          u'title': u'fa Users Group'}],
+                          u'title': u'fa Users Group'},
+                         {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/z_project',
+                          u'@type': u'virtual.ogds.group',
+                          u'active': True,
+                          u'groupid': u'z_project',
+                          u'title': None}],
              u'lastname': u'B\xe4rfuss',
              u'phone_fax': u'012 34 56 77',
              u'phone_mobile': u'012 34 56 76',
