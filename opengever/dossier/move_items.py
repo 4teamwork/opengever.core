@@ -203,7 +203,41 @@ class MoveItemsForm(form.Form):
                 msg, type='error')
 
 
+class MoveItemForm(MoveItemsForm):
+
+    label = _('heading_move_item', default="Move Item")
+
+    def extract_selected_objs(self, data):
+        return [self.context]
+
+    def updateWidgets(self):
+        super(MoveItemForm, self).updateWidgets()
+        self.widgets['request_paths'].mode = HIDDEN_MODE
+        self.widgets['request_paths'].value = '/'.join(self.context.getPhysicalPath())
+
+    def create_statusmessages(self, moved_items, failed_objects, failed_resource_locked_objects):
+        """ Create statusmessages with errors and infos of the move-process
+        """
+        if moved_items:
+            msg = _(u'item_moved',
+                    default=u'${item} was moved.',
+                    mapping={'item': self.context.title})
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='info')
+
+        else:
+            msg = _(u'failed_to_move_item',
+                    default=u'Failed to move ${item}.',
+                    mapping={'item': failed_objects[0]})
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
+
 class MoveTemplateItemsForm(MoveItemsForm):
+    fields = field.Fields(IMoveTemplateItemsSchema)
+
+
+class MoveTemplateItemForm(MoveItemForm):
     fields = field.Fields(IMoveTemplateItemsSchema)
 
 
@@ -261,6 +295,17 @@ class MoveItemsFormView(layout.FormWrapper):
         """ This method checks if the current context is within a templatefolder.
         """
         return bool(filter(ITemplateFolder.providedBy, aq_chain(context)))
+
+
+class MoveItemFormView(MoveItemsFormView):
+    form = MoveItemForm
+    template_form = MoveTemplateItemForm
+
+    def get_container(self):
+        return aq_parent(aq_inner(self.context))
+
+    def assert_items_selected(self):
+        return
 
 
 class NotInContentTypes(Invalid):

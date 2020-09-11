@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-09-03 12:37+0000\n"
+"POT-Creation-Date: 2020-09-10 09:47+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -173,6 +173,11 @@ msgstr "Dossier de réunion"
 #: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.meetingtemplate.xml
 msgid "Meeting Template"
 msgstr "Modèle de séance"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20200909160057_add_move_item_action/actions.xml
+msgid "Move Item"
+msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200129170738_add_move_proposal_items_action/actions.xml

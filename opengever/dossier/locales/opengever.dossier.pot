@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-06-16 09:06+0000\n"
+"POT-Creation-Date: 2020-09-11 06:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,6 +349,11 @@ msgstr ""
 msgid "error_no_items"
 msgstr ""
 
+#. Default: "Failed to move ${item}."
+#: ./opengever/dossier/move_items.py
+msgid "failed_to_move_item"
+msgstr ""
+
 #. Default: "Common"
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "fieldset_common"
@@ -418,6 +423,11 @@ msgstr ""
 msgid "heading_dossier_note"
 msgstr ""
 
+#. Default: "Move Item"
+#: ./opengever/dossier/move_items.py
+msgid "heading_move_item"
+msgstr ""
+
 #. Default: "Move Items"
 #: ./opengever/dossier/move_items.py
 msgid "heading_move_items"
@@ -480,6 +490,11 @@ msgstr ""
 #. Default: "Removed participations."
 #: ./opengever/dossier/browser/forms.py
 msgid "info_removed_participations"
+msgstr ""
+
+#. Default: "${item} was moved."
+#: ./opengever/dossier/move_items.py
+msgid "item_moved"
 msgstr ""
 
 #. Default: "Add Note"
