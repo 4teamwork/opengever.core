@@ -1,6 +1,8 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from six import BytesIO
+from unittest import skipIf
 
 UPLOAD_DATA = b"abcdefgh"
 UPLOAD_LENGTH = len(UPLOAD_DATA)
@@ -101,6 +103,11 @@ class TestTUSUpload(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.assert_tus_replace_fails(self.document, browser)
 
+    @skipIf(
+        datetime.now() < datetime(2021, 9, 11),
+        "Lock verification temporary disabled, because it's not yet supported "
+        "by Office Connector",
+    )
     @browsing
     def test_cannot_replace_document_if_lock_token_not_provided(self, browser):
         self.login(self.regular_user, browser)
