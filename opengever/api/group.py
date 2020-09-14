@@ -242,16 +242,23 @@ class GeverGroupsDelete(Service):
     def check_preconditions(self):
         if not self.group:
             raise NotFound("Trying to delete a non-existing group.")
+        if not self.ogds_group:
+            raise BadRequest('Group not found in OGDS.'.format(self._get_group_id))
+        if not self.ogds_group.is_local:
+            raise BadRequest('Can only delete local groups.')
 
     def reply(self):
 
         portal_groups = getToolByName(self.context, "portal_groups")
+        self.ogds_group = Group.query.get(self._get_group_id)
         self.group = self._get_group(self._get_group_id)
 
         self.check_preconditions()
 
         delete_successful = portal_groups.removeGroup(self._get_group_id)
+
         if delete_successful:
+            self.ogds_group.active = False
             return self.reply_no_content()
         else:
             return self.reply_no_content(status=404)

@@ -317,3 +317,68 @@ class TestGeverGroupsPatch(IntegrationTestCase):
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id, userid],
             [user.userid for user in self.ogds_group.users])
+
+
+class TestGeverGroupsDelete(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestGeverGroupsDelete, self).setUp()
+        self.groupid = u'committee_rpk_group'
+        self.ogds_group = Group.query.get(self.groupid)
+        self.ogds_group.is_local = True
+
+    @browsing
+    def test_deleting_group_is_allowed_for_administrators(self, browser):
+        self.login(self.workspace_owner, browser)
+        portal_groups = getToolByName(self.portal, "portal_groups")
+        self.assertIsNotNone(portal_groups.getGroupById(self.groupid))
+
+        with browser.expect_unauthorized():
+            browser.open(
+                "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+                method='DELETE',
+                headers=self.api_headers)
+
+        self.login(self.administrator, browser)
+        response = browser.open(
+            "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+            method='DELETE',
+            headers=self.api_headers)
+
+        self.assertEqual(204, response.status_code)
+        self.assertIsNone(portal_groups.getGroupById(self.groupid))
+
+    @browsing
+    def test_deleting_group_updates_ogds(self, browser):
+        self.login(self.administrator, browser)
+        portal_groups = getToolByName(self.portal, "portal_groups")
+
+        self.assertIsNotNone(portal_groups.getGroupById(self.groupid))
+        self.assertTrue(self.ogds_group.active)
+
+        browser.open(
+            "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+            method='DELETE',
+            headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.assertIsNone(portal_groups.getGroupById(self.groupid))
+        self.assertFalse(self.ogds_group.active)
+
+    @browsing
+    def test_only_local_groups_can_be_deleted(self, browser):
+        self.login(self.administrator, browser)
+        portal_groups = getToolByName(self.portal, "portal_groups")
+        self.ogds_group.is_local = False
+        self.assertIsNotNone(portal_groups.getGroupById(self.groupid))
+
+        with browser.expect_http_error(400):
+            browser.open(
+                "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+                method='DELETE',
+                headers=self.api_headers)
+
+        self.assertEqual({u'message': u'Can only delete local groups.',
+                          u'type': u'BadRequest'},
+                         browser.json)
+        self.assertIsNotNone(portal_groups.getGroupById(self.groupid))
