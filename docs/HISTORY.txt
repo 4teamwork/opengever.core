@@ -9,6 +9,7 @@ Changelog
 - Populate filename for favorites where previous upgrades failed. [deiferni]
 - Add move item action. [tinagerber]
 - Not only documents, but also mails in tasks and proposals may not be moved. [tinagerber]
+- Include is_subdossier and review_state in @navigation endpoint nodes. [elioschmutz]
 
 
 2020.9.0 (2020-09-10)

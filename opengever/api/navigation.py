@@ -130,6 +130,8 @@ class Navigation(object):
             'current': self.context.absolute_url() == brain.getURL(),
             'current_tree': self.context.absolute_url().startswith(brain.getURL()),
             'is_leafnode': None,
+            'is_subdossier': brain.is_subdossier,
+            'review_state': brain.review_state,
         }
         if brain.portal_type == 'opengever.repository.repositoryfolder':
             node['is_leafnode'] = not brain.has_sametype_children
