@@ -981,4 +981,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="DELETE"
+      name="@groups"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".group.GeverGroupsDelete"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
