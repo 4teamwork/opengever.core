@@ -4,7 +4,8 @@ Changelog
 2020.10.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Fix globalindex endpoint for undefined sort orders. [njohner]
+- Fix ogds listing endpoints for undefined sort orders. [njohner]
 
 
 2020.9.0 (2020-09-10)
@@ -13,8 +14,6 @@ Changelog
 - Order groups and teams in User serializer by title. [elioschmutz]
 - Bump ftw.monitor to get bin/dump-perf-metrics script. [lgraf]
 - Correctly handle query strings for oguid on remote admin units in ResolveOGUIDView. [njohner]
-- Fix globalindex endpoint for undefined sort orders. [njohner]
-- Fix ogds listing endpoints for undefined sort orders. [njohner]
 - Add @successors and @predecessor expansion for tasks. [deiferni]
 - Don't show workspace actions for non-open dossiers or when the user can only view. [deiferni]
 - Add @share-content endpoint to share content in workspace. [tinagerber]
