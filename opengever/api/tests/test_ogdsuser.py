@@ -1,8 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.api.serializer import SerializeUserModelToJson
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.tests.base import OGDSTestCase
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
 
@@ -145,3 +147,77 @@ class TestOGDSUserGet(IntegrationTestCase):
             browser.open(self.contactfolder,
                          view='@ogds-users/kathi.barfuss/foobar',
                          headers=self.api_headers)
+
+
+class TestAssignedGroupsMethod(OGDSTestCase):
+
+    def test_assigned_groups_returns_empty_list_if_no_groups_are_assigned(self):
+        serializer = SerializeUserModelToJson(self.bob, None)
+        self.assertEqual([], serializer.assigned_groups())
+
+    def test_assigned_groups_returns_a_list_of_multiple_groups(self):
+        serializer = SerializeUserModelToJson(self.john, None)
+        groups = serializer.assigned_groups()
+        self.assertSequenceEqual([self.members_a, self.inbox_members], groups)
+
+    def test_assigned_groups_is_ordered_by_group_title(self):
+        self.members_a.title = 'Group B'
+        self.inbox_members.title = 'Group C'
+
+        create(Builder("ogds_group").id("members_1")
+               .having(title='Group A', users=[self.john]))
+        create(Builder("ogds_group").id("members_z")
+               .having(title='Group D', users=[self.john]))
+
+        serializer = SerializeUserModelToJson(self.john, None)
+        groups = serializer.assigned_groups()
+
+        self.assertSequenceEqual(['Group A', 'Group B', 'Group C', 'Group D'],
+                                 [group.title for group in groups])
+
+
+class TestAssignedTeamsMethod(OGDSTestCase):
+
+    def test_assigned_teams_returns_empty_list_if_no_teams_are_assigned(self):
+        serializer = SerializeUserModelToJson(self.bob, None)
+        self.assertEqual([], serializer.assigned_teams())
+
+    def test_assigned_teams_returns_a_list_of_multiple_teams(self):
+        team_a = create(Builder("ogds_team").having(title="Team A",
+                                                    group=self.members_a,
+                                                    org_unit=self.org_unit_a))
+
+        team_b = create(Builder("ogds_team").having(title="Team B",
+                                                    group=self.members_a,
+                                                    org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team C",
+                                           group=self.members_b,
+                                           org_unit=self.org_unit_a))
+
+        serializer = SerializeUserModelToJson(self.john, None)
+        teams = serializer.assigned_teams()
+        self.assertItemsEqual([team_a, team_b], teams)
+
+    def test_assigned_teams_is_ordered_by_team_title(self):
+        create(Builder("ogds_team").having(title="Team A",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team C",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team D",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        create(Builder("ogds_team").having(title="Team B",
+                                           group=self.members_a,
+                                           org_unit=self.org_unit_a))
+
+        serializer = SerializeUserModelToJson(self.john, None)
+        teams = serializer.assigned_teams()
+
+        self.assertSequenceEqual(['Team A', 'Team B', 'Team C', 'Team D'],
+                                 [team.title for team in teams])
