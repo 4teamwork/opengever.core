@@ -239,13 +239,16 @@ class GeverGroupsDelete(Service):
         portal_groups = getToolByName(portal, "portal_groups")
         return portal_groups.getGroupById(group_id)
 
+    def check_preconditions(self):
+        if not self.group:
+            raise NotFound("Trying to delete a non-existing group.")
+
     def reply(self):
 
         portal_groups = getToolByName(self.context, "portal_groups")
-        group = self._get_group(self._get_group_id)
+        self.group = self._get_group(self._get_group_id)
 
-        if not group:
-            raise NotFound("Trying to delete a non-existing group.")
+        self.check_preconditions()
 
         delete_successful = portal_groups.removeGroup(self._get_group_id)
         if delete_successful:
