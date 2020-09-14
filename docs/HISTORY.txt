@@ -6,6 +6,7 @@ Changelog
 
 - Fix globalindex endpoint for undefined sort orders. [njohner]
 - Fix ogds listing endpoints for undefined sort orders. [njohner]
+- Populate filename for favorites where previous upgrades failed. [deiferni]
 
 
 2020.9.0 (2020-09-10)
