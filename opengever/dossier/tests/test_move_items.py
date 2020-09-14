@@ -4,6 +4,7 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
@@ -667,6 +668,17 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         self.assertNotIn(self.taskdocument, self.empty_dossier.objectValues())
 
     @browsing
+    def test_mail_inside_a_task_is_not_movable(self, browser):
+        self.login(self.regular_user)
+        mail = create(Builder('mail').titled('Good news').within(self.task))
+        self.move_items(browser, src=self.task, obj=mail, target=self.empty_dossier)
+
+        self.assertEqual('Document {} is inside a task and therefore not movable. Move the task'
+                         ' instead'.format(mail.title), error_messages()[0])
+        self.assertIn(mail, self.task.objectValues())
+        self.assertNotIn(mail, self.empty_dossier.objectValues())
+
+    @browsing
     def test_document_inside_closed_dossier_is_not_movable(self, browser):
         self.login(self.dossier_manager)
         self.move_items(
@@ -959,3 +971,43 @@ class TestMoveItemsWithTestbrowserSolr(SolrIntegrationTestCase):
 
         browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.expired_dossier.title_or_id()))))
         self.assertEqual('', browser.contents)
+
+
+class TestMoveItem(IntegrationTestCase):
+
+    def move_item(self, browser, src, target):
+        browser.open(src, view='move_item')
+        browser.fill({'Destination': target})
+        browser.css('#form-buttons-button_submit').first.click()
+
+    @browsing
+    def test_move_document(self, browser):
+        self.login(self.regular_user, browser)
+        doc_title = self.document.title.encode('utf-8')
+        self.assertIn(doc_title, [a.Title for a in self.dossier.getFolderContents()])
+
+        self.move_item(browser, self.document, self.empty_dossier)
+        self.assertIn(doc_title, [a.Title for a in self.empty_dossier.getFolderContents()])
+        self.assertNotIn(doc_title, [a.Title for a in self.dossier.getFolderContents()])
+        assert_message(u'{} was moved.'.format(doc_title.decode('utf-8')))
+
+    @browsing
+    def test_checked_out_document_is_not_movable(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+        doc_title = self.document.title.encode('utf-8')
+        self.assertIn(doc_title, [a.Title for a in self.dossier.getFolderContents()])
+        self.move_item(browser, self.document, self.empty_dossier)
+        self.assertIn(doc_title, [a.Title for a in self.dossier.getFolderContents()])
+        self.assertNotIn(doc_title, [a.Title for a in self.empty_dossier.getFolderContents()])
+        assert_message(u'Failed to move {}.'.format(doc_title.decode('utf-8')))
+
+    @browsing
+    def test_move_document_in_templates(self, browser):
+        self.login(self.administrator, browser)
+        doc_title = self.dossiertemplatedocument.title.encode('utf-8')
+        self.assertIn(doc_title, [a.Title for a in self.dossiertemplate.getFolderContents()])
+        self.move_item(browser, self.dossiertemplatedocument, self.templates)
+        self.assertIn(doc_title, [a.Title for a in self.templates.getFolderContents()])
+        self.assertNotIn(doc_title, [a.Title for a in self.dossiertemplate.getFolderContents()])
+        assert_message(u'{} was moved.'.format(doc_title.decode('utf-8')))

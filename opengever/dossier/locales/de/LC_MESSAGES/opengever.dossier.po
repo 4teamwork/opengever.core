@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-06-16 09:06+0000\n"
+"POT-Creation-Date: 2020-09-11 06:27+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -350,6 +350,11 @@ msgstr "Enddatum erforderlich"
 msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt."
 
+#. Default: "Failed to move ${item}."
+#: ./opengever/dossier/move_items.py
+msgid "failed_to_move_item"
+msgstr "${item} konnte nicht verschoben werden."
+
 #. Default: "Common"
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "fieldset_common"
@@ -419,6 +424,11 @@ msgstr "Dossier ablegen"
 msgid "heading_dossier_note"
 msgstr "Kommentar zu Dossier `${title}`"
 
+#. Default: "Move Item"
+#: ./opengever/dossier/move_items.py
+msgid "heading_move_item"
+msgstr "Element verschieben"
+
 #. Default: "Move Items"
 #: ./opengever/dossier/move_items.py
 msgid "heading_move_items"
@@ -484,6 +494,11 @@ msgstr "Die Beteiligung wurde gespeichert."
 #: ./opengever/dossier/browser/forms.py
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
+
+#. Default: "${item} was moved."
+#: ./opengever/dossier/move_items.py
+msgid "item_moved"
+msgstr "${item} wurde verschoben."
 
 #. Default: "Add Note"
 #: ./opengever/dossier/viewlets/templates/note.pt

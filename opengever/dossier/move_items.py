@@ -4,7 +4,7 @@ from Acquisition import aq_parent
 from OFS.CopySupport import CopyError, ResourceLockedError
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -114,7 +114,7 @@ class MoveItemsForm(form.Form):
             for obj in objs:
                 parent = aq_parent(aq_inner(obj))
 
-                if IDocumentSchema.providedBy(obj) and not obj.is_movable():
+                if IBaseDocument.providedBy(obj) and not obj.is_movable():
                     if obj.is_inside_a_task():
                         msg = _(
                             'label_not_movable_since_inside_task',
@@ -132,7 +132,7 @@ class MoveItemsForm(form.Form):
                     else:
                         raise Exception(
                             'Failed to determine the reason for unmovable document. '
-                            'Did IDocumentSchema.is_moveable change?'
+                            'Did IBaseDocument.is_moveable change?'
                         )
                     IStatusMessage(self.request).addStatusMessage(msg, type='error')
                     continue
@@ -203,7 +203,41 @@ class MoveItemsForm(form.Form):
                 msg, type='error')
 
 
+class MoveItemForm(MoveItemsForm):
+
+    label = _('heading_move_item', default="Move Item")
+
+    def extract_selected_objs(self, data):
+        return [self.context]
+
+    def updateWidgets(self):
+        super(MoveItemForm, self).updateWidgets()
+        self.widgets['request_paths'].mode = HIDDEN_MODE
+        self.widgets['request_paths'].value = '/'.join(self.context.getPhysicalPath())
+
+    def create_statusmessages(self, moved_items, failed_objects, failed_resource_locked_objects):
+        """ Create statusmessages with errors and infos of the move-process
+        """
+        if moved_items:
+            msg = _(u'item_moved',
+                    default=u'${item} was moved.',
+                    mapping={'item': self.context.title})
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='info')
+
+        else:
+            msg = _(u'failed_to_move_item',
+                    default=u'Failed to move ${item}.',
+                    mapping={'item': failed_objects[0]})
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
+
 class MoveTemplateItemsForm(MoveItemsForm):
+    fields = field.Fields(IMoveTemplateItemsSchema)
+
+
+class MoveTemplateItemForm(MoveItemForm):
     fields = field.Fields(IMoveTemplateItemsSchema)
 
 
@@ -212,15 +246,19 @@ class MoveItemsFormView(layout.FormWrapper):
     """
 
     form = MoveItemsForm
+    template_form = MoveTemplateItemsForm
 
     def __init__(self, context, request):
         if self.within_template_folder(context):
-            self.form = MoveTemplateItemsForm
+            self.form = self.template_form
 
         super(MoveItemsFormView, self).__init__(context, request)
 
+    def get_container(self):
+        return self.context
+
     def assert_valid_container_state(self):
-        container = self.context
+        container = self.get_container()
         if not self.within_template_folder(container) and \
                 IDossierMarker.providedBy(container) and not container.is_open():
             msg = _(u'Can only move objects from open dossiers!')
@@ -229,8 +267,7 @@ class MoveItemsFormView(layout.FormWrapper):
             self.request.RESPONSE.redirect(
                 '%s#documents' % container.absolute_url())
 
-    def render(self):
-        self.assert_valid_container_state()
+    def assert_items_selected(self):
         if not self.request.get('paths') and not \
                 self.form_instance.widgets['request_paths'].value:
             msg = _(u'You have not selected any items')
@@ -246,12 +283,29 @@ class MoveItemsFormView(layout.FormWrapper):
             else:
                 return self.request.RESPONSE.redirect(
                     '%s#documents' % self.context.absolute_url())
+
+    def render(self):
+        self.assert_valid_container_state()
+        redirect = self.assert_items_selected()
+        if redirect:
+            return redirect
         return super(MoveItemsFormView, self).render()
 
     def within_template_folder(self, context):
         """ This method checks if the current context is within a templatefolder.
         """
         return bool(filter(ITemplateFolder.providedBy, aq_chain(context)))
+
+
+class MoveItemFormView(MoveItemsFormView):
+    form = MoveItemForm
+    template_form = MoveTemplateItemForm
+
+    def get_container(self):
+        return aq_parent(aq_inner(self.context))
+
+    def assert_items_selected(self):
+        return
 
 
 class NotInContentTypes(Invalid):

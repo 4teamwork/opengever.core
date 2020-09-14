@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-06-16 09:06+0000\n"
+"POT-Creation-Date: 2020-09-11 06:27+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -348,6 +348,11 @@ msgstr "Date de clôture requise"
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun élément."
 
+#. Default: "Failed to move ${item}."
+#: ./opengever/dossier/move_items.py
+msgid "failed_to_move_item"
+msgstr ""
+
 #. Default: "Common"
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "fieldset_common"
@@ -417,6 +422,11 @@ msgstr "Classer le dossier"
 msgid "heading_dossier_note"
 msgstr "Commentaire sur le dossier `${title}`"
 
+#. Default: "Move Item"
+#: ./opengever/dossier/move_items.py
+msgid "heading_move_item"
+msgstr ""
+
 #. Default: "Move Items"
 #: ./opengever/dossier/move_items.py
 msgid "heading_move_items"
@@ -482,6 +492,11 @@ msgstr "Participation enregistrée."
 #: ./opengever/dossier/browser/forms.py
 msgid "info_removed_participations"
 msgstr "Participations enlevées."
+
+#. Default: "${item} was moved."
+#: ./opengever/dossier/move_items.py
+msgid "item_moved"
+msgstr ""
 
 #. Default: "Add Note"
 #: ./opengever/dossier/viewlets/templates/note.pt

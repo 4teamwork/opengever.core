@@ -46,3 +46,6 @@ class ProposalTemplate(Document):
     """Proposal templates are added to the template folder.
     They have a word-file attached, which is copied when creating a new proposal.
     """
+
+    def is_movable(self):
+        return False

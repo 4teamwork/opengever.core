@@ -295,6 +295,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="move_item"
+      class=".move_items.MoveItemFormView"
+      permission="zope2.CopyOrMove"
+      />
+
   <adapter
       factory=".nightly_after_resolve_job.ExecuteNightlyAfterResolveJobs"
       name="execute-after-resolve-jobs"
