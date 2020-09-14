@@ -4,7 +4,8 @@ Changelog
 2020.10.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Fix globalindex endpoint for undefined sort orders. [njohner]
+- Fix ogds listing endpoints for undefined sort orders. [njohner]
 
 
 2020.9.0 (2020-09-10)

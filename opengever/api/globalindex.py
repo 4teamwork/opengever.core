@@ -1,103 +1,26 @@
-from opengever.api.batch import SQLHypermediaBatch
+from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.globalindex.model.task import Task
-from opengever.tabbedview.sqlsource import cast_to_string
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.services import Service
-from sqlalchemy import asc
-from sqlalchemy import desc
-from sqlalchemy import or_
-from zope.component import queryMultiAdapter
 
 
-class GlobalIndexGet(Service):
+class GlobalIndexGet(OGDSListingBaseService):
 
     searchable_columns = [Task.title, Task.text,
                           Task.sequence_number, Task.responsible]
 
-    def reply(self):
-        sort_on = self.request.form.get('sort_on', DEFAULT_SORT_INDEX)
-        if sort_on not in Task.__table__.columns:
-            sort_on = DEFAULT_SORT_INDEX
+    default_sort_on = DEFAULT_SORT_INDEX
+    default_sort_order = 'descending'
+    serializer_interface = ISerializeToJson
+    unique_sort_on = 'id'
 
-        sort_order = self.request.form.get('sort_order', 'descending')
-
-        start = self.request.form.get('b_start', '0')
-        rows = self.request.form.get('b_size', '25')
-
-        filters = self.request.form.get('filters', {})
-
-        search = self.request.form.get('search')
-
-        try:
-            start = int(start)
-            rows = int(rows)
-        except ValueError:
-            start = 0
-            rows = 25
-
-        if sort_order == 'ascending':
-            order = asc(getattr(Task, sort_on))
-        else:
-            order = desc(getattr(Task, sort_on))
-
-        query = Task.query.restrict().order_by(order)
+    def extend_query_with_filters(self, query, filters):
         for key, value in filters.items():
             if isinstance(value, list):
                 query = query.filter(getattr(Task, key).in_(value))
             else:
                 query = query.filter(getattr(Task, key) == value)
-        query = query.avoid_duplicates()
-
-        if search:
-            query = self.extend_query_with_textfilter(query, search)
-
-        tasks = query
-        batch = SQLHypermediaBatch(self.request, tasks)
-        items = []
-        for task in batch:
-            serializer = queryMultiAdapter(
-                (task, self.request), ISerializeToJson)
-            items.append(serializer())
-
-        result = {}
-        result['items'] = items
-        result['batching'] = batch.links
-        result['items_total'] = batch.items_total
-        result['b_start'] = start
-        result['b_size'] = rows
-
-        return result
-
-    def extend_query_with_textfilter(self, query, text):
-        """Extends the given `query` with text filters.
-        This is a copy from opengever.tabbedview.sqlsource.SqlTableSource
-        """
-        if len(text):
-            if isinstance(text, str):
-                text = text.decode('utf-8')
-
-            # remove trailing asterisk
-            if text.endswith(u'*'):
-                text = text[:-1]
-
-            # lets split up the search term into words, extend them with
-            # the default wildcards and then search for every word
-            # seperately
-            for word in text.strip().split(' '):
-                term = u'%%%s%%' % word
-
-                # XXX check if the following hack is still necessary
-
-                # Fixed Problems with the collation with the Oracle DB
-                # the case insensitive worked just every second time
-                # now it works fine
-                # Issue #759
-                query.session
-
-                expressions = []
-                for field in self.searchable_columns:
-                    expressions.append(cast_to_string(field).ilike(term))
-                query = query.filter(or_(*expressions))
-
         return query
+
+    def get_base_query(self):
+        return Task.query.restrict().avoid_duplicates()

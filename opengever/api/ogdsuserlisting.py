@@ -5,7 +5,7 @@ from opengever.ogds.models.user import User
 import re
 
 
-class OGDDSUserListingGet(OGDSListingBaseService):
+class OGDSUserListingGet(OGDSListingBaseService):
     """API Endpoint that returns users from ogds.
 
     GET /@ogds-user-listing HTTP/1.1
@@ -27,6 +27,7 @@ class OGDDSUserListingGet(OGDSListingBaseService):
         User.directorate,
     )
 
+    unique_sort_on = 'userid'
     default_sort_on = 'lastname'
     model_class = User
     default_state_filter = tuple()

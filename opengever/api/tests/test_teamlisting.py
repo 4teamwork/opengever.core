@@ -171,6 +171,40 @@ class TestTeamListingGet(IntegrationTestCase):
         self.assertEqual(3, browser.json['items_total'])
 
     @browsing
+    def test_listing_always_has_a_secondary_sort_by_team_id(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.contactfolder,
+                     view=u'@team-listing?sort_on=org_unit_id',
+                     headers=self.api_headers)
+
+        self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(
+            [u'fa', u'fa', u'fa'],
+            [item['org_unit_id'] for item in browser.json['items']])
+
+        expected = sorted(item.team_id for item in Team.query.all())
+        self.assertEqual([item['team_id'] for item in browser.json['items']],
+                         expected)
+
+    @browsing
+    def test_secondary_sort_by_team_id_respects_sort_order(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.contactfolder,
+            view=u'@team-listing?sort_on=org_unit_id&sort_order=descending',
+            headers=self.api_headers)
+
+        self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(
+            [u'fa', u'fa', u'fa'],
+            [item['org_unit_id'] for item in browser.json['items']])
+
+        expected = sorted((item.team_id for item in Team.query.all()),
+                          reverse=True)
+        self.assertEqual([item['team_id'] for item in browser.json['items']],
+                         expected)
+
+    @browsing
     def test_sort_descending(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,

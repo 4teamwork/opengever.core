@@ -23,14 +23,26 @@ class OGDSListingBaseService(Service):
     """
 
     searchable_columns = tuple()
+    # unique_sort_on should be set in all subclasses to a unique key to make
+    # sure that results are always sorted, otherwise sorting can be undefined.
+    # As a separate query is made for every batch and for every item, undefined
+    # sort order can lead to problems when iterating over the items and
+    # batching (some items returned more than once and others missing).
+    unique_sort_on = None
     default_sort_on = None
     default_sort_order = 'ascending'
     model_class = None
+    serializer_interface = ISerializeToJsonSummary
 
     def reply(self):
         sort_on, sort_order, search, filters = self.extract_params()
         query = self.get_base_query()
         query = self.extend_query_with_sorting(query, sort_on, sort_order)
+
+        if self.unique_sort_on != sort_on:
+            query = self.extend_query_with_sorting(
+                query, self.unique_sort_on, sort_order)
+
         query = self.extend_query_with_search(query, search)
         query = self.extend_query_with_filters(query, filters)
 
@@ -38,7 +50,7 @@ class OGDSListingBaseService(Service):
         items = []
         for item in batch:
             serializer = queryMultiAdapter(
-                (item, self.request), ISerializeToJsonSummary)
+                (item, self.request), self.serializer_interface)
             items.append(serializer())
 
         result = {}
@@ -47,6 +59,8 @@ class OGDSListingBaseService(Service):
         result['items_total'] = batch.items_total
         if batch.links:
             result['batching'] = batch.links
+        result['b_start'] = batch.b_start
+        result['b_size'] = batch.b_size
         return result
 
     def extract_params(self):

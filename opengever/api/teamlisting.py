@@ -17,6 +17,7 @@ class TeamListingGet(OGDSListingBaseService):
         Team.org_unit_id,
     )
 
+    unique_sort_on = 'id'
     default_sort_on = 'title'
     model_class = Team
     default_state_filter = tuple()

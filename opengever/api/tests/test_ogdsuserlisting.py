@@ -245,6 +245,40 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.assertEqual(19, browser.json['items_total'])
 
     @browsing
+    def test_listing_always_has_a_secondary_sort_by_userid(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.contactfolder,
+                     view=u'@ogds-user-listing?sort_on=department',
+                     headers=self.api_headers)
+
+        subset = [item['userid'] for item in browser.json['items']
+                  if item['department'] is None]
+        self.assertEqual(18, len(subset))
+        self.assertEqual(19, browser.json['items_total'])
+
+        expected = sorted([item.userid for item in User.query.all()
+                           if item.department is None])
+        self.assertEqual(subset, expected)
+
+    @browsing
+    def test_secondary_sort_by_userid_respects_sort_order(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.contactfolder,
+            view=u'@ogds-user-listing?sort_on=department&sort_order=descending',
+            headers=self.api_headers)
+
+        subset = [item['userid'] for item in browser.json['items']
+                  if item['department'] is None]
+        self.assertEqual(18, len(subset))
+        self.assertEqual(19, browser.json['items_total'])
+
+        expected = sorted(
+            [item.userid for item in User.query.all() if item.department is None],
+            reverse=True)
+        self.assertEqual(subset, expected)
+
+    @browsing
     def test_sort_descending(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder,
