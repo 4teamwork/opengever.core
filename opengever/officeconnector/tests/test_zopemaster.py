@@ -102,14 +102,18 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
 
         self.checkout_document(browser, raw_token, payloads[0], self.document)
 
-        self.lock_document(browser, raw_token, payloads[0], self.document)
+        lock_token = self.lock_document(
+            browser, raw_token, payloads[0], self.document)
 
         original_checksum = sha256(
             self.download_document(browser, raw_token, payloads[0]),
             ).hexdigest()
 
         with open(path_to_asset('addendum.docx')) as f:
-            self.upload_document(browser, raw_token, payloads[0], self.document, f)
+            self.upload_document(
+                browser, raw_token, payloads[0], self.document, f,
+                lock_token=lock_token,
+            )
 
         new_checksum = sha256(
             self.download_document(browser, raw_token, payloads[0]),

@@ -955,4 +955,12 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@tus-upload"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".tus.UploadPatch"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

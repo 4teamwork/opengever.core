@@ -210,6 +210,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         self.assertEquals(200, browser.status_code)
         self.assertTrue(lock_manager.is_locked())
+        return browser.json[u'token']
 
     def download_document(self, browser, raw_token, payload):
         with self.as_officeconnector(browser):
@@ -243,7 +244,8 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         return file_contents
 
-    def upload_document(self, browser, raw_token, payload, document, new_file):
+    def upload_document(self, browser, raw_token, payload, document, new_file,
+                        lock_token=None):
         with self.as_officeconnector(browser):
             filename = b64encode(basename(new_file.name))
             content_type = b64encode(payload.get('content-type'))
@@ -265,6 +267,8 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 'Upload-Offset': '0',
                 'Content-Type': 'application/offset+octet-stream',
             }
+            if lock_token is not None:
+                headers['Lock-Token'] = lock_token
             browser.open(upload_url, method='PATCH', data=new_file.read(), headers=headers)
             self.assertEquals(204, browser.status_code)
 

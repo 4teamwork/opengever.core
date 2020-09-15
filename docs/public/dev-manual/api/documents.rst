@@ -206,6 +206,27 @@ Datei uploaden:
     HTTP/1.1 204 No content
     Content-Type: application/json
 
+Wurde das Dokument zuvor mittels Lock gesperrt, muss das Lock Token über den
+`Lock-Token` header mitgegeben werden.
+
+Dateiupload mit Lock Token:
+
+  .. sourcecode:: http
+
+      PATCH /ordnungssystem/dossier-23/document-123/@tus-upload/6cdfc5ddd1844e8cbca32721c4b17b84 HTTP/1.1
+      Accept: application/json
+      Tus-Resumable: 1.0.0
+      Upload-Offset: 0
+      Content-Type: application/offset+octet-stream
+      Lock-Token: 0.684672730996-0.25195226375-00105A989226:1477076400.000
+
+      test data
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No content
+    Content-Type: application/json
+
 
 .. _label-api_checkin:
 

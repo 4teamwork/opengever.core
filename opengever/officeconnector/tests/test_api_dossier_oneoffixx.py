@@ -110,10 +110,14 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
 
         self.assertTrue(self.shadow_document.is_shadow_document())
         self.checkout_document(browser, raw_token, payloads[0], self.shadow_document)
-        self.lock_document(browser, raw_token, payloads[0], self.shadow_document)
+        lock_token = self.lock_document(
+            browser, raw_token, payloads[0], self.shadow_document)
 
         with open(path_to_asset('addendum.docx')) as f:
-            self.upload_document(browser, raw_token, payloads[0], self.shadow_document, f)
+            self.upload_document(
+                browser, raw_token, payloads[0], self.shadow_document, f,
+                lock_token=lock_token,
+            )
         self.assertFalse(self.shadow_document.is_shadow_document())
 
         self.unlock_document(browser, raw_token, payloads[0], self.shadow_document)
