@@ -12,7 +12,6 @@ from opengever.contact.utils import get_contactfolder_url
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import is_dossierish_portal_type
-from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.team import Team
@@ -29,6 +28,7 @@ from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
 from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from Products.ZCatalog.interfaces import ICatalogBrain
+from sqlalchemy import func
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
@@ -190,10 +190,8 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
 
     def add_additional_metadata(self, data):
         """Add the groups and teams assigned to that user."""
-
-        service = ogds_service()
-        groups = service.assigned_groups(self.context.userid)
-        teams = service.assigned_teams(self.context.userid)
+        groups = self.assigned_groups()
+        teams = self.assigned_teams()
         data['groups'] = []
         data['teams'] = []
         for group in groups:
@@ -211,6 +209,33 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
         if not is_administrator():
             del data['last_login']
         return data
+
+    def assigned_groups(self):
+        """Returns the assigned_groups for a given user ordered by the title
+        or groupid.
+
+        The group title is not required. Thus, we need to use the title or the
+        groupid for sorting. Using the `coalesce` function could lead into
+        performance issues with a huge amount of groups or queries.
+
+        Currently, we don't want this function in the ogds_service until we have
+        a good solution to not lead into performance issues.
+        """
+        query = Group.query.join(Group.users)
+        query = query.filter(User.userid == self.context.userid)
+
+        # Order by title or groupid if no title is given.
+        query = query.order_by(func.coalesce(Group.title, Group.groupid))
+
+        return query.all()
+
+    def assigned_teams(self):
+        """Returns the assigned_teams for the given user ordered by the title.
+        """
+        query = Team.query.join(Group).join(Group.users)
+        query = query.filter(User.userid == self.context.userid)
+        query = query.order_by(Team.title)
+        return query.all()
 
 
 @implementer(ISerializeToJsonSummary)

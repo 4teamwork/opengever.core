@@ -3,7 +3,6 @@ from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
-from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from plone import api
 
@@ -68,18 +67,6 @@ class OGDSService(object):
             org_units = [each for each in org_units
                          if each != current_org_unit]
         return org_units
-
-    def assigned_groups(self, userid):
-        query = Group.query.join(Group.users)
-        query = query.filter(User.userid == userid)
-        query = query.order_by(Group.title)
-        return query.all()
-
-    def assigned_teams(self, userid):
-        query = Team.query.join(Group).join(Group.users)
-        query = query.filter(User.userid == userid)
-        query = query.order_by(Team.title)
-        return query.all()
 
     def fetch_org_unit(self, unit_id):
         return self._query_org_units(
