@@ -1,4 +1,5 @@
 from opengever.base.model import create_session
+from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.security import elevated_privileges
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
@@ -58,6 +59,11 @@ class GeverGroupsPost(Service):
         already_exists = gtool.getGroupById(groupname)
         if already_exists:
             raise BadRequest("The group name you entered already exists.")
+
+        if len(groupname) > GROUP_ID_LENGTH:
+            raise BadRequest(
+                "The group name you entered is too long: "
+                "maximal length is {}".format(GROUP_ID_LENGTH))
 
         if Group.query.filter(Group.groupid == groupname).count() != 0:
             raise BadRequest('Group {} already exists in OGDS.'.format(groupname))

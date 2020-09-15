@@ -154,6 +154,31 @@ class TestGroupPost(IntegrationTestCase):
             "User unknown not found in OGDS.")
         self.assertEqual(browser.json[u'type'], u'BadRequest')
 
+    @browsing
+    def test_group_creation_fails_if_groupname_is_too_long(self, browser):
+        self.login(self.manager, browser)
+        groupid = 256*"a"
+        ogds_group = Group.query.get(groupid)
+        self.assertIsNone(ogds_group)
+
+        payload = {
+            u'groupname': groupid,
+        }
+        with browser.expect_http_error(400):
+            browser.open(
+                self.portal,
+                view='@groups',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            browser.json[u'message'],
+            u'The group name you entered is too long: maximal length is 255')
+        self.assertEqual(browser.json[u'type'], u'BadRequest')
+        ogds_group = Group.query.get(groupid)
+        self.assertIsNone(ogds_group)
+
 
 class TestGeverGroupsPatch(IntegrationTestCase):
 
