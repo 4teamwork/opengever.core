@@ -248,7 +248,9 @@ class OGDSUpdater(object):
         # to clear out memberships from the `groups_users` association table
         # before importing them, so that memberships from groups that have
         # been deleted in LDAP get removed from OGDS.
-        for group in session.query(Group):
+        #
+        # Local groups are ignored as they should not get synced to the LDAP.
+        for group in session.query(Group).filter(Group.is_local != True):  # noqa
             group.active = False
             group.users = []
 
@@ -298,6 +300,13 @@ class OGDSUpdater(object):
                         logger.warn(
                             u"Skipping duplicate group '{}'!".format(groupid))
                         continue
+
+                if group.is_local:
+                    # We avoid overwriting local groups.
+                    logger.warn(
+                        u"Skipping LDAP group '{}'! "
+                        "Already exists as local group.".format(groupid))
+                    continue
 
                 logger.info(u"Importing group '{}'...".format(groupid))
 
