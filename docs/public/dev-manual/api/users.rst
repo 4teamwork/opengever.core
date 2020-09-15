@@ -118,6 +118,9 @@ sortiert zurückgegeben.
 Gruppen
 =======
 
+Gruppendetails
+--------------
+
 Details über Gruppen können mit dem ``@ogds-groups`` Endpoint abgefragt werden. Der Endpoint steht nur auf Stufe Kontaktordner zur Verfügung und erwartet eine Einschränkung auf eine Gruppe via Gruppen-ID. Die URL setzt sich somit folgendermassen zusammen:
 
 ``http://example.org/kontakte/@ogds-groups/stv_benutzer``
@@ -159,3 +162,13 @@ Nachnamen sortiert zurückgegeben.
         ],
         "items_total": 11
       }
+
+Gruppen erstellen, löschen und modifizieren
+-------------------------------------------
+
+Gruppen erstellen, modifizieren und löschen kann über den ``@groups`` Endpoint gemacht werden und ist in der `plone.restapi Dokumentation <https://plonerestapi.readthedocs.io/en/latest/groups.html>`_ beschrieben. Dieser Endpoint wurde für GEVER folgendermassen angepasst:
+
+- Die Gruppen Daten werden korrekt im OGDS abgespiegelt.
+- Er steht auch für Administratoren zur Verfügung.
+- Er wurde eingeschränkt um nur die Administration von gewissen Rollen zu erlauben: ``workspace_guest``, ``workspace_member`` und ``workspace_admin``.
+- Gruppennamen darf nicht länger als 255 Zeichen lang sein
