@@ -26,6 +26,32 @@ GEVER-Mandanten abgefragt werden.
           "apps_url": "https://dev.onegovgever.ch/portal/api/apps",
           "bumblebee_app_id": "gever_dev",
           "cas_url": "https://dev.onegovgever.ch/portal/cas",
+          "current_user": {
+              "@id": "http://localhost:8080/fd/@users/john.doe",
+              "description": null,
+              "email": "john.doe@example.org",
+              "fullname": "Doe John",
+              "home_page": null,
+              "id": "john.doe",
+              "location": null,
+              "portrait": null,
+              "roles": [
+                "Member",
+                "WorkspacesUser",
+                "WorkspacesCreator"
+              ],
+              "roles_and_principals": [
+                "principal:john.doe",
+                "Member",
+                "WorkspacesUser",
+                "WorkspacesCreator",
+                "Authenticated",
+                "principal:AuthenticatedUsers",
+                "principal:og_demo-ftw_users",
+                "Anonymous"
+              ],
+              "username": "john.doe"
+          },
           "document_preserved_as_paper_default": true,
           "features": {
               "activity": true,
@@ -80,15 +106,13 @@ GEVER-Mandanten abgefragt werden.
           },
           "org_unit": "afi",
           "portal_url": "https://dev.onegovgever.ch/portal",
-          "private_folder_url": "http://localhost:8080/fd/private/niklaus.johner",
+          "private_folder_url": "http://localhost:8080/fd/private/john.doe",
           "recently_touched_limit": 10,
           "root_url": "http://localhost:8080/fd",
           "sharing_configuration": {
               "black_list_prefix": "^$",
               "white_list_prefix": "^.+"
           },
-          "user_fullname": "Johner Niklaus",
-          "user_email": "niklaus.johner@example.com"
           "user_settings": {
               "notify_inbox_actions": true,
               "notify_own_actions": false,
@@ -96,7 +120,6 @@ GEVER-Mandanten abgefragt werden.
                   "introduction"
               ]
           },
-          "userid": "niklaus.johner",
           "usersnap_api_key": "",
           "version": "2020.4.0.dev0"
       }

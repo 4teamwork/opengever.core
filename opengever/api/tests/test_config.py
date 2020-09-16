@@ -40,9 +40,9 @@ class TestConfig(IntegrationTestCase):
         url = self.portal.absolute_url() + '/@config'
         browser.open(url, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'userid'), u'kathi.barfuss')
-        self.assertEqual(browser.json.get(u'user_fullname'), u'B\xe4rfuss K\xe4thi')
-        self.assertEqual(browser.json.get(u'user_email'), u'kathi.barfuss@gever.local')
+        self.assertEqual(browser.json['current_user'].get(u'id'), u'kathi.barfuss')
+        self.assertEqual(browser.json['current_user'].get(u'fullname'), u'B\xe4rfuss K\xe4thi')
+        self.assertEqual(browser.json['current_user'].get(u'email'), u'kathi.barfuss@gever.local')
 
     @browsing
     def test_config_contains_features(self, browser):
