@@ -6,6 +6,7 @@ from opengever.repository.repositoryfolder import REPOSITORY_FOLDER_STATE_INACTI
 from opengever.repository.repositoryroot import IRepositoryRoot
 from plone import api
 from plone.restapi.interfaces import IExpandableElement
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import BadRequest
@@ -135,7 +136,7 @@ class Navigation(object):
         }
         if brain.portal_type == 'opengever.repository.repositoryfolder':
             node['is_leafnode'] = not brain.has_sametype_children
-        return node
+        return json_compatible(node)
 
 
 class NavigationGet(Service):
