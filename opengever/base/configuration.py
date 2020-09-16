@@ -36,7 +36,10 @@ from opengever.workspace.interfaces import IWorkspaceSettings
 from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
 from pkg_resources import get_distribution
 from plone import api
+from plone.restapi.interfaces import ISerializeToJson
 from zope.component import adapter
+from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
 import os
@@ -72,9 +75,8 @@ class GeverSettingsAdpaterV1(object):
 
         user = api.user.get_current()
         if user.getId():
-            info['userid'] = user.getId()
-            info['user_fullname'] = user.getProperty('fullname')
-            info['user_email'] = user.getProperty('email')
+            serializer = queryMultiAdapter((user, getRequest()), ISerializeToJson)
+            info['current_user'] = OrderedDict(serializer())
         return info
 
     def get_user_settings(self):
