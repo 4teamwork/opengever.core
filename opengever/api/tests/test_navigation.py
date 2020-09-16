@@ -1,6 +1,9 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
+from plone import api
 from urllib import urlencode
+import Missing
 
 
 def flatten_tree(items):
@@ -330,3 +333,30 @@ class TestNavigation(IntegrationTestCase):
             'The dossier "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9" '
             'is a subdossier.',
         )
+
+    @browsing
+    def test_navigation_deals_properly_with_missing_value(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Prep a repofolder with Missing.Value for its 'is_subdossier' metadata
+        # (because tuples are immutable, this needs to be done by replacing
+        # the metadata tuple with a new one consisting of left side, new value
+        # and right side)
+        brain = obj2brain(self.branch_repofolder)
+        rid = brain.getRID()
+        catalog = api.portal.get_tool('portal_catalog')
+        md_pos = catalog._catalog.schema['is_subdossier']
+
+        md = catalog._catalog.data[rid]
+        catalog._catalog.data[rid] = md[:md_pos] + (Missing.Value, ) + md[md_pos + 1:]
+
+        url = self.portal.absolute_url() + '/@navigation'
+        browser.open(
+            url,
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+        self.assertIn(u'tree', browser.json)
+        self.assertEqual(
+            browser.json['@id'],
+            u'http://nohost/plone/@navigation')
