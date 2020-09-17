@@ -6,6 +6,11 @@ Role mapping:
   admin => Administrator
   systems administrator => Manager
 
+Visible roles:
+  workspace guest
+  workspace member
+  workspace admin
+
 General:
   A workspace member can perform the same actions as a workspace guest.
   A workspace admin can perform the same actions as a workspace member.
@@ -18,4 +23,3 @@ General:
 Initial Status: Active
 Status Active:
   A workspace guest can view.
-  A workspace admin can manage security.

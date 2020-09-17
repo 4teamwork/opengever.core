@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing.freezer import freeze
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.participation import can_manage_member
 import json
 import pytz
 
@@ -239,3 +240,38 @@ class TestDeactivateWorkspace(IntegrationTestCase):
                 self.todolist_general, method='DELETE',
                 headers=self.api_headers,
             )
+
+    @browsing
+    def test_cannot_manage_member_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assertTrue(can_manage_member(self.workspace))
+        self.deactivate_workspace(browser)
+        self.assertFalse(can_manage_member(self.workspace))
+
+    @browsing
+    def test_cannot_manage_member_of_workspace_folder_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assertTrue(can_manage_member(self.workspace_folder))
+        self.deactivate_workspace(browser)
+        self.assertFalse(can_manage_member(self.workspace_folder))
+
+    @browsing
+    def test_cannot_manage_member_of_todo_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assertTrue(can_manage_member(self.todo))
+        self.deactivate_workspace(browser)
+        self.assertFalse(can_manage_member(self.todo))
+
+    @browsing
+    def test_cannot_manage_member_of_todolist_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assertTrue(can_manage_member(self.todolist_general))
+        self.deactivate_workspace(browser)
+        self.assertFalse(can_manage_member(self.todolist_general))
+
+    @browsing
+    def test_cannot_manage_member_of_document_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assertTrue(can_manage_member(self.workspace_document))
+        self.deactivate_workspace(browser)
+        self.assertFalse(can_manage_member(self.workspace_document))
