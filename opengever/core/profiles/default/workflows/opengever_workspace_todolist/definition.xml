@@ -135,61 +135,17 @@
     <permission-map name="Portlets: Manage portlets" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Sharing page: Delegate Administrator role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate CommitteeMember role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate DossierManager role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate Editor role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate Publisher role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate Reader role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
+    <permission-map name="Sharing page: Delegate Administrator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeMember role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate DossierManager role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Publisher role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspaceAdmin role" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -205,16 +161,8 @@
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
     </permission-map>
-    <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
+    <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False"/>
     <permission-map name="Sharing page: Delegate roles" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
