@@ -401,6 +401,12 @@
                      Add portal content,
                      Modify portal content,
                      Manage properties,
+                     Change local roles,
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate roles,
+                     Take ownership,
                      "
         />
     <lawgiver:map_permissions
@@ -419,6 +425,12 @@
                      opengever.document: Force Checkin,
                      Modify portal content,
                      Manage properties,
+                     Change local roles,
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate roles,
+                     Take ownership,
                      "
         />
     <lawgiver:map_permissions
@@ -435,6 +447,12 @@
                      Modify portal content,
                      Delete objects,
                      Manage properties,
+                     Change local roles,
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate roles,
+                     Take ownership,
                      "
         />
 
@@ -447,6 +465,12 @@
                      Modify portal content,
                      Delete objects,
                      Manage properties,
+                     Change local roles,
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate roles,
+                     Take ownership,
                      "
         />
 

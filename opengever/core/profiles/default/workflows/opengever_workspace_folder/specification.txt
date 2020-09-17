@@ -35,4 +35,3 @@ General:
 Initial Status: Active
 Status Active:
   A workspace guest can view.
-  A workspace admin can manage security.

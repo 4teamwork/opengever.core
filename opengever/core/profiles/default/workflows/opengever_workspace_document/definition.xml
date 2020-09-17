@@ -7,7 +7,6 @@
   <permission>CMFEditions: Checkout to location</permission>
   <permission>CMFEditions: Revert to previous versions</permission>
   <permission>CMFEditions: Save new version</permission>
-  <permission>Change local roles</permission>
   <permission>Delete objects</permission>
   <permission>Edit comments</permission>
   <permission>Edit date of cassation</permission>
@@ -36,13 +35,8 @@
   <permission>Sharing page: Delegate Publisher role</permission>
   <permission>Sharing page: Delegate Reader role</permission>
   <permission>Sharing page: Delegate Reviewer role</permission>
-  <permission>Sharing page: Delegate WorkspaceAdmin role</permission>
-  <permission>Sharing page: Delegate WorkspaceGuest role</permission>
-  <permission>Sharing page: Delegate WorkspaceMember role</permission>
   <permission>Sharing page: Delegate WorkspacesCreator role</permission>
   <permission>Sharing page: Delegate WorkspacesUser role</permission>
-  <permission>Sharing page: Delegate roles</permission>
-  <permission>Take ownership</permission>
   <permission>View</permission>
   <permission>ftw.keywordwidget: Add new term</permission>
   <permission>ftw.mail: Add Inbound Mail</permission>
@@ -107,11 +101,6 @@
     <permission-map name="CMFEditions: Checkout to location" acquired="False"/>
     <permission-map name="CMFEditions: Revert to previous versions" acquired="False"/>
     <permission-map name="CMFEditions: Save new version" acquired="False"/>
-    <permission-map name="Change local roles" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
     <permission-map name="Delete objects" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -150,33 +139,8 @@
     <permission-map name="Sharing page: Delegate Publisher role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate WorkspaceAdmin role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate WorkspaceGuest role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Sharing page: Delegate WorkspaceMember role" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
     <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate roles" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
-    <permission-map name="Take ownership" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-    </permission-map>
     <permission-map name="View" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
