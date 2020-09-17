@@ -542,9 +542,7 @@
     <permission-map name="CMFEditions: Revert to previous versions" acquired="False"/>
     <permission-map name="CMFEditions: Save new version" acquired="False"/>
     <permission-map name="Change local roles" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
     </permission-map>
     <permission-map name="Delete objects" acquired="False">
       <permission-role>Manager</permission-role>
@@ -582,31 +580,21 @@
     <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspaceAdmin role" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate WorkspaceGuest role" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate WorkspaceMember role" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False"/>
     <permission-map name="Sharing page: Delegate roles" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
     </permission-map>
     <permission-map name="Take ownership" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
     </permission-map>
     <permission-map name="View" acquired="False">
       <permission-role>Administrator</permission-role>

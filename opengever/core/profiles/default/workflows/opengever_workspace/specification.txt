@@ -46,7 +46,6 @@ Status Active:
   A workspace admin can deactivate.
 Status Inactive:
   A workspace guest can view.
-  A workspace admin can manage security.
   A workspace admin can reactivate.
 
 Transitions:
