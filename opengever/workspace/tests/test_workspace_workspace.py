@@ -198,6 +198,16 @@ class TestWorkspaceWorkspaceAPI(IntegrationTestCase):
         self.assertIn(self.EXPECTED_ADD_INVITATION_ACTION, actions)
 
     @browsing
+    def test_workspace_admin_cannot_see_add_invitation_action_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.set_workflow_state('opengever_workspace--STATUS--inactive', self.workspace)
+
+        browser.open(self.workspace, view='@actions', headers=self.api_headers)
+        actions = browser.json['object_buttons']
+
+        self.assertNotIn(self.EXPECTED_ADD_INVITATION_ACTION, actions)
+
+    @browsing
     def test_workspace_member_cannot_see_add_invitation_action(self, browser):
         self.login(self.workspace_member, browser)
 
