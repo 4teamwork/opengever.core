@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-07 05:24+0000\n"
+"POT-Creation-Date: 2020-09-18 11:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,16 @@ msgstr ""
 #: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/listing.py
 msgid "label_description"
+msgstr ""
+
+#. Default: "Details Dossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailsdossier"
+msgstr ""
+
+#. Default: "Details Subdossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailssubdossier"
 msgstr ""
 
 #. Default: "Document author"
@@ -73,6 +83,11 @@ msgstr ""
 #. Default: "Issuer"
 #: ./opengever/latex/listing.py
 msgid "label_issuer"
+msgstr ""
+
+#. Default: "Page"
+#: ./opengever/latex/layouts/default.py
+msgid "label_page"
 msgstr ""
 
 #. Default: "Participants"

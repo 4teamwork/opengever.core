@@ -69,6 +69,13 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
                                   ILaTexListing, name='subdossiers')
         args['subdossiers'] = listing.get_listing(self.get_subdossiers())
 
+        # Dossier details title
+        args['label_detailssubdossier'] = translate(
+        _('label_detailssubdossier', default="Details Subdossier"), context=self.request)
+
+        args['label_detailsdossier'] = translate(
+        _('label_detailsdossier', default="Details Dossier"), context=self.request)
+
         # documents
         args['documentstitle'] = translate(
             _('label_documents', default="Documents"), context=self.request)
