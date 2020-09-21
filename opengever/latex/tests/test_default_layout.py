@@ -108,7 +108,7 @@ class TestDefaultLayout(MockTestCase):
 
         self.assertEqual(layout.get_render_arguments(), args)
 
-    def test_get_remder_arguments_non_owner(self):
+    def test_get_render_arguments_non_owner(self):
         context = self.mocker.mock()
         request = self.create_dummy()
         builder = self.create_dummy()
