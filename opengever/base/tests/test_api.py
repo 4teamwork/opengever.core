@@ -1,9 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.api.testing import RelativeSession
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.wopi.lock import create_lock as create_wopi_lock
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -14,6 +16,25 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import transaction
+
+
+class TestDocumentStatus(IntegrationTestCase):
+
+    @browsing
+    def test_document_status_for_mails(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.mail_eml, view='status', headers=self.api_headers)
+        expected = {
+            u'checked_out': False,
+            u'checked_out_by': None,
+            u'checked_out_collaboratively': False,
+            u'int_id': getUtility(IIntIds).getId(self.mail_eml),
+            u'locked': False,
+            u'locked_by': None,
+            u'title': u'Die B\xfcrgschaft',
+        }
+        self.assertEqual(expected, browser.json)
 
 
 class TestBaseDocumentApi(FunctionalTestCase):
