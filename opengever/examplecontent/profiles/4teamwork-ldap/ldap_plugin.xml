@@ -10,7 +10,6 @@
     <interface value="ICredentialsResetPlugin" />
     <interface value="IGroupEnumerationPlugin" />
     <interface value="IGroupIntrospection" />
-    <interface value="IGroupManagement" />
     <interface value="IGroupsPlugin" />
     <interface value="IPropertiesPlugin" />
     <interface value="IUserAdderPlugin" />
