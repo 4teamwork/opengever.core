@@ -4,6 +4,7 @@ Changelog
 2020.10.0 (unreleased)
 ----------------------
 
+- Fix `status` API endpoint for mails. [deiferni]
 - Do not allow to manage security in deactivated workspaces. [tinagerber]
 - API change: Add current_user to @config endpoint and remove userid, user_fullname and user_email. [tinagerber]
 - Fix globalindex endpoint for undefined sort orders. [njohner]
