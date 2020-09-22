@@ -26,7 +26,6 @@ from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
-from .plone_restapi import PatchPloneRestAPIOrdering
 
 
 PatchActionInfo()()
@@ -57,4 +56,3 @@ PatchCMFCatalogAwareHandlers()()
 ScrubBoboExceptions()()
 PatchExceptionFormatter()()
 PatchWorkflowTool()()
-PatchPloneRestAPIOrdering()()
