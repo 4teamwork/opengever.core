@@ -40,6 +40,7 @@ NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
 NOT_CLOSED_TASKS = _("not all task are closed")
 NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
+MSG_ACTIVE_WORKSPACES = _("Not all linked workspaces are deactivated.")
 MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
 
 AFTER_RESOLVE_JOBS_PENDING_KEY = 'opengever.dossier.resolve.after_resolve_jobs_pending'
@@ -613,6 +614,8 @@ class ResolveConditions(object):
             errors.append(NOT_CLOSED_TASKS)
         if self.context.has_active_proposals():
             errors.append(MSG_ACTIVE_PROPOSALS)
+        if self.context.is_linked_to_active_workspaces():
+            errors.append(MSG_ACTIVE_WORKSPACES)
         if not self.context.has_valid_startdate():
             errors.append(NO_START_DATE)
 

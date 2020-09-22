@@ -93,6 +93,9 @@ class LinkedWorkspaces(object):
         This means, unauthorized objects or not existing UIDs will be skipped
         automatically.
         """
+        return self.list_non_cached(**kwargs)
+
+    def list_non_cached(self, **kwargs):
         uids = self.storage.list()
         if not uids:
             return {'items': [], 'items_total': 0}

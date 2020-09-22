@@ -23,6 +23,8 @@ from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.resolve_lock import ResolveLock
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import index_data_for
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from operator import itemgetter
 from operator import methodcaller
 from plone import api
@@ -35,6 +37,7 @@ from zope.schema.interfaces import IVocabularyFactory
 import json
 import logging
 import pytz
+import transaction
 
 
 def get_resolver_vocabulary():
@@ -1446,6 +1449,69 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 class TestResolveConditionsRESTAPI(ResolveTestHelperRESTAPI, TestResolveConditions):
 
     pass
+
+
+class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
+                                                             FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_resolving_is_cancelled_when_dossier_is_linked_to_active_workspace(self, browser):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.grant('Reviewer', *api.user.get_roles())
+            browser.login()
+            self.resolve(self.dossier, browser)
+            self.assert_not_resolved(self.dossier)
+            self.assert_errors(self.dossier, browser,
+                               ['Not all linked workspaces are deactivated.'])
+
+    @browsing
+    def test_dossier_is_resolved_when_no_workspace_is_linked(self, browser):
+        with self.workspace_client_env():
+            self.grant('Reviewer', *api.user.get_roles())
+            browser.login()
+            self.resolve(self.dossier, browser)
+            self.assert_resolved(self.dossier)
+            self.assert_success(self.dossier, browser,
+                                ['The dossier has been succesfully resolved.'])
+
+    @browsing
+    def test_dossier_is_resolved_when_deactivated_workspace_is_linked(self, browser):
+        with self.workspace_client_env():
+            browser.exception_bubbling = True
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.grant('Reviewer', *api.user.get_roles())
+            self.grant('WorkspaceAdmin', on=self.workspace)
+            browser.login()
+
+            browser.open(self.workspace,
+                         view='content_status_modify?workflow_action='
+                              'opengever_workspace--TRANSITION--deactivate--active_inactive',
+                         data={'_authenticator': createToken()})
+            self.resolve(self.dossier, browser)
+            self.assert_resolved(self.dossier)
+            self.assert_success(self.dossier, browser,
+                                ['The dossier has been succesfully resolved.'])
+
+
+class TestResolveConditionsWithWorkspaceClientFeatureEnabledRESTAPI(
+        ResolveTestHelperRESTAPI, TestResolveConditionsWithWorkspaceClientFeatureEnabled):
+
+    api_headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
+
+    def resolve(self, dossier, browser):
+        browser.raise_http_errors = False
+        url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
+        # Set a payload so that the POST request is not transformed
+        # into a GET request by the MechanizeDriver
+        kwargs = {'method': 'POST',
+                  'headers': self.api_headers,
+                  'data': json.dumps({})}
+        browser.open(url, **kwargs)
 
 
 class TestResolving(IntegrationTestCase, ResolveTestHelper):

@@ -8,6 +8,7 @@ from opengever.base.date_time import as_utc
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
+from opengever.base.security import elevated_privileges
 from opengever.contact.models import Participation
 from opengever.contact.participation import ParticipationWrapper
 from opengever.document.behaviors import IBaseDocument
@@ -24,6 +25,8 @@ from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.ogds.base.actor import Actor
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
+from opengever.workspaceclient import is_workspace_client_feature_enabled
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
@@ -299,6 +302,13 @@ class DossierContainer(Container):
             )
 
         return bool(active_proposals)
+
+    def is_linked_to_active_workspaces(self):
+        if not is_workspace_client_feature_enabled():
+            return False
+        params = {'review_state': 'opengever_workspace--STATUS--active'}
+        with elevated_privileges():
+            return bool(ILinkedWorkspaces(self).list_non_cached(**params)['items_total'])
 
     def is_all_checked_in(self):
         """Check if all documents in this path are checked in."""

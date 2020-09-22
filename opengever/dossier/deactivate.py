@@ -15,6 +15,9 @@ CONTAINS_ACTIVE_PROPOSAL = _(u"The Dossier can't be deactivated, it contains"
 CONTAINS_ACTIVE_TASK = _(u"The Dossier can't be deactivated, not all contained"
                          " tasks are in a closed state.")
 
+CONTAINS_ACTIVE_WORKSPACE = _(u"The Dossier can't be deactivated, not all linked"
+                              " workspaces are deactivated.")
+
 
 class DossierDeactivator(object):
     """Recursively deactivate the dossier and its subdossiers.
@@ -58,6 +61,8 @@ class DossierDeactivator(object):
 
         if self.context.has_active_proposals():
             errors.append(CONTAINS_ACTIVE_PROPOSAL)
+        if self.context.is_linked_to_active_workspaces():
+            errors.append(CONTAINS_ACTIVE_WORKSPACE)
 
         # Check for subdossiers the user cannot deactivate
         for subdossier in self.context.get_subdossiers(unrestricted=True):

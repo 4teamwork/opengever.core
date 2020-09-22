@@ -12,11 +12,14 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.interface import alsoProvides
 import pytz
+import transaction
 
 
 class TestDossierContainer(IntegrationTestCase):
@@ -199,6 +202,46 @@ class TestDossierChecks(IntegrationTestCase):
         self.assertTrue(self.dossier.is_all_checked_in())
         self.checkout_document(self.document)
         self.assertFalse(self.dossier.is_all_checked_in())
+
+    def test_is_linked_to_active_workspaces_is_false_when_workspace_client_feature_not_enabled(self):
+        self.login(self.dossier_responsible)
+        self.assertFalse(self.dossier.is_linked_to_active_workspaces())
+
+
+class TestDossierWithWorkspaceClientFeaturesEnabled(FunctionalWorkspaceClientTestCase):
+
+    def test_is_linked_to_active_workspaces_is_true_when_active_workspace_is_linked(self):
+        with self.workspace_client_env():
+            self.login()
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.assertTrue(self.dossier.is_linked_to_active_workspaces())
+
+    def test_is_linked_to_active_workspaces_is_false_when_no_workspace_is_linked(self):
+        with self.workspace_client_env():
+            self.login()
+            self.assertFalse(self.dossier.is_linked_to_active_workspaces())
+
+    def test_is_linked_to_active_workspaces_is_false_when_inactive_workspace_is_linked(self):
+        with self.workspace_client_env():
+            workspace = create(Builder('workspace').in_state('opengever_workspace--STATUS--inactive')
+                                                   .within(self.workspace_root))
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(workspace.UID())
+            self.login()
+            self.assertFalse(self.dossier.is_linked_to_active_workspaces())
+
+    def test_is_linked_to_active_workspaces_is_true_for_user_without_workspace_access(self):
+        with self.workspace_client_env():
+            self.login()
+            roles = api.user.get_roles()
+            roles.remove('WorkspaceClientUser')
+            self.grant(*roles)
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.assertTrue(self.dossier.is_linked_to_active_workspaces())
 
 
 class TestDateCalculations(IntegrationTestCase):
