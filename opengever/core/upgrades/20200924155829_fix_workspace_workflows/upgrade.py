@@ -70,9 +70,13 @@ class FixWorkspaceWorkflows(UpgradeStep):
     def __call__(self):
         self.install_upgrade_profile()
         self.update_workflow_security(
+
             [
-                'opengever_workspace_folder',
+                'opengever_workspace',
                 'opengever_workspace_document',
+                'opengever_workspace_folder',
+                'opengever_workspace_todo',
+                'opengever_workspace_todolist',
             ],
             reindex_security=False, savepoints=None
         )
