@@ -128,7 +128,8 @@ html_theme_options = {
     'extra_nav_links': {'Produktseite': 'https://onegovgever.ch',
                         'Feedback Forum': 'https://feedback.onegovgever.ch',
                         'Online Demo': 'https://demo.onegovgever.ch',
-                        u'Franz\xf6sische Dokumentation': 'https://docs-fr.onegovgever.ch'},
+                        u'Franz\xf6sische Dokumentation': 'https://docs-fr.onegovgever.ch',
+                        u'Datenschutzerklärung': 'https://www.4teamwork.ch/datenschutzerklaerung/'},
     'sidebar_width': '280px',
     'page_width': '1040px',
 }
