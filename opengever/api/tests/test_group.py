@@ -2,11 +2,72 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.group import ASSIGNABLE_ROLES
+from opengever.base.utils import check_group_plugin_configuration
+from opengever.base.exceptions import IncorrectConfigurationError
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from Products.CMFCore.utils import getToolByName
+from Products.PloneLDAP.factory import manage_addPloneLDAPMultiPlugin
+from Products.PlonePAS.interfaces.group import IGroupManagement
+from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
 import json
+
+
+class TestCheckGroupPluginConfiguration(IntegrationTestCase):
+
+    def test_raises_if_source_group_not_in_group_management_plugins(self):
+        self.login(self.regular_user)
+        check_group_plugin_configuration(self.portal)
+
+        acl_users = getToolByName(self.portal, 'acl_users')
+        plugins = acl_users.plugins
+        plugins.deactivatePlugin(IGroupManagement, 'source_groups')
+
+        with self.assertRaises(IncorrectConfigurationError) as exc:
+            check_group_plugin_configuration(self.portal)
+
+        self.assertEqual(
+            'Configuration error: source_groups plugin is not active '
+            'for group management.',
+            exc.exception.message)
+
+    def test_raises_if_source_group_not_first_group_management_plugin(self):
+        self.login(self.regular_user)
+        acl_users = getToolByName(self.portal, 'acl_users')
+        plugins = acl_users.plugins
+        manage_addPloneLDAPMultiPlugin(
+            acl_users, "ldap", title="title", login_attr="uid",
+            uid_attr="mail", users_base="ou=Users", users_scope=0,
+            roles="CustomRole", groups_base="ou=Groups", groups_scope=1,
+            binduid="cn=admin", bindpwd="XXX", rdn_attr="cn", LDAP_server=None
+            )
+        plugins.activatePlugin(IGroupManagement, 'ldap')
+        plugins.movePluginsUp(IGroupManagement, ('ldap',))
+
+        with self.assertRaises(IncorrectConfigurationError) as exc:
+            check_group_plugin_configuration(self.portal)
+
+        self.assertEqual(
+            'Configuration error: source_groups plugin needs to be the first '
+            'group management plugin.',
+            exc.exception.message)
+
+    def test_raises_if_source_group_not_in_group_enumeration_plugins(self):
+        self.login(self.regular_user)
+        check_group_plugin_configuration(self.portal)
+
+        acl_users = getToolByName(self.portal, 'acl_users')
+        plugins = acl_users.plugins
+        plugins.deactivatePlugin(IGroupEnumerationPlugin, 'source_groups')
+
+        with self.assertRaises(IncorrectConfigurationError) as exc:
+            check_group_plugin_configuration(self.portal)
+
+        self.assertEqual(
+            'Configuration error: source_groups plugin is not active '
+            'for group enumeration.',
+            exc.exception.message)
 
 
 class TestGroupPost(IntegrationTestCase):
@@ -179,6 +240,37 @@ class TestGroupPost(IntegrationTestCase):
         ogds_group = Group.query.get(groupid)
         self.assertIsNone(ogds_group)
 
+    @browsing
+    def test_group_creation_fails_if_configuration_is_incorrect(self, browser):
+        self.login(self.manager, browser)
+        acl_users = getToolByName(self.portal, 'acl_users')
+        plugins = acl_users.plugins
+        plugins.deactivatePlugin(IGroupManagement, 'source_groups')
+
+        portal_groups = getToolByName(self.portal, "portal_groups")
+        self.groupid = u'test_group'
+
+        self.assertIsNone(portal_groups.getGroupById(self.groupid))
+
+        payload = {
+            u'groupname': self.groupid,
+        }
+
+        with browser.expect_http_error(500):
+            browser.open(
+                self.portal,
+                view='@groups',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            browser.json[u'message'],
+            u'Configuration error: source_groups plugin is not active for '
+            u'group management.')
+        self.assertEqual(browser.json[u'type'], u'IncorrectConfigurationError')
+        self.assertIsNone(portal_groups.getGroupById(self.groupid))
+
 
 class TestGeverGroupsPatch(IntegrationTestCase):
 
@@ -237,6 +329,35 @@ class TestGeverGroupsPatch(IntegrationTestCase):
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id, self.workspace_guest.id],
             [user.getId() for user in group_data.getGroupMembers()])
+
+    @browsing
+    def test_group_update_fails_if_configuration_is_incorrect(self, browser):
+        self.login(self.administrator, browser)
+        acl_users = getToolByName(self.portal, 'acl_users')
+        plugins = acl_users.plugins
+        plugins.deactivatePlugin(IGroupManagement, 'source_groups')
+
+        portal_groups = getToolByName(self.portal, "portal_groups")
+        group_data = portal_groups.getGroupById(self.groupid)
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
+                         group_data.getGroupTitleOrName())
+
+        payload = {u'title': u'new title'}
+        with browser.expect_http_error(500):
+            browser.open(
+                "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+                data=json.dumps(payload),
+                method='PATCH',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            browser.json[u'message'],
+            u'Configuration error: source_groups plugin is not active for '
+            u'group management.')
+        self.assertEqual(browser.json[u'type'], u'IncorrectConfigurationError')
+        group_data = portal_groups.getGroupById(self.groupid)
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
+                         group_data.getGroupTitleOrName())
 
     @browsing
     def test_updating_group_also_updates_ogds(self, browser):
@@ -372,6 +493,29 @@ class TestGeverGroupsDelete(IntegrationTestCase):
 
         self.assertEqual(204, response.status_code)
         self.assertIsNone(portal_groups.getGroupById(self.groupid))
+
+    @browsing
+    def test_deleting_group_fails_if_configuration_is_incorrect(self, browser):
+        self.login(self.administrator, browser)
+        acl_users = getToolByName(self.portal, 'acl_users')
+        plugins = acl_users.plugins
+        plugins.deactivatePlugin(IGroupManagement, 'source_groups')
+
+        portal_groups = getToolByName(self.portal, "portal_groups")
+        self.assertIsNotNone(portal_groups.getGroupById(self.groupid))
+
+        with browser.expect_http_error(500):
+            browser.open(
+                "{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+                method='DELETE',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            browser.json[u'message'],
+            u'Configuration error: source_groups plugin is not active for '
+            u'group management.')
+        self.assertEqual(browser.json[u'type'], u'IncorrectConfigurationError')
+        self.assertIsNotNone(portal_groups.getGroupById(self.groupid))
 
     @browsing
     def test_deleting_group_updates_ogds(self, browser):

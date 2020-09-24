@@ -1,3 +1,4 @@
+from opengever.base.utils import check_group_plugin_configuration
 from opengever.base.model import create_session
 from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.security import elevated_privileges
@@ -47,6 +48,8 @@ class GeverGroupsPost(Service):
     """
 
     def check_preconditions(self, groupname, roles):
+        check_group_plugin_configuration(self.context)
+
         if not groupname:
             raise BadRequest("Property 'groupname' is required")
 
@@ -154,6 +157,8 @@ class GeverGroupsPatch(Service):
         return portal_groups.getGroupById(group_id)
 
     def check_preconditions(self):
+        check_group_plugin_configuration(self.context)
+
         if not self.group:
             raise BadRequest("Trying to update a non-existing group.")
         if not self.ogds_group:
@@ -246,6 +251,8 @@ class GeverGroupsDelete(Service):
         return portal_groups.getGroupById(group_id)
 
     def check_preconditions(self):
+        check_group_plugin_configuration(self.context)
+
         if not self.group:
             raise NotFound("Trying to delete a non-existing group.")
         if not self.ogds_group:

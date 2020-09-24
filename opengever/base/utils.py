@@ -1,3 +1,4 @@
+from opengever.base.exceptions import IncorrectConfigurationError
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
@@ -225,3 +226,25 @@ def is_administrator(user=None):
     if not user:
         user = api.user.get_current()
     return bool(user.has_role('Administrator') or user.has_role('Manager'))
+
+
+def check_group_plugin_configuration(portal):
+    acl_users = getToolByName(portal, 'acl_users')
+    plugins = acl_users.plugins
+    group_management_plugins = plugins.getAllPlugins('IGroupManagement')
+
+    if 'source_groups' not in group_management_plugins.get('active'):
+        raise IncorrectConfigurationError(
+            "Configuration error: source_groups plugin is not active "
+            "for group management.")
+    elif group_management_plugins.get('active')[0] != 'source_groups':
+        raise IncorrectConfigurationError(
+            "Configuration error: source_groups plugin needs to be the "
+            "first group management plugin.")
+
+    group_enumeration_plugins = plugins.getAllPlugins('IGroupEnumerationPlugin')
+    if 'source_groups' not in group_enumeration_plugins.get('active'):
+        raise IncorrectConfigurationError(
+            "Configuration error: source_groups plugin is not active "
+            "for group enumeration.")
+
