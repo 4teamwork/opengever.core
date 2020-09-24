@@ -1,5 +1,5 @@
 from collective import dexteritytextindexer
-from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.vocabulary import wrap_vocabulary
 from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus

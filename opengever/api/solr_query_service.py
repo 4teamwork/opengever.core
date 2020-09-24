@@ -1,4 +1,4 @@
-from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.vocabulary import wrap_vocabulary
 from copy import copy
 from copy import deepcopy
 from DateTime import DateTime
