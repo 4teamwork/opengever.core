@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.10.0 (unreleased)
+2020.10.0 (2020-09-25)
 ----------------------
 
 - Fix `status` API endpoint for mails. [deiferni]
