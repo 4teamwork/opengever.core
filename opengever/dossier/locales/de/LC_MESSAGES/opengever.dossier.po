@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-09-11 06:27+0000\n"
+"POT-Creation-Date: 2020-09-22 14:48+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -118,6 +118,10 @@ msgstr "Neuste Aufgaben"
 msgid "No Subdossiers"
 msgstr "Keine Subdossiers"
 
+#: ./opengever/dossier/resolve.py
+msgid "Not all linked workspaces are deactivated."
+msgstr "Nicht alle verlinkten Teamräume sind deaktiviert."
+
 #: ./opengever/dossier/archive.py
 msgid "Not all required fields are filled."
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
@@ -174,6 +178,10 @@ msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Dokum
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
 msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Aufgaben abgeschlossen sind."
+
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, not all linked workspaces are deactivated."
+msgstr "Das Dossier kann nicht storniert werden, da nicht alle verlinkten Teamräume deaktiviert sind."
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."

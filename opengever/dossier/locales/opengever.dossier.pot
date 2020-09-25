@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-11 06:27+0000\n"
+"POT-Creation-Date: 2020-09-22 14:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,6 +118,10 @@ msgstr ""
 msgid "No Subdossiers"
 msgstr ""
 
+#: ./opengever/dossier/resolve.py
+msgid "Not all linked workspaces are deactivated."
+msgstr ""
+
 #: ./opengever/dossier/archive.py
 msgid "Not all required fields are filled."
 msgstr ""
@@ -172,6 +176,10 @@ msgstr ""
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, not all linked workspaces are deactivated."
 msgstr ""
 
 #: ./opengever/dossier/deactivate.py

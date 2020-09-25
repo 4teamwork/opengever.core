@@ -6,14 +6,19 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from plone.protect import createToken
 import json
+import transaction
 
 
 class TestDossierDeactivation(IntegrationTestCase):
@@ -179,3 +184,121 @@ class TestDossierDeactivationRESTAPI(TestDossierDeactivation):
                 u'type': u'Bad Request'}},
             browser.json)
         self.assert_workflow_state('dossier-state-active', self.empty_dossier)
+
+
+class TestDossierDeactivationWithWorkspaceClientFeatureEnabled(FunctionalWorkspaceClientTestCase):
+
+    inactive_state = 'dossier-state-inactive'
+
+    def deactivate_dossier(self, dossier, browser):
+        browser.open(dossier, view='transition-deactivate',
+                     send_authenticator=True)
+
+    def deactivate_workspace(self, workspace, browser):
+        browser.open(workspace,
+                     view='content_status_modify?workflow_action='
+                          'opengever_workspace--TRANSITION--deactivate--active_inactive',
+                     data={'_authenticator': createToken()})
+
+    def assert_deactivated(self, dossier):
+        dossier_state = api.content.get_state(dossier)
+        msg = ("Expected dossier %r to be deactivated (state %r). "
+               "Actual state is %r instead." % (
+                   dossier, self.inactive_state, dossier_state))
+        self.assertEquals(self.inactive_state, dossier_state, msg)
+
+    def assert_not_deactivated(self, dossier):
+        dossier_state = api.content.get_state(dossier)
+        msg = ("Expected dossier %r to NOT be deactivated (NOT in state %r). "
+               "Actual state is %r however." % (
+                   dossier, self.inactive_state, dossier_state))
+        self.assertNotEqual(self.inactive_state, dossier_state, msg)
+
+    def assert_success(self, dossier, browser, info_msgs=None):
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        statusmessages.assert_no_error_messages()
+        self.assertEquals(info_msgs, info_messages())
+
+    def assert_errors(self, dossier, browser, error_msgs):
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(error_msgs, error_messages())
+
+    @browsing
+    def test_deactivating_is_cancelled_when_dossier_is_linked_to_active_workspace(self, browser):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.grant('Reviewer', *api.user.get_roles())
+            browser.login()
+            self.deactivate_dossier(self.dossier, browser)
+            self.assert_not_deactivated(self.dossier)
+            self.assert_errors(self.dossier, browser,
+                               [u'The Dossier can\'t be deactivated, '
+                                u'not all linked workspaces are deactivated.'])
+
+    @browsing
+    def test_dossier_is_deactivated_when_no_workspace_is_linked(self, browser):
+        with self.workspace_client_env():
+            self.grant('Reviewer', *api.user.get_roles())
+            browser.login()
+            self.deactivate_dossier(self.dossier, browser)
+            self.assert_deactivated(self.dossier)
+            self.assert_success(self.dossier, browser,
+                                ['The Dossier has been deactivated'])
+
+    @browsing
+    def test_dossier_is_deactivated_when_deactivated_workspace_is_linked(self, browser):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.grant('Reviewer', *api.user.get_roles())
+            self.grant('WorkspaceAdmin', on=self.workspace)
+            browser.login()
+
+            self.deactivate_workspace(self.workspace, browser)
+            self.deactivate_dossier(self.dossier, browser)
+            self.assert_deactivated(self.dossier)
+            self.assert_success(self.dossier, browser,
+                                ['The Dossier has been deactivated'])
+
+
+class TestDossierDeactivationWithWorkspaceClientFeatureEnabledRESTAPI(
+        TestDossierDeactivationWithWorkspaceClientFeatureEnabled):
+
+    api_headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
+
+    def deactivate_dossier(self, dossier, browser):
+        browser.raise_http_errors = False
+        url = dossier.absolute_url() + '/@workflow/dossier-transition-deactivate'
+        # Set a payload so that the POST request is not transformed
+        # into a GET request by the MechanizeDriver
+        kwargs = {'method': 'POST',
+                  'headers': self.api_headers,
+                  'data': json.dumps({})}
+        browser.open(url, **kwargs)
+
+    def assert_errors(self, dossier, browser, error_msgs):
+        self.assertEquals(400, browser.status_code)
+        self.assertEquals(
+            {u'error':
+                {u'message': u'',
+                 u'errors': error_msgs,
+                 u'type': u'PreconditionsViolated'}},
+            browser.json)
+        expected_url = dossier.absolute_url() + \
+            '/@workflow/dossier-transition-deactivate'
+        self.assertEquals(expected_url, browser.url)
+
+    def assert_success(self, dossier, browser, info_msgs=None):
+        self.assertEqual(200, browser.status_code)
+        expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-deactivate'
+        self.assertEquals(expected_url, browser.url)
+        self.assertDictContainsSubset(
+            {u'title': u'dossier-state-inactive',
+             u'comments': u'',
+             u'actor': api.user.get_current().getId(),
+             u'action': u'dossier-transition-deactivate',
+             u'review_state': u'dossier-state-inactive'},
+            browser.json)

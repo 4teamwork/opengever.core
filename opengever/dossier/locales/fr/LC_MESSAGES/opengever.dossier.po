@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-11 06:27+0000\n"
+"POT-Creation-Date: 2020-09-22 14:48+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -117,6 +117,10 @@ msgstr "Dernières tâches"
 msgid "No Subdossiers"
 msgstr "Aucun sous-dossier"
 
+#: ./opengever/dossier/resolve.py
+msgid "Not all linked workspaces are deactivated."
+msgstr ""
+
 #: ./opengever/dossier/archive.py
 msgid "Not all required fields are filled."
 msgstr "Un ou plusieurs des champs requis n'ont pas été remplis."
@@ -172,6 +176,10 @@ msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
 msgstr "Ce dossier ne peut pas être annulé, il contient encore des tâches non accomplies."
+
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, not all linked workspaces are deactivated."
+msgstr ""
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."

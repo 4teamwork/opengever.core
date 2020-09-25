@@ -4,7 +4,7 @@ Changelog
 2020.11.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Don't resolve or deactivate a dossier if it is linked to an active workspace. [tinagerber]
 
 
 2020.10.0 (2020-09-25)
