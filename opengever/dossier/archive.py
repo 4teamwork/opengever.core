@@ -1,4 +1,4 @@
-from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.vocabulary import wrap_vocabulary
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier

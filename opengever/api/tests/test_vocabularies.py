@@ -1,9 +1,12 @@
+from collective.elephantvocabulary.interfaces import IElephantVocabulary
 from ftw.testbrowser import browsing
+from opengever.api.schema.sources import get_field_by_name
 from opengever.base.behaviors.classification import IClassification
 from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
+from plone.dexterity.utils import iterSchemata
 
 
 NON_SENSITIVE_VOCABUALRIES = [
@@ -510,3 +513,24 @@ class TestGetSources(IntegrationTestCase):
                            u'question', u'regulations', u'report', u'request']
         self.assertItemsEqual(expected_tokens,
                               [item['token'] for item in response.get('items')])
+
+
+class TestElephantVocabularies(IntegrationTestCase):
+
+    @browsing
+    def test_fields_with_elephant_vocabularies_are_serialized_properly(self, browser):
+        self.login(self.regular_user, browser)
+
+        schemata = iterSchemata(self.document)
+        document_type_field = get_field_by_name('document_type', schemata)
+        vocabulary = document_type_field.vocabulary(self.document)
+
+        self.assertTrue(
+            IElephantVocabulary.providedBy(vocabulary),
+            "Make sure that the tested field is really an elephant vocabulary.")
+
+        browser.open(self.document, headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u'token': u'contract', u'title': u'Contract'},
+            browser.json[document_type_field.getName()])

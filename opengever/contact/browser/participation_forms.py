@@ -1,5 +1,5 @@
 from Acquisition import aq_parent
-from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.vocabulary import wrap_vocabulary
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm

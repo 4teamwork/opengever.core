@@ -1,4 +1,4 @@
-from collective.elephantvocabulary import wrap_vocabulary
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
 from opengever.dossier import events
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder

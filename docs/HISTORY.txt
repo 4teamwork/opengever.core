@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Don't resolve or deactivate a dossier if it is linked to an active workspace. [tinagerber]
+- Provides the IVocabularyTokenized interface for elephant vocabularies. [elioschmutz]
 
 
 2020.10.0 (2020-09-25)
