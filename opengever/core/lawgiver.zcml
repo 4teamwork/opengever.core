@@ -396,6 +396,8 @@
                      opengever.document: Checkin,
                      opengever.document: Checkout,
                      opengever.document: Force Checkin,
+                     opengever.trash: Trash content,
+                     opengever.trash: Untrash content,
                      ftw.mail: Add Mail,
                      ftw.mail: Add Inbound Mail,
                      Add portal content,
@@ -407,6 +409,11 @@
                      Sharing page: Delegate WorkspaceMember role,
                      Sharing page: Delegate roles,
                      Take ownership,
+                     CMFEditions: Access previous versions,
+                     CMFEditions: Apply version control,
+                     CMFEditions: Checkout to location,
+                     CMFEditions: Revert to previous versions,
+                     CMFEditions: Save new version,
                      "
         />
     <lawgiver:map_permissions
@@ -423,6 +430,8 @@
                      opengever.document: Checkin,
                      opengever.document: Checkout,
                      opengever.document: Force Checkin,
+                     opengever.trash: Trash content,
+                     opengever.trash: Untrash content,
                      Modify portal content,
                      Manage properties,
                      Change local roles,
@@ -431,6 +440,11 @@
                      Sharing page: Delegate WorkspaceMember role,
                      Sharing page: Delegate roles,
                      Take ownership,
+                     CMFEditions: Access previous versions,
+                     CMFEditions: Apply version control,
+                     CMFEditions: Checkout to location,
+                     CMFEditions: Revert to previous versions,
+                     CMFEditions: Save new version,
                      "
         />
     <lawgiver:map_permissions

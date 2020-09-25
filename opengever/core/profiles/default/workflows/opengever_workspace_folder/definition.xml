@@ -1,11 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dc-workflow workflow_id="opengever_workspace_folder" title="Workspace folder workflow" description="" initial_state="opengever_workspace_folder--STATUS--active" state_variable="review_state" manager_bypass="True">
   <permission>Access contents information</permission>
-  <permission>CMFEditions: Access previous versions</permission>
-  <permission>CMFEditions: Apply version control</permission>
-  <permission>CMFEditions: Checkout to location</permission>
-  <permission>CMFEditions: Revert to previous versions</permission>
-  <permission>CMFEditions: Save new version</permission>
   <permission>Delete objects</permission>
   <permission>Edit comments</permission>
   <permission>Edit date of cassation</permission>
@@ -69,8 +64,6 @@
   <permission>opengever.task: Add task</permission>
   <permission>opengever.task: Add task comment</permission>
   <permission>opengever.task: Edit task</permission>
-  <permission>opengever.trash: Trash content</permission>
-  <permission>opengever.trash: Untrash content</permission>
   <permission>plone.portlet.collection: Add collection portlet</permission>
   <permission>plone.portlet.static: Add static portlet</permission>
   <state state_id="opengever_workspace_folder--STATUS--active" title="Active">
@@ -81,17 +74,6 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
-    <permission-map name="CMFEditions: Access previous versions" acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceGuest</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
-    </permission-map>
-    <permission-map name="CMFEditions: Apply version control" acquired="False"/>
-    <permission-map name="CMFEditions: Checkout to location" acquired="False"/>
-    <permission-map name="CMFEditions: Revert to previous versions" acquired="False"/>
-    <permission-map name="CMFEditions: Save new version" acquired="False"/>
     <permission-map name="Delete objects" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -183,8 +165,6 @@
     <permission-map name="opengever.task: Add task" acquired="False"/>
     <permission-map name="opengever.task: Add task comment" acquired="False"/>
     <permission-map name="opengever.task: Edit task" acquired="False"/>
-    <permission-map name="opengever.trash: Trash content" acquired="False"/>
-    <permission-map name="opengever.trash: Untrash content" acquired="False"/>
     <permission-map name="plone.portlet.collection: Add collection portlet" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
