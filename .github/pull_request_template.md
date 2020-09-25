@@ -27,6 +27,7 @@ _Only applicable should be left and checked._
   - [ ] Documentation is updated
   - If breaking:
     - [ ] api-change label added
+    - [ ] #delivery channel notified about breaking change
     - [ ] Scrum master is informed
 - New functionality:
   - [ ] for `document` also works for `mail`
