@@ -24,3 +24,8 @@ class NonRemoteOguid(Exception):
     """An attempt was made to use get_remote_url() on a Oguid for an object
     that is located on the current AdminUnit.
     """
+
+
+class IncorrectConfigurationError(Exception):
+    """Exception raised when Gever is not configured correctly
+    """

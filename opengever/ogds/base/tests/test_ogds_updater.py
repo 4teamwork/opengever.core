@@ -14,7 +14,7 @@ from plone import api
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
 BLACKLISTED_USER_COLUMNS = {'userid', 'last_login'}
-BLACKLISTED_GROUP_COLUMNS = set()
+BLACKLISTED_GROUP_COLUMNS = {'is_local'}
 
 
 class TestOGDSUpdater(FunctionalTestCase):
@@ -211,3 +211,26 @@ class TestOGDSUpdater(FunctionalTestCase):
 
         ogds_group = ogds_service().fetch_group(u'f\xfchrung')
         self.assertEquals(u'f\xfchrung', ogds_group.groupid)
+
+    def test_does_not_overwrite_local_groups(self):
+        groupid = u'local.group'
+        ogds_group = create(Builder('ogds_group').id(groupid))
+        ogds_user = create(Builder('ogds_user').id('john.doe'))
+        ogds_group.users.append(ogds_user)
+
+        ldap_user = create(Builder('ldapuser').named('sk1m1'))
+        FAKE_LDAP_USERFOLDER.users = [ldap_user]
+        FAKE_LDAP_USERFOLDER.groups = [create(
+            Builder('ldapgroup').named(groupid).with_members([ldap_user]))]
+        updater = IOGDSUpdater(self.portal)
+        updater.import_users()
+
+        ogds_group.is_local = True
+        updater.import_groups()
+        self.assertItemsEqual([user.userid for user in ogds_group.users],
+                              [ogds_user.userid])
+
+        ogds_group.is_local = False
+        updater.import_groups()
+        self.assertItemsEqual([user.userid for user in ogds_group.users],
+                              [ldap_user[1]['userid']])

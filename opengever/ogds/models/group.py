@@ -42,6 +42,11 @@ class Group(Base):
     active = Column(Boolean, default=True)
     title = Column(String(GROUP_TITLE_LENGTH))
 
+    # is_local is set for groups created over the @groups endpoint
+    # which should always be plone groups and are the only groups
+    # allowed to be managed over the @groups endpoint.
+    is_local = Column(Boolean, default=False, nullable=True)
+
     users = relation(User, secondary=groups_users,
                      backref=backref('groups', order_by='Group.groupid'))
     teams = relationship(Team, back_populates="group")

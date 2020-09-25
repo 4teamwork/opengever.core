@@ -322,6 +322,7 @@ class OpengeverContentFixture(object):
             'workspace_owner',
             u'G\xfcnther',
             u'Fr\xf6hlich',
+            ['WorkspacesUser', 'WorkspacesCreator'],
             user_settings={'_seen_tours': '["*"]'},
             )
 
@@ -329,6 +330,7 @@ class OpengeverContentFixture(object):
             'workspace_admin',
             u'Fridolin',
             u'Hugentobler',
+            ['WorkspacesUser', 'WorkspacesCreator'],
             user_settings={'_seen_tours': '["*"]'},
             )
 
@@ -336,6 +338,7 @@ class OpengeverContentFixture(object):
             'workspace_member',
             u'B\xe9atrice',
             u'Schr\xf6dinger',
+            ['WorkspacesUser'],
             user_settings={'_seen_tours': '["*"]'},
             )
 
@@ -343,6 +346,7 @@ class OpengeverContentFixture(object):
             'workspace_guest',
             u'Hans',
             u'Peter',
+            ['WorkspacesUser'],
             user_settings={'_seen_tours': '["*"]'},
             )
 
@@ -2119,18 +2123,6 @@ class OpengeverContentFixture(object):
         policy_config.setPolicyBelow(
             'opengever_workspace_policy', update_security=False)
 
-        self.set_roles(
-            self.workspace_root, self.workspace_owner.getId(),
-            ['WorkspacesUser', 'WorkspacesCreator'])
-        self.set_roles(
-            self.workspace_root, self.workspace_admin.getId(),
-            ['WorkspacesUser', 'WorkspacesCreator'])
-        self.set_roles(
-            self.workspace_root, self.workspace_member.getId(),
-            ['WorkspacesUser'])
-        self.set_roles(
-            self.workspace_root, self.workspace_guest.getId(),
-            ['WorkspacesUser'])
         self.workspace_root.reindexObjectSecurity()
 
     def create_workspace(self):

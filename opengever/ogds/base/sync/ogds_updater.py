@@ -1,8 +1,11 @@
 from logging.handlers import TimedRotatingFileHandler
+from opengever.base.exceptions import IncorrectConfigurationError
+from opengever.base.utils import check_group_plugin_configuration
 from opengever.base.model import create_session
 from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.pathfinder import PathFinder
+from opengever.base.sentry import maybe_report_exception
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
@@ -17,6 +20,7 @@ from sqlalchemy import String
 from sqlalchemy.orm.exc import MultipleResultsFound
 from sqlalchemy.orm.exc import NoResultFound
 from zope.component import adapter
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 import logging
 import os
@@ -50,6 +54,11 @@ def sync_ogds(plone, users=True, groups=True):
     # Set up logging to a rotating ogds-update.log
     setup_ogds_sync_logfile(logger)
 
+    # We check that the group management is setup correctly. This is not
+    # strictly necessary but ensures that this configuration is checked
+    # on a regular basis and that the @groups endpoint is safe.
+    check_group_manager(plone)
+
     updater = IOGDSUpdater(plone)
     start = time.clock()
 
@@ -80,6 +89,19 @@ def setup_ogds_sync_logfile(logger):
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
     logger.addHandler(file_handler)
+
+
+def check_group_manager(context):
+    """We make sure here that the site is setup correctly in that @groups
+    will write to source_groups and not to the ldap and that enumeration
+    is enabled for the source_groups plugin. This is especially important
+    for Teamraum deployments where the @groups endpoint is actually used.
+    """
+    try:
+        check_group_plugin_configuration(context)
+    except IncorrectConfigurationError as exc:
+        maybe_report_exception(
+            context, getRequest(), exc.__class__.__name__, exc.message)
 
 
 @implementer(IOGDSUpdater)
@@ -248,7 +270,9 @@ class OGDSUpdater(object):
         # to clear out memberships from the `groups_users` association table
         # before importing them, so that memberships from groups that have
         # been deleted in LDAP get removed from OGDS.
-        for group in session.query(Group):
+        #
+        # Local groups are ignored as they should not get synced to the LDAP.
+        for group in session.query(Group).filter(Group.is_local != True):  # noqa
             group.active = False
             group.users = []
 
@@ -298,6 +322,13 @@ class OGDSUpdater(object):
                         logger.warn(
                             u"Skipping duplicate group '{}'!".format(groupid))
                         continue
+
+                if group.is_local:
+                    # We avoid overwriting local groups.
+                    logger.warn(
+                        u"Skipping LDAP group '{}'! "
+                        "Already exists as local group.".format(groupid))
+                    continue
 
                 logger.info(u"Importing group '{}'...".format(groupid))
 

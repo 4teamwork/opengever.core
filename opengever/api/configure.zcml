@@ -963,4 +963,31 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="POST"
+      name="@groups"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".group.GeverGroupsPost"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@groups"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".group.GeverGroupsPatch"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@groups"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".group.GeverGroupsDelete"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
