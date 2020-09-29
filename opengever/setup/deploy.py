@@ -104,10 +104,11 @@ class GeverDeployment(object):
         acl_users = getToolByName(self.site, 'acl_users')
         plugins = acl_users.plugins
 
-        # disable source_groups when using ldap except for group management and
-        # enumeration which are used to create groups over the @groups endpoint.
+        # disable source_groups when using ldap except for group management,
+        # enumeration and introspection which are used to create groups over
+        # the @groups endpoint.
         for ptype in plugins.listPluginTypeInfo():
-            if ptype['id'] == 'IGroupEnumerationPlugin':
+            if ptype['id'] in ['IGroupEnumerationPlugin', 'IGroupIntrospection']:
                 continue
             if ptype['id'] == 'IGroupManagement':
                 to_deactivate = 'ldap'
