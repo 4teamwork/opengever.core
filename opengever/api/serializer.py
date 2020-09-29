@@ -72,6 +72,17 @@ def extend_with_is_subdossier(result, context, request):
         result['is_subdossier'] = context.is_subdossier()
 
 
+def extend_with_groupurl(result, context, request):
+    """OGDS-Groups cannot be modified by default nor are all metadata stored
+    in the ogds. The `@groups` endpoint provides more information about
+    a group and it also provides the PATCH and POST verbs to modify a
+    group. We extend the response data with the `groupurl`
+    which is a URL to the group-resource stored in plone, not in the ogds.
+    """
+    result['groupurl'] = '{}/@groups/{}'.format(
+        api.portal.get().absolute_url(), context.groupid)
+
+
 @adapter(IDexterityContent, IOpengeverBaseLayer)
 class GeverSerializeToJson(SerializeToJson):
 
@@ -185,6 +196,9 @@ class SerializeGroupModelToJson(SerializeSQLModelToJsonBase):
         users = User.query.join(groups_users).filter_by(
             groupid=self.context.groupid).order_by(User.lastname)
         return users
+
+    def add_additional_metadata(self, data):
+        extend_with_groupurl(data, self.context, self.request)
 
 
 @implementer(ISerializeToJson)
@@ -391,3 +405,6 @@ class SerializeGroupModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
     content_type = 'virtual.ogds.group'
     id_attribute_name = 'groupid'
     endpoint_name = '@ogds-groups'
+
+    def add_additional_metadata(self, data):
+        extend_with_groupurl(data, self.context, self.request)

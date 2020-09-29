@@ -406,6 +406,7 @@ Beispiel: Auflistung aller Gruppen:
           "@type": "virtual.ogds.group",
           "active": true,
           "groupid": "test-group",
+          "groupurl": "http://localhost:8080/fd/@groups/test-group",
           "is_local": false,
           "title": "Test Group"
         }
@@ -453,3 +454,9 @@ Lokale Gruppen:
 
     GET /kontakte/@ogds-group-listing?filters.is_local:record:boolean=True HTTP/1.1
     Accept: application/json
+
+Zugriff auf die Plone Gruppe:
+-----------------------------
+Eine OGDS-Gruppe kann nicht manipuliert werden und enthält auch nicht alle Metadaten welche in Plone zur Verfügung stehen. Dafür sind Abfragen gegen den OGDS-Endpoint sehr schnell. Benötigt man jedoch zusätzliche Gruppeninformatione oder möchte lokale Gruppen ändern, muss der ``@groups`` Endpoint von Plone verwendet werden. Dieser stellt mehr Metadaten für Gruppen zur Verfügung und bietet auch einen POST und PATCH Endpoint zum Ändern von lokalen Gruppen an.
+
+Eine serialisierte OGDS-Gruppe stellt, für den einfacheren Zugriff auf die Plone-Gruppe, im Attribut ``groupurl`` die URL zur Plone-Ressource zur Verfügung.

@@ -150,6 +150,7 @@ Nachnamen sortiert zurückgegeben.
         "@type": "virtual.ogds.group",
         "active": true,
         "groupid": "stv_benutzer",
+        "groupurl": "http://example.org/@groups/stv_benutzer"
         "title": "stv_benutzer",
         "items": [
             {
