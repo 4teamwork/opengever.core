@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-22 14:48+0000\n"
+"POT-Creation-Date: 2020-09-29 16:20+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -355,6 +355,11 @@ msgstr "Date de clôture requise"
 #: ./opengever/dossier/browser/report.py
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun élément."
+
+#. Default: "There is already a participation for this contact."
+#: ./opengever/dossier/browser/forms.py
+msgid "error_participant_already_exists"
+msgstr ""
 
 #. Default: "Failed to move ${item}."
 #: ./opengever/dossier/move_items.py
