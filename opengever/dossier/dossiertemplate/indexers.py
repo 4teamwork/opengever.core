@@ -1,4 +1,4 @@
-from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.indexers import SearchableTextExtender
 from plone.indexer import indexer
@@ -7,7 +7,7 @@ from zope.component import adapter
 
 @indexer(IDossierTemplateMarker)
 def DossierTemplateSubjectIndexer(obj):
-    aobj = IDossier(obj)
+    aobj = IDossierTemplate(obj)
     return aobj.keywords
 
 
