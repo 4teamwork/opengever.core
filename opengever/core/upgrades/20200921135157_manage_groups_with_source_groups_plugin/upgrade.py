@@ -1,5 +1,6 @@
 from ftw.upgrade import UpgradeStep
 from Products.CMFPlone.utils import getToolByName
+from Products.PlonePAS.interfaces.group import IGroupIntrospection
 from Products.PlonePAS.interfaces.group import IGroupManagement
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
 import logging
@@ -19,7 +20,7 @@ class ManageGroupsWithSourceGroupsPlugin(UpgradeStep):
         should all be source groups. For that we move the source_groups plugin
         to the top.
         We now also need to find the created source groups, hence we need to
-        activate enumeration for the source_groups plugin.
+        activate enumeration and  introspection for the source_groups plugin.
         """
         acl_users = getToolByName(self.portal, 'acl_users')
         plugins = acl_users.plugins
@@ -48,3 +49,10 @@ class ManageGroupsWithSourceGroupsPlugin(UpgradeStep):
             plugins.activatePlugin(IGroupEnumerationPlugin, 'source_groups')
         elif 'source_groups' not in group_enumeration_plugins.get('active'):
             LOG.error('Source groups is not available for group enumeration')
+
+        # Make sure that source_groups is activated for  group introspection
+        group_introspecion_plugins = plugins.getAllPlugins('IGroupIntrospection')
+        if 'source_groups' in group_introspecion_plugins.get('available'):
+            plugins.activatePlugin(IGroupIntrospection, 'source_groups')
+        elif 'source_groups' not in group_introspecion_plugins.get('active'):
+            LOG.error('Source groups is not available for group introspection')
