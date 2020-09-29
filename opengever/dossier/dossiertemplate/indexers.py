@@ -1,8 +1,13 @@
+from collective import dexteritytextindexer
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
-from opengever.dossier.indexers import SearchableTextExtender
 from plone.indexer import indexer
 from zope.component import adapter
+from zope.component import getAdapter
+from zope.component import getUtility
+from zope.interface import implementer
 
 
 @indexer(IDossierTemplateMarker)
@@ -11,9 +16,39 @@ def DossierTemplateSubjectIndexer(obj):
     return aobj.keywords
 
 
+@implementer(dexteritytextindexer.IDynamicTextIndexExtender)
 @adapter(IDossierTemplateMarker)
-class DossierTemplateSearchableTextExtender(SearchableTextExtender):
+class DossierTemplateSearchableTextExtender(object):
     """Make dossier templates full text searchable."""
+
+    def __init__(self, context):
+        self.context = context
+
+    def __call__(self):
+        searchable = []
+        # append some other attributes to the searchableText index
+        # reference_number
+        refNumb = getAdapter(self.context, IReferenceNumber)
+        searchable.append(refNumb.get_number())
+
+        # sequence_number
+        seqNumb = getUtility(ISequenceNumber)
+        searchable.append(str(seqNumb.get_number(self.context)))
+
+        # comments
+        comments = getattr(IDossierTemplate(self.context), 'comments', None)
+        if comments:
+            searchable.append(comments.encode('utf-8'))
+
+        # keywords
+        keywords = IDossierTemplate(self.context).keywords
+        if keywords:
+            searchable.extend(
+                keyword.encode('utf-8') if isinstance(keyword, unicode)
+                else keyword
+                for keyword in keywords)
+
+        return ' '.join(searchable)
 
 
 @indexer(IDossierTemplateMarker)
