@@ -1,9 +1,12 @@
+from ftw.keywordwidget.field import ChoicePlus
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base import _ as base_mf
 from opengever.base.source import SolrObjPathSourceBinder
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
 from opengever.dossier.behaviors import dossiernamefromtitle
-from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -71,20 +74,52 @@ class IDossierTemplateMarker(Interface, ITabbedviewUploadable):
     """
 
 
-class IDossierTemplate(IDossier):
+class IDossierTemplate(model.Schema):
     """Behavior Interface for dossiertemplates.
-
-    We need the IDossier behavior fields for the dossier template.
-    Unfortunately we cannot use the IDossier behavior directly because
-    it's providing the IDossierMarker interface which will destroy
-    some functionality of the dossiertemplate.
-
-    To fix that, we have to create a subclass of the IDosser behavior
-    and register it with an own IDossierTemplateMarker interface.
-
-    With this workaround we get the schema of the IDossier but
-    not its marker interfaces.
     """
+
+    model.fieldset(
+        u'common',
+        label=base_mf(u'fieldset_common', default=u'Common'),
+        fields=[
+            u'keywords',
+            u'comments',
+        ],
+    )
+
+    form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True, async=True)
+    keywords = schema.Tuple(
+        title=_(u'label_keywords', default=u'Keywords'),
+        description=_(u'help_keywords', default=u''),
+        value_type=ChoicePlus(
+            source=KeywordAddableRestrictableSourceBinder()
+        ),
+        required=False,
+        missing_value=(),
+        default=(),
+    )
+
+    comments = schema.Text(
+        title=_(u'label_comments', default=u'Comments'),
+        required=False,
+    )
+
+    model.fieldset(
+        u'filing',
+        label=_(u'fieldset_filing', default=u'Filing'),
+        fields=[
+            u'filing_prefix',
+        ],
+    )
+
+    filing_prefix = schema.Choice(
+        title=_(u'filing_prefix', default="filing prefix"),
+        source=wrap_vocabulary(
+            'opengever.dossier.type_prefixes',
+            visible_terms_from_registry="opengever.dossier"
+            '.interfaces.IDossierContainerTypes.type_prefixes'),
+        required=False,
+    )
 
 
 alsoProvides(IDossierTemplate, IFormFieldProvider)

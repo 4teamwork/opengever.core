@@ -10,6 +10,7 @@ from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -204,9 +205,13 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
              'from_attribute': 'relatedDossier'})
         return [relation.from_id for relation in relations if relation.from_object]
 
+    @property
+    def keywords(self):
+        return IDossier(self.context).keywords
+
     def get_keywords(self):
         linked_keywords = []
-        for keyword in IDossier(self.context).keywords:
+        for keyword in self.keywords:
             url = u'{}/@@search?Subject={}'.format(
                 api.portal.get().absolute_url(),
                 quote_plus(safe_unicode(keyword).encode('utf-8')))
@@ -235,6 +240,10 @@ class DossierTemplateOverview(DossierOverview):
                  self.make_comment_box(),
                  self.make_filing_prefix_box()],
                 [self.make_document_box()]]
+
+    @property
+    def keywords(self):
+        return IDossierTemplate(self.context).keywords
 
     def make_document_box(self):
         return dict(id='documents', content=self.documents(), href='documents',

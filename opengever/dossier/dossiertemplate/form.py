@@ -13,10 +13,10 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.behaviors import IRestrictAddableDossierTemplates
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
-from opengever.dossier.dossiertemplate.dossiertemplate import TEMPLATABLE_FIELDS
 from opengever.dossier.vocabularies import IRestrictKeywords
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -191,7 +191,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                     # will anonymously reinitialise a new source with no way of
                     # accessing the IWizardDataStorage and hence the template.
                     alsoProvides(self.request, IRestrictKeywords)
-                    self.request.allowed_keywords = IDossier(template_obj).keywords
+                    self.request.allowed_keywords = IDossierTemplate(template_obj).keywords
 
                     self.groups[0].fields['IDossier.keywords'].widgetFactory["input"] = ParameterizedWidget(
                         KeywordWidget,
@@ -222,17 +222,13 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                 title_help = IDossierTemplateSchema(template_obj).title_help
 
                 for group in self.groups:
-                    for widgetname in group.widgets:
-
-                        # Skip not whitelisted template fields.
-                        # We don't want to update fields which are not
-                        # whitelisted in the template.
-                        template_widget_name = self.get_template_widget_name(widgetname)
-                        if template_widget_name not in TEMPLATABLE_FIELDS:
+                    for fieldname, widget in group.widgets.items():
+                        # We skip fields that do not exist on the dossier template
+                        mapped_field_name = self.map_to_template_fieldname(fieldname)
+                        if mapped_field_name not in template_values:
                             continue
 
-                        value = template_values.get(template_widget_name)
-                        widget = group.widgets.get(widgetname)
+                        value = template_values.get(mapped_field_name)
 
                         # If the current field is the title field and the
                         # title_help is set, we remove the input-value and
@@ -245,7 +241,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                         # Set the template value to the dossier add-form widget.
                         widget.value = IDataConverter(widget).toWidgetValue(value)
 
-                        if widgetname == 'IDossier.keywords':
+                        if fieldname == 'IDossier.keywords':
                             self._modify_keyword_widget_according_to_template(widget)
 
             def _modify_keyword_widget_according_to_template(self, widget):
@@ -265,20 +261,18 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                 if not template_obj.predefined_keywords:
                     widget.value = ()
 
-            def get_template_widget_name(self, widgetname):
-                """The dossiertemplates uses the same fields as the
-                dossier (IDossier) but it includes it with another interface.
-                We have to map this two interface names to get the correct
-                value or widget.
-
-                This function maps an original interface to the DossierTemplate
-                interfaces:
+            def map_to_template_fieldname(self, fieldname):
+                """The dossiertemplate has some fields matching IDossier fields,
+                but with a different interface name, i.e. IDossierTemplate
+                instead of IDossier. So we have to map these IDossier to
+                IDossierTemplate to get the corresponding fieldname on the
+                dossiertemplate
 
                 Example:
 
                 IDossier.keywords => IDossierTemplate.keywords
                 """
-                interface_name, name = widgetname.split('.')
+                interface_name, name = fieldname.split('.')
                 return '.'.join([
                     BEHAVIOR_INTERFACE_MAPPING.get(interface_name, interface_name),
                     name])
