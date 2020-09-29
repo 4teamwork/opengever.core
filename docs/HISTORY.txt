@@ -7,6 +7,7 @@ Changelog
 - Bump `ftw.catalogdoctor` to `1.1.0` which provides fixes for additional health problems. [deiferni]
 - Prevent setting invalid reference prefix number via API. [deiferni]
 - Remove IDossier baseclass from IDossierTemplate to fix API for dossier templates. [njohner]
+- Implement new api endpoint @ogds-group-listing. [elioschmutz]
 - Don't resolve or deactivate a dossier if it is linked to an active workspace. [tinagerber]
 - Provides the IVocabularyTokenized interface for elephant vocabularies. [elioschmutz]
 - Customize @groups endpoints to handle OGDS. [njohner]

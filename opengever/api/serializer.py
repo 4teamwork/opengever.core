@@ -385,6 +385,7 @@ class SerializeGroupModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
         'groupid',
         'title',
         'active',
+        'is_local',
     )
 
     content_type = 'virtual.ogds.group'
