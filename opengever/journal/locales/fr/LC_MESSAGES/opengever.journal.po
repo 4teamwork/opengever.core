@@ -32,11 +32,6 @@ msgstr "Modifié par"
 msgid "label_add_journal_entry"
 msgstr "Ajouter une entrée à l'historique"
 
-#. Default: "Attachments deleted: ${filenames}"
-#: ./opengever/journal/handlers.py
-msgid "label_attachments_deleted"
-msgstr "Fichiers attachés effacés: ${filenames}"
-
 #. Default: "Category"
 #: ./opengever/journal/form.py
 msgid "label_category"

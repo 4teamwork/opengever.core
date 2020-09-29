@@ -33,11 +33,6 @@ msgstr ""
 msgid "label_add_journal_entry"
 msgstr ""
 
-#. Default: "Attachments deleted: ${filenames}"
-#: ./opengever/journal/handlers.py
-msgid "label_attachments_deleted"
-msgstr ""
-
 #. Default: "Category"
 #: ./opengever/journal/form.py
 msgid "label_category"

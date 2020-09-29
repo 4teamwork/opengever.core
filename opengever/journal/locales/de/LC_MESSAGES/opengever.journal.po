@@ -30,11 +30,6 @@ msgstr "Geändert von"
 msgid "label_add_journal_entry"
 msgstr "Journaleintrag hinzufügen"
 
-#. Default: "Attachments deleted: ${filenames}"
-#: ./opengever/journal/handlers.py
-msgid "label_attachments_deleted"
-msgstr "Attachments gelöscht: ${filenames}"
-
 #. Default: "Category"
 #: ./opengever/journal/form.py
 msgid "label_category"
