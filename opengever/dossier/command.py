@@ -70,7 +70,7 @@ class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):
         self.block_role_inheritance = getattr(
             template, '__ac_local_roles_block__', None)
 
-        # Grab the local roles assignations from the template, if any
+        # Grab the local roles assignments from the template, if any
         self.role_assignments = None
         manager = RoleAssignmentManager(template)
         if manager.has_storage():
