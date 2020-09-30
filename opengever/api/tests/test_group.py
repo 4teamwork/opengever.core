@@ -144,6 +144,7 @@ class TestGroupPost(IntegrationTestCase):
 
         payload = {
             u'groupname': u'test_group',
+            u'title': u'Test group',
             u'users': [self.workspace_guest.getId(), self.workspace_member.getId()]
         }
         response = browser.open(
@@ -158,6 +159,7 @@ class TestGroupPost(IntegrationTestCase):
         self.assertIsNotNone(ogds_group)
         self.assertTrue(ogds_group.is_local)
         self.assertTrue(ogds_group.active)
+        self.assertEqual('Test group', ogds_group.title)
         self.assertItemsEqual(
             [User.query.get(self.workspace_guest.getId()),
              User.query.get(self.workspace_member.getId())],
