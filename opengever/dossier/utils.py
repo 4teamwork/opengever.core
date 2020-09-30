@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.inbox.inbox import IInbox
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
@@ -73,3 +74,11 @@ def is_dossierish_portal_type(portal_type_name):
     if segments[0] != 'opengever':
         return False
     return 'dossier' in segments[-1]
+
+
+def supports_is_subdossier(obj):
+    """
+    Returns a boolean indicating whether the given object supports
+    the is_subdossier index / method.
+    """
+    return IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj)
