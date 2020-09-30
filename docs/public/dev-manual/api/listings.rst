@@ -457,6 +457,6 @@ Lokale Gruppen:
 
 Zugriff auf die Plone Gruppe:
 -----------------------------
-Eine OGDS-Gruppe kann nicht manipuliert werden und enthält auch nicht alle Metadaten welche in Plone zur Verfügung stehen. Dafür sind Abfragen gegen den OGDS-Endpoint sehr schnell. Benötigt man jedoch zusätzliche Gruppeninformatione oder möchte lokale Gruppen ändern, muss der ``@groups`` Endpoint von Plone verwendet werden. Dieser stellt mehr Metadaten für Gruppen zur Verfügung und bietet auch einen POST und PATCH Endpoint zum Ändern von lokalen Gruppen an.
+Eine OGDS-Gruppe kann nicht manipuliert werden und enthält auch nicht alle Metadaten welche in Plone zur Verfügung stehen. Dafür sind Abfragen gegen den OGDS-Endpoint sehr schnell. Benötigt man jedoch zusätzliche Gruppeninformationen oder möchte lokale Gruppen ändern, muss der ``@groups`` Endpoint von Plone verwendet werden. Dieser stellt mehr Metadaten für Gruppen zur Verfügung und bietet auch einen POST, PATCH und DELETE Endpoint zum Ändern von lokalen Gruppen an. Der ``@groups`` Endpoint wird im Kapitel :ref:`users` genauer beschrieben.
 
 Eine serialisierte OGDS-Gruppe stellt, für den einfacheren Zugriff auf die Plone-Gruppe, im Attribut ``groupurl`` die URL zur Plone-Ressource zur Verfügung.
