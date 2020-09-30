@@ -9,8 +9,8 @@ from opengever.base.oguid import Oguid
 from opengever.base.security import reindex_object_security_without_children
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import should_track_touches
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
+from opengever.dossier.utils import supports_is_subdossier
 from opengever.globalindex.handlers.task import sync_task
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task.task import ITask
@@ -23,7 +23,6 @@ from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectMovedEvent
 from zope.sqlalchemy.datamanager import mark_changed
-
 
 reindex_after_copy = ['created']
 
@@ -75,13 +74,11 @@ def object_moved_or_added(context, event):
     to_reindex = ['containing_dossier']
     # containing_subdossier is really only used for documents,
     # while is_subdossier is only meaningful for dossiers.
-    if IDossierMarker.providedBy(context):
-        was_subdossier = IDossierMarker.providedBy(event.oldParent)
-        is_subdossier = IDossierMarker.providedBy(event.newParent)
-        if was_subdossier != is_subdossier:
+    if supports_is_subdossier(context):
+        if event.oldParent.portal_type != event.newParent.portal_type:
             to_reindex.append('is_subdossier')
 
-    if IDossierMarker.providedBy(context) and IObjectMovedEvent.providedBy(event):
+    if supports_is_subdossier(context) and IObjectMovedEvent.providedBy(event):
         # The moved dossier may change from a dossier to a subdossier or vice-versa.
         Favorite.query.update_is_subdossier(context)
 
