@@ -29,6 +29,7 @@ class TestDossierTemplateSerialization(IntegrationTestCase):
              )
         self.assertEqual(browser.json[u'filing_prefix'],
                          {u'title': u'Department', u'token': u'department'})
+        self.assertEqual(False, browser.json['is_subdossier'])
 
 
 class TestDossierTemplatePost(IntegrationTestCase):

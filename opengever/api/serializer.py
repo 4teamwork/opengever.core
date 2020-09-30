@@ -9,9 +9,8 @@ from opengever.base.response import IResponseSupported
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.base.utils import is_administrator
 from opengever.contact.utils import get_contactfolder_url
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import is_dossierish_portal_type
+from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.team import Team
@@ -68,6 +67,11 @@ def extend_with_responses(result, context, request):
             result['responses'].append(serializer(container=context))
 
 
+def extend_with_is_subdossier(result, context, request):
+    if supports_is_subdossier(context):
+        result['is_subdossier'] = context.is_subdossier()
+
+
 @adapter(IDexterityContent, IOpengeverBaseLayer)
 class GeverSerializeToJson(SerializeToJson):
 
@@ -91,6 +95,7 @@ class GeverSerializeFolderToJson(SerializeFolderToJson):
         extend_with_oguid(result, self.context)
         extend_with_relative_path(result, self.context)
         extend_with_responses(result, self.context, self.request)
+        extend_with_is_subdossier(result, self.context, self.request)
 
         return result
 
@@ -245,8 +250,7 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
     def __call__(self, *args, **kwargs):
         summary = super(GeverSerializeToJsonSummary, self).__call__(*args, **kwargs)
 
-        if IDossierMarker.providedBy(self.context) or IDossierTemplateMarker.providedBy(self.context):
-            summary['is_subdossier'] = self.context.is_subdossier()
+        extend_with_is_subdossier(summary, self.context, self.request)
 
         summary['is_leafnode'] = None
         if IRepositoryFolder.providedBy(self.context):
