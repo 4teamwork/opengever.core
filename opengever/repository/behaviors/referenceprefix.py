@@ -1,5 +1,5 @@
-from zope.container.interfaces import IContainerModifiedEvent
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 from opengever.repository import _
 from plone.autoform.interfaces import IFormFieldProvider
@@ -7,6 +7,7 @@ from plone.supermodel import model
 from z3c.form import validator, error
 from z3c.form.interfaces import IAddForm
 from zope import schema
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import provider
