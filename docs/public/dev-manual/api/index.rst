@@ -19,6 +19,7 @@ Inhalt:
    breadcrumbs.rst
    searching.rst
    dossiers.rst
+   dossier_participations.rst
    documents.rst
    extract_attachments.rst
    trash.rst
