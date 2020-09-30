@@ -27,10 +27,6 @@ class DossierTemplateSearchableTextExtender(object):
     def __call__(self):
         searchable = []
         # append some other attributes to the searchableText index
-        # reference_number
-        refNumb = getAdapter(self.context, IReferenceNumber)
-        searchable.append(refNumb.get_number())
-
         # sequence_number
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
