@@ -59,12 +59,24 @@ class TestRepositoryAPI(IntegrationTestCase):
             u'items_total': 3,
             u'layout': u'tabbed_view',
             u'modified': u'2016-08-31T07:11:33+00:00',
+            u"next_item": {
+                u"@id": u"http://nohost/plone/vorlagen",
+                u"@type": u"opengever.dossier.templatefolder",
+                u"description": u"",
+                u"title": u"Vorlagen"
+            },
             u'oguid': 'plone:%s' % int_id,
             u'parent': {
                 u'@id': u'http://nohost/plone',
                 u'@type': u'Plone Site',
                 u'description': u'',
                 u'title': u'Plone site',
+            },
+            u"previous_item": {
+                u"@id": u"http://nohost/plone/kontakte",
+                u"@type": u"opengever.contact.contactfolder",
+                u"description": u"",
+                u"title": u"Kontakte"
             },
             u'relative_path': u'ordnungssystem',
             u'review_state': u'repositoryroot-state-active',
@@ -73,5 +85,6 @@ class TestRepositoryAPI(IntegrationTestCase):
             u'valid_from': None,
             u'valid_until': None,
             u'version': None,
+
         }
         self.assert_json_structure_equal(expected_repository_root, browser.json)

@@ -122,8 +122,7 @@ class TestDocumentPost(IntegrationTestCase):
 
         self.assertEqual(
             u"[{'message': 'It is not possible to add E-mails as document, use portal_type ftw.mail.mail"
-            " instead.', 'error': Invalid(u'It is not possible to add E-mails as document, use portal_type "
-            "ftw.mail.mail instead.',)}]",
+            " instead.', 'error': 'ValidationError'}]",
             browser.json['message'])
 
 
