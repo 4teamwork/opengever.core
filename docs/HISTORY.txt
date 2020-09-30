@@ -4,6 +4,7 @@ Changelog
 2020.11.0 (unreleased)
 ----------------------
 
+- Bump `ftw.catalogdoctor` to `1.1.0` which provides fixes for additional health problems. [deiferni]
 - Don't resolve or deactivate a dossier if it is linked to an active workspace. [tinagerber]
 - Provides the IVocabularyTokenized interface for elephant vocabularies. [elioschmutz]
 - Customize @groups endpoints to handle OGDS. [njohner]
