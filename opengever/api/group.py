@@ -116,7 +116,7 @@ class GeverGroupsPost(Service):
         # Add group to ogds
         session = create_session()
 
-        ogds_group = Group(groupname, is_local=True)
+        ogds_group = Group(groupname, is_local=True, title=title)
         for userid in users:
             user = get_sql_user(userid)
             ogds_group.users.append(user)
