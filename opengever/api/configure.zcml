@@ -29,6 +29,7 @@
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
   <adapter factory=".serializer.SerializeBrainToJsonSummary" />
 
+  <adapter factory=".repositoryfolder.DeserializeRepositoryFolderFromJson" />
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".inbox.SerializeInboxToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
