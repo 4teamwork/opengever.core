@@ -221,6 +221,12 @@
 
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.dossier.interfaces.IParticipationModified"
+      handler=".handlers.participation_modified"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
            opengever.dossier.interfaces.IParticipationRemoved"
       handler=".handlers.participation_removed"
       />

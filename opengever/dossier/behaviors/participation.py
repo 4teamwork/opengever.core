@@ -53,6 +53,10 @@ class ParticipationHandler(object):
             if participation.contact == contact_id:
                 return participation
 
+    def update_participation(self, value, roles):
+        value.roles = roles
+        notify(events.ParticipationModified(self.context, value))
+
     def set_participations(self, value):
         if not isinstance(value, PersistentList):
             raise TypeError('Excpected PersistentList instance')

@@ -15,6 +15,18 @@ class ParticipationCreated(ObjectEvent):
         self.participant = participant
 
 
+class ParticipationModified(ObjectEvent):
+    """The `ParticipationModified` is fired after a
+    participation is modified.
+    """
+
+    implements(interfaces.IParticipationModified)
+
+    def __init__(self, obj, participant):
+        self.object = obj
+        self.participant = participant
+
+
 class ParticipationRemoved(ObjectEvent):
     """The `ParticipationRemoved` is fired before a participation is removed.
     """
