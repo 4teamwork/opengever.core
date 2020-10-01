@@ -16,8 +16,7 @@ from opengever.base.query import BaseQuery
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.bumblebee import is_bumblebeeable
 from opengever.document.behaviors import IBaseDocument
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
@@ -78,7 +77,7 @@ class Favorite(Base):
         truncated_title = cls.truncate_title(obj.Title().decode('utf-8'))
 
         is_subdossier = None
-        if IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj):
+        if supports_is_subdossier(obj):
             is_subdossier = obj.is_subdossier()
 
         is_leafnode = None
@@ -229,7 +228,7 @@ class FavoriteQuery(BaseQuery):
         query.update({'review_state': review_state})
 
     def update_is_subdossier(self, obj):
-        if not (IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj)):
+        if not supports_is_subdossier(obj):
             return
         query = self.by_object(obj)
         query.update({'is_subdossier': obj.is_subdossier()})

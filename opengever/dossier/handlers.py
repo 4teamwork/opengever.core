@@ -17,7 +17,6 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import getAdapter
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
 
 
 def set_former_reference_before_moving(obj, event):

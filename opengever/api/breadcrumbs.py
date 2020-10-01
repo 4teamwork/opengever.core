@@ -1,8 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.api.serializer import extend_with_is_subdossier
 from opengever.base.interfaces import IOpengeverBaseLayer
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJsonSummary
@@ -53,8 +52,7 @@ class Breadcrumbs(object):
                 if IRepositoryFolder.providedBy(obj):
                     item['is_leafnode'] = obj.is_leaf_node()
 
-                if IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj):
-                    item['is_subdossier'] = obj.is_subdossier()
+                extend_with_is_subdossier(item, obj, self.request)
 
                 items.append(item)
             obj = aq_parent(aq_inner(obj))

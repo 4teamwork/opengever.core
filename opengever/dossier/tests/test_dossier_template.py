@@ -9,6 +9,7 @@ from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
@@ -16,6 +17,34 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from zExceptions import Unauthorized
+from zope.schema import getFieldsInOrder
+import unittest
+
+
+class TestDossierTemplateSchema(unittest.TestCase):
+
+    def test_idossiertemplateschema_fields_do_not_match_any_idossier_fields(self):
+        idossiertemplateschema_fields = {
+            fieldname for fieldname, field in getFieldsInOrder(IDossierTemplateSchema)
+            }
+        idossier_fields = {
+            fieldname for fieldname, field in getFieldsInOrder(IDossier)
+            }
+        self.assertEqual(
+            set(),
+            idossiertemplateschema_fields.intersection(idossier_fields))
+
+    def test_idossiertemplate_fields_all_match_idossier_fields(self):
+        idossiertemplate_fields = {
+            fieldname for fieldname, field in getFieldsInOrder(IDossierTemplate)
+        }
+        idossier_fields = {
+            fieldname for fieldname, field in getFieldsInOrder(IDossier)
+        }
+
+        self.assertEqual(
+            idossiertemplate_fields,
+            idossiertemplate_fields.intersection(idossier_fields))
 
 
 class TestIsDossierTemplateFeatureEnabled(IntegrationTestCase):
@@ -135,7 +164,7 @@ class TestDossierTemplate(IntegrationTestCase):
             browser.css('#content h1').first.text)
 
     @browsing
-    def test_show_only_whitelisted_schema_fields_in_add_form(self, browser):
+    def test_shown_fields_in_add_form(self, browser):
         self.maxDiff = None
         self.login(self.administrator, browser=browser)
         browser.open(self.templates)
@@ -154,7 +183,7 @@ class TestDossierTemplate(IntegrationTestCase):
         )
 
     @browsing
-    def test_show_only_whitelisted_schema_fields_in_edit_form(self, browser):
+    def test_shown_fields_in_edit_form(self, browser):
         self.maxDiff = None
         self.login(self.administrator, browser=browser)
         browser.open(self.dossiertemplate, view="edit")

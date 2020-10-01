@@ -361,25 +361,14 @@ DOSSIER_TEMPLATE_DEFAULTS = {
     'description': u'',
     'keywords': (),
     'predefined_keywords': True,
-    'relatedDossier': [],
     'restrict_keywords': False,
-    'start': FROZEN_TODAY,
     'title_help': u'',
 }
 DOSSIER_TEMPLATE_FORM_DEFAULTS = {
 }
 DOSSIER_TEMPLATE_MISSING_VALUES = {
     'comments': None,
-    'container_location': None,
-    'container_type': None,
-    'end': None,
-    'external_reference': None,
     'filing_prefix': None,
-    'former_reference_number': None,
-    'number_of_containers': None,
-    'responsible': None,
-    'temporary_former_reference_number': None,
-    'touched': None,
 }
 
 
@@ -525,15 +514,15 @@ class TestDefaultsBase(IntegrationTestCase):
 
             if isinstance(widget, SingleCheckBoxWidget):
                 # Boolean fields handled by SingleCheckBoxWidgets are funny:
-                # Their fields' missing value is None, which ends up
-                # as a widget.value of empty list [], which
+                # Their fields' missing value is None when not explicitely set,
+                # which ends up as a widget.value of empty list [], which
                 # IDataConverter.toFieldValue() then turns into False.
                 #
                 # In other words, there isn't really a concept of missing
                 # values for booleans - MV will always end up being
                 # considered the same as False.
-                if field_value_from_widget is False:
-                    field_value_from_widget = None
+                if not missing_value:
+                    missing_value = False
 
             if isinstance(field, List) and isinstance(widget, CheckBoxWidget):
                 # zope.schema.List is weird too - it gets rendered using
@@ -1736,8 +1725,6 @@ class TestDossierTemplateDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
-        # we don't set that field for dossier templates, it seems
-        del expected['touched']
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -1754,8 +1741,6 @@ class TestDossierTemplateDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
-        # we don't set that field for dossier templates, it seems
-        del expected['touched']
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -1772,8 +1757,6 @@ class TestDossierTemplateDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_z3c_form_defaults()
-        # we don't set that field for dossier templates, it seems
-        del expected['touched']
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -1784,9 +1767,6 @@ class TestDossierTemplateDefaults(TestDefaultsBase):
         payload = {
             u'@type': self.portal_type,
             u'title': DOSSIER_TEMPLATE_REQUIREDS['title'],
-            # the dossier template expects a responsible, even though unused
-            # in the form. we just give it the one from dossier
-            u'responsible': DOSSIER_FORM_DEFAULTS['responsible'],
         }
         with freeze(FROZEN_NOW):
             response = browser.open(
@@ -1802,12 +1782,6 @@ class TestDossierTemplateDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
-        # we don't set that field for dossier templates, it seems
-        del expected['touched']
-        # the dossier template expects a responsible, even though unused
-        # in the form. we just give it the one from dossier
-        # when setting responsible via rest api it seems to become unicode
-        expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible'].decode('utf-8')
         # when setting description via rest api it seems to become a bytestring
         expected['description'] = ''
 
