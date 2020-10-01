@@ -373,3 +373,90 @@ Mit ``filters.last_login:record:list`` kann nach dem Zeitpunkt des letzten Login
 
     GET /kontakte/@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%20* HTTP/1.1
     Accept: application/json
+
+
+Auflistung der OGDS-Gruppen
+===========================
+
+Mit dem Endpoint ``@ogds-group-listing`` können Gruppen aus dem ogds aufgelistet werden.
+Dieser Endpoint liefern inhaltlich die gleiche Struktur wie der ``@listing`` Endpoint, unterstütz
+aber nur ein Subset der Parameter. Im Moment ist es nicht möglich die
+``columns`` anzugeben, sondern es werden immer alle vom Modell
+untertstützten Attribute zurückgegeben.
+
+Beispiel: Auflistung aller Gruppen:
+
+  .. sourcecode:: http
+
+    GET /kontakte/kontakte/@ogds-group-listing?b_size=1 HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "http://localhost:8080/fd/kontakte/@ogds-group-listing",
+      "b_size": 25,
+      "b_start": 0,
+      "items": [
+        {
+          "@id": "http://localhost:8080/fd/kontakte/@ogds-groups/test-group",
+          "@type": "virtual.ogds.group",
+          "active": true,
+          "groupid": "test-group",
+          "groupurl": "http://localhost:8080/fd/@groups/test-group",
+          "is_local": false,
+          "title": "Test Group"
+        }
+      ],
+      "items_total": 1
+    }
+
+Optionale Parameter:
+--------------------
+Folgende Parameter werden im Moment unterstützt:
+
+- ``b_start``: Das erste zurückzugebende Element
+- ``b_size``: Die maximale Anzahl der zurückzugebenden Elemente
+- ``sort_on``: Sortierung nach einem indexierten Feld
+- ``sort_order``: Sortierreihenfolge: ``ascending`` (aufsteigend) oder ``descending`` (absteigend)
+- ``search``: Filterung nach einem beliebigen Suchbegriff
+- ``filters``: Einschränkung nach einem bestimmten Wert eines Feldes
+
+
+Filtern:
+--------
+
+Status:
+~~~~~~~
+Folgende Statusfilter stehen zur Verfügung:
+
+- ``active``: aktive Gruppen
+- ``inactive``: inaktive Gruppen
+
+
+**Beispiel: Nur aktive Gruppen abfragen**
+
+  .. sourcecode:: http
+
+    GET /kontakte/@ogds-group-listing?filters.state:record:list=active HTTP/1.1
+    Accept: application/json
+
+
+Lokale Gruppen:
+~~~~~~~~~~~~~~~
+
+**Beispiel: Nur lokale Gruppen abfragen**
+
+  .. sourcecode:: http
+
+    GET /kontakte/@ogds-group-listing?filters.is_local:record:boolean=True HTTP/1.1
+    Accept: application/json
+
+Zugriff auf die Plone Gruppe:
+-----------------------------
+Eine OGDS-Gruppe kann nicht manipuliert werden und enthält auch nicht alle Metadaten welche in Plone zur Verfügung stehen. Dafür sind Abfragen gegen den OGDS-Endpoint sehr schnell. Benötigt man jedoch zusätzliche Gruppeninformationen oder möchte lokale Gruppen ändern, muss der ``@groups`` Endpoint von Plone verwendet werden. Dieser stellt mehr Metadaten für Gruppen zur Verfügung und bietet auch einen POST, PATCH und DELETE Endpoint zum Ändern von lokalen Gruppen an. Der ``@groups`` Endpoint wird im Kapitel :ref:`users` genauer beschrieben.
+
+Eine serialisierte OGDS-Gruppe stellt, für den einfacheren Zugriff auf die Plone-Gruppe, im Attribut ``groupurl`` die URL zur Plone-Ressource zur Verfügung.

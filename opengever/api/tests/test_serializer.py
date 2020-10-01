@@ -272,3 +272,35 @@ class TestInboxSerializer(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         int_id = getUtility(IIntIds).getId(self.inbox)
         self.assertEqual(browser.json.get(u'oguid'), u'plone:%s' % int_id)
+
+
+class TestGroupSerializer(IntegrationTestCase):
+
+    @browsing
+    def test_group_serialization(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(
+            self.portal, view='@groups/fa_users?b_size=1',
+            headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+
+        response = browser.json
+        del response.get('users')['batching']
+
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/@groups/fa_users',
+             u'@type': u'virtual.plone.group',
+             u'description': u'',
+             u'email': u'',
+             u'groupname': u'fa_users',
+             u'id': u'fa_users',
+             u'roles': [u'Authenticated'],
+             u'title': u'fa Users Group',
+             u'users': {u'@id': u'http://nohost/plone/@groups/fa_users',
+                        u'items': [{u'@id': u'http://nohost/plone/@users/service.user',
+                                    u'@type': u'virtual.plone.user',
+                                    u'title': u'User Service (service.user)',
+                                    u'token': u'service.user'}],
+                        u'items_total': 17}},
+            response)

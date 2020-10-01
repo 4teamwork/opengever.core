@@ -20,6 +20,7 @@ class TestOGDSGroupsGet(IntegrationTestCase):
              u'@type': u'virtual.ogds.group',
              u'active': True,
              u'groupid': u'projekt_a',
+             u'groupurl': u'http://nohost/plone/@groups/projekt_a',
              u'is_local': False,
              u'title': u'Projekt A',
              u'items': [{u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',

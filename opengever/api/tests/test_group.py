@@ -122,6 +122,7 @@ class TestGroupPost(IntegrationTestCase):
         self.assertEqual(201, response.status_code)
         self.assertDictEqual(
             {u'@id': u'http://nohost/plone/@groups/test_group',
+             u'@type': u'virtual.plone.group',
              u'description': None,
              u'email': None,
              u'groupname': u'test_group',

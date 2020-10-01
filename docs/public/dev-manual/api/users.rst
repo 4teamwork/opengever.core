@@ -150,6 +150,7 @@ Nachnamen sortiert zurückgegeben.
         "@type": "virtual.ogds.group",
         "active": true,
         "groupid": "stv_benutzer",
+        "groupurl": "http://example.org/@groups/stv_benutzer"
         "title": "stv_benutzer",
         "items": [
             {
@@ -162,6 +163,61 @@ Nachnamen sortiert zurückgegeben.
         ],
         "items_total": 11
       }
+
+Plone-Gruppen
+-------------
+Falls mehr Informationen für eine Gruppe benötigt werden, kann ein Request auf die Plone-Gruppe über den ``@groups`` Endpoint gemacht werden. Dies ist weniger performant als ein Request auf den ``@ogds-groups`` Endpoint, bietet dafür mehr Informationen. Eine serialisierte OGDS-Gruppe enthält ein Attribut ``groupurl`` welches auf die Plone-Ressource zeigt.
+
+Die generelle Verwendung des Endpoints ist in der `plone.restapi Dokumentation <https://plonerestapi.readthedocs.io/en/latest/groups.html>`_ beschrieben. Dieser Endpoint wurde für GEVER folgendermassen angepasst:
+
+- Serialisierte Gruppendaten enthalten einen `@type`
+- die Benutzer in den Gruppendaten werden als korrekte Ressource serialisiert
+
+Die neue Antwort einer Gruppe sieht wie folgt aus:
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      GET /@groups/stv_benutzer HTTP/1.1
+      Accept: application/json
+
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "http://example.org/@groups/stv_benutzer",
+        "@type": "virtual.plone.group",
+        "description": "",
+        "email": "",
+        "groupname": "STV Benutzer",
+        "id": "stv_benutzer",
+        "roles": [
+          "Authenticated"
+        ],
+        "title": "",
+        "users": {
+          "@id": "http://example.org/@groups/stv_benutzer",
+          "items": [
+            {
+              "@id": "http://example.org/@users/muster.max",
+              "@type": "virtual.plone.user",
+              "title": "Max Muster (muster.max)",
+              "token": "muster.max"
+            },
+            {"...": "..."}
+          ],
+          "items_total": 11
+        }
+      }
+
 
 Gruppen erstellen, löschen und modifizieren
 -------------------------------------------

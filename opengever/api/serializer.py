@@ -11,6 +11,7 @@ from opengever.base.utils import is_administrator
 from opengever.contact.utils import get_contactfolder_url
 from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.dossier.utils import supports_is_subdossier
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.team import Team
@@ -25,7 +26,9 @@ from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
+from plone.restapi.serializer.group import SerializeGroupToJson
 from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
+from Products.PlonePAS.interfaces.group import IGroupData
 from Products.ZCatalog.interfaces import ICatalogBrain
 from sqlalchemy import func
 from zope.component import adapter
@@ -70,6 +73,17 @@ def extend_with_responses(result, context, request):
 def extend_with_is_subdossier(result, context, request):
     if supports_is_subdossier(context):
         result['is_subdossier'] = context.is_subdossier()
+
+
+def extend_with_groupurl(result, context, request):
+    """OGDS-Groups cannot be modified by default nor are all metadata stored
+    in the ogds. The `@groups` endpoint provides more information about
+    a group and it also provides the PATCH and POST verbs to modify a
+    group. We extend the response data with the `groupurl`
+    which is a URL to the group-resource stored in plone, not in the ogds.
+    """
+    result['groupurl'] = '{}/@groups/{}'.format(
+        api.portal.get().absolute_url(), context.groupid)
 
 
 @adapter(IDexterityContent, IOpengeverBaseLayer)
@@ -185,6 +199,35 @@ class SerializeGroupModelToJson(SerializeSQLModelToJsonBase):
         users = User.query.join(groups_users).filter_by(
             groupid=self.context.groupid).order_by(User.lastname)
         return users
+
+    def add_additional_metadata(self, data):
+        extend_with_groupurl(data, self.context, self.request)
+
+
+@implementer(ISerializeToJson)
+@adapter(IGroupData, IOpengeverBaseLayer)
+class GeverSerializeGroupToJson(SerializeGroupToJson):
+
+    content_type = 'virtual.plone.group'
+
+    def __call__(self):
+        data = super(GeverSerializeGroupToJson, self).__call__()
+        data['@type'] = self.content_type
+
+        # The user-items are just userids by default which is not the expected
+        # response for summarized users. We have to extend the items manually
+        # with additional metadata to make this endpoint behaves like other ones.
+        user_items = []
+        for userid in data.get('users').get('items'):
+            user_items.append({
+                '@id': '{}/@users/{}'.format(api.portal.get().absolute_url(), userid),
+                '@type': 'virtual.plone.user',
+                'token': userid,
+                'title': Actor.lookup(userid).get_label()
+                })
+
+        data.get('users')['items'] = user_items
+        return data
 
 
 @implementer(ISerializeToJson)
@@ -385,8 +428,12 @@ class SerializeGroupModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
         'groupid',
         'title',
         'active',
+        'is_local',
     )
 
     content_type = 'virtual.ogds.group'
     id_attribute_name = 'groupid'
     endpoint_name = '@ogds-groups'
+
+    def add_additional_metadata(self, data):
+        extend_with_groupurl(data, self.context, self.request)

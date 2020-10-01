@@ -24,6 +24,7 @@
   <adapter factory=".serializer.SerializeTeamModelToJson" />
   <adapter factory=".serializer.SerializeUserModelToJson" />
   <adapter factory=".serializer.SerializeGroupModelToJson" />
+  <adapter factory=".serializer.GeverSerializeGroupToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJsonSummary" />
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
@@ -398,6 +399,14 @@
       for="opengever.contact.interfaces.IContactFolder"
       factory=".ogdsuserlisting.OGDSUserListingGet"
       name="@ogds-user-listing"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      for="opengever.contact.interfaces.IContactFolder"
+      factory=".ogdsgrouplisting.OGDSGroupListingGet"
+      name="@ogds-group-listing"
       permission="zope2.View"
       />
 
