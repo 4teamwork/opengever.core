@@ -687,12 +687,12 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         self.assertDictEqual(
             {u'task_type':
-                 {
-                     u'information': {u'count': 1, u'label': u'Zur Kenntnisnahme'},
-                     u'correction': {u'count': 2, u'label': u'Zur Pr\xfcfung / Korrektur'},
-                     u'direct-execution': {u'count': 6, u'label': u'Zur direkten Erledigung'}
-                 }
-            },
+             {
+                 u'information': {u'count': 1, u'label': u'Zur Kenntnisnahme'},
+                 u'correction': {u'count': 2, u'label': u'Zur Pr\xfcfung / Korrektur'},
+                 u'direct-execution': {u'count': 6, u'label': u'Zur direkten Erledigung'}
+             }
+             },
             browser.json['facets']
         )
 
@@ -926,3 +926,30 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                     u'responsible': u'beatrice.schrodinger',
                     u'title': u'Go live'}],
             browser.json['items'])
+
+    @browsing
+    def test_task_templatefolders_listing(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query_string = 'name=tasktemplate_folders'
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.templates, view=view, headers=self.api_headers)
+        self.assertEqual([{u'@id': u'http://nohost/plone/vorlagen/verfahren-neuanstellung',
+                           u'@type': u'opengever.tasktemplates.tasktemplatefolder',
+                           u'UID': u'createspecialtemplates0000000005',
+                           u'description': u'',
+                           u'review_state': u'tasktemplatefolder-state-activ',
+                           u'title': u'Verfahren Neuanstellung'}], browser.json['items'])
+
+    @browsing
+    def test_task_templates_listing(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query_string = 'name=tasktemplates'
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.templates, view=view, headers=self.api_headers)
+        self.assertEqual([{u'@id': u'http://nohost/plone/vorlagen/verfahren-neuanstellung/'
+                                   u'opengever-tasktemplates-tasktemplate',
+                           u'@type': u'opengever.tasktemplates.tasktemplate',
+                           u'UID': u'createspecialtemplates0000000006',
+                           u'description': u'',
+                           u'review_state': u'tasktemplate-state-active',
+                           u'title': u'Arbeitsplatz einrichten.'}], browser.json['items'])

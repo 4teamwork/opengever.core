@@ -63,12 +63,14 @@ class TestListingStats(SolrIntegrationTestCase):
                     u'listing_name': [
                         {u'count': 12, u'field': u'listing_name', u'value': u'documents'},
                         {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'},
+                        {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplates'},
                         {u'count': 3, u'field': u'listing_name', u'value': u'dossiers'},
                         {u'count': 0, u'field': u'listing_name', u'value': u'contacts'},
                         {u'count': 9, u'field': u'listing_name', u'value': u'tasks'},
                         {u'count': 0, u'field': u'listing_name', u'value': u'workspace_folders'},
                         {u'count': 3, u'field': u'listing_name', u'value': u'proposals'},
                         {u'count': 0, u'field': u'listing_name', u'value': u'todos'},
+                        {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplate_folders'},
                     ]
                 }
             }, browser.json)
@@ -150,6 +152,10 @@ class TestListingStats(SolrIntegrationTestCase):
                          u'field': u'listing_name',
                          u'value': u'workspaces',
                          u'queries': {u'responsible:kathi.barfuss': 0}},
+                        {u'count': 0,
+                         u'field': u'listing_name',
+                         u'queries': {u'responsible:kathi.barfuss': 0},
+                         u'value': u'tasktemplates'},
                         {u'count': 3,
                          u'field': u'listing_name',
                          u'value': u'dossiers',
@@ -174,6 +180,10 @@ class TestListingStats(SolrIntegrationTestCase):
                          u'field': u'listing_name',
                          u'value': u'todos',
                          u'queries': {u'responsible:kathi.barfuss': 0}},
+                        {u'count': 0,
+                         u'field': u'listing_name',
+                         u'queries': {u'responsible:kathi.barfuss': 0},
+                         u'value': u'tasktemplate_folders'}
                     ]
                 }
             }, browser.json)
