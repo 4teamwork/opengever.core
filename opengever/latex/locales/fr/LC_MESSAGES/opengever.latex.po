@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-27 12:37+0000\n"
+"POT-Creation-Date: 2020-09-18 11:16+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-latex/fr/>\n"
@@ -32,9 +32,20 @@ msgid "label_delivery_date"
 msgstr "Date de remise"
 
 #. Default: "Description"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/listing.py
 msgid "label_description"
 msgstr "Description"
+
+#. Default: "Details Dossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailsdossier"
+msgstr "Détails Dossier"
+
+#. Default: "Details Subdossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailssubdossier"
+msgstr "Détails Sous-Dossier"
 
 #. Default: "Document author"
 #: ./opengever/latex/listing.py
@@ -62,6 +73,7 @@ msgid "label_dossier_tasks"
 msgstr "Liste des tâches du dossier \"${title} (${reference_number})\""
 
 #. Default: "End"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_end"
@@ -71,6 +83,11 @@ msgstr "Fin"
 #: ./opengever/latex/listing.py
 msgid "label_issuer"
 msgstr "Mandant"
+
+#. Default: "Page"
+#: ./opengever/latex/layouts/default.py
+msgid "label_page"
+msgstr "Page"
 
 #. Default: "Participants"
 #: ./opengever/latex/dossierdetails.py
@@ -83,6 +100,7 @@ msgid "label_receipt_date"
 msgstr "Date d'entrée"
 
 #. Default: "Reference number"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_reference_number"
@@ -99,6 +117,7 @@ msgid "label_repository_title"
 msgstr "Numéro de classement"
 
 #. Default: "Responsible"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_responsible"
@@ -116,6 +135,7 @@ msgid "label_sequence_number"
 msgstr "Numéro courant"
 
 #. Default: "Start"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_start"
@@ -161,6 +181,11 @@ msgstr "Titre"
 #: ./opengever/latex/listing.py
 msgid "label_transition"
 msgstr "Action"
+
+#. Default: "Repository version"
+#: ./opengever/latex/dossiercover.py
+msgid "repository_version"
+msgstr "Version du système de classement"
 
 #. Default: "No."
 #: ./opengever/latex/listing.py

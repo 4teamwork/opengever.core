@@ -15,16 +15,16 @@ ${clienttitle}
 %% \end{tabularx}
 \vspace{0.5cm}
 \rule{\linewidth}{.11em}
-Version Ordnungssystem: ${repositoryversion}\newline
-\textbf{Aktenzeichen: ${referencenr}}\newline
+${label_repository_version}: ${repositoryversion}\newline
+\textbf{${label_reference_number}: ${referencenr}}\newline
 \newline
 \normalsize \textbf{${title}} \newline
 
-\scriptsize Beschreibung: ${description} \newline
+\scriptsize ${label_description}: ${description} \newline
 \vspace{0.3cm} \newline
-Federführung: ${responsible}
+${label_responsible}: ${responsible}
 \vspace{0.15cm} \newline
-Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}Abschluss: ${end}\hspace{0.15cm} \newline
+${label_start}: ${start}\hspace{0.15cm}|\hspace{0.15cm}${label_end}: ${end}\hspace{0.15cm} \newline
 </%block>
 
 <%block name="client_specific_part">

@@ -1,62 +1,22 @@
-from ftw.testing import MockTestCase
-from mocker import ANY
-from opengever.latex.interfaces import ILaTeXSettings
+from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from opengever.latex.layouts.default import DefaultLayout
-from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.ogds.base import utils
-from plone.registry.interfaces import IRegistry
+from opengever.testing import IntegrationTestCase
+from plone import api
 
 
-FAKE_LOCATION = 'fakelocation'
-FAKE_CLIENT_TITLE = 'fakeclienttitle'
-
-
-class TestDefaultLayout(MockTestCase):
-
-    layer = LATEX_ZCML_LAYER
-
-    def setUp(self):
-        super(TestDefaultLayout, self).setUp()
-
-        admin_unit = self.stub()
-
-        self._ori_get_current_admin_unit = utils.get_current_admin_unit
-        get_current_admin_unit = self.mocker.replace(
-            'opengever.ogds.base.utils.get_current_admin_unit')
-        self.expect(get_current_admin_unit()).result(admin_unit).count(0, None)
-        self.expect(admin_unit.label()).result(FAKE_CLIENT_TITLE).count(0, None)
-
-        registry_mock = self.stub()
-        self.expect(
-            registry_mock.forInterface(ILaTeXSettings).location).result(FAKE_LOCATION)
-        self.mock_utility(registry_mock, IRegistry)
-
-        self.portal_membership = self.stub()
-        self.mock_tool(self.portal_membership, 'portal_membership')
-
-    def tearDown(self):
-        super(TestDefaultLayout, self).tearDown()
-        utils.get_current_admin_unit = self._ori_get_current_admin_unit
+class TestDefaultLayout(IntegrationTestCase):
 
     def test_configuration(self):
-        context = self.create_dummy()
-        request = self.create_dummy()
-        builder = self.create_dummy()
-
-        self.replay()
-        layout = DefaultLayout(context, request, builder)
+        self.login(self.regular_user)
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
 
         self.assertEqual(layout.show_contact, False)
         self.assertEqual(layout.show_logo, False)
         self.assertEqual(layout.show_organisation, False)
 
     def test_before_render_hook(self):
-        context = self.create_dummy()
-        request = self.create_dummy()
-        builder = self.mocker.mock()
-
-        self.replay()
-        layout = DefaultLayout(context, request, builder)
+        self.login(self.regular_user)
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
 
         layout.before_render_hook()
 
@@ -83,69 +43,53 @@ class TestDefaultLayout(MockTestCase):
         self.assertEqual(layout.get_packages_latex(), packages)
 
     def test_get_render_arguments(self):
-        context = self.mocker.mock()
-        request = self.create_dummy()
-        builder = self.create_dummy()
+        self.login(self.regular_user)
 
-        member = self.mocker.mock()
-        self.expect(context.Creator()).result('john.doe')
-        self.expect(self.portal_membership.getMemberById('john.doe')).result(
-            member)
-        self.expect(member.getProperty('phone_number', '&nbsp;')).result(
-            '012 345 6789')
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
 
-        self.replay()
-        layout = DefaultLayout(context, request, builder)
+        self.assertEqual(self.dossier.Creator(), 'robert.ziegler')
+
+        portal_membership_tool = api.portal.get_tool('portal_membership')
+
+        member = portal_membership_tool.getMemberById('robert.ziegler')
+        member.phone_number = '012 345 6789'
 
         args = {
-            'client_title': FAKE_CLIENT_TITLE,
-            'member_phone': '012 345 6789',
             'show_contact': False,
-            'show_logo': False,
+            'page_label': 'Page',
+            'client_title': 'Hauptmandant',
+            'location': 'Bern',
             'show_organisation': False,
-            'location': FAKE_LOCATION,
+            'member_phone': '012 345 6789',
+            'show_logo': False
             }
 
-        self.assertEqual(layout.get_render_arguments(), args)
+        self.assertDictEqual(layout.get_render_arguments(), args)
 
-    def test_get_remder_arguments_non_owner(self):
-        context = self.mocker.mock()
-        request = self.create_dummy()
-        builder = self.create_dummy()
+    def test_get_render_arguments_non_owner(self):
+        self.login(self.regular_user)
+        self.dossier.creators = ('NonExistentUser',)
 
-        self.expect(context.Creator()).result('john.doe')
-        self.expect(
-            self.portal_membership.getMemberById('john.doe')).result(None)
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
 
-        self.replay()
-        layout = DefaultLayout(context, request, builder)
+        self.assertNotEqual(self.dossier.Creator(), 'robert.ziegler')
 
         args = {
-            'client_title': FAKE_CLIENT_TITLE,
-            'member_phone': '',
             'show_contact': False,
-            'show_logo': False,
+            'page_label': 'Page',
+            'client_title': 'Hauptmandant',
+            'location': 'Bern',
             'show_organisation': False,
-            'location': FAKE_LOCATION,
+            'member_phone': '',
+            'show_logo': False
             }
 
         self.assertEqual(layout.get_render_arguments(), args)
 
     def test_rendering(self):
-        context = self.stub()
-        request = self.create_dummy()
-        builder = self.stub()
-        self.expect(builder.add_file('logo.pdf', data=ANY))
+        self.login(self.regular_user)
 
-        member = self.stub()
-        self.expect(context.Creator()).result('john.doe')
-        self.expect(self.portal_membership.getMemberById('john.doe')).result(
-            member)
-        self.expect(member.getProperty('phone_number', '&nbsp;')).result(
-            '012 345 6789')
-
-        self.replay()
-        layout = DefaultLayout(context, request, builder)
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
 
         latex = layout.render_latex('LATEX CONTENT')
         self.assertIn('LATEX CONTENT', latex)
@@ -153,24 +97,15 @@ class TestDefaultLayout(MockTestCase):
         self.assertIn(r'\phantom{foo}\vspace{-2\baselineskip}', latex)
 
     def test_box_sizes_and_positions(self):
-        context = self.stub()
-        request = self.create_dummy()
-        builder = self.stub()
-        self.expect(builder.add_file('logo.pdf', data=ANY))
+        self.login(self.regular_user)
 
-        member = self.stub()
-        self.expect(context.Creator()).result('john.doe')
-        self.expect(self.portal_membership.getMemberById('john.doe')).result(
-            member)
-        self.expect(member.getProperty('phone_number', '&nbsp;')).result(
-            '012 345 6789')
+        builder = PDFBuilder()
 
-        self.replay()
-        layout = DefaultLayout(context, request, builder)
-
+        layout = DefaultLayout(self.dossier, self.request, builder)
         layout.show_organisation = True
 
         latex = layout.render_latex('LATEX CONTENT')
+
         self.assertIn(r'\begin{textblock}{58mm\TPHorizModule} '
                       r'(136mm\TPHorizModule',
                       latex)

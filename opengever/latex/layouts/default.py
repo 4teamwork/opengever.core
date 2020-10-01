@@ -1,11 +1,13 @@
 from ftw.pdfgenerator.interfaces import IBuilder
 from ftw.pdfgenerator.layout.customizable import CustomizableLayout
 from opengever.latex.interfaces import ILaTeXSettings
+from opengever.latex import _
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import adapter
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import Interface
 
 
@@ -67,7 +69,9 @@ class DefaultLayout(CustomizableLayout):
             'show_contact': self.show_contact,
             'show_logo': self.show_logo,
             'show_organisation': self.show_organisation,
-            'location': convert(self.get_location())}
+            'location': convert(self.get_location()),
+            'page_label': translate(_('label_page', default='Page'), context=self.request),
+        }
 
     def get_current_admin_unit_label(self):
         return get_current_admin_unit().label()

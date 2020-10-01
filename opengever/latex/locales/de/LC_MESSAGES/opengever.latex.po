@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-27 12:37+0000\n"
+"POT-Creation-Date: 2020-09-18 11:16+0000\n"
 "PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,9 +30,20 @@ msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
 #. Default: "Description"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/listing.py
 msgid "label_description"
 msgstr "Beschreibung"
+
+#. Default: "Details Dossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailsdossier"
+msgstr "Details Dossier"
+
+#. Default: "Details Subdossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailssubdossier"
+msgstr "Details Subdossier"
 
 #. Default: "Document author"
 #: ./opengever/latex/listing.py
@@ -60,6 +71,7 @@ msgid "label_dossier_tasks"
 msgstr "Aufgabenliste zu Dossier \"${title} (${reference_number})\""
 
 #. Default: "End"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_end"
@@ -69,6 +81,11 @@ msgstr "Ende"
 #: ./opengever/latex/listing.py
 msgid "label_issuer"
 msgstr "Auftraggeber"
+
+#. Default: "Page"
+#: ./opengever/latex/layouts/default.py
+msgid "label_page"
+msgstr "Seite"
 
 #. Default: "Participants"
 #: ./opengever/latex/dossierdetails.py
@@ -81,6 +98,7 @@ msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Reference number"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_reference_number"
@@ -97,6 +115,7 @@ msgid "label_repository_title"
 msgstr "Ordnungsposition"
 
 #. Default: "Responsible"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_responsible"
@@ -114,6 +133,7 @@ msgid "label_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "Start"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_start"
@@ -159,6 +179,11 @@ msgstr "Titel"
 #: ./opengever/latex/listing.py
 msgid "label_transition"
 msgstr "Aktion"
+
+#. Default: "Repository version"
+#: ./opengever/latex/dossiercover.py
+msgid "repository_version"
+msgstr "Version Ordnungssystem"
 
 #. Default: "No."
 #: ./opengever/latex/listing.py

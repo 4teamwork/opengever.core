@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-27 12:37+0000\n"
+"POT-Creation-Date: 2020-09-18 11:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,8 +33,19 @@ msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "Description"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/listing.py
 msgid "label_description"
+msgstr ""
+
+#. Default: "Details Dossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailsdossier"
+msgstr ""
+
+#. Default: "Details Subdossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailssubdossier"
 msgstr ""
 
 #. Default: "Document author"
@@ -63,6 +74,7 @@ msgid "label_dossier_tasks"
 msgstr ""
 
 #. Default: "End"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_end"
@@ -71,6 +83,11 @@ msgstr ""
 #. Default: "Issuer"
 #: ./opengever/latex/listing.py
 msgid "label_issuer"
+msgstr ""
+
+#. Default: "Page"
+#: ./opengever/latex/layouts/default.py
+msgid "label_page"
 msgstr ""
 
 #. Default: "Participants"
@@ -84,6 +101,7 @@ msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Reference number"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_reference_number"
@@ -100,6 +118,7 @@ msgid "label_repository_title"
 msgstr ""
 
 #. Default: "Responsible"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_responsible"
@@ -117,6 +136,7 @@ msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "Start"
+#: ./opengever/latex/dossiercover.py
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_start"
@@ -161,6 +181,11 @@ msgstr ""
 #. Default: "Transition"
 #: ./opengever/latex/listing.py
 msgid "label_transition"
+msgstr ""
+
+#. Default: "Repository version"
+#: ./opengever/latex/dossiercover.py
+msgid "repository_version"
 msgstr ""
 
 #. Default: "No."
