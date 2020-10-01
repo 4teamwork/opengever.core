@@ -184,6 +184,11 @@
       name="touched"
       />
 
+  <adapter
+      factory=".indexers.participations"
+      name="participations"
+      />
+
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"

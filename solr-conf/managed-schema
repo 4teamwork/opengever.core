@@ -169,6 +169,7 @@
     <field name="task_type" type="string" indexed="true" stored="false" />
     <field name="trashed" type="boolean" indexed="true" stored="false" />
     <field name="watchers" type="string" indexed="true" stored="false" multiValued="true"/>
+    <field name="participations" type="string" indexed="true" stored="true" multiValued="true"/>
 
     <!-- PHVS specific fields -->
     <field name="language" type="string" indexed="true" stored="true" />

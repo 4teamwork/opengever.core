@@ -11,7 +11,10 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.browser.participants import translate_participation_role
+from opengever.dossier.participations import IParticipationData
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
@@ -280,3 +283,22 @@ class ParticipationIndexHelper(object):
         role_label = self.role_to_label(role)
         participant_label = self.participant_id_to_label(participant_id)
         return u"{}|{}".format(role_label, participant_label)
+
+
+@indexer(IParticipationAwareMarker)
+def participations(obj):
+    phandler = IParticipationAware(obj)
+    helper = ParticipationIndexHelper()
+    participations = phandler.get_participations()
+    index_value = set()
+
+    for participation in participations:
+        data = IParticipationData(participation)
+        index_value.add(helper.participant_id_and_role_to_index_value(
+            participant_id=data.participant_id))
+        for role in data.roles:
+            index_value.add(helper.participant_id_and_role_to_index_value(
+                role=role))
+            index_value.add(helper.participant_id_and_role_to_index_value(
+                participant_id=data.participant_id, role=role))
+    return list(index_value)

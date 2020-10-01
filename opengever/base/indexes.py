@@ -101,3 +101,8 @@ def is_subdossier(obj):
 @indexer(IDexterityContent)
 def watchers(obj):
     return []
+
+
+@indexer(IDexterityContent)
+def participations(obj):
+    return []
