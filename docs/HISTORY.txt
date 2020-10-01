@@ -27,6 +27,7 @@ Changelog
 - Do not allow @tus-replace if document is not checked out by current user. [buchi]
 - Fix workspace workflows: Allow to create new document versions and to trash documents again. [buchi]
 - Add missing translations for dossier export. [2e12]
+- Replace Chatlio in docs with HubSpot Chat. [2e12]
 
 
 2020.9.0 (2020-09-10)

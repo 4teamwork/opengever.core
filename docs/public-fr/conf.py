@@ -128,7 +128,8 @@ html_theme_options = {
     'extra_nav_links': {u'Site du produit': 'https://onegovgever.ch',
                         u'Forum de feedback': 'https://feedback.onegovgever.ch',
                         u'Démo en ligne': 'https://demo.onegovgever.ch',
-                        u'Documentation en allemand': 'https://docs.onegovgever.ch'},
+                        u'Documentation en allemand': 'https://docs.onegovgever.ch',
+                        u'Déclaration de confidentialité': 'https://www.4teamwork.ch/fr/declaration-de-confidentialite/'},
     'sidebar_width': '280px',
     'page_width': '1040px',
 }
