@@ -50,14 +50,14 @@ class TestParticipationHanlder(MockTestCase):
             {'contact': 'hugo'})
 
         # test appending
-        handler.append_participiation(peter)
+        handler.append_participation(peter)
         self.assertEquals(handler.get_participations(), [peter, ])
 
-        handler.append_participiation(sepp)
+        handler.append_participation(sepp)
         self.assertEquals(handler.get_participations(), [peter, sepp])
 
         # an existing participation should not be addable multiple time
-        self.assertEquals(handler.append_participiation(peter), None)
+        self.assertEquals(handler.append_participation(peter), None)
 
         # test has participation
         self.assertEquals(handler.has_participation(peter), True)

@@ -62,7 +62,7 @@ class ParticipationHandler(object):
             raise TypeError('Excpected PersistentList instance')
         self.annotations[self.annotation_key] = value
 
-    def append_participiation(self, value):
+    def append_participation(self, value):
         if not IParticipation.providedBy(value):
             raise TypeError('Excpected IParticipation object')
         if not self.has_participation(value):

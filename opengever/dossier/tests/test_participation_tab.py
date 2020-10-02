@@ -30,7 +30,7 @@ class TestParticipationTabbedview(FunctionalTestCase):
         handler = ParticipationHandler(self.dossier)
         sepp = handler.create_participation(
             contact='sepp', roles=['Reader', 'Editor'])
-        handler.append_participiation(sepp)
+        handler.append_participation(sepp)
 
         view = self.get_tabbed_view('tabbedview_view-participants')
         self.assertEqual(1, len(view.contents))

@@ -108,7 +108,7 @@ class TestDossierMigratorForParticipants(FunctionalTestCase):
 
         self.phandler = IParticipationAware(self.dossier)
         p = self.phandler.create_participation('old.participant', ['regard'])
-        self.phandler.append_participiation(p)
+        self.phandler.append_participation(p)
 
     def test_dossier_participation_gets_migrated(self):
 
@@ -128,7 +128,7 @@ class TestDossierMigratorForParticipants(FunctionalTestCase):
 
         # Create a participation using that contact
         p = self.phandler.create_participation(contact.contactid(), ['regard'])
-        self.phandler.append_participiation(p)
+        self.phandler.append_participation(p)
 
         migrator = DossierMigrator(self.portal, {contact.id: 'new'}, 'move')
         migrator.migrate()

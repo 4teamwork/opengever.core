@@ -178,7 +178,7 @@ class ParticipationAddForm(Form):
                 status.addStatusMessage(msg, type='error')
             else:
                 part = phandler.create_participation(**data)
-                phandler.append_participiation(part)
+                phandler.append_participation(part)
                 msg = _(u'info_participation_create',
                         u'Participation created.')
                 status.addStatusMessage(msg, type='info')
