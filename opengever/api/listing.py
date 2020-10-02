@@ -71,6 +71,12 @@ FILTERS = {
     ],
     u'contacts': [
         u'object_provides:opengever.contact.contact.IContact',
+    ],
+    u'tasktemplates': [
+        u'object_provides:opengever.tasktemplates.content.tasktemplate.ITaskTemplate',
+    ],
+    u'tasktemplate_folders': [
+        u'object_provides:opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema',
     ]
 }
 
