@@ -1,6 +1,9 @@
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.actor import OGDSUserActor
 from opengever.workspace.activities import WorkspaceWatcherManager
+from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.participation import PARTICIPATION_ROLES
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from plone import api
@@ -55,6 +58,25 @@ class ParticipationTraverseService(Service):
         for item in self.participants(context):
             if item.get('token') == token:
                 return item
+
+    def is_actor_allowed_to_participate(self, token):
+        """Validates the actor token if it' a avalid actor.
+        """
+        if not isinstance(Actor.lookup(token), (OGDSUserActor, )):
+            raise BadRequest('The actor is not allowed')
+
+        if self.find_participant(token, self.context.get_context_with_local_roles()):
+            raise BadRequest('The participant already exists')
+
+        if IWorkspaceFolder.providedBy(self.context):
+            if not self.context.has_blocked_local_role_inheritance():
+                raise Forbidden(
+                    "The participations are not managed in this context. "
+                    "Please block the role inheritance before adding "
+                    "new participants.")
+
+            if not self.find_participant(token, self.context.get_parent_with_local_roles()):
+                raise BadRequest('The participant is not allowed')
 
 
 class ParticipationsGet(ParticipationTraverseService):
@@ -178,17 +200,7 @@ class ParticipationsPost(ParticipationTraverseService):
         return participant, role
 
     def validate_participation(self, token, role):
-        if not self.context.has_blocked_local_role_inheritance():
-            raise Forbidden(
-                "The participations are not managed in this context. "
-                "Please block the role inheritance before adding "
-                "new participants.")
-
-        if not self.find_participant(token, self.context.get_parent_with_local_roles()):
-            raise BadRequest('The participant is not allowed')
-
-        if self.find_participant(token, self.context.get_context_with_local_roles()):
-            raise BadRequest('The participant already exists')
+        self.is_actor_allowed_to_participate(token)
 
         if role not in PARTICIPATION_ROLES:
             raise BadRequest('Role is not availalbe. Available roles are: {}'.format(

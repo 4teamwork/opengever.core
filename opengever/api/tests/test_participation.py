@@ -544,7 +544,110 @@ class TestParticipationPatch(IntegrationTestCase):
                 )
 
 
-class TestParticipationPost(IntegrationTestCase):
+class TestParticipationPostWorkspace(IntegrationTestCase):
+
+    @browsing
+    def test_let_a_user_participate(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        remove_participation(self.workspace, browser, self.workspace_member.id)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        self.assertIsNone(entry)
+
+        data = {
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='POST',
+            data=json.dumps(data),
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+    @browsing
+    def test_inexistant_user_cannot_participate(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        data = {
+            "participant": {"token": 'not-existing-user'},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_can_only_assign_predefined_workspace_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        remove_participation(self.workspace, browser, self.workspace_member.id)
+
+        data = {
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'Manager'},
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_only_one_participation_per_user_is_allowed(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        self.assertIsNotNone(entry)
+
+        data = {
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+
+class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
 
     @browsing
     def test_let_a_user_participate_to_a_folder(self, browser):
@@ -590,7 +693,7 @@ class TestParticipationPost(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         data = {
-            "participant": {"token": self.workspace_member.id},
+            "participant": {"token": self.regular_user.id},
             "role": {"token": 'WorkspaceGuest'},
         }
 
@@ -641,6 +744,10 @@ class TestParticipationPost(IntegrationTestCase):
                 headers=http_headers(),
                 )
 
+        self.assertEqual('BadRequest', browser.json.get('type'))
+        self.assertIn('Role is not availalbe. Available roles are:',
+                      browser.json.get('message'))
+
     @browsing
     def test_do_not_allow_readding_an_already_existing_user(self, browser):
         self.login(self.workspace_admin, browser=browser)
@@ -669,6 +776,9 @@ class TestParticipationPost(IntegrationTestCase):
                 headers=http_headers(),
                 )
 
+        self.assertEqual({"message": "The participant already exists",
+                          "type": "BadRequest"}, browser.json)
+
     @browsing
     def test_only_users_from_the_upper_context_are_allowed_to_participate_to_a_folder(self, browser):
         self.login(self.workspace_admin, browser=browser)
@@ -689,6 +799,9 @@ class TestParticipationPost(IntegrationTestCase):
                 data=json.dumps(data),
                 headers=http_headers(),
                 )
+
+        self.assertEqual({"message": "The participant is not allowed",
+                          "type": "BadRequest"}, browser.json)
 
 
 class TestMyInvitationsGet(IntegrationTestCase):
