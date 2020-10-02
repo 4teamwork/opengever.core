@@ -177,8 +177,7 @@ class ParticipationAddForm(Form):
                         default=u'There is already a participation for this contact.')
                 status.addStatusMessage(msg, type='error')
             else:
-                part = phandler.create_participation(**data)
-                phandler.append_participation(part)
+                phandler.add_participation(data.get('contact'), data.get('roles'))
                 msg = _(u'info_participation_create',
                         u'Participation created.')
                 status.addStatusMessage(msg, type='info')

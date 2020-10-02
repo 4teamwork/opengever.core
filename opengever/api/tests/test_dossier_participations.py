@@ -13,8 +13,7 @@ class PloneParticipationsHelper(object):
 
     def add_participation(self, context, participant_id, roles, browser=None):
         handler = IParticipationAware(context)
-        participation = handler.create_participation(**{"contact": participant_id, "roles": roles})
-        handler.append_participation(participation)
+        handler.add_participation(participant_id, roles)
 
 
 class SQLParticipationsHelper(object):

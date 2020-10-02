@@ -28,9 +28,8 @@ class TestParticipationTabbedview(FunctionalTestCase):
         self.portal.REQUEST['searchable_text'] = 'sepp'
 
         handler = PloneParticipationHandler(self.dossier)
-        sepp = handler.create_participation(
-            contact='sepp', roles=['Reader', 'Editor'])
-        handler.append_participation(sepp)
+        handler.add_participation(
+            participant_id='sepp', roles=['Reader', 'Editor'])
 
         view = self.get_tabbed_view('tabbedview_view-participants')
         self.assertEqual(1, len(view.contents))

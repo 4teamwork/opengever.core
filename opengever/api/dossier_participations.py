@@ -153,8 +153,7 @@ class ParticipationsPost(Service):
         if existing_participation:
             raise BadRequest("There is already a participation for {}".format(participant_id))
 
-        participation = handler.create_participation(**{"contact": participant_id, "roles": roles})
-        handler.append_participation(participation)
+        handler.add_participation(participant_id, roles)
 
     def add_sql_participation(self, participant_id, roles):
         participant = get_sql_participant(self.context, participant_id)

@@ -43,21 +43,23 @@ class TestPloneParticipationHanlder(MockTestCase):
 
         # creation
         peter = handler.create_participation(
-            {'contact': 'peter', 'roles': ['Reader', ], })
-        sepp = handler.create_participation(
-            {'contact': 'sepp', 'roles': ['Reader', 'Editor'], })
+            participant_id='peter', roles=['Reader'])
         hugo = handler.create_participation(
-            {'contact': 'hugo'})
+            participant_id='hugo', roles=['Reader'])
+        self.assertEquals(handler.get_participations(), [])
 
         # test appending
         handler.append_participation(peter)
-        self.assertEquals(handler.get_participations(), [peter, ])
+        self.assertEquals(handler.get_participations(), [peter])
 
-        handler.append_participation(sepp)
+        # test adding
+        sepp = handler.add_participation(
+            participant_id='sepp', roles=['Reader', 'Editor'])
         self.assertEquals(handler.get_participations(), [peter, sepp])
 
         # an existing participation should not be addable multiple time
-        self.assertEquals(handler.append_participation(peter), None)
+        handler.append_participation(peter)
+        self.assertEquals(handler.get_participations(), [peter, sepp])
 
         # test has participation
         self.assertEquals(handler.has_participation(peter), True)
@@ -65,7 +67,7 @@ class TestPloneParticipationHanlder(MockTestCase):
 
         # test removing
         handler.remove_participation(peter)
-        self.assertEquals(handler.get_participations(), [sepp, ])
+        self.assertEquals(handler.get_participations(), [sepp])
 
 
 class TestParticipationAddForm(IntegrationTestCase):

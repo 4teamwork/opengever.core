@@ -39,8 +39,13 @@ class PloneParticipationHandler(object):
         self.context = context
         self.annotations = IAnnotations(self.context)
 
-    def create_participation(self, *args, **kwargs):
-        p = Participation(*args, **kwargs)
+    def add_participation(self, participant_id, roles):
+        participation = self.create_participation(participant_id, roles)
+        self.append_participation(participation)
+        return participation
+
+    def create_participation(self, participant_id, roles):
+        p = Participation(participant_id, roles)
         return p
 
     def get_participations(self):
