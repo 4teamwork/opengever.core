@@ -5,7 +5,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.core.testing import COMPONENT_UNIT_TESTING
-from opengever.dossier.behaviors.participation import ParticipationHandler
+from opengever.dossier.behaviors.participation import PloneParticipationHandler
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.testing import IntegrationTestCase
@@ -13,11 +13,11 @@ from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
 
 
-class TestParticipationHanlder(MockTestCase):
+class TestPloneParticipationHanlder(MockTestCase):
     layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
-        super(TestParticipationHanlder, self).setUp()
+        super(TestPloneParticipationHanlder, self).setUp()
         self.context = self.mocker.mock()
 
         annonation_storage = {}
@@ -39,7 +39,7 @@ class TestParticipationHanlder(MockTestCase):
 
     def test_participation_with_handler(self):
         self.replay()
-        handler = ParticipationHandler(self.context)
+        handler = PloneParticipationHandler(self.context)
 
         # creation
         peter = handler.create_participation(

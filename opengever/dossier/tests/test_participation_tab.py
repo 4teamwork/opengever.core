@@ -2,7 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
-from opengever.dossier.behaviors.participation import ParticipationHandler
+from opengever.dossier.behaviors.participation import PloneParticipationHandler
 
 
 class TestParticipationTabbedview(FunctionalTestCase):
@@ -27,7 +27,7 @@ class TestParticipationTabbedview(FunctionalTestCase):
     def test_participants_text_filter(self):
         self.portal.REQUEST['searchable_text'] = 'sepp'
 
-        handler = ParticipationHandler(self.dossier)
+        handler = PloneParticipationHandler(self.dossier)
         sepp = handler.create_participation(
             contact='sepp', roles=['Reader', 'Editor'])
         handler.append_participation(sepp)

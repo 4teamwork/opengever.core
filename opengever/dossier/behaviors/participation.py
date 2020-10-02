@@ -8,7 +8,8 @@ from plone.supermodel import model
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
-from zope.interface import Interface, implements
+from zope.interface import implements
+from zope.interface import Interface
 
 
 _marker = object()
@@ -29,10 +30,9 @@ class IParticipationAwareMarker(Interface):
     """
 
 
-class ParticipationHandler(object):
+class PloneParticipationHandler(object):
     """ IParticipationAware behavior / adpter factory
     """
-    implements(IParticipationAware)
     annotation_key = 'participations'
 
     def __init__(self, context):
