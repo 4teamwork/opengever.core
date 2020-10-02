@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-22 14:48+0000\n"
+"POT-Creation-Date: 2020-09-29 16:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -355,6 +355,11 @@ msgstr ""
 #. Default: "You have not selected any items."
 #: ./opengever/dossier/browser/report.py
 msgid "error_no_items"
+msgstr ""
+
+#. Default: "There is already a participation for this contact."
+#: ./opengever/dossier/browser/forms.py
+msgid "error_participant_already_exists"
 msgstr ""
 
 #. Default: "Failed to move ${item}."

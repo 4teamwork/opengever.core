@@ -99,6 +99,11 @@ class IParticipationCreated(IObjectEvent):
     """
 
 
+class IParticipationModified(IObjectEvent):
+    """Interface for participation modified event.
+    """
+
+
 class IParticipationRemoved(IObjectEvent):
     """Interface for participation removed event.
     """

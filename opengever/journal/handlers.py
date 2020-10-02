@@ -637,6 +637,21 @@ def participation_created(context, event):
     journal_entry_factory(context, PARTICIPANT_ADDED, title)
 
 
+PARTICIPANT_MODIFIED = 'Participant modified'
+
+
+def participation_modified(context, event):
+    title = _(
+        u'label_participant_modified',
+        default=u'Participant modified: ${contact}',
+        mapping={
+            'contact': readable_ogds_author(
+                event.participant,
+                event.participant.contact),
+            })
+    journal_entry_factory(context, PARTICIPANT_MODIFIED, title)
+
+
 PARTICIPANT_REMOVED = 'Participant removed'
 
 

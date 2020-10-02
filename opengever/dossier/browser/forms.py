@@ -171,13 +171,18 @@ class ParticipationAddForm(Form):
         data, errors = self.extractData()
         if not errors:
             phandler = IParticipationAware(self.context)
-            part = phandler.create_participation(**data)
-            phandler.append_participiation(part)
             status = IStatusMessage(self.request)
-            msg = _(u'info_participation_create',
-                    u'Participation created.')
-            status.addStatusMessage(msg, type='info')
-            return self._redirect_to_participants_tab()
+            if phandler.get_participation_by_contact_id(data.get('contact')):
+                msg = _(u'error_participant_already_exists',
+                        default=u'There is already a participation for this contact.')
+                status.addStatusMessage(msg, type='error')
+            else:
+                part = phandler.create_participation(**data)
+                phandler.append_participiation(part)
+                msg = _(u'info_participation_create',
+                        u'Participation created.')
+                status.addStatusMessage(msg, type='info')
+                return self._redirect_to_participants_tab()
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

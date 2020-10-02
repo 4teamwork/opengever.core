@@ -1000,4 +1000,41 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="GET"
+      name="@participations"
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      factory=".dossier_participations.ParticipationsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@participations"
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      factory=".dossier_participations.ParticipationsPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@participations"
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      factory=".dossier_participations.ParticipationsPatch"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@participations"
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      factory=".dossier_participations.ParticipationsDelete"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".dossier_participations.Participations"
+      name="participations"
+      />
+
 </configure>

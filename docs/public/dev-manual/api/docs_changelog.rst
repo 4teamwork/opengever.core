@@ -8,6 +8,12 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 2020-09-01
 ----------
 
+- Kapitel "Beteiligungen" hinzugefügt
+
+
+2020-09-01
+----------
+
 - Kapitel "Teamraum-Mitglieder" hinzugefügt
 - Kapitel "Inhalte teilen" hinzugefügt
 

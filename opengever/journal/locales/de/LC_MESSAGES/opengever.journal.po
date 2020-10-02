@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-11-13 15:05+0000\n"
+"POT-Creation-Date: 2020-09-28 13:04+0000\n"
 "PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -29,11 +29,6 @@ msgstr "Geändert von"
 #: ./opengever/journal/templates/journal_selection.pt
 msgid "label_add_journal_entry"
 msgstr "Journaleintrag hinzufügen"
-
-#. Default: "Attachments deleted: ${filenames}"
-#: ./opengever/journal/handlers.py
-msgid "label_attachments_deleted"
-msgstr "Attachments gelöscht: ${filenames}"
 
 #. Default: "Category"
 #: ./opengever/journal/form.py
@@ -225,6 +220,11 @@ msgstr "Objekt eingefügt: ${title}"
 #: ./opengever/journal/handlers.py
 msgid "label_participant_added"
 msgstr "Beteiligung hinzugefügt für ${contact} als ${roles}"
+
+#. Default: "Participant modified: ${contact}"
+#: ./opengever/journal/handlers.py
+msgid "label_participant_modified"
+msgstr "Beteiligung von ${contact} modifiziert"
 
 #. Default: "Participant removed: ${contact}"
 #: ./opengever/journal/handlers.py

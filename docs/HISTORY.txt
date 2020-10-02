@@ -11,6 +11,8 @@ Changelog
 - Customize the group_data serializer to return summarized users instead of only userids. [elioschmutz]
 - Extend the ogds-group serializer with a `groupurl` property. [elioschmutz]
 - Implement new api endpoint @ogds-group-listing. [elioschmutz]
+- Add @participations API endpoint for dossiers to CRUD participations. [tinagerber]
+- Do not allow to add multiple participations for one contact. [tinagerber]
 - Don't resolve or deactivate a dossier if it is linked to an active workspace. [tinagerber]
 - Provides the IVocabularyTokenized interface for elephant vocabularies. [elioschmutz]
 - Customize @groups endpoints to handle OGDS. [njohner]

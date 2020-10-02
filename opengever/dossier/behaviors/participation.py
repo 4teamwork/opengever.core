@@ -47,6 +47,16 @@ class ParticipationHandler(object):
         return self.annotations.get(self.annotation_key,
                                     PersistentList())
 
+    def get_participation_by_contact_id(self, contact_id):
+        participations = list(self.get_participations())
+        for participation in participations:
+            if participation.contact == contact_id:
+                return participation
+
+    def update_participation(self, value, roles):
+        value.roles = roles
+        notify(events.ParticipationModified(self.context, value))
+
     def set_participations(self, value):
         if not isinstance(value, PersistentList):
             raise TypeError('Excpected PersistentList instance')

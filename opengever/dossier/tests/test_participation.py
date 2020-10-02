@@ -1,9 +1,14 @@
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.dossier.behaviors.participation import ParticipationHandler
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
+from opengever.testing import IntegrationTestCase
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
 
@@ -61,3 +66,27 @@ class TestParticipationHanlder(MockTestCase):
         # test removing
         handler.remove_participation(peter)
         self.assertEquals(handler.get_participations(), [sepp, ])
+
+
+class TestParticipationAddForm(IntegrationTestCase):
+
+    def add_participation_to_dossier(self, contact_id, roles, browser):
+        browser.visit(self.dossier)
+        factoriesmenu.add('Participant')
+        browser.fill({'Roles': roles})
+        form = browser.find_form_by_field('Contact')
+        form.find_widget('Contact').fill(contact_id)
+        browser.find('Add').click()
+
+    @browsing
+    def test_participant_can_only_have_one_participation_per_context(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.add_participation_to_dossier(self.regular_user.getId(), ['Regard'], browser)
+        self.assertEqual(['Participation created.'], info_messages())
+        self.assertEqual([], error_messages())
+
+        self.add_participation_to_dossier(self.regular_user.getId(), ['Participation'], browser)
+        self.assertEqual(['There is already a participation for this contact.'], error_messages())
+        self.assertEqual('http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
+                         'dossier-1/add-plone-participation', browser.url)

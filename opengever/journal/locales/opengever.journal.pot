@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-11-13 15:05+0000\n"
+"POT-Creation-Date: 2020-09-28 13:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,11 +31,6 @@ msgstr ""
 #: ./opengever/journal/form.py
 #: ./opengever/journal/templates/journal_selection.pt
 msgid "label_add_journal_entry"
-msgstr ""
-
-#. Default: "Attachments deleted: ${filenames}"
-#: ./opengever/journal/handlers.py
-msgid "label_attachments_deleted"
 msgstr ""
 
 #. Default: "Category"
@@ -227,6 +222,11 @@ msgstr ""
 #. Default: "Participant added: ${contact} with roles ${roles}"
 #: ./opengever/journal/handlers.py
 msgid "label_participant_added"
+msgstr ""
+
+#. Default: "Participant modified: ${contact}"
+#: ./opengever/journal/handlers.py
+msgid "label_participant_modified"
 msgstr ""
 
 #. Default: "Participant removed: ${contact}"
