@@ -57,8 +57,9 @@ class TestPloneParticipationHanlder(MockTestCase):
             participant_id='sepp', roles=['Reader', 'Editor'])
         self.assertEquals(handler.get_participations(), [peter, sepp])
 
-        # an existing participation should not be addable multiple time
-        handler.append_participation(peter)
+        # adding a participation for a contact already having one is not allowed
+        with self.assertRaises(ValueError):
+            handler.add_participation(participant_id='peter', roles=['Editor'])
         self.assertEquals(handler.get_participations(), [peter, sepp])
 
         # test has participation

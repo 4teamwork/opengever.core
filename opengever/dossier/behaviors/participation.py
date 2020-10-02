@@ -70,11 +70,15 @@ class PloneParticipationHandler(object):
     def append_participation(self, value):
         if not IParticipation.providedBy(value):
             raise TypeError('Excpected IParticipation object')
-        if not self.has_participation(value):
-            lst = self.get_participations()
-            lst.append(value)
-            self.set_participations(lst)
-            notify(events.ParticipationCreated(self.context, value))
+
+        if self.get_participation_by_contact_id(value.contact):
+            raise ValueError("There is already a participation for {}".format(
+                value.contact))
+
+        lst = self.get_participations()
+        lst.append(value)
+        self.set_participations(lst)
+        notify(events.ParticipationCreated(self.context, value))
 
     def has_participation(self, value):
         return value in self.get_participations()
