@@ -677,6 +677,97 @@
       mimetypes="application/x-iwork-pages-sffpages"
       />
 
+  <!-- Cadwork -->
+  <mimetype
+      name="Cadwork 2d"
+      binary="True"
+      extensions="2d"
+      globs="*.2d"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-2d"
+      />
+
+  <mimetype
+      name="Cadwork catalog 2d"
+      binary="True"
+      extensions="2dc"
+      globs="*.2dc"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-catalog-2d"
+      />
+
+  <mimetype
+      name="Cadwork 2dl lines"
+      binary="True"
+      extensions="2dl"
+      globs="*.2dl"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-2d-lines"
+      />
+
+  <mimetype
+      name="Cadwork 2dm"
+      binary="True"
+      extensions="2dm"
+      globs="*.2dm"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-2dm"
+      />
+
+  <mimetype
+      name="Cadwork 2dr"
+      binary="True"
+      extensions="2dr"
+      globs="*.2dr"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-2dr"
+      />
+
+  <mimetype
+      name="Cadwork 3d"
+      binary="True"
+      extensions="3d"
+      globs="*.3d"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-3d"
+      />
+
+  <mimetype
+      name="Cadwork catalog 3d"
+      binary="True"
+      extensions="3dc"
+      globs="*.3dc"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-catalog-3d"
+      />
+
+  <mimetype
+      name="Cadwork Lexoview"
+      binary="True"
+      extensions="iv ivx ivz"
+      globs="*.iv *.ivx *.ivz"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-lexoview"
+      />
+
+  <mimetype
+      name="Cadwork Lexo2D"
+      binary="True"
+      extensions="l2d lx2d"
+      globs="*.l2d *.lx2d"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-lexo2d"
+      />
+
+  <mimetype
+      name="Cadwork Lexocad"
+      binary="True"
+      extensions="lxz"
+      globs="*.lxz"
+      icon_path="application.png"
+      mimetypes="application/x-cadwork-lexocad"
+      />
+
   <!-- Various other file formats -->
 
   <mimetype
