@@ -46,6 +46,7 @@ SYSTEM_ACTOR_ID = '__system__'
 class Actor(object):
 
     css_class = 'actor-user'
+    actor_type = 'user'
 
     def __init__(self, identifier):
         self.identifier = identifier
@@ -136,6 +137,8 @@ class Actor(object):
 
 class NullActor(object):
 
+    actor_type = 'null'
+
     def __init__(self, identifier):
         self.identifier = identifier
 
@@ -158,6 +161,8 @@ class NullActor(object):
 class SystemActor(object):
     """Used for system notifications, using the internal SYSTEM_ACTOR_ID.
     """
+
+    actor_type = 'system'
 
     def __init__(self, identifier):
         if identifier != SYSTEM_ACTOR_ID:
@@ -184,6 +189,7 @@ class SystemActor(object):
 class InboxActor(Actor):
 
     css_class = 'actor-inbox'
+    actor_type = 'inbox'
 
     def __init__(self, identifier, org_unit=None):
         super(InboxActor, self).__init__(identifier)
@@ -216,6 +222,7 @@ class InboxActor(Actor):
 class TeamActor(Actor):
 
     css_class = 'actor-team'
+    actor_type = 'team'
 
     def __init__(self, identifier, team=None):
         super(TeamActor, self).__init__(identifier)
@@ -242,6 +249,7 @@ class TeamActor(Actor):
 class CommitteeActor(Actor):
 
     css_class = 'actor-committee'
+    actor_type = 'committee'
 
     def __init__(self, identifier, committee=None):
         super(CommitteeActor, self).__init__(identifier)
@@ -265,6 +273,7 @@ class CommitteeActor(Actor):
 class ContactActor(Actor):
 
     css_class = 'actor-contact'
+    actor_type = 'contact'
 
     def __init__(self, identifier, contact=None):
         super(ContactActor, self).__init__(identifier)
@@ -342,6 +351,8 @@ class OGDSUserActor(Actor):
 
 
 class OGDSGroupActor(Actor):
+
+    actor_type = 'group'
 
     def __init__(self, identifier, group=None):
         super(OGDSGroupActor, self).__init__(identifier)
