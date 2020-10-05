@@ -51,6 +51,9 @@ FILTERS = {
     u'dossiers': [
         u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
     ],
+    u'dossiertemplates': [
+        u'object_provides:opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema',
+    ],
     u'documents': [
         u'object_provides:opengever.document.behaviors.IBaseDocument',
     ],

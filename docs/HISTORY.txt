@@ -5,7 +5,7 @@ Changelog
 ----------------------
 
 - @ogds-users, @ogds-groups, @ogds-user-listing and @ogds-group-listing are now registered on the plone siteroot instead the contact-folder. [elioschmutz]
-- Add tasktemplates and tasktemplatefolders to @listing endpoint. [tinagerber]
+- Add dossiertemplates, tasktemplates and tasktemplatefolders to @listing endpoint. [tinagerber]
 - Bump `ftw.catalogdoctor` to `1.1.0` which provides fixes for additional health problems. [deiferni]
 - Prevent setting invalid reference prefix number via API. [deiferni]
 - Remove IDossier baseclass from IDossierTemplate to fix API for dossier templates. [njohner]

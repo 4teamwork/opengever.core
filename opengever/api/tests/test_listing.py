@@ -953,3 +953,34 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                            u'description': u'',
                            u'review_state': u'tasktemplate-state-active',
                            u'title': u'Arbeitsplatz einrichten.'}], browser.json['items'])
+
+    @browsing
+    def test_dossiertemplates_listing(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query_string = '&'.join((
+            'name=dossiertemplates',
+            'columns=title',
+            'columns=description',
+            'columns=changed',
+            'sort_on=changed',
+            'sort_order=ascending',
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.templates, view=view, headers=self.api_headers)
+
+        self.assertEqual([
+            {
+                u'@id': self.dossiertemplate.absolute_url(),
+                u'UID': IUUID(self.dossiertemplate),
+                u'changed': u'2016-08-31T09:13:33Z',
+                u'description': u'Lorem ipsum',
+                u'title': u'Bauvorhaben klein'
+            },
+            {
+                u'@id': self.subdossiertemplate.absolute_url(),
+                u'UID': IUUID(self.subdossiertemplate),
+                u'changed': u'2016-08-31T09:17:33Z',
+                u'description': u'',
+                u'title': u'Anfragen'
+            }
+        ], browser.json['items'])
