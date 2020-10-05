@@ -65,8 +65,8 @@ def get_full_user_info(userid=None, member=None):
     return PloneUserActor(identifier=userid, user=member).get_label()
 
 
-def can_manage_member(context, member=None, roles=None):
-    if member and member.getId() == api.user.get_current().getId():
+def can_manage_member(context, actor=None, roles=None):
+    if actor and actor.identifier == api.user.get_current().getId():
         return False
     else:
         return api.user.has_permission(
