@@ -1,6 +1,5 @@
 from datetime import datetime
 from docx import Document
-from docx.opc.exceptions import PackageNotFoundError
 from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
@@ -293,16 +292,14 @@ class TestHandlers(FunctionalTestCase):
         moved_doc = self.target_dossier.getFirstChild()
         self.assertEqual('Invalid DOCX', moved_doc.title)
 
-    def test_failure_to_update_docprops_does_block_creation_of_new_doc(self):
-        with self.assertRaises(PackageNotFoundError):
-            create(
-                Builder('document')
-                .within(self.dossier)
-                .titled("Invalid DOCX")
-                .attach_file_containing('foo', u'invalid.docx'))
-
-    def test_failure_to_update_docprops_does_block_copying(self):
+    def test_failure_to_update_docprops_doesnt_block_creation_of_new_doc(self):
         invalid_docx = self.create_invalid_docx()
-        with self.assertRaises(PackageNotFoundError):
-            api.content.copy(source=invalid_docx,
-                             target=self.target_dossier)
+        self.assertEqual('Invalid DOCX', invalid_docx.title)
+
+    def test_failure_to_update_docprops_doesnt_block_copying(self):
+        invalid_docx = self.create_invalid_docx()
+        copied = api.content.copy(source=invalid_docx,
+                                  target=self.target_dossier)
+
+        self.assertEqual('copy of Invalid DOCX', copied.title)
+
