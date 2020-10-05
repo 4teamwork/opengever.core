@@ -3,6 +3,7 @@ from opengever.dossier import _
 from opengever.dossier import events
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent import Persistent
+from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone.supermodel import model
 from zope import schema
@@ -48,49 +49,50 @@ class PloneParticipationHandler(object):
         p = Participation(participant_id, roles)
         return p
 
-    def get_participations(self):
-        return self.annotations.get(self.annotation_key,
-                                    PersistentList())
+    @property
+    def _participations(self):
+        return self.annotations.get(self.annotation_key)
 
-    def get_participation_by_contact_id(self, contact_id):
-        participations = list(self.get_participations())
-        for participation in participations:
-            if participation.contact == contact_id:
-                return participation
-
-    def update_participation(self, value, roles):
-        value.roles = roles
-        notify(events.ParticipationModified(self.context, value))
-
-    def set_participations(self, value):
-        if not isinstance(value, PersistentList):
-            raise TypeError('Excpected PersistentList instance')
+    @_participations.setter
+    def _participations(self, value):
         self.annotations[self.annotation_key] = value
+
+    def get_participations(self):
+        participations = self._participations or PersistentDict()
+        return participations.values()
+
+    def get_participation(self, participant_id):
+        return self._participations and self._participations.get(participant_id)
+
+    def update_participation(self, participant_id, roles):
+        if not self.has_participation(participant_id):
+            raise ValueError("{} has no participations on this context".format(
+                participant_id))
+        self._participations[participant_id].roles = roles
+        notify(events.ParticipationModified(
+            self.context, self._participations[participant_id]))
 
     def append_participation(self, value):
         if not IParticipation.providedBy(value):
             raise TypeError('Excpected IParticipation object')
 
-        if self.get_participation_by_contact_id(value.contact):
+        if self.has_participation(value.contact):
             raise ValueError("There is already a participation for {}".format(
                 value.contact))
 
-        lst = self.get_participations()
-        lst.append(value)
-        self.set_participations(lst)
+        if self._participations is None:
+            self._participations = PersistentDict()
+        self._participations[value.contact] = value
         notify(events.ParticipationCreated(self.context, value))
 
-    def has_participation(self, value):
-        return value in self.get_participations()
+    def has_participation(self, participant_id):
+        return self._participations and participant_id in self._participations
 
-    def remove_participation(self, value, quiet=True):
-        if not quiet and not self.has_participation(value):
-            raise ValueError('Participation not in list')
-        lst = self.get_participations()
-        lst.remove(value)
-        self.set_participations(lst)
-        notify(events.ParticipationRemoved(self.context, value))
-        del value
+    def remove_participation(self, participant_id, quiet=True):
+        if not quiet and not self.has_participation(participant_id):
+            raise ValueError('No participation for {}'.format(participant_id))
+        participation = self._participations.pop(participant_id)
+        notify(events.ParticipationRemoved(self.context, participation))
 
 
 # -------- model --------

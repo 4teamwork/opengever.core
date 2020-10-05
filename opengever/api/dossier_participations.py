@@ -149,9 +149,9 @@ class ParticipationsPost(Service):
     def add_plone_participation(self, participant_id, roles):
         get_plone_actor(participant_id)
         handler = IParticipationAware(self.context)
-        existing_participation = handler.get_participation_by_contact_id(participant_id)
-        if existing_participation:
-            raise BadRequest("There is already a participation for {}".format(participant_id))
+        if handler.has_participation(participant_id):
+            raise BadRequest("There is already a participation for {}".format(
+                participant_id))
 
         handler.add_participation(participant_id, roles)
 
@@ -160,7 +160,8 @@ class ParticipationsPost(Service):
         query = participant.participation_class.query.by_participant(
             participant).by_dossier(self.context)
         if query.count():
-            raise BadRequest("There is already a participation for {}".format(participant_id))
+            raise BadRequest("There is already a participation for {}".format(
+                participant_id))
         participant.participation_class.create(
             participant=participant, dossier=self.context, roles=roles)
 
@@ -214,17 +215,18 @@ class ParticipationsPatch(Service):
     def update_plone_participation(self, participant_id, new_roles):
         get_plone_actor(participant_id)
         handler = IParticipationAware(self.context)
-        participation = handler.get_participation_by_contact_id(participant_id)
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
-        handler.update_participation(participation, new_roles)
+        if not handler.has_participation(participant_id):
+            raise BadRequest("{} has no participations on this context".format(
+                participant_id))
+        handler.update_participation(participant_id, new_roles)
 
     def update_sql_participation(self, participant_id, new_roles):
         participant = get_sql_participant(self.context, participant_id)
         participation = participant.participation_class.query.by_participant(
             participant).by_dossier(self.context).first()
         if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
+            raise BadRequest("{} has no participations on this context".format(
+                participant_id))
         participation.update_roles(new_roles)
 
     def reply(self):
@@ -268,17 +270,18 @@ class ParticipationsDelete(Service):
     def delete_plone_participation(self, participant_id):
         get_plone_actor(participant_id)
         handler = IParticipationAware(self.context)
-        participation = handler.get_participation_by_contact_id(participant_id)
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
-        participation = handler.remove_participation(participation)
+        if not handler.has_participation(participant_id):
+            raise BadRequest("{} has no participations on this context".format(
+                participant_id))
+        handler.remove_participation(participant_id)
 
     def delete_sql_participation(self, participant_id):
         participant = get_sql_participant(self.context, participant_id)
         participation = participant.participation_class.query.by_participant(
             participant).by_dossier(self.context).first()
         if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
+            raise BadRequest("{} has no participations on this context".format(
+                participant_id))
         participation.delete()
 
     def reply(self):

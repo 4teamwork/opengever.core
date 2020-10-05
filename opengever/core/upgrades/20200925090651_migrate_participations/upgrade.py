@@ -3,6 +3,7 @@ from opengever.contact import is_contact_feature_enabled
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from persistent.list import PersistentList
+from zope.annotation.interfaces import IAnnotations
 
 
 class MigrateParticipations(UpgradeStep):
@@ -10,13 +11,19 @@ class MigrateParticipations(UpgradeStep):
     """
     deferrable = True
 
+    annotation_key = 'participations'
+
     def __call__(self):
         if is_contact_feature_enabled():
             return
         query = {'object_provides': IParticipationAwareMarker.__identifier__}
         for dossier in self.objects(query, 'Merge participations.'):
             handler = IParticipationAware(dossier)
-            old_participations = handler.get_participations()
+
+            annotations = IAnnotations(dossier)
+            old_participations = annotations.get(self.annotation_key,
+                                                 PersistentList())
+
             if not old_participations:
                 continue
             contacts_and_roles = dict()
@@ -28,4 +35,4 @@ class MigrateParticipations(UpgradeStep):
 
             lst = PersistentList([handler.create_participation(contact=key, roles=value)
                                   for key, value in contacts_and_roles.items()])
-            handler.set_participations(lst)
+            annotations[self.annotation_key] = lst
