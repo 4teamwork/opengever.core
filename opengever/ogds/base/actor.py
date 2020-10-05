@@ -128,6 +128,11 @@ class Actor(object):
     def permission_identifier(self):
         raise NotImplementedError()
 
+    def represents(self):
+        """Returns the object this actor is representing.
+        """
+        raise NotImplementedError()
+
     def representatives(self):
         """Returns a list of users which are representative for the current
         actor. Used for example when notifying an actor.
@@ -153,6 +158,9 @@ class NullActor(object):
 
     def get_link(self, with_icon=False):
         return self.identifier or u''
+
+    def represents(self):
+        raise None
 
     def representatives(self):
         return []
@@ -181,6 +189,9 @@ class SystemActor(object):
 
     def get_link(self, with_icon=False):
         return u''
+
+    def represents(self):
+        raise None
 
     def representatives(self):
         return []
@@ -218,6 +229,9 @@ class InboxActor(Actor):
     def representatives(self):
         return self.org_unit.inbox().assigned_users()
 
+    def represents(self):
+        return self.org_unit
+
 
 class TeamActor(Actor):
 
@@ -245,6 +259,9 @@ class TeamActor(Actor):
     def representatives(self):
         return self.team.group.users
 
+    def represents(self):
+        return self.team
+
 
 class CommitteeActor(Actor):
 
@@ -268,6 +285,9 @@ class CommitteeActor(Actor):
         # Avoid circular imports
         from opengever.meeting.activity.helpers import get_users_by_group
         return get_users_by_group(self.committee.group_id)
+
+    def represents(self):
+        return self.committee
 
 
 class ContactActor(Actor):
@@ -300,6 +320,9 @@ class ContactActor(Actor):
     def representatives(self):
         return []
 
+    def represents(self):
+        return self.contact
+
 
 class PloneUserActor(Actor):
 
@@ -326,6 +349,9 @@ class PloneUserActor(Actor):
     def representatives(self):
         return []
 
+    def represents(self):
+        return self.user
+
 
 class OGDSUserActor(Actor):
 
@@ -348,6 +374,9 @@ class OGDSUserActor(Actor):
 
     def representatives(self):
         return [self.user]
+
+    def represents(self):
+        return self.user
 
 
 class OGDSGroupActor(Actor):
@@ -373,6 +402,9 @@ class OGDSGroupActor(Actor):
 
     def representatives(self):
         return self.group.users
+
+    def represents(self):
+        return self.group
 
 
 class ActorLookup(object):
