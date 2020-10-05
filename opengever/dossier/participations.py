@@ -1,3 +1,5 @@
+from opengever.contact import is_contact_feature_enabled
+from opengever.contact.models import Participation as SQLParticipation
 from opengever.dossier import events
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -13,7 +15,10 @@ class ParticipationHandler(object):
 
     def __init__(self, context):
         self.context = context
-        self.handler = PloneParticipationHandler(context)
+        if is_contact_feature_enabled():
+            self.handler = SQLParticipationHandler(context)
+        else:
+            self.handler = PloneParticipationHandler(context)
 
     def __getattr__(self, name):
         return getattr(self.handler, name)
@@ -81,3 +86,16 @@ class PloneParticipationHandler(object):
             raise ValueError('No participation for {}'.format(participant_id))
         participation = self._participations.pop(participant_id)
         notify(events.ParticipationRemoved(self.context, participation))
+
+
+class SQLParticipationHandler(object):
+    """ IParticipationAware behavior / adpter factory
+    """
+
+    def __init__(self, context):
+        self.context = context
+
+    def get_participations(self):
+        query = SQLParticipation.query.by_dossier(self.context)
+        for participation in query:
+            yield participation
