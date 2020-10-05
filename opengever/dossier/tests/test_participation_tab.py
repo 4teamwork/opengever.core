@@ -2,7 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
-from opengever.dossier.behaviors.participation import PloneParticipationHandler
+from opengever.dossier.participations import PloneParticipationHandler
 
 
 class TestParticipationTabbedview(FunctionalTestCase):

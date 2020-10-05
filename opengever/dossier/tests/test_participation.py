@@ -5,7 +5,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.core.testing import COMPONENT_UNIT_TESTING
-from opengever.dossier.behaviors.participation import PloneParticipationHandler
+from opengever.dossier.participations import PloneParticipationHandler
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.testing import IntegrationTestCase

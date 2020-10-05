@@ -1,5 +1,10 @@
+from opengever.dossier import events
+from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.dossier.behaviors.participation import PloneParticipationHandler
+from opengever.dossier.behaviors.participation import Participation
+from persistent.dict import PersistentDict
+from zope.annotation.interfaces import IAnnotations
+from zope.event import notify
 from zope.interface import implements
 
 
@@ -12,3 +17,67 @@ class ParticipationHandler(object):
 
     def __getattr__(self, name):
         return getattr(self.handler, name)
+
+
+class PloneParticipationHandler(object):
+    """ IParticipationAware behavior / adapter factory.
+    """
+    annotation_key = 'participations'
+
+    def __init__(self, context):
+        self.context = context
+        self.annotations = IAnnotations(self.context)
+
+    def add_participation(self, participant_id, roles):
+        participation = self.create_participation(participant_id, roles)
+        self.append_participation(participation)
+        return participation
+
+    def create_participation(self, participant_id, roles):
+        p = Participation(participant_id, roles)
+        return p
+
+    @property
+    def _participations(self):
+        return self.annotations.get(self.annotation_key)
+
+    @_participations.setter
+    def _participations(self, value):
+        self.annotations[self.annotation_key] = value
+
+    def get_participations(self):
+        participations = self._participations or PersistentDict()
+        return participations.values()
+
+    def get_participation(self, participant_id):
+        return self._participations and self._participations.get(participant_id)
+
+    def update_participation(self, participant_id, roles):
+        if not self.has_participation(participant_id):
+            raise ValueError("{} has no participations on this context".format(
+                participant_id))
+        self._participations[participant_id].roles = roles
+        notify(events.ParticipationModified(
+            self.context, self._participations[participant_id]))
+
+    def append_participation(self, value):
+        if not IParticipation.providedBy(value):
+            raise TypeError('Excpected IParticipation object')
+
+        if self.has_participation(value.contact):
+            raise ValueError("There is already a participation for {}".format(
+                value.contact))
+
+        if self._participations is None:
+            self._participations = PersistentDict()
+        self._participations[value.contact] = value
+        notify(events.ParticipationCreated(self.context, value))
+
+    def has_participation(self, participant_id):
+        return self._participations and participant_id in self._participations
+
+    def remove_participation(self, participant_id, quiet=True):
+        if not quiet and not self.has_participation(participant_id):
+            raise ValueError('No participation for {}'.format(participant_id))
+        participation = self._participations.pop(participant_id)
+        notify(events.ParticipationRemoved(self.context, participation))
