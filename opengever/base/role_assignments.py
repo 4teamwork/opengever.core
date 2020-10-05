@@ -314,6 +314,13 @@ class RoleAssignmentManager(object):
         return [RoleAssignment.get(**data) for data
                 in self.storage.get_by_principal(principal_id)]
 
+    def get_roles_by_principal_id(self, principal_id):
+        roles = set()
+        for assignment_data in self.storage.get_by_principal(principal_id):
+                roles.update(assignment_data.get('roles', []))
+
+        return roles
+
     def reset(self, assignments):
         cause = assignments[0].cause
         if len(set([asg.cause for asg in assignments])) > 1:

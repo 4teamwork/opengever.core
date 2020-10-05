@@ -186,6 +186,15 @@ class TestRoleAssignmentManager(IntegrationTestCase):
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
 
+    def test_get_roles_by_principal_id_returns_the_assigned_roles_for_a_principal(self):
+        self.login(self.regular_user)
+
+        manager = RoleAssignmentManager(self.dossier)
+
+        self.assertEquals(
+            set(['Contributor']),
+            manager.get_roles_by_principal_id(self.regular_user.id))
+
 
 class TestManageRoleAssignmentsView(IntegrationTestCase):
 
