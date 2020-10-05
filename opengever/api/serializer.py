@@ -345,15 +345,18 @@ class SerializeSQLModelToJsonSummaryBase(object):
 
     @property
     def get_url(self):
-        base_url = self.request.URL.rsplit("/@")[0]
         return '{}/{}/{}'.format(
-            base_url,
+            self.base_url,
             self.endpoint_name,
             getattr(self.context, self.id_attribute_name)
             )
 
     def add_additional_metadata(self, data):
         pass
+
+    @property
+    def base_url(self):
+        return self.request.URL.rsplit("/@")[0]
 
 
 class SerializeContactModelToJsonSummaryBase(SerializeSQLModelToJsonSummaryBase):
@@ -394,7 +397,7 @@ class SerializeTeamModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
 
 @implementer(ISerializeToJsonSummary)
 @adapter(User, IOpengeverBaseLayer)
-class SerializeUserModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
+class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     item_columns = (
         'active',
@@ -419,10 +422,14 @@ class SerializeUserModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
         if is_administrator():
             data['last_login'] = json_compatible(getattr(self.context, 'last_login'))
 
+    @property
+    def base_url(self):
+        return api.portal.get().absolute_url()
+
 
 @implementer(ISerializeToJsonSummary)
 @adapter(Group, IOpengeverBaseLayer)
-class SerializeGroupModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
+class SerializeGroupModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     item_columns = (
         'groupid',
@@ -437,3 +444,7 @@ class SerializeGroupModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
 
     def add_additional_metadata(self, data):
         extend_with_groupurl(data, self.context, self.request)
+
+    @property
+    def base_url(self):
+        return api.portal.get().absolute_url()
