@@ -5,6 +5,15 @@ Teamraum Beteiligungen
 
 Der ``@participations`` Endpoint behandelt Teamraum Beteiligungen.
 
+Eine Beteiligung an einem Teamraum bedeutet, dass ein bestimmter Benutzer oder
+eine bestimmte Gruppe zugriff auf einen Teaumraum hat. Je nach Beteiligung hat der Benutzer andere Berechtigungen.
+
+Es gibt folgende Beteiligungsrollen:
+
+- WorkspaceAdmin
+- WorkspaceMember
+- WorkspaceGuest
+
 
 Beteiligungen abrufen:
 ----------------------
@@ -31,28 +40,36 @@ Ein GET Request gibt die Beteiligungen sowie die aktiven Einladungen eines Inhal
           "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
           "@type": "virtual.participations.user",
           "is_editable": true,
-          "participant_email": "max.muster@example.org",
           "role": {
             "title": "Admin",
             "token": "WorkspaceAdmin"
           },
           "participant": {
+            "@id": "http://localhost:8081/fd/@ogds-users/max.muster",
+            "@type": "virtual.ogds.user",
+            "active": true,
+            "email": "max.muster@example.com",
             "title": "Max Muster (max.muster)",
-            "token": "max.muster"
-          }
+            "id": "max.muster",
+            "is_local": null
+          },
         },
         {
-          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/petra.frohlich",
-          "@type": "virtual.participations.user",
+          "@id": "http://localhost:8081/fd/workspaces/workspace-41/@participations/afi_benutzer",
+          "@type": "virtual.participations.group",
           "is_editable": true,
-          "participant_email": "petra.frohlich@example.org",
-          "role": {
-            "title": "Teammitglied",
-            "token": "WorkspaceMember"
-          },
           "participant": {
-            "title": "Petra Fröhlich (petra.frohlich)",
-            "token": "petra.frohlich"
+            "@id": "http://localhost:8081/fd/@ogds-groups/afi_benutzer",
+            "@type": "virtual.ogds.group",
+            "active": true,
+            "id": "afi_benutzer",
+            "is_local": true,
+            "title": "AFI Benutzer",
+            "email": null
+          },
+          "role": {
+            "title": "Admin",
+            "token": "WorkspaceAdmin"
           }
         }
       ]
@@ -82,15 +99,18 @@ Ein GET Request auf die jeweilige Resource gibt die Beteiligungen oder die Einla
       "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
       "@type": "virtual.participations.user",
       "is_editable": true,
-      "participant_email": "max.muster@example.org",
       "role": {
         "title": "Admin",
         "token": "WorkspaceAdmin"
       },
       "participant": {
+        "@id": "http://localhost:8081/fd/@ogds-users/max.muster",
+        "@type": "virtual.ogds.user",
+        "active": true,
+        "email": "max.muster@example.com",
         "title": "Max Muster (max.muster)",
-        "token": "max.muster"
-      }
+        "id": "max.muster",
+        "is_local": null
     }
 
 
@@ -128,7 +148,7 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
 
        {
          "participant": "maria.meier",
-         "role": "WorkspaceMember",
+         "role": "WorkspaceMember"
        }
 
 **Beispiel-Response**:
@@ -142,16 +162,18 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
       "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
       "@type": "virtual.participations.user",
       "is_editable": true,
-      "participant_email": "max.muster@example.org",
-      "participant_fullname": "Max Muster (max.muster)",
       "role": {
         "title": "Admin",
-        "token": "WorkspaceMember"
+        "token": "WorkspaceAdmin"
       },
       "participant": {
+        "@id": "http://localhost:8081/fd/@ogds-users/max.muster",
+        "@type": "virtual.ogds.user",
+        "active": true,
+        "email": "max.muster@example.com",
         "title": "Max Muster (max.muster)",
-        "token": "max.muster"
-      }
+        "id": "max.muster",
+        "is_local": null
     }
 
 
