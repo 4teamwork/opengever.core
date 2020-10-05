@@ -45,13 +45,13 @@ class TestOGDSUserGet(IntegrationTestCase):
                 )
             )
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-users/kathi.barfuss',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
+            {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
              u'@type': u'virtual.ogds.user',
              u'active': True,
              u'address1': u'Kappelenweg 13',
@@ -66,28 +66,28 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'email': u'foo@example.com',
              u'email2': u'bar@example.com',
              u'firstname': u'K\xe4thi',
-             u'groups': [{u'@id': u'http://nohost/plone/kontakte/@ogds-groups/projekt_a',
+             u'groups': [{u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
                           u'@type': u'virtual.ogds.group',
                           u'active': True,
                           u'groupid': u'projekt_a',
                           u'groupurl': u'http://nohost/plone/@groups/projekt_a',
                           u'is_local': False,
                           u'title': u'Projekt A'},
-                         {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/a_project',
+                         {u'@id': u'http://nohost/plone/@ogds-groups/a_project',
                           u'@type': u'virtual.ogds.group',
                           u'active': True,
                           u'groupid': u'a_project',
                           u'groupurl': u'http://nohost/plone/@groups/a_project',
                           u'is_local': False,
                           u'title': None},
-                         {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/fa_users',
+                         {u'@id': u'http://nohost/plone/@ogds-groups/fa_users',
                           u'@type': u'virtual.ogds.group',
                           u'active': True,
                           u'groupid': u'fa_users',
                           u'groupurl': u'http://nohost/plone/@groups/fa_users',
                           u'is_local': False,
                           u'title': u'fa Users Group'},
-                         {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/z_project',
+                         {u'@id': u'http://nohost/plone/@ogds-groups/z_project',
                           u'@type': u'virtual.ogds.group',
                           u'active': True,
                           u'groupid': u'z_project',
@@ -132,7 +132,7 @@ class TestOGDSUserGet(IntegrationTestCase):
     def test_last_login_is_visible(self, browser):
         self.login(self.administrator, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-users/{}'.format(self.administrator.getId()),
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -143,7 +143,7 @@ class TestOGDSUserGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@ogds-users',
                          headers=self.api_headers)
 
@@ -152,7 +152,7 @@ class TestOGDSUserGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@ogds-users/kathi.barfuss/foobar',
                          headers=self.api_headers)
 

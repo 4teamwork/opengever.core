@@ -10,19 +10,19 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
     def test_group_listing_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/projekt_a',
+            {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
              u'@type': u'virtual.ogds.group',
              u'active': True,
              u'groupid': u'projekt_a',
              u'groupurl': u'http://nohost/plone/@groups/projekt_a',
              u'is_local': False,
              u'title': u'Projekt A'},
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/projekt_b',
+            {u'@id': u'http://nohost/plone/@ogds-groups/projekt_b',
              u'@type': u'virtual.ogds.group',
              u'active': True,
              u'groupid': u'projekt_b',
@@ -36,7 +36,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
     def test_batch_grouplisting_offset(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing?b_size=4&b_start=2',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -54,7 +54,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
     def test_batch_large_offset_returns_empty_items(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing?b_start=999',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -67,7 +67,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@ogds-group-listing?b_size=-1',
                          headers=self.api_headers)
 
@@ -76,7 +76,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@ogds-group-listing?b_start=-1',
                          headers=self.api_headers)
 
@@ -86,7 +86,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
         ogds_service().fetch_group('projekt_a').active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing?filters.state:record:list=inactive',
                      headers=self.api_headers)
 
@@ -100,7 +100,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
         ogds_service().fetch_group('projekt_a').active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing?filters.state:record:list=active',
                      headers=self.api_headers)
 
@@ -114,7 +114,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
         ogds_service().fetch_group('projekt_a').active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing'
                           '?filters.state:record:list=inactive'
                           '&filters.state:record:list=active',
@@ -131,7 +131,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
         ogds_service().fetch_group('projekt_b').is_local = None
         ogds_service().fetch_group('projekt_laeaer').is_local = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing?filters.is_local:record:boolean=True',
                      headers=self.api_headers)
 
@@ -147,7 +147,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
         ogds_service().fetch_group('projekt_b').is_local = None
         ogds_service().fetch_group('projekt_laeaer').is_local = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-group-listing?filters.is_local:record:boolean=False',
                      headers=self.api_headers)
 
@@ -159,7 +159,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
     @browsing
     def test_search_title(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-group-listing?search=Projekt',
                      headers=self.api_headers)
 
@@ -172,7 +172,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
     @browsing
     def test_search_strips_asterisk(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-group-listing?search=Projekt*',
                      headers=self.api_headers)
 
@@ -182,7 +182,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
     @browsing
     def test_sort_descending(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-group-listing?sort_order=descending',
                      headers=self.api_headers)
 

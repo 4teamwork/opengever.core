@@ -12,18 +12,18 @@ class TestOGDSGroupsGet(IntegrationTestCase):
     def test_ogds_groups_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder, view='@ogds-groups/projekt_a', headers=self.api_headers)
+        browser.open(self.portal, view='@ogds-groups/projekt_a', headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-groups/projekt_a',
+            {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
              u'@type': u'virtual.ogds.group',
              u'active': True,
              u'groupid': u'projekt_a',
              u'groupurl': u'http://nohost/plone/@groups/projekt_a',
              u'is_local': False,
              u'title': u'Projekt A',
-             u'items': [{u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
+             u'items': [{u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
                          u'@type': u'virtual.ogds.user',
                          u'active': True,
                          u'department': u'Staatskanzlei',
@@ -37,7 +37,7 @@ class TestOGDSGroupsGet(IntegrationTestCase):
                          u'phone_office': u'012 34 56 78',
                          u'title': u'B\xe4rfuss K\xe4thi',
                          u'userid': u'kathi.barfuss'},
-                        {u'@id': u'http://nohost/plone/kontakte/@ogds-users/robert.ziegler',
+                        {u'@id': u'http://nohost/plone/@ogds-users/robert.ziegler',
                          u'@type': u'virtual.ogds.user',
                          u'active': True,
                          u'department': None,
@@ -59,21 +59,21 @@ class TestOGDSGroupsGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder, view='@ogds-groups', headers=self.api_headers)
+            browser.open(self.portal, view='@ogds-groups', headers=self.api_headers)
 
     @browsing
     def test_raises_bad_request_when_too_many_params_are_given(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder, view='@ogds-groups/projekt_a/foobar',
+            browser.open(self.portal, view='@ogds-groups/projekt_a/foobar',
                          headers=self.api_headers)
 
     @browsing
     def test_batching_for_ogds_groups(self, browser):
         self.login(self.regular_user, browser=browser)
         projekt_a = ogds_service().fetch_group('projekt_a')
-        url = self.contactfolder.absolute_url() + '/@ogds-groups/projekt_a?b_size=2'
+        url = self.portal.absolute_url() + '/@ogds-groups/projekt_a?b_size=2'
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertNotIn('batching', browser.json)

@@ -396,7 +396,7 @@
 
   <plone:service
       method="GET"
-      for="opengever.contact.interfaces.IContactFolder"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsuserlisting.OGDSUserListingGet"
       name="@ogds-user-listing"
       permission="zope2.View"
@@ -404,7 +404,7 @@
 
   <plone:service
       method="GET"
-      for="opengever.contact.interfaces.IContactFolder"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsgrouplisting.OGDSGroupListingGet"
       name="@ogds-group-listing"
       permission="zope2.View"
@@ -428,7 +428,7 @@
 
   <plone:service
       method="GET"
-      for="opengever.contact.interfaces.IContactFolder"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsgroups.OGDSGroupsGet"
       name="@ogds-groups"
       permission="zope2.View"
@@ -436,7 +436,7 @@
 
   <plone:service
       method="GET"
-      for="opengever.contact.interfaces.IContactFolder"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsuser.OGDSUserGet"
       name="@ogds-users"
       permission="zope2.View"

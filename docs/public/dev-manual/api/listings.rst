@@ -265,17 +265,14 @@ Optionale Parameter:
     Accept: application/json
 
 
-Auflistungen User und Teams
-===========================
-
-Mit den Endpoints ``@ogds-user-listing`` und ``@team-listing`` können Benutzer und
-Teams aus dem ogds aufgelistet werden. Diese beiden Endpoints liefern
-inhaltlich die gleiche Struktur wie der ``@listing`` Endpoint, unterstützen
+Auflistung User
+===============
+Mit dem Endpoint ``@ogds-user-listing`` können Benutzer aus dem ogds aufgelistet werden.
+Dieser Endpoint liefern inhaltlich die gleiche Struktur wie der ``@listing`` Endpoint, unterstütz
 aber nur ein Subset der Parameter. Im Moment ist es nicht möglich die
-``columns`` anzugeben, sondern es werden immer alle vom vom Modell
-untertstützten Attribute zurückgegeben. Des weiteren ist der ``depth``
-Paremeter nicht implementiert, ``facets`` werden ebenfalls nicht unterstützt.
-Dies weil die Datenquelle eine SQL-Datenbank und nicht Solr ist.
+``columns`` anzugeben, sondern es werden immer alle vom Modell
+untertstützten Attribute zurückgegeben.
+
 Das ``last_login`` Attribut ist nur für Administratoren und Manager sichtbar.
 
 
@@ -283,7 +280,7 @@ Beispiel: Auflistung aller Benutzer:
 
   .. sourcecode:: http
 
-    GET /kontakte/kontakte/@ogds-user-listing?b_size=1 HTTP/1.1
+    GET /@ogds-user-listing?b_size=1 HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
@@ -292,16 +289,16 @@ Beispiel: Auflistung aller Benutzer:
     Content-Type: application/json
 
     {
-      "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing",
+      "@id": "http://localhost:8080/fd/@ogds-user-listing",
       "batching": {
-        "@id": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_size=1",
-        "first": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=0&b_size=1",
-        "last": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=24&b_size=1",
-        "next": "http://localhost:8080/fd/kontakte/@ogds-user-listing?b_start=1&b_size=1"
+        "@id": "http://localhost:8080/fd/@ogds-user-listing?b_size=1",
+        "first": "http://localhost:8080/fd/@ogds-user-listing?b_start=0&b_size=1",
+        "last": "http://localhost:8080/fd/@ogds-user-listing?b_start=24&b_size=1",
+        "next": "http://localhost:8080/fd/@ogds-user-listing?b_start=1&b_size=1"
       },
       "items": [
         {
-          "@id": "http://localhost:8080/fd/kontakte/@ogds-users/sandro.ackermann",
+          "@id": "http://localhost:8080/fd/@ogds-users/sandro.ackermann",
           "@type": "virtual.ogds.user",
           "active": true,
           "department": null,
@@ -343,6 +340,76 @@ Mit ``filters.state:record:list`` können die gewünschten Status angegeben werd
 - ``active``: aktive Benutzer/Teams
 - ``inactive``: inaktive Benutzer/Teams
 
+**Beispiel: Filtern nach Benutzer mit Datum des letzten Logins zwischen dem 27.5.2020 und 2.6.2020**
+
+  .. sourcecode:: http
+
+    GET /@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%202020-06-02 HTTP/1.1
+    Accept: application/json
+
+**Beispiel: Filtern nach Benutzer mit Datum des letzten Logins nach dem 27.5.2020**
+
+  .. sourcecode:: http
+
+    GET /@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%20* HTTP/1.1
+    Accept: application/json
+
+Auflistung Teams
+================
+Mit dem Endpoint ``@team-listing`` können Teams aus dem ogds aufgelistet werden.
+Dieser Endpoint liefern inhaltlich die gleiche Struktur wie der ``@listing`` Endpoint, unterstütz
+aber nur ein Subset der Parameter. Im Moment ist es nicht möglich die
+``columns`` anzugeben, sondern es werden immer alle vom Modell
+untertstützten Attribute zurückgegeben.
+
+Dieser Endpoint steht nur für Kontaktordner zur Verfügung.
+
+Beispiel: Auflistung aller Teams:
+
+  .. sourcecode:: http
+
+    GET /kontakte/@team-listing?b_size=1 HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "http://localhost:8080/fd/@ogds-user-listing",
+      "batching": {
+        "@id": "http://localhost:8080/fd/kontakte/@team-listing?b_size=1",
+        "first": "http://localhost:8080/fd/kontakte/@team-listing?b_start=0&b_size=1",
+        "last": "http://localhost:8080/fd/kontakte/@team-listing?b_start=24&b_size=1",
+        "next": "http://localhost:8080/fd/kontakte/@team-listing?b_start=1&b_size=1"
+      },
+      "items": [
+        {
+          "@id": "http://localhost:8081/fd/kontakte/@teams/427",
+          "@type": "virtual.ogds.team",
+          "active": true,
+          "groupid": "test-group",
+          "org_unit_id": "stv",
+          "org_unit_title": "Steuerverwaltung",
+          "team_id": 427,
+          "title": "Test Team"
+        },
+      ],
+      "items_total": 25
+    }
+
+
+Filtern:
+--------
+
+Status:
+~~~~~~~
+Folgende Statusfilter stehen zur Verfügung:
+
+- ``active``: aktive Gruppen
+- ``inactive``: inaktive Gruppen
+
 
 **Beispiel: Nur aktive Teams abfragen**
 
@@ -359,23 +426,6 @@ Mit ``filters.state:record:list`` können die gewünschten Status angegeben werd
     GET /kontakte/@team-listing?filters.state:record:list=active&filters.state:record:list=inactive HTTP/1.1
     Accept: application/json
 
-Mit ``filters.last_login:record:list`` kann nach dem Zeitpunkt des letzten Logins gefiltert werden:
-
-
-**Beispiel: Filtern nach Benutzer mit Datum des letzten Logins zwischen dem 27.5.2020 und 2.6.2020**
-
-  .. sourcecode:: http
-
-    GET /kontakte/@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%202020-06-02 HTTP/1.1
-    Accept: application/json
-
-**Beispiel: Filtern nach Benutzer mit Datum des letzten Logins nach dem 27.5.2020**
-
-  .. sourcecode:: http
-
-    GET /kontakte/@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%20* HTTP/1.1
-    Accept: application/json
-
 
 Auflistung der OGDS-Gruppen
 ===========================
@@ -390,7 +440,7 @@ Beispiel: Auflistung aller Gruppen:
 
   .. sourcecode:: http
 
-    GET /kontakte/kontakte/@ogds-group-listing?b_size=1 HTTP/1.1
+    GET /@ogds-group-listing?b_size=1 HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
@@ -399,12 +449,12 @@ Beispiel: Auflistung aller Gruppen:
     Content-Type: application/json
 
     {
-      "@id": "http://localhost:8080/fd/kontakte/@ogds-group-listing",
+      "@id": "http://localhost:8080/fd/@ogds-group-listing",
       "b_size": 25,
       "b_start": 0,
       "items": [
         {
-          "@id": "http://localhost:8080/fd/kontakte/@ogds-groups/test-group",
+          "@id": "http://localhost:8080/fd/@ogds-groups/test-group",
           "@type": "virtual.ogds.group",
           "active": true,
           "groupid": "test-group",
@@ -443,7 +493,7 @@ Folgende Statusfilter stehen zur Verfügung:
 
   .. sourcecode:: http
 
-    GET /kontakte/@ogds-group-listing?filters.state:record:list=active HTTP/1.1
+    GET /@ogds-group-listing?filters.state:record:list=active HTTP/1.1
     Accept: application/json
 
 
@@ -454,7 +504,7 @@ Lokale Gruppen:
 
   .. sourcecode:: http
 
-    GET /kontakte/@ogds-group-listing?filters.is_local:record:boolean=True HTTP/1.1
+    GET /@ogds-group-listing?filters.is_local:record:boolean=True HTTP/1.1
     Accept: application/json
 
 Zugriff auf die Plone Gruppe:

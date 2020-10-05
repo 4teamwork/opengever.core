@@ -11,13 +11,13 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     def test_user_listing_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-users/kathi.barfuss',
+            {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
              u'@type': u'virtual.ogds.user',
              u'active': True,
              u'department': u'Staatskanzlei',
@@ -31,7 +31,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_office': u'012 34 56 78',
              u'title': u'B\xe4rfuss K\xe4thi',
              u'userid': u'kathi.barfuss'},
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-users/james.bond',
+            {u'@id': u'http://nohost/plone/@ogds-users/james.bond',
              u'@type': u'virtual.ogds.user',
              u'active': True,
              u'department': None,
@@ -51,7 +51,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     @browsing
     def test_last_login_is_visible_in_ogds_user_listing(self, browser):
         self.login(self.administrator, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -61,7 +61,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     def test_batch_userlisting_offset(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing?b_size=4&b_start=7',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -79,7 +79,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     def test_batch_large_offset_returns_empty_items(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing?b_start=999',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -92,7 +92,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@ogds-user-listing?b_size=-1',
                          headers=self.api_headers)
 
@@ -101,7 +101,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@ogds-user-listing?b_start=-1',
                          headers=self.api_headers)
 
@@ -111,7 +111,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         ogds_user = self.get_ogds_user(self.reader_user)
         ogds_user.active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing?filters.state:record:list=inactive',
                      headers=self.api_headers)
 
@@ -124,7 +124,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         ogds_user = self.get_ogds_user(self.reader_user)
         ogds_user.active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing?filters.state:record:list=active',
                      headers=self.api_headers)
 
@@ -137,7 +137,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         ogds_user = self.get_ogds_user(self.reader_user)
         ogds_user.active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing'
                            '?filters.state:record:list=inactive'
                           '&filters.state:record:list=active',
@@ -150,21 +150,21 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     def test_last_login_filter(self, browser):
         self.login(self.regular_user, browser=browser)
         filters_expression = 'filters.last_login:record:list=2020-01-01%20TO%202020-04-04'
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing?{}'.format(filters_expression),
                      headers=self.api_headers)
         self.assertEqual(0, len(browser.json['items']))
 
         User.query.get_by_userid(self.meeting_user.getId()).last_login = date(2020, 3, 2)
         User.query.get_by_userid(self.dossier_responsible.getId()).last_login = date(2020, 2, 5)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing?{}'.format(filters_expression),
                      headers=self.api_headers)
 
         self.assertEqual(2, len(browser.json['items']))
 
         User.query.get_by_userid(self.dossier_responsible.getId()).last_login = date(2020, 5, 5)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@ogds-user-listing?{}'.format(filters_expression),
                      headers=self.api_headers)
         self.assertEqual(1, len(browser.json['items']))
@@ -172,13 +172,13 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     @browsing
     def test_search_firstname(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-user-listing?search=L\xfcck',
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-users/lucklicher.laser',
+            {u'@id': u'http://nohost/plone/@ogds-users/lucklicher.laser',
              u'@type': u'virtual.ogds.user',
              u'active': True,
              u'department': None,
@@ -198,13 +198,13 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     @browsing
     def test_search_fristname_and_lastname(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-user-listing?search=frido gentobler',
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@ogds-users/fridolin.hugentobler',
+            {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler',
              u'@type': u'virtual.ogds.user',
              u'active': True,
              u'department': None,
@@ -224,7 +224,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     @browsing
     def test_search_strips_asterisk(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-user-listing?search=gentobler*',
                      headers=self.api_headers)
 
@@ -234,7 +234,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     @browsing
     def test_sort_on_firstname(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-user-listing?sort_on=firstname',
                      headers=self.api_headers)
 
@@ -247,7 +247,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     @browsing
     def test_listing_always_has_a_secondary_sort_by_userid(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-user-listing?sort_on=department',
                      headers=self.api_headers)
 
@@ -264,7 +264,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     def test_secondary_sort_by_userid_respects_sort_order(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.contactfolder,
+            self.portal,
             view=u'@ogds-user-listing?sort_on=department&sort_order=descending',
             headers=self.api_headers)
 
@@ -281,7 +281,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
     @browsing
     def test_sort_descending(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@ogds-user-listing?sort_order=descending',
                      headers=self.api_headers)
 
