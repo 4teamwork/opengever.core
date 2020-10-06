@@ -1,5 +1,6 @@
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Participation as SQLParticipation
+from opengever.contact.sources import ContactsSource
 from opengever.dossier import events
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -11,6 +12,23 @@ from zope.event import notify
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
+
+
+class InvalidParticipantId(Exception):
+    """No participant found for the given participant_id.
+    """
+
+
+class DupplicateParticipation(Exception):
+    """A participation already exists for the given participant
+    on the current context.
+    """
+
+
+class MissingParticipation(Exception):
+    """No participation found for the given participant on the
+    given context.
+    """
 
 
 class ParticipationHandler(object):
@@ -102,6 +120,49 @@ class SQLParticipationHandler(object):
         query = SQLParticipation.query.by_dossier(self.context)
         for participation in query:
             yield participation
+
+    def get_participation(self, participant_id):
+        participant = self.get_participant(participant_id)
+        query = participant.participation_class.query.by_participant(
+            participant).by_dossier(self.context)
+        participation = query.one_or_none()
+        if not participation:
+            raise MissingParticipation(
+                "{} has no participations on this context".format(participant_id))
+        return query.one_or_none()
+
+    def has_participation(self, participant_id):
+        try:
+            self.get_participation(participant_id)
+            return True
+        except (MissingParticipation, InvalidParticipantId):
+            return False
+
+    def get_participant(self, participant_id):
+        source = ContactsSource(self.context)
+        try:
+            term = source.getTermByToken(participant_id)
+        except LookupError:
+            raise InvalidParticipantId(
+                "{} is not a valid id".format(participant_id))
+        return term.value
+
+    def add_participation(self, participant_id, roles):
+        if self.has_participation(participant_id):
+            raise DupplicateParticipation(
+                "There is already a participation for {}".format(participant_id))
+
+        participant = self.get_participant(participant_id)
+        return participant.participation_class.create(
+            participant=participant, dossier=self.context, roles=roles)
+
+    def update_participation(self, participant_id, roles):
+        participation = self.get_participation(participant_id)
+        participation.update_roles(roles)
+
+    def remove_participation(self, participant_id):
+        participation = self.get_participation(participant_id)
+        participation.delete()
 
 
 class IParticipationData(Interface):

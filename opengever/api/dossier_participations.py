@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
@@ -5,6 +6,9 @@ from opengever.contact.models import Participation
 from opengever.contact.sources import ContactsSource
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
+from opengever.dossier.participations import DupplicateParticipation
+from opengever.dossier.participations import InvalidParticipantId
+from opengever.dossier.participations import MissingParticipation
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
@@ -41,15 +45,6 @@ def validate_roles(context, roles):
     for role in roles:
         if role not in available_roles:
             raise BadRequest("Role '{}' does not exist".format(role))
-
-
-def get_sql_participant(context, participant_id):
-    source = ContactsSource(context)
-    try:
-        term = source.getTermByToken(participant_id)
-    except Exception:
-        raise BadRequest("{} is not a valid id".format(participant_id))
-    return term.value
 
 
 def get_plone_actor(participant_id):
@@ -121,6 +116,15 @@ class ParticipationBaseService(Service):
         super(ParticipationBaseService, self).__init__(context, request)
         self.handler = IParticipationAware(self.context)
 
+    @contextmanager
+    def handle_errors(self):
+        try:
+            yield
+        except (InvalidParticipantId,
+                DupplicateParticipation,
+                MissingParticipation) as exc:
+            raise BadRequest(exc.message)
+
 
 class ParticipationsGet(Service):
     """API Endpoint which returns a list of all participations for the current
@@ -162,14 +166,8 @@ class ParticipationsPost(ParticipationBaseService):
         self.handler.add_participation(participant_id, roles)
 
     def add_sql_participation(self, participant_id, roles):
-        participant = get_sql_participant(self.context, participant_id)
-        query = participant.participation_class.query.by_participant(
-            participant).by_dossier(self.context)
-        if query.count():
-            raise BadRequest("There is already a participation for {}".format(
-                participant_id))
-        participant.participation_class.create(
-            participant=participant, dossier=self.context, roles=roles)
+        with self.handle_errors():
+            self.handler.add_participation(participant_id, roles)
 
     def reply(self):
         # Disable CSRF protection
@@ -226,13 +224,8 @@ class ParticipationsPatch(ParticipationBaseService):
         self.handler.update_participation(participant_id, new_roles)
 
     def update_sql_participation(self, participant_id, new_roles):
-        participant = get_sql_participant(self.context, participant_id)
-        participation = participant.participation_class.query.by_participant(
-            participant).by_dossier(self.context).first()
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(
-                participant_id))
-        participation.update_roles(new_roles)
+        with self.handle_errors():
+            self.handler.update_participation(participant_id, new_roles)
 
     def reply(self):
         # Disable CSRF protection
@@ -280,13 +273,8 @@ class ParticipationsDelete(ParticipationBaseService):
         self.handler.remove_participation(participant_id)
 
     def delete_sql_participation(self, participant_id):
-        participant = get_sql_participant(self.context, participant_id)
-        participation = participant.participation_class.query.by_participant(
-            participant).by_dossier(self.context).first()
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(
-                participant_id))
-        participation.delete()
+        with self.handle_errors():
+            self.handler.remove_participation(participant_id)
 
     def reply(self):
         participant_id = self.read_params()
