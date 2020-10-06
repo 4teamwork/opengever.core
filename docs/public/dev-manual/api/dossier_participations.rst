@@ -64,39 +64,6 @@ Ein Beteiligter kann in verschiedenen Rollen an einem Dossier beteiligt sein. Mi
       }
 
 
-Beteiligungen als erweiterbare Komponente
------------------------------------------
-
-Die Beteilgungen können als Kompomente eines Dossiers direkt über den ``expand``-Parameter eingebettet werden, so dass keine zusätzliche Abfrage nötig ist.
-
-**Beispiel-Request**:
-
-  .. sourcecode:: http
-
-    GET /dossier-1?expand=participations HTTP/1.1
-    Accept: application/json
-
-**Beispiel-Response**:
-
-  .. sourcecode:: http
-
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-
-    {
-      "@id": "https://example.org/ordnungssystem/fuehrung/dossier-1?expand=participations",
-      "@components": {
-        "participations": {
-          "@id": "https://example.org/ordnungssystem/fuehrung/dossier-1/@participations",
-          "available_roles": ["..."],
-          "items": ["..."],
-          "items_total": 2
-        }
-      },
-      "...": "..."
-    }
-
-
 Beteiligung hinzufügen
 ----------------------
 
@@ -120,6 +87,7 @@ Eine Beteiligung kann mittels POST-Requests hinzugefügt werden.
    .. sourcecode:: http
 
       HTTP/1.1 204 No content
+
 
 Rollen einer Beteiligung bearbeiten
 -----------------------------------

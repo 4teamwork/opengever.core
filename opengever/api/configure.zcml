@@ -1032,9 +1032,4 @@
       permission="zope2.View"
       />
 
-  <adapter
-      factory=".dossier_participations.Participations"
-      name="participations"
-      />
-
 </configure>

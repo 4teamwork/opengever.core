@@ -58,14 +58,6 @@ class TestParticipationsGet(IntegrationTestCase, PloneParticipationsHelper):
             u'items_total': 2}
         self.assertEqual(expected_json, browser.json)
 
-        browser.open(self.dossier, method='GET', headers=self.api_headers)
-        self.assertEqual({u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
-                                  u'vertrage-und-vereinbarungen/dossier-1/@participations'},
-                         browser.json['@components']['participations'])
-        browser.open(self.dossier.absolute_url() + '?expand=participations',
-                     method='GET', headers=self.api_headers)
-        self.assertEqual(expected_json, browser.json['@components']['participations'])
-
     @browsing
     def test_response_is_batched(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -111,14 +103,6 @@ class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
                         u'roles': [u'final-drawing', u'participation']}],
             u'items_total': 2}
         self.assertEqual(expected_json, browser.json)
-
-        browser.open(self.dossier, method='GET', headers=self.api_headers)
-        self.assertEqual({u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
-                                  u'vertrage-und-vereinbarungen/dossier-1/@participations'},
-                         browser.json['@components']['participations'])
-        browser.open(self.dossier.absolute_url() + '?expand=participations',
-                     method='GET', headers=self.api_headers)
-        self.assertEqual(expected_json, browser.json['@components']['participations'])
 
     @browsing
     def test_response_is_batched(self, browser):

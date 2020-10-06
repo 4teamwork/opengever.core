@@ -1,9 +1,7 @@
 from opengever.api.batch import SQLHypermediaBatch
-from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Participation
 from opengever.contact.sources import ContactsSource
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import ContactActor
@@ -13,12 +11,9 @@ from opengever.ogds.base.actor import PloneUserActor
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
-from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from zExceptions import BadRequest
-from zope.component import adapter
 from zope.interface import alsoProvides
-from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.schema.vocabulary import getVocabularyRegistry
@@ -55,12 +50,12 @@ def get_plone_actor(participant_id):
     return actor
 
 
-@implementer(IExpandableElement)
-@adapter(IDossierMarker, IOpengeverBaseLayer)
-class Participations(object):
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
+class ParticipationsGet(Service):
+    """API Endpoint which returns a list of all participations for the current
+    dossier.
+
+    GET /@participations HTTP/1.1
+    """
 
     def get_sql_participations(self):
         query = Participation.query.by_dossier(self.context)
@@ -92,35 +87,19 @@ class Participations(object):
                 "roles": list(participation.roles)})
         return batch, items
 
-    def __call__(self, expand=False):
-        result = {'participations': {
-            '@id': '/'.join((self.context.absolute_url(), '@participations'))}}
-        if not expand:
-            return result
-
+    def reply(self):
         if is_contact_feature_enabled():
             batch, items = self.get_sql_participations()
         else:
             batch, items = self.get_plone_participations()
 
-        result["participations"]["available_roles"] = available_roles(self.context)
-        result["participations"]["items"] = items
-        result["participations"]["items_total"] = batch.items_total
+        result = {"@id": "/".join((self.context.absolute_url(), "@participations")),
+                  "available_roles": available_roles(self.context),
+                  "items": items,
+                  "items_total": batch.items_total}
         if batch.links:
-            result["participations"]["batching"] = batch.links
+            result["batching"] = batch.links
         return result
-
-
-class ParticipationsGet(Service):
-    """API Endpoint which returns a list of all participations for the current
-    dossier.
-
-    GET /@participations HTTP/1.1
-    """
-
-    def reply(self):
-        participations = Participations(self.context, self.request)
-        return participations(expand=True)["participations"]
 
 
 class ParticipationsPost(Service):
