@@ -115,6 +115,13 @@ class Participations(object):
         return result
 
 
+class ParticipationBaseService(Service):
+
+    def __init__(self, context, request):
+        super(ParticipationBaseService, self).__init__(context, request)
+        self.handler = IParticipationAware(self.context)
+
+
 class ParticipationsGet(Service):
     """API Endpoint which returns a list of all participations for the current
     dossier.
@@ -127,7 +134,7 @@ class ParticipationsGet(Service):
         return participations(expand=True)["participations"]
 
 
-class ParticipationsPost(Service):
+class ParticipationsPost(ParticipationBaseService):
     """API Endpoint to update an existing participation.
 
     POST /@participations HTTP/1.1
@@ -148,12 +155,11 @@ class ParticipationsPost(Service):
 
     def add_plone_participation(self, participant_id, roles):
         get_plone_actor(participant_id)
-        handler = IParticipationAware(self.context)
-        if handler.has_participation(participant_id):
+        if self.handler.has_participation(participant_id):
             raise BadRequest("There is already a participation for {}".format(
                 participant_id))
 
-        handler.add_participation(participant_id, roles)
+        self.handler.add_participation(participant_id, roles)
 
     def add_sql_participation(self, participant_id, roles):
         participant = get_sql_participant(self.context, participant_id)
@@ -178,7 +184,7 @@ class ParticipationsPost(Service):
         return None
 
 
-class ParticipationsPatch(Service):
+class ParticipationsPatch(ParticipationBaseService):
     """API Endpoint to update an existing participation.
 
     PATCH /@participations/peter.mueller HTTP/1.1
@@ -214,11 +220,10 @@ class ParticipationsPatch(Service):
 
     def update_plone_participation(self, participant_id, new_roles):
         get_plone_actor(participant_id)
-        handler = IParticipationAware(self.context)
-        if not handler.has_participation(participant_id):
+        if not self.handler.has_participation(participant_id):
             raise BadRequest("{} has no participations on this context".format(
                 participant_id))
-        handler.update_participation(participant_id, new_roles)
+        self.handler.update_participation(participant_id, new_roles)
 
     def update_sql_participation(self, participant_id, new_roles):
         participant = get_sql_participant(self.context, participant_id)
@@ -243,7 +248,7 @@ class ParticipationsPatch(Service):
         return None
 
 
-class ParticipationsDelete(Service):
+class ParticipationsDelete(ParticipationBaseService):
     """API Endpoint to update an existing participation.
 
     DELETE /@participations/peter.mueller HTTP/1.1
@@ -269,11 +274,10 @@ class ParticipationsDelete(Service):
 
     def delete_plone_participation(self, participant_id):
         get_plone_actor(participant_id)
-        handler = IParticipationAware(self.context)
-        if not handler.has_participation(participant_id):
+        if not self.handler.has_participation(participant_id):
             raise BadRequest("{} has no participations on this context".format(
                 participant_id))
-        handler.remove_participation(participant_id)
+        self.handler.remove_participation(participant_id)
 
     def delete_sql_participation(self, participant_id):
         participant = get_sql_participant(self.context, participant_id)
