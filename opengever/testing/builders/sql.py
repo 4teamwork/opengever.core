@@ -3,7 +3,6 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
-from opengever.base.browser.helper import get_css_class
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
@@ -54,7 +53,6 @@ from opengever.testing.model import TransparentModelLoader
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
-from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 import transaction
 

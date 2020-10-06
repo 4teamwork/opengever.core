@@ -1,11 +1,9 @@
 from collective import dexteritytextindexer
-from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from plone.indexer import indexer
 from zope.component import adapter
-from zope.component import getAdapter
 from zope.component import getUtility
 from zope.interface import implementer
 
