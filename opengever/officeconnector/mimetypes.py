@@ -14,6 +14,17 @@ EDITABLE_TYPES = [
     'application/x-iwork-numbers-sffnumbers',
     # Apple Pages
     'application/x-iwork-pages-sffpages',
+    # CADwork
+    'application/x-cadwork-2d-lines',
+    'application/x-cadwork-2d',
+    'application/x-cadwork-2dm',
+    'application/x-cadwork-2dr',
+    'application/x-cadwork-3d',
+    'application/x-cadwork-catalog-2d',
+    'application/x-cadwork-catalog-3d',
+    'application/x-cadwork-lexo2d',
+    'application/x-cadwork-lexocad',
+    'application/x-cadwork-lexoview',
     # Images - MS Paint or Adobe Photoshop
     'image/bmp',
     'image/gif',
