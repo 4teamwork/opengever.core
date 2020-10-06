@@ -55,25 +55,22 @@ class TestListingStats(SolrIntegrationTestCase):
             '{}/@listing-stats'.format(self.dossier.absolute_url()),
             headers={'Accept': 'application/json'},
         )
+        self.assertEqual(u'{}/@listing-stats'.format(self.dossier.absolute_url()),
+                         browser.json['@id'])
 
-        self.assertDictEqual(
-            {
-                u'@id': u'{}/@listing-stats'.format(self.dossier.absolute_url()),
-                u'facet_pivot': {
-                    u'listing_name': [
-                        {u'count': 12, u'field': u'listing_name', u'value': u'documents'},
-                        {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'},
-                        {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplates'},
-                        {u'count': 3, u'field': u'listing_name', u'value': u'dossiers'},
-                        {u'count': 0, u'field': u'listing_name', u'value': u'contacts'},
-                        {u'count': 9, u'field': u'listing_name', u'value': u'tasks'},
-                        {u'count': 0, u'field': u'listing_name', u'value': u'workspace_folders'},
-                        {u'count': 3, u'field': u'listing_name', u'value': u'proposals'},
-                        {u'count': 0, u'field': u'listing_name', u'value': u'todos'},
-                        {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplate_folders'},
-                    ]
-                }
-            }, browser.json)
+        expected = [{u'count': 0, u'field': u'listing_name', u'value': u'contacts'},
+                    {u'count': 12, u'field': u'listing_name', u'value': u'documents'},
+                    {u'count': 3, u'field': u'listing_name', u'value': u'dossiers'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'dossiertemplates'},
+                    {u'count': 3, u'field': u'listing_name', u'value': u'proposals'},
+                    {u'count': 9, u'field': u'listing_name', u'value': u'tasks'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplate_folders'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplates'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'todos'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'workspace_folders'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'}]
+
+        self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
     @browsing
     def test_listing_stats_returns_total_counts(self, browser):
@@ -138,55 +135,54 @@ class TestListingStats(SolrIntegrationTestCase):
                 self.dossier.absolute_url(), self.regular_user.id),
             headers={'Accept': 'application/json'},
         )
+        self.assertEqual(u'{}/@listing-stats'.format(self.dossier.absolute_url()),
+                         browser.json['@id'])
 
-        self.assertDictEqual(
-            {
-                u'@id': u'{}/@listing-stats'.format(self.dossier.absolute_url()),
-                u'facet_pivot': {
-                    u'listing_name': [
-                        {u'count': 12, u'field':
-                         u'listing_name',
-                         u'value': u'documents',
-                         u'queries': {u'responsible:kathi.barfuss': 1}},
-                        {u'count': 0,
-                         u'field': u'listing_name',
-                         u'value': u'workspaces',
-                         u'queries': {u'responsible:kathi.barfuss': 0}},
-                        {u'count': 0,
-                         u'field': u'listing_name',
-                         u'queries': {u'responsible:kathi.barfuss': 0},
-                         u'value': u'tasktemplates'},
-                        {u'count': 3,
-                         u'field': u'listing_name',
-                         u'value': u'dossiers',
-                         u'queries': {u'responsible:kathi.barfuss': 0}},
-                        {u'count': 0,
-                         u'field': u'listing_name',
-                         u'value': u'contacts',
-                         u'queries': {u'responsible:kathi.barfuss': 0}},
-                        {u'count': 9,
-                         u'field': u'listing_name',
-                         u'value': u'tasks',
-                         u'queries': {u'responsible:kathi.barfuss': 8}},
-                        {u'count': 0,
-                         u'field': u'listing_name',
-                         u'value': u'workspace_folders',
-                         u'queries': {u'responsible:kathi.barfuss': 0}},
-                        {u'count': 3,
-                         u'field': u'listing_name',
-                         u'value': u'proposals',
-                         u'queries': {u'responsible:kathi.barfuss': 0}},
-                        {u'count': 0,
-                         u'field': u'listing_name',
-                         u'value': u'todos',
-                         u'queries': {u'responsible:kathi.barfuss': 0}},
-                        {u'count': 0,
-                         u'field': u'listing_name',
-                         u'queries': {u'responsible:kathi.barfuss': 0},
-                         u'value': u'tasktemplate_folders'}
-                    ]
-                }
-            }, browser.json)
+        expected = [{u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'contacts'},
+                    {u'count': 12,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 1},
+                     u'value': u'documents'},
+                    {u'count': 3,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'dossiers'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'dossiertemplates'},
+                    {u'count': 3,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'proposals'},
+                    {u'count': 9,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 8},
+                     u'value': u'tasks'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'tasktemplate_folders'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'tasktemplates'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'todos'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'workspace_folders'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'workspaces'}]
+        self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
     @browsing
     def test_listing_stats_pivot_queries_supports_depth(self, browser):
@@ -201,7 +197,7 @@ class TestListingStats(SolrIntegrationTestCase):
              u'value': u'documents',
              u'queries': {u'depth:1': 4}
              },
-            browser.json['facet_pivot']['listing_name'][0])
+            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))
 
     @browsing
     def test_listing_stats_pivot_queries_supports_unicode(self, browser):
@@ -218,7 +214,7 @@ class TestListingStats(SolrIntegrationTestCase):
              u'queries': {u'responsible:kathi.barfuss': 1,
                           u'depth:1': 4}
              },
-            browser.json['facet_pivot']['listing_name'][0])
+            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))
 
     @browsing
     def test_listing_stats_pivot_queries_supports_special_characters(self, browser):
@@ -235,4 +231,4 @@ class TestListingStats(SolrIntegrationTestCase):
              u'value': u'documents',
              u'queries': {u'Title:Vertr\xe4ge': 3}
              },
-            browser.json['facet_pivot']['listing_name'][0])
+            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))
