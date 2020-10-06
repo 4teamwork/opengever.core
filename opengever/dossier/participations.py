@@ -6,8 +6,11 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import Participation
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.event import notify
+from zope.interface import implementer
 from zope.interface import implements
+from zope.interface import Interface
 
 
 class ParticipationHandler(object):
@@ -99,3 +102,50 @@ class SQLParticipationHandler(object):
         query = SQLParticipation.query.by_dossier(self.context)
         for participation in query:
             yield participation
+
+
+class IParticipationData(Interface):
+    """Adapter interface to harmonize data accessors for
+    plone and SQL participations.
+    """
+
+    def roles(self):
+        """ Property returning the list of roles.
+        """
+
+    def participant_id(self):
+        """ Property returning the participant_id.
+        """
+
+
+@implementer(IParticipationData)
+@adapter(IParticipation)
+class PloneParticipationData(object):
+
+    def __init__(self, participation):
+        self._participation = participation
+
+    @property
+    def roles(self):
+        return self._participation.roles
+
+    @property
+    def participant_id(self):
+        return self._participation.contact
+
+
+@implementer(IParticipationData)
+@adapter(SQLParticipation)
+class SQLParticipationData(object):
+
+    def __init__(self, participation):
+        self._participation = participation
+
+    @property
+    def roles(self):
+        return [role.role for role in self._participation.roles]
+
+    @property
+    def participant_id(self):
+        source = ContactsSource(self._participation.resolve_dossier())
+        return source.getTerm(self._participation.participant).token

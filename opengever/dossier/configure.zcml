@@ -307,4 +307,7 @@
       name="execute-after-resolve-jobs"
       />
 
+  <adapter factory=".participations.PloneParticipationData" />
+  <adapter factory=".participations.SQLParticipationData" />
+
 </configure>
