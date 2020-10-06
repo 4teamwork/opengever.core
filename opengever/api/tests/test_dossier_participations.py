@@ -1,12 +1,12 @@
 from ftw.builder.builder import Builder
 from ftw.builder.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 import json
-import transaction
 
 
 class PloneParticipationsHelper(object):
@@ -248,7 +248,7 @@ class TestParticipationsPostWithContactFeatureEnabled(TestParticipationsPost):
         self.organization = create(Builder('organization').named('4teamwork AG'))
         self.org_role = create(Builder('org_role').having(
             person=self.person, organization=self.organization, function=u'Gute Fee'))
-        transaction.commit()
+        create_session().flush()
         self.valid_participant_id = 'person:{}'.format(self.person.id)
 
     @browsing
@@ -424,7 +424,7 @@ class TestParticipationsPatchWithContactFeatureEnabled(SQLParticipationsHelper,
         super(TestParticipationsPatchWithContactFeatureEnabled, self).setUp()
         self.person = create(Builder('person').having(
             firstname=u'Hans', lastname=u'M\xfcller'))
-        transaction.commit()
+        create_session().flush()
         self.participant_id = 'person:{}'.format(self.person.id)
         self.participant_title = self.person.get_title()
 
@@ -484,7 +484,7 @@ class TestParticipationsDeleteWithContactFeatureEnabled(SQLParticipationsHelper,
         super(TestParticipationsDeleteWithContactFeatureEnabled, self).setUp()
         self.person = create(Builder('person').having(
             firstname=u'Hans', lastname=u'M\xfcller'))
-        transaction.commit()
+        create_session().flush()
         self.participant_id = 'person:{}'.format(self.person.id)
         self.participant_title = self.person.get_title()
 
