@@ -50,7 +50,7 @@ def document_moved_or_added(context, event):
     if IObjectAddedEvent.providedBy(event):
         # Be strict when adding new documents to GEVER, lenient on moving
         # ones that already made it into the system
-        _update_docproperties(context, raise_on_error=True)
+        _update_docproperties(context, raise_on_error=False)
     else:
         _update_docproperties(context, raise_on_error=False)
 
