@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Allow assigning groups as participants to a Teamraum [elioschmutz]
+- Add external_reference field to solr, reindex objects with values. [deiferni]
 
 
 2020.11.0 (2020-10-07)
