@@ -9,7 +9,7 @@ Changelog
 - Add dossiertemplates, tasktemplates and tasktemplatefolders to @listing endpoint. [tinagerber]
 - No longer prevent adding documents with doc-property update issues. [deiferni]
 - Add tasktemplates and tasktemplatefolders to @listing endpoint. [tinagerber]
-- Bump `ftw.catalogdoctor` to `1.1.0` which provides fixes for additional health problems. [deiferni]
+- Bump `ftw.catalogdoctor` to `1.2.0` which provides fixes for additional health problems. [deiferni]
 - Prevent setting invalid reference prefix number via API. [deiferni]
 - Remove IDossier baseclass from IDossierTemplate to fix API for dossier templates. [njohner]
 - Customize the group_data serializer to return summarized users instead of only userids. [elioschmutz]
