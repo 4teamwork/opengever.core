@@ -116,9 +116,10 @@ class PloneParticipationHandler(object):
     def has_participation(self, participant_id):
         return self._participations and participant_id in self._participations
 
-    def remove_participation(self, participant_id, quiet=True):
-        if not quiet and not self.has_participation(participant_id):
-            raise ValueError('No participation for {}'.format(participant_id))
+    def remove_participation(self, participant_id):
+        if not self.has_participation(participant_id):
+            raise MissingParticipation(
+                "{} has no participations on this context".format(participant_id))
         participation = self._participations.pop(participant_id)
         notify(events.ParticipationRemoved(self.context, participation))
 

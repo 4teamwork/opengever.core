@@ -255,10 +255,7 @@ class ParticipationsDelete(ParticipationBaseService):
     def delete_plone_participation(self, participant_id):
         with self.handle_errors():
             self.handler.validate_participant(participant_id)
-        if not self.handler.has_participation(participant_id):
-            raise BadRequest("{} has no participations on this context".format(
-                participant_id))
-        self.handler.remove_participation(participant_id)
+            self.handler.remove_participation(participant_id)
 
     def delete_sql_participation(self, participant_id):
         with self.handle_errors():
