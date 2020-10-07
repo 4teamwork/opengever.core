@@ -78,6 +78,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``document_type``: Dokumenttyp
 - ``email``: E-Mail Adresse
 - ``end``: Enddatum des Dossiers
+- ``external_reference``: Externe Referenz für Dossiers oder Fremdzeichen für Dokumente
 - ``file_extension``: Datei-Endung
 - ``filename``: Dateiname
 - ``filesize``: Dateigrösse
@@ -155,6 +156,8 @@ siehe Tabelle:
     |``document_type``         |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
     |``end``                   |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
+    |``external_reference``    |    ja    |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
     |``file_extension``        |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
