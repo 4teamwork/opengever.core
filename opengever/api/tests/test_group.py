@@ -87,6 +87,29 @@ class TestCheckGroupPluginConfiguration(IntegrationTestCase):
             exc.exception.message)
 
 
+class TestGroupGet(IntegrationTestCase):
+
+    @browsing
+    def test_fetch_groups_is_allowed_for_administrators(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        with browser.expect_unauthorized():
+            browser.open(
+                self.portal,
+                view='@groups',
+                method='GET',
+                headers=self.api_headers)
+
+        self.login(self.administrator, browser)
+        response = browser.open(
+            self.portal,
+            view='@groups',
+            method='GET',
+            headers=self.api_headers)
+
+        self.assertEqual(200, response.status_code)
+
+
 class TestGroupPost(IntegrationTestCase):
 
     @browsing
