@@ -974,6 +974,15 @@
       />
 
   <plone:service
+      method="GET"
+      name="@groups"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory="plone.restapi.services.groups.get.GroupsGet"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
       method="POST"
       name="@groups"
       for="Products.CMFCore.interfaces.ISiteRoot"
