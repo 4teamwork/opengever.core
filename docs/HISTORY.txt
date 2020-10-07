@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.11.0 (unreleased)
+2020.11.0 (2020-10-07)
 ----------------------
 
 - GET @groups endpoint is now available with the `opengever.api.ManageGroups` permission. [elioschmutz]
