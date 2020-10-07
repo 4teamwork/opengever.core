@@ -5,6 +5,8 @@ from opengever.dossier import events
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import Participation
+from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
@@ -53,6 +55,14 @@ class PloneParticipationHandler(object):
     def __init__(self, context):
         self.context = context
         self.annotations = IAnnotations(self.context)
+
+    def validate_participant(self, participant_id):
+        source = UsersContactsInboxesSourceBinder()(self.context)
+        try:
+            source.getTermByToken(participant_id)
+        except LookupError:
+            raise InvalidParticipantId(
+                "{} is not a valid id".format(participant_id))
 
     def add_participation(self, participant_id, roles):
         participation = self.create_participation(participant_id, roles)

@@ -158,7 +158,8 @@ class ParticipationsPost(ParticipationBaseService):
         return participant_id, roles
 
     def add_plone_participation(self, participant_id, roles):
-        get_plone_actor(participant_id)
+        with self.handle_errors():
+            self.handler.validate_participant(participant_id)
         if self.handler.has_participation(participant_id):
             raise BadRequest("There is already a participation for {}".format(
                 participant_id))
@@ -217,7 +218,8 @@ class ParticipationsPatch(ParticipationBaseService):
         return roles
 
     def update_plone_participation(self, participant_id, new_roles):
-        get_plone_actor(participant_id)
+        with self.handle_errors():
+            self.handler.validate_participant(participant_id)
         if not self.handler.has_participation(participant_id):
             raise BadRequest("{} has no participations on this context".format(
                 participant_id))
@@ -266,7 +268,8 @@ class ParticipationsDelete(ParticipationBaseService):
         return self.params[0]
 
     def delete_plone_participation(self, participant_id):
-        get_plone_actor(participant_id)
+        with self.handle_errors():
+            self.handler.validate_participant(participant_id)
         if not self.handler.has_participation(participant_id):
             raise BadRequest("{} has no participations on this context".format(
                 participant_id))
