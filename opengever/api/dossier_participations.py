@@ -157,27 +157,12 @@ class ParticipationsPost(ParticipationBaseService):
         validate_roles(self.context, roles)
         return participant_id, roles
 
-    def add_plone_participation(self, participant_id, roles):
-        with self.handle_errors():
-            self.handler.validate_participant(participant_id)
-        if self.handler.has_participation(participant_id):
-            raise BadRequest("There is already a participation for {}".format(
-                participant_id))
-
-        self.handler.add_participation(participant_id, roles)
-
-    def add_sql_participation(self, participant_id, roles):
-        with self.handle_errors():
-            self.handler.add_participation(participant_id, roles)
-
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
         participant_id, roles = self.extract_data()
-        if is_contact_feature_enabled():
-            self.add_sql_participation(participant_id, roles)
-        else:
-            self.add_plone_participation(participant_id, roles)
+        with self.handle_errors():
+            self.handler.add_participation(participant_id, roles)
 
         self.request.response.setStatus(204)
         return None

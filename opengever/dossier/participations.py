@@ -65,6 +65,10 @@ class PloneParticipationHandler(object):
                 "{} is not a valid id".format(participant_id))
 
     def add_participation(self, participant_id, roles):
+        self.validate_participant(participant_id)
+        if self.has_participation(participant_id):
+            raise DupplicateParticipation(
+                "There is already a participation for {}".format(participant_id))
         participation = self.create_participation(participant_id, roles)
         self.append_participation(participation)
         return participation
