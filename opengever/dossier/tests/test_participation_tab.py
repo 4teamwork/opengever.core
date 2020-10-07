@@ -25,9 +25,11 @@ class TestParticipationTabbedview(SolrIntegrationTestCase):
         self.login(self.regular_user)
         handler = IParticipationAware(self.dossier)
         handler.add_participation(
-            participant_id=self.regular_user.id, roles=['Reader', 'Editor'])
+            participant_id=self.regular_user.id,
+            roles=['participation', 'final-drawing'])
         handler.add_participation(
-            participant_id=self.secretariat_user.id, roles=['Reader', 'Editor'])
+            participant_id=self.secretariat_user.id,
+            roles=['participation', 'final-drawing'])
 
         view = self.get_tabbed_view('tabbedview_view-participants')
         self.assertEqual(3, len(view.contents))

@@ -5,7 +5,6 @@ from opengever.dossier import events
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import Participation
-from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
@@ -14,6 +13,7 @@ from zope.event import notify
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
+from zope.schema.vocabulary import getVocabularyRegistry
 
 
 class InvalidParticipantId(Exception):
@@ -33,6 +33,11 @@ class MissingParticipation(Exception):
     """
 
 
+class InvalidRole(Exception):
+    """Given role does not exist.
+    """
+
+
 class ParticipationHandler(object):
     implements(IParticipationAware)
 
@@ -47,7 +52,20 @@ class ParticipationHandler(object):
         return getattr(self.handler, name)
 
 
-class PloneParticipationHandler(object):
+class ParticipationHandlerBase(object):
+    """Base class for the PloneParticipationHandler and SQLParticipationHandler.
+    """
+
+    def validate_roles(context, roles):
+        if not roles:
+            raise InvalidRole("A list of roles is required")
+        available_roles = getVocabularyRegistry().get(context, "opengever.dossier.participation_roles")
+        for role in roles:
+            if role not in available_roles:
+                raise InvalidRole("Role '{}' does not exist".format(role))
+
+
+class PloneParticipationHandler(ParticipationHandlerBase):
     """ IParticipationAware behavior / adapter factory.
     """
     annotation_key = 'participations'
@@ -66,6 +84,7 @@ class PloneParticipationHandler(object):
 
     def add_participation(self, participant_id, roles):
         self.validate_participant(participant_id)
+        self.validate_roles(roles)
         if self.has_participation(participant_id):
             raise DupplicateParticipation(
                 "There is already a participation for {}".format(participant_id))
@@ -93,6 +112,7 @@ class PloneParticipationHandler(object):
         return self._participations and self._participations.get(participant_id)
 
     def update_participation(self, participant_id, roles):
+        self.validate_roles(roles)
         if not self.has_participation(participant_id):
             raise MissingParticipation(
                 "{} has no participations on this context".format(participant_id))
@@ -124,7 +144,7 @@ class PloneParticipationHandler(object):
         notify(events.ParticipationRemoved(self.context, participation))
 
 
-class SQLParticipationHandler(object):
+class SQLParticipationHandler(ParticipationHandlerBase):
     """ IParticipationAware behavior / adpter factory
     """
 
@@ -163,6 +183,7 @@ class SQLParticipationHandler(object):
         return term.value
 
     def add_participation(self, participant_id, roles):
+        self.validate_roles(roles)
         if self.has_participation(participant_id):
             raise DupplicateParticipation(
                 "There is already a participation for {}".format(participant_id))
@@ -172,6 +193,7 @@ class SQLParticipationHandler(object):
             participant=participant, dossier=self.context, roles=roles)
 
     def update_participation(self, participant_id, roles):
+        self.validate_roles(roles)
         participation = self.get_participation(participant_id)
         participation.update_roles(roles)
 

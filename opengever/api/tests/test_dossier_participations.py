@@ -406,7 +406,10 @@ class TestParticipationsPatch(IntegrationTestCase, PloneParticipationsHelper):
     @browsing
     def test_patch_participations_with_invalid_role_raises_bad_request(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = u'{}/@participations/{}'.format(self.dossier.absolute_url(), self.participant_id)
+        url = u'{}/@participations/{}'.format(
+            self.dossier.absolute_url(), self.participant_id)
+        self.add_participation(
+            self.dossier, self.participant_id, ['regard'], browser=browser)
         with browser.expect_http_error(400):
             browser.open(url, method='PATCH', headers=self.api_headers,
                          data=json.dumps({'roles': ['regard', 'invalid']}))

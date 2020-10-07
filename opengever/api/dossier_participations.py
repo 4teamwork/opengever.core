@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.participations import DupplicateParticipation
 from opengever.dossier.participations import InvalidParticipantId
+from opengever.dossier.participations import InvalidRole
 from opengever.dossier.participations import MissingParticipation
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import ContactActor
@@ -36,15 +37,6 @@ def available_roles(context):
 
     vocabulary = getVocabularyRegistry().get(context, "opengever.dossier.participation_roles")
     return [{"token": term.token, "title": term.title} for term in vocabulary]
-
-
-def validate_roles(context, roles):
-    if not roles:
-        raise BadRequest("A list of roles is required")
-    available_roles = getVocabularyRegistry().get(context, "opengever.dossier.participation_roles")
-    for role in roles:
-        if role not in available_roles:
-            raise BadRequest("Role '{}' does not exist".format(role))
 
 
 def get_plone_actor(participant_id):
@@ -122,7 +114,8 @@ class ParticipationBaseService(Service):
             yield
         except (InvalidParticipantId,
                 DupplicateParticipation,
-                MissingParticipation) as exc:
+                MissingParticipation,
+                InvalidRole) as exc:
             raise BadRequest(exc.message)
 
 
@@ -154,7 +147,6 @@ class ParticipationsPost(ParticipationBaseService):
         roles = data.get("roles", None)
         if not participant_id:
             raise BadRequest("Property 'participant_id' is required")
-        validate_roles(self.context, roles)
         return participant_id, roles
 
     def reply(self):
@@ -199,7 +191,6 @@ class ParticipationsPatch(ParticipationBaseService):
     def extract_roles(self):
         data = json_body(self.request)
         roles = data.get("roles", None)
-        validate_roles(self.context, roles)
         return roles
 
     def update_plone_participation(self, participant_id, new_roles):
