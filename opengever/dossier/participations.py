@@ -94,8 +94,8 @@ class PloneParticipationHandler(object):
 
     def update_participation(self, participant_id, roles):
         if not self.has_participation(participant_id):
-            raise ValueError("{} has no participations on this context".format(
-                participant_id))
+            raise MissingParticipation(
+                "{} has no participations on this context".format(participant_id))
         self._participations[participant_id].roles = roles
         notify(events.ParticipationModified(
             self.context, self._participations[participant_id]))
@@ -105,8 +105,8 @@ class PloneParticipationHandler(object):
             raise TypeError('Excpected IParticipation object')
 
         if self.has_participation(value.contact):
-            raise ValueError("There is already a participation for {}".format(
-                value.contact))
+            raise DupplicateParticipation(
+                "There is already a participation for {}".format(value.contact))
 
         if self._participations is None:
             self._participations = PersistentDict()
