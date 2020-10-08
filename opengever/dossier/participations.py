@@ -231,7 +231,8 @@ class PloneParticipationData(object):
 
     @property
     def roles(self):
-        return self._participation.roles
+        # persistent list cannot be json serialized
+        return list(self._participation.roles)
 
     @property
     def participant_id(self):
