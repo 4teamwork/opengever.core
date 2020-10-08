@@ -53,46 +53,29 @@ class Participations(object):
         self.context = context
         self.request = request
 
-    def get_sql_participations(self):
-        query = Participation.query.by_dossier(self.context)
-        batch = SQLHypermediaBatch(self.request, query)
-        items = []
-        source = ContactsSource(self.context)
-        for participation in batch:
-            participant_id = source.getTerm(participation.participant).token
-            items.append({
-                "@id": "{}/@participations/{}".format(self.context.absolute_url(), participant_id),
-                "participant_id": participant_id,
-                "participant_title": participation.participant.get_title(),
-                "roles": [role.role for role in participation.roles]})
-        return batch, items
-
-    def get_plone_participations(self):
-        handler = IParticipationAware(self.context)
-        participations = list(handler.get_participations())
-
-        batch = HypermediaBatch(self.request, participations)
-        items = []
-        for participation in batch:
-            actor = ActorLookup(participation.contact).lookup()
-            items.append({
-                "@id": '{}/@participations/{}'.format(self.context.absolute_url(),
-                                                      participation.contact),
-                "participant_id": participation.contact,
-                "participant_title": actor.get_label(),
-                "roles": list(participation.roles)})
-        return batch, items
-
     def __call__(self, expand=False):
         result = {'participations': {
             '@id': '/'.join((self.context.absolute_url(), '@participations'))}}
         if not expand:
             return result
 
+        handler = IParticipationAware(self.context)
+        participations = handler.get_participations()
+
         if is_contact_feature_enabled():
-            batch, items = self.get_sql_participations()
+            batch = SQLHypermediaBatch(self.request, participations)
         else:
-            batch, items = self.get_plone_participations()
+            batch = HypermediaBatch(self.request, participations)
+
+        items = []
+        for participation in batch:
+            data = IParticipationData(participation)
+            items.append({
+                "@id": '{}/@participations/{}'.format(
+                    self.context.absolute_url(), data.participant_id),
+                "participant_id": data.participant_id,
+                "participant_title":  data.participant_title,
+                "roles": data.roles})
 
         result["participations"]["available_roles"] = available_roles(self.context)
         result["participations"]["items"] = items

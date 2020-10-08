@@ -5,6 +5,7 @@ from opengever.dossier import events
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import Participation
+from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
@@ -155,8 +156,7 @@ class SQLParticipationHandler(ParticipationHandlerBase):
 
     def get_participations(self):
         query = SQLParticipation.query.by_dossier(self.context)
-        for participation in query:
-            yield participation
+        return query
 
     def get_participation(self, participant_id):
         participant = self.get_participant(participant_id)
@@ -217,6 +217,10 @@ class IParticipationData(Interface):
         """ Property returning the participant_id.
         """
 
+    def participant_title(self):
+        """ Property returning the participant title.
+        """
+
 
 @implementer(IParticipationData)
 @adapter(IParticipation)
@@ -232,6 +236,11 @@ class PloneParticipationData(object):
     @property
     def participant_id(self):
         return self._participation.contact
+
+    @property
+    def participant_title(self):
+        actor = ActorLookup(self._participation.contact).lookup()
+        return actor.get_label()
 
 
 @implementer(IParticipationData)
@@ -249,3 +258,7 @@ class SQLParticipationData(object):
     def participant_id(self):
         source = ContactsSource(self._participation.resolve_dossier())
         return source.getTerm(self._participation.participant).token
+
+    @property
+    def participant_title(self):
+        return self._participation.participant.get_title()
