@@ -141,6 +141,7 @@
     <field name="touched" type="pdate" indexed="true" stored="false" />
     <field name="email" type="string" indexed="true" stored="false" />
     <field name="email2" type="string" indexed="true" stored="false" />
+    <field name="external_reference" type="string" indexed="true" stored="false" />
     <field name="end" type="pdate" indexed="true" stored="false" />
     <field name="file_extension" type="string" indexed="true" stored="false" />
     <field name="filename" type="string" indexed="true" stored="false" />

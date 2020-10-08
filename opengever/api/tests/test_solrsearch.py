@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
@@ -209,6 +210,19 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         self.assertItemsEqual(
             [{u'Title': item.title, u'UID': IUUID(item)}
              for item in (self.document, self.subdocument, self.offered_dossier_to_archive)],
+            browser.json[u'items'])
+
+    @browsing
+    def test_query_for_external_reference(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=external_reference:qpr-900-9001-\xf7&fl=UID,external_reference'.format(
+            self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [{u'UID': IUUID(self.dossier),
+              u'external_reference': IDossier(self.dossier).external_reference}],
             browser.json[u'items'])
 
     @skip("Seems this does not behave very consistently in the moment."

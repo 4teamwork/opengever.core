@@ -146,6 +146,8 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
     features = ('bumblebee', 'solr')
 
+    maxDiff = None
+
     @browsing
     def test_dossier_listing_works_for_responsible_fullname(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -167,6 +169,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
             'name=dossiers',
+            'columns=external_reference',
             'columns=reference',
             'columns=title',
             'columns=review_state',
@@ -192,6 +195,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             {u'review_state': u'dossier-state-active',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'UID': IUUID(self.dossier),
+             u'external_reference': u'qpr-900-9001-\xf7',
              u'trashed': False,
              u'reference': u'Client1 1.1 / 1',
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
@@ -203,6 +207,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
             'name=documents',
+            'columns=external_reference',
             'columns=reference',
             'columns=title',
             'columns=modified',
@@ -220,6 +225,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             {u'reference': u'Client1 1.1 / 1 / 14',
              u'title': u'Vertr\xe4gsentwurf',
              u'document_author': u'test_user_1_',
+             u'external_reference': None,
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
              u'UID': IUUID(self.document),
              u'trashed': False,

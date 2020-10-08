@@ -26,6 +26,7 @@ OTHER_ALLOWED_FIELDS = set([
     'document_type',
     'email',
     'end',
+    'external_reference',
     'file_extension',
     'firstname',
     'has_sametype_children',

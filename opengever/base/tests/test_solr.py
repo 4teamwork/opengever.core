@@ -84,7 +84,6 @@ class TestSolr(IntegrationTestCase):
             'cmf_uid',
             'contactid',
             'date_of_completion',
-            'external_reference',
             'getId',
             'getObjPositionInParent',
             'is_default_page',
