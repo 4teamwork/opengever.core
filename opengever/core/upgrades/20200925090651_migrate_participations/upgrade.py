@@ -33,6 +33,6 @@ class MigrateParticipations(UpgradeStep):
                 else:
                     contacts_and_roles[participation.contact] = set(participation.roles)
 
-            lst = PersistentList([handler.create_participation(contact=key, roles=value)
+            lst = PersistentList([handler.create_participation(participant_id=key, roles=value)
                                   for key, value in contacts_and_roles.items()])
             annotations[self.annotation_key] = lst
