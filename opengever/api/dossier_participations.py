@@ -3,8 +3,8 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Participation
 from opengever.contact.sources import ContactsSource
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
@@ -60,7 +60,7 @@ def get_plone_actor(participant_id):
 
 
 @implementer(IExpandableElement)
-@adapter(IDossierMarker, IOpengeverBaseLayer)
+@adapter(IParticipationAwareMarker, IOpengeverBaseLayer)
 class Participations(object):
     def __init__(self, context, request):
         self.context = context

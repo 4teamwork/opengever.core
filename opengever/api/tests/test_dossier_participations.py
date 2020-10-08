@@ -548,3 +548,47 @@ class TestPossibleParticipantsGetWithContactFeatureEnabled(SolrIntegrationTestCa
         self.assertEqual(5, len(browser.json.get('items')))
         self.assertEqual(21, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)
+
+
+class TestParticipationsExpansion(IntegrationTestCase):
+
+    @browsing
+    def test_participation_expansion_on_dossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.empty_dossier, headers=self.api_headers)
+        self.assertIn(u'participations', browser.json['@components'])
+        url = "{}/@participations".format(self.empty_dossier.absolute_url())
+        self.assertEqual(
+            {'@id': url},
+            browser.json['@components']['participations'])
+
+        handler = IParticipationAware(self.empty_dossier)
+        participation = handler.add_participation(self.regular_user.id, ['regard'])
+        data = IParticipationData(participation)
+        browser.open(
+            self.empty_dossier.absolute_url() + '?expand=participations',
+            method='GET',
+            headers=self.api_headers)
+
+        expected = {
+            u'@id': url,
+            u'available_roles': [{u'title': u'Final drawing',
+                                  u'token': u'final-drawing'},
+                                 {u'title': u'Participation',
+                                  u'token': u'participation'},
+                                 {u'title': u'Regard', u'token': u'regard'}],
+            u'items': [{u'@id': '{}/{}'.format(url, data.participant_id),
+                        u'participant_id': data.participant_id,
+                        u'participant_title': data.participant_title,
+                        u'roles': data.roles}],
+            u'items_total': 1
+            }
+        self.assertEqual(expected, browser.json['@components']['participations'])
+
+    @browsing
+    def test_participation_expansion_is_not_available_on_private_dossiers(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.assertFalse(IParticipationAware.providedBy(self.private_dossier))
+        browser.open(self.private_dossier, headers=self.api_headers)
+        self.assertNotIn(u'participations', browser.json['@components'])
