@@ -46,6 +46,7 @@ SYSTEM_ACTOR_ID = '__system__'
 class Actor(object):
 
     css_class = 'actor-user'
+    actor_type = 'user'
 
     def __init__(self, identifier):
         self.identifier = identifier
@@ -127,6 +128,11 @@ class Actor(object):
     def permission_identifier(self):
         raise NotImplementedError()
 
+    def represents(self):
+        """Returns the object this actor is representing.
+        """
+        raise NotImplementedError()
+
     def representatives(self):
         """Returns a list of users which are representative for the current
         actor. Used for example when notifying an actor.
@@ -135,6 +141,8 @@ class Actor(object):
 
 
 class NullActor(object):
+
+    actor_type = 'null'
 
     def __init__(self, identifier):
         self.identifier = identifier
@@ -151,6 +159,9 @@ class NullActor(object):
     def get_link(self, with_icon=False):
         return self.identifier or u''
 
+    def represents(self):
+        raise None
+
     def representatives(self):
         return []
 
@@ -158,6 +169,8 @@ class NullActor(object):
 class SystemActor(object):
     """Used for system notifications, using the internal SYSTEM_ACTOR_ID.
     """
+
+    actor_type = 'system'
 
     def __init__(self, identifier):
         if identifier != SYSTEM_ACTOR_ID:
@@ -177,6 +190,9 @@ class SystemActor(object):
     def get_link(self, with_icon=False):
         return u''
 
+    def represents(self):
+        raise None
+
     def representatives(self):
         return []
 
@@ -184,6 +200,7 @@ class SystemActor(object):
 class InboxActor(Actor):
 
     css_class = 'actor-inbox'
+    actor_type = 'inbox'
 
     def __init__(self, identifier, org_unit=None):
         super(InboxActor, self).__init__(identifier)
@@ -212,10 +229,14 @@ class InboxActor(Actor):
     def representatives(self):
         return self.org_unit.inbox().assigned_users()
 
+    def represents(self):
+        return self.org_unit
+
 
 class TeamActor(Actor):
 
     css_class = 'actor-team'
+    actor_type = 'team'
 
     def __init__(self, identifier, team=None):
         super(TeamActor, self).__init__(identifier)
@@ -238,10 +259,14 @@ class TeamActor(Actor):
     def representatives(self):
         return self.team.group.users
 
+    def represents(self):
+        return self.team
+
 
 class CommitteeActor(Actor):
 
     css_class = 'actor-committee'
+    actor_type = 'committee'
 
     def __init__(self, identifier, committee=None):
         super(CommitteeActor, self).__init__(identifier)
@@ -261,10 +286,14 @@ class CommitteeActor(Actor):
         from opengever.meeting.activity.helpers import get_users_by_group
         return get_users_by_group(self.committee.group_id)
 
+    def represents(self):
+        return self.committee
+
 
 class ContactActor(Actor):
 
     css_class = 'actor-contact'
+    actor_type = 'contact'
 
     def __init__(self, identifier, contact=None):
         super(ContactActor, self).__init__(identifier)
@@ -290,6 +319,9 @@ class ContactActor(Actor):
 
     def representatives(self):
         return []
+
+    def represents(self):
+        return self.contact
 
 
 class PloneUserActor(Actor):
@@ -317,6 +349,9 @@ class PloneUserActor(Actor):
     def representatives(self):
         return []
 
+    def represents(self):
+        return self.user
+
 
 class OGDSUserActor(Actor):
 
@@ -340,8 +375,13 @@ class OGDSUserActor(Actor):
     def representatives(self):
         return [self.user]
 
+    def represents(self):
+        return self.user
+
 
 class OGDSGroupActor(Actor):
+
+    actor_type = 'group'
 
     def __init__(self, identifier, group=None):
         super(OGDSGroupActor, self).__init__(identifier)
@@ -362,6 +402,9 @@ class OGDSGroupActor(Actor):
 
     def representatives(self):
         return self.group.users
+
+    def represents(self):
+        return self.group
 
 
 class ActorLookup(object):

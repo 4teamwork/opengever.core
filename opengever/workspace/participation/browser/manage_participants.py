@@ -1,9 +1,9 @@
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
-from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
 from opengever.workspace.participation import can_manage_member
-from opengever.workspace.participation import get_full_user_info
 from opengever.workspace.participation import invitation_to_item
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
@@ -38,16 +38,16 @@ class ManageParticipants(BrowserView):
         """
         entries = []
 
-        for userid, roles in self.context.get_local_roles():
-            member = api.user.get(userid=userid)
+        for participant_id, roles in self.context.get_local_roles():
+            actor = Actor.lookup(participant_id)
             managed_roles = list(set(roles) & set(MANAGED_ROLES))
-            if member is not None and managed_roles:
-                item = dict(token=userid,
+            if managed_roles:
+                item = dict(token=actor.identifier,
                             roles=managed_roles,
-                            can_manage=can_manage_member(self.context, member, roles),
+                            can_manage=can_manage_member(self.context, actor, roles),
                             type_='user',
-                            name=get_full_user_info(member=member),
-                            userid=userid)
+                            name=actor.get_label(),
+                            userid=actor.identifier)
                 entries.append(item)
         return entries
 
@@ -108,7 +108,7 @@ class ManageParticipants(BrowserView):
             storage.remove_invitation(token)
             return
 
-        elif type_ == 'user' and can_manage_member(self.context, api.user.get(userid=token)):
+        elif type_ in ['user', 'group'] and can_manage_member(self.context, Actor.lookup(token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_SHARING, token)
             # Avoid circular imports
@@ -131,7 +131,7 @@ class ManageParticipants(BrowserView):
 
     def _modify(self, token, role, type_):
         if not token or not type_:
-            raise BadRequest('No userid or type provided.')
+            raise BadRequest('No actor id or type provided.')
 
         if role not in MANAGED_ROLES:
             raise Unauthorized('Inavlid role provided.')
@@ -139,10 +139,11 @@ class ManageParticipants(BrowserView):
         if token == api.user.get_current().id:
             raise Unauthorized('Not allowed to modify the current user.')
 
-        if type_ == 'user':
-            user_roles = api.user.get_roles(username=token, obj=self.context,
-                                            inherit=False)
-            if user_roles:
+        if type_ in ['user', 'group']:
+            assignment_manager = RoleAssignmentManager(self.context)
+            assigned_roles = assignment_manager.get_roles_by_principal_id(token)
+
+            if assigned_roles:
                 assignment = SharingRoleAssignment(token, [role], self.context)
                 RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
@@ -151,7 +152,7 @@ class ManageParticipants(BrowserView):
                 self.request.RESPONSE.setStatus(204)
                 return True
             else:
-                raise BadRequest('User does not have any local roles')
+                raise BadRequest('Actor does not have any local roles')
         elif type_ == 'invitation':
             storage = getUtility(IInvitationStorage)
             storage.update_invitation(token, role=role)

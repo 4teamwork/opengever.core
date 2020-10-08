@@ -1,14 +1,17 @@
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.ogds.base.actor import Actor
 from opengever.workspace.activities import WorkspaceWatcherManager
+from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.participation import PARTICIPATION_ROLES
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
-from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Forbidden
+from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
@@ -28,23 +31,42 @@ class ParticipationTraverseService(Service):
         return self
 
     def prepare_response_item(self, participant):
-        userid = participant.get('token')
+        actor = Actor.lookup(participant.get('token'))
         role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
-        member = api.user.get(userid=userid)
         managing_context = self.context.get_context_with_local_roles()
+
+        # We manually serialize the actors'representer and extract the desired
+        # properties to get a homogeneous json result for different actor types
+        #
+        # We do not use an Actor serializer here because it does not exist
+        # right now and needs more specification before we can implement it
+        # properly.
+        #
+        # The current implementation can be refactored as soon we have
+        # a properly implemented actor serializer.
+        #
+        # This will be tracked in https://4teamwork.atlassian.net/browse/CA-406
+        serialized_actor = getMultiAdapter(
+            (actor.represents(), self.request),
+            interface=ISerializeToJsonSummary)()
+
         return {
-            '@id': '{}/@participations/{}'.format(managing_context.absolute_url(), userid),
-            '@type': 'virtual.participations.user',
+            '@id': '{}/@participations/{}'.format(managing_context.absolute_url(), actor.identifier),
+            '@type': 'virtual.participations.{}'.format(actor.actor_type),
             'is_editable': managing_context == self.context and participant.get('can_manage'),
             'role': {
                 'token': role.id,
                 'title': role.translated_title(self.request),
             },
             'participant': {
-                "token": userid,
-                "title": participant.get('name'),
-            },
-            'participant_email': member.getProperty('email'),
+                '@id': serialized_actor.get('@id'),
+                '@type': serialized_actor.get('@type'),
+                'id': actor.identifier,
+                'title': actor.get_label(),
+                'email': serialized_actor.get('email'),
+                'is_local': serialized_actor.get('is_local'),
+                'active': serialized_actor.get('active'),
+            }
         }
 
     def participants(self, context):
@@ -55,6 +77,25 @@ class ParticipationTraverseService(Service):
         for item in self.participants(context):
             if item.get('token') == token:
                 return item
+
+    def is_actor_allowed_to_participate(self, token):
+        """Validates the actor token if it' a avalid actor.
+        """
+        if Actor.lookup(token).actor_type not in ['user', 'group']:
+            raise BadRequest('The actor is not allowed')
+
+        if self.find_participant(token, self.context.get_context_with_local_roles()):
+            raise BadRequest('The participant already exists')
+
+        if IWorkspaceFolder.providedBy(self.context):
+            if not self.context.has_blocked_local_role_inheritance():
+                raise Forbidden(
+                    "The participations are not managed in this context. "
+                    "Please block the role inheritance before adding "
+                    "new participants.")
+
+            if not self.find_participant(token, self.context.get_parent_with_local_roles()):
+                raise BadRequest('The participant is not allowed')
 
 
 class ParticipationsGet(ParticipationTraverseService):
@@ -107,7 +148,7 @@ class ParticipationsDelete(ParticipationTraverseService):
         """
         if obj.get_context_with_local_roles() == obj and self.find_participant(token, obj):
                 manager = ManageParticipants(obj, self.request)
-                manager._delete('user', token)
+                manager._delete(Actor.lookup(token).actor_type, token)
 
         for folder in obj.listFolderContents(
                 contentFilter={'portal_type': 'opengever.workspace.folder'}):
@@ -128,8 +169,9 @@ class ParticipationsPatch(ParticipationTraverseService):
             self.request.RESPONSE.setStatus(204)
             return None
 
+        actor = Actor.lookup(participant)
         manager = ManageParticipants(self.context, self.request)
-        manager._modify(participant, role, 'user')
+        manager._modify(participant, role, actor.actor_type)
         return None
 
     def read_params(self):
@@ -178,17 +220,7 @@ class ParticipationsPost(ParticipationTraverseService):
         return participant, role
 
     def validate_participation(self, token, role):
-        if not self.context.has_blocked_local_role_inheritance():
-            raise Forbidden(
-                "The participations are not managed in this context. "
-                "Please block the role inheritance before adding "
-                "new participants.")
-
-        if not self.find_participant(token, self.context.get_parent_with_local_roles()):
-            raise BadRequest('The participant is not allowed')
-
-        if self.find_participant(token, self.context.get_context_with_local_roles()):
-            raise BadRequest('The participant already exists')
+        self.is_actor_allowed_to_participate(token)
 
         if role not in PARTICIPATION_ROLES:
             raise BadRequest('Role is not availalbe. Available roles are: {}'.format(

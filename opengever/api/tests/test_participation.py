@@ -14,9 +14,9 @@ def http_headers():
             'Content-Type': 'application/json'}
 
 
-def get_entry_by_token(entries, token):
+def get_entry_by_id(entries, token):
     for entry in entries:
-        if entry['participant']['token'] == token:
+        if entry['participant']['id'] == token:
             return entry
     return None
 
@@ -37,6 +37,15 @@ def remove_participation(obj, browser, token):
     )
 
 
+def add_participation(obj, browser, token, role):
+    browser.open(
+        obj.absolute_url() + '/@participations/{}'.format(token),
+        method='POST',
+        headers=http_headers(),
+        data=json.dumps({'participant': token, 'role': role})
+    )
+
+
 class TestParticipationGet(IntegrationTestCase):
 
     maxDiff = None
@@ -44,6 +53,7 @@ class TestParticipationGet(IntegrationTestCase):
     @browsing
     def test_list_all_current_participants_and_invitations(self, browser):
         self.login(self.workspace_owner, browser)
+        add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceMember')
 
         response = browser.open(
             self.workspace.absolute_url() + '/@participations',
@@ -52,53 +62,62 @@ class TestParticipationGet(IntegrationTestCase):
         ).json
 
         self.assertItemsEqual(
-            [
-                {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
-                    u'@type': u'virtual.participations.user',
-                    u'is_editable': True,
-                    u'role': {u'token': u'WorkspaceMember',
-                              u'title': u'Member'},
-                    u'participant': {
-                        'token': 'beatrice.schrodinger',
-                        'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
-                    },
-                    u'participant_email': u'beatrice.schrodinger@gever.local',
-                }, {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
-                    u'@type': u'virtual.participations.user',
-                    u'is_editable': True,
-                    u'role': {u'token': u'WorkspaceAdmin',
-                              u'title': u'Admin'},
-                    u'participant': {
-                        'token': 'fridolin.hugentobler',
-                        'title': u'Hugentobler Fridolin (fridolin.hugentobler)',
-                    },
-                    u'participant_email': u'fridolin.hugentobler@gever.local',
-                }, {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
-                    u'@type': u'virtual.participations.user',
-                    u'is_editable': False,
-                    u'role': {u'token': u'WorkspaceAdmin',
-                              u'title': u'Admin'},
-                    u'participant': {
-                        'token': 'gunther.frohlich',
-                        'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
-                    },
-                    u'participant_email': u'gunther.frohlich@gever.local',
-                }, {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
-                    u'@type': u'virtual.participations.user',
-                    u'is_editable': True,
-                    u'role': {u'token': u'WorkspaceGuest',
-                              u'title': u'Guest'},
-                    u'participant': {
-                        'token': 'hans.peter',
-                        'title': u'Peter Hans (hans.peter)',
-                    },
-                    u'participant_email': u'hans.peter@gever.local',
-                },
-            ], response.get('items'))
+            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
+              u'@type': u'virtual.participations.user',
+              u'is_editable': True,
+              u'participant': {u'@id': u'http://nohost/plone/@ogds-users/beatrice.schrodinger',
+                               u'@type': u'virtual.ogds.user',
+                               u'active': True,
+                               u'email': u'beatrice.schrodinger@gever.local',
+                               u'id': u'beatrice.schrodinger',
+                               u'is_local': None,
+                               u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)'},
+              u'role': {u'title': u'Member', u'token': u'WorkspaceMember'}},
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
+              u'@type': u'virtual.participations.user',
+              u'is_editable': True,
+              u'participant': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler',
+                               u'@type': u'virtual.ogds.user',
+                               u'active': True,
+                               u'email': u'fridolin.hugentobler@gever.local',
+                               u'id': u'fridolin.hugentobler',
+                               u'is_local': None,
+                               u'title': u'Hugentobler Fridolin (fridolin.hugentobler)'},
+              u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}},
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
+              u'@type': u'virtual.participations.user',
+              u'is_editable': False,
+              u'participant': {u'@id': u'http://nohost/plone/@ogds-users/gunther.frohlich',
+                               u'@type': u'virtual.ogds.user',
+                               u'active': True,
+                               u'email': u'gunther.frohlich@gever.local',
+                               u'id': u'gunther.frohlich',
+                               u'is_local': None,
+                               u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)'},
+              u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}},
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+              u'@type': u'virtual.participations.user',
+              u'is_editable': True,
+              u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
+                               u'@type': u'virtual.ogds.user',
+                               u'active': True,
+                               u'email': u'hans.peter@gever.local',
+                               u'id': u'hans.peter',
+                               u'is_local': None,
+                               u'title': u'Peter Hans (hans.peter)'},
+              u'role': {u'title': u'Guest', u'token': u'WorkspaceGuest'}},
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/projekt_a',
+              u'@type': u'virtual.participations.group',
+              u'is_editable': True,
+              u'participant': {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
+                               u'@type': u'virtual.ogds.group',
+                               u'active': True,
+                               u'email': None,
+                               u'id': u'projekt_a',
+                               u'is_local': False,
+                               u'title': u'Projekt A'},
+              u'role': {u'title': u'Member', u'token': u'WorkspaceMember'}}],
+             response.get('items'))
 
     @browsing
     def test_list_all_current_participants_in_folder_lists_participants_of_the_workspace(self, browser):
@@ -151,7 +170,7 @@ class TestParticipationGet(IntegrationTestCase):
         items = response.get('items')
 
         self.assertFalse(
-            get_entry_by_token(items, self.workspace_owner.id)['is_editable'],
+            get_entry_by_id(items, self.workspace_owner.id)['is_editable'],
             'The admin should not be able to manage himself')
 
     @browsing
@@ -167,11 +186,11 @@ class TestParticipationGet(IntegrationTestCase):
         items = response.get('items')
 
         self.assertFalse(
-            get_entry_by_token(items, self.workspace_admin.id)['is_editable'],
+            get_entry_by_id(items, self.workspace_admin.id)['is_editable'],
             'The admin should not be able to manage himself')
 
         self.assertTrue(
-            get_entry_by_token(items, 'hans.peter')['is_editable'],
+            get_entry_by_id(items, 'hans.peter')['is_editable'],
             'The admin should be able to manage hans.peter')
 
     @browsing
@@ -187,7 +206,7 @@ class TestParticipationGet(IntegrationTestCase):
         items = response.get('items')
 
         self.assertTrue(
-            get_entry_by_token(items, self.workspace_guest.id)['is_editable'],
+            get_entry_by_id(items, self.workspace_guest.id)['is_editable'],
             'The admin should be able to manage {}'.format(self.workspace_guest.id))
 
     @browsing
@@ -203,7 +222,7 @@ class TestParticipationGet(IntegrationTestCase):
         items = response.get('items')
 
         self.assertFalse(
-            get_entry_by_token(items, self.workspace_guest.id)['is_editable'],
+            get_entry_by_id(items, self.workspace_guest.id)['is_editable'],
             'The admin should not be able to manage {}'.format(self.workspace_guest.id))
 
     @browsing
@@ -221,7 +240,7 @@ class TestParticipationGet(IntegrationTestCase):
             'No entry should be editable because the user has no permission')
 
     @browsing
-    def test_get_single_participant(self, browser):
+    def test_get_single_user_participant(self, browser):
         self.login(self.workspace_owner, browser)
 
         response = browser.open(
@@ -231,26 +250,50 @@ class TestParticipationGet(IntegrationTestCase):
         ).json
 
         self.assertDictEqual(
-            {
-                u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
-                u'@type': u'virtual.participations.user',
-                u'is_editable': True,
-                u'participant': {
-                    'token': 'hans.peter',
-                    'title': u'Peter Hans (hans.peter)',
-                },
-                u'role': {
-                    'token': 'WorkspaceGuest',
-                    'title': 'Guest',
-                },
-                u'participant_email': 'hans.peter@gever.local',
-            }, response)
+            {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+             u'@type': u'virtual.participations.user',
+             u'is_editable': True,
+             u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
+                              u'@type': u'virtual.ogds.user',
+                              u'active': True,
+                              u'email': u'hans.peter@gever.local',
+                              u'id': u'hans.peter',
+                              u'is_local': None,
+                              u'title': u'Peter Hans (hans.peter)'},
+             u'role': {u'title': u'Guest', u'token': u'WorkspaceGuest'}},
+            response)
+
+    @browsing
+    def test_get_single_group_participant(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceMember')
+
+        response = browser.open(
+            self.workspace.absolute_url() + '/@participations/projekt_a',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertDictEqual(
+            {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/projekt_a',
+             u'@type': u'virtual.participations.group',
+             u'is_editable': True,
+             u'participant': {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
+                              u'@type': u'virtual.ogds.group',
+                              u'active': True,
+                              u'email': None,
+                              u'id': u'projekt_a',
+                              u'is_local': False,
+                              u'title': u'Projekt A'},
+             u'role': {u'title': u'Member', u'token': u'WorkspaceMember'}},
+            response)
 
 
 class TestParticipationDelete(IntegrationTestCase):
 
     @browsing
-    def test_delete_local_role(self, browser):
+    def test_delete_user_local_role(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
@@ -260,7 +303,7 @@ class TestParticipationDelete(IntegrationTestCase):
         )
 
         self.assertIsNotNone(
-            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to have local roles for the user')
 
         browser.open(
@@ -278,8 +321,42 @@ class TestParticipationDelete(IntegrationTestCase):
         )
 
         self.assertIsNone(
-            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to have no local roles anymore for the user')
+
+    @browsing
+    def test_delete_group_local_role(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceGuest')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNotNone(
+            get_entry_by_id(browser.json.get('items'), 'projekt_a'),
+            'Expect to have local roles for the group')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations/projekt_a',
+            method='DELETE',
+            headers=http_headers(),
+        )
+
+        self.assertEqual(204, browser.status_code)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNone(
+            get_entry_by_id(browser.json.get('items'), 'projekt_a'),
+            'Expect to have no local roles anymore for the group')
 
     @browsing
     def test_delete_local_role_from_folder(self, browser):
@@ -294,7 +371,7 @@ class TestParticipationDelete(IntegrationTestCase):
         )
 
         self.assertIsNotNone(
-            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to have local roles for the user')
 
         browser.open(
@@ -312,7 +389,7 @@ class TestParticipationDelete(IntegrationTestCase):
         )
 
         self.assertIsNone(
-            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to have no local roles anymore for the user')
 
         browser.open(
@@ -322,7 +399,7 @@ class TestParticipationDelete(IntegrationTestCase):
         )
 
         self.assertIsNotNone(
-            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to still have local roles for the user on the workspace')
 
     @browsing
@@ -377,7 +454,7 @@ class TestParticipationDelete(IntegrationTestCase):
         )
 
         self.assertIsNone(
-            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to have no local roles anymore for the user in the workspace')
 
         browser.open(
@@ -387,14 +464,14 @@ class TestParticipationDelete(IntegrationTestCase):
         )
 
         self.assertIsNone(
-            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to have no local roles anymore for the user in the folder')
 
 
 class TestParticipationPatch(IntegrationTestCase):
 
     @browsing
-    def test_modify_a_users_loca_roles(self, browser):
+    def test_modify_a_users_local_roles(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
@@ -403,7 +480,7 @@ class TestParticipationPatch(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
         self.assertEquals(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
@@ -424,7 +501,45 @@ class TestParticipationPatch(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceMember', u'title': u'Member'},
+            entry.get('role'))
+
+    @browsing
+    def test_modify_a_groups_local_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceGuest')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+        data = json.dumps(json_compatible({
+            'role': {'token': 'WorkspaceMember'}
+        }))
+        browser.open(
+            entry['@id'],
+            method='PATCH',
+            data=data,
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
         self.assertEquals(
             {u'token': u'WorkspaceMember', u'title': u'Member'},
             entry.get('role'))
@@ -441,7 +556,7 @@ class TestParticipationPatch(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
         self.assertEquals(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
@@ -462,7 +577,7 @@ class TestParticipationPatch(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
         self.assertEquals(
             {u'token': u'WorkspaceMember', u'title': u'Member'},
             entry.get('role'),
@@ -474,7 +589,7 @@ class TestParticipationPatch(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
         self.assertEquals(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'),
@@ -505,7 +620,7 @@ class TestParticipationPatch(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
 
         with browser.expect_http_error(401):
             data = json.dumps(json_compatible({
@@ -529,7 +644,7 @@ class TestParticipationPatch(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_admin.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_admin.id)
 
         with browser.expect_http_error(401):
             data = json.dumps(json_compatible({
@@ -544,7 +659,146 @@ class TestParticipationPatch(IntegrationTestCase):
                 )
 
 
-class TestParticipationPost(IntegrationTestCase):
+class TestParticipationPostWorkspace(IntegrationTestCase):
+
+    @browsing
+    def test_let_a_user_participate(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        remove_participation(self.workspace, browser, self.workspace_member.id)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
+        self.assertIsNone(entry)
+
+        data = {
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='POST',
+            data=json.dumps(data),
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+    @browsing
+    def test_let_a_group_participate(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
+        self.assertIsNone(entry)
+
+        data = {
+            "participant": {"token": 'projekt_a'},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='POST',
+            data=json.dumps(data),
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+    @browsing
+    def test_inexistant_user_cannot_participate(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        data = {
+            "participant": {"token": 'not-existing-user'},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_can_only_assign_predefined_workspace_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        remove_participation(self.workspace, browser, self.workspace_member.id)
+
+        data = {
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'Manager'},
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_only_one_participation_per_user_is_allowed(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
+        self.assertIsNotNone(entry)
+
+        data = {
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+
+class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
 
     @browsing
     def test_let_a_user_participate_to_a_folder(self, browser):
@@ -559,7 +813,7 @@ class TestParticipationPost(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
         self.assertIsNone(entry)
 
         data = {
@@ -580,7 +834,7 @@ class TestParticipationPost(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
         self.assertEquals(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
@@ -590,7 +844,7 @@ class TestParticipationPost(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         data = {
-            "participant": {"token": self.workspace_member.id},
+            "participant": {"token": self.regular_user.id},
             "role": {"token": 'WorkspaceGuest'},
         }
 
@@ -641,6 +895,10 @@ class TestParticipationPost(IntegrationTestCase):
                 headers=http_headers(),
                 )
 
+        self.assertEqual('BadRequest', browser.json.get('type'))
+        self.assertIn('Role is not availalbe. Available roles are:',
+                      browser.json.get('message'))
+
     @browsing
     def test_do_not_allow_readding_an_already_existing_user(self, browser):
         self.login(self.workspace_admin, browser=browser)
@@ -653,7 +911,7 @@ class TestParticipationPost(IntegrationTestCase):
             headers=http_headers(),
         )
 
-        entry = get_entry_by_token(browser.json.get('items'), self.workspace_member.id)
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
         self.assertIsNotNone(entry)
 
         data = {
@@ -668,6 +926,9 @@ class TestParticipationPost(IntegrationTestCase):
                 data=json.dumps(data),
                 headers=http_headers(),
                 )
+
+        self.assertEqual({"message": "The participant already exists",
+                          "type": "BadRequest"}, browser.json)
 
     @browsing
     def test_only_users_from_the_upper_context_are_allowed_to_participate_to_a_folder(self, browser):
@@ -689,6 +950,9 @@ class TestParticipationPost(IntegrationTestCase):
                 data=json.dumps(data),
                 headers=http_headers(),
                 )
+
+        self.assertEqual({"message": "The participant is not allowed",
+                          "type": "BadRequest"}, browser.json)
 
 
 class TestMyInvitationsGet(IntegrationTestCase):
