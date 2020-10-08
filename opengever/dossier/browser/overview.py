@@ -127,9 +127,16 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
             fl=fieldlist)
         return OGSolrContentListing(resp)
 
+    def _get_participations(self):
+        if not self.context.has_participation_support():
+            return []
+
+        phandler = IParticipationAware(self.context)
+        return phandler.get_participations()
+
     def sql_participations(self):
         participations = []
-        for participation in Participation.query.by_dossier(self.context):
+        for participation in self._get_participations():
             participant = participation.participant
             participations.append({
                 'getURL': participant.get_url(),
@@ -141,12 +148,7 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
                       key=lambda participation: participation.get('Title'))
 
     def plone_participations(self):
-        if not self.context.has_participation_support():
-            return []
-
-        # get the participants
-        phandler = IParticipationAware(self.context)
-        results = list(phandler.get_participations())
+        results = list(self._get_participations())
 
         # also append the responsible
         class ResponsibleParticipant(object):
