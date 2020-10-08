@@ -196,10 +196,7 @@ class ParticipationsPatch(ParticipationBaseService):
     def update_plone_participation(self, participant_id, new_roles):
         with self.handle_errors():
             self.handler.validate_participant(participant_id)
-        if not self.handler.has_participation(participant_id):
-            raise BadRequest("{} has no participations on this context".format(
-                participant_id))
-        self.handler.update_participation(participant_id, new_roles)
+            self.handler.update_participation(participant_id, new_roles)
 
     def update_sql_participation(self, participant_id, new_roles):
         with self.handle_errors():
