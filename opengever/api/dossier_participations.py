@@ -2,19 +2,14 @@ from contextlib import contextmanager
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
-from opengever.contact.models import Participation
 from opengever.contact.sources import ContactsSource
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.participations import DupplicateParticipation
 from opengever.dossier.participations import InvalidParticipantId
 from opengever.dossier.participations import InvalidRole
+from opengever.dossier.participations import IParticipationData
 from opengever.dossier.participations import MissingParticipation
-from opengever.ogds.base.actor import ActorLookup
-from opengever.ogds.base.actor import ContactActor
-from opengever.ogds.base.actor import InboxActor
-from opengever.ogds.base.actor import OGDSUserActor
-from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
@@ -37,13 +32,6 @@ def available_roles(context):
 
     vocabulary = getVocabularyRegistry().get(context, "opengever.dossier.participation_roles")
     return [{"token": term.token, "title": term.title} for term in vocabulary]
-
-
-def get_plone_actor(participant_id):
-    actor = ActorLookup(participant_id).lookup()
-    if not isinstance(actor, (ContactActor, InboxActor, OGDSUserActor, PloneUserActor)):
-        raise BadRequest("{} is not a valid id".format(participant_id))
-    return actor
 
 
 @implementer(IExpandableElement)
@@ -176,23 +164,13 @@ class ParticipationsPatch(ParticipationBaseService):
         roles = data.get("roles", None)
         return roles
 
-    def update_plone_participation(self, participant_id, new_roles):
-        with self.handle_errors():
-            self.handler.update_participation(participant_id, new_roles)
-
-    def update_sql_participation(self, participant_id, new_roles):
-        with self.handle_errors():
-            self.handler.update_participation(participant_id, new_roles)
-
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
         new_roles = self.extract_roles()
         participant_id = self.read_params()
-        if is_contact_feature_enabled():
-            self.update_sql_participation(participant_id, new_roles)
-        else:
-            self.update_plone_participation(participant_id, new_roles)
+        with self.handle_errors():
+            self.handler.update_participation(participant_id, new_roles)
 
         self.request.response.setStatus(204)
         return None
@@ -222,20 +200,10 @@ class ParticipationsDelete(ParticipationBaseService):
                 "Must supply participant as URL path parameter.")
         return self.params[0]
 
-    def delete_plone_participation(self, participant_id):
-        with self.handle_errors():
-            self.handler.remove_participation(participant_id)
-
-    def delete_sql_participation(self, participant_id):
-        with self.handle_errors():
-            self.handler.remove_participation(participant_id)
-
     def reply(self):
         participant_id = self.read_params()
-        if is_contact_feature_enabled():
-            self.delete_sql_participation(participant_id)
-        else:
-            self.delete_plone_participation(participant_id)
+        with self.handle_errors():
+            self.handler.remove_participation(participant_id)
 
         self.request.response.setStatus(204)
         return None
