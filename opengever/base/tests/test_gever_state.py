@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
+from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from plone.app.testing import applyProfile
 
 
@@ -28,6 +29,17 @@ class TestGeverStateView(IntegrationTestCase):
             'http://foo.org/cluster/portal',
             self.portal.restrictedTraverse('@@gever_state/cas_server_url')(),
         )
+
+    def test_is_readonly_if_disabled(self):
+        self.assertFalse(
+            self.portal.restrictedTraverse('@@gever_state/is_readonly')(),
+        )
+
+    def test_is_readonly_if_enabled(self):
+        with ZODBStorageInReadonlyMode():
+            self.assertTrue(
+                self.portal.restrictedTraverse('@@gever_state/is_readonly')(),
+            )
 
     @browsing
     def test_properties_action_only_available_on_types_with_different_default_view(self, browser):
