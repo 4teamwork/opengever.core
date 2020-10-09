@@ -1,5 +1,7 @@
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
 
+  <object name="folder_factories" meta_type="CMF Action Category" />
+
   <!-- DOCUMENT ACTIONS -->
   <object name="document_actions" meta_type="CMF Action Category">
 
