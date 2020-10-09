@@ -34,6 +34,8 @@ OTHER_ALLOWED_FIELDS = set([
     'is_subtask',
     'issuer',
     'lastname',
+    'language',
+    'location',
     'modified',
     'phone_office',
     'receipt_date',
