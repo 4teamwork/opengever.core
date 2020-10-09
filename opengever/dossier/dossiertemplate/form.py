@@ -34,8 +34,10 @@ from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface import alsoProvides
+from zope.interface import implementer
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import json
 
@@ -66,6 +68,15 @@ def get_dossier_templates(context):
             template.title))
 
     return SimpleVocabulary(terms)
+
+
+@implementer(IVocabularyFactory)
+class DossierTemplatesVocabulary(object):
+
+    def __call__(self, context):
+        if not IRestrictAddableDossierTemplates.providedBy(context):
+            return SimpleVocabulary([])
+        return get_dossier_templates(context)
 
 
 def get_wizard_storage_key(context):
