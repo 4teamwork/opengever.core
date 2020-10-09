@@ -44,7 +44,7 @@ class DocumentFromTemplatePost(Service):
             raise BadRequest('Missing parameter template')
 
         vocabulary = getUtility(IVocabularyFactory,
-                             name='opengever.dossier.DocumentTemplatesVocabulary')
+                                name='opengever.dossier.DocumentTemplatesVocabulary')
         term = vocabulary(self.context).getTermByToken(token)
         template = term.value
 
@@ -88,15 +88,15 @@ class ITriggerTaskTemplateSources(model.Schema):
                          'opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema',
                          'opengever.tasktemplates.content.tasktemplate.ITaskTemplate',
                          ]
-                    }
-                )
+                }
+            )
         )
     )
 
     responsible = schema.Choice(
         source=TaskResponsibleSourceBinder(include_teams=True),
         required=True,
-        )
+    )
 
     related_documents = RelationList(
         required=False,
@@ -113,7 +113,7 @@ class ITriggerTaskTemplateSources(model.Schema):
                      'opengever.task.task.ITask',
                      'ftw.mail.mail.IMail', ],
                 }),
-            )
+        )
     )
 
 
@@ -183,7 +183,7 @@ class TriggerTaskTemplatePost(Service):
             IFieldDeserializer)
 
         responsible_field = Fields(
-                ITriggerTaskTemplateSources)['responsible'].field
+            ITriggerTaskTemplateSources)['responsible'].field
         responsible_deserializer = queryMultiAdapter(
             (responsible_field, self.context, self.request),
             IFieldDeserializer)
@@ -227,7 +227,7 @@ class TriggerTaskTemplatePost(Service):
                 except (RequiredMissing, ConstraintNotSatisfied):
                     errors.append(
                         u'invalid responsible {} for template {}'.format(
-                        raw_responsible, template))
+                            raw_responsible, template))
                 else:
                     by_template['responsible'] = responsible
 

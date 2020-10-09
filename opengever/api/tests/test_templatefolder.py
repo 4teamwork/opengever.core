@@ -208,7 +208,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.assertEqual('fa', main_task.responsible_client)
         self.assertEqual('direct-execution', main_task.task_type)
         self.assertEqual('task-state-in-progress',
-                          api.content.get_state(main_task))
+                         api.content.get_state(main_task))
 
         subtasks = main_task.listFolderContents()
         self.assertEqual(1, len(subtasks))
@@ -218,7 +218,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.assertEqual('robert.ziegler', subtask.responsible)
         self.assertEqual('fa', subtask.responsible_client)
         self.assertEqual('task-state-open',
-                          api.content.get_state(subtask))
+                         api.content.get_state(subtask))
 
     @browsing
     def test_trigger_with_non_nested_task_template_folder_input(self, browser):
@@ -349,9 +349,9 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                 'responsible_client': 'fa',
                 'responsible': 'robert.ziegler',
                 'deadline': 10,
-                })
+            })
             .within(foreign_task_template_folder)
-            )
+        )
 
         data = {
             'tasktemplatefolder': self._get_task_template_item(
@@ -424,11 +424,11 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         main_task = children['added'].pop()
         self.assertTrue(IFromParallelTasktemplate.providedBy(main_task))
         self.assertEqual('task-state-in-progress',
-                          api.content.get_state(main_task))
+                         api.content.get_state(main_task))
         for subtask in main_task.listFolderContents():
             self.assertTrue(IFromParallelTasktemplate.providedBy(subtask))
             self.assertEqual('task-state-open',
-                              api.content.get_state(subtask))
+                             api.content.get_state(subtask))
 
     @browsing
     def test_create_sequential_tasks(self, browser):
@@ -454,11 +454,11 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         main_task = children['added'].pop()
         self.assertTrue(IFromSequentialTasktemplate.providedBy(main_task))
         self.assertEqual('task-state-in-progress',
-                          api.content.get_state(main_task))
+                         api.content.get_state(main_task))
         for subtask in main_task.listFolderContents():
             self.assertTrue(IFromSequentialTasktemplate.providedBy(subtask))
             self.assertEqual('task-state-planned',
-                              api.content.get_state(subtask))
+                             api.content.get_state(subtask))
 
     @browsing
     def test_respects_start_immediately_flag(self, browser):
@@ -466,12 +466,12 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.tasktemplatefolder.sequence_type = u'sequential'
 
         template_2 = create(Builder('tasktemplate')
-               .titled(u'Noch was.')
-               .having(issuer='responsible',
-                       responsible_client='fa',
-                       responsible='robert.ziegler',
-                       deadline=10,)
-               .within(self.tasktemplatefolder))
+                            .titled(u'Noch was.')
+                            .having(issuer='responsible',
+                                    responsible_client='fa',
+                                    responsible='robert.ziegler',
+                                    deadline=10,)
+                            .within(self.tasktemplatefolder))
 
         data = {
             'tasktemplatefolder': self._get_task_template_item(browser),
@@ -507,20 +507,20 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         notebook = create(Builder('tasktemplate')
-               .titled(u'Notebook einrichten.')
-               .having(issuer='responsible',
-                       responsible_client='fa',
-                       responsible='robert.ziegler',
-                       deadline=10)
-        .within(self.tasktemplatefolder))
+                          .titled(u'Notebook einrichten.')
+                          .having(issuer='responsible',
+                                  responsible_client='fa',
+                                  responsible='robert.ziegler',
+                                  deadline=10)
+                          .within(self.tasktemplatefolder))
 
         user_accounts = create(Builder('tasktemplate')
-               .titled(u'User Accounts erstellen.')
-               .having(issuer='responsible',
-                       responsible_client='fa',
-                       responsible='robert.ziegler',
-                       deadline=10)
-        .within(self.tasktemplatefolder))
+                               .titled(u'User Accounts erstellen.')
+                               .having(issuer='responsible',
+                                       responsible_client='fa',
+                                       responsible='robert.ziegler',
+                                       deadline=10)
+                               .within(self.tasktemplatefolder))
 
         data = {
             'tasktemplatefolder': self._get_task_template_item(browser),
@@ -791,12 +791,12 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.tasktemplatefolder.sequence_type = u'sequential'
 
         template_2 = create(Builder('tasktemplate')
-               .titled(u'Notebook einrichten.')
-               .having(issuer='responsible',
-                       responsible_client='fa',
-                       responsible='robert.ziegler',
-                       deadline=10,)
-        .within(self.tasktemplatefolder))
+                            .titled(u'Notebook einrichten.')
+                            .having(issuer='responsible',
+                                    responsible_client='fa',
+                                    responsible='robert.ziegler',
+                                    deadline=10,)
+                            .within(self.tasktemplatefolder))
 
         data = {
             'tasktemplatefolder': self._get_task_template_item(browser),
