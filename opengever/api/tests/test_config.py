@@ -9,27 +9,28 @@ from plone import api
 
 class TestConfig(IntegrationTestCase):
 
+    @property
+    def config_url(self):
+        return self.portal.absolute_url() + '/@config'
+
     @browsing
     def test_config_contains_id(self, browser):
         self.login(self.regular_user, browser)
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'@id'), url)
+        self.assertEqual(browser.json.get(u'@id'), self.config_url)
 
     @browsing
     def test_config_contains_version(self, browser):
         self.login(self.regular_user, browser)
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'version'), get_distribution('opengever.core').version)
 
     @browsing
     def test_config_contains_admin_and_org_unit(self, browser):
         self.login(self.regular_user, browser)
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'admin_unit'), 'plone')
         self.assertEqual(browser.json.get(u'org_unit'), 'fa')
@@ -37,8 +38,7 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_userinfo(self, browser):
         self.login(self.regular_user, browser)
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json['current_user'].get(u'id'), u'kathi.barfuss')
         self.assertEqual(browser.json['current_user'].get(u'fullname'), u'B\xe4rfuss K\xe4thi')
@@ -47,8 +47,7 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_features(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'features'),
@@ -92,24 +91,21 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_max_subdossier_depth(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'max_dossier_levels'), 2)
 
     @browsing
     def test_config_contains_max_repository_depth(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'max_repositoryfolder_levels'), 3)
 
     @browsing
     def test_config_contains_recently_touched_limit(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'recently_touched_limit'), 10)
 
@@ -128,8 +124,7 @@ class TestConfig(IntegrationTestCase):
         ])
 
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'cas_url'), 'https://cas.server.local')
@@ -137,8 +132,7 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_portal_url(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'portal_url'), 'http://nohost/portal')
@@ -146,7 +140,7 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_oneoffixx_settings(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config', headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         expected_oneoffixx_settings = {
             u'fake_sid': u'',
@@ -160,8 +154,7 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_sharing_configuration_white_and_black_lists(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'sharing_configuration'),
                          {u'white_list_prefix': '^.+', u'black_list_prefix': '^$'})
@@ -169,8 +162,8 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_user_settings(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url,
+                     headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             {u'notify_inbox_actions': True,
@@ -181,8 +174,7 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_nightly_job_timewindow_settings(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'nightly_jobs'),
                          {u'start_time': u'1:00:00', u'end_time': u'5:00:00'})
@@ -190,32 +182,29 @@ class TestConfig(IntegrationTestCase):
     @browsing
     def test_config_contains_is_emm_environment(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers={'Accept': 'application/json'})
+        browser.open(self.config_url,
+                     headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertIn(u'is_emm_environment', browser.json)
 
     @browsing
     def test_is_admin_menu_visible_is_true_for_administrators(self, browser):
         self.login(self.administrator, browser)
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertTrue(browser.json.get(u'is_admin_menu_visible'))
 
     @browsing
     def test_is_admin_menu_visible_is_false_for_regular_user(self, browser):
         self.login(self.regular_user, browser)
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertFalse(browser.json.get(u'is_admin_menu_visible'))
 
     @browsing
     def test_config_contains_bumblebee_app_id(self, browser):
         self.login(self.regular_user, browser)
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             'local',
@@ -235,8 +224,7 @@ class TestConfig(IntegrationTestCase):
         membership_tool.createMemberarea()
 
         # Finally test our implementation.
-        url = self.portal.absolute_url() + '/@config'
-        browser.open(url, headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             u'http://nohost/plone/private/kathi.barfuss',
@@ -247,14 +235,12 @@ class TestConfig(IntegrationTestCase):
     def test_config_contains_usersnap_api_key(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'usersnap_api_key'), u'')
 
         api.portal.set_registry_record('api_key', u'some key', interface=IUserSnapSettings)
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'usersnap_api_key'), u'some key')
 
@@ -262,14 +248,12 @@ class TestConfig(IntegrationTestCase):
     def test_config_contains_current_inbox_url_if_available(self, browser):
         self.login(self.secretariat_user, browser)
 
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'inbox_folder_url'), u'http://nohost/plone/eingangskorb/eingangskorb_fa')
 
         self.login(self.regular_user, browser)
 
-        browser.open(self.portal.absolute_url() + '/@config',
-                     headers=self.api_headers)
+        browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'inbox_folder_url'), u'')
