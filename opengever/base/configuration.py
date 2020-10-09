@@ -29,6 +29,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
+from opengever.readonly import is_in_readonly_mode
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.task.interfaces import ITaskSettings
@@ -64,6 +65,7 @@ class GeverSettingsAdpaterV1(object):
         config['portal_url'] = get_gever_portal_url()
         config['cas_url'] = get_cas_server_url()
         config['apps_url'] = os.environ.get('APPS_ENDPOINT_URL')
+        config['is_readonly'] = is_in_readonly_mode()
         return config
 
     def get_info(self):

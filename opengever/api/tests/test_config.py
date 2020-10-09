@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from opengever.base.interfaces import IUserSnapSettings
 from opengever.private import enable_opengever_private
 from opengever.testing import IntegrationTestCase
+from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from pkg_resources import get_distribution
 from plone import api
 
@@ -136,6 +137,19 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'portal_url'), 'http://nohost/portal')
+
+    @browsing
+    def test_config_contains_is_readonly_flag(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertFalse(browser.json.get(u'is_readonly'))
+
+        with ZODBStorageInReadonlyMode():
+            browser.open(self.config_url, headers=self.api_headers)
+            self.assertEqual(200, browser.status_code)
+            self.assertTrue(browser.json.get(u'is_readonly'))
 
     @browsing
     def test_config_contains_oneoffixx_settings(self, browser):
