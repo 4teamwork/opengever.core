@@ -4,9 +4,14 @@ Changelog
 2020.12.0 (unreleased)
 ----------------------
 
-- Add and index PHVS specific fields in solr. [njohner]
 - Allow assigning groups as participants to a Teamraum [elioschmutz]
 - Add external_reference field to solr, reindex objects with values. [deiferni]
+
+
+2020.11.1 (2020-10-09)
+----------------------
+
+- Add and index PHVS specific fields in solr. [njohner]
 
 
 2020.11.0 (2020-10-07)
