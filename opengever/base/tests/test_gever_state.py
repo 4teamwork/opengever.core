@@ -13,18 +13,18 @@ class TestGeverStateView(IntegrationTestCase):
         get_current_admin_unit().public_url = 'http://foo.org/cluster'
 
     def test_cluster_base_url(self):
-        self.assertEquals(
+        self.assertEqual(
             'http://foo.org/cluster/',
             self.portal.restrictedTraverse('@@gever_state/cluster_base_url')())
 
     def test_gever_portal_url(self):
-        self.assertEquals(
+        self.assertEqual(
             'http://foo.org/cluster/portal',
             self.portal.restrictedTraverse('@@gever_state/gever_portal_url')())
 
     def test_cas_server_url(self):
         applyProfile(self.portal, 'opengever.setup:casauth')
-        self.assertEquals(
+        self.assertEqual(
             'http://foo.org/cluster/portal',
             self.portal.restrictedTraverse('@@gever_state/cas_server_url')(),
         )
