@@ -1,0 +1,15 @@
+<div id="readonly-message-container"
+     tal:condition="view/available"
+     i18n:domain="opengever.readonly">
+
+  <div id="readonly-message">
+      <strong i18n:translate="msg_currently_in_readonly_mode">
+        GEVER is currently in readonly mode
+      </strong>
+      <br/>
+      <em i18n:translate="msg_write_actions_disabled">
+        (Actions that would modify data are disabled)
+      </em>
+  </div>
+
+</div>
