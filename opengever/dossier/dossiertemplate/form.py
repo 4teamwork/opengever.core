@@ -179,6 +179,46 @@ class SelectDossierTemplateWizardStep(
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
+class CreateDossierContentFromTemplateMixin(object):
+
+    def create_dossier_content_from_template(self, container, template):
+        with DeactivatedCatalogIndexing():
+            # While generating content, each newly created object
+            # will be indexed up to 4 times in the creation process.
+            #
+            # This is not necessary and takes a long time.
+            #
+            # Creating all the subdossier without reindexing the catalog
+            # will improve the performance massively and we can manually
+            # reindex the created objects once at the end of the creation
+            # process.
+            self.recursive_content_creation(template, container)
+
+        self.recursive_reindex(container)
+
+    def recursive_reindex(self, obj):
+        for child_obj in obj.listFolderContents():
+            child_obj.reindexObject()
+
+            if IDexterityContainer.providedBy(child_obj):
+                self.recursive_reindex(child_obj)
+
+    def recursive_content_creation(self, template_obj, target_container):
+        responsible = IDossier(target_container).responsible
+
+        for child_obj in template_obj.listFolderContents():
+            if IDossierTemplateSchema.providedBy(child_obj):
+                dossier = CreateDossierFromTemplateCommand(
+                    target_container, child_obj).execute()
+
+                IDossier(dossier).responsible = responsible
+
+                self.recursive_content_creation(child_obj, dossier)
+            else:
+                CreateDocumentFromTemplateCommand(
+                    target_container, child_obj, child_obj.title).execute()
+
+
 class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
     """Second wizard step - add the dossier from previeously selected template.
     """
@@ -186,7 +226,8 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
     typename = 'opengever.dossier.businesscasedossier'
 
     def _create_form_class(self, parent_form_class, steptitle):
-        class WrappedForm(CreateDossierMixin, BaseWizardStepForm, parent_form_class):
+        class WrappedForm(CreateDossierMixin, CreateDossierContentFromTemplateMixin,
+                          BaseWizardStepForm, parent_form_class):
             step_name = 'add-dossier-from-template'
 
             def updateFields(self):
@@ -294,25 +335,12 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                 if errors:
                     self.status = self.formErrorsMessage
                     return
-
                 container = self.createAndAdd(data)
                 if container is not None:
                     container = self.context.get(container.getId())
                     template_container = get_saved_template_obj(self.context)
 
-                    with DeactivatedCatalogIndexing():
-                        # While generating content, each newly created object
-                        # will be indexed up to 4 times in the creation process.
-                        #
-                        # This is not necessary and takes a long time.
-                        #
-                        # Creating all the subdossier without reindexing the catalog
-                        # will improve the performance massively and we can manually
-                        # reindex the created objects once at the end of the creation
-                        # process.
-                        self.recursive_content_creation(template_container, container)
-
-                    self.recursive_reindex(container)
+                    self.create_dossier_content_from_template(container, template_container)
 
                     self._finishedAdd = True
                     api.portal.show_message(
@@ -321,28 +349,6 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
             def handleCancel(self, action):
                 return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-            def recursive_reindex(self, obj):
-                for child_obj in obj.listFolderContents():
-                    child_obj.reindexObject()
-
-                    if IDexterityContainer.providedBy(child_obj):
-                        self.recursive_reindex(child_obj)
-
-            def recursive_content_creation(self, template_obj, target_container):
-                responsible = IDossier(target_container).responsible
-
-                for child_obj in template_obj.listFolderContents():
-                    if IDossierTemplateSchema.providedBy(child_obj):
-                        dossier = CreateDossierFromTemplateCommand(
-                            target_container, child_obj).execute()
-
-                        IDossier(dossier).responsible = responsible
-
-                        self.recursive_content_creation(child_obj, dossier)
-                    else:
-                        CreateDocumentFromTemplateCommand(
-                            target_container, child_obj, child_obj.title).execute()
 
         return WrappedForm
 
