@@ -91,7 +91,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_repository_root(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.repository_root.absolute_url() + '?expansion=main-dossier',
+            self.repository_root.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
@@ -103,7 +103,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_leaf_repofolder(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.leaf_repofolder.absolute_url() + '?expansion=main-dossier',
+            self.leaf_repofolder.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
@@ -115,7 +115,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_dossier(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.dossier.absolute_url() + '?expansion=main-dossier',
+            self.dossier.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
@@ -137,7 +137,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_document(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.document.absolute_url() + '?expansion=main-dossier',
+            self.document.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
@@ -159,7 +159,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_task(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.task.absolute_url() + '?expansion=main-dossier',
+            self.task.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
@@ -181,7 +181,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_subdossier(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.subdossier.absolute_url() + '?expansion=main-dossier',
+            self.subdossier.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
@@ -203,7 +203,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_subdocument(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.subdocument.absolute_url() + '?expansion=main-dossier',
+            self.subdocument.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
@@ -225,7 +225,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
     def test_main_dossier_expansion_on_subsubdossier(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.subsubdossier.absolute_url() + '?expansion=main-dossier',
+            self.subsubdossier.absolute_url() + '?expand=main-dossier',
             method="GET",
             headers=self.api_headers,
         )
