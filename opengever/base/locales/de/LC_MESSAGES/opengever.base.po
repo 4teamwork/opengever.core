@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-07-03 11:25+0000\n"
+"POT-Creation-Date: 2020-10-12 10:35+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -112,6 +112,11 @@ msgstr "Wenn Sie diesen Fehler dem Fachapplikationsverantwortlichen melden wolle
 msgid "description_no_privileges_for_page"
 msgstr "Sie haben unzureichende Berechtigungen um diese Seite anzuzeigen. Wenn Sie meinen diese Meldung fehlerhafterweise angezeigt zu bekommen, kontaktieren Sie bitte die fachapplikationsverantwortliche Person."
 
+#. Default: "Please notify your administrator about this error, and include a description the action you tried to perform as well as the error number below."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_please_notify_admin"
+msgstr "Bitte melden sie diesen Fehler dem Fachapplikationsverantwortlichen unter Angabe der Aktion welche Sie durchzuführen versucht haben, und der untenstehenden Fehlernummer."
+
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error"
@@ -121,6 +126,16 @@ msgstr "Entschuldigung, aber die Webseite die Sie versucht haben zu erreichen is
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error_site_admin"
 msgstr "Bitte kontaktieren Sie die fachapplikationsverantwortliche Person, wenn dieses Problem längerfristig besteht."
+
+#. Default: "The system currently is in ReadOnly mode, and therefore all write operations will be blocked."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_system_in_readonly_mode"
+msgstr "Das System befindet sich zurzeit im ReadOnly-Modus, und alle Schreibzugriffe werden deshalb verhindert."
+
+#. Default: "However, the action you tried to perform has nevertheless attempted to perform a write, and therefore had to be cancelled."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_unexpected_write_blocked"
+msgstr "Jedoch hat die von Ihnen durchgeführte Aktion trotzdem versucht, einen Schreibzugriff durchzuführen, und musste deshalb abgebrochen werden."
 
 #. Default: "Checked out documents cannot be copied."
 #: ./opengever/base/browser/copy_items.py
@@ -152,6 +167,11 @@ msgstr "Allgemein"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "fieldset_lifecycle"
 msgstr "Lebenszyklus"
+
+#. Default: "Error: Unexpected write attempt during ReadOnly mode"
+#: ./opengever/base/browser/templates/error.pt
+msgid "heading_site_error_readonly"
+msgstr "Fehler: Unerwarteter Schreibzugriff im ReadOnly-Modus"
 
 #. Default: "Archival value code"
 #: ./opengever/base/behaviors/lifecycle.py

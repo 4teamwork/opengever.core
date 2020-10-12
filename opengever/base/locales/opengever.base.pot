@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-07-03 11:25+0000\n"
+"POT-Creation-Date: 2020-10-12 10:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,6 +111,11 @@ msgstr ""
 msgid "description_no_privileges_for_page"
 msgstr ""
 
+#. Default: "Please notify your administrator about this error, and include a description the action you tried to perform as well as the error number below."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_please_notify_admin"
+msgstr ""
+
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error"
@@ -119,6 +124,16 @@ msgstr ""
 #. Default: "Please contact the responsible person if this problem persists."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error_site_admin"
+msgstr ""
+
+#. Default: "The system currently is in ReadOnly mode, and therefore all write operations will be blocked."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_system_in_readonly_mode"
+msgstr ""
+
+#. Default: "However, the action you tried to perform has nevertheless attempted to perform a write, and therefore had to be cancelled."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_unexpected_write_blocked"
 msgstr ""
 
 #. Default: "Checked out documents cannot be copied."
@@ -150,6 +165,11 @@ msgstr ""
 #. Default: "Life Cycle"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "fieldset_lifecycle"
+msgstr ""
+
+#. Default: "Error: Unexpected write attempt during ReadOnly mode"
+#: ./opengever/base/browser/templates/error.pt
+msgid "heading_site_error_readonly"
 msgstr ""
 
 #. Default: "Archival value code"

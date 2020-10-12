@@ -2,6 +2,8 @@ from Acquisition import aq_acquire
 from plone import api
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zExceptions import NotFound
+from ZODB import POSException
 from zope.component import adapts
 from zope.component.hooks import getSite
 from zope.interface import Interface
@@ -26,15 +28,18 @@ class ErrorHandlingView(BrowserView):
             self.portal_url = ''
             self.language = 'de'
 
-        exception = self.context
-        self.error_type = type(exception).__name__
         self.request.response.setHeader('Content-Type', 'text/html')
-
         return self.template()
 
     def is_manager(self):
         if self.plone:
             return api.user.has_permission('cmf.ManagePortal')
+
+    def is_notfound_error(self):
+        return isinstance(self.context, NotFound)
+
+    def is_readonly_error(self):
+        return isinstance(self.context, POSException.ReadOnlyError)
 
     def get_error_log(self):
         log = None
