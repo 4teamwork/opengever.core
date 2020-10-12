@@ -28,6 +28,7 @@ class ErrorHandlingView(BrowserView):
 
         exception = self.context
         self.error_type = type(exception).__name__
+        self.request.response.setHeader('Content-Type', 'text/html')
 
         return self.template()
 
