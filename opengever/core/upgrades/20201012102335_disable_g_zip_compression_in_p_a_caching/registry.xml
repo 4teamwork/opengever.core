@@ -1,0 +1,7 @@
+<registry>
+
+  <record name="plone.app.caching.interfaces.IPloneCacheSettings.enableCompression">
+    <value>False</value>
+  </record>
+
+</registry>

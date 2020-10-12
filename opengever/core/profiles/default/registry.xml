@@ -22,7 +22,7 @@
   </record>
 
   <record name="plone.app.caching.interfaces.IPloneCacheSettings.enableCompression">
-    <value>True</value>
+    <value>False</value>
   </record>
 
   <!-- disable cache purging for now, since we have no proxies configured
