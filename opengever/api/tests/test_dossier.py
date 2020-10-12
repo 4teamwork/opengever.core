@@ -242,3 +242,66 @@ class TestMainDossierExpansion(IntegrationTestCase):
             },
             browser.json["@components"]['main-dossier'],
         )
+
+    @browsing
+    def test_main_dossier_expansion_on_dossiertemplate(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.dossiertemplate.absolute_url() + '?expand=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/vorlagen/dossiertemplate-1',
+                u'@type': u'opengever.dossier.dossiertemplate',
+                u'description': u'Lorem ipsum',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': None,
+                u'title': u'Bauvorhaben klein',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_dossiertemplatedocument(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.dossiertemplatedocument.absolute_url() + '?expand=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/vorlagen/dossiertemplate-1',
+                u'@type': u'opengever.dossier.dossiertemplate',
+                u'description': u'Lorem ipsum',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': None,
+                u'title': u'Bauvorhaben klein',
+            },
+            browser.json["@components"]['main-dossier'],
+        )
+
+    @browsing
+    def test_main_dossier_expansion_on_subdossiertemplate(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            self.subdossiertemplate.absolute_url() + '?expand=main-dossier',
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            {
+                u'@id': u'http://nohost/plone/vorlagen/dossiertemplate-1',
+                u'@type': u'opengever.dossier.dossiertemplate',
+                u'description': u'Lorem ipsum',
+                u'is_leafnode': None,
+                u'is_subdossier': False,
+                u'review_state': None,
+                u'title': u'Bauvorhaben klein',
+            },
+            browser.json["@components"]['main-dossier'],
+        )

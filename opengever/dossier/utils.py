@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.inbox.inbox import IInbox
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
@@ -41,7 +42,9 @@ def get_main_dossier(obj):
 
     dossier = None
     while obj and not IPloneSiteRoot.providedBy(obj):
-        if IDossierMarker.providedBy(obj) or IInbox.providedBy(obj):
+        if IDossierMarker.providedBy(obj) or \
+           IInbox.providedBy(obj) or \
+           IDossierTemplateSchema.providedBy(obj):
             dossier = obj
 
         obj = aq_parent(aq_inner(obj))
