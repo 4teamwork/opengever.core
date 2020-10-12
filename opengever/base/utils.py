@@ -249,8 +249,13 @@ def check_group_plugin_configuration(portal):
             "for group enumeration.")
 
     group_introspection_plugins = plugins.getAllPlugins('IGroupIntrospection')
-
     if 'source_groups' not in group_introspection_plugins.get('active'):
         raise IncorrectConfigurationError(
             "Configuration error: source_groups plugin is not active "
             "for group introspection.")
+
+    groups_plugins = plugins.getAllPlugins('IGroupsPlugin')
+    if 'source_groups' not in groups_plugins.get('active'):
+        raise IncorrectConfigurationError(
+            "Configuration error: source_groups plugin is not active "
+            "for the groups plugin.")

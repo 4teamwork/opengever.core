@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Add @dossier-from-template endpoint. [tinagerber]
+- Activate the groups plugin for source_groups. [elioschmutz]
 - Also provide main_dossier for dossiertemplates [elioschmutz]
 - Allow assigning groups as participants to a Teamraum [elioschmutz]
 - Add external_reference field to solr, reindex objects with values. [deiferni]
