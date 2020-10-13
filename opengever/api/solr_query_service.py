@@ -164,6 +164,9 @@ class SimpleListingField(object):
     def index_value_to_label(self, value):
         return value
 
+    def hide_facet(self, facet):
+        return False
+
 
 class ListingField(SimpleListingField):
 
@@ -248,6 +251,9 @@ class ParticipantIdField(ParticipationsField):
         participant_id = self.helper.index_value_to_participant_id(value)
         return self.helper.participant_id_to_label(participant_id)
 
+    def hide_facet(self, facet):
+        return self.helper.index_value_to_role(facet) != self.helper.any_role_marker
+
 
 class ParticipationRoleField(ParticipationsField):
 
@@ -256,6 +262,9 @@ class ParticipationRoleField(ParticipationsField):
     def index_value_to_label(self, value):
         role = self.helper.index_value_to_role(value)
         return self.helper.role_to_label(role)
+
+    def hide_facet(self, facet):
+        return self.helper.index_value_to_participant_id(facet) != self.helper.any_participant_marker
 
 
 DEFAULT_SORT_INDEX = 'modified'
@@ -409,6 +418,8 @@ class SolrQueryBaseService(Service):
 
             facet_counts[facet_name] = {}
             for facet, count in solr_facet.items():
+                if field.hide_facet(facet):
+                    continue
                 facet_counts[field.field_name][facet] = {
                     "count": count,
                     "label": field.index_value_to_label(facet)

@@ -1173,3 +1173,38 @@ class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCas
             [IUUID(self.dossier), IUUID(self.empty_dossier)],
             [item['UID'] for item in browser.json['items']])
 
+    @browsing
+    def test_dossier_participant_and_roles_facets(self, browser):
+        """participants facets only include tokens with 'any-role' while
+        participation_roles facets only tokens with 'any-participant'.
+        Also note that selecting some of the available facets as additional
+        filter will lead to an empty result set.
+        """
+        self.login(self.regular_user, browser=browser)
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        query_string = '&'.join((
+            'name=dossiers',
+            'facets:list=participants',
+            'facets:list=participation_roles',
+            participant_filter.format(self.dossier_responsible.getId())
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.subdossier)],
+            [item['UID'] for item in browser.json['items']])
+        self.assertItemsEqual(
+            ['{}|any-role'.format(self.secretariat_user.getId()),
+             '{}|any-role'.format(self.dossier_responsible.getId())],
+            browser.json['facets']['participants'].keys())
+        self.assertItemsEqual(
+            ['any-participant|final-drawing', 'any-participant|participation'],
+            browser.json['facets']['participation_roles'].keys())
+
+        view = view + '&' + role_filter.format('final-drawing')
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        self.assertEqual(0, browser.json['items_total'])
