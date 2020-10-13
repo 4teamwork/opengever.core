@@ -70,6 +70,10 @@ class ParticipationAddForm(ModelAddForm):
                                        dossier=self.context,
                                        roles=data.pop('roles'))
 
+    def add(self, obj):
+        super(ParticipationAddForm, self).add(obj)
+        self.context.reindexObject(idxs=["participations", "UID"])
+
     def nextURL(self):
         return '{}#participations'.format(self.context.absolute_url())
 
@@ -102,6 +106,7 @@ class ParticipationEditForm(ModelEditForm):
 
     def applyChanges(self, data):
         self.model.update_roles(data.get('roles'))
+        self.model.resolve_dossier().reindexObject(idxs=["participations", "UID"])
 
     def nextURL(self):
         """Returns the url to the dossiers participation tab."""
@@ -129,6 +134,7 @@ class ParticipationRemoveForm(z3c.form.form.Form):
             return
 
         self.model.delete()
+        self.model.resolve_dossier().reindexObject(idxs=["participations", "UID"])
 
         api.portal.show_message(
             _(u'info_participation_removed', u'Participation removed'),

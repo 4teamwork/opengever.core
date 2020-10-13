@@ -91,6 +91,7 @@ class PloneParticipationHandler(ParticipationHandlerBase):
                 "There is already a participation for {}".format(participant_id))
         participation = self.create_participation(participant_id, roles)
         self.append_participation(participation)
+        self.context.reindexObject(idxs=["participations", "UID"])
         return participation
 
     def create_participation(self, participant_id, roles):
@@ -119,6 +120,7 @@ class PloneParticipationHandler(ParticipationHandlerBase):
             raise MissingParticipation(
                 "{} has no participations on this context".format(participant_id))
         self._participations[participant_id].roles = roles
+        self.context.reindexObject(idxs=["participations", "UID"])
         notify(events.ParticipationModified(
             self.context, self._participations[participant_id]))
 
@@ -144,6 +146,7 @@ class PloneParticipationHandler(ParticipationHandlerBase):
             raise MissingParticipation(
                 "{} has no participations on this context".format(participant_id))
         participation = self._participations.pop(participant_id)
+        self.context.reindexObject(idxs=["participations", "UID"])
         notify(events.ParticipationRemoved(self.context, participation))
 
 
@@ -191,17 +194,21 @@ class SQLParticipationHandler(ParticipationHandlerBase):
                 "There is already a participation for {}".format(participant_id))
 
         participant = self.get_participant(participant_id)
-        return participant.participation_class.create(
+        participation = participant.participation_class.create(
             participant=participant, dossier=self.context, roles=roles)
+        self.context.reindexObject(idxs=["participations", "UID"])
+        return participation
 
     def update_participation(self, participant_id, roles):
         self.validate_roles(roles)
         participation = self.get_participation(participant_id)
         participation.update_roles(roles)
+        self.context.reindexObject(idxs=["participations", "UID"])
 
     def remove_participation(self, participant_id):
         participation = self.get_participation(participant_id)
         participation.delete()
+        self.context.reindexObject(idxs=["participations", "UID"])
 
 
 class IParticipationData(Interface):
