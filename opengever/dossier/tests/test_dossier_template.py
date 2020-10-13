@@ -645,6 +645,59 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
             browser.css('#formfield-form-widgets-IOpenGeverBase-title .formHelp').first.text)
 
 
+class TestDossierTemplateVocabulary(IntegrationTestCase):
+    features = ('dossiertemplate', )
+
+    @browsing
+    def test_dossier_template_vocabulary(self, browser):
+        self.login(self.regular_user, browser=browser)
+        create(Builder("dossiertemplate")
+               .within(self.templates)
+               .titled(u"Bauvorhaben gross"))
+
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        self.assertItemsEqual(
+            ['Bauvorhaben klein', 'Bauvorhaben gross'],
+            [item['title'] for item in browser.json['items']])
+
+    @browsing
+    def test_templates_are_available_if_businesscase_dossiers_are_not_allowed(self, browser):
+        self.login(self.administrator, browser=browser)
+        create(Builder("dossiertemplate")
+               .within(self.templates)
+               .titled(u"Bauvorhaben gross"))
+        self.leaf_repofolder.allow_add_businesscase_dossier = False
+        self.set_related_items(
+            self.leaf_repofolder, [self.dossiertemplate, ],
+            fieldname='addable_dossier_templates')
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        self.assertEqual(['Bauvorhaben klein'], [item['title'] for item in browser.json['items']])
+
+    @browsing
+    def test_only_addable_templates_are_available(self, browser):
+        self.login(self.administrator, browser=browser)
+        template = create(Builder("dossiertemplate")
+                          .within(self.templates)
+                          .titled(u"Bauvorhaben gross"))
+        self.set_related_items(
+            self.leaf_repofolder, [template, ],
+            fieldname='addable_dossier_templates')
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        self.assertEqual(
+            ['Bauvorhaben gross'],
+            [item['title'] for item in browser.json['items']])
+
+
 class TestSubDossierTemplateHandling(IntegrationTestCase):
 
     @browsing

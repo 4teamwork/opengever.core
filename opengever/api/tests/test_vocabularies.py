@@ -33,6 +33,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.document.document_types',
     'opengever.dossier.container_types',
     'opengever.dossier.DocumentTemplatesVocabulary',
+    'opengever.dossier.DossierTemplatesVocabulary',
     'opengever.dossier.participation_roles',
     'opengever.dossier.type_prefixes',
     'opengever.dossier.ValidResolverNamesVocabulary',

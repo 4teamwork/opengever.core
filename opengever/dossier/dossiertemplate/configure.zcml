@@ -86,4 +86,9 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <utility
+      factory=".form.DossierTemplatesVocabulary"
+      name="opengever.dossier.DossierTemplatesVocabulary"
+      />
+
 </configure>

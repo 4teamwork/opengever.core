@@ -1,8 +1,13 @@
+from opengever.api.add import FolderPost
 from opengever.api.task import deserialize_responsible
 from opengever.api.validation import get_validation_errors
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
+from opengever.dossier.dossiertemplate.form import CreateDossierContentFromTemplateMixin
+from opengever.dossier.dossiertemplate import is_create_dossier_from_template_available
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -16,6 +21,7 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
@@ -44,7 +50,7 @@ class DocumentFromTemplatePost(Service):
             raise BadRequest('Missing parameter template')
 
         vocabulary = getUtility(IVocabularyFactory,
-                             name='opengever.dossier.DocumentTemplatesVocabulary')
+                                name='opengever.dossier.DocumentTemplatesVocabulary')
         term = vocabulary(self.context).getTermByToken(token)
         template = term.value
 
@@ -58,6 +64,48 @@ class DocumentFromTemplatePost(Service):
 
         serializer = queryMultiAdapter((document, self.request), ISerializeToJson)
         return serializer()
+
+
+class DossierFromTemplatePost(FolderPost, CreateDossierContentFromTemplateMixin):
+    """API Endpoint to create a dossier from a template.
+    """
+    def extract_data(self):
+        data = self.request_data
+        self.type_ = 'opengever.dossier.businesscasedossier'
+        self.id_ = data.get("id", None)
+        self.title_ = data.get('title', None)
+
+        token = data.get('template')
+        if isinstance(token, dict):
+            token = token.get('token')
+        if not token:
+            raise BadRequest('Missing parameter template')
+        vocabulary = getUtility(IVocabularyFactory,
+                                name='opengever.dossier.DossierTemplatesVocabulary')
+        try:
+            self.dossier_template = vocabulary(self.context).getTermByToken(token).value
+        except LookupError:
+            raise BadRequest("Invalid token '{}'".format(token))
+        return data
+
+    def reply(self):
+        if not is_create_dossier_from_template_available(self.context):
+            raise Unauthorized
+
+        serialized_dossier = super(DossierFromTemplatePost, self).reply()
+        self.validate_keywords(self.dossier_template, self.request_data.get('keywords'))
+        self.create_dossier_content_from_template(self.obj, self.dossier_template)
+        return serialized_dossier
+
+    def validate_keywords(self, dossier_template, keywords_data):
+        if dossier_template.restrict_keywords and keywords_data:
+            allowed_keywords = IDossierTemplate(dossier_template).keywords
+            deserializer = queryMultiAdapter(
+                (IDossier['keywords'], self.obj, self.request), IFieldDeserializer)
+            keywords = deserializer(keywords_data)
+            for keyword in keywords:
+                if keyword not in allowed_keywords:
+                    raise BadRequest("Keyword '{}' is not allowed".format(keyword))
 
 
 class ITriggerTaskTemplate(model.Schema):
@@ -88,15 +136,15 @@ class ITriggerTaskTemplateSources(model.Schema):
                          'opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema',
                          'opengever.tasktemplates.content.tasktemplate.ITaskTemplate',
                          ]
-                    }
-                )
+                }
+            )
         )
     )
 
     responsible = schema.Choice(
         source=TaskResponsibleSourceBinder(include_teams=True),
         required=True,
-        )
+    )
 
     related_documents = RelationList(
         required=False,
@@ -113,7 +161,7 @@ class ITriggerTaskTemplateSources(model.Schema):
                      'opengever.task.task.ITask',
                      'ftw.mail.mail.IMail', ],
                 }),
-            )
+        )
     )
 
 
@@ -183,7 +231,7 @@ class TriggerTaskTemplatePost(Service):
             IFieldDeserializer)
 
         responsible_field = Fields(
-                ITriggerTaskTemplateSources)['responsible'].field
+            ITriggerTaskTemplateSources)['responsible'].field
         responsible_deserializer = queryMultiAdapter(
             (responsible_field, self.context, self.request),
             IFieldDeserializer)
@@ -227,7 +275,7 @@ class TriggerTaskTemplatePost(Service):
                 except (RequiredMissing, ConstraintNotSatisfied):
                     errors.append(
                         u'invalid responsible {} for template {}'.format(
-                        raw_responsible, template))
+                            raw_responsible, template))
                 else:
                     by_template['responsible'] = responsible
 

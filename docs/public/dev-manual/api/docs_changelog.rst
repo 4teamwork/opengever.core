@@ -8,6 +8,11 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 2020-09-01
 ----------
 
+- Kapitel "Geschäftsdossier ab Vorlage erstellen" hinzugefügt
+
+2020-09-01
+----------
+
 - Kapitel "Beteiligungen" hinzugefügt
 
 
