@@ -12,6 +12,7 @@ from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
+from opengever.dossier.dossiertemplate import is_create_dossier_from_template_available
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
@@ -362,7 +363,4 @@ class SelectDossierTemplateView(FormWrapper):
         """Checks if it is allowed to add a 'dossier from template'
         at the current context.
         """
-        return is_dossier_template_feature_enabled() and \
-            self.context.is_leaf_node() and \
-            api.user.has_permission('opengever.dossier: Add businesscasedossier', obj=self.context) and \
-            (self.context.allow_add_businesscase_dossier or self.context.addable_dossier_templates)
+        return is_create_dossier_from_template_available(self.context)
