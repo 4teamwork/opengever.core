@@ -4,6 +4,10 @@ Changelog
 2020.12.0 (unreleased)
 ----------------------
 
+- Use custom error page for ReadOnlyErrors. [lgraf]
+- Disable GZip compression in p.a.caching. [lgraf]
+- Add viewlet that shows a message to indicate readonly mode. [lgraf]
+- Add is_readonly flag for @config endpoint and @@gever_state view. [lgraf]
 - Add @dossier-from-template endpoint. [tinagerber]
 - Also provide main_dossier for dossiertemplates [elioschmutz]
 - Allow assigning groups as participants to a Teamraum [elioschmutz]
