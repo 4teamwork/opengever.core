@@ -3,21 +3,29 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.contact import is_contact_feature_enabled
+from opengever.contact.sources import ContactsSource
 from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
+from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.browser.participants import translate_participation_role
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.private.dossier import IPrivateDossier
+from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implementer
 
 
@@ -225,3 +233,50 @@ class SearchableTextExtender(object):
 @indexer(IDossierMarker)
 def dossier_touched_indexer(obj):
     return IDossier(obj).touched
+
+
+class ParticipationIndexHelper(object):
+
+    any_participant_marker = 'any-participant'
+    any_role_marker = 'any-role'
+
+    def index_value_to_participant_id_and_role(self, value):
+        participant_id, role = value.rsplit("|", 1)
+        return participant_id, role
+
+    def index_value_to_participant_id(self, value):
+        participant_id, role = self.index_value_to_participant_id_and_role(value)
+        return participant_id
+
+    def index_value_to_role(self, value):
+        participant_id, role = self.index_value_to_participant_id_and_role(value)
+        return role
+
+    def participant_id_and_role_to_index_value(self, participant_id=None, role=None):
+        if role is None:
+            role = self.any_role_marker
+        if participant_id is None:
+            participant_id = self.any_participant_marker
+        return u"{}|{}".format(participant_id, role)
+
+    def role_to_label(self, role):
+        if role == self.any_role_marker:
+            return translate(_(u'any_role'), context=getRequest())
+        return translate_participation_role(role)
+
+    def participant_id_to_label(self, participant_id):
+        if participant_id == self.any_participant_marker:
+            return translate(_(u'any_participant'), context=getRequest())
+        if is_contact_feature_enabled():
+            source = ContactsSource(api.portal.get())
+            term = source.getTermByToken(participant_id)
+        else:
+            source = UsersContactsInboxesSourceBinder()(api.portal.get())
+            term = source.getTermByToken(participant_id)
+        return term.title
+
+    def index_value_to_label(self, value):
+        participant_id, role = self.index_value_to_participant_id_and_role(value)
+        role_label = self.role_to_label(role)
+        participant_label = self.participant_id_to_label(participant_id)
+        return u"{}|{}".format(role_label, participant_label)

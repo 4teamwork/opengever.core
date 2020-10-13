@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-29 16:20+0000\n"
+"POT-Creation-Date: 2020-10-12 14:36+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -256,6 +256,14 @@ msgstr "Aucun élément n'a été sélectionné"
 msgid "additional_attributes"
 msgstr "Attributs supplémentaires"
 
+#: ./opengever/dossier/indexers.py
+msgid "any_participant"
+msgstr "Tous"
+
+#: ./opengever/dossier/indexers.py
+msgid "any_role"
+msgstr "Tous"
+
 #. Default: "Add"
 #: ./opengever/dossier/browser/forms.py
 msgid "button_add"
@@ -374,6 +382,7 @@ msgstr "Général"
 #. Default: "Filing"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/behaviors/filing.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "fieldset_filing"
 msgstr "Stockage"
 
@@ -467,6 +476,7 @@ msgid "help_filing_number"
 msgstr "Saisir le numéro d'inventaire complet."
 
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "help_keywords"
 msgstr ""
 "Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de classement.\n"
@@ -549,6 +559,7 @@ msgstr "Clôturer"
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_comments"
 msgstr "Commentaire"
 
@@ -671,6 +682,7 @@ msgstr "Historique"
 #. Default: "Keywords"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_keywords"
 msgstr "Mots-clés"
 

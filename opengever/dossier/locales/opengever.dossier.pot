@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-29 16:20+0000\n"
+"POT-Creation-Date: 2020-10-12 14:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -257,6 +257,14 @@ msgstr ""
 msgid "additional_attributes"
 msgstr ""
 
+#: ./opengever/dossier/indexers.py
+msgid "any_participant"
+msgstr ""
+
+#: ./opengever/dossier/indexers.py
+msgid "any_role"
+msgstr ""
+
 #. Default: "Add"
 #: ./opengever/dossier/browser/forms.py
 msgid "button_add"
@@ -375,6 +383,7 @@ msgstr ""
 #. Default: "Filing"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/behaviors/filing.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "fieldset_filing"
 msgstr ""
 
@@ -468,6 +477,7 @@ msgid "help_filing_number"
 msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "help_keywords"
 msgstr ""
 
@@ -548,6 +558,7 @@ msgstr ""
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_comments"
 msgstr ""
 
@@ -670,6 +681,7 @@ msgstr ""
 #. Default: "Keywords"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_keywords"
 msgstr ""
 
