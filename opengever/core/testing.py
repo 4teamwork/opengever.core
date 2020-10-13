@@ -476,6 +476,11 @@ class ContentFixtureLayer(OpengeverFixture):
         self.setup_eventlog()
         setup_logger()
 
+    def make_fixture(self):
+        # Avoid circular imports:
+        from opengever.testing.fixtures import OpengeverContentFixture
+        return OpengeverContentFixture()
+
     def setUpPloneSite(self, portal):
         session.current_session = session.BuilderSession()
         session.current_session.session = create_session()
@@ -488,10 +493,8 @@ class ContentFixtureLayer(OpengeverFixture):
 
         if not db_cache_manager.is_loaded_from_cache('GEVER_fixture'):
             sqlite_testing.create_tables()
-            # Avoid circular imports:
-            from opengever.testing.fixtures import OpengeverContentFixture
             setRequest(portal.REQUEST)
-            self['fixture_lookup_table'] = OpengeverContentFixture()()
+            self['fixture_lookup_table'] = self.make_fixture()()
             setRequest(None)
 
             db_cache_manager.data['fixture_lookup_table'] = (
