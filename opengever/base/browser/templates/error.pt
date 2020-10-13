@@ -46,7 +46,7 @@
         </div>
 
 
-        <metal:notfound tal:condition="python:view.error_type=='NotFound'">
+        <metal:notfound tal:condition="view/is_notfound_error">
             <tal:redirect define="redirection_view context/@@plone_redirector_view">
 
                 <tal:redirect define="redirect_success redirection_view/attempt_redirect|nothing" replace="nothing">
@@ -76,14 +76,39 @@
             </tal:redirect>
         </metal:notfound>
 
-        <metal:othererror tal:condition="python:view.error_type!='NotFound'"
+        <metal:othererror tal:condition="not:view/is_notfound_error"
                           tal:define="is_manager view/is_manager;
                                       error_log view/get_error_log">
 
-            <h1 class="documentFirstHeading"
-                i18n:translate="heading_site_error_sorry">
-                We&#8217;re sorry, but there seems to be an error&hellip;
-            </h1>
+            <metal:genericerror tal:condition="not:view/is_readonly_error">
+
+                <h1 class="documentFirstHeading"
+                    i18n:translate="heading_site_error_sorry">
+                    We&#8217;re sorry, but there seems to be an error&hellip;
+                </h1>
+
+            </metal:genericerror>
+
+            <metal:readonlyerror tal:condition="view/is_readonly_error" i18n:domain="opengever.base">
+
+                <h1 class="documentFirstHeading"
+                    i18n:translate="heading_site_error_readonly">
+                    Error: Unexpected write attempt during ReadOnly mode
+                </h1>
+
+                <p i18n:translate="description_system_in_readonly_mode">
+                    The system currently is in ReadOnly mode, and therefore all write operations will be blocked.
+                </p>
+                <p i18n:translate="description_unexpected_write_blocked">
+                    However, the action you tried to perform has nevertheless attempted to perform a write, and
+                    therefore had to be cancelled.
+                </p>
+                <p i18n:translate="description_please_notify_admin">
+                    Please notify your administrator about this error, and include a description the action you
+                    tried to perform as well as the error number below.
+                </p>
+
+            </metal:readonlyerror>
 
             <div class="error-body">
                 <tal:noentry condition="not:error_log">
@@ -98,7 +123,8 @@
                     <code i18n:name="entryid" tal:content="error_log/errorid">1174791474.310.489098092344</code>.
                     </p>
 
-                    <p tal:condition="not: is_manager" i18n:domain="opengever.base"
+                    <p tal:condition="python: not(is_manager or view.is_readonly_error())"
+                       i18n:domain="opengever.base"
                        i18n:translate="description_include_error_in_admin_message">
                     If you need to report this to the responsible person, please include this entry number in your message.
                     </p>

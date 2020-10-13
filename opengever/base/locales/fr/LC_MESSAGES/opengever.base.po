@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-07-03 11:25+0000\n"
+"POT-Creation-Date: 2020-10-12 10:35+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -113,6 +113,11 @@ msgstr "Si vous voulez signaler cette erreur au responsable de l'application, ve
 msgid "description_no_privileges_for_page"
 msgstr "Vous n'avez pas les droits suffisants pour voir cette page. Si vous pensez que vous avez reçu ce message par erreur, veuillez contacter le responsable de l'application."
 
+#. Default: "Please notify your administrator about this error, and include a description the action you tried to perform as well as the error number below."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_please_notify_admin"
+msgstr ""
+
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error"
@@ -122,6 +127,16 @@ msgstr "Nous nous excusons pour la gêne occasionnée, mais la page à laquelle 
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error_site_admin"
 msgstr "Si ce problème subsiste, veuillez contacter le responsable de l'application, s'il vous plaît."
+
+#. Default: "The system currently is in ReadOnly mode, and therefore all write operations will be blocked."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_system_in_readonly_mode"
+msgstr ""
+
+#. Default: "However, the action you tried to perform has nevertheless attempted to perform a write, and therefore had to be cancelled."
+#: ./opengever/base/browser/templates/error.pt
+msgid "description_unexpected_write_blocked"
+msgstr ""
 
 #. Default: "Checked out documents cannot be copied."
 #: ./opengever/base/browser/copy_items.py
@@ -153,6 +168,11 @@ msgstr "Général"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "fieldset_lifecycle"
 msgstr "Cycle de vie"
+
+#. Default: "Error: Unexpected write attempt during ReadOnly mode"
+#: ./opengever/base/browser/templates/error.pt
+msgid "heading_site_error_readonly"
+msgstr ""
 
 #. Default: "Archival value code"
 #: ./opengever/base/behaviors/lifecycle.py

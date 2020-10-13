@@ -95,6 +95,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', None),
+            ('is_readonly', False),
             ])
 
         with self.login(self.regular_user):
@@ -111,6 +112,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', None),
+            ('is_readonly', False),
             ])
         configuration = IGeverSettings(self.portal).get_config()
         self.assertEqual(configuration, expected_configuration)
@@ -140,6 +142,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', 'http://example.com/api/apps'),
+            ('is_readonly', False),
             ])
 
         with custom_apps_url('http://example.com/api/apps'):
