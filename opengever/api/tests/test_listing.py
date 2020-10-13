@@ -1147,3 +1147,29 @@ class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCas
             [IUUID(self.dossier), IUUID(self.subdossier), IUUID(self.empty_dossier)],
             [item['UID'] for item in browser.json['items']])
 
+    @browsing
+    def test_dossier_participant_and_roles_filters_combine_with_and(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        query_string = '&'.join((
+            'name=dossiers',
+            participant_filter.format(self.dossier_responsible.getId()),
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.subdossier), IUUID(self.empty_dossier)],
+            [item['UID'] for item in browser.json['items']])
+
+        view = view + '&' + role_filter.format('regard')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.empty_dossier)],
+            [item['UID'] for item in browser.json['items']])
+

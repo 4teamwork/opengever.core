@@ -3,6 +3,7 @@ from ftw.solr.query import make_path_filter
 from opengever.api.solr_query_service import REQUIRED_RESPONSE_FIELDS as DEFAULT_REQUIRED_RESPONSE_FIELDS
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
+from opengever.dossier.indexers import ParticipationIndexHelper
 from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
@@ -148,12 +149,30 @@ class ListingGet(SolrQueryBaseService):
             '/'.join(self.context.getPhysicalPath()), depth))
 
         # Add requested filters
+        filters = self.preprocess_filters(filters)
         for key, value in filters.items():
             field = self.get_field(key)
             solr_filter = field.listing_to_solr_filter(value)
             if solr_filter:
                 filter_queries.append(solr_filter)
         return filter_queries
+
+    def preprocess_filters(self, filters):
+        filters = dict(filters)
+        if 'participants' in filters and 'participation_roles' in filters:
+            helper = ParticipationIndexHelper()
+            participant_id_filters = filters.pop('participants')
+            role_filters = filters.pop('participation_roles')
+            participations = []
+            for id_filter in participant_id_filters:
+                participant_id = helper.index_value_to_participant_id(id_filter)
+                for role_filter in role_filters:
+                    role = helper.index_value_to_role(role_filter)
+                    participations.append(
+                        helper.participant_id_and_role_to_index_value(
+                            participant_id, role))
+            filters['participations'] = participations
+        return filters
 
     def extract_sort(self, params, query):
         """ Extract the sort order, defaulting to sorting in descending
