@@ -10,13 +10,17 @@ from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
 from opengever.ogds.base.actor import OGDSUserActor
 from opengever.ogds.base.actor import PloneUserActor
+from opengever.ogds.base.sources import UsersContactsInboxesSource
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IExpandableElement
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
+from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
 from zope.component import adapter
+from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import implements
@@ -287,3 +291,32 @@ class ParticipationsDelete(Service):
 
         self.request.response.setStatus(204)
         return None
+
+
+class PossibleParticipantsGet(Service):
+    def reply(self):
+        if is_contact_feature_enabled():
+            source = ContactsSource(self.context)
+        else:
+            source = UsersContactsInboxesSource(self.context)
+        query = safe_unicode(self.request.form.get('query', ''))
+        results = source.search(query)
+
+        batch = HypermediaBatch(self.request, results)
+
+        serialized_terms = []
+        for term in batch:
+            serializer = getMultiAdapter(
+                (term, self.request), interface=ISerializeToJson
+            )
+            serialized_terms.append(serializer())
+
+        result = {
+            "@id": batch.canonical_url,
+            "items": serialized_terms,
+            "items_total": batch.items_total,
+        }
+        links = batch.links
+        if links:
+            result["batching"] = links
+        return result
