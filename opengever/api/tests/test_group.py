@@ -12,6 +12,7 @@ from Products.PloneLDAP.factory import manage_addPloneLDAPMultiPlugin
 from Products.PlonePAS.interfaces.group import IGroupIntrospection
 from Products.PlonePAS.interfaces.group import IGroupManagement
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 import json
 
 
@@ -31,6 +32,22 @@ class TestCheckGroupPluginConfiguration(IntegrationTestCase):
         self.assertEqual(
             'Configuration error: source_groups plugin is not active '
             'for group management.',
+            exc.exception.message)
+
+    def test_raises_if_source_group_not_in_groups_plugin(self):
+        self.login(self.regular_user)
+        check_group_plugin_configuration(self.portal)
+
+        acl_users = getToolByName(self.portal, 'acl_users')
+        plugins = acl_users.plugins
+        plugins.deactivatePlugin(IGroupsPlugin, 'source_groups')
+
+        with self.assertRaises(IncorrectConfigurationError) as exc:
+            check_group_plugin_configuration(self.portal)
+
+        self.assertEqual(
+            'Configuration error: source_groups plugin is not active '
+            'for the groups plugin.',
             exc.exception.message)
 
     def test_raises_if_source_group_not_first_group_management_plugin(self):

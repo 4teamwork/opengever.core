@@ -9,6 +9,7 @@ Changelog
 - Add viewlet that shows a message to indicate readonly mode. [lgraf]
 - Add is_readonly flag for @config endpoint and @@gever_state view. [lgraf]
 - Add @dossier-from-template endpoint. [tinagerber]
+- Activate the groups plugin for source_groups. [elioschmutz]
 - Also provide main_dossier for dossiertemplates [elioschmutz]
 - Allow assigning groups as participants to a Teamraum [elioschmutz]
 - Add external_reference field to solr, reindex objects with values. [deiferni]
