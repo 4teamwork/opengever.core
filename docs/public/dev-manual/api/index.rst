@@ -50,6 +50,7 @@ Inhalt:
    workspace/index
    linked_workspaces.rst
    templatefolder.rst
+   dossier_from_template.rst
    trigger_task_template.rst
    remote_workflow.rst
    accept_remote_task.rst

@@ -793,6 +793,14 @@
 
   <plone:service
       method="POST"
+      name="@dossier-from-template"
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      factory=".templatefolder.DossierFromTemplatePost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
       name="@trigger-task-template"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".templatefolder.TriggerTaskTemplatePost"

@@ -7,7 +7,9 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.ogds.models.team import Team
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
@@ -15,6 +17,8 @@ from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zExceptions import BadRequest
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
 import json
 import pytz
 
@@ -151,6 +155,126 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
                          headers=self.api_headers)
+
+
+class TestDossierFromTemplatePost(IntegrationTestCase):
+
+    features = ('dossiertemplate', )
+
+    @browsing
+    def test_create_dossier_from_template_within_repository_folder(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        template = browser.json['items'][0]
+
+        data = {'template': template,
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        dossier = children['added'].pop()
+        self.assertEqual(u'New d\xf6ssier', dossier.title)
+        self.assertEqual(self.regular_user.getId(), IDossier(dossier).responsible)
+        self.assertEqual([u'Werkst\xe4tte', u'Anfragen'],
+                         [obj.title for obj in dossier.listFolderContents()])
+
+        subdossier = dossier.listFolderContents()[1]
+        self.assertEqual([u'Baumsch\xfctze'],
+                         [obj.title for obj in subdossier.listFolderContents()])
+
+    @browsing
+    def test_raise_unauthorized_if_dossiertemplate_feature_is_not_available(self, browser):
+        self.login(self.regular_user, browser)
+        toggle_feature(IDossierTemplateSettings, enabled=False)
+
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        template = browser.json['items'][0]
+
+        data = {'template': template,
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+
+        with browser.expect_unauthorized():
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+    @browsing
+    def test_invalid_keyword_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser)
+        self.dossiertemplate.restrict_keywords = True
+        vocabulary = getUtility(IVocabularyFactory,
+                                name='opengever.dossier.DossierTemplatesVocabulary')
+        token = vocabulary(self.leaf_repofolder).getTerm(self.dossiertemplate).token
+        data = {'template': {'token': token},
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId(),
+                'keywords': ['secret', 'invalid']}
+
+        with browser.expect_http_error(400):
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {"message": "Keyword 'invalid' is not allowed",
+             "type": "BadRequest"},
+            browser.json)
+
+    @browsing
+    def test_missing_template_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser)
+        data = {'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+
+        with browser.expect_http_error(400):
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {"message": "Missing parameter template",
+             "type": "BadRequest"},
+            browser.json)
+
+    @browsing
+    def test_invalid_template_raises_bad_request(self, browser):
+        self.login(self.administrator, browser)
+        template = create(Builder("dossiertemplate")
+                          .within(self.templates)
+                          .titled(u"Bauvorhaben gross"))
+        vocabulary = getUtility(IVocabularyFactory,
+                                name='opengever.dossier.DossierTemplatesVocabulary')
+        token = vocabulary(self.leaf_repofolder).getTerm(self.dossiertemplate).token
+        self.set_related_items(
+            self.leaf_repofolder, [template, ],
+            fieldname='addable_dossier_templates')
+
+        self.login(self.regular_user, browser)
+
+        data = {'template': {'token': token},
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+        with browser.expect_http_error(400):
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {"message": "Invalid token '{}'".format(token),
+             "type": "BadRequest"},
+            browser.json)
 
 
 class TestTriggerTaskTemplatePost(IntegrationTestCase):

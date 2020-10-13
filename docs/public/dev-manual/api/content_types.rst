@@ -32,6 +32,7 @@ Ordnungsposition
 --------------------
 
 
+.. _label-dossier-schema:
 
 Geschäftsdossier
 ^^^^^^^^^^^^^^^^
