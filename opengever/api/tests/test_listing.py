@@ -14,6 +14,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from zExceptions import BadRequest
 from zope.component import getMultiAdapter
 
 
@@ -1172,6 +1173,50 @@ class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCas
         self.assertItemsEqual(
             [IUUID(self.dossier), IUUID(self.empty_dossier)],
             [item['UID'] for item in browser.json['items']])
+
+    @browsing
+    def test_cannot_filter_both_by_participations_and_participants(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        participation_filter = 'filters.participations:record:list={}|{}'
+        query_string = '&'.join((
+            'name=dossiers',
+            participation_filter.format(self.dossier_responsible.getId(), 'regard'),
+            participant_filter.format(self.dossier_responsible.getId()),
+        ))
+        view = '@listing?{}'.format(query_string)
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': "Cannot set participations filter together with "
+                         "participants or participation_roles filters.",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_cannot_filter_both_by_participations_and_participation_roles(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        participation_filter = 'filters.participations:record:list={}|{}'
+        query_string = '&'.join((
+            'name=dossiers',
+            participation_filter.format(self.dossier_responsible.getId(), 'regard'),
+            role_filter.format('regard'),
+        ))
+        view = '@listing?{}'.format(query_string)
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': "Cannot set participations filter together with "
+                         "participants or participation_roles filters.",
+             u'type': u'BadRequest'},
+            browser.json)
 
     @browsing
     def test_dossier_participant_and_roles_facets(self, browser):
