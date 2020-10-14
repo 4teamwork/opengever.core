@@ -108,6 +108,21 @@
                     tried to perform as well as the error number below.
                 </p>
 
+                <metal:culprit tal:condition="is_manager">
+                    <div tal:condition="view/get_culprit_traceback">
+                        <h3>This seems to be the culprit:</h3>
+                        <pre tal:content="view/get_culprit_traceback" />
+                    </div>
+
+                    <div tal:condition="not: view/get_culprit_traceback">
+                        <strong>
+                            If this is a local development or STAGING system, you might want to enable
+                            Write-on-Read tracing using the <tt>@@manage-write-on-read-tracing</tt> view
+                            in order to hopefully get a traceback for the <em>real</em> culprit for this write.
+                        </strong>
+                    </div>
+                </metal:culprit>
+
             </metal:readonlyerror>
 
             <div class="error-body">
