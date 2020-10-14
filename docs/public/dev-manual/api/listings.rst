@@ -92,6 +92,9 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``lastname``: Nachname
 - ``mimetype``: Mimetype
 - ``modified``: Modifikationsdatum
+- ``participants``: Beteiligte
+- ``participation_roles``: Beteiligungsrollen
+- ``participations``: Beteiligungen
 - ``pdf_url``: URL für Vorschau-PDF
 - ``phone_office``: Telefonnummer
 - ``preview_url``: URL für Vorschau
@@ -178,6 +181,12 @@ siehe Tabelle:
     |``mimetype``              |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
     |``modified``              |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |        ja       |        ja        |       ja        |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
+    |``participants``          |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
+    |``participation_roles``   |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
+    |``participations``        |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
     |``pdf_url``               |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
