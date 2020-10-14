@@ -6,10 +6,10 @@
 
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      name="manage-csrf-tracing"
-      class=".manage_csrf_tracing.ManageCSRFTracing"
+      name="manage-write-on-read-tracing"
+      class=".manage_write_on_read_tracing.ManageWriteOnReadTracing"
       permission="cmf.ManagePortal"
-      template="templates/managecsrftracing.pt"
+      template="templates/manage_write_on_read_tracing.pt"
       />
 
   <browser:page

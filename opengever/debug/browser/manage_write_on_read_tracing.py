@@ -71,7 +71,7 @@ def register_patched_to_trace(self, obj):
 
 def revert_patches_if_expired():
     if datetime.now() >= _patches_expire_at:
-        log.info("CSRF tracing patches have expired. Reverting...")
+        log.info("WriteOnRead tracing patches have expired. Reverting...")
         _unpatch_register()
         _unpatch_build_csrf_report()
 
@@ -152,13 +152,13 @@ def _is_patched(func, orig_func):
     return (False, '')
 
 
-class ManageCSRFTracing(BrowserView):
-    """This view allows to enable CSRF tracing, which will monkey patch
+class ManageWriteOnReadTracing(BrowserView):
+    """This view allows to enable WriteOnRead tracing, which will monkey patch
     the method for object registration on the ZODB connection in order to
     save a stack trace at the point a persistent object has been registered
     (i.e. changed for the first time in a transaction).
 
-    Activating CSRF tracing will patch two methods: register() on the ZODB
+    Activating WriteOnRead tracing will patch two methods: register() on the ZODB
     connection and _build_csrf_report() on our own OGProtectTransform. The
     patch to register() will save a formatted stack trace to a module global
     every time a persistent object is modified for the first time in a
@@ -178,10 +178,10 @@ class ManageCSRFTracing(BrowserView):
         timeout = int(self.request.form.get('timeout', DEFAULT_PATCH_TIMEOUT))
 
         if action == 'Activate':
-            self._activate_csrf_tracing(timeout)
+            self._activate_write_on_read_tracing(timeout)
 
         elif action == 'Deactivate':
-            self._deactivate_csrf_tracing()
+            self._deactivate_write_on_read_tracing()
 
         # Allow for suggesting a timeout value via query string
         self._suggested_timeout = None
@@ -189,26 +189,26 @@ class ManageCSRFTracing(BrowserView):
         if suggested_timeout is not None:
             self._suggested_timeout = int(suggested_timeout)
 
-        return super(ManageCSRFTracing, self).__call__()
+        return super(ManageWriteOnReadTracing, self).__call__()
 
-    def _activate_csrf_tracing(self, timeout):
+    def _activate_write_on_read_tracing(self, timeout):
         global _patches_expire_at
 
-        log.info("Activating CSRF tracing...")
+        log.info("Activating WriteOnRead tracing...")
         with expires_lock:
             _patches_expire_at = datetime.now() + timedelta(minutes=timeout)
 
         _patch_register()
         _patch_build_csrf_report()
-        msg = u'CSRF tracing has been activated!'
+        msg = u'WriteOnRead tracing has been activated!'
         IStatusMessage(self.request).addStatusMessage(msg, 'warning')
         log.info(msg)
 
-    def _deactivate_csrf_tracing(self):
-        log.info("Deactivating CSRF tracing...")
+    def _deactivate_write_on_read_tracing(self):
+        log.info("Deactivating WriteOnRead tracing...")
         _unpatch_register()
         _unpatch_build_csrf_report()
-        msg = u'CSRF tracing has been deactivated!'
+        msg = u'WriteOnRead tracing has been deactivated!'
         IStatusMessage(self.request).addStatusMessage(msg, 'info')
         log.info(msg)
 
@@ -235,5 +235,5 @@ class ManageCSRFTracing(BrowserView):
         return _patches_expire_at
 
     def documentation(self):
-        doc = ManageCSRFTracing.__doc__
+        doc = ManageWriteOnReadTracing.__doc__
         return doc.replace('\n\n', '<br/><br/>')
