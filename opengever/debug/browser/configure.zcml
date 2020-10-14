@@ -14,10 +14,10 @@
 
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      name="trigger-csrf"
-      class=".trigger_csrf.TriggerCSRF"
+      name="trigger-write-on-read"
+      class=".trigger_write_on_read.TriggerWriteOnRead"
       permission="cmf.ManagePortal"
-      template="templates/triggercsrf.pt"
+      template="templates/trigger_write_on_read.pt"
       />
 
 </configure>
