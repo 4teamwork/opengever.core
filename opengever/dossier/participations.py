@@ -63,7 +63,7 @@ class ParticipationHandlerBase(object):
         available_roles = getVocabularyRegistry().get(context, "opengever.dossier.participation_roles")
         for role in roles:
             if role not in available_roles:
-                raise InvalidRole("Role '{}' does not exist".format(role))
+                raise InvalidRole(u"Role '{}' does not exist".format(role))
 
 
 class PloneParticipationHandler(ParticipationHandlerBase):
@@ -81,14 +81,14 @@ class PloneParticipationHandler(ParticipationHandlerBase):
             source.getTermByToken(participant_id)
         except LookupError:
             raise InvalidParticipantId(
-                "{} is not a valid id".format(participant_id))
+                u"{} is not a valid id".format(participant_id))
 
     def add_participation(self, participant_id, roles):
         self.validate_participant(participant_id)
         self.validate_roles(roles)
         if self.has_participation(participant_id):
             raise DupplicateParticipation(
-                "There is already a participation for {}".format(participant_id))
+                u"There is already a participation for {}".format(participant_id))
         participation = self.create_participation(participant_id, roles)
         self.append_participation(participation)
         self.context.reindexObject(idxs=["participations", "UID"])
@@ -118,7 +118,7 @@ class PloneParticipationHandler(ParticipationHandlerBase):
         self.validate_roles(roles)
         if not self.has_participation(participant_id):
             raise MissingParticipation(
-                "{} has no participations on this context".format(participant_id))
+                u"{} has no participations on this context".format(participant_id))
         self._participations[participant_id].roles = roles
         self.context.reindexObject(idxs=["participations", "UID"])
         notify(events.ParticipationModified(
@@ -130,7 +130,7 @@ class PloneParticipationHandler(ParticipationHandlerBase):
 
         if self.has_participation(value.contact):
             raise DupplicateParticipation(
-                "There is already a participation for {}".format(value.contact))
+                u"There is already a participation for {}".format(value.contact))
 
         if self._participations is None:
             self._participations = PersistentDict()
@@ -144,7 +144,7 @@ class PloneParticipationHandler(ParticipationHandlerBase):
         self.validate_participant(participant_id)
         if not self.has_participation(participant_id):
             raise MissingParticipation(
-                "{} has no participations on this context".format(participant_id))
+                u"{} has no participations on this context".format(participant_id))
         participation = self._participations.pop(participant_id)
         self.context.reindexObject(idxs=["participations", "UID"])
         notify(events.ParticipationRemoved(self.context, participation))
@@ -168,7 +168,7 @@ class SQLParticipationHandler(ParticipationHandlerBase):
         participation = query.one_or_none()
         if not participation:
             raise MissingParticipation(
-                "{} has no participations on this context".format(participant_id))
+                u"{} has no participations on this context".format(participant_id))
         return query.one_or_none()
 
     def has_participation(self, participant_id):
@@ -184,14 +184,14 @@ class SQLParticipationHandler(ParticipationHandlerBase):
             term = source.getTermByToken(participant_id)
         except LookupError:
             raise InvalidParticipantId(
-                "{} is not a valid id".format(participant_id))
+                u"{} is not a valid id".format(participant_id))
         return term.value
 
     def add_participation(self, participant_id, roles):
         self.validate_roles(roles)
         if self.has_participation(participant_id):
             raise DupplicateParticipation(
-                "There is already a participation for {}".format(participant_id))
+                u"There is already a participation for {}".format(participant_id))
 
         participant = self.get_participant(participant_id)
         participation = participant.participation_class.create(
