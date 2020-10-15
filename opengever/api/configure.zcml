@@ -1062,4 +1062,12 @@
       name="participations"
       />
 
+  <plone:service
+      method="GET"
+      name="@possible-participants"
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      factory=".dossier_participations.PossibleParticipantsGet"
+      permission="zope2.View"
+      />
+
 </configure>

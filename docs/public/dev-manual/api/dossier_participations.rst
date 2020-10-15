@@ -163,6 +163,42 @@ Mittels DELETE-Requests kann eine Beteiligung wieder entfernt werden.
 
       HTTP/1.1 204 No content
 
+Liste von möglichen Beteiligten
+-------------------------------
+Der ``@possible-participants``-Endpoint liefert eine Liste von Aktoren, welche als Beteiligte für den aktuellen Kontext hinzugefügt werden können. Der Endpoint steht nur für Dossiers zur Verfügung.
+
+**Beispiel-Request:**
+
+
+  .. sourcecode:: http
+
+    GET /dossier-1/@possible-participants HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel-Response:**
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "https://example.org/ordnungssystem/fuehrung/dossier-1//@possible-particpants",
+        "items": [
+          {
+            "title": "Bond James (james@example.com)",
+            "token": "contact:james.bond"
+          },
+          {
+            "title": "Ziegler Rolf (rolf.ziegler)",
+            "token": "rolf.ziegler"
+          },
+          { "...": "..." },
+        ],
+        "items_total": 17
+      }
+
 
 Paginierung
 ~~~~~~~~~~~

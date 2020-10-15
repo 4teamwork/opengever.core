@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 import json
 import transaction
 
@@ -486,3 +487,64 @@ class TestParticipationsDeleteWithContactFeatureEnabled(SQLParticipationsHelper,
         transaction.commit()
         self.participant_id = 'person:{}'.format(self.person.id)
         self.participant_title = self.person.get_title()
+
+
+class TestPossibleParticipantsGet(SolrIntegrationTestCase):
+
+    @browsing
+    def test_get_possible_participants(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = self.dossier.absolute_url() + '/@possible-participants?query=fra'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {u'@id': url,
+                         u'items': [{u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
+                                     u'token': u'franzi.muller'},
+                                    {u'title': u'Meier Franz (meier.f@example.com)',
+                                     u'token': u'contact:meier-franz'}],
+                         u'items_total': 2}
+
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_response_is_batched(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = self.dossier.absolute_url() + '/@possible-participants?b_size=5'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(5, len(browser.json.get('items')))
+        self.assertEqual(22, browser.json.get('items_total'))
+        self.assertIn('batching', browser.json)
+
+
+class TestPossibleParticipantsGetWithContactFeatureEnabled(SolrIntegrationTestCase):
+
+    features = ('contact', )
+
+    @browsing
+    def test_get_possible_participants(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = self.dossier.absolute_url() + '/@possible-participants?query=mei'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {u'@id': url,
+                         u'items': [{u'title': u'Meier AG',
+                                     u'token': u'organization:2'},
+                                    {u'title': u'Meier David (david.meier)',
+                                     u'token': u'ogds_user:david.meier'}],
+                         u'items_total': 2}
+
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_response_is_batched(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = self.dossier.absolute_url() + '/@possible-participants?b_size=5'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(5, len(browser.json.get('items')))
+        self.assertEqual(21, browser.json.get('items_total'))
+        self.assertIn('batching', browser.json)
