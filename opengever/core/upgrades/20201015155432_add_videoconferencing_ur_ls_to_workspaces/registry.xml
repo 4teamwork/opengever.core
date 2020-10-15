@@ -1,0 +1,5 @@
+<registry>
+
+  <record name="opengever.workspace.interfaces.IWorkspaceSettings" field="videoconferencing_base_url" />
+
+</registry>
