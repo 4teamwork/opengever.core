@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-09-29 16:20+0000\n"
+"POT-Creation-Date: 2020-10-12 14:36+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -258,6 +258,14 @@ msgstr "Sie haben kein Element ausgewählt"
 msgid "additional_attributes"
 msgstr "Zusatzattribute"
 
+#: ./opengever/dossier/indexers.py
+msgid "any_participant"
+msgstr "Alle"
+
+#: ./opengever/dossier/indexers.py
+msgid "any_role"
+msgstr "Alle"
+
 #. Default: "Add"
 #: ./opengever/dossier/browser/forms.py
 msgid "button_add"
@@ -376,6 +384,7 @@ msgstr "Allgemein"
 #. Default: "Filing"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/behaviors/filing.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "fieldset_filing"
 msgstr "Ablage"
 
@@ -469,6 +478,7 @@ msgid "help_filing_number"
 msgstr "Geben Sie die vollständige Ablagenummer an."
 
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "help_keywords"
 msgstr ""
 "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition.\n"
@@ -551,6 +561,7 @@ msgstr "Schliessen"
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_comments"
 msgstr "Kommentar"
 
@@ -673,6 +684,7 @@ msgstr "Journal"
 #. Default: "Keywords"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_keywords"
 msgstr "Schlagwörter"
 

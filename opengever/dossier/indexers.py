@@ -3,21 +3,32 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.contact import is_contact_feature_enabled
+from opengever.contact.sources import ContactsSource
 from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
+from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
+from opengever.dossier.browser.participants import translate_participation_role
+from opengever.dossier.participations import IParticipationData
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.private.dossier import IPrivateDossier
+from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implementer
 
 
@@ -225,3 +236,109 @@ class SearchableTextExtender(object):
 @indexer(IDossierMarker)
 def dossier_touched_indexer(obj):
     return IDossier(obj).touched
+
+
+class ParticipationIndexHelper(object):
+    """This helper class is used to convert data back and forth between
+    participations, participants and roles on one side and index values
+    on the other. It is in charge of creating and parsing participations
+    index values as well as convert them to human readable labels.
+
+    The index is a multivalued string field in Solr and takes the form
+    'participant_id|role', with additional entries of the types
+    'any-participant|role' and 'participant_id|any-role' used to allow
+    querying only by participant_id or only by role (i.e. all dossiers
+    where a given participant has a participation with any role,
+    as well as all dossiers where any participant has a participation
+    with a given role).
+
+    """
+    any_participant_marker = 'any-participant'
+    any_role_marker = 'any-role'
+
+    def index_value_to_participant_id_and_role(self, value):
+        """Takes a single index value of the form 'participant_id|role'
+        and returns the participant_id and role.
+        """
+        participant_id, role = value.rsplit("|", 1)
+        return participant_id, role
+
+    def index_value_to_participant_id(self, value):
+        """Takes a single index value of the form 'participant_id|role'
+        and returns the participant_id.
+        """
+        participant_id, role = self.index_value_to_participant_id_and_role(value)
+        return participant_id
+
+    def index_value_to_role(self, value):
+        """Takes a single index value of the form 'participant_id|role'
+        and returns the role.
+        """
+        participant_id, role = self.index_value_to_participant_id_and_role(value)
+        return role
+
+    def participant_id_and_role_to_index_value(self, participant_id=None, role=None):
+        """Creates an index value of the form 'participant_id|role' from
+        a participant_id and/or a role, filling in the markers for any-role
+        or any-participant if necessary.
+        """
+        if role is None:
+            role = self.any_role_marker
+        if participant_id is None:
+            participant_id = self.any_participant_marker
+        return u"{}|{}".format(participant_id, role)
+
+    def participations_to_index_value_list(self, participations):
+        """From a list of participations, this method creates the list of
+        index values of the form ['participant_id|role', ...] that will be
+        stored in solr.
+        """
+        index_value = set()
+
+        for participation in participations:
+            data = IParticipationData(participation)
+            index_value.add(self.participant_id_and_role_to_index_value(
+                participant_id=data.participant_id))
+            for role in data.roles:
+                index_value.add(self.participant_id_and_role_to_index_value(
+                    role=role))
+                index_value.add(self.participant_id_and_role_to_index_value(
+                    participant_id=data.participant_id, role=role))
+        return list(index_value)
+
+    def role_to_label(self, role):
+        """Returns a translated label for a given role.
+        """
+        if role == self.any_role_marker:
+            return translate(_(u'any_role'), context=getRequest())
+        return translate_participation_role(role)
+
+    def participant_id_to_label(self, participant_id):
+        """Returns a translated label for a given participant_id.
+        """
+        if participant_id == self.any_participant_marker:
+            return translate(_(u'any_participant'), context=getRequest())
+        if is_contact_feature_enabled():
+            source = ContactsSource(api.portal.get())
+            term = source.getTermByToken(participant_id)
+        else:
+            source = UsersContactsInboxesSourceBinder()(api.portal.get())
+            term = source.getTermByToken(participant_id)
+        return term.title
+
+    def index_value_to_label(self, value):
+        """Returns a translated label of the form 'participant label|role label'
+        for a given index value ('participant_id|role').
+        """
+        participant_id, role = self.index_value_to_participant_id_and_role(value)
+        role_label = self.role_to_label(role)
+        participant_label = self.participant_id_to_label(participant_id)
+        return u"{}|{}".format(role_label, participant_label)
+
+
+@indexer(IParticipationAwareMarker)
+def participations(obj):
+    phandler = IParticipationAware(obj)
+    helper = ParticipationIndexHelper()
+    participations = phandler.get_participations()
+    return helper.participations_to_index_value_list(participations)

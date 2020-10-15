@@ -2,6 +2,7 @@ from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
@@ -291,3 +292,43 @@ class TestDossierFilingNumberIndexer(SolrIntegrationTestCase):
 
         indexed_value = solr_data_for(self.dossier, 'SearchableText')
         self.assertIn(expected_filing_no, indexed_value)
+
+
+class TestDossierParticipationsIndexer(SolrIntegrationTestCase):
+
+    def test_plone_participations_are_indexed_in_solr(self):
+        self.login(self.regular_user)
+
+        handler = IParticipationAware(self.dossier)
+        handler.add_participation(
+            self.regular_user.id, ['participation', 'final-drawing'])
+
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.dossier, 'participations')
+        expected = [
+            u'kathi.barfuss|participation',
+            u'kathi.barfuss|final-drawing',
+            u'any-participant|participation',
+            u'any-participant|final-drawing',
+            u'kathi.barfuss|any-role']
+        self.assertItemsEqual(expected, indexed_value)
+
+    def test_sql_participations_are_indexed_in_solr(self):
+        self.activate_feature('contact')
+        self.login(self.regular_user)
+
+        # participations do not get indexed properly during setup of the fixture
+        self.dossier.reindexObject(idxs=['UID', 'participations'])
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.dossier, 'participations')
+        expected = [
+            u'any-participant|final-drawing',
+            u'any-participant|participation',
+            u'organization:2|any-role',
+            u'organization:2|final-drawing',
+            u'person:1|any-role',
+            u'person:1|final-drawing',
+            u'person:1|participation']
+        self.assertItemsEqual(expected, indexed_value)

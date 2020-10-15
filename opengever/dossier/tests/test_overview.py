@@ -143,9 +143,7 @@ class TestOverview(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         handler = IParticipationAware(self.tested_dossier)
-        participation = handler.create_participation(
-            contact='kathi.barfuss', roles=['regard'])
-        handler.append_participiation(participation)
+        handler.add_participation('kathi.barfuss', ['regard'])
 
         browser.open(self.tested_dossier,
                      view='tabbedview_view-overview')

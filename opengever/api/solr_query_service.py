@@ -1,4 +1,3 @@
-from opengever.base.vocabulary import wrap_vocabulary
 from copy import copy
 from copy import deepcopy
 from DateTime import DateTime
@@ -11,6 +10,8 @@ from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
 from opengever.base.utils import get_preferred_language_code
 from opengever.base.utils import safe_int
+from opengever.base.vocabulary import wrap_vocabulary
+from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.task.helper import task_type_helper
 from plone import api
@@ -163,6 +164,9 @@ class SimpleListingField(object):
     def index_value_to_label(self, value):
         return value
 
+    def hide_facet(self, facet):
+        return False
+
 
 class ListingField(SimpleListingField):
 
@@ -219,6 +223,50 @@ class DateListingField(SimpleListingField):
         return u'{}:({})'.format(filter_escape(self.index), value)
 
 
+class ParticipationsField(ListingField):
+
+    field_name = 'participations'
+
+    def __init__(self):
+        self.index = 'participations'
+        self.sort_index = self.index
+        self.additional_required_fields = []
+        self.helper = ParticipationIndexHelper()
+
+    def accessor(self, doc):
+        if not doc.get('participations'):
+            return
+        return list({self.index_value_to_label(participation)
+                     for participation in doc.get('participations')})
+
+    def index_value_to_label(self, value):
+        return self.helper.index_value_to_label(value)
+
+
+class ParticipantIdField(ParticipationsField):
+
+    field_name = 'participants'
+
+    def index_value_to_label(self, value):
+        participant_id = self.helper.index_value_to_participant_id(value)
+        return self.helper.participant_id_to_label(participant_id)
+
+    def hide_facet(self, facet):
+        return self.helper.index_value_to_role(facet) != self.helper.any_role_marker
+
+
+class ParticipationRoleField(ParticipationsField):
+
+    field_name = 'participation_roles'
+
+    def index_value_to_label(self, value):
+        role = self.helper.index_value_to_role(value)
+        return self.helper.role_to_label(role)
+
+    def hide_facet(self, facet):
+        return self.helper.index_value_to_participant_id(facet) != self.helper.any_participant_marker
+
+
 DEFAULT_SORT_INDEX = 'modified'
 
 DEFAULT_FIELDS = set([
@@ -244,6 +292,9 @@ FIELDS_WITH_MAPPING = [
     ListingField('issuer_fullname', 'issuer', 'issuer_fullname'),
     ListingField('keywords', 'Subject'),
     ListingField('mimetype', 'getContentType', sort_index='mimetype'),
+    ParticipationsField(),
+    ParticipantIdField(),
+    ParticipationRoleField(),
     ListingField('pdf_url', None, 'preview_pdf_url', DEFAULT_SORT_INDEX,
                  additional_required_fields=['bumblebee_checksum', 'path']),
     ListingField('preview_url', None, 'get_preview_frame_url', DEFAULT_SORT_INDEX,
@@ -367,6 +418,8 @@ class SolrQueryBaseService(Service):
 
             facet_counts[facet_name] = {}
             for facet, count in solr_facet.items():
+                if field.hide_facet(facet):
+                    continue
                 facet_counts[field.field_name][facet] = {
                     "count": count,
                     "label": field.index_value_to_label(facet)

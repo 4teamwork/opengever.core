@@ -48,7 +48,11 @@ class ContactsSource(object):
         if not token:
             raise LookupError
 
-        term_type, term_id = token.split(':')
+        try:
+            term_type, term_id = token.split(':')
+        except ValueError:
+            raise LookupError
+
         term_id = term_id
         clazz = self.by_type[term_type]
         contact = clazz.query.get(term_id)

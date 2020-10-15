@@ -417,6 +417,11 @@
       name="watchers"
       />
 
+  <adapter
+      factory=".indexes.participations"
+      name="participations"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />

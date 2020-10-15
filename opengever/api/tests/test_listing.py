@@ -10,9 +10,11 @@ from opengever.base.solr import OGSolrDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from zExceptions import BadRequest
 from zope.component import getMultiAdapter
 
 
@@ -990,3 +992,264 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                 u'title': u'Anfragen'
             }
         ], browser.json['items'])
+
+
+class TestSQLDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
+
+    features = ('bumblebee', 'solr', 'contact')
+    maxDiff = None
+
+    @browsing
+    def test_dossier_participations_fields(self, browser):
+        self.activate_feature('contact')
+        self.login(self.regular_user, browser=browser)
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=title',
+            'columns=participations',
+            'columns=participants',
+            'columns=participation_roles',
+            'filters.UID:record:list={}'.format(IUUID(self.dossier))
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        item = browser.json['items'][0]
+        self.assertEqual(self.dossier.absolute_url(), item['@id'])
+        self.assertEqual(IUUID(self.dossier), item['UID'])
+        self.assertItemsEqual(
+            [u'B\xfchler Josef', u'Meier AG', u'any_participant'],
+            item['participants'])
+        self.assertItemsEqual(
+            [u'any_role', u'Participation', u'Final drawing'],
+            item['participation_roles'])
+        self.assertItemsEqual(
+            [u'any_role|B\xfchler Josef',
+             u'Final drawing|B\xfchler Josef',
+             u'Participation|any_participant',
+             u'any_role|Meier AG',
+             u'Participation|B\xfchler Josef',
+             u'Final drawing|Meier AG',
+             u'Final drawing|any_participant'],
+            item['participations'])
+
+
+class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
+
+    features = ('bumblebee', 'solr')
+    maxDiff = None
+
+    def setUp(self):
+        super(TestPloneDossierParticipationsInListingWithRealSolr, self).setUp()
+        with self.login(self.manager):
+            handler = IParticipationAware(self.dossier)
+            handler.add_participation(self.regular_user.getId(),
+                                      ['regard', 'participation', 'final-drawing'])
+            handler.add_participation(self.dossier_responsible.getId(), ['regard'])
+
+            handler = IParticipationAware(self.subdossier)
+            handler.add_participation(self.dossier_responsible.getId(), ['participation'])
+            handler.add_participation(self.secretariat_user.getId(), ['final-drawing'])
+
+            handler = IParticipationAware(self.empty_dossier)
+            handler.add_participation(self.dossier_responsible.getId(), ['regard'])
+            self.commit_solr()
+
+    @browsing
+    def test_dossier_participations_fields(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=title',
+            'columns=participations',
+            'columns=participants',
+            'columns=participation_roles',
+            'filters.UID:record:list={}'.format(IUUID(self.dossier))
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        item = browser.json['items'][0]
+        self.assertEqual(self.dossier.absolute_url(), item['@id'])
+        self.assertEqual(IUUID(self.dossier), item['UID'])
+        self.assertItemsEqual(
+            [u'Ziegler Robert (robert.ziegler)',
+             u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'any_participant'],
+            item['participants'])
+        self.assertItemsEqual(
+            [u'any_role', u'Regard', u'Participation', u'Final drawing'],
+            item['participation_roles'])
+        self.assertItemsEqual(
+            [u'Regard|Ziegler Robert (robert.ziegler)',
+             u'any_role|Ziegler Robert (robert.ziegler)',
+             u'Regard|any_participant',
+             u'Participation|B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'Regard|B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'Participation|any_participant',
+             u'any_role|B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'Final drawing|B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'Final drawing|any_participant'],
+            item['participations'])
+
+    @browsing
+    def test_dossier_participant_filters_combine_with_or(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        query_string = '&'.join((
+            'name=dossiers',
+            participant_filter.format(self.regular_user.getId()),
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier)],
+            [item['UID'] for item in browser.json['items']])
+
+        view = view + '&' + participant_filter.format(self.dossier_responsible.getId())
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.subdossier), IUUID(self.empty_dossier)],
+            [item['UID'] for item in browser.json['items']])
+
+    @browsing
+    def test_dossier_participation_roles_filters_combine_with_or(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        query_string = '&'.join((
+            'name=dossiers',
+            role_filter.format('final-drawing'),
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.subdossier)],
+            [item['UID'] for item in browser.json['items']])
+
+        view = view + '&' + role_filter.format('regard')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.subdossier), IUUID(self.empty_dossier)],
+            [item['UID'] for item in browser.json['items']])
+
+    @browsing
+    def test_dossier_participant_and_roles_filters_combine_with_and(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        query_string = '&'.join((
+            'name=dossiers',
+            participant_filter.format(self.dossier_responsible.getId()),
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.subdossier), IUUID(self.empty_dossier)],
+            [item['UID'] for item in browser.json['items']])
+
+        view = view + '&' + role_filter.format('regard')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.empty_dossier)],
+            [item['UID'] for item in browser.json['items']])
+
+    @browsing
+    def test_cannot_filter_both_by_participations_and_participants(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        participation_filter = 'filters.participations:record:list={}|{}'
+        query_string = '&'.join((
+            'name=dossiers',
+            participation_filter.format(self.dossier_responsible.getId(), 'regard'),
+            participant_filter.format(self.dossier_responsible.getId()),
+        ))
+        view = '@listing?{}'.format(query_string)
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': "Cannot set participations filter together with "
+                         "participants or participation_roles filters.",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_cannot_filter_both_by_participations_and_participation_roles(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        participation_filter = 'filters.participations:record:list={}|{}'
+        query_string = '&'.join((
+            'name=dossiers',
+            participation_filter.format(self.dossier_responsible.getId(), 'regard'),
+            role_filter.format('regard'),
+        ))
+        view = '@listing?{}'.format(query_string)
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': "Cannot set participations filter together with "
+                         "participants or participation_roles filters.",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_dossier_participant_and_roles_facets(self, browser):
+        """participants facets only include tokens with 'any-role' while
+        participation_roles facets only tokens with 'any-participant'.
+        Also note that selecting some of the available facets as additional
+        filter will lead to an empty result set.
+        """
+        self.login(self.regular_user, browser=browser)
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        query_string = '&'.join((
+            'name=dossiers',
+            'facets:list=participants',
+            'facets:list=participation_roles',
+            participant_filter.format(self.dossier_responsible.getId())
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.subdossier)],
+            [item['UID'] for item in browser.json['items']])
+        self.assertItemsEqual(
+            ['{}|any-role'.format(self.secretariat_user.getId()),
+             '{}|any-role'.format(self.dossier_responsible.getId())],
+            browser.json['facets']['participants'].keys())
+        self.assertItemsEqual(
+            ['any-participant|final-drawing', 'any-participant|participation'],
+            browser.json['facets']['participation_roles'].keys())
+
+        view = view + '&' + role_filter.format('final-drawing')
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        self.assertEqual(0, browser.json['items_total'])

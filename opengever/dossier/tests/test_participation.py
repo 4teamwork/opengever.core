@@ -2,70 +2,184 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
-from ftw.testing import MockTestCase
-from mocker import ANY
-from opengever.core.testing import COMPONENT_UNIT_TESTING
-from opengever.dossier.behaviors.participation import ParticipationHandler
-from opengever.dossier.interfaces import IParticipationCreated
-from opengever.dossier.interfaces import IParticipationRemoved
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.participations import DupplicateParticipation
+from opengever.dossier.participations import InvalidParticipantId
+from opengever.dossier.participations import InvalidRole
+from opengever.dossier.participations import IParticipationData
+from opengever.dossier.participations import MissingParticipation
+from opengever.dossier.participations import PloneParticipationHandler
+from opengever.dossier.participations import SQLParticipationHandler
 from opengever.testing import IntegrationTestCase
-from zope.annotation.interfaces import IAnnotations
-from zope.interface import Interface
 
 
-class TestParticipationHanlder(MockTestCase):
-    layer = COMPONENT_UNIT_TESTING
+class TestPloneParticipationHanlder(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestParticipationHanlder, self).setUp()
-        self.context = self.mocker.mock()
+    handler_class = PloneParticipationHandler
+    valid_id = 'kathi.barfuss'
 
-        annonation_storage = {}
+    def test_handler_delegates_to_correct_handler_class(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        self.assertIsInstance(handler.handler, self.handler_class)
 
-        def annotation_adapter(obj):
-            return annonation_storage
+    def test_adding_participation(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        self.assertItemsEqual(handler.get_participations(), [])
 
-        self.mock_adapter(annotation_adapter, IAnnotations, [Interface, ])
+        kathi = handler.add_participation(
+            participant_id=self.valid_id,
+            roles=['participation', 'final-drawing'])
 
-        created_handler = self.mocker.mock()
-        self.expect(
-            created_handler(ANY)).result('created event fired').count(0, 3)
-        self.mock_handler(created_handler, [IParticipationCreated, ])
+        self.assertItemsEqual(handler.get_participations(), [kathi])
 
-        removed_handler = self.mocker.mock()
-        self.expect(
-            removed_handler(ANY)).result('removed event fired').count(0, 1)
-        self.mock_handler(removed_handler, [IParticipationRemoved, ])
+    def test_updating_participaton(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        handler.add_participation(
+            participant_id=self.valid_id,
+            roles=['participation', 'final-drawing'])
+        participation = handler.get_participation(self.valid_id)
+        self.assertItemsEqual(
+            IParticipationData(participation).roles,
+            ['participation', 'final-drawing'])
 
-    def test_participation_with_handler(self):
-        self.replay()
-        handler = ParticipationHandler(self.context)
+        handler.update_participation(self.valid_id, roles=['participation'])
+        participation = handler.get_participation(self.valid_id)
+        self.assertItemsEqual(
+            IParticipationData(participation).roles, ['participation'])
 
-        # creation
-        peter = handler.create_participation(
-            {'contact': 'peter', 'roles': ['Reader', ], })
-        sepp = handler.create_participation(
-            {'contact': 'sepp', 'roles': ['Reader', 'Editor'], })
-        hugo = handler.create_participation(
-            {'contact': 'hugo'})
+    def test_deleting_participaton(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        handler.add_participation(
+            participant_id=self.valid_id,
+            roles=['participation', 'final-drawing'])
+        self.assertTrue(handler.has_participation(self.valid_id))
 
-        # test appending
-        handler.append_participiation(peter)
-        self.assertEquals(handler.get_participations(), [peter, ])
+        handler.remove_participation(self.valid_id)
+        self.assertFalse(handler.has_participation(self.valid_id))
 
-        handler.append_participiation(sepp)
-        self.assertEquals(handler.get_participations(), [peter, sepp])
+    def test_only_one_participation_per_participant_is_allowed(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
 
-        # an existing participation should not be addable multiple time
-        self.assertEquals(handler.append_participiation(peter), None)
+        handler.add_participation(participant_id=self.valid_id,
+                                  roles=['participation', 'final-drawing'])
 
-        # test has participation
-        self.assertEquals(handler.has_participation(peter), True)
-        self.assertEquals(handler.has_participation(hugo), False)
+        with self.assertRaises(DupplicateParticipation) as exc:
+            handler.add_participation(participant_id=self.valid_id,
+                                      roles=['participation', 'final-drawing'])
+        self.assertEqual(
+            'There is already a participation for {}'.format(self.valid_id),
+            exc.exception.message)
 
-        # test removing
-        handler.remove_participation(peter)
-        self.assertEquals(handler.get_participations(), [sepp, ])
+    def test_cannot_add_participation_for_invalid_participant(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+
+        with self.assertRaises(InvalidParticipantId) as exc:
+            handler.add_participation(participant_id='invalid-id',
+                                      roles=['participation', 'final-drawing'])
+
+        self.assertEqual(
+            'invalid-id is not a valid id',
+            exc.exception.message)
+        self.assertFalse(handler.has_participation('invalid-id'))
+
+    def test_cannot_delete_missing_participation(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        self.assertFalse(handler.has_participation(self.valid_id))
+
+        with self.assertRaises(MissingParticipation) as exc:
+            handler.remove_participation(self.valid_id)
+
+        self.assertEqual(
+            '{} has no participations on this context'.format(self.valid_id),
+            exc.exception.message)
+
+    def test_cannot_update_missing_participation(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        self.assertFalse(handler.has_participation(self.valid_id))
+        with self.assertRaises(MissingParticipation) as exc:
+            handler.update_participation(self.valid_id, roles=['participation'])
+
+        self.assertEqual(
+            '{} has no participations on this context'.format(self.valid_id),
+            exc.exception.message)
+
+    def test_cannot_add_participation_with_invalid_role(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+
+        with self.assertRaises(InvalidRole) as exc:
+            handler.add_participation(participant_id=self.valid_id,
+                                      roles=['invalid-role'])
+
+        self.assertEqual(
+            "Role 'invalid-role' does not exist",
+            exc.exception.message)
+        self.assertFalse(handler.has_participation(self.valid_id))
+
+    def test_cannot_add_participation_without_role(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+
+        with self.assertRaises(InvalidRole) as exc:
+            handler.add_participation(participant_id=self.valid_id,
+                                      roles=[])
+
+        self.assertEqual(
+            "A list of roles is required",
+            exc.exception.message)
+        self.assertFalse(handler.has_participation(self.valid_id))
+
+    def test_cannot_update_participaton_with_invalid_role(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        handler.add_participation(
+            participant_id=self.valid_id,
+            roles=['participation', 'final-drawing'])
+
+        with self.assertRaises(InvalidRole) as exc:
+            handler.update_participation(self.valid_id, roles=['invalid-role'])
+        self.assertEqual(
+            "Role 'invalid-role' does not exist",
+            exc.exception.message)
+
+        participation = handler.get_participation(self.valid_id)
+        self.assertItemsEqual(
+            IParticipationData(participation).roles,
+            ['participation', 'final-drawing'])
+
+    def test_cannot_update_participaton_without_role(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.empty_dossier)
+        handler.add_participation(
+            participant_id=self.valid_id,
+            roles=['participation', 'final-drawing'])
+
+        with self.assertRaises(InvalidRole) as exc:
+            handler.update_participation(self.valid_id, roles=[])
+        self.assertEqual(
+            "A list of roles is required",
+            exc.exception.message)
+
+        participation = handler.get_participation(self.valid_id)
+        self.assertItemsEqual(
+            IParticipationData(participation).roles,
+            ['participation', 'final-drawing'])
+
+
+class TestSQLParticipationHanlder(TestPloneParticipationHanlder):
+
+    features = ('contact', )
+
+    handler_class = SQLParticipationHandler
+    valid_id = 'ogds_user:kathi.barfuss'
 
 
 class TestParticipationAddForm(IntegrationTestCase):

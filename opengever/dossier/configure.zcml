@@ -184,6 +184,11 @@
       name="touched"
       />
 
+  <adapter
+      factory=".indexers.participations"
+      name="participations"
+      />
+
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
@@ -306,5 +311,8 @@
       factory=".nightly_after_resolve_job.ExecuteNightlyAfterResolveJobs"
       name="execute-after-resolve-jobs"
       />
+
+  <adapter factory=".participations.PloneParticipationData" />
+  <adapter factory=".participations.SQLParticipationData" />
 
 </configure>

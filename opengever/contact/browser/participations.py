@@ -67,7 +67,7 @@ class PersonParticipationsView(ParticipationsView):
         return Participation.query.by_person(self.context.model)
 
 
-class ParticpationTab(BrowserView, GeverTabMixin):
+class ParticipationTab(BrowserView, GeverTabMixin):
 
     show_searchform = False
 

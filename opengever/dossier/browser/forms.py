@@ -172,13 +172,12 @@ class ParticipationAddForm(Form):
         if not errors:
             phandler = IParticipationAware(self.context)
             status = IStatusMessage(self.request)
-            if phandler.get_participation_by_contact_id(data.get('contact')):
+            if phandler.has_participation(data.get('contact')):
                 msg = _(u'error_participant_already_exists',
                         default=u'There is already a participation for this contact.')
                 status.addStatusMessage(msg, type='error')
             else:
-                part = phandler.create_participation(**data)
-                phandler.append_participiation(part)
+                phandler.add_participation(data.get('contact'), data.get('roles'))
                 msg = _(u'info_participation_create',
                         u'Participation created.')
                 status.addStatusMessage(msg, type='info')
@@ -211,7 +210,7 @@ class DeleteParticipants(BrowserView):
         for a in oids:
             oid = base64.decodestring(a)
             obj = self.context._p_jar[oid]
-            phandler.remove_participation(obj)
+            phandler.remove_participation(obj.contact)
         status = IStatusMessage(self.request)
         msg = _(u'info_removed_participations',
                 'Removed participations.')

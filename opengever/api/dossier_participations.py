@@ -1,15 +1,15 @@
+from contextlib import contextmanager
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
-from opengever.contact.models import Participation
 from opengever.contact.sources import ContactsSource
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.ogds.base.actor import ActorLookup
-from opengever.ogds.base.actor import ContactActor
-from opengever.ogds.base.actor import InboxActor
-from opengever.ogds.base.actor import OGDSUserActor
-from opengever.ogds.base.actor import PloneUserActor
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
+from opengever.dossier.participations import DupplicateParticipation
+from opengever.dossier.participations import InvalidParticipantId
+from opengever.dossier.participations import InvalidRole
+from opengever.dossier.participations import IParticipationData
+from opengever.dossier.participations import MissingParticipation
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
@@ -34,67 +34,12 @@ def available_roles(context):
     return [{"token": term.token, "title": term.title} for term in vocabulary]
 
 
-def validate_roles(context, roles):
-    if not roles:
-        raise BadRequest("A list of roles is required")
-    available_roles = getVocabularyRegistry().get(context, "opengever.dossier.participation_roles")
-    for role in roles:
-        if role not in available_roles:
-            raise BadRequest("Role '{}' does not exist".format(role))
-
-
-def get_sql_participant(context, participant_id):
-    source = ContactsSource(context)
-    try:
-        term = source.getTermByToken(participant_id)
-    except Exception:
-        raise BadRequest("{} is not a valid id".format(participant_id))
-    return term.value
-
-
-def get_plone_actor(participant_id):
-    actor = ActorLookup(participant_id).lookup()
-    if not isinstance(actor, (ContactActor, InboxActor, OGDSUserActor, PloneUserActor)):
-        raise BadRequest("{} is not a valid id".format(participant_id))
-    return actor
-
-
 @implementer(IExpandableElement)
-@adapter(IDossierMarker, IOpengeverBaseLayer)
+@adapter(IParticipationAwareMarker, IOpengeverBaseLayer)
 class Participations(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-
-    def get_sql_participations(self):
-        query = Participation.query.by_dossier(self.context)
-        batch = SQLHypermediaBatch(self.request, query)
-        items = []
-        source = ContactsSource(self.context)
-        for participation in batch:
-            participant_id = source.getTerm(participation.participant).token
-            items.append({
-                "@id": "{}/@participations/{}".format(self.context.absolute_url(), participant_id),
-                "participant_id": participant_id,
-                "participant_title": participation.participant.get_title(),
-                "roles": [role.role for role in participation.roles]})
-        return batch, items
-
-    def get_plone_participations(self):
-        handler = IParticipationAware(self.context)
-        participations = list(handler.get_participations())
-
-        batch = HypermediaBatch(self.request, participations)
-        items = []
-        for participation in batch:
-            actor = ActorLookup(participation.contact).lookup()
-            items.append({
-                "@id": '{}/@participations/{}'.format(self.context.absolute_url(),
-                                                      participation.contact),
-                "participant_id": participation.contact,
-                "participant_title": actor.get_label(),
-                "roles": list(participation.roles)})
-        return batch, items
 
     def __call__(self, expand=False):
         result = {'participations': {
@@ -102,10 +47,23 @@ class Participations(object):
         if not expand:
             return result
 
+        handler = IParticipationAware(self.context)
+        participations = handler.get_participations()
+
         if is_contact_feature_enabled():
-            batch, items = self.get_sql_participations()
+            batch = SQLHypermediaBatch(self.request, participations)
         else:
-            batch, items = self.get_plone_participations()
+            batch = HypermediaBatch(self.request, participations)
+
+        items = []
+        for participation in batch:
+            data = IParticipationData(participation)
+            items.append({
+                "@id": '{}/@participations/{}'.format(
+                    self.context.absolute_url(), data.participant_id),
+                "participant_id": data.participant_id,
+                "participant_title":  data.participant_title,
+                "roles": data.roles})
 
         result["participations"]["available_roles"] = available_roles(self.context)
         result["participations"]["items"] = items
@@ -113,6 +71,23 @@ class Participations(object):
         if batch.links:
             result["participations"]["batching"] = batch.links
         return result
+
+
+class ParticipationBaseService(Service):
+
+    def __init__(self, context, request):
+        super(ParticipationBaseService, self).__init__(context, request)
+        self.handler = IParticipationAware(self.context)
+
+    @contextmanager
+    def handle_errors(self):
+        try:
+            yield
+        except (InvalidParticipantId,
+                DupplicateParticipation,
+                MissingParticipation,
+                InvalidRole) as exc:
+            raise BadRequest(exc.message)
 
 
 class ParticipationsGet(Service):
@@ -127,7 +102,7 @@ class ParticipationsGet(Service):
         return participations(expand=True)["participations"]
 
 
-class ParticipationsPost(Service):
+class ParticipationsPost(ParticipationBaseService):
     """API Endpoint to update an existing participation.
 
     POST /@participations HTTP/1.1
@@ -143,42 +118,20 @@ class ParticipationsPost(Service):
         roles = data.get("roles", None)
         if not participant_id:
             raise BadRequest("Property 'participant_id' is required")
-        validate_roles(self.context, roles)
         return participant_id, roles
-
-    def add_plone_participation(self, participant_id, roles):
-        get_plone_actor(participant_id)
-        handler = IParticipationAware(self.context)
-        existing_participation = handler.get_participation_by_contact_id(participant_id)
-        if existing_participation:
-            raise BadRequest("There is already a participation for {}".format(participant_id))
-
-        participation = handler.create_participation(**{"contact": participant_id, "roles": roles})
-        handler.append_participiation(participation)
-
-    def add_sql_participation(self, participant_id, roles):
-        participant = get_sql_participant(self.context, participant_id)
-        query = participant.participation_class.query.by_participant(
-            participant).by_dossier(self.context)
-        if query.count():
-            raise BadRequest("There is already a participation for {}".format(participant_id))
-        participant.participation_class.create(
-            participant=participant, dossier=self.context, roles=roles)
 
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
         participant_id, roles = self.extract_data()
-        if is_contact_feature_enabled():
-            self.add_sql_participation(participant_id, roles)
-        else:
-            self.add_plone_participation(participant_id, roles)
+        with self.handle_errors():
+            self.handler.add_participation(participant_id, roles)
 
         self.request.response.setStatus(204)
         return None
 
 
-class ParticipationsPatch(Service):
+class ParticipationsPatch(ParticipationBaseService):
     """API Endpoint to update an existing participation.
 
     PATCH /@participations/peter.mueller HTTP/1.1
@@ -209,40 +162,21 @@ class ParticipationsPatch(Service):
     def extract_roles(self):
         data = json_body(self.request)
         roles = data.get("roles", None)
-        validate_roles(self.context, roles)
         return roles
-
-    def update_plone_participation(self, participant_id, new_roles):
-        get_plone_actor(participant_id)
-        handler = IParticipationAware(self.context)
-        participation = handler.get_participation_by_contact_id(participant_id)
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
-        handler.update_participation(participation, new_roles)
-
-    def update_sql_participation(self, participant_id, new_roles):
-        participant = get_sql_participant(self.context, participant_id)
-        participation = participant.participation_class.query.by_participant(
-            participant).by_dossier(self.context).first()
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
-        participation.update_roles(new_roles)
 
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
         new_roles = self.extract_roles()
         participant_id = self.read_params()
-        if is_contact_feature_enabled():
-            self.update_sql_participation(participant_id, new_roles)
-        else:
-            self.update_plone_participation(participant_id, new_roles)
+        with self.handle_errors():
+            self.handler.update_participation(participant_id, new_roles)
 
         self.request.response.setStatus(204)
         return None
 
 
-class ParticipationsDelete(Service):
+class ParticipationsDelete(ParticipationBaseService):
     """API Endpoint to update an existing participation.
 
     DELETE /@participations/peter.mueller HTTP/1.1
@@ -266,28 +200,10 @@ class ParticipationsDelete(Service):
                 "Must supply participant as URL path parameter.")
         return self.params[0]
 
-    def delete_plone_participation(self, participant_id):
-        get_plone_actor(participant_id)
-        handler = IParticipationAware(self.context)
-        participation = handler.get_participation_by_contact_id(participant_id)
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
-        participation = handler.remove_participation(participation)
-
-    def delete_sql_participation(self, participant_id):
-        participant = get_sql_participant(self.context, participant_id)
-        participation = participant.participation_class.query.by_participant(
-            participant).by_dossier(self.context).first()
-        if not participation:
-            raise BadRequest("{} has no participations on this context".format(participant_id))
-        participation.delete()
-
     def reply(self):
         participant_id = self.read_params()
-        if is_contact_feature_enabled():
-            self.delete_sql_participation(participant_id)
-        else:
-            self.delete_plone_participation(participant_id)
+        with self.handle_errors():
+            self.handler.remove_participation(participant_id)
 
         self.request.response.setStatus(204)
         return None
