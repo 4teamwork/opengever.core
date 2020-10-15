@@ -71,6 +71,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``containing_subdossier``: Titel des Subdossiers in dem das Dokument enthalten ist
 - ``created``: Erstelldatum
 - ``creator``: Ersteller
+- ``creator_fullname``: Ersteller (Anzeigename)
 - ``deadline``: Aufgabenfrist
 - ``delivery_date``: Ausgangsdatum
 - ``description``: Beschreibung
@@ -146,6 +147,8 @@ siehe Tabelle:
     |``created``               |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |        ja       |        ja        |       ja        |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
     |``creator``               |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |        ja       |        ja        |       ja        |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
+    |``creator_fullname``      |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |        ja       |        ja        |       ja        |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+
     |``deadline``              |   nein   |   nein  |     nein     |        nein        |   ja    |   ja    |  nein   |   nein   |       nein      |       nein       |       nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+

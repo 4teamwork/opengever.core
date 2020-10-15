@@ -1056,6 +1056,18 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             ],
             [item.get('@id') for item in browser.json['items']])
 
+    @browsing
+    def test_folder_contents_listing_works_for_creator_fullname(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=folder_contents',
+            'columns:list=creator_fullname',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(u'Fr\xf6hlich G\xfcnther', browser.json['items'][0].get('creator_fullname'))
+
 
 class TestSQLDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
 
