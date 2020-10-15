@@ -10,6 +10,16 @@
             "title": "Teamraum",
             "additionalProperties": false,
             "properties": {
+                "videoconferencing_url": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Videoconferencing URL",
+                    "description": "URL for videoconferencing link",
+                    "_zope_schema_type": "TextLine",
+                    "default": "<IWorkspaceSettings.videoconferencing_base_url + random UUID>"
+                },
                 "changed": {
                     "type": [
                         "null",
@@ -72,6 +82,7 @@
                 "guid"
             ],
             "field_order": [
+                "videoconferencing_url",
                 "changed",
                 "title",
                 "description"

@@ -175,6 +175,9 @@ DEFAULT_OVERRIDES = {
     'opengever.meeting.proposal.IProposal': {
         'language': u'<User-spezifischer Default>'
     },
+    'opengever.workspace.workspace.IWorkspaceSchema': {
+        'videoconferencing_url': u'<IWorkspaceSettings.videoconferencing_base_url + random UUID>',
+    },
 }
 
 # Dropped from all schema dumps
