@@ -84,6 +84,9 @@ FILTERS = {
     ],
     u'tasktemplate_folders': [
         u'object_provides:opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema',
+    ],
+    u'folder_contents': [
+        u'object_provides:plone.dexterity.interfaces.IDexterityContent'
     ]
 }
 

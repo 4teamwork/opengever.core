@@ -55,6 +55,7 @@ Aktuell werden folgende Auflistungen unterstützt:
 - ``contacts``: Lokale Kontakte
 - ``tasktemplates``: Standardabläufe
 - ``tasktemplate_folders``: Aufgabenvorlagen
+- ``folder_contents``: Alle Inhalte innerhalb des Objektes
 
 
 Für jede Auflistung können verschiedene Felder (Parameter ``columns``) abgefragt

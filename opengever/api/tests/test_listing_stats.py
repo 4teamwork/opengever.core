@@ -68,7 +68,8 @@ class TestListingStats(SolrIntegrationTestCase):
                     {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplates'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'todos'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspace_folders'},
-                    {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'}]
+                    {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'},
+                    {u'count': 27, u'field': u'listing_name', u'value': u'folder_contents'}]
 
         self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
@@ -93,9 +94,10 @@ class TestListingStats(SolrIntegrationTestCase):
 
         pivot = self.get_facet_pivot_for(dossier, 'listing_name', browser)
 
-        self.assertEqual(4, sum([facet.get('count') for facet in pivot]))
+        self.assertEqual(8, sum([facet.get('count') for facet in pivot]))
         self.assertEqual(1, self.get_facet_by_value(pivot, 'dossiers').get('count'))
         self.assertEqual(3, self.get_facet_by_value(pivot, 'documents').get('count'))
+        self.assertEqual(4, self.get_facet_by_value(pivot, 'folder_contents').get('count'))
 
     @browsing
     def test_exclude_trashed_content(self, browser):
@@ -181,7 +183,11 @@ class TestListingStats(SolrIntegrationTestCase):
                     {u'count': 0,
                      u'field': u'listing_name',
                      u'queries': {u'responsible:kathi.barfuss': 0},
-                     u'value': u'workspaces'}]
+                     u'value': u'workspaces'},
+                    {u'count': 27,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 9},
+                     u'value': u'folder_contents'}]
         self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
     @browsing
