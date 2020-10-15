@@ -262,6 +262,20 @@ class ParticipationIndexHelper(object):
             participant_id = self.any_participant_marker
         return u"{}|{}".format(participant_id, role)
 
+    def participations_to_index_value_list(self, participations):
+        index_value = set()
+
+        for participation in participations:
+            data = IParticipationData(participation)
+            index_value.add(self.participant_id_and_role_to_index_value(
+                participant_id=data.participant_id))
+            for role in data.roles:
+                index_value.add(self.participant_id_and_role_to_index_value(
+                    role=role))
+                index_value.add(self.participant_id_and_role_to_index_value(
+                    participant_id=data.participant_id, role=role))
+        return list(index_value)
+
     def role_to_label(self, role):
         if role == self.any_role_marker:
             return translate(_(u'any_role'), context=getRequest())
@@ -290,15 +304,4 @@ def participations(obj):
     phandler = IParticipationAware(obj)
     helper = ParticipationIndexHelper()
     participations = phandler.get_participations()
-    index_value = set()
-
-    for participation in participations:
-        data = IParticipationData(participation)
-        index_value.add(helper.participant_id_and_role_to_index_value(
-            participant_id=data.participant_id))
-        for role in data.roles:
-            index_value.add(helper.participant_id_and_role_to_index_value(
-                role=role))
-            index_value.add(helper.participant_id_and_role_to_index_value(
-                participant_id=data.participant_id, role=role))
-    return list(index_value)
+    return helper.participations_to_index_value_list(participations)
