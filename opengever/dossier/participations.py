@@ -95,8 +95,7 @@ class PloneParticipationHandler(ParticipationHandlerBase):
         return participation
 
     def create_participation(self, participant_id, roles):
-        p = Participation(participant_id, roles)
-        return p
+        return Participation(participant_id, roles)
 
     @property
     def _participations(self):
@@ -111,7 +110,9 @@ class PloneParticipationHandler(ParticipationHandlerBase):
         return participations.values()
 
     def get_participation(self, participant_id):
-        return self._participations and self._participations.get(participant_id)
+        if not self._participations:
+            return None
+        return self._participations.get(participant_id)
 
     def update_participation(self, participant_id, roles):
         self.validate_participant(participant_id)
