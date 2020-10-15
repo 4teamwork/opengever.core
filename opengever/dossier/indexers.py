@@ -239,23 +239,49 @@ def dossier_touched_indexer(obj):
 
 
 class ParticipationIndexHelper(object):
+    """This helper class is used to convert data back and forth between
+    participations, participants and roles on one side and index values
+    on the other. It is in charge of creating and parsing participations
+    index values as well as convert them to human readable labels.
 
+    The index is a multivalued string field in Solr and takes the form
+    'participant_id|role', with additional entries of the types
+    'any-participant|role' and 'participant_id|any-role' used to allow
+    querying only by participant_id or only by role (i.e. all dossiers
+    where a given participant has a participation with any role,
+    as well as all dossiers where any participant has a participation
+    with a given role).
+
+    """
     any_participant_marker = 'any-participant'
     any_role_marker = 'any-role'
 
     def index_value_to_participant_id_and_role(self, value):
+        """Takes a single index value of the form 'participant_id|role'
+        and returns the participant_id and role.
+        """
         participant_id, role = value.rsplit("|", 1)
         return participant_id, role
 
     def index_value_to_participant_id(self, value):
+        """Takes a single index value of the form 'participant_id|role'
+        and returns the participant_id.
+        """
         participant_id, role = self.index_value_to_participant_id_and_role(value)
         return participant_id
 
     def index_value_to_role(self, value):
+        """Takes a single index value of the form 'participant_id|role'
+        and returns the role.
+        """
         participant_id, role = self.index_value_to_participant_id_and_role(value)
         return role
 
     def participant_id_and_role_to_index_value(self, participant_id=None, role=None):
+        """Creates an index value of the form 'participant_id|role' from
+        a participant_id and/or a role, filling in the markers for any-role
+        or any-participant if necessary.
+        """
         if role is None:
             role = self.any_role_marker
         if participant_id is None:
@@ -263,6 +289,10 @@ class ParticipationIndexHelper(object):
         return u"{}|{}".format(participant_id, role)
 
     def participations_to_index_value_list(self, participations):
+        """From a list of participations, this method creates the list of
+        index values of the form ['participant_id|role', ...] that will be
+        stored in solr.
+        """
         index_value = set()
 
         for participation in participations:
@@ -277,11 +307,15 @@ class ParticipationIndexHelper(object):
         return list(index_value)
 
     def role_to_label(self, role):
+        """Returns a translated label for a given role.
+        """
         if role == self.any_role_marker:
             return translate(_(u'any_role'), context=getRequest())
         return translate_participation_role(role)
 
     def participant_id_to_label(self, participant_id):
+        """Returns a translated label for a given participant_id.
+        """
         if participant_id == self.any_participant_marker:
             return translate(_(u'any_participant'), context=getRequest())
         if is_contact_feature_enabled():
@@ -293,6 +327,9 @@ class ParticipationIndexHelper(object):
         return term.title
 
     def index_value_to_label(self, value):
+        """Returns a translated label of the form 'participant label|role label'
+        for a given index value ('participant_id|role').
+        """
         participant_id, role = self.index_value_to_participant_id_and_role(value)
         role_label = self.role_to_label(role)
         participant_label = self.participant_id_to_label(participant_id)
