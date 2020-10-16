@@ -19,6 +19,7 @@ from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
+from .readonly import PatchContentRulesHandlerOnLogin
 from .readonly import PatchMembershipToolSetLoginTimes
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
@@ -36,6 +37,7 @@ PatchCatalogToFilterTrashedDocs()()
 PatchCMFCatalogAware()()
 PatchCMFCatalogAwareHandlers()()
 PatchCMFEditonsHistoryHandlerTool()()
+PatchContentRulesHandlerOnLogin()()
 PatchCopyContainerVerifyObjectPaste()()
 PatchDeserializeFromJson()()
 PatchDexterityContentGetattr()()
