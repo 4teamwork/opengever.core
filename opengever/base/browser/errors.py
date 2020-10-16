@@ -1,4 +1,6 @@
 from Acquisition import aq_acquire
+from opengever.debug import write_on_read_tracing
+from opengever.debug.write_on_read_tracing import format_instruction
 from plone import api
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -40,6 +42,11 @@ class ErrorHandlingView(BrowserView):
 
     def is_readonly_error(self):
         return isinstance(self.context, POSException.ReadOnlyError)
+
+    def get_culprit_traceback(self):
+        instruction = write_on_read_tracing.tb_for_last_db_write
+        if instruction is not None:
+            return format_instruction(instruction)
 
     def get_error_log(self):
         log = None

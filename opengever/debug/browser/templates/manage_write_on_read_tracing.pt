@@ -7,7 +7,7 @@
       i18n:domain="opengever.debug">
 <head>
   <metal:head metal:fill-slot="head_slot">
-  <title>Manage CSRF Tracing</title>
+  <title>Manage Write-on-Read Tracing</title>
   <style>
     td.patched {background-color: DarkOrange;}
     td.not-patched {background-color: LimeGreen;}
@@ -24,7 +24,7 @@
     <tal:main-macro metal:define-macro="main">
 
       <div tal:replace="structure provider:plone.abovecontenttitle" />
-      <h1 class="documentFirstHeading">Manage CSRF tracing</h1>
+      <h1 class="documentFirstHeading">Manage Write-on-Read tracing</h1>
 
       <div tal:replace="structure provider:plone.abovecontentbody" />
 

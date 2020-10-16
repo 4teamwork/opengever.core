@@ -6,18 +6,18 @@
 
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      name="manage-csrf-tracing"
-      class=".manage_csrf_tracing.ManageCSRFTracing"
+      name="manage-write-on-read-tracing"
+      class=".manage_write_on_read_tracing.ManageWriteOnReadTracing"
       permission="cmf.ManagePortal"
-      template="templates/managecsrftracing.pt"
+      template="templates/manage_write_on_read_tracing.pt"
       />
 
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      name="trigger-csrf"
-      class=".trigger_csrf.TriggerCSRF"
+      name="trigger-write-on-read"
+      class=".trigger_write_on_read.TriggerWriteOnRead"
       permission="cmf.ManagePortal"
-      template="templates/triggercsrf.pt"
+      template="templates/trigger_write_on_read.pt"
       />
 
 </configure>
