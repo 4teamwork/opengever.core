@@ -73,3 +73,26 @@ class PatchPloneProtectOnUserLogsIn(MonkeyPatch):
         original_onUserLogsIn = plone_protect_subscribers.onUserLogsIn
 
         self.patch_refs(plone_protect_subscribers, 'onUserLogsIn', onUserLogsIn)
+
+
+class PatchMembershipToolCreateMemberarea(MonkeyPatch):
+    """In read-only mode, don't create a user's member area.
+
+    This would cause a DB write and therefore is not supported while readonly
+    mode is active.
+    """
+
+    def __call__(self):
+
+        def createMemberarea(self, *args, **kwargs):
+            if is_in_readonly_mode():
+                return
+
+            return original_createMemberarea(self, *args, **kwargs)
+
+        locals()['__patch_refs__'] = False
+        original_createMemberarea = MembershipTool.createMemberarea
+
+        # Patch both spellings (API change in CMF)
+        self.patch_refs(MembershipTool, 'createMemberarea', createMemberarea)
+        self.patch_refs(MembershipTool, 'createMemberArea', createMemberarea)

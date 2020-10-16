@@ -15,6 +15,13 @@ import transaction
 
 class TestLoginDuringReadOnlyMode(FunctionalTestCase):
 
+    def create_private_root(self, membership_tool):
+        # Create private root (the place where users' member folders reside)
+        membership_tool.setMemberareaCreationFlag()
+        private_root = create(Builder('private_root'))
+        membership_tool.setMembersFolderById(private_root.id)
+        membership_tool.setMemberAreaType('opengever.private.folder')
+
     @browsing
     def test_set_login_times_doesnt_prevent_login_during_readonly(self, browser):
         membership_tool = api.portal.get_tool('portal_membership')
@@ -63,18 +70,30 @@ class TestLoginDuringReadOnlyMode(FunctionalTestCase):
     @browsing
     def test_member_area_creation_doesnt_prevent_login_during_readonly(self, browser):
         membership_tool = api.portal.get_tool('portal_membership')
-
-        # Create private root (the place where users' member folders reside)
-        membership_tool.setMemberareaCreationFlag()
-        private_root = create(Builder('private_root'))
-        membership_tool.setMembersFolderById(private_root.id)
-        membership_tool.setMemberAreaType('opengever.private.folder')
-
+        self.create_private_root(membership_tool)
         transaction.commit()
 
         with ZODBStorageInReadonlyMode():
             browser.login()
             membership_tool.createMemberarea()
+            transaction.commit()
+
+        member = membership_tool.getAuthenticatedMember()
+        self.assertEqual(TEST_USER_ID, member.getId())
+
+    @browsing
+    def test_login_during_readonly(self, browser):
+        """While the tests above test individual patches, this test fires all
+        the login related events via loginUser() and makes sure that
+        login as a whole works during readonly mode.
+        """
+        membership_tool = api.portal.get_tool('portal_membership')
+        self.create_private_root(membership_tool)
+        transaction.commit()
+
+        with ZODBStorageInReadonlyMode():
+            browser.login()
+            membership_tool.loginUser()
             transaction.commit()
 
         member = membership_tool.getAuthenticatedMember()
