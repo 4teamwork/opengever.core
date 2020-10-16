@@ -21,6 +21,7 @@ from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
 from .readonly import PatchContentRulesHandlerOnLogin
 from .readonly import PatchMembershipToolSetLoginTimes
+from .readonly import PatchPloneProtectOnUserLogsIn
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -52,6 +53,7 @@ PatchMembershipToolSetLoginTimes()()
 PatchNamedfileNamedDataConverter()()
 PatchOFSRoleManager()()
 PatchPlone43RC1Upgrade()()
+PatchPloneProtectOnUserLogsIn()()
 PatchResourceRegistriesURLRegex()()
 PatchTransmogrifyDXSchemaUpdater()()
 PatchWebDAVLockTimeout()()

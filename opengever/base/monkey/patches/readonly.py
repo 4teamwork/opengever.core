@@ -1,7 +1,13 @@
 from opengever.base.monkey.patching import MonkeyPatch
 from opengever.readonly import is_in_readonly_mode
 from plone.app.contentrules import handlers as contentrules_handlers
+from plone.protect import subscribers as plone_protect_subscribers
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.PlonePAS.tools.membership import MembershipTool
+from Products.PluggableAuthService.interfaces.events import IUserLoggedInEvent
+from zope.component import adapter
+from zope.globalrequest import getRequest
+from zope.interface import alsoProvides
 
 
 class PatchMembershipToolSetLoginTimes(MonkeyPatch):
@@ -44,3 +50,26 @@ class PatchContentRulesHandlerOnLogin(MonkeyPatch):
         original_user_logged_in = contentrules_handlers.user_logged_in
 
         self.patch_refs(contentrules_handlers, 'user_logged_in', user_logged_in)
+
+
+class PatchPloneProtectOnUserLogsIn(MonkeyPatch):
+    """In read-only mode, prevent plone.protect from rotating the key ring on
+    login, which may cause DB writes and prevent the user from logging in.
+    """
+
+    def __call__(self):
+
+        @adapter(IUserLoggedInEvent)
+        def onUserLogsIn(event):
+            if is_in_readonly_mode():
+                # disable csrf protection on login requests
+                req = getRequest()
+                alsoProvides(req, IDisableCSRFProtection)
+                return
+
+            return original_onUserLogsIn(event)
+
+        locals()['__patch_refs__'] = False
+        original_onUserLogsIn = plone_protect_subscribers.onUserLogsIn
+
+        self.patch_refs(plone_protect_subscribers, 'onUserLogsIn', onUserLogsIn)
