@@ -1,5 +1,7 @@
 from AccessControl import getSecurityManager
 from DateTime import DateTime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
@@ -53,6 +55,26 @@ class TestLoginDuringReadOnlyMode(FunctionalTestCase):
             event = UserLoggedInEvent(user)
             plone_protect_subscribers.onUserLogsIn(event)
 
+            transaction.commit()
+
+        member = membership_tool.getAuthenticatedMember()
+        self.assertEqual(TEST_USER_ID, member.getId())
+
+    @browsing
+    def test_member_area_creation_doesnt_prevent_login_during_readonly(self, browser):
+        membership_tool = api.portal.get_tool('portal_membership')
+
+        # Create private root (the place where users' member folders reside)
+        membership_tool.setMemberareaCreationFlag()
+        private_root = create(Builder('private_root'))
+        membership_tool.setMembersFolderById(private_root.id)
+        membership_tool.setMemberAreaType('opengever.private.folder')
+
+        transaction.commit()
+
+        with ZODBStorageInReadonlyMode():
+            browser.login()
+            membership_tool.createMemberarea()
             transaction.commit()
 
         member = membership_tool.getAuthenticatedMember()
