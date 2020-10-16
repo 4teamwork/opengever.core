@@ -135,43 +135,43 @@ class SQLTypeDumper(object):
     """
 
     def dump(self, sql_type):
-            log.info("Dumping schemas for SQL type%r" % sql_type)
-            # SQL type names are prefixed with an underscore to distinguish
-            # them from actual portal_types
-            dottedname = sql_type.lstrip('_')
-            main_klass = resolve_dotted(dottedname)
+        log.info("Dumping schemas for SQL type%r" % sql_type)
+        # SQL type names are prefixed with an underscore to distinguish
+        # them from actual portal_types
+        dottedname = sql_type.lstrip('_')
+        main_klass = resolve_dotted(dottedname)
 
-            schemas = []
-            schema_dumper = SQLSchemaDumper()
+        schemas = []
+        schema_dumper = SQLSchemaDumper()
 
-            # Also consider columns from base classes (inheritance).
-            # We only consider one level of inheritance though, we don't look
-            # up base classes recursively.
-            bases = list(filter(_is_mapped_class, main_klass.__bases__))
-            mapper_args = getattr(main_klass, '__mapper_args__', {})
+        # Also consider columns from base classes (inheritance).
+        # We only consider one level of inheritance though, we don't look
+        # up base classes recursively.
+        bases = list(filter(_is_mapped_class, main_klass.__bases__))
+        mapper_args = getattr(main_klass, '__mapper_args__', {})
 
-            if bases and 'polymorphic_identity' not in mapper_args:
+        if bases and 'polymorphic_identity' not in mapper_args:
+            raise NotImplementedError(
+                "Unexpected inheritance for %r: Mapped base classes, but "
+                "no polymorphic_identity found!" % main_klass)
+
+        for base_class in bases:
+            if list(filter(_is_mapped_class, base_class.__bases__)) != []:
                 raise NotImplementedError(
-                    "Unexpected inheritance for %r: Mapped base classes, but "
-                    "no polymorphic_identity found!" % main_klass)
+                    "More than one level of inheritance currently not"
+                    "supported when dumping SQL schemas.")
 
-            for base_class in bases:
-                if list(filter(_is_mapped_class, base_class.__bases__)) != []:
-                    raise NotImplementedError(
-                        "More than one level of inheritance currently not"
-                        "supported when dumping SQL schemas.")
+        for cls in [main_klass] + bases:
+            schema = schema_dumper.dump(cls)
+            schemas.append(schema)
 
-            for cls in [main_klass] + bases:
-                schema = schema_dumper.dump(cls)
-                schemas.append(schema)
+        type_dump = OrderedDict((
+            ('portal_type', sql_type),
+            ('title', main_klass.__name__),
+            ('schemas', schemas),
+        ))
 
-            type_dump = OrderedDict((
-                ('portal_type', sql_type),
-                ('title', main_klass.__name__),
-                ('schemas', schemas),
-            ))
-
-            return type_dump
+        return type_dump
 
 
 class JSONSchemaBuilder(object):
