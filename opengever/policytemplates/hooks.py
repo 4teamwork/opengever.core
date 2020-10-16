@@ -222,10 +222,6 @@ def post_nof_templates(configurator, question, answer):
 
     answer = to_integer(configurator, question, answer)
 
-    if not bool(answer):
-        configurator.ignored_directories.append('templates')
-        configurator.ignored_files.append('02-templates.json.bob')
-
     return answer
 
 
