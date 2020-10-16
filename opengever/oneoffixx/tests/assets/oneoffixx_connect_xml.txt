@@ -14,8 +14,8 @@
       <Function name="CustomInterfaceConnector" id="70E94788-CE84-4460-9698-5663878A295B">
         <Arguments>
           <Interface Name="OneGovGEVER">
-            <Node Id="Document.ReferenceNumber">Client1 1.1 / 1 / 39</Node>
-            <Node Id="Document.SequenceNumber">39</Node>
+            <Node Id="Document.ReferenceNumber">Client1 1.1 / 1 / 41</Node>
+            <Node Id="Document.SequenceNumber">41</Node>
             <Node Id="Dossier.ReferenceNumber">Client1 1.1 / 1</Node>
             <Node Id="Dossier.Title">Verträge mit der kantonalen Finanzverwaltung</Node>
             <Node Id="User.FullName">Ziegler Robert</Node>
@@ -26,8 +26,8 @@
             <Node Id="ogg.document.creator.user.title">Ziegler Robert</Node>
             <Node Id="ogg.document.creator.user.userid">robert.ziegler</Node>
             <Node Id="ogg.document.document_date">Aug 31, 2016</Node>
-            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 39</Node>
-            <Node Id="ogg.document.sequence_number">39</Node>
+            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 41</Node>
+            <Node Id="ogg.document.sequence_number">41</Node>
             <Node Id="ogg.document.title">Schättengarten</Node>
             <Node Id="ogg.document.version_number">0</Node>
             <Node Id="ogg.dossier.external_reference">qpr-900-9001-÷</Node>
@@ -43,8 +43,8 @@
         </Arguments>
       </Function>
       <Function name="MetaData" id="c364b495-7176-4ce2-9f7c-e71f302b8096">
-        <Value key="Document.ReferenceNumber" type="string">Client1 1.1 / 1 / 39</Value>
-        <Value key="Document.SequenceNumber" type="string">39</Value>
+        <Value key="Document.ReferenceNumber" type="string">Client1 1.1 / 1 / 41</Value>
+        <Value key="Document.SequenceNumber" type="string">41</Value>
         <Value key="Dossier.ReferenceNumber" type="string">Client1 1.1 / 1</Value>
         <Value key="Dossier.Title" type="string">Verträge mit der kantonalen Finanzverwaltung</Value>
         <Value key="User.FullName" type="string">Ziegler Robert</Value>
@@ -55,8 +55,8 @@
         <Value key="ogg.document.creator.user.title" type="string">Ziegler Robert</Value>
         <Value key="ogg.document.creator.user.userid" type="string">robert.ziegler</Value>
         <Value key="ogg.document.document_date" type="string">Aug 31, 2016</Value>
-        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 39</Value>
-        <Value key="ogg.document.sequence_number" type="string">39</Value>
+        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 41</Value>
+        <Value key="ogg.document.sequence_number" type="string">41</Value>
         <Value key="ogg.document.title" type="string">Schättengarten</Value>
         <Value key="ogg.document.version_number" type="string">0</Value>
         <Value key="ogg.dossier.external_reference" type="string">qpr-900-9001-÷</Value>

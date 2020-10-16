@@ -236,7 +236,7 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
 
         response = solr.search(filters=("UID:{}".format(document.UID())))
         indexed_value = response.docs[0].get('SearchableText')
-        self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 42 42 foo bar',
+        self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 44 44 foo bar',
                       indexed_value)
 
 
