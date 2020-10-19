@@ -70,7 +70,7 @@ class TestWOPIValidation(FunctionalTestCase):
         cmd = [
             'docker',
             'run',
-            '-it',
+            '-t',
             '--rm',
             'tylerbutler/wopi-validator',
             '--',
