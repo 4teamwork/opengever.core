@@ -147,7 +147,7 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
                .within(self.workspace))
 
         self.assertEqual(
-            ['folder-1', 'document-38', 'todolist-1', 'todolist-2',
+            ['folder-1', 'document-38', 'document-39', 'todolist-1', 'todolist-2',
              'todo-1', 'todolist-3', 'todolist-4'],
             self.workspace.objectIds())
 
@@ -162,7 +162,7 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
                      headers=self.api_headers, data=json.dumps(data))
 
         self.assertEqual(
-            ['folder-1', 'document-38', 'todolist-2', 'todolist-3',
+            ['folder-1', 'document-38', 'document-39', 'todolist-2', 'todolist-3',
              'todo-1', 'todolist-1', 'todolist-4'],
             self.workspace.objectIds())
 

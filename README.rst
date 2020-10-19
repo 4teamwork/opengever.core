@@ -648,6 +648,8 @@ Objects
         - self.completed_todo
       - self.workspace_document
       - self.workspace_folder
+        - self.workspace_folder_document
+      - self.workspace_mail
 
 .. </fixture:objects>
 

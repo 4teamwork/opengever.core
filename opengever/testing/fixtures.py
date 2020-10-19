@@ -2157,6 +2157,19 @@ class OpengeverContentFixture(object):
             .with_asset_file('text.txt')
             ))
 
+        self.register('workspace_mail', create(
+            Builder("mail")
+            .with_message(MAIL_DATA)
+            .within(self.workspace)
+            ))
+
+        self.register('workspace_folder_document', create(
+            Builder('document')
+            .within(self.workspace_folder)
+            .titled(u'Ordnerdokument')
+            .with_asset_file('text.txt')
+            ))
+
     def create_todos(self):
         self.todolist_general = self.register('todolist_general', create(
             Builder('todolist')

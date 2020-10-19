@@ -282,7 +282,7 @@ class TestDocumentDefaultValues(IntegrationTestCase):
             factoriesmenu.add('Document')
             browser.fill({'Title': u'My Document'}).save()
 
-        document = self.dossier['document-42']
+        document = self.dossier['document-44']
         self.assertEqual(today, document.document_date)
 
     @browsing
@@ -294,7 +294,7 @@ class TestDocumentDefaultValues(IntegrationTestCase):
         factoriesmenu.add('Document')
         browser.fill({'Title': u'My Document', 'File': ('DATA', 'file.txt', 'text/plain')}).save()
 
-        document = self.dossier['document-42']
+        document = self.dossier['document-44']
         self.assertFalse(document.preserved_as_paper)
 
     @browsing
@@ -306,7 +306,7 @@ class TestDocumentDefaultValues(IntegrationTestCase):
         factoriesmenu.add('Document')
         browser.fill({'Title': u'My Document'}).save()
 
-        document = self.dossier['document-42']
+        document = self.dossier['document-44']
         self.assertTrue(document.preserved_as_paper)
 
 
