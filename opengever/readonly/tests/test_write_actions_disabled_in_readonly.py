@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
@@ -64,6 +66,21 @@ class TestEditActionsDisabledInReadOnly(IntegrationTestCase):
     def test_no_edit_for_dossier(self, browser):
         self.login(self.regular_user, browser)
         self.assert_no_edit_link(browser, self.dossier)
+
+    @browsing
+    def test_no_edit_for_task(self, browser):
+        self.login(self.regular_user, browser)
+
+        open_task = create(
+            Builder('task')
+            .within(self.dossier)
+            .having(issuer=self.dossier_responsible.id,
+                    responsible=self.regular_user.id,
+                    responsible_client='fa',
+                    task_type='correction')
+            .in_state('task-state-open'))
+
+        self.assert_no_edit_link(browser, open_task)
 
     @browsing
     def test_no_edit_for_document(self, browser):
@@ -182,6 +199,24 @@ class TestEditActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
         self.login(self.regular_user, browser)
         with ZODBStorageInReadonlyMode():
             actions = self.get_actions(browser, self.dossier)
+
+        self.assertNotIn('edit', self.action_ids(actions['object']))
+
+    @browsing
+    def test_no_edit_action_on_task(self, browser):
+        self.login(self.regular_user, browser)
+
+        open_task = create(
+            Builder('task')
+            .within(self.dossier)
+            .having(issuer=self.dossier_responsible.id,
+                    responsible=self.regular_user.id,
+                    responsible_client='fa',
+                    task_type='correction')
+            .in_state('task-state-open'))
+
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, open_task)
 
         self.assertNotIn('edit', self.action_ids(actions['object']))
 

@@ -181,6 +181,7 @@ class PatchPloneUserGetRolesInContext(MonkeyPatch):
 
 WRITE_PERMISSIONS = [
     'Modify portal content',
+    'opengever.task: Edit task',
 ]
 
 
