@@ -3,6 +3,7 @@ from opengever.base.sentry import log_msg_to_sentry
 from zope.globalrequest import getRequest
 import logging
 import os
+import requests
 import shutil
 import subprocess
 import tempfile
@@ -17,6 +18,25 @@ class Msg2MimeTransform(object):
     """
 
     def transform(self, value):
+        msgconvert_url = os.environ.get('MSGCONVERT_URL')
+        if msgconvert_url:
+            return self.transform_using_service(msgconvert_url, value)
+        else:
+            return self.transform_using_executable(value)
+
+    def transform_using_service(self, url, value):
+        resp = None
+        try:
+            resp = requests.post(url, files={'msg': value})
+            resp.raise_for_status()
+        except requests.exceptions.RequestException:
+            details = resp.content[:200] if resp is not None else ''
+            logger.exception('Msg conversion failed. %s', details)
+            raise
+        else:
+            return resp.content
+
+    def transform_using_executable(self, value):
         # Create a temporary directory for 'msgconvert' to work in. It dumps
         # the resulting .eml file to its working directory, and doesn't take
         # an commandline option to actually specify the output path, so we
