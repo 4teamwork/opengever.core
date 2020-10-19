@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-01 07:29+0000\n"
+"POT-Creation-Date: 2020-10-19 09:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,6 +94,11 @@ msgstr ""
 #. Default: "Member"
 #: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceMember"
+msgstr ""
+
+#. Default: "URL for videoconferencing link"
+#: ./opengever/workspace/workspace.py
+msgid "help_videoconferencing_url"
 msgstr ""
 
 #. Default: "Invitation"
@@ -196,6 +201,11 @@ msgstr ""
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_trash"
+msgstr ""
+
+#. Default: "Videoconferencing URL"
+#: ./opengever/workspace/workspace.py
+msgid "label_videoconferencing_url"
 msgstr ""
 
 #. Default: "Workspaces"

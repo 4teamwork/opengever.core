@@ -6,8 +6,8 @@
     "properties": {
         "videoconferencing_url": {
             "type": "string",
-            "title": "Videoconferencing URL",
-            "description": "URL for videoconferencing link",
+            "title": "Videokonferenz URL",
+            "description": "Verwendete URL um eine Videokonferenz f\u00fcr diesen Teamraum zu starten.",
             "_zope_schema_type": "TextLine",
             "default": "<IWorkspaceSettings.videoconferencing_base_url + random UUID>"
         },

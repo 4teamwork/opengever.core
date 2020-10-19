@@ -1,3 +1,4 @@
+from opengever.workspace import _
 from opengever.workspace.base import WorkspaceBase
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
@@ -31,8 +32,9 @@ def videoconferencing_url_default():
 class IWorkspaceSchema(model.Schema):
 
     videoconferencing_url = schema.TextLine(
-        title=u'Videoconferencing URL',
-        description=u'URL for videoconferencing link',
+        title=_(u'label_videoconferencing_url', default=u'Videoconferencing URL'),
+        description=_(u'help_videoconferencing_url',
+                      default=u'URL for videoconferencing link'),
         required=False,
         defaultFactory=videoconferencing_url_default
     )
