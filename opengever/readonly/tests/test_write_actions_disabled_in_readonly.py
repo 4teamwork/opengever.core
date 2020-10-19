@@ -51,6 +51,16 @@ class TestEditActionsDisabledInReadOnly(IntegrationTestCase):
         self.assertIsNone(edit_link)
 
     @browsing
+    def test_no_edit_for_reporoot(self, browser):
+        self.login(self.administrator, browser)
+        self.assert_no_edit_link(browser, self.repository_root)
+
+    @browsing
+    def test_no_edit_for_repofolder(self, browser):
+        self.login(self.administrator, browser)
+        self.assert_no_edit_link(browser, self.leaf_repofolder)
+
+    @browsing
     def test_no_edit_for_dossier(self, browser):
         self.login(self.regular_user, browser)
         self.assert_no_edit_link(browser, self.dossier)
@@ -150,6 +160,22 @@ class TestAddActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
 
 
 class TestEditActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
+
+    @browsing
+    def test_no_edit_action_on_reporoot(self, browser):
+        self.login(self.administrator, browser)
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.repository_root)
+
+        self.assertNotIn('edit', self.action_ids(actions['object']))
+
+    @browsing
+    def test_no_edit_action_on_repofolder(self, browser):
+        self.login(self.administrator, browser)
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.leaf_repofolder)
+
+        self.assertNotIn('edit', self.action_ids(actions['object']))
 
     @browsing
     def test_no_edit_action_on_dossier(self, browser):

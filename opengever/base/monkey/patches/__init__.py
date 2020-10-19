@@ -20,6 +20,7 @@ from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
 from .readonly import PatchCASAuthSetLoginTimes
+from .readonly import PatchCheckPermission
 from .readonly import PatchContentRulesHandlerOnLogin
 from .readonly import PatchMembershipToolCreateMemberarea
 from .readonly import PatchMembershipToolSetLoginTimes
@@ -40,6 +41,7 @@ PatchBaseOrderedViewletManagerExceptions()()
 PatchBuilderCreate()()
 PatchCASAuthSetLoginTimes()()
 PatchCatalogToFilterTrashedDocs()()
+PatchCheckPermission()()
 PatchCMFCatalogAware()()
 PatchCMFCatalogAwareHandlers()()
 PatchCMFEditonsHistoryHandlerTool()()

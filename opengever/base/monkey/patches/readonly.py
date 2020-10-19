@@ -1,3 +1,4 @@
+from AccessControl.ImplPython import ZopeSecurityPolicy
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from opengever.base.monkey.patching import MonkeyPatch
 from opengever.readonly import is_in_readonly_mode
@@ -176,3 +177,32 @@ class PatchPloneUserGetRolesInContext(MonkeyPatch):
         original_getRolesInContext = PloneUser.getRolesInContext
 
         self.patch_refs(PloneUser, 'getRolesInContext', getRolesInContext)
+
+
+WRITE_PERMISSIONS = [
+    'Modify portal content',
+]
+
+
+class PatchCheckPermission(MonkeyPatch):
+    """Patch ZopeSecurityPolicy.checkPermission to filter a user's permissions.
+
+    While filtering roles gets us quite far in automatically deactivating
+    functionality that would require write-access to the DB, there's still a
+    significant number of write actions that need to be deactivated by
+    filtering permissions, instead of just roles.
+    """
+
+    def __call__(self):
+
+        def checkPermission(self, permission, object, context):
+            if is_in_readonly_mode():
+                if permission in WRITE_PERMISSIONS:
+                    return 0
+
+            return original_checkPermission(self, permission, object, context)
+
+        locals()['__patch_refs__'] = False
+        original_checkPermission = ZopeSecurityPolicy.checkPermission
+
+        self.patch_refs(ZopeSecurityPolicy, 'checkPermission', checkPermission)
