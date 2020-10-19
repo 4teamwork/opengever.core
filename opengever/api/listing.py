@@ -50,6 +50,9 @@ OTHER_ALLOWED_FIELDS = set([
     'watchers',
 ])
 
+ALLOWED_ORDER_GROUP_FIELDS = set([
+    'portal_type'
+])
 
 FILTERS = {
     u'dossiers': [
@@ -200,7 +203,86 @@ class ListingGet(SolrQueryBaseService):
                 sort += ' desc'
             else:
                 sort += ' asc'
-        return sort
+
+        return self.extend_with_sort_first(sort, params)
+
+    def extend_with_sort_first(self, sort, params):
+        """The sort_first sorts docs in two steps. First, it will sort
+        all items having one of the provided values of a defined field first.
+        All other docs will be put into the second group. Each group will then
+        be sorted by the `sort_on`.
+
+        Having a result of the following docs ordered by sortable_title:
+
+        { 'portal_type': 'type1', title: 'A' }
+        { 'portal_type': 'type2', title: 'B' }
+        { 'portal_type': 'type2', title: 'C' }
+        { 'portal_type': 'type3', title: 'D' }
+        { 'portal_type': 'type1', title: 'E' }
+        { 'portal_type': 'type4', title: 'F' }
+
+        Can be grouped i.e. by type:
+
+        { 'portal_type': ['type1', type3'] }
+
+        which will result in the following sort order:
+
+        { 'portal_type': 'type1', title: 'A' } <= Group 1
+        { 'portal_type': 'type3', title: 'D' }
+        { 'portal_type': 'type1', title: 'E' }
+        { 'portal_type': 'type2', title: 'B' } <= Group 2
+        { 'portal_type': 'type2', title: 'C' }
+        { 'portal_type': 'type4', title: 'F' }
+        """
+        sort_first = params.get('sort_first', {})
+
+        if not sort_first:
+            return sort
+
+        if not isinstance(sort_first, record):
+            raise BadRequest('The sort_first parameter needs to be a record.')
+
+        if len(sort_first) > 1:
+            raise BadRequest('Exactly one sort_first field is required.')
+
+        # Currently, only one sort_first field is implemented. Thus, we just
+        # extract the first item and use this for further processing.
+        field_name, field_values = sort_first.items()[0]
+
+        if not field_values:
+            return sort
+
+        if isinstance(field_values, str):
+            field_values = [field_values]
+
+        if field_name not in ALLOWED_ORDER_GROUP_FIELDS:
+            raise BadRequest(
+                'Sort first field {} is not allowed. Allowed fields are: '
+                '{}.'.format(field_name,
+                             ','.join(ALLOWED_ORDER_GROUP_FIELDS)))
+
+        return ','.join([self._build_sort_first_func_string(field_name, field_values), sort])
+
+    @staticmethod
+    def _build_sort_first_func_string(field_name, field_values):
+        """Generates a solr function string to order by a group of values of
+        a specific field.
+
+        We achieve this by giving each solr-document a number of either 1 or 0,
+        depending on the field content and then sort by this number.
+
+        A conditional function query looks like this `if(test, value1, value2)`
+
+        The `termfreq`-function returns the number of times a term appears in
+        the field for each document. It allows to check whether any of
+        the field_values are included in the document's field value.
+        """
+        field_value_conditions = []
+        for field_value in field_values:
+            field_value_conditions.append(
+                'termfreq({}, {})'.format(field_name, field_value))
+
+        return 'if(or({}), 1, 0) desc'.format(','.join(field_value_conditions))
 
     def parse_requested_fields(self, params):
         return params.get('columns', None)

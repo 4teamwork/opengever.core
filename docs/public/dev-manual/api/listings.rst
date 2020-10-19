@@ -240,6 +240,7 @@ Optionale Parameter:
 - ``b_size``: Die maximale Anzahl der zurückzugebenden Elemente
 - ``sort_on``: Sortierung nach einem indexierten Feld
 - ``sort_order``: Sortierreihenfolge: ``ascending`` (aufsteigend) oder ``descending`` (absteigend)
+- ``sort_first``: Sortiert die Resultate in zwei Gruppen. Jede Gruppe wird anschließend gem. ``sort_on`` sortiert.
 - ``search``: Filterung nach einem beliebigen Suchbegriff
 - ``columns``: Liste der Felder, die zurückgegeben werden sollen.
 - ``filters``: Einschränkung nach einem bestimmten Wert eines Feldes
@@ -279,6 +280,31 @@ Optionale Parameter:
   .. sourcecode:: http
 
     GET /ordnungssystem/fuehrung/dossier-23/@listing?name=documents&facets:list=creator HTTP/1.1
+    Accept: application/json
+
+
+Bestimmte Inhalte zuerst sortieren:
+-----------------------------------
+Die Resultate können in zwei Gruppen aufgeteilt und anschließend sortiert werden. So können z.B. in einer Auflistung alle Ordner zuoberst angezeigt werden.
+
+Alle Inhalte welche zuerst angezeigt werden sollen bilden eine Gruppe, alle restlichen Inhalte bilden eine zweite Gruppe. Momentan werden nur folgende Felder als `sort_first` unterstütz:
+
+- ``portal_type``
+
+
+**Beispiel: Alle Dossiers zuoberst. Jede Gruppe wird nach Titel sortiert**
+
+  .. sourcecode:: http
+
+    GET /@listing?sort_first.portal_type:record:list=opengever.dossier.businesscasedossier&sort_on=sortable_title HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel: Alle Dokumente und Mails zuoberst**
+
+  .. sourcecode:: http
+
+    GET /@listing?sort_first.portal_type:record:list=opengever.document.document&sort_first.portal_type:record:list=ftw.mail.mail& HTTP/1.1
     Accept: application/json
 
 

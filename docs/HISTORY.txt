@@ -7,6 +7,7 @@ Changelog
 - Don't create journal entry when downloading file copy in readonly mode. [lgraf]
 - Create Bumblebee user salt on login. [lgraf]
 - Patch several login-related events to allow login during readonly mode. [lgraf]
+- Implement `sort_first` parameter in the `@listing` endpoint. [elioschmutz]
 - Add optional support for WriteOnRead tracing in ReadOnlyError page. [lgraf]
 - Add videoconferencing URL to workspaces. [deiferni]
 - Add a new listing field: creator_fullname. [elioschmutz]

@@ -3,6 +3,8 @@ from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from mock import Mock
 from opengever.activity import notification_center
+from opengever.api.listing import ALLOWED_ORDER_GROUP_FIELDS
+from opengever.api.listing import ListingGet
 from opengever.api.solr_query_service import filename
 from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
@@ -14,7 +16,6 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
-from zExceptions import BadRequest
 from zope.component import getMultiAdapter
 
 
@@ -1328,3 +1329,161 @@ class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCas
         view = view + '&' + role_filter.format('final-drawing')
         browser.open(self.dossier, view=view, headers=self.api_headers)
         self.assertEqual(0, browser.json['items_total'])
+
+
+class TestListingSortFirst(SolrIntegrationTestCase):
+
+    def test_build_sort_first_func_string_builds_function_string_correctly(self):
+        self.assertEqual(
+            'if(or(termfreq(portal_type, type1)), 1, 0) desc',
+            ListingGet._build_sort_first_func_string('portal_type', ['type1']))
+
+        self.assertEqual(
+            'if(or(termfreq(portal_type, type1),termfreq(portal_type, type2)), 1, 0) desc',
+            ListingGet._build_sort_first_func_string('portal_type', ['type1', 'type2']))
+
+    @browsing
+    def test_sort_first_raises_error_if_parameter_is_not_a_record(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        query_string = '&'.join((
+            'name=folder_contents',
+            'sort_first=type1'
+        ))
+        view = '?'.join(('@listing', query_string))
+
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            u'The sort_first parameter needs to be a record.',
+            browser.json.get('message'))
+
+    @browsing
+    def test_sort_first_raises_error_if_used_with_not_whitelisted_field(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        not_allowed_field = 'not_whitelisted_field'
+
+        self.assertNotIn(not_allowed_field, ALLOWED_ORDER_GROUP_FIELDS)
+
+        query_string = '&'.join((
+            'name=folder_contents',
+            'sort_first.{}:record=open'.format(not_allowed_field)
+        ))
+        view = '?'.join(('@listing', query_string))
+
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            u'Sort first field not_whitelisted_field is not allowed. Allowed fields are: portal_type.',
+            browser.json.get('message'))
+
+    @browsing
+    def test_sort_first_raises_error_if_used_with_multiple_field_names(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        query_string = '&'.join((
+            'name=folder_contents',
+            'sort_first.portal_type:record=type1',
+            'sort_first.review_state:record=state1'
+        ))
+        view = '?'.join(('@listing', query_string))
+
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            u'Exactly one sort_first field is required.',
+            browser.json.get('message'))
+
+    @browsing
+    def test_sort_first_will_order_a_portal_type_first(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        query_string = '&'.join((
+            'name=folder_contents',
+            'sort_first.portal_type:record=opengever.workspace.folder'
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [u'opengever.workspace.folder',
+             u'opengever.workspace.todo',
+             u'opengever.workspace.todolist',
+             u'opengever.workspace.todo',
+             u'opengever.workspace.todo',
+             u'opengever.workspace.todolist',
+             u'opengever.document.document',
+             u'ftw.mail.mail',
+             u'opengever.document.document'],
+            [item['@type'] for item in browser.json['items']])
+
+    @browsing
+    def test_sort_first_by_portal_type_will_order_a_list_of_portal_types_first(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        query_string = '&'.join((
+            'name=folder_contents',
+            'sort_first.portal_type:record:list=opengever.workspace.folder',
+            'sort_first.portal_type:record:list=opengever.document.document',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [u'opengever.workspace.folder',
+             u'opengever.document.document',
+             u'opengever.document.document',
+             u'opengever.workspace.todo',
+             u'opengever.workspace.todolist',
+             u'opengever.workspace.todo',
+             u'opengever.workspace.todo',
+             u'opengever.workspace.todolist',
+             u'ftw.mail.mail',
+             ],
+            [item['@type'] for item in browser.json['items']])
+
+    @browsing
+    def test_sort_first_will_order_each_group_by_the_provided_sort_order(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        query_string = '&'.join((
+            'name=folder_contents',
+            'columns:list=title',
+            'columns:list=@type',
+            'sort_on=title',
+            'sort_first.portal_type:record:list=opengever.workspace.folder',
+            'sort_first.portal_type:record:list=opengever.document.document',
+        ))
+        view = '?'.join(('@listing', query_string + '&sort_order=asc'))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [(u'Ordnerdokument', u'opengever.document.document'),
+             (u'Teamraumdokument', u'opengever.document.document'),
+             (u'WS F\xc3lder', u'opengever.workspace.folder'),
+             (u'Allgemeine Informationen', u'opengever.workspace.todolist'),
+             (u'Cleanup installation', u'opengever.workspace.todo'),
+             (u'Die B\xfcrgschaft', u'ftw.mail.mail'),
+             (u'Fix user login', u'opengever.workspace.todo'),
+             (u'Go live', u'opengever.workspace.todo'),
+             (u'Projekteinf\xfchrung', u'opengever.workspace.todolist')],
+            [(item['title'], item['@type']) for item in browser.json['items']])
+
+        view = '?'.join(('@listing', query_string + '&sort_order=reverse'))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [(u'WS F\xc3lder', u'opengever.workspace.folder'),
+             (u'Teamraumdokument', u'opengever.document.document'),
+             (u'Ordnerdokument', u'opengever.document.document'),
+             (u'Projekteinf\xfchrung', u'opengever.workspace.todolist'),
+             (u'Go live', u'opengever.workspace.todo'),
+             (u'Fix user login', u'opengever.workspace.todo'),
+             (u'Die B\xfcrgschaft', u'ftw.mail.mail'),
+             (u'Cleanup installation', u'opengever.workspace.todo'),
+             (u'Allgemeine Informationen', u'opengever.workspace.todolist')],
+            [(item['title'], item['@type']) for item in browser.json['items']])
