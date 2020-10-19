@@ -123,6 +123,8 @@ class PatchMembershipToolCreateMemberarea(MonkeyPatch):
 WRITER_ROLES = [
     'Contributor',
     'Editor',
+    'Reviewer',
+    'Publisher',
 ]
 
 
@@ -149,3 +151,28 @@ class PatchPloneUserAllowed(MonkeyPatch):
         original_allowed = PloneUser.allowed
 
         self.patch_refs(PloneUser, 'allowed', allowed)
+
+
+class PatchPloneUserGetRolesInContext(MonkeyPatch):
+    """Patch PloneUser.getRolesInContext to filter out roles that the user
+    appears to have.
+
+    This is mainly required to deactivate workflow transitions, which are
+    often protected by guard-roles. Those are compared directly to the roles
+    the user has, so we need to filter those as well.
+    """
+
+    def __call__(self):
+
+        def getRolesInContext(self, context):
+            roles = original_getRolesInContext(self, context)
+
+            if is_in_readonly_mode():
+                roles = [r for r in roles if r not in WRITER_ROLES]
+
+            return roles
+
+        locals()['__patch_refs__'] = False
+        original_getRolesInContext = PloneUser.getRolesInContext
+
+        self.patch_refs(PloneUser, 'getRolesInContext', getRolesInContext)

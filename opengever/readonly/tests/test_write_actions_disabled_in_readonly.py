@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
@@ -63,6 +64,27 @@ class TestEditActionsDisabledInReadOnly(IntegrationTestCase):
     def test_no_edit_for_mail(self, browser):
         self.login(self.regular_user, browser)
         self.assert_no_edit_link(browser, self.mail_eml)
+
+
+class TestWorkflowTransitionsDisabledInReadOnly(IntegrationTestCase):
+
+    def get_menu_actions(self, browser, context):
+        with ZODBStorageInReadonlyMode():
+            browser.open(context)
+
+        return editbar.menu_options('Actions')
+
+    @browsing
+    def test_no_wf_transitions_on_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        actions = self.get_menu_actions(browser, self.dossier)
+
+        self.assertEqual([
+            'Cover (PDF)',
+            'Export as Zip',
+            'Print details (PDF)',
+            'Properties'],
+            actions)
 
 
 class APITestMixin(object):
@@ -144,3 +166,14 @@ class TestEditActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
             actions = self.get_actions(browser, self.mail_eml)
 
         self.assertNotIn('edit', self.action_ids(actions['object']))
+
+
+class TestWorkflowTransitionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
+
+    @browsing
+    def test_no_wf_transitions_on_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        with ZODBStorageInReadonlyMode():
+            workflow = self.get_workflow(browser, self.dossier)
+
+        self.assertEqual([], self.transition_ids(workflow['transitions']))

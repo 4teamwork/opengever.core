@@ -25,6 +25,7 @@ from .readonly import PatchMembershipToolCreateMemberarea
 from .readonly import PatchMembershipToolSetLoginTimes
 from .readonly import PatchPloneProtectOnUserLogsIn
 from .readonly import PatchPloneUserAllowed
+from .readonly import PatchPloneUserGetRolesInContext
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -60,6 +61,7 @@ PatchOFSRoleManager()()
 PatchPlone43RC1Upgrade()()
 PatchPloneProtectOnUserLogsIn()()
 PatchPloneUserAllowed()()
+PatchPloneUserGetRolesInContext()()
 PatchResourceRegistriesURLRegex()()
 PatchTransmogrifyDXSchemaUpdater()()
 PatchWebDAVLockTimeout()()
