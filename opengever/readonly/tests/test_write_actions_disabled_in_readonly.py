@@ -86,6 +86,14 @@ class TestWorkflowTransitionsDisabledInReadOnly(IntegrationTestCase):
             'Properties'],
             actions)
 
+    @browsing
+    def test_no_wf_transitions_on_task(self, browser):
+        self.login(self.regular_user, browser)
+        with ZODBStorageInReadonlyMode():
+            browser.open(self.task)
+
+        self.assertFalse(editbar.visible())
+
 
 class APITestMixin(object):
 
@@ -175,5 +183,13 @@ class TestWorkflowTransitionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestM
         self.login(self.regular_user, browser)
         with ZODBStorageInReadonlyMode():
             workflow = self.get_workflow(browser, self.dossier)
+
+        self.assertEqual([], self.transition_ids(workflow['transitions']))
+
+    @browsing
+    def test_no_wf_transitions_on_task(self, browser):
+        self.login(self.regular_user, browser)
+        with ZODBStorageInReadonlyMode():
+            workflow = self.get_workflow(browser, self.task)
 
         self.assertEqual([], self.transition_ids(workflow['transitions']))
