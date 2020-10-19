@@ -2170,6 +2170,15 @@ class OpengeverContentFixture(object):
             .with_asset_file('text.txt')
         ))
 
+        self.register('workspace_meeting', create(
+            Builder('workspace meeting')
+            .within(self.workspace)
+            .titled(u'Besprechung Kl\xe4ranlage')
+            .having(
+                start=datetime(2016, 12, 8),
+                responsible=self.workspace_member.getId())
+        ))
+
     def create_todos(self):
         self.todolist_general = self.register('todolist_general', create(
             Builder('todolist')

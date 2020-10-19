@@ -1010,6 +1010,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                 u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-2',
                 u'http://nohost/plone/workspaces/workspace-1/todo-1',
                 u'http://nohost/plone/workspaces/workspace-1/todolist-1',
+                u'http://nohost/plone/workspaces/workspace-1/meeting-1',
                 u'http://nohost/plone/workspaces/workspace-1/folder-1',
                 u'http://nohost/plone/workspaces/workspace-1/folder-1/document-40',
                 u'http://nohost/plone/workspaces/workspace-1/document-39',
@@ -1032,6 +1033,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                 u'http://nohost/plone/workspaces/workspace-1/todolist-2',
                 u'http://nohost/plone/workspaces/workspace-1/todo-1',
                 u'http://nohost/plone/workspaces/workspace-1/todolist-1',
+                u'http://nohost/plone/workspaces/workspace-1/meeting-1',
                 u'http://nohost/plone/workspaces/workspace-1/folder-1',
                 u'http://nohost/plone/workspaces/workspace-1/document-39',
                 u'http://nohost/plone/workspaces/workspace-1/document-38'
@@ -1416,6 +1418,7 @@ class TestListingSortFirst(SolrIntegrationTestCase):
              u'opengever.workspace.todo',
              u'opengever.workspace.todo',
              u'opengever.workspace.todolist',
+             u'opengever.workspace.meeting',
              u'opengever.document.document',
              u'ftw.mail.mail',
              u'opengever.document.document'],
@@ -1442,6 +1445,7 @@ class TestListingSortFirst(SolrIntegrationTestCase):
              u'opengever.workspace.todo',
              u'opengever.workspace.todo',
              u'opengever.workspace.todolist',
+             u'opengever.workspace.meeting',
              u'ftw.mail.mail',
              ],
             [item['@type'] for item in browser.json['items']])
@@ -1466,6 +1470,7 @@ class TestListingSortFirst(SolrIntegrationTestCase):
              (u'Teamraumdokument', u'opengever.document.document'),
              (u'WS F\xc3lder', u'opengever.workspace.folder'),
              (u'Allgemeine Informationen', u'opengever.workspace.todolist'),
+             (u'Besprechung Kl\xe4ranlage', u'opengever.workspace.meeting'),
              (u'Cleanup installation', u'opengever.workspace.todo'),
              (u'Die B\xfcrgschaft', u'ftw.mail.mail'),
              (u'Fix user login', u'opengever.workspace.todo'),
@@ -1485,5 +1490,6 @@ class TestListingSortFirst(SolrIntegrationTestCase):
              (u'Fix user login', u'opengever.workspace.todo'),
              (u'Die B\xfcrgschaft', u'ftw.mail.mail'),
              (u'Cleanup installation', u'opengever.workspace.todo'),
+             (u'Besprechung Kl\xe4ranlage', u'opengever.workspace.meeting'),
              (u'Allgemeine Informationen', u'opengever.workspace.todolist')],
             [(item['title'], item['@type']) for item in browser.json['items']])

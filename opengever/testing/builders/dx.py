@@ -592,6 +592,13 @@ class WorkspaceFolderBuilder(DexterityBuilder):
 builder_registry.register('workspace folder', WorkspaceFolderBuilder)
 
 
+class WorkspaceMeetingBuilder(DexterityBuilder):
+    portal_type = 'opengever.workspace.meeting'
+
+
+builder_registry.register('workspace meeting', WorkspaceMeetingBuilder)
+
+
 class ToDoBuilder(DexterityBuilder):
     portal_type = 'opengever.workspace.todo'
 

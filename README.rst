@@ -650,6 +650,7 @@ Objects
       - self.workspace_folder
         - self.workspace_folder_document
       - self.workspace_mail
+      - self.workspace_meeting
 
 .. </fixture:objects>
 
