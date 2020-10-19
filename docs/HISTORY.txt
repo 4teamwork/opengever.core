@@ -4,6 +4,7 @@ Changelog
 2020.12.0 (unreleased)
 ----------------------
 
+- Patch several login-related events to allow login during readonly mode. [lgraf]
 - Add optional support for WriteOnRead tracing in ReadOnlyError page. [lgraf]
 - Use custom error page for ReadOnlyErrors. [lgraf]
 - Disable GZip compression in p.a.caching. [lgraf]

@@ -19,6 +19,10 @@ from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
+from .readonly import PatchContentRulesHandlerOnLogin
+from .readonly import PatchMembershipToolCreateMemberarea
+from .readonly import PatchMembershipToolSetLoginTimes
+from .readonly import PatchPloneProtectOnUserLogsIn
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -31,28 +35,32 @@ from .workflowtool import PatchWorkflowTool
 PatchActionInfo()()
 PatchBaseOrderedViewletManagerExceptions()()
 PatchBuilderCreate()()
-PatchExtendedPathIndex()()
 PatchCatalogToFilterTrashedDocs()()
+PatchCMFCatalogAware()()
+PatchCMFCatalogAwareHandlers()()
 PatchCMFEditonsHistoryHandlerTool()()
+PatchContentRulesHandlerOnLogin()()
 PatchCopyContainerVerifyObjectPaste()()
+PatchDeserializeFromJson()()
 PatchDexterityContentGetattr()()
 PatchDexterityDefaultAddForm()()
 PatchDXContainerPastePermission()()
 PatchDXCreateContentInContainer()()
+PatchExceptionFormatter()()
+PatchExtendedPathIndex()()
 PatchInvokeFactory()()
 PatchLDAPUserFolderEncoding()()
+PatchMembershipToolCreateMemberarea()()
+PatchMembershipToolSetLoginTimes()()
 PatchNamedfileNamedDataConverter()()
+PatchOFSRoleManager()()
 PatchPlone43RC1Upgrade()()
+PatchPloneProtectOnUserLogsIn()()
 PatchResourceRegistriesURLRegex()()
 PatchTransmogrifyDXSchemaUpdater()()
 PatchWebDAVLockTimeout()()
+PatchWorkflowTool()()
 PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
-PatchDeserializeFromJson()()
-PatchCMFCatalogAware()()
-PatchOFSRoleManager()()
-PatchCMFCatalogAwareHandlers()()
 ScrubBoboExceptions()()
-PatchExceptionFormatter()()
-PatchWorkflowTool()()
