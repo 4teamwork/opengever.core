@@ -4,6 +4,7 @@ from opengever.readonly import is_in_readonly_mode
 from plone.app.contentrules import handlers as contentrules_handlers
 from plone.protect import subscribers as plone_protect_subscribers
 from plone.protect.interfaces import IDisableCSRFProtection
+from Products.PlonePAS.plugins.ufactory import PloneUser
 from Products.PlonePAS.tools.membership import MembershipTool
 from Products.PluggableAuthService.interfaces.events import IUserLoggedInEvent
 from zope.component import adapter
@@ -115,3 +116,36 @@ class PatchMembershipToolCreateMemberarea(MonkeyPatch):
         # Patch both spellings (API change in CMF)
         self.patch_refs(MembershipTool, 'createMemberarea', createMemberarea)
         self.patch_refs(MembershipTool, 'createMemberArea', createMemberarea)
+
+
+# Roles strongly associated with write operations
+
+WRITER_ROLES = [
+    'Contributor',
+    'Editor',
+]
+
+
+class PatchPloneUserAllowed(MonkeyPatch):
+    """In order to deactivate most functionality that would cause writes
+    during read-only mode, like adding or editing content, we filter the
+    roles that the user has during RO mode.
+
+    As a first line of "defense", we do this by patching PloneUser.allowed
+    in a way that it doesn't consider those filtered roles as giving the
+    permission that is currently being checked for.
+    """
+
+    def __call__(self):
+
+        def allowed(self, object, object_roles=None):
+            if is_in_readonly_mode():
+                if object_roles is not None:
+                    object_roles = [r for r in object_roles if r not in WRITER_ROLES]
+
+            return original_allowed(self, object, object_roles=object_roles)
+
+        locals()['__patch_refs__'] = False
+        original_allowed = PloneUser.allowed
+
+        self.patch_refs(PloneUser, 'allowed', allowed)

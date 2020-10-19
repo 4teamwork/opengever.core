@@ -6,6 +6,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from persistent.list import PersistentList
 from Products.CMFPlone.utils import safe_hasattr
+from unittest import expectedFailure
 from ZODB import POSException
 import transaction
 
@@ -114,8 +115,13 @@ class TestDemoStorageReadOnlySupportTestbrowser(FunctionalTestCase):
             conn = self.portal._p_jar
             self.assertTrue(conn.isReadOnly())
 
+    @expectedFailure
     @browsing
     def test_raises_read_only_error_on_content_creation(self, browser):
+        """This test currently fails because we now withdraw the Contributor
+        role from users in ReadOnly mode. We therefore never even get to the
+        ReadOnlyError being raised.
+        """
         browser.login().open(self.portal)
 
         browser.exception_bubbling = True
