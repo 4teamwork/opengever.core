@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Make is_in_readonly_mode() slightly more robust. [lgraf]
+- Show traceback on ReadOnlyError page to all users, not just managers. [lgraf]
 - Don't create journal entry when downloading file copy in readonly mode. [lgraf]
 - Create Bumblebee user salt on login. [lgraf]
 - Patch several login-related events to allow login during readonly mode. [lgraf]

@@ -108,7 +108,7 @@
                     tried to perform as well as the error number below.
                 </p>
 
-                <metal:culprit tal:condition="is_manager">
+                <metal:culprit>
                     <div tal:condition="view/get_culprit_traceback">
                         <h3>This seems to be the culprit:</h3>
                         <pre tal:content="view/get_culprit_traceback" />
