@@ -38,6 +38,11 @@ class TestAddActionsDisabledInReadOnly(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.assert_no_factories_menu(browser, self.task)
 
+    @browsing
+    def test_no_addable_types_in_workspaceroot(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assert_no_factories_menu(browser, self.workspace_root)
+
 
 class TestEditActionsDisabledInReadOnly(IntegrationTestCase):
 
@@ -172,6 +177,14 @@ class TestAddActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
         self.login(self.regular_user, browser)
         with ZODBStorageInReadonlyMode():
             types = self.get_addable_types(browser, self.task)
+
+        self.assertEqual([], self.type_ids(types))
+
+    @browsing
+    def test_no_addable_types_on_workspaceroot(self, browser):
+        self.login(self.workspace_admin, browser)
+        with ZODBStorageInReadonlyMode():
+            types = self.get_addable_types(browser, self.workspace_root)
 
         self.assertEqual([], self.type_ids(types))
 
