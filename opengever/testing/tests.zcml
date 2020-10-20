@@ -27,4 +27,12 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <plone:service
+      method="GET"
+      name="@test-write-on-read"
+      for="*"
+      factory=".services.WriteOnRead"
+      permission="zope.Public"
+      />
+
 </configure>

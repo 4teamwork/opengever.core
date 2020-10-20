@@ -1,7 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
-import json
 
 
 class TestRESTAPIReadOnlyErrorHandling(FunctionalTestCase):
@@ -13,14 +12,13 @@ class TestRESTAPIReadOnlyErrorHandling(FunctionalTestCase):
         with ZODBStorageInReadonlyMode():
             with browser.expect_http_error(code=500):
                 browser.open(
-                    self.portal, method='POST',
+                    self.portal,
+                    view='@test-write-on-read',
                     headers={
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'},
-                    data=json.dumps({
-                        '@type': 'opengever.document.document',
-                        'title': 'foo'})
                 )
+
             self.assertEqual({
                 u'message': u'',
                 u'type': u'ReadOnlyError'},
