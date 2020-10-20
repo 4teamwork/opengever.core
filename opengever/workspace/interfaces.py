@@ -28,6 +28,14 @@ class IWorkspaceSettings(Interface):
         default=None,
     )
 
+    videoconferencing_base_url = schema.TextLine(
+        title=u'Videoconferencing base URL',
+        description=u'Base URL used for default videoconferencing link, '
+                    'e.g.: https://meet.jit.si/',
+        default=u'https://meet.jit.si/',
+        required=False,
+    )
+
 
 class IToDo(Interface):
     """ Marker interface for ToDos """

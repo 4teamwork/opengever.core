@@ -33,3 +33,14 @@ class TestWorkspaceSerializer(IntegrationTestCase):
             },
             browser.json
         )
+
+    @browsing
+    def test_workspace_serialization_contains_videoconferencing_url(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(
+            self.workspace, headers={'Accept': 'application/json'}).json
+
+        self.assertIn(
+            u'videoconferencing_url', browser.json)
+        self.assertIn(
+            u'https://meet.jit.si/', browser.json['videoconferencing_url'])

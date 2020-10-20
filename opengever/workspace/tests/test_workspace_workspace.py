@@ -34,6 +34,10 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
               'reference': None,
               'principal': 'fridolin.hugentobler'}],
             RoleAssignmentManager(workspace).storage._storage())
+        self.assertIsNotNone(
+            workspace.videoconferencing_url)
+        self.assertIn(
+             u'https://meet.jit.si/', workspace.videoconferencing_url)
 
     @browsing
     def test_workspace_folder_is_addable_in_workspace(self, browser):

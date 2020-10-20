@@ -7,6 +7,7 @@ Changelog
 - Create Bumblebee user salt on login. [lgraf]
 - Patch several login-related events to allow login during readonly mode. [lgraf]
 - Add optional support for WriteOnRead tracing in ReadOnlyError page. [lgraf]
+- Add videoconferencing URL to workspaces. [deiferni]
 - Use custom error page for ReadOnlyErrors. [lgraf]
 - Disable GZip compression in p.a.caching. [lgraf]
 - Add viewlet that shows a message to indicate readonly mode. [lgraf]

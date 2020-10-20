@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-01 07:29+0000\n"
+"POT-Creation-Date: 2020-10-19 09:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,6 +93,11 @@ msgstr "Gast"
 msgid "WorkspaceMember"
 msgstr "Teammitglied"
 
+#. Default: "URL for videoconferencing link"
+#: ./opengever/workspace/workspace.py
+msgid "help_videoconferencing_url"
+msgstr "Verwendete URL um eine Videokonferenz für diesen Teamraum zu starten."
+
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
 msgid "invitation"
@@ -116,7 +121,13 @@ msgstr "Einladung zum Teamraum \"${title}\""
 #. Default: "Hello,\n\nYou were invited by ${user} to the workspace \"${title}\" at ${platform}.\n\nPlease click the following link if you want to accept the invitation:\n${accept_url}"
 #: ./opengever/workspace/participation/invitation_mailer.py
 msgid "invitation_mail_summary"
-msgstr "Guten Tag,\n\n${user} hat Sie eingeladen, an \"${title}\" auf der Plattform ${platform} teilzunehmen.\n\nWenn Sie die Einladung annehmen möchten, klicken Sie auf folgenden Link:\n${accept_url}"
+msgstr ""
+"Guten Tag,\n"
+"\n"
+"${user} hat Sie eingeladen, an \"${title}\" auf der Plattform ${platform} teilzunehmen.\n"
+"\n"
+"Wenn Sie die Einladung annehmen möchten, klicken Sie auf folgenden Link:\n"
+"${accept_url}"
 
 #. Default: "Completed"
 #: ./opengever/workspace/todo.py
@@ -194,6 +205,11 @@ msgstr "ToDo wieder eröffnet"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_trash"
 msgstr "Papierkorb"
+
+#. Default: "Videoconferencing URL"
+#: ./opengever/workspace/workspace.py
+msgid "label_videoconferencing_url"
+msgstr "Videokonferenz URL"
 
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py
