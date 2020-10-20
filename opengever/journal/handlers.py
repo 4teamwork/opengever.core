@@ -10,6 +10,7 @@ from opengever.base.oguid import Oguid
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.journal import _
+from opengever.readonly import is_in_readonly_mode
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.sharing.behaviors import IStandard
 from opengever.sharing.browser.sharing import ROLE_MAPPING
@@ -431,6 +432,8 @@ FILE_COPY_DOWNLOADED = 'File copy downloaded'
 
 
 def file_copy_downloaded(context, event):
+    if is_in_readonly_mode():
+        return
 
     title_unversioned = _(u'label_file_copy_downloaded',
                           default=u'Download copy')
@@ -462,6 +465,9 @@ PDF_DOWNLOADED = 'PDF downloaded'
 
 
 def pdf_downloaded(context, event):
+    if is_in_readonly_mode():
+        return
+
     title = _(u'label_pdf_downloaded', default=u'PDF downloaded')
     journal_entry_factory(context, PDF_DOWNLOADED, title)
 
