@@ -201,6 +201,16 @@ class TestOtherWriteActionsDisabledInReadOnly(IntegrationTestCase):
             'Checkin',
             browser.css('.contentWrapper').first.normalized_text())
 
+    @browsing
+    def test_cant_set_own_properties_in_ro_mode(self, browser):
+        self.login(self.regular_user, browser)
+
+        with ZODBStorageInReadonlyMode():
+            browser.open(self.portal)
+
+        personaltools = browser.css('#portal-personaltools')
+        self.assertIsNone(personaltools.find('Preferences').first_or_none)
+
 
 class APITestMixin(object):
 
@@ -418,3 +428,12 @@ class TestOtherWriteActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMix
             actions = self.get_actions(browser, self.document)
 
         self.assertNotIn('trash_document', self.action_ids(actions['file_actions']))
+
+    @browsing
+    def test_cant_set_own_properties_in_ro_mode_via_api(self, browser):
+        self.login(self.regular_user, browser)
+
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.portal)
+
+        self.assertNotIn('preferences', self.action_ids(actions['user']))

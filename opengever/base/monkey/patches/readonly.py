@@ -248,6 +248,8 @@ WRITE_PERMISSIONS = [
     'Remove GEVER content',
     'Delete objects',
     'Copy or Move',
+
+    'Set own properties',
 ]
 
 
