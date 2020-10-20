@@ -993,6 +993,81 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             }
         ], browser.json['items'])
 
+    @browsing
+    def test_folder_contents_listing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=folder_contents',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-3',
+                u'http://nohost/plone/workspaces/workspace-1/todolist-2',
+                u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-2',
+                u'http://nohost/plone/workspaces/workspace-1/todo-1',
+                u'http://nohost/plone/workspaces/workspace-1/todolist-1',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/document-40',
+                u'http://nohost/plone/workspaces/workspace-1/document-39',
+                u'http://nohost/plone/workspaces/workspace-1/document-38'
+            ],
+            [item.get('@id') for item in browser.json['items']])
+
+    @browsing
+    def test_folder_contents_listing_filtered_by_depth(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=folder_contents',
+            'depth=1',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'http://nohost/plone/workspaces/workspace-1/todolist-2',
+                u'http://nohost/plone/workspaces/workspace-1/todo-1',
+                u'http://nohost/plone/workspaces/workspace-1/todolist-1',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1',
+                u'http://nohost/plone/workspaces/workspace-1/document-39',
+                u'http://nohost/plone/workspaces/workspace-1/document-38'
+            ],
+            [item.get('@id') for item in browser.json['items']])
+
+    @browsing
+    def test_filtered_folder_contents_listing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=folder_contents',
+            'filters.portal_type:record:list=opengever.workspace.folder',
+            'filters.portal_type:record:list=opengever.document.document',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'http://nohost/plone/workspaces/workspace-1/folder-1',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/document-40',
+                u'http://nohost/plone/workspaces/workspace-1/document-38',
+            ],
+            [item.get('@id') for item in browser.json['items']])
+
+    @browsing
+    def test_folder_contents_listing_works_for_creator_fullname(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=folder_contents',
+            'columns:list=creator_fullname',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(u'Fr\xf6hlich G\xfcnther', browser.json['items'][0].get('creator_fullname'))
+
 
 class TestSQLDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
 

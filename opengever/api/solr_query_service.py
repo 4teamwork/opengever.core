@@ -285,6 +285,7 @@ FIELDS_WITH_MAPPING = [
     ListingField('checked_out', 'checked_out', transform=display_name),
     ListingField('checked_out_fullname', 'checked_out', 'checked_out_fullname'),
     ListingField('creator', 'Creator', transform=display_name),
+    ListingField('creator_fullname', 'Creator', 'creator_fullname'),
     ListingField('description', 'Description'),
     ListingField('document_type', 'document_type', transform=translate_document_type),
     ListingField('filename', 'filename', filename),

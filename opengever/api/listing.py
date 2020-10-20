@@ -84,6 +84,9 @@ FILTERS = {
     ],
     u'tasktemplate_folders': [
         u'object_provides:opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema',
+    ],
+    u'folder_contents': [
+        u'object_provides:plone.dexterity.interfaces.IDexterityContent'
     ]
 }
 
@@ -159,8 +162,8 @@ class ListingGet(SolrQueryBaseService):
 
     def preprocess_filters(self, filters):
         filters = dict(filters)
-        if 'participations' in filters and ('participants' in filters or
-                                            'participation_roles' in filters):
+        if 'participations' in filters and ('participants' in filters
+                                            or 'participation_roles' in filters):
             raise BadRequest(
                 "Cannot set participations filter together with participants "
                 "or participation_roles filters.")

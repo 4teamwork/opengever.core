@@ -197,6 +197,10 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         userid = getattr(self._brain, "checked_out", None)
         return None if userid is None else display_name(userid)
 
+    def creator_fullname(self):
+        userid = getattr(self._brain, "Creator", None)
+        return None if userid is None else display_name(userid)
+
     def creator(self):
         return self._brain.Creator
 
