@@ -1,11 +1,15 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.repository.deleter import RepositoryDeleter
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from plone import api
+from zExceptions import Unauthorized
 
 
 class TestAddActionsDisabledInReadOnly(IntegrationTestCase):
@@ -142,6 +146,34 @@ class TestWorkflowTransitionsDisabledInReadOnly(IntegrationTestCase):
             browser.open(self.task)
 
         self.assertFalse(editbar.visible())
+
+
+class TestDeleteActionsDisabledInReadOnly(IntegrationTestCase):
+
+    @browsing
+    def test_repository_deletion_not_available_in_ro_mode(self, browser):
+        self.login(self.administrator, browser)
+
+        with ZODBStorageInReadonlyMode():
+            browser.open(self.empty_repofolder)
+
+        self.assertNotIn(
+            'Delete',
+            browser.css('.contentWrapper').first.normalized_text())
+
+    @browsing
+    def test_repository_deletion_not_allowed_in_ro_mode(self, browser):
+        self.login(self.administrator, browser)
+
+        parent = aq_parent(aq_inner(self.empty_repofolder))
+        repo_id = self.empty_repofolder.getId()
+        self.assertIn(repo_id, parent.objectIds())
+
+        with ZODBStorageInReadonlyMode():
+            with self.assertRaises(Unauthorized):
+                RepositoryDeleter(self.empty_repofolder).delete()
+
+        self.assertIn(repo_id, parent.objectIds())
 
 
 class TestOtherWriteActionsDisabledInReadOnly(IntegrationTestCase):
@@ -343,6 +375,18 @@ class TestWorkflowTransitionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestM
             workflow = self.get_workflow(browser, self.task)
 
         self.assertEqual([], self.transition_ids(workflow['transitions']))
+
+
+class TestDeleteActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
+
+    @browsing
+    def test_repository_deletion_not_available_in_ro_mode_via_api(self, browser):
+        self.login(self.administrator, browser)
+
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.empty_repofolder)
+
+        self.assertNotIn('delete_repository', self.action_ids(actions['object_buttons']))
 
 
 class TestOtherWriteActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):

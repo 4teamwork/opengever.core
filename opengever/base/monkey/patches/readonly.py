@@ -244,6 +244,10 @@ WRITE_PERMISSIONS = [
     'opengever.workspace: Delete Todos',
     'opengever.workspace: Modify Workspace',
     'opengever.workspace: Update Content Order',
+
+    'Remove GEVER content',
+    'Delete objects',
+    'Copy or Move',
 ]
 
 
