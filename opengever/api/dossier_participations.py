@@ -62,7 +62,7 @@ class Participations(object):
                 "@id": '{}/@participations/{}'.format(
                     self.context.absolute_url(), data.participant_id),
                 "participant_id": data.participant_id,
-                "participant_title":  data.participant_title,
+                "participant_title": data.participant_title,
                 "roles": data.roles})
 
         result["participations"]["available_roles"] = available_roles(self.context)
@@ -211,12 +211,10 @@ class ParticipationsDelete(ParticipationBaseService):
 
 class PossibleParticipantsGet(Service):
     def reply(self):
-        if is_contact_feature_enabled():
-            source = ContactsSource(self.context)
-        else:
-            source = UsersContactsInboxesSource(self.context)
         query = safe_unicode(self.request.form.get('query', ''))
-        results = source.search(query)
+
+        handler = IParticipationAware(self.context)
+        results = handler.participant_source.search(query)
 
         batch = HypermediaBatch(self.request, results)
 

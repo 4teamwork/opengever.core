@@ -74,11 +74,11 @@ class PloneParticipationHandler(ParticipationHandlerBase):
     def __init__(self, context):
         self.context = context
         self.annotations = IAnnotations(self.context)
+        self.participant_source = UsersContactsInboxesSourceBinder()(self.context)
 
     def validate_participant(self, participant_id):
-        source = UsersContactsInboxesSourceBinder()(self.context)
         try:
-            source.getTermByToken(participant_id)
+            self.participant_source.getTermByToken(participant_id)
         except LookupError:
             raise InvalidParticipantId(
                 u"{} is not a valid id".format(participant_id))
@@ -157,6 +157,7 @@ class SQLParticipationHandler(ParticipationHandlerBase):
 
     def __init__(self, context):
         self.context = context
+        self.participant_source = ContactsSource(self.context)
 
     def get_participations(self):
         query = SQLParticipation.query.by_dossier(self.context)
@@ -180,9 +181,8 @@ class SQLParticipationHandler(ParticipationHandlerBase):
             return False
 
     def get_participant(self, participant_id):
-        source = ContactsSource(self.context)
         try:
-            term = source.getTermByToken(participant_id)
+            term = self.participant_source.getTermByToken(participant_id)
         except LookupError:
             raise InvalidParticipantId(
                 u"{} is not a valid id".format(participant_id))
