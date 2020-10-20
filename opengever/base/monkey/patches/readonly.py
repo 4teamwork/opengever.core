@@ -127,6 +127,7 @@ WRITER_ROLES = [
     'Reviewer',
     'Publisher',
     'WorkspacesCreator',
+    'Role Manager',
 ]
 
 

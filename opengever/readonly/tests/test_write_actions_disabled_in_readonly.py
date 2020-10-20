@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
+from plone import api
 
 
 class TestAddActionsDisabledInReadOnly(IntegrationTestCase):
@@ -96,6 +97,18 @@ class TestEditActionsDisabledInReadOnly(IntegrationTestCase):
     def test_no_edit_for_mail(self, browser):
         self.login(self.regular_user, browser)
         self.assert_no_edit_link(browser, self.mail_eml)
+
+    @browsing
+    def test_no_sharing_for_dossier(self, browser):
+        self.login(self.regular_user, browser)
+
+        api.user.grant_roles(self.regular_user.id, roles=['Role Manager'])
+
+        with ZODBStorageInReadonlyMode():
+            browser.open(self.dossier)
+
+        self.assertNotIn(
+            'Sharing', browser.css('.contentWrapper').first.normalized_text())
 
 
 class TestWorkflowTransitionsDisabledInReadOnly(IntegrationTestCase):
@@ -248,6 +261,16 @@ class TestEditActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
             actions = self.get_actions(browser, self.mail_eml)
 
         self.assertNotIn('edit', self.action_ids(actions['object']))
+
+    @browsing
+    def test_no_sharing_action_on_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        api.user.grant_roles(self.regular_user.id, roles=['Role Manager'])
+
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.dossier)
+
+        self.assertNotIn('local_roles', self.action_ids(actions['object_buttons']))
 
 
 class TestWorkflowTransitionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
