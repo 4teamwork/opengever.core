@@ -103,6 +103,11 @@ class TestEditActionsDisabledInReadOnly(IntegrationTestCase):
         self.assert_no_edit_link(browser, self.mail_eml)
 
     @browsing
+    def test_no_edit_for_workspace(self, browser):
+        self.login(self.workspace_owner, browser)
+        self.assert_no_edit_link(browser, self.workspace)
+
+    @browsing
     def test_no_sharing_for_dossier(self, browser):
         self.login(self.regular_user, browser)
 
@@ -137,6 +142,32 @@ class TestWorkflowTransitionsDisabledInReadOnly(IntegrationTestCase):
             browser.open(self.task)
 
         self.assertFalse(editbar.visible())
+
+
+class TestOtherWriteActionsDisabledInReadOnly(IntegrationTestCase):
+
+    @browsing
+    def test_cant_checkout_document_in_ro_mode(self, browser):
+        self.login(self.regular_user, browser)
+
+        with ZODBStorageInReadonlyMode():
+            browser.open(self.document)
+
+        self.assertNotIn(
+            'Checkout',
+            browser.css('.contentWrapper').first.normalized_text())
+
+    @browsing
+    def test_cant_checkin_document_in_ro_mode(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+
+        with ZODBStorageInReadonlyMode():
+            browser.open(self.document)
+
+        self.assertNotIn(
+            'Checkin',
+            browser.css('.contentWrapper').first.normalized_text())
 
 
 class APITestMixin(object):
@@ -277,6 +308,14 @@ class TestEditActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
         self.assertNotIn('edit', self.action_ids(actions['object']))
 
     @browsing
+    def test_no_edit_action_on_workspace(self, browser):
+        self.login(self.workspace_owner, browser)
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.workspace)
+
+        self.assertNotIn('edit', self.action_ids(actions['object']))
+
+    @browsing
     def test_no_sharing_action_on_dossier(self, browser):
         self.login(self.regular_user, browser)
         api.user.grant_roles(self.regular_user.id, roles=['Role Manager'])
@@ -304,3 +343,34 @@ class TestWorkflowTransitionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestM
             workflow = self.get_workflow(browser, self.task)
 
         self.assertEqual([], self.transition_ids(workflow['transitions']))
+
+
+class TestOtherWriteActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMixin):
+
+    @browsing
+    def test_cant_checkout_document_in_ro_mode_via_api(self, browser):
+        self.login(self.regular_user, browser)
+
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.document)
+
+        self.assertNotIn('checkout_document', self.action_ids(actions['object_buttons']))
+
+    @browsing
+    def test_cant_checkin_document_in_ro_mode_via_api(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.document)
+
+        self.assertEqual([], actions['object_checkin_menu'])
+
+    @browsing
+    def test_cant_trash_document_in_ro_mode_via_api(self, browser):
+        self.login(self.regular_user, browser)
+
+        with ZODBStorageInReadonlyMode():
+            actions = self.get_actions(browser, self.document)
+
+        self.assertNotIn('trash_document', self.action_ids(actions['file_actions']))

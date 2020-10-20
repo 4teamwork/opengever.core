@@ -183,7 +183,6 @@ class PatchPloneUserGetRolesInContext(MonkeyPatch):
 
 WRITE_PERMISSIONS = [
     'Modify portal content',
-    'opengever.task: Edit task',
     'Add portal content',
 
     'ftw.keywordwidget: Add new term',
@@ -221,6 +220,30 @@ WRITE_PERMISSIONS = [
     'opengever.workspace: Add Workspace',
     'opengever.workspace: Add WorkspaceFolder',
     'opengever.workspace: Add WorkspaceRoot',
+
+    'ftw.tokenauth: Manage own Service Keys',
+    'ftw.usermigration: Migrate users',
+    'opengever.api: Manage Groups',
+    'opengever.api: Manage Role Assignment Reports',
+    'opengever.api: Transfer Assignment',
+    'opengever.contact: Edit person',
+    'opengever.contact: Edit team',
+    'opengever.disposition: Edit transfer number',
+    'opengever.document: Cancel',
+    'opengever.document: Checkin',
+    'opengever.document: Checkout',
+    'opengever.document: Force Checkin',
+    'opengever.document: Modify archival file',
+    'opengever.dossier: Destroy dossier',
+    'opengever.dossier: Protect dossier',
+    'opengever.repository: Unlock Reference Prefix',
+    'opengever.task: Edit task',
+    'opengever.trash: Trash content',
+    'opengever.trash: Untrash content',
+    'opengever.webactions: Manage own WebActions',
+    'opengever.workspace: Delete Todos',
+    'opengever.workspace: Modify Workspace',
+    'opengever.workspace: Update Content Order',
 ]
 
 
