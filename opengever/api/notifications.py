@@ -1,4 +1,5 @@
 from opengever.activity import notification_center
+from opengever.readonly import is_in_readonly_mode
 from plone import api
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
@@ -114,7 +115,7 @@ class NotificationPatch(Service):
                 "It's not allowed to access notifications of other users.")
 
         notification = self.get_notification(userid, notification_id)
-        if mark_as_read:
+        if mark_as_read and not is_in_readonly_mode():
             self.center.mark_notification_as_read(notification.notification_id)
 
         self.request.response.setStatus(204)
