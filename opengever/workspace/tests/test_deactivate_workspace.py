@@ -185,6 +185,16 @@ class TestDeactivateWorkspace(IntegrationTestCase):
             )
 
     @browsing
+    def test_cannot_add_workspace_meeting_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.deactivate_workspace(browser)
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace, method='POST', headers=self.api_headers,
+                data=json.dumps({'@type': 'opengever.workspace.meeting'}),
+            )
+
+    @browsing
     def test_cannot_modify_document_in_deactivated_workspace(self, browser):
         self.login(self.workspace_admin, browser)
         self.deactivate_workspace(browser)
@@ -222,6 +232,16 @@ class TestDeactivateWorkspace(IntegrationTestCase):
             browser.open(
                 self.todolist_general, method='PATCH',
                 headers=self.api_headers, data=json.dumps({'title': 'Foo'}),
+            )
+
+    @browsing
+    def test_cannot_modify_workspace_meeting_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.deactivate_workspace(browser)
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace_meeting, method='PATCH', headers=self.api_headers,
+                data=json.dumps({'title': 'Foo'}),
             )
 
     @browsing
@@ -275,3 +295,10 @@ class TestDeactivateWorkspace(IntegrationTestCase):
         self.assertTrue(can_manage_member(self.workspace_document))
         self.deactivate_workspace(browser)
         self.assertFalse(can_manage_member(self.workspace_document))
+
+    @browsing
+    def test_cannot_manage_member_of_workspace_meeting_in_deactivated_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assertTrue(can_manage_member(self.workspace_meeting))
+        self.deactivate_workspace(browser)
+        self.assertFalse(can_manage_member(self.workspace_meeting))
