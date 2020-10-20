@@ -8,6 +8,7 @@ WHITELIST = (
     # These test views are unsecure by design in order to test security:
     'opengever.base.tests.views.unauthorized.PublishingUnauthorized',
     'opengever.base.tests.views.unauthorized.TraversalUnauthorized',
+    'opengever.base.tests.views.write_on_read.WriteOnRead',
 
     # The plone-layout view is zope.Public in Plone too and should not
     # disclose sensitive infos.

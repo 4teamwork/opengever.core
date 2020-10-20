@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
@@ -99,15 +98,14 @@ class TestErrorPageFunctional(FunctionalTestCase):
 
     @browsing
     def test_read_only_error_shows_custom_error_page(self, browser):
-        browser.login().open(self.dossier)
+        browser.login()
 
         with ZODBStorageInReadonlyMode():
-            factoriesmenu.add('Document')
             with browser.expect_http_error(code=500):
-                browser.fill({'Title': u'Foo'}).save()
+                browser.open(self.portal, view='test-write-on-read')
 
         self.assertEqual(
             'Error: Unexpected write attempt during ReadOnly mode',
             browser.css('h1').first.text)
 
-        self.assertEqual(0, len(self.dossier.objectValues()))
+        self.assertFalse(hasattr(self.portal, 'some_attribute'))
