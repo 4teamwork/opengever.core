@@ -8,5 +8,7 @@ def is_in_readonly_mode():
     """Checks whether the current instance is in readonly mode.
     """
     site = getSite()
-    conn = site._p_jar
-    return conn.isReadOnly()
+    if site:
+        conn = site._p_jar
+        return conn.isReadOnly()
+    return False
