@@ -15,6 +15,7 @@
   <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
   <adapter factory=".sequence.TodoListSequenceNumberGenerator" />
   <adapter factory=".sequence.TodoSequenceNumberGenerator" />
+  <adapter factory=".sequence.WorkspaceMeetingSequenceNumberGenerator" />
 
   <subscriber
       for="opengever.workspace.interfaces.IWorkspace

@@ -13,6 +13,7 @@
     <element value="opengever.workspace.todo" />
     <element value="opengever.workspace.todolist" />
     <element value="opengever.workspace.folder" />
+    <element value="opengever.workspace.meeting" />
   </property>
 
   <!-- Schema interface -->

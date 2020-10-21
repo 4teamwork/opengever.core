@@ -59,6 +59,7 @@
   <object name="opengever.workspace.root" meta_type="Dexterity FTI" />
   <object name="opengever.workspace.workspace" meta_type="Dexterity FTI" />
   <object name="opengever.workspace.folder" meta_type="Dexterity FTI" />
+  <object name="opengever.workspace.meeting" meta_type="Dexterity FTI" />
   <object name="opengever.workspace.todo" meta_type="Dexterity FTI" />
   <object name="opengever.workspace.todolist" meta_type="Dexterity FTI" />
 
