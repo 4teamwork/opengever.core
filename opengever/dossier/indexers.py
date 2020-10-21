@@ -333,7 +333,7 @@ class ParticipationIndexHelper(object):
         participant_id, role = self.index_value_to_participant_id_and_role(value)
         role_label = self.role_to_label(role)
         participant_label = self.participant_id_to_label(participant_id)
-        return u"{}|{}".format(role_label, participant_label)
+        return u"{}|{}".format(participant_label, role_label)
 
 
 @indexer(IParticipationAwareMarker)
