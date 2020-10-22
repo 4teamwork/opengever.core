@@ -16,4 +16,4 @@ msgstr ""
 
 #: ./opengever/wopi/browser/edit.py
 msgid "Document is checked out for exclusive editing."
-msgstr ""
+msgstr "Le document est en checkout pour modification exclusive."

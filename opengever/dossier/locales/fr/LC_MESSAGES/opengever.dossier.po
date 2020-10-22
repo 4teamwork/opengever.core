@@ -119,7 +119,7 @@ msgstr "Aucun sous-dossier"
 
 #: ./opengever/dossier/resolve.py
 msgid "Not all linked workspaces are deactivated."
-msgstr ""
+msgstr "Tous les espaces de travail liés ne sont pas désactivés."
 
 #: ./opengever/dossier/archive.py
 msgid "Not all required fields are filled."
@@ -179,7 +179,7 @@ msgstr "Ce dossier ne peut pas être annulé, il contient encore des tâches non
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all linked workspaces are deactivated."
-msgstr ""
+msgstr "Le dossier ne peut pas être désactivé, car tous les espaces de travail liés ne sont pas désactivés."
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."
@@ -367,12 +367,12 @@ msgstr "Vous n'avez sélectionné aucun élément."
 #. Default: "There is already a participation for this contact."
 #: ./opengever/dossier/browser/forms.py
 msgid "error_participant_already_exists"
-msgstr ""
+msgstr "Il y a déjà une participation pour ce contact."
 
 #. Default: "Failed to move ${item}."
 #: ./opengever/dossier/move_items.py
 msgid "failed_to_move_item"
-msgstr ""
+msgstr "${item} n'a pas pu être déplacé."
 
 #. Default: "Common"
 #: ./opengever/dossier/behaviors/dossier.py
@@ -447,7 +447,7 @@ msgstr "Commentaire sur le dossier `${title}`"
 #. Default: "Move Item"
 #: ./opengever/dossier/move_items.py
 msgid "heading_move_item"
-msgstr ""
+msgstr "Déplacer un élément"
 
 #. Default: "Move Items"
 #: ./opengever/dossier/move_items.py
@@ -519,7 +519,7 @@ msgstr "Participations enlevées."
 #. Default: "${item} was moved."
 #: ./opengever/dossier/move_items.py
 msgid "item_moved"
-msgstr ""
+msgstr "${item} a été déplacé."
 
 #. Default: "Add Note"
 #: ./opengever/dossier/viewlets/templates/note.pt
@@ -899,7 +899,7 @@ msgstr "Aide pour le choix du titre"
 #. Default: "Date of modification of the dossier or its content"
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "label_touched"
-msgstr ""
+msgstr "Date de modification du dossier ou de son contenu"
 
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py

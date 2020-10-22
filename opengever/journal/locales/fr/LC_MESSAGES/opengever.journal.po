@@ -226,7 +226,7 @@ msgstr "Participation ajoutée pour ${contact} comme ${roles}"
 #. Default: "Participant modified: ${contact}"
 #: ./opengever/journal/handlers.py
 msgid "label_participant_modified"
-msgstr ""
+msgstr "Participation de ${contact} modifiée"
 
 #. Default: "Participant removed: ${contact}"
 #: ./opengever/journal/handlers.py

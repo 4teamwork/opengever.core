@@ -494,7 +494,7 @@ msgstr "Editer à nouveau"
 #. Default: "Edit in Office Online"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_edit_in_office_online"
-msgstr ""
+msgstr "Modifier avec Office Online"
 
 #. Default: "Error"
 #: ./opengever/document/browser/save_pdf_document_under.py
@@ -657,7 +657,7 @@ msgstr "${creator} a fait un checkout de ce document."
 #. Default: "This item is being edited in Office Online by ${creator}."
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_collaborative_checkout_info"
-msgstr ""
+msgstr "${creator} modifie actuellement ce document dans Office Online."
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py

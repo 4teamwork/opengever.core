@@ -665,7 +665,7 @@ msgstr "Le modèle pour les points à l'ordre du jour sans requête doit être s
 #. Default: "Can only move objects from open dossiers"
 #: ./opengever/meeting/browser/move_proposal_items.py
 msgid "error_move_proposal_dossier_not_open"
-msgstr ""
+msgstr "Seuls les objets contenus dans des dossiers actifs peuvent être déplacés."
 
 #. Default: "Cannot change the state because the proposal contains checked out documents."
 #: ./opengever/meeting/proposal_transition_comment.py
@@ -675,7 +675,7 @@ msgstr "L'état ne peut pas être changé tant que la requête contient des docu
 #. Default: "You have not selected any items"
 #: ./opengever/meeting/browser/move_proposal_items.py
 msgid "error_no_items_selected"
-msgstr ""
+msgstr "Vous n'avez sélectionné aucun élément"
 
 #. Default: "Insufficient privileges to add a document to the meeting dossier."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -937,7 +937,7 @@ msgstr "Générer un extrait de protocole"
 #. Default: "Create task"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_create_task_from_proposal"
-msgstr ""
+msgstr "Créer une tâche"
 
 #. Default: "Creator"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1010,7 +1010,7 @@ msgstr "Description"
 #. Default: "Destination"
 #: ./opengever/meeting/browser/move_proposal_items.py
 msgid "label_destination"
-msgstr ""
+msgstr "Dossier de déstination"
 
 #. Default: "Dossier"
 #: ./opengever/meeting/proposal.py
@@ -1416,12 +1416,12 @@ msgstr "Modification d'état ${transition} exécutée"
 #. Default: "Unlock submitted document"
 #: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
 msgid "label_unlock_submitted_document"
-msgstr ""
+msgstr "Voulez-vous vraiment déverrouiller ce document?"
 
 #. Default: "Unlocked attachments"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_unlocked_attachments"
-msgstr ""
+msgstr "Pièces jointes découplées"
 
 #. Default: "Are you sure you want to unschedule this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1618,7 +1618,7 @@ msgstr "Statut modifié avec succès."
 #. Default: "Do you really want to unlock the submitted document?"
 #: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
 msgid "msg_unlock_submitted_document"
-msgstr ""
+msgstr "Ceci découple le document soumis du document original. Vous pourrez ensuite modifier le document.<br />Soumettre une nouvelle version ne sera alors plus possible."
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
@@ -1846,7 +1846,7 @@ msgstr "Envoyer un e-mail"
 #. Default: "Document has been unlocked"
 #: ./opengever/meeting/browser/unlock_submitted_document_form.py
 msgid "statmsg_submitted_document_unlocked"
-msgstr ""
+msgstr "Le document a été déverrouillé."
 
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py
@@ -1931,4 +1931,4 @@ msgstr "Mettre à l'ordre du jour:"
 #. Default: "This cannot be undone."
 #: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
 msgid "warning_unlock_submitted_document"
-msgstr ""
+msgstr "Cette action ne pourra pas être annulée."

@@ -17,9 +17,9 @@ msgstr ""
 #. Default: "GEVER is currently in readonly mode"
 #: ./opengever/readonly/viewlets/readonlymessage.pt
 msgid "msg_currently_in_readonly_mode"
-msgstr ""
+msgstr "GEVER est actuellement en mode lecture seule"
 
 #. Default: "(Actions that would modify data are disabled)"
 #: ./opengever/readonly/viewlets/readonlymessage.pt
 msgid "msg_write_actions_disabled"
-msgstr ""
+msgstr "(Les actions qui modifient des données sont désactivées)"

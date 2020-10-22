@@ -22,7 +22,7 @@ msgstr ""
 #. Default: "Added as watcher"
 #: ./opengever/activity/notification_settings.py
 msgid "added-as-watcher"
-msgstr ""
+msgstr "Ajouté comme observateur"
 
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
@@ -154,7 +154,7 @@ msgstr "transmission refusée"
 #. Default: "Added as watcher to forwarding"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-watcher-added"
-msgstr ""
+msgstr "Ajouté comme observateur à une transmission"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -323,7 +323,7 @@ msgstr "observateur"
 #. Default: "State changed"
 #: ./opengever/activity/notification_settings.py
 msgid "state-changed"
-msgstr ""
+msgstr "Changement de l'état"
 
 #. Default: "Daily Digest for ${date}"
 #: ./opengever/activity/digest.py
@@ -348,7 +348,7 @@ msgstr "tâche ajoutée"
 #. Default: "Task added / reassigned"
 #: ./opengever/activity/notification_settings.py
 msgid "task-added-or-reassigned"
-msgstr ""
+msgstr "Tâche créée / réassignée"
 
 #. Default: "Task commented"
 #: ./opengever/activity/__init__.py
@@ -451,7 +451,7 @@ msgstr "tâche rouverte"
 #. Default: "Added as watcher to task"
 #: ./opengever/activity/__init__.py
 msgid "task-watcher-added"
-msgstr ""
+msgstr "Ajouté comme observateur à une tâche"
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py
