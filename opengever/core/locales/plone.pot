@@ -302,6 +302,36 @@ msgid "opengever_workspace_folder--STATUS--active"
 msgstr ""
 
 #. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--ROLE--Administrator"
+msgstr ""
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--ROLE--Manager"
+msgstr ""
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--ROLE--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--ROLE--WorkspaceGuest"
+msgstr ""
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--ROLE--WorkspaceMember"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--STATUS--active"
+msgstr ""
+
+#. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Administrator"
 msgstr ""

@@ -58,3 +58,18 @@ class ToDoNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     implements(IToDoNameFromTitle)
 
     format = u'todo-%i'
+
+
+class IWorkspaceMeetingNameFromTitle(INameFromTitle):
+    """Behavior interface for WorkspaceMeetingNameFromTitle.
+    """
+
+
+class WorkspaceMeetingNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
+    """ The ID of a workspace meeting should be 'meeting-{sequence number}'.
+
+    format = u'meeting-%i'
+    """
+    implements(IWorkspaceMeetingNameFromTitle)
+
+    format = u'meeting-%i'

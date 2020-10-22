@@ -497,6 +497,26 @@
 
   </lawgiver:workflow>
 
+  <lawgiver:workflow name="opengever_workspace_meeting">
+    <lawgiver:ignore
+        permissions="
+                     opengever.trash: Trash content,
+                     opengever.trash: Untrash content,
+                     Add portal content,
+                     Modify portal content,
+                     Delete objects,
+                     Manage properties,
+                     Change local roles,
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate roles,
+                     Take ownership,
+                     "
+        />
+
+  </lawgiver:workflow>
+
   <!-- Should be ignored, permission is only granted to manager and admin on site root -->
   <lawgiver:ignore
       permissions="

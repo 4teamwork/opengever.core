@@ -1,0 +1,13 @@
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <object name="opengever_workspace_meeting" meta_type="Workflow" />
+
+  <bindings>
+
+    <type type_id="opengever.workspace.meeting">
+      <bound-workflow workflow_id="opengever_workspace_meeting" />
+    </type>
+
+  </bindings>
+
+</object>

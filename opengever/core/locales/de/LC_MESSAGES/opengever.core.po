@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-09-10 09:47+0000\n"
+"POT-Creation-Date: 2020-10-19 15:33+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -336,7 +336,7 @@ msgstr "Freigabe von ungebrauchten Aktenzeichen Prefixen."
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.workspace.xml
 #: ./opengever/core/upgrades/20171213174551_add_workspace_content_type/types/opengever.workspace.workspace.xml
-#: ./opengever/core/upgrades/20200827114625_update_workspace_workflow/types/opengever.workspace.workspace.xml
+#: ./opengever/core/upgrades/20200909192905_update_workspace_workflow/types/opengever.workspace.workspace.xml
 msgid "Workspace"
 msgstr "Teamraum"
 
@@ -344,6 +344,11 @@ msgstr "Teamraum"
 #: ./opengever/core/upgrades/20171220151710_add_workspace_folder_content_type/types/opengever.workspace.folder.xml
 msgid "WorkspaceFolder"
 msgstr "Ordner"
+
+#: ./opengever/core/profiles/default/types/opengever.workspace.meeting.xml
+#: ./opengever/core/upgrades/20201016095810_install_workspace_meeting_type/types/opengever.workspace.meeting.xml
+msgid "WorkspaceMeeting"
+msgstr "Meeting"
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.root.xml
 msgid "WorkspaceRoot"

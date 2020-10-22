@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-09-10 09:47+0000\n"
+"POT-Creation-Date: 2020-10-19 15:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -334,13 +334,18 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.workspace.xml
 #: ./opengever/core/upgrades/20171213174551_add_workspace_content_type/types/opengever.workspace.workspace.xml
-#: ./opengever/core/upgrades/20200827114625_update_workspace_workflow/types/opengever.workspace.workspace.xml
+#: ./opengever/core/upgrades/20200909192905_update_workspace_workflow/types/opengever.workspace.workspace.xml
 msgid "Workspace"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.folder.xml
 #: ./opengever/core/upgrades/20171220151710_add_workspace_folder_content_type/types/opengever.workspace.folder.xml
 msgid "WorkspaceFolder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.workspace.meeting.xml
+#: ./opengever/core/upgrades/20201016095810_install_workspace_meeting_type/types/opengever.workspace.meeting.xml
+msgid "WorkspaceMeeting"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.root.xml

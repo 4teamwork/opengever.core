@@ -207,9 +207,9 @@ class OpengeverContentFixture(object):
                 title=u'Hauptmandant',
                 unit_id=u'plone',
                 public_url='http://nohost/plone',
-                )
-            .as_current_admin_unit()
             )
+            .as_current_admin_unit()
+        )
 
         self.org_unit_fa = create(
             Builder('org_unit')
@@ -217,10 +217,10 @@ class OpengeverContentFixture(object):
             .having(
                 title=u'Finanz\xe4mt',
                 admin_unit=self.admin_unit,
-                )
+            )
             .with_default_groups()
             .as_current_org_unit()
-            )
+        )
 
         self.org_unit_rk = create(
             Builder('org_unit')
@@ -228,7 +228,7 @@ class OpengeverContentFixture(object):
             .having(
                 title=u'Ratskanzl\xc3\xa4i',
                 admin_unit=self.admin_unit,
-                )
+            )
             .with_default_groups()
         )
 
@@ -239,7 +239,7 @@ class OpengeverContentFixture(object):
             u'Kohler',
             ['Administrator', 'APIUser'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.member_admin = self.create_user(
             'member_admin',
@@ -247,14 +247,14 @@ class OpengeverContentFixture(object):
             u'Meier',
             ['MemberAreaAdministrator', 'APIUser'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.dossier_responsible = self.create_user(
             'dossier_responsible',
             u'Robert',
             u'Ziegler',
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.regular_user = self.create_user(
             'regular_user',
@@ -278,7 +278,7 @@ class OpengeverContentFixture(object):
             url='http://www.example.com',
             zip_code='1234',
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.meeting_user = self.create_user(
             'meeting_user',
@@ -286,7 +286,7 @@ class OpengeverContentFixture(object):
             u'J\xe4ger',
             email='herbert@jager.com',
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.secretariat_user = self.create_user(
             'secretariat_user',
@@ -294,21 +294,21 @@ class OpengeverContentFixture(object):
             u'K\xf6nig',
             group=self.org_unit_fa.inbox_group,
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.committee_responsible = self.create_user(
             'committee_responsible',
             u'Fr\xe4nzi',
             u'M\xfcller',
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.dossier_manager = self.create_user(
             'dossier_manager',
             u'F\xe4ivel',
             u'Fr\xfchling',
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.records_manager = self.create_user(
             'records_manager',
@@ -316,7 +316,7 @@ class OpengeverContentFixture(object):
             u'Flucht',
             ['Records Manager'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.workspace_owner = self.create_user(
             'workspace_owner',
@@ -324,7 +324,7 @@ class OpengeverContentFixture(object):
             u'Fr\xf6hlich',
             ['WorkspacesUser', 'WorkspacesCreator'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.workspace_admin = self.create_user(
             'workspace_admin',
@@ -332,7 +332,7 @@ class OpengeverContentFixture(object):
             u'Hugentobler',
             ['WorkspacesUser', 'WorkspacesCreator'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.workspace_member = self.create_user(
             'workspace_member',
@@ -340,7 +340,7 @@ class OpengeverContentFixture(object):
             u'Schr\xf6dinger',
             ['WorkspacesUser'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.workspace_guest = self.create_user(
             'workspace_guest',
@@ -348,7 +348,7 @@ class OpengeverContentFixture(object):
             u'Peter',
             ['WorkspacesUser'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.archivist = self.create_user(
             'archivist',
@@ -356,7 +356,7 @@ class OpengeverContentFixture(object):
             u'Fischer',
             ['Archivist'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         self.service_user = self.create_user(
             'service_user',
@@ -368,7 +368,7 @@ class OpengeverContentFixture(object):
                 'Impersonator',
                 'Administrator',
             ],
-            )
+        )
 
         self.webaction_manager = self.create_user(
             'webaction_manager',
@@ -376,7 +376,7 @@ class OpengeverContentFixture(object):
             u'Manager',
             ['WebActionManager'],
             user_settings={'_seen_tours': '["*"]'},
-            )
+        )
 
         # This user is intended to be used in situations where you need a user
         # which has only the 'Reader' role on some context and one has to build
@@ -388,7 +388,7 @@ class OpengeverContentFixture(object):
             Builder('user')
             .named(firstname, lastname)
             .with_roles(['Member'])
-            )
+        )
 
         builder.update_properties()  # updates builder.userid
         email = '{}@gever.local'.format(builder.userid)
@@ -398,7 +398,7 @@ class OpengeverContentFixture(object):
             Builder('ogds_user')
             .id(plone_user.getId())
             .having(firstname=firstname, lastname=lastname, email=email)
-            )
+        )
 
         self._lookup_table['reader_user'] = ('user', plone_user.getId())
 
@@ -433,12 +433,12 @@ class OpengeverContentFixture(object):
         users = [
             ogds_service().find_user(user.getId())
             for user in [self.regular_user, self.dossier_responsible]
-            ]
+        ]
 
         group_a = create(
             Builder('ogds_group')
             .having(groupid='projekt_a', title=u'Projekt A', users=users)
-            )
+        )
 
         self.projekt_a = create(
             Builder('ogds_team')
@@ -446,13 +446,13 @@ class OpengeverContentFixture(object):
                 title=u'Projekt \xdcberbaung Dorfmatte',
                 group=group_a,
                 org_unit=self.org_unit_fa,
-                )
             )
+        )
 
         users = [
             ogds_service().find_user(user.getId())
             for user in [self.committee_responsible, self.meeting_user]
-            ]
+        ]
 
         group_b = create(
             Builder('ogds_group')
@@ -460,8 +460,8 @@ class OpengeverContentFixture(object):
                 groupid='projekt_b',
                 title=u'Projekt B',
                 users=users,
-                )
             )
+        )
 
         self.projekt_b = create(
             Builder('ogds_team')
@@ -469,8 +469,8 @@ class OpengeverContentFixture(object):
                 title=u'Sekretariat Abteilung XY',
                 group=group_b,
                 org_unit=self.org_unit_fa,
-                )
             )
+        )
 
         group_empty = create(
             Builder('ogds_group')
@@ -498,8 +498,8 @@ class OpengeverContentFixture(object):
             .having(
                 title_de=u'Ordnungssystem',
                 title_fr=u'Syst\xe8me de classement',
-                )
-            ))
+            )
+        ))
 
         self.set_roles(
             self.root, self.org_unit_fa.users_group_id,
@@ -520,8 +520,8 @@ class OpengeverContentFixture(object):
                 title_de=u'F\xfchrung',
                 title_fr=u'Direction',
                 description=u'Alles zum Thema F\xfchrung.',
-                )
-            ))
+            )
+        ))
 
         self.set_roles(
             self.repofolder0, self.dossier_manager.getId(),
@@ -535,8 +535,8 @@ class OpengeverContentFixture(object):
             .having(
                 title_de=u'Vertr\xe4ge und Vereinbarungen',
                 title_fr=u'Contrats et accords',
-                )
-            ))
+            )
+        ))
 
         self.repofolder1 = self.register('empty_repofolder', create(
             Builder('repository')
@@ -544,8 +544,8 @@ class OpengeverContentFixture(object):
             .having(
                 title_de=u'Rechnungspr\xfcfungskommission',
                 title_fr=u'Commission de v\xe9rification',
-                )
-            ))
+            )
+        ))
 
         self.set_roles(
             self.repofolder1, self.archivist.getId(),
@@ -557,9 +557,9 @@ class OpengeverContentFixture(object):
             .having(
                 title_de=u'Spinn\xe4nnetzregistrar',
                 title_fr=u"Toile d'araign\xe9e",
-                )
+            )
             .in_state('repositoryfolder-state-inactive')
-            ))
+        ))
 
     @staticuid()
     def create_contacts(self):
@@ -569,8 +569,8 @@ class OpengeverContentFixture(object):
                 id='kontakte',
                 title_de=u'Kontakte',
                 title_en=u'Contacts',
-                )
-            ))
+            )
+        ))
 
         self.set_roles(
             self.contactfolder, self.org_unit_fa.users_group_id,
@@ -588,8 +588,8 @@ class OpengeverContentFixture(object):
             .having(
                 firstname=u'Hanspeter',
                 lastname='D\xc3\xbcrr'.decode('utf-8'),
-                )
-            ))
+            )
+        ))
 
         self.franz_meier = self.register('franz_meier', create(
             Builder('contact')
@@ -598,13 +598,13 @@ class OpengeverContentFixture(object):
                 firstname=u'Franz',
                 lastname=u'Meier',
                 email=u'meier.f@example.com',
-                )
-            ))
+            )
+        ))
 
         self.josef_buehler = create(
             Builder('person')
             .having(firstname=u'Josef', lastname=u'B\xfchler'),
-            )
+        )
 
         self.meier_ag = create(Builder('organization').named(u'Meier AG'))
 
@@ -616,7 +616,7 @@ class OpengeverContentFixture(object):
             Builder('templatefolder')
             .titled(u'Vorlagen')
             .having(id='vorlagen')
-            ))
+        ))
 
         self.set_roles(
             self.templates, self.org_unit_fa.users_group_id, ['Reader'])
@@ -632,20 +632,20 @@ class OpengeverContentFixture(object):
             .titled(u'T\xc3\xb6mpl\xc3\xb6te Ohne')
             .with_asset_file('without_custom_properties.docx')
             .within(self.templates)
-            ))
+        ))
 
         self.register('normal_template', create(
             Builder('document')
             .titled(u'T\xc3\xb6mpl\xc3\xb6te Normal')
             .with_dummy_content()
             .within(self.templates)
-            ))
+        ))
 
         self.register('empty_template', create(
             Builder('document')
             .titled(u'T\xc3\xb6mpl\xc3\xb6te Leer')
             .within(self.templates)
-            ))
+        ))
 
         with self.features('doc-properties'):
             self.register('docprops_template', create(
@@ -654,32 +654,32 @@ class OpengeverContentFixture(object):
                 .with_asset_file('with_custom_properties.docx')
                 .with_modification_date(datetime(2010, 12, 28))
                 .within(self.templates)
-                ))
+            ))
 
         with self.features('meeting'):
             self.meeting_template = self.register('meeting_template', create(
                 Builder('meetingtemplate')
                 .titled(u'Meeting T\xc3\xb6mpl\xc3\xb6te')
                 .within(self.templates)
-                ))
+            ))
             self.register('paragraph_template', create(
                 Builder('paragraphtemplate')
                 .titled(u'Begr\xfcssung')
                 .having(position=1)
                 .within(self.meeting_template)
-                ))
+            ))
             create(
                 Builder('paragraphtemplate')
                 .titled(u'Gesch\xf0fte')
                 .having(position=2)
                 .within(self.meeting_template)
-                )
+            )
             create(
                 Builder('paragraphtemplate')
                 .titled(u'Schlusswort')
                 .having(position=3)
                 .within(self.meeting_template)
-                )
+            )
 
     @staticuid()
     def create_special_templates(self):
@@ -687,7 +687,7 @@ class OpengeverContentFixture(object):
             Builder('sablontemplate')
             .within(self.templates)
             .with_asset_file('sablon_template.docx')
-            ))
+        ))
 
         with self.features('meeting'):
             self.proposal_template = self.register('proposal_template', create(
@@ -695,21 +695,21 @@ class OpengeverContentFixture(object):
                 .titled(u'Geb\xfchren')
                 .with_asset_file(u'vertragsentwurf.docx')
                 .within(self.templates)
-                ))
+            ))
 
             self.register('ad_hoc_agenda_item_template', create(
                 Builder('proposaltemplate')
                 .titled(u'Freitext Traktandum')
                 .with_asset_file(u'freitext_traktandum.docx')
                 .within(self.templates)
-                ))
+            ))
 
             self.register('recurring_agenda_item_template', create(
                 Builder('proposaltemplate')
                 .titled(u'Wiederkehrendes Traktandum')
                 .with_asset_file(u'wiederkehrendes_traktandum.docx')
                 .within(self.templates)
-                ))
+            ))
 
         self.tasktemplatefolder = self.register('tasktemplatefolder', create(
             Builder('tasktemplatefolder')
@@ -727,9 +727,9 @@ class OpengeverContentFixture(object):
                 'responsible_client': 'fa',
                 'responsible': 'robert.ziegler',
                 'deadline': 10,
-                })
+            })
             .within(self.tasktemplatefolder)
-            ))
+        ))
 
         self.dossiertemplate = self.register('dossiertemplate', create(
             Builder('dossiertemplate')
@@ -739,9 +739,9 @@ class OpengeverContentFixture(object):
                 'keywords': (u'secret', u'special'),
                 'comments': 'this is very special',
                 'filing_prefix': 'department',
-                })
+            })
             .within(self.templates)
-            ))
+        ))
 
         # The title of this one should be alphabetically after
         # subdossiertemplatedocument for testing sorting!
@@ -756,7 +756,7 @@ class OpengeverContentFixture(object):
             Builder('dossiertemplate')
             .titled(u'Anfragen')
             .within(self.dossiertemplate)
-            ))
+        ))
 
         self.register('subdossiertemplatedocument', create(
             Builder('document')
@@ -772,7 +772,7 @@ class OpengeverContentFixture(object):
             .titled(u'Vorlagen neu')
             .having(id='vorlagen-neu')
             .within(self.templates)
-            ))
+        ))
 
         self.set_roles(subtemplates, self.org_unit_fa.users_group_id, ['Reader'])
         self.set_roles(subtemplates, self.administrator.getId(),
@@ -786,14 +786,14 @@ class OpengeverContentFixture(object):
             .with_dummy_content()
             .with_modification_date(datetime(2020, 2, 29))
             .within(subtemplates)
-            ))
+        ))
 
     @staticuid()
     def create_committees(self):
         self.committee_container = self.register('committee_container', create(
             Builder('committee_container')
             .titled(u'Sitzungen')
-            ))
+        ))
 
         self.set_roles(
             self.committee_container, self.committee_responsible.getId(),
@@ -814,7 +814,7 @@ class OpengeverContentFixture(object):
             responsibles=[
                 self.administrator,
                 self.committee_responsible,
-                ],
+            ],
             templates={
                 'agendaitem_list_template': self.sablon_template,
                 'protocol_header_template': self.sablon_template,
@@ -822,12 +822,12 @@ class OpengeverContentFixture(object):
                 'excerpt_suffix_template': self.sablon_template,
                 'paragraph_template': self.sablon_template,
             }
-            ))
+        ))
 
         self.register_raw(
             'committee_id',
             self.committee.load_model().committee_id,
-            )
+        )
 
         self.period = self.register('period', api.content.find(
             context=self.committee,
@@ -844,14 +844,14 @@ class OpengeverContentFixture(object):
             email='h.schoeller@example.org',
             date_from=datetime(2014, 1, 1),
             date_to=datetime(2016, 12, 31),
-            )
+        )
 
         self.committee_secretary = create(
             Builder('ogds_user')
             .id('committee.secretary')
             .having(firstname=u'C\xf6mmittee', lastname='Secretary', email='committee.secretary@example.com')
             .assign_to_org_units([self.org_unit_fa])
-            )
+        )
 
         self.committee_participant_1 = self.create_committee_membership(
             self.committee,
@@ -861,7 +861,7 @@ class OpengeverContentFixture(object):
             email='g.woelfl@example.com',
             date_from=datetime(2014, 1, 1),
             date_to=datetime(2016, 12, 31),
-            )
+        )
 
         self.committee_participant_2 = self.create_committee_membership(
             self.committee,
@@ -871,7 +871,7 @@ class OpengeverContentFixture(object):
             email='jens-wendler@example.com',
             date_from=datetime(2014, 1, 1),
             date_to=datetime(2016, 12, 31),
-            )
+        )
 
         self.inactive_committee_participant = self.create_committee_membership(
             self.committee,
@@ -881,7 +881,7 @@ class OpengeverContentFixture(object):
             email='pablo-neruda@example.com',
             date_from=datetime(2010, 1, 1),
             date_to=datetime(2014, 12, 31),
-            )
+        )
 
         self.empty_committee = self.register(
             'empty_committee',
@@ -893,7 +893,7 @@ class OpengeverContentFixture(object):
                 responsibles=[
                     self.administrator,
                     self.committee_responsible,
-                    ],
+                ],
                 templates={
                     'agendaitem_list_template': self.sablon_template,
                     'protocol_header_template': self.sablon_template,
@@ -901,13 +901,13 @@ class OpengeverContentFixture(object):
                     'excerpt_suffix_template': self.sablon_template,
                     'paragraph_template': self.sablon_template,
                 }
-                ),
-            )
+            ),
+        )
 
         self.register_raw(
             'empty_committee_id',
             self.empty_committee.load_model().committee_id,
-            )
+        )
 
         self.set_roles(
             self.empty_committee, self.meeting_user.getId(),
@@ -921,7 +921,7 @@ class OpengeverContentFixture(object):
             Builder('inbox_container')
             .titled(u'Eingangsk\xf6rbli')
             .having(id='eingangskorb')
-            ))
+        ))
 
         # Enable inbox_policy placeful workflow
         inbox_policy_id = 'opengever_inbox_policy'
@@ -946,15 +946,15 @@ class OpengeverContentFixture(object):
                 id='eingangskorb_fa',
                 responsible_org_unit='fa',
                 inbox_group=self.org_unit_fa.inbox_group.groupid,
-                )
-            ))
+            )
+        ))
 
         self.register('inbox_document', create(
             Builder('document')
             .within(self.inbox)
             .titled(u'Dokument im Eingangsk\xf6rbli')
             .with_asset_file('text.txt')
-            ))
+        ))
 
         self.inbox.__ac_local_roles_block__ = True
         self.set_roles(self.inbox, self.secretariat_user.getId(),
@@ -972,8 +972,8 @@ class OpengeverContentFixture(object):
                 responsible_client=self.org_unit_fa.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
-                )
-            ))
+            )
+        ))
         self.create_task_subscriptions(inbox_forwarding)
 
         self.register('inbox_forwarding_document', create(
@@ -981,7 +981,7 @@ class OpengeverContentFixture(object):
             .within(inbox_forwarding)
             .titled(u'Dokument im Eingangsk\xf6rbliweiterleitung')
             .with_asset_file('text.txt')
-            ))
+        ))
 
     @staticuid()
     def create_inbox_rk(self):
@@ -993,8 +993,8 @@ class OpengeverContentFixture(object):
                 id='eingangskorb_rk',
                 responsible_org_unit='rk',
                 inbox_group=self.org_unit_fa.inbox_group.groupid,
-                )
-            ))
+            )
+        ))
 
         self.inbox_rk.__ac_local_roles_block__ = True
         self.set_roles(self.inbox_rk, self.secretariat_user.getId(),
@@ -1029,25 +1029,25 @@ class OpengeverContentFixture(object):
             Builder('private_folder')
             .having(id=self.regular_user.getId())
             .within(self.private_root)
-            ))
+        ))
 
         self.private_dossier = self.register('private_dossier', create(
             Builder('private_dossier')
             .having(title=u'Mein Dossier 1')
             .within(self.private_folder)
-            ))
+        ))
 
         create(
             Builder('private_dossier')
             .having(title=u'Mein Dossier 2')
             .within(self.private_folder)
-            )
+        )
 
         self.register('private_document', create(
             Builder('document')
             .within(self.private_dossier)
             .with_asset_file('vertragsentwurf.docx')
-            ))
+        ))
 
         self.register('private_mail', create(
             Builder('mail')
@@ -1078,26 +1078,26 @@ class OpengeverContentFixture(object):
                 keywords=(
                     u'Finanzverwaltung',
                     u'Vertr\xe4ge',
-                    ),
+                ),
                 start=date(2016, 1, 1),
                 responsible=self.dossier_responsible.getId(),
                 external_reference=u'qpr-900-9001-\xf7',
-                )
-            ))
+            )
+        ))
 
         create(
             Builder('contact_participation')
             .for_contact(self.meier_ag)
             .for_dossier(self.dossier)
             .with_roles(['final-drawing'])
-            )
+        )
 
         create(
             Builder('contact_participation')
             .for_contact(self.josef_buehler)
             .for_dossier(self.dossier)
             .with_roles(['final-drawing', 'participation'])
-            )
+        )
 
         self.document = self.register('document', create(
             Builder('document')
@@ -1111,11 +1111,11 @@ class OpengeverContentFixture(object):
                 document_type='contract',
                 receipt_date=datetime(2010, 1, 3),
                 keywords=(u'Wichtig', ),
-                )
+            )
             .attach_file_containing(
                 bumblebee_asset('example.docx').bytes(),
                 u'vertragsentwurf.docx')
-            ))
+        ))
 
         with self.features('meeting'):
             proposal = self.register('proposal', create(
@@ -1126,15 +1126,15 @@ class OpengeverContentFixture(object):
                     committee=self.committee.load_model(),
                     issuer=self.dossier_responsible.getId(),
                     description=u'F\xfcr weitere Bearbeitung bewilligen',
-                    )
+                )
                 .relate_to(self.document)
                 .as_submitted()
-                ))
+            ))
 
             self.register_path(
                 'submitted_proposal',
                 proposal.load_model().submitted_physical_path.encode('utf-8'),
-                )
+            )
 
             self.register('proposaldocument', create(
                 Builder('document')
@@ -1143,8 +1143,8 @@ class OpengeverContentFixture(object):
                 .attach_file_containing(
                     'Komentar text',
                     u'vertr\xe4g sentwurf.docx',
-                    )
-                ))
+                )
+            ))
 
             self.register('draft_proposal', create(
                 Builder('proposal')
@@ -1153,8 +1153,8 @@ class OpengeverContentFixture(object):
                     title=u'Antrag f\xfcr Kreiselbau',
                     committee=self.empty_committee.load_model(),
                     issuer=self.dossier_responsible.getId(),
-                    )
-                ))
+                )
+            ))
 
             self.decided_proposal = create(
                 Builder('proposal')
@@ -1163,16 +1163,16 @@ class OpengeverContentFixture(object):
                     title=u'Initialvertrag f\xfcr Bearbeitung',
                     committee=self.committee.load_model(),
                     issuer=self.dossier_responsible.getId(),
-                    )
-                .as_submitted()
                 )
+                .as_submitted()
+            )
 
             self.register_path(
                 'decided_proposal',
                 self.decided_proposal
                 .load_model()
                 .submitted_physical_path.encode('utf-8'),
-                )
+            )
 
         subdossier = self.register('subdossier', create(
             Builder('dossier')
@@ -1180,14 +1180,14 @@ class OpengeverContentFixture(object):
             .titled(u'2016')
             .having(
                 keywords=(u'Subkeyword', u'Subkeyw\xf6rd'),
-                )
-            ))
+            )
+        ))
 
         self.register('subdossier2', create(
             Builder('dossier')
             .within(self.dossier)
             .titled(u'2015')
-            ))
+        ))
 
         subdocument = self.register('subdocument', create(
             Builder('document')
@@ -1473,9 +1473,9 @@ class OpengeverContentFixture(object):
                 start=date(1995, 1, 1),
                 end=date(2000, 12, 31),
                 responsible=self.dossier_responsible.getId(),
-                )
+            )
             .in_state('dossier-state-resolved')
-            ))
+        ))
 
         self.expired_document = self.register('expired_document', create(
             Builder('document')
@@ -1483,7 +1483,7 @@ class OpengeverContentFixture(object):
             .titled(u'\xdcbersicht der Vertr\xe4ge vor 2000')
             .attach_archival_file_containing('TEST', name=u'test.pdf')
             .with_dummy_content()
-            ))
+        ))
 
     @staticuid()
     def create_inactive_dossier(self):
@@ -1497,16 +1497,16 @@ class OpengeverContentFixture(object):
                 start=date(2016, 1, 1),
                 end=date(2016, 12, 31),
                 responsible=self.dossier_responsible.getId(),
-                )
+            )
             .in_state('dossier-state-inactive')
-            ))
+        ))
 
         self.inactive_document = self.register('inactive_document', create(
             Builder('document')
             .within(self.inactive_dossier)
             .titled(u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016')
             .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')
-            ))
+        ))
 
     @staticuid()
     def create_offered_dossiers(self):
@@ -1521,9 +1521,9 @@ class OpengeverContentFixture(object):
                 end=date(2000, 1, 31),
                 responsible=self.dossier_responsible.getId(),
                 archival_value=ARCHIVAL_VALUE_WORTHY,
-                )
+            )
             .in_state('dossier-state-resolved')
-            ))
+        ))
 
         self.offered_dossier_for_sip = self.register('offered_dossier_for_sip', create(
             Builder('dossier')
@@ -1534,9 +1534,9 @@ class OpengeverContentFixture(object):
                 end=date(1997, 1, 31),
                 responsible=self.dossier_responsible.getId(),
                 archival_value=ARCHIVAL_VALUE_WORTHY,
-                )
+            )
             .in_state('dossier-state-resolved')
-            ))
+        ))
 
         self.offered_dossier_to_destroy = self.register('offered_dossier_to_destroy', create(
             Builder('dossier')
@@ -1548,9 +1548,9 @@ class OpengeverContentFixture(object):
                 end=date(2000, 1, 15),
                 responsible=self.dossier_responsible.getId(),
                 archival_value=ARCHIVAL_VALUE_UNWORTHY,
-                )
+            )
             .in_state('dossier-state-inactive')
-            ))
+        ))
 
     @staticuid()
     def create_disposition(self):
@@ -1581,7 +1581,7 @@ class OpengeverContentFixture(object):
                 .within(self.dossier)
                 .titled(u'Sch\xe4ttengarten')
                 .as_shadow_document(),
-                ))
+            ))
             shadow_document_annotations = IAnnotations(shadow_document)
             shadow_document_annotations['template-id'] = '2574d08d-95ea-4639-beab-3103fe4c3bc7'
             shadow_document_annotations['languages'] = [2055]
@@ -1630,8 +1630,8 @@ class OpengeverContentFixture(object):
             .having(
                 start=date(2016, 1, 1),
                 responsible=self.dossier_responsible.getId(),
-                )
-            ))
+            )
+        ))
 
     @staticuid()
     def create_protected_dossiers(self):
@@ -1643,8 +1643,8 @@ class OpengeverContentFixture(object):
                 description=u'Lichtbogen-L\xf6schkammern usw.',
                 responsible=self.dossier_responsible.getId(),
                 start=date(2016, 1, 1),
-                )
-            ))
+            )
+        ))
         protected_dossier.__ac_local_roles_block__ = True
         protected_dossier.reindexObjectSecurity()
         protected_dossier.reindexObject(idxs=['blocked_local_roles'])
@@ -1656,11 +1656,11 @@ class OpengeverContentFixture(object):
             .having(
                 document_date=datetime(2010, 1, 3),
                 document_author=TEST_USER_ID,
-                )
+            )
             .attach_file_containing(
                 bumblebee_asset('example.docx').bytes(),
                 u'bauplan.docx')
-            ))
+        ))
 
         protected_dossier_with_task = self.register('protected_dossier_with_task', create(
             Builder('dossier')
@@ -1670,8 +1670,8 @@ class OpengeverContentFixture(object):
                 description=u'Schl\xe4cht',
                 responsible=self.dossier_responsible.getId(),
                 start=date(2016, 1, 1),
-                )
-            ))
+            )
+        ))
         protected_dossier_with_task.__ac_local_roles_block__ = True
         protected_dossier_with_task.reindexObjectSecurity()
         protected_dossier_with_task.reindexObject(idxs=['blocked_local_roles'])
@@ -1683,11 +1683,11 @@ class OpengeverContentFixture(object):
             .having(
                 document_date=datetime(2010, 1, 3),
                 document_author=TEST_USER_ID,
-                )
+            )
             .attach_file_containing(
                 bumblebee_asset('example.docx').bytes(),
                 u'kunststuck.docx')
-            ))
+        ))
 
         task_in_protected_dossier = self.register('task_in_protected_dossier', create(
             Builder('task')
@@ -1699,10 +1699,10 @@ class OpengeverContentFixture(object):
                 issuer=self.dossier_responsible.getId(),
                 task_type='correction',
                 deadline=date(2016, 11, 1),
-                )
+            )
             .in_state('task-state-in-progress')
             .relate_to(protected_document_with_task)
-            ))
+        ))
         self.create_task_subscriptions(task_in_protected_dossier)
 
     @staticuid()
@@ -1711,7 +1711,7 @@ class OpengeverContentFixture(object):
             Builder("mail")
             .with_message(MAIL_DATA)
             .within(self.dossier)
-            ))
+        ))
 
         class MockMsg2MimeTransform(object):
 
@@ -1723,7 +1723,7 @@ class OpengeverContentFixture(object):
             'testm\xc3\xa4il.msg',
             'mock-msg-body',
             transform=MockMsg2MimeTransform(),
-            )
+        )
 
         self.register('mail_msg', command.execute())
 
@@ -1737,22 +1737,22 @@ class OpengeverContentFixture(object):
                 start=date(2016, 9, 12),
                 keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                 responsible=self.committee_responsible.getId(),
-                )
-            ))
+            )
+        ))
 
         create(
             Builder('contact_participation')
             .for_contact(self.meier_ag)
             .for_dossier(self.meeting_dossier)
             .with_roles(['final-drawing'])
-            )
+        )
 
         create(
             Builder('contact_participation')
             .for_contact(self.josef_buehler)
             .for_dossier(self.meeting_dossier)
             .with_roles(['final-drawing', 'participation'])
-            )
+        )
 
         self.meeting_document = self.register('meeting_document', create(
             Builder('document')
@@ -1761,9 +1761,9 @@ class OpengeverContentFixture(object):
             .having(
                 document_date=datetime(2016, 12, 1),
                 document_author=TEST_USER_ID,
-                )
+            )
             .with_asset_file('text.txt')
-            ))
+        ))
 
         self.meeting = create(
             Builder('meeting')
@@ -1778,17 +1778,17 @@ class OpengeverContentFixture(object):
                 participants=[
                     self.committee_participant_1,
                     self.committee_participant_2,
-                    ],
-                )
-            .link_with(self.meeting_dossier)
+                ],
             )
+            .link_with(self.meeting_dossier)
+        )
 
         create_session().flush()  # trigger id generation, part of path
 
         self.register_path(
             'meeting',
             self.meeting.physical_path.encode('utf-8'),
-            )
+        )
 
         decided_meeting_dossier = self.register(
             'decided_meeting_dossier', create(
@@ -1798,8 +1798,8 @@ class OpengeverContentFixture(object):
                 .having(
                     start=date(2016, 8, 17),
                     responsible=self.committee_responsible.getId(),
-                    )
-                ))
+                )
+            ))
 
         self.decided_meeting = create(
             Builder('meeting')
@@ -1814,21 +1814,21 @@ class OpengeverContentFixture(object):
                 participants=[
                     self.committee_participant_1,
                     self.committee_participant_2,
-                    ],
-                )
-            .link_with(decided_meeting_dossier)
+                ],
             )
+            .link_with(decided_meeting_dossier)
+        )
 
         create_session().flush()  # trigger id generation, part of path
 
         self.register_path(
             'decided_meeting',
             self.decided_meeting.physical_path.encode('utf-8'),
-            )
+        )
 
         self.decided_meeting.schedule_proposal(
             self.decided_proposal.load_model(),
-            )
+        )
         create_session().flush()  # trigger workflow state default
         for agenda_item in self.decided_meeting.agenda_items:
             agenda_item.close()
@@ -1847,8 +1847,8 @@ class OpengeverContentFixture(object):
                     start=date(2016, 7, 17),
                     responsible=self.committee_responsible.getId(),
                     relatedDossier=[self.dossier, self.meeting_dossier],
-                    )
-                ))
+                )
+            ))
 
         self.closed_meeting = create(
             Builder('meeting')
@@ -1863,10 +1863,10 @@ class OpengeverContentFixture(object):
                 participants=[
                     self.committee_participant_1,
                     self.committee_participant_2,
-                    ],
-                )
-            .link_with(closed_meeting_dossier)
+                ],
             )
+            .link_with(closed_meeting_dossier)
+        )
 
         create_session().flush()  # trigger id generation, part of path
 
@@ -1878,8 +1878,8 @@ class OpengeverContentFixture(object):
                 .having(
                     start=date(2016, 10, 17),
                     responsible=self.committee_responsible.getId(),
-                    )
-                ))
+                )
+            ))
 
         self.cancelled_meeting = create(
             Builder('meeting')
@@ -1895,17 +1895,17 @@ class OpengeverContentFixture(object):
                 participants=[
                     self.committee_participant_1,
                     self.committee_participant_2,
-                    ],
-                )
-            .link_with(self.cancelled_meeting_dossier)
+                ],
             )
+            .link_with(self.cancelled_meeting_dossier)
+        )
 
         create_session().flush()  # trigger id generation, part of path
 
         self.register_path(
             'cancelled_meeting',
             self.cancelled_meeting.physical_path.encode('utf-8'),
-            )
+        )
 
     @contextmanager
     def freeze_at_hour(self, hour, tick_length=2):
@@ -1998,7 +1998,7 @@ class OpengeverContentFixture(object):
             .named(firstname, lastname)
             .with_roles(*globalroles)
             .in_groups(self.org_unit_fa.users_group_id)
-            )
+        )
 
         builder.update_properties()  # updates builder.userid
         email = '{}@gever.local'.format(builder.userid)
@@ -2012,7 +2012,7 @@ class OpengeverContentFixture(object):
             .in_group(group)
             .having(**kwargs)
             .with_user_settings(**(user_settings or {}))
-            )
+        )
 
         # Use a static bumblebee user salt so that access tokens are predictable
         # when the time is frozen.
@@ -2023,19 +2023,19 @@ class OpengeverContentFixture(object):
         return plone_user
 
     def create_committee_membership(
-            self,
-            committee,
-            member_id_register_name,
-            firstname,
-            lastname,
-            email,
-            date_from,
-            date_to,
-        ):
+        self,
+        committee,
+        member_id_register_name,
+        firstname,
+        lastname,
+        email,
+        date_from,
+        date_to,
+    ):
         member = create(
             Builder('member')
             .having(firstname=firstname, lastname=lastname, email=email)
-            )
+        )
 
         create(
             Builder('membership')
@@ -2044,49 +2044,49 @@ class OpengeverContentFixture(object):
                 member=member,
                 date_from=date_from,
                 date_to=date_to,
-                )
             )
+        )
 
         create_session().flush()  # trigger id generation, part of path
 
         self.register_url(
             member_id_register_name,
             member.get_url(self.committee_container).encode('utf-8'),
-            )
+        )
 
         return member
 
     def create_committee(
-            self,
-            title,
-            repository_folder,
-            group_id,
-            group_title,
-            responsibles,
-            templates=None,
-        ):
+        self,
+        title,
+        repository_folder,
+        group_id,
+        group_title,
+        responsibles,
+        templates=None,
+    ):
         if templates is None:
             templates = {}
         # XXX I would have expected the commitee builder to do all of that.
         ogds_members = map(
             ogds_service().find_user,
             map(methodcaller('getId'), responsibles),
-            )
+        )
 
         create(
             Builder('ogds_group')
             .having(
                 groupid=group_id,
                 users=ogds_members,
-                )
             )
+        )
 
         create(
             Builder('group')
             .with_groupid(group_id)
             .having(title=group_title)
             .with_members(*responsibles)
-            )
+        )
 
         committee = create(
             Builder('committee')
@@ -2098,8 +2098,8 @@ class OpengeverContentFixture(object):
                 repository_folder=repository_folder,
                 group_id=group_id,
                 **templates
-                )
             )
+        )
 
         return committee
 
@@ -2110,8 +2110,8 @@ class OpengeverContentFixture(object):
                 id=u'workspaces',
                 title_de=u'Teamr\xe4ume',
                 title_fr=u'Espace partag\xe9',
-                )
-            ))
+            )
+        ))
 
         # Enable placeful workflow policy for workspace root
         self.workspace_root.manage_addProduct[
@@ -2131,7 +2131,7 @@ class OpengeverContentFixture(object):
             .titled(u'A Workspace')
             .having(description=u'A Workspace description')
             .within(self.workspace_root)
-            ))
+        ))
 
         self.set_roles(
             self.workspace, self.workspace_admin.getId(),
@@ -2148,27 +2148,36 @@ class OpengeverContentFixture(object):
             .titled(u'WS F\xc3lder')
             .having(description=u'A Workspace folder description')
             .within(self.workspace)
-            ))
+        ))
 
         self.register('workspace_document', create(
             Builder('document')
             .within(self.workspace)
             .titled(u'Teamraumdokument')
             .with_asset_file('text.txt')
-            ))
+        ))
 
         self.register('workspace_mail', create(
             Builder("mail")
             .with_message(MAIL_DATA)
             .within(self.workspace)
-            ))
+        ))
 
         self.register('workspace_folder_document', create(
             Builder('document')
             .within(self.workspace_folder)
             .titled(u'Ordnerdokument')
             .with_asset_file('text.txt')
-            ))
+        ))
+
+        self.register('workspace_meeting', create(
+            Builder('workspace meeting')
+            .within(self.workspace)
+            .titled(u'Besprechung Kl\xe4ranlage')
+            .having(
+                start=datetime(2016, 12, 8),
+                responsible=self.workspace_member.getId())
+        ))
 
     def create_todos(self):
         self.todolist_general = self.register('todolist_general', create(
@@ -2192,7 +2201,7 @@ class OpengeverContentFixture(object):
                 deadline=date(2016, 9, 1),
                 completed=False)
             .within(self.workspace)
-            ))
+        ))
 
         self.assigned_todo = self.register('assigned_todo', create(
             Builder('todo')
@@ -2202,7 +2211,7 @@ class OpengeverContentFixture(object):
                 responsible=self.workspace_member.getId(),
                 completed=False)
             .within(self.todolist_introduction)
-            ))
+        ))
 
         self.completed_todo = self.register('completed_todo', create(
             Builder('todo')

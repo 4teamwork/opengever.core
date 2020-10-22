@@ -1,0 +1,4 @@
+<object name="portal_types" meta_type="Plone Types Tool">
+  <!-- WORKSPACE -->
+  <object name="opengever.workspace.meeting" meta_type="Dexterity FTI" />
+</object>

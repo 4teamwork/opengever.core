@@ -101,6 +101,11 @@ msgstr ""
 msgid "help_videoconferencing_url"
 msgstr ""
 
+#. Default: "Common"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "fieldset_common"
+msgstr ""
+
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
 msgid "invitation"
@@ -146,6 +151,11 @@ msgstr ""
 msgid "label_documents"
 msgstr ""
 
+#. Default: "End"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_end"
+msgstr ""
+
 #. Default: "Folders"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_folders"
@@ -156,9 +166,24 @@ msgstr ""
 msgid "label_journal"
 msgstr ""
 
+#. Default: "Location"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_location"
+msgstr ""
+
+#. Default: "Organizer"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_organizer"
+msgstr ""
+
 #. Default: "Responsible"
 #: ./opengever/workspace/todo.py
 msgid "label_responsible"
+msgstr ""
+
+#. Default: "Start"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_start"
 msgstr ""
 
 #. Default: "Text"
@@ -206,6 +231,11 @@ msgstr ""
 #. Default: "Videoconferencing URL"
 #: ./opengever/workspace/workspace.py
 msgid "label_videoconferencing_url"
+msgstr ""
+
+#. Default: "Video Call Link"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_video_call_link"
 msgstr ""
 
 #. Default: "Workspaces"

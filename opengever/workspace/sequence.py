@@ -2,6 +2,7 @@ from opengever.base.sequence import DefaultSequenceNumberGenerator
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
+from opengever.workspace.interfaces import IWorkspaceMeeting
 from opengever.workspace.todolist import IToDoListSchema
 from zope.component import adapter
 
@@ -36,3 +37,11 @@ class TodoSequenceNumberGenerator(DefaultSequenceNumberGenerator):
     """
 
     key = 'ToDoSequenceNumberGenerator'
+
+
+@adapter(IWorkspaceMeeting)
+class WorkspaceMeetingSequenceNumberGenerator(DefaultSequenceNumberGenerator):
+    """Sequence Number generator for workspace meeting, which uses a global counter.
+    """
+
+    key = 'WorkspaceMeetingSequenceNumberGenerator'

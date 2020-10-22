@@ -124,6 +124,57 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
                 got[user] = factoriesmenu.visible() \
                     and 'WorkspaceFolder' in factoriesmenu.addable_types()
 
+        self.assertDictEqual(expected, got)
+
+    @browsing
+    def test_security_add_workspace_meetings(self, browser):
+        expected = {self.workspace_owner: True,
+                    self.workspace_admin: True,
+                    self.workspace_member: True,
+                    self.workspace_guest: False}
+
+        got = {}
+        for user in expected.keys():
+            locals()['__traceback_info__'] = user
+            with self.login(user, browser):
+                browser.open(self.workspace)
+                got[user] = factoriesmenu.visible() \
+                    and 'WorkspaceMeeting' in factoriesmenu.addable_types()
+
+        self.assertDictEqual(expected, got)
+
+    @browsing
+    def test_security_edit_workspace_meeting_action(self, browser):
+        expected = {self.workspace_owner: True,
+                    self.workspace_admin: True,
+                    self.workspace_member: True,
+                    self.workspace_guest: False}
+
+        got = {}
+        for user in expected.keys():
+            locals()['__traceback_info__'] = user
+            with self.login(user, browser):
+                browser.open(self.workspace_meeting)
+                got[user] = editbar.visible() and 'Edit' in editbar.contentviews()
+
+        self.maxDiff = None
+        self.assertEquals(expected, got)
+
+    @browsing
+    def test_security_add_workspace_meetings(self, browser):
+        expected = {self.workspace_owner: True,
+                    self.workspace_admin: True,
+                    self.workspace_member: True,
+                    self.workspace_guest: False}
+
+        got = {}
+        for user in expected.keys():
+            locals()['__traceback_info__'] = user
+            with self.login(user, browser):
+                browser.open(self.workspace)
+                got[user] = factoriesmenu.visible() \
+                    and 'WorkspaceMeeting' in factoriesmenu.addable_types()
+
         self.maxDiff = None
         self.assertEquals(expected, got)
 

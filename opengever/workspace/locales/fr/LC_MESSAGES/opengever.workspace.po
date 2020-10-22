@@ -98,6 +98,11 @@ msgstr "Membre du team"
 msgid "help_videoconferencing_url"
 msgstr "URL utilisée pour lancer une vidéoconférence pour cet espace partagé."
 
+#. Default: "Common"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "fieldset_common"
+msgstr "Général"
+
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
 msgid "invitation"
@@ -149,6 +154,11 @@ msgstr "Description"
 msgid "label_documents"
 msgstr "Documents"
 
+#. Default: "End"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_end"
+msgstr "Fin"
+
 #. Default: "Folders"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_folders"
@@ -159,10 +169,25 @@ msgstr "Répertoires"
 msgid "label_journal"
 msgstr "Journal"
 
+#. Default: "Location"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_location"
+msgstr "Lieu"
+
+#. Default: "Organizer"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_organizer"
+msgstr "Organisateur"
+
 #. Default: "Responsible"
 #: ./opengever/workspace/todo.py
 msgid "label_responsible"
 msgstr "Responsable"
+
+#. Default: "Start"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_start"
+msgstr "Début"
 
 #. Default: "Text"
 #: ./opengever/workspace/todo.py
@@ -210,6 +235,11 @@ msgstr "Corbeille"
 #: ./opengever/workspace/workspace.py
 msgid "label_videoconferencing_url"
 msgstr "URL de vidéoconférence"
+
+#. Default: "Video Call Link"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_video_call_link"
+msgstr "Lien pour la vidéoconférence"
 
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py

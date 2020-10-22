@@ -34,4 +34,11 @@
       for="opengever.workspace.interfaces.IToDo"
       />
 
+  <plone:behavior
+      title="workspace meeting name from title"
+      provides=".namefromtitle.IWorkspaceMeetingNameFromTitle"
+      factory=".namefromtitle.WorkspaceMeetingNameFromTitle"
+      for="opengever.workspace.interfaces.IWorkspaceMeeting"
+      />
+
 </configure>
