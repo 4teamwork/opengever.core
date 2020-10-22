@@ -56,3 +56,12 @@ class TestOGQuickupload(IntegrationTestCase):
         self.assertEquals(u'Document added: document',
                           translate(history.data()[0]['action']['title']),
                           'Expected the document title in the action title')
+
+    def test_uses_mimetype_from_mimetype_registry(self):
+        content = create(Builder('quickuploaded_document')
+                         .within(self.dossier)
+                         .with_data(
+                            'Cadwork 2d Dummy document',
+                            filename='test.2d',
+                            content_type='application/x-cadwork-2d'))
+        self.assertEqual(content.file.contentType, 'application/x-cadwork-2d')
