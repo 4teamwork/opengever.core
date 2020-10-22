@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.12.0 (unreleased)
+2020.12.0 (2020-10-22)
 ----------------------
 
 - Make is_in_readonly_mode() slightly more robust. [lgraf]
