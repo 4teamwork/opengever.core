@@ -27,6 +27,7 @@ Changelog
 - Allow assigning groups as participants to a Teamraum [elioschmutz]
 - Add external_reference field to solr, reindex objects with values. [deiferni]
 - Provide empty MS Office templates for new deployments. [2e12]
+- Fix mimetype for quickupload with custom mimetypes. [buchi]
 
 
 2020.11.1 (2020-10-09)

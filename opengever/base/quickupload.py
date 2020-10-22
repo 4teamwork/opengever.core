@@ -84,7 +84,8 @@ class OGQuickUploadCapableFileFactory(object):
                 self.context, filename, data,
                 message_source=MESSAGE_SOURCE_DRAG_DROP_UPLOAD)
         else:
-            command = CreateDocumentCommand(self.context, filename, data)
+            command = CreateDocumentCommand(
+                self.context, filename, data, content_type=content_type)
 
         try:
             obj = command.execute()
