@@ -9,4 +9,8 @@ services:
     image: 4teamwork/sablon:latest
     ports:
       - 8091:8080
+  pdflatex:
+    image: 4teamwork/pdflatex:latest
+    ports:
+      - 8092:8080
 

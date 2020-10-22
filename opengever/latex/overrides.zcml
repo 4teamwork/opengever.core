@@ -1,0 +1,8 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <utility
+      component="opengever.latex.builder.builder_factory"
+      provides="ftw.pdfgenerator.interfaces.IBuilderFactory"
+      />
+
+</configure>
