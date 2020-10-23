@@ -78,8 +78,6 @@ class WorkspaceClient(object):
     def lookup_url_by_uid(self, uid):
         """Searches on the remote system for an object having the given UID and
         returns the URL to this object.
-
-        If no object is found with the given UID, it returns None.
         """
         items = self.search(UID=uid).get('items')
 
@@ -89,7 +87,7 @@ class WorkspaceClient(object):
         if len(items) > 1:
             raise LookupError("Found multiple objects with the same UID")
 
-        return items[0].get('@id') if items else None
+        return items[0].get('@id')
 
     def tus_upload(self, url_or_path, portal_type, file_, size, content_type,
                    filename, **additional_metadata):
