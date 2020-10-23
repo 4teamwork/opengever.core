@@ -478,14 +478,17 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
 class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
 
+    def get_journal_entries(self, obj):
+        annotations = IAnnotations(obj)
+        data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+        return data
+
     def test_copying_document_to_a_workspace_is_journalized(self):
         document = create(Builder('document')
                           .within(self.dossier)
                           .with_dummy_content())
 
-        journal_entries = IAnnotations(self.dossier).get(
-            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
-        self.assertEqual(2, len(journal_entries))
+        self.assertEqual(2, len(self.get_journal_entries(self.dossier)))
 
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
@@ -493,8 +496,7 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             with auto_commit_after_request(manager.client):
                 manager.copy_document_to_workspace(document, self.workspace.UID())
 
-        journal_entries = IAnnotations(self.dossier).get(
-            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        journal_entries = self.get_journal_entries(self.dossier)
         self.assertEqual(3, len(journal_entries))
 
         entry = journal_entries[-1]
@@ -504,4 +506,22 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
                             'title': document.title}],
              'type': 'Document copied to workspace',
              'title': u'label_document_copied_to_workspace'},
+            entry['action'])
+
+    def test_workspace_creation_is_journalized(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
+
+            manager.create(title=u"My new w\xf6rkspace")
+            transaction.commit()
+
+        journal_entries = self.get_journal_entries(self.dossier)
+        self.assertEqual(2, len(journal_entries))
+
+        entry = journal_entries[-1]
+        self.assertEqual(
+            {'visible': True,
+             'type': 'Linked workspace created',
+             'title': u'label_linked_workspace_created'},
             entry['action'])

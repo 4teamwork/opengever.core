@@ -115,6 +115,17 @@ class LinkedWorkspaces(object):
         """
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
+
+        # Add journal entry to dossier
+        title = _(
+            u'label_linked_workspace_created',
+            default=u'Linked workspace ${workspace_title} created.',
+            mapping={'workspace_title': workspace.get('title')})
+
+        journal_entry_factory(
+            context=self.context, action='Linked workspace created',
+            title=title)
+
         return workspace
 
     def _get_linked_workspace_url(self, workspace_uid):
