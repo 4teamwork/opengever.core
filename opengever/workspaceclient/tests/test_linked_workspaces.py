@@ -71,18 +71,23 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             self.assertEqual(
                 [workspace2.absolute_url()],
-                [workspace.get('@id') for workspace in manager.list(b_size=1, b_start=1).get('items')])
+                [workspace.get('@id') for workspace in
+                 manager.list(b_size=1, b_start=1).get('items')])
 
     def test_list_skips_workspaces_if_no_view_permission(self):
-        unauthorized_workspace = create(Builder('workspace').within(self.workspace_root))
+        unauthorized_workspace = create(Builder('workspace').within(
+            self.workspace_root))
         self.grant('', on=unauthorized_workspace)
 
-        authorized_workspace = create(Builder('workspace').within(self.workspace_root))
+        authorized_workspace = create(Builder('workspace').within(
+            self.workspace_root))
         self.grant('View', on=unauthorized_workspace)
 
         self.assertTrue(api.user.has_permission('View', obj=self.workspace))
-        self.assertTrue(api.user.has_permission('View', obj=authorized_workspace))
-        self.assertFalse(api.user.has_permission('View', obj=unauthorized_workspace))
+        self.assertTrue(api.user.has_permission(
+            'View', obj=authorized_workspace))
+        self.assertFalse(api.user.has_permission(
+            'View', obj=unauthorized_workspace))
 
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
@@ -113,22 +118,25 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.workspace.reindexObject()
             transaction.commit()
 
-            self.assertEqual(['Old title'],
-                             [workspace.get('title') for workspace in manager.list().get('items')])
+            self.assertEqual(
+                ['Old title'],
+                [workspace.get('title') for workspace in manager.list().get('items')])
 
             self.workspace.title = 'New title'
             self.workspace.reindexObject()
             transaction.commit()
 
-            self.assertEqual(['Old title'],
-                             [workspace.get('title') for workspace in manager.list().get('items')])
+            self.assertEqual(
+                ['Old title'],
+                [workspace.get('title') for workspace in manager.list().get('items')])
 
             self.invalidate_cache()
-            self.assertEqual(['New title'],
-                             [workspace.get('title') for workspace in manager.list().get('items')])
+            self.assertEqual(
+                ['New title'],
+                [workspace.get('title') for workspace in manager.list().get('items')])
 
     def test_create_workspace_will_store_workspace_in_the_storage(self):
-        with self.workspace_client_env() as client:
+        with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
             self.assertEqual([], manager.list().get('items'))
 
@@ -161,7 +169,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager.storage.add(self.workspace.UID())
 
             with self.observe_children(self.workspace) as children:
-                response = manager.copy_document_to_workspace(document, self.workspace.UID())
+                response = manager.copy_document_to_workspace(
+                    document, self.workspace.UID())
                 transaction.commit()
 
             self.assertEqual(1, len(children['added']))
@@ -209,12 +218,14 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.workspace) as children:
                 with auto_commit_after_request(manager.client):
-                    response = manager.copy_document_to_workspace(document, self.workspace.UID())
+                    response = manager.copy_document_to_workspace(
+                        document, self.workspace.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
 
-            self.assertEqual(workspace_document.absolute_url(), response.get('@id'))
+            self.assertEqual(workspace_document.absolute_url(),
+                             response.get('@id'))
             self.assertEqual(workspace_document.title, document.title)
             self.assertEqual(workspace_document.file.open().read(),
                              document.file.open().read())
@@ -236,7 +247,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.workspace) as children:
                 with auto_commit_after_request(manager.client):
-                    response = manager.copy_document_to_workspace(mail, self.workspace.UID())
+                    response = manager.copy_document_to_workspace(
+                        mail, self.workspace.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
@@ -265,7 +277,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.workspace) as children:
                 with auto_commit_after_request(manager.client):
-                    response = manager.copy_document_to_workspace(mail, self.workspace.UID())
+                    response = manager.copy_document_to_workspace(
+                        mail, self.workspace.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
@@ -313,7 +326,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager = ILinkedWorkspaces(self.dossier)
             manager.storage.add(self.workspace.UID())
 
-            documents = manager.list_documents_in_linked_workspace(self.workspace.UID())
+            documents = manager.list_documents_in_linked_workspace(
+                self.workspace.UID())
             expected_url = (
                 '{}/@search?portal_type=opengever.document.document&'
                 'portal_type=ftw.mail.mail&metadata_fields=UID&'
