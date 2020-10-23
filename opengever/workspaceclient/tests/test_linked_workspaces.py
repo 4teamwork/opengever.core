@@ -1,13 +1,16 @@
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.command import CreateEmailCommand
+from opengever.base.oguid import Oguid
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component.interfaces import ComponentLookupError
 import transaction
@@ -471,3 +474,34 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
+
+
+class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
+
+    def test_copying_document_to_a_workspace_is_journalized(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        journal_entries = IAnnotations(self.dossier).get(
+            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        self.assertEqual(2, len(journal_entries))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            with auto_commit_after_request(manager.client):
+                manager.copy_document_to_workspace(document, self.workspace.UID())
+
+        journal_entries = IAnnotations(self.dossier).get(
+            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        self.assertEqual(3, len(journal_entries))
+
+        entry = journal_entries[-1]
+        self.assertEqual(
+            {'visible': True,
+             'documents': [{'id': Oguid.for_object(document).id,
+                            'title': document.title}],
+             'type': 'Document copied to workspace',
+             'title': u'label_document_copied_to_workspace'},
+            entry['action'])
