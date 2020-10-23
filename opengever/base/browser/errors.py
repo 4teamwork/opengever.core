@@ -1,4 +1,5 @@
 from Acquisition import aq_acquire
+from logging import getLogger
 from opengever.debug import write_on_read_tracing
 from opengever.debug.write_on_read_tracing import format_instruction
 from plone import api
@@ -11,6 +12,9 @@ from zope.component.hooks import getSite
 from zope.interface import Interface
 import sys
 import traceback
+
+
+logger = getLogger('opengever.base')
 
 
 class ErrorHandlingView(BrowserView):
@@ -29,6 +33,12 @@ class ErrorHandlingView(BrowserView):
             self.portal_state = None
             self.portal_url = ''
             self.language = 'de'
+
+        if self.is_readonly_error():
+            culprit_tb = self.get_culprit_traceback()
+            if culprit_tb:
+                logger.info('Traceback of most recent DB write:')
+                logger.info(culprit_tb)
 
         self.request.response.setHeader('Content-Type', 'text/html')
         return self.template()
