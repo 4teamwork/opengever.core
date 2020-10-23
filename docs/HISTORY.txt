@@ -4,7 +4,7 @@ Changelog
 2020.13.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Bump ftw.tabbedview to 4.2.1 to get fix for empty action lists. [lgraf]
 
 
 2020.12.0 (2020-10-22)
