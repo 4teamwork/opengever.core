@@ -525,3 +525,36 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
              'type': 'Linked workspace created',
              'title': u'label_linked_workspace_created'},
             entry['action'])
+
+    def test_copying_document_from_workspace_is_journalized(self):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .with_dummy_content())
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
+
+            with auto_commit_after_request(manager.client):
+                manager.copy_document_from_workspace(
+                    self.workspace.UID(), document.UID())
+
+        journal_entries = self.get_journal_entries(self.dossier)
+        self.assertEqual(3, len(journal_entries))
+
+        doc_copied_from_workspace_entry = journal_entries[-2]
+        self.assertEqual(
+            {'visible': True,
+             'type': 'Document copied from workspace',
+             'title': u'label_document_copied_from_workspace'},
+            doc_copied_from_workspace_entry['action'])
+
+        doc_created_entry = journal_entries[-1]
+        self.assertEqual(
+            {'visible': True,
+             'type': 'Document added',
+             'title': u'label_document_added'},
+            doc_created_entry['action'])

@@ -209,6 +209,18 @@ class LinkedWorkspaces(object):
         # We should avoid setting the id ourselves, can lead to conflicts
         document_repr = self._blacklisted_dict(document_repr, ['id'])
 
+        # Add journal entry to the dossier before creating the document
+        workspace_title = self.client.get_by_uid(workspace_uid).get('title')
+        title = _(
+            u'label_document_copied_from_workspace',
+            default=u'Document ${doc_title} copied from workspace ${workspace_title}.',
+            mapping={'doc_title': document_repr.get('title'),
+                     'workspace_title': workspace_title})
+
+        journal_entry_factory(
+            context=self.context, action='Document copied from workspace',
+            title=title)
+
         proxy_post = ProxyPost(document_repr)
         proxy_post.context = self.context
         proxy_post.request = getRequest()
