@@ -77,12 +77,12 @@ msgstr "Copier"
 #: ./opengever/core/upgrades/20200309163442_add_copy_documents_from_workspace_action/actions.xml
 #: ./opengever/core/upgrades/20200311140946_move_copy_documents_from_workspace_to_folder_actions/actions.xml
 msgid "Copy documents from workspace"
-msgstr ""
+msgstr "Rapatrier des documents de l'espace de travail"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200218164654_add_copy_documents_to_workspace_action/actions.xml
 msgid "Copy documents to workspace"
-msgstr ""
+msgstr "Copier des documents vers l'espace de travail"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Cover (PDF)"
@@ -158,7 +158,7 @@ msgstr "Conteneur de la boîte de réception"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200310081410_add_list_workspaces_action/actions.xml
 msgid "List workspaces"
-msgstr ""
+msgstr "Lister les espaces de travail"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20190401163048_add_manage_webactions_action/actions.xml
@@ -177,7 +177,7 @@ msgstr "Modèle de séance"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200909160057_add_move_item_action/actions.xml
 msgid "Move Item"
-msgstr ""
+msgstr "Déplacer"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200129170738_add_move_proposal_items_action/actions.xml
@@ -280,7 +280,7 @@ msgstr "Envoyer par E-Mail"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200827160546_add_share_content_action/actions.xml
 msgid "Share content"
-msgstr ""
+msgstr "Partager"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Submit additional documents"

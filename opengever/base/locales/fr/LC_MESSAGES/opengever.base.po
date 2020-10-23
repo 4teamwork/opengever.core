@@ -116,7 +116,7 @@ msgstr "Vous n'avez pas les droits suffisants pour voir cette page. Si vous pens
 #. Default: "Please notify your administrator about this error, and include a description the action you tried to perform as well as the error number below."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_please_notify_admin"
-msgstr ""
+msgstr "Veuillez signaler cette erreur au responsable de l'application, en spécifiant ce que vous avez essayé de faire ainsi que le numéro de l'erreur ci-dessous."
 
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
 #: ./opengever/base/browser/templates/error.pt
@@ -131,12 +131,12 @@ msgstr "Si ce problème subsiste, veuillez contacter le responsable de l'applica
 #. Default: "The system currently is in ReadOnly mode, and therefore all write operations will be blocked."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_system_in_readonly_mode"
-msgstr ""
+msgstr "Le système se trouve actuellement en mode lecture seule, empêchant tous les accès en écriture."
 
 #. Default: "However, the action you tried to perform has nevertheless attempted to perform a write, and therefore had to be cancelled."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_unexpected_write_blocked"
-msgstr ""
+msgstr "L'action que vous avez effectuée a tout de même essayé d'effectuer un accès en écriture et a donc dû être interrompue."
 
 #. Default: "Checked out documents cannot be copied."
 #: ./opengever/base/browser/copy_items.py
@@ -172,7 +172,7 @@ msgstr "Cycle de vie"
 #. Default: "Error: Unexpected write attempt during ReadOnly mode"
 #: ./opengever/base/browser/templates/error.pt
 msgid "heading_site_error_readonly"
-msgstr ""
+msgstr "Erreur: Accès en écriture imprévu en mode lecture seule"
 
 #. Default: "Archival value code"
 #: ./opengever/base/behaviors/lifecycle.py

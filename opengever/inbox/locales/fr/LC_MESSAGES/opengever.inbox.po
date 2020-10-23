@@ -79,7 +79,7 @@ msgstr "Transmission ajoutée"
 #. Default: "Added as watcher of the forwarding"
 #: ./opengever/inbox/activities.py
 msgid "label_forwarding_watcher_added"
-msgstr ""
+msgstr "Ajouté comme observateur de la transmission"
 
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py
@@ -114,7 +114,7 @@ msgstr "Nouvelle transmission ajoutée par ${user}"
 #. Default: "Added as watcher of the forwarding by ${user}"
 #: ./opengever/inbox/activities.py
 msgid "summary_forwarding_watcher_added"
-msgstr ""
+msgstr "Ajouté comme observateur de la transmission par ${user}"
 
 #. Default: "Assign Forwarding"
 #: ./opengever/inbox/browser/assign.py
