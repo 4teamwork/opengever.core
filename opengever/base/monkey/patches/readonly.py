@@ -1,3 +1,4 @@
+from ftw.casauth.plugin import CASAuthenticationPlugin
 from opengever.base.monkey.patching import MonkeyPatch
 from opengever.readonly import is_in_readonly_mode
 from plone.app.contentrules import handlers as contentrules_handlers
@@ -30,6 +31,24 @@ class PatchMembershipToolSetLoginTimes(MonkeyPatch):
         original_setLoginTimes = MembershipTool.setLoginTimes
 
         self.patch_refs(MembershipTool, 'setLoginTimes', setLoginTimes)
+
+
+class PatchCASAuthSetLoginTimes(MonkeyPatch):
+    """Same for ftw.casauth - don't update last login times in readonly mode.
+    """
+
+    def __call__(self):
+
+        def set_login_times(self, member):
+            if is_in_readonly_mode():
+                return False
+
+            return original_set_login_times(self, member)
+
+        locals()['__patch_refs__'] = False
+        original_set_login_times = CASAuthenticationPlugin.set_login_times
+
+        self.patch_refs(CASAuthenticationPlugin, 'set_login_times', set_login_times)
 
 
 class PatchContentRulesHandlerOnLogin(MonkeyPatch):
