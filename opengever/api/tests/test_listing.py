@@ -638,6 +638,26 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             browser.json['items'][-1])
 
     @browsing
+    def test_workspace_meetings_listing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=workspace_meetings',
+            'columns=title',
+            'columns=responsible',
+            'columns=start',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertDictEqual(
+            {u'@id': self.workspace_meeting.absolute_url(),
+             u'UID': IUUID(self.workspace_meeting),
+             u'responsible': self.workspace_member.getId(),
+             u'start': u'2016-12-08T00:00:00Z',
+             u'title': u'Besprechung Kl\xe4ranlage'},
+            browser.json['items'][0])
+
+    @browsing
     def test_tasks_listing(self, browser):
         self.enable_languages()
 

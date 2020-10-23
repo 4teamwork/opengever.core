@@ -68,6 +68,7 @@ class TestListingStats(SolrIntegrationTestCase):
                     {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplates'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'todos'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspace_folders'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'workspace_meetings'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'},
                     {u'count': 27, u'field': u'listing_name', u'value': u'folder_contents'}]
 
@@ -180,6 +181,10 @@ class TestListingStats(SolrIntegrationTestCase):
                      u'field': u'listing_name',
                      u'queries': {u'responsible:kathi.barfuss': 0},
                      u'value': u'workspace_folders'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'workspace_meetings'},
                     {u'count': 0,
                      u'field': u'listing_name',
                      u'queries': {u'responsible:kathi.barfuss': 0},
