@@ -6,6 +6,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from pkg_resources import get_distribution
 from plone import api
+import os
 
 
 class TestConfig(IntegrationTestCase):
@@ -279,3 +280,13 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'inbox_folder_url'), u'')
+
+    @browsing
+    def test_config_contains_bumblebee_notification_url(self, browser):
+        os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee.local/'
+
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'bumblebee_notifications_url'), u'http://bumblebee.local/YnVtYmxlYmVl/api/notifications')

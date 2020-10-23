@@ -96,6 +96,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('cas_url', None),
             ('apps_url', None),
             ('application_type', 'gever'),
+            ('bumblebee_notifications_url', 'http://bumblebee.local/YnVtYmxlYmVl/api/notifications'),
             ('is_readonly', False),
             ])
 
@@ -114,6 +115,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('cas_url', None),
             ('apps_url', None),
             ('application_type', 'gever'),
+            ('bumblebee_notifications_url', 'http://bumblebee.local/YnVtYmxlYmVl/api/notifications'),
             ('is_readonly', False),
             ])
         configuration = IGeverSettings(self.portal).get_config()
@@ -150,6 +152,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('cas_url', None),
             ('apps_url', 'http://example.com/api/apps'),
             ('application_type', 'gever'),
+            ('bumblebee_notifications_url', 'http://bumblebee.local/YnVtYmxlYmVl/api/notifications'),
             ('is_readonly', False),
             ])
 

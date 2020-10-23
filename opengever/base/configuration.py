@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from AccessControl.users import nobody
 from collections import OrderedDict
+from ftw import bumblebee
 from opengever.activity.interfaces import IActivitySettings
 from opengever.api.user_settings import serialize_setting
 from opengever.base.casauth import get_cas_server_url
@@ -66,6 +67,7 @@ class GeverSettingsAdpaterV1(object):
         config['cas_url'] = get_cas_server_url()
         config['apps_url'] = os.environ.get('APPS_ENDPOINT_URL')
         config['application_type'] = self.get_application_type()
+        config['bumblebee_notifications_url'] = bumblebee.get_service_v3().get_notifications_url()
         config['is_readonly'] = is_in_readonly_mode()
         return config
 
