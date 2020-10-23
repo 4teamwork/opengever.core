@@ -70,6 +70,9 @@ FILTERS = {
     u'workspace_folders': [
         u'object_provides:opengever.workspace.interfaces.IWorkspaceFolder',
     ],
+    u'workspace_meetings': [
+        u'object_provides:opengever.workspace.interfaces.IWorkspaceMeeting',
+    ],
     u'tasks': [
         u'object_provides:opengever.task.task.ITask',
     ],
