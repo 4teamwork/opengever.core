@@ -13,6 +13,7 @@ from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component.interfaces import ComponentLookupError
+from zope.i18n import translate
 import transaction
 
 
@@ -483,6 +484,14 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
         data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
         return data
 
+    def assert_journal_entry(self, action, title, entry):
+        translated_title = translate(entry.get('action').get('title'),
+                                     context=self.request)
+
+        self.assertEquals(action, entry.get('action').get('type'))
+        self.assertEquals(title, translated_title)
+        self.assertEquals(True, entry.get('action').get('visible'))
+
     def test_copying_document_to_a_workspace_is_journalized(self):
         document = create(Builder('document')
                           .within(self.dossier)
@@ -501,12 +510,12 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
 
         entry = journal_entries[-1]
         self.assertEqual(
-            {'visible': True,
-             'documents': [{'id': Oguid.for_object(document).id,
-                            'title': document.title}],
-             'type': 'Document copied to workspace',
-             'title': u'label_document_copied_to_workspace'},
-            entry['action'])
+            [{'id': Oguid.for_object(document).id, 'title': document.title}],
+            entry['action']['documents'])
+        self.assert_journal_entry(
+            'Document copied to workspace',
+            u'Document Testdokum\xe4nt copied to workspace Ein Teamraum.',
+            entry)
 
     def test_workspace_creation_is_journalized(self):
         with self.workspace_client_env():
@@ -520,11 +529,10 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
         self.assertEqual(2, len(journal_entries))
 
         entry = journal_entries[-1]
-        self.assertEqual(
-            {'visible': True,
-             'type': 'Linked workspace created',
-             'title': u'label_linked_workspace_created'},
-            entry['action'])
+        self.assert_journal_entry(
+            'Linked workspace created',
+            u'Linked workspace My new w\xf6rkspace created.',
+            entry)
 
     def test_copying_document_from_workspace_is_journalized(self):
         document = create(Builder('document')
@@ -546,15 +554,13 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
         self.assertEqual(3, len(journal_entries))
 
         doc_copied_from_workspace_entry = journal_entries[-2]
-        self.assertEqual(
-            {'visible': True,
-             'type': 'Document copied from workspace',
-             'title': u'label_document_copied_from_workspace'},
-            doc_copied_from_workspace_entry['action'])
+        self.assert_journal_entry(
+            'Document copied from workspace',
+            u'Document Testdokum\xe4nt copied from workspace Ein Teamraum.',
+            doc_copied_from_workspace_entry)
 
         doc_created_entry = journal_entries[-1]
-        self.assertEqual(
-            {'visible': True,
-             'type': 'Document added',
-             'title': u'label_document_added'},
-            doc_created_entry['action'])
+        self.assert_journal_entry(
+            'Document added',
+            u'Document added: Testdokum\xe4nt',
+            doc_created_entry)
