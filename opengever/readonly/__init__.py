@@ -1,7 +1,12 @@
 from zope.component.hooks import getSite
 from zope.i18nmessageid import MessageFactory
+import os
 
 _ = MessageFactory('opengever.readonly')
+
+
+def readonly_env_var_is_set():
+    return bool(os.environ.get('GEVER_READ_ONLY_MODE'))
 
 
 def is_in_readonly_mode():

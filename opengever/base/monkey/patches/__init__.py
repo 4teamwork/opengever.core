@@ -34,6 +34,7 @@ from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
+from opengever.readonly import readonly_env_var_is_set
 
 
 PatchActionInfo()()
@@ -41,7 +42,6 @@ PatchBaseOrderedViewletManagerExceptions()()
 PatchBuilderCreate()()
 PatchCASAuthSetLoginTimes()()
 PatchCatalogToFilterTrashedDocs()()
-PatchCheckPermission()()
 PatchCMFCatalogAware()()
 PatchCMFCatalogAwareHandlers()()
 PatchCMFEditonsHistoryHandlerTool()()
@@ -62,8 +62,6 @@ PatchNamedfileNamedDataConverter()()
 PatchOFSRoleManager()()
 PatchPlone43RC1Upgrade()()
 PatchPloneProtectOnUserLogsIn()()
-PatchPloneUserAllowed()()
-PatchPloneUserGetRolesInContext()()
 PatchResourceRegistriesURLRegex()()
 PatchTransmogrifyDXSchemaUpdater()()
 PatchWebDAVLockTimeout()()
@@ -72,3 +70,10 @@ PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
 ScrubBoboExceptions()()
+
+# These three patches implement role and permission filtering during RO mode.
+# We only apply these conditionally when RO mode actually is active.
+if readonly_env_var_is_set():
+    PatchCheckPermission()()
+    PatchPloneUserAllowed()()
+    PatchPloneUserGetRolesInContext()()

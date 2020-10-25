@@ -53,7 +53,7 @@ def setup_engine_options(event):
     """
     engine = event.engine
 
-    if is_in_readonly_mode():
+    if is_in_readonly_mode() and engine.name != 'sqlite':
         listen(engine, 'begin', set_sql_connection_to_readonly_on_begin)
 
     if engine.name == 'oracle':
