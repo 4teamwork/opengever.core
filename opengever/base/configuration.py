@@ -65,6 +65,7 @@ class GeverSettingsAdpaterV1(object):
         config['portal_url'] = get_gever_portal_url()
         config['cas_url'] = get_cas_server_url()
         config['apps_url'] = os.environ.get('APPS_ENDPOINT_URL')
+        config['application_type'] = self.get_application_type()
         config['is_readonly'] = is_in_readonly_mode()
         return config
 
@@ -80,6 +81,11 @@ class GeverSettingsAdpaterV1(object):
             serializer = queryMultiAdapter((user, getRequest()), ISerializeToJson)
             info['current_user'] = OrderedDict(serializer())
         return info
+
+    def get_application_type(self):
+        if api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings):
+            return 'teamraum'
+        return 'gever'
 
     def get_user_settings(self):
         setting = UserSettings.query.filter_by(userid=api.user.get_current().id).one_or_none()

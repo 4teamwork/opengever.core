@@ -95,6 +95,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', None),
+            ('application_type', 'gever'),
             ('is_readonly', False),
             ])
 
@@ -112,10 +113,16 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', None),
+            ('application_type', 'gever'),
             ('is_readonly', False),
             ])
         configuration = IGeverSettings(self.portal).get_config()
         self.assertEqual(configuration, expected_configuration)
+
+    def test_application_type_is_teamraum_if_workspace_feature_enabled(self):
+        self.activate_feature('workspace')
+        application_type = IGeverSettings(self.portal).get_application_type()
+        self.assertEqual('teamraum', application_type)
 
     def test_apps_url_can_be_set_through_env_variable(self):
 
@@ -142,6 +149,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('portal_url', 'http://nohost/portal'),
             ('cas_url', None),
             ('apps_url', 'http://example.com/api/apps'),
+            ('application_type', 'gever'),
             ('is_readonly', False),
             ])
 

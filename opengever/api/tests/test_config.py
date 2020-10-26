@@ -139,6 +139,14 @@ class TestConfig(IntegrationTestCase):
             browser.json.get(u'portal_url'), 'http://nohost/portal')
 
     @browsing
+    def test_config_contains_application_type(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'application_type'), 'gever')
+
+    @browsing
     def test_config_contains_is_readonly_flag(self, browser):
         self.login(self.regular_user, browser)
 
