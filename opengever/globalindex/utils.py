@@ -1,4 +1,5 @@
 from opengever.globalindex.model.task import Task
+from plone import api
 
 
 def indexed_task_link_helper(item, value):
@@ -9,14 +10,23 @@ def indexed_task_link_helper(item, value):
 
 
 def get_selected_items(context, request):
-    """Returns a set of SQLAlchemy objects, for "task_id:list given
-    in the request"
+    """Returns a set of SQLAlchemy objects, for "task_id:list" or "tasks:list"
+    given in the request"
     """
-    ids = request.get('task_ids', [])
+    ids = request.get('task_ids', [])  # a list of `task_id`s within the ogds
+    tasks = request.get('tasks', [])  # a list of `@id`s of tasks
+
     if ids:
         tasks = Task.query.by_ids(ids)
         keys = ids
         attr = 'task_id'
+
+    elif tasks:
+        portal_url = api.portal.get().absolute_url()
+        paths = [task.replace(portal_url, '').lstrip('/') for task in tasks]
+        tasks = Task.query.by_paths(paths)
+        keys = paths
+        attr = 'physical_path'
 
     else:
         # empty generator
