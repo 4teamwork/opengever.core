@@ -5,6 +5,7 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
+from opengever.readonly import is_in_readonly_mode
 from opengever.task import FINISHED_TASK_STATES
 from opengever.task.browser.delegate.main import DelegateTask
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
@@ -118,6 +119,9 @@ class TaskTransitionController(BrowserView):
         """Returns `True` if the current user can execute the
         `transition` on the current task.
         """
+        if is_in_readonly_mode():
+            return False
+
         return self._is_transition_possible(
             transition, include_agency, get_checker(self.context))
 

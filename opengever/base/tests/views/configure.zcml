@@ -32,4 +32,11 @@
       permission="zope2.Public"
       />
 
+  <browser:page
+      name="test-write-on-read"
+      class=".write_on_read.WriteOnRead"
+      for="*"
+      permission="zope2.Public"
+      />
+
 </configure>

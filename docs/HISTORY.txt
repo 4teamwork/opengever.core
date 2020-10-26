@@ -6,6 +6,7 @@ Changelog
 
 - Extend @config endpoint with application type. [tinagerber]
 - Journalize creation of linked workspace and copying documents to and from it. [njohner]
+- Disable write actions during readonly mode. [lgraf]
 - Custom error page: Also log ReadOnlyError culprit traceback to error log (if available). [lgraf]
 - Avoid ftw.casauth write-on-read (last login times) during login. [lgraf]
 - Bump ftw.tabbedview to 4.2.1 to get fix for empty action lists. [lgraf]

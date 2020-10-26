@@ -20,10 +20,13 @@ from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
 from .readonly import PatchCASAuthSetLoginTimes
+from .readonly import PatchCheckPermission
 from .readonly import PatchContentRulesHandlerOnLogin
 from .readonly import PatchMembershipToolCreateMemberarea
 from .readonly import PatchMembershipToolSetLoginTimes
 from .readonly import PatchPloneProtectOnUserLogsIn
+from .readonly import PatchPloneUserAllowed
+from .readonly import PatchPloneUserGetRolesInContext
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -31,6 +34,7 @@ from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
+from opengever.readonly import readonly_env_var_is_set
 
 
 PatchActionInfo()()
@@ -66,3 +70,10 @@ PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
 ScrubBoboExceptions()()
+
+# These three patches implement role and permission filtering during RO mode.
+# We only apply these conditionally when RO mode actually is active.
+if readonly_env_var_is_set():
+    PatchCheckPermission()()
+    PatchPloneUserAllowed()()
+    PatchPloneUserGetRolesInContext()()

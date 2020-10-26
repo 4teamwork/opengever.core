@@ -2,6 +2,7 @@ from opengever.activity import notification_center
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.ogds.models.service import ogds_service
+from opengever.readonly import is_in_readonly_mode
 from plone import api
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -33,6 +34,9 @@ class ResolveNotificationView(ResolveOGUIDView):
         return self.notification.userid == current_user.getId()
 
     def mark_as_read(self):
+        if is_in_readonly_mode():
+            return
+
         self.notification.is_read = True
 
     def redirect(self):
