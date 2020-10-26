@@ -41,7 +41,9 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
                                      .having(id='workspaces'))
         self.grant('WorkspacesUser', 'WorkspacesCreator', on=self.workspace_root)
 
-        self.workspace = create(Builder('workspace').within(self.workspace_root))
+        self.workspace = create(Builder('workspace')
+                                .having(title=u'Ein Teamraum')
+                                .within(self.workspace_root))
         self.grant('WorkspaceMember', on=self.workspace)
 
         # Grant necessary permissions to use the workspace client

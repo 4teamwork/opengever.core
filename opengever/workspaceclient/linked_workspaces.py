@@ -1,5 +1,7 @@
 from opengever.api.add import GeverFolderPost
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.journal.handlers import journal_entry_factory
+from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
@@ -113,6 +115,17 @@ class LinkedWorkspaces(object):
         """
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
+
+        # Add journal entry to dossier
+        title = _(
+            u'label_linked_workspace_created',
+            default=u'Linked workspace ${workspace_title} created.',
+            mapping={'workspace_title': workspace.get('title')})
+
+        journal_entry_factory(
+            context=self.context, action='Linked workspace created',
+            title=title)
+
         return workspace
 
     def _get_linked_workspace_url(self, workspace_uid):
@@ -142,6 +155,18 @@ class LinkedWorkspaces(object):
 
         filename = document.get_filename()
         size = file_.size
+
+        # Add journal entry to dossier
+        workspace_title = self.client.get_by_uid(workspace_uid).get('title')
+        title = _(
+            u'label_document_copied_to_workspace',
+            default=u'Document ${doc_title} copied to workspace ${workspace_title}.',
+            mapping={'doc_title': document.title_or_id(),
+                     'workspace_title': workspace_title})
+
+        journal_entry_factory(
+            context=self.context, action='Document copied to workspace',
+            title=title, documents=[document])
 
         return self.client.tus_upload(workspace_url, portal_type, file_.open(),
                                       size, content_type, filename,
@@ -183,6 +208,18 @@ class LinkedWorkspaces(object):
 
         # We should avoid setting the id ourselves, can lead to conflicts
         document_repr = self._blacklisted_dict(document_repr, ['id'])
+
+        # Add journal entry to the dossier before creating the document
+        workspace_title = self.client.get_by_uid(workspace_uid).get('title')
+        title = _(
+            u'label_document_copied_from_workspace',
+            default=u'Document ${doc_title} copied from workspace ${workspace_title}.',
+            mapping={'doc_title': document_repr.get('title'),
+                     'workspace_title': workspace_title})
+
+        journal_entry_factory(
+            context=self.context, action='Document copied from workspace',
+            title=title)
 
         proxy_post = ProxyPost(document_repr)
         proxy_post.context = self.context

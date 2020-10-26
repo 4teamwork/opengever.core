@@ -1,15 +1,19 @@
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.command import CreateEmailCommand
+from opengever.base.oguid import Oguid
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component.interfaces import ComponentLookupError
+from zope.i18n import translate
 import transaction
 
 
@@ -71,18 +75,23 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             self.assertEqual(
                 [workspace2.absolute_url()],
-                [workspace.get('@id') for workspace in manager.list(b_size=1, b_start=1).get('items')])
+                [workspace.get('@id') for workspace in
+                 manager.list(b_size=1, b_start=1).get('items')])
 
     def test_list_skips_workspaces_if_no_view_permission(self):
-        unauthorized_workspace = create(Builder('workspace').within(self.workspace_root))
+        unauthorized_workspace = create(Builder('workspace').within(
+            self.workspace_root))
         self.grant('', on=unauthorized_workspace)
 
-        authorized_workspace = create(Builder('workspace').within(self.workspace_root))
+        authorized_workspace = create(Builder('workspace').within(
+            self.workspace_root))
         self.grant('View', on=unauthorized_workspace)
 
         self.assertTrue(api.user.has_permission('View', obj=self.workspace))
-        self.assertTrue(api.user.has_permission('View', obj=authorized_workspace))
-        self.assertFalse(api.user.has_permission('View', obj=unauthorized_workspace))
+        self.assertTrue(api.user.has_permission(
+            'View', obj=authorized_workspace))
+        self.assertFalse(api.user.has_permission(
+            'View', obj=unauthorized_workspace))
 
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
@@ -113,22 +122,25 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.workspace.reindexObject()
             transaction.commit()
 
-            self.assertEqual(['Old title'],
-                             [workspace.get('title') for workspace in manager.list().get('items')])
+            self.assertEqual(
+                ['Old title'],
+                [workspace.get('title') for workspace in manager.list().get('items')])
 
             self.workspace.title = 'New title'
             self.workspace.reindexObject()
             transaction.commit()
 
-            self.assertEqual(['Old title'],
-                             [workspace.get('title') for workspace in manager.list().get('items')])
+            self.assertEqual(
+                ['Old title'],
+                [workspace.get('title') for workspace in manager.list().get('items')])
 
             self.invalidate_cache()
-            self.assertEqual(['New title'],
-                             [workspace.get('title') for workspace in manager.list().get('items')])
+            self.assertEqual(
+                ['New title'],
+                [workspace.get('title') for workspace in manager.list().get('items')])
 
     def test_create_workspace_will_store_workspace_in_the_storage(self):
-        with self.workspace_client_env() as client:
+        with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
             self.assertEqual([], manager.list().get('items'))
 
@@ -161,7 +173,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager.storage.add(self.workspace.UID())
 
             with self.observe_children(self.workspace) as children:
-                response = manager.copy_document_to_workspace(document, self.workspace.UID())
+                response = manager.copy_document_to_workspace(
+                    document, self.workspace.UID())
                 transaction.commit()
 
             self.assertEqual(1, len(children['added']))
@@ -209,12 +222,14 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.workspace) as children:
                 with auto_commit_after_request(manager.client):
-                    response = manager.copy_document_to_workspace(document, self.workspace.UID())
+                    response = manager.copy_document_to_workspace(
+                        document, self.workspace.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
 
-            self.assertEqual(workspace_document.absolute_url(), response.get('@id'))
+            self.assertEqual(workspace_document.absolute_url(),
+                             response.get('@id'))
             self.assertEqual(workspace_document.title, document.title)
             self.assertEqual(workspace_document.file.open().read(),
                              document.file.open().read())
@@ -236,7 +251,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.workspace) as children:
                 with auto_commit_after_request(manager.client):
-                    response = manager.copy_document_to_workspace(mail, self.workspace.UID())
+                    response = manager.copy_document_to_workspace(
+                        mail, self.workspace.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
@@ -265,7 +281,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.workspace) as children:
                 with auto_commit_after_request(manager.client):
-                    response = manager.copy_document_to_workspace(mail, self.workspace.UID())
+                    response = manager.copy_document_to_workspace(
+                        mail, self.workspace.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
@@ -313,7 +330,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager = ILinkedWorkspaces(self.dossier)
             manager.storage.add(self.workspace.UID())
 
-            documents = manager.list_documents_in_linked_workspace(self.workspace.UID())
+            documents = manager.list_documents_in_linked_workspace(
+                self.workspace.UID())
             expected_url = (
                 '{}/@search?portal_type=opengever.document.document&'
                 'portal_type=ftw.mail.mail&metadata_fields=UID&'
@@ -457,3 +475,92 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
+
+
+class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
+
+    def get_journal_entries(self, obj):
+        annotations = IAnnotations(obj)
+        data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+        return data
+
+    def assert_journal_entry(self, action, title, entry):
+        translated_title = translate(entry.get('action').get('title'),
+                                     context=self.request)
+
+        self.assertEquals(action, entry.get('action').get('type'))
+        self.assertEquals(title, translated_title)
+        self.assertEquals(True, entry.get('action').get('visible'))
+
+    def test_copying_document_to_a_workspace_is_journalized(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        self.assertEqual(2, len(self.get_journal_entries(self.dossier)))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            with auto_commit_after_request(manager.client):
+                manager.copy_document_to_workspace(document, self.workspace.UID())
+
+        journal_entries = self.get_journal_entries(self.dossier)
+        self.assertEqual(3, len(journal_entries))
+
+        entry = journal_entries[-1]
+        self.assertEqual(
+            [{'id': Oguid.for_object(document).id, 'title': document.title}],
+            entry['action']['documents'])
+        self.assert_journal_entry(
+            'Document copied to workspace',
+            u'Document Testdokum\xe4nt copied to workspace Ein Teamraum.',
+            entry)
+
+    def test_workspace_creation_is_journalized(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
+
+            manager.create(title=u"My new w\xf6rkspace")
+            transaction.commit()
+
+        journal_entries = self.get_journal_entries(self.dossier)
+        self.assertEqual(2, len(journal_entries))
+
+        entry = journal_entries[-1]
+        self.assert_journal_entry(
+            'Linked workspace created',
+            u'Linked workspace My new w\xf6rkspace created.',
+            entry)
+
+    def test_copying_document_from_workspace_is_journalized(self):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .with_dummy_content())
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
+
+            with auto_commit_after_request(manager.client):
+                manager.copy_document_from_workspace(
+                    self.workspace.UID(), document.UID())
+
+        journal_entries = self.get_journal_entries(self.dossier)
+        self.assertEqual(3, len(journal_entries))
+
+        doc_copied_from_workspace_entry = journal_entries[-2]
+        self.assert_journal_entry(
+            'Document copied from workspace',
+            u'Document Testdokum\xe4nt copied from workspace Ein Teamraum.',
+            doc_copied_from_workspace_entry)
+
+        doc_created_entry = journal_entries[-1]
+        self.assert_journal_entry(
+            'Document added',
+            u'Document added: Testdokum\xe4nt',
+            doc_created_entry)
