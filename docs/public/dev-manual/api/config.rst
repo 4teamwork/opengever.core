@@ -23,6 +23,7 @@ GEVER-Mandanten abgefragt werden.
       {
           "@id": "http://localhost:8080/fd/@config",
           "admin_unit": "fd",
+          "application_type": "gever",
           "apps_url": "https://dev.onegovgever.ch/portal/api/apps",
           "bumblebee_app_id": "gever_dev",
           "cas_url": "https://dev.onegovgever.ch/portal/cas",
@@ -127,6 +128,9 @@ GEVER-Mandanten abgefragt werden.
 
 Konfigurationsoptionen
 ----------------------
+
+application_type
+  Applikationstyp, entweder "gever" oder "teamraum"
 
 apps_url
 

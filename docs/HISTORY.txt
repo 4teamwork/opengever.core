@@ -4,6 +4,7 @@ Changelog
 2020.13.0 (unreleased)
 ----------------------
 
+- Extend @config endpoint with application type. [tinagerber]
 - Journalize creation of linked workspace and copying documents to and from it. [njohner]
 - Custom error page: Also log ReadOnlyError culprit traceback to error log (if available). [lgraf]
 - Avoid ftw.casauth write-on-read (last login times) during login. [lgraf]
