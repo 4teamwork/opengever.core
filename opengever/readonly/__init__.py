@@ -15,5 +15,6 @@ def is_in_readonly_mode():
     site = getSite()
     if site:
         conn = site._p_jar
-        return conn.isReadOnly()
+        if conn:
+            return conn.isReadOnly()
     return False
