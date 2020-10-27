@@ -82,6 +82,15 @@ class TestTaskQueries(IntegrationTestCase):
 
         self.assertEquals(None, Task.query.by_path('test/not-existng/', 'plone'))
 
+    def test_by_paths_returns_tasks_wich_match_the_given_paths(self):
+        self.login(self.regular_user)
+
+        tasks = [self.task, self.subtask, self.meeting_subtask]
+
+        self.assertEquals(
+            [task.get_sql_object() for task in tasks],
+            Task.query.by_paths([task.get_sql_object().physical_path for task in tasks]))
+
     def test_by_ids_returns_tasks_wich_match_the_given_id(self):
         self.login(self.regular_user)
 

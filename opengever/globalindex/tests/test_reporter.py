@@ -91,3 +91,35 @@ class TestTaskReporter(IntegrationTestCase):
              u'label_task_type', u'label_title',
              u'label_dossier'],
             [cell.value for cell in list(workbook.active.rows)[0]])
+
+    @browsing
+    def test_task_report_by_task_ressource_id(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='task_report',
+                     data={'view_name': 'mytasks',
+                           'tasks': [self.task.absolute_url(),
+                                     self.meeting_task.absolute_url()]})
+
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(browser.contents)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        # self.task
+        self.assertSequenceEqual(
+            [self.task.title,  u'task-state-in-progress',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.dossier.title, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'For confirmation / correction', u'plone', 1],
+            [cell.value for cell in list(workbook.active.rows)[1]])
+
+        # self.meeting_task
+        self.assertSequenceEqual(
+            [self.meeting_task.title, u'task-state-in-progress',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
+             u'For confirmation / correction', u'plone', 9],
+            [cell.value for cell in list(workbook.active.rows)[2]])

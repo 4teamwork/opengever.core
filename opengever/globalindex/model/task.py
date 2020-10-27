@@ -588,6 +588,13 @@ class TaskQuery(BaseQuery):
         return self._extend_with_physical_path(
             query, Task.physical_path, path).first()
 
+    def by_paths(self, paths, admin_unit_id=None):
+        """Returns all tasks whos physical_path is listed in `paths`.
+        """
+        admin_unit_id = admin_unit_id or get_current_admin_unit().id()
+        query = self.restrict().filter_by(admin_unit_id=admin_unit_id)
+        return query.filter(Task.physical_path.in_(paths)).all()
+
     def by_ids(self, task_ids):
         """Returns all tasks whos task_ids are listed in `task_ids`.
         """

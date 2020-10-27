@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Use oguid instead of intId as token in DossierTemplatesVocabulary. [tinagerber]
+- `@@task_report`-view supports task lookup by the ressource-id through the `tasks` parameter. [elioschmutz]
 - Extend @config endpoint with application type. [tinagerber]
 - Journalize creation of linked workspace and copying documents to and from it. [njohner]
 - Disable write actions during readonly mode. [lgraf]
