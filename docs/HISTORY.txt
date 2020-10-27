@@ -9,6 +9,7 @@ Changelog
 - Disable write actions during readonly mode. [lgraf]
 - Custom error page: Also log ReadOnlyError culprit traceback to error log (if available). [lgraf]
 - Avoid ftw.casauth write-on-read (last login times) during login. [lgraf]
+- Expose bumblebee notifications url in the config endpoint. [Kevin Bieri]
 - Bump ftw.tabbedview to 4.2.1 to get fix for empty action lists. [lgraf]
 - Add workspacemeetings to @listing endpoint. [tinagerber]
 - Fix order of labels for participations field in the listing endpoint. [njohner]

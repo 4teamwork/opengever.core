@@ -26,6 +26,7 @@ GEVER-Mandanten abgefragt werden.
           "application_type": "gever",
           "apps_url": "https://dev.onegovgever.ch/portal/api/apps",
           "bumblebee_app_id": "gever_dev",
+          "bumblebee_notifications_url": "ws://bumblebee.local/notifications",
           "cas_url": "https://dev.onegovgever.ch/portal/cas",
           "current_user": {
               "@id": "http://localhost:8080/fd/@users/john.doe",
@@ -139,6 +140,10 @@ apps_url
 cas_url
 
   CAS server URL
+
+bumblebee_notifications_url
+
+    Websocket URL, um Änderungen über Vorschaubilder zu erhalten
 
 features
     Optional aktivierbare Features:
