@@ -4,6 +4,7 @@ Changelog
 2020.13.0 (unreleased)
 ----------------------
 
+- Use oguid instead of intId as token in DossierTemplatesVocabulary. [tinagerber]
 - Extend @config endpoint with application type. [tinagerber]
 - Journalize creation of linked workspace and copying documents to and from it. [njohner]
 - Disable write actions during readonly mode. [lgraf]

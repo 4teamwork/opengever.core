@@ -13,7 +13,6 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_create_dossier_from_template_available
-from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.behaviors import IRestrictAddableDossierTemplates
@@ -32,7 +31,6 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from z3c.form.interfaces import IDataConverter
 from zExceptions import Unauthorized
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import implementer
@@ -60,12 +58,11 @@ def get_dossier_templates(context):
         })
         templates = [brain.getObject() for brain in brains]
 
-    intids = getUtility(IIntIds)
     terms = []
     for template in templates:
         terms.append(SimpleVocabulary.createTerm(
             template,
-            str(intids.getId(template)),
+            Oguid.for_object(template),
             template.title))
 
     return SimpleVocabulary(terms)
