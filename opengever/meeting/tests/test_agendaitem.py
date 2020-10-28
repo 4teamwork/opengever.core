@@ -39,14 +39,18 @@ class TestDisplayAgendaItems(IntegrationTestCase):
         self.assertTrue(item.get('has_documents'))
 
     @browsing
-    def test_agendaitem_attachements_are_sorted(self, browser):
+    def test_agendaitem_attachements_are_sorted_by_position_in_relation_field(self, browser):
         self.login(self.committee_responsible, browser)
         documents = [
             create(Builder('document')
                    .within(self.dossier)
                    .titled(title))
-            for title in ('XXX', 'aBd', 'abc',)
+            for title in ('Doc 1', 'Doc 4', 'Doc 2', 'Doc 3')
         ]
+        documents.reverse()
+
+        self.dossier.moveObjectToPosition(documents[1].getId(), 0)
+
         proposal, submitted_proposal = create(Builder('proposal')
                           .within(self.dossier)
                           .having(committee=self.committee.load_model())
@@ -60,7 +64,8 @@ class TestDisplayAgendaItems(IntegrationTestCase):
 
         pattern = re.compile('<a class="document_link.*?>(.*?)</a>')
         browser_titles = [pattern.search(el).groups()[0] for el in item.get('documents')]
-        self.assertEquals([u'abc', u'aBd', u'XXX'], browser_titles)
+        self.assertEquals([u'Doc 3', 'Doc 2', 'Doc 4', 'Doc 1'],
+                          browser_titles)
 
     @browsing
     def test_agendaitem_with_excerpts_and_documents_has_documents(self, browser):
