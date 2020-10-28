@@ -27,8 +27,9 @@ from opengever.base.utils import escape_html
 from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
-from opengever.ogds.base.utils import groupmembers_url
+from opengever.ogds.base.interfaces import IActor
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.team import Team
 from plone.dexterity.utils import safe_unicode
@@ -38,11 +39,13 @@ from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import implementer
 
 
 SYSTEM_ACTOR_ID = '__system__'
 
 
+@implementer(IActor)
 class Actor(object):
 
     css_class = 'actor-user'
@@ -129,17 +132,13 @@ class Actor(object):
         raise NotImplementedError()
 
     def represents(self):
-        """Returns the object this actor is representing.
-        """
         raise NotImplementedError()
 
     def representatives(self):
-        """Returns a list of users which are representative for the current
-        actor. Used for example when notifying an actor.
-        """
         raise NotImplementedError()
 
 
+@implementer(IActor)
 class NullActor(object):
 
     actor_type = 'null'
@@ -166,6 +165,7 @@ class NullActor(object):
         return []
 
 
+@implementer(IActor)
 class SystemActor(object):
     """Used for system notifications, using the internal SYSTEM_ACTOR_ID.
     """
@@ -197,6 +197,7 @@ class SystemActor(object):
         return []
 
 
+@implementer(IActor)
 class InboxActor(Actor):
 
     css_class = 'actor-inbox'
@@ -233,6 +234,7 @@ class InboxActor(Actor):
         return self.org_unit
 
 
+@implementer(IActor)
 class TeamActor(Actor):
 
     css_class = 'actor-team'
@@ -263,6 +265,7 @@ class TeamActor(Actor):
         return self.team
 
 
+@implementer(IActor)
 class CommitteeActor(Actor):
 
     css_class = 'actor-committee'
@@ -290,6 +293,7 @@ class CommitteeActor(Actor):
         return self.committee
 
 
+@implementer(IActor)
 class ContactActor(Actor):
 
     css_class = 'actor-contact'
@@ -324,6 +328,7 @@ class ContactActor(Actor):
         return self.contact
 
 
+@implementer(IActor)
 class PloneUserActor(Actor):
 
     def __init__(self, identifier, user=None):
@@ -353,6 +358,7 @@ class PloneUserActor(Actor):
         return self.user
 
 
+@implementer(IActor)
 class OGDSUserActor(Actor):
 
     def __init__(self, identifier, user=None):
@@ -379,6 +385,7 @@ class OGDSUserActor(Actor):
         return self.user
 
 
+@implementer(IActor)
 class OGDSGroupActor(Actor):
 
     actor_type = 'group'

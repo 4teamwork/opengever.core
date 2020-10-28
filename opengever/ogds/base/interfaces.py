@@ -133,3 +133,35 @@ class IInternalOpengeverRequestLayer(Interface):
 
 class ITeam(Interface):
     """Marker interface for team object wrappers."""
+
+
+class IActor(Interface):
+    """Class describing the actor interface."""
+
+    actor_type = Attribute('Actor type string')
+    identifier = Attribute('Actor identifier string')
+
+    def corresponds_to(self, user):
+        """Checks whether the actor corresponds to the given user.
+        """
+
+    def get_profile_url(self):
+        """Profile URL
+        """
+
+    def get_label(self, with_principal=True):
+        """Actor label
+        """
+
+    def get_link(self, with_icon=False):
+        """HTML tag to display a link for the actor.
+        """
+
+    def represents(self):
+        """Returns the object this actor is representing.
+        """
+
+    def representatives(self):
+        """Returns a list of users which are representative for the current
+        actor. Used for example when notifying an actor.
+        """

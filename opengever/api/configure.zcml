@@ -30,6 +30,7 @@
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
   <adapter factory=".serializer.SerializeBrainToJsonSummary" />
 
+  <adapter factory=".actors.SerializeActorToJson" />
   <adapter factory=".repositoryfolder.DeserializeRepositoryFolderFromJson" />
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".inbox.SerializeInboxToJson" />
@@ -453,6 +454,14 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsuser.OGDSUserGet"
       name="@ogds-users"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".actors.ActorsGet"
+      name="@actors"
       permission="zope2.View"
       />
 
