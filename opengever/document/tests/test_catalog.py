@@ -11,9 +11,6 @@ class TestCatalog(FunctionalTestCase):
     def test_delivery_date_index_registered(self):
         self.assertIn('delivery_date', self.catalog.indexes())
 
-    def test_document_author_index_registered(self):
-        self.assertIn('document_author', self.catalog.indexes())
-
     def test_cchecked_out_index_registered(self):
         self.assertIn('checked_out', self.catalog.indexes())
 

@@ -287,7 +287,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'date_of_completion',
                                'deadline',
                                'delivery_date',
-                               'document_author',
                                'document_date',
                                'document_type',
                                'email',
