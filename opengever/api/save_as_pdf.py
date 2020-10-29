@@ -53,7 +53,6 @@ class SaveAsPdf(Service):
         else:
             document = self.source_document
 
-        import pdb; pdb.set_trace()
         if IBumblebeeServiceV3(getRequest()).queue_demand(
                 document, PROCESSING_QUEUE, self.get_callback_url(), opaque_id=token):
             annotations[PDF_SAVE_STATUS_KEY] = "conversion-demanded"
