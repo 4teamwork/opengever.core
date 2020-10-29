@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+import json
 
 
 class TestActorsGet(IntegrationTestCase):
@@ -139,3 +140,91 @@ class TestActorsGet(IntegrationTestCase):
              u'identifier': u'foo',
              u'label': u'foo'},
             browser.json)
+
+
+class TestActorsGetListPOST(IntegrationTestCase):
+
+    @property
+    def actors_url(self):
+        return self.portal.absolute_url() + '/@actors'
+
+    @browsing
+    def test_get_list_of_actors(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_ids = {'actor_ids': ['team:1', 'inbox:fa']}
+        browser.open(self.actors_url, method='POST',
+                     data=json.dumps(actor_ids), headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        expected = {
+            u'@id': self.actors_url,
+            u'items': [
+                {u'@id': self.actors_url + "/team:1",
+                 u'actor_type': u'team',
+                 u'identifier': u'team:1',
+                 u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)'},
+                {u'@id': self.actors_url + '/inbox:fa',
+                 u'actor_type': u'inbox',
+                 u'identifier': u'inbox:fa',
+                 u'label': u'Inbox: Finanz\xe4mt'}
+                ]
+            }
+
+        self.assertDictEqual(expected, browser.json)
+
+    @browsing
+    def test_handles_invalid_actor_ids(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_ids = {'actor_ids': ['team:1', 'foo']}
+        browser.open(self.actors_url, method='POST',
+                     data=json.dumps(actor_ids), headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        expected = {
+            u'@id': self.actors_url,
+            u'items': [
+                {u'@id': self.actors_url + "/team:1",
+                 u'actor_type': u'team',
+                 u'identifier': u'team:1',
+                 u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)'},
+                {u'@id': self.actors_url + '/foo',
+                 u'actor_type': u'null',
+                 u'identifier': u'foo',
+                 u'label': u'foo'}
+                ]
+            }
+
+        self.assertDictEqual(expected, browser.json)
+
+    @browsing
+    def test_handles_empty_actor_ids_list(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_ids = {'actor_ids': []}
+        browser.open(self.actors_url, method='POST',
+                     data=json.dumps(actor_ids), headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        expected = {
+            u'@id': self.actors_url,
+            u'items': []
+            }
+
+        self.assertDictEqual(expected, browser.json)
+
+    @browsing
+    def test_handles_missing_actor_ids_list(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.actors_url, method='POST',
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        expected = {
+            u'@id': self.actors_url,
+            u'items': []
+            }
+
+        self.assertDictEqual(expected, browser.json)

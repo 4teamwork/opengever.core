@@ -2,6 +2,7 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.interfaces import IActor
 from plone import api
+from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
@@ -63,3 +64,29 @@ class ActorsGet(Service):
             raise BadRequest("Only actor ID is supported URL path parameter.")
 
         return self.params[0]
+
+
+class ActorsGetListPOST(Service):
+    """This endpoint allows to get the data for a list of actors using
+    a POST request containing a list of actor_ids in the request body.
+
+    POST /@actors HTTP/1.1
+    """
+
+    @property
+    def request_data(self):
+        return json_body(self.request)
+
+    def reply(self):
+        data = json_body(self.request)
+        actor_ids = data.get('actor_ids', [])
+        items = []
+        for actorid in actor_ids:
+            actor = ActorLookup(actorid).lookup()
+            serializer = queryMultiAdapter((actor, self.request), ISerializeToJson)
+            items.append(serializer())
+
+        result = {}
+        result['@id'] = self.request.URL
+        result['items'] = items
+        return result

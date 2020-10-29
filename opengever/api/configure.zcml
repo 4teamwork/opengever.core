@@ -466,6 +466,14 @@
       />
 
   <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".actors.ActorsGetListPOST"
+      name="@actors"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       for="zope.interface.Interface"
       factory=".livesearch.GeverLiveSearchGet"
