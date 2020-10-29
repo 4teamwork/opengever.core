@@ -127,6 +127,14 @@
 
   <plone:service
       method="POST"
+      name="@save-as-pdf"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".save_as_pdf.SaveAsPdf"
+      permission="CMFEditions.RevertToPreviousVersions"
+      />
+
+  <plone:service
+      method="POST"
       name="@scan-in"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".scanin.ScanIn"
