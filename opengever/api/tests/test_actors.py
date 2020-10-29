@@ -1,6 +1,20 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.api.actors import serialize_actor_id_to_json_summary
 import json
+
+
+class TestActorSummarySerialization(IntegrationTestCase):
+
+    @property
+    def actors_url(self):
+        return self.portal.absolute_url() + '/@actors'
+
+    def test_serialize_actor_id_to_json_summary(self):
+        self.assertDictEqual(
+            {'@id': self.actors_url + "/some_id",
+             'identifier': 'some_id'},
+            serialize_actor_id_to_json_summary('some_id'))
 
 
 class TestActorsGet(IntegrationTestCase):

@@ -13,6 +13,18 @@ from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
 
+def serialize_actor_id_to_json_summary(actor_id):
+    """This method is used to return a standardized summary representation
+    of an actor. We should keep this very efficient as it will be used by
+    various endpoints returning actors or lists of actors for certain fields.
+    We therefore should only return data that we can compute without retrieving
+    the actual actor object.
+    """
+    url = '{}/@actors/{}'.format(api.portal.get().absolute_url(), actor_id)
+    return {'@id': url,
+            'identifier': actor_id}
+
+
 @implementer(ISerializeToJson)
 @adapter(IActor, IOpengeverBaseLayer)
 class SerializeActorToJson(object):
