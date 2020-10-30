@@ -4,6 +4,16 @@
 
 
 
+   .. py:attribute:: videoconferencing_url
+
+       :Feldname: :field-title:`Videokonferenz URL`
+       :Datentyp: ``TextLine``
+       
+       :Default: <IWorkspaceSettings.videoconferencing_base_url + random UUID>
+       :Beschreibung: Verwendete URL um eine Videokonferenz für diesen Teamraum zu starten.
+       
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`
