@@ -3,6 +3,7 @@ Beobachter
 
 Der ``@watchers`` Endpoint dient dazu, für Aufgaben und Weiterleitungen Beobachter zu registrieren.
 
+Diese Endpoints liefern zur Zeit sowohl ``referenced_users`` als auch ``referenced_actors`` zurück. ``referenced_users`` wird in einer späteren Version jedoch nicht mehr unterstützt werden, und wird durch ``referenced_actors`` abgelöst.
 
 Auflistung
 ----------
@@ -36,6 +37,16 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
             "@id": "https://example.org/@users/rolf.ziegler",
             "id": "rolf.ziegler",
             "fullname": "Ziegler Rolf"
+          }
+        ],
+        "referenced_actors": [
+          {
+            "@id": "https://example.org/@actors/peter.mueller",
+            "identifier": "peter.mueller",
+          },
+          {
+            "@id": "https://example.org/@actors/rolf.ziegler",
+            "identifier": "rolf.ziegler",
           }
         ],
         "referenced_watcher_roles": [
@@ -89,6 +100,7 @@ Die Beobachter können als Kompomente einer Aufgabe direkt über den ``expand``-
         "watchers": {
           "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@listing-stats",
           "referenced_users": ["..."],
+          "referenced_actors": ["..."],
           "referenced_watcher_roles": ["..."],
           "watchers_and_roles": { "...": "..." }
         }
