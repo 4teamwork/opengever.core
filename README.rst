@@ -71,6 +71,9 @@ is required for Tika).
 LaTeX
 ^^^^^
 
+Note: Use the pdflatex Docker image instead of installing LaTeX locally. See
+`Services`_ for more details.
+
 A LaTeX distribution and the ``pdflatex`` binary are required for generating
 dossier covers, dossier details and dossier listing PDFs as well as open task
 reports and task listing PDFs.
@@ -122,6 +125,9 @@ README for details on how to configure Mail-In.
 Perl and ``Email::Outlook::Message`` module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Note: Use the msgconvert Docker image instead of installing msgconvert locally.
+See `Services`_ for more details.
+
 In order to convert Outlook ``*.msg`` messages to RFC822 ``*.eml`` when using
 Drag&Drop upload, we use the `msgconvert.pl <http://www.matijs.net/software/msgconv/>`_
 script. This script requires Perl and the ``Email::Outlook::Message`` module.
@@ -145,6 +151,9 @@ In the end, GEVER will look for the ``msgconvert`` executable in ``$PATH``.
 
 Sablon
 ^^^^^^
+
+Note: Use the sablon Docker image instead of installing sablon locally. See
+`Services`_ for more details.
 
 If ``opengever.meeting`` is activated (which it is for the default development
 installation), the Ruby gem `Sablon <https://github.com/senny/sablon/>`_ is
@@ -301,6 +310,47 @@ PostgreSQL-Example:
 .. code:: postgresql
 
     UPDATE admin_units SET site_url = replace("site_url", 'https://dev.onegovgever.ch', 'http://localhost:8080'), public_url = replace("public_url", 'https://dev.onegovgever.ch', 'http://localhost:8080');
+
+
+Services
+--------
+
+In preparation for dockerizing ``opengever.core``, parts of the application are
+extracted into dockerized services.
+
+Currently the following services are available as Docker images and are used
+for local development by default:
+
+- `msgconvert <https://github.com/4teamwork/msgconvert>`_
+- `pdflatex <https://github.com/4teamwork/pdflatex>`_
+- `sablon <https://github.com/4teamwork/sablon>`_
+
+To run these services, Docker is required.
+See `Get Docker <https://docs.docker.com/get-docker/>`_ for how to install
+Docker on your local machine.
+
+A `Docker Compose <https://docs.docker.com/compose/>`_ file is provided in this
+repo to easily run the services.
+
+To start the services simply run:
+
+.. code::
+
+  docker-compose up
+
+
+``opengever.core`` will use the services if the service URL is configured
+through environment variables. The ``development.cfg`` buildout configuration
+defines these variables by default:
+
+.. code::
+
+  MSGCONVERT_URL=http://localhost:8090/
+  SABLON_URL=http://localhost:8091/
+  PDFLATEX_URL=http://localhost:8092/
+
+To disable the use of a service, simply remove the according environment
+variable or set it to an empty value.
 
 
 OGDS synchronization
