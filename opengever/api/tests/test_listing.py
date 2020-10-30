@@ -88,6 +88,18 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         self.assertEqual(['start'], params['facet.field'])
 
     @browsing
+    def test_does_not_limit_facets(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=documents&columns:list=title'
+                '&facets:list=creator')
+        browser.open(self.repository_root, view=view,
+                     headers=self.api_headers)
+        params = self.solr.search.call_args[1]
+        self.assertEqual(-1, params['facet.limit'],
+                        msg="Facets must not be limited")
+
+    @browsing
     def test_excludes_searchroot(self, browser):
         self.login(self.regular_user, browser=browser)
 
