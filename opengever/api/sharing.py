@@ -1,3 +1,4 @@
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.ogds.models.service import ogds_service
@@ -43,6 +44,7 @@ class SharingGet(APISharingGet):
 
         for item in data.get('entries', []):
             self.extend_item_with_ogds_summary(item)
+            self.extend_item_with_actor(item)
 
         # sort available roles
         data['available_roles'].sort(
@@ -50,6 +52,9 @@ class SharingGet(APISharingGet):
                              ROLES_ORDER.index(b['id'])))
 
         return data
+
+    def extend_item_with_actor(self, item):
+        item['actor'] = serialize_actor_id_to_json_summary(item['id'])
 
     def extend_item_with_ogds_summary(self, item):
         ogds_summary = None

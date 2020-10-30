@@ -3,6 +3,8 @@ Sharing
 
 Die lokalen Rollen können mit dem ``@sharing`` Endpoint abgefragt werden. Um die lokalen Rollen aufzulisten, wenn man keine Berechtigungen zum Bearbeiten hat, muss man den Parameter `ignore_permissions=True` setzen.
 
+Das ``ogds_summary`` Feld ist überholt und das ``actor`` Feld sollte anstatt verwendet werden.
+
 **Beispiel-Request**:
 
     GET /ordnungssystem/fuehrung/dossier-23/@sharing?ignore_permissions=True HTTP/1.1
@@ -46,6 +48,10 @@ Die lokalen Rollen können mit dem ``@sharing`` Endpoint abgefragt werden. Um di
                     "active": true,
                     "groupid": "og_demo-ftw_users",
                     "title": null
+                },
+                "actor": {
+                    "@id": "http://localhost:8080/fd/@actors/og_demo-ftw_users",
+                    "identifier": "og_demo-ftw_users"
                 },
                 "roles": {
                     "Contributor": false,
