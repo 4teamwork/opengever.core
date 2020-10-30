@@ -60,15 +60,15 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
     def test_repofolder_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.leaf_repofolder, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'Client1 1.1', browser.json.get(u'reference_number'))
 
     @browsing
     def test_repofolder_serialization_contains_is_leafnode(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.leaf_repofolder, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'is_leafnode'), True)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(True, browser.json.get(u'is_leafnode'))
 
     @browsing
     def test_repofolder_serialization_contains_relative_path(self, browser):
@@ -76,18 +76,18 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
         browser.open(self.leaf_repofolder, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
-            browser.json.get(u'relative_path'),
-            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen')
+            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+            browser.json.get(u'relative_path'))
 
     @browsing
     def test_repofolder_serialization_contains_oguid(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.leaf_repofolder, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         int_id = getUtility(IIntIds).getId(self.leaf_repofolder)
         self.assertEqual(
-            browser.json.get(u'oguid'),
-            u'plone:%s' % int_id)
+            u'plone:%s' % int_id,
+            browser.json.get(u'oguid'))
 
 
 class TestDossierSerializer(IntegrationTestCase):
@@ -101,57 +101,57 @@ class TestDossierSerializer(IntegrationTestCase):
     def test_dossier_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'Client1 1.1 / 1', browser.json.get(u'reference_number'))
 
     @browsing
     def test_dossier_serialization_contains_email(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'email'), u'1014013300@example.org')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'1014013300@example.org', browser.json.get(u'email'))
 
     @browsing
     def test_dossier_serialization_contains_responsible_fullname(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            browser.json.get(u'responsible_fullname'), u'Ziegler Robert')
+            u'Ziegler Robert', browser.json.get(u'responsible_fullname'))
 
     @browsing
     def test_dossier_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            browser.json.get(u'relative_path'),
-            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1')
+            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+            browser.json.get(u'relative_path'))
 
     @browsing
     def test_dossier_serialization_contains_is_subdossier(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            browser.json.get(u'is_subdossier'),
-            False)
+            False,
+            browser.json.get(u'is_subdossier'))
 
         browser.open(self.subdossier, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            browser.json.get(u'is_subdossier'),
-            True)
+            True,
+            browser.json.get(u'is_subdossier'))
 
     @browsing
     def test_dossier_serialization_contains_oguid(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         int_id = getUtility(IIntIds).getId(self.dossier)
         self.assertEqual(
-            browser.json.get(u'oguid'),
-            u'plone:%s' % int_id)
+            u'plone:%s' % int_id,
+            browser.json.get(u'oguid'))
 
 
 class TestDocumentSerializer(IntegrationTestCase):
@@ -165,35 +165,35 @@ class TestDocumentSerializer(IntegrationTestCase):
     def test_document_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 14')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'Client1 1.1 / 1 / 14', browser.json.get(u'reference_number'))
 
     @browsing
     def test_document_serialization_contains_bumblebee_checksum(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'bumblebee_checksum'), DOCX_CHECKSUM)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(DOCX_CHECKSUM, browser.json.get(u'bumblebee_checksum'))
 
     @browsing
     def test_document_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            browser.json.get(u'relative_path'),
             u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/{}'.format(
-                self.document.getId()))
+                self.document.getId()),
+            browser.json.get(u'relative_path'))
 
     @browsing
     def test_document_serialization_contains_oguid(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         int_id = getUtility(IIntIds).getId(self.document)
         self.assertEqual(
-            browser.json.get(u'oguid'),
-            u'plone:%s' % int_id)
+            u'plone:%s' % int_id,
+            browser.json.get(u'oguid'))
 
     @browsing
     def test_mail_serialization_contains_reference_number(self, browser):
@@ -206,30 +206,30 @@ class TestDocumentSerializer(IntegrationTestCase):
     def test_mail_serialization_contains_bumblebee_checksum(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
 
         checksum = IBumblebeeDocument(self.mail_eml).get_checksum()
-        self.assertEqual(browser.json.get(u'bumblebee_checksum'), checksum)
+        self.assertEqual(checksum, browser.json.get(u'bumblebee_checksum'))
 
     @browsing
     def test_mail_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            browser.json.get(u'relative_path'),
             u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/{}'.format(
-                self.mail_eml.getId()))
+                self.mail_eml.getId()),
+            browser.json.get(u'relative_path'))
 
     @browsing
     def test_mail_serialization_contains_oguid(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         int_id = getUtility(IIntIds).getId(self.mail_eml)
         self.assertEqual(
-            browser.json.get(u'oguid'),
-            u'plone:%s' % int_id)
+            u'plone:%s' % int_id,
+            browser.json.get(u'oguid'))
 
 
 class TestInboxSerializer(IntegrationTestCase):
@@ -238,15 +238,15 @@ class TestInboxSerializer(IntegrationTestCase):
     def test_inbox_serialization_contains_email(self, browser):
         self.login(self.secretariat_user, browser)
         browser.open(self.inbox, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'email'), u'1011033300@example.org')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'1011033300@example.org', browser.json.get(u'email'))
 
     @browsing
     def test_inbox_serialization_contains_inbox_id(self, browser):
         self.login(self.secretariat_user, browser)
         browser.open(self.inbox, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'inbox_id'), u'inbox:fa')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'inbox:fa', browser.json.get(u'inbox_id'))
 
     @browsing
     def test_inbox_id_defaults_to_current_orgunit(self, browser):
@@ -254,24 +254,24 @@ class TestInboxSerializer(IntegrationTestCase):
         IResponsibleOrgUnit(self.inbox).responsible_org_unit = None
 
         browser.open(self.inbox, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'inbox_id'), u'inbox:fa')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'inbox:fa', browser.json.get(u'inbox_id'))
 
         # change orgunit
         browser.open(self.repository_root)
         browser.css('.orgunitMenuContent a')[0].click()
 
         browser.open(self.inbox, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'inbox_id'), u'inbox:rk')
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'inbox:rk', browser.json.get(u'inbox_id'))
 
     @browsing
     def test_inbox_serialization_contains_oguid(self, browser):
         self.login(self.secretariat_user, browser)
         browser.open(self.inbox, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
         int_id = getUtility(IIntIds).getId(self.inbox)
-        self.assertEqual(browser.json.get(u'oguid'), u'plone:%s' % int_id)
+        self.assertEqual(u'plone:%s' % int_id, browser.json.get(u'oguid'))
 
 
 class TestGroupSerializer(IntegrationTestCase):
@@ -283,7 +283,7 @@ class TestGroupSerializer(IntegrationTestCase):
         browser.open(
             self.portal, view='@groups/fa_users?b_size=1',
             headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(200, browser.status_code)
 
         response = browser.json
         del response.get('users')['batching']
