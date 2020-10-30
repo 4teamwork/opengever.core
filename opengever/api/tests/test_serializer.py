@@ -120,6 +120,16 @@ class TestDossierSerializer(IntegrationTestCase):
             u'Ziegler Robert', browser.json.get(u'responsible_fullname'))
 
     @browsing
+    def test_dossier_serialization_contains_responsible_actor(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            {'@id': self.portal.absolute_url() + u'/@actors/robert.ziegler',
+             'identifier': 'robert.ziegler'},
+            browser.json.get(u'responsible_actor'))
+
+    @browsing
     def test_dossier_serialization_contains_relative_path(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
