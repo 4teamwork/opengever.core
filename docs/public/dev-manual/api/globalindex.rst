@@ -5,6 +5,8 @@ Globalindex
 
 Der globale, also über den ganzen Mandantenverbund verteilte, Aufgabenindex kann mit dem ``@globalindex`` Endpoint abgefragt werden.
 
+Die Felder ``issuer_fullname`` und ``responsible_fullname`` sind überholt und durch ``issuer_actor`` und ``responsible_actor`` ersetzt.
+
   .. sourcecode:: http
 
     GET /@globalindex HTTP/1.1
@@ -18,7 +20,7 @@ Der globale, also über den ganzen Mandantenverbund verteilte, Aufgabenindex kan
     {
       "batching": null,
       "items": [
-        { "@id": "http://localhost:8080//ordnungssystem/dossier-23/document-123/task-1",
+        { "@id": "http://localhost:8080/ordnungssystem/dossier-23/document-123/task-1",
           "@type": "opengever.task.task",
           "assigned_org_unit": "fa",
           "containing_dossier": "Anfragen 2019",
@@ -28,12 +30,20 @@ Der globale, also über den ganzen Mandantenverbund verteilte, Aufgabenindex kan
           "is_subtask": false,
           "issuer": "robert.ziegler",
           "issuer_fullname": "Ziegler Robert",
+          "issuer_actor": {
+            "@id": "http://localhost:8080/@actors/robert.ziegler"
+            "identifier": "robert.ziegler"
+          }
           "issuing_org_unit": "fa",
           "modified": "2016-08-31T18:27:33",
           "oguid": "plone:1016273300",
           "predecessor_id": null,
           "responsible": "Eingangskorb Finanzamt",
           "responsible": "inbox:fa",
+          "responsible_actor": {
+            "@id": "http://localhost:8080/@actors/inbox:fa"
+            "identifier": "inbox:fa"
+          }
           "review_state": "task-state-in-progress",
           "task_id": 14,
           "task_type": "For direct execution",
