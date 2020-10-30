@@ -126,11 +126,15 @@ class WebActionsProvider(object):
     def _filter_action_data(self, action):
         return dict((key, action.get(key)) for key in self._attributes_to_keep)
 
-    def get_webactions(self, display=None):
+    def get_webactions(self, display=None, flat=False):
         webactions = self._get_webactions_for_context()
         if display is not None:
             webactions = self._filter_for_display(display, webactions)
         webactions = self._sort(self._filter_for_user(webactions))
+
+        if flat:
+            return webactions
+
         webactions_dict = defaultdict(list)
         for webaction in webactions:
             webactions_dict[webaction["display"]].append(
