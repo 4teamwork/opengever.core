@@ -6,6 +6,7 @@ Changelog
 
 - Agenda-item attachments are now ordered based on the position in the relationField. [elioschmutz]
 - Remove the limit for facets returned in the listing API endpoint. [Kevin Bieri]
+- `@actions` endpoint also returns available webactions. [elioschmutz]
 - Use oguid instead of intId as token in DossierTemplatesVocabulary. [tinagerber]
 - `@@task_report`-view supports task lookup by the ressource-id through the `tasks` parameter. [elioschmutz]
 - Ensure `document_author` and `SearchableText` indices are dropped from catalog. [deiferni]

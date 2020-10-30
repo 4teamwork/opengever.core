@@ -3,10 +3,50 @@
 Webactions
 ==========
 
-Der ``/@webactions`` Endpoint auf dem Root des Mandanten ermöglicht das
-Verwalten von sogenannten WebActions in GEVER.
+Eine Webaktion wird von einer Drittanwendung in GEVER registriert. Mit Webaktionen können Knöpfe, Links und Icons direkt an gewissen Stellen in GEVER platziert werden, mit welchen der Benutzer dann Aktionen in einer Drittanwendung auslösen kann.
 
 .. contents::
+
+Registrierte Webaktionen anzeigen (GET)
+---------------------------------------
+
+Webaktionen werden im ``@actions``-Endpoint in einer eigenen Kategorie ``webactions`` angezeigt, sofern diese für den aktuellen Kontext und Benutzer verfügbar sind.
+
+**Request**:
+
+.. sourcecode:: http
+
+  GET /@actions HTTP/1.1
+  Accept: application/json
+
+**Response**:
+
+.. sourcecode:: http
+
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+
+  {
+    "object_buttons": ["..."],
+    "user": ["..."],
+    "webactions": [
+      {
+        "action_id": 0,
+        "title": "Open in ExternalApp",
+        "target_url": "http://example.org/endpoint",
+        "mode": "self",
+        "display": "actions-menu"
+      }
+    ]
+  }
+
+Weitere Informationen über die Verwendung des ``@actions``-Endpoints befinden sich in der `plone.restapi Dokumentation  <https://plonerestapi.readthedocs.io/en/latest/actions.html#listing-available-actions>`_.
+
+Webactions verwalten
+--------------------
+
+Der ``/@webactions`` Endpoint auf dem Root des Mandanten ermöglicht das
+Verwalten von sogenannten WebActions in GEVER.
 
 Solche Webaktionen können z.B. für oder von Drittanwendungen (mit den nötigen
 :ref:`Berechtigungen <webactions-mgmt-permissions>`) registriert werden, um
@@ -19,7 +59,7 @@ auslösen kann.
 .. _webactions-mgmt-permissions:
 
 Berechtigungen für das Verwalten von Webaktionen
-------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Für das Verwalten von Webaktionen über die REST API wird die permission
 ``opengever.webactions: Manage own WebActions`` benötigt. Diese ist in GEVER
@@ -31,7 +71,7 @@ löschen).
 
 
 Erstellen (POST)
-----------------
+~~~~~~~~~~~~~~~~
 
 .. http:post:: /@webactions
 
@@ -101,7 +141,7 @@ Webaktion, welche für weitere Requests verwendet werden kann.
 
 
 Auslesen (GET)
---------------
+~~~~~~~~~~~~~~
 
 .. http:get:: /@webactions/(action_id)
 
@@ -149,7 +189,7 @@ Auslesen (GET)
 
 
 Auflisten (GET)
----------------
+~~~~~~~~~~~~~~~
 
 
 .. http:get:: /@webactions
@@ -215,7 +255,7 @@ Auflisten (GET)
 
 
 Aktualisieren (PATCH)
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 
 .. http:patch:: /@webactions/(action_id)
@@ -261,7 +301,7 @@ Aktualisieren (PATCH)
 
 
 Löschen (DELETE)
-----------------
+~~~~~~~~~~~~~~~~
 
 
 .. http:delete:: /@webactions/(action_id)
@@ -299,7 +339,7 @@ Löschen (DELETE)
 .. _webactions-fields:
 
 Eigenschaften von Webaktionen
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Folgend ist eine Auflistung aller von Webaktionen unterstützten Felder und deren Typ und Bedeutung.
 
@@ -351,7 +391,7 @@ Folgend ist eine Auflistung aller von Webaktionen unterstützten Felder und dere
 .. _webactions-mode:
 
 Zielfenster
------------
+~~~~~~~~~~~
 
 Über das Feld ``mode`` kann gesteuert werden, wie der Link geöffnet wird.
 
@@ -372,7 +412,7 @@ Erlaubte Werte:
 .. _webactions-scope:
 
 Scope
------
+~~~~~
 
 Über das Feld ``scope`` kann gesteuert werden, bei welchen Objekten die
 Webaktion angeboten wird.
@@ -391,7 +431,7 @@ Webaktion angeboten wird.
 .. _webactions-server-metadata:
 
 Vom Server vergebene Metadaten
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +---------------+-------------+-------------------------------------------------------------------+
 | Feld          | Typ         | Beschreibung                                                      |
@@ -408,7 +448,7 @@ Vom Server vergebene Metadaten
 .. _webactions-display:
 
 Darstellungsorte
-----------------
+~~~~~~~~~~~~~~~~
 
 Die Webaktionen können an verschiedenen Orten dargestellt werden.
 
@@ -445,7 +485,7 @@ Folgende Darstellungsorte sind als Werte für das Feld ``display`` erlaubt:
 .. _webactions-permissions:
 
 Berechtigungsabhängige Aktionen
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Aktionen können eingeschränkt werden, so dass sie nur dann angezeigt werden,
 wenn der Benutzer mindestens eine der angegebenen Berechtigungen auf dem
@@ -474,7 +514,7 @@ Folgende Werte können für das Feld ``permissions`` angegeben werden:
 .. _webactions-unique-name:
 
 Eindeutiger Name
-----------------
+~~~~~~~~~~~~~~~~
 
 Das optionale Feld ``unique_name`` kann verwendet werden, um sicherzustellen,
 dass eine Webaktion nicht aus versehen mehrmals erstellt wird.
@@ -505,7 +545,7 @@ antwortet der Server mit ``400 Bad Request``:
 .. _target-url:
 
 Ziel-URL
---------
+~~~~~~~~
 
 Wenn die Webaktionen an ihrem Darstellungsort in GEVER angezeigt werden, werden
 der Ziel-URL zwei Querystring-Parameter angehängt:
