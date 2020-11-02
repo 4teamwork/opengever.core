@@ -35,6 +35,7 @@ Inhalt:
    preview.rst
    webactions.rst
    users.rst
+   actors.rst
    assigned_users.rst
    usersettings.rst
    tasks.rst
