@@ -165,3 +165,7 @@ class IActor(Interface):
         """Returns a list of users which are representative for the current
         actor. Used for example when notifying an actor.
         """
+
+    def get_portrait_url(self):
+        """Returns an URL to the actor's portrait if he has one, None otherwise.
+        """

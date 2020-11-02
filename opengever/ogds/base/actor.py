@@ -32,6 +32,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.team import Team
+from plone import api
 from plone.dexterity.utils import safe_unicode
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
@@ -137,6 +138,9 @@ class Actor(object):
     def representatives(self):
         raise NotImplementedError()
 
+    def get_portrait_url(self):
+        raise NotImplementedError()
+
 
 @implementer(IActor)
 class NullActor(object):
@@ -163,6 +167,9 @@ class NullActor(object):
 
     def representatives(self):
         return []
+
+    def get_portrait_url(self):
+        return None
 
 
 @implementer(IActor)
@@ -195,6 +202,9 @@ class SystemActor(object):
 
     def representatives(self):
         return []
+
+    def get_portrait_url(self):
+        return None
 
 
 @implementer(IActor)
@@ -233,6 +243,9 @@ class InboxActor(Actor):
     def represents(self):
         return self.org_unit
 
+    def get_portrait_url(self):
+        return None
+
 
 @implementer(IActor)
 class TeamActor(Actor):
@@ -264,6 +277,9 @@ class TeamActor(Actor):
     def represents(self):
         return self.team
 
+    def get_portrait_url(self):
+        return None
+
 
 @implementer(IActor)
 class CommitteeActor(Actor):
@@ -291,6 +307,9 @@ class CommitteeActor(Actor):
 
     def represents(self):
         return self.committee
+
+    def get_portrait_url(self):
+        return None
 
 
 @implementer(IActor)
@@ -327,6 +346,9 @@ class ContactActor(Actor):
     def represents(self):
         return self.contact
 
+    def get_portrait_url(self):
+        return None
+
 
 @implementer(IActor)
 class PloneUserActor(Actor):
@@ -357,6 +379,11 @@ class PloneUserActor(Actor):
     def represents(self):
         return self.user
 
+    def get_portrait_url(self):
+        portrait = self.user.getPersonalPortrait()
+        if portrait:
+            return portrait.absolute_url()
+
 
 @implementer(IActor)
 class OGDSUserActor(Actor):
@@ -383,6 +410,13 @@ class OGDSUserActor(Actor):
 
     def represents(self):
         return self.user
+
+    def get_portrait_url(self):
+        mtool = api.portal.get_tool('portal_membership')
+        member = mtool.getMemberById(self.user.userid)
+        portrait = member.getPersonalPortrait()
+        if portrait:
+            return portrait.absolute_url()
 
 
 @implementer(IActor)
@@ -412,6 +446,9 @@ class OGDSGroupActor(Actor):
 
     def represents(self):
         return self.group
+
+    def get_portrait_url(self):
+        return None
 
 
 class ActorLookup(object):

@@ -40,6 +40,7 @@ class SerializeActorToJson(object):
             'actor_type': self.context.actor_type,
             'identifier': self.context.identifier,
             'label': self.context.get_label(with_principal=False),
+            'portrait_url': self.context.get_portrait_url(),
         }
 
         return result
