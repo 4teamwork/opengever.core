@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
@@ -61,6 +62,8 @@ class Participations(object):
                     self.context.absolute_url(), data.participant_id),
                 "participant_id": data.participant_id,
                 "participant_title": data.participant_title,
+                "participant_actor": serialize_actor_id_to_json_summary(
+                    data.participant_id),
                 "roles": data.roles})
 
         result["participations"]["available_roles"] = available_roles(self.context)

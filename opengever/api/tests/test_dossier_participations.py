@@ -34,11 +34,17 @@ class TestParticipationsGet(IntegrationTestCase):
                         u'vertrage-und-vereinbarungen/dossier-1/@participations/kathi.barfuss',
                         u'participant_id': u'kathi.barfuss',
                         u'participant_title': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                        u'participant_actor': {
+                            u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
+                            u'identifier': u'kathi.barfuss'},
                         u'roles': [u'regard', u'participation', u'final-drawing']},
                        {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
                         u'vertrage-und-vereinbarungen/dossier-1/@participations/robert.ziegler',
                         u'participant_id': u'robert.ziegler',
                         u'participant_title': u'Ziegler Robert (robert.ziegler)',
+                        u'participant_actor': {
+                            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                            u'identifier': u'robert.ziegler'},
                         u'roles': [u'regard']}],
             u'items_total': 2}
         self.assertEqual(expected_json, browser.json)
@@ -91,11 +97,17 @@ class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
                                 u'vereinbarungen/dossier-1/@participations/organization:2',
                         u'participant_id': u'organization:2',
                         u'participant_title': u'Meier AG',
+                        u'participant_actor': {
+                            u'@id': u'http://nohost/plone/@actors/organization:2',
+                            u'identifier': u'organization:2'},
                         u'roles': [u'final-drawing']},
                        {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
                                 u'vereinbarungen/dossier-1/@participations/person:1',
                         u'participant_id': u'person:1',
                         u'participant_title': u'B\xfchler Josef',
+                        u'participant_actor': {
+                            u'@id': u'http://nohost/plone/@actors/person:1',
+                            u'identifier': u'person:1'},
                         u'roles': [u'final-drawing', u'participation']}],
             u'items_total': 2}
         self.assertEqual(expected_json, browser.json)
@@ -519,6 +531,9 @@ class TestParticipationsExpansion(IntegrationTestCase):
             u'items': [{u'@id': '{}/{}'.format(url, data.participant_id),
                         u'participant_id': data.participant_id,
                         u'participant_title': data.participant_title,
+                        u'participant_actor': {
+                            u'@id': u'http://nohost/plone/@actors/' + data.participant_id,
+                            u'identifier': data.participant_id},
                         u'roles': data.roles}],
             u'items_total': 1
             }
