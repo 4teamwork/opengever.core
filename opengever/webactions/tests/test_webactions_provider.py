@@ -88,6 +88,15 @@ class TestWebActionProvider(TestWebActionBase):
 
         self.assertDictEqual(expected_data, webactions)
 
+    def test_webaction_provider_returns_a_list_if_requesting_flat_structure(self):
+        self.login(self.regular_user)
+        provider = getMultiAdapter((self.dossier, self.request), IWebActionsProvider)
+
+        webactions = provider.get_webactions(flat=True)
+
+        self.assertEqual(['Action 1', 'Action 2', 'Action 3'],
+                         [action.get('title') for action in webactions])
+
     def test_webaction_provider_only_returns_enabled_actions(self):
         self.login(self.regular_user)
         provider = getMultiAdapter((self.dossier, self.request), IWebActionsProvider)

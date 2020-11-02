@@ -55,6 +55,20 @@
   <adapter factory=".todo.DeserializeToDoFromJson" />
   <adapter factory=".mail.DeserializeMailFromJson" />
 
+  <adapter
+      factory=".actions.GeverActions"
+      name="actions"
+      />
+
+  <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".actions.GeverActionsGet"
+      name="@actions"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
   <plone:service
       method="PATCH"
       for="opengever.document.document.IDocumentSchema"

@@ -63,11 +63,14 @@ class IWebActionsProvider(Interface):
     webactions for a given user on a given context.
     """
 
-    def get_webactions(self, display=None):
+    def get_webactions(self, display=None, flat=False):
         """Returns a dictionary of all available webactions per display location
         ('display' location as key and list of webactions for that location as
         values). If display is passed, only webactions for that display type are
         returned.
+
+        If flat is true, it will return a list of the available webactions
+        instead a dictionary.
         """
 
 

@@ -791,3 +791,84 @@ class TestObjectButtonsGetForTemplates(ObjectButtonsTestBase):
             expected_object_buttons,
             self.get_object_buttons(browser, self.normal_template),
         )
+
+
+class TestWebActionsIntegration(IntegrationTestCase):
+
+    @browsing
+    def test_integrate_webactions_in_its_own_action_category(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='/@actions',
+                     method='GET', headers=self.api_headers)
+        self.assertNotIn('webactions', browser.json)
+
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction').having(enabled=True))
+
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='/@actions',
+                     method='GET', headers=self.api_headers)
+        self.assertIn('webactions', browser.json)
+
+    @browsing
+    def test_integrate_webactions_on_expand(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='?expand=actions',
+                     method='GET', headers=self.api_headers)
+        actions = browser.json.get('@components').get('actions')
+        self.assertNotIn('webactions', actions)
+
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction').having(enabled=True))
+
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='?expand=actions',
+                     method='GET', headers=self.api_headers)
+        actions = browser.json.get('@components').get('actions')
+        self.assertIn('webactions', actions)
+
+    @browsing
+    def test_list_available_webactions(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction')
+               .having(
+                   title=u'Open in ExternalApp',
+                   enabled=True,
+            ))
+        create(Builder('webaction')
+               .having(
+                   title=u'Open in InternalApp',
+                   enabled=True,
+        ))
+        create(Builder('webaction')
+               .having(
+                   title=u'Open in BrokenApp',
+                   enabled=False,
+            ))
+
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='/@actions',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [u'Open in ExternalApp', u'Open in InternalApp'],
+            [action.get('title') for action in browser.json.get('webactions')])
+
+    @browsing
+    def test_webaction_serialization_in_actions_endpoint(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction'))
+
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='/@actions',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual([
+            {
+                u'action_id': 0,
+                u'display': u'actions-menu',
+                u'mode': u'self',
+                u'target_url': u'http://example.org/endpoint',
+                u'title': u'Open in ExternalApp'
+            }],
+            browser.json.get('webactions'))
