@@ -2,16 +2,14 @@
 
 Used via the @@manage-write-on-read-tracing view.
 """
-from collections import namedtuple
 from datetime import datetime
 from opengever.base.protect import OGProtectTransform
+from opengever.debug.stacktrace import format_instruction
+from opengever.debug.stacktrace import save_stacktrace
 from ZODB.Connection import Connection
 from ZODB.POSException import ConflictError
-from ZODB.utils import u64
-import inspect
 import logging
 import threading
-import traceback
 
 
 log = logging.getLogger('opengever.debug')
@@ -32,11 +30,6 @@ patches_expire_at = None
 # Locks to make writing to module globals thread-safe
 expires_lock = threading.RLock()
 tb_lock = threading.RLock()
-
-
-# Lightweight object to keep a formatted traceback and associated info around
-AnnotatedTraceback = namedtuple(
-    'AnnotatedTraceback', ['oid', 'filename', 'line_no', 'extracted_tb'])
 
 
 def build_csrf_report_with_tb(self, env):
@@ -63,7 +56,11 @@ def register_patched_to_trace(self, obj):
 
     orig_register_func(self, obj)
     try:
-        save_stacktrace(obj)
+        global tb_for_last_db_write
+        instruction = save_stacktrace(obj)
+        # Write the traceback to the module global (in a thread-safe way)
+        with tb_lock:
+            tb_for_last_db_write = instruction
     except ConflictError:
         raise
     except Exception, e:
@@ -75,49 +72,6 @@ def revert_patches_if_expired():
         log.info("WriteOnRead tracing patches have expired. Reverting...")
         unpatch_register()
         unpatch_build_csrf_report()
-
-
-def save_stacktrace(obj):
-    """Stores an `AnnotatedTraceback` object that contains a formatted stack
-    trace for the current frame and the OID of the object that has been
-    modified for possible logging at a later point in time.
-    """
-    global tb_for_last_db_write
-
-    tb_limit = 20
-    current_frame = inspect.currentframe()
-
-    # Outer two frames are in this module, so they're not interesting
-    frame = current_frame.f_back.f_back
-
-    filename = frame.f_code.co_filename
-    line_no = frame.f_lineno
-    extracted_tb = traceback.extract_stack(frame, limit=tb_limit)
-    oid = hex(u64(obj._p_oid))
-    instruction = AnnotatedTraceback(oid, filename, line_no, extracted_tb)
-
-    # Write the traceback to the module global (in a thread-safe way)
-    with tb_lock:
-        tb_for_last_db_write = instruction
-
-    # Avoid leaking frames
-    del current_frame
-    del frame
-
-
-def format_instruction(instruction):
-    """Render the information from an `AnnotatedTraceback` object (file name,
-    line number and formatted traceback) and an OID for display.
-    """
-    output = ['\n']
-    msg = 'DB write to obj with OID {oid} from code ' \
-          'in "{filename}", line {line_no}!'
-    msg = msg.format(**instruction._asdict())
-    output.append("=" * len(msg))
-    output.append(msg)
-    output.append("=" * len(msg))
-    output.append(''.join(traceback.format_list(instruction.extracted_tb)))
-    return '\n'.join(output)
 
 
 def patch_register():
