@@ -62,7 +62,7 @@ def get_dossier_templates(context):
     for template in templates:
         terms.append(SimpleVocabulary.createTerm(
             template,
-            Oguid.for_object(template),
+            template.UID(),
             template.title))
 
     return SimpleVocabulary(terms)

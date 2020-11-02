@@ -22,7 +22,7 @@ Zusätzlich können auch die anderen Felder des :ref:`label-dossier-schema`-Sche
        Accept: application/json
 
        {
-        "template": {"token": "fd:12345"},
+        "template": {"token": "1234567890"},
         "description": "Dossier description"
         "responsible": "rolf.ziegler",
         "title": "Dossier title"
