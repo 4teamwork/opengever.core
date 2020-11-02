@@ -307,6 +307,7 @@ class ListingGet(SolrQueryBaseService):
             additional_params["facet"] = "true"
             additional_params["facet.mincount"] = 1
             additional_params["facet.field"] = facet_fields
+            additional_params['facet.limit'] = -1
         return additional_params
 
     @with_active_solr_only
