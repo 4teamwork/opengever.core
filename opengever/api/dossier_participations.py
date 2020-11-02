@@ -2,7 +2,6 @@ from contextlib import contextmanager
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
-from opengever.contact.sources import ContactsSource
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.participations import DupplicateParticipation
@@ -10,7 +9,6 @@ from opengever.dossier.participations import InvalidParticipantId
 from opengever.dossier.participations import InvalidRole
 from opengever.dossier.participations import IParticipationData
 from opengever.dossier.participations import MissingParticipation
-from opengever.ogds.base.sources import UsersContactsInboxesSource
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
