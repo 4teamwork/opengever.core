@@ -34,6 +34,8 @@ from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
+from opengever.debug import debug_modified_out_of_sync_env_var_is_set
+from opengever.debug.patches.modified_out_of_sync import PatchConnectionRegister
 from opengever.readonly import readonly_env_var_is_set
 
 
@@ -77,3 +79,8 @@ if readonly_env_var_is_set():
     PatchCheckPermission()()
     PatchPloneUserAllowed()()
     PatchPloneUserGetRolesInContext()()
+
+# This patch helps debugging an issue where modified of objects is out of date
+# with modified in the catalog.
+if debug_modified_out_of_sync_env_var_is_set():
+    PatchConnectionRegister()()
