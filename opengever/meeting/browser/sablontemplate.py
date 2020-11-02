@@ -21,10 +21,10 @@ SAMPLE_MEETING_DATA = {
             "title": u'Beweisaufn\xe4hme',
             "filename": u"Beweisaufnaehme.txt"
             }, {
+            "title": "Strafbefehl"
+            }, {
             "title": u"L\xf6rem",
             "filename": u"Loerem.eml"
-            }, {
-            "title": "Strafbefehl"
             }]
     }, {
         'description': u'R\xfccktritt Grund',

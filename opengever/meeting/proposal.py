@@ -382,7 +382,7 @@ class SubmittedProposal(ModelContainer, ProposalBase):
         documents = catalog(
             portal_type=['opengever.document.document', 'ftw.mail.mail'],
             path=dict(query='/'.join(self.getPhysicalPath())),
-            sort_on='sortable_title'
+            sort_on='getObjPositionInParent'
             )
 
         ignored_documents = [self.get_excerpt()]
@@ -522,10 +522,7 @@ class Proposal(Container, ProposalBase):
         return api.user.has_permission('opengever.meeting: Add Proposal Comment', obj=self)
 
     def get_documents(self):
-        return sorted(
-            [relation.to_object for relation in self.relatedItems],
-            key=lambda document: document.title_or_id(),
-            )
+        return [relation.to_object for relation in self.relatedItems]
 
     def get_excerpt(self):
         return self.load_model().resolve_excerpt_document()
