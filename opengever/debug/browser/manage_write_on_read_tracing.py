@@ -56,16 +56,14 @@ class ManageWriteOnReadTracing(BrowserView):
         with write_on_read_tracing.expires_lock:
             write_on_read_tracing.patches_expire_at = datetime.now() + timedelta(minutes=timeout)
 
-        write_on_read_tracing.patch_register()
-        write_on_read_tracing.patch_build_csrf_report()
+        write_on_read_tracing.patch()
         msg = u'WriteOnRead tracing has been activated!'
         IStatusMessage(self.request).addStatusMessage(msg, 'warning')
         log.info(msg)
 
     def _deactivate_write_on_read_tracing(self):
         log.info("Deactivating WriteOnRead tracing...")
-        write_on_read_tracing.unpatch_register()
-        write_on_read_tracing.unpatch_build_csrf_report()
+        write_on_read_tracing.unpatch()
         msg = u'WriteOnRead tracing has been deactivated!'
         IStatusMessage(self.request).addStatusMessage(msg, 'info')
         log.info(msg)
@@ -76,14 +74,14 @@ class ManageWriteOnReadTracing(BrowserView):
         return write_on_read_tracing.DEFAULT_PATCH_TIMEOUT
 
     def patching_status(self):
-        for name, func, orig_func in (
+        for name, func, patch_func in (
             ('ZODB.Connection.Connection.register',
-             Connection.register,
-             write_on_read_tracing.orig_register_func),
+             Connection.register.__func__,  # make sure to compare functions
+             write_on_read_tracing.register_patched_to_trace),
             ('opengever.base.protect.OGProtectTransform._build_csrf_report',
-             OGProtectTransform._build_csrf_report,
-             write_on_read_tracing.orig_build_csrf_report_func)):
-            patched, patched_name = write_on_read_tracing.is_func_patched(func, orig_func)
+             OGProtectTransform._build_csrf_report.__func__,   # make sure to compare functions
+             write_on_read_tracing.build_csrf_report_with_tb)):
+            patched, patched_name = write_on_read_tracing.is_func_patched(func, patch_func)
             yield dict(name=name, patched_name=patched_name, patched=patched)
 
     def is_patched(self):
