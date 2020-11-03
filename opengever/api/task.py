@@ -1,3 +1,4 @@
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
@@ -136,9 +137,13 @@ class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
     def add_additional_metadata(self, data):
         data.update({
             '@id': self.context.absolute_url(),
+            # XXX deprecated
             'issuer_fullname': display_name(self.context.issuer),
+            'issuer_actor': serialize_actor_id_to_json_summary(self.context.issuer),
             'oguid': str(self.context.oguid),
+            # XXX deprecated
             'responsible_fullname': display_name(self.context.responsible),
+            'responsible_actor': serialize_actor_id_to_json_summary(self.context.responsible),
             'task_type': task_type_helper(self.context.task_type),
         })
 

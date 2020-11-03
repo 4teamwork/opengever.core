@@ -1,6 +1,8 @@
 from ftw.mail.interfaces import IEmailAddress
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_main_dossier
 from plone.restapi.interfaces import IExpandableElement
@@ -19,8 +21,12 @@ class SerializeDossierToJson(GeverSerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeDossierToJson, self).__call__(*args, **kwargs)
 
+        # XXX deprecated
         result[u"responsible_fullname"] = self.context.get_responsible_actor(
             ).get_label(with_principal=False)
+
+        result[u'responsible_actor'] = serialize_actor_id_to_json_summary(
+            IDossier(self.context).responsible)
         result[u'reference_number'] = self.context.get_reference_number()
         result[u'email'] = IEmailAddress(self.request).get_email_for_object(
             self.context)

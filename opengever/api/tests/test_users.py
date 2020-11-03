@@ -1,6 +1,5 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-from zExceptions import Unauthorized
 
 
 class TestUsersGet(IntegrationTestCase):

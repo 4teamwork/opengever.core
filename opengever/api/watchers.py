@@ -3,6 +3,7 @@ from opengever.activity import notification_center
 from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.sources import PossibleWatchersSource
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.ogds.base.actor import ActorLookup
 from opengever.task.task import ITask
@@ -47,6 +48,7 @@ class Watchers(object):
 
         portal_url = api.portal.get().absolute_url()
         referenced_users = []
+        referenced_actors = []
         for actor_id in watchers_and_roles:
             actor = ActorLookup(actor_id).lookup()
             referenced_users.append(
@@ -55,6 +57,7 @@ class Watchers(object):
                     'id': actor_id,
                     'fullname': actor.get_label(with_principal=False)
                 })
+            referenced_actors.append(serialize_actor_id_to_json_summary(actor_id))
 
         referenced_watcher_roles = [
             {
@@ -65,7 +68,9 @@ class Watchers(object):
 
         result['watchers']['watchers_and_roles'] = watchers_and_roles
         result['watchers']['referenced_watcher_roles'] = referenced_watcher_roles
+        # XXX deprecated
         result['watchers']['referenced_users'] = referenced_users
+        result['watchers']['referenced_actors'] = referenced_actors
         return result
 
 

@@ -13,6 +13,7 @@ Changelog
 - Use UID instead of intId as token in DossierTemplatesVocabulary. [tinagerber, elioschmutz]
 - `@@task_report`-view supports task lookup by the ressource-id through the `tasks` parameter. [elioschmutz]
 - Ensure `document_author` and `SearchableText` indices are dropped from catalog. [deiferni]
+- Add @actors endpoint allowing retrieve the data for actor IDs. [njohner]
 - Extend @config endpoint with application type. [tinagerber]
 - Journalize creation of linked workspace and copying documents to and from it. [njohner]
 - Disable write actions during readonly mode. [lgraf]

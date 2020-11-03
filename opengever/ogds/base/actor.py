@@ -27,10 +27,12 @@ from opengever.base.utils import escape_html
 from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
-from opengever.ogds.base.utils import groupmembers_url
+from opengever.ogds.base.interfaces import IActor
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.team import Team
+from plone import api
 from plone.dexterity.utils import safe_unicode
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
@@ -38,11 +40,13 @@ from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import implementer
 
 
 SYSTEM_ACTOR_ID = '__system__'
 
 
+@implementer(IActor)
 class Actor(object):
 
     css_class = 'actor-user'
@@ -129,17 +133,16 @@ class Actor(object):
         raise NotImplementedError()
 
     def represents(self):
-        """Returns the object this actor is representing.
-        """
         raise NotImplementedError()
 
     def representatives(self):
-        """Returns a list of users which are representative for the current
-        actor. Used for example when notifying an actor.
-        """
+        raise NotImplementedError()
+
+    def get_portrait_url(self):
         raise NotImplementedError()
 
 
+@implementer(IActor)
 class NullActor(object):
 
     actor_type = 'null'
@@ -165,7 +168,11 @@ class NullActor(object):
     def representatives(self):
         return []
 
+    def get_portrait_url(self):
+        return None
 
+
+@implementer(IActor)
 class SystemActor(object):
     """Used for system notifications, using the internal SYSTEM_ACTOR_ID.
     """
@@ -196,7 +203,11 @@ class SystemActor(object):
     def representatives(self):
         return []
 
+    def get_portrait_url(self):
+        return None
 
+
+@implementer(IActor)
 class InboxActor(Actor):
 
     css_class = 'actor-inbox'
@@ -232,7 +243,11 @@ class InboxActor(Actor):
     def represents(self):
         return self.org_unit
 
+    def get_portrait_url(self):
+        return None
 
+
+@implementer(IActor)
 class TeamActor(Actor):
 
     css_class = 'actor-team'
@@ -262,7 +277,11 @@ class TeamActor(Actor):
     def represents(self):
         return self.team
 
+    def get_portrait_url(self):
+        return None
 
+
+@implementer(IActor)
 class CommitteeActor(Actor):
 
     css_class = 'actor-committee'
@@ -289,7 +308,11 @@ class CommitteeActor(Actor):
     def represents(self):
         return self.committee
 
+    def get_portrait_url(self):
+        return None
 
+
+@implementer(IActor)
 class ContactActor(Actor):
 
     css_class = 'actor-contact'
@@ -323,7 +346,11 @@ class ContactActor(Actor):
     def represents(self):
         return self.contact
 
+    def get_portrait_url(self):
+        return None
 
+
+@implementer(IActor)
 class PloneUserActor(Actor):
 
     def __init__(self, identifier, user=None):
@@ -352,7 +379,13 @@ class PloneUserActor(Actor):
     def represents(self):
         return self.user
 
+    def get_portrait_url(self):
+        portrait = self.user.getPersonalPortrait()
+        if portrait:
+            return portrait.absolute_url()
 
+
+@implementer(IActor)
 class OGDSUserActor(Actor):
 
     def __init__(self, identifier, user=None):
@@ -378,7 +411,15 @@ class OGDSUserActor(Actor):
     def represents(self):
         return self.user
 
+    def get_portrait_url(self):
+        mtool = api.portal.get_tool('portal_membership')
+        member = mtool.getMemberById(self.user.userid)
+        portrait = member.getPersonalPortrait()
+        if portrait:
+            return portrait.absolute_url()
 
+
+@implementer(IActor)
 class OGDSGroupActor(Actor):
 
     actor_type = 'group'
@@ -405,6 +446,9 @@ class OGDSGroupActor(Actor):
 
     def represents(self):
         return self.group
+
+    def get_portrait_url(self):
+        return None
 
 
 class ActorLookup(object):

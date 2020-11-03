@@ -1,8 +1,8 @@
 from contextlib import contextmanager
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.contact import is_contact_feature_enabled
-from opengever.contact.sources import ContactsSource
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.participations import DupplicateParticipation
@@ -10,7 +10,6 @@ from opengever.dossier.participations import InvalidParticipantId
 from opengever.dossier.participations import InvalidRole
 from opengever.dossier.participations import IParticipationData
 from opengever.dossier.participations import MissingParticipation
-from opengever.ogds.base.sources import UsersContactsInboxesSource
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
@@ -63,6 +62,8 @@ class Participations(object):
                     self.context.absolute_url(), data.participant_id),
                 "participant_id": data.participant_id,
                 "participant_title": data.participant_title,
+                "participant_actor": serialize_actor_id_to_json_summary(
+                    data.participant_id),
                 "roles": data.roles})
 
         result["participations"]["available_roles"] = available_roles(self.context)

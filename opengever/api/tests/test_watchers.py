@@ -36,6 +36,16 @@ class TestWatchersGet(SolrIntegrationTestCase):
                     u'id': u'robert.ziegler'
                 }
             ],
+            u'referenced_actors': [
+                {
+                    u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
+                    u'identifier': u'kathi.barfuss'
+                },
+                {
+                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                    u'identifier': u'robert.ziegler'
+                }
+            ],
             u'referenced_watcher_roles': [
                 {
                     u'id': u'task_issuer',
@@ -56,7 +66,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
             }
         }
 
-        self.assertEqual(expected_json, browser.json)
+        self.assertDictEqual(expected_json, browser.json)
 
         browser.open(self.task, method='GET', headers=self.api_headers)
 
@@ -90,6 +100,16 @@ class TestWatchersGet(SolrIntegrationTestCase):
                     u'id': u'robert.ziegler'
                 }
             ],
+            u'referenced_actors': [
+                {
+                    u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
+                    u'identifier': u'kathi.barfuss'
+                },
+                {
+                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                    u'identifier': u'robert.ziegler'
+                }
+            ],
             u'referenced_watcher_roles': [
                 {
                     u'id': u'task_issuer',
@@ -110,7 +130,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
             }
         }
 
-        self.assertEqual(expected_json, browser.json)
+        self.assertDictEqual(expected_json, browser.json)
 
         browser.open(self.inbox_forwarding, method='GET', headers=self.api_headers)
 
@@ -141,6 +161,12 @@ class TestWatchersGet(SolrIntegrationTestCase):
                     u'@id': u'http://nohost/plone/@users/team:1',
                     u'fullname': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                     u'id': u'team:1'
+                },
+            ],
+            u'referenced_actors': [
+                {
+                    u'@id': u'http://nohost/plone/@actors/team:1',
+                    u'identifier': u'team:1'
                 },
             ],
             u'referenced_watcher_roles': [
@@ -182,6 +208,12 @@ class TestWatchersGet(SolrIntegrationTestCase):
                     u'@id': u'http://nohost/plone/@users/inbox:fa',
                     u'fullname': u'Inbox: Finanz\xe4mt',
                     u'id': u'inbox:fa'
+                },
+            ],
+            u'referenced_actors': [
+                {
+                    u'@id': u'http://nohost/plone/@actors/inbox:fa',
+                    u'identifier': u'inbox:fa'
                 },
             ],
             u'referenced_watcher_roles': [

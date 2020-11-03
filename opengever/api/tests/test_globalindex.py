@@ -26,12 +26,18 @@ class TestGlobalIndexGet(IntegrationTestCase):
              u'is_subtask': False,
              u'issuer': u'robert.ziegler',
              u'issuer_fullname': u'Ziegler Robert',
+             u'issuer_actor': {
+                u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                u'identifier': u'robert.ziegler'},
              u'issuing_org_unit': u'fa',
              u'modified': u'2016-08-31T18:27:33',
              u'oguid': str(Oguid.for_object(self.inbox_task)),
              u'predecessor_id': None,
              u'responsible': u'inbox:fa',
              u'responsible_fullname': u'Inbox: Finanz\xe4mt',
+             u'responsible_actor': {
+                 u'@id': u'http://nohost/plone/@actors/inbox:fa',
+                 u'identifier': u'inbox:fa'},
              u'review_state': u'task-state-in-progress',
              u'task_id': 14,
              u'task_type': u'For direct execution',

@@ -30,7 +30,6 @@ from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import clearafter
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
-from plone.restapi.interfaces import ISerializeToJsonSummary
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import normalizeString
@@ -38,7 +37,6 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
 import json
@@ -229,24 +227,18 @@ class OpengeverSharingView(SharingView):
         inactive groups (groups that were deleted from the LDAP) as users.
         Instead we check using the ogds service.
         """
-        ogds_summary = None
         url = None
         service = ogds_service()
         group = service.fetch_group(item['id'])
         user = service.fetch_user(item['id'])
         if group:
-            serializer = queryMultiAdapter((group, self.request), ISerializeToJsonSummary)
-            ogds_summary = serializer()
             url = '{}/@@list_groupmembers?{}'.format(
                 api.portal.get().absolute_url(),
                 urlencode({'group': item['id']}))
         elif user:
-            serializer = queryMultiAdapter((user, self.request), ISerializeToJsonSummary)
-            ogds_summary = serializer()
             url = '{}/@@user-details-plain/{}'.format(
                 api.portal.get().absolute_url(), item['id'])
 
-        item['ogds_summary'] = ogds_summary
         item['url'] = url
 
     def extend_with_assignment_infos(self, item, manager):

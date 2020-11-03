@@ -1,8 +1,11 @@
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.ogds.models.service import ogds_service
 from opengever.sharing.browser.sharing import ROLES_ORDER
 from opengever.sharing.security import disabled_permission_check
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services.content.sharing import SharingGet as APISharingGet
 from zExceptions import BadRequest
 from zope.component import queryMultiAdapter
@@ -39,12 +42,34 @@ class SharingGet(APISharingGet):
         else:
             data = serializer(search=self.request.form.get('search'))
 
+        for item in data.get('entries', []):
+            self.extend_item_with_ogds_summary(item)
+            self.extend_item_with_actor(item)
+
         # sort available roles
         data['available_roles'].sort(
             lambda a, b: cmp(ROLES_ORDER.index(a['id']),
                              ROLES_ORDER.index(b['id'])))
 
         return data
+
+    def extend_item_with_actor(self, item):
+        item['actor'] = serialize_actor_id_to_json_summary(item['id'])
+
+    def extend_item_with_ogds_summary(self, item):
+        ogds_summary = None
+
+        service = ogds_service()
+        group = service.fetch_group(item['id'])
+        user = service.fetch_user(item['id'])
+        if group:
+            serializer = queryMultiAdapter((group, self.request), ISerializeToJsonSummary)
+            ogds_summary = serializer()
+        elif user:
+            serializer = queryMultiAdapter((user, self.request), ISerializeToJsonSummary)
+            ogds_summary = serializer()
+
+        item['ogds_summary'] = ogds_summary
 
 
 class RoleAssignmentsGet(APISharingGet):
