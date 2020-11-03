@@ -8,7 +8,7 @@ from opengever.private import get_private_folder_url
 from plone.restapi.services import Service
 
 
-class Config(Service):
+class ConfigGet(Service):
     """GEVER configuration"""
 
     def reply(self):
