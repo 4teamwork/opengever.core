@@ -1,7 +1,0 @@
-<object>
-
-  <order manager="plone.portalheader" skinname="*">
-    <viewlet name="opengever.base.favorites-menu" insert-after="opengever.activity.notification" />
-  </order>
-
-</object>

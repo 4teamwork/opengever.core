@@ -1,9 +1,0 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.projectdossier" meta_type="Dexterity FTI" i18n:domain="opengever.core">
-
-  <action
-      action_id="add_tasktemplate"
-      title="Add task from template"
-      i18n:domain="opengever.core">
-  </action>
-
-</object>

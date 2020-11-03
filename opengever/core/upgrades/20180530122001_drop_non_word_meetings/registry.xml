@@ -1,3 +1,0 @@
-<registry>
-    <record name="opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled" remove="True" />
-</registry>

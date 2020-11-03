@@ -1,9 +1,0 @@
-<rolemap>
-  <roles>
-    <role name="CommitteeAdministrator" />
-    <role name="CommitteeResponsible" />
-    <role name="MeetingUser" />
-  </roles>
-  <permissions>
-  </permissions>
-</rolemap>
