@@ -25,6 +25,8 @@ from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSetting
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.private import enable_opengever_private
+from opengever.testing.docker import MSGCONVERT_SERVICE_FIXTURE
+from opengever.testing.docker import PDFLATEX_SERVICE_FIXTURE
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -665,3 +667,11 @@ OPENGEVER_SOLR_INTEGRATION_TESTING = GEVERIntegrationTesting(
     # See docstring of ContentFixtureLayer.
     bases=(ContentFixtureWithSolrLayer(), TRAVERSAL_BROWSER_FIXTURE),
     name="opengever.core:integration:solr")
+
+PDFLATEX_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
+    bases=(PDFLATEX_SERVICE_FIXTURE, OPENGEVER_FIXTURE),
+    name="opengever.core:pdflatex-service-integration")
+
+MSGCONVERT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
+    bases=(MSGCONVERT_SERVICE_FIXTURE, OPENGEVER_FIXTURE),
+    name="opengever.core:msgconvert-service-integration")
