@@ -1,5 +1,0 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.tasktemplates.tasktemplatefolder" meta_type="Dexterity FTI" i18n:domain="opengever.core">
-
-  <property name="klass">opengever.tasktemplates.tasktemplatefolder.TaskTemplateFolder</property>
-
-</object>

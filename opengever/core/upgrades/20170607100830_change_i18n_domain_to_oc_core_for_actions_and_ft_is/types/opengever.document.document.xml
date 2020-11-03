@@ -1,8 +1,0 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.document.document" meta_type="Dexterity FTI" i18n:domain="opengever.core">
-
-  <action
-      i18n:domain="opengever.core"
-      title="Sharing"
-      action_id="sharing" />
-
-</object>

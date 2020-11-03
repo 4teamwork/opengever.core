@@ -4,6 +4,7 @@ Changelog
 2020.13.0 (unreleased)
 ----------------------
 
+- Delete old upgrade steps up to and including 2018.5.7. [njohner]
 - Agenda-item attachments are now ordered based on the position in the relationField. [elioschmutz]
 - Remove the limit for facets returned in the listing API endpoint. [Kevin Bieri]
 - `@actions` endpoint also returns available webactions. [elioschmutz]

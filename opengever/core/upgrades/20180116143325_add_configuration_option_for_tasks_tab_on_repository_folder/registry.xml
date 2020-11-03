@@ -1,4 +1,0 @@
-<registry>
-  <record interface="opengever.repository.interfaces.IRepositoryFolderRecords"
-          field="show_tasks_tab" />
-</registry>

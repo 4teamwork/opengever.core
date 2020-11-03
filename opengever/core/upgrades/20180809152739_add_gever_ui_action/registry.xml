@@ -1,4 +1,0 @@
-<registry>
-  <!-- Gever-UI -->
-  <records interface="opengever.base.interfaces.IGeverUI" />
-</registry>

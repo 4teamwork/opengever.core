@@ -1,7 +1,0 @@
-<registry>
-
-  <records interface="ftw.solr.interfaces.ISolrSettings">
-    <value key="simple_search_term_pattern">Title:{term}^100 OR Title:{term}*^10 OR SearchableText:{term}^10 OR SearchableText:{term}* OR sequence_number_string:{term}^2000</value>
-  </records>
-
-</registry>

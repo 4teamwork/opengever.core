@@ -1,7 +1,0 @@
-<rolemap>
-  <permissions>
-    <permission name="opengever.workspace: Add Workspace" acquire="True">
-      <role name="Manager" />
-    </permission>
-  </permissions>
-</rolemap>

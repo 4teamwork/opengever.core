@@ -1,7 +1,0 @@
-<registry>
-
-  <records interface="opengever.base.interfaces.IFavoritesSettings">
-    <value key="is_feature_enabled">True</value>
-  </records>
-
-</registry>

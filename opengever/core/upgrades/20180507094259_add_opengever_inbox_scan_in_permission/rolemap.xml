@@ -1,7 +1,0 @@
-<rolemap>
-  <permissions>
-    <permission name="opengever.inbox: Scan In" acquire="True">
-      <role name="Manager" />
-    </permission>
-  </permissions>
-</rolemap>

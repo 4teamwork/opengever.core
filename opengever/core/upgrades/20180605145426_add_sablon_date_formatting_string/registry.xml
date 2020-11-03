@@ -1,5 +1,0 @@
-<registry>
-  <!-- MEETING -->
-  <record interface="opengever.meeting.interfaces.IMeetingSettings" purge="False" field="sablon_date_format_string">
-  </record>
-</registry>

@@ -1,4 +1,0 @@
-<registry>
-  <record interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings"
-          field="is_auto_refresh_enabled" />
-</registry>

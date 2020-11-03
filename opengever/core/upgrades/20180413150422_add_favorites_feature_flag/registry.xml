@@ -1,5 +1,0 @@
-<registry>
-
-  <records interface="opengever.base.interfaces.IFavoritesSettings" />
-
-</registry>

@@ -1,8 +1,0 @@
-<object name="portal_javascripts" meta_type="JavaScripts Registry">
-
-  <javascript
-      id="++resource++quickupload_static/swfobject.js"
-      enabled="False"
-      />
-
-</object>

@@ -1,9 +1,0 @@
-<registry>
-
-  <records interface="ftw.zipexport.interfaces.IZipExportSettings">
-    <value key="enabled_dotted_names" purge="False">
-      <element>opengever.dossier.templatefolder.interfaces.ITemplateFolder</element>
-    </value>
-  </records>
-
-</registry>
