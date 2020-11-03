@@ -54,6 +54,18 @@ class ISIPTransport(Interface):
         """
 
 
+class IDispositionSettings(Interface):
+
+    disregard_retention_period = schema.Bool(
+        title=u'Disregard retention period',
+        description=u'Whether it is only allowed to select expired dossiers '
+                    'for a disposition. If set to False only expired dossiers '
+                    'will be allowed, if set to True non-expired dossiers '
+                    'are allowed as well, disregarding their retention '
+                    'period.',
+        default=False)
+
+
 class IFilesystemTransportSettings(Interface):
 
     enabled = schema.Bool(

@@ -8,6 +8,7 @@ Changelog
 - Add support for using the sablon service instead of a locally installed sablon. [buchi]
 - Add support for using the pdflatex service instead of a locally installed pdflatex. [buchi]
 - Add GEVER_COLORIZATION to the configuration endpoint. [2e12]
+- Add flag to disregard retention period when creating a disposition. [deiferni]
 
 
 2020.13.0 (2020-11-05)

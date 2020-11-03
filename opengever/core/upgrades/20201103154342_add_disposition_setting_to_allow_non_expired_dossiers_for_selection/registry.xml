@@ -1,0 +1,4 @@
+<registry>
+  <record interface="opengever.disposition.interfaces.IDispositionSettings"
+          field="disregard_retention_period" />
+</registry>

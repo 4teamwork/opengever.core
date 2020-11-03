@@ -115,7 +115,7 @@ class TestDisposition(IntegrationTestCase):
                           browser.css('.fieldErrorBox .error').text)
 
     @browsing
-    def test_only_expired_dossiers_can_be_added(self, browser):
+    def test_only_expired_dossiers_can_be_added_by_default(self, browser):
         self.login(self.records_manager, browser)
 
         data = {'paths:list': obj2paths([self.expired_dossier]),
@@ -136,6 +136,25 @@ class TestDisposition(IntegrationTestCase):
                 browser.css('.fieldErrorBox .error').text)
 
         with freeze(datetime(2021, 1, 1)):
+            browser.open(self.repository_root,
+                         view='++add++opengever.disposition.disposition',
+                         data=data)
+
+            browser.find('Save').click()
+
+            self.assertEquals([], error_messages())
+            self.assertEquals(['Item created'], info_messages())
+
+    @browsing
+    def test_non_expired_dossiers_can_be_added_with_disregard_retention_period(self, browser):
+        self.login(self.records_manager, browser)
+        self.activate_feature('disposition-disregard-retention-period')
+
+        data = {'paths:list': obj2paths([self.expired_dossier]),
+                '_authenticator': createToken()}
+
+        with freeze(datetime(2001, 1, 1)):
+            self.assertFalse(self.expired_dossier.is_retention_period_expired())
             browser.open(self.repository_root,
                          view='++add++opengever.disposition.disposition',
                          data=data)
