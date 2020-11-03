@@ -163,7 +163,7 @@ class NullActor(object):
         return self.identifier or u''
 
     def represents(self):
-        raise None
+        return None
 
     def representatives(self):
         return []
@@ -198,7 +198,7 @@ class SystemActor(object):
         return u''
 
     def represents(self):
-        raise None
+        return None
 
     def representatives(self):
         return []
