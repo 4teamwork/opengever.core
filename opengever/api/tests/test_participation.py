@@ -174,6 +174,32 @@ class TestParticipationGet(IntegrationTestCase):
             'The admin should not be able to manage himself')
 
     @browsing
+    def test_manages_invalid_participant(self, browser):
+        self.login(self.manager, browser)
+
+        self.workspace.__ac_local_roles__ = {'invalid_participant': ['WorkspaceAdmin']}
+
+        response = browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertItemsEqual(
+            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/invalid_participant',
+              u'@type': u'virtual.participations.null',
+              u'is_editable': True,
+              u'participant': {u'@id': None,
+                               u'@type': None,
+                               u'active': None,
+                               u'email': None,
+                               u'id': u'invalid_participant',
+                               u'is_local': None,
+                               u'title': u'invalid_participant'},
+              u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}}],
+            response.get('items'))
+
+    @browsing
     def test_current_logged_in_admin_cannot_edit_himself(self, browser):
         self.login(self.workspace_admin, browser)
 

@@ -46,9 +46,13 @@ class ParticipationTraverseService(Service):
         # a properly implemented actor serializer.
         #
         # This will be tracked in https://4teamwork.atlassian.net/browse/CA-406
-        serialized_actor = getMultiAdapter(
-            (actor.represents(), self.request),
-            interface=ISerializeToJsonSummary)()
+        represented_obj = actor.represents()
+        if represented_obj:
+            serialized_actor = getMultiAdapter(
+                (represented_obj, self.request),
+                interface=ISerializeToJsonSummary)()
+        else:
+            serialized_actor = {}
 
         return {
             '@id': '{}/@participations/{}'.format(managing_context.absolute_url(), actor.identifier),
