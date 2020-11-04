@@ -25,18 +25,20 @@ class WebActionsSafeDataGetter(object):
         self.request = request
         self.display = display
 
-    def get_webactions_data(self):
+    def get_webactions_data(self, flat=False):
         provider = queryMultiAdapter((self.context, self.request),
                                      IWebActionsProvider)
         if provider is None:
-            return dict()
+            return list() if flat else dict()
 
-        webactions_dict = provider.get_webactions(self.display)
-        return self._pre_formatting(webactions_dict)
+        webactions = provider.get_webactions(self.display, flat)
+        return self._pre_formatting(webactions)
 
-    def _pre_formatting(self, webactions_dict):
+    def _pre_formatting(self, webactions):
+        if isinstance(webactions, list):
+            return map(self._prepare_webaction_data, webactions)
         return dict((display, map(self._prepare_webaction_data, webactions))
-                    for display, webactions in webactions_dict.items())
+                    for display, webactions in webactions.items())
 
     def _prepare_webaction_data(self, action):
         data = {key: value if key in self._attributes_not_to_escape else escape_html(value)

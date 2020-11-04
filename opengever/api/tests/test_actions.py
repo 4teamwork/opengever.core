@@ -857,7 +857,8 @@ class TestWebActionsIntegration(IntegrationTestCase):
     @browsing
     def test_webaction_serialization_in_actions_endpoint(self, browser):
         self.login(self.webaction_manager, browser=browser)
-        create(Builder('webaction'))
+        create(Builder('webaction').having(
+            target_url='http://localhost/foo?location={path}'))
 
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='/@actions',
@@ -868,7 +869,9 @@ class TestWebActionsIntegration(IntegrationTestCase):
                 u'action_id': 0,
                 u'display': u'actions-menu',
                 u'mode': u'self',
-                u'target_url': u'http://example.org/endpoint',
+                u'icon_data': None,
+                u'icon_name': None,
+                u'target_url': u'http://localhost/foo?location=%2Fplone%2Fordnungssystem%2Ffuhrung%2Fvertrage-und-vereinbarungen%2Fdossier-1&context=http%3A%2F%2Fnohost%2Fplone%2Fordnungssystem%2Ffuhrung%2Fvertrage-und-vereinbarungen%2Fdossier-1&orgunit=fa',
                 u'title': u'Open in ExternalApp'
             }],
             browser.json.get('webactions'))
