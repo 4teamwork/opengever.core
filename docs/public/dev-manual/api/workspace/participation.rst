@@ -14,6 +14,8 @@ Es gibt folgende Beteiligungsrollen:
 - WorkspaceMember
 - WorkspaceGuest
 
+Diese Endpoints liefern zur Zeit sowohl ``participant`` als auch ``participant_actor`` zurück. ``participant`` wird in einer späteren Version jedoch nicht mehr unterstützt werden, und wird durch ``participant_actor`` abgelöst.
+
 
 Beteiligungen abrufen:
 ----------------------
@@ -44,6 +46,10 @@ Ein GET Request gibt die Beteiligungen sowie die aktiven Einladungen eines Inhal
             "title": "Admin",
             "token": "WorkspaceAdmin"
           },
+          "participant_actor": {
+            "@id": "http://localhost:8081/fd/@actors/max.muster",
+            "identifier": "max.muster",
+          },
           "participant": {
             "@id": "http://localhost:8081/fd/@ogds-users/max.muster",
             "@type": "virtual.ogds.user",
@@ -58,6 +64,10 @@ Ein GET Request gibt die Beteiligungen sowie die aktiven Einladungen eines Inhal
           "@id": "http://localhost:8081/fd/workspaces/workspace-41/@participations/afi_benutzer",
           "@type": "virtual.participations.group",
           "is_editable": true,
+          "participant_actor": {
+            "@id": "http://localhost:8081/fd/@actors/afi_benutzer",
+            "identifier": "afi_benutzer",
+          },
           "participant": {
             "@id": "http://localhost:8081/fd/@ogds-groups/afi_benutzer",
             "@type": "virtual.ogds.group",
@@ -102,6 +112,10 @@ Ein GET Request auf die jeweilige Resource gibt die Beteiligungen oder die Einla
       "role": {
         "title": "Admin",
         "token": "WorkspaceAdmin"
+      },
+      "participant_actor": {
+        "@id": "http://localhost:8081/fd/@actors/max.muster",
+        "identifier": "max.muster",
       },
       "participant": {
         "@id": "http://localhost:8081/fd/@ogds-users/max.muster",
@@ -148,7 +162,7 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
 
        {
          "participant": "maria.meier",
-         "role": "WorkspaceMember"
+         "role": "WorkspaceAdmin"
        }
 
 **Beispiel-Response**:
@@ -166,13 +180,17 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
         "title": "Admin",
         "token": "WorkspaceAdmin"
       },
+      "participant_actor": {
+        "@id": "http://localhost:8081/fd/@actors/maria.meier",
+        "identifier": "maria.meier",
+      },
       "participant": {
-        "@id": "http://localhost:8081/fd/@ogds-users/max.muster",
+        "@id": "http://localhost:8081/fd/@ogds-users/maria.meier",
         "@type": "virtual.ogds.user",
         "active": true,
-        "email": "max.muster@example.com",
-        "title": "Max Muster (max.muster)",
-        "id": "max.muster",
+        "email": "maria.meier@example.com",
+        "title": "Maria Meier (maria.meier)",
+        "id": "maria.meier",
         "is_local": null
     }
 

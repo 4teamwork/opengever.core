@@ -65,6 +65,9 @@ class TestParticipationGet(IntegrationTestCase):
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
+              u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/beatrice.schrodinger',
+                  u'identifier': u'beatrice.schrodinger'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/beatrice.schrodinger',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
@@ -76,6 +79,9 @@ class TestParticipationGet(IntegrationTestCase):
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
+              u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                  u'identifier': u'fridolin.hugentobler'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
@@ -87,6 +93,9 @@ class TestParticipationGet(IntegrationTestCase):
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
               u'@type': u'virtual.participations.user',
               u'is_editable': False,
+              u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/gunther.frohlich',
+                  u'identifier': u'gunther.frohlich'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/gunther.frohlich',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
@@ -98,6 +107,9 @@ class TestParticipationGet(IntegrationTestCase):
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
+              u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/hans.peter',
+                  u'identifier': u'hans.peter'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
@@ -109,6 +121,9 @@ class TestParticipationGet(IntegrationTestCase):
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/projekt_a',
               u'@type': u'virtual.participations.group',
               u'is_editable': True,
+              u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/projekt_a',
+                  u'identifier': u'projekt_a'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
                                u'@type': u'virtual.ogds.group',
                                u'active': True,
@@ -117,7 +132,7 @@ class TestParticipationGet(IntegrationTestCase):
                                u'is_local': False,
                                u'title': u'Projekt A'},
               u'role': {u'title': u'Member', u'token': u'WorkspaceMember'}}],
-             response.get('items'))
+            response.get('items'))
 
     @browsing
     def test_list_all_current_participants_in_folder_lists_participants_of_the_workspace(self, browser):
@@ -189,6 +204,9 @@ class TestParticipationGet(IntegrationTestCase):
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/invalid_participant',
               u'@type': u'virtual.participations.null',
               u'is_editable': True,
+              u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/invalid_participant',
+                  u'identifier': u'invalid_participant'},
               u'participant': {u'@id': None,
                                u'@type': None,
                                u'active': None,
@@ -279,6 +297,9 @@ class TestParticipationGet(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
              u'@type': u'virtual.participations.user',
              u'is_editable': True,
+             u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/hans.peter',
+                  u'identifier': u'hans.peter'},
              u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
                               u'@type': u'virtual.ogds.user',
                               u'active': True,
@@ -305,6 +326,9 @@ class TestParticipationGet(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/projekt_a',
              u'@type': u'virtual.participations.group',
              u'is_editable': True,
+             u'participant_actor': {
+                  u'@id': u'http://nohost/plone/@actors/projekt_a',
+                  u'identifier': u'projekt_a'},
              u'participant': {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
                               u'@type': u'virtual.ogds.group',
                               u'active': True,

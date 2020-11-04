@@ -1,3 +1,4 @@
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.base.actor import Actor
@@ -31,21 +32,15 @@ class ParticipationTraverseService(Service):
         return self
 
     def prepare_response_item(self, participant):
-        actor = Actor.lookup(participant.get('token'))
         role = PARTICIPATION_ROLES.get(participant.get('roles')[0])
         managing_context = self.context.get_context_with_local_roles()
 
         # We manually serialize the actors'representer and extract the desired
         # properties to get a homogeneous json result for different actor types
-        #
-        # We do not use an Actor serializer here because it does not exist
-        # right now and needs more specification before we can implement it
-        # properly.
-        #
-        # The current implementation can be refactored as soon we have
-        # a properly implemented actor serializer.
-        #
-        # This will be tracked in https://4teamwork.atlassian.net/browse/CA-406
+        # XXX deprecated
+        # We should use the participant_actor instead which will also avoid
+        # having to resolve the actor in this endpoint.
+        actor = Actor.lookup(participant.get('token'))
         represented_obj = actor.represents()
         if represented_obj:
             serialized_actor = getMultiAdapter(
@@ -62,6 +57,8 @@ class ParticipationTraverseService(Service):
                 'token': role.id,
                 'title': role.translated_title(self.request),
             },
+            'participant_actor': serialize_actor_id_to_json_summary(
+                    participant.get('token')),
             'participant': {
                 '@id': serialized_actor.get('@id'),
                 '@type': serialized_actor.get('@type'),
