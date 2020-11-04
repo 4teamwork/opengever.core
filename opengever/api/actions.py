@@ -1,23 +1,12 @@
 from opengever.base.interfaces import IOpengeverBaseLayer
-from opengever.webactions.interfaces import IWebActionsProvider
 from opengever.webactions.renderer import WebActionsSafeDataGetter
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services.actions.get import Actions
 from plone.restapi.services.actions.get import ActionsGet
 from zope.component import adapter
-from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
-
-
-WEBACTION_ATTRIBUTE_WHITELIST = [
-    'action_id',
-    'title',
-    'target_url',
-    'display',
-    'mode',
-]
 
 
 @implementer(IExpandableElement)
@@ -42,9 +31,7 @@ class GeverActions(Actions):
         structure.
         """
         data_getter = WebActionsSafeDataGetter(self.context, self.request, None)
-        webactions = [
-            {key: webaction.get(key) for key in WEBACTION_ATTRIBUTE_WHITELIST}
-            for webaction in data_getter.get_webactions_data(flat=True)]
+        webactions = data_getter.get_webactions_data(flat=True)
 
         if webactions:
             actions['webactions'] = json_compatible(webactions)

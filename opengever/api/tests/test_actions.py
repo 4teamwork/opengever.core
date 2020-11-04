@@ -869,6 +869,8 @@ class TestWebActionsIntegration(IntegrationTestCase):
                 u'action_id': 0,
                 u'display': u'actions-menu',
                 u'mode': u'self',
+                u'icon_data': None,
+                u'icon_name': None,
                 u'target_url': u'http://localhost/foo?location=%2Fplone%2Fordnungssystem%2Ffuhrung%2Fvertrage-und-vereinbarungen%2Fdossier-1&context=http%3A%2F%2Fnohost%2Fplone%2Fordnungssystem%2Ffuhrung%2Fvertrage-und-vereinbarungen%2Fdossier-1&orgunit=fa',
                 u'title': u'Open in ExternalApp'
             }],
