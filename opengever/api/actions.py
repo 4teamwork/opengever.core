@@ -1,5 +1,6 @@
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.webactions.interfaces import IWebActionsProvider
+from opengever.webactions.renderer import WebActionsSafeDataGetter
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services.actions.get import Actions
@@ -40,14 +41,10 @@ class GeverActions(Actions):
         environment (context, user, permissions, webaction-settings) in a flat
         structure.
         """
-        provider = queryMultiAdapter((self.context, self.request), IWebActionsProvider)
-
-        if not provider:
-            return
-
+        data_getter = WebActionsSafeDataGetter(self.context, self.request, None)
         webactions = [
             {key: webaction.get(key) for key in WEBACTION_ATTRIBUTE_WHITELIST}
-            for webaction in provider.get_webactions(flat=True)]
+            for webaction in data_getter.get_webactions_data(flat=True)]
 
         if webactions:
             actions['webactions'] = json_compatible(webactions)
