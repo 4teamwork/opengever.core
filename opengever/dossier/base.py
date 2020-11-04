@@ -34,6 +34,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getUtility
+from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -306,9 +307,15 @@ class DossierContainer(Container):
     def is_linked_to_active_workspaces(self):
         if not is_workspace_client_feature_enabled():
             return False
-        params = {'review_state': 'opengever_workspace--STATUS--active'}
+
         with elevated_privileges():
-            return bool(ILinkedWorkspaces(self).list_non_cached(**params)['items_total'])
+            linked_workspaces_adapter = queryAdapter(self, ILinkedWorkspaces)
+            if not linked_workspaces_adapter:
+                return False
+
+            params = {'review_state': 'opengever_workspace--STATUS--active'}
+            active_workspaces = linked_workspaces_adapter.list_non_cached(**params)['items_total']
+            return bool(active_workspaces)
 
     def is_all_checked_in(self):
         """Check if all documents in this path are checked in."""

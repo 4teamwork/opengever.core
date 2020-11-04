@@ -1478,6 +1478,18 @@ class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
                                 ['The dossier has been succesfully resolved.'])
 
     @browsing
+    def test_subdossier_is_resolvable_with_activated_workspace_client(self, browser):
+        subdossier = create(Builder('dossier').within(self.dossier))
+
+        with self.workspace_client_env():
+            self.grant('Reviewer', *api.user.get_roles())
+            browser.login()
+            self.resolve(subdossier, browser)
+            self.assert_resolved(subdossier)
+            self.assert_success(subdossier, browser,
+                                ['The subdossier has been succesfully resolved.'])
+
+    @browsing
     def test_dossier_is_resolved_when_deactivated_workspace_is_linked(self, browser):
         with self.workspace_client_env():
             browser.exception_bubbling = True
