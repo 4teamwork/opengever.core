@@ -42,6 +42,7 @@ class TestWebActionProvider(TestWebActionBase):
                              'icon_name': None,
                              'mode': 'self',
                              'icon_data': None,
+                             'display': 'actions-menu',
                              'action_id': 0}
 
         self.action2_data = {'target_url': 'http://example.org/endpoint',
@@ -49,6 +50,7 @@ class TestWebActionProvider(TestWebActionBase):
                              'icon_name': None,
                              'mode': 'self',
                              'icon_data': None,
+                             'display': 'actions-menu',
                              'action_id': 1}
 
         self.action3_data = {'target_url': 'http://example.org/endpoint',
@@ -56,6 +58,7 @@ class TestWebActionProvider(TestWebActionBase):
                              'icon_name': None,
                              'mode': 'self',
                              'icon_data': None,
+                             'display': 'actions-menu',
                              'action_id': 2}
 
     def test_data_returned_by_webaction_provider(self):
@@ -79,6 +82,9 @@ class TestWebActionProvider(TestWebActionBase):
         storage = get_storage()
         storage.update(1, {"display": "action-buttons"})
         storage.update(2, {"display": "user-menu"})
+
+        self.action2_data['display'] = 'action-buttons'
+        self.action3_data['display'] = 'user-menu'
 
         expected_data = {'actions-menu': [self.action1_data],
                          'action-buttons': [self.action2_data],

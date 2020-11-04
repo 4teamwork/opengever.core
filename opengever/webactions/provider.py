@@ -35,7 +35,7 @@ class WebActionsProvider(object):
     """
 
     _attributes_to_keep = ("title", "target_url", "mode", "action_id",
-                           "icon_name", "icon_data")
+                           "icon_name", "icon_data", "display")
 
     def __init__(self, context, request):
         self.context = context
@@ -133,7 +133,7 @@ class WebActionsProvider(object):
         webactions = self._sort(self._filter_for_user(webactions))
 
         if flat:
-            return webactions
+            return map(self._filter_action_data, webactions)
 
         webactions_dict = defaultdict(list)
         for webaction in webactions:
