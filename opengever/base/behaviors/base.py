@@ -3,6 +3,7 @@ from opengever.base import _
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
+from Products.CMFPlone.utils import safe_unicode
 from zope import schema
 from zope.interface import Interface, alsoProvides
 
@@ -58,8 +59,16 @@ class OpenGeverBase(metadata.MetadataBase):
         return self.context.description
 
     def _set_description(self, value):
-        if isinstance(value, str):
-            raise ValueError('Description must be unicode.')
-        self.context.description = value
+        # Quickfix for: https://4teamwork.atlassian.net/browse/NE-247
+        #
+        # Content created through the plone.restapi without a description
+        # will have an empty bytestring as the default description. This
+        # We convert the value to unicode instead of raising an error.
+        #
+        # This means, we'll no longer detect bad data-types. So
+        # this fix will be reverted through the story
+        # https://4teamwork.atlassian.net/browse/CA-918 which will fix the
+        # main issue.
+        self.context.description = safe_unicode(value)
 
     description = property(_get_description, _set_description)

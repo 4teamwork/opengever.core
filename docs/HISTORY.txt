@@ -4,6 +4,7 @@ Changelog
 2020.13.0 (unreleased)
 ----------------------
 
+- Convert bytestring values for IOpengeverBase.description field to unicode instead of raising an error. [elioschmutz]
 - Fix the Workspace `@participations` endpoint for NullActors. [njohner]
 - Delete old upgrade steps up to and including 2018.5.7. [njohner]
 - Add monkey-patch to track out of sync modified. [deiferni]
