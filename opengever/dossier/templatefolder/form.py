@@ -23,7 +23,6 @@ from z3c.form import button
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.form import Form
 from zope import schema
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
@@ -52,14 +51,13 @@ def get_templates(context):
                 sort_on='sortable_title', sort_order='ascending'))
     templates.sort(key=lambda template: template.Title.lower())
 
-    intids = getUtility(IIntIds)
     terms = []
     for brain in templates:
         template = brain.getObject()
         if IDocumentMetadata(template).digitally_available:
             terms.append(SimpleVocabulary.createTerm(
                 template,
-                str(intids.getId(template)),
+                str(template.UID()),
                 template.title))
     return SimpleVocabulary(terms)
 
