@@ -1,6 +1,6 @@
+from opengever.core.docker_testing import SABLON_SERVICE_FIXTURE
 from opengever.meeting.sablon import Sablon
 from opengever.testing import assets
-from opengever.testing.docker import SABLON_SERVICE_FIXTURE
 from pkg_resources import resource_filename
 from StringIO import StringIO
 from unittest import TestCase
