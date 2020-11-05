@@ -3,8 +3,13 @@ from os import environ
 from os.path import join
 from subprocess32 import PIPE
 from subprocess32 import Popen
+import logging
+import requests
 import shutil
 import tempfile
+
+
+logger = logging.getLogger('opengever.meeting.sablon')
 
 
 class Sablon(object):
@@ -22,6 +27,39 @@ class Sablon(object):
 
     def process(self, json_data, namedblobfile=None):
 
+        sablon_url = environ.get('SABLON_URL')
+        if sablon_url:
+            return self.process_using_service(
+                sablon_url, json_data, namedblobfile)
+        else:
+            return self.process_using_executable(json_data, namedblobfile)
+
+    def is_processed_successfully(self):
+        return self.returncode == 0
+
+    def process_using_service(self, url, json_data, namedblobfile):
+        if namedblobfile is None:
+            namedblobfile = self.template.file
+        template = namedblobfile.open()
+
+        resp = None
+        try:
+            resp = requests.post(
+                url,
+                files={'context': json_data, 'template': template},
+            )
+            resp.raise_for_status()
+        except requests.exceptions.RequestException:
+            details = resp.content[:200] if resp is not None else ''
+            logger.exception(
+                'Document creation with sablon failed. %s', details)
+            raise SablonProcessingFailed(details)
+        else:
+            self.file_data = resp.content
+            self.returncode = 0
+            return self
+
+    def process_using_executable(self, json_data, namedblobfile):
         tmpdir_path = tempfile.mkdtemp(prefix='opengever.core.sablon_')
         output_path = join(tmpdir_path, 'sablon_output.docx')
 
@@ -47,6 +85,3 @@ class Sablon(object):
             shutil.rmtree(tmpdir_path)
 
         return self
-
-    def is_processed_successfully(self):
-        return self.returncode == 0

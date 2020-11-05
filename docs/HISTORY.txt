@@ -4,7 +4,9 @@ Changelog
 2020.14.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Add support for using the msgconvert service instead of a locally installed msgconvert. [buchi]
+- Add support for using the sablon service instead of a locally installed sablon. [buchi]
+- Add support for using the pdflatex service instead of a locally installed pdflatex. [buchi]
 
 
 2020.13.0 (2020-11-05)

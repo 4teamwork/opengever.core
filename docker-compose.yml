@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  msgconvert:
+    image: 4teamwork/msgconvert:latest
+    ports:
+      - 8090:8080
+  sablon:
+    image: 4teamwork/sablon:latest
+    ports:
+      - 8091:8080
+  pdflatex:
+    image: 4teamwork/pdflatex:latest
+    ports:
+      - 8092:8080
+
