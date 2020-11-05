@@ -1,5 +1,6 @@
 from ftw.bumblebee.config import bumblebee_config
 from opengever.base import utils
+from opengever.base.colorization import get_color
 from opengever.base.interfaces import IGeverSettings
 from opengever.inbox.utils import get_current_inbox
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
@@ -35,6 +36,7 @@ class Config(Service):
         config['is_admin_menu_visible'] = utils.is_administrator()
         config['bumblebee_app_id'] = bumblebee_config.app_id
         config['private_folder_url'] = get_private_folder_url()
+        config['gever_colorization'] = get_color()
 
         inbox = get_current_inbox(self.context)
         config['inbox_folder_url'] = inbox.absolute_url() if inbox else ''
