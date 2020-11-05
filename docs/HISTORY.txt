@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.13.0 (unreleased)
+2020.13.0 (2020-11-05)
 ----------------------
 
 - Convert bytestring values for IOpengeverBase.description field to unicode instead of raising an error. [elioschmutz]
