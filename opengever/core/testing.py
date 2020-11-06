@@ -19,14 +19,14 @@ from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core import sqlite_testing
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR
+from opengever.core.docker_testing import MSGCONVERT_SERVICE_FIXTURE
+from opengever.core.docker_testing import PDFLATEX_SERVICE_FIXTURE
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.private import enable_opengever_private
-from opengever.testing.docker import MSGCONVERT_SERVICE_FIXTURE
-from opengever.testing.docker import PDFLATEX_SERVICE_FIXTURE
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
