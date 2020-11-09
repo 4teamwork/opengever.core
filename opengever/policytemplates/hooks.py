@@ -144,12 +144,18 @@ def post_package_name(configurator, question, answer):
         answer,
         'onegovgever' if configurator.variables['is_gever'] else 'teamraum'
         )
+    bumblebee_app_id_default = u'{}_{}'.format(
+        'gever' if configurator.variables['is_gever'] else 'teamraum',
+        answer
+        )
     new_defaults = {
         'package.url': 'https://github.com/4teamwork/opengever.{}'.format(
             answer),
         'adminunit.abbreviation': answer,
         'adminunit.id': answer,
         'base.domain': domain_default,
+        'base.ogds_db_name': u'ogds_{}'.format(answer),
+        'base.bumblebee_app_id': bumblebee_app_id_default,
     }
     update_defaults(configurator, new_defaults)
     configurator.variables['package.name_capitalized'] = answer.capitalize()
@@ -183,6 +189,7 @@ def post_adminunit_abbreviation(configurator, question, answer):
         'deployment.rolemanager_group': '{}_admins'.format(answer),
         'deployment.records_manager_group': '{}_admins'.format(answer),
         'deployment.archivist_group': '{}_admins'.format(answer),
+        'deployment.administrator_group': '{}_admins'.format(answer),
         'orgunit.users_group': '{}_users'.format(answer),
         'orgunit.inbox_group': '{}_inbox'.format(answer),
         'orgunit.id': answer.lower()
