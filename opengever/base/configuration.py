@@ -14,6 +14,7 @@ from opengever.base.interfaces import ISearchSettings
 from opengever.base.interfaces import IUserSnapSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.contact.interfaces import IContactSettings
+from opengever.disposition.interfaces import IDispositionSettings
 from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.interfaces import IFTPSTransportSettings
 from opengever.document.interfaces import IDocumentSettings
@@ -133,6 +134,7 @@ class GeverSettingsAdpaterV1(object):
         features['archival_file_conversion_blacklist'] = api.portal.get_registry_record('archival_file_conversion_blacklist', interface=IDossierResolveProperties)  # noqa
         features['changed_for_end_date'] = api.portal.get_registry_record('use_changed_for_end_date', interface=IDossierResolveProperties)  # noqa
         features['contacts'] = api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings)
+        features['disposition_disregard_retention_period'] = api.portal.get_registry_record('disregard_retention_period', interface=IDispositionSettings)  # noqa
         features['disposition_transport_filesystem'] = api.portal.get_registry_record('enabled', interface=IFilesystemTransportSettings)  # noqa
         features['disposition_transport_ftps'] = api.portal.get_registry_record('enabled', interface=IFTPSTransportSettings)  # noqa
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa

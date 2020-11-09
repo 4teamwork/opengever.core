@@ -59,6 +59,7 @@ class TestConfig(IntegrationTestCase):
                 u'archival_file_conversion_blacklist': [],
                 u'changed_for_end_date': True,
                 u'contacts': False,
+                u'disposition_disregard_retention_period': False,
                 u'disposition_transport_filesystem': False,
                 u'disposition_transport_ftps': False,
                 u'doc_properties': False,

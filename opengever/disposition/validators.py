@@ -1,7 +1,9 @@
 from opengever.disposition import _
 from opengever.disposition.disposition import IDispositionSchema
 from opengever.disposition.interfaces import IDisposition
+from opengever.disposition.interfaces import IDispositionSettings
 from plone import api
+from plone.memoize.instance import memoize
 from z3c.form import validator
 from zope.interface import Invalid
 
@@ -10,6 +12,12 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
 
     _current_dossiers = None
 
+    @property
+    @memoize
+    def disregard_retention_period(self):
+        return api.portal.get_registry_record(
+            name='disregard_retention_period', interface=IDispositionSettings)
+
     def validate(self, value):
         """Validate if the retention period of all selected dossiers is
         expired and the dossiers are not part of another disposition.
@@ -17,11 +25,11 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
         super(OfferedDossiersValidator, self).validate(value)
 
         for dossier in value:
-            if not dossier.is_retention_period_expired():
+            if not self.is_retention_period_expired(dossier):
                 raise Invalid(
                     _(u'error_retention_period_not_expired',
-                      default=u'The retention period of the selected dossiers'
-                      ' is not expired.'))
+                      default=u'The retention period of the selected '
+                              'dossiers is not expired.'))
 
             if self.is_offered_in_a_different_disposition(dossier):
                 raise Invalid(
@@ -29,6 +37,12 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
                       default=u'The dossier ${title} is already offered in a '
                       'different disposition.',
                       mapping={'title': dossier.title}))
+
+    def is_retention_period_expired(self, dossier):
+        if self.disregard_retention_period:
+            return True
+
+        return dossier.is_retention_period_expired()
 
     def is_offered_in_a_different_disposition(self, dossier):
         if api.content.get_state(dossier) == 'dossier-state-offered':

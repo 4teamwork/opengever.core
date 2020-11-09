@@ -66,6 +66,7 @@ FEATURE_FLAGS = {
     'bumblebee-auto-refresh': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.is_auto_refresh_enabled',
     'changed_for_end_date': 'opengever.dossier.interfaces.IDossierResolveProperties.use_changed_for_end_date',
     'contact': 'opengever.contact.interfaces.IContactSettings.is_feature_enabled',
+    'disposition-disregard-retention-period': 'opengever.disposition.interfaces.IDispositionSettings.disregard_retention_period',  # noqa
     'doc-properties': 'opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties',
     'dossiertemplate': 'opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings.is_feature_enabled',
     'ech0147-export': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_export_enabled',

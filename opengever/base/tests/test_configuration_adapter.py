@@ -61,6 +61,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('archival_file_conversion_blacklist', []),
                 ('changed_for_end_date', True),
                 ('contacts', False),
+                ('disposition_disregard_retention_period', False),
                 ('disposition_transport_filesystem', False),
                 ('disposition_transport_ftps', False),
                 ('doc_properties', False),

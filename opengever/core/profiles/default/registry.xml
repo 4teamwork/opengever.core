@@ -63,6 +63,7 @@
   </record>
 
   <!-- DISPOSITION -->
+  <records interface="opengever.disposition.interfaces.IDispositionSettings" />
   <records interface="opengever.disposition.interfaces.IFilesystemTransportSettings" />
   <records interface="opengever.disposition.interfaces.IFTPSTransportSettings" />
 

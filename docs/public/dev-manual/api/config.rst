@@ -61,6 +61,7 @@ GEVER-Mandanten abgefragt werden.
               "archival_file_conversion_blacklist": [],
               "changed_for_end_date": true,
               "contacts": false,
+              "disposition_disregard_retention_period": false,
               "disposition_transport_filesystem": false,
               "disposition_transport_ftps": false,
               "doc_properties": true,
@@ -160,6 +161,9 @@ features
 
     contacts
         Erweitertes Kontaktmodul
+
+    disposition_disregard_retention_period
+        Aufbewahrungsdauer beim Erstellen von Angeboten ignorieren
 
     disposition_transport_filesystem
         Das SIP Packet bei der Aussonderung zusätzlich über das Dateisystem ausliefern
