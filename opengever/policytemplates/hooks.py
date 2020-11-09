@@ -183,9 +183,8 @@ def post_adminunit_title(configurator, question, answer):
     return answer
 
 
-def post_adminunit_abbreviation(configurator, question, answer):
+def post_adminunit_id(configurator, question, answer):
     new_defaults = {
-        'adminunit.id': answer.lower(),
         'deployment.rolemanager_group': '{}_admins'.format(answer),
         'deployment.records_manager_group': '{}_admins'.format(answer),
         'deployment.archivist_group': '{}_admins'.format(answer),
@@ -201,10 +200,6 @@ def post_adminunit_abbreviation(configurator, question, answer):
         configurator.variables.update({
             'orgunit.id': answer.lower()
             })
-    return answer
-
-
-def post_adminunit_id(configurator, question, answer):
     configurator.variables['adminunit.ac_cookie_name'] = answer.replace('-', '_')
     configurator.variables['adminunit.id_capitalized'] = answer.capitalize()
     configurator.variables['adminunit.id_upper'] = answer.upper()
