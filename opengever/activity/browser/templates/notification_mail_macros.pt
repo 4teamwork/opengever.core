@@ -24,7 +24,7 @@
         </style>
     <![endif]-->
 
-    <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+    <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. -->
     <!--[if !mso]><!-->
     <!--<![endif]-->
 
