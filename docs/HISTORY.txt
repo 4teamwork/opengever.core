@@ -4,6 +4,7 @@ Changelog
 2020.14.0 (unreleased)
 ----------------------
 
+- Prevent notification mails being bounced due to blacklisted URL in comment. [deiferni]
 - Add support for using the msgconvert service instead of a locally installed msgconvert. [buchi]
 - Add support for using the sablon service instead of a locally installed sablon. [buchi]
 - Add support for using the pdflatex service instead of a locally installed pdflatex. [buchi]
