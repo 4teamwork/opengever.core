@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Prevent notification mails being bounced due to blacklisted URL in comment. [deiferni]
+- Enhance policy generator with some more defaults for SaaS GEVER. [deiferni]
 - Add support for using the msgconvert service instead of a locally installed msgconvert. [buchi]
 - Add support for using the sablon service instead of a locally installed sablon. [buchi]
 - Add support for using the pdflatex service instead of a locally installed pdflatex. [buchi]
