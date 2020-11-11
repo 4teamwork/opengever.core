@@ -38,7 +38,7 @@ class BasicReferenceNumber(object):
     def get_local_number(self):
         return ''
 
-    def append_local_number(self, numbers):
+    def add_local_number(self, numbers):
         if not numbers.get(self.ref_type):
             numbers[self.ref_type] = []
 
@@ -46,7 +46,7 @@ class BasicReferenceNumber(object):
 
     def get_numbers(self):
         numbers = {}
-        self.append_local_number(numbers)
+        self.add_local_number(numbers)
 
         parent = self.context
 
@@ -55,7 +55,7 @@ class BasicReferenceNumber(object):
             parent_reference_adapter = queryAdapter(parent, IReferenceNumber)
 
             if parent_reference_adapter:
-                parent_reference_adapter.append_local_number(numbers)
+                parent_reference_adapter.add_local_number(numbers)
 
         return numbers
 
