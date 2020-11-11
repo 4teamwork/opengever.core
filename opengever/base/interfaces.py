@@ -104,8 +104,8 @@ class IReferenceNumber(Interface):
         """Append the number part of the context in the specific list
         in the given numbers dict."""
 
-    def get_parent_numbers():
-        """Returns a dict with list of all number parts, from the context up to
+    def get_numbers():
+        """Returns a dict of lists of all number parts, from the context up to
         the plone site, grouped by the context type.
 
         Examples:
