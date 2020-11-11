@@ -95,11 +95,14 @@ class MemberVocabulary(object):
     def __call__(self, context):
         terms = []
 
-        for member in Member.query.order_by(Member.fullname):
+        for member in self.get_members():
             terms.append(SimpleTerm(value=member,
                                     token=member.member_id,
                                     title=member.fullname))
         return SimpleVocabulary(terms)
+
+    def get_members(self):
+        return Member.query.by_current_admin_unit().order_by(Member.fullname)
 
 
 @provider(IContextSourceBinder)

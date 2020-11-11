@@ -109,6 +109,21 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEqual(u'M\xfcller Peter', link.get('title'))
         self.assertEqual(u'M\xfcller Peter', link.text)
 
+    @browsing
+    def test_only_local_members_are_listed(self, browser):
+        create(Builder('member').having(
+            admin_unit_id='foreign', firstname=u'Hans', lastname=u'Jakobi')
+        )
+
+        browser.login()
+        browser.open(self.container, view='tabbedview_view-members')
+        items = browser.css('table.listing').first.dicts()
+        self.assertEqual(1, len(items))
+        self.assertEqual(
+            [{'Lastname': u'M\xfcller', 'Firstname': 'Peter', 'E-Mail': ''}],
+            items
+        )
+
 
 class TestMemberView(FunctionalTestCase):
 
