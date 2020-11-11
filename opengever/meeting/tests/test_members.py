@@ -54,7 +54,8 @@ class TestMemberListing(FunctionalTestCase):
     def setUp(self):
         super(TestMemberListing, self).setUp()
         self.container = create(Builder('committee_container'))
-        self.member = create(Builder('member'))
+        self.member = create(Builder('member').having(
+            admin_unit_id=self._admin_unit_id))
 
         # CommitteeResponsible is assigned globally here for the sake of
         # simplicity
@@ -78,6 +79,7 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEqual(u'Hanspeter', hans.firstname)
         self.assertEqual(u'Hansj\xf6rg', hans.lastname)
         self.assertEqual(u'foo@example.com', hans.email)
+        self.assertEqual(u'admin-unit-1', hans.admin_unit_id)
 
     @browsing
     def test_members_can_be_edited_in_browser(self, browser):
@@ -121,7 +123,8 @@ class TestMemberView(FunctionalTestCase):
 
         self.container = create(Builder('committee_container'))
         self.member = create(Builder('member')
-                             .having(email='p.meier@example.com'))
+                             .having(email='p.meier@example.com',
+                                     admin_unit_id=self._admin_unit_id))
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
         self.committee = create(Builder('committee')
                                 .with_default_period()
@@ -160,7 +163,8 @@ class TestMemberView(FunctionalTestCase):
 
     @browsing
     def test_show_message_if_member_has_no_memberships(self, browser):
-        member = create(Builder('member'))
+        member = create(Builder('member').having(
+            admin_unit_id=self._admin_unit_id))
         browser.login().open(member.get_url(self.container))
         self.assertEqual(
             'This member has no memberships.',

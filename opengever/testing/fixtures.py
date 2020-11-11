@@ -2034,7 +2034,8 @@ class OpengeverContentFixture(object):
     ):
         member = create(
             Builder('member')
-            .having(firstname=firstname, lastname=lastname, email=email)
+            .having(firstname=firstname, lastname=lastname, email=email,
+                    admin_unit_id=self.admin_unit.unit_id)
         )
 
         create(

@@ -3,12 +3,18 @@ from opengever.base.model import EMAIL_LENGTH
 from opengever.base.model import FIRSTNAME_LENGTH
 from opengever.base.model import LASTNAME_LENGTH
 from opengever.base.model import SQLFormSupport
+from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.utils import escape_html
+from opengever.ogds.base.utils import get_current_admin_unit
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import column_property
 from sqlalchemy.schema import Sequence
+
+
+def member_admin_unit_id_default():
+    return get_current_admin_unit().id()
 
 
 class Member(Base, SQLFormSupport):
@@ -17,6 +23,8 @@ class Member(Base, SQLFormSupport):
 
     member_id = Column("id", Integer, Sequence("member_id_seq"),
                        primary_key=True)
+    admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False,
+                           default=member_admin_unit_id_default)
     firstname = Column(String(FIRSTNAME_LENGTH), nullable=False)
     lastname = Column(String(LASTNAME_LENGTH), nullable=False)
     fullname = column_property(lastname + " " + firstname)
