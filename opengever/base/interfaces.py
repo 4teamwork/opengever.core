@@ -100,9 +100,9 @@ class IReferenceNumber(Interface):
     def get_local_number():
         """Returns only the reference number part of the context."""
 
-    def append_local_number(numbers):
-        """Append the number part of the context in the specific list
-        in the given numbers dict."""
+    def add_local_number(numbers):
+        """Adds the number part of the context in the specific list
+        in the passed numbers dict."""
 
     def get_numbers():
         """Returns a dict of lists of all number parts, from the context up to
