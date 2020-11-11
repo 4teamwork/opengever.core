@@ -24,7 +24,7 @@ class BasicReferenceNumber(object):
         self.context = context
 
     def get_number(self):
-        numbers = self.get_parent_numbers()
+        numbers = self.get_numbers()
 
         return self.get_active_formatter().complete_number(numbers)
 
@@ -44,7 +44,7 @@ class BasicReferenceNumber(object):
 
         numbers[self.ref_type].insert(0, self.get_local_number())
 
-    def get_parent_numbers(self):
+    def get_numbers(self):
         numbers = {}
         self.append_local_number(numbers)
 

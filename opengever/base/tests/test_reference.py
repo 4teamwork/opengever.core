@@ -43,7 +43,7 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
              'repositoryroot': [''],
              'repository': [u'1', u'1'],
              'dossier': [u'1', u'1']},
-            IReferenceNumber(self.subdossier).get_parent_numbers())
+            IReferenceNumber(self.subdossier).get_numbers())
 
     def test_use_dotted_as_default_formatter(self):
         self.login(self.regular_user)

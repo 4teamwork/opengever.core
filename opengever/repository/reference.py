@@ -8,13 +8,13 @@ from zope.component import adapter
 @adapter(IRepositoryRoot)
 class RepositoryRootNumber(BasicReferenceNumber):
     """ Reference number generator for the repository root, which just
-    adds the seperator-space and is primary required because we wan't
+    adds the seperator-space and is primarily required because we want
     to traverse over it.
     """
     ref_type = 'repositoryroot'
 
     def get_number(self):
-        parent_num = self.get_parent_numbers()
+        parent_num = self.get_numbers()
         if parent_num:
             return str(parent_num) + ' '
         return ''
@@ -32,6 +32,6 @@ class RepositoryFolderReferenceNumber(BasicReferenceNumber):
         return prefix or ''
 
     def get_repository_number(self):
-        numbers = self.get_parent_numbers()
+        numbers = self.get_numbers()
 
         return self.get_active_formatter().repository_number(numbers)
