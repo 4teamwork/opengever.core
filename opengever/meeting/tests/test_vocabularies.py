@@ -26,8 +26,11 @@ class TestProposalTransitionsVocabulary(IntegrationTestCase):
 
 class TestCommitteeVocabularies(IntegrationTestCase):
 
-    def test_committeee_vocabulary_list_all_committees(self):
+    def test_committeee_vocabulary_list_all_local_committees(self):
         self.login(self.committee_responsible)
+
+        create(Builder('committee_model').having(admin_unit_id='foreign'))
+
         factory = getUtility(IVocabularyFactory,
                              name='opengever.meeting.CommitteeVocabulary')
         self.assertItemsEqual(
@@ -35,8 +38,11 @@ class TestCommitteeVocabularies(IntegrationTestCase):
              self.committee.load_model()],
             [term.value for term in factory(context=None)])
 
-    def test_active_committeee_vocabulary_list_only_active_committees(self):
+    def test_active_committeee_vocabulary_list_only_active_local_committees(self):
         self.login(self.committee_responsible)
+
+        create(Builder('committee_model').having(admin_unit_id='foreign'))
+
         factory = getUtility(IVocabularyFactory,
                              name='opengever.meeting.ActiveCommitteeVocabulary')
         self.assertItemsEqual(

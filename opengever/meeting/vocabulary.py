@@ -48,7 +48,7 @@ class CommitteeVocabulary(object):
         ])
 
     def get_committees(self):
-        return Committee.query.order_by('title').all()
+        return Committee.query.by_current_admin_unit().order_by('title').all()
 
 
 @implementer(IVocabularyFactory)
@@ -67,7 +67,7 @@ class ActiveCommitteeVocabulary(object):
         ])
 
     def get_committees(self):
-        return Committee.query.active().order_by('title').all()
+        return Committee.query.by_current_admin_unit().active().order_by('title').all()
 
 
 @implementer(IVocabularyFactory)
