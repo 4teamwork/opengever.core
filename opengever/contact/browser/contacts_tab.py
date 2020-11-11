@@ -1,6 +1,7 @@
 from opengever.contact import _
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import email_helper
+from Products.CMFPlone.utils import safe_unicode
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
@@ -9,33 +10,39 @@ def authenticated_member(context):
 
 
 def linked(item, value):
-    url_method = lambda: '#'
-    if hasattr(item, 'getURL'):
-        url_method = item.getURL
-    elif hasattr(item, 'absolute_url'):
-        url_method = item.absolute_url
-
-    css_class = getattr(item, 'css_icon_class', '')
-
-    if isinstance(value, unicode):
-        value = value.encode('utf8')
-    link = '<a href="%s">%s</a>' % (
-        url_method(),
-        value or '')
-    wrapper = '<span class="linkWrapper %s">%s</span>' % (css_class, link)
-    return wrapper
+    return _render_link(item, value, include_css_class=True)
 
 
 def linked_no_icon(item, value):
-    url_method = lambda: '#'
+    return _render_link(item, value)
+
+
+def _render_link(item, value, include_css_class=False):
+    """Render a link to item with value as text.
+
+    Optionally include an additional css class provided by the item.
+
+    Item can be anything from brain to solr-document and those do not guarantee
+    unicode strings. Thus we consider this method to be at the application
+    boundary and make sure we work with unicode internally.
+    """
+    value = safe_unicode(value) if value else u''
+
+    href = u'#'
     if hasattr(item, 'getURL'):
-        url_method = item.getURL
+        href = item.getURL()
     elif hasattr(item, 'absolute_url'):
-        url_method = item.absolute_url
-    link = u'<a href="%s" >%s</a>' % (
-        url_method(),
-        value and value or '')
-    wrapper = u'<span class="linkWrapper">%s</span>' % link
+        href = item.absolute_url()
+    href = safe_unicode(href)
+
+    css_classes = [u'linkWrapper']
+    if include_css_class:
+        css_class = getattr(item, 'css_icon_class', None)
+        if css_class is not None:
+            css_classes.append(safe_unicode(css_class))
+
+    anchor = u'<a href="%s">%s</a>' % (href, value)
+    wrapper = u'<span class="%s">%s</span>' % (u" ".join(css_classes), anchor)
     return wrapper
 
 
