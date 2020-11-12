@@ -26,8 +26,8 @@ Mit der Filtersuche (z.B. innerhalb eines Dossiers) werden Objekte
 Der eingegebene Begriff durchsucht dabei alle Objekte ebenfalls im Volltext
 und liefert die Ergebnisse direkt in der Liste.
 
-Regeln und Operatoren für alle drei Suchtypen
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Regeln für alle drei Suchtypen
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Zwischen Gross- und Kleinschreibung wird nicht unterschieden.
 
@@ -36,23 +36,6 @@ Regeln und Operatoren für alle drei Suchtypen
    Suchbegriffen, aber keine spezielles Zeichen. Aufgezeigt werden dann
    die Treffer, die alle Suchbegriffe enthalten.
 
--  ``*`` (*Stern*) steht als Platzhalter für kein oder mehrere beliebige
-   Zeichen. Dieser kann aber nur nach Wortanfängen und nicht am Anfang eines
-   Suchbegriffes stehen.
-   Beispiel Suchbegriff Dokumentvorlage: ``Dokument*`` schlägt den Suchbegriff vor,
-   hingegen wird ``*vorlage`` den Suchbegriff nicht finden.
-
--  ``?`` (*Fragezeichen*) steht als Platzhalter für exakt ein beliebiges
-   Zeichen.
-
--  ``-`` (*Minus*): Setzt man das Minus-Zeichen vor einen Begriff (Bsp.:
-   ``unterlagen -test``), so werden Suchresultate geliefert, in denen die
-   restlichen Suchbegriffe vorkommen, nicht aber der negierte Begriff.
-
--  ``"`` (*Anführungszeichen*): Durch das Setzen von Anführungszeichen
-   (Bsp.: ``"Polizeiverordnung"`` wird nach dem exakten Begriff gesucht.
-   Innerhalb der Anführungszeichen dürfen keine anderen Operatoren
-   vorkommen.
 
 Einfache Suche
 --------------
