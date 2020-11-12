@@ -4,6 +4,7 @@ Changelog
 2020.14.0 (unreleased)
 ----------------------
 
+- Add @notification-settings API endpoint. [tinagerber]
 - Fix an encoding error on the local contacts tab. [deiferni]
 - Prevent notification mails being bounced due to blacklisted URL in comment. [deiferni]
 - Enhance policy generator with some more defaults for SaaS GEVER. [deiferni]

@@ -298,11 +298,19 @@ class NotificationSettings(object):
         if setting:
             create_session().delete(setting)
 
-    def set_custom_setting(self, setting_kind, userid,
-                           mail_roles=None, badge_roles=None, digest_roles=None):
+    def set_custom_setting(self, setting_kind, userid, mail_roles=None,
+                           badge_roles=None, digest_roles=None, use_default=False):
         setting = self._get_custom_notification_settings(userid).get(setting_kind)
         if not setting:
-            setting = model.NotificationSetting(kind=setting_kind, userid=userid)
+            if use_default:
+                default_setting = self._get_default_notification_settings().get(setting_kind)
+                setting = model.NotificationSetting(
+                    kind=setting_kind, userid=userid,
+                    _badge_notification_roles=default_setting._badge_notification_roles,
+                    _digest_notification_roles=default_setting._digest_notification_roles,
+                    _mail_notification_roles=default_setting._mail_notification_roles)
+            else:
+                setting = model.NotificationSetting(kind=setting_kind, userid=userid)
             create_session().add(setting)
 
         if mail_roles is not None:

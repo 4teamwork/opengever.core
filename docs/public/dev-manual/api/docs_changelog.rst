@@ -5,12 +5,17 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
-2020-09-01
+2020-11-11
+----------
+
+- Kapitel "Benachrichtigungseinstellungen" hinzugefügt
+
+2020-10-12
 ----------
 
 - Kapitel "Geschäftsdossier ab Vorlage erstellen" hinzugefügt
 
-2020-09-01
+2020-10-01
 ----------
 
 - Kapitel "Beteiligungen" hinzugefügt
