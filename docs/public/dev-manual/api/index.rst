@@ -37,6 +37,7 @@ Inhalt:
    users.rst
    actors.rst
    assigned_users.rst
+   notification_settings.rst
    usersettings.rst
    tasks.rst
    globalindex.rst
