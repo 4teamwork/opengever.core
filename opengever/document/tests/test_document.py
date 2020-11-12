@@ -15,6 +15,8 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentSettings
+from opengever.dossier.deactivate import DossierDeactivator
+from opengever.dossier.resolve import LockingResolveManager
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
@@ -141,6 +143,42 @@ class TestDocument(IntegrationTestCase):
     def test_document_inside_a_dossier_is_movable(self):
         self.login(self.regular_user)
         self.assertTrue(self.document.is_movable())
+
+    def test_document_inside_a_resolved_dossier_is_not_movable(self):
+        self.login(self.secretariat_user)
+
+        resolve_manager = LockingResolveManager(self.resolvable_dossier)
+        resolve_manager.resolve()
+
+        self.assertFalse(self.resolvable_document.is_movable())
+
+    def test_document_inside_a_deactivated_dossier_is_not_movable(self):
+        self.login(self.secretariat_user)
+
+        deactivator = DossierDeactivator(self.resolvable_dossier)
+        deactivator.deactivate()
+
+        self.assertFalse(self.resolvable_document.is_movable())
+
+    def test_document_inside_a_resolved_subdossier_is_not_movable(self):
+        self.login(self.secretariat_user)
+
+        resolve_manager = LockingResolveManager(self.resolvable_subdossier)
+        resolve_manager.resolve()
+
+        self.assertFalse(self.resolvable_document.is_movable())
+
+    def test_document_inside_a_deactivated_subdossier_is_not_movable(self):
+        self.login(self.secretariat_user)
+
+        deactivator = DossierDeactivator(self.resolvable_subdossier)
+        deactivator.deactivate()
+
+        self.assertFalse(self.resolvable_document.is_movable())
+
+    def test_document_inside_an_inbox_is_movable(self):
+        self.login(self.secretariat_user)
+        self.assertTrue(self.inbox_document.is_movable())
 
     def test_document_inside_a_task_is_not_movable(self):
         self.login(self.regular_user)

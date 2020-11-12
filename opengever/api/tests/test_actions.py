@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.dossier.resolve import LockingResolveManager
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashable
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -772,6 +773,39 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
         self.assertListEqual(
             expected_object_buttons,
             self.get_object_buttons(browser, self.inbox_document),
+        )
+
+    @browsing
+    def test_actions_for_document_in_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        resolve_manager = LockingResolveManager(self.resolvable_dossier)
+        resolve_manager.resolve()
+
+        self.login(self.regular_user, browser)
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.resolvable_document),
+        )
+
+    @browsing
+    def test_actions_for_document_in_inactive_dossier(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.inactive_document),
         )
 
 
