@@ -177,6 +177,14 @@ class TestMemberView(FunctionalTestCase):
             browser.css('table#properties').first.lists())
 
     @browsing
+    def test_cant_open_members_of_foreign_admin_units(self, browser):
+        foreign_member = create(Builder('member').having(
+            admin_unit_id='foreign'))
+
+        with browser.expect_http_error(reason='Not Found'):
+            browser.login().open(foreign_member.get_url(self.container))
+
+    @browsing
     def test_show_message_if_member_has_no_memberships(self, browser):
         member = create(Builder('member').having(
             admin_unit_id=self._admin_unit_id))
