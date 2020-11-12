@@ -1,3 +1,4 @@
+from ftw.testbrowser import browsing
 from opengever.activity import model
 from opengever.activity.notification_settings import NotificationSettings
 from opengever.testing import IntegrationTestCase
@@ -216,3 +217,106 @@ class TestNotificationSettings(IntegrationTestCase):
 
         setting = notification_settings.get_setting('task-added-or-reassigned', userid)
         self.assertTrue(notification_settings.is_custom_setting(setting))
+
+
+class TestNotificationSettingsGet(IntegrationTestCase):
+    features = ('activity', )
+
+    @browsing
+    def test_get_notification_settings_for_gever(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='/@notification-settings',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual({
+            u'@id': u'http://nohost/plone/@notification-settings/activities/added-as-watcher',
+            u'badge': {u'regular_watcher': True},
+            u'digest': {u'regular_watcher': False},
+            u'group': u'watcher',
+            u'id': u'added-as-watcher',
+            u'kind': u'added-as-watcher',
+            u'mail': {u'regular_watcher': False},
+            u'personal': False,
+            u'title': u'Added as watcher'
+        }, browser.json['activities']['items'][0])
+
+        self.assertEqual([u'added-as-watcher', u'task-added-or-reassigned',
+                          u'task-transition-modify-deadline', u'task-commented',
+                          u'task-status-modified', u'task-reminder', u'dossier-overdue'],
+                         [activity['kind'] for activity in browser.json['activities']['items']])
+
+        self.assertEqual({
+            u'@id': u'http://nohost/plone/@notification-settings/general/notify_inbox_actions',
+            u'group': u'general',
+            u'help_text': u'Activate, respectively deactivate, all notifications due to your '
+            u'inbox permissions.',
+            u'id': u'notify_inbox_actions',
+            u'personal': False,
+            u'title': u'Enable notifications for inbox actions',
+            u'value': True
+        }, browser.json['general']['items'][-1])
+
+        self.assertEqual([u'notify_own_actions', u'notify_inbox_actions'],
+                         [activity['id'] for activity in browser.json['general']['items']])
+
+        self.assertEqual([
+            {u'id': u'dossier_responsible_role', u'title': u'Dossier responsible'},
+            {u'id': u'task_reminder_watcher_role', u'title': u'Watcher'},
+            {u'id': u'task_issuer', u'title': u'Task issuer'},
+            {u'id': u'task_responsible', u'title': u'Task responsible'},
+            {u'id': u'regular_watcher', u'title': u'Watcher'}
+        ], browser.json['translations'])
+
+    @browsing
+    def test_get_notification_settings_for_teamraum(self, browser):
+        self.activate_feature('workspace')
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='/@notification-settings',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual({
+            u'@id': u'http://nohost/plone/@notification-settings',
+            u'activities': {
+                u'@id': u'http://nohost/plone/@notification-settings/activities',
+                u'items': [{
+                    u'@id': u'http://nohost/plone/@notification-settings/activities/todo-assigned',
+                    u'badge': {u'todo_responsible_role': True,
+                               u'workspace_member_role': False},
+                    u'digest': {u'todo_responsible_role': False,
+                                u'workspace_member_role': True},
+                    u'group': u'workspace',
+                    u'id': u'todo-assigned',
+                    u'kind': u'todo-assigned',
+                    u'mail': {u'todo_responsible_role': False,
+                              u'workspace_member_role': False},
+                    u'personal': False,
+                    u'title': u'ToDo assigned'},
+                    {u'@id': u'http://nohost/plone/@notification-settings/activities/todo-modified',
+                     u'badge': {u'todo_responsible_role': True,
+                                u'workspace_member_role': False},
+                     u'digest': {u'todo_responsible_role': False,
+                                 u'workspace_member_role': True},
+                     u'group': u'workspace',
+                     u'id': u'todo-modified',
+                     u'kind': u'todo-modified',
+                     u'mail': {u'todo_responsible_role': False,
+                               u'workspace_member_role': False},
+                     u'personal': False,
+                     u'title': u'ToDo modified'}]},
+            u'general': {
+                u'@id': u'http://nohost/plone/@notification-settings/general',
+                u'items': [{
+                    u'@id': u'http://nohost/plone/@notification-settings/general/notify_own_actions',
+                    u'group': u'general',
+                    u'help_text': u"By default no notifications are emitted for a users'own "
+                                  u"actions. This option allows to modify this behavior. "
+                                  u"Notwithstanding this configuration, user notification settings "
+                                  u"for each action type will get applied anyway.",
+                    u'id': u'notify_own_actions',
+                    u'personal': False,
+                    u'title': u'Enable notifications for own actions',
+                    u'value': False}]},
+            u'translations': [{
+                u'id': u'todo_responsible_role',
+                u'title': u'ToDo responsible'},
+                {u'id': u'workspace_member_role',
+                 u'title': u'Workspace member'}]}, browser.json)

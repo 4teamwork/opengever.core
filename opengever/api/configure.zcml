@@ -760,6 +760,14 @@
 
   <plone:service
       method="GET"
+      name="@notification-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".notification_settings.NotificationSettingsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
       name="@user-settings"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".user_settings.UserSettingsGet"
