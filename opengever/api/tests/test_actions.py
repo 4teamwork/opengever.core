@@ -598,6 +598,85 @@ class TestFolderActions(IntegrationTestCase):
         self.assertNotIn(self.createTaskAction,
                          self.get_folder_buttons(browser, self.inactive_dossier))
 
+    @browsing
+    def test_actions_for_dossier(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'create_task', u'title': u'Create Task'},
+            {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.dossier),
+        )
+
+    @browsing
+    def test_actions_for_inactive_dossier(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
+        ]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.inactive_dossier),
+        )
+
+    @browsing
+    def test_actions_for_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        resolve_manager = LockingResolveManager(self.resolvable_dossier)
+        resolve_manager.resolve()
+
+        self.login(self.regular_user, browser)
+
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
+        ]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.resolvable_dossier),
+        )
+
 
 class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
 

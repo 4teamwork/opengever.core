@@ -1,0 +1,16 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- FOLDER BUTTONS -->
+  <object name="folder_buttons" meta_type="CMF Action Category">
+
+    <object name="move_items" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="available_expr">object/@@folder_buttons_availability/is_move_items_available</property>
+    </object>
+
+    <object name="move_proposal_items" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="available_expr">object/@@folder_buttons_availability/is_move_items_available</property>
+    </object>
+
+  </object>
+
+</object>
