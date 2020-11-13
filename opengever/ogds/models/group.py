@@ -53,6 +53,15 @@ class Group(Base):
 
     column_names_to_sync = {'groupid', 'active', 'title'}
 
+    # A classmethod property needs to be defined on the metaclass
+    class __metaclass__(type(Base)):
+        @property
+        def columns_to_sync(cls):
+            return {
+                col for col in cls.__table__.columns
+                if col.name in cls.column_names_to_sync
+            }
+
     def __init__(self, groupid, **kwargs):
         self.groupid = groupid
         super(Group, self).__init__(**kwargs)
@@ -70,10 +79,6 @@ class Group(Base):
         if result is NotImplemented:
             return result
         return not result
-
-    @property
-    def columns_to_sync(self):
-        return {col for col in self.__table__.columns if col.name in self.column_names_to_sync}
 
     def id(self):
         return self.groupid
