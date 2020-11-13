@@ -5,7 +5,6 @@ from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import Unauthorized
-import os
 import transaction
 
 
@@ -72,23 +71,21 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             url = client.lookup_url_by_uid(self.workspace.UID())
             self.assertEqual(self.workspace.absolute_url(), url)
 
-    def test_tus_upload(self):
+    def test_upload_document_copy(self):
         with self.workspace_client_env() as client:
             filepath = assets.path_to_asset('vertragsentwurf.docx')
-            file_size = os.path.getsize(filepath)
             content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            portal_type = 'opengever.document.document'
-            additional_metadata = {
+            document_metadata = {
+                '@type': 'opengever.document.document',
                 'title': u"My new d\xf6kument",
                 'description': u'Fantastic'
             }
 
             with self.observe_children(self.workspace) as children:
-                response = client.tus_upload(
+                response = client.upload_document_copy(
                     self.workspace.absolute_url(),
-                    portal_type,
-                    open(filepath, 'r'), file_size, content_type,
-                    'vertragsentwurf.docx', **additional_metadata)
+                    open(filepath, 'r'), content_type,
+                    'vertragsentwurf.docx', document_metadata)
                 transaction.commit()
 
             self.assertEqual(1, len(children['added']))

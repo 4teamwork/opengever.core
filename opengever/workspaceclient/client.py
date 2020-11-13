@@ -6,6 +6,7 @@ from opengever.workspaceclient.session import WorkspaceSession
 from plone import api
 from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
+import json
 import os
 
 
@@ -94,6 +95,25 @@ class WorkspaceClient(object):
         returns the URL to this object.
         """
         return self.get_by_uid(uid).get('@id')
+
+    def upload_document_copy(self, url_or_path, file_, content_type,
+                             filename, document_metadata):
+        """Creates a copy of a GEVER document in a workspace.
+
+        :param url_or_path: Location where to create the new document
+        :param file_: Readable IO which holds the content of the file
+        :param content_type: The content type of the document
+        :param filename: The filename of the document
+        :param document_metadata: Additional metadatadata for the new object
+        """
+        url_or_path = url_or_path.strip('/')
+
+        response = self.post(
+            url_or_path + '/@upload-document-copy',
+            files={'file': (filename, file_, content_type)},
+            data={'document_metadata': json.dumps(document_metadata)}
+        )
+        return response
 
     def tus_upload(self, url_or_path, portal_type, file_, size, content_type,
                    filename, **additional_metadata):
