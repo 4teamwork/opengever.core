@@ -300,10 +300,10 @@ class NotificationSettings(object):
 
     def set_custom_setting(self, setting_kind, userid, mail_roles=None,
                            badge_roles=None, digest_roles=None, use_default=False):
+        default_setting = self._get_default_notification_settings().get(setting_kind)
         setting = self._get_custom_notification_settings(userid).get(setting_kind)
         if not setting:
             if use_default:
-                default_setting = self._get_default_notification_settings().get(setting_kind)
                 setting = model.NotificationSetting(
                     kind=setting_kind, userid=userid,
                     _badge_notification_roles=default_setting._badge_notification_roles,
@@ -322,6 +322,11 @@ class NotificationSettings(object):
         if digest_roles is not None:
             setting.digest_notification_roles = digest_roles
 
+        if setting.digest_notification_roles == default_setting.digest_notification_roles  \
+           and setting.mail_notification_roles == default_setting.mail_notification_roles  \
+           and setting.badge_notification_roles == default_setting.badge_notification_roles:
+            self.remove_custom_setting(setting_kind, userid)
+            return default_setting
         return setting
 
     def is_custom_setting(self, setting):
@@ -336,7 +341,7 @@ class NotificationSettings(object):
             setattr(self, '_default_notification_settings', {
                 default.kind: default for default
                 in model.NotificationDefault.query
-                })
+            })
 
         return self._default_notification_settings
 

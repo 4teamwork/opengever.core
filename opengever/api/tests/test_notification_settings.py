@@ -206,6 +206,21 @@ class TestNotificationSettings(IntegrationTestCase):
         self.assertEqual(frozenset([]),
                          setting.digest_notification_roles)
 
+    def test_set_default_as_custom_setting_does_not_add_custom_setting(self):
+        notification_settings = NotificationSettings()
+        userid = self.regular_user.getId()
+
+        default = notification_settings.get_setting('task-added-or-reassigned', userid)
+
+        notification_settings.set_custom_setting(
+            'task-added-or-reassigned', userid,
+            mail_roles=[role for role in default.mail_notification_roles],
+            badge_roles=[role for role in default.badge_notification_roles],
+            digest_roles=[role for role in default.digest_notification_roles])
+
+        new_setting = notification_settings.get_setting('task-added-or-reassigned', userid)
+        self.assertIsInstance(new_setting, model.NotificationDefault)
+
     def test_is_custom_setting_returns_true_if_setting_is_a_custom_setting(self):
         userid = self.regular_user.getId()
         notification_settings = NotificationSettings()
