@@ -303,6 +303,7 @@ class LDAPSearch(object):
 
         mapped_results = []
         for result in results:
+            self.retrieve_ranged_attributes(result)
             mapped_results.append(self.apply_schema_map(result))
 
         return mapped_results
@@ -452,6 +453,42 @@ class LDAPSearch(object):
         """
         uf = self.context
         return uf.getProperty('group_filter')
+
+    def retrieve_ranged_attributes(self, result):
+        """Retrieve all attribute values if server returned a range
+        (e.g. member;range=0-1499)
+        """
+        dn, attrs = result
+        for key in attrs.keys():
+            if ';range=' in key:
+                name, range_ = key.split(';range=')
+                attrs[name] = attrs[key]
+                del attrs[key]
+                attrs[name].extend(self._retrieve_next_range(dn, name, range_))
+
+    def _retrieve_next_range(self, dn, name, range_):
+        start, end = range_.split('-')
+        end = int(end)
+        next_range = '%s;range=%s-*' % (name, end + 1)
+        results = self.search(base_dn=dn, attrs=[next_range])
+        if not results:
+            return []
+
+        # According to Microsoft's documentation we should get the next_range
+        # attribute with no values if it's not the last range. However in
+        # practice we only get one attribute containing the values. To make
+        # sure we can handle both cases, we ignore attributes with no value.
+        attrs = {k: v for k, v in results[0][1].items() if v}
+        if next_range in attrs:
+            values = attrs[next_range]
+        else:
+            values = []
+            for key in attrs.keys():
+                if ';range=' in key:
+                    values += attrs[key]
+                    name, range_ = key.split(';range=')
+                    values += self._retrieve_next_range(dn, name, range_)
+        return values
 
     def _apply_schema_map_to_filter(self, filterstr):
         """Rewrite attribute names in a LDAP filter expression according to the

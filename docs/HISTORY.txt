@@ -19,6 +19,7 @@ Changelog
 - Add GEVER_COLORIZATION to the configuration endpoint. [2e12]
 - Add flag to disregard retention period when creating a disposition. [deiferni]
 - Optimize OGDS Sync. [buchi]
+- Fix getting group members from AD in OGDS sync if group contains more than 1500 members. [buchi]
 
 
 2020.13.0 (2020-11-05)
