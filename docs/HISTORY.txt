@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Add @notification-settings API endpoint. [tinagerber]
+- Use UID instead of intId as token in DocumentTemplatesVocabulary. [elioschmutz]
 - Fix an encoding error on the local contacts tab. [deiferni]
 - Prevent notification mails being bounced due to blacklisted URL in comment. [deiferni]
 - Enhance policy generator with some more defaults for SaaS GEVER. [deiferni]

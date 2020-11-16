@@ -103,7 +103,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         browser.open(self.dossier, view='document_with_template')
 
         browser.fill({
-            'form.widgets.template': str(getUtility(IIntIds).getId(self.normal_template)),
+            'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
             'Edit after creation': False,
             }).save()
@@ -116,7 +116,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='document_with_template')
         browser.fill({
-            'form.widgets.template': str(getUtility(IIntIds).getId(self.normal_template)),
+            'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
             }).save()
 
@@ -128,7 +128,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='document_with_template')
         browser.fill({
-            'form.widgets.template': str(getUtility(IIntIds).getId(self.normal_template)),
+            'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
             }).save()
 
@@ -141,7 +141,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='document_with_template')
         browser.fill({
-            'form.widgets.template': str(getUtility(IIntIds).getId(self.normal_template)),
+            'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
             }).save()
 
@@ -157,7 +157,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         with freeze(datetime(2020, 10, 28, 0, 0)):
             browser.open(self.dossier, view='document_with_template')
             browser.fill({
-                'form.widgets.template': str(getUtility(IIntIds).getId(self.asset_template)),
+                'form.widgets.template': self.asset_template.UID(),
                 'Title': 'Test Docx',
                 }).save()
 
@@ -210,7 +210,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         with freeze(datetime(2020, 9, 28, 0, 0)):
             browser.open(self.dossier, view='document_with_template')
             browser.fill({
-                'form.widgets.template': str(getUtility(IIntIds).getId(self.docprops_template)),
+                'form.widgets.template': self.docprops_template.UID(),
                 'Title': 'Test Docx',
                 }).save()
 
@@ -291,7 +291,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         with freeze(datetime(2020, 10, 28, 0, 0)):
             browser.open(self.dossier, view='document_with_template')
             browser.fill({
-                'form.widgets.template': str(getUtility(IIntIds).getId(self.asset_template)),
+                'form.widgets.template': self.asset_template.UID(),
                 'Title': 'Test Docx',
                 }).save()
 
@@ -422,11 +422,6 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         self.assertEqual(TEST_USER_ID, entry['actor'])
         self.assertEqual('', entry['comments'])
 
-    @staticmethod
-    def _make_token(document):
-        intids = getUtility(IIntIds)
-        return str(intids.getId(document))
-
     @browsing
     def test_contact_recipient_properties_are_added(self, browser):
         address1 = create(
@@ -473,7 +468,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
             browser.fill({
-                'form.widgets.template': self._make_token(self.template_word),
+                'form.widgets.template': self.template_word.UID(),
                 'Title': 'Test Docx',
                 })
             form = browser.find_form_by_field('Recipient')
@@ -561,7 +556,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
             browser.fill({
-                'form.widgets.template': self._make_token(self.template_word),
+                'form.widgets.template': self.template_word.UID(),
                 'Title': 'Test Docx',
                 })
             form = browser.find_form_by_field('Recipient')
@@ -611,7 +606,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
             browser.fill({
-                'form.widgets.template': self._make_token(self.template_word),
+                'form.widgets.template': self.template_word.UID(),
                 'Title': 'Test Docx',
                 })
             form = browser.find_form_by_field('Recipient')
@@ -660,7 +655,7 @@ class TestDocumentWithTemplateFormWithOfficeConnector(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='document_with_template')
         browser.fill({
-            'form.widgets.template': str(getUtility(IIntIds).getId(self.normal_template)),
+            'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test OfficeConnector',
             }).save()
 
