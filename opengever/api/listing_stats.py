@@ -128,7 +128,6 @@ class ListingStats(object):
         already takes care of this future improvement.
         """
         fq = [
-            'trashed:false',
             'path_parent:{}/*'.format(escape(
                 '/'.join(self.context.getPhysicalPath())))
         ]

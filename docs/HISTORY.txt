@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Use a dedicated endpoint to upload document copy to workspace. [lgraf]
+- No longer exclude trashed documents in @listing-stats endpoint. [tinagerber]
 - Add @notification-settings API endpoint. [tinagerber]
 - Use UID instead of intId as token in DocumentTemplatesVocabulary. [elioschmutz]
 - Add simple support for meetings in a multi-admin-unit cluster. [deiferni]
