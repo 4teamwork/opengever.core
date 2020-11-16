@@ -47,6 +47,9 @@ class FolderPost(Service):
             raise BadRequest("Property '@type' is required")
         return data
 
+    def before_deserialization(self, obj):
+        pass
+
     def deserialize_object(self):
         # Acquisition wrap temporarily to satisfy things like vocabularies
         # depending on tools
@@ -94,6 +97,8 @@ class FolderPost(Service):
         except BadRequest as exc:
             self.request.response.setStatus(400)
             return dict(error=dict(type="Bad Request", message=str(exc)))
+
+        self.before_deserialization(self.obj)
 
         try:
             self.deserialize_object()

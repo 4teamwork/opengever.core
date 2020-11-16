@@ -1,11 +1,16 @@
+from ftw.mail.mail import IMail
+from opengever.api.add import GeverFolderPost
 from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.document.document import IDocumentSchema
 from opengever.ogds.base.actor import Actor
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.participation import can_manage_member
 from plone.restapi.interfaces import ISerializeToJson
+from zExceptions import BadRequest
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
+import json
 
 
 @implementer(ISerializeToJson)
@@ -26,3 +31,49 @@ class SerializeWorkspaceToJson(GeverSerializeFolderToJson):
         result["responsible_fullname"] = actor.get_label(with_principal=False)
 
         return result
+
+
+class UploadDocumentCopy(GeverFolderPost):
+    """Endpoint to upload a complete copy of a GEVER document to a workspace.
+
+    Expects a multipart request that includes the document blob as well as
+    the document metadata.
+
+    The multipart request must contain a multipart file upload part, as well
+    as a second, form encoded part with a `document_metadata` field.
+
+    The value in the form field `document_metadata` is expected to be a
+    JSON encoded string with the document's metadata fields in the
+    ISerializeToJson serialization format.
+    """
+
+    def extract_data(self):
+        data = json.loads(self.request.form['document_metadata'])
+
+        self.type_ = data.get("@type", None)
+        self.title_ = data.get("title", None)
+        self.id_ = None
+
+        if not self.type_:
+            raise BadRequest("Property '@type' is required")
+
+        self.file_upload = self.request.form['file']
+        self.filename = self.file_upload.filename.decode('utf-8')
+        self.content_type = self.file_upload.headers.get('Content-Type')
+
+        # GeverFolderPost will invoke deserializer with self.data, instead
+        # of looking for it in the request, like the standard FolderPost
+        self.data = data
+        return data
+
+    def before_deserialization(self, obj):
+        field = IDocumentSchema['file']
+        if obj.is_mail:
+            field = IMail['message']
+
+        namedblobfile = field._type(
+            data=self.file_upload,
+            contentType=self.content_type,
+            filename=self.filename)
+
+        field.set(field.interface(obj), namedblobfile)

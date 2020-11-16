@@ -145,16 +145,15 @@ class LinkedWorkspaces(object):
 
         file_ = document.get_file()
         document_repr = self._serialized_document_schema_fields(document)
+        document_metadata = self._drop_non_metadata_fields(document_repr)
 
         if not file_:
             # File only preserved in paper.
             return self.client.post(workspace_url, json=document_repr)
 
-        portal_type = document.portal_type
         content_type = document.content_type()
 
         filename = document.get_filename()
-        size = file_.size
 
         # Add journal entry to dossier
         workspace_title = self.client.get_by_uid(workspace_uid).get('title')
@@ -168,9 +167,12 @@ class LinkedWorkspaces(object):
             context=self.context, action='Document copied to workspace',
             title=title, documents=[document])
 
-        return self.client.tus_upload(workspace_url, portal_type, file_.open(),
-                                      size, content_type, filename,
-                                      **self._tus_document_repr(document_repr))
+        response = self.client.upload_document_copy(
+            workspace_url, file_.open(),
+            content_type, filename,
+            document_metadata)
+
+        return response
 
     def _get_document_by_uid(self, workspace_uid, document_uid):
         linked_documents = self.list_documents_in_linked_workspace(workspace_uid)
@@ -259,13 +261,13 @@ class LinkedWorkspaces(object):
         whitelist.append('@type')
         return self._whitelisted_dict(serializer(), whitelist)
 
-    def _tus_document_repr(self, serialized_document):
-        """Prepares the serialized document to match the criterias to add a new
-        document with the `tus_upload`.
+    def _drop_non_metadata_fields(self, serialized_document):
+        """Drops non-metadata fields from a serialized document in order to
+        prepare it as needed by the @upload-document-copy endpoint.
         """
         return self._blacklisted_dict(
             serialized_document,
-            ['@type', 'file', 'archival_file', 'message', 'original_message'])
+            ['file', 'archival_file', 'message', 'original_message'])
 
     def _whitelisted_dict(self, dict_obj, whitelist):
         whitelisted_dict = {}
