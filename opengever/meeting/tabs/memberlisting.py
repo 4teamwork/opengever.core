@@ -44,7 +44,7 @@ class MemberListingTab(BaseListingTab):
         return item.get_lastname_link(self.context)
 
     def get_base_query(self):
-        return Member.query
+        return Member.query.by_current_admin_unit()
 
 
 @implementer(ITableSource)

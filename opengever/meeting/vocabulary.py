@@ -48,7 +48,7 @@ class CommitteeVocabulary(object):
         ])
 
     def get_committees(self):
-        return Committee.query.order_by('title').all()
+        return Committee.query.by_current_admin_unit().order_by('title').all()
 
 
 @implementer(IVocabularyFactory)
@@ -67,7 +67,7 @@ class ActiveCommitteeVocabulary(object):
         ])
 
     def get_committees(self):
-        return Committee.query.active().order_by('title').all()
+        return Committee.query.by_current_admin_unit().active().order_by('title').all()
 
 
 @implementer(IVocabularyFactory)
@@ -95,11 +95,14 @@ class MemberVocabulary(object):
     def __call__(self, context):
         terms = []
 
-        for member in Member.query.order_by(Member.fullname):
+        for member in self.get_members():
             terms.append(SimpleTerm(value=member,
                                     token=member.member_id,
                                     title=member.fullname))
         return SimpleVocabulary(terms)
+
+    def get_members(self):
+        return Member.query.by_current_admin_unit().order_by(Member.fullname)
 
 
 @provider(IContextSourceBinder)

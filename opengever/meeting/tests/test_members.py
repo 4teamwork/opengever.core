@@ -54,7 +54,8 @@ class TestMemberListing(FunctionalTestCase):
     def setUp(self):
         super(TestMemberListing, self).setUp()
         self.container = create(Builder('committee_container'))
-        self.member = create(Builder('member'))
+        self.member = create(Builder('member').having(
+            admin_unit_id=self._admin_unit_id))
 
         # CommitteeResponsible is assigned globally here for the sake of
         # simplicity
@@ -78,6 +79,7 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEqual(u'Hanspeter', hans.firstname)
         self.assertEqual(u'Hansj\xf6rg', hans.lastname)
         self.assertEqual(u'foo@example.com', hans.email)
+        self.assertEqual(u'admin-unit-1', hans.admin_unit_id)
 
     @browsing
     def test_members_can_be_edited_in_browser(self, browser):
@@ -107,6 +109,21 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEqual(u'M\xfcller Peter', link.get('title'))
         self.assertEqual(u'M\xfcller Peter', link.text)
 
+    @browsing
+    def test_only_local_members_are_listed(self, browser):
+        create(Builder('member').having(
+            admin_unit_id='foreign', firstname=u'Hans', lastname=u'Jakobi')
+        )
+
+        browser.login()
+        browser.open(self.container, view='tabbedview_view-members')
+        items = browser.css('table.listing').first.dicts()
+        self.assertEqual(1, len(items))
+        self.assertEqual(
+            [{'Lastname': u'M\xfcller', 'Firstname': 'Peter', 'E-Mail': ''}],
+            items
+        )
+
 
 class TestMemberView(FunctionalTestCase):
 
@@ -121,7 +138,8 @@ class TestMemberView(FunctionalTestCase):
 
         self.container = create(Builder('committee_container'))
         self.member = create(Builder('member')
-                             .having(email='p.meier@example.com'))
+                             .having(email='p.meier@example.com',
+                                     admin_unit_id=self._admin_unit_id))
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
         self.committee = create(Builder('committee')
                                 .with_default_period()
@@ -159,8 +177,17 @@ class TestMemberView(FunctionalTestCase):
             browser.css('table#properties').first.lists())
 
     @browsing
+    def test_cant_open_members_of_foreign_admin_units(self, browser):
+        foreign_member = create(Builder('member').having(
+            admin_unit_id='foreign'))
+
+        with browser.expect_http_error(reason='Not Found'):
+            browser.login().open(foreign_member.get_url(self.container))
+
+    @browsing
     def test_show_message_if_member_has_no_memberships(self, browser):
-        member = create(Builder('member'))
+        member = create(Builder('member').having(
+            admin_unit_id=self._admin_unit_id))
         browser.login().open(member.get_url(self.container))
         self.assertEqual(
             'This member has no memberships.',

@@ -1,14 +1,16 @@
 from datetime import date
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.oguid import Oguid
+from opengever.base.query import BaseQuery
 from opengever.meeting.model.committee import Committee
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.model.generateddocument import GeneratedDocument
 from opengever.meeting.model.meeting import Meeting
+from opengever.meeting.model.member import Member
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.model.submitteddocument import SubmittedDocument
-from opengever.base.query import BaseQuery
+from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from sqlalchemy import and_
 from sqlalchemy import or_
@@ -92,8 +94,22 @@ class CommitteeQuery(BaseQuery):
         return self.filter(
             Committee.workflow_state == Committee.STATE_ACTIVE.name)
 
+    def by_current_admin_unit(self):
+        admin_unit_id = get_current_admin_unit().id()
+        return self.filter_by(admin_unit_id=admin_unit_id)
+
 
 Committee.query_cls = CommitteeQuery
+
+
+class MemberQuery(BaseQuery):
+
+    def by_current_admin_unit(self):
+        admin_unit_id = get_current_admin_unit().id()
+        return self.filter_by(admin_unit_id=admin_unit_id)
+
+
+Member.query_cls = MemberQuery
 
 
 class MembershipQuery(BaseQuery):

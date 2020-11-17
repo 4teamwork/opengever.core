@@ -29,7 +29,8 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
 
         if id_.startswith('member'):
             member_id = int(id_.split('-')[-1])
-            member = Member.query.get(member_id)
+            member = Member.query.by_current_admin_unit().filter_by(
+                member_id=member_id).first()
             if member:
                 return MemberWrapper.wrap(self, member)
 

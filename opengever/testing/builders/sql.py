@@ -415,6 +415,7 @@ class MemberBuilder(SqlObjectBuilder):
         super(MemberBuilder, self).__init__(session)
         self.arguments['firstname'] = u'Peter'
         self.arguments['lastname'] = u'M\xfcller'
+        self.arguments['admin_unit_id'] = 'foo'
 
 
 builder_registry.register('member', MemberBuilder)

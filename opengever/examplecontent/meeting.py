@@ -6,6 +6,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import session
 from opengever.base.model import create_session
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import assets
 from opengever.testing import builders  # noqa
 from plone import api
@@ -92,9 +93,11 @@ class MeetingExampleContentCreator(object):
 
     def create_members_and_memberships(self):
         peter = create(Builder('member')
-                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+                       .having(firstname=u'Peter', lastname=u'M\xfcller',
+                               admin_unit_id=get_current_admin_unit().id()))
         hans = create(Builder('member')
-                      .having(firstname=u'Hans', lastname=u'Meier'))
+                      .having(firstname=u'Hans', lastname=u'Meier',
+                              admin_unit_id=get_current_admin_unit().id()))
 
         for committee in [self.committee_law_model,
                           self.committee_assembly_model]:

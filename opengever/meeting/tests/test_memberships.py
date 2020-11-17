@@ -39,7 +39,9 @@ class TestMemberships(FunctionalTestCase):
         self.committee = create(Builder('committee')
                                 .with_default_period()
                                 .within(self.container))
-        self.member = create(Builder('member'))
+        self.member = create(Builder('member').having(
+            admin_unit_id=self._admin_unit_id)
+        )
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
 
         # CommitteeResponsible is assigned globally here for the sake of
