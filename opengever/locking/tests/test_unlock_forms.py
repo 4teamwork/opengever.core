@@ -65,6 +65,29 @@ class TestUnlockSubmittedProposalDocument(IntegrationTestCase):
 class TestUnlockDocumentCopiedToWorkspace(IntegrationTestCase):
 
     @browsing
+    def test_locked_document_displays_message_with_link_to_unlock_form(self, browser):
+        self.login(self.administrator, browser)
+
+        lockable = ILockable(self.document)
+        self.assertFalse(lockable.locked())
+
+        browser.visit(self.document)
+        self.assertEqual([], statusmessages.info_messages())
+
+        lockable.lock(COPIED_TO_WORKSPACE_LOCK)
+        self.assertTrue(lockable.locked())
+
+        browser.visit(self.document)
+        self.assertEqual(
+            ['This document has been copied to a linked workspace and '
+             'cannot be edited directly. Unlock'],
+            statusmessages.info_messages())
+        self.assertEqual(
+            "{}/@@unlock_document_copied_to_workspace_form".format(
+                self.document.absolute_url()),
+            browser.find_link_by_text("Unlock").get('action'))
+
+    @browsing
     def test_unlocking_document_through_unlock_form(self, browser):
         self.login(self.administrator, browser)
 
