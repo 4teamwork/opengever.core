@@ -31,8 +31,11 @@ class FolderButtonsAvailabilityView(BrowserView):
 
         return True
 
+    def _is_dossier(self):
+        return IDossierMarker.providedBy(self.context)
+
     def _is_open_dossier(self):
-        if not IDossierMarker.providedBy(self.context):
+        if not self._is_dossier():
             return False
 
         return self.context.is_open()
@@ -80,3 +83,8 @@ class FolderButtonsAvailabilityView(BrowserView):
             self._can_copy_between_workspace_and_dossier()
             and self._can_add_content_to_dossier()
         )
+
+    def is_move_items_available(self):
+        if self._is_dossier() and not self._is_open_dossier():
+            return False
+        return True
