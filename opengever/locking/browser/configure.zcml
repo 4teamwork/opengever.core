@@ -13,4 +13,12 @@
       allowed_attributes="force_unlock_unstealable"
       />
 
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="unlock_submitted_document_form"
+      permission="cmf.ModifyPortalContent"
+      template="templates/unlock_submitted_document_form.pt"
+      class=".unlock_forms.UnlockSubmittedDocumentForm"
+      />
+
 </configure>
