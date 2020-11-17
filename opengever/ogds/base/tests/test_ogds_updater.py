@@ -13,7 +13,7 @@ from plone import api
 
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
-BLACKLISTED_USER_COLUMNS = {'userid', 'last_login'}
+BLACKLISTED_USER_COLUMNS = {'last_login'}
 BLACKLISTED_GROUP_COLUMNS = {'is_local'}
 
 
@@ -127,6 +127,8 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_groups()
 
         group = ogds_service().fetch_group('og_mandant1_users')
+        # Bulk updates are not session aware, thus we need to refresh
+        ogds_service().session.refresh(group)
         self.assertEquals(u'OG Mandant1 users', group.title)
 
     def test_handles_multivalues_group_titles(self):
@@ -147,6 +149,8 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_groups()
 
         group = ogds_service().fetch_group('og_mandant1_users')
+        # Bulk updates are not session aware, thus we need to refresh
+        ogds_service().session.refresh(group)
         self.assertEquals(u'OG Mandant1 users \xc4ddition', group.title)
 
     def test_imports_group_memberships(self):

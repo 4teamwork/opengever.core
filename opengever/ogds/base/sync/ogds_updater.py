@@ -1,11 +1,11 @@
 from logging.handlers import TimedRotatingFileHandler
 from opengever.base.exceptions import IncorrectConfigurationError
-from opengever.base.utils import check_group_plugin_configuration
 from opengever.base.model import create_session
 from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.pathfinder import PathFinder
 from opengever.base.sentry import maybe_report_exception
+from opengever.base.utils import check_group_plugin_configuration
 from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
@@ -17,8 +17,9 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from sqlalchemy import String
-from sqlalchemy.orm.exc import MultipleResultsFound
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import or_
+from sqlalchemy.sql.expression import true
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
@@ -30,7 +31,6 @@ import time
 NO_UID_MSG = u"User {!r} has no 'uid' attribute."
 NO_UID_AD_MSG = u"User {!r} has none of the attributes {!r} - skipping."
 USER_NOT_FOUND_LDAP = u"Referenced user {!r} not found in LDAP, ignoring!"
-USER_NOT_FOUND_SQL = u"Referenced user {!r} not found in SQL, ignoring!"
 
 AD_UID_KEYS = [u'userid', u'sAMAccountName', u'windows_login_name']
 
@@ -60,7 +60,7 @@ def sync_ogds(plone, users=True, groups=True):
     check_group_manager(plone)
 
     updater = IOGDSUpdater(plone)
-    start = time.clock()
+    start = time.time()
 
     if users:
         logger.info(u"Importing users...")
@@ -70,7 +70,7 @@ def sync_ogds(plone, users=True, groups=True):
         logger.info(u"Importing groups...")
         updater.import_groups()
 
-    elapsed = time.clock() - start
+    elapsed = time.time() - start
     logger.info(u"Done in {:0.1f} seconds.".format(elapsed))
 
     logger.info(u"Updating LDAP SYNC importstamp...")
@@ -177,10 +177,107 @@ class OGDSUpdater(object):
         """
         session = create_session()
 
-        # Set all SQL users inactive first - the ones still contained in the
-        # LDAP will be set active again below (in the same transaction).
-        for user in session.query(User):
-            user.active = False
+        ldap_users = self.ldap_users()
+        ogds_users = {
+            user.userid: {
+                col: getattr(user, col)
+                for col in user.column_names_to_sync
+            } for user in session.query(User)
+        }
+
+        added_mappings, deleted_mappings, modified_mappings = self.update_mappings(
+            ldap_users, ogds_users)
+
+        session.bulk_insert_mappings(User, added_mappings)
+        for added in added_mappings:
+            logger.info('Added user %s', added['userid'])
+
+        session.bulk_update_mappings(User, deleted_mappings + modified_mappings)
+        for deleted in deleted_mappings:
+            logger.info('Deactivated user %s', deleted['userid'])
+        for modified in modified_mappings:
+            logger.info('Modified user %s', modified['userid'])
+
+        logger.info('Users added: %s', len(added_mappings))
+        logger.info('Users deactivated: %s', len(deleted_mappings))
+        logger.info('Users modified: %s', len(modified_mappings))
+
+    def import_groups(self):
+        """Imports groups from all the configured LDAP plugins into OGDS.
+        """
+        session = create_session()
+
+        ldap_groups, ldap_group_members = self.ldap_groups_and_members()
+        ogds_groups = {}
+        ogds_group_members = {}
+        for group in (
+            session.query(Group)
+            .filter(or_(Group.is_local.is_(None), Group.is_local == false()))
+        ):
+            ogds_groups[group.groupid] = {
+                col: getattr(group, col)
+                for col in group.column_names_to_sync
+            }
+            ogds_group_members[group.groupid] = set(
+                [user.userid for user in group.users])
+
+        # Ignore local OGDS groups
+        local_ogds_groups = set([
+            group.groupid for group
+            in session.query(Group).filter(Group.is_local == true())
+        ])
+        for local_group in local_ogds_groups:
+            if local_group in ldap_groups:
+                del ldap_groups[local_group]
+            if local_group in ldap_group_members:
+                del ldap_group_members[local_group]
+
+        added_mappings, deleted_mappings, modified_mappings = self.update_mappings(
+            ldap_groups, ogds_groups, pk='groupid')
+
+        session.bulk_insert_mappings(Group, added_mappings)
+        for added in added_mappings:
+            logger.info('Added group %s', added['groupid'])
+
+        session.bulk_update_mappings(Group, deleted_mappings + modified_mappings)
+        for deleted in deleted_mappings:
+            logger.info('Deactivated group %s', deleted['groupid'])
+        for modified in modified_mappings:
+            logger.info('Modified group %s', modified['groupid'])
+
+        # Update group members
+        ogds_users = {
+            user.userid: user for user in session.query(User)
+        }
+        ogds_groups = {
+            group.groupid: group
+            for group in session.query(Group).filter(
+                or_(Group.is_local.is_(None), Group.is_local == false())
+            )
+        }
+
+        modified_count = 0
+        for groupid in ldap_group_members.keys():
+            diff = ldap_group_members[groupid] ^ ogds_group_members.get(groupid, set())
+            if diff:
+                group = ogds_groups[groupid]
+                group.users = [
+                    ogds_users[userid] for userid
+                    in ldap_group_members[groupid]
+                ]
+                for userid in ldap_group_members[groupid]:
+                    logger.info('Added user %s into group %s.', userid, groupid)
+                modified_count += 1
+
+        logger.info('Groups added: %s', len(added_mappings))
+        logger.info('Groups deactivated: %s', len(deleted_mappings))
+        logger.info('Groups modified: %s', len(modified_mappings))
+        logger.info('Groups with modified membership: %s', modified_count)
+        session.flush()
+
+    def ldap_users(self):
+        """Fetch users from LDAP"""
+        users = {}
 
         for plugin in self._ldap_plugins():
             ldap_userfolder = plugin._getLDAPUserFolder()
@@ -208,36 +305,14 @@ class OGDSUpdater(object):
                                 u"userid too long!".format(userid))
                     continue
 
-                if not self.user_exists(userid):
-                    # Create the new user
-                    user = User(userid)
-                    session.add(user)
-                else:
-                    # Get the existing user
-                    try:
-                        user = self.get_sql_user(userid)
-                    except MultipleResultsFound:
-                        # Duplicate user with slightly different spelling
-                        # (casing, whitespace, ...) that may not be considered
-                        # different by the SQL backend's unique constraint.
-                        # We therefore enforce uniqueness ourselves.
-                        logger.warn(
-                            u"Skipping duplicate user '{}'!".format(userid))
-                        continue
-
-                # Iterate over all SQL columns to be synchronized and update their values
-                for col in user.columns_to_sync:
-                    if col.name == 'userid':
-                        # We already set the userid when creating the user
-                        # object, and it may not be called the same in LDAP as
-                        # in our SQL model
-                        continue
+                user_attrs = {}
+                for col in User.columns_to_sync:
                     value = info.get(col.name)
 
                     # We can't store sequences in SQL columns. So if we do get
                     # a multi-valued field to be stored directly in OGDS, we
                     # treat it as a multi-line string and join it.
-                    if isinstance(value, list) or isinstance(value, tuple):
+                    if isinstance(value, (list, tuple)):
                         value = ' '.join([str(v) for v in value])
 
                     if isinstance(value, str):
@@ -251,31 +326,17 @@ class OGDSUpdater(object):
                                 u"(user: %r)" % (value, col.name, userid))
                             value = value[:col.type.length]
 
-                    setattr(user, col.name, value)
+                    user_attrs[col.name] = value
 
-                # Set the user active
-                user.active = True
-                logger.info(u"Imported user '{}'".format(userid))
-            session.flush()
+                user_attrs['active'] = True
+                users[userid] = user_attrs
 
-    def import_groups(self):
-        """Imports groups from all the configured LDAP plugins into OGDS.
-        """
-        session = create_session()
+        return users
 
-        # Set all SQL groups inactive first - the ones still contained in the
-        # LDAP will be set active again below (in the same transaction).
-        #
-        # Also set their `users` attribute to an empty collection in order
-        # to clear out memberships from the `groups_users` association table
-        # before importing them, so that memberships from groups that have
-        # been deleted in LDAP get removed from OGDS.
-        #
-        # Local groups are ignored as they should not get synced to the LDAP.
-        for group in session.query(Group).filter(Group.is_local != True):  # noqa
-            group.active = False
-            group.users = []
-
+    def ldap_groups_and_members(self):
+        """Fetch groups and group members from LDAP"""
+        groups = {}
+        members = {}
         for plugin in self._ldap_plugins():
             ldap_userfolder = plugin._getLDAPUserFolder()
 
@@ -284,6 +345,7 @@ class OGDSUpdater(object):
             logger.info(u'Group filter: %r' % ldap_util.get_group_filter())
 
             ldap_groups = ldap_util.get_groups()
+            ldap_users = {dn.lower(): info for dn, info in ldap_util.get_users()}
 
             for ldap_group in ldap_groups:
                 dn, info = ldap_group
@@ -306,54 +368,26 @@ class OGDSUpdater(object):
                                 u"groupid too long!".format(groupid))
                     continue
 
-                if not self.group_exists(groupid):
-                    # Create the new group
-                    group = Group(groupid)
-                    session.add(group)
-                else:
-                    # Get the existing group
-                    try:
-                        group = self.get_sql_group(groupid)
-                    except MultipleResultsFound:
-                        # Duplicate group with slightly different spelling
-                        # (casing, whitespace, ...) that may not be considered
-                        # different by the SQL backend's unique constraint.
-                        # We therefore enforce uniqueness ourselves.
-                        logger.warn(
-                            u"Skipping duplicate group '{}'!".format(groupid))
-                        continue
-
-                if group.is_local:
-                    # We avoid overwriting local groups.
-                    logger.warn(
-                        u"Skipping LDAP group '{}'! "
-                        "Already exists as local group.".format(groupid))
-                    continue
-
-                logger.info(u"Importing group '{}'...".format(groupid))
-
-                # Iterate over all SQL columns to be synchronized and update their values
-                for col in group.columns_to_sync:
-                    setattr(group, col.name,
-                            self._convert_value(info.get(col.name)))
-
-                # Sync group title
+                group_attrs = {}
+                for col in Group.columns_to_sync:
+                    group_attrs[col.name] = self._convert_value(
+                        info.get(col.name))
                 title_attribute = self.get_group_title_ldap_attribute()
                 if title_attribute and info.get(title_attribute):
-                    setattr(group, 'title',
-                            self._convert_value(info.get(title_attribute)))
+                    group_attrs['title'] = self._convert_value(
+                        info.get(title_attribute))
+                group_attrs['active'] = True
+                groups[groupid] = group_attrs
 
-                contained_users = []
+                contained_users = set()
                 group_members = ldap_util.get_group_members(info)
 
                 for user_dn in group_members:
-                    ldap_user = ldap_util.entry_by_dn(user_dn)
+                    user_info = ldap_users.get(user_dn.lower())
 
-                    if ldap_user is None:
+                    if user_info is None:
                         logger.warn(USER_NOT_FOUND_LDAP.format(user_dn))
                         continue
-
-                    user_dn, user_info = ldap_user
 
                     if isinstance(user_dn, str):
                         user_dn = user_dn.decode('utf-8')
@@ -383,23 +417,38 @@ class OGDSUpdater(object):
                     if isinstance(userid, str):
                         userid = userid.decode('utf-8')
 
-                    try:
-                        user = self.get_sql_user(userid)
-                    except NoResultFound:
-                        logger.warn(USER_NOT_FOUND_SQL.format(userid))
-                        continue
-                    except MultipleResultsFound:
-                        # Duplicate user - skip (see above).
-                        logger.warn(
-                            u"  Skipping duplicate user '{}'!".format(userid))
-                        continue
+                    contained_users.add(userid)
 
-                    contained_users.append(user)
-                    logger.info(
-                        u"Importing user '{}' into group '{}'...".format(
-                            userid, groupid))
+                members[groupid] = contained_users
 
-                group.users = contained_users
-                group.active = True
-                session.flush()
-                logger.info(u"Done.")
+        return groups, members
+
+    def update_mappings(self, ldap_objects, ogds_objects, pk='userid'):
+        """Determine difference between LDAP and OGDS objects and return
+           mappings for bulk inserts/updates.
+        """
+        ldap_keys = set(ldap_objects.keys())
+        ogds_keys = set(ogds_objects.keys())
+        ogds_active_keys = set(
+            [key for key, value in ogds_objects.items() if value.get('active')])
+
+        added = ldap_keys - ogds_keys
+        deleted = ogds_active_keys - ldap_keys
+        existing = ldap_keys & ogds_keys
+        modified = {}
+        for key in existing:
+            diff = set(ldap_objects[key].items()) ^ set(ogds_objects[key].items())
+            if diff:
+                attributes = dict(diff).keys()
+                modified[key] = attributes
+
+        added_mappings = [ldap_objects[a] for a in added]
+        deleted_mappings = [{pk: d, 'active': False} for d in deleted]
+        modified_mappings = []
+        for key, modified_attrs in modified.items():
+            changes = {pk: key}
+            for modified_attr in modified_attrs:
+                changes[modified_attr] = ldap_objects[key][modified_attr]
+            modified_mappings.append(changes)
+
+        return added_mappings, deleted_mappings, modified_mappings
