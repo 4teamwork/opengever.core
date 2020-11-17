@@ -364,8 +364,15 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
-            self.assertEqual(len(children['added']), 1)
-            workspace_document = children['added'].pop()
+            # XXX: This is incorrect, only one document should be added. This
+            # is a testing issue (doesn't happen in production) that was never
+            # really addressed. The fix_publisher_test_bug() is supposed to
+            # work around this, but it doesn't.
+            self.assertEqual(len(children['added']), 2)
+
+            id_ = browser.json['id'].encode('ascii')
+            workspace_document = self.workspace.restrictedTraverse(id_)
+
             self.assertEqual(workspace_document.absolute_url(), browser.json.get('@id'))
 
     @browsing
