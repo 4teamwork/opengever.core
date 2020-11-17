@@ -3,7 +3,7 @@ from Acquisition import aq_parent
 from opengever.base.response import IResponseContainer
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
-from opengever.meeting import _
+from opengever.locking import _
 from opengever.meeting.proposalhistory import ProposalResponse
 from plone.locking.interfaces import ILockable
 from Products.Five.browser import BrowserView
@@ -88,7 +88,9 @@ class UnlockSubmittedDocumentForm(UnlockDocumentBaseForm):
     view_name = "unlock_submitted_document_form"
     unlock_message = _(
         'msg_unlock_submitted_document',
-        default=u"Do you really want to unlock the submitted document?")
+        default=u"This will decouple the submitted document from the original "
+                u"one. You will then be able to modify this document but "
+                u"submitting a new version will not be possible anymore.")
 
     def check_preconditions(self):
         if not self.context.is_submitted_document():
@@ -110,4 +112,6 @@ class UnlockDocumentCopiedToWorkspaceForm(UnlockDocumentBaseForm):
     view_name = "unlock_document_copied_to_workspace_form"
     unlock_message = _(
         'msg_unlock_document_copied_to_workspace',
-        default=u"Do you really want to unlock the document copied to a workspace?")
+        default=u"Modifications made to this document in Gever might get "
+                u"overwritten when copying the document back from the linked "
+                u"workspace as a new version of this document.")
