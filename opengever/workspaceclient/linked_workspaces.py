@@ -1,6 +1,7 @@
 from opengever.api.add import GeverFolderPost
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.journal.handlers import journal_entry_factory
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
@@ -12,6 +13,7 @@ from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from plone import api
 from plone.dexterity.utils import iterSchemata
+from plone.locking.interfaces import ILockable
 from plone.memoize import ram
 from plone.restapi.interfaces import ISerializeToJson
 from time import time
@@ -141,7 +143,7 @@ class LinkedWorkspaces(object):
             raise WorkspaceNotFound()
         return workspace_url
 
-    def copy_document_to_workspace(self, document, workspace_uid):
+    def copy_document_to_workspace(self, document, workspace_uid, lock=False):
         """Will upload a copy of a document to a linked workspace.
         """
         if document.is_checked_out():
@@ -184,6 +186,8 @@ class LinkedWorkspaces(object):
         workspace_document_uid = response['UID']
         ILinkedDocuments(document).link_workspace_document(workspace_document_uid)
 
+        if lock:
+            ILockable(document).lock(COPIED_TO_WORKSPACE_LOCK)
         return response
 
     def _get_document_by_uid(self, workspace_uid, document_uid):
