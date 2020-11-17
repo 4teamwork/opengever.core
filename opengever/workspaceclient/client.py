@@ -95,7 +95,7 @@ class WorkspaceClient(object):
         return self.get_by_uid(uid).get('@id')
 
     def upload_document_copy(self, url_or_path, file_, content_type,
-                             filename, document_metadata):
+                             filename, document_metadata, gever_document_uid):
         """Creates a copy of a GEVER document in a workspace.
 
         :param url_or_path: Location where to create the new document
@@ -103,12 +103,16 @@ class WorkspaceClient(object):
         :param content_type: The content type of the document
         :param filename: The filename of the document
         :param document_metadata: Additional metadatadata for the new object
+        :param gever_document_uid: UID of the GEVER document being copied
         """
         url_or_path = url_or_path.strip('/')
 
         response = self.post(
             url_or_path + '/@upload-document-copy',
             files={'file': (filename, file_, content_type)},
-            data={'document_metadata': json.dumps(document_metadata)}
+            data={
+                'document_metadata': json.dumps(document_metadata),
+                'gever_document_uid': gever_document_uid,
+            }
         )
         return response

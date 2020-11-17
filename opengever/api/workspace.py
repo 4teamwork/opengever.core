@@ -5,6 +5,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.ogds.base.actor import Actor
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.participation import can_manage_member
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.restapi.interfaces import ISerializeToJson
 from zExceptions import BadRequest
 from zope.component import adapter
@@ -45,6 +46,9 @@ class UploadDocumentCopy(GeverFolderPost):
     The value in the form field `document_metadata` is expected to be a
     JSON encoded string with the document's metadata fields in the
     ISerializeToJson serialization format.
+
+    The `gever_document_uid` is the UID of the GEVER document this copy will
+    be linked to.
     """
 
     def extract_data(self):
@@ -52,6 +56,7 @@ class UploadDocumentCopy(GeverFolderPost):
 
         self.type_ = data.get("@type", None)
         self.title_ = data.get("title", None)
+        self.gever_document_uid = self.request.form['gever_document_uid']
         self.id_ = None
 
         if not self.type_:
@@ -77,3 +82,6 @@ class UploadDocumentCopy(GeverFolderPost):
             filename=self.filename)
 
         field.set(field.interface(obj), namedblobfile)
+
+    def before_serialization(self, obj):
+        ILinkedDocuments(obj).link_gever_document(self.gever_document_uid)
