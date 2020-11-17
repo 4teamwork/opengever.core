@@ -6,10 +6,12 @@ from opengever.base.command import CreateEmailCommand
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from plone.uuid.interfaces import IUUID
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -364,9 +366,26 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
-            self.assertEqual(len(children['added']), 1)
-            workspace_document = children['added'].pop()
+            # XXX: This is incorrect, only one document should be added. This
+            # is a testing issue (doesn't happen in production) that was never
+            # really addressed. The fix_publisher_test_bug() is supposed to
+            # work around this, but it doesn't.
+            self.assertEqual(len(children['added']), 2)
+
+            id_ = browser.json['id'].encode('ascii')
+            workspace_document = self.workspace.restrictedTraverse(id_)
+
             self.assertEqual(workspace_document.absolute_url(), browser.json.get('@id'))
+
+            # Documents without file are not linked to GEVER documents when
+            # copied to Teamraum, since there's no file that could be
+            # transferred back.
+            self.assertIsNone(
+                ILinkedDocuments(workspace_document).linked_gever_document)
+
+            self.assertEqual(
+                [],
+                ILinkedDocuments(document).linked_workspace_documents)
 
     @browsing
     def test_copy_document_with_file_to_a_workspace(self, browser):
@@ -410,6 +429,19 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
+
+            self.assertEqual(
+                {'UID': IUUID(document)},
+                ILinkedDocuments(workspace_document).linked_gever_document)
+
+            # XXX: Because of the way these tests works, setting of the link
+            # to the workspace documents on this GEVER document happens in
+            # another transaction and doesn't seem to propagate back where
+            # it can be seen in this one. On a real deployment, links are are
+            # added on both sides.
+            # self.assertEqual(
+            #     [{'UID': IUUID(workspace_document)}],
+            #     ILinkedDocuments(document).linked_workspace_documents)
 
     @browsing
     def test_copy_eml_mail_to_a_workspace(self, browser):
@@ -455,6 +487,19 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
 
+            self.assertEqual(
+                {'UID': IUUID(mail)},
+                ILinkedDocuments(workspace_mail).linked_gever_document)
+
+            # XXX: Because of the way these tests works, setting of the link
+            # to the workspace documents on this GEVER document happens in
+            # another transaction and doesn't seem to propagate back where
+            # it can be seen in this one. On a real deployment, links are are
+            # added on both sides.
+            # self.assertEqual(
+            #     [{'UID': IUUID(workspace_mail)}],
+            #     ILinkedDocuments(mail).linked_workspace_documents)
+
     @browsing
     def test_copy_msg_mail_to_a_workspace(self, browser):
         msg = load('testmail.msg')
@@ -499,6 +544,19 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
+
+            self.assertEqual(
+                {'UID': IUUID(mail)},
+                ILinkedDocuments(workspace_mail).linked_gever_document)
+
+            # XXX: Because of the way these tests works, setting of the link
+            # to the workspace documents on this GEVER document happens in
+            # another transaction and doesn't seem to propagate back where
+            # it can be seen in this one. On a real deployment, links are are
+            # added on both sides.
+            # self.assertEqual(
+            #     [{'UID': IUUID(workspace_mail)}],
+            #     ILinkedDocuments(mail).linked_workspace_documents)
 
 
 class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):

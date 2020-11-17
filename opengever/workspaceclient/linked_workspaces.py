@@ -5,6 +5,7 @@ from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from plone import api
@@ -148,12 +149,13 @@ class LinkedWorkspaces(object):
         document_metadata = self._drop_non_metadata_fields(document_repr)
 
         if not file_:
-            # File only preserved in paper.
+            # File only preserved in paper. Not linked to GEVER document,
+            # since there's no file that could be transferred back.
             return self.client.post(workspace_url, json=document_repr)
 
         content_type = document.content_type()
-
         filename = document.get_filename()
+        gever_document_uid = document.UID()
 
         # Add journal entry to dossier
         workspace_title = self.client.get_by_uid(workspace_uid).get('title')
@@ -170,7 +172,10 @@ class LinkedWorkspaces(object):
         response = self.client.upload_document_copy(
             workspace_url, file_.open(),
             content_type, filename,
-            document_metadata)
+            document_metadata, gever_document_uid)
+
+        workspace_document_uid = response['UID']
+        ILinkedDocuments(document).link_workspace_document(workspace_document_uid)
 
         return response
 

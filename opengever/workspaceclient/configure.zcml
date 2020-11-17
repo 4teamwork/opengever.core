@@ -8,6 +8,7 @@
   <include file="permissions.zcml" />
 
   <adapter factory=".linked_workspaces.LinkedWorkspaces" />
+  <adapter factory=".linked_documents.LinkedDocuments" />
 
   <i18n:registerTranslations directory="locales" />
 

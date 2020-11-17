@@ -71,6 +71,9 @@ class FolderPost(Service):
     def add_object_to_context(self):
         self.obj = add(self.context, self.obj, rename=not bool(self.id_))
 
+    def before_serialization(self, obj):
+        pass
+
     def serialize_object(self):
         serializer = queryMultiAdapter((self.obj, self.request), ISerializeToJson)
 
@@ -116,6 +119,7 @@ class FolderPost(Service):
         self.request.response.setStatus(201)
         self.request.response.setHeader("Location", self.obj.absolute_url())
 
+        self.before_serialization(self.obj)
         serialized_obj = self.serialize_object()
 
         return serialized_obj

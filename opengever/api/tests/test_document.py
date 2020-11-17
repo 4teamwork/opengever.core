@@ -2,7 +2,9 @@ from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.namedfile.file import NamedBlobFile
+from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
 import json
 
@@ -106,6 +108,42 @@ class TestDocumentSerializer(IntegrationTestCase):
             browser.json.get(u'preview_url')[:124],
             u'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494e'
             u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview')
+
+    @browsing
+    def test_document_serialization_contains_tr_connect_links_on_gever_doc(self, browser):
+        self.login(self.workspace_member, browser)
+
+        adapter = ILinkedDocuments(self.document)
+        adapter.link_workspace_document(IUUID(self.workspace_document))
+        adapter.link_workspace_document(IUUID(self.workspace_folder_document))
+
+        browser.open(self.document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        expected_links = {
+            'workspace_documents': [
+                {'UID': IUUID(self.workspace_document)},
+                {'UID': IUUID(self.workspace_folder_document)},
+            ],
+            'gever_document': None,
+        }
+        self.assertEqual(expected_links, browser.json['teamraum_connect_links'])
+
+    @browsing
+    def test_document_serialization_contains_tr_connect_links_on_workspace_doc(self, browser):
+        self.login(self.workspace_member, browser)
+
+        adapter = ILinkedDocuments(self.workspace_document)
+        adapter.link_gever_document(IUUID(self.document))
+
+        browser.open(self.workspace_document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        expected_links = {
+            'workspace_documents': [],
+            'gever_document': {
+                'UID': IUUID(self.document),
+            },
+        }
+        self.assertEqual(expected_links, browser.json['teamraum_connect_links'])
 
 
 class TestDocumentPost(IntegrationTestCase):

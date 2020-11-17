@@ -76,7 +76,9 @@ Ein GEVER-Dokument in einen verknüpften Teamraum kopieren
 
 Über den Endpoint `@copy-document-to-workspace` kann eine Kopie eines GEVER-Dokuments in einen bestehenden Teamraum hochgeladen werden. Dabei ist zu beachten, dass der Teamraum mit dem Haupt-Dossier verknüpft sein muss und dass sich das Dokument innerhalb des aktuellen Hauptdossier oder in einem seiner Subdossiers befindet.
 
-Achtung: Die Kopie wird nicht mit dem originalen Dokument verknüpft. Es handelt sich um ein komplett unabhängiges Objekt. Ein automatisches zurückführen oder synchronisieren mit dem Originaldokument ist nicht möglich.
+Die Kopie wird mit dem originalen Dokument verknüpft. Diese Verknüpfung wird auf beiden Objekten eingetragen (dem ursprünglichen GEVER-Dokument, und der Kopie im Teamraum), und ist in einem GET Request auf das entsprechende Dokument im Property ``teamraum_connnect_links`` sichtbar.
+
+Ein automatisches Zurückführen oder Synchronisieren mit dem Originaldokument ist zur Zeit allerdings noch nicht möglich.
 
 **Beispiel-Request**:
 

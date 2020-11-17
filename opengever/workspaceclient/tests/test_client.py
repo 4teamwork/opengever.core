@@ -2,6 +2,7 @@ from opengever.testing import assets
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import Unauthorized
@@ -85,7 +86,7 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
                 response = client.upload_document_copy(
                     self.workspace.absolute_url(),
                     open(filepath, 'r'), content_type,
-                    'vertragsentwurf.docx', document_metadata)
+                    'vertragsentwurf.docx', document_metadata, 'UID-1234')
                 transaction.commit()
 
             self.assertEqual(1, len(children['added']))
@@ -98,3 +99,7 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             self.assertEqual(u'My new doekument.docx', document.file.filename)
             self.assertEqual(u'My new d\xf6kument', document.title)
             self.assertEqual('Fantastic', document.description)
+
+            self.assertEqual(
+                {'UID': 'UID-1234'},
+                ILinkedDocuments(document).linked_gever_document)

@@ -4,6 +4,7 @@ from opengever.base.helpers import display_name
 from opengever.base.interfaces import IReferenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.content.update import ContentPatch
@@ -49,6 +50,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             'is_shadow_document': obj.is_shadow_document(),
             'current_version_id': obj.get_current_version_id(
                 missing_as_zero=True),
+            'teamraum_connect_links': ILinkedDocuments(obj).serialize(),
         }
 
         result.update(additional_metadata)
