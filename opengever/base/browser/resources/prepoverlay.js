@@ -32,12 +32,12 @@ $(function() {
 
   });
 
-  $('.unlock-submitted-document').prepOverlay(
+  $('.unlock-document').prepOverlay(
     {
       subtype: 'ajax',
-      filter: '#unlock-submitted-document',
+      filter: '#unlock-document-form',
       closeselector: '#form-buttons-cancel',
-      formselector: '#unlock-submitted-document',
+      formselector: '#unlock-document',
       noform: function(el, config) {
         $(config.filter).closest('.overlay-ajax').overlay().close();
         location.reload();
