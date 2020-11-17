@@ -37,3 +37,9 @@ class WorkspaceNotFound(Exception):
     def __init__(self):
         super(WorkspaceNotFound, self).__init__(
             'No workspace found.')
+
+
+class CopyToWorkspaceForbidden(Exception):
+    """Raised if copying a document to a workspace is not permitted for
+    business logic reasons.
+    """

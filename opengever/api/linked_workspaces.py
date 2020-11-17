@@ -181,6 +181,11 @@ class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
         if not document or not IBaseDocument.providedBy(document):
             raise BadRequest("The document does not exist")
 
+        if document.is_checked_out():
+            raise BadRequest(
+                "Document can't be copied to a workspace because it's "
+                "currently checked out")
+
         if not self.obj_contained_in(document, self.context):
             raise BadRequest(
                 "Only documents within the current main dossier are allowed")

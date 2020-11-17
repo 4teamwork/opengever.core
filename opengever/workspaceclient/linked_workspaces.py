@@ -3,6 +3,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.journal.handlers import journal_entry_factory
 from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
+from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
@@ -142,6 +143,11 @@ class LinkedWorkspaces(object):
     def copy_document_to_workspace(self, document, workspace_uid):
         """Will upload a copy of a document to a linked workspace.
         """
+        if document.is_checked_out():
+            raise CopyToWorkspaceForbidden(
+                "Document %r can't be copied to a workspace because it's "
+                "currently checked out" % document)
+
         workspace_url = self._get_linked_workspace_url(workspace_uid)
 
         file_ = document.get_file()
