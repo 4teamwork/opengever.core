@@ -3,6 +3,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.journal.handlers import journal_entry_factory
 from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
+from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
@@ -198,6 +199,11 @@ class LinkedWorkspaces(object):
         if not document:
             raise LookupError("Document not in linked workspace")
 
+        if bool(document['checked_out']):
+            raise CopyFromWorkspaceForbidden(
+                "Document %r can't be copied from workspace because it's "
+                "currently checked out" % document_uid)
+
         document_url = document.get("@id")
         document_repr = self.client.get(url_or_path=document_url)
 
@@ -247,7 +253,7 @@ class LinkedWorkspaces(object):
         return self.client.search(
             url_or_path=workspace_url,
             portal_type=["opengever.document.document", "ftw.mail.mail"],
-            metadata_fields=["UID", "filename"],
+            metadata_fields=["UID", "filename", "checked_out"],
             **kwargs)
 
     def has_linked_workspaces(self):

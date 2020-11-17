@@ -43,3 +43,9 @@ class CopyToWorkspaceForbidden(Exception):
     """Raised if copying a document to a workspace is not permitted for
     business logic reasons.
     """
+
+
+class CopyFromWorkspaceForbidden(Exception):
+    """Raised if copying a document from a workspace is not permitted for
+    business logic reasons.
+    """

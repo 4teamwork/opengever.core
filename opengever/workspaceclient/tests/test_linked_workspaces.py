@@ -7,6 +7,7 @@ from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
+from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -358,7 +359,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             expected_url = (
                 '{}/@search?portal_type=opengever.document.document&'
                 'portal_type=ftw.mail.mail&metadata_fields=UID&'
-                'metadata_fields=filename'.format(
+                'metadata_fields=filename&metadata_fields=checked_out'.format(
                     self.workspace.absolute_url()))
             self.assertEqual(expected_url, documents['@id'])
             self.assertEqual(1, documents['items_total'])
@@ -366,6 +367,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 {u'@id': document.absolute_url(),
                  u'@type': u'opengever.document.document',
                  u'UID': document.UID(),
+                 u'checked_out': u'',
                  u'description': u'',
                  u'filename': u'',
                  u'is_leafnode': None,
@@ -498,6 +500,28 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
+
+    def test_copying_document_from_workspace_is_prevented_if_checked_out(self):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .with_dummy_content())
+
+        manager = getMultiAdapter((document, self.request), ICheckinCheckoutManager)
+        manager.checkout()
+
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    with self.assertRaises(CopyFromWorkspaceForbidden):
+                        manager.copy_document_from_workspace(
+                            self.workspace.UID(), document.UID())
+
+            self.assertEqual(0, len(children['added']))
 
 
 class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
