@@ -60,7 +60,7 @@ def sync_ogds(plone, users=True, groups=True):
     check_group_manager(plone)
 
     updater = IOGDSUpdater(plone)
-    start = time.clock()
+    start = time.time()
 
     if users:
         logger.info(u"Importing users...")
@@ -70,7 +70,7 @@ def sync_ogds(plone, users=True, groups=True):
         logger.info(u"Importing groups...")
         updater.import_groups()
 
-    elapsed = time.clock() - start
+    elapsed = time.time() - start
     logger.info(u"Done in {:0.1f} seconds.".format(elapsed))
 
     logger.info(u"Updating LDAP SYNC importstamp...")
