@@ -32,6 +32,87 @@ class TestLocalReferenceNumber(IntegrationTestCase):
         self.assertEquals(
             u'1', IReferenceNumber(self.dossier).get_local_number())
 
+    def test_document_returns_sequence_number_of_context(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'14', IReferenceNumber(self.document).get_local_number())
+
+    def test_task_returns_empty_string(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.task).get_local_number())
+
+    def test_committee_container_returns_empty_string(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.committee_container).get_local_number())
+
+    def test_committee_returns_empty_string(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.committee).get_local_number())
+
+    def test_proposal_returns_empty_string(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.proposal).get_local_number())
+
+    def test_inbox_container_returns_empty_string(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.inbox_container).get_local_number())
+
+    def test_inbox_returns_empty_string(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.inbox).get_local_number())
+
+    def test_contactfolder_returns_empty_string(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.contactfolder).get_local_number())
+
+    def test_contact_returns_empty_string(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.franz_meier).get_local_number())
+
+    def test_private_root_returns_location_prefix(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'P', IReferenceNumber(self.private_root).get_local_number())
+
+    def test_private_folder_returns_urlified_userid(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'kathi-barfuss',
+            IReferenceNumber(self.private_folder).get_local_number())
+
+    def test_private_dossier_returns_reference_prefix_of_the_context(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'1',
+            IReferenceNumber(self.private_dossier).get_local_number())
+
+    def test_template_folder_returns_empty_string(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            '',
+            IReferenceNumber(self.templates).get_local_number())
+
 
 class TestReferenceNumberAdapter(IntegrationTestCase):
 
@@ -84,6 +165,132 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
         self.assertEquals(
             '11-1.1',
             IReferenceNumber(self.subdossier).get_number())
+
+    def test_reference_number_for_plone_site(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.portal).get_number())
+
+    def test_reference_number_for_repository_root(self):
+        self.login(self.regular_user)
+
+        self.assertEquals("{'repositoryroot': [''], 'site': [u'Client1']} ",
+                          IReferenceNumber(self.repository_root).get_number())
+
+    def test_reference_number_for_repositoryfolder(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1',
+                          IReferenceNumber(self.leaf_repofolder).get_number())
+
+    def test_reference_number_for_dossier(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1.1',
+                          IReferenceNumber(self.subdossier).get_number())
+
+    def test_reference_number_for_document(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1.1.1 / 23',
+                          IReferenceNumber(self.subsubdocument).get_number())
+
+    def test_reference_number_for_task(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1',
+                          IReferenceNumber(self.subtask).get_number())
+
+    def test_reference_number_for_committee_container(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.committee_container).get_number())
+
+    def test_reference_number_for_committee(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.committee).get_number())
+
+    def test_reference_number_for_proposal(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1',
+                          IReferenceNumber(self.proposal).get_number())
+
+    def test_reference_number_for_proposal_document(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1 / 18',
+                          IReferenceNumber(self.proposaldocument).get_number())
+
+    def test_reference_number_for_inbox_container(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.inbox_container).get_number())
+
+    def test_reference_number_for_inbox(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.inbox).get_number())
+
+    def test_reference_number_for_contactfolder(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.contactfolder).get_number())
+
+    def test_reference_number_for_contact(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.franz_meier).get_number())
+
+    def test_reference_number_for_private_root(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'P Client1',
+                          IReferenceNumber(self.private_root).get_number())
+
+    def test_reference_number_for_private_folder(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'P Client1 kathi-barfuss',
+                          IReferenceNumber(self.private_folder).get_number())
+
+    def test_reference_number_for_private_dossier(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'P Client1 kathi-barfuss / 1',
+                          IReferenceNumber(self.private_dossier).get_number())
+
+    def test_reference_number_for_template_folder(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.templates).get_number())
+
+    def test_reference_number_for_document_template(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 / 3',
+                          IReferenceNumber(self.empty_template).get_number())
+
+    def test_reference_number_for_tasktemplate(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.tasktemplate).get_number())
+
+    def test_reference_number_for_dossiertemplate(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.subdossiertemplate).get_number())
 
 
 class TestDottedFormatterBase(IntegrationTestCase):
