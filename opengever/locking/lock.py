@@ -18,3 +18,9 @@ LOCK_TYPE_MEETING_EXCERPT_LOCK = u'meeting.excerpt.lock'
 MEETING_EXCERPT_LOCK = LockType(
     LOCK_TYPE_MEETING_EXCERPT_LOCK,
     stealable=True, user_unlockable=True, timeout=MAX_TIMEOUT)
+
+
+LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK = u'document.copied_to_workspace.lock'
+COPIED_TO_WORKSPACE_LOCK = LockType(
+    LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK,
+    stealable=True, user_unlockable=True, timeout=MAX_TIMEOUT)
