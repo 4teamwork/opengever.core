@@ -21,4 +21,12 @@
       class=".unlock_forms.UnlockSubmittedDocumentForm"
       />
 
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="unlock_document_copied_to_workspace_form"
+      permission="cmf.ModifyPortalContent"
+      template="templates/unlock_document_form.pt"
+      class=".unlock_forms.UnlockDocumentCopiedToWorkspaceForm"
+      />
+
 </configure>

@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.response import IResponseContainer
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting import _
 from opengever.meeting.proposalhistory import ProposalResponse
@@ -101,3 +102,12 @@ class UnlockSubmittedDocumentForm(UnlockDocumentBaseForm):
 
         proposal = aq_parent(aq_inner(self.context))
         IResponseContainer(proposal).add(response)
+
+
+class UnlockDocumentCopiedToWorkspaceForm(UnlockDocumentBaseForm):
+
+    lock_type = COPIED_TO_WORKSPACE_LOCK
+    view_name = "unlock_document_copied_to_workspace_form"
+    unlock_message = _(
+        'msg_unlock_document_copied_to_workspace',
+        default=u"Do you really want to unlock the document copied to a workspace?")

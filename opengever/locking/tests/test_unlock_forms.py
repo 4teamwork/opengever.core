@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.meeting.model import SubmittedDocument
 from opengever.testing import IntegrationTestCase
 from plone.locking.interfaces import ILockable
@@ -59,3 +60,32 @@ class TestUnlockSubmittedProposalDocument(IntegrationTestCase):
 
         self.assertEqual([''], browser.css('body').text_content())
         self.assertFalse(lockable.locked(), "Submitted document should be unlocked")
+
+
+class TestUnlockDocumentCopiedToWorkspace(IntegrationTestCase):
+
+    @browsing
+    def test_unlocking_document_through_unlock_form(self, browser):
+        self.login(self.administrator, browser)
+
+        lockable = ILockable(self.document)
+        self.assertFalse(lockable.locked())
+
+        lockable.lock(COPIED_TO_WORKSPACE_LOCK)
+        self.assertTrue(lockable.locked())
+
+        browser.visit(self.document, view="@@unlock_document_copied_to_workspace_form")
+        browser.find_button_by_label('Unlock').click()
+
+        statusmessages.assert_message('Document has been unlocked')
+        self.assertFalse(lockable.locked(), "Document should be unlocked")
+
+    @browsing
+    def test_unlock_form_redirects_to_document_if_document_is_not_locked(self, browser):
+        self.login(self.administrator, browser)
+
+        lockable = ILockable(self.document)
+        self.assertFalse(lockable.locked())
+
+        browser.visit(self.document, view="@@unlock_document_copied_to_workspace_form")
+        self.assertEqual(self.document.absolute_url(), browser.url)
