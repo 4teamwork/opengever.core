@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.base.command import CreateEmailCommand
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
@@ -15,6 +16,7 @@ from plone.uuid.interfaces import IUUID
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+from zope.component import getMultiAdapter
 import json
 import requests_mock
 import transaction
@@ -558,6 +560,44 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             #     [{'UID': IUUID(workspace_mail)}],
             #     ILinkedDocuments(mail).linked_workspace_documents)
 
+    @browsing
+    def test_copy_document_to_workspace_is_prevented_if_checked_out(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        manager = getMultiAdapter((document, self.request), ICheckinCheckoutManager)
+        manager.checkout()
+
+        payload = {
+            'document_uid': document.UID(),
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, document)
+            with self.observe_children(self.workspace) as children:
+                with browser.expect_http_error(code=400):
+                    browser.open(
+                        self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                        data=json.dumps(payload),
+                        method='POST',
+                        headers={'Accept': 'application/json',
+                                 'Content-Type': 'application/json'},
+                    )
+
+            self.assertEqual(len(children['added']), 0)
+            self.assertEqual(
+                {u'type': u'BadRequest',
+                 u'message': u"Document can't be copied to a workspace "
+                             u"because it's currently checked out"},
+                browser.json)
+
 
 class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
 
@@ -632,6 +672,7 @@ class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
                 [{u'@id': document.absolute_url(),
                   u'@type': u'opengever.document.document',
                   u'UID': document.UID(),
+                  u'checked_out': u'',
                   u'description': u'',
                   u'filename': u'',
                   u'is_leafnode': None,
@@ -921,3 +962,41 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(mail_copy))
+
+    @browsing
+    def test_copying_document_from_workspace_is_prevented_if_checked_out(self, browser):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .with_dummy_content())
+
+        manager = getMultiAdapter((document, self.request), ICheckinCheckoutManager)
+        manager.checkout()
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'document_uid': document.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, document)
+            with self.observe_children(self.dossier) as children:
+                with browser.expect_http_error(code=400):
+                    browser.open(
+                        self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                        data=json.dumps(payload),
+                        method='POST',
+                        headers={'Accept': 'application/json',
+                                 'Content-Type': 'application/json'},
+                    )
+
+            self.assertEqual(len(children['added']), 0)
+            self.assertEqual(
+                {u'type': u'BadRequest',
+                 u'message': u"Document can't be copied from workspace "
+                             u"because it's currently checked out"},
+                browser.json)

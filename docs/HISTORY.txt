@@ -4,6 +4,7 @@ Changelog
 2020.14.0 (unreleased)
 ----------------------
 
+- Prevent documents from being copied to workspace when checked out. [lgraf]
 - Link documents copied via Teamraum Connect. [lgraf]
 - Use a dedicated endpoint to upload document copy to workspace. [lgraf]
 - Add @notification-settings API endpoint. [tinagerber]

@@ -2,6 +2,7 @@ from functools import wraps
 from opengever.base.sentry import maybe_report_exception
 from opengever.document.behaviors import IBaseDocument
 from opengever.workspaceclient import is_workspace_client_feature_available
+from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -181,6 +182,11 @@ class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
         if not document or not IBaseDocument.providedBy(document):
             raise BadRequest("The document does not exist")
 
+        if document.is_checked_out():
+            raise BadRequest(
+                "Document can't be copied to a workspace because it's "
+                "currently checked out")
+
         if not self.obj_contained_in(document, self.context):
             raise BadRequest(
                 "Only documents within the current main dossier are allowed")
@@ -236,8 +242,14 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         workspace_uid, document_uid = self.validate_data(json_body(self.request))
-        document = ILinkedWorkspaces(self.context).copy_document_from_workspace(
-            workspace_uid, document_uid)
+        try:
+            document = ILinkedWorkspaces(self.context).copy_document_from_workspace(
+                workspace_uid, document_uid)
+        except CopyFromWorkspaceForbidden:
+            raise BadRequest(
+                "Document can't be copied from workspace because it's "
+                "currently checked out")
+
         return self.serialize_object(document)
 
     def serialize_object(self, obj):
