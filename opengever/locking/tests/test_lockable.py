@@ -159,8 +159,8 @@ class TestSQLLockable(FunctionalTestCase):
     def test_lock_info_returns_an_list_of_dicts_of_all_valid_locks(self):
         # valid
         lock1 = create(Builder('lock')
-                      .of_obj(self.wrapper)
-                      .having(time=utcnow_tz_aware() - timedelta(seconds=100)))
+                       .of_obj(self.wrapper)
+                       .having(time=utcnow_tz_aware() - timedelta(seconds=100)))
 
         self.assertEquals(
             [{'creator': TEST_USER_ID,
@@ -175,9 +175,9 @@ class TestSQLLockable(FunctionalTestCase):
 
     def test_during_lock_creation_the_expired_locks_gets_cleared(self):
         lock_1 = create(Builder('lock')
-                       .having(object_type='Meeting',
-                               object_id=12345,
-                               time=utcnow_tz_aware() - timedelta(seconds=1000)))
+                        .having(object_type='Meeting',
+                                object_id=12345,
+                                time=utcnow_tz_aware() - timedelta(seconds=1000)))
 
         lock_2 = create(Builder('lock')
                         .having(object_type='Meeting',
