@@ -235,6 +235,73 @@ Then run the `activate_solr` maintenance script:
     $ bin/instance run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
 
 
+Activating Solr sync
+~~~~~~~~~~~~~~~~~~~~
+
+The custom Solr sync allows to propagate document updates to another Solr. This can be enabled for specific portal types.
+A StatelessScriptUpdateProcessor with the name ``sync.chain`` provides a script that is using a JavaScript Script to sync the documents.
+
+To activate the ``sync.chain``, provide an overlayconfig using the ``overlayconfig`` option in the ``ftw.recipe.solr``.
+See https://github.com/4teamwork/ftw.recipe.solr#supported-options for more information.
+
+In order for the StatelessScriptUpdateProcessor to work, add the following overlayconfig under the solr section in the buildout.cfg.
+
+.. code::
+configoverlay =
+    {
+        "initParams": {
+            "/update/**,/query,/select,/spell": {
+                "name":"/update/**,/query,/select,/spell",
+                "path":"/update/**,/query,/select,/spell",
+                "defaults": {
+                    "update.chain":"sync.chain",
+                    "df":"SearchableText"
+                }
+            }
+        }
+    }
+
+When the ``sync.chain`` UpdateRequestProcessorChain is activated, the ``remoteCoreURL`` and ``portalTypes`` option has to be set in the ``buildout.cfg``. The ``portalTypes`` options is a comma separated list of portal_types to sync.
+This is done by using the ``jvm-opts`` option:
+
+.. code::
+    [solr]
+        jvm-opts = -Xms512m -Xmx512m -Xss256k -DremoteCoreURL=http://localhost:8984/solr/ris  -DportalTypes=opengever.document.document,opengever.dossier.businesscasedossier
+
+Notice the other options next to ``-DremoteCoreURL``. These are options from https://github.com/4teamwork/ftw.recipe.solr#supported-options.
+All the defaults from the ``jvm-opts`` section have to be set here again to not override the defaults.
+
+Testing
+^^^^^^^
+
+Because automated testing is hard, the tests have to be done manually. This section documents the steps required to do the test setup involving two Solr instances. The manual test will determine whether the relevant documents are propagated to a remote Solr.
+
+1. Install the RIS Solr from https://github.com/4teamwork/ris-solr#lokale-entwicklung
+2. Change the RIS Solr port to ``8984`` in the buildout.cfg:
+
+.. code::
+
+    [solr]
+    port = 8984
+
+3. Configure the GEVER Solr as documented under :ref:`Activating Solr sync`
+4. Start GEVER, GEVER Solr and RIS Solr
+5. Go to http://localhost:8984/ and select the ``ris`` Solr core
+6. Make a query with ``q=*:*`` and no active filters
+7. As a result there should be no search results
+8. Go to http://localhost:8080/fd/ordnungssystem/fuehrung/kommunikation/allgemeines/dossier-1 and change the dossiertitle from ``Jahresdossier 2015`` to ``Jahresdossier 2017``
+9. Go back to the RIS Solr and make a query with ``q=Title:Jahresdossier 2017`` and no active filters
+10. As a result the dossier with the title ``Jahresdossier 2017`` should appear
+11. Go to http://localhost:8080/fd/ordnungssystem/fuehrung/kommunikation/allgemeines/dossier-1/document-1 and change the documenttitle from ``Jahresdokument`` to ``Jahresdokument RIS``
+12. Go back to the RIS Solr and make a query with ``q=Title:Jahresdokument RIS`` and no active filters
+13. As a result the document with the title ``Jahresdokument RIS`` should appear
+14. Go to http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-16/task-1 and change the tasktitle from ``Testaufgabe`` to ``Testaufgabe RIS``
+15. Go back to the RIS Solr and make a query with ``q=Title:Testaufgabe RIS`` and no active filters
+16. As a result there should be no search results
+17. Go to http://localhost:8080/fd/ordnungssystem/fuehrung/kommunikation/allgemeines and create a new dossier with the title ``Testdossier RIS`` and select ``david.erni`` as responsible
+18. Go back to the RIS Solr and make a query with ``q=Title:Testdossier RIS`` and no active filters
+19. As a result the dossier with the title ``Testdossier RIS`` should appear
+
 Setting up a multi-admin environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
