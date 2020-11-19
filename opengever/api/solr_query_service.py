@@ -290,6 +290,7 @@ FIELDS_WITH_MAPPING = [
     ListingField('document_type', 'document_type', transform=translate_document_type),
     ListingField('filename', 'filename', filename),
     ListingField('filesize', 'filesize', filesize),
+    ListingField('issuer', 'issuer', transform=display_name),
     ListingField('issuer_fullname', 'issuer', 'issuer_fullname'),
     ListingField('keywords', 'Subject'),
     ListingField('mimetype', 'getContentType', sort_index='mimetype'),
