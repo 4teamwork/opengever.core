@@ -101,7 +101,7 @@ class TestListingStats(SolrIntegrationTestCase):
         self.assertEqual(4, self.get_facet_by_value(pivot, 'folder_contents').get('count'))
 
     @browsing
-    def test_exclude_trashed_content(self, browser):
+    def test_include_trashed_content(self, browser):
         self.login(self.regular_user, browser)
 
         dossier = create(Builder('dossier').within(self.leaf_repofolder))
@@ -128,7 +128,7 @@ class TestListingStats(SolrIntegrationTestCase):
         )
 
         pivot = self.get_facet_pivot_for(dossier, 'listing_name', browser)
-        self.assertEqual(0, self.get_facet_by_value(pivot, 'documents').get('count'))
+        self.assertEqual(1, self.get_facet_by_value(pivot, 'documents').get('count'))
 
     @browsing
     def test_listing_stats_pivot_queries_full_response(self, browser):
