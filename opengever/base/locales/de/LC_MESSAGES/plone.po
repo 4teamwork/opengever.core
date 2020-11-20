@@ -270,6 +270,21 @@ msgstr "Löschen"
 msgid "mail-transition-restore"
 msgstr "Wiederherstellen"
 
+msgid "proposal-state-active"
+msgstr "In Bearbeitung"
+
+msgid "proposal-state-cancelled"
+msgstr "Storniert"
+
+msgid "proposal-state-decided"
+msgstr "Beschlossen"
+
+msgid "proposal-state-scheduled"
+msgstr "Traktandiert"
+
+msgid "proposal-state-submitted"
+msgstr "Eingereicht"
+
 msgid "proposal-transition-cancel"
 msgstr "Stornieren"
 

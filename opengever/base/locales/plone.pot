@@ -396,6 +396,21 @@ msgstr ""
 msgid "batch_x_items_matching_your_criteria"
 msgstr ""
 
+msgid "proposal-state-active"
+msgstr ""
+
+msgid "proposal-state-cancelled"
+msgstr ""
+
+msgid "proposal-state-decided"
+msgstr ""
+
+msgid "proposal-state-scheduled"
+msgstr ""
+
+msgid "proposal-state-submitted"
+msgstr ""
+
 msgid "proposal-transition-cancel"
 msgstr ""
 

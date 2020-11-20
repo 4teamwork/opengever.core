@@ -4,7 +4,8 @@ Changelog
 2020.15.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Cast value of issuer to actor label in listing and search endpoints. [tinagerber]
+- Translate proposal review states. [tinagerber]
 
 
 2020.14.0 (2020-11-19)
