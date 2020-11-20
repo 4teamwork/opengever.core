@@ -77,4 +77,4 @@ class LinkedDocuments(object):
         annotations = IAnnotations(self.document)
         if persistent:
             return annotations.setdefault(self.storage_key, PersistentMapping())
-        return dict(annotations.setdefault(self.storage_key, {}))
+        return dict(annotations.get(self.storage_key, {}))
