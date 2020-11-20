@@ -3,6 +3,7 @@ from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.linked_documents import AlreadyLinkedError
 from opengever.workspaceclient.linked_documents import LinkedDocuments
 from plone.uuid.interfaces import IUUID
+from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 
 
@@ -64,3 +65,14 @@ class TestLinkedDocumentsAdapter(IntegrationTestCase):
 
         with self.assertRaises(AlreadyLinkedError):
             adapter.link_workspace_document(IUUID(self.workspace_document))
+
+    def test_reading_properties_does_not_result_in_write_to_annotations(self):
+        self.login(self.workspace_member)
+
+        adapter = ILinkedDocuments(self.document)
+
+        adapter.linked_workspace_documents
+        adapter.linked_gever_document
+
+        annotations = IAnnotations(self.document)
+        self.assertNotIn(adapter.storage_key, annotations.keys())
