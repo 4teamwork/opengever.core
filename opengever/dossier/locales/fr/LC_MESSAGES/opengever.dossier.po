@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-10-12 14:36+0000\n"
+"POT-Creation-Date: 2020-11-20 09:59+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -726,6 +726,11 @@ msgstr "Le document «${name}» est dans une requête et ne peut pas être dépl
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_inside_task"
 msgstr "Le document «${name}» est dans une tâche et ne peut pas être déplacé. Déplacez la tâche."
+
+#. Default: "Document ${name} is locked and therefore not movable."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_locked"
+msgstr "Le document «${name}» est verrouillé et ne peut pas être déplacé."
 
 #. Default: "Number of Containers"
 #: ./opengever/dossier/behaviors/dossier.py
