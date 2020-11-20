@@ -368,11 +368,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
-            # XXX: This is incorrect, only one document should be added. This
-            # is a testing issue (doesn't happen in production) that was never
-            # really addressed. The fix_publisher_test_bug() is supposed to
-            # work around this, but it doesn't.
-            self.assertEqual(len(children['added']), 2)
+            self.assertEqual(len(children['added']), 1)
 
             id_ = browser.json['id'].encode('ascii')
             workspace_document = self.workspace.restrictedTraverse(id_)
