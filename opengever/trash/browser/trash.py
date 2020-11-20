@@ -37,6 +37,10 @@ class TrashView(BrowserView):
                             u'could not trash the object ${obj}, it is an excerpt'
                             ' that has been returned to the proposal.',
                             mapping={'obj': obj.Title().decode('utf-8')})
+                    elif exc.message == 'The document is locked':
+                        msg = _(
+                            u'could not trash the object ${obj}, it is locked.',
+                            mapping={'obj': obj.Title().decode('utf-8')})
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
                 except Unauthorized:

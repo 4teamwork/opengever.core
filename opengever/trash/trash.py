@@ -1,6 +1,9 @@
 from AccessControl import Unauthorized
 from Acquisition import aq_inner, aq_parent
+from opengever.document.interfaces import ICheckinCheckoutManager
+from plone.locking.interfaces import ILockable
 from Products.CMFCore.utils import _checkPermission
+from zope.component import queryMultiAdapter
 from zope.component.interfaces import IObjectEvent
 from zope.component.interfaces import ObjectEvent
 from zope.event import notify
@@ -8,8 +11,6 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import noLongerProvides
-from opengever.document.interfaces import ICheckinCheckoutManager
-from zope.component import queryMultiAdapter
 
 
 class ITrashable(Interface):
@@ -108,6 +109,11 @@ class Trasher(object):
                 raise TrashError('The document has been returned as excerpt')
             return False
 
+        if self.is_locked():
+            if raise_on_violations:
+                raise TrashError('The document is locked')
+            return False
+
         return True
 
     def verify_may_untrash(self, raise_on_violations=True):
@@ -157,3 +163,6 @@ class Trasher(object):
             return False
 
         return submitted_proposal.get_excerpt() == self.context
+
+    def is_locked(self):
+        return ILockable(self.context).locked()

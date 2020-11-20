@@ -1,4 +1,5 @@
 from opengever.base.oguid import Oguid
+from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 from opengever.locking.lock import LOCK_TYPE_MEETING_EXCERPT_LOCK
 from opengever.locking.lock import LOCK_TYPE_MEETING_SUBMITTED_LOCK
 from opengever.meeting.model import GeneratedExcerpt
@@ -18,6 +19,8 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         'templates/submitted_document_lock_template.pt')
     excerpt_document_lock_template = ViewPageTemplateFile(
         'templates/excerpt_document_lock_template.pt')
+    copied_to_workspace_lock = ViewPageTemplateFile(
+        'templates/copied_to_workspace_lock.pt')
     oc_document_lock_template = ViewPageTemplateFile(
         'templates/oc_document_lock_template.pt')
     default_template = ViewPageTemplateFile('templates/info.pt')
@@ -28,6 +31,7 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     custom_templates = {
         LOCK_TYPE_MEETING_SUBMITTED_LOCK: 'submitted_document_lock_template',
         LOCK_TYPE_MEETING_EXCERPT_LOCK: 'excerpt_document_lock_template',
+        LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK: 'copied_to_workspace_lock',
         "office_connector_lock": 'oc_document_lock_template',
         'default': 'default_template'
     }

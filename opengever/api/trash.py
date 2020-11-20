@@ -19,17 +19,21 @@ class Trash(Service):
         try:
             trasher.trash()
         except TrashError as exc:
+            self.request.response.setStatus(400)
             if exc.message == 'Already trashed':
-                self.request.response.setStatus(400)
                 return {'error': {
                     'type': 'Bad Request',
                     'message': 'Already trashed',
                 }}
             elif exc.message == 'Document checked out':
-                self.request.response.setStatus(400)
                 return {'error': {
                     'type': 'Bad Request',
-                    'message': 'Can not trash a checked-out document',
+                    'message': 'Cannot trash a checked-out document',
+                }}
+            elif exc.message == 'The document is locked':
+                return {'error': {
+                    'type': 'Bad Request',
+                    'message': 'Cannot trash a locked document',
                 }}
 
         self.request.response.setStatus(204)

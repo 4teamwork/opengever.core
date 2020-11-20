@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.base.command import CreateEmailCommand
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
@@ -12,6 +13,7 @@ from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.uuid.interfaces import IUUID
 from zExceptions import BadRequest
 from zExceptions import NotFound
@@ -593,6 +595,48 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                  u'message': u"Document can't be copied to a workspace "
                              u"because it's currently checked out"},
                 browser.json)
+
+    @browsing
+    def test_lock_document_when_copying_to_a_workspace(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        payload = {
+            'document_uid': document.UID(),
+            'workspace_uid': self.workspace.UID(),
+            'lock': True,
+        }
+
+        lockable = ILockable(document)
+        self.assertFalse(lockable.locked())
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, document)
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        # XXX: This is incorrect, only one document should be added. This
+        # is a testing issue (doesn't happen in production) that was never
+        # really addressed. The fix_publisher_test_bug() is supposed to
+        # work around this, but it doesn't.
+        self.assertEqual(len(children['added']), 2)
+
+        self.assertTrue(lockable.locked())
+        self.assertEqual(1, len(lockable.lock_info()))
+        self.assertEqual(LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK,
+                         lockable.lock_info()[0]['type'].__name__)
 
 
 class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):

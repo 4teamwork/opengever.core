@@ -4,7 +4,7 @@ Changelog
 2020.15.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Allow locking document when making a copy via Teamraum Connect. [njohner]
 
 
 2020.14.1 (2020-11-20)

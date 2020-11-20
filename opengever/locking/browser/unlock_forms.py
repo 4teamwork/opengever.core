@@ -1,8 +1,9 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.response import IResponseContainer
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
-from opengever.meeting import _
+from opengever.locking import _
 from opengever.meeting.proposalhistory import ProposalResponse
 from plone.locking.interfaces import ILockable
 from Products.Five.browser import BrowserView
@@ -10,11 +11,14 @@ from Products.statusmessages.interfaces import IStatusMessage
 from zExceptions import NotFound
 
 
-class UnlockSubmittedDocumentForm(BrowserView):
+class UnlockDocumentBaseForm(BrowserView):
+
+    lock_type = None
+    view_name = None
+    unlock_message = None
 
     def __call__(self):
-        if not self.context.is_submitted_document():
-            raise NotFound()
+        self.check_preconditions()
 
         if not ILockable(self.context).locked():
             return self.reload_context_default_view()
@@ -26,7 +30,7 @@ class UnlockSubmittedDocumentForm(BrowserView):
             self.unlock()
             self.add_response_object()
 
-            msg = _('statmsg_submitted_document_unlocked',
+            msg = _('statmsg_document_unlocked',
                     default=u'Document has been unlocked',)
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
 
@@ -46,10 +50,13 @@ class UnlockSubmittedDocumentForm(BrowserView):
                 document.
                 """
                 return self.reload_context_default_view()
-        return super(UnlockSubmittedDocumentForm, self).__call__()
+        return super(UnlockDocumentBaseForm, self).__call__()
+
+    def check_preconditions(self):
+        return
 
     def unlock(self):
-        ILockable(self.context).unlock(MEETING_SUBMITTED_LOCK)
+        ILockable(self.context).unlock(self.lock_type)
 
     def reload_context_default_view(self):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
@@ -69,6 +76,27 @@ class UnlockSubmittedDocumentForm(BrowserView):
         return self.is_form_submitted() and self.is_js_request()
 
     def add_response_object(self):
+        return
+
+    def get_form_post_url(self):
+        return "{}/@@{}".format(self.context.absolute_url(), self.view_name)
+
+
+class UnlockSubmittedDocumentForm(UnlockDocumentBaseForm):
+
+    lock_type = MEETING_SUBMITTED_LOCK
+    view_name = "unlock_submitted_document_form"
+    unlock_message = _(
+        'msg_unlock_submitted_document',
+        default=u"This will decouple the submitted document from the original "
+                u"one. You will then be able to modify this document but "
+                u"submitting a new version will not be possible anymore.")
+
+    def check_preconditions(self):
+        if not self.context.is_submitted_document():
+            raise NotFound()
+
+    def add_response_object(self):
         response = ProposalResponse(
             u'document_unlocked',
             document_title=self.context.title,
@@ -76,3 +104,14 @@ class UnlockSubmittedDocumentForm(BrowserView):
 
         proposal = aq_parent(aq_inner(self.context))
         IResponseContainer(proposal).add(response)
+
+
+class UnlockDocumentCopiedToWorkspaceForm(UnlockDocumentBaseForm):
+
+    lock_type = COPIED_TO_WORKSPACE_LOCK
+    view_name = "unlock_document_copied_to_workspace_form"
+    unlock_message = _(
+        'msg_unlock_document_copied_to_workspace',
+        default=u"Modifications made to this document in Gever might get "
+                u"overwritten when copying the document back from the linked "
+                u"workspace as a new version of this document.")

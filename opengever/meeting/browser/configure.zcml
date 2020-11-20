@@ -454,14 +454,6 @@
       />
 
   <browser:page
-      for="opengever.document.document.IDocumentSchema"
-      name="unlock_submitted_document_form"
-      permission="cmf.ModifyPortalContent"
-      template="templates/unlock_submitted_document_form.pt"
-      class=".unlock_submitted_document_form.UnlockSubmittedDocumentForm"
-      />
-
-  <browser:page
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       name="move_proposal_items"
       class=".move_proposal_items.MoveProposalItemsFormView"

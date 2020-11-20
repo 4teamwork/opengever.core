@@ -13,6 +13,7 @@ from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
@@ -320,6 +321,36 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                             document, self.workspace.UID())
 
             self.assertEqual(0, len(children['added']))
+
+    def test_locking_document_when_copying_it_to_a_workspace(self):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.workspace) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_to_workspace(
+                        document, self.workspace.UID())
+
+            self.assertEqual(1, len(children['added']))
+            self.assertFalse(ILockable(document).locked())
+
+            with self.observe_children(self.workspace) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_to_workspace(
+                        document, self.workspace.UID(), lock=True)
+
+            self.assertEqual(1, len(children['added']))
+            self.assertTrue(ILockable(document).locked())
+
+            lock_infos = ILockable(document).lock_info()
+            self.assertEqual(1, len(lock_infos))
+            self.assertEqual(u'document.copied_to_workspace.lock',
+                             lock_infos[0]['type'].__name__)
 
     def test_has_linked_workspaces(self):
         with self.workspace_client_env():

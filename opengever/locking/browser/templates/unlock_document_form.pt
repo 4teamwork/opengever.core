@@ -4,30 +4,28 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       metal:use-macro="context/main_template/macros/master"
-      i18n:domain="opengever.meeting">
+      i18n:domain="opengever.locking">
 
 <body>
 
 <metal:main fill-slot="main">
 
-<form id="unlock-submitted-document"
-      tal:attributes="action string:${context/absolute_url}/@@unlock_submitted_document_form"
+<form id="unlock-document-form"
+      tal:attributes="action view/get_form_post_url"
       method="POST">
 
-  <h1 i18n:translate="label_unlock_submitted_document">
-    Unlock submitted document
+  <h1 i18n:translate="label_unlock_document_confirmation">
+    Unlock document confirmation
   </h1>
 
   <dl class="portalMessage warning">
     <dt i18n:translate="label_warning">Warning</dt>
-    <dd i18n:translate="warning_unlock_submitted_document">
+    <dd i18n:translate="warning_unlock_document">
       This cannot be undone.
     </dd>
   </dl>
 
-  <p class="panel" i18n:translate="msg_unlock_submitted_document">
-    Do you really want to unlock the submitted document?
-  </p>
+  <p class="panel" i18n:translate="" tal:content="view/unlock_message"></p>
 
   <div class="form_elements">
     <input i18n:attributes="value Unlock" i18n:domain="plone"

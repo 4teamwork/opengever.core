@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-10-12 14:36+0000\n"
+"POT-Creation-Date: 2020-11-20 09:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -724,6 +724,11 @@ msgstr ""
 #. Default: "Document ${name} is inside a task and therefore not movable. Move the task instead"
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_inside_task"
+msgstr ""
+
+#. Default: "Document ${name} is locked and therefore not movable."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_locked"
 msgstr ""
 
 #. Default: "Number of Containers"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-01-29 22:31+0000\n"
+"POT-Creation-Date: 2020-11-17 17:00+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1411,11 +1411,6 @@ msgstr "Transition"
 msgid "label_transition_executed"
 msgstr "Statusänderung ${transition} ausgeführt"
 
-#. Default: "Unlock submitted document"
-#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
-msgid "label_unlock_submitted_document"
-msgstr "Wollen Sie dieses Dokument wirklich entsperren?"
-
 #. Default: "Unlocked attachments"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_unlocked_attachments"
@@ -1438,7 +1433,6 @@ msgstr "Kommende Sitzungen"
 
 #. Default: "Warning"
 #: ./opengever/meeting/browser/meetings/zipexport.py
-#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
 msgid "label_warning"
 msgstr "Warnung"
 
@@ -1612,11 +1606,6 @@ msgstr "Das Objekt wurde erfolgreich gelöscht."
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "msg_transition_successful"
 msgstr "Status erfolgreich geändert."
-
-#. Default: "Do you really want to unlock the submitted document?"
-#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
-msgid "msg_unlock_submitted_document"
-msgstr "Dadurch wird das eingereichte Dokument vom originalen Dokument entkoppelt. Sie können das Dokument anschliessend bearbeiten.<br />Einreichen neuer Versionen wird dadurch nicht mehr möglich sein."
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
@@ -1841,11 +1830,6 @@ msgstr "Traktandiert"
 msgid "send email"
 msgstr "E-Mail senden"
 
-#. Default: "Document has been unlocked"
-#: ./opengever/meeting/browser/unlock_submitted_document_form.py
-msgid "statmsg_submitted_document_unlocked"
-msgstr "Dokument wurde freigegeben."
-
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py
 msgid "submitted"
@@ -1925,8 +1909,3 @@ msgstr "Traktandum einfügen:"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_schedule_proposal"
 msgstr "Antrag traktandieren:"
-
-#. Default: "This cannot be undone."
-#: ./opengever/meeting/browser/templates/unlock_submitted_document_form.pt
-msgid "warning_unlock_submitted_document"
-msgstr "Dies kann nicht rückgängig gemacht werden."

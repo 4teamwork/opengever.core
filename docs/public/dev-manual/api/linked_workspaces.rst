@@ -80,6 +80,8 @@ Die Kopie wird mit dem originalen Dokument verknüpft. Diese Verknüpfung wird a
 
 Ein automatisches Zurückführen oder Synchronisieren mit dem Originaldokument ist zur Zeit allerdings noch nicht möglich.
 
+Das GEVER-Dokument kann beim Kopieren gesperrt werden, wenn der optionale ``lock`` Parameter auf ``True`` gesetzt wird. Dies verhindert, dass das Dokument im Gever überarbeitet wird.
+
 **Beispiel-Request**:
 
   .. sourcecode:: http
@@ -91,6 +93,7 @@ Ein automatisches Zurückführen oder Synchronisieren mit dem Originaldokument i
     {
       "workspace_uid": "c11627f492b6447fb61617bb06b9a21a"
       "document_uid": "c2ae40cf41c84493ac4b7618d75ee7f7"
+      "lock": "True"
     }
 
 

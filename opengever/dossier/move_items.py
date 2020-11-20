@@ -11,6 +11,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
+from plone.locking.interfaces import ILockable
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -128,6 +129,12 @@ class MoveItemsForm(form.Form):
                             default=u'Document ${name} is inside a proposal '
                                     u'and therefore not movable. Move the '
                                     u'proposal instead',
+                            mapping=dict(name=obj.title))
+                    elif ILockable(obj).locked():
+                        msg = _(
+                            'label_not_movable_since_locked',
+                            default=u'Document ${name} is locked and '
+                                    u'therefore not movable.',
                             mapping=dict(name=obj.title))
                     else:
                         raise Exception(

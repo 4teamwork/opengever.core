@@ -40,7 +40,7 @@ class TestTrashAPI(IntegrationTestCase):
                          method='POST', headers={'Accept': 'application/json'})
         self.assertEqual(
             browser.json[u'error'][u'message'],
-            u'Can not trash a checked-out document')
+            u'Cannot trash a checked-out document')
 
     @browsing
     def test_trash_document_without_permission_gives_401(self, browser):

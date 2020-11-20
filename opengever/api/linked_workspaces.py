@@ -164,10 +164,10 @@ class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        workspace_uid, document = self.validate_data(json_body(self.request))
+        workspace_uid, document, lock = self.validate_data(json_body(self.request))
 
         return ILinkedWorkspaces(self.context).copy_document_to_workspace(
-            document, workspace_uid)
+            document, workspace_uid, lock)
 
     def validate_data(self, data):
         workspace_uid = data.get('workspace_uid')
@@ -191,7 +191,8 @@ class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
             raise BadRequest(
                 "Only documents within the current main dossier are allowed")
 
-        return workspace_uid, document
+        lock = data.get('lock', False)
+        return workspace_uid, document, lock
 
     def obj_contained_in(self, obj, container):
         catalog = api.portal.get_tool('portal_catalog')
