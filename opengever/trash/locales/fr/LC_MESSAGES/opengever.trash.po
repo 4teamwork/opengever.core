@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-09-04 12:38+0000\n"
+"POT-Creation-Date: 2020-11-20 09:56+0000\n"
 "PO-Revision-Date: 2017-12-03 12:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-trash/fr/>\n"
@@ -39,6 +39,10 @@ msgstr "L'objet n'a pas pu être supprimé, il s'agit d'un extrait de protocol d
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."
 msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer."
+
+#: ./opengever/trash/browser/trash.py
+msgid "could not trash the object ${obj}, it is locked."
+msgstr "L'objet ${obj} est verouillé. Vous ne pouvez pas le supprimer."
 
 #. Default: "You have not selected any items."
 #: ./opengever/trash/browser/remove_confirmation.py

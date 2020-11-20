@@ -1,6 +1,7 @@
 from datetime import timedelta
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.core.testing import MEMORY_DB_LAYER
 from opengever.document.interfaces import IFileActions
@@ -184,6 +185,7 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
                      method='GET', headers=self.api_headers)
 
         expected_file_actions.remove(u'oc_direct_checkout')
+        expected_file_actions.remove(u'trash_document')
         self.assertEqual(
             expected_file_actions,
             [action.get('id') for action in browser.json['file_actions']])
@@ -230,7 +232,7 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
         self.assertNotIn(doc_id, self.subdossier)
 
     @browsing
-    def test_can_trash_locked_document(self, browser):
+    def test_cannot_trash_locked_document(self, browser):
         self.login(self.regular_user, browser=browser)
         ILockable(self.document).lock(self.lock_type)
 
@@ -238,18 +240,28 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
         data['_authenticator'] = createToken()
         browser.open(self.dossier, view="trashed", data=data)
 
-        self.assertTrue(ITrashed.providedBy(self.document))
-        self.assertTrue(obj2brain(self.document, unrestricted=True).trashed)
+        self.assertEqual(
+            [u'could not trash the object {}, it is locked.'.format(
+                self.document.title)],
+            error_messages())
+        self.assertFalse(ITrashed.providedBy(self.document))
+        self.assertFalse(obj2brain(self.document, unrestricted=True).trashed)
 
     @browsing
-    def test_can_trash_locked_document_over_api(self, browser):
+    def test_cannot_trash_locked_document_over_api(self, browser):
         self.login(self.regular_user, browser)
         ILockable(self.document).lock(self.lock_type)
 
-        browser.open(self.document.absolute_url() + '/@trash',
-                     method='POST', headers={'Accept': 'application/json'})
-        self.assertEqual(204, browser.status_code)
-        self.assertTrue(ITrashed.providedBy(self.document))
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(self.document.absolute_url() + '/@trash',
+                         method='POST', headers={'Accept': 'application/json'})
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Cannot trash a locked document',
+             u'type': u'Bad Request'},
+            browser.json['error'])
+        self.assertFalse(ITrashed.providedBy(self.document))
 
 
 class TestDocumentsLockedWithMeetingExcerptLock(TestDocumentsLockedWithMeetingSubmittedLock):

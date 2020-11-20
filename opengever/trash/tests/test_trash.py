@@ -8,6 +8,7 @@ from opengever.testing import obj2brain
 from opengever.trash.remover import Remover
 from opengever.trash.trash import ITrashed
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 
 
