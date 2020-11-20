@@ -4,6 +4,7 @@ Changelog
 2020.15.0 (unreleased)
 ----------------------
 
+- Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
 
 
