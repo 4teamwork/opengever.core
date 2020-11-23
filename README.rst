@@ -247,26 +247,28 @@ See https://github.com/4teamwork/ftw.recipe.solr#supported-options for more info
 In order for the StatelessScriptUpdateProcessor to work, add the following overlayconfig under the solr section in the buildout.cfg.
 
 .. code::
-configoverlay =
-    {
-        "initParams": {
-            "/update/**,/query,/select,/spell": {
-                "name":"/update/**,/query,/select,/spell",
-                "path":"/update/**,/query,/select,/spell",
-                "defaults": {
-                    "update.chain":"sync.chain",
-                    "df":"SearchableText"
+
+    configoverlay =
+        {
+            "initParams": {
+                "/update/**,/query,/select,/spell": {
+                    "name":"/update/**,/query,/select,/spell",
+                    "path":"/update/**,/query,/select,/spell",
+                    "defaults": {
+                        "update.chain":"sync.chain",
+                        "df":"SearchableText"
+                    }
                 }
             }
         }
-    }
 
 When the ``sync.chain`` UpdateRequestProcessorChain is activated, the ``remoteCoreURL`` and ``portalTypes`` option has to be set in the ``buildout.cfg``. The ``portalTypes`` options is a comma separated list of portal_types to sync.
 This is done by using the ``jvm-opts`` option:
 
 .. code::
+
     [solr]
-        jvm-opts = -Xms512m -Xmx512m -Xss256k -DremoteCoreURL=http://localhost:8984/solr/ris  -DportalTypes=opengever.document.document,opengever.dossier.businesscasedossier
+        jvm-opts = -Xms512m -Xmx512m -Xss256k -DremoteCoreURL=http://localhost:8984/solr/ris -DportalTypes=opengever.document.document,opengever.dossier.businesscasedossier
 
 Notice the other options next to ``-DremoteCoreURL``. These are options from https://github.com/4teamwork/ftw.recipe.solr#supported-options.
 All the defaults from the ``jvm-opts`` section have to be set here again to not override the defaults.
@@ -284,7 +286,8 @@ Because automated testing is hard, the tests have to be done manually. This sect
     [solr]
     port = 8984
 
-3. Configure the GEVER Solr as documented under :ref:`Activating Solr sync`
+
+3. Configure the GEVER Solr as documented under `Activating Solr sync`_
 4. Start GEVER, GEVER Solr and RIS Solr
 5. Go to http://localhost:8984/ and select the ``ris`` Solr core
 6. Make a query with ``q=*:*`` and no active filters
