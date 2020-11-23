@@ -352,6 +352,23 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(u'document.copied_to_workspace.lock',
                              lock_infos[0]['type'].__name__)
 
+    def test_locking_mail_is_ignored_when_copying_it_to_a_workspace(self):
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_dummy_message())
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.workspace) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_to_workspace(
+                        mail, self.workspace.UID(), lock=True)
+
+            self.assertEqual(1, len(children['added']))
+            self.assertFalse(ILockable(mail).locked())
+
     def test_has_linked_workspaces(self):
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)

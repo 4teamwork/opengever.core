@@ -186,7 +186,7 @@ class LinkedWorkspaces(object):
         workspace_document_uid = response['UID']
         ILinkedDocuments(document).link_workspace_document(workspace_document_uid)
 
-        if lock:
+        if lock and not document.is_mail:
             ILockable(document).lock(COPIED_TO_WORKSPACE_LOCK)
         return response
 
