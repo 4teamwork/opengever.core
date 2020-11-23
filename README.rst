@@ -156,7 +156,7 @@ Note: Use the sablon Docker image instead of installing sablon locally. See
 `Services`_ for more details.
 
 If ``opengever.meeting`` is activated (which it is for the default development
-installation), the Ruby gem `Sablon <https://github.com/senny/sablon/>`_ is
+installation), the Ruby gem Sablon_ is
 required to generate documents from ``*.docx`` templates. Sablon is executed
 as subprocess so the ``sablon`` script provided by the sablon gem must be
 accessible as the user that is running gever instances.
@@ -393,7 +393,7 @@ for local development by default:
 
 - `msgconvert <https://github.com/4teamwork/msgconvert>`_
 - `pdflatex <https://github.com/4teamwork/pdflatex>`_
-- `sablon <https://github.com/4teamwork/sablon>`_
+- Sablon_
 
 To run these services, Docker is required.
 See `Get Docker <https://docs.docker.com/get-docker/>`_ for how to install
@@ -1388,3 +1388,4 @@ Example configuration:
 
 .. _testing fixtures: https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/fixtures.py
 .. _COMPONENT_REGISTRY_ISOLATION: https://github.com/4teamwork/ftw.testing#component-registry-isolation-layer
+.. _Sablon: https://github.com/4teamwork/sablon
