@@ -88,13 +88,12 @@ function extractValueFromDoc(doc, key) {
   if (value.indexOf("{") === 0 && value.indexOf("}") === value.length - 1) {
     value = value.substring(1, value.length - 1);
     var modifierSplit = value.split("=");
-    var modifier = modifierSplit[0];
-    var data = modifierSplit.splice(1);
+    var modifier = modifierSplit.shift();
     if (atomicUpdateModifiers.indexOf(modifier) > -1) {
       return {
         isAtomic: true,
         modifier: modifier,
-        value: data.join(""),
+        value: modifierSplit.join(""),
       };
     }
   }

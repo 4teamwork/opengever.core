@@ -4,7 +4,7 @@ Changelog
 2020.14.2 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Fix StatelessScriptUpdateProcessor for documents. [Kevin Bieri]
 
 
 2020.14.1 (2020-11-20)
