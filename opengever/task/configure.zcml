@@ -103,6 +103,7 @@
   <adapter factory=".adapters.ResponseContainer" />
   <adapter factory=".deadline_modifier.DeadlineModifier" />
   <adapter factory=".successor.SuccessorTaskController" />
+  <adapter factory=".ziprepresentation.TaskZipRepresentation" />
 
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
