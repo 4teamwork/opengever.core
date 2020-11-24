@@ -4,9 +4,14 @@ Changelog
 2020.15.0 (unreleased)
 ----------------------
 
-- Fix StatelessScriptUpdateProcessor for documents. [Kevin Bieri]
 - Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
+
+
+2020.14.2 (2020-11-24)
+----------------------
+
+- Fix StatelessScriptUpdateProcessor for documents. [Kevin Bieri]
 
 
 2020.14.1 (2020-11-20)
