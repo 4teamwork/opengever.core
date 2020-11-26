@@ -10,6 +10,7 @@ from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_COPY
 from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_VERSION
@@ -22,6 +23,7 @@ from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 import json
 import requests_mock
 import transaction
@@ -50,6 +52,13 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
         with self.observe_children(self.workspace_root) as children:
             with self.workspace_client_env():
                 fix_publisher_test_bug(browser, self.dossier)
+
+                # This prevents a database conflict error,
+                # otherwise both the dossier and the workspace will be modified.
+                # This is a testing issue (doesn't happen in production)
+                alsoProvides(self.dossier, ILinkedToWorkspace)
+                transaction.commit()
+
                 browser.open(
                     self.dossier.absolute_url() + '/@create-linked-workspace',
                     data=json.dumps({"title": "My linked workspace"}),

@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Support transferring documents from workspace back to GEVER as new version. [lgraf]
+- Mark dossiers with an interface as soon as they are linked to a workspace. [tinagerber]
 - Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
 

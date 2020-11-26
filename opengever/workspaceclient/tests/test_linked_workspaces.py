@@ -12,6 +12,7 @@ from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -20,6 +21,7 @@ from plone.uuid.interfaces import IUUID
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
+from zope.interface import alsoProvides
 import transaction
 
 
@@ -149,6 +151,11 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
             self.assertEqual([], manager.list().get('items'))
+
+            # This prevents a database conflict error,
+            # otherwise both the dossier and the workspace will be modified.
+            # This is a testing issue (doesn't happen in production)
+            alsoProvides(self.dossier, ILinkedToWorkspace)
 
             with self.observe_children(self.workspace_root) as children:
                 response = manager.create(title=u"My new w\xf6rkspace")
@@ -806,6 +813,11 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
             self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
+
+            # This prevents a database conflict error,
+            # otherwise both the dossier and the workspace will be modified.
+            # This is a testing issue (doesn't happen in production)
+            alsoProvides(self.dossier, ILinkedToWorkspace)
 
             manager.create(title=u"My new w\xf6rkspace")
             transaction.commit()

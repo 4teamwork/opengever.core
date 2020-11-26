@@ -38,3 +38,8 @@ class ILinkedDocuments(Interface):
     def serialize():
         """Serialize links as a JSON compatible data structure.
         """
+
+
+class ILinkedToWorkspace(Interface):
+    """Marker interface to mark dossiers with linked workspace
+    """

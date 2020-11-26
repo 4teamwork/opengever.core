@@ -10,6 +10,7 @@ from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from plone import api
@@ -23,6 +24,7 @@ from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implementer
 
 CACHE_TIMEOUT = 24 * 60 * 60
@@ -125,6 +127,10 @@ class LinkedWorkspaces(object):
         """
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
+
+        if not ILinkedToWorkspace.providedBy(self.context):
+            alsoProvides(self.context, ILinkedToWorkspace)
+            self.context.reindexObject(idxs=['object_provides'])
 
         # Add journal entry to dossier
         title = _(
