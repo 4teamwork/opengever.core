@@ -166,6 +166,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             workspace = children['added'].pop()
             self.assertEqual([workspace.absolute_url()],
                              [ws.get('@id') for ws in manager.list().get('items')])
+            self.assertEqual(workspace.external_reference, Oguid.for_object(self.dossier).id)
 
     def test_subdossiers_do_not_provided_linked_workspaces(self):
         subdossier = create(Builder('dossier').within(self.dossier))

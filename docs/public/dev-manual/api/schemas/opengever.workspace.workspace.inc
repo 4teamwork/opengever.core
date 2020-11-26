@@ -14,6 +14,16 @@
        
 
 
+   .. py:attribute:: external_reference
+
+       :Feldname: :field-title:`Verknüpftes Dossier`
+       :Datentyp: ``TextLine``
+       
+       
+       
+       
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`

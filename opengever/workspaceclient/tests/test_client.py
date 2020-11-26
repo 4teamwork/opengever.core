@@ -1,3 +1,4 @@
+from opengever.base.oguid import Oguid
 from opengever.testing import assets
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled

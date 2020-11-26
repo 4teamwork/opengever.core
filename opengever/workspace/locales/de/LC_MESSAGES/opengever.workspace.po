@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-10-19 09:18+0000\n"
+"POT-Creation-Date: 2020-11-26 13:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,15 +93,15 @@ msgstr "Gast"
 msgid "WorkspaceMember"
 msgstr "Teammitglied"
 
-#. Default: "URL for videoconferencing link"
-#: ./opengever/workspace/workspace.py
-msgid "help_videoconferencing_url"
-msgstr "Verwendete URL um eine Videokonferenz für diesen Teamraum zu starten."
-
 #. Default: "Common"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "fieldset_common"
 msgstr "Allgemein"
+
+#. Default: "URL for videoconferencing link"
+#: ./opengever/workspace/workspace.py
+msgid "help_videoconferencing_url"
+msgstr "Verwendete URL um eine Videokonferenz für diesen Teamraum zu starten."
 
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
@@ -169,6 +169,11 @@ msgstr "Ordner"
 msgid "label_journal"
 msgstr "Journal"
 
+#. Default: "Linked dossier"
+#: ./opengever/workspace/workspace.py
+msgid "label_linked_dossier"
+msgstr "Verknüpftes Dossier"
+
 #. Default: "Location"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_location"
@@ -231,15 +236,15 @@ msgstr "ToDo wieder eröffnet"
 msgid "label_trash"
 msgstr "Papierkorb"
 
-#. Default: "Videoconferencing URL"
-#: ./opengever/workspace/workspace.py
-msgid "label_videoconferencing_url"
-msgstr "Videokonferenz URL"
-
 #. Default: "Video Call Link"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_video_call_link"
 msgstr "Video-Call Link"
+
+#. Default: "Videoconferencing URL"
+#: ./opengever/workspace/workspace.py
+msgid "label_videoconferencing_url"
+msgstr "Videokonferenz URL"
 
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py

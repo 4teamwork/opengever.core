@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.base.command import CreateEmailCommand
+from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
@@ -75,6 +76,8 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
                       linked_workspace.absolute_url())
         self.assertIn(browser.json.get('title'),
                       linked_workspace.title)
+        self.assertIn(browser.json.get('external_reference'),
+                      Oguid.for_object(self.dossier).id)
 
     @browsing
     def test_raise_not_found_if_feature_is_not_activated(self, browser):

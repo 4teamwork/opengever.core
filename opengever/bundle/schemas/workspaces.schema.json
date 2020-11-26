@@ -20,6 +20,15 @@
                     "_zope_schema_type": "TextLine",
                     "default": "<IWorkspaceSettings.videoconferencing_base_url + random UUID>"
                 },
+                "external_reference": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Verkn\u00fcpftes Dossier",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
                 "changed": {
                     "type": [
                         "null",
@@ -83,6 +92,7 @@
             ],
             "field_order": [
                 "videoconferencing_url",
+                "external_reference",
                 "changed",
                 "title",
                 "description"

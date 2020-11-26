@@ -1,4 +1,5 @@
 from opengever.api.add import GeverFolderPost
+from opengever.base.oguid import Oguid
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.journal.handlers import journal_entry_factory
@@ -125,6 +126,8 @@ class LinkedWorkspaces(object):
 
         This function returns the serialized workspace.
         """
+        if isinstance(data, dict):
+            data['external_reference'] = Oguid.for_object(self.context).id
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
 
