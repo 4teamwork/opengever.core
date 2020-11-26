@@ -42,6 +42,12 @@
   </records>
 
 {{% endif %}}
+{{% if setup.usersnap_api_key %}}
+  <records interface="opengever.base.interfaces.IUserSnapSettings">
+    <value key="api_key">{{{setup.usersnap_api_key}}}</value>
+  </records>
+
+{{% endif %}}
 {{% if is_gever %}}
 {{% if setup.enable_meeting_feature %}}
   <record interface="opengever.meeting.interfaces.IMeetingSettings" field="is_feature_enabled">
