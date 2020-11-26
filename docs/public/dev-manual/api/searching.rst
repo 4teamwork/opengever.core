@@ -228,3 +228,9 @@ Pfadtiefe
 Batching
 ~~~~~~~~
 Der Endpoint stellt die Standard-Paginierung gem :ref:`Kapitel Paginierung <batching>` zur Verfügung.
+
+
+Teamraum Solr Suche
+-------------------
+
+Um im GEVER eine Suchabfrage an den Solr Service eines verknüpften Teamraums abzusetzen,  steht der ``@teamraum-solrsearch`` Endpoint zur Verfügung. Für den Endpoint stehen dieselben Parameter zur Verfügung, wie für den ``@solrsearch`` Endpoint.

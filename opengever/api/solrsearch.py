@@ -1,8 +1,11 @@
 from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
+from opengever.api.linked_workspaces import request_error_handler
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
+from opengever.workspaceclient.client import WorkspaceClient
 from plone import api
+from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import InternalError
 
@@ -119,3 +122,12 @@ class SolrSearchGet(SolrQueryBaseService):
         if field.startswith("_") or field in BLACKLISTED_ATTRIBUTES:
             return False
         return True
+
+
+class TeamraumSolrSearchGet(Service):
+
+    @request_error_handler
+    def reply(self):
+        # Validation will be done on the remote system
+        params = self.request.form.copy()
+        return WorkspaceClient().solrsearch(**params)

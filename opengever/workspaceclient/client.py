@@ -48,6 +48,11 @@ class WorkspaceClient(object):
         url_or_path = '{}/@search'.format(url_or_path.strip('/'))
         return self.request.get(url_or_path, params=kwargs).json()
 
+    def solrsearch(self, **kwargs):
+        """Dispatches a solrsearch request.
+        """
+        return self.request.get('/@solrsearch', params=kwargs).json()
+
     def get(self, url_or_path):
         """Proxy method to perform a get request.
         """
