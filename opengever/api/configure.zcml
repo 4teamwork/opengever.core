@@ -815,6 +815,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@link-to-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.LinkToWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
       method="GET"
       name="@linked-workspaces"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"

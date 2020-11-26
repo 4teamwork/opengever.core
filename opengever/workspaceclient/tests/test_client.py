@@ -62,6 +62,24 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
         workspace = children['added'].pop()
         self.assertEqual(workspace.title, response.get('title'))
 
+    def test_link_to_workspace(self):
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        with self.workspace_client_env() as client:
+            response = client.link_to_workspace(self.workspace.UID(), dossier_oguid)
+            transaction.commit()
+
+        self.assertEqual(self.workspace.title, response.get('title'))
+        self.assertEqual(dossier_oguid, response.get('external_reference'))
+        self.assertEqual(dossier_oguid, self.workspace.external_reference)
+
+    def test_link_to_workspace_raises_if_workspace_is_already_linked(self):
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        self.workspace.external_reference = "fd:123"
+        with self.workspace_client_env() as client:
+            with self.assertRaises(LookupError) as error:
+                client.link_to_workspace(self.workspace.UID(), dossier_oguid)
+            self.assertEqual("Workspace is already linked to a dossier", str(error.exception))
+
     def test_lookup_url_by_uid_raises_if_nothing_found(self):
         with self.workspace_client_env() as client:
             with self.assertRaises(LookupError) as error:

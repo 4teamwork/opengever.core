@@ -156,6 +156,22 @@ class LinkedWorkspacesPost(LinkedWorkspacesService):
         return ILinkedWorkspaces(self.context).create(**data)
 
 
+class LinkToWorkspacePost(LinkedWorkspacesService):
+    """API Endpoint to link a dossier to an existing workspace.
+    """
+    @request_error_handler
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+        data = json_body(self.request)
+        workspace_uid = data.get('workspace_uid')
+        if not workspace_uid:
+            raise BadRequest("Property 'workspace_uid' is required")
+
+        ILinkedWorkspaces(self.context).link_to_workspace(workspace_uid)
+        return self.reply_no_content()
+
+
 class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
     """API Endpoint to copy a document to a linked workspace.
     """

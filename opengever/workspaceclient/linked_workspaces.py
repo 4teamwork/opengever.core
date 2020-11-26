@@ -130,7 +130,6 @@ class LinkedWorkspaces(object):
             data['external_reference'] = Oguid.for_object(self.context).id
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
-
         if not ILinkedToWorkspace.providedBy(self.context):
             alsoProvides(self.context, ILinkedToWorkspace)
             self.context.reindexObject(idxs=['object_provides'])
@@ -146,6 +145,24 @@ class LinkedWorkspaces(object):
             title=title)
 
         return workspace
+
+    def link_to_workspace(self, workspace_uid):
+        workspace = self.client.link_to_workspace(workspace_uid, Oguid.for_object(self.context).id)
+        self.storage.add(workspace.get('UID'))
+
+        if not ILinkedToWorkspace.providedBy(self.context):
+            alsoProvides(self.context, ILinkedToWorkspace)
+            self.context.reindexObject(idxs=['object_provides'])
+
+        # Add journal entry to dossier
+        title = _(
+            u'label_workspace_linked',
+            default=u'Linked to workspace ${workspace_title}.',
+            mapping={'workspace_title': workspace.get('title')})
+
+        journal_entry_factory(
+            context=self.context, action='Linked to workspace',
+            title=title)
 
     def _get_linked_workspace_url(self, workspace_uid):
         if workspace_uid not in self.storage:

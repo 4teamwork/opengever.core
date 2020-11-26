@@ -48,3 +48,8 @@ msgstr "Initialversion - Dokument aus teamraum ${workspace_title} kopiert."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_linked_workspace_created"
 msgstr "Teamraum ${workspace_title} zu diesem Dossier eröffnet."
+
+#. Default: "Linked to workspace ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_workspace_linked"
+msgstr "Mit Teamraum ${workspace_title} verknüpft."

@@ -74,11 +74,22 @@ class WorkspaceClient(object):
 
         return self.request.post('/workspaces', json=payload).json()
 
-    def get_by_uid(self, uid):
+    def link_to_workspace(self, workspace_uid, dossier_oguid):
+        """ Sets dossier_oguid as external_reference of the workspace
+        and returns the serialization of the workspace
+        """
+        workspace = self.get_by_uid(uid=workspace_uid, metadata_fields='external_reference')
+        if workspace.get('external_reference'):
+            raise LookupError("Workspace is already linked to a dossier")
+        return self.request.patch(workspace.get('@id'),
+                                  json={'external_reference': dossier_oguid},
+                                  headers={'Prefer': 'return=representation'}).json()
+
+    def get_by_uid(self, uid, **kwargs):
         """Searches on the remote system for an object having the given UID
         and returns it (serialized).
         """
-        items = self.search(UID=uid).get('items')
+        items = self.search(UID=uid, **kwargs).get('items')
 
         if not items:
             raise LookupError("Did not find object with UID {}".format(uid))
