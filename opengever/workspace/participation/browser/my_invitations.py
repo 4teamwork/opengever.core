@@ -218,7 +218,7 @@ class MyWorkspaceInvitations(BrowserView):
             RoleAssignmentManager(target).add_or_update_assignment(assignment)
             self.storage().mark_invitation_as_accepted(invitation['iid'])
 
-            manager = WorkspaceWatcherManager(self.context)
+            manager = WorkspaceWatcherManager(target)
             manager.new_participant_added(invitation['recipient'], invitation['role'])
 
         self._maybe_create_ogds_entry()

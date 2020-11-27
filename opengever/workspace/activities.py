@@ -41,7 +41,11 @@ class WorkspaceWatcherManager(object):
 
     def new_participant_added(self, participant, role):
         catalog = api.portal.get_tool("portal_catalog")
-        todos = catalog(portal_type="opengever.workspace.todo")
+
+        todos = catalog.searchResults(
+            portal_type="opengever.workspace.todo",
+            path='/'.join(self.workspace.getPhysicalPath()))
+
         for todo in todos:
             self.center.add_watcher_to_resource(todo.getObject(), participant, role)
 
