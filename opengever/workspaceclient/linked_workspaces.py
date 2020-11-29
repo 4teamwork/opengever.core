@@ -269,29 +269,29 @@ class LinkedWorkspaces(object):
         return gever_doc, retrieval_mode
 
     def _retrieve_as_version(self, document_repr, gever_doc_uid):
-            catalog = api.portal.get_tool('portal_catalog')
-            gever_doc = catalog(UID=gever_doc_uid)[0].getObject()
+        catalog = api.portal.get_tool('portal_catalog')
+        gever_doc = catalog(UID=gever_doc_uid)[0].getObject()
 
-            # Make sure the previous working copy is saved as an initial
-            # version. This MUST happen before updating the file.
-            Versioner(gever_doc).create_initial_version()
+        # Make sure the previous working copy is saved as an initial
+        # version. This MUST happen before updating the file.
+        Versioner(gever_doc).create_initial_version()
 
-            version_comment = _(u'document_retrieved_from_teamraum_change_note',
-                                default=u'Document retrieved from teamraum')
-            gever_doc.update_file(
-                document_repr['file']['data'],
-                create_version=True,
-                comment=translate(version_comment, context=getRequest()))
+        version_comment = _(u'document_retrieved_from_teamraum_change_note',
+                            default=u'Document retrieved from teamraum')
+        gever_doc.update_file(
+            document_repr['file']['data'],
+            create_version=True,
+            comment=translate(version_comment, context=getRequest()))
 
-            ILockable(gever_doc).unlock(COPIED_TO_WORKSPACE_LOCK)
-            return gever_doc
+        ILockable(gever_doc).unlock(COPIED_TO_WORKSPACE_LOCK)
+        return gever_doc
 
     def _retrieve_as_copy(self, document_repr):
-            proxy_post = ProxyPost(document_repr)
-            proxy_post.context = self.context
-            proxy_post.request = getRequest()
-            gever_doc = proxy_post.reply()
-            return gever_doc
+        proxy_post = ProxyPost(document_repr)
+        proxy_post.context = self.context
+        proxy_post.request = getRequest()
+        gever_doc = proxy_post.reply()
+        return gever_doc
 
     def list_documents_in_linked_workspace(self, workspace_uid, **kwargs):
         """List documents contained in a linked workspace
