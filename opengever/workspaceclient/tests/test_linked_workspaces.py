@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -14,11 +13,9 @@ from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
-from zope.i18n import translate
 import transaction
 
 
@@ -574,19 +571,6 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
 class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
 
-    def get_journal_entries(self, obj):
-        annotations = IAnnotations(obj)
-        data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-        return data
-
-    def assert_journal_entry(self, action, title, entry):
-        translated_title = translate(entry.get('action').get('title'),
-                                     context=self.request)
-
-        self.assertEquals(action, entry.get('action').get('type'))
-        self.assertEquals(title, translated_title)
-        self.assertEquals(True, entry.get('action').get('visible'))
-
     def test_copying_document_to_a_workspace_is_journalized(self):
         document = create(Builder('document')
                           .within(self.dossier)
@@ -600,17 +584,16 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             with auto_commit_after_request(manager.client):
                 manager.copy_document_to_workspace(document, self.workspace.UID())
 
-        journal_entries = self.get_journal_entries(self.dossier)
-        self.assertEqual(3, len(journal_entries))
+        self.assertEqual(3, len(self.get_journal_entries(self.dossier)))
 
-        entry = journal_entries[-1]
         self.assertEqual(
             [{'id': Oguid.for_object(document).id, 'title': document.title}],
-            entry['action']['documents'])
+            self.get_journal_entry(self.dossier, -1)['action']['documents'])
+
         self.assert_journal_entry(
+            self.dossier,
             'Document copied to workspace',
-            u'Document Testdokum\xe4nt copied to workspace Ein Teamraum.',
-            entry)
+            u'Document Testdokum\xe4nt copied to workspace Ein Teamraum.')
 
     def test_workspace_creation_is_journalized(self):
         with self.workspace_client_env():
@@ -620,14 +603,12 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             manager.create(title=u"My new w\xf6rkspace")
             transaction.commit()
 
-        journal_entries = self.get_journal_entries(self.dossier)
-        self.assertEqual(2, len(journal_entries))
+        self.assertEqual(2, len(self.get_journal_entries(self.dossier)))
 
-        entry = journal_entries[-1]
         self.assert_journal_entry(
+            self.dossier,
             'Linked workspace created',
-            u'Linked workspace My new w\xf6rkspace created.',
-            entry)
+            u'Linked workspace My new w\xf6rkspace created.')
 
     def test_copying_document_from_workspace_is_journalized(self):
         document = create(Builder('document')
@@ -645,17 +626,16 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
                 manager.copy_document_from_workspace(
                     self.workspace.UID(), document.UID())
 
-        journal_entries = self.get_journal_entries(self.dossier)
-        self.assertEqual(3, len(journal_entries))
+        self.assertEqual(3, len(self.get_journal_entries(self.dossier)))
 
-        doc_copied_from_workspace_entry = journal_entries[-2]
         self.assert_journal_entry(
+            self.dossier,
             'Document copied from workspace',
             u'Document Testdokum\xe4nt copied from workspace Ein Teamraum.',
-            doc_copied_from_workspace_entry)
+            entry=-2)
 
-        doc_created_entry = journal_entries[-1]
         self.assert_journal_entry(
+            self.dossier,
             'Document added',
             u'Document added: Testdokum\xe4nt',
-            doc_created_entry)
+            entry=-1)
