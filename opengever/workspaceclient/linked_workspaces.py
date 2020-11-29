@@ -250,11 +250,16 @@ class LinkedWorkspaces(object):
             title=title)
 
         # If the workspace document doesn't have a link to a GEVER document,
+        # or is not a regular document with a file,
         # always create a copy instead of attempting to create a version.
         gever_doc_link = document_repr.get('teamraum_connect_links', {}).get('gever_document')
         gever_doc_uid = gever_doc_link.get('UID') if gever_doc_link else None
 
-        if as_new_version and gever_doc_uid:
+        is_document_with_file = all((
+            document_repr['@type'] == u'opengever.document.document',
+            document_repr.get('file')))
+
+        if as_new_version and gever_doc_uid and is_document_with_file:
             retrieval_mode = RETRIEVAL_MODE_VERSION
             gever_doc = self._retrieve_as_version(document_repr, gever_doc_uid)
         else:

@@ -584,6 +584,36 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
 
+    def test_copy_doc_without_file_from_workspace_as_new_version(self):
+        """A document without file should always be retrieved as a copy, even
+        when linked and `as_new_version=True` was specified.
+        """
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace))
+
+        gever_doc = create(Builder('document')
+                           .within(self.dossier))
+
+        # Documents without a file are never linked by the current
+        # implementation. But even if they were, no attempt at creating a
+        # version should be made.
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_doc.UID(), as_new_version=True)
+
+            self.assertEqual(1, len(children['added']))
+            new_doc = children['added'].pop()
+            self.assertEqual(new_doc, dst_doc)
+
     def test_copy_eml_mail_from_a_workspace(self):
         mail = create(Builder("mail")
                       .with_message(MAIL_DATA)
@@ -611,6 +641,36 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
+
+    def test_copy_eml_mail_from_workspace_as_new_version(self):
+        """A mail should always be retrieved as a copy, even when linked and
+        `as_new_version=True` was specified.
+        """
+        workspace_mail = create(Builder("mail")
+                                .with_message(MAIL_DATA)
+                                .within(self.workspace))
+
+        gever_doc = create(Builder('document')
+                           .within(self.dossier))
+
+        # Mails are never linked by the current implementation. But even if
+        # they were, no attempt at creating a version should be made.
+        ILinkedDocuments(workspace_mail).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_mail))
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_mail.UID(), as_new_version=True)
+
+            self.assertEqual(1, len(children['added']))
+            new_mail = children['added'].pop()
+            self.assertEqual(new_mail, dst_doc)
 
     def test_copy_msg_mail_from_a_workspace(self):
         msg = load('testmail.msg')
