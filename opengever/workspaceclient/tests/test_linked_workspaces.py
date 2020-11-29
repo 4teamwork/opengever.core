@@ -5,6 +5,7 @@ from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
@@ -534,6 +535,34 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(new_content, new_version.file.data)
             self.assertEqual(initial_filename, new_version.file.filename)
             self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
+
+    def test_copy_document_from_workspace_as_new_version_unlocks_document(self):
+        gever_doc = create(Builder('document')
+                           .within(self.dossier)
+                           .with_dummy_content())
+
+        ILockable(gever_doc).lock(COPIED_TO_WORKSPACE_LOCK)
+
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .attach_file_containing('foo', name=u'foo.doc'))
+
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with auto_commit_after_request(manager.client):
+                dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                    self.workspace.UID(), workspace_doc.UID(),
+                    as_new_version=True)
+
+            self.assertEqual(gever_doc, dst_doc)
+            self.assertFalse(ILockable(gever_doc).locked())
 
     def test_copy_unlinked_document_from_workspace_as_new_version(self):
         """Retrieving an unlinked document from a workspace to GEVER should

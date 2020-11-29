@@ -282,6 +282,8 @@ class LinkedWorkspaces(object):
                 document_repr['file']['data'],
                 create_version=True,
                 comment=translate(version_comment, context=getRequest()))
+
+            ILockable(gever_doc).unlock(COPIED_TO_WORKSPACE_LOCK)
             return gever_doc
 
     def _retrieve_as_copy(self, document_repr):
