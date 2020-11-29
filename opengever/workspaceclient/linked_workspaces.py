@@ -246,8 +246,12 @@ class LinkedWorkspaces(object):
             context=self.context, action='Document copied from workspace',
             title=title)
 
-        if as_new_version:
-            gever_doc_uid = document_repr['teamraum_connect_links']['gever_document']['UID']
+        # If the workspace document doesn't have a link to a GEVER document,
+        # always create a copy instead of attempting to create a version.
+        gever_doc_link = document_repr.get('teamraum_connect_links', {}).get('gever_document')
+        gever_doc_uid = gever_doc_link.get('UID') if gever_doc_link else None
+
+        if as_new_version and gever_doc_uid:
             catalog = api.portal.get_tool('portal_catalog')
             gever_doc = catalog(UID=gever_doc_uid)[0].getObject()
 

@@ -532,6 +532,29 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(initial_filename, new_version.file.filename)
             self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
 
+    def test_copy_unlinked_document_from_workspace_as_new_version(self):
+        """Retrieving an unlinked document from a workspace to GEVER should
+        always create a copy, even when `as_new_version=True` was given.
+        """
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .with_dummy_content())
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_doc.UID(),
+                        as_new_version=True)
+
+            self.assertEqual(1, len(children['added']))
+            new_gever_doc = children['added'].pop()
+            self.assertEqual(workspace_doc.title, new_gever_doc.title)
+
     def test_copy_document_without_file_from_a_workspace(self):
         document = create(Builder('document')
                           .within(self.workspace))
