@@ -11,6 +11,8 @@ from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_COPY
+from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_VERSION
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -886,6 +888,9 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(len(children['added']), 1)
             document_copy = children['added'].pop()
             self.assertEqual(document_copy.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
     def test_copy_document_with_file_from_a_workspace(self, browser):
@@ -923,6 +928,10 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(document_copy))
+
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
     def test_copy_document_from_workspace_as_new_version(self, browser):
@@ -993,6 +1002,10 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(initial_filename, new_version.file.filename)
             self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
 
+            self.assertEqual(
+                RETRIEVAL_MODE_VERSION,
+                browser.json.get('teamraum_connect_retrieval_mode'))
+
     @browsing
     def test_copy_eml_mail_from_a_workspace(self, browser):
         mail = create(Builder("mail")
@@ -1030,6 +1043,10 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(mail_copy))
+
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
     def test_copy_msg_mail_from_a_workspace(self, browser):
@@ -1072,6 +1089,10 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(mail_copy))
+
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
     def test_copying_document_from_workspace_is_prevented_if_checked_out(self, browser):

@@ -460,11 +460,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), document.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
+            self.assertEqual(workspace_document, dst_doc)
+
             self.assertEqual(document.title, workspace_document.title)
             self.assertEqual(document.description, workspace_document.description)
             self.assertEqual(document.file.open().read(),
@@ -507,11 +509,12 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), workspace_doc.UID(),
                         as_new_version=True)
 
             self.assertEqual(0, len(children['added']))
+            self.assertEqual(gever_doc, dst_doc)
 
             self.assertTrue(Versioner(gever_doc).has_initial_version())
             self.assertEqual(1, Versioner(gever_doc).get_current_version_id())
@@ -547,12 +550,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), workspace_doc.UID(),
                         as_new_version=True)
 
             self.assertEqual(1, len(children['added']))
             new_gever_doc = children['added'].pop()
+            self.assertEqual(new_gever_doc, dst_doc)
             self.assertEqual(workspace_doc.title, new_gever_doc.title)
 
     def test_copy_document_without_file_from_a_workspace(self):
@@ -566,11 +570,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), document.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
+            self.assertEqual(workspace_document, dst_doc)
+
             self.assertEqual(document.title, workspace_document.title)
             self.assertEqual(document.description, workspace_document.description)
 
@@ -590,11 +596,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), mail.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
+            self.assertEqual(workspace_mail, dst_doc)
+
             self.assertEqual(mail.title, workspace_mail.title)
             self.assertEqual(mail.description, workspace_mail.description)
             self.assertEqual(workspace_mail.get_file().open().read(),
@@ -616,11 +624,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), mail.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
+            self.assertEqual(workspace_mail, dst_doc)
+
             self.assertEqual(mail.title, workspace_mail.title)
             self.assertEqual(mail.description, workspace_mail.description)
             self.assertEqual(workspace_mail.get_file().open().read(),
@@ -647,7 +657,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
                     with self.assertRaises(CopyFromWorkspaceForbidden):
-                        manager.copy_document_from_workspace(
+                        dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                             self.workspace.UID(), document.UID())
 
             self.assertEqual(0, len(children['added']))
@@ -707,7 +717,7 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
 
             with auto_commit_after_request(manager.client):
-                manager.copy_document_from_workspace(
+                dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                     self.workspace.UID(), document.UID())
 
         self.assertEqual(3, len(self.get_journal_entries(self.dossier)))

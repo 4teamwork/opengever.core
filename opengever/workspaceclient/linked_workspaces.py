@@ -27,6 +27,9 @@ from zope.interface import implementer
 
 CACHE_TIMEOUT = 24 * 60 * 60
 
+RETRIEVAL_MODE_COPY = 'copy'
+RETRIEVAL_MODE_VERSION = 'version'
+
 
 def list_cache_key(linked_workspaces_instance, **kwargs):
     """Cache key builder for linked workspaces list.
@@ -252,11 +255,13 @@ class LinkedWorkspaces(object):
         gever_doc_uid = gever_doc_link.get('UID') if gever_doc_link else None
 
         if as_new_version and gever_doc_uid:
+            retrieval_mode = RETRIEVAL_MODE_VERSION
             gever_doc = self._retrieve_as_version(document_repr, gever_doc_uid)
         else:
+            retrieval_mode = RETRIEVAL_MODE_COPY
             gever_doc = self._retrieve_as_copy(document_repr)
 
-        return gever_doc
+        return gever_doc, retrieval_mode
 
     def _retrieve_as_version(self, document_repr, gever_doc_uid):
             catalog = api.portal.get_tool('portal_catalog')

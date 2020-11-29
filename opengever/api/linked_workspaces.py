@@ -245,14 +245,17 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         workspace_uid, document_uid, as_new_version = self.validate_data(
             json_body(self.request))
         try:
-            document = ILinkedWorkspaces(self.context).copy_document_from_workspace(
-                workspace_uid, document_uid, as_new_version)
+            destination_document, retrieval_mode = ILinkedWorkspaces(
+                self.context).copy_document_from_workspace(
+                    workspace_uid, document_uid, as_new_version)
         except CopyFromWorkspaceForbidden:
             raise BadRequest(
                 "Document can't be copied from workspace because it's "
                 "currently checked out")
 
-        return self.serialize_object(document)
+        serialized = self.serialize_object(destination_document)
+        serialized['teamraum_connect_retrieval_mode'] = retrieval_mode
+        return serialized
 
     def serialize_object(self, obj):
         serializer = queryMultiAdapter((obj, self.request), ISerializeToJson)
