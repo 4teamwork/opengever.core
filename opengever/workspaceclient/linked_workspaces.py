@@ -252,6 +252,13 @@ class LinkedWorkspaces(object):
         gever_doc_uid = gever_doc_link.get('UID') if gever_doc_link else None
 
         if as_new_version and gever_doc_uid:
+            gever_doc = self._retrieve_as_version(document_repr, gever_doc_uid)
+        else:
+            gever_doc = self._retrieve_as_copy(document_repr)
+
+        return gever_doc
+
+    def _retrieve_as_version(self, document_repr, gever_doc_uid):
             catalog = api.portal.get_tool('portal_catalog')
             gever_doc = catalog(UID=gever_doc_uid)[0].getObject()
 
@@ -265,10 +272,9 @@ class LinkedWorkspaces(object):
                 document_repr['file']['data'],
                 create_version=True,
                 comment=translate(version_comment, context=getRequest()))
-
             return gever_doc
 
-        else:
+    def _retrieve_as_copy(self, document_repr):
             proxy_post = ProxyPost(document_repr)
             proxy_post.context = self.context
             proxy_post.request = getRequest()
