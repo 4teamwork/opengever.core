@@ -4,15 +4,18 @@ from ftw.builder import create
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
+from plone.uuid.interfaces import IUUID
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
@@ -470,6 +473,64 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
+
+    def test_copy_document_from_workspace_as_new_version(self):
+        gever_doc = create(Builder('document')
+                           .within(self.dossier)
+                           .with_dummy_content())
+
+        self.assertIsNone(Versioner(gever_doc).get_current_version_id())
+        self.assertFalse(Versioner(gever_doc).has_initial_version())
+
+        initial_content = gever_doc.file.data
+        initial_filename = gever_doc.file.filename
+
+        self.assertEqual('Test data', initial_content)
+        self.assertEqual(u'Testdokumaent.doc', initial_filename)
+
+        new_content = 'Content produced in Workspace'
+        new_filename = u'workspace.doc'
+
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .attach_file_containing(new_content,
+                                                       name=new_filename))
+
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_doc.UID(),
+                        as_new_version=True)
+
+            self.assertEqual(0, len(children['added']))
+
+            self.assertTrue(Versioner(gever_doc).has_initial_version())
+            self.assertEqual(1, Versioner(gever_doc).get_current_version_id())
+
+            self.assertEqual(new_content, gever_doc.file.data)
+            self.assertEqual(initial_filename, gever_doc.file.filename)
+
+            initial_version = Versioner(gever_doc).retrieve(0)
+            initial_version_md = Versioner(gever_doc).retrieve_version(0)
+            new_version = Versioner(gever_doc).retrieve(1)
+            new_version_md = Versioner(gever_doc).retrieve_version(1)
+
+            self.assertEqual(initial_content, initial_version.file.data)
+            self.assertEqual(initial_filename, initial_version.file.filename)
+            self.assertEqual(u'Initial version', initial_version_md.comment)
+
+            self.assertEqual(new_content, new_version.file.data)
+            self.assertEqual(initial_filename, new_version.file.filename)
+            self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
 
     def test_copy_document_without_file_from_a_workspace(self):
         document = create(Builder('document')

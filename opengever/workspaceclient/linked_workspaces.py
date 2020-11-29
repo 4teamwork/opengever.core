@@ -1,4 +1,5 @@
 from opengever.api.add import GeverFolderPost
+from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.journal.handlers import journal_entry_factory
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
@@ -21,6 +22,7 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
 from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implementer
 
 CACHE_TIMEOUT = 24 * 60 * 60
@@ -196,7 +198,7 @@ class LinkedWorkspaces(object):
             if document.get('UID') == document_uid:
                 return document
 
-    def copy_document_from_workspace(self, workspace_uid, document_uid):
+    def copy_document_from_workspace(self, workspace_uid, document_uid, as_new_version=False):
         """Will copy a document from a linked workspace.
         """
         document = self._get_document_by_uid(workspace_uid, document_uid)
@@ -244,10 +246,30 @@ class LinkedWorkspaces(object):
             context=self.context, action='Document copied from workspace',
             title=title)
 
-        proxy_post = ProxyPost(document_repr)
-        proxy_post.context = self.context
-        proxy_post.request = getRequest()
-        return proxy_post.reply()
+        if as_new_version:
+            gever_doc_uid = document_repr['teamraum_connect_links']['gever_document']['UID']
+            catalog = api.portal.get_tool('portal_catalog')
+            gever_doc = catalog(UID=gever_doc_uid)[0].getObject()
+
+            # Make sure the previous working copy is saved as an initial
+            # version. This MUST happen before updating the file.
+            Versioner(gever_doc).create_initial_version()
+
+            version_comment = _(u'document_retrieved_from_teamraum_change_note',
+                                default=u'Document retrieved from teamraum')
+            gever_doc.update_file(
+                document_repr['file']['data'],
+                create_version=True,
+                comment=translate(version_comment, context=getRequest()))
+
+            return gever_doc
+
+        else:
+            proxy_post = ProxyPost(document_repr)
+            proxy_post.context = self.context
+            proxy_post.request = getRequest()
+            gever_doc = proxy_post.reply()
+            return gever_doc
 
     def list_documents_in_linked_workspace(self, workspace_uid, **kwargs):
         """List documents contained in a linked workspace

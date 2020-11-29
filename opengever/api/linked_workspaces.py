@@ -242,10 +242,11 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        workspace_uid, document_uid = self.validate_data(json_body(self.request))
+        workspace_uid, document_uid, as_new_version = self.validate_data(
+            json_body(self.request))
         try:
             document = ILinkedWorkspaces(self.context).copy_document_from_workspace(
-                workspace_uid, document_uid)
+                workspace_uid, document_uid, as_new_version)
         except CopyFromWorkspaceForbidden:
             raise BadRequest(
                 "Document can't be copied from workspace because it's "
@@ -265,4 +266,5 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         document_uid = data.get('document_uid')
         if not document_uid:
             raise BadRequest("Property 'document_uid' is required")
-        return workspace_uid, document_uid
+        as_new_version = bool(data.get('as_new_version', False))
+        return workspace_uid, document_uid, as_new_version
