@@ -4,12 +4,15 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.base.command import CreateEmailCommand
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_COPY
+from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_VERSION
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -885,6 +888,9 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(len(children['added']), 1)
             document_copy = children['added'].pop()
             self.assertEqual(document_copy.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
     def test_copy_document_with_file_from_a_workspace(self, browser):
@@ -923,6 +929,83 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(document_copy))
 
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
+
+    @browsing
+    def test_copy_document_from_workspace_as_new_version(self, browser):
+        gever_doc = create(Builder('document')
+                           .within(self.dossier)
+                           .with_dummy_content())
+
+        self.assertIsNone(Versioner(gever_doc).get_current_version_id())
+        self.assertFalse(Versioner(gever_doc).has_initial_version())
+
+        initial_content = gever_doc.file.data
+        initial_filename = gever_doc.file.filename
+
+        self.assertEqual('Test data', initial_content)
+        self.assertEqual(u'Testdokumaent.doc', initial_filename)
+
+        new_content = 'Content produced in Workspace'
+        new_filename = u'workspace.doc'
+
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .attach_file_containing(new_content,
+                                                       name=new_filename))
+
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+
+        payload = {
+            'workspace_uid': IUUID(self.workspace),
+            'document_uid': IUUID(workspace_doc),
+            'as_new_version': True,
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, workspace_doc)
+            with self.observe_children(self.dossier) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            self.assertEqual(len(children['added']), 0)
+
+            self.assertTrue(Versioner(gever_doc).has_initial_version())
+            self.assertEqual(1, Versioner(gever_doc).get_current_version_id())
+
+            self.assertEqual(new_content, gever_doc.file.data)
+            self.assertEqual(initial_filename, gever_doc.file.filename)
+
+            initial_version = Versioner(gever_doc).retrieve(0)
+            initial_version_md = Versioner(gever_doc).retrieve_version(0)
+            new_version = Versioner(gever_doc).retrieve(1)
+            new_version_md = Versioner(gever_doc).retrieve_version(1)
+
+            self.assertEqual(initial_content, initial_version.file.data)
+            self.assertEqual(initial_filename, initial_version.file.filename)
+            self.assertEqual(u'Initial version', initial_version_md.comment)
+
+            self.assertEqual(new_content, new_version.file.data)
+            self.assertEqual(initial_filename, new_version.file.filename)
+            self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
+
+            self.assertEqual(
+                RETRIEVAL_MODE_VERSION,
+                browser.json.get('teamraum_connect_retrieval_mode'))
+
     @browsing
     def test_copy_eml_mail_from_a_workspace(self, browser):
         mail = create(Builder("mail")
@@ -960,6 +1043,10 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(mail_copy))
+
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
     def test_copy_msg_mail_from_a_workspace(self, browser):
@@ -1002,6 +1089,10 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(mail_copy))
+
+            self.assertEqual(
+                RETRIEVAL_MODE_COPY,
+                browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
     def test_copying_document_from_workspace_is_prevented_if_checked_out(self, browser):

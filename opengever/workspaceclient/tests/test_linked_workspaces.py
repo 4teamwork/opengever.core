@@ -1,24 +1,25 @@
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
+from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
-from zope.annotation.interfaces import IAnnotations
+from plone.uuid.interfaces import IUUID
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
-from zope.i18n import translate
 import transaction
 
 
@@ -460,11 +461,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), document.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
+            self.assertEqual(workspace_document, dst_doc)
+
             self.assertEqual(document.title, workspace_document.title)
             self.assertEqual(document.description, workspace_document.description)
             self.assertEqual(document.file.open().read(),
@@ -473,6 +476,141 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
+
+            document_journal = self.get_journal_entries(workspace_document)
+            self.assertEqual(2, len(document_journal))
+
+            self.assert_journal_entry(
+                workspace_document,
+                action_type='Document created via copy from teamraum',
+                title=u'Initial version - Document copied from teamraum %s.' % self.workspace.title,
+            )
+
+    def test_copy_document_from_workspace_as_new_version(self):
+        gever_doc = create(Builder('document')
+                           .within(self.dossier)
+                           .with_dummy_content())
+
+        self.assertIsNone(Versioner(gever_doc).get_current_version_id())
+        self.assertFalse(Versioner(gever_doc).has_initial_version())
+
+        initial_content = gever_doc.file.data
+        initial_filename = gever_doc.file.filename
+
+        self.assertEqual('Test data', initial_content)
+        self.assertEqual(u'Testdokumaent.doc', initial_filename)
+
+        new_content = 'Content produced in Workspace'
+        new_filename = u'workspace.doc'
+
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .attach_file_containing(new_content,
+                                                       name=new_filename))
+
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_doc.UID(),
+                        as_new_version=True)
+
+            self.assertEqual(0, len(children['added']))
+            self.assertEqual(gever_doc, dst_doc)
+
+            self.assertTrue(Versioner(gever_doc).has_initial_version())
+            self.assertEqual(1, Versioner(gever_doc).get_current_version_id())
+
+            self.assertEqual(new_content, gever_doc.file.data)
+            self.assertEqual(initial_filename, gever_doc.file.filename)
+
+            initial_version = Versioner(gever_doc).retrieve(0)
+            initial_version_md = Versioner(gever_doc).retrieve_version(0)
+            new_version = Versioner(gever_doc).retrieve(1)
+            new_version_md = Versioner(gever_doc).retrieve_version(1)
+
+            self.assertEqual(initial_content, initial_version.file.data)
+            self.assertEqual(initial_filename, initial_version.file.filename)
+            self.assertEqual(u'Initial version', initial_version_md.comment)
+
+            self.assertEqual(new_content, new_version.file.data)
+            self.assertEqual(initial_filename, new_version.file.filename)
+            self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
+
+            document_journal = self.get_journal_entries(gever_doc)
+            self.assertEqual(2, len(document_journal))
+
+            self.assert_journal_entry(
+                gever_doc,
+                action_type='Document retrieved as new version from teamraum',
+                title=u'Document unlocked - created new version with document from teamraum.',
+            )
+
+            self.assert_journal_entry(
+                self.dossier,
+                action_type='Document retrieved from teamraum',
+                title=u'Document Testdokum\xe4nt retrieved from workspace.',
+            )
+
+    def test_copy_document_from_workspace_as_new_version_unlocks_document(self):
+        gever_doc = create(Builder('document')
+                           .within(self.dossier)
+                           .with_dummy_content())
+
+        ILockable(gever_doc).lock(COPIED_TO_WORKSPACE_LOCK)
+
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .attach_file_containing('foo', name=u'foo.doc'))
+
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with auto_commit_after_request(manager.client):
+                dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                    self.workspace.UID(), workspace_doc.UID(),
+                    as_new_version=True)
+
+            self.assertEqual(gever_doc, dst_doc)
+            self.assertFalse(ILockable(gever_doc).locked())
+
+    def test_copy_unlinked_document_from_workspace_as_new_version(self):
+        """Retrieving an unlinked document from a workspace to GEVER should
+        always create a copy, even when `as_new_version=True` was given.
+        """
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .with_dummy_content())
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_doc.UID(),
+                        as_new_version=True)
+
+            self.assertEqual(1, len(children['added']))
+            new_gever_doc = children['added'].pop()
+            self.assertEqual(new_gever_doc, dst_doc)
+            self.assertEqual(workspace_doc.title, new_gever_doc.title)
 
     def test_copy_document_without_file_from_a_workspace(self):
         document = create(Builder('document')
@@ -485,17 +623,49 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), document.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_document = children['added'].pop()
+            self.assertEqual(workspace_document, dst_doc)
+
             self.assertEqual(document.title, workspace_document.title)
             self.assertEqual(document.description, workspace_document.description)
 
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
+
+    def test_copy_doc_without_file_from_workspace_as_new_version(self):
+        """A document without file should always be retrieved as a copy, even
+        when linked and `as_new_version=True` was specified.
+        """
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace))
+
+        gever_doc = create(Builder('document')
+                           .within(self.dossier))
+
+        # Documents without a file are never linked by the current
+        # implementation. But even if they were, no attempt at creating a
+        # version should be made.
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_doc.UID(), as_new_version=True)
+
+            self.assertEqual(1, len(children['added']))
+            new_doc = children['added'].pop()
+            self.assertEqual(new_doc, dst_doc)
 
     def test_copy_eml_mail_from_a_workspace(self):
         mail = create(Builder("mail")
@@ -509,11 +679,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), mail.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
+            self.assertEqual(workspace_mail, dst_doc)
+
             self.assertEqual(mail.title, workspace_mail.title)
             self.assertEqual(mail.description, workspace_mail.description)
             self.assertEqual(workspace_mail.get_file().open().read(),
@@ -522,6 +694,36 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
+
+    def test_copy_eml_mail_from_workspace_as_new_version(self):
+        """A mail should always be retrieved as a copy, even when linked and
+        `as_new_version=True` was specified.
+        """
+        workspace_mail = create(Builder("mail")
+                                .with_message(MAIL_DATA)
+                                .within(self.workspace))
+
+        gever_doc = create(Builder('document')
+                           .within(self.dossier))
+
+        # Mails are never linked by the current implementation. But even if
+        # they were, no attempt at creating a version should be made.
+        ILinkedDocuments(workspace_mail).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_mail))
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                        self.workspace.UID(), workspace_mail.UID(), as_new_version=True)
+
+            self.assertEqual(1, len(children['added']))
+            new_mail = children['added'].pop()
+            self.assertEqual(new_mail, dst_doc)
 
     def test_copy_msg_mail_from_a_workspace(self):
         msg = load('testmail.msg')
@@ -535,11 +737,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    manager.copy_document_from_workspace(
+                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                         self.workspace.UID(), mail.UID())
 
             self.assertEqual(1, len(children['added']))
             workspace_mail = children['added'].pop()
+            self.assertEqual(workspace_mail, dst_doc)
+
             self.assertEqual(mail.title, workspace_mail.title)
             self.assertEqual(mail.description, workspace_mail.description)
             self.assertEqual(workspace_mail.get_file().open().read(),
@@ -566,26 +770,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
                     with self.assertRaises(CopyFromWorkspaceForbidden):
-                        manager.copy_document_from_workspace(
+                        dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                             self.workspace.UID(), document.UID())
 
             self.assertEqual(0, len(children['added']))
 
 
 class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
-
-    def get_journal_entries(self, obj):
-        annotations = IAnnotations(obj)
-        data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-        return data
-
-    def assert_journal_entry(self, action, title, entry):
-        translated_title = translate(entry.get('action').get('title'),
-                                     context=self.request)
-
-        self.assertEquals(action, entry.get('action').get('type'))
-        self.assertEquals(title, translated_title)
-        self.assertEquals(True, entry.get('action').get('visible'))
 
     def test_copying_document_to_a_workspace_is_journalized(self):
         document = create(Builder('document')
@@ -600,17 +791,16 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             with auto_commit_after_request(manager.client):
                 manager.copy_document_to_workspace(document, self.workspace.UID())
 
-        journal_entries = self.get_journal_entries(self.dossier)
-        self.assertEqual(3, len(journal_entries))
+        self.assertEqual(3, len(self.get_journal_entries(self.dossier)))
 
-        entry = journal_entries[-1]
         self.assertEqual(
             [{'id': Oguid.for_object(document).id, 'title': document.title}],
-            entry['action']['documents'])
+            self.get_journal_entry(self.dossier, -1)['action']['documents'])
+
         self.assert_journal_entry(
+            self.dossier,
             'Document copied to workspace',
-            u'Document Testdokum\xe4nt copied to workspace Ein Teamraum.',
-            entry)
+            u'Document Testdokum\xe4nt copied to workspace Ein Teamraum.')
 
     def test_workspace_creation_is_journalized(self):
         with self.workspace_client_env():
@@ -620,14 +810,12 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             manager.create(title=u"My new w\xf6rkspace")
             transaction.commit()
 
-        journal_entries = self.get_journal_entries(self.dossier)
-        self.assertEqual(2, len(journal_entries))
+        self.assertEqual(2, len(self.get_journal_entries(self.dossier)))
 
-        entry = journal_entries[-1]
         self.assert_journal_entry(
+            self.dossier,
             'Linked workspace created',
-            u'Linked workspace My new w\xf6rkspace created.',
-            entry)
+            u'Linked workspace My new w\xf6rkspace created.')
 
     def test_copying_document_from_workspace_is_journalized(self):
         document = create(Builder('document')
@@ -642,20 +830,19 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
 
             with auto_commit_after_request(manager.client):
-                manager.copy_document_from_workspace(
+                dst_doc, retrieval_mode = manager.copy_document_from_workspace(
                     self.workspace.UID(), document.UID())
 
-        journal_entries = self.get_journal_entries(self.dossier)
-        self.assertEqual(3, len(journal_entries))
+        self.assertEqual(3, len(self.get_journal_entries(self.dossier)))
 
-        doc_copied_from_workspace_entry = journal_entries[-2]
         self.assert_journal_entry(
+            self.dossier,
             'Document copied from workspace',
-            u'Document Testdokum\xe4nt copied from workspace Ein Teamraum.',
-            doc_copied_from_workspace_entry)
+            u'Document Testdokum\xe4nt copied from workspace Ein Teamraum as a new document.',
+            entry=-1)
 
-        doc_created_entry = journal_entries[-1]
         self.assert_journal_entry(
+            self.dossier,
             'Document added',
             u'Document added: Testdokum\xe4nt',
-            doc_created_entry)
+            entry=-2)
