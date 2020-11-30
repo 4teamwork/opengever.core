@@ -160,9 +160,14 @@ Dokumente in einem verknüpften Teamraum auflisten
 Ein GEVER-Dokument von einem verknüpften Teamraum zurückführen
 --------------------------------------------------------------
 
-Über den Endpoint ``@copy-document-from-workspace`` kann eine Kopie eines Dokuments aus einem verknüpften Teamraum in GEVER zurückgeführt werden.
+Über den Endpoint ``@copy-document-from-workspace`` kann ein Dokument aus einem verknüpften Teamraum in GEVER zurückgeführt werden.
 
-Achtung: Auch wenn das Dokument ursprünglich von GEVER in den Teamraum kopiert wurde, wird beim Zurückführen ein neues, komplett unabhängiges Dokument in GEVER erstellt.
+Abhängig vom Boolean-Parameter ``as_new_version`` kann bestimmt werden, ob das Dokument als neue Version des Ursprungsdokuments zurückgeführt werden soll (falls möglich), oder als Kopie (als neues GEVER-Dokument).
+
+In gewissen Fällen ist es nicht möglich, ein Dokument als neue Version zurückzuführen. Z.B. wenn das Teamraum-Dokument nicht mit einem GEVER-Dokument verlinkt ist, das Dokument keine Datei hat, oder es sich um ein E-Mail handelt.
+
+Wenn mit ``"as_new_version": true`` in solchen Fällen trotzdem eine neue Version gewünscht wird, erstellt das Backend automatisch eine Kopie statt einer Version. Die Entscheidung, welchen Rückführungsmechanismus das Backend schlussendlich gewählt und durchgeführt hat, wird in der Response im Attribut ``teamraum_connect_retrieval_mode`` zurückgegeben: Entweder ``copy`` oder ``version``.
+
 
 **Beispiel-Request**:
 
@@ -173,8 +178,9 @@ Achtung: Auch wenn das Dokument ursprünglich von GEVER in den Teamraum kopiert 
     Content-Type: application/json
 
     {
-      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a"
-      "document_uid": "c2ae40cf41c84493ac4b7618d75ee7f7"
+      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a",
+      "document_uid": "c2ae40cf41c84493ac4b7618d75ee7f7",
+      "as_new_version": true
     }
 
 
@@ -189,5 +195,6 @@ Achtung: Auch wenn das Dokument ursprünglich von GEVER in den Teamraum kopiert 
       "@id": ".../dossier-23/document-1",
       "@type": "opengever.document.document",
       "title": "Ein Dokument",
+      "teamraum_connect_retrieval_mode": "version",
        "...": "..."
     }
