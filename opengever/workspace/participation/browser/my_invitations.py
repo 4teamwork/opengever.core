@@ -219,7 +219,7 @@ class MyWorkspaceInvitations(BrowserView):
             self.storage().mark_invitation_as_accepted(invitation['iid'])
 
             manager = WorkspaceWatcherManager(target)
-            manager.new_participant_added(invitation['recipient'], invitation['role'])
+            manager.new_participant_added(invitation['recipient'])
 
         self._maybe_create_ogds_entry()
         return target
