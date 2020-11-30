@@ -4,6 +4,7 @@ Changelog
 2020.15.0 (unreleased)
 ----------------------
 
+- Support transferring documents from workspace back to GEVER as new version. [lgraf]
 - Correct bug with watchers being wrongfully added to ToDos. [njohner]
 - Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
