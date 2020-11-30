@@ -4,7 +4,7 @@ Changelog
 2020.14.3 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Correct bug with watchers being wrongfully added to ToDos. [njohner]
 
 
 2020.14.2 (2020-11-24)

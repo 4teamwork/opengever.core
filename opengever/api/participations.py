@@ -197,7 +197,7 @@ class ParticipationsPost(ParticipationTraverseService):
         RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
         activity_manager = WorkspaceWatcherManager(self.context)
-        activity_manager.new_participant_added(token, role)
+        activity_manager.new_participant_added(token)
 
         self.request.response.setStatus(201)
         return self.prepare_response_item(self.find_participant(

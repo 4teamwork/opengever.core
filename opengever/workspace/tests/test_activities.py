@@ -122,8 +122,11 @@ class TestToDoWatchers(IntegrationTestCase):
         self.assertEqual([], responsible_watchers)
 
     @browsing
-    def test_new_workspace_member_is_watcher_on_all_todos(self, browser):
+    def test_new_workspace_member_is_watcher_on_all_todos_in_workspace(self, browser):
         self.login(self.workspace_owner, browser)
+
+        workspace2 = create(Builder('workspace').within(self.workspace_root))
+        todo_in_workspace2 = create(Builder('todo').within(workspace2))
 
         getUtility(IInvitationStorage).add_invitation(
             self.workspace,
@@ -151,9 +154,12 @@ class TestToDoWatchers(IntegrationTestCase):
         self.assertIsNotNone(watcher)
 
         self.login(self.workspace_member, browser)
+
+        watched_resources = [resource.oguid.resolve_object() for resource in watcher.resources]
+        self.assertNotIn(todo_in_workspace2, watched_resources)
         self.assertItemsEqual(
             [self.todo, self.assigned_todo, self.completed_todo],
-            [resource.oguid.resolve_object() for resource in watcher.resources])
+            watched_resources)
 
     @browsing
     def test_deleted_workspace_member_is_removed_as_watcher_from_all_todos(self, browser):
