@@ -235,10 +235,10 @@ Then run the `activate_solr` maintenance script:
     $ bin/instance run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
 
 
-Activating Solr sync
-~~~~~~~~~~~~~~~~~~~~
+Activating Solr update chain
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The custom Solr sync allows to propagate document updates to another Solr. This can be enabled for specific portal types.
+The custom Solr update chain allows to propagate document updates to another Solr. This can be enabled for specific portal types.
 A StatelessScriptUpdateProcessor with the name ``sync.chain`` provides a script that is using a JavaScript Script to sync the documents.
 
 To activate the ``sync.chain``, provide an overlayconfig using the ``overlayconfig`` option in the ``ftw.recipe.solr``.
@@ -270,7 +270,7 @@ This is done by using the ``jvm-opts`` option:
     [solr]
         jvm-opts = -Xms512m -Xmx512m -Xss256k -DremoteCoreURL=http://localhost:8984/solr/ris -DportalTypes=opengever.document.document,opengever.dossier.businesscasedossier
 
-Notice the other options next to ``-DremoteCoreURL``. These are options from https://github.com/4teamwork/ftw.recipe.solr#supported-options.
+Note the other options next to ``-DremoteCoreURL``. These are options from https://github.com/4teamwork/ftw.recipe.solr#supported-options.
 All the defaults from the ``jvm-opts`` section have to be set here again to not override the defaults.
 
 Testing
