@@ -237,17 +237,7 @@ class LinkedWorkspaces(object):
         # We should avoid setting the id ourselves, can lead to conflicts
         document_repr = self._blacklisted_dict(document_repr, ['id'])
 
-        # Add journal entry to the dossier before creating the document
         workspace_title = self.client.get_by_uid(workspace_uid).get('title')
-        title = _(
-            u'label_document_copied_from_workspace',
-            default=u'Document ${doc_title} copied from workspace ${workspace_title}.',
-            mapping={'doc_title': document_repr.get('title'),
-                     'workspace_title': workspace_title})
-
-        journal_entry_factory(
-            context=self.context, action='Document copied from workspace',
-            title=title)
 
         # If the workspace document doesn't have a link to a GEVER document,
         # or is not a regular document with a file,
@@ -261,14 +251,14 @@ class LinkedWorkspaces(object):
 
         if as_new_version and gever_doc_uid and is_document_with_file:
             retrieval_mode = RETRIEVAL_MODE_VERSION
-            gever_doc = self._retrieve_as_version(document_repr, gever_doc_uid)
+            gever_doc = self._retrieve_as_version(document_repr, gever_doc_uid, workspace_title)
         else:
             retrieval_mode = RETRIEVAL_MODE_COPY
-            gever_doc = self._retrieve_as_copy(document_repr)
+            gever_doc = self._retrieve_as_copy(document_repr, workspace_title)
 
         return gever_doc, retrieval_mode
 
-    def _retrieve_as_version(self, document_repr, gever_doc_uid):
+    def _retrieve_as_version(self, document_repr, gever_doc_uid, workspace_title):
         catalog = api.portal.get_tool('portal_catalog')
         gever_doc = catalog(UID=gever_doc_uid)[0].getObject()
 
@@ -283,14 +273,58 @@ class LinkedWorkspaces(object):
             create_version=True,
             comment=translate(version_comment, context=getRequest()))
 
+        # Dossier
+        journal_entry_factory(
+            context=self.context,
+            action='Document retrieved from teamraum',
+            title=_(
+                u'label_document_retrieved_from_workspace',
+                default=u'Document ${doc_title} retrieved from workspace.',
+                mapping={'doc_title': document_repr.get('title')})
+        )
+
+        # Document
+        journal_entry_factory(
+            context=gever_doc,
+            action='Document retrieved as new version from teamraum',
+            title=_(
+                u'label_document_retrieved_as_new_version_from_teamraum',
+                default=u'Document unlocked - created new version with '
+                        u'document from teamraum.')
+        )
+
         ILockable(gever_doc).unlock(COPIED_TO_WORKSPACE_LOCK)
         return gever_doc
 
-    def _retrieve_as_copy(self, document_repr):
+    def _retrieve_as_copy(self, document_repr, workspace_title):
         proxy_post = ProxyPost(document_repr)
         proxy_post.context = self.context
         proxy_post.request = getRequest()
         gever_doc = proxy_post.reply()
+
+        # Dossier
+        journal_entry_factory(
+            context=self.context,
+            action='Document copied from workspace',
+            title=_(
+                u'label_document_copied_from_workspace',
+                default=u'Document ${doc_title} copied from workspace '
+                        u'${workspace_title} as a new document.',
+                mapping={'doc_title': document_repr.get('title'),
+                         'workspace_title': workspace_title})
+        )
+
+        # Document
+        journal_entry_factory(
+            context=gever_doc,
+            action='Document created via copy from teamraum',
+            title=_(
+                u'label_initial_version_document_copied_from_teamraum',
+                default=u'Initial version - Document copied from teamraum '
+                        u'${workspace_title}.',
+                mapping={'workspace_title': workspace_title})
+        )
+
         return gever_doc
 
     def list_documents_in_linked_workspace(self, workspace_uid, **kwargs):

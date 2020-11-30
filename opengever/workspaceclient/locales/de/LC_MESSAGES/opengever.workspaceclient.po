@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-11-29 17:10+0000\n"
+"POT-Creation-Date: 2020-11-30 01:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,30 @@ msgstr ""
 msgid "document_retrieved_from_teamraum_change_note"
 msgstr "Dokument aus Teamraum zurückgeführt."
 
-#. Default: "Document ${doc_title} copied from workspace ${workspace_title}."
+#. Default: "Document ${doc_title} copied from workspace ${workspace_title} as a new document."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_document_copied_from_workspace"
-msgstr "Dokument ${doc_title} aus Teamraum ${workspace_title} zurückgeführt."
+msgstr "Dokument ${doc_title} wurde aus teamraum ${workspace_title} kopiert und neu erstellt"
 
 #. Default: "Document ${doc_title} copied to workspace ${workspace_title}."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_document_copied_to_workspace"
 msgstr "Dokument ${doc_title} in Teamraum ${workspace_title} kopiert."
+
+#. Default: "Document unlocked - created new version with document from teamraum."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_document_retrieved_as_new_version_from_teamraum"
+msgstr "Dokument freigegeben - Neue Version mit Dokument aus teamraum erstellt."
+
+#. Default: "Document ${doc_title} retrieved from workspace."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_document_retrieved_from_workspace"
+msgstr "Dokument ${doc_title} wurde aus teamraum zurückgeführt."
+
+#. Default: "Initial version - Document copied from teamraum ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_initial_version_document_copied_from_teamraum"
+msgstr "Initialversion - Dokument aus teamraum ${workspace_title} kopiert."
 
 #. Default: "Linked workspace ${workspace_title} created."
 #: ./opengever/workspaceclient/linked_workspaces.py

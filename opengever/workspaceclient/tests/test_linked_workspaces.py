@@ -477,6 +477,15 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 manager._serialized_document_schema_fields(document),
                 manager._serialized_document_schema_fields(workspace_document))
 
+            document_journal = self.get_journal_entries(workspace_document)
+            self.assertEqual(2, len(document_journal))
+
+            self.assert_journal_entry(
+                workspace_document,
+                action_type='Document created via copy from teamraum',
+                title=u'Initial version - Document copied from teamraum %s.' % self.workspace.title,
+            )
+
     def test_copy_document_from_workspace_as_new_version(self):
         gever_doc = create(Builder('document')
                            .within(self.dossier)
@@ -535,6 +544,21 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(new_content, new_version.file.data)
             self.assertEqual(initial_filename, new_version.file.filename)
             self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
+
+            document_journal = self.get_journal_entries(gever_doc)
+            self.assertEqual(2, len(document_journal))
+
+            self.assert_journal_entry(
+                gever_doc,
+                action_type='Document retrieved as new version from teamraum',
+                title=u'Document unlocked - created new version with document from teamraum.',
+            )
+
+            self.assert_journal_entry(
+                self.dossier,
+                action_type='Document retrieved from teamraum',
+                title=u'Document Testdokum\xe4nt retrieved from workspace.',
+            )
 
     def test_copy_document_from_workspace_as_new_version_unlocks_document(self):
         gever_doc = create(Builder('document')
@@ -814,11 +838,11 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
         self.assert_journal_entry(
             self.dossier,
             'Document copied from workspace',
-            u'Document Testdokum\xe4nt copied from workspace Ein Teamraum.',
-            entry=-2)
+            u'Document Testdokum\xe4nt copied from workspace Ein Teamraum as a new document.',
+            entry=-1)
 
         self.assert_journal_entry(
             self.dossier,
             'Document added',
             u'Document added: Testdokum\xe4nt',
-            entry=-1)
+            entry=-2)
