@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.14.4 (unreleased)
+2020.14.4 (2020-12-01)
 ----------------------
 
 - Correct upgrade: fix only subscription on ToDos of current admin unit. [njohner]
