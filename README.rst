@@ -365,10 +365,10 @@ Then make sure you can login without cas re-enabling ldap as authentication plug
 - Go to ``{admin-unit}/acl_users/ldap/manage_activateInterfacesForm``
 - Make sure ``Authentication`` is enabled
 
-It is also wise to change the CAS server URL:
+It is also wise to change the CAS server URL. If you want to be able to use the gever-ui, you should set it to empty string, otherwise the frontend will try to login with CAS:
 
 - Go to ``{admin-unit}/acl_users/cas_auth/manage_config``
-- Set ``CAS Server URL`` to e.g. ``https://localhost:1234/portal/cas``
+- Set ``CAS Server URL`` to empty string
 
 Lastly you have to change the admin-unit urls in the database to localhost.
 
