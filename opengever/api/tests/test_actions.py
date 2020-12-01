@@ -147,6 +147,83 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
                          self.get_file_actions(browser, self.document))
 
     @browsing
+    def test_available_file_actions_if_document_checked_out_by_myself(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+
+        expected_file_actions = [
+            {u'id': u'oc_direct_edit',
+             u'title': u'Edit',
+             u'icon': u''},
+            {u'id': u'checkin_without_comment',
+             u'title': u'Checkin without comment',
+             u'icon': u''},
+            {u'id': u'checkin_with_comment',
+             u'title': u'Checkin with comment',
+             u'icon': u''},
+            {u'id': u'cancel_checkout',
+             u'title': u'Cancel checkout',
+             u'icon': u''},
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
+    def test_available_file_actions_if_document_checked_out_by_another_user_without_a_version(self, browser):
+        self.login(self.dossier_manager, browser)
+        self.checkout_document(self.document)
+
+        self.login(self.regular_user, browser)
+
+        expected_file_actions = [
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
+    def test_available_file_actions_if_document_checked_out_by_another_user_with_a_version(self, browser):
+        self.login(self.dossier_manager, browser)
+        self.checkout_document(self.document)
+        self.document.update_file('first version', create_version=True)
+
+        self.login(self.regular_user, browser)
+
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
     def test_oc_zem_checkout_available_if_oc_checkout_deactivated(self, browser):
         self.deactivate_feature('officeconnector-checkout')
         self.login(self.regular_user, browser)

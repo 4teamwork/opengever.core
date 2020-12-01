@@ -4,6 +4,7 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
+- Allow downloading and sending a document checked out by another user. [elioschmutz]
 - Fix keyword filter for keywords that contain spaces. [tinagerber]
 - Add feature flag for todos. [tinagerber]
 - No longer zip-export empty tasks, prevent creation of empty folders in such cases. [deiferni]

@@ -2,8 +2,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.document.browser.download import DownloadConfirmationHelper
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
+from zExceptions import BadRequest
+from zope.component import getMultiAdapter
 
 
 class TestDocumentDownloadConfirmation(IntegrationTestCase):
@@ -95,3 +98,53 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.empty_document, view='download')
         self.assertEqual([u'The Document L\xe4\xe4r has no File.'], error_messages())
+
+    @browsing
+    def test_download_view_downloads_working_copy_if_document_checked_out_by_current_user(self, browser):
+        self.login(self.regular_user, browser)
+        manager = getMultiAdapter(
+            (self.document, self.request), ICheckinCheckoutManager)
+        manager.checkout()
+
+        # Updating file data without creating a new version
+        self.document.update_file('my working copy')
+        browser.open(self.document, view='download')
+        self.assertEqual('my working copy', browser.contents)
+
+        # Creating a version
+        self.document.update_file('first version', create_version=True)
+
+        # And continue on the working copy
+        self.document.update_file('my working copy after version')
+        browser.open(self.document, view='download')
+        self.assertEqual('my working copy after version', browser.contents)
+
+    @browsing
+    def test_download_view_raises_bad_request_if_trying_to_download_a_document_checked_out_by_another_user_without_a_version(self, browser):
+        self.login(self.dossier_manager)
+        manager = getMultiAdapter(
+            (self.document, self.request), ICheckinCheckoutManager)
+        manager.checkout()
+
+        self.login(self.regular_user, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest):
+            browser.open(self.document, view='download')
+
+    @browsing
+    def test_download_view_downloads_the_latest_version_if_the_document_is_checked_out_by_another_user(self, browser):
+        with self.login(self.dossier_manager):
+            manager = getMultiAdapter(
+                (self.document, self.request), ICheckinCheckoutManager)
+            manager.checkout()
+
+            # Creating a version
+            self.document.update_file('first version', create_version=True)
+
+            # And continue on the working copy
+            self.document.update_file('my working copy after version')
+
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='download')
+        self.assertEqual('first version', browser.contents)
