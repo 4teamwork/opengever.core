@@ -4,11 +4,21 @@ Changelog
 2020.15.0 (unreleased)
 ----------------------
 
-- Correct upgrade: fix only subscription on ToDos of current admin unit. [njohner]
 - Support transferring documents from workspace back to GEVER as new version. [lgraf]
-- Correct bug with watchers being wrongfully added to ToDos. [njohner]
 - Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
+
+
+2020.14.4 (2020-12-01)
+----------------------
+
+- Correct upgrade: fix only subscription on ToDos of current admin unit. [njohner]
+
+
+2020.14.3 (2020-12-01)
+----------------------
+
+- Correct bug with watchers being wrongfully added to ToDos. [njohner]
 
 
 2020.14.2 (2020-11-24)
