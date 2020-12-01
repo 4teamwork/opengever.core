@@ -1,8 +1,10 @@
 from ftw.upgrade import UpgradeStep
 from opengever.activity import notification_center
+from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.model import create_session
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspace.todo import ToDo
 from zope.globalrequest import getRequest
@@ -28,7 +30,7 @@ class CorrectToDoWatchers(UpgradeStep):
         # as role, we can identify the wrongly added subscriptions by their role.
         roles = ["WorkspaceGuest", "WorkspaceMember", "WorkspaceAdmin"]
         subscriptions = Subscription.query.filter(Subscription.role.in_(roles))
-
+        subscriptions = subscriptions.join(Resource).filter(Resource.admin_unit_id == get_current_admin_unit().id())
         todos = set()
         for subscription in subscriptions:
             resource = subscription.resource
