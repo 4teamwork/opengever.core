@@ -5,6 +5,10 @@ Changelog
 ----------------------
 
 - Support transferring documents from workspace back to GEVER as new version. [lgraf]
+- Add @teamraum-solrsearch endpoint to search on a connected teamraum deployment. [tinagerber]
+- Add @link-to-workspace endpoint to link a dossier to an existing workspace. [tinagerber]
+- Set linked dossier oguid as external_reference for linked workspaces. [tinagerber]
+- Mark dossiers with an interface as soon as they are linked to a workspace. [tinagerber]
 - Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
 

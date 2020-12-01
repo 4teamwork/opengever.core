@@ -48,3 +48,8 @@ msgstr ""
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_linked_workspace_created"
 msgstr "Espace de travail ${workspace_title} créé pour ce dossier."
+
+#. Default: "Linked to workspace ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_workspace_linked"
+msgstr ""

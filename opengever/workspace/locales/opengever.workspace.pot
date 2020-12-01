@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-10-19 09:18+0000\n"
+"POT-Creation-Date: 2020-11-26 13:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,14 +96,14 @@ msgstr ""
 msgid "WorkspaceMember"
 msgstr ""
 
-#. Default: "URL for videoconferencing link"
-#: ./opengever/workspace/workspace.py
-msgid "help_videoconferencing_url"
-msgstr ""
-
 #. Default: "Common"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "fieldset_common"
+msgstr ""
+
+#. Default: "URL for videoconferencing link"
+#: ./opengever/workspace/workspace.py
+msgid "help_videoconferencing_url"
 msgstr ""
 
 #. Default: "Invitation"
@@ -164,6 +164,11 @@ msgstr ""
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_journal"
+msgstr ""
+
+#. Default: "Linked dossier"
+#: ./opengever/workspace/workspace.py
+msgid "label_linked_dossier"
 msgstr ""
 
 #. Default: "Location"
@@ -228,14 +233,14 @@ msgstr ""
 msgid "label_trash"
 msgstr ""
 
-#. Default: "Videoconferencing URL"
-#: ./opengever/workspace/workspace.py
-msgid "label_videoconferencing_url"
-msgstr ""
-
 #. Default: "Video Call Link"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_video_call_link"
+msgstr ""
+
+#. Default: "Videoconferencing URL"
+#: ./opengever/workspace/workspace.py
+msgid "label_videoconferencing_url"
 msgstr ""
 
 #. Default: "Workspaces"

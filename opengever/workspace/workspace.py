@@ -3,6 +3,7 @@ from opengever.workspace.base import WorkspaceBase
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
+from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.content.update import ContentPatch
@@ -38,6 +39,13 @@ class IWorkspaceSchema(model.Schema):
         required=False,
         defaultFactory=videoconferencing_url_default
     )
+    directives.omitted('external_reference')
+    external_reference = schema.TextLine(
+        title=_(u'label_linked_dossier', default=u'Linked dossier'),
+        required=False,
+        default=u'',
+        missing_value=u''
+    )
 
 
 class Workspace(WorkspaceBase):
@@ -56,8 +64,12 @@ class WorkspaceContentPatch(ContentPatch):
     def reply(self):
         data = json_body(self.request)
         if data.keys() != ['ordering']:
-            if not api.user.has_permission('opengever.workspace: Modify Workspace',
-                                           obj=self.context):
-                raise Unauthorized()
+            if data.keys() == ['external_reference']:
+                if not api.user.has_permission('Modify portal content', obj=self.context):
+                    raise Unauthorized()
+            else:
+                if not api.user.has_permission('opengever.workspace: Modify Workspace',
+                                               obj=self.context):
+                    raise Unauthorized()
 
         return super(WorkspaceContentPatch, self).reply()

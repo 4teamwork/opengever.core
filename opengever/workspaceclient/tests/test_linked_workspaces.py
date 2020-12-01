@@ -12,6 +12,7 @@ from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -20,6 +21,7 @@ from plone.uuid.interfaces import IUUID
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
+from zope.interface import alsoProvides
 import transaction
 
 
@@ -150,6 +152,11 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             manager = ILinkedWorkspaces(self.dossier)
             self.assertEqual([], manager.list().get('items'))
 
+            # This prevents a database conflict error,
+            # otherwise both the dossier and the workspace will be modified.
+            # This is a testing issue (doesn't happen in production)
+            alsoProvides(self.dossier, ILinkedToWorkspace)
+
             with self.observe_children(self.workspace_root) as children:
                 response = manager.create(title=u"My new w\xf6rkspace")
                 transaction.commit()
@@ -159,6 +166,23 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             workspace = children['added'].pop()
             self.assertEqual([workspace.absolute_url()],
                              [ws.get('@id') for ws in manager.list().get('items')])
+            self.assertEqual(workspace.external_reference, Oguid.for_object(self.dossier).id)
+
+    def test_link_to_workspace(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            self.assertEqual([], manager.list().get('items'))
+
+            # This prevents a database conflict error,
+            # otherwise both the dossier and the workspace will be modified.
+            # This is a testing issue (doesn't happen in production)
+            alsoProvides(self.dossier, ILinkedToWorkspace)
+
+            manager.link_to_workspace(self.workspace.UID())
+            transaction.commit()
+            self.assertEqual([self.workspace.absolute_url()],
+                             [ws.get('@id') for ws in manager.list().get('items')])
+            self.assertEqual(self.workspace.external_reference, Oguid.for_object(self.dossier).id)
 
     def test_subdossiers_do_not_provided_linked_workspaces(self):
         subdossier = create(Builder('dossier').within(self.dossier))
@@ -807,6 +831,11 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             manager = ILinkedWorkspaces(self.dossier)
             self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
 
+            # This prevents a database conflict error,
+            # otherwise both the dossier and the workspace will be modified.
+            # This is a testing issue (doesn't happen in production)
+            alsoProvides(self.dossier, ILinkedToWorkspace)
+
             manager.create(title=u"My new w\xf6rkspace")
             transaction.commit()
 
@@ -816,6 +845,25 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             self.dossier,
             'Linked workspace created',
             u'Linked workspace My new w\xf6rkspace created.')
+
+    def test_workspace_linking_is_journalized(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            self.assertEqual(1, len(self.get_journal_entries(self.dossier)))
+
+            # This prevents a database conflict error,
+            # otherwise both the dossier and the workspace will be modified.
+            # This is a testing issue (doesn't happen in production)
+            alsoProvides(self.dossier, ILinkedToWorkspace)
+
+            manager.link_to_workspace(self.workspace.UID())
+            transaction.commit()
+
+        journal_entries = self.get_journal_entries(self.dossier)
+        self.assertEqual(2, len(journal_entries))
+
+        self.assert_journal_entry(self.dossier, 'Linked to workspace',
+                                  u'Linked to workspace {}.'.format(self.workspace.title))
 
     def test_copying_document_from_workspace_is_journalized(self):
         document = create(Builder('document')

@@ -71,6 +71,30 @@ Als Antwort erhalten Sie eine Representation des erstellten Teamraums
     }
 
 
+Dossier mit bestehendem Teamraum verknüpfen
+-------------------------------------------
+
+Ein Dosser kann über den Endpoint ``@link-to-workspace`` mit einem bestehenden Teamraum verknüpft werden.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/@link-to-workspace HTTP/1.1
+    Accept: application/json
+    Content-Type: application/json
+
+    {
+      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a"
+    }
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+
+
 Ein GEVER-Dokument in einen verknüpften Teamraum kopieren
 ---------------------------------------------------------
 

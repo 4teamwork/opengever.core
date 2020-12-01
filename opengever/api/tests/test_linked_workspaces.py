@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.base.command import CreateEmailCommand
+from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
@@ -10,6 +11,7 @@ from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_COPY
 from opengever.workspaceclient.linked_workspaces import RETRIEVAL_MODE_VERSION
@@ -22,6 +24,7 @@ from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 import json
 import requests_mock
 import transaction
@@ -50,6 +53,13 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
         with self.observe_children(self.workspace_root) as children:
             with self.workspace_client_env():
                 fix_publisher_test_bug(browser, self.dossier)
+
+                # This prevents a database conflict error,
+                # otherwise both the dossier and the workspace will be modified.
+                # This is a testing issue (doesn't happen in production)
+                alsoProvides(self.dossier, ILinkedToWorkspace)
+                transaction.commit()
+
                 browser.open(
                     self.dossier.absolute_url() + '/@create-linked-workspace',
                     data=json.dumps({"title": "My linked workspace"}),
@@ -66,6 +76,8 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
                       linked_workspace.absolute_url())
         self.assertIn(browser.json.get('title'),
                       linked_workspace.title)
+        self.assertIn(browser.json.get('external_reference'),
+                      Oguid.for_object(self.dossier).id)
 
     @browsing
     def test_raise_not_found_if_feature_is_not_activated(self, browser):
@@ -115,6 +127,92 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'},
                 )
+
+
+class TestLinkToWorkspacesPost(FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_link_to_workspace(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            fix_publisher_test_bug(browser, self.dossier)
+
+            # This prevents a database conflict error,
+            # otherwise both the dossier and the workspace will be modified.
+            # This is a testing issue (doesn't happen in production)
+            alsoProvides(self.dossier, ILinkedToWorkspace)
+            transaction.commit()
+
+            browser.open(
+                self.dossier.absolute_url() + '/@link-to-workspace',
+                data=json.dumps({"workspace_uid": self.workspace.UID()}),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'})
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(Oguid.for_object(self.dossier).id, self.workspace.external_reference)
+
+    @browsing
+    def test_raises_not_found_if_workspaceclient_feature_not_enabled(self, browser):
+        browser.login()
+        self.enable_feature(enabled=False)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(NotFound):
+            browser.open(
+                self.dossier.absolute_url() + '/@link-to-workspace',
+                data=json.dumps({"workspace_uid": self.workspace.UID()}),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'})
+
+    @browsing
+    def test_missing_workspace_uid_raises_bad_request(self, browser):
+        browser.exception_bubbling = True
+        with self.workspace_client_env():
+            browser.login()
+            fix_publisher_test_bug(browser, self.dossier)
+            with self.assertRaises(BadRequest) as cm:
+                browser.open(
+                    self.dossier.absolute_url() + '/@link-to-workspace',
+                    data=json.dumps({}),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'})
+        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+
+    @browsing
+    def test_only_workspace_client_users_can_use_the_api(self, browser):
+        browser.exception_bubbling = True
+        browser.login()
+        with self.workspace_client_env():
+            roles = set(api.user.get_roles())
+            self.grant(roles.difference({'WorkspaceClientUser'}))
+            with self.assertRaises(Unauthorized):
+                browser.open(
+                    self.dossier.absolute_url() + '/@link-to-workspace',
+                    data=json.dumps({"workspace_uid": self.workspace.UID()}),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'})
+
+    @browsing
+    def test_raise_exception_for_subdossiers(self, browser):
+        subdossier = create(Builder('dossier').within(self.dossier))
+        transaction.commit()
+        browser.login()
+        with self.workspace_client_env():
+            fix_publisher_test_bug(browser, subdossier)
+
+            browser.exception_bubbling = True
+            with self.assertRaises(BadRequest):
+                browser.open(
+                    subdossier.absolute_url() + '/@link-to-workspace',
+                    data=json.dumps({"workspace_uid": self.workspace.UID()}),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'})
 
 
 class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):

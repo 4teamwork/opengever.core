@@ -1,4 +1,5 @@
 from opengever.api.add import GeverFolderPost
+from opengever.base.oguid import Oguid
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.journal.handlers import journal_entry_factory
@@ -10,6 +11,7 @@ from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.storage import LinkedWorkspacesStorage
 from plone import api
@@ -23,6 +25,7 @@ from zope.component import getMultiAdapter
 from zope.component.interfaces import ComponentLookupError
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implementer
 
 CACHE_TIMEOUT = 24 * 60 * 60
@@ -123,8 +126,13 @@ class LinkedWorkspaces(object):
 
         This function returns the serialized workspace.
         """
+        if isinstance(data, dict):
+            data['external_reference'] = Oguid.for_object(self.context).id
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
+        if not ILinkedToWorkspace.providedBy(self.context):
+            alsoProvides(self.context, ILinkedToWorkspace)
+            self.context.reindexObject(idxs=['object_provides'])
 
         # Add journal entry to dossier
         title = _(
@@ -137,6 +145,24 @@ class LinkedWorkspaces(object):
             title=title)
 
         return workspace
+
+    def link_to_workspace(self, workspace_uid):
+        workspace = self.client.link_to_workspace(workspace_uid, Oguid.for_object(self.context).id)
+        self.storage.add(workspace.get('UID'))
+
+        if not ILinkedToWorkspace.providedBy(self.context):
+            alsoProvides(self.context, ILinkedToWorkspace)
+            self.context.reindexObject(idxs=['object_provides'])
+
+        # Add journal entry to dossier
+        title = _(
+            u'label_workspace_linked',
+            default=u'Linked to workspace ${workspace_title}.',
+            mapping={'workspace_title': workspace.get('title')})
+
+        journal_entry_factory(
+            context=self.context, action='Linked to workspace',
+            title=title)
 
     def _get_linked_workspace_url(self, workspace_uid):
         if workspace_uid not in self.storage:
