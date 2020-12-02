@@ -172,7 +172,7 @@ msgstr "Journal"
 #. Default: "Linked dossier"
 #: ./opengever/workspace/workspace.py
 msgid "label_linked_dossier"
-msgstr ""
+msgstr "Dossier lié"
 
 #. Default: "Location"
 #: ./opengever/workspace/workspace_meeting.py
