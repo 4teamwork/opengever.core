@@ -17,12 +17,12 @@ msgstr ""
 #. Default: "Document retrieved from teamraum"
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "document_retrieved_from_teamraum_change_note"
-msgstr ""
+msgstr "Document rapatrié de l'espace de travail."
 
 #. Default: "Document ${doc_title} copied from workspace ${workspace_title} as a new document."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_document_copied_from_workspace"
-msgstr ""
+msgstr "Une copie du document ${doc_title} de l'espace de travail ${workspace_title} a été créée."
 
 #. Default: "Document ${doc_title} copied to workspace ${workspace_title}."
 #: ./opengever/workspaceclient/linked_workspaces.py
@@ -32,17 +32,17 @@ msgstr "Document ${doc_title} copié dans l'espace de travail ${workspace_title}
 #. Default: "Document unlocked - created new version with document from teamraum."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_document_retrieved_as_new_version_from_teamraum"
-msgstr ""
+msgstr "Document déverrouillé - Une nouvelle version a été créée à partir d'un document de l'espace de travail."
 
 #. Default: "Document ${doc_title} retrieved from workspace."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_document_retrieved_from_workspace"
-msgstr ""
+msgstr "Document ${doc_title} a été rapatrié de l'espace de travail."
 
 #. Default: "Initial version - Document copied from teamraum ${workspace_title}."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_initial_version_document_copied_from_teamraum"
-msgstr ""
+msgstr "Version initiale - Le document ${doc_title} a été copié de l'espace de travail."
 
 #. Default: "Linked workspace ${workspace_title} created."
 #: ./opengever/workspaceclient/linked_workspaces.py
@@ -52,4 +52,4 @@ msgstr "Espace de travail ${workspace_title} créé pour ce dossier."
 #. Default: "Linked to workspace ${workspace_title}."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_workspace_linked"
-msgstr ""
+msgstr "Lié à l'espace de travail ${workspace_title}."
