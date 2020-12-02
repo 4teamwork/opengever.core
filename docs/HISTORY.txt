@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Allow downloading and sending a document checked out by another user. [elioschmutz]
+- Adding a subtask to a sequential task through the restapi respects the `position` parameter [elioschmutz]
 - Fix keyword filter for keywords that contain spaces. [tinagerber]
 - Fix deletion of favorites when object is removed or trashed. [njohner]
 - Add @assign-to-dossier rest-api endpoint to assign a forwarding to a dossier [elioschmutz]

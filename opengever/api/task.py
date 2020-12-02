@@ -1,4 +1,5 @@
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.api.add import FolderPost
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
@@ -22,6 +23,7 @@ from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
+from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -276,3 +278,20 @@ class TaskSuccessorsGet(Service):
     def reply(self):
         successors = TaskSuccessors(self.context, self.request)
         return successors(expand=True)['successors']
+
+
+class TaskPost(FolderPost):
+    def add_object_to_context(self):
+        super(TaskPost, self).add_object_to_context()
+
+        # Subtasks having a sequential main task requires a special handling for
+        # setting the position within the main task.
+        if self.context.is_sequential_main_task():
+            try:
+                position = int(self.request_data.get(
+                    'position',
+                    len(self.context.get_tasktemplate_order())))
+            except (ValueError):
+                raise BadRequest("Could not parse `position` attribute")
+
+            self.context.add_task_to_tasktemplate_order(position, self.obj)

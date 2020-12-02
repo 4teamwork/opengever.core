@@ -8,11 +8,13 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.restapi.serializer.converters import json_compatible
+from zExceptions import BadRequest
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -535,3 +537,129 @@ class TestTaskTransitions(IntegrationTestCase):
         self.assertItemsEqual(
             [str(intids.getId(el)) for el in [self.document, self.taskdocument]],
             [term['token'] for term in browser.json['items']])
+
+
+class TestAddingAdditionalTaskToSequentialProcessPost(IntegrationTestCase):
+
+    @browsing
+    def test_adds_task_to_the_given_position(self, browser):
+        data = {
+            "@type": "opengever.task.task",
+            "title": "Subtask",
+            "task_type": "direct-execution",
+            "position": 1,
+            "responsible": {
+                'token': "fa:{}".format(self.secretariat_user.id),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': self.regular_user.id,
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            }
+        }
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.sequential_task) as subtasks:
+            browser.open(self.sequential_task, json.dumps(data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(subtasks['added']))
+
+        oguids = self.sequential_task.get_tasktemplate_order()
+        self.assertEquals(
+            [u'Mitarbeiter Dossier generieren',
+             u'Subtask',
+             u'Arbeitsplatz vorbereiten',
+             u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [oguid.resolve_object().title for oguid in oguids])
+
+    @browsing
+    def test_added_task_is_part_of_sequence(self, browser):
+        data = {
+            "@type": "opengever.task.task",
+            "title": "Subtask",
+            "task_type": "direct-execution",
+            "position": 1,
+            "responsible": {
+                'token': "fa:{}".format(self.secretariat_user.id),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': self.regular_user.id,
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            }
+        }
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.sequential_task) as subtasks:
+            browser.open(self.sequential_task, json.dumps(data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(subtasks['added']))
+        additional_task, = subtasks['added']
+
+        self.assertTrue(IFromSequentialTasktemplate.providedBy(additional_task))
+
+        self.assertEquals(
+            additional_task.get_sql_object(),
+            self.seq_subtask_1.get_sql_object().tasktemplate_successor)
+
+    @browsing
+    def test_adds_task_to_the_end_if_no_position_is_given(self, browser):
+        data = {
+            "@type": "opengever.task.task",
+            "title": "Subtask",
+            "task_type": "direct-execution",
+            "responsible": {
+                'token': "fa:{}".format(self.secretariat_user.id),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': self.regular_user.id,
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            }
+        }
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.sequential_task) as subtasks:
+            browser.open(self.sequential_task, json.dumps(data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(subtasks['added']))
+
+        oguids = self.sequential_task.get_tasktemplate_order()
+        self.assertEquals(
+            [u'Mitarbeiter Dossier generieren',
+             u'Arbeitsplatz vorbereiten',
+             u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'Subtask'],
+            [oguid.resolve_object().title for oguid in oguids])
+
+    @browsing
+    def test_raise_error_if_position_is_not_an_int(self, browser):
+        data = {
+            "@type": "opengever.task.task",
+            "title": "Subtask",
+            "position": "not a number",
+            "task_type": "direct-execution",
+            "responsible": {
+                'token': "fa:{}".format(self.secretariat_user.id),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': self.regular_user.id,
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            }
+        }
+
+        self.login(self.regular_user, browser=browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as cm:
+            browser.open(self.sequential_task, json.dumps(data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual("Could not parse `position` attribute", str(cm.exception))
