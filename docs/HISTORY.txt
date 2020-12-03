@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2020.15.0 (unreleased)
+2020.15.0 (2020-12-03)
 ----------------------
 
 - Support transferring documents from workspace back to GEVER as new version. [lgraf]
