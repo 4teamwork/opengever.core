@@ -4,7 +4,7 @@ Changelog
 2020.14.5 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Added a field to the solr sync chain so that PDF documents can be displayed in RIS [sebastianmanger]
 
 
 2020.14.4 (2020-12-01)
