@@ -4,6 +4,12 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
+- Nothing changed yet.
+
+
+2020.15.1 (2020-12-03)
+----------------------
+
 - Added a field to the solr sync chain so that PDF documents can be displayed in RIS [sebastianmanger]
 
 
@@ -17,6 +23,12 @@ Changelog
 - Mark dossiers with an interface as soon as they are linked to a workspace. [tinagerber]
 - Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
+
+
+2020.14.5 (2020-12-03)
+----------------------
+
+- Added a field to the solr sync chain so that PDF documents can be displayed in RIS [sebastianmanger]
 
 
 2020.14.4 (2020-12-01)
