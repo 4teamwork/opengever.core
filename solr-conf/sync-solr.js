@@ -280,6 +280,7 @@ function processAdd(cmd) {
       "allowedRolesAndUsers",
       true
     );
+    updateDocument = fillPayload(updateDocument, doc, "bumblebee_checksum");
     // end: list of values
 
     if (isObjectEmpty(updateDocument)) {
