@@ -89,6 +89,7 @@ class TestConfig(IntegrationTestCase):
                 u'tasks_pdf': False,
                 u'workspace': False,
                 u'workspace_client': False,
+                u'workspace_todo': True,
             })
 
     @browsing

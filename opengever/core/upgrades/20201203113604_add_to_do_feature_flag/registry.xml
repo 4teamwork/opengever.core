@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.workspace.interfaces.IToDoSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
+</registry>

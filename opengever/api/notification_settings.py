@@ -8,6 +8,7 @@ from opengever.api.validation import get_validation_errors
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
+from opengever.workspace import is_todo_feature_enabled
 from opengever.workspace import is_workspace_feature_enabled
 from plone import api
 from plone.restapi.deserializer import json_body
@@ -64,7 +65,7 @@ class NotificationSettingsGet(Service):
             'reminder': not is_workspace_feature_enabled(),
             'task': not is_workspace_feature_enabled(),
             'watcher': not is_workspace_feature_enabled(),
-            'workspace': is_workspace_feature_enabled(),
+            'workspace': is_workspace_feature_enabled() and is_todo_feature_enabled(),
         }
 
     def general_settings_visibility(self):

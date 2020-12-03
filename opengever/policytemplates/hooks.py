@@ -44,6 +44,7 @@ IGNORED_QUESTIONS = {
         'deployment.workspace_users_group',
         'base.apps_endpoint_url',
         'base.workspace_secret',
+        'setup.enable_todo_feature'
         ]
     }
 

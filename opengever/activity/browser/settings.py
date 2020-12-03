@@ -17,6 +17,7 @@ from opengever.base.json_response import JSONResponse
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
+from opengever.workspace import is_todo_feature_enabled
 from opengever.workspace import is_workspace_feature_enabled
 from path import Path
 from plone import api
@@ -353,4 +354,4 @@ class NotificationSettingsForm(BrowserView):
         return is_meeting_feature_enabled()
 
     def show_workspaces_tab(self):
-        return is_workspace_feature_enabled()
+        return is_workspace_feature_enabled() and is_todo_feature_enabled()
