@@ -13,6 +13,8 @@ from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.task import ITask
 from opengever.task.task_response import ITaskResponse
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
@@ -23,6 +25,7 @@ from plone.restapi.services import Service
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -34,6 +37,7 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeTaskToJson, self).__call__(*args, **kwargs)
         result[u'containing_dossier'] = self._get_containing_dossier_summary()
+        result[u'sequence_type'] = self._get_sequence_type()
         return result
 
     def _get_containing_dossier_summary(self):
@@ -43,6 +47,19 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
         return getMultiAdapter(
             (containing_dossier, self.request), ISerializeToJsonSummary
         )()
+
+    def _get_sequence_type(self):
+        if IFromSequentialTasktemplate.providedBy(self.context):
+            return {'title': translate(u'label_sequential_process',
+                                       domain='opengever.task',
+                                       context=self.request),
+                    'token': 'sequential'}
+        if IFromParallelTasktemplate.providedBy(self.context):
+            return {'title': translate(u'label_parallel_process',
+                                       domain='opengever.task',
+                                       context=self.request),
+                    'token': 'parallel'}
+        return None
 
 
 @implementer(ISerializeToJson)
