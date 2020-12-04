@@ -4,7 +4,7 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- No longer zip-export empty tasks, prevent creation of empty folders in such cases. [deiferni]
 
 
 2020.15.1 (2020-12-03)

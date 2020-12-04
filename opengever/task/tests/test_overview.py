@@ -85,8 +85,7 @@ class TestTaskOverview(SolrIntegrationTestCase):
         zipfile = ZipFile(StringIO(browser.contents), 'r')
 
         self.assertEquals(
-            [u'Task - Rechtliche Grundlagen in Vertragsentwurf Uberprufen/',
-             'Feedback zum Vertragsentwurf.docx'],
+            ['Feedback zum Vertragsentwurf.docx'],
             zipfile.namelist())
 
         data = {'zip_selected:method': 1,
