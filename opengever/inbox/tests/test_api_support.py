@@ -117,6 +117,35 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(u'F\xf6rw\xe4rding', task.title)
 
     @browsing
+    def test_assign_to_dossier_allows_to_pass_task_data_which_will_be_used_to_create_the_new_task(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        url = '{}/@workflow/forwarding-transition-assign-to-dossier'.format(
+            self.inbox_forwarding.absolute_url())
+
+        dossier_uid = obj2brain(self.empty_dossier).UID
+        data = {
+            'dossier': dossier_uid,
+            'task': {
+                u'title': u'My custom task',
+                u'task_type': u'information',
+                u'deadline': u'2016-11-01',
+                u'is_private': False,
+                u'responsible': u'robert.ziegler',
+                u'responsible_client': u'fa',
+                u'revoke_permissions': True,
+                u'issuer': u'robert.ziegler'}}
+
+        browser.open(url, method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        task = self.empty_dossier.objectValues()[-1]
+
+        self.assertEqual(FORWARDING_SUCCESSOR_TYPE, task.task_type)
+        self.assertEqual(u'robert.ziegler', task.issuer)
+        self.assertEqual(u'My custom task', task.title)
+
+    @browsing
     def test_reassign_forwarding(self, browser):
         self.login(self.administrator, browser=browser)
 
