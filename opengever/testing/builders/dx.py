@@ -13,6 +13,7 @@ from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.tasktemplates import INTERACTIVE_USERS
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
@@ -186,6 +187,7 @@ class TaskBuilder(DexterityBuilder):
         self.transitions = []
         self.predecessor = None
         self._as_sequential_task = False
+        self._as_parallel_task = False
         self.arguments = {
             'responsible_client': 'org-unit-1',
             'responsible': TEST_USER_ID,
@@ -205,6 +207,9 @@ class TaskBuilder(DexterityBuilder):
 
         if self._as_sequential_task:
             alsoProvides(obj, IFromSequentialTasktemplate)
+
+        if self._as_parallel_task:
+            alsoProvides(obj, IFromParallelTasktemplate)
 
         super(TaskBuilder, self).after_create(obj)
 
@@ -234,6 +239,10 @@ class TaskBuilder(DexterityBuilder):
 
     def as_sequential_task(self):
         self._as_sequential_task = True
+        return self
+
+    def as_parallel_task(self):
+        self._as_parallel_task = True
         return self
 
 

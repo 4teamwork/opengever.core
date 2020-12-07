@@ -11,6 +11,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
+from plone import api
 from plone.restapi.serializer.converters import json_compatible
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
@@ -205,6 +206,36 @@ class TestTaskSerialization(SolrIntegrationTestCase):
             ],
             browser.json['items']
         )
+
+    @browsing
+    def test_sequence_type_for_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertEqual(None, browser.json['sequence_type'])
+
+    @browsing
+    def test_sequence_type_for_sequential_task(self, browser):
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.setDefaultLanguage('de-ch')
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.sequential_task, method="GET", headers=self.api_headers)
+        self.assertEqual({u'title': u'Sequenzieller Ablauf', u'token': u'sequential'},
+                         browser.json['sequence_type'])
+
+    @browsing
+    def test_sequence_type_for_parallel_task(self, browser):
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.setDefaultLanguage('de-ch')
+        self.login(self.regular_user, browser=browser)
+        parallel_task = create(Builder('task')
+                               .within(self.dossier)
+                               .having(responsible_client='fa',
+                                       responsible=self.regular_user.getId(),
+                                       issuer=self.dossier_responsible.getId())
+                               .as_parallel_task())
+        browser.open(parallel_task, method="GET", headers=self.api_headers)
+        self.assertEqual({u'title': u'Paralleler Ablauf', u'token': u'parallel'},
+                         browser.json['sequence_type'])
 
 
 class TestTaskCommentSync(FunctionalTestCase):
