@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -8,6 +9,9 @@ class TestRepositoryAPI(IntegrationTestCase):
 
     @browsing
     def test_can_get_repository_root(self, browser):
+        language_tool = api.portal.get_tool('portal_languages')
+        language_tool.addSupportedLanguage('fr-ch')
+
         self.login(self.regular_user, browser=browser)
         browser.open(self.repository_root, method="GET", headers={"Accept": "application/json"})
         self.assertEqual(200, browser.status_code)

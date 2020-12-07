@@ -64,3 +64,34 @@ class TestTranslatedTitlePatch(IntegrationTestCase):
                      method="PATCH", headers=self.api_headers)
 
         self.assertEqual(u'F\xf6lder', self.empty_repofolder.title_fr)
+
+
+class TestTranslatedTitleGet(IntegrationTestCase):
+
+    @browsing
+    def test_translated_title_not_serialized_for_inactive_lang(self, browser):
+        language_tool = api.portal.get_tool('portal_languages')
+        self.assertEqual(['en', 'de-ch'], language_tool.getSupportedLanguages())
+
+        self.login(self.regular_user, browser)
+        response = browser.open(self.empty_repofolder, method="GET",
+                                headers=self.api_headers).json
+
+        expected = {"title_de": u"Rechnungspr\xfcfungskommission"}
+        self.assertDictContainsSubset(expected, response)
+        self.assertNotIn("title_fr", response)
+
+    @browsing
+    def test_translated_title_serialized_for_all_active_langs(self, browser):
+        language_tool = api.portal.get_tool('portal_languages')
+        language_tool.addSupportedLanguage('fr-ch')
+
+        self.login(self.regular_user, browser)
+        response = browser.open(self.empty_repofolder, method="GET",
+                                headers=self.api_headers).json
+
+        expected = {
+            "title_de": u"Rechnungspr\xfcfungskommission",
+            "title_fr": u"Commission de v\xe9rification",
+            }
+        self.assertDictContainsSubset(expected, response)
