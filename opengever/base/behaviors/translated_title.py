@@ -1,6 +1,7 @@
 from collective.dexteritytextindexer import searchable
 from opengever.base import _
 from opengever.base.utils import get_preferred_language_code
+from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
@@ -10,6 +11,21 @@ from zope.schema import TextLine
 
 
 TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr')
+
+
+def get_active_languages():
+    lang_tool = api.portal.get_tool('portal_languages')
+    return [lang.split('-')[0] for lang in lang_tool.supported_langs]
+
+
+def get_inactive_languages():
+    active_languages = get_active_languages()
+    inactive = []
+
+    for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+        if lang not in active_languages:
+            inactive.append(lang)
+    return inactive
 
 
 class ITranslatedTitleSupport(Interface):

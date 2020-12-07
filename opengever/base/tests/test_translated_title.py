@@ -5,6 +5,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
+from opengever.base.behaviors.translated_title import get_active_languages
+from opengever.base.behaviors.translated_title import get_inactive_languages
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.behaviors.translated_title import TranslatedTitle
@@ -14,6 +16,28 @@ from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
 from opengever.testing import TestCase
 from plone import api
+
+
+class TestTranslatedTitleActiveLanguages(IntegrationTestCase):
+
+    def test_get_active_languages_default(self):
+        self.assertEqual(['en', 'de'], get_active_languages())
+
+    def test_get_active_languages_all_supported_enabled(self):
+        language_tool = api.portal.get_tool('portal_languages')
+        language_tool.addSupportedLanguage('fr-ch')
+        self.assertEqual(['en', 'de', 'fr'], get_active_languages())
+
+
+class TestTranslatedTitleInactiveLanguages(IntegrationTestCase):
+
+    def test_get_active_languages_default(self):
+        self.assertEqual(['fr'], get_inactive_languages())
+
+    def test_get_active_languages_all_supported_enabled(self):
+        language_tool = api.portal.get_tool('portal_languages')
+        language_tool.addSupportedLanguage('fr-ch')
+        self.assertEqual([], get_inactive_languages())
 
 
 class TestTranslatedTitleIsOnTop(IntegrationTestCase):
