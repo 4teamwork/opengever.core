@@ -15,6 +15,7 @@ from .exception_formatter import PatchExceptionFormatter
 from .extendedpathindex import PatchExtendedPathIndex
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
+from .jsonschema_for_portal_type import PatchGetJsonschemaForPortalType
 from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
@@ -72,6 +73,7 @@ PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
 ScrubBoboExceptions()()
+PatchGetJsonschemaForPortalType()()
 
 # These three patches implement role and permission filtering during RO mode.
 # We only apply these conditionally when RO mode actually is active.
