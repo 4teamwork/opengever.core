@@ -6,6 +6,7 @@ Changelog
 
 - Allow downloading and sending a document checked out by another user. [elioschmutz]
 - Fix keyword filter for keywords that contain spaces. [tinagerber]
+- Fix deletion of favorites when object is removed or trashed. [njohner]
 - Add feature flag for todos. [tinagerber]
 - Only expose translated title fields for active languages in schema and serialization via API. [deiferni]
 - No longer zip-export empty tasks, prevent creation of empty folders in such cases. [deiferni]
