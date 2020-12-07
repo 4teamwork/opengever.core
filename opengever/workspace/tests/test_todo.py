@@ -147,6 +147,19 @@ class TestAPISupportForTodo(IntegrationTestCase):
         self.assertEqual('todo-4', browser.json['id'])
 
     @browsing
+    def test_create_with_todo_feature_disabled(self, browser):
+        self.deactivate_feature('workspace-todo')
+        self.login(self.workspace_member, browser)
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.open(
+                self.workspace, method='POST', headers=self.api_headers,
+                data=json.dumps({'title': 'Ein ToDo',
+                                 '@type': 'opengever.workspace.todo'}))
+
+        self.assertEqual('Disallowed subobject type: opengever.workspace.todo',
+                         browser.json['error']['message'])
+
+    @browsing
     def test_read(self, browser):
         self.login(self.workspace_member, browser)
         browser.open(self.todo, method='GET', headers=self.api_headers)

@@ -63,6 +63,27 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
         self.login(self.workspace_member)
         self.assertEquals('workspace-1', self.workspace.getId())
 
+    def test_default_addable_types(self):
+        self.login(self.workspace_member)
+        self.assertItemsEqual(
+            ['opengever.document.document',
+             'ftw.mail.mail',
+             'opengever.workspace.todo',
+             'opengever.workspace.todolist',
+             'opengever.workspace.folder',
+             'opengever.workspace.meeting'],
+            [fti.id for fti in self.workspace.allowedContentTypes()])
+
+    def test_addable_types_with_todo_feature_disabled(self):
+        self.deactivate_feature('workspace-todo')
+        self.login(self.workspace_member)
+        self.assertItemsEqual(
+            ['opengever.document.document',
+             'ftw.mail.mail',
+             'opengever.workspace.folder',
+             'opengever.workspace.meeting'],
+            [fti.id for fti in self.workspace.allowedContentTypes()])
+
     @browsing
     def test_security_view_access(self, browser):
         for user in (self.workspace_owner,

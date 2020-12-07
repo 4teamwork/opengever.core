@@ -37,6 +37,14 @@ class IWorkspaceSettings(Interface):
     )
 
 
+class IToDoSettings(Interface):
+
+    is_feature_enabled = schema.Bool(
+        title=u'Enable todo feature',
+        description=u'Whether todos integration is enabled',
+        default=True)
+
+
 class IToDo(Interface):
     """ Marker interface for ToDos """
 

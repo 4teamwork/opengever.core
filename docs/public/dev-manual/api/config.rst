@@ -91,6 +91,7 @@ GEVER-Mandanten abgefragt werden.
               "tasks_pdf": false,
               "workspace": false,
               "workspace_client": false
+              "workspace_todo": false,
           },
           "gever_colorization": "#37C35A",
           "inbox_folder_url": "https://dev.onegovgever.ch/fd/eingangskorb/eingangskorb_afi",
@@ -245,6 +246,10 @@ features
 
     workspace_client
         Integration von GEVER mit einem Teamraum
+
+    workspace_todo
+        ToDo's und ToDo-Listen in einem Teamraum
+
 
 gever_colorization
     Rahmen Farbe

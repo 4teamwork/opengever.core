@@ -133,5 +133,11 @@
     <value key="is_feature_enabled">True</value>
   </records>
 
+{{% if not setup.enable_todo_feature %}}
+  <records interface="opengever.workspace.interfaces.IToDoSettings">
+    <value key="is_feature_enabled">False</value>
+  </records>
+
+{{% endif %}}
 {{% endif %}}
 </registry>

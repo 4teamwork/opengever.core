@@ -89,6 +89,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('solr', True),
                 ('workspace', False),
                 ('workspace_client', False),
+                ('workspace_todo', True),
                 ('private_tasks', True),
                 ('optional_task_permissions_revoking', False),
                 ])),
