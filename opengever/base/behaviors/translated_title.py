@@ -28,6 +28,13 @@ def get_inactive_languages():
     return inactive
 
 
+def has_translation_behavior(fti):
+    if not hasattr(fti, 'behaviors'):
+        return False
+
+    return ITranslatedTitle.__identifier__ in fti.behaviors
+
+
 class ITranslatedTitleSupport(Interface):
     """Mark objects with translated title support."""
 

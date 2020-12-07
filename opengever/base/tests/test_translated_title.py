@@ -7,6 +7,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.behaviors.translated_title import get_active_languages
 from opengever.base.behaviors.translated_title import get_inactive_languages
+from opengever.base.behaviors.translated_title import has_translation_behavior
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.behaviors.translated_title import TranslatedTitle
@@ -38,6 +39,22 @@ class TestTranslatedTitleInactiveLanguages(IntegrationTestCase):
         language_tool = api.portal.get_tool('portal_languages')
         language_tool.addSupportedLanguage('fr-ch')
         self.assertEqual([], get_inactive_languages())
+
+
+class TestTranslatedTitleHasTranslationBehavior(IntegrationTestCase):
+
+    def test_has_translation_behavior(self):
+        ttool = api.portal.get_tool("portal_types")
+
+        self.assertFalse(has_translation_behavior(
+            ttool["Plone Site"]))
+        self.assertFalse(has_translation_behavior(
+            ttool["opengever.document.document"]))
+
+        self.assertTrue(has_translation_behavior(
+            ttool["opengever.repository.repositoryfolder"]))
+        self.assertTrue(has_translation_behavior(
+            ttool["opengever.contact.contactfolder"]))
 
 
 class TestTranslatedTitleIsOnTop(IntegrationTestCase):
