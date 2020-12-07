@@ -1,7 +1,9 @@
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
-from opengever.inbox.yearfolder import get_current_yearfolder
 from opengever.base.response import IResponseContainer
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.inbox.yearfolder import get_current_yearfolder
 from opengever.task.browser.accept.utils import FORWARDING_SUCCESSOR_TYPE
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
@@ -61,6 +63,40 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(
             'forwarding-transition-assign-to-dossier', response.transition)
         self.assertEqual(Oguid.for_object(task).id, response.successor_oguid)
+
+    @browsing
+    def test_assign_to_dossier_validates_add_permission(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        url = '{}/@workflow/forwarding-transition-assign-to-dossier'.format(
+            self.inbox_forwarding.absolute_url())
+
+        self.dossier.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
+            SharingRoleAssignment(api.user.get_current().getId(), ['Reader']))
+
+        dossier_uid = obj2brain(self.dossier).UID
+        data = {'dossier': dossier_uid}
+
+        self.assertFalse(api.user.has_permission('opengever.task: Add task', obj=self.dossier))
+        with browser.expect_http_error(401):
+            browser.open(url, method='POST',
+                         data=json.dumps(data), headers=self.api_headers)
+
+    @browsing
+    def test_assign_to_dossier_validates_addable_types(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        url = '{}/@workflow/forwarding-transition-assign-to-dossier'.format(
+            self.inbox_forwarding.absolute_url())
+
+        self.assertTrue(api.user.has_permission('opengever.task: Add task', obj=self.dossier))
+        dossier_uid = obj2brain(self.inactive_dossier).UID
+        data = {'dossier': dossier_uid}
+
+        with browser.expect_http_error(401):
+            browser.open(url, method='POST',
+                         data=json.dumps(data), headers=self.api_headers)
 
     @browsing
     def test_assign_to_dossier_open_successor_task(self, browser):
