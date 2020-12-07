@@ -204,6 +204,8 @@ JSON_SCHEMA_FIELD_TYPES = {
     # Ugly, but need to wrap this because pycodestyle ignores noqa for E241
     'TextLine': {
         'type': 'string'},
+    'TranslatedTextLine': {
+        'type': 'string'},
     'Text': {
         'type': 'string'},
     'Tuple': {

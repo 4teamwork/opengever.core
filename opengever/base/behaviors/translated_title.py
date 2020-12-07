@@ -51,6 +51,21 @@ class TranslatedTitleMixin(object):
         return title or ''
 
 
+class TranslatedTextLine(TextLine):
+
+    @property
+    def required(self):
+        if not self._required:
+            return False
+
+        lang_code = self.getName().split('_')[-1]
+        return lang_code in get_active_languages()
+
+    @required.setter
+    def required(self, val):
+        self._required = val
+
+
 class ITranslatedTitle(model.Schema):
     """Behavior schema adding translated title fields to dexterity
     content.
@@ -70,7 +85,7 @@ class ITranslatedTitle(model.Schema):
     form.order_before(title_de='valid_from')
     form.order_before(title_de='description')
     searchable('title_de')
-    title_de = TextLine(
+    title_de = TranslatedTextLine(
         title=_(u'label_title_de', default=u'Title (German)'),
         required=True)
 
@@ -79,7 +94,7 @@ class ITranslatedTitle(model.Schema):
     form.order_before(title_fr='valid_from')
     form.order_before(title_fr='description')
     searchable('title_fr')
-    title_fr = TextLine(
+    title_fr = TranslatedTextLine(
         title=_(u'label_title_fr', default=u'Title (French)'),
         required=True)
 
