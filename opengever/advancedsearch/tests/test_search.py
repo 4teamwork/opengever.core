@@ -239,7 +239,7 @@ class TestQueryStrings(IntegrationTestCase):
                       'form.widgets.end_2': "01.04.2010",
                       'form.widgets.reference': "OG 14.2",
                       'form.widgets.sequence_number': "5",
-                      'form.widgets.searchable_filing_no': "14",
+                      'form.widgets.filing_no': "14",
                       'form.widgets.dossier_review_state:list': 'dossier-state-active'})
 
         form = browser.find_form_by_field('Responsible')
@@ -257,7 +257,7 @@ class TestQueryStrings(IntegrationTestCase):
             ('end.query:record:list:date', '2010-04-02'),
             ('reference', 'OG 14.2'),
             ('sequence_number:int', '5'),
-            ('searchable_filing_no', '14'),
+            ('filing_no', '14'),
             ('responsible', self.regular_user.id),
             ('review_state:list', 'dossier-state-active'),
         ])
