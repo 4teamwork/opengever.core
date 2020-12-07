@@ -36,8 +36,7 @@ $(function() {
 
     var update_widget = function() {
       var selection = widget.find('input[type=radio]:checked').val();
-      var widget_render_url = [location.protocol, '//', location.host,
-                               location.pathname,
+      var widget_render_url = [form.attr('action'),
                                '/++widget++' + fieldname,
                                '/ajax_render'].join('');
       $.get(widget_render_url,

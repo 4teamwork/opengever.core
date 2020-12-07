@@ -6,6 +6,7 @@ Changelog
 
 - No longer zip-export empty tasks, prevent creation of empty folders in such cases. [deiferni]
 - Add sequence_type to task serializer. [tinagerber]
+- Fix only rendering allowed proposal templates when proposal add form is opened from documents tab. [deiferni]
 
 
 2020.15.1 (2020-12-03)
