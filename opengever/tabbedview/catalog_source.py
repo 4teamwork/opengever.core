@@ -152,8 +152,8 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                 range_ = value.get('range', None)
                 if query and isinstance(_query, (list, tuple)) and operator:
                     operator = ' {} '.format(operator.upper())
-                    filters.append(u'{}:({})'.format(
-                        key, escape(operator.join(_query))))
+                    filter_values = [u'"{}"'.format(escape(val)) for val in _query]
+                    filters.append(u'{}:({})'.format(key, operator.join(filter_values)))
                 elif range_ in ['min', 'max', 'minmax']:
                     if not isinstance(_query, (list, tuple)):
                         _query = [_query]
