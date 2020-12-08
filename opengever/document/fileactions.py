@@ -200,21 +200,28 @@ class DocumentFileActions(BaseDocumentFileActions):
 
     def is_download_copy_action_available(self):
         """Disable downloading copies when the document is checked out by
-        another user.
+        another user and document doesn't have any version.
         """
         manager = getMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
+
+        has_version = self.context.get_current_version_id(missing_as_zero=True) > 0
+
         return (
             super(DocumentFileActions, self).is_download_copy_action_available()
-            and not manager.is_checked_out_by_another_user())
+            and not (manager.is_checked_out_by_another_user() and not has_version))
 
     def is_attach_to_email_action_available(self):
+        """Disable attaching documents to email when the document is checked out by
+        another user and mail doesn't have any version.
+        """
         manager = getMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
+        has_version = self.context.get_current_version_id(missing_as_zero=True) > 0
         return (
             super(DocumentFileActions, self).is_attach_to_email_action_available()
-            and not manager.is_checked_out_by_another_user())
+            and not (manager.is_checked_out_by_another_user() and not has_version))
 
     def is_oneoffixx_retry_action_available(self):
         return self.context.is_oneoffixx_creatable()

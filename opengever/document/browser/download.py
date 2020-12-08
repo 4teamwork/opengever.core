@@ -4,6 +4,7 @@ from opengever.core import dictstorage
 from opengever.document import _
 from opengever.document.browser.edit import get_redirect_url
 from opengever.document.events import FileCopyDownloadedEvent
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.mail import IOGMailMarker
 from plone import api
 from plone.memoize import ram
@@ -14,6 +15,8 @@ from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zExceptions import BadRequest
+from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.event import notify
@@ -30,9 +33,20 @@ class DocumentishDownload(Download):
     - Set Content-Disposition headers based on browser sniffing
     - Fire our own `FileCopyDownloadedEvent`
     - Redirect with notification when instead of raising 404 for missing files
+    - Download the latest version instead the current working copy if the
+      document is checked out by another user
     """
 
     def __call__(self):
+        if self.is_checked_out_by_another_user():
+            current_version_id = self.context.get_current_version_id()
+            if not current_version_id:
+                raise BadRequest('The document is checked out by another user '
+                                 'and there is no current version to download.')
+
+            self.request['version_id'] = current_version_id
+            return DocumentDownloadFileVersion(self.context, self.request)()
+
         DownloadConfirmationHelper(self.context).process_request_form()
 
         try:
@@ -59,6 +73,11 @@ class DocumentishDownload(Download):
 
     def stream_data(self, named_file):
         return stream_data(named_file)
+
+    def is_checked_out_by_another_user(self):
+        manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+        return manager and manager.is_checked_out_by_another_user()
 
 
 class DownloadConfirmation(BrowserView):
