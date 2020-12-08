@@ -275,3 +275,15 @@ class TestDossierListing(SolrIntegrationTestCase):
         self.open_repo_with_filter(
             browser, self.leaf_repofolder, 'filter_all', ['Wichtig'])
         self.assertEqual(1, len(browser.css('.listing tbody tr')))
+
+    @browsing
+    def test_filter_dossiers_by_subject_that_contains_a_space(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_all')
+        self.assertLess(1, len(browser.css('.listing tbody tr')))
+        IDossier(self.dossier).keywords = ('Alpha Beta')
+        self.dossier.reindexObject()
+        self.commit_solr()
+        self.open_repo_with_filter(
+            browser, self.leaf_repofolder, 'filter_all', ['Alpha Beta'])
+        self.assertEqual(1, len(browser.css('.listing tbody tr')))
