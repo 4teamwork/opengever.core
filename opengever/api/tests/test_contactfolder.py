@@ -17,7 +17,6 @@ class TestContactFolderGet(IntegrationTestCase):
                 u'id': u'kontakte',
                 u'relative_path': u'kontakte',
                 u'title_de': u'Kontakte',
-                u'title_fr': None,
             },
             browser.json
         )

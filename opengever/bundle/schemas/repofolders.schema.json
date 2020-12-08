@@ -159,7 +159,7 @@
                     ],
                     "title": "Titel (deutsch)",
                     "description": "",
-                    "_zope_schema_type": "TextLine"
+                    "_zope_schema_type": "TranslatedTextLine"
                 },
                 "title_fr": {
                     "type": [
@@ -168,7 +168,7 @@
                     ],
                     "title": "Titel (franz\u00f6sisch)",
                     "description": "",
-                    "_zope_schema_type": "TextLine"
+                    "_zope_schema_type": "TranslatedTextLine"
                 },
                 "retention_period": {
                     "type": [

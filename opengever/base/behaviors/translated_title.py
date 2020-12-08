@@ -1,6 +1,7 @@
 from collective.dexteritytextindexer import searchable
 from opengever.base import _
 from opengever.base.utils import get_preferred_language_code
+from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
@@ -10,6 +11,28 @@ from zope.schema import TextLine
 
 
 TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr')
+
+
+def get_active_languages():
+    lang_tool = api.portal.get_tool('portal_languages')
+    return [lang.split('-')[0] for lang in lang_tool.supported_langs]
+
+
+def get_inactive_languages():
+    active_languages = get_active_languages()
+    inactive = []
+
+    for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+        if lang not in active_languages:
+            inactive.append(lang)
+    return inactive
+
+
+def has_translation_behavior(fti):
+    if not hasattr(fti, 'behaviors'):
+        return False
+
+    return ITranslatedTitle.__identifier__ in fti.behaviors
 
 
 class ITranslatedTitleSupport(Interface):
@@ -26,6 +49,21 @@ class TranslatedTitleMixin(object):
         if isinstance(title, unicode):
             return title.encode('utf-8')
         return title or ''
+
+
+class TranslatedTextLine(TextLine):
+
+    @property
+    def required(self):
+        if not self._required:
+            return False
+
+        lang_code = self.getName().split('_')[-1]
+        return lang_code in get_active_languages()
+
+    @required.setter
+    def required(self, val):
+        self._required = val
 
 
 class ITranslatedTitle(model.Schema):
@@ -47,7 +85,7 @@ class ITranslatedTitle(model.Schema):
     form.order_before(title_de='valid_from')
     form.order_before(title_de='description')
     searchable('title_de')
-    title_de = TextLine(
+    title_de = TranslatedTextLine(
         title=_(u'label_title_de', default=u'Title (German)'),
         required=True)
 
@@ -56,7 +94,7 @@ class ITranslatedTitle(model.Schema):
     form.order_before(title_fr='valid_from')
     form.order_before(title_fr='description')
     searchable('title_fr')
-    title_fr = TextLine(
+    title_fr = TranslatedTextLine(
         title=_(u'label_title_fr', default=u'Title (French)'),
         required=True)
 
