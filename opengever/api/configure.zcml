@@ -93,6 +93,14 @@
 
   <plone:service
       method="POST"
+      name="@assign-to-dossier"
+      for="opengever.inbox.forwarding.IForwarding"
+      factory=".forwarding.AssignToDossier"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
       name="@checkout"
       for="opengever.document.document.IDocumentSchema"
       factory=".checkout.Checkout"
