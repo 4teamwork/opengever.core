@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.6.5 (unreleased)
+2019.6.5 (2020-12-08)
 ---------------------
 
 - Use filing_no field in advanced search form. [njohner]
