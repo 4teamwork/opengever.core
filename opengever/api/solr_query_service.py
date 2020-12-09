@@ -61,6 +61,10 @@ def translate_document_type(document_type):
         return term.title
 
 
+def translate_public_trial(public_trial):
+    return translate(public_trial, context=getRequest(), domain="opengever.base")
+
+
 def filesize(obj):
     try:
         filesize = obj.filesize
@@ -103,6 +107,13 @@ def translated_title(obj):
 
 def translated_task_type(obj):
     return task_type_helper(obj, obj.get("task_type"))
+
+
+def translated_public_trial(obj):
+    try:
+        return translate(obj.public_trial, context=getRequest(), domain="opengever.base")
+    except AttributeError:
+        return None
 
 
 def to_relative_path(value):
@@ -301,6 +312,8 @@ FIELDS_WITH_MAPPING = [
                  additional_required_fields=['bumblebee_checksum', 'path']),
     ListingField('preview_url', None, 'get_preview_frame_url', DEFAULT_SORT_INDEX,
                  additional_required_fields=['bumblebee_checksum', 'path']),
+    ListingField('public_trial', 'public_trial', accessor=translated_public_trial,
+                 transform=translate_public_trial),
     ListingField('reference_number', 'reference'),
     ListingField('relative_path', 'path', relative_path, transform=to_relative_path),
     ListingField('responsible', 'responsible', transform=display_name),

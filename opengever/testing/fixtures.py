@@ -18,6 +18,7 @@ from ftw.tokenauth.pas.storage import CredentialStorage
 from opengever.activity.model import Watcher
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.command import CreateEmailCommand
@@ -1630,6 +1631,7 @@ class OpengeverContentFixture(object):
             .having(
                 start=date(2016, 1, 1),
                 responsible=self.dossier_responsible.getId(),
+                public_trial=PUBLIC_TRIAL_PRIVATE,
             )
         ))
 
