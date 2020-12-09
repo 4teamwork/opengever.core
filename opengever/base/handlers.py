@@ -116,7 +116,10 @@ def remove_favorites(context, event):
     oguid = Oguid.for_object(context)
 
     stmt = Favorite.__table__.delete().where(Favorite.oguid == oguid)
-    create_session().execute(stmt)
+
+    session = create_session()
+    session.execute(stmt)
+    mark_changed(session)
 
 
 def is_title_changed(descriptions):

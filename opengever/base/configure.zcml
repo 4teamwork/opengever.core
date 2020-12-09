@@ -308,7 +308,7 @@
 
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
-           zope.lifecycleevent.IObjectRemovedEvent"
+           OFS.interfaces.IObjectWillBeRemovedEvent"
       handler=".handlers.remove_favorites"
       />
 

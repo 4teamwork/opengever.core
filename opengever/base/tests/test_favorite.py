@@ -244,16 +244,20 @@ class TestHandlers(IntegrationTestCase):
         self.login(self.manager)
 
         create(Builder('favorite')
-               .for_object(self.dossier)
+               .for_object(self.subdocument)
+               .for_user(self.administrator))
+
+        create(Builder('favorite')
+               .for_object(self.subdossier)
                .for_user(self.administrator))
 
         create(Builder('favorite')
                .for_object(self.empty_dossier)
                .for_user(self.dossier_responsible))
 
-        self.assertEquals(2, Favorite.query.count())
+        self.assertEquals(3, Favorite.query.count())
 
-        api.content.delete(obj=self.empty_dossier)
+        api.content.delete(obj=self.subdossier)
 
         self.assertEquals(1, Favorite.query.count())
 
