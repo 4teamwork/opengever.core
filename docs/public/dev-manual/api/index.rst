@@ -49,6 +49,7 @@ Inhalt:
    role_assignment_reports.rst
    allowed_roles_and_principals.rst
    watchers.rst
+   inbox.rst
    workspace/index
    linked_workspaces.rst
    templatefolder.rst
