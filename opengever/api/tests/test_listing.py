@@ -181,10 +181,12 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
     @browsing
     def test_dossier_listing(self, browser):
+        self.enable_languages()
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
             'name=dossiers',
             'columns=external_reference',
+            'columns=public_trial',
             'columns=reference',
             'columns=title',
             'columns=review_state',
@@ -194,7 +196,9 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'de-ch'})
         results = browser.json
 
         self.assertItemsEqual(
@@ -211,11 +215,25 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'UID': IUUID(self.dossier),
              u'external_reference': u'qpr-900-9001-\xf7',
+             u'public_trial': u'Nicht gepr\xfcft',
              u'trashed': False,
              u'reference': u'Client1 1.1 / 1',
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
             results['items'][-1])
+
+    @browsing
+    def test_public_trial_facets_are_translated(self, browser):
+        self.enable_languages()
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.repository_root, view='@listing?name=dossiers&facets:list=public_trial',
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'de-ch'})
+
+        self.assertDictEqual(
+            {u'public_trial': {u'unchecked': {u'count': 16, u'label': u'Nicht gepr\xfcft'},
+                               u'private': {u'count': 1, u'label': u'Nicht \xf6ffentlich'}}},
+            browser.json['facets'])
 
     @browsing
     def test_document_listing(self, browser):

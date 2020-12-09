@@ -8,6 +8,7 @@ Changelog
 - Fix keyword filter for keywords that contain spaces. [tinagerber]
 - Fix deletion of favorites when object is removed or trashed. [njohner]
 - Add @assign-to-dossier rest-api endpoint to assign a forwarding to a dossier [elioschmutz]
+- Add public_trial field to listing endpoint. [tinagerber]
 - Add feature flag for todos. [tinagerber]
 - Only expose translated title fields for active languages in schema and serialization via API. [deiferni]
 - No longer zip-export empty tasks, prevent creation of empty folders in such cases. [deiferni]

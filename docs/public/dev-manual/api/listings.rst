@@ -101,6 +101,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``pdf_url``: URL für Vorschau-PDF
 - ``phone_office``: Telefonnummer
 - ``preview_url``: URL für Vorschau
+- ``public_trial``: Öffentlichkeitsstatus
 - ``receipt_date``: Eingangsdatum
 - ``reference_number``: Aktenzeichen
 - ``reference``: Referenz
@@ -196,6 +197,8 @@ siehe Tabelle:
     |``pdf_url``               |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
     |``preview_url``           |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
+    |``public_trial``          |    ja    |   ja    |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
     |``receipt_date``          |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
