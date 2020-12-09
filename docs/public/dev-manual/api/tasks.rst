@@ -610,3 +610,28 @@ Die kopierten Aufgaben können auch direkt über den GET-Request eines Tasks mit
 
      GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1?expand=successors HTTP/1.1
      Accept: application/json
+
+
+
+Aufgabenliste einer sequenziellen Aufgabe erweitern
+---------------------------------------------------
+Bei sequenziellen Aufgaben ist die Position von Aufgaben relevant. Wird die Aufgabenliste von einer sequenziellen Aufgabe erweitert, kann über den Parameter ``position`` die Position der neuen Aufgabe bestimmt werden.
+
+Wird keine Position angegeben, wird die Aufgabe am Ende der Aufgabenliste hinzugefügt.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /(container) HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+      {
+        "@type": "opengever.task.task",
+        "title": "Bitte Dokument reviewen",
+        "position": 4,
+        "...": "...",
+      }
+
+Der Parameter steht nur für Aufgaben innerhalb einer sequenziellen Aufgabe zur Verfügung.

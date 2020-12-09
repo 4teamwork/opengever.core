@@ -783,6 +783,13 @@
       />
 
   <plone:service
+      method="POST"
+      for="opengever.task.task.ITask"
+      factory=".task.TaskPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
       method="GET"
       name="@notification-settings"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
