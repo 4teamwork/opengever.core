@@ -13,6 +13,7 @@ from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from plone import api
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
@@ -28,6 +29,9 @@ import os
 import time
 
 
+IGNORED_LOCAL_GROUPS = set([
+    'Administrators', 'Site Administrators', 'Reviewers'])
+
 NO_UID_MSG = u"User {!r} has no 'uid' attribute."
 NO_UID_AD_MSG = u"User {!r} has none of the attributes {!r} - skipping."
 USER_NOT_FOUND_LDAP = u"Referenced user {!r} not found in LDAP, ignoring!"
@@ -40,7 +44,7 @@ logger = logging.getLogger('opengever.ogds.base')
 logger.setLevel(logging.INFO)
 
 
-def sync_ogds(plone, users=True, groups=True):
+def sync_ogds(plone, users=True, groups=True, local_groups=False):
     """Syncronize OGDS users and groups by importing users, groups and
     group membership information from LDAP into the respective OGDS SQL tables.
 
@@ -69,6 +73,10 @@ def sync_ogds(plone, users=True, groups=True):
     if groups:
         logger.info(u"Importing groups...")
         updater.import_groups()
+
+    if local_groups:
+        logger.info(u"Importing local groups...")
+        updater.import_local_groups()
 
     elapsed = time.time() - start
     logger.info(u"Done in {:0.1f} seconds.".format(elapsed))
@@ -275,6 +283,76 @@ class OGDSUpdater(object):
         logger.info('Groups with modified membership: %s', modified_count)
         session.flush()
 
+    def import_local_groups(self):
+        session = create_session()
+
+        local_groups, local_group_members = self.plone_groups()
+        ogds_groups = {}
+        ogds_group_members = {}
+        for group in (session.query(Group).filter(Group.is_local == true())):
+            ogds_groups[group.groupid] = {
+                col: getattr(group, col)
+                for col in group.column_names_to_sync ^ set(['is_local'])
+            }
+            ogds_group_members[group.groupid] = set(
+                [user.userid for user in group.users])
+
+        # Ignore global OGDS groups
+        global_ogds_groups = set([
+            group.groupid for group
+            in session.query(Group).filter(
+                or_(Group.is_local.is_(None), Group.is_local == false())
+            )
+        ])
+        for global_group in global_ogds_groups:
+            if global_group in local_groups:
+                del local_groups[global_group]
+            if global_group in local_group_members:
+                del local_group_members[global_group]
+
+        added_mappings, deleted_mappings, modified_mappings = self.update_mappings(
+            local_groups, ogds_groups, pk='groupid')
+
+        session.bulk_insert_mappings(Group, added_mappings)
+        for added in added_mappings:
+            logger.info('Added local group %s', added['groupid'])
+
+        session.bulk_update_mappings(Group, deleted_mappings + modified_mappings)
+        for deleted in deleted_mappings:
+            logger.info('Deactivated local group %s', deleted['groupid'])
+        for modified in modified_mappings:
+            logger.info('Modified local group %s', modified['groupid'])
+
+        # Update group members
+        ogds_users = {
+            user.userid: user for user in session.query(User)
+        }
+        ogds_groups = {
+            group.groupid: group
+            for group in session.query(Group).filter(Group.is_local == true())
+        }
+
+        modified_count = 0
+        for groupid in local_group_members.keys():
+            local_ogds_group_members = set([
+                m for m in local_group_members[groupid] if m in ogds_users])
+            diff = local_ogds_group_members ^ ogds_group_members.get(groupid, set())
+            if diff:
+                group = ogds_groups[groupid]
+                group.users = [
+                    ogds_users[userid] for userid
+                    in local_ogds_group_members
+                ]
+                for userid in local_group_members[groupid]:
+                    logger.info('Added user %s into local group %s.', userid, groupid)
+                modified_count += 1
+
+        logger.info('Local groups added: %s', len(added_mappings))
+        logger.info('Local groups deactivated: %s', len(deleted_mappings))
+        logger.info('Local groups modified: %s', len(modified_mappings))
+        logger.info('Local groups with modified membership: %s', modified_count)
+        session.flush()
+
     def ldap_users(self):
         """Fetch users from LDAP"""
         users = {}
@@ -421,6 +499,29 @@ class OGDSUpdater(object):
 
                 members[groupid] = contained_users
 
+        return groups, members
+
+    def plone_groups(self):
+        """Returns local Plone groups"""
+        uf = getToolByName(self.context, 'acl_users')
+        groups_plugin = uf.plugins.get('source_groups')
+
+        groups = {}
+        members = {}
+        for group in groups_plugin.getGroups():
+            groupid = group.getId()
+            if groupid in IGNORED_LOCAL_GROUPS:
+                continue
+            title = groups_plugin.getGroupInfo(groupid).get('title')
+            if title is not None:
+                title = title.decode('utf8')
+            groups[groupid] = {
+                'groupid': groupid.decode('utf8'),
+                'title': title,
+                'active': True,
+                'is_local': True,
+            }
+            members[groupid] = group.getMemberIds()
         return groups, members
 
     def update_mappings(self, ldap_objects, ogds_objects, pk='userid'):

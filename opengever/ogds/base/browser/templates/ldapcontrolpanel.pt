@@ -21,12 +21,14 @@
                 <tr>
                     <td>User</td>
                     <td>Group</td>
+                    <td>Local Group</td>
                 <tr>
             </thead>
             <tbody>
                 <tr>
                     <td><a tal:attributes="href string:${portal_url}/@@sync_users" href="">Start import</a></td>
                     <td><a tal:attributes="href string:${portal_url}/@@sync_groups" href="">Start import</a></td>
+                    <td><a tal:attributes="href string:${portal_url}/@@sync_local_groups" href="">Start import</a></td>
                 <tr>
             </tbody>
         </table>

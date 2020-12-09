@@ -238,3 +238,77 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_groups()
         self.assertItemsEqual([user.userid for user in ogds_group.users],
                               [ldap_user[1]['userid']])
+
+    def test_imports_local_groups(self):
+        create(Builder('group').with_groupid('my_local_group'))
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_local_groups()
+
+        group = ogds_service().fetch_group('my_local_group')
+        self.assertEqual(group.title, 'my_local_group')
+
+    def test_deactivates_local_groups(self):
+        create(Builder('ogds_group')
+               .id('my_local_group').having(is_local=True, active=True))
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_local_groups()
+
+        group = ogds_service().fetch_group('my_local_group')
+        self.assertEqual(group.active, False)
+
+    def test_adds_members_to_local_groups(self):
+        user = api.user.get(username='test_user_1_')
+        create(Builder('group')
+               .with_groupid('my_local_group')
+               .with_members(user))
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_local_groups()
+
+        group = ogds_service().fetch_group('my_local_group')
+        self.assertEqual([u.userid for u in group.users], ['test_user_1_'])
+
+    def test_removes_members_from_local_groups(self):
+        ogds_group = create(Builder('ogds_group')
+                            .id('my_local_group')
+                            .having(is_local=True, active=True))
+        ogds_user = create(Builder('ogds_user').id('john.doe'))
+        ogds_group.users.append(ogds_user)
+
+        create(Builder('group')
+               .with_groupid('my_local_group'))
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_local_groups()
+
+        self.assertNotIn('john.doe', ogds_group.users)
+
+    def test_import_ignores_duplicate_group_if_global_group_exists(self):
+        FAKE_LDAP_USERFOLDER.groups = [
+            create(Builder('ldapgroup').named('duplicate_group'))
+        ]
+        create(Builder('group').with_groupid('duplicate_group'))
+
+        updater = IOGDSUpdater(self.portal)
+
+        updater.import_groups()
+        updater.import_local_groups()
+
+        group = ogds_service().fetch_group('duplicate_group')
+        self.assertEqual(group.is_local, False)
+
+    def test_import_ignores_duplicate_group_if_local_group_exists(self):
+        FAKE_LDAP_USERFOLDER.groups = [
+            create(Builder('ldapgroup').named('duplicate_group'))
+        ]
+        create(Builder('group').with_groupid('duplicate_group'))
+
+        updater = IOGDSUpdater(self.portal)
+
+        updater.import_local_groups()
+        updater.import_groups()
+
+        group = ogds_service().fetch_group('duplicate_group')
+        self.assertEqual(group.is_local, True)
