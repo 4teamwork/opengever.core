@@ -102,22 +102,17 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     @browsing
     def test_download_view_downloads_working_copy_if_document_checked_out_by_current_user(self, browser):
         self.login(self.regular_user, browser)
+        initDocumentData = self.document.file.data
+
         manager = getMultiAdapter(
             (self.document, self.request), ICheckinCheckoutManager)
         manager.checkout()
 
-        # Updating file data without creating a new version
+        # Updating the file will create an initial version with the initial file content
         self.document.update_file('my working copy')
         browser.open(self.document, view='download')
         self.assertEqual('my working copy', browser.contents)
-
-        # Creating a version
-        self.document.update_file('first version', create_version=True)
-
-        # And continue on the working copy
-        self.document.update_file('my working copy after version')
-        browser.open(self.document, view='download')
-        self.assertEqual('my working copy after version', browser.contents)
+        self.assertNotEqual(initDocumentData, browser.contents)
 
     @browsing
     def test_download_view_raises_bad_request_if_trying_to_download_a_document_checked_out_by_another_user_without_a_version(self, browser):
@@ -134,17 +129,20 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
 
     @browsing
     def test_download_view_downloads_the_latest_version_if_the_document_is_checked_out_by_another_user(self, browser):
-        with self.login(self.dossier_manager):
-            manager = getMultiAdapter(
-                (self.document, self.request), ICheckinCheckoutManager)
-            manager.checkout()
+        self.login(self.dossier_manager, browser)
+        initDocumentData = self.document.file.data
 
-            # Creating a version
-            self.document.update_file('first version', create_version=True)
+        manager = getMultiAdapter(
+            (self.document, self.request), ICheckinCheckoutManager)
+        manager.checkout()
 
-            # And continue on the working copy
-            self.document.update_file('my working copy after version')
+        # Updating the file will create an initial version with the initial file content
+        self.document.update_file('my working copy')
+
+        browser.open(self.document, view='download')
+        self.assertEqual('my working copy', browser.contents)
+        self.assertNotEqual(initDocumentData, browser.contents)
 
         self.login(self.regular_user, browser)
         browser.open(self.document, view='download')
-        self.assertEqual('first version', browser.contents)
+        self.assertEqual(initDocumentData, browser.contents)

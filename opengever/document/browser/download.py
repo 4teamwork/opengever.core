@@ -40,7 +40,7 @@ class DocumentishDownload(Download):
     def __call__(self):
         if self.is_checked_out_by_another_user():
             current_version_id = self.context.get_current_version_id()
-            if not current_version_id:
+            if current_version_id is None:
                 raise BadRequest('The document is checked out by another user '
                                  'and there is no current version to download.')
 
