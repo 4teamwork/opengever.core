@@ -219,6 +219,19 @@ class TestDocument(IntegrationTestCase):
         self.login(self.regular_user)
         self.assertIsNone(self.document.get_parent_inbox())
 
+    def test_is_inside_a_template_folder_return_false_if_not_in_a_template_folder(self):
+        self.login(self.regular_user)
+        self.assertFalse(self.document.is_inside_a_template_folder())
+        self.assertFalse(self.mail_eml.is_inside_a_template_folder())
+
+    def test_is_inside_a_template_folder_return_true_if_inside_a_template_folder(self):
+        self.login(self.regular_user)
+        self.assertTrue(self.normal_template.is_inside_a_template_folder())
+
+    def test_is_inside_a_template_folder_return_true_if_directly_inside_a_dossier_template(self):
+        self.login(self.regular_user)
+        self.assertTrue(self.dossiertemplatedocument.is_inside_a_template_folder())
+
     @browsing
     def test_regular_user_can_add_new_keywords_in_document(self, browser):
         self.login(self.regular_user, browser)
