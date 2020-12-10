@@ -73,6 +73,23 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(browser.json['trashed'])
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
+        self.assertFalse(browser.json['is_template'])
+
+    @browsing
+    def test_contains_additional_metadata_for_dossier_template_document(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.dossiertemplatedocument, headers={'Accept': 'application/json'})
+
+        self.assertTrue(browser.json['is_template'])
+
+    @browsing
+    def test_contains_additional_metadata_for_template_document(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.normal_template, headers={'Accept': 'application/json'})
+
+        self.assertTrue(browser.json['is_template'])
 
     @browsing
     def test_contains_collaborative_checkout_info(self, browser):

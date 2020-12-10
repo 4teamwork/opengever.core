@@ -48,6 +48,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             'containing_subdossier': obj.containing_subdossier_title(),
             'trashed': obj.is_trashed,
             'is_shadow_document': obj.is_shadow_document(),
+            'is_template': obj.is_template(),
             'current_version_id': obj.get_current_version_id(
                 missing_as_zero=True),
             'teamraum_connect_links': ILinkedDocuments(obj).serialize(),
