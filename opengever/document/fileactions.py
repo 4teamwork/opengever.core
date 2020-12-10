@@ -205,7 +205,7 @@ class DocumentFileActions(BaseDocumentFileActions):
         manager = getMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
-        has_version = self.context.get_current_version_id(missing_as_zero=True) > 0
+        has_version = self.context.get_current_version_id() is not None
 
         return (
             super(DocumentFileActions, self).is_download_copy_action_available()
@@ -218,7 +218,8 @@ class DocumentFileActions(BaseDocumentFileActions):
         manager = getMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
-        has_version = self.context.get_current_version_id(missing_as_zero=True) > 0
+        has_version = self.context.get_current_version_id() is not None
+
         return (
             super(DocumentFileActions, self).is_attach_to_email_action_available()
             and not (manager.is_checked_out_by_another_user() and not has_version))
