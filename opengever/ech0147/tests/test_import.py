@@ -143,6 +143,9 @@ class TestImport(IntegrationTestCase):
                     if not field.required and value is not None:
                         self.assertEqual(field._type, type(value), 'Wrong type for value of field: {}'.format(name))
 
+            self.assertEqual(type(doc.file.contentType), str)
+            self.assertEqual(type(doc.file.filename), unicode)
+
     @browsing
     def test_import_toplevel_documents_in_repofolder_displays_error(self, browser):
         self.activate_feature('ech0147-import')

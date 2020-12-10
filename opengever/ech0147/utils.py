@@ -114,7 +114,7 @@ def create_document(container, document, zipfile):
         filename = os.path.basename(file_.pathFileName)
         obj.file = file_field._type(
             data=zipfile.read(zipinfo),
-            contentType=file_.mimeType,
+            contentType=str(file_.mimeType),
             filename=filename)
 
     # Rename document
