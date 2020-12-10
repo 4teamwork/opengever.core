@@ -33,6 +33,16 @@ class ObjectButtonsTestBase(IntegrationTestCase):
         return browser.json['object_buttons']
 
 
+class FolderActionsTestBase(IntegrationTestCase):
+
+    maxDiff = None
+
+    def get_folder_buttons(self, browser, context):
+        browser.open(context.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        return browser.json['folder_buttons']
+
+
 class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
 
     @browsing
@@ -534,6 +544,84 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
                          self.get_file_actions(browser, self.document))
 
 
+class TestFileActionsGetForTemplates(FileActionsTestBase):
+
+    @browsing
+    def test_available_file_actions(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
+            {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
+            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'}
+        ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.normal_template))
+
+
+class TestFileActionsGetForDossierTemplateDocuments(FileActionsTestBase):
+
+    @browsing
+    def test_available_file_actions_for_dossier_template_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        template = create(Builder('document')
+                          .within(self.dossiertemplate)
+                          .titled(u'Werkst\xe4tte')
+                          .with_dummy_content())
+
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
+            {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
+            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'}
+        ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, template))
+
+    @browsing
+    def test_available_file_actions_for_subdossier_template_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        template = create(Builder('document')
+                          .within(self.subdossiertemplate)
+                          .titled(u'Werkst\xe4tte')
+                          .with_dummy_content())
+
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
+            {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
+            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
+            {u'icon': u'', u'id': u'trash_document', u'title': u'Trash document'}
+        ]
+
+        self.assertListEqual(
+            expected_file_actions,
+            self.get_file_actions(browser, template),
+        )
+
+
+class TestFileActionsGetForProposalTemplates(FileActionsTestBase):
+
+    @browsing
+    def test_available_file_actions_for_proposal_template(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
+            {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
+            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
+            {u'icon': u'', u'id': u'trash_document', u'title': u'Trash document'}
+        ]
+
+        self.assertListEqual(
+            expected_file_actions,
+            self.get_file_actions(browser, self.proposal_template),
+        )
+
+
 class TestNewTaskFromDocumentAction(FileActionsTestBase):
 
     @browsing
@@ -644,19 +732,13 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
                          self.get_file_actions(browser, self.inactive_document))
 
 
-class TestFolderActions(IntegrationTestCase):
+class TestFolderActions(FolderActionsTestBase):
 
     features = ('bumblebee',)
-    maxDiff = None
     createTaskAction = {
         u'id': u'create_task',
         u'title': u'Create Task',
         u'icon': u'',}
-
-    def get_folder_buttons(self, browser, context):
-        browser.open(context.absolute_url() + '/@actions',
-                     method='GET', headers=self.api_headers)
-        return browser.json['folder_buttons']
 
     @browsing
     def test_create_task_available_in_open_dossier(self, browser):
@@ -997,7 +1079,7 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
 class TestObjectButtonsGetForTemplates(ObjectButtonsTestBase):
 
     @browsing
-    def test_template_has_delete_object_button(self, browser):
+    def test_available_object_button_actions_for_template_document(self, browser):
         self.login(self.dossier_responsible, browser)
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
@@ -1009,6 +1091,202 @@ class TestObjectButtonsGetForTemplates(ObjectButtonsTestBase):
         self.assertListEqual(
             expected_object_buttons,
             self.get_object_buttons(browser, self.normal_template),
+        )
+
+
+class TestObjectButtonsGetForDossierTemplateDocuments(ObjectButtonsTestBase):
+
+    @browsing
+    def test_available_object_button_actions_for_dossier_template_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        template = create(Builder('document')
+                          .within(self.dossiertemplate)
+                          .titled(u'Werkst\xe4tte')
+                          .with_dummy_content())
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+        ]
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, template),
+        )
+
+    @browsing
+    def test_available_object_button_actions_for_subdossier_template_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        template = create(Builder('document')
+                          .within(self.subdossiertemplate)
+                          .titled(u'Werkst\xe4tte')
+                          .with_dummy_content())
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+        ]
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, template),
+        )
+
+
+class TestObjectButtonsGetForProposalTemplates(ObjectButtonsTestBase):
+
+    @browsing
+    def test_available_object_button_actions_for_proposal_template(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'}
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.proposal_template),
+        )
+
+
+class TestFolderButtonsGetForTemplatesFolder(FolderActionsTestBase):
+
+    @browsing
+    def test_available_folder_button_actions_for_template_folder(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
+        ]
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.templates),
+        )
+
+    @browsing
+    def test_available_folder_button_actions_for_subtemplate_folder(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
+        ]
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.subtemplates),
+        )
+
+
+class TestFolderButtonsGetForDossierTemplatesFolder(FolderActionsTestBase):
+
+    @browsing
+    def test_available_folder_button_actions_for_dossier_template_folder(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
+        ]
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.dossiertemplate),
+        )
+
+    @browsing
+    def test_available_folder_button_actions_for_subdossier_template_folder(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
+        ]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.subdossiertemplate),
         )
 
 
