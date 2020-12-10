@@ -69,6 +69,14 @@ class GroupSyncView(LDAPSyncView):
         self.run_update(users=False)
 
 
+class LocalGroupSyncView(LDAPSyncView):
+    """Browser view that starts a local group import.
+    """
+
+    def __call__(self):
+        self.run_update(users=False, groups=False, local_groups=True)
+
+
 class ResetSyncStampView(BrowserView):
     """A view that resets the current sync stamp with a new stamp
     on every client registered in the OGDS.

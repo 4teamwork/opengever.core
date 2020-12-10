@@ -41,6 +41,13 @@
 
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="sync_local_groups"
+      class=".ldapcontrolpanel.LocalGroupSyncView"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       name="reset_syncstamp"
       class=".ldapcontrolpanel.ResetSyncStampView"
       permission="cmf.ManagePortal"
