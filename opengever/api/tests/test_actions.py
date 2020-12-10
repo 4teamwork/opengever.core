@@ -1107,6 +1107,7 @@ class TestObjectButtonsGetForDossierTemplateDocuments(ObjectButtonsTestBase):
 
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
             {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
             {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
@@ -1127,6 +1128,7 @@ class TestObjectButtonsGetForDossierTemplateDocuments(ObjectButtonsTestBase):
 
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
             {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
             {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
