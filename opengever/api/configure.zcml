@@ -1156,4 +1156,9 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".lock.Lock"
+      name="lock"
+      />
+
 </configure>

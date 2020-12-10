@@ -6,6 +6,7 @@ Changelog
 
 - Add invitation_group_dn to teamraum policy template. [njohner]
 - Actions for document templates are properly configured. [elioschmutz]
+- Add @lock expansion. [tinagerber]
 - Allow downloading and sending a document checked out by another user. [elioschmutz]
 - Adding a subtask to a sequential task through the restapi respects the `position` parameter [elioschmutz]
 - Fix keyword filter for keywords that contain spaces. [tinagerber]
