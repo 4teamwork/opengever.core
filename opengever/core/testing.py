@@ -556,14 +556,10 @@ class ContentFixtureLayer(NoSolrTestingBase, OpengeverFixture):
         pass
 
 
-SOLR_PORT = os.environ.get('PORT4', '19904')
-SOLR_CORE = 'testing'
-
-
 class SolrTestingBase(object):
 
     def maybe_start_solr(self):
-        SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
+        SolrServer.get_instance().configure(self.solr_port, self.solr_core).start()
         import collective.indexing.monkey  # noqa
         import ftw.solr.patches  # noqa
 
@@ -579,7 +575,7 @@ class SolrTestingBase(object):
             '  <solr:connection host="localhost"'
             '                   port="{SOLR_PORT}"'
             '                   base="/solr/{SOLR_CORE}" />'
-            '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
+            '</configure>'.format(SOLR_PORT=self.solr_port, SOLR_CORE=self.solr_core),
             context=configurationContext)
 
         # Clear ftw.solr's thread-local connection cache
@@ -611,6 +607,9 @@ class ContentFixtureWithSolrLayer(SolrTestingBase, ContentFixtureLayer):
     """
 
     defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR, )
+
+    solr_port = os.environ.get('PORT4', '19904')
+    solr_core = 'testing'
 
     def setUpPloneSite(self, portal):
         super(ContentFixtureWithSolrLayer, self).setUpPloneSite(portal)
@@ -684,6 +683,9 @@ MSGCONVERT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
 
 
 class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
+
+    solr_port = os.environ.get('PORT5', '19905')
+    solr_core = 'testing'
 
     def setUpPloneSite(self, portal):
         super(OpengeverFixtureWithSolr, self).setUpPloneSite(portal)
