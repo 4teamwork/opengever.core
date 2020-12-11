@@ -681,3 +681,34 @@ PDFLATEX_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
 MSGCONVERT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
     bases=(MSGCONVERT_SERVICE_FIXTURE, OPENGEVER_FIXTURE),
     name="opengever.core:msgconvert-service-integration")
+
+
+class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
+
+    def setUpPloneSite(self, portal):
+        super(OpengeverFixtureWithSolr, self).setUpPloneSite(portal)
+
+        # Before making a Solr backup we need to do a full commit to make sure
+        # extracting SearchableText from files get's processed. This is done in
+        # an after commit hook.
+        transaction.commit()
+        SolrReplicationAPIClient.get_instance().create_backup('fixture')
+
+    def setUpZope(self, app, configurationContext):
+        super(OpengeverFixtureWithSolr, self).setUpZope(app, configurationContext)
+        self.maybe_start_solr()
+        self.maybe_configure_solr(configurationContext)
+
+    def tearDownZope(self, app):
+        self.maybe_stop_solr()
+        super(OpengeverFixtureWithSolr, self).tearDownZope(app)
+
+
+OPENGEVER_FIXTURE_SQLITE_WITH_SOLR = OpengeverFixtureWithSolr(
+    sql_layer=sqlite_testing.SQLITE_MEMORY_FIXTURE)
+
+
+OPENGEVER_SOLR_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_FIXTURE_SQLITE_WITH_SOLR,
+           set_builder_session_factory(functional_session_factory)),
+    name="opengever.core:functional:solr")
