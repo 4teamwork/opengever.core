@@ -7,6 +7,7 @@ from opengever.trash.trash import ITrashable
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 import transaction
 
@@ -188,6 +189,34 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         self.login(self.regular_user, browser)
 
         expected_file_actions = [
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
+    def test_available_file_actions_if_document_checked_out_by_another_user_with_an_init_version(self, browser):
+        self.login(self.dossier_manager, browser)
+        self.checkout_document(self.document)
+
+        # The file setter of a document will automatically create an init version
+        self.document.file = NamedBlobFile(
+            data='TEST DATA', filename=self.document.file.filename)
+
+        self.login(self.regular_user, browser)
+
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
