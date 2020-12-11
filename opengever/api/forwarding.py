@@ -1,3 +1,4 @@
+from opengever.api.task import deserialize_responsible
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -25,6 +26,10 @@ class AssignToDossier(Service):
         transition_params = {'text': comment, 'dossier': IUUID(target)}
 
         if task_payload:
+            responsible = deserialize_responsible(task_payload.get('responsible'))
+            if responsible:
+                task_payload.update(responsible)
+
             transition_params['task'] = task_payload
 
         try:

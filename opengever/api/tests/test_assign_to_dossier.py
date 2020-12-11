@@ -134,6 +134,35 @@ class TestAssignToDossier(IntegrationTestCase):
         self.assertEqual('2018-12-03', task.get('deadline'))
 
     @browsing
+    def test_combined_values_for_responsible_is_possible(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        task_payload = {
+            "@type": "opengever.task.task",
+            "title": u"Manual t\xf6sk",
+            "task_type": "correction",
+            "deadline": "2018-12-03",
+            "is_private": False,
+            'revoke_permissions': True,
+            "responsible": 'fa:{}'.format(self.regular_user.id),
+            "issuer": self.secretariat_user.id}
+
+        browser.open(
+            self.inbox_forwarding.absolute_url(),
+            view='@assign-to-dossier',
+            method='POST',
+            headers=self.api_headers,
+            data=json.dumps({
+                'target_uid': self.dossier.UID(),
+                'task': task_payload
+            }))
+
+        self.assertEqual(201, browser.status_code)
+        task = browser.json
+
+        self.assertEqual('fa:kathi.barfuss', task.get('responsible').get('token'))
+
+    @browsing
     def test_assign_to_dossier_validates_add_permission(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
