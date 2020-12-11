@@ -99,7 +99,10 @@ class BaseDocumentFileActions(object):
 
     def is_trash_document_available(self):
         trasher = ITrashable(self.context)
-        return trasher.verify_may_trash(raise_on_violations=False)
+        return (
+            trasher.verify_may_trash(raise_on_violations=False)
+            and not self.context.is_inside_a_template_folder()
+            )
 
     def is_untrash_document_available(self):
         trasher = ITrashable(self.context)
