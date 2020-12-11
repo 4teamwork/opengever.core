@@ -100,3 +100,9 @@ class FolderButtonsAvailabilityView(BrowserView):
 
     def is_send_as_email_available(self):
         return not self._is_template_area()
+
+    def is_trash_available(self):
+        return not self._is_template_area()
+
+    def is_untrash_available(self):
+        return not self._is_template_area()

@@ -1174,8 +1174,6 @@ class TestFolderButtonsGetForTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
         ]
@@ -1205,8 +1203,6 @@ class TestFolderButtonsGetForTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
         ]
@@ -1239,8 +1235,6 @@ class TestFolderButtonsGetForDossierTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
         ]
@@ -1270,8 +1264,6 @@ class TestFolderButtonsGetForDossierTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
         ]
