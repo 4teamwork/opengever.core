@@ -222,7 +222,8 @@ class DocumentFileActions(BaseDocumentFileActions):
 
         return (
             super(DocumentFileActions, self).is_attach_to_email_action_available()
-            and not (manager.is_checked_out_by_another_user() and not has_version))
+            and not (manager.is_checked_out_by_another_user() and not has_version)
+            and not self.context.is_inside_a_template_folder())
 
     def is_oneoffixx_retry_action_available(self):
         return self.context.is_oneoffixx_creatable()

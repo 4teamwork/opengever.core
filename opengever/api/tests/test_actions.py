@@ -553,7 +553,6 @@ class TestFileActionsGetForTemplates(FileActionsTestBase):
         expected_file_actions = [
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
-            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'}
         ]
         self.assertEqual(expected_file_actions,
@@ -574,7 +573,6 @@ class TestFileActionsGetForDossierTemplateDocuments(FileActionsTestBase):
         expected_file_actions = [
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
-            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'}
         ]
         self.assertEqual(expected_file_actions,
@@ -592,7 +590,6 @@ class TestFileActionsGetForDossierTemplateDocuments(FileActionsTestBase):
         expected_file_actions = [
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
-            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
             {u'icon': u'', u'id': u'trash_document', u'title': u'Trash document'}
         ]
@@ -611,7 +608,6 @@ class TestFileActionsGetForProposalTemplates(FileActionsTestBase):
         expected_file_actions = [
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
-            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
             {u'icon': u'', u'id': u'trash_document', u'title': u'Trash document'}
         ]
