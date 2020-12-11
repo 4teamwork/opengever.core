@@ -377,7 +377,21 @@ class OfficeatworkLayer(PloneSandboxLayer):
 OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER = OfficeatworkLayer()
 
 
-class ContentFixtureLayer(OpengeverFixture):
+class NoSolrTestingBase(object):
+
+    def maybe_start_solr(self):
+        pass
+
+    def maybe_stop_solr(self):
+        pass
+
+    def maybe_configure_solr(self, configurationContext):
+        # Clear ftw.solr's thread-local connection cache
+        if hasattr(solr_connection_cache, 'connection'):
+            delattr(solr_connection_cache, 'connection')
+
+
+class ContentFixtureLayer(NoSolrTestingBase, OpengeverFixture):
     """The content fixture layer extends the regular OpengeverFixture with a
     content fixture.
     The content fixture is a set of objects which are constructed on layer setup
@@ -435,17 +449,6 @@ class ContentFixtureLayer(OpengeverFixture):
         """.format(f.name)))[0]
         assert eventlog_conf.eventlog is not None
         getConfiguration().eventlog = eventlog_conf.eventlog
-
-    def maybe_start_solr(self):
-        pass
-
-    def maybe_stop_solr(self):
-        pass
-
-    def maybe_configure_solr(self, configurationContext):
-        # Clear ftw.solr's thread-local connection cache
-        if hasattr(solr_connection_cache, 'connection'):
-            delattr(solr_connection_cache, 'connection')
 
     def setUpZope(self, app, configurationContext):
         self.maybe_start_solr()
@@ -557,27 +560,7 @@ SOLR_PORT = os.environ.get('PORT4', '19904')
 SOLR_CORE = 'testing'
 
 
-class ContentFixtureWithSolrLayer(ContentFixtureLayer):
-    """Layer with GEVER content fixture and a real Solr.
-
-    Use the SolrIntegrationTestCase (default to this layer) for tests that
-    need to run against a real Solr instance.
-
-    When you modify objects in your tests that lead to changes in Solr, you'll
-    need to make sure to issue a commit to Solr in order for these changes to
-    actually be visible (when querying Solr after that, and asserting on the
-    results for example). When using the SolrIntegrationTestCase, you can
-    simply do self.commit_solr() to commit pending changes on the Solr side.
-
-    Solr contents are isolated between tests using snapshots done via Solr's
-    replication API.
-
-    This layer inherits from ContentFixtureLayer instead of using it as a base
-    (see docstring of ContentFixtureLayer for details). This layer also
-    shouldn't be used as a base for other layers.
-    """
-
-    defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR, )
+class SolrTestingBase(object):
 
     def maybe_start_solr(self):
         SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
@@ -605,6 +588,29 @@ class ContentFixtureWithSolrLayer(ContentFixtureLayer):
 
         # Clear solr from potential artefacts of the previous run.
         SolrReplicationAPIClient.get_instance().clear()
+
+
+class ContentFixtureWithSolrLayer(SolrTestingBase, ContentFixtureLayer):
+    """Layer with GEVER content fixture and a real Solr.
+
+    Use the SolrIntegrationTestCase (default to this layer) for tests that
+    need to run against a real Solr instance.
+
+    When you modify objects in your tests that lead to changes in Solr, you'll
+    need to make sure to issue a commit to Solr in order for these changes to
+    actually be visible (when querying Solr after that, and asserting on the
+    results for example). When using the SolrIntegrationTestCase, you can
+    simply do self.commit_solr() to commit pending changes on the Solr side.
+
+    Solr contents are isolated between tests using snapshots done via Solr's
+    replication API.
+
+    This layer inherits from ContentFixtureLayer instead of using it as a base
+    (see docstring of ContentFixtureLayer for details). This layer also
+    shouldn't be used as a base for other layers.
+    """
+
+    defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR, )
 
     def setUpPloneSite(self, portal):
         super(ContentFixtureWithSolrLayer, self).setUpPloneSite(portal)
