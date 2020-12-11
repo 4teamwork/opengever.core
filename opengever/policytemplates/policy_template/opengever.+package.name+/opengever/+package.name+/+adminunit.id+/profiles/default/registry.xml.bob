@@ -131,6 +131,7 @@
 {{% if is_teamraum %}}
   <records interface="opengever.workspace.interfaces.IWorkspaceSettings">
     <value key="is_feature_enabled">True</value>
+    <value key="invitation_group_dn">{{{setup.invitation_group_dn}}}</value>
   </records>
 
 {{% if not setup.enable_todo_feature %}}
