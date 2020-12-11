@@ -233,3 +233,9 @@ class SolrTestMixin(object):
 
     def get_solr_connection(self):
         return SolrServer.get_instance().connection
+
+    def assert_in_solr(self, obj):
+        solr = getUtility(ISolrSearch)
+        response = solr.search(filters=("UID:{}".format(obj.UID())))
+        self.assertEqual(1, len(response.docs),
+                         "{} not found in solr".format(obj))
