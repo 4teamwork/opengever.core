@@ -4,6 +4,7 @@ from ftw.solr.interfaces import ISolrSearch
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from opengever.contact.sources import ContactsSource
+from opengever.core.solr_testing import SolrServer
 from opengever.document.versioner import Versioner
 from operator import attrgetter
 from plone import api
@@ -223,3 +224,12 @@ class CapturingLogHandler(logging.NullHandler):
 
     def clear(self):
         self._records = []
+
+
+class SolrTestMixin(object):
+
+    def commit_solr(self):
+        SolrServer.get_instance().commit()
+
+    def get_solr_connection(self):
+        return SolrServer.get_instance().connection
