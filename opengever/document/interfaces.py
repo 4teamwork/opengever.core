@@ -205,3 +205,6 @@ class IFileActions(Interface):
 
     def is_new_task_from_document_available():
         """Return whether the new_task_from_document action is available."""
+
+    def is_unlock_available():
+        """Return whether the unlock action is available."""

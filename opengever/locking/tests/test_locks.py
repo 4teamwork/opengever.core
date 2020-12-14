@@ -184,8 +184,12 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
         browser.open(self.document.absolute_url() + '/@actions',
                      method='GET', headers=self.api_headers)
 
-        expected_file_actions.remove(u'oc_direct_checkout')
-        expected_file_actions.remove(u'trash_document')
+        expected_file_actions = [
+            u'download_copy',
+            u'attach_to_email',
+            u'new_task_from_document',
+            u'unlock']
+
         self.assertEqual(
             expected_file_actions,
             [action.get('id') for action in browser.json['file_actions']])

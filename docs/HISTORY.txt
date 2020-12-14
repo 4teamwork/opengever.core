@@ -6,6 +6,7 @@ Changelog
 
 - Add invitation_group_dn to teamraum policy template. [njohner]
 - Actions for document templates are properly configured. [elioschmutz]
+- Add unlock file action. [tinagerber]
 - Allow removal of copied_to_workspace locks via the @unlock API endpoint by users other than the creator. [tinagerber]
 - Add @lock expansion. [tinagerber]
 - Allow downloading and sending a document checked out by another user. [elioschmutz]

@@ -2,11 +2,13 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.dossier.resolve import LockingResolveManager
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashable
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 import transaction
@@ -724,6 +726,106 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.inactive_document))
+
+
+class TestUnlockAction(FileActionsTestBase):
+
+    @browsing
+    def test_unlock_available_if_document_is_locked_by_current_user(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock()
+
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            {u'id': u'unlock',
+             u'title': u'Unlock',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
+    def test_unlock_not_available_if_document_is_locked_by_another_user(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock()
+        self.login(self.dossier_responsible, browser)
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
+    def test_unlock_available_for_manager(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock()
+        self.login(self.manager, browser)
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            {u'id': u'unlock',
+             u'title': u'Unlock',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
+
+    @browsing
+    def test_unlock_available_if_document_is_locked_by_workspace_lock(self, browser):
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock(COPIED_TO_WORKSPACE_LOCK)
+        self.login(self.dossier_responsible, browser)
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
+             u'icon': u''},
+            {u'id': u'unlock',
+             u'title': u'Unlock',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))
 
 
 class TestFolderActions(FolderActionsTestBase):
