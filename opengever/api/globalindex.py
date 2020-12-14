@@ -4,6 +4,7 @@ from opengever.base.helpers import display_name
 from opengever.globalindex.browser.report import task_type_helper
 from opengever.globalindex.model.task import Task
 from plone.restapi.interfaces import ISerializeToJson
+from sqlalchemy import Date
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 
@@ -38,10 +39,29 @@ class GlobalIndexGet(OGDSListingBaseService):
         for key, value in filters.items():
             if not isinstance(value, list):
                 value = [value]
+
             if key.startswith('-'):
-                query = query.filter(getattr(Task, key[1:]).notin_(value))
+                key = key[1:]
+                exclude = True
             else:
-                query = query.filter(getattr(Task, key).in_(value))
+                exclude = False
+
+            column = getattr(Task, key, None)
+            if column is None:
+                continue
+
+            if isinstance(column.type, Date):
+                lower, upper = value[0].split(' TO ')
+                if lower == '*':
+                    query = query.filter(column <= upper)
+                elif upper == '*':
+                    query = query.filter(column >= lower)
+                else:
+                    query = query.filter(column.between(lower, upper))
+            elif exclude:
+                query = query.filter(column.notin_(value))
+            else:
+                query = query.filter(column.in_(value))
         return query
 
     def get_base_query(self):

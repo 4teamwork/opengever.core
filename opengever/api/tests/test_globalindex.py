@@ -147,6 +147,28 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(3, len(browser.json['items']))
 
     @browsing
+    def test_filter_by_date(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@globalindex?filters.deadline:record=2020-01-01 TO 2020-12-31'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertEqual(2, len(browser.json['items']))
+
+        view = '@globalindex?filters.deadline:record=* TO 2019-01-01'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(12, browser.json['items_total'])
+        self.assertEqual(12, len(browser.json['items']))
+
+        view = '@globalindex?filters.deadline:record=2018-01-01 TO *'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertEqual(2, len(browser.json['items']))
+
+    @browsing
     def test_handles_search_queries(self, browser):
         self.login(self.regular_user, browser=browser)
 
