@@ -131,6 +131,22 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(9, len(browser.json['items']))
 
     @browsing
+    def test_filter_by_excluding_value(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@globalindex?filters.-responsible:record={}'.format(
+            self.regular_user.id)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertNotIn(
+            self.regular_user.id,
+            [item['responsible'] for item in browser.json['items']],
+        )
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertEqual(3, len(browser.json['items']))
+
+    @browsing
     def test_handles_search_queries(self, browser):
         self.login(self.regular_user, browser=browser)
 

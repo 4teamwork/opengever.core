@@ -36,10 +36,12 @@ class GlobalIndexGet(OGDSListingBaseService):
 
     def extend_query_with_filters(self, query, filters):
         for key, value in filters.items():
-            if isinstance(value, list):
-                query = query.filter(getattr(Task, key).in_(value))
+            if not isinstance(value, list):
+                value = [value]
+            if key.startswith('-'):
+                query = query.filter(getattr(Task, key[1:]).notin_(value))
             else:
-                query = query.filter(getattr(Task, key) == value)
+                query = query.filter(getattr(Task, key).in_(value))
         return query
 
     def get_base_query(self):
