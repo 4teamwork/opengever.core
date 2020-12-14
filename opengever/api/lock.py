@@ -45,3 +45,23 @@ class Unlock(Service):
             alsoProvides(self.request, IDisableCSRFProtection)
 
         return lock_info(self.context)
+
+def can_safely_unlock(self, lock_type=STEALABLE_LOCK):
+    if not lock_type.user_unlockable:
+        return False
+
+    info = self.lock_info()
+    # There is no lock, so return True
+    if len(info) == 0:
+        return True
+
+    userid = getSecurityManager().getUser().getId() or None
+    for l in info:
+        # There is another lock of a different type
+        if not hasattr(l['type'], '__name__') or \
+           l['type'].__name__ != lock_type.__name__:
+            return False
+        # The lock is in fact held by the current user
+        if l['creator'] == userid:
+            return True
+    return False
