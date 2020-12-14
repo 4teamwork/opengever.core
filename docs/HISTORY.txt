@@ -4,6 +4,7 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
+- Enable nightly jobs in teamraum policy templates. [njohner]
 - Add invitation_group_dn to teamraum policy template. [njohner]
 - Allow downloading and sending a document checked out by another user. [elioschmutz]
 - Adding a subtask to a sequential task through the restapi respects the `position` parameter [elioschmutz]

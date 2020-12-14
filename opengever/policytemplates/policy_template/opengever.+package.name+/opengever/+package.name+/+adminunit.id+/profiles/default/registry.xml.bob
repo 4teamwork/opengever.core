@@ -12,6 +12,11 @@
   <records interface="opengever.base.interfaces.ISearchSettings">
     <value key="use_solr">True</value>
   </records>
+
+  <records interface="opengever.nightlyjobs.interfaces.INightlyJobsSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
+
 {{% if not setup.enable_activity_feature %}}
   <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
