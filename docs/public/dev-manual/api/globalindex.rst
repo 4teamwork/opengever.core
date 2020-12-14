@@ -19,6 +19,7 @@ Die Felder ``issuer_fullname`` und ``responsible_fullname`` sind überholt und d
 
     {
       "batching": null,
+      "facets": {},
       "items": [
         { "@id": "http://localhost:8080/ordnungssystem/dossier-23/document-123/task-1",
           "@type": "opengever.task.task",
@@ -75,6 +76,10 @@ Filter und Suche
 - ``search``: Filterung nach einem beliebigen Suchbegriff
 - ``filters``: Einschränkung nach einem bestimmten Wert eines Feldes
 
+Facetten
+~~~~~~~~
+- ``facets``: Liste von Feldern für die Facetten Wertebereiche zurückgegeben werden sollen.
+
 
 **Beispiel: Filtern nach erledigten und abgeschlossenen Aufgaben:**
 
@@ -95,4 +100,11 @@ Filter und Suche
   .. sourcecode:: http
 
     GET /@globalindex?search=vertrag HTTP/1.1
+    Accept: application/json
+
+**Beispiel: Wertebereiche des Auftragnehmers und des Aufgabenstatus liefern**
+
+  .. sourcecode:: http
+
+    GET /@globalindex?facets:list=review_state&facets:list=responsible HTTP/1.1
     Accept: application/json
