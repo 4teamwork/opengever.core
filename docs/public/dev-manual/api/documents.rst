@@ -144,13 +144,17 @@ Lock erstellen mit eigenem Timeout
 Lock entfernen
 ~~~~~~~~~~~~~~
 
-Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden.
+Ein bestehendes Lock kann mittels ``@unlock`` Endpoint entfernt werden. Der ``lock_type`` Parameter erlaubt es, den Lock-Typ anzugegeben, der entfernt werden soll. Wenn ``lock_type`` nicht angegeben wird, wird ein Lock vom Typ ``plone.locking.stealable`` entfernt.
 
 
   .. sourcecode:: http
 
     POST /ordnungssystem/dossier-23/document-123/@unlock HTTP/1.1
     Accept: application/json
+
+    {
+        "lock_type": "document.copied_to_workspace.lock"
+    }
 
   .. sourcecode:: http
 
