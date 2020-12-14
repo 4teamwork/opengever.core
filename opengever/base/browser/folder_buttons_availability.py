@@ -106,3 +106,6 @@ class FolderButtonsAvailabilityView(BrowserView):
 
     def is_untrash_available(self):
         return not self._is_template_area()
+
+    def is_attach_documents_available(self):
+        return not self._is_template_area()

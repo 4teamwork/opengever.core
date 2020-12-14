@@ -267,7 +267,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:javascript:officeConnectorMultiAttach('$portal_url/officeconnector_attach_url');</property>
       <property name="icon_expr" />
-      <property name="available_expr" />
+      <property name="available_expr">object/@@folder_buttons_availability/is_attach_documents_available</property>
       <property name="permissions">
         <element value="View" />
       </property>

@@ -15,6 +15,10 @@
       <property name="available_expr">object/@@folder_buttons_availability/is_untrash_available</property>
     </object>
 
+    <object name="attach_documents" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="available_expr">object/@@folder_buttons_availability/is_attach_documents_available</property>
+    </object>
+
   </object>
 
 </object>
