@@ -126,12 +126,15 @@ class OGDSListingBaseService(Service):
 
     def facets(self, search, filters):
         session = create_session()
+        base_filter = self.get_base_query().whereclause
         requested_facets = self.request.form.get('facets', [])
         facets = {}
         for col in self.facet_columns:
             if col.name not in requested_facets:
                 continue
             query = session.query(col, func.count(self.unique_sort_on)).group_by(col)
+            if base_filter is not None:
+                query = query.filter(base_filter)
             query = self.extend_query_with_search(query, search)
             query = self.extend_query_with_filters(query, filters)
 
