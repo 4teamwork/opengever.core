@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Fix unicode error in meeting overview. [njohner]
+- Disable grouping on Subject column. [njohner]
 - Add invitation_group_dn to teamraum policy template. [njohner]
 - Actions for document templates are properly configured. [elioschmutz]
 - Add unlock file action. [tinagerber]
