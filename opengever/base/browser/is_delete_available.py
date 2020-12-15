@@ -1,4 +1,5 @@
-from Acquisition import aq_parent
+from Acquisition import aq_chain
+from Acquisition import aq_inner
 from opengever.dossier.templatedossier import ITemplateDossier
 from opengever.dossier.templatefolder import ITemplateFolder
 from opengever.meeting.interfaces import IParagraphTemplate
@@ -28,11 +29,13 @@ class IsDeleteAvailable(BrowserView):
     )
 
     def __call__(self):
-        parent = aq_parent(self.context)
-        allowed = (
-            # Whitelisted by interface provided by context
-            any(interface.providedBy(self.context) for interface in self.authorized_interfaces),
-            # Whitelisted by interface provided by the acquired parent
-            any(interface.providedBy(parent) for interface in self.authorized_parent_interfaces),
-        )
-        return any(allowed)
+        # Whitelisted by interface provided by context
+        if any(interface.providedBy(self.context) for interface in self.authorized_interfaces):
+            return True
+
+        # Whitelisted by interface provided by one of its parents
+        for obj in aq_chain(aq_inner(self.context)):
+            if any(interface.providedBy(obj) for interface in self.authorized_parent_interfaces):
+                return True
+
+        return False

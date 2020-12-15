@@ -907,7 +907,6 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Copy Items',
             'Export selection',
             'Move Items',
-            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
@@ -923,7 +922,6 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Export selection',
             'Delete',
             'Move Items',
-            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
@@ -965,7 +963,6 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Export as Zip',
             'Copy Items',
             'Export selection',
-            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
@@ -980,7 +977,6 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Checkin without comment',
             'Export selection',
             'Delete',
-            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
@@ -999,7 +995,6 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Export as Zip',
             'Copy Items',
             'Export selection',
-            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
@@ -1013,7 +1008,6 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Checkin with comment',
             'Checkin without comment',
             'Export selection',
-            'Attach selection',
             'Delete',
             ]
 

@@ -1,4 +1,7 @@
+from Acquisition import aq_chain
+from Acquisition import aq_inner
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.task.task import ITask
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -39,6 +42,12 @@ class FolderButtonsAvailabilityView(BrowserView):
             return False
 
         return self.context.is_open()
+
+    def _is_template_area(self):
+        for obj in [self.context] + aq_chain(aq_inner(self.context)):
+            if ITemplateFolder.providedBy(obj):
+                return True
+        return False
 
     def _can_modify_dossier(self):
         return api.user.has_permission(
@@ -88,3 +97,15 @@ class FolderButtonsAvailabilityView(BrowserView):
         if self._is_dossier() and not self._is_open_dossier():
             return False
         return True
+
+    def is_send_as_email_available(self):
+        return not self._is_template_area()
+
+    def is_trash_available(self):
+        return not self._is_template_area()
+
+    def is_untrash_available(self):
+        return not self._is_template_area()
+
+    def is_attach_documents_available(self):
+        return not self._is_template_area()
