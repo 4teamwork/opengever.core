@@ -131,6 +131,44 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(9, len(browser.json['items']))
 
     @browsing
+    def test_filter_by_excluding_value(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@globalindex?filters.-responsible:record={}'.format(
+            self.regular_user.id)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertNotIn(
+            self.regular_user.id,
+            [item['responsible'] for item in browser.json['items']],
+        )
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertEqual(3, len(browser.json['items']))
+
+    @browsing
+    def test_filter_by_date(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@globalindex?filters.deadline:record=2020-01-01 TO 2020-12-31'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertEqual(2, len(browser.json['items']))
+
+        view = '@globalindex?filters.deadline:record=* TO 2019-01-01'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(12, browser.json['items_total'])
+        self.assertEqual(12, len(browser.json['items']))
+
+        view = '@globalindex?filters.deadline:record=2018-01-01 TO *'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertEqual(2, len(browser.json['items']))
+
+    @browsing
     def test_handles_search_queries(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -187,3 +225,75 @@ class TestGlobalIndexGet(IntegrationTestCase):
         self.assertEqual(items[0]['@type'], u'opengever.task.task')
         self.assertEqual(items[1]['@type'], u'opengever.inbox.forwarding')
 
+    @browsing
+    def test_returns_requested_facets(self, browser):
+        self.login(self.regular_user, browser=browser)
+        view = (
+            '@globalindex?'
+            'facets:list=review_state&'
+            'facets:list=task_type&'
+            'facets:list=responsible'
+        )
+        headers = self.api_headers.copy()
+        headers.update({'Accept-Language': 'de'})
+        browser.open(self.portal, view=view, headers=headers)
+
+        self.assertEqual(
+            browser.json['facets'],
+            {
+                u'responsible': {
+                    u'inbox:fa': {
+                        u'count': 1,
+                        u'label': u'Eingangskorb: Finanz\xe4mt',
+                    },
+                    u'kathi.barfuss': {
+                        u'count': 12,
+                        u'label': u'B\xe4rfuss K\xe4thi',
+                    },
+                    u'robert.ziegler': {
+                        u'count': 2,
+                        u'label': u'Ziegler Robert',
+                    },
+                },
+                u'review_state': {
+                    u'forwarding-state-open': {
+                        u'count': 1,
+                        u'label': u'Offen',
+                    },
+                    u'task-state-in-progress': {
+                        u'count': 7,
+                        u'label': u'In Arbeit',
+                    },
+                    u'task-state-open': {
+                        u'count': 2,
+                        u'label': u'Offen',
+                    },
+                    u'task-state-planned': {
+                        u'count': 2,
+                        u'label': u'Geplant',
+                    },
+                    u'task-state-resolved': {
+                        u'count': 3,
+                        u'label': u'Erledigt',
+                    },
+                },
+                u'task_type': {
+                    u'correction': {
+                        u'count': 5,
+                        u'label': u'Zur Pr\xfcfung / Korrektur',
+                    },
+                    u'direct-execution': {
+                        u'count': 7,
+                        u'label': u'Zur direkten Erledigung',
+                    },
+                    u'forwarding_task_type': {
+                        u'count': 1,
+                        u'label': u'Weiterleitung',
+                    },
+                    u'information': {
+                        u'count': 1,
+                        u'label': u'Zur Kenntnisnahme',
+                    },
+                },
+            },
+        )

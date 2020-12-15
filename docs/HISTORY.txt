@@ -19,6 +19,7 @@ Changelog
 - Fix only rendering allowed proposal templates when proposal add form is opened from documents tab. [deiferni]
 - Add OGDS sync for local groups. [buchi]
 - Fix type of file contentType on eCH0147 import. [buchi]
+- Implement faceting for OGDS based listings in general and for the globalindex endpoint in particular. [buchi]
 
 
 2020.15.1 (2020-12-03)

@@ -9,6 +9,7 @@ from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
+from sqlalchemy import func
 from zope.component import queryMultiAdapter
 from ZPublisher.HTTPRequest import record
 
@@ -23,6 +24,8 @@ class OGDSListingBaseService(Service):
     """
 
     searchable_columns = tuple()
+    facet_columns = tuple()
+    facet_label_transforms = {}
     # unique_sort_on should be set in all subclasses to a unique key to make
     # sure that results are always sorted, otherwise sorting can be undefined.
     # As a separate query is made for every batch and for every item, undefined
@@ -61,6 +64,7 @@ class OGDSListingBaseService(Service):
             result['batching'] = batch.links
         result['b_start'] = batch.b_start
         result['b_size'] = batch.b_size
+        result['facets'] = self.facets(search, filters)
         return result
 
     def extract_params(self):
@@ -119,3 +123,29 @@ class OGDSListingBaseService(Service):
 
     def extend_query_with_filters(self, query, filters):
         return query
+
+    def facets(self, search, filters):
+        session = create_session()
+        base_filter = self.get_base_query().whereclause
+        requested_facets = self.request.form.get('facets', [])
+        facets = {}
+        for col in self.facet_columns:
+            if col.name not in requested_facets:
+                continue
+            query = session.query(col, func.count(self.unique_sort_on)).group_by(col)
+            if base_filter is not None:
+                query = query.filter(base_filter)
+            query = self.extend_query_with_search(query, search)
+            query = self.extend_query_with_filters(query, filters)
+
+            facets[col.name] = {}
+            transform = self.facet_label_transforms.get(col.name, lambda x: x)
+            for facet_info in query.all():
+                if not facet_info[0]:
+                    continue
+                facets[col.name][facet_info[0]] = {
+                    'count': facet_info[1],
+                    'label': transform(facet_info[0]),
+                }
+
+        return facets
