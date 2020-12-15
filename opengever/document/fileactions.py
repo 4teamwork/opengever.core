@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.bumblebee.mimetypes import is_mimetype_supported
+from opengever.api.lock import can_unlock_obj
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
@@ -13,6 +14,7 @@ from opengever.trash.trash import ITrashable
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.wopi.lock import get_lock_token
 from plone import api
+from plone.locking.interfaces import ILockable
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
@@ -113,6 +115,16 @@ class BaseDocumentFileActions(object):
         is_inside_dossier = IDossierMarker.providedBy(parent)
         may_add_task = api.user.has_permission('opengever.task: Add task', obj=parent)
         return is_inside_dossier and may_add_task
+
+    def is_unlock_available(self):
+        lockable = ILockable(self.context)
+        if not lockable.locked():
+            return False
+        info = lockable.lock_info()
+        for lock in info:
+            if can_unlock_obj(self.context, lock['type']):
+                return True
+        return False
 
 
 @implementer(IFileActions)

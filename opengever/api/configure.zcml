@@ -1156,4 +1156,18 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".lock.Lock"
+      name="lock"
+      />
+
+  <plone:service
+      method="POST"
+      name="@unlock"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".lock.Unlock"
+      permission="cmf.ModifyPortalContent"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>

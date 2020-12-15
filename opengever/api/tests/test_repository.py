@@ -22,6 +22,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                 u'actions': {u'@id': u'http://nohost/plone/ordnungssystem/@actions'},
                 u'breadcrumbs': {u'@id': u'http://nohost/plone/ordnungssystem/@breadcrumbs'},
                 u'listing-stats': {u'@id': u'http://nohost/plone/ordnungssystem/@listing-stats'},
+                u'lock': {u'@id': 'http://nohost/plone/ordnungssystem/@lock'},
                 u'main-dossier': None,
                 u'navigation': {u'@id': u'http://nohost/plone/ordnungssystem/@navigation'},
                 u'types': {u'@id': u'http://nohost/plone/ordnungssystem/@types'},
