@@ -685,7 +685,7 @@ MSGCONVERT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
 class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
 
     solr_port = os.environ.get('PORT5', '19905')
-    solr_core = 'testing'
+    solr_core = 'functionaltesting'
 
     def setUpPloneSite(self, portal):
         super(OpengeverFixtureWithSolr, self).setUpPloneSite(portal)
