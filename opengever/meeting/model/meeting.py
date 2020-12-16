@@ -220,7 +220,7 @@ class Meeting(Base, SQLFormSupport):
             return str(self.meeting_number)
 
         title = period.title
-        return '{} / {}'.format(title, self.meeting_number)
+        return u'{} / {}'.format(title, self.meeting_number)
 
     def generate_decision_numbers(self):
         """Generate decision numbers for each agenda item of this meeting.

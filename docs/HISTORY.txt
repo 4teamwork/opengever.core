@@ -4,6 +4,7 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
+- Fix unicode error in meeting overview. [njohner]
 - Add invitation_group_dn to teamraum policy template. [njohner]
 - Actions for document templates are properly configured. [elioschmutz]
 - Add unlock file action. [tinagerber]
