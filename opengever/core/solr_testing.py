@@ -1,16 +1,16 @@
 from collective.indexing.queue import processQueue
 from ftw.solr.interfaces import ISolrConnectionManager
+from itertools import izip_longest
 from path import Path
+from requests.exceptions import ConnectionError
 from threading import Thread
 from zope.component import getUtility
 import atexit
-from itertools import izip_longest
 import errno
 import io
 import os
 import requests
 import signal
-import socket
 import subprocess
 import time
 
@@ -95,7 +95,11 @@ class SolrServer(object):
         """
         self._require_configured()
         for index in range(int(timeout / interval)):
-            if self.is_ready():
+            try:
+                ready = self.is_ready()
+            except ConnectionError:
+                ready = False
+            if ready:
                 return self
             if verbose:
                 print '... waiting for solr ({})'.format(index)

@@ -17,13 +17,14 @@ else:
     from opengever.testing.helpers import obj2paths
     from opengever.testing.helpers import set_preferred_language
     from opengever.testing.helpers import solr_data_for
+    from opengever.testing.integration_test_case import IntegrationTestCase
+    from opengever.testing.integration_test_case import SolrIntegrationTestCase
     from opengever.testing.sql import assign_user_to_client
     from opengever.testing.sql import create_ogds_user
     from opengever.testing.sql import select_current_org_unit
     from opengever.testing.test_case import FunctionalTestCase
-    from opengever.testing.integration_test_case import IntegrationTestCase
-    from opengever.testing.integration_test_case import SolrIntegrationTestCase
+    from opengever.testing.test_case import SolrFunctionalTestCase
     from opengever.testing.test_case import TestCase
     import opengever.testing.testbrowser_datetime_widget
-    import opengever.testing.testbrowser_tablechoice_widget
     import opengever.testing.testbrowser_responsible_user_widget
+    import opengever.testing.testbrowser_tablechoice_widget

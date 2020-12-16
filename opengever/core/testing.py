@@ -377,7 +377,21 @@ class OfficeatworkLayer(PloneSandboxLayer):
 OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER = OfficeatworkLayer()
 
 
-class ContentFixtureLayer(OpengeverFixture):
+class NoSolrTestingBase(object):
+
+    def maybe_start_solr(self):
+        pass
+
+    def maybe_stop_solr(self):
+        pass
+
+    def maybe_configure_solr(self, configurationContext):
+        # Clear ftw.solr's thread-local connection cache
+        if hasattr(solr_connection_cache, 'connection'):
+            delattr(solr_connection_cache, 'connection')
+
+
+class ContentFixtureLayer(NoSolrTestingBase, OpengeverFixture):
     """The content fixture layer extends the regular OpengeverFixture with a
     content fixture.
     The content fixture is a set of objects which are constructed on layer setup
@@ -435,17 +449,6 @@ class ContentFixtureLayer(OpengeverFixture):
         """.format(f.name)))[0]
         assert eventlog_conf.eventlog is not None
         getConfiguration().eventlog = eventlog_conf.eventlog
-
-    def maybe_start_solr(self):
-        pass
-
-    def maybe_stop_solr(self):
-        pass
-
-    def maybe_configure_solr(self, configurationContext):
-        # Clear ftw.solr's thread-local connection cache
-        if hasattr(solr_connection_cache, 'connection'):
-            delattr(solr_connection_cache, 'connection')
 
     def setUpZope(self, app, configurationContext):
         self.maybe_start_solr()
@@ -553,11 +556,37 @@ class ContentFixtureLayer(OpengeverFixture):
         pass
 
 
-SOLR_PORT = os.environ.get('PORT4', '19904')
-SOLR_CORE = 'testing'
+class SolrTestingBase(object):
+
+    def maybe_start_solr(self):
+        SolrServer.get_instance().configure(self.solr_port, self.solr_core).start()
+        import collective.indexing.monkey  # noqa
+        import ftw.solr.patches  # noqa
+
+    def maybe_stop_solr(self):
+        SolrServer.get_instance().stop()
+
+    def maybe_configure_solr(self, configurationContext):
+        # Solr must be started before registering the connection since ftw.solr
+        # will get the schema from solr and cache it.
+        SolrServer.get_instance().await_ready()
+        xmlconfig.string(
+            '<configure xmlns:solr="http://namespaces.plone.org/solr">'
+            '  <solr:connection host="localhost"'
+            '                   port="{SOLR_PORT}"'
+            '                   base="/solr/{SOLR_CORE}" />'
+            '</configure>'.format(SOLR_PORT=self.solr_port, SOLR_CORE=self.solr_core),
+            context=configurationContext)
+
+        # Clear ftw.solr's thread-local connection cache
+        if hasattr(solr_connection_cache, 'connection'):
+            delattr(solr_connection_cache, 'connection')
+
+        # Clear solr from potential artefacts of the previous run.
+        SolrReplicationAPIClient.get_instance().clear()
 
 
-class ContentFixtureWithSolrLayer(ContentFixtureLayer):
+class ContentFixtureWithSolrLayer(SolrTestingBase, ContentFixtureLayer):
     """Layer with GEVER content fixture and a real Solr.
 
     Use the SolrIntegrationTestCase (default to this layer) for tests that
@@ -579,32 +608,8 @@ class ContentFixtureWithSolrLayer(ContentFixtureLayer):
 
     defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR, )
 
-    def maybe_start_solr(self):
-        SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
-        import collective.indexing.monkey  # noqa
-        import ftw.solr.patches  # noqa
-
-    def maybe_stop_solr(self):
-        SolrServer.get_instance().stop()
-
-    def maybe_configure_solr(self, configurationContext):
-        # Solr must be started before registering the connection since ftw.solr
-        # will get the schema from solr and cache it.
-        SolrServer.get_instance().await_ready()
-        xmlconfig.string(
-            '<configure xmlns:solr="http://namespaces.plone.org/solr">'
-            '  <solr:connection host="localhost"'
-            '                   port="{SOLR_PORT}"'
-            '                   base="/solr/{SOLR_CORE}" />'
-            '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
-            context=configurationContext)
-
-        # Clear ftw.solr's thread-local connection cache
-        if hasattr(solr_connection_cache, 'connection'):
-            delattr(solr_connection_cache, 'connection')
-
-        # Clear solr from potential artefacts of the previous run.
-        SolrReplicationAPIClient.get_instance().clear()
+    solr_port = os.environ.get('PORT4', '19904')
+    solr_core = 'testing'
 
     def setUpPloneSite(self, portal):
         super(ContentFixtureWithSolrLayer, self).setUpPloneSite(portal)
@@ -675,3 +680,37 @@ PDFLATEX_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
 MSGCONVERT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
     bases=(MSGCONVERT_SERVICE_FIXTURE, OPENGEVER_FIXTURE),
     name="opengever.core:msgconvert-service-integration")
+
+
+class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
+
+    solr_port = os.environ.get('PORT5', '19905')
+    solr_core = 'functionaltesting'
+
+    def setUpPloneSite(self, portal):
+        super(OpengeverFixtureWithSolr, self).setUpPloneSite(portal)
+
+        # Before making a Solr backup we need to do a full commit to make sure
+        # extracting SearchableText from files get's processed. This is done in
+        # an after commit hook.
+        transaction.commit()
+        SolrReplicationAPIClient.get_instance().create_backup('fixture')
+
+    def setUpZope(self, app, configurationContext):
+        super(OpengeverFixtureWithSolr, self).setUpZope(app, configurationContext)
+        self.maybe_start_solr()
+        self.maybe_configure_solr(configurationContext)
+
+    def tearDownZope(self, app):
+        self.maybe_stop_solr()
+        super(OpengeverFixtureWithSolr, self).tearDownZope(app)
+
+
+OPENGEVER_FIXTURE_SQLITE_WITH_SOLR = OpengeverFixtureWithSolr(
+    sql_layer=sqlite_testing.SQLITE_MEMORY_FIXTURE)
+
+
+OPENGEVER_SOLR_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_FIXTURE_SQLITE_WITH_SOLR,
+           set_builder_session_factory(functional_session_factory)),
+    name="opengever.core:functional:solr")

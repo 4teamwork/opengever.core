@@ -1,11 +1,16 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.solr.connection import SolrResponse
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from lxml import etree
 from opengever.base.solr import OGSolrContentListing
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.testing import IntegrationTestCase
-from pkg_resources import get_distribution
+from opengever.testing import solr_data_for
+from opengever.testing import SolrFunctionalTestCase
 from plone import api
 import os
 import pkg_resources
@@ -151,3 +156,90 @@ class TestOGSolrDocument(unittest.TestCase):
         doc = OGSolrDocument(data={'Description': 'My Description'})
         obj = OGSolrContentListingObject(doc)
         self.assertEqual(obj.CroppedDescription(), 'My Description')
+
+
+class TestSolrBlobIndexingFunctional(SolrFunctionalTestCase):
+
+    def setUp(self):
+        super(TestSolrBlobIndexingFunctional, self).setUp()
+        api.portal.set_registry_record(
+            "opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties",
+            True)
+
+    def make_path_param(self, *objects):
+        """Build a paths:list request parameter, as expected by some views.
+        """
+        return {
+            'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects]}
+
+    @browsing
+    def test_blob_is_indexed_when_copy_pasting_dossier_containing_word_document(self, browser):
+        browser.login()
+        self.dossier = create(Builder('dossier'))
+        self.document = create(Builder('document')
+                               .titled(u'\xdcberpr\xfcfung XY')
+                               .with_dummy_content()
+                               .within(self.dossier))
+        self.repofolder = create(Builder('repository'))
+
+        with self.observe_children(self.repofolder) as children:
+            browser.open(
+                self.repofolder, view="copy_items",
+                data=self.make_path_param(self.dossier))
+            browser.css('#contentActionMenus a#paste').first.click()
+
+        self.assertEqual(1, len(children['added']))
+        created_dossier = children['added'].pop()
+        created_document = created_dossier.listFolderContents()[0]
+
+        self.commit_solr()
+        self.assert_in_solr(created_document)
+        searchable_text = solr_data_for(created_document, 'SearchableText')
+        self.assertIsNotNone(searchable_text)
+        self.assertIn(u'Test data\n\n', searchable_text)
+
+    @browsing
+    def test_blob_is_indexed_when_creating_dossier_with_template_containing_word_document(self, browser):
+        api.portal.set_registry_record(
+            "opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings.is_feature_enabled",
+            True)
+
+        browser.login()
+
+        self.repofolder = create(Builder('repository'))
+
+        self.templates = create(
+            Builder('templatefolder')
+            .titled(u'Vorlagen')
+            .having(id='vorlagen')
+        )
+
+        self.dossiertemplate = create(
+            Builder('dossiertemplate')
+            .titled(u'Bauvorhaben klein')
+            .within(self.templates)
+        )
+        self.dossiertemplatedocument = create(
+            Builder('document')
+            .within(self.dossiertemplate)
+            .titled(u'Werkst\xe4tte')
+            .with_asset_file(u'vertragsentwurf.docx')
+        )
+
+        with self.observe_children(self.repofolder) as children:
+            browser.open(self.repofolder)
+            factoriesmenu.add('Dossier with template')
+            token = browser.css(
+                'input[name="form.widgets.template"]').first.attrib.get('value')
+            browser.fill({'form.widgets.template': token}).submit()
+            browser.click_on('Save')
+
+        self.assertEqual(1, len(children['added']))
+        created_dossier = children['added'].pop()
+        created_document = created_dossier.listFolderContents()[0]
+
+        self.commit_solr()
+        self.assert_in_solr(created_document)
+        searchable_text = solr_data_for(created_document, 'SearchableText')
+        self.assertIsNotNone(searchable_text)
+        self.assertIn(u'Vertragsentwurf', searchable_text)

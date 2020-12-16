@@ -11,6 +11,7 @@ from opengever.base.response import IResponseContainer
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.core.testing import OPENGEVER_SOLR_FUNCTIONAL_TESTING
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model import SubmittedDocument
@@ -19,6 +20,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 from opengever.testing import builders  # keep!
 from opengever.testing.helpers import localized_datetime
+from opengever.testing.helpers import SolrTestMixin
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -287,3 +289,13 @@ class FunctionalTestCase(TestCase):
         assignable = getMultiAdapter(
             (obj, manager), ILocalPortletAssignmentManager)
         self.assertTrue(assignable.getBlacklistStatus(CONTEXT_CATEGORY))
+
+
+class SolrFunctionalTestCase(FunctionalTestCase, SolrTestMixin):
+
+    layer = OPENGEVER_SOLR_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        super(SolrFunctionalTestCase, self).setUp()
+        api.portal.set_registry_record(
+            'opengever.base.interfaces.ISearchSettings.use_solr', True)

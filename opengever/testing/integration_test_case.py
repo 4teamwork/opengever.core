@@ -15,7 +15,6 @@ from opengever.activity.hooks import insert_notification_defaults
 from opengever.activity.mailer import process_mail_queue
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
-from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.core.testing import OPENGEVER_SOLR_INTEGRATION_TESTING
 from opengever.document.archival_file import STATE_CONVERTED
@@ -32,6 +31,7 @@ from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.testing import assets
+from opengever.testing.helpers import SolrTestMixin
 from opengever.testing.test_case import TestCase
 from opengever.trash.trash import Trasher
 from operator import methodcaller
@@ -782,14 +782,8 @@ class IntegrationTestCase(TestCase):
         self.assertTrue(interface.providedBy(obj), '{} should provide {}'.format(obj, interface))
 
 
-class SolrIntegrationTestCase(IntegrationTestCase):
+class SolrIntegrationTestCase(IntegrationTestCase, SolrTestMixin):
 
     layer = OPENGEVER_SOLR_INTEGRATION_TESTING
 
     features = ('solr', )
-
-    def commit_solr(self):
-        SolrServer.get_instance().commit()
-
-    def get_solr_connection(self):
-        return SolrServer.get_instance().connection
