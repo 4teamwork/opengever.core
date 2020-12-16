@@ -45,6 +45,7 @@ IGNORED_QUESTIONS = {
         'setup.invitation_group_dn',
         'base.apps_endpoint_url',
         'base.workspace_secret',
+        'setup.enable_workspace_meeting_feature',
         'setup.enable_todo_feature'
         ]
     }

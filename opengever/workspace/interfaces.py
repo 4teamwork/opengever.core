@@ -37,6 +37,14 @@ class IWorkspaceSettings(Interface):
     )
 
 
+class IWorkspaceMeetingSettings(Interface):
+
+    is_feature_enabled = schema.Bool(
+        title=u'Enable workspace meeting feature',
+        description=u'Whether workspace meeting integration is enabled',
+        default=True)
+
+
 class IToDoSettings(Interface):
 
     is_feature_enabled = schema.Bool(

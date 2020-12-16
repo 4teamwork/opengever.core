@@ -4,6 +4,7 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
+- Add feature flag for workspace meetings. [tinagerber]
 - Fix unicode error in meeting overview. [njohner]
 - Disable grouping on Subject column. [njohner]
 - Add invitation_group_dn to teamraum policy template. [njohner]
