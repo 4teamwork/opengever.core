@@ -361,3 +361,13 @@ class TestMeeting(IntegrationTestCase):
 
         self.assertEqual(2, self.meeting.model.meeting_number)
         self.assertEqual(2, self.period.meeting_sequence_number)
+
+    def test_get_meeting_number_supports_unicode_period_title(self):
+        self.login(self.committee_responsible)
+
+        self.assertEqual(
+            u'2016 / 1', self.decided_meeting.model.get_meeting_number())
+
+        self.period.title = u"\xe4 period"
+        self.assertEqual(
+            u'\xe4 period / 1', self.decided_meeting.model.get_meeting_number())
