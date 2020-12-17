@@ -254,6 +254,32 @@ class TestParticipationsPost(IntegrationTestCase):
              "type": "BadRequest"},
             browser.json)
 
+    @browsing
+    def test_post_participation_for_resolved_dossier_raises_unauthorized(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(self.expired_dossier, view='/@participations',
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({'participant_id': self.valid_participant_id,
+                                          'roles': ['regard']}))
+        self.assertEqual({"message": "You are not authorized to access this resource.",
+                          "type": "Unauthorized"}, browser.json)
+
+    @browsing
+    def test_post_participation_for_inactive_dossier_raises_unauthorized(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(self.inactive_dossier, view='/@participations',
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({'participant_id': self.valid_participant_id,
+                                          'roles': ['regard']}))
+        self.assertEqual({"message": "You are not authorized to access this resource.",
+                          "type": "Unauthorized"}, browser.json)
+
 
 class TestParticipationsPostWithContactFeatureEnabled(TestParticipationsPost):
 
@@ -370,6 +396,32 @@ class TestParticipationsPatch(IntegrationTestCase):
         self.assertEqual({"message": "Role 'invalid' does not exist",
                           "type": "BadRequest"}, browser.json)
 
+    @browsing
+    def test_patch_participation_for_resolved_dossier_raises_unauthorized(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(self.expired_dossier, view='/@participations',
+                         method='PATCH',
+                         headers=self.api_headers,
+                         data=json.dumps({'roles': ['participation', 'final-drawing']}))
+
+        self.assertEqual({"message": "You are not authorized to access this resource.",
+                          "type": "Unauthorized"}, browser.json)
+
+    @browsing
+    def test_patch_participation_for_inactive_dossier_raises_unauthorized(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(self.inactive_dossier, view='/@participations',
+                         method='PATCH',
+                         headers=self.api_headers,
+                         data=json.dumps({'roles': ['participation', 'final-drawing']}))
+
+        self.assertEqual({"message": "You are not authorized to access this resource.",
+                          "type": "Unauthorized"}, browser.json)
+
 
 class TestParticipationsPatchWithContactFeatureEnabled(TestParticipationsPatch):
 
@@ -424,6 +476,30 @@ class TestParticipationsDelete(IntegrationTestCase):
                          method='DELETE', headers=self.api_headers)
         self.assertEqual({"message": "chaosqueen is not a valid id",
                           "type": "BadRequest"}, browser.json)
+
+    @browsing
+    def test_delete_participation_for_resolved_dossier_raises_unauthorized(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(self.expired_dossier,
+                         view='/@participations/' + self.participant_id,
+                         method='DELETE', headers=self.api_headers)
+
+        self.assertEqual({"message": "You are not authorized to access this resource.",
+                          "type": "Unauthorized"}, browser.json)
+
+    @browsing
+    def test_delete_participation_for_inactive_dossier_raises_unauthorized(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(self.inactive_dossier,
+                         view='/@participations/' + self.participant_id,
+                         method='DELETE', headers=self.api_headers)
+
+        self.assertEqual({"message": "You are not authorized to access this resource.",
+                          "type": "Unauthorized"}, browser.json)
 
 
 class TestParticipationsDeleteWithContactFeatureEnabled(TestParticipationsDelete):
