@@ -90,7 +90,8 @@ GEVER-Mandanten abgefragt werden.
               "solr": true,
               "tasks_pdf": false,
               "workspace": false,
-              "workspace_client": false
+              "workspace_client": false,
+              "workspace_meetings": false,
               "workspace_todo": false,
           },
           "gever_colorization": "#37C35A",
@@ -246,6 +247,9 @@ features
 
     workspace_client
         Integration von GEVER mit einem Teamraum
+
+    workspace_meetings
+        Meetings in einem Teamraum
 
     workspace_todo
         ToDo's und ToDo-Listen in einem Teamraum

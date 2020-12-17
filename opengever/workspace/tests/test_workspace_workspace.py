@@ -84,6 +84,17 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
              'opengever.workspace.meeting'],
             [fti.id for fti in self.workspace.allowedContentTypes()])
 
+    def test_addable_types_with_workspace_meeting_feature_disabled(self):
+        self.deactivate_feature('workspace-meeting')
+        self.login(self.workspace_member)
+        self.assertItemsEqual(
+            ['opengever.document.document',
+             'ftw.mail.mail',
+             'opengever.workspace.folder',
+             'opengever.workspace.todo',
+             'opengever.workspace.todolist'],
+            [fti.id for fti in self.workspace.allowedContentTypes()])
+
     @browsing
     def test_security_view_access(self, browser):
         for user in (self.workspace_owner,

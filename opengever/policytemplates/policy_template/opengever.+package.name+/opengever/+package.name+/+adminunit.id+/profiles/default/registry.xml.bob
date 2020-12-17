@@ -134,6 +134,13 @@
     <value key="invitation_group_dn">{{{setup.invitation_group_dn}}}</value>
   </records>
 
+{{% if not setup.enable_workspace_meeting_feature %}}
+  <records interface="opengever.workspace.interfaces.IWorkspaceMeetingSettings">
+    <value key="is_feature_enabled">False</value>
+  </records>
+
+{{% endif %}}
+
 {{% if not setup.enable_todo_feature %}}
   <records interface="opengever.workspace.interfaces.IToDoSettings">
     <value key="is_feature_enabled">False</value>

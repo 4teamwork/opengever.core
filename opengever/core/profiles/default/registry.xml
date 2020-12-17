@@ -188,6 +188,9 @@
   <!-- Workspace -->
   <records interface="opengever.workspace.interfaces.IWorkspaceSettings" />
 
+  <!-- WorkspaceMeeting -->
+  <records interface="opengever.workspace.interfaces.IWorkspaceMeetingSettings" />
+
   <!-- ToDo -->
   <records interface="opengever.workspace.interfaces.IToDoSettings" />
 

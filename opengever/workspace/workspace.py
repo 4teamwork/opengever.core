@@ -1,5 +1,6 @@
 from opengever.workspace import _
 from opengever.workspace import is_todo_feature_enabled
+from opengever.workspace import is_workspace_meeting_feature_enabled
 from opengever.workspace.base import WorkspaceBase
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
@@ -61,6 +62,8 @@ class Workspace(WorkspaceBase):
         def filter_type(fti):
             if fti.id == "opengever.workspace.todo" or fti.id == "opengever.workspace.todolist":
                 return is_todo_feature_enabled()
+            if fti.id == "opengever.workspace.meeting":
+                return is_workspace_meeting_feature_enabled()
             return True
 
         return filter(filter_type, types)

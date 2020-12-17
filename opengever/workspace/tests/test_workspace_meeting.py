@@ -42,6 +42,21 @@ class TestAPISupportForWorkspaceMeeting(IntegrationTestCase):
         self.assertEqual('meeting-2', browser.json['id'])
 
     @browsing
+    def test_create_with_workspace_meeting_feature_disabled(self, browser):
+        self.deactivate_feature('workspace-meeting')
+        self.login(self.workspace_member, browser)
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.open(
+                self.workspace, method='POST', headers=self.api_headers,
+                data=json.dumps({'title': 'Ein Meeting',
+                                 'responsible': self.workspace_member.getId(),
+                                 'start': '2020-10-10T23:56:00',
+                                 '@type': 'opengever.workspace.meeting'}))
+
+        self.assertEqual('Disallowed subobject type: opengever.workspace.meeting',
+                         browser.json['error']['message'])
+
+    @browsing
     def test_get_workspace_meeting_via_api(self, browser):
         self.login(self.workspace_member, browser)
         browser.open(self.workspace_meeting, method='GET', headers=self.api_headers)
