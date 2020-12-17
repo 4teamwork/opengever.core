@@ -5,6 +5,7 @@ Changelog
 ----------------------
 
 - Add feature flag for workspace meetings. [tinagerber]
+- Do not allow to modify the participations of a dossier via @participations endpoint if dossier cannot be modified. [tinagerber]
 - Fix unicode error in meeting overview. [njohner]
 - Disable grouping on Subject column. [njohner]
 - Add invitation_group_dn to teamraum policy template. [njohner]

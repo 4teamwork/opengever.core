@@ -1124,7 +1124,7 @@
       name="@participations"
       for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
       factory=".dossier_participations.ParticipationsPost"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <plone:service
@@ -1132,7 +1132,7 @@
       name="@participations"
       for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
       factory=".dossier_participations.ParticipationsPatch"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <plone:service
@@ -1140,7 +1140,7 @@
       name="@participations"
       for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
       factory=".dossier_participations.ParticipationsDelete"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <adapter
