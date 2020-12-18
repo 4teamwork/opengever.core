@@ -254,11 +254,13 @@ class DocumentFileActions(BaseDocumentFileActions):
 
     def _can_edit_with_office_online(self):
         # Office Online allows collaborative editing
-        # Thus a document is editable by Office Online if it's not checked out
+        # Thus a document is editable by Office Online if it's not checked out and not locked
         # or if it's checked out by Office Online.
         if self.context.checked_out_by():
             if get_lock_token(self.context):
                 return True
             else:
                 return False
+        if self.context.is_locked():
+            return False
         return True

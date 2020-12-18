@@ -6,9 +6,10 @@ from opengever.document.interfaces import IFileActions
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing.test_case import TestCase
-from opengever.wopi.testing import mock_wopi_discovery
 from opengever.wopi.lock import create_lock
+from opengever.wopi.testing import mock_wopi_discovery
 from plone import api
+from plone.locking.interfaces import ILockable
 from zope.component import getMultiAdapter
 from zope.interface.verify import verifyClass
 
@@ -83,6 +84,13 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
+        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        self.assertFalse(actions.is_office_online_edit_action_available())
+
+    def test_not_editable_if_locked_by_other(self):
+        mock_wopi_discovery()
+        self.login(self.regular_user)
+        ILockable(self.document).lock()
         actions = getMultiAdapter((self.document, self.request), IFileActions)
         self.assertFalse(actions.is_office_online_edit_action_available())
 

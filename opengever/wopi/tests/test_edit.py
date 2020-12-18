@@ -1,10 +1,12 @@
 from base64 import urlsafe_b64decode
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.token import validate_access_token
 from plone import api
+from plone.locking.interfaces import ILockable
 from zope.component import getMultiAdapter
 
 
@@ -90,3 +92,11 @@ class TestEditView(IntegrationTestCase):
                                   ICheckinCheckoutManager)
         self.assertFalse(manager.is_collaborative_checkout())
         self.assertEqual([], manager.get_collaborators())
+
+    @browsing
+    def test_edit_view_on_locked_document_redirects_to_document_and_shows_error_message(self, browser):
+        self.login(self.regular_user, browser=browser)
+        ILockable(self.document).lock()
+        browser.open(self.document, view="office_online_edit")
+        self.assertEqual(self.document.absolute_url(), browser.url)
+        self.assertEqual(['Document is locked.'], error_messages())
