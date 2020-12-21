@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2020-03-26 17:52+0000\n"
+"POT-Creation-Date: 2020-12-21 10:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,4 +19,8 @@ msgstr ""
 
 #: ./opengever/wopi/browser/edit.py
 msgid "Document is checked out for exclusive editing."
+msgstr ""
+
+#: ./opengever/wopi/browser/edit.py
+msgid "Document is locked."
 msgstr ""
