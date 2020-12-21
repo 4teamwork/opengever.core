@@ -8,6 +8,8 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.propertysheets">
 
+  <include package=".api" />
+
   <utility
       factory=".schemapolicy.PropertySheetsSchemaPolicy"
       name="propertysheets"

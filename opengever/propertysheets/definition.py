@@ -4,6 +4,11 @@ from plone.supermodel import loadString
 class PropertySheetSchemas(object):
 
     @classmethod
+    def list(cls, context):
+        for name in property_sheets:
+            yield cls.get(name)
+
+    @classmethod
     def get(cls, name):
         if name not in property_sheets:
             return None
