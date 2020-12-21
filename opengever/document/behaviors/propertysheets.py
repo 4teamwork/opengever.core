@@ -1,10 +1,10 @@
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.schema import JSONField
-from plone.supermodel import loadString
 from plone.supermodel import model
 from z3c.form import validator
 from zope.interface import alsoProvides
 from zope.schema import getFieldsInOrder
+from opengever.propertysheets.definition import PropertySheetSchemas
 
 
 class IPropertySheets(model.Schema):
@@ -39,39 +39,19 @@ class PropertySheetsValidator(validator.SimpleFieldValidator):
         if not document_type:
             return
 
-        # POC, use hardcoded additional schema
-        if document_type != 'question':
+        schema_class = PropertySheetSchemas.get(document_type)
+        if schema_class is None:
             return
 
         obj = value or {}
 
-        model = loadString(str_schema, policy=u'customfields')
-        schema_class = model.schemata['opengever.custom1']
-        schema_name = schema_class.getName()
-
         sheet_for_type = obj.get(document_type, {})
-
         for name, field in getFieldsInOrder(schema_class):
             sheet_value = sheet_for_type.get(name, None)
             field.validate(sheet_value)
-
-        pass
 
 
 validator.WidgetValidatorDiscriminators(
     PropertySheetsValidator,
     field=IPropertySheets['property_sheets'],
     )
-
-
-str_schema = """
-<model xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:indexer="http://namespaces.plone.org/supermodel/indexer" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns="http://namespaces.plone.org/supermodel/schema">
-  <schema name="opengever.custom1">
-    <field name="bar" type="zope.schema.TextLine">
-      <required>True</required>
-      <title>bar</title>
-    </field>
-  </schema>
-</model>
-"""
-
