@@ -91,6 +91,15 @@
       for="*"
       />
 
+  <!-- Custom property sheets POC -->
+  <plone:behavior
+      title="Property Sheets Behavior"
+      description="POC property sheets for Document"
+      provides="opengever.document.behaviors.propertysheets.IPropertySheets"
+      for="opengever.document.behaviors.IBaseDocument"
+      factory="plone.behavior.AnnotationStorage"
+      />
+
   <!-- custom add form for documents -->
   <adapter
       for="Products.CMFCore.interfaces.IFolderish
