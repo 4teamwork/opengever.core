@@ -17,4 +17,13 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".post.PropertySheetsPost"
+      name="@propertysheets"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>
