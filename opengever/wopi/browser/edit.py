@@ -4,6 +4,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.wopi import _
 from opengever.wopi.discovery import actions_by_extension
 from opengever.wopi.interfaces import IWOPISettings
+from opengever.wopi.lock import get_lock_token
 from opengever.wopi.token import create_access_token
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -26,6 +27,14 @@ class EditOnlineView(BrowserView):
                 'already checked out for exclusive editing ' % self.context)
             api.portal.show_message(
                 _(u'Document is checked out for exclusive editing.'),
+                self.request, 'error')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+        if self.is_locked_but_not_by_WOPI():
+            logger.error(
+                'Attempt to edit %r with Office Online even though it is '
+                'locked ' % self.context)
+            api.portal.show_message(
+                _(u'Document is locked.'),
                 self.request, 'error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
@@ -77,6 +86,13 @@ class EditOnlineView(BrowserView):
         self.urlsrc = '?'.join([url, ''.join(params_with_values)])
 
         return self.index()
+
+    def is_locked_but_not_by_WOPI(self):
+        if not self.context.is_locked():
+            return False
+        if get_lock_token(self.context):
+            return False
+        return True
 
     def is_exclusively_checked_out(self):
         manager = getMultiAdapter((self.context, self.request),

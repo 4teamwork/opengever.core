@@ -4,6 +4,7 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
+- Prevent attempts to edit locked documents in Office Online. [tinagerber]
 - Add feature flag for workspace meetings. [tinagerber]
 - Do not allow to modify the participations of a dossier via @participations endpoint if dossier cannot be modified. [tinagerber]
 - Fix unicode error in meeting overview. [njohner]
