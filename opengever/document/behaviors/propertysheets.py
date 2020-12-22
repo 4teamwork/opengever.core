@@ -1,39 +1,23 @@
+from opengever.propertysheets.definition import PropertySheetSchemas
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.schema import JSONField
 from plone.supermodel import model
-from z3c.form import validator
+from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.schema import getFieldsInOrder
-from opengever.propertysheets.definition import PropertySheetSchemas
 
 
-class IPropertySheets(model.Schema):
+class PropertySheetField(JSONField):
 
-    property_sheets = JSONField(
-        title=u'Property sheets with custom properties.',
-        required=False
-    )
+    def _validate(self, value):
+        super(PropertySheetField, self)._validate(value)
 
-    model.fieldset(
-        u'properties',
-        label=u'User defined property sheets.',
-        fields=[
-            u'property_sheets',
-            ],
-        )
+        request = getRequest()
 
-
-alsoProvides(IPropertySheets, IFormFieldProvider)
-
-
-class PropertySheetsValidator(validator.SimpleFieldValidator):
-
-    def validate(self, value):
-        # use new document_type from request, or fallback to the one currently set
-        if 'form.widgets.IDocumentMetadata.document_type' in self.request:
-            document_type = self.request.get(
+        if 'form.widgets.IDocumentMetadata.document_type' in request:
+            document_type = request.get(
                 'form.widgets.IDocumentMetadata.document_type')[0]
-        else:
+        elif self.context:
             document_type = self.context.document_type
 
         if not document_type:
@@ -51,7 +35,20 @@ class PropertySheetsValidator(validator.SimpleFieldValidator):
             field.validate(sheet_value)
 
 
-validator.WidgetValidatorDiscriminators(
-    PropertySheetsValidator,
-    field=IPropertySheets['property_sheets'],
+class IPropertySheets(model.Schema):
+
+    property_sheets = PropertySheetField(
+        title=u'Property sheets with custom properties.',
+        required=False
     )
+
+    model.fieldset(
+        u'properties',
+        label=u'User defined property sheets.',
+        fields=[
+            u'property_sheets',
+            ],
+        )
+
+
+alsoProvides(IPropertySheets, IFormFieldProvider)
