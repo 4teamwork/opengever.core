@@ -33,6 +33,7 @@
     <element value="opengever.document.behaviors.metadata.IDocumentMetadata" />
     <element value="ftw.bumblebee.interfaces.IBumblebeeable" />
     <element value="opengever.quota.primary.IPrimaryBlobFieldQuota" />
+    <element value="opengever.document.behaviors.propertysheets.IPropertySheets" />
   </property>
 
   <!-- View information -->
