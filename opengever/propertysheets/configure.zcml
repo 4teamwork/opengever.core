@@ -36,4 +36,6 @@
       template="templates/propertysheet.pt"
       />
 
+    <adapter factory=".widgets.PropertySheetsDataConverter" />
+
 </configure>

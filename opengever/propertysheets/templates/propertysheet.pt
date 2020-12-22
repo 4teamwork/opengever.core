@@ -4,4 +4,13 @@
 
 <div>PROPERTYSHEET YAY</div>
 
+  <tal:block repeat="widget view/widgets">
+      <div class="field">
+          <label tal:content="widget/label" />
+          <br />
+          <div tal:content="structure widget/render" />
+      </div>
+  </tal:block>
+
 </html>
+
