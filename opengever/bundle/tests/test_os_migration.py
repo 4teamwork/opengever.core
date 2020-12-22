@@ -26,7 +26,7 @@ class TestOSMigration(IntegrationTestCase):
         analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
         analyser.analyse()
 
-        self.assertEqual(7, len(analyser.analysed_rows))
+        self.assertEqual(6, len(analyser.analysed_rows))
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -42,35 +42,19 @@ class TestOSMigration(IntegrationTestCase):
              'uid': self.branch_repofolder.UID()},
             analyser.analysed_rows[0])
 
-        guid = analyser.analysed_rows[1]['new_position_guid']
-        self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem('-', '-', 'Contrats et accords'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position': '',
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_item': OperationItem(),
-             'repository_depth_violated': False,
-             'uid': None},
-            analyser.analysed_rows[1])
-
-        self.assertDictEqual(
-            {'leaf_node_violated': False,
-             'new_item': OperationItem(),
-             'new_number': None,
+             'new_item': OperationItem(0, u'Allgemeines und \xdcbergreifendes'),
+             'new_number': '0',
              'new_parent_position': None,
              'new_parent_uid': None,
              'new_position': None,
              'new_position_guid': None,
-             'new_title': None,
+             'new_title': u'Allgemeines und \xdcbergreifendes',
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", ''),
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
-            analyser.analysed_rows[2])
+            analyser.analysed_rows[1])
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -84,9 +68,9 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(3, u"Spinn\xe4nnetzregistrar", ''),
              'repository_depth_violated': False,
              'uid': self.inactive_repofolder.UID()},
-            analyser.analysed_rows[3])
+            analyser.analysed_rows[2])
 
-        guid = analyser.analysed_rows[4]['new_position_guid']
+        guid = analyser.analysed_rows[3]['new_position_guid']
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -100,9 +84,9 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(),
              'repository_depth_violated': False,
              'uid': None},
-            analyser.analysed_rows[4])
+            analyser.analysed_rows[3])
 
-        guid = analyser.analysed_rows[5]['new_position_guid']
+        guid = analyser.analysed_rows[4]['new_position_guid']
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -116,9 +100,9 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(),
              'repository_depth_violated': False,
              'uid': None},
-            analyser.analysed_rows[5])
+            analyser.analysed_rows[4])
 
-        uid = analyser.analysed_rows[6]['new_parent_uid']
+        uid = analyser.analysed_rows[5]['new_parent_uid']
         self.assertIsNotNone(uid)
 
         self.assertDictEqual(
@@ -133,7 +117,7 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', 'Richtlinien'),
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
-            analyser.analysed_rows[6])
+            analyser.analysed_rows[5])
 
     def test_repository_excel_analyser_os_test_migration(self):
         self.login(self.manager)
@@ -142,7 +126,7 @@ class TestOSMigration(IntegrationTestCase):
         analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
         analyser.analyse()
 
-        self.assertEqual(7, len(analyser.analysed_rows))
+        self.assertEqual(6, len(analyser.analysed_rows))
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -158,22 +142,6 @@ class TestOSMigration(IntegrationTestCase):
              'uid': self.branch_repofolder.UID()},
             analyser.analysed_rows[0])
 
-        guid = analyser.analysed_rows[1]['new_position_guid']
-        self.assertIsNotNone(guid)
-        self.assertDictEqual(
-            {'leaf_node_violated': False,
-             'new_item': OperationItem('-', '-', 'Contrats et accords'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position': '',
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_item': OperationItem(),
-             'repository_depth_violated': False,
-             'uid': None},
-            analyser.analysed_rows[1])
-
         self.assertDictEqual(
             {'leaf_node_violated': False,
              'new_item': OperationItem(0, u'Branch with new number', ''),
@@ -186,7 +154,7 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", ''),
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
-            analyser.analysed_rows[2])
+            analyser.analysed_rows[1])
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -200,9 +168,9 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(3, u"Spinn\xe4nnetzregistrar", ''),
              'repository_depth_violated': False,
              'uid': self.inactive_repofolder.UID()},
-            analyser.analysed_rows[3])
+            analyser.analysed_rows[2])
 
-        guid = analyser.analysed_rows[4]['new_position_guid']
+        guid = analyser.analysed_rows[3]['new_position_guid']
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -216,9 +184,9 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(),
              'repository_depth_violated': False,
              'uid': None},
-            analyser.analysed_rows[4])
+            analyser.analysed_rows[3])
 
-        guid = analyser.analysed_rows[5]['new_position_guid']
+        guid = analyser.analysed_rows[4]['new_position_guid']
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -232,7 +200,7 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(),
              'repository_depth_violated': False,
              'uid': None},
-            analyser.analysed_rows[5])
+            analyser.analysed_rows[4])
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
@@ -246,7 +214,7 @@ class TestOSMigration(IntegrationTestCase):
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', 'Richtlinien'),
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
-            analyser.analysed_rows[6])
+            analyser.analysed_rows[5])
 
     def test_repository_migrator(self):
         self.login(self.manager)
