@@ -1,3 +1,5 @@
+from opengever.propertysheets.api.utils import get_property_sheet_schema
+from opengever.propertysheets.definition import PropertySheetSchemas
 from plone.restapi.services import Service
 from plone.restapi.services.types.get import check_security
 from plone.restapi.types.utils import get_jsonschema_for_portal_type
@@ -45,9 +47,21 @@ class GEVERSchemaGet(Service):
         check_security(self.context)
         self.content_type = "application/json+schema"
         try:
-            return get_jsonschema_for_portal_type(
+            schema = get_jsonschema_for_portal_type(
                 portal_type, self.context, self.request
             )
+            if portal_type == 'opengever.document.document':
+                del schema['properties']['property_sheets']
+
+                sheets = []
+                for schema_class in PropertySheetSchemas.list():
+                    sheets.append(get_property_sheet_schema(
+                        self.context, self.request, schema_class)
+                    )
+
+                schema['properties']['property_sheets'] = sheets
+
+            return schema
         except KeyError:
             self.content_type = "application/json"
             self.request.response.setStatus(404)
