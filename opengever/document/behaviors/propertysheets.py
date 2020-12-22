@@ -1,12 +1,19 @@
 from opengever.propertysheets.definition import PropertySheetSchemas
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.schema import IJSONField
 from plone.schema import JSONField
 from plone.supermodel import model
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
+from zope.interface import implementer
 from zope.schema import getFieldsInOrder
 
 
+class IPropertySheetField(IJSONField):
+    pass
+
+
+@implementer(IPropertySheetField)
 class PropertySheetField(JSONField):
 
     def _validate(self, value):

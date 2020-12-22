@@ -6,6 +6,7 @@
     xmlns:vdex="http://namespaces.zope.org/vdex"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
     i18n_domain="opengever.propertysheets">
 
   <include package=".api" />
@@ -13,6 +14,26 @@
   <utility
       factory=".schemapolicy.PropertySheetsSchemaPolicy"
       name="propertysheets"
+      />
+
+  <adapter
+      factory=".widgets.PropertySheetFieldWiget"
+      for="opengever.document.behaviors.propertysheets.IPropertySheetField
+           z3c.form.interfaces.IFormLayer"
+      />
+
+  <class class=".widgets.PropertySheetFieldWiget">
+    <require
+        permission="zope.Public"
+        interface=".widgets.IPropertySheetWiget"
+        />
+  </class>
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".widgets.IPropertySheetWiget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/propertysheet.pt"
       />
 
 </configure>
