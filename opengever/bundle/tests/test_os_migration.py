@@ -30,7 +30,7 @@ class TestOSMigration(IntegrationTestCase):
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem(1, u"F\xfchrung und Koordination", "leadership"),
+             'new_item': OperationItem(1, u"F\xfchrung und Koordination", ""),
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
@@ -74,7 +74,7 @@ class TestOSMigration(IntegrationTestCase):
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem(4, 'Created branch', ''),
+             'new_item': OperationItem(4, 'Created branch', 'comment 1'),
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
@@ -90,7 +90,7 @@ class TestOSMigration(IntegrationTestCase):
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem(41, 'created leaf', ''),
+             'new_item': OperationItem(41, 'created leaf', 'comment 2'),
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
@@ -107,7 +107,7 @@ class TestOSMigration(IntegrationTestCase):
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem(42, 'Moved leaf', 'droit municipal'),
+             'new_item': OperationItem(42, 'Moved leaf', 'comment for moved one'),
              'new_number': '2',
              'new_parent_position': '4',
              'new_parent_uid': uid,
@@ -130,7 +130,7 @@ class TestOSMigration(IntegrationTestCase):
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem(1, u"F\xfchrung und Koordination", "leadership"),
+             'new_item': OperationItem(1, u"F\xfchrung und Koordination", ""),
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
@@ -174,7 +174,7 @@ class TestOSMigration(IntegrationTestCase):
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem('01', 'created leaf in branch with new number', ''),
+             'new_item': OperationItem('01', 'created leaf in branch with new number', 'comment 1'),
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
@@ -190,7 +190,7 @@ class TestOSMigration(IntegrationTestCase):
         self.assertIsNotNone(guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem(12, 'created leaf in existing branch', ''),
+             'new_item': OperationItem(12, 'created leaf in existing branch', 'comment 2'),
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
@@ -204,7 +204,7 @@ class TestOSMigration(IntegrationTestCase):
 
         self.assertDictEqual(
             {'leaf_node_violated': False,
-             'new_item': OperationItem('02', 'Moved leaf in branch with new number', 'droit municipal'),
+             'new_item': OperationItem('02', 'Moved leaf in branch with new number', 'comment for moved one'),
              'new_number': '2',
              'new_parent_position': '0',
              'new_parent_uid': self.empty_repofolder.UID(),
