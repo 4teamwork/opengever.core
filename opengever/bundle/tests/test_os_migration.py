@@ -236,6 +236,10 @@ class TestOSMigration(IntegrationTestCase):
         self.assertEqual(u'1 F\xfchrung und Koordination', brain.title_de)
         self.assertEqual('Client1 1', IReferenceNumber(obj).get_number())
         self.assertEqual(self.repository_root, aq_parent(aq_inner(obj)))
+        # Access to fixture objects is done over a lookup table containing
+        # the object's path, so won't work anymore.
+        # We can simply overrite the attribute though.
+        self.branch_repofolder = obj
 
         # Second one has a new number
         results = catalog(reference='Client1 0')
@@ -245,6 +249,7 @@ class TestOSMigration(IntegrationTestCase):
         obj = brain.getObject()
         self.assertEqual('Client1 0', IReferenceNumber(obj).get_number())
         self.assertEqual(self.repository_root, aq_parent(aq_inner(obj)))
+        self.empty_repofolder = obj
 
         # Third one should be deleted, but that is not implemented
         results = catalog(reference='Client1 3')
@@ -258,8 +263,7 @@ class TestOSMigration(IntegrationTestCase):
         self.assertEqual('01 created leaf in branch with new number', brain.title_de)
         obj = brain.getObject()
         self.assertEqual('Client1 01', IReferenceNumber(obj).get_number())
-        # that fails for now, we can't traverse onto self.empty_repofolder, probably path was not reindexed
-        # self.assertEqual(self.empty_repofolder, aq_parent(aq_inner(obj)))
+        self.assertEqual(self.empty_repofolder, aq_parent(aq_inner(obj)))
 
         # Fifth is created in an existing branch
         results = catalog(reference='Client1 12')
@@ -268,8 +272,7 @@ class TestOSMigration(IntegrationTestCase):
         self.assertEqual('12 created leaf in existing branch', brain.title_de)
         obj = brain.getObject()
         self.assertEqual('Client1 12', IReferenceNumber(obj).get_number())
-        # that fails for now, we can't traverse onto self.branch_repofolder, probably path was not reindexed
-        # self.assertEqual(self.branch_repofolder, aq_parent(aq_inner(obj)))
+        self.assertEqual(self.branch_repofolder, aq_parent(aq_inner(obj)))
 
         # Sixth is moved into the branch with new number
         results = catalog(reference='Client1 02', portal_type='opengever.repository.repositoryfolder')
@@ -278,5 +281,5 @@ class TestOSMigration(IntegrationTestCase):
         self.assertEqual('02 Moved leaf in branch with new number', brain.title_de)
         obj = brain.getObject()
         self.assertEqual('Client1 02', IReferenceNumber(obj).get_number())
-        # that fails for now, we can't traverse onto self.empty_repofolder, probably path was not reindexed
-        # self.assertEqual(self.empty_repofolder, aq_parent(aq_inner(obj)))
+        self.assertEqual(self.empty_repofolder, aq_parent(aq_inner(obj)))
+        self.leaf_repofolder = obj
