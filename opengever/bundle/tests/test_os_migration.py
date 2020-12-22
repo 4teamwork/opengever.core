@@ -272,8 +272,7 @@ class TestOSMigration(IntegrationTestCase):
         # self.assertEqual(self.branch_repofolder, aq_parent(aq_inner(obj)))
 
         # Sixth is moved into the branch with new number
-        # reference should be 'Client1 02', but is currently wrong
-        results = catalog(reference='Client1 1.1', portal_type='opengever.repository.repositoryfolder')
+        results = catalog(reference='Client1 02', portal_type='opengever.repository.repositoryfolder')
         self.assertEqual(1, len(results))
         brain = results[0]
         self.assertEqual('02 Moved leaf in branch with new number', brain.title_de)
