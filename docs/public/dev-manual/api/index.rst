@@ -59,6 +59,5 @@ Inhalt:
    accept_remote_task.rst
    complete_successor_task.rst
    examples/index.rst
-   docs_changelog.rst
 
 .. disqus::
