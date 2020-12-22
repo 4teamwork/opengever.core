@@ -1,16 +1,12 @@
-# from opengever.maintenance.scripts.repository_migration_analyse import OperationItem
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.interfaces import IReferenceNumber
+from opengever.maintenance.scripts.repository_migration_analyse import OperationItem
 from opengever.maintenance.scripts.repository_migration_analyse import RepositoryExcelAnalyser
 from opengever.maintenance.scripts.repository_migration_analyse import RepositoryMigrator
 from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_filename
 from plone import api
-
-
-def OperationItem(position=None, title=None, description=None):
-    return {'position': str(position) if position is not None else position, 'title': title, 'description': description}
 
 
 class TestOSMigration(IntegrationTestCase):
