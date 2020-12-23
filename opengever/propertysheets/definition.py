@@ -1,7 +1,15 @@
 from opengever.propertysheets.exceptions import InvalidFieldType
+from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from plone.schemaeditor import fields
 from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import model
+import re
+import tokenize
+import keyword
+
+
+def isidentifier(val):
+    return re.match(tokenize.Name + r'\Z', val) and not keyword.iskeyword(val)
 
 
 class PropertySheetSchemaDefinition(object):
@@ -34,6 +42,11 @@ class PropertySheetSchemaDefinition(object):
     def add_field(self, field_type, name, title, description, required, values=None):
         if field_type not in self.FACTORIES:
             raise InvalidFieldType("Field type '{}' is invalid.".format(field_type))
+
+        if not isidentifier(name):
+            raise InvalidFieldTypeDefinition(
+                "The name '{}' is not a valid identifier.".format(name)
+            )
 
         factory = self.FACTORIES[field_type]
         properties = {
