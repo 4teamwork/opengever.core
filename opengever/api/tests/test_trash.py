@@ -56,6 +56,17 @@ class TestTrashAPI(IntegrationTestCase):
             u'You are not authorized to access this resource.')
 
     @browsing
+    def test_trash_document_template_is_not_allowed(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(self.normal_template, view='/@trash',
+                         method='POST', headers={'Accept': 'application/json'})
+        self.assertEqual(
+            browser.json[u'message'],
+            u'You are not authorized to access this resource.')
+
+    @browsing
     def test_untrash_document(self, browser):
         self.login(self.regular_user, browser)
         trasher = ITrashable(self.document)

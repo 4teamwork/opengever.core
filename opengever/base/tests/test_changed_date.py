@@ -225,13 +225,6 @@ class TestChangedUpdateForSablonTemplate(TestChangedUpdateBase):
             browser.find('Save').click()
         self.assert_changed_value(self.sablon_template, FREEZING_TIME)
 
-    def test_changed_is_updated_when_workflow_status_is_changed(self):
-        self.login(self.manager)
-        with freeze(FREEZING_TIME):
-            ITrashable(self.sablon_template).trash()
-            api.content.transition(obj=self.sablon_template, transition="document-transition-remove")
-        self.assert_changed_value(self.sablon_template, FREEZING_TIME)
-
 
 class TestChangedUpdateForProposalTemplate(TestChangedUpdateBase):
 
@@ -244,13 +237,6 @@ class TestChangedUpdateForProposalTemplate(TestChangedUpdateBase):
             browser.open(self.proposal_template, view='edit')
             browser.fill({"Title": 'foo'})
             browser.find('Save').click()
-        self.assert_changed_value(self.proposal_template, FREEZING_TIME)
-
-    def test_changed_is_updated_when_workflow_status_is_changed(self):
-        self.login(self.manager)
-        with freeze(FREEZING_TIME):
-            ITrashable(self.proposal_template).trash()
-            api.content.transition(obj=self.proposal_template, transition="document-transition-remove")
         self.assert_changed_value(self.proposal_template, FREEZING_TIME)
 
 
