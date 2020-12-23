@@ -70,6 +70,51 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['yesorno']
         self.assertIsInstance(field, schema.Bool)
 
+    def test_add_choice_field_with_simple_values(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = ['one', 'two', 'three']
+        definition.add_field(
+            "choice", u"chooseone", u"choose", u"", False, values=choices
+        )
+
+        self.assertEqual(["chooseone"], definition.schema_class.names())
+        field = definition.schema_class['chooseone']
+        self.assertIsInstance(field, schema.Choice)
+
+        voc_values = [each.value for each in field.vocabulary]
+        voc_tokens = [each.token for each in field.vocabulary]
+
+        self.assertEqual(choices, voc_values)
+        self.assertEqual(choices, voc_tokens)
+
+    def test_add_choice_field_requires_values(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "choice", u"chooseone", u"choose", u"", False, values=None
+            )
+
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "choice", u"chooseone", u"choose", u"", False, values=[]
+            )
+
+    def test_add_choice_field_prevents_duplicate_values(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = ['duplicate', 'duplicate']
+        with self.assertRaises(ValueError):
+            definition.add_field(
+                "choice", u"chooseone", u"choose", u"", False, values=choices
+            )
+
+    def test_add_non_choice_field_prevents_adding_values(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "int", u"num", u"A number", u"Put a number.", True, values=[1]
+            )
+
     def test_add_int_field(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         definition.add_field(

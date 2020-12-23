@@ -22,6 +22,7 @@ class PropertySheetSchemaDefinition(object):
     """
     FACTORIES = {
         'bool': fields.BoolFactory,
+        'choice': fields.ChoiceFactory,
         'int': fields.IntFactory,
         'text': fields.TextFactory,
         'textline': fields.TextLineFactory,
@@ -55,6 +56,17 @@ class PropertySheetSchemaDefinition(object):
             "description": description,
             "required": required,
         }
+
+        if field_type == 'choice':
+            if not values:
+                raise InvalidFieldTypeDefinition(
+                    "For 'choice' fields types values are required."
+                )
+            properties['values'] = values
+        elif values:
+            raise InvalidFieldTypeDefinition(
+                "The argument 'values' is only valid for 'choice' fields."
+            )
 
         field = factory(**properties)
         schema = IEditableSchema(self.schema_class)
