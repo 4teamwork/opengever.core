@@ -2,7 +2,9 @@ from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from plone.schemaeditor import fields
 from plone.schemaeditor.utils import IEditableSchema
+from plone.supermodel import loadString
 from plone.supermodel import model
+from plone.supermodel import serializeSchema
 import re
 import tokenize
 import keyword
@@ -71,3 +73,14 @@ class PropertySheetSchemaDefinition(object):
         field = factory(**properties)
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
+
+    def _save(self, storage):
+        storage[self.name] = serializeSchema(self.schema_class, name=self.name)
+
+    @classmethod
+    def _load(cls, storage, name):
+        serialized_schema = storage[name]
+        model = loadString(serialized_schema, policy=u'propertysheets')
+        schema_class = model.schemata[name]
+
+        return cls(name, schema_class)
