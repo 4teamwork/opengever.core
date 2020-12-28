@@ -606,21 +606,18 @@ class TestOSMigration(IntegrationTestCase):
         # Now we check for consistency in the catalog
         self.assertObjectConsistency(obj)
 
-    def test_repository_migrator_create_branch_in_reporoot(self):
+    def test_repository_migrator_create_branch_and_leaf_in_reporoot(self):
         self.login(self.manager)
-        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_create_in_repofolder.xlsx')
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_create_in_reporoot.xlsx')
         analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
         analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
         analyser.analyse()
 
-        results = self.portal.portal_catalog.unrestrictedSearchResults(
-            Title="New branch")
-        self.assertEqual(0, len(results))
-
         # We only create the new repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
-        self.assertEqual(1, len(changed_rows))
-        guid = changed_rows[0]['new_position_guid']
+        self.assertEqual(2, len(changed_rows))
+        branch_guid = changed_rows[0]['new_position_guid']
+        self.assertIsNotNone(branch_guid)
         reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
         self.assertEqual(
             {'leaf_node_violated': False,
@@ -630,27 +627,54 @@ class TestOSMigration(IntegrationTestCase):
              'new_parent_uid': None,
              'new_position_parent_guid': reporoot_guid,
              'new_position_parent_position': '',
-             'new_position_guid': guid,
+             'new_position_guid': branch_guid,
              'new_title': None,
              'old_item': OperationItem(),
              'repository_depth_violated': False,
              'uid': None},
             changed_rows[0])
+        guid = changed_rows[1]['new_position_guid']
+        self.assertEqual(
+            {'leaf_node_violated': False,
+             'new_item': OperationItem(41, u'New leaf', 'New leaf description'),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_parent_guid': branch_guid,
+             'new_position_parent_position': None,
+             'new_position_guid': guid,
+             'new_title': None,
+             'old_item': OperationItem(),
+             'repository_depth_violated': False,
+             'uid': None},
+            changed_rows[1])
 
         with self.observe_children(self.repository_root) as children:
             migrator = RepositoryMigrator(analyser.analysed_rows)
             migrator.run()
 
-        # check that the new repofolder was indeed created
+        # check that the new branch repofolder was indeed created
         self.assertEqual(1, len(children['added']))
-        obj = children['added'].pop()
+        branch = children['added'].pop()
 
-        self.assertEqual('New branch', obj.title_de)
-        self.assertEqual('Client1 4', IReferenceNumber(obj).get_number())
+        self.assertEqual('New branch', branch.title_de)
+        self.assertEqual('Client1 4', IReferenceNumber(branch).get_number())
         self.assertEqual('/plone/ordnungssystem/new-branch',
-                         obj.absolute_url_path())
-        parent = aq_parent(aq_inner(obj))
+                         branch.absolute_url_path())
+        parent = aq_parent(aq_inner(branch))
         self.assertEqual(self.repository_root, parent)
 
+        # check that the new leaf repofolder was indeed created
+        self.assertEqual(1, len(branch.contentItems()))
+        leaf = branch.contentItems()[0][1]
+
+        self.assertEqual('New leaf', leaf.title_de)
+        self.assertEqual('Client1 41', IReferenceNumber(leaf).get_number())
+        self.assertEqual('/plone/ordnungssystem/new-branch/new-leaf',
+                         leaf.absolute_url_path())
+        parent = aq_parent(aq_inner(leaf))
+        self.assertEqual(branch, parent)
+
         # Now we check for consistency in the catalog
-        self.assertObjectConsistency(obj)
+        self.assertObjectConsistency(branch)
+        self.assertObjectConsistency(leaf)
