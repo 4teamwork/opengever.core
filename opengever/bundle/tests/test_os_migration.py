@@ -678,3 +678,82 @@ class TestOSMigration(IntegrationTestCase):
         # Now we check for consistency in the catalog
         self.assertObjectConsistency(branch)
         self.assertObjectConsistency(leaf)
+
+    def test_repository_migrator_create_in_moved_repofolder(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_create_in_moved_repofolder.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        self.assertEqual(
+            '/plone/ordnungssystem/rechnungsprufungskommission',
+            self.empty_repofolder.absolute_url_path())
+
+        # We create a new repofolder and move the leaf_repofolder into it
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(2, len(changed_rows))
+
+        self.assertEqual(
+            {'leaf_node_violated': False,
+             'new_item': OperationItem(12, u"Rechnungspr\xfcfungskommission", None),
+             'new_number': '2',
+             'new_parent_position': '1',
+             'new_parent_uid': self.branch_repofolder.UID(),
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
+             'new_position_guid': None,
+             'new_title': None,
+             'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", None),
+             'repository_depth_violated': False,
+             'uid': self.empty_repofolder.UID()},
+            changed_rows[0])
+
+        guid = changed_rows[1]['new_position_guid']
+        self.assertEqual(
+            {'leaf_node_violated': False,
+             'new_item': OperationItem(121, u'New leaf', 'New description'),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_guid': guid,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': '2',
+             'new_title': None,
+             'old_item': OperationItem(),
+             'repository_depth_violated': False,
+             'uid': None},
+            changed_rows[1])
+
+        with self.observe_children(self.branch_repofolder) as branch_children,\
+                self.observe_children(self.repository_root) as root_children:
+            migrator = RepositoryMigrator(analyser.analysed_rows)
+            migrator.run()
+
+        # check that the empty_repofolder was indeed moved
+        self.assertEqual(1, len(branch_children['added']))
+        self.assertEqual(branch_children['added'], root_children['removed'])
+        moved_repofolder = branch_children['added'].pop()
+        self.assertEqual(
+            '/plone/ordnungssystem/fuhrung/rechnungsprufungskommission',
+            moved_repofolder.absolute_url_path())
+
+        # check that the new repofolder was indeed created
+        self.assertEqual(1, len(moved_repofolder.contentItems()))
+        new_repofolder = moved_repofolder.contentItems()[0][1]
+        self.assertEqual('New leaf', new_repofolder.title_de)
+        self.assertEqual('Client1 121', IReferenceNumber(new_repofolder).get_number())
+        self.assertEqual(
+            '/plone/ordnungssystem/fuhrung/rechnungsprufungskommission/new-leaf',
+            new_repofolder.absolute_url_path())
+
+        # We check that the moved repofolder and all contained objects were
+        # updated correctly
+        contained_brains = self.portal.portal_catalog.unrestrictedSearchResults(
+            path=moved_repofolder.absolute_url_path())
+
+        for brain in contained_brains:
+            obj = brain.getObject()
+            self.assertObjectConsistency(
+                obj, parent_refnum='Client1 12',
+                parent_path=moved_repofolder.absolute_url_path())
