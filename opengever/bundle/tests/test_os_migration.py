@@ -1,5 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.security import elevated_privileges
@@ -11,6 +13,33 @@ from opengever.testing import obj2brain
 from pkg_resources import resource_filename
 from plone import api
 from plone.app.uuid.utils import uuidToObject
+
+
+class TestOSMigrationPreconditions(IntegrationTestCase):
+
+    def test_raises_if_not_grouped_by_three(self):
+        self.login(self.manager)
+        with self.assertRaises(AssertionError) as exc:
+            RepositoryExcelAnalyser('', '')
+
+        self.assertEqual(
+            'Migration is only supported with grouped_by_three',
+            exc.exception.message)
+
+    def test_raises_if_more_than_one_reporoot(self):
+        self.login(self.manager)
+        api.portal.set_registry_record(
+            "opengever.base.interfaces.IReferenceNumberSettings.formatter",
+            "grouped_by_three")
+        RepositoryExcelAnalyser('', '')
+
+        create(Builder('repository_root'))
+        with self.assertRaises(AssertionError) as exc:
+            RepositoryExcelAnalyser('', '')
+
+        self.assertEqual(
+            'Migration is only supported with a single repository root',
+            exc.exception.message)
 
 
 class TestOSMigration(IntegrationTestCase):
