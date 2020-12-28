@@ -5,6 +5,7 @@ from ftw.builder import create
 from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.security import elevated_privileges
+from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.maintenance.scripts.repository_migration_analyse import OperationItem
 from opengever.maintenance.scripts.repository_migration_analyse import RepositoryExcelAnalyser
 from opengever.maintenance.scripts.repository_migration_analyse import RepositoryMigrator
@@ -13,6 +14,7 @@ from opengever.testing import obj2brain
 from pkg_resources import resource_filename
 from plone import api
 from plone.app.uuid.utils import uuidToObject
+from zope.annotation import IAnnotations
 
 
 class TestOSMigrationPreconditions(IntegrationTestCase):
@@ -105,7 +107,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': u'F\xfchrung und Koordination',
              'old_item': OperationItem(1, u"F\xfchrung", ''),
@@ -119,7 +122,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': '0',
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': u'Allgemeines und \xdcbergreifendes',
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", ''),
@@ -133,7 +137,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(3, u"Spinn\xe4nnetzregistrar", ''),
@@ -141,16 +146,18 @@ class TestOSMigration(IntegrationTestCase):
              'uid': self.inactive_repofolder.UID()},
             analyser.analysed_rows[2])
 
-        guid = analyser.analysed_rows[3]['new_position_guid']
-        self.assertIsNotNone(guid)
+        new_branch_guid = analyser.analysed_rows[3]['new_position_guid']
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
+        self.assertIsNotNone(new_branch_guid)
         self.assertDictEqual(
             {'leaf_node_violated': False,
              'new_item': OperationItem(4, 'Created branch', 'comment 1'),
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': '',
-             'new_position_guid': guid,
+             'new_position_parent_guid': reporoot_guid,
+             'new_position_parent_position': '',
+             'new_position_guid': new_branch_guid,
              'new_title': None,
              'old_item': OperationItem(),
              'repository_depth_violated': False,
@@ -165,7 +172,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': new_branch_guid,
+             'new_position_parent_position': None,
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
@@ -182,7 +190,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': '2',
              'new_parent_position': '4',
              'new_parent_uid': uid,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': u'Moved leaf',
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', 'Richtlinien'),
@@ -205,7 +214,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': u'F\xfchrung und Koordination',
              'old_item': OperationItem(1, u"F\xfchrung", ''),
@@ -219,7 +229,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': '0',
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': u'Branch with new number',
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", ''),
@@ -233,7 +244,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(3, u"Spinn\xe4nnetzregistrar", ''),
@@ -249,7 +261,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': '2',
+             'new_position_parent_guid': None,
+             'new_position_parent_position': '2',
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
@@ -265,7 +278,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': '1',
+             'new_position_parent_guid': None,
+             'new_position_parent_position': '1',
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
@@ -279,7 +293,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': '2',
              'new_parent_position': '0',
              'new_parent_uid': self.empty_repofolder.UID(),
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': u'Moved leaf in branch with new number',
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', 'Richtlinien'),
@@ -373,7 +388,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
@@ -403,7 +419,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': '0',
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
@@ -416,7 +433,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem('11', u'Vertr\xe4ge und Vereinbarungen', None),
@@ -458,7 +476,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': u'New title',
              'old_item': OperationItem(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
@@ -506,7 +525,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': '1',
              'new_parent_position': '2',
              'new_parent_uid': self.empty_repofolder.UID(),
-             'new_position': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
@@ -537,7 +557,7 @@ class TestOSMigration(IntegrationTestCase):
             obj = brain.getObject()
             self.assertObjectConsistency(obj, parent_path=self.leaf_repofolder.absolute_url_path())
 
-    def test_repository_migrator_create(self):
+    def test_repository_migrator_create_leaf(self):
         self.login(self.manager)
         migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_create.xlsx')
         analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
@@ -558,7 +578,8 @@ class TestOSMigration(IntegrationTestCase):
              'new_number': None,
              'new_parent_position': None,
              'new_parent_uid': None,
-             'new_position': '1',
+             'new_position_parent_guid': None,
+             'new_position_parent_position': '1',
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
@@ -581,6 +602,55 @@ class TestOSMigration(IntegrationTestCase):
                          obj.absolute_url_path())
         parent = aq_parent(aq_inner(obj))
         self.assertEqual(self.branch_repofolder, parent)
+
+        # Now we check for consistency in the catalog
+        self.assertObjectConsistency(obj)
+
+    def test_repository_migrator_create_branch_in_reporoot(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_create_in_repofolder.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        results = self.portal.portal_catalog.unrestrictedSearchResults(
+            Title="New branch")
+        self.assertEqual(0, len(results))
+
+        # We only create the new repofolder
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(1, len(changed_rows))
+        guid = changed_rows[0]['new_position_guid']
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
+        self.assertEqual(
+            {'leaf_node_violated': False,
+             'new_item': OperationItem(4, u'New branch', 'New description'),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_parent_guid': reporoot_guid,
+             'new_position_parent_position': '',
+             'new_position_guid': guid,
+             'new_title': None,
+             'old_item': OperationItem(),
+             'repository_depth_violated': False,
+             'uid': None},
+            changed_rows[0])
+
+        with self.observe_children(self.repository_root) as children:
+            migrator = RepositoryMigrator(analyser.analysed_rows)
+            migrator.run()
+
+        # check that the new repofolder was indeed created
+        self.assertEqual(1, len(children['added']))
+        obj = children['added'].pop()
+
+        self.assertEqual('New branch', obj.title_de)
+        self.assertEqual('Client1 4', IReferenceNumber(obj).get_number())
+        self.assertEqual('/plone/ordnungssystem/new-branch',
+                         obj.absolute_url_path())
+        parent = aq_parent(aq_inner(obj))
+        self.assertEqual(self.repository_root, parent)
 
         # Now we check for consistency in the catalog
         self.assertObjectConsistency(obj)
