@@ -839,3 +839,68 @@ class TestOSMigration(IntegrationTestCase):
             self.assertObjectConsistency(
                 obj, parent_path=new_branch.absolute_url_path(),
                 parent_refnum='Client1 4')
+
+    def test_repository_migrator_move_into_repository_root(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_move_into_reporoot.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        self.assertEqual(
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+            self.leaf_repofolder.absolute_url_path())
+        parent = aq_parent(aq_inner(self.leaf_repofolder))
+        self.assertEqual(self.branch_repofolder, parent)
+
+        # We only move the leaf_repofolder
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(1, len(changed_rows))
+        self.assertEqual(
+            {'leaf_node_violated': False,
+             'new_item': OperationItem(4, u'Vertr\xe4ge und Vereinbarungen', None),
+             'new_number': '4',
+             'new_parent_position': '',
+             'new_parent_uid': self.repository_root.UID(),
+             'new_position_guid': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
+             'new_title': None,
+             'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
+             'repository_depth_violated': False,
+             'uid': self.leaf_repofolder.UID()},
+            changed_rows[0])
+
+        with self.observe_children(self.branch_repofolder) as branch_children,\
+                self.observe_children(self.repository_root) as root_children:
+            migrator = RepositoryMigrator(analyser.analysed_rows)
+            migrator.run()
+
+        self.assertEqual(1, len(branch_children['removed']))
+        self.assertEqual(branch_children['removed'], root_children['added'])
+
+        # path in the lookup table is not correct anymore, so accessing
+        # self.leaf_repofolder does not work anymore.
+        self.leaf_repofolder = root_children['added'].pop()
+
+        # check that the leaf_repofolder was indeed moved
+        self.assertEqual(
+            '/plone/ordnungssystem/vertrage-und-vereinbarungen',
+            self.leaf_repofolder.absolute_url_path())
+        parent = aq_parent(aq_inner(self.leaf_repofolder))
+        self.assertEqual(self.repository_root, parent)
+
+        # and its reference number updated
+        self.assertEqual(
+            'Client1 4', IReferenceNumber(self.leaf_repofolder).get_number())
+
+        # We check that leaf_repofolder and all contained objects were updated
+        # correctly
+        contained_brains = self.portal.portal_catalog.unrestrictedSearchResults(
+            path=self.leaf_repofolder.absolute_url_path())
+
+        for brain in contained_brains:
+            obj = brain.getObject()
+            self.assertObjectConsistency(
+                obj, parent_path=self.repository_root.absolute_url_path(),
+                parent_refnum='Client1 4')
