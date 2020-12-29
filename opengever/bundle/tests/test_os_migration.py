@@ -6,6 +6,7 @@ from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.security import elevated_privileges
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.maintenance.scripts.repository_migration_analyse import MigrationValidationError
 from opengever.maintenance.scripts.repository_migration_analyse import OperationItem
 from opengever.maintenance.scripts.repository_migration_analyse import RepositoryExcelAnalyser
 from opengever.maintenance.scripts.repository_migration_analyse import RepositoryMigrator
@@ -44,22 +45,7 @@ class TestOSMigrationPreconditions(IntegrationTestCase):
             exc.exception.message)
 
 
-class TestOSMigration(IntegrationTestCase):
-
-    maxDiff = None
-
-    def setUp(self):
-        super(TestOSMigration, self).setUp()
-        api.portal.set_registry_record(
-            "opengever.base.interfaces.IReferenceNumberSettings.formatter",
-            "grouped_by_three")
-        # We need to reindex all objects after the change of reference number
-        # formatter...
-        with elevated_privileges():
-            res = api.portal.get().portal_catalog.unrestrictedSearchResults(
-                path=self.branch_repofolder.absolute_url_path())
-            for brain in res:
-                brain.getObject().reindexObject()
+class OSMigrationTestMixin(object):
 
     def assertObjectConsistency(self, obj, parent_refnum=None, parent_path=None):
         err_msg = "{} not consistent".format(obj.absolute_url_path())
@@ -91,6 +77,24 @@ class TestOSMigration(IntegrationTestCase):
     @staticmethod
     def get_changed_rows(rows):
         return [row for row in rows if not row['old_item'] == row['new_item']]
+
+
+class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
+
+    maxDiff = None
+
+    def setUp(self):
+        super(TestOSMigrationAnalysis, self).setUp()
+        api.portal.set_registry_record(
+            "opengever.base.interfaces.IReferenceNumberSettings.formatter",
+            "grouped_by_three")
+        # We need to reindex all objects after the change of reference number
+        # formatter...
+        with elevated_privileges():
+            res = api.portal.get().portal_catalog.unrestrictedSearchResults(
+                path=self.branch_repofolder.absolute_url_path())
+            for brain in res:
+                brain.getObject().reindexObject()
 
     def test_repository_excel_analyser_os_test_branch_and_leaf_creation(self):
         self.login(self.manager)
@@ -301,6 +305,24 @@ class TestOSMigration(IntegrationTestCase):
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
             analyser.analysed_rows[5])
+
+
+class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
+
+    maxDiff = None
+
+    def setUp(self):
+        super(TestOSMigrationRun, self).setUp()
+        api.portal.set_registry_record(
+            "opengever.base.interfaces.IReferenceNumberSettings.formatter",
+            "grouped_by_three")
+        # We need to reindex all objects after the change of reference number
+        # formatter...
+        with elevated_privileges():
+            res = api.portal.get().portal_catalog.unrestrictedSearchResults(
+                path=self.branch_repofolder.absolute_url_path())
+            for brain in res:
+                brain.getObject().reindexObject()
 
     def test_repository_migrator(self):
         self.login(self.manager)
@@ -1003,3 +1025,99 @@ class TestOSMigration(IntegrationTestCase):
             self.assertObjectConsistency(
                 obj, parent_path=self.empty_repofolder.absolute_url_path(),
                 parent_refnum='Client1 12')
+
+
+class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
+
+    maxDiff = None
+
+    def setUp(self):
+        super(TestOSMigrationValidation, self).setUp()
+        api.portal.set_registry_record(
+            "opengever.base.interfaces.IReferenceNumberSettings.formatter",
+            "grouped_by_three")
+        # We need to reindex all objects after the change of reference number
+        # formatter...
+        with elevated_privileges():
+            res = api.portal.get().portal_catalog.unrestrictedSearchResults(
+                path=self.branch_repofolder.absolute_url_path())
+            for brain in res:
+                brain.getObject().reindexObject()
+
+    def test_validation_fails_if_title_is_not_set_correctly(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_no_changes.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        # we do nothing here
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(0, len(changed_rows))
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+        migrator.validate()
+
+        self.branch_repofolder.title_de = "modified"
+        with self.assertRaises(MigrationValidationError):
+            migrator.validate()
+
+        self.assertEqual([self.branch_repofolder.UID()],
+                         migrator.validation_errors.keys())
+        self.assertEqual(
+            [(u'F\xfchrung', 'modified', 'incorrect title'),
+             (u'1 F\xfchrung', u'1 modified', 'data inconsistency'),
+             ('0001 fuhrung', '0001 modified', 'data inconsistency')],
+            migrator.validation_errors[self.branch_repofolder.UID()])
+
+    def test_validation_fails_if_uid_cannot_be_resolved(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_no_changes.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        # we do nothing here
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(0, len(changed_rows))
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+        migrator.validate()
+
+        migrator.operations_list[0]['uid'] = "foo"
+        with self.assertRaises(MigrationValidationError):
+            migrator.validate()
+
+        self.assertEqual(0, len(migrator.validation_errors))
+        self.assertTrue(migrator.validation_failed)
+
+    def test_validation_fails_if_data_is_not_consistent(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_no_changes.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        # we do nothing here
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(0, len(changed_rows))
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+        migrator.validate()
+
+        initial_title = self.branch_repofolder.title_de
+        self.branch_repofolder.title_de = "modified"
+        self.branch_repofolder.reindexObject()
+        self.branch_repofolder.title_de = initial_title
+        with self.assertRaises(MigrationValidationError):
+            migrator.validate()
+
+        self.assertEqual([self.branch_repofolder.UID()],
+                         migrator.validation_errors.keys())
+        self.assertEqual(
+            [(u'1 modified', u'1 F\xfchrung', 'data inconsistency'),
+             ('0001 modified', '0001 fuhrung', 'data inconsistency')],
+            migrator.validation_errors[self.branch_repofolder.UID()])
