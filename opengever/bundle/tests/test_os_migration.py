@@ -345,7 +345,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
 
         self.assertEqual(9, len(analyser.analysed_rows))
         invalid_rows = [row for row in analyser.analysed_rows if not row['is_valid']]
-        self.assertEqual(4, len(invalid_rows))
+        self.assertEqual(5, len(invalid_rows))
 
         self.assertEqual(
             {'is_valid': False,
@@ -404,7 +404,25 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
             log_list[2])
 
         guid = invalid_rows[3]['new_position_guid']
-        parent_guid = invalid_rows[3]['new_position_parent_guid']
+        self.assertEqual(
+            {'is_valid': False,
+             'leaf_node_violated': True,
+             'new_item': OperationItem('112', 'Second new leaf', None),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_guid': guid,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': '11',
+             'new_title': None,
+             'old_item': OperationItem(None, None, None),
+             'repository_depth_violated': False,
+             'uid': None},
+            invalid_rows[3])
+        self.assertIn("leaf node principle violated", log_list[3])
+
+        guid = invalid_rows[4]['new_position_guid']
+        parent_guid = invalid_rows[4]['new_position_parent_guid']
         self.assertEqual(
             {'is_valid': False,
              'leaf_node_violated': False,
@@ -419,10 +437,10 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'old_item': OperationItem(None, None, None),
              'repository_depth_violated': True,
              'uid': None},
-            invalid_rows[3])
+            invalid_rows[4])
         self.assertIn(
             "repository depth violated.",
-            log_list[3])
+            log_list[4])
 
         logger.removeHandler(handler)
 
