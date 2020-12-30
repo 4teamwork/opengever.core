@@ -6,6 +6,7 @@ from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.security import elevated_privileges
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.maintenance.scripts.repository_migration_analyse import MigrationPreconditionsError
 from opengever.maintenance.scripts.repository_migration_analyse import MigrationValidationError
 from opengever.maintenance.scripts.repository_migration_analyse import OperationItem
 from opengever.maintenance.scripts.repository_migration_analyse import RepositoryExcelAnalyser
@@ -32,7 +33,7 @@ class ListHandler(logging.Handler):
 logger = logging.getLogger('migration')
 
 
-class TestOSMigrationPreconditions(IntegrationTestCase):
+class TestOSMigrationAnalysisPreconditions(IntegrationTestCase):
 
     def test_raises_if_not_grouped_by_three(self):
         self.login(self.manager)
@@ -400,7 +401,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'uid': None},
             invalid_rows[2])
         self.assertIn(
-            "could not find new parent for move operation.",
+            "could not find new parent for create operation.",
             log_list[2])
 
         guid = invalid_rows[3]['new_position_guid']
@@ -443,6 +444,24 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
             log_list[4])
 
         logger.removeHandler(handler)
+
+
+class TestOSMigrationsMigratorPreconditions(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestOSMigrationsMigratorPreconditions, self).setUp()
+        api.portal.set_registry_record(
+            "opengever.base.interfaces.IReferenceNumberSettings.formatter",
+            "grouped_by_three")
+
+    def test_raises_if_any_operation_is_invalid(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_invalid.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+        with self.assertRaises(MigrationPreconditionsError):
+            RepositoryMigrator(analyser.analysed_rows)
 
 
 class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
