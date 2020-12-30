@@ -422,6 +422,11 @@
       name="participations"
       />
 
+  <adapter
+      factory=".indexes.getObjPositionInParent"
+      name="getObjPositionInParent"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />

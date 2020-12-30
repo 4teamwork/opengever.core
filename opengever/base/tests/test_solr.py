@@ -90,7 +90,6 @@ class TestSolr(IntegrationTestCase):
             'contactid',
             'date_of_completion',
             'getId',
-            'getObjPositionInParent',
             'is_default_page',
             'is_folderish',
             'predecessor',
