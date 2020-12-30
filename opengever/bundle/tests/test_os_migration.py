@@ -6,6 +6,7 @@ from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.security import elevated_privileges
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.maintenance.scripts.repository_migration_analyse import MigrationPreconditionsError
 from opengever.maintenance.scripts.repository_migration_analyse import MigrationValidationError
 from opengever.maintenance.scripts.repository_migration_analyse import OperationItem
@@ -83,11 +84,15 @@ class OSMigrationTestMixin(object):
         if parent_path:
             self.assertIn(parent_path, obj.absolute_url_path(), err_msg)
 
-        if not obj.portal_type == 'opengever.repository.repositoryfolder':
-            return
-        self.assertEqual(brain.title_de, obj.get_prefixed_title_de(), err_msg)
-        self.assertEqual(brain.title_fr, obj.get_prefixed_title_fr(), err_msg)
-        self.assertEqual(catalog_data['sortable_title'], sortable_title(obj)(), err_msg)
+        if obj.portal_type == 'opengever.repository.repositoryfolder':
+            self.assertEqual(brain.title_de, obj.get_prefixed_title_de(), err_msg)
+            self.assertEqual(brain.title_fr, obj.get_prefixed_title_fr(), err_msg)
+            self.assertEqual(catalog_data['sortable_title'], sortable_title(obj)(), err_msg)
+
+        elif obj.portal_type == 'opengever.task.task':
+            model = obj.get_sql_object()
+            self.assertEqual(obj.get_reference_number(), model.reference_number)
+            self.assertEqual(obj.get_physical_path(), model.physical_path)
 
     @staticmethod
     def get_changed_rows(rows):
@@ -480,6 +485,9 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
                 path=self.branch_repofolder.absolute_url_path())
             for brain in res:
                 brain.getObject().reindexObject()
+                if brain.portal_type == 'opengever.task.task':
+                    # make sure that reference number in task model is up to date.
+                    TaskSqlSyncer(brain.getObject(), None).sync()
 
     def test_repository_migrator(self):
         self.login(self.manager)
