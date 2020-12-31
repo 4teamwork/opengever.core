@@ -1280,6 +1280,17 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
                 obj, parent_path=self.empty_repofolder.absolute_url_path(),
                 parent_refnum='Client1 12')
 
+    def test_repository_migrator_move_and_change_child_refnum(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_move_and_change_child_refnum.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        # This will validate that the reference numbers were set correctly
+        migrator.run()
+
     def get_allowed_users(self, obj):
         return filter(lambda x: x.startswith("user:"),
                       self.get_catalog_indexdata(obj)['allowedRolesAndUsers'])
