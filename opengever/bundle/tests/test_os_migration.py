@@ -4,6 +4,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.globalindex.handlers.task import TaskSqlSyncer
@@ -137,6 +139,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': u'F\xfchrung und Koordination',
              'old_item': OperationItem(1, u"F\xfchrung", ''),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.branch_repofolder.UID()},
             analyser.analysed_rows[0])
@@ -153,6 +156,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': u'Allgemeines und \xdcbergreifendes',
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", ''),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
             analyser.analysed_rows[1])
@@ -169,6 +173,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(3, u"Spinn\xe4nnetzregistrar", ''),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.inactive_repofolder.UID()},
             analyser.analysed_rows[2])
@@ -188,6 +193,13 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': new_branch_guid,
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             analyser.analysed_rows[3])
@@ -206,6 +218,13 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             analyser.analysed_rows[4])
@@ -225,6 +244,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': u'Moved leaf',
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', 'Richtlinien'),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
             analyser.analysed_rows[5])
@@ -250,6 +270,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': u'F\xfchrung und Koordination',
              'old_item': OperationItem(1, u"F\xfchrung", ''),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.branch_repofolder.UID()},
             analyser.analysed_rows[0])
@@ -266,6 +287,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': u'Branch with new number',
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", ''),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
             analyser.analysed_rows[1])
@@ -282,6 +304,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(3, u"Spinn\xe4nnetzregistrar", ''),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.inactive_repofolder.UID()},
             analyser.analysed_rows[2])
@@ -300,6 +323,13 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             analyser.analysed_rows[3])
@@ -318,6 +348,13 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             analyser.analysed_rows[4])
@@ -334,6 +371,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': u'Moved leaf in branch with new number',
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', 'Richtlinien'),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
             analyser.analysed_rows[5])
@@ -365,6 +403,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': None,
              'new_title': None,
              'old_item': OperationItem('2', u"Rechnungspr\xfcfungskommission", None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
             invalid_rows[0])
@@ -382,6 +421,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': None,
              'new_title': None,
              'old_item': OperationItem('3', u"Spinn\xe4nnetzregistrar", None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.inactive_repofolder.UID()},
             invalid_rows[1])
@@ -402,6 +442,13 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': '5',
              'new_title': None,
              'old_item': OperationItem(None, None, None),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             invalid_rows[2])
@@ -422,6 +469,13 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': '11',
              'new_title': None,
              'old_item': OperationItem(None, None, None),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             invalid_rows[3])
@@ -441,6 +495,13 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': None,
              'new_title': None,
              'old_item': OperationItem(None, None, None),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': True,
              'uid': None},
             invalid_rows[4])
@@ -581,6 +642,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.branch_repofolder.UID()},
             changed_rows[0])
@@ -613,6 +675,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.branch_repofolder.UID()},
             changed_rows[0])
@@ -628,6 +691,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem('11', u'Vertr\xe4ge und Vereinbarungen', None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
             changed_rows[1])
@@ -672,6 +736,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': u'New title',
              'old_item': OperationItem(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.branch_repofolder.UID()},
             changed_rows[0])
@@ -722,6 +787,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
             changed_rows[0])
@@ -776,6 +842,15 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions':  {
+                'add': [u'group1'],
+                'block_inheritance': True,
+                'close': [u'group2', u'group3'],
+                'edit': [u'group1'],
+                'manage_dossiers': [],
+                'reactivate': [],
+                'read': [u'group1', u'group2']
+                },
              'repository_depth_violated': False,
              'uid': None},
             changed_rows[0])
@@ -824,6 +899,13 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': branch_guid,
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             changed_rows[0])
@@ -840,6 +922,13 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': guid,
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             changed_rows[1])
@@ -901,6 +990,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_guid': None,
              'new_title': None,
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
             changed_rows[0])
@@ -918,6 +1008,13 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': '2',
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             changed_rows[1])
@@ -987,6 +1084,13 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': '',
              'new_title': None,
              'old_item': OperationItem(),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
              'repository_depth_violated': False,
              'uid': None},
             changed_rows[0])
@@ -1003,6 +1107,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': None,
              'new_title': None,
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid':  self.leaf_repofolder.UID()},
             changed_rows[1])
@@ -1067,6 +1172,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': None,
              'new_title': None,
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
             changed_rows[0])
@@ -1140,6 +1246,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': None,
              'new_title': None,
              'old_item': OperationItem(2, u"Rechnungspr\xfcfungskommission", ''),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
             changed_rows[0])
@@ -1155,6 +1262,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
              'new_position_parent_position': None,
              'new_title': None,
              'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
+             'permissions': None,
              'repository_depth_violated': False,
              'uid': self.leaf_repofolder.UID()},
             changed_rows[1])
@@ -1205,6 +1313,179 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
             self.assertObjectConsistency(
                 obj, parent_path=self.empty_repofolder.absolute_url_path(),
                 parent_refnum='Client1 12')
+
+    def get_allowed_users(self, obj):
+        return filter(lambda x: x.startswith("user:"),
+                      self.get_catalog_indexdata(obj)['allowedRolesAndUsers'])
+
+    def test_repository_migrator_move_updates_permissions_correctly(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_move.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+
+        self.assertItemsEqual(['user:fa_users', 'user:jurgen.fischer'],
+                              self.get_allowed_users(self.leaf_repofolder))
+        self.assertItemsEqual(['user:fa_users', 'user:jurgen.fischer'],
+                              self.get_allowed_users(self.branch_repofolder))
+        self.assertItemsEqual(['user:fa_users', 'user:jurgen.fischer'],
+                              self.get_allowed_users(self.empty_repofolder))
+        self.assertItemsEqual(
+            ['user:fa_inbox_users', 'user:fa_users', 'user:jurgen.fischer', 'user:kathi.barfuss'],
+            self.get_allowed_users(self.dossier))
+
+        RoleAssignmentManager(self.branch_repofolder).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']))
+
+        RoleAssignmentManager(self.empty_repofolder).add_or_update_assignment(
+            SharingRoleAssignment(self.workspace_guest.getId(), ['Reader']))
+
+        self.assertItemsEqual([
+            'user:lucklicher.laser', 'user:fa_users', 'user:jurgen.fischer'],
+            self.get_allowed_users(self.branch_repofolder))
+        self.assertItemsEqual([
+            'user:hans.peter', 'user:fa_users', 'user:jurgen.fischer'],
+            self.get_allowed_users(self.empty_repofolder))
+        # because of inheritance, lucklicher.laser now has reader permissions
+        # on both leaf_repofolder and dossier
+        self.assertItemsEqual([
+            'user:lucklicher.laser', 'user:fa_users', 'user:jurgen.fischer'],
+            self.get_allowed_users(self.leaf_repofolder))
+        self.assertItemsEqual(
+            ['user:lucklicher.laser', 'user:fa_inbox_users', 'user:fa_users', 'user:jurgen.fischer', 'user:kathi.barfuss'],
+            self.get_allowed_users(self.dossier))
+
+        # We move leaf_repofolder from branch_repofolder to empty_repofolder
+        dossier_uid = self.dossier.UID()
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+
+        # path in the lookup table is not correct anymore, so accessing
+        # self.leaf_repofolder does not work anymore.
+        self.leaf_repofolder = uuidToObject(changed_rows[0]['uid'])
+        self.dossier = uuidToObject(dossier_uid)
+
+        # lucklicher.laser has lost his permissions as it was inherited from
+        # branch_repofolder, while hans.peter now has reader permissions on
+        # both leaf_repofolder and dossier as it is inherited from the new parent
+        self.assertItemsEqual([
+            'user:hans.peter', 'user:fa_users', 'user:jurgen.fischer'],
+            self.get_allowed_users(self.leaf_repofolder))
+        self.assertItemsEqual(
+            ['user:hans.peter', 'user:fa_inbox_users', 'user:fa_users', 'user:jurgen.fischer', 'user:kathi.barfuss'],
+            self.get_allowed_users(self.dossier))
+
+    def test_repository_migrator_move_updates_blocked_permissions_correctly(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_move.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+
+        RoleAssignmentManager(self.branch_repofolder).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']))
+
+        RoleAssignmentManager(self.empty_repofolder).add_or_update_assignment(
+            SharingRoleAssignment(self.workspace_guest.getId(), ['Reader']))
+
+        self.assertItemsEqual(['user:lucklicher.laser', 'user:fa_users', 'user:jurgen.fischer'],
+                              self.get_allowed_users(self.leaf_repofolder))
+        self.assertItemsEqual(
+            ['user:lucklicher.laser', 'user:fa_inbox_users', 'user:fa_users', 'user:jurgen.fischer', 'user:kathi.barfuss'],
+            self.get_allowed_users(self.dossier))
+
+        self.leaf_repofolder.__ac_local_roles_block__ = True
+        self.leaf_repofolder.reindexObjectSecurity()
+
+        self.assertItemsEqual([], self.get_allowed_users(self.leaf_repofolder))
+        self.assertItemsEqual(
+            ['user:fa_inbox_users', 'user:kathi.barfuss'],
+            self.get_allowed_users(self.dossier))
+
+        # We move leaf_repofolder from branch_repofolder to empty_repofolder
+        dossier_uid = self.dossier.UID()
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+
+        # path in the lookup table is not correct anymore, so accessing
+        # self.leaf_repofolder does not work anymore.
+        self.leaf_repofolder = uuidToObject(changed_rows[0]['uid'])
+        self.dossier = uuidToObject(dossier_uid)
+
+        # Note that reader permission of hans.peter was not inherited from
+        # empty_repofolder
+        self.assertItemsEqual([], self.get_allowed_users(self.leaf_repofolder))
+        self.assertItemsEqual(
+            ['user:fa_inbox_users', 'user:kathi.barfuss'],
+            self.get_allowed_users(self.dossier))
+
+    def test_repository_migrator_create_sets_permissions_correctly(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_create.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        # We only create the new repofolder
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(1, len(changed_rows))
+        guid = changed_rows[0]['new_position_guid']
+        self.assertEqual(
+            {'is_valid': True,
+             'leaf_node_violated': False,
+             'new_item': OperationItem(12, u'New leaf', 'New description'),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': '1',
+             'new_position_guid': guid,
+             'new_title': None,
+             'old_item': OperationItem(),
+             'permissions':  {
+                'add': [u'group1'],
+                'block_inheritance': True,
+                'close': [u'group2', u'group3'],
+                'edit': [u'group1'],
+                'manage_dossiers': [],
+                'reactivate': [],
+                'read': [u'group1', u'group2']
+                },
+             'repository_depth_violated': False,
+             'uid': None},
+            changed_rows[0])
+
+        self.assertEqual(
+            False, getattr(self.branch_repofolder, '__ac_local_roles_block__', False))
+        self.assertDictEqual(
+            {'faivel.fruhling': ['DossierManager'],
+             'nicole.kohler': ['Owner']},
+            self.branch_repofolder.__ac_local_roles__)
+
+        with self.observe_children(self.branch_repofolder) as children:
+            migrator = RepositoryMigrator(analyser.analysed_rows)
+            migrator.run()
+
+        self.assertEqual(1, len(children['added']))
+        created = children['added'].pop()
+        self.assertEqual(True, getattr(created, '__ac_local_roles_block__', False))
+        self.assertDictEqual(
+            {'admin': ['Owner'],
+             'group1': ['Contributor', 'Editor', 'Reader'],
+             'group2': ['Reviewer', 'Reader'],
+             'group3': ['Reviewer']},
+            created.__ac_local_roles__)
+
+        # Check that permissions were not changed on branch_repofolder
+        self.assertEqual(
+            False, getattr(self.branch_repofolder, '__ac_local_roles_block__', False))
+        self.assertDictEqual(
+            {'faivel.fruhling': ['DossierManager'],
+             'nicole.kohler': ['Owner']},
+            self.branch_repofolder.__ac_local_roles__)
 
 
 class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
