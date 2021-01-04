@@ -4,3 +4,7 @@ class InvalidFieldType(Exception):
 
 class InvalidFieldTypeDefinition(Exception):
     pass
+
+
+class InvalidSchemaIdentifier(Exception):
+    pass

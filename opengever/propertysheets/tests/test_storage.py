@@ -1,4 +1,5 @@
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.exceptions import InvalidSchemaIdentifier
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing.test_case import FunctionalTestCase
 from persistent.list import PersistentList
@@ -68,4 +69,22 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
 
         self.assertItemsEqual(
             ["schema1", "schema2"], [each.name for each in storage.list()]
+        )
+
+    def test_prevents_duplicate_identifiers(self):
+        storage = PropertySheetSchemaStorage(self.portal)
+        fixture = PropertySheetSchemaDefinition.create(
+            "fixture", identifiers=['foo', 'bar', 'qux']
+        )
+        storage.save(fixture)
+
+        conflict = PropertySheetSchemaDefinition.create(
+            "conflict", identifiers=[u'foo']
+        )
+        with self.assertRaises(InvalidSchemaIdentifier) as cm:
+            storage.save(conflict)
+
+        exc = cm.exception
+        self.assertEqual(
+            u"The identifier 'foo' is already in use.", exc.message
         )

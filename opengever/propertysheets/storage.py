@@ -1,4 +1,5 @@
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.exceptions import InvalidSchemaIdentifier
 from persistent.mapping import PersistentMapping
 from plone import api
 from zope.annotation import IAnnotations
@@ -29,6 +30,18 @@ class PropertySheetSchemaStorage(object):
             annotations[self.ANNOTATIONS_KEY] = PersistentMapping()
 
         storage = annotations[self.ANNOTATIONS_KEY]
+
+        used_identifiers = set()
+        for definition_data in storage.values():
+            used_identifiers.update(definition_data['identifiers'])
+
+        for new_identifier in schema_definition.identifiers:
+            if new_identifier in used_identifiers:
+                raise InvalidSchemaIdentifier(
+                    u"The identifier '{}' is already in use.".format(
+                        new_identifier)
+                )
+
         schema_definition._save(storage)
 
     def get(self, name):
