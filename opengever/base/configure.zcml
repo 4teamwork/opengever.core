@@ -331,6 +331,12 @@
       />
 
   <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           Products.CMFPlone.events.IReorderedEvent"
+      handler=".handlers.contents_reordered"
+      />
+
+  <subscriber
       for="opengever.base.behaviors.changed.IChangedMarker
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.maybe_update_changed_date"
