@@ -1,6 +1,8 @@
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing.test_case import FunctionalTestCase
+from persistent.list import PersistentList
+from persistent.mapping import PersistentMapping
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from zope.annotation import IAnnotations
@@ -9,7 +11,9 @@ from zope.annotation import IAnnotations
 class TestPropertySheetSchemaStorage(FunctionalTestCase):
 
     def test_save_schema_definition(self):
-        definition = PropertySheetSchemaDefinition.create("myschema")
+        definition = PropertySheetSchemaDefinition.create(
+            "myschema", identifiers=["qux", "foo.bar"]
+        )
         definition.add_field("bool", u"yesorno", u"y/n", u"", False)
 
         storage = PropertySheetSchemaStorage(self.portal)
@@ -19,13 +23,20 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         self.assertIn(
             "opengever.propertysheets.schema_definitions", annotations
         )
-        storage = annotations["opengever.propertysheets.schema_definitions"]
-        self.assertIn("myschema", storage)
+        serialized = annotations["opengever.propertysheets.schema_definitions"]
+        self.assertIsInstance(serialized, PersistentMapping)
+        self.assertIn("myschema", serialized)
         self.assertEqual(
-            storage["myschema"],
-            serializeSchema(definition.schema_class, name="myschema"),
+            serialized["myschema"]["schema"],
+            serializeSchema(definition.schema_class, name="myschema")
         )
-        deserialized = loadString(storage["myschema"])
+        self.assertIsInstance(
+            serialized["myschema"]["identifiers"], PersistentList
+        )
+        self.assertEqual(
+            ["qux", "foo.bar"], serialized["myschema"]["identifiers"]
+        )
+        deserialized = loadString(serialized["myschema"]["schema"])
         self.assertIn("myschema", deserialized.schemata)
 
     def test_get_inexistent_schema_definition(self):

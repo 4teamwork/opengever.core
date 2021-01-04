@@ -1,13 +1,15 @@
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
+from persistent.list import PersistentList
+from persistent.mapping import PersistentMapping
 from plone.schemaeditor import fields
 from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
+import keyword
 import re
 import tokenize
-import keyword
 
 
 def isidentifier(val):
@@ -31,16 +33,21 @@ class PropertySheetSchemaDefinition(object):
     }
 
     @classmethod
-    def create(cls, name):
+    def create(cls, name, identifiers=None):
 
         class SchemaClass(model.Schema):
             pass
 
-        return cls(name, SchemaClass)
+        return cls(name, SchemaClass, identifiers=identifiers)
 
-    def __init__(self, name, schema_class):
+    def __init__(self, name, schema_class, identifiers=None):
         self.name = name
         self.schema_class = schema_class
+        if identifiers is None:
+            identifiers = tuple()
+        else:
+            identifiers = tuple(identifiers)
+        self.identifiers = identifiers
 
     def add_field(self, field_type, name, title, description, required, values=None):
         if field_type not in self.FACTORIES:
@@ -75,12 +82,18 @@ class PropertySheetSchemaDefinition(object):
         schema.addField(field)
 
     def _save(self, storage):
-        storage[self.name] = serializeSchema(self.schema_class, name=self.name)
+        serialized_schema = serializeSchema(self.schema_class, name=self.name)
+        definition_data = PersistentMapping()
+        definition_data['schema'] = serialized_schema
+        definition_data['identifiers'] = PersistentList(self.identifiers)
+        storage[self.name] = definition_data
 
     @classmethod
     def _load(cls, storage, name):
-        serialized_schema = storage[name]
+        definition_data = storage[name]
+        serialized_schema = definition_data['schema']
+        identifiers = definition_data['identifiers']
         model = loadString(serialized_schema, policy=u'propertysheets')
         schema_class = model.schemata[name]
 
-        return cls(name, schema_class)
+        return cls(name, schema_class, identifiers=identifiers)

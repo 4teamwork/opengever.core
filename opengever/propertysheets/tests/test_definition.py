@@ -49,6 +49,22 @@ class TestSchemaDefinition(FunctionalTestCase):
             "No fields should be defined initially"
         )
 
+    def test_create_schema_definition_with_one_identifier(self):
+        definition = PropertySheetSchemaDefinition.create(
+            "myschema", identifiers=[u"foo.bar"]
+        )
+
+        self.assertEqual("myschema", definition.name)
+        self.assertEqual((u"foo.bar",), definition.identifiers)
+
+    def test_create_schema_definition_with_mulitple_identifiers(self):
+        definition = PropertySheetSchemaDefinition.create(
+            "myschema", identifiers=[u"foo.bar", u"qux"]
+        )
+
+        self.assertEqual("myschema", definition.name)
+        self.assertEqual((u"foo.bar", u"qux"), definition.identifiers)
+
     def test_add_field_sets_correct_field_properties(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         definition.add_field(
