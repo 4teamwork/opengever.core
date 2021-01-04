@@ -130,6 +130,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(1, u"F\xfchrung und Koordination", ""),
              'new_number': None,
              'new_parent_position': None,
@@ -147,6 +148,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(0, u'Allgemeines und \xdcbergreifendes'),
              'new_number': '0',
              'new_parent_position': None,
@@ -167,6 +169,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(4, 'Created branch', 'comment 1'),
              'new_number': None,
              'new_parent_position': None,
@@ -192,6 +195,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(41, 'created leaf', 'comment 2'),
              'new_number': None,
              'new_parent_position': None,
@@ -218,6 +222,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(42, 'Moved leaf', 'comment for moved one'),
              'new_number': '2',
              'new_parent_position': '4',
@@ -244,6 +249,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(1, u"F\xfchrung und Koordination", ""),
              'new_number': None,
              'new_parent_position': None,
@@ -261,6 +267,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(0, u'Branch with new number', ''),
              'new_number': '0',
              'new_parent_position': None,
@@ -280,6 +287,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem('01', 'created leaf in branch with new number', 'comment 1'),
              'new_number': None,
              'new_parent_position': None,
@@ -305,6 +313,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(12, 'created leaf in existing branch', 'comment 2'),
              'new_number': None,
              'new_parent_position': None,
@@ -328,6 +337,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem('02', 'Moved leaf in branch with new number', 'comment for moved one'),
              'new_number': '2',
              'new_parent_position': '0',
@@ -360,6 +370,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': False,
              'leaf_node_violated': True,
+             'merge_into': None,
              'new_item': OperationItem('111', u"Rechnungspr\xfcfungskommission", None),
              'new_number': '1',
              'new_parent_position': '11',
@@ -378,6 +389,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': False,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem('41', u"Spinn\xe4nnetzregistrar", None),
              'new_number': '1',
              'new_parent_position': '4',
@@ -399,6 +411,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': False,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem('51', 'New leaf', None),
              'new_number': None,
              'new_parent_position': None,
@@ -426,6 +439,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': False,
              'leaf_node_violated': True,
+             'merge_into': None,
              'new_item': OperationItem('112', 'Second new leaf', None),
              'new_number': None,
              'new_parent_position': None,
@@ -452,6 +466,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': False,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem('1211', 'fourth level', None),
              'new_number': None,
              'new_parent_position': None,
@@ -599,6 +614,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(1, u"F\xfchrung", "New description"),
              'new_number': None,
              'new_parent_position': None,
@@ -632,6 +648,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(0, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
              'new_number': '0',
              'new_parent_position': None,
@@ -648,6 +665,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem('01', u'Vertr\xe4ge und Vereinbarungen', None),
              'new_number': None,
              'new_parent_position': None,
@@ -693,6 +711,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(1, "New title", u"Alles zum Thema F\xfchrung."),
              'new_number': None,
              'new_parent_position': None,
@@ -744,6 +763,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(21, u'Vertr\xe4ge und Vereinbarungen', None),
              'new_number': '1',
              'new_parent_position': '2',
@@ -799,6 +819,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(12, u'New leaf', 'New description'),
              'new_number': None,
              'new_parent_position': None,
@@ -856,6 +877,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(4, u'New branch', 'New description'),
              'new_number': None,
              'new_parent_position': None,
@@ -879,6 +901,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(41, u'New leaf', 'New leaf description'),
              'new_number': None,
              'new_parent_position': None,
@@ -947,6 +970,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(12, u"Rechnungspr\xfcfungskommission", None),
              'new_number': '2',
              'new_parent_position': '1',
@@ -965,6 +989,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(121, u'New leaf', 'New description'),
              'new_number': None,
              'new_parent_position': None,
@@ -1041,6 +1066,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(4, u'New branch', 'New description'),
              'new_number': None,
              'new_parent_position': None,
@@ -1064,6 +1090,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(41, u'Vertr\xe4ge und Vereinbarungen', None),
              'new_number': '1',
              'new_parent_position': '4',
@@ -1129,6 +1156,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(4, u'Vertr\xe4ge und Vereinbarungen', None),
              'new_number': '4',
              'new_parent_position': '',
@@ -1203,6 +1231,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(12, u"Rechnungspr\xfcfungskommission", None),
              'new_number': '2',
              'new_parent_position': '1',
@@ -1219,6 +1248,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertDictEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(121, u'Vertr\xe4ge und Vereinbarungen', ''),
              'new_number': '1',
              'new_parent_position': '12',
@@ -1413,6 +1443,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(
             {'is_valid': True,
              'leaf_node_violated': False,
+             'merge_into': None,
              'new_item': OperationItem(12, u'New leaf', 'New description'),
              'new_number': None,
              'new_parent_position': None,
@@ -1463,6 +1494,167 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
             {'faivel.fruhling': ['DossierManager'],
              'nicole.kohler': ['Owner']},
             self.branch_repofolder.__ac_local_roles__)
+
+    def test_repository_migrator_merge_into_existing_repofolder(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_merge_into_existing_repofolder.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        # We merge leaf_repofolder into empty_repofolder
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(1, len(changed_rows))
+
+        self.assertEqual(
+            {'is_valid': True,
+             'leaf_node_violated': False,
+             'merge_into': self.empty_repofolder.UID(),
+             'new_item': OperationItem(2, u'Vertr\xe4ge und Vereinbarungen', None),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_guid': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
+             'new_title': None,
+             'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
+             'permissions': None,
+             'repository_depth_violated': False,
+             'uid': self.leaf_repofolder.UID()},
+            changed_rows[0])
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        self.assertEqual(1, len(migrator.items_to_merge()))
+        self.assertEqual(changed_rows, migrator.items_to_merge())
+
+        directly_contained = self.leaf_repofolder.contentValues()
+        contained = self.portal.portal_catalog.unrestrictedSearchResults(
+                path={'query': self.leaf_repofolder.absolute_url_path(),
+                      'exclude_root': True})
+        contained_uids = [brain.UID for brain in contained]
+        self.assertEqual(16, len(directly_contained))
+        self.assertEqual(59, len(contained_uids))
+
+        with self.observe_children(self.branch_repofolder) as branch_children,\
+                self.observe_children(self.empty_repofolder) as children:
+            migrator.run()
+
+        # check that branch_repofolder was deleted
+        self.assertEqual(1, len(branch_children['removed']))
+
+        # check that the content of the leaf_folder was moved
+        self.assertEqual(16, len(children['added']))
+        self.assertItemsEqual(directly_contained, children['added'])
+
+        # We check that new_branch and all contained objects were updated
+        # correctly
+        contained_brains = self.portal.portal_catalog.unrestrictedSearchResults(
+            path={'query': self.empty_repofolder.absolute_url_path(),
+                  'exclude_root': True})
+
+        self.assertItemsEqual([brain.UID for brain in contained_brains],
+                              contained_uids)
+
+        for brain in contained_brains:
+            obj = brain.getObject()
+            self.assertObjectConsistency(
+                obj, parent_path=self.empty_repofolder.absolute_url_path(),
+                parent_refnum='Client1 2')
+
+    def test_repository_migrator_merge_into_created_repofolder(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_merge_into_created_repofolder.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        # We create a new repofolder and merge leaf_repofolder into it
+        changed_rows = self.get_changed_rows(analyser.analysed_rows)
+        self.assertEqual(2, len(changed_rows))
+
+        guid = changed_rows[0]['new_position_guid']
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
+        self.assertEqual(
+            {'is_valid': True,
+             'leaf_node_violated': False,
+             'merge_into': None,
+             'new_item': OperationItem(4, u'Vertr\xe4ge und Vereinbarungen', None),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_guid': guid,
+             'new_position_parent_guid': reporoot_guid,
+             'new_position_parent_position': '',
+             'new_title': None,
+             'old_item': OperationItem(None, None, None),
+             'permissions': {'add': [],
+                             'block_inheritance': False,
+                             'close': [],
+                             'edit': [],
+                             'manage_dossiers': [],
+                             'reactivate': [],
+                             'read': []},
+             'repository_depth_violated': False,
+             'uid': None},
+            changed_rows[0])
+
+        self.assertEqual(
+            {'is_valid': True,
+             'leaf_node_violated': False,
+             'merge_into': guid,
+             'new_item': OperationItem(4, u'Vertr\xe4ge und Vereinbarungen', None),
+             'new_number': None,
+             'new_parent_position': None,
+             'new_parent_uid': None,
+             'new_position_guid': None,
+             'new_position_parent_guid': None,
+             'new_position_parent_position': None,
+             'new_title': None,
+             'old_item': OperationItem(11, u'Vertr\xe4ge und Vereinbarungen', None),
+             'permissions': None,
+             'repository_depth_violated': False,
+             'uid': self.leaf_repofolder.UID()},
+            changed_rows[1])
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        self.assertEqual(1, len(migrator.items_to_merge()))
+
+        directly_contained = self.leaf_repofolder.contentValues()
+        contained = self.portal.portal_catalog.unrestrictedSearchResults(
+                path={'query': self.leaf_repofolder.absolute_url_path(),
+                      'exclude_root': True})
+        contained_uids = [brain.UID for brain in contained]
+        self.assertEqual(16, len(directly_contained))
+        self.assertEqual(59, len(contained_uids))
+
+        with self.observe_children(self.branch_repofolder) as branch_children,\
+                self.observe_children(self.repository_root) as children:
+            migrator.run()
+
+        # check that branch_repofolder was deleted
+        self.assertEqual(1, len(branch_children['removed']))
+
+        # check that the content of the leaf_folder was moved
+        self.assertEqual(1, len(children['added']))
+        new_repofolder = children['added'].pop()
+
+        self.assertItemsEqual(directly_contained, new_repofolder.contentValues())
+
+        # We check that new_branch and all contained objects were updated
+        # correctly
+        contained_brains = self.portal.portal_catalog.unrestrictedSearchResults(
+            path={'query': new_repofolder.absolute_url_path()})
+
+        contained_uids.append(new_repofolder.UID())
+        self.assertItemsEqual([brain.UID for brain in contained_brains],
+                              contained_uids)
+
+        for brain in contained_brains:
+            obj = brain.getObject()
+            self.assertObjectConsistency(
+                obj, parent_path=self.repository_root.absolute_url_path(),
+                parent_refnum='Client1 4')
 
 
 class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
