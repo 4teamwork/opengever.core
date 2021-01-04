@@ -7,6 +7,7 @@ import json
 
 
 class TestContentsReorderedHandler(SolrIntegrationTestCase):
+    features = ('workspace', )
 
     @browsing
     def test_reindex_getObjPositionInParent_if_reordering_contents_through_folder_contents(self, browser):
@@ -115,5 +116,40 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
             {u'UID': tasktemplate_1.UID(),
              u'getObjPositionInParent': 1},
             {u'UID': tasktemplate_2.UID(),
+             u'getObjPositionInParent': 0},
+            ], browser.json["items"])
+
+    @browsing
+    def test_reindex_getObjPositionInParent_if_reordering_todos_through_the_restapi(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        view = u'/@solrsearch?fl=getObjPositionInParent&depth=1'
+
+        todo_1 = self.assigned_todo
+        todo_2 = self.completed_todo
+
+        browser.open(self.todolist_introduction.absolute_url(), view=view,
+                     method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual([
+            {u'UID': todo_1.UID(),
+             u'getObjPositionInParent': 0},
+            {u'UID': todo_2.UID(),
+             u'getObjPositionInParent': 1},
+            ], browser.json["items"])
+
+        data = {'ordering': {'obj_id': todo_1.id, 'delta': 1}}
+
+        browser.open(self.todolist_introduction, data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+        self.commit_solr()
+
+        browser.open(self.todolist_introduction.absolute_url(), view=view,
+                     method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual([
+            {u'UID': todo_1.UID(),
+             u'getObjPositionInParent': 1},
+            {u'UID': todo_2.UID(),
              u'getObjPositionInParent': 0},
             ], browser.json["items"])
