@@ -6,5 +6,5 @@ class InvalidFieldTypeDefinition(Exception):
     pass
 
 
-class InvalidSchemaIdentifier(Exception):
+class InvalidSchemaAssignment(Exception):
     pass

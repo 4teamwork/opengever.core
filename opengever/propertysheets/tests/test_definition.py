@@ -49,21 +49,21 @@ class TestSchemaDefinition(FunctionalTestCase):
             "No fields should be defined initially"
         )
 
-    def test_create_schema_definition_with_one_identifier(self):
+    def test_create_schema_definition_with_one_assignment(self):
         definition = PropertySheetSchemaDefinition.create(
-            "myschema", identifiers=[u"foo.bar"]
+            "myschema", assignments=[u"foo.bar"]
         )
 
         self.assertEqual("myschema", definition.name)
-        self.assertEqual((u"foo.bar",), definition.identifiers)
+        self.assertEqual((u"foo.bar",), definition.assignments)
 
-    def test_create_schema_definition_with_mulitple_identifiers(self):
+    def test_create_schema_definition_with_mulitple_assignments(self):
         definition = PropertySheetSchemaDefinition.create(
-            "myschema", identifiers=[u"foo.bar", u"qux"]
+            "myschema", assignments=[u"foo.bar", u"qux"]
         )
 
         self.assertEqual("myschema", definition.name)
-        self.assertEqual((u"foo.bar", u"qux"), definition.identifiers)
+        self.assertEqual((u"foo.bar", u"qux"), definition.assignments)
 
     def test_add_field_sets_correct_field_properties(self):
         definition = PropertySheetSchemaDefinition.create("foo")
@@ -161,7 +161,7 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['bla']
         self.assertIsInstance(field, schema.TextLine)
 
-    def test_enforces_valid_identifiers_as_fieldnames(self):
+    def test_enforces_valid_assignments_as_fieldnames(self):
         definition = PropertySheetSchemaDefinition.create("foo")
 
         with self.assertRaises(InvalidFieldTypeDefinition):

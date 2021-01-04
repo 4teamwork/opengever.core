@@ -1,5 +1,5 @@
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
-from opengever.propertysheets.exceptions import InvalidSchemaIdentifier
+from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing.test_case import FunctionalTestCase
 from persistent.list import PersistentList
@@ -13,7 +13,7 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
 
     def test_save_schema_definition(self):
         definition = PropertySheetSchemaDefinition.create(
-            "myschema", identifiers=["qux", "foo.bar"]
+            "myschema", assignments=["qux", "foo.bar"]
         )
         definition.add_field("bool", u"yesorno", u"y/n", u"", False)
 
@@ -32,10 +32,10 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
             serializeSchema(definition.schema_class, name="myschema")
         )
         self.assertIsInstance(
-            serialized["myschema"]["identifiers"], PersistentList
+            serialized["myschema"]["assignments"], PersistentList
         )
         self.assertEqual(
-            ["qux", "foo.bar"], serialized["myschema"]["identifiers"]
+            ["qux", "foo.bar"], serialized["myschema"]["assignments"]
         )
         deserialized = loadString(serialized["myschema"]["schema"])
         self.assertIn("myschema", deserialized.schemata)
@@ -71,28 +71,28 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
             ["schema1", "schema2"], [each.name for each in storage.list()]
         )
 
-    def test_prevents_duplicate_identifiers(self):
+    def test_prevents_duplicate_assignments(self):
         storage = PropertySheetSchemaStorage(self.portal)
         fixture = PropertySheetSchemaDefinition.create(
-            "fixture", identifiers=['foo', 'bar', 'qux']
+            "fixture", assignments=['foo', 'bar', 'qux']
         )
         storage.save(fixture)
 
         conflict = PropertySheetSchemaDefinition.create(
-            "conflict", identifiers=[u'foo']
+            "conflict", assignments=[u'foo']
         )
-        with self.assertRaises(InvalidSchemaIdentifier) as cm:
+        with self.assertRaises(InvalidSchemaAssignment) as cm:
             storage.save(conflict)
 
         exc = cm.exception
         self.assertEqual(
-            u"The identifier 'foo' is already in use.", exc.message
+            u"The assignment 'foo' is already in use.", exc.message
         )
 
-    def test_query_for_schema_by_identifier(self):
+    def test_query_for_schema_by_assignment(self):
         storage = PropertySheetSchemaStorage(self.portal)
         fixture = PropertySheetSchemaDefinition.create(
-            "fixture", identifiers=["foo", "bar"]
+            "fixture", assignments=["foo", "bar"]
         )
         storage.save(fixture)
 
@@ -100,6 +100,6 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         self.assertIsNotNone(schema)
         self.assertEqual("fixture", schema.name)
 
-    def test_query_for_nonexistent_identifier(self):
+    def test_query_for_nonexistent_assignment(self):
         storage = PropertySheetSchemaStorage(self.portal)
         self.assertIsNone(storage.query("foo"))

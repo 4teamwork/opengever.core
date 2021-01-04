@@ -33,21 +33,21 @@ class PropertySheetSchemaDefinition(object):
     }
 
     @classmethod
-    def create(cls, name, identifiers=None):
+    def create(cls, name, assignments=None):
 
         class SchemaClass(model.Schema):
             pass
 
-        return cls(name, SchemaClass, identifiers=identifiers)
+        return cls(name, SchemaClass, assignments=assignments)
 
-    def __init__(self, name, schema_class, identifiers=None):
+    def __init__(self, name, schema_class, assignments=None):
         self.name = name
         self.schema_class = schema_class
-        if identifiers is None:
-            identifiers = tuple()
+        if assignments is None:
+            assignments = tuple()
         else:
-            identifiers = tuple(identifiers)
-        self.identifiers = identifiers
+            assignments = tuple(assignments)
+        self.assignments = assignments
 
     def add_field(self, field_type, name, title, description, required, values=None):
         if field_type not in self.FACTORIES:
@@ -85,15 +85,15 @@ class PropertySheetSchemaDefinition(object):
         serialized_schema = serializeSchema(self.schema_class, name=self.name)
         definition_data = PersistentMapping()
         definition_data['schema'] = serialized_schema
-        definition_data['identifiers'] = PersistentList(self.identifiers)
+        definition_data['assignments'] = PersistentList(self.assignments)
         storage[self.name] = definition_data
 
     @classmethod
     def _load(cls, storage, name):
         definition_data = storage[name]
         serialized_schema = definition_data['schema']
-        identifiers = definition_data['identifiers']
+        assignments = definition_data['assignments']
         model = loadString(serialized_schema, policy=u'propertysheets')
         schema_class = model.schemata[name]
 
-        return cls(name, schema_class, identifiers=identifiers)
+        return cls(name, schema_class, assignments=assignments)

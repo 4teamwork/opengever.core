@@ -1,5 +1,5 @@
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
-from opengever.propertysheets.exceptions import InvalidSchemaIdentifier
+from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from persistent.mapping import PersistentMapping
 from plone import api
 from zope.annotation import IAnnotations
@@ -31,16 +31,17 @@ class PropertySheetSchemaStorage(object):
 
         storage = annotations[self.ANNOTATIONS_KEY]
 
-        used_identifiers = set()
+        used_assignments = set()
         for definition_data in storage.values():
-            used_identifiers.update(definition_data['identifiers'])
+            used_assignments.update(definition_data['assignments'])
 
-        for new_identifier in schema_definition.identifiers:
-            if new_identifier in used_identifiers:
-                raise InvalidSchemaIdentifier(
-                    u"The identifier '{}' is already in use.".format(
-                        new_identifier)
+        for new_assignment in schema_definition.assignments:
+            if new_assignment in used_assignments:
+                raise InvalidSchemaAssignment(
+                    u"The assignment '{}' is already in use.".format(
+                        new_assignment)
                 )
+            used_assignments.add(new_assignment)
 
         schema_definition._save(storage)
 
@@ -53,11 +54,11 @@ class PropertySheetSchemaStorage(object):
 
         return PropertySheetSchemaDefinition._load(storage, name)
 
-    def query(self, identifier):
+    def query(self, assignment):
         annotations = IAnnotations(self.context)
         storage = annotations.get(self.ANNOTATIONS_KEY, {})
         for name, definition_data in storage.items():
-            if identifier in definition_data['identifiers']:
+            if assignment in definition_data['assignments']:
                 return self.get(name)
 
         return None
