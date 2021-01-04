@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.testing import SolrIntegrationTestCase
+import json
 
 
 class TestContentsReorderedHandler(SolrIntegrationTestCase):
@@ -68,6 +69,43 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
                      headers={'Content-Type': 'application/x-www-form-urlencoded'},
                      method="POST",
                      data={'new_order[]': [tasktemplate_2.id, tasktemplate_1.id]})
+        self.commit_solr()
+
+        browser.open(self.tasktemplatefolder.absolute_url(), view=view,
+                     method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual([
+            {u'UID': tasktemplate_1.UID(),
+             u'getObjPositionInParent': 1},
+            {u'UID': tasktemplate_2.UID(),
+             u'getObjPositionInParent': 0},
+            ], browser.json["items"])
+
+    @browsing
+    def test_reindex_getObjPositionInParent_if_reordering_tasktemplates_through_the_restapi(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        view = u'/@solrsearch?fl=getObjPositionInParent&depth=1&fq=object_provides:{}'.format(
+            ITaskTemplate.__identifier__)
+
+        tasktemplate_1 = self.tasktemplate
+        tasktemplate_2 = create(Builder('tasktemplate').within(self.tasktemplatefolder))
+        self.commit_solr()
+
+        browser.open(self.tasktemplatefolder.absolute_url(), view=view,
+                     method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual([
+            {u'UID': tasktemplate_1.UID(),
+             u'getObjPositionInParent': 0},
+            {u'UID': tasktemplate_2.UID(),
+             u'getObjPositionInParent': 1},
+            ], browser.json["items"])
+
+        data = {'ordering': {'obj_id': tasktemplate_1.id, 'delta': 1}}
+
+        browser.open(self.tasktemplatefolder, data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
         self.commit_solr()
 
         browser.open(self.tasktemplatefolder.absolute_url(), view=view,
