@@ -4,7 +4,7 @@ Changelog
 2021.2.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Implement storage for property sheet schemas in plone-site annotations. [deiferni]
 
 
 2021.1.0 (2021-01-06)
