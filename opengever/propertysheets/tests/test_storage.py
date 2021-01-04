@@ -88,3 +88,18 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         self.assertEqual(
             u"The identifier 'foo' is already in use.", exc.message
         )
+
+    def test_query_for_schema_by_identifier(self):
+        storage = PropertySheetSchemaStorage(self.portal)
+        fixture = PropertySheetSchemaDefinition.create(
+            "fixture", identifiers=["foo", "bar"]
+        )
+        storage.save(fixture)
+
+        schema = storage.query("bar")
+        self.assertIsNotNone(schema)
+        self.assertEqual("fixture", schema.name)
+
+    def test_query_for_nonexistent_identifier(self):
+        storage = PropertySheetSchemaStorage(self.portal)
+        self.assertIsNone(storage.query("foo"))

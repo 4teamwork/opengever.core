@@ -52,3 +52,12 @@ class PropertySheetSchemaStorage(object):
             return None
 
         return PropertySheetSchemaDefinition._load(storage, name)
+
+    def query(self, identifier):
+        annotations = IAnnotations(self.context)
+        storage = annotations.get(self.ANNOTATIONS_KEY, {})
+        for name, definition_data in storage.items():
+            if identifier in definition_data['identifiers']:
+                return self.get(name)
+
+        return None
