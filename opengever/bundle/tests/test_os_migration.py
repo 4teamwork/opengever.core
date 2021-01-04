@@ -33,7 +33,7 @@ class ListHandler(logging.Handler):
         self.log_list.append(record.msg)
 
 
-logger = logging.getLogger('migration')
+logger = logging.getLogger('opengever.maintenance')
 
 
 class TestOSMigrationAnalysisPreconditions(IntegrationTestCase):
@@ -384,6 +384,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
             invalid_rows[0])
+
         self.assertIn("leaf node principle violated", log_list[0])
 
         self.assertEqual(
@@ -459,7 +460,8 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'repository_depth_violated': False,
              'uid': None},
             invalid_rows[3])
-        self.assertIn("leaf node principle violated", log_list[3])
+        self.assertIn("Invalid operation: parent not found.", log_list[3])
+        self.assertIn("leaf node principle violated", log_list[4])
 
         guid = invalid_rows[4]['new_position_guid']
         parent_guid = invalid_rows[4]['new_position_parent_guid']
@@ -486,9 +488,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'repository_depth_violated': True,
              'uid': None},
             invalid_rows[4])
-        self.assertIn(
-            "repository depth violated.",
-            log_list[4])
+        self.assertIn("repository depth violated.", log_list[5])
 
         logger.removeHandler(handler)
 
