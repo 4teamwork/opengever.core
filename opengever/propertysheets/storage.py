@@ -12,8 +12,8 @@ class PropertySheetSchemaStorage(object):
     """
     ANNOTATIONS_KEY = 'opengever.propertysheets.schema_definitions'
 
-    def __init__(self, context=None):
-        self.context = context or api.portal.get()
+    def __init__(self):
+        self.context = api.portal.get()
 
     def list(self):
         annotations = IAnnotations(self.context)

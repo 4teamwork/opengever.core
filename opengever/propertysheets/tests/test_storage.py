@@ -17,7 +17,7 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         )
         definition.add_field("bool", u"yesorno", u"y/n", u"", False)
 
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         storage.save(definition)
 
         annotations = IAnnotations(self.portal)
@@ -41,11 +41,11 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         self.assertIn("myschema", deserialized.schemata)
 
     def test_get_inexistent_schema_definition(self):
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         self.assertIsNone(storage.get("idontexist"))
 
     def test_get_schema_definition(self):
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         definition = PropertySheetSchemaDefinition.create("myschema")
         storage.save(definition)
 
@@ -53,11 +53,11 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         self.assertEqual("myschema", loaded.name)
 
     def test_list_empty_storage(self):
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         self.assertEqual([], storage.list())
 
     def test_list_definitions(self):
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         definition1 = PropertySheetSchemaDefinition.create("schema1")
         definition1.add_field("bool", u"yesorno", u"y/n", u"", False)
 
@@ -72,7 +72,7 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         )
 
     def test_prevents_duplicate_assignments(self):
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         fixture = PropertySheetSchemaDefinition.create(
             "fixture", assignments=['foo', 'bar', 'qux']
         )
@@ -90,7 +90,7 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         )
 
     def test_query_for_schema_by_assignment(self):
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         fixture = PropertySheetSchemaDefinition.create(
             "fixture", assignments=["foo", "bar"]
         )
@@ -101,5 +101,5 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         self.assertEqual("fixture", schema.name)
 
     def test_query_for_nonexistent_assignment(self):
-        storage = PropertySheetSchemaStorage(self.portal)
+        storage = PropertySheetSchemaStorage()
         self.assertIsNone(storage.query("foo"))
