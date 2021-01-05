@@ -6,15 +6,24 @@ from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import SORTABLE_TITLE_LENGTH
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
+from opengever.workspace.interfaces import IToDo
+from opengever.workspace.interfaces import IToDoList
 from plone.dexterity.interfaces import IDexterityContent
 from plone.i18n.normalizer.base import mapUnicode
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import IFolderish
+from Products.CMFPlone.CatalogTool import getObjPositionInParent as ploneGetObjPositionInParent
 from Products.CMFPlone.CatalogTool import num_sort_regex
 from Products.CMFPlone.CatalogTool import zero_fill
 from Products.CMFPlone.utils import safe_callable
 from Products.CMFPlone.utils import safe_unicode
 from zope.annotation import IAnnotations
+
+
+# 'getObjPositionInParent' index is only calculated for objects providing
+# one of thoes interfaces.
+CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (ITaskTemplate, IToDo, IToDoList)
 
 
 @indexer(IDexterityContent)
@@ -106,3 +115,18 @@ def watchers(obj):
 @indexer(IDexterityContent)
 def participations(obj):
     return []
+
+
+@indexer(IDexterityContent)
+def getObjPositionInParent(obj):
+    """This indexer is only used by solr and only for a small set of whitelisted
+    interfaces. We only whitelist intefaces where we really need to sort by
+    position in parent.
+
+    The plone_catalog indexer uses a special index type called 'GopipIndex' which
+    is a fake index. So this function will not be used by the
+    plone catalogs 'getObjPositionInParent' index.
+    """
+    if any(iface.providedBy(obj) for iface in CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT):
+        return ploneGetObjPositionInParent(obj)()
+    return None

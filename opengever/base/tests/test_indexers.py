@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 
 
 class TestHasSameTypeChildren(IntegrationTestCase):
@@ -284,3 +285,47 @@ class TestIsSubdossierIndexer(IntegrationTestCase):
                                 self.private_dossier)
         self.assert_metadata_value(False, 'is_subdossier',
                                    self.private_dossier)
+
+
+class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
+
+    @browsing
+    def test_index_only_for_whitelisted_types(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = u'{}/@solrsearch?sort=portal_type asc&fl=getObjPositionInParent&fq=UID:({})'.format(
+            self.portal.absolute_url(),
+            ' OR '.join([
+                self.leaf_repofolder.UID(),
+                self.dossier.UID(),
+                self.document.UID(),
+                self.task.UID(),
+                self.proposal.UID(),
+                self.tasktemplate.UID(),
+                self.workspace.UID(),
+                self.todolist_general.UID(),
+                self.todo.UID(),
+            ]))
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.maxDiff = None
+
+        self.assertEqual([
+            {u'UID': self.document.UID(),
+             u'getObjPositionInParent': None},
+            {u'UID': self.dossier.UID(),
+             u'getObjPositionInParent': None},
+            {u'UID': self.proposal.UID(),
+             u'getObjPositionInParent': None},
+            {u'UID': self.leaf_repofolder.UID(),
+             u'getObjPositionInParent': None},
+            {u'UID': self.task.UID(),
+             u'getObjPositionInParent': None},
+            {u'UID': self.tasktemplate.UID(),
+             u'getObjPositionInParent': 0},
+            {u'UID': self.todo.UID(),
+             u'getObjPositionInParent': 6},
+            {u'UID': self.todolist_general.UID(),
+             u'getObjPositionInParent': 4},
+            {u'UID': self.workspace.UID(),
+             u'getObjPositionInParent': None}
+            ], browser.json["items"])

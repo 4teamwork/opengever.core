@@ -95,6 +95,7 @@ class TaskTemplatesOrderingInTabbedView(SolrIntegrationTestCase):
 
         # Move the new task template to the top within the container.
         self.tasktemplatefolder.moveObjectsToTop(task_create_user.id)
+        self.commit_solr()
 
         # Make sure the change of position worked in Plone.
         self.assertEquals(

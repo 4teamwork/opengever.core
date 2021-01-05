@@ -67,4 +67,10 @@
     <adapter factory=".warmup.GEVERWarmupPerformer" />
   </configure>
 
+  <adapter
+      for="plone.folder.interfaces.IOrderableFolder"
+      provides="plone.folder.interfaces.IExplicitOrdering"
+      factory=".ordering.GeverDefaultOrdering"
+      />
+
 </configure>
