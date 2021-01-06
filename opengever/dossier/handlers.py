@@ -159,3 +159,13 @@ def update_dossier_touched_date(obj, event):
             # Prevent reindexing all indexes by indexing `UID` too.
             obj.reindexObject(idxs=['UID', 'touched'])
         obj = aq_parent(aq_inner(obj))
+
+
+def update_dossier_touched_date_for_move_event(obj, event):
+    """ObjectMovedEvent get dispatched to all children of the moved object
+    by OFS.subscribers.dispatchObjectMovedEvent. Because, we do not want
+    to set touched for all children of the moved object, we skip the update for
+    the dispatched events.
+    """
+    if obj == event.object:
+        update_dossier_touched_date(obj, event)

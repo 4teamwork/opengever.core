@@ -92,6 +92,32 @@ class TestDossierTouched(IntegrationTestCase):
             self.assertEqual("2020-06-12", str(IDossier(self.subdossier2).touched))
 
     @browsing
+    def test_moving_content_does_not_touch_children_of_moved_object(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.assertEqual("2016-08-31", str(IDossier(self.dossier).touched))
+        self.assertEqual("2016-08-31", str(IDossier(self.subdossier).touched))
+        self.assertEqual("2016-08-31", str(IDossier(self.subdossier2).touched))
+        self.assertEqual("2016-08-31", str(IDossier(self.subsubdossier).touched))
+
+        with freeze(datetime(2020, 6, 12)), self.observe_children(self.subdossier2) as children:
+            api.content.move(source=self.subdossier, target=self.subdossier2)
+
+        self.assertEqual(1, len(children['added']))
+        moved_subdossier = children['added'].pop()
+        subdossiers = self.portal.portal_catalog.unrestrictedSearchResults(
+            path={'query': moved_subdossier.absolute_url_path(),
+                  'exclude_root': True},
+            portal_type='opengever.dossier.businesscasedossier')
+        self.assertEqual(1, len(subdossiers))
+        moved_subsubdossier = subdossiers[0].getObject()
+
+        self.assertEqual("2020-06-12", str(IDossier(self.dossier).touched))
+        self.assertEqual("2020-06-12", str(IDossier(moved_subdossier).touched))
+        self.assertEqual("2020-06-12", str(IDossier(self.subdossier2).touched))
+        self.assertEqual("2016-08-31", str(IDossier(moved_subsubdossier).touched))
+
+    @browsing
     def test_modifying_proposal_touches_containing_dossier(self, browser):
         self.activate_feature('meeting')
 
