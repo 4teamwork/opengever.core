@@ -17,4 +17,13 @@
       permission="cmf.ManagePortal"
       />
 
+  <plone:service
+      method="DELETE"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".delete.PropertySheetsDelete"
+      name="@propertysheets"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
