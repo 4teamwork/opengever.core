@@ -1,8 +1,10 @@
 from opengever.base.filename import filenamenormalizer
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
+from opengever.propertysheets.schema import get_property_sheet_schema
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
+from plone.restapi.serializer.converters import IJsonCompatible
 from plone.schemaeditor import fields
 from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
@@ -93,6 +95,11 @@ class PropertySheetSchemaDefinition(object):
         field = factory(**properties)
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
+
+    def get_json_schema(self):
+        schema_info = get_property_sheet_schema(self.schema_class)
+        schema_info["assignments"] = IJsonCompatible(self.assignments)
+        return schema_info
 
     def _save(self, storage):
         serialized_schema = serializeSchema(self.schema_class, name=self.name)
