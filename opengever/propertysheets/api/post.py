@@ -1,0 +1,108 @@
+from opengever.api.add import get_schema_validation_errors
+from opengever.propertysheets.definition import isidentifier
+from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.exceptions import InvalidSchemaAssignment
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone.protect.interfaces import IDisableCSRFProtection
+from plone.restapi.deserializer import json_body
+from plone.restapi.services import Service
+from plone.supermodel import model
+from zExceptions import BadRequest
+from zope import schema
+from zope.interface import alsoProvides
+from zope.interface import implementer
+from zope.interface import provider
+from zope.publisher.interfaces import IPublishTraverse
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
+
+
+@provider(IContextSourceBinder)
+def make_field_types_vocabulary(context):
+    return SimpleVocabulary.fromValues(
+        PropertySheetSchemaDefinition.FACTORIES.keys()
+    )
+
+
+class IFieldDefinition(model.Schema):
+
+    field_type = schema.Choice(
+        required=True, source=make_field_types_vocabulary
+    )
+    title = schema.TextLine(required=False)
+    description = schema.TextLine(required=False)
+    required = schema.Bool(required=False)
+
+
+@implementer(IPublishTraverse)
+class PropertySheetsPost(Service):
+    """
+    Add new property sheets or replace existing ones.
+
+    POST http://localhost:8080/fd/@propertysheets/question HTTP/1.1
+    {
+        "fields": {"title": {"type": "text", "required": true}},
+        "assignments": ["document_types.question"]
+    }
+    """
+    def __init__(self, context, request):
+        super(PropertySheetsPost, self).__init__(context, request)
+        self.params = []
+        self.storage = PropertySheetSchemaStorage()
+
+    def publishTraverse(self, request, name):
+        self.params.append(name)
+        return self
+
+    def reply(self):
+        if len(self.params) != 1:
+            raise BadRequest(u"Missing parameter sheet_name.")
+
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        errors = []
+        data = json_body(self.request)
+        sheet_name = self.params.pop()
+
+        if not isidentifier(sheet_name):
+            raise BadRequest(u"The name '{}' is invalid.".format(sheet_name))
+
+        fields = data.get("fields")
+        if not fields or not hasattr(fields, "items"):
+            raise BadRequest(u"Missing or invalid field definitions.")
+
+        assignments = data.get("assignments")
+        if assignments is not None:
+            assignments = tuple(assignments)
+
+        schema_definition = PropertySheetSchemaDefinition.create(
+            sheet_name, assignments=assignments
+        )
+        for name, data in data["fields"].items():
+            field_errors = get_schema_validation_errors(
+                self.context, data, IFieldDefinition
+            )
+            if field_errors:
+                errors.extend(field_errors)
+                continue
+
+            field_type = data["field_type"]
+            title = data.get("title", name)
+            description = data.get("description", u"")
+            required = data.get("required", False)
+            schema_definition.add_field(
+                field_type, name, title, description, required
+            )
+
+        if errors:
+            raise BadRequest(errors)
+
+        try:
+            self.storage.save(schema_definition)
+        except InvalidSchemaAssignment as exc:
+            raise BadRequest(exc.message)
+
+        json_schema = self.storage.get(sheet_name).get_json_schema()
+        self.request.response.setStatus(201)
+        self.content_type = "application/json+schema"
+        return json_schema
