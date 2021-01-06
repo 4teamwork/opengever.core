@@ -1,3 +1,4 @@
+from opengever.base.filename import filenamenormalizer
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from persistent.list import PersistentList
@@ -7,6 +8,7 @@ from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
+from zope.schema.vocabulary import SimpleVocabulary
 import keyword
 import re
 import tokenize
@@ -14,6 +16,10 @@ import tokenize
 
 def isidentifier(val):
     return re.match(tokenize.Name + r'\Z', val) and not keyword.iskeyword(val)
+
+
+def ascii_token(text):
+    return filenamenormalizer.normalize(text)
 
 
 class PropertySheetSchemaDefinition(object):
@@ -71,7 +77,14 @@ class PropertySheetSchemaDefinition(object):
                 raise InvalidFieldTypeDefinition(
                     "For 'choice' fields types values are required."
                 )
-            properties['values'] = values
+            terms = [SimpleVocabulary.createTerm(item, ascii_token(item), item)
+                     for item in values]
+            properties['vocabulary'] = SimpleVocabulary(terms)
+            # The field factory injects an empty list as values argument if it
+            # is not set. This will lead to a conflict with the vocabylary we
+            # provide here. We prevent this error by actively setting the
+            # values argument to None.
+            properties['values'] = None
         elif values:
             raise InvalidFieldTypeDefinition(
                 "The argument 'values' is only valid for 'choice' fields."
