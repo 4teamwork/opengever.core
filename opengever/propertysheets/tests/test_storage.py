@@ -103,3 +103,28 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
     def test_query_for_nonexistent_assignment(self):
         storage = PropertySheetSchemaStorage()
         self.assertIsNone(storage.query("foo"))
+
+    def test_remove_nonexistent_sheet(self):
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual([], storage.list())
+        storage.remove("nix")
+        self.assertEqual([], storage.list())
+
+    def test_remove_sheet(self):
+        storage = PropertySheetSchemaStorage()
+        fixture = PropertySheetSchemaDefinition.create("removeme")
+        storage.save(fixture)
+        self.assertEqual(1, len(storage.list()))
+
+        storage.remove("removeme")
+
+        self.assertEqual([], storage.list())
+
+    def test_containment(self):
+        storage = PropertySheetSchemaStorage()
+        fixture = PropertySheetSchemaDefinition.create("imin")
+        storage.save(fixture)
+
+        self.assertIn('imin', storage)
+        self.assertNotIn(None, storage)
+        self.assertNotIn('foo', storage)
