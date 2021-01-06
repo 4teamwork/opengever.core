@@ -4,6 +4,7 @@ Changelog
 2020.16.0 (unreleased)
 ----------------------
 
+- Do not update touched date of children when moving an object. [njohner]
 - Introduces a new solr-index 'getObjPositionInParent' for tasktemplates, todolists and todos. [elioschmutz]
 - Prevent attempts to edit locked documents in Office Online. [tinagerber]
 - Add feature flag for workspace meetings. [tinagerber]

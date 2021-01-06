@@ -210,7 +210,7 @@
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectMovedEvent"
-      handler=".handlers.update_dossier_touched_date"
+      handler=".handlers.update_dossier_touched_date_for_move_event"
       />
 
   <subscriber
