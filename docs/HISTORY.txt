@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2020.16.0 (unreleased)
-----------------------
+2021.1.0 (2021-01-06)
+---------------------
 
 - Do not update touched date of children when moving an object. [njohner]
 - Introduces a new solr-index 'getObjPositionInParent' for tasktemplates, todolists and todos. [elioschmutz]
