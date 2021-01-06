@@ -8,6 +8,8 @@ Inhaltstypen
    :backlinks: none
 
 
+.. _translated-titles:
+
 Übersetzte Titel
 ----------------
 

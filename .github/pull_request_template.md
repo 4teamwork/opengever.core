@@ -25,6 +25,7 @@ _Only applicable should be left and checked._
 
 - API change:
   - [ ] Documentation is updated
+  - [ ] API Changelog entry (see [guide](https://4teamwork.atlassian.net/wiki/spaces/4TEAM/pages/451248812/API+Changelog+Guidelines))
   - If breaking:
     - [ ] api-change label added
     - [ ] #delivery channel notified about breaking change
