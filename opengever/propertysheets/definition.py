@@ -45,6 +45,7 @@ class PropertySheetSchemaDefinition(object):
 
         class SchemaClass(model.Schema):
             pass
+        SchemaClass.__name__ = name
 
         return cls(name, SchemaClass, assignments=assignments)
 
