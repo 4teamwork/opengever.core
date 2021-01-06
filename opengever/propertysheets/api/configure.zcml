@@ -9,6 +9,15 @@
   <include package="plone.restapi" file="permissions.zcml" />
 
   <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".get.PropertySheetsGet"
+      name="@propertysheets"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".post.PropertySheetsPost"
