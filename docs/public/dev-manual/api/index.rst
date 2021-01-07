@@ -27,6 +27,7 @@ Inhalt:
    vocabularies.rst
    scanin.rst
    content_types.rst
+   propertysheets.rst
    metadata.rst
    config.rst
    favorite.rst
