@@ -42,7 +42,7 @@ class PropertySheetsPost(Service):
     POST http://localhost:8080/fd/@propertysheets/question HTTP/1.1
     {
         "fields": {"title": {"type": "text", "required": true}},
-        "assignments": ["document_types.question"]
+        "assignments": ["IDocumentMetadata.document_type.question"]
     }
     """
     def __init__(self, context, request):
@@ -60,7 +60,6 @@ class PropertySheetsPost(Service):
 
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        errors = []
         data = json_body(self.request)
         sheet_name = self.params.pop()
 
@@ -71,38 +70,44 @@ class PropertySheetsPost(Service):
         if not fields or not hasattr(fields, "items"):
             raise BadRequest(u"Missing or invalid field definitions.")
 
+        errors = []
+        for name, field_data in fields.items():
+            field_errors = get_schema_validation_errors(
+                self.context, field_data, IFieldDefinition
+            )
+            if field_errors:
+                errors.extend(field_errors)
+        if errors:
+            raise BadRequest(errors)
+
         assignments = data.get("assignments")
         if assignments is not None:
             assignments = tuple(assignments)
 
+        try:
+            schema_definition = self.create_property_sheet(
+                sheet_name, assignments, fields
+            )
+        except InvalidSchemaAssignment as exc:
+            raise BadRequest(exc.message)
+
+        json_schema = schema_definition.get_json_schema()
+        self.request.response.setStatus(201)
+        self.content_type = "application/json+schema"
+        return json_schema
+
+    def create_property_sheet(self, sheet_name, assignments, fields):
         schema_definition = PropertySheetSchemaDefinition.create(
             sheet_name, assignments=assignments
         )
-        for name, data in data["fields"].items():
-            field_errors = get_schema_validation_errors(
-                self.context, data, IFieldDefinition
-            )
-            if field_errors:
-                errors.extend(field_errors)
-                continue
-
-            field_type = data["field_type"]
-            title = data.get("title", name)
-            description = data.get("description", u"")
-            required = data.get("required", False)
+        for name, field_data in fields.items():
+            field_type = field_data["field_type"]
+            title = field_data.get("title", name)
+            description = field_data.get("description", u"")
+            required = field_data.get("required", False)
             schema_definition.add_field(
                 field_type, name, title, description, required
             )
 
-        if errors:
-            raise BadRequest(errors)
-
-        try:
-            self.storage.save(schema_definition)
-        except InvalidSchemaAssignment as exc:
-            raise BadRequest(exc.message)
-
-        json_schema = self.storage.get(sheet_name).get_json_schema()
-        self.request.response.setStatus(201)
-        self.content_type = "application/json+schema"
-        return json_schema
+        self.storage.save(schema_definition)
+        return self.storage.get(sheet_name)

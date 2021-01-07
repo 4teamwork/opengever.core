@@ -9,7 +9,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
 
     def test_validate_simple_property_sheet_schema_definition(self):
         definition = PropertySheetSchemaDefinition.create(
-            "schema", assignments=[u"foo.bar"]
+            "schema", assignments=[u"IDocumentMetadata.document_type.question"]
         )
         definition.add_field("bool", u"yesorno", u"y/n", u"", False)
         choices = [u"bl\xe4h", u"bl\xfcb"]
@@ -22,7 +22,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
 
         self.assertEqual(
             {
-                u"assignments": [u"foo.bar"],
+                u"assignments": [u"IDocumentMetadata.document_type.question"],
                 u"fieldsets": [
                     {
                         u"behavior": u"plone",
@@ -60,7 +60,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
 
     def test_validate_complex_sheet_schema_with_all_supported_fields(self):
         definition = PropertySheetSchemaDefinition.create(
-            "schema", assignments=[u"foo.bar"]
+            "schema", assignments=[u"IDocumentMetadata.document_type.question"]
         )
         definition.add_field("bool", u"yesorno", u"y/n", u"", False)
         choices = [u"bl\xe4h", u"blub"]

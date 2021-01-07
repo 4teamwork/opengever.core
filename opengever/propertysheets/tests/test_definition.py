@@ -60,19 +60,31 @@ class TestSchemaDefinition(FunctionalTestCase):
 
     def test_create_schema_definition_with_one_assignment(self):
         definition = PropertySheetSchemaDefinition.create(
-            "myschema", assignments=[u"foo.bar"]
+            "myschema",
+            assignments=[u"IDocumentMetadata.document_type.contract"]
         )
 
         self.assertEqual("myschema", definition.name)
-        self.assertEqual((u"foo.bar",), definition.assignments)
+        self.assertEqual(
+            (u"IDocumentMetadata.document_type.contract",),
+            definition.assignments
+        )
 
     def test_create_schema_definition_with_mulitple_assignments(self):
         definition = PropertySheetSchemaDefinition.create(
-            "myschema", assignments=[u"foo.bar", u"qux"]
+            "myschema",
+            assignments=[
+                u"IDocumentMetadata.document_type.contract",
+                u"IDocumentMetadata.document_type.question"
+            ]
         )
 
         self.assertEqual("myschema", definition.name)
-        self.assertEqual((u"foo.bar", u"qux"), definition.assignments)
+        self.assertEqual(
+            (u"IDocumentMetadata.document_type.contract",
+             u"IDocumentMetadata.document_type.question"),
+            definition.assignments
+        )
 
     def test_add_field_sets_correct_field_properties(self):
         definition = PropertySheetSchemaDefinition.create("foo")
