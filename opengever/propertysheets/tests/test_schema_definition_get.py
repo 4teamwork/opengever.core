@@ -54,7 +54,7 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         definition = PropertySheetSchemaDefinition.create(
-            "schema", assignments=[u"foo.bar"]
+            "schema", assignments=[u"IDocumentMetadata.document_type.question"]
         )
         definition.add_field("bool", u"yesorno", u"y/n", u"", False)
         choices = ["one", "two", "three"]
@@ -72,7 +72,7 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
 
         self.assertEqual(
             {
-                u"assignments": [u"foo.bar"],
+                u"assignments": [u"IDocumentMetadata.document_type.question"],
                 u"fieldsets": [
                     {
                         u"behavior": u"plone",

@@ -1,6 +1,7 @@
 from opengever.base.filename import filenamenormalizer
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
+from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.schema import get_property_sheet_schema
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
@@ -10,6 +11,8 @@ from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import keyword
 import re
@@ -54,9 +57,31 @@ class PropertySheetSchemaDefinition(object):
         self.schema_class = schema_class
         if assignments is None:
             assignments = tuple()
-        else:
-            assignments = tuple(assignments)
         self.assignments = assignments
+
+    @property
+    def assignments(self):
+        return self._assignments
+
+    @assignments.setter
+    def assignments(self, values):
+        vocabulary_factory = getUtility(
+            IVocabularyFactory,
+            name="opengever.propertysheets.PropertySheetAssignmentsVocabulary"
+        )
+        vocabulary = vocabulary_factory(None)
+
+        assignments = []
+        for token in values:
+            try:
+                term = vocabulary.getTermByToken(token)
+                assignments.append(term.value)
+            except LookupError:
+                raise InvalidSchemaAssignment(
+                    "The assignment '{}' is invalid.".format(token)
+                )
+
+        self._assignments = tuple(assignments)
 
     def add_field(self, field_type, name, title, description, required, values=None):
         if field_type not in self.FACTORIES:

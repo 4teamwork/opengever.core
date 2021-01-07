@@ -14,4 +14,9 @@
       name="propertysheets"
       />
 
+  <utility
+      factory=".assignment.PropertySheetAssignmentVocabulary"
+      name="opengever.propertysheets.PropertySheetAssignmentsVocabulary"
+      />
+
 </configure>
