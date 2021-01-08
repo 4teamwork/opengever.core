@@ -4,6 +4,7 @@ Changelog
 2021.3.0 (unreleased)
 ---------------------
 
+- Adding tasktemplates over the restapi properly separates the responsible user and client. [elioschmutz]
 - Include path in the data submitted by the Solr update chain. [sebastianmanger]
 - Fix wrapping of keywords in keywordwidget. [njohner]
 - Harmonize translations for document sent and received dates. [lgraf]
