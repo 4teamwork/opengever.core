@@ -38,3 +38,4 @@ csv.register_dialect(u'OpenGeverCSV', OpenGeverCSVDialect)
 # file.
 languages._combinedlanguagelist['de-ch']['native'] = u'Deutsch'
 languages._combinedlanguagelist['fr-ch']['native'] = u'Français'
+languages._combinedlanguagelist['en-us']['native'] = u'English'
