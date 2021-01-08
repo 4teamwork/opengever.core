@@ -19,6 +19,7 @@ class NegotiateLanguage(object):
     SIMPLE_TO_COMBINED_MAPPING = {
         'de': 'de-ch',
         'fr': 'fr-ch',
+        'en': 'en-us',
     }
 
     def getMappedRequestLanguages(self, tool):

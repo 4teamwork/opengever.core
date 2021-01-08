@@ -4,6 +4,7 @@ Changelog
 2021.2.0 (unreleased)
 ---------------------
 
+- Add 'en-us' as supported language in example content. [lgraf]
 - Implement storage for property sheet schemas in plone-site annotations. [deiferni]
 
 
