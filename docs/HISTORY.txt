@@ -10,7 +10,6 @@ Changelog
 2021.1.0 (2021-01-06)
 ---------------------
 
-- Do not update touched date of children when moving an object. [njohner]
 - Introduces a new solr-index 'getObjPositionInParent' for tasktemplates, todolists and todos. [elioschmutz]
 - Prevent attempts to edit locked documents in Office Online. [tinagerber]
 - Add feature flag for workspace meetings. [tinagerber]
@@ -41,14 +40,14 @@ Changelog
 - Setup placeful workflow for workspace root in default content. [buchi]
 
 
-2020.15.1 (2020-12-03)
-----------------------
+2020.15.1 (2020-12-03) does not include 2020.14.6
+-------------------------------------------------
 
 - Added a field to the solr sync chain so that PDF documents can be displayed in RIS [sebastianmanger]
 
 
-2020.15.0 (2020-12-03)
-----------------------
+2020.15.0 (2020-12-03) does not include 2020.14.6
+-------------------------------------------------
 
 - Support transferring documents from workspace back to GEVER as new version. [lgraf]
 - Add @teamraum-solrsearch endpoint to search on a connected teamraum deployment. [tinagerber]
@@ -57,6 +56,12 @@ Changelog
 - Mark dossiers with an interface as soon as they are linked to a workspace. [tinagerber]
 - Ignore locking mail when making a copy via Teamraum Connect. [njohner]
 - Allow locking document when making a copy via Teamraum Connect. [njohner]
+
+
+2020.14.6 (2021-01-08)
+----------------------
+
+- Do not update touched date of children when moving an object. [njohner]
 
 
 2020.14.5 (2020-12-03)
