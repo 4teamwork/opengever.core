@@ -19,6 +19,8 @@ Für die meisten Requests ist es notwendig, dass sich der Benutzer zuerst an der
 API authentisiert, siehe dazu das Kapitel zur
 :ref:`Authentisierung <authentication>`.
 
+Änderungen an der API werden im :ref:`API Changelog <api-changelog>` dokumentiert.
+
 ------
 
 
