@@ -1,0 +1,603 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2015-02-24 08:40+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Als Beobachter hinzugefügt worden
+#. Default: "Added as watcher"
+#: ./opengever/activity/notification_settings.py
+msgid "added-as-watcher"
+msgstr "Added as watcher"
+
+#. German translation: Archivar
+#. Default: "Archivist"
+#: ./opengever/activity/roles.py
+msgid "archivist"
+msgstr "Archivist"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/activity/browser/settings.py
+msgid "btn_cancel"
+msgstr "Cancel"
+
+#. German translation: Auf Standard zurücksetzen
+#. Default: "Reset"
+#: ./opengever/activity/browser/settings.py
+msgid "btn_reset"
+msgstr "Reset"
+
+#. German translation: Speichern
+#. Default: "Save"
+#: ./opengever/activity/browser/settings.py
+msgid "btn_save"
+msgstr "Save"
+
+#. German translation: Akteur
+#. Default: "Actor"
+#: ./opengever/activity/browser/listing.py
+msgid "column_Actor"
+msgstr "Actor"
+
+#. German translation: Typ
+#. Default: "Kind"
+#: ./opengever/activity/browser/listing.py
+msgid "column_kind"
+msgstr "Kind"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/activity/browser/listing.py
+msgid "column_title"
+msgstr "Title"
+
+#. German translation: Gremien-Verantwortlicher
+#. Default: "Committee responsible"
+#: ./opengever/activity/roles.py
+msgid "committee_responsible"
+msgstr "Committee responsible"
+
+#. German translation: Erstellt
+#. Default: "Created"
+#: ./opengever/activity/browser/listing.py
+msgid "created"
+msgstr "Created"
+
+#. German translation: Angebot hinzugefügt
+#. Default: "Disposition added"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "disposition-added"
+msgstr "Disposition added"
+
+#. German translation: Bewertung finalisiert
+#. Default: "Disposition appraised"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "disposition-transition-appraise"
+msgstr "Disposition appraised"
+
+#. German translation: Archivierung bestätigt
+#. Default: "Disposition archived"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "disposition-transition-archive"
+msgstr "Disposition archived"
+
+#. German translation: Angebot abgeschlossen
+#. Default: "Disposition closed"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "disposition-transition-close"
+msgstr "Disposition closed"
+
+#. German translation: Zur Archivierung angeboten
+#. Default: "Disposition disposed"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "disposition-transition-dispose"
+msgstr "Disposition disposed"
+
+#. German translation: Angebot abgelehnt
+#. Default: "Disposition refused"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "disposition-transition-refuse"
+msgstr "Disposition refused"
+
+#. German translation: Überfälliges Dossier
+#. Default: "Overdue dossier"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "dossier-overdue"
+msgstr "Overdue dossier"
+
+#. German translation: Federführend
+#. Default: "Dossier responsible"
+#: ./opengever/activity/roles.py
+msgid "dossier_responsible_role"
+msgstr "Dossier responsible"
+
+#. German translation: Weiterleitung hinzugefügt
+#. Default: "Forwarding added"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-added"
+msgstr "Forwarding added"
+
+#. German translation: Weiterleitung akzeptiert
+#. Default: "Forwarding accepted"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-accept"
+msgstr "Forwarding accepted"
+
+#. German translation: Weiterleitung einem Dossier zugewiesen
+#. Default: "Forwarding assigned to dossier"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-assign-to-dossier"
+msgstr "Forwarding assigned to dossier"
+
+#. German translation: Weiterleitung abgeschlossen
+#. Default: "Forwarding closed"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-close"
+msgstr "Forwarding closed"
+
+#. German translation: Weiterleitung neu zugewiesen
+#. Default: "Forwarding reassigned"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-reassign"
+msgstr "Forwarding reassigned"
+
+#. German translation: Weiterleitung neu zugewiesen und abgelehnt
+#. Default: "Forwarding reassigned and refused"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-reassign-refused"
+msgstr "Forwarding reassigned and refused"
+
+#. German translation: Weiterleitung abgelehnt
+#. Default: "Forwarding refused"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-refuse"
+msgstr "Forwarding refused"
+
+#. German translation: Als Beobachter hinzugefügt zu Weiterleitung
+#. Default: "Added as watcher to forwarding"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-watcher-added"
+msgstr "Added as watcher to forwarding"
+
+#. German translation: Benachrichtigungen
+#. Default: "Notifications"
+#: ./opengever/activity/viewlets/notification.pt
+msgid "heading_notifications"
+msgstr "Notifications"
+
+#. German translation: Aktivität
+#. Default: "Activity"
+#: ./opengever/activity/browser/settings.py
+msgid "label_activity"
+msgstr "Activity"
+
+#. German translation: GEVER Benachrichtigung
+#. Default: "Badge"
+#: ./opengever/activity/browser/settings.py
+msgid "label_badge"
+msgstr "Badge"
+
+#. German translation: Tageszusammenfassung
+#. Default: "Daily Digest"
+#: ./opengever/activity/browser/settings.py
+msgid "label_daily_digest"
+msgstr "Daily Digest"
+
+#. German translation: Aussonderung
+#. Default: "Dispositions"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dispositions"
+msgstr "Dispositions"
+
+#. German translation: Dossiers
+#. Default: "Dossiers"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dossiers"
+msgstr "Dossiers"
+
+#. German translation: Allgemein
+#. Default: "General"
+#: ./opengever/activity/browser/settings.py
+msgid "label_general"
+msgstr "General"
+
+#. German translation: Mail
+#. Default: "Mail"
+#: ./opengever/activity/browser/settings.py
+msgid "label_mail"
+msgstr "Mail"
+
+#. German translation: Benachrichtigungs-Einstellungen
+#. Default: "Notification settings"
+#: ./opengever/activity/browser/templates/notification_mail_macros.pt
+#: ./opengever/activity/browser/templates/settings.pt
+msgid "label_notification_settings"
+msgstr "Notification settings"
+
+#. German translation: Alle Benachrichtigungen
+#. Default: "All Notifications"
+#: ./opengever/activity/viewlets/notification.pt
+msgid "label_notifications_overview"
+msgstr "All Notifications"
+
+#. German translation: Anträge
+#. Default: "Proposals"
+#: ./opengever/activity/browser/settings.py
+msgid "label_proposals"
+msgstr "Proposals"
+
+#. German translation: Alle Benachrichtigungen als gelesen markieren
+#. Default: "Mark all notifications as read"
+#: ./opengever/activity/viewlets/notification.pt
+msgid "label_read_all_notifications"
+msgstr "Mark all notifications as read"
+
+#. German translation: Erinnerungen
+#. Default: "Reminders"
+#: ./opengever/activity/browser/settings.py
+msgid "label_reminders"
+msgstr "Reminders"
+
+#. German translation: Aufgaben
+#. Default: "Tasks"
+#: ./opengever/activity/browser/settings.py
+msgid "label_tasks"
+msgstr "Tasks"
+
+#. German translation: Teamräume
+#. Default: "Workspaces"
+#: ./opengever/activity/browser/settings.py
+msgid "label_workspaces"
+msgstr "Workspaces"
+
+#. German translation: Während dem Erzeugen der Benachrichtigung ist ein Fehler aufgetreten. Die Benachrichtigung wurde deshalb nicht oder nur zum Teil ausgelöst.
+#. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
+#: ./opengever/activity/error_handling.py
+msgid "msg_error_not_notified"
+msgstr "A problem has occurred during the notification creation. Notification could not or only partially produced."
+
+#. German translation: Alle Benachrichtigungen aufgrund von Eingangskorbberechtigung aktivieren bzw. deaktivieren.
+#. Default: "Activate, respectively deactivate, all notifications due to your inbox permissions."
+#: ./opengever/activity/browser/settings.py
+msgid "notify_inbox_actions_help"
+msgstr "Activate, respectively deactivate, all notifications due to your inbox permissions."
+
+#. German translation: Benachrichtigungen für Eingangskorb aktivieren
+#. Default: "Enable notifications for inbox actions"
+#: ./opengever/activity/browser/settings.py
+msgid "notify_inbox_actions_title"
+msgstr "Enable notifications for inbox actions"
+
+#. German translation: Standardmässig werden für selbst ausgeführte Aktionen keine Benachrichtigungen ausgelöst. Mit dieser Option kann dieses Verhalten verändert werden. Persönlich vorgenommene Benachrichtigungseinstellungen pro Aktionstyp gelten dabei nach wie vor.
+#. Default: "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
+#: ./opengever/activity/browser/settings.py
+msgid "notify_own_actions_help"
+msgstr "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
+
+#. German translation: Benachrichtigung für eigene Aktionen aktivieren
+#. Default: "Enable notifications for own actions"
+#: ./opengever/activity/browser/settings.py
+msgid "notify_own_actions_title"
+msgstr "Enable notifications for own actions"
+
+#. German translation: Zusätzliche Beilagen eingereicht
+#. Default: "Additional documents submitted"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-additional-documents-submitted"
+msgstr "Additional documents submitted"
+
+#. German translation: Beilage aktualisiert
+#. Default: "Attachment updated"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-attachment-updated"
+msgstr "Attachment updated"
+
+#. German translation: Antrag kommentiert
+#. Default: "Proposal commented"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-commented"
+msgstr "Proposal commented"
+
+#. German translation: Antrag beschlossen
+#. Default: "Proposal decided"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-transition-decide"
+msgstr "Proposal decided"
+
+#. German translation: Antrag entfernt
+#. Default: "Proposal pulled"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-transition-pull"
+msgstr "Proposal pulled"
+
+#. German translation: Antrag zurückgewiesen
+#. Default: "Proposal rejected"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-transition-reject"
+msgstr "Proposal rejected"
+
+#. German translation: Antrag traktandiert
+#. Default: "Proposal scheduled"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-transition-schedule"
+msgstr "Proposal scheduled"
+
+#. German translation: Antrag eingereicht
+#. Default: "Proposal submitted"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "proposal-transition-submit"
+msgstr "Proposal submitted"
+
+#. German translation: Antragssteller
+#. Default: "Proposal issuer"
+#: ./opengever/activity/roles.py
+msgid "proposal_issuer"
+msgstr "Proposal issuer"
+
+#. German translation: Records Manager
+#. Default: "Records Manager"
+#: ./opengever/activity/roles.py
+msgid "records_manager"
+msgstr "Records Manager"
+
+#. German translation: Beobachter
+#. Default: "Watcher"
+#: ./opengever/activity/roles.py
+msgid "regular_watcher"
+msgstr "Watcher"
+
+#. German translation: Statusänderungen
+#. Default: "State changed"
+#: ./opengever/activity/notification_settings.py
+msgid "state-changed"
+msgstr "State changed"
+
+#. German translation: Tageszusammenfassung vom ${date}
+#. Default: "Daily Digest for ${date}"
+#: ./opengever/activity/digest.py
+msgid "subject_digest"
+msgstr "Daily Digest for ${date}"
+
+#. German translation: GEVER Aktivität
+#. Default: "GEVER Activity"
+#: ./opengever/activity/mail.py
+msgid "subject_prefix"
+msgstr "GEVER Activity"
+
+#. German translation: Eingereichter Antrag kommentiert
+#. Default: "Submitted proposal commented"
+#: ./opengever/activity/__init__.py
+msgid "submitted-proposal-commented"
+msgstr "Submitted proposal commented"
+
+#. German translation: Aufgabe hinzugefügt
+#. Default: "Task added"
+#: ./opengever/activity/__init__.py
+msgid "task-added"
+msgstr "Task added"
+
+#. German translation: Aufgabe erstellt / neu zugewiesen
+#. Default: "Task added / reassigned"
+#: ./opengever/activity/notification_settings.py
+msgid "task-added-or-reassigned"
+msgstr "Task added / reassigned"
+
+#. German translation: Aufgabe kommentiert
+#. Default: "Task commented"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "task-commented"
+msgstr "Task commented"
+
+#. German translation: Aufgaben-Erinnerung
+#. Default: "Task reminder"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "task-reminder"
+msgstr "Task reminder"
+
+#. German translation: Aufgabe wieder eröffnet
+#. Default: "Task reopened"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-cancelled-open"
+msgstr "Task reopened"
+
+#. German translation: Aufgabe delegiert
+#. Default: "Task delegated"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-delegate"
+msgstr "Task delegated"
+
+#. German translation: Aufgabe erledigt
+#. Default: "Task resolved"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-in-progress-resolved"
+msgstr "Task resolved"
+
+#. German translation: Aufgabe abgeschlossen
+#. Default: "Task closed"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr "Task closed"
+
+#. German translation: Aufgaben-Frist verändert
+#. Default: "Task deadline modified"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "task-transition-modify-deadline"
+msgstr "Task deadline modified"
+
+#. German translation: Aufgaben abgebrochen
+#. Default: "Task cancelled"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-cancelled"
+msgstr "Task cancelled"
+
+#. German translation: Aufgabe akzeptiert
+#. Default: "Task accepted"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-in-progress"
+msgstr "Task accepted"
+
+#. German translation: Aufgabe abgelehnt
+#. Default: "Task rejected"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-rejected"
+msgstr "Task rejected"
+
+#. German translation: Aufgabe erledigt
+#. Default: "Task resolved"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-resolved"
+msgstr "Task resolved"
+
+#. German translation: Aufgabe abgeschlossen
+#. Default: "Task closed"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-tested-and-closed"
+msgstr "Task closed"
+
+#. German translation: Aufgabe übersprungen
+#. Default: "Task skipped"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-planned-skipped"
+msgstr "Task skipped"
+
+#. German translation: Aufgabe neu zugewiesen
+#. Default: "Task reassign"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-reassign"
+msgstr "Task reassign"
+
+#. German translation: Aufgabe wieder eröffnet
+#. Default: "Task reopened"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-rejected-open"
+msgstr "Task reopened"
+
+#. German translation: Aufgabe übersprungen
+#. Default: "Task skipped"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-rejected-skipped"
+msgstr "Task skipped"
+
+#. German translation: Aufgaben-Überarbeitung gefordert
+#. Default: "Task revision wanted"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-resolved-in-progress"
+msgstr "Task revision wanted"
+
+#. German translation: Aufgabe abgeschlossen
+#. Default: "Task closed"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-resolved-tested-and-closed"
+msgstr "Task closed"
+
+#. German translation: Aufgabe wieder eröffnet
+#. Default: "Task reopened"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-skipped-open"
+msgstr "Task reopened"
+
+#. German translation: Als Beobachter hinzugefügt zu Aufgabe
+#. Default: "Added as watcher to task"
+#: ./opengever/activity/__init__.py
+msgid "task-watcher-added"
+msgstr "Added as watcher to task"
+
+#. German translation: Auftraggeber
+#. Default: "Task issuer"
+#: ./opengever/activity/roles.py
+msgid "task_issuer"
+msgstr "Task issuer"
+
+#. German translation: Früherer Auftragnehmer
+#. Default: "Task former responsible"
+#: ./opengever/activity/roles.py
+msgid "task_old_responsible"
+msgstr "Task former responsible"
+
+#. German translation: Beobachter
+#. Default: "Watcher"
+#: ./opengever/activity/roles.py
+msgid "task_reminder_watcher_role"
+msgstr "Watcher"
+
+#. German translation: Auftragnehmer
+#. Default: "Task responsible"
+#: ./opengever/activity/roles.py
+msgid "task_responsible"
+msgstr "Task responsible"
+
+#. German translation: Tageszusammenfassung für ${username}
+#. Default: "Daily Digest for ${username}"
+#: ./opengever/activity/digest.py
+msgid "title_daily_digest"
+msgstr "Daily Digest for ${username}"
+
+#. German translation: ToDo zugewiesen
+#. Default: "ToDo assigned"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "todo-assigned"
+msgstr "ToDo assigned"
+
+#. German translation: ToDo modifiziert
+#. Default: "ToDo modified"
+#: ./opengever/activity/__init__.py
+#: ./opengever/activity/notification_settings.py
+msgid "todo-modified"
+msgstr "ToDo modified"
+
+#. German translation: ToDo Verantwortlicher
+#. Default: "ToDo responsible"
+#: ./opengever/activity/roles.py
+msgid "todo_responsible_role"
+msgstr "ToDo responsible"
+
+#. German translation: Dokument hinzugefügt
+#. Default: "Document added"
+#: ./opengever/activity/__init__.py
+msgid "transition-add-document"
+msgstr "Document added"
+
+#. German translation: Unteraufgabe erstellt
+#. Default: "Subtask added"
+#: ./opengever/activity/__init__.py
+msgid "transition-add-subtask"
+msgstr "Subtask added"
+
+#. German translation: Teamraum Mitglied
+#. Default: "Workspace member"
+#: ./opengever/activity/roles.py
+msgid "workspace_member_role"
+msgstr "Workspace member"

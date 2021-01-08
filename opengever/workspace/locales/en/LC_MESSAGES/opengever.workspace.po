@@ -1,0 +1,337 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 16:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Aktion
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Action"
+msgstr "Action"
+
+#. German translation: Erledigt durch ${user}
+#: ./opengever/workspace/activities.py
+msgid "Closed by ${user}"
+msgstr "Closed by ${user}"
+
+#. German translation: Kommentiert durch ${user}
+#: ./opengever/workspace/activities.py
+msgid "Commented by ${user}"
+msgstr "Commented by ${user}"
+
+#. German translation: Löschen
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Delete"
+msgstr "Delete"
+
+#. German translation: Gelöschter Teamraum
+#: ./opengever/workspace/participation/browser/my_invitations.py
+msgid "Deleted Workspace"
+msgstr "Deleted Workspace"
+
+#. German translation: Einladung
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invitation"
+msgstr "Invitation"
+
+#. German translation: Einladen
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invite"
+msgstr "Invite"
+
+#. German translation: Eingeladen durch:
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invited by:"
+msgstr "Invited by:"
+
+#. German translation: Teilnehmer wurde gelöscht
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Participant deleted"
+msgstr "Participant deleted"
+
+#. German translation: Teilnehmer wurde eingeladen
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Participant invited"
+msgstr "Participant invited"
+
+#. German translation: Wieder eröffnet durch ${user}
+#: ./opengever/workspace/activities.py
+msgid "Reopened by ${user}"
+msgstr "Reopened by ${user}"
+
+#. German translation: Rolle wurde aktualisiert
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Role updated"
+msgstr "Role updated"
+
+#. German translation: Rolle
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Rolle"
+msgstr "Rolle"
+
+#. German translation: Benutzer suchen ...
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Select a user ..."
+msgstr "Select a user ..."
+
+#. German translation: Typ
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Type"
+msgstr "Type"
+
+#. German translation: Benutzer
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "User"
+msgstr "User"
+
+#. German translation: Admin
+#. Default: "Admin"
+#: ./opengever/workspace/participation/__init__.py
+msgid "WorkspaceAdmin"
+msgstr "Admin"
+
+#. German translation: Gast
+#. Default: "Guest"
+#: ./opengever/workspace/participation/__init__.py
+msgid "WorkspaceGuest"
+msgstr "Guest"
+
+#. German translation: Teammitglied
+#. Default: "Member"
+#: ./opengever/workspace/participation/__init__.py
+msgid "WorkspaceMember"
+msgstr "Member"
+
+#. German translation: Allgemein
+#. Default: "Common"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "fieldset_common"
+msgstr "Common"
+
+#. German translation: Verwendete URL um eine Videokonferenz für diesen Teamraum zu starten.
+#. Default: "URL for videoconferencing link"
+#: ./opengever/workspace/workspace.py
+msgid "help_videoconferencing_url"
+msgstr "URL for videoconferencing link"
+
+#. German translation: Einladung
+#. Default: "Invitation"
+#: ./opengever/workspace/participation/__init__.py
+msgid "invitation"
+msgstr "Invitation"
+
+#. German translation: Sie wurden von ${user} in den Teamraum \"${title}\" eingeladen.
+#. Default: "You were invited by ${user} to the workspace \"${title}\"."
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_description"
+msgstr "You were invited by ${user} to the workspace \"${title}\"."
+
+#. German translation: Nachricht von ${user}:
+#. Default: "Message from ${user}:"
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_message_title"
+msgstr "Message from ${user}:"
+
+#. German translation: Einladung zum Teamraum \"${title}\
+#. Default: "Invitation to workspace \"${title}\""
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_subject"
+msgstr "Invitation to workspace \"${title}\""
+
+#. German translation: "Guten Tag,\n\n${user} hat Sie eingeladen, an \"${title}\" auf der Plattform ${platform} teilzunehmen.\n\nWenn Sie die Einladung annehmen möchten, klicken Sie auf folgenden Link:\n${accept_url}""
+#. Default: "Hello,\n\nYou were invited by ${user} to the workspace \"${title}\" at ${platform}.\n\nPlease click the following link if you want to accept the invitation:\n${accept_url}"
+#: ./opengever/workspace/participation/invitation_mailer.py
+msgid "invitation_mail_summary"
+msgstr ""
+"Hello,\n"
+"\n"
+"You were invited by ${user} to the workspace \"${title}\" at ${platform}.\n"
+"\n"
+"Please click the following link if you want to accept the invitation:\n"
+"${accept_url}"
+
+#. German translation: Erledigt
+#. Default: "Completed"
+#: ./opengever/workspace/todo.py
+msgid "label_completed"
+msgstr "Completed"
+
+#. German translation: Zu erledigen bis
+#. Default: "Deadline"
+#: ./opengever/workspace/todo.py
+msgid "label_deadline"
+msgstr "Deadline"
+
+#. German translation: Beschreibung
+#. Default: "Description"
+#: ./opengever/workspace/browser/tabs.py
+msgid "label_description"
+msgstr "Description"
+
+#. German translation: Dokumente
+#. Default: "Documents"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_documents"
+msgstr "Documents"
+
+#. German translation: Ende
+#. Default: "End"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_end"
+msgstr "End"
+
+#. German translation: Ordner
+#. Default: "Folders"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_folders"
+msgstr "Folders"
+
+#. German translation: Journal
+#. Default: "Journal"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_journal"
+msgstr "Journal"
+
+#. German translation: Verknüpftes Dossier
+#. Default: "Linked dossier"
+#: ./opengever/workspace/workspace.py
+msgid "label_linked_dossier"
+msgstr "Linked dossier"
+
+#. German translation: Ort
+#. Default: "Location"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_location"
+msgstr "Location"
+
+#. German translation: Organisator
+#. Default: "Organizer"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_organizer"
+msgstr "Organizer"
+
+#. German translation: Verantwortlich
+#. Default: "Responsible"
+#: ./opengever/workspace/todo.py
+msgid "label_responsible"
+msgstr "Responsible"
+
+#. German translation: Beginn
+#. Default: "Start"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_start"
+msgstr "Start"
+
+#. German translation: Text
+#. Default: "Text"
+#: ./opengever/workspace/todo.py
+msgid "label_text"
+msgstr "Text"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/workspace/browser/tabs.py
+#: ./opengever/workspace/todo.py
+#: ./opengever/workspace/todolist.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: ToDo
+#. Default: "ToDo"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_todo"
+msgstr "ToDo"
+
+#. German translation: ToDo zugewiesen
+#. Default: "ToDo assigned"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_assigned_activity"
+msgstr "ToDo assigned"
+
+#. German translation: ToDo erledigt
+#. Default: "ToDo closed"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_closed_activity"
+msgstr "ToDo closed"
+
+#. German translation: ToDo kommentiert
+#. Default: "ToDo commented"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_commented_activity"
+msgstr "ToDo commented"
+
+#. German translation: ToDo wieder eröffnet
+#. Default: "ToDo reopened"
+#: ./opengever/workspace/activities.py
+msgid "label_todo_reopened_activity"
+msgstr "ToDo reopened"
+
+#. German translation: Papierkorb
+#. Default: "Trash"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_trash"
+msgstr "Trash"
+
+#. German translation: Video-Call Link
+#. Default: "Video Call Link"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_video_call_link"
+msgstr "Video Call Link"
+
+#. German translation: Videokonferenz URL
+#. Default: "Videoconferencing URL"
+#: ./opengever/workspace/workspace.py
+msgid "label_videoconferencing_url"
+msgstr "Videoconferencing URL"
+
+#. German translation: Teamräume
+#. Default: "Workspaces"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_workspaces"
+msgstr "Workspaces"
+
+#. German translation: Kommentar
+#. Default: "Comment"
+#: ./opengever/workspace/content_sharing_mailer.py
+msgid "share_mail_comment_title"
+msgstr "Comment"
+
+#. German translation: Hinweis zu \"${title}\
+#. Default: "Notification to \"${title}\""
+#: ./opengever/workspace/content_sharing_mailer.py
+msgid "share_mail_subject"
+msgstr "Notification to \"${title}\""
+
+#. German translation: ${user} hat einen Hinweis an Sie versendet:
+#. Default: "${user} has sent you a notification:"
+#: ./opengever/workspace/content_sharing_mailer.py
+msgid "share_mail_summary"
+msgstr "${user} has sent you a notification:"
+
+#. German translation: An ${responsible} neu zugewiesen durch ${user}
+#. Default: "Assigned to ${responsible} by ${user}"
+#: ./opengever/workspace/activities.py
+msgid "summary_todo_assigned_activity"
+msgstr "Assigned to ${responsible} by ${user}"
+
+#. German translation: Teilnehmer von  \"${workspace}\
+#. Default: "Manage participation of ${workspace}"
+#: ./opengever/workspace/participation/browser/templates/participants-view.pt
+msgid "title_manage_participation"
+msgstr "Manage participation of ${workspace}"
+
+#. German translation: Benutzer
+#. Default: "User"
+#: ./opengever/workspace/participation/__init__.py
+msgid "user"
+msgstr "User"

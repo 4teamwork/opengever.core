@@ -1,0 +1,577 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2012-11-22 14:19+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Aktiv
+#: ./opengever/tabbedview/browser/tabs.py
+#: ./opengever/tabbedview/browser/users.py
+msgid "Active"
+msgstr "Active"
+
+#. German translation: Alle Sichtbaren ausgewählt <a href=\"#\">x</a>
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt
+msgid "All visible entries chosen <a href=\"#\">x</a>"
+msgstr "All visible entries chosen <a href=\"#\">x</a>"
+
+#. German translation: Auswählen
+#: ./opengever/tabbedview/browser/selection_with_filters.pt
+msgid "Choose"
+msgstr "Choose"
+
+#. German translation: Ersteller
+#. Default: "Ersteller"
+msgid "Creator"
+msgstr "Ersteller"
+
+#. German translation: Treffer pro Seite
+#: ./opengever/tabbedview/browser/batching.pt
+msgid "Hits per site"
+msgstr "Hits per site"
+
+#. German translation: Alle in diesem Ordner anzeigen
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt
+msgid "Show all in this Folder"
+msgstr "Show all in this Folder"
+
+#. German translation: Status
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
+#: ./opengever/tabbedview/browser/generic_with_filters.pt
+#: ./opengever/tabbedview/browser/selection_with_filters.pt
+msgid "State"
+msgstr "State"
+
+#. German translation: Titel
+#. Default: "Titel"
+msgid "Title"
+msgstr "Titel"
+
+#. German translation: Akteur
+#. Default: "Akteur"
+msgid "actor"
+msgstr "Akteur"
+
+#. German translation: Zusätzliches
+msgid "additional_contact"
+msgstr "additional_contact"
+
+#. German translation: Alle Kontakte
+msgid "all_contacts"
+msgstr "all_contacts"
+
+#. German translation: Alle Gremien
+msgid "all_orgunits"
+msgstr "all_orgunits"
+
+#. German translation: Weitere Aktionen &#9660;
+#. Default: "More actions &#9660;"
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt
+msgid "button_more_actions"
+msgstr "More actions &#9660;"
+
+#. German translation: in Bearbeitung
+msgid "checked_out"
+msgstr "checked_out"
+
+#. German translation: Erledigt am
+#. Default: "Date of completion"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_date_of_completion"
+msgstr "Date of completion"
+
+#. German translation: Zu erledigen bis
+#. Default: "Deadline"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_deadline"
+msgstr "Deadline"
+
+#. German translation: Erstellt am
+#. Default: "Issued at"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_issued_at"
+msgstr "Issued at"
+
+#. German translation: Organisationseinheit
+#. Default: "Organisational Unit"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_issuing_org_unit"
+msgstr "Organisational Unit"
+
+#. German translation: Status
+#. Default: "Review state"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_review_state"
+msgstr "Review state"
+
+#. German translation: Laufnummer
+#. Default: "Sequence number"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_sequence_number"
+msgstr "Sequence number"
+
+#. German translation: Auftragstyp
+#. Default: "Task type"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_task_type"
+msgstr "Task type"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "column_title"
+msgstr "Title"
+
+#. German translation: Kommentar
+#. Default: "Kommentar"
+msgid "comment"
+msgstr "Kommentar"
+
+#. German translation: Kommentar
+msgid "comments"
+msgstr "comments"
+
+#. German translation: Beteiligter
+msgid "contact"
+msgstr "contact"
+
+#. German translation: Dossier
+#. Default: "Dossier"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "containing_dossier"
+msgstr "Dossier"
+
+#. German translation: Erstellt am
+msgid "created"
+msgstr "created"
+
+#. German translation: Erledigt am
+msgid "date_of_completion"
+msgstr "date_of_completion"
+
+#. German translation: Frist
+msgid "deadline"
+msgstr "deadline"
+
+#. German translation: Ausgangsdatum
+msgid "delivery_date"
+msgstr "delivery_date"
+
+#. German translation: Autor
+msgid "document_author"
+msgstr "document_author"
+
+#. German translation: Dokumentdatum
+msgid "document_date"
+msgstr "document_date"
+
+#. German translation: Laufnummer
+#. Default: "Sequence Number"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "document_sequence_number"
+msgstr "Sequence Number"
+
+#. German translation: Dokumente
+#. Default: "Dokumente"
+msgid "documents"
+msgstr "Dokumente"
+
+#. German translation: Galerieansicht
+#. Default: "Gallery"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
+msgid "documents_pill_documents"
+msgstr "Gallery"
+
+#. German translation: Listenansicht
+#. Default: "List"
+#: ./opengever/tabbedview/browser/bumblebee_gallery.pt
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
+msgid "documents_pill_list"
+msgstr "List"
+
+#. German translation: Dossiers
+#. Default: "Dossiers"
+msgid "dossiers"
+msgstr "Dossiers"
+
+#. German translation: E-Mail
+msgid "email"
+msgstr "email"
+
+#. German translation: Ende
+msgid "end"
+msgstr "end"
+
+#. German translation: Termine
+#. Default: "Termine"
+msgid "events"
+msgstr "Termine"
+
+#. German translation: Abgelaufen
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "expired"
+msgstr "expired"
+
+#. German translation: Allgemein
+msgid "important_contact"
+msgstr "important_contact"
+
+#. German translation: Zugewiesen von
+msgid "issuer"
+msgstr "issuer"
+
+#. German translation: Journal
+#. Default: "Journal"
+msgid "journal"
+msgstr "Journal"
+
+#. German translation: Aktiv
+#. Default: "Active"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_active"
+msgstr "Active"
+
+#. German translation: In Bearbeitung
+#. Default: "Checked out by"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_checked_out"
+msgstr "Checked out by"
+
+#. German translation: Erstelldatum
+#. Default: "Creation Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_created_date"
+msgstr "Creation Date"
+
+#. German translation: Ausgangsdatum
+#. Default: "Delivery Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_delivery_date"
+msgstr "Delivery Date"
+
+#. German translation: Amt
+#. Default: "Department"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_department_user"
+msgstr "Department"
+
+#. German translation: Direktion
+#. Default: "Directorate"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_directorate_user"
+msgstr "Directorate"
+
+#. German translation: Autor
+#. Default: "Document Author"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_document_author"
+msgstr "Document Author"
+
+#. German translation: Dokumentdatum
+#. Default: "Document Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_document_date"
+msgstr "Document Date"
+
+#. German translation: Dateiendung
+#. Default: "File extension"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_document_file_extension"
+msgstr "File extension"
+
+#. German translation: Aktenzeichen
+#. Default: "Reference Number"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_document_reference"
+msgstr "Reference Number"
+
+#. German translation: Federführung
+#. Default: "Responsible"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_dossier_responsible"
+msgstr "Responsible"
+
+#. German translation: Ende
+#. Default: "End"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_end"
+msgstr "End"
+
+#. German translation: Auftraggeber
+#. Default: "Issuer"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "label_issuer"
+msgstr "Issuer"
+
+#. German translation: Schlagwörter
+#. Default: "Keywords"
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
+#: ./opengever/tabbedview/browser/generic_with_filters.pt
+#: ./opengever/tabbedview/browser/selection_with_filters.pt
+msgid "label_keywords"
+msgstr "Keywords"
+
+#. German translation: Änderungsdatum
+#. Default: "Modification Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_modified_date"
+msgstr "Modification Date"
+
+#. German translation: Meine Benachrichtigungen
+#. Default: "My notifications"
+#: ./opengever/tabbedview/browser/personal_overview.py
+msgid "label_my_notifications"
+msgstr "My notifications"
+
+#. German translation: Meine Anträge
+#. Default: "My proposals"
+#: ./opengever/tabbedview/browser/personal_overview.py
+msgid "label_my_proposals"
+msgstr "My proposals"
+
+#. German translation: Pendent
+#. Default: "Pending"
+#: ./opengever/tabbedview/browser/personal_overview.py
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "label_pending"
+msgstr "Pending"
+
+#. German translation: Vorschau
+#. Default: "Preview"
+#: ./opengever/tabbedview/helper.py
+msgid "label_preview"
+msgstr "Preview"
+
+#. German translation: Öffentlichkeitsstatus
+#. Default: "Public Trial"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_public_trial"
+msgstr "Public Trial"
+
+#. German translation: Eingangsdatum
+#. Default: "Receipt Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_receipt_date"
+msgstr "Receipt Date"
+
+#. German translation: Aktenzeichen
+#. Default: "Reference Number"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_reference"
+msgstr "Reference Number"
+
+#. German translation: Auftragnehmer
+#. Default: "Responsible"
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "label_responsible_task"
+msgstr "Responsible"
+
+#. German translation: Status
+#. Default: "Review state"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_review_state"
+msgstr "Review state"
+
+#. German translation: Version ${version} vom ${timestamp}
+#. Default: "Version ${version} of ${timestamp}"
+#: ./opengever/tabbedview/helper.py
+msgid "label_showroom_version_title"
+msgstr "Version ${version} of ${timestamp}"
+
+#. German translation: Beginn
+#. Default: "Start"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_start"
+msgstr "Start"
+
+#. German translation: Subdossier
+#. Default: "Subdossier"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_subdossier"
+msgstr "Subdossier"
+
+#. German translation: Alle
+#: ./opengever/tabbedview/browser/personal_overview.py
+#: ./opengever/tabbedview/browser/tabs.py
+#: ./opengever/tabbedview/browser/tasklisting.py
+msgid "label_tabbedview_filter_all"
+msgstr "label_tabbedview_filter_all"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: E-Mail
+#. Default: "Email"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_userstab_email"
+msgstr "Email"
+
+#. German translation: Vorname
+#. Default: "Firstname"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_userstab_firstname"
+msgstr "Firstname"
+
+#. German translation: Nachname
+#. Default: "Lastname"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_userstab_lastname"
+msgstr "Lastname"
+
+#. German translation: Telefon Geschäft
+#. Default: "Office Phone"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_userstab_phone_office"
+msgstr "Office Phone"
+
+#. German translation: Benutzerid
+#. Default: "Userid"
+#: ./opengever/tabbedview/browser/users.py
+msgid "label_userstab_userid"
+msgstr "Userid"
+
+#. German translation: Änderungsdatum
+#. Default: "Änderungsdatum"
+msgid "modified"
+msgstr "Änderungsdatum"
+
+#. German translation: Meine Aufgaben
+msgid "mytasks"
+msgstr "mytasks"
+
+#. German translation: Keine
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt
+msgid "none"
+msgstr "none"
+
+#. German translation: Gremien
+msgid "orgunit_contact"
+msgstr "orgunit_contact"
+
+#. German translation: Überfällig
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "overdue"
+msgstr "overdue"
+
+#. German translation: Übersicht
+#. Default: "Übersicht"
+msgid "overview"
+msgstr "Übersicht"
+
+#. German translation: Beteiligte
+msgid "participants"
+msgstr "participants"
+
+#. German translation: Persönliche Übersicht: ${user_name}
+#. Default: "Personal Overview: ${user_name}"
+#: ./opengever/tabbedview/browser/personal_overview.py
+msgid "personal_overview_title"
+msgstr "Personal Overview: ${user_name}"
+
+#. German translation: Telefon Nummer
+msgid "phone_office"
+msgstr "phone_office"
+
+#. German translation: Nach Schlagwörtern filtern...
+#. Default: "Filter by subjects..."
+#: ./opengever/tabbedview/filters.py
+msgid "placeholder_filter_by_subjects"
+msgstr "Filter by subjects..."
+
+#. German translation: Vorschau
+#. Default: "Vorschau"
+msgid "preview"
+msgstr "Vorschau"
+
+#. German translation: Eingangsdatum
+msgid "receipt_date"
+msgstr "receipt_date"
+
+#. German translation: Aktenzeichen
+#. Default: "Reference Number"
+msgid "reference"
+msgstr "Reference Number"
+
+#. German translation: Ref Nr
+msgid "reference_number"
+msgstr "reference_number"
+
+#. German translation: Verwandte Dossiers
+msgid "relateddossiers"
+msgstr "relateddossiers"
+
+#. German translation: Ordnungspositionen
+#. Default: "Ordnungspositionen"
+msgid "repostories"
+msgstr "Ordnungspositionen"
+
+#. German translation: Federführend
+#. Default: "Responsible"
+msgid "responsible"
+msgstr "Responsible"
+
+#. German translation: Status
+msgid "review_state"
+msgstr "review_state"
+
+#. German translation: Rollen
+msgid "role_list"
+msgstr "role_list"
+
+#. German translation: Beteiligte
+#. Default: "Beteiligte"
+msgid "sharing"
+msgstr "Beteiligte"
+
+#. German translation: Titel
+#. Default: "Titel"
+msgid "sortable_title"
+msgstr "Titel"
+
+#. German translation: Beginn
+msgid "start"
+msgstr "start"
+
+#. German translation: Subdossiers
+#. Default: "Subdossiers"
+msgid "subdossiers"
+msgstr "Subdossiers"
+
+#. German translation: ${amount} Treffer
+#. Default: "${amount} matches"
+#: ./opengever/tabbedview/browser/no_selection_amount.pt
+msgid "tab_matches"
+msgstr "${amount} matches"
+
+#. German translation: Aufgaben
+#. Default: "Aufgaben"
+msgid "tasks"
+msgstr "Aufgaben"
+
+#. German translation: Datum
+#. Default: "Datum"
+msgid "time"
+msgstr "Datum"
+
+#. German translation: Titel
+#. Default: "Titel"
+msgid "title"
+msgstr "Titel"
+
+#. German translation: Papierkorb
+msgid "trash"
+msgstr "trash"

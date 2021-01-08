@@ -1,0 +1,119 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Standardmäßig werden die Berechtigungen von einem Ordner auf die in ihm befindlichen Artikel vererbt. Wenn Sie dies deaktivieren, sind nur die explizit definierten Zugriffsberechtigungen gültig.
+#. Default: "By default, permissions from the container of this item are inherited. If you disable this, only the explicitly defined sharing permissions will be valid."
+#: ./opengever/sharing/browser/sharing.py
+msgid "help_inherit_local_roles"
+msgstr "By default, permissions from the container of this item are inherited. If you disable this, only the explicitly defined sharing permissions will be valid."
+
+#. German translation: Vererbte Berechtigung
+#. Default: "Acquired permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_acquired_permission"
+msgstr "Acquired permission"
+
+#. German translation: Automatische Berechtigung
+#. Default: "Automatic permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_automatic_permission"
+msgstr "Automatic permission"
+
+#. German translation: Geschützte Objekte
+#. Default: "Protected Objects"
+#: ./opengever/sharing/browser/admin_list.py
+msgid "label_blocked_local_roles"
+msgstr "Protected Objects"
+
+#. German translation: Lokale Berechtigung
+#. Default: "Local permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_local_permission"
+msgstr "Local permission"
+
+#. German translation: Keine geschützte Objekte in diesem Bereich gefunden.
+#. Default: "No protected objects were found within this scope."
+#: ./opengever/sharing/browser/admin_list.py
+msgid "label_no_blocked_local_roles"
+msgstr "No protected objects were found within this scope."
+
+#. German translation: Lokale Rolle erfolgreich gespeichert
+#. Default: "Local roles successfully changed"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_roles_successfully_changed"
+msgstr "Local roles successfully changed"
+
+#. German translation: Lokale Rollen konnten nicht gespeichert werden.
+#. Default: "Local roles save failed."
+#: ./opengever/sharing/browser/sharing.py
+msgid "message_save_failed"
+msgstr "Local roles save failed."
+
+#. German translation: Suche Benutzer oder Gruppen
+#. Default: "Search for Users and Groups"
+#: ./opengever/sharing/browser/sharing.py
+msgid "principal_search_placeholder"
+msgstr "Search for Users and Groups"
+
+#. German translation: Hinzufügen
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_contributor"
+msgstr "sharing_contributor"
+
+#. German translation: Dossiers hinzufügen
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_dossier_contributor"
+msgstr "sharing_dossier_contributor"
+
+#. German translation: Dossiers bearbeiten
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_dossier_editor"
+msgstr "sharing_dossier_editor"
+
+#. German translation: Dossiers verwalten
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_dossier_manager"
+msgstr "sharing_dossier_manager"
+
+#. German translation: Dossiers reaktivieren
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_dossier_publisher"
+msgstr "sharing_dossier_publisher"
+
+#. German translation: Lesen
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_dossier_reader"
+msgstr "sharing_dossier_reader"
+
+#. German translation: Dossiers abschliessen
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_dossier_reviewer"
+msgstr "sharing_dossier_reviewer"
+
+#. German translation: Bearbeiten
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_editor"
+msgstr "sharing_editor"
+
+#. German translation: Lesen
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_reader"
+msgstr "sharing_reader"
+
+#. German translation: Rollen verwalten
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_role_manager"
+msgstr "sharing_role_manager"

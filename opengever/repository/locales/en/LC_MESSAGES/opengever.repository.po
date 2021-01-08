@@ -1,0 +1,372 @@
+# opengever.repository
+# Jonas Baumann <j.baumann@4teamwork.ch>, 2009
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2014-11-25 11:31+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#. German translation: Rapport konnte nicht generiert werden.
+#: ./opengever/repository/browser/excel_export.py
+msgid "Could not generate the report."
+msgstr "Could not generate the report."
+
+#. German translation: Wird verwendet
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
+msgid "In use"
+msgstr "In use"
+
+#. German translation: Aktenzeichen Präfix Manager
+#: ./opengever/repository/upgrades/profiles/2601/actions.xml
+msgid "Prefix Manager"
+msgstr "Prefix Manager"
+
+#. German translation: Freigabe von ungebrauchten Aktenzeichen Prefixen.
+#: ./opengever/repository/upgrades/profiles/2601/actions.xml
+msgid "Unlock unused repository prefixes."
+msgstr "Unlock unused repository prefixes."
+
+#. German translation: Hinzufügen von Geschäftsdossiers erlauben
+#. Default: "Allow add businesscase dossier"
+#: ./opengever/repository/repositoryfolder.py
+msgid "allow_add_businesscase_dossier"
+msgstr "Allow add businesscase dossier"
+
+#. German translation: Wählen Sie, ob es in dieser Ordnungsposition erlaubt ist, Geschäftsdossiers hinzuzufügen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.
+#. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
+#: ./opengever/repository/repositoryfolder.py
+msgid "description_allow_add_businesscase_dossier"
+msgstr "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
+
+#. German translation: Keine untergeordnete Ordnungspositionen verfügbar.
+#. Default: "No nested repositorys available."
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
+msgid "empty_repository"
+msgstr "No nested repositorys available."
+
+#. German translation: Eine Ordnungsposition mit diesem Aktenzeichen existiert bereits auf gleicher Stufe.
+#. Default: "A Sibling with the same reference number is existing."
+#: ./opengever/repository/behaviors/referenceprefix.py
+msgid "error_sibling_reference_number_existing"
+msgstr "A Sibling with the same reference number is existing."
+
+#. German translation: Allgemein
+#. Default: "Common"
+#: ./opengever/repository/behaviors/referenceprefix.py
+#: ./opengever/repository/behaviors/responsibleorg.py
+#: ./opengever/repository/repositoryfolder.py
+msgid "fieldset_common"
+msgstr "Common"
+
+#. German translation: Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.
+#. Default: "Select all additional dossier types which should be addable in this repository folder."
+#: ./opengever/repository/repositoryfolder.py
+msgid "help_addable_dossier_types"
+msgstr "Select all additional dossier types which should be addable in this repository folder."
+
+#. German translation: Eine kurze Beschreibung des Inhalts.
+#. Default: "A short summary of the content."
+#: ./opengever/repository/repositoryfolder.py
+msgid "help_description"
+msgstr "A short summary of the content."
+
+#. German translation: Erlaubte Spezialdossiers
+#. Default: "Addable dossier types"
+#: ./opengever/repository/repositoryfolder.py
+msgid "label_addable_dossier_types"
+msgstr "Addable dossier types"
+
+#. German translation: Unterbruch Vererbung
+#. Default: "Blocked inheritance"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_blocked_inheritance"
+msgstr "Blocked inheritance"
+
+#. German translation: Geschützte Objekte
+#. Default: "Protected Objects"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_blocked_local_roles"
+msgstr "Protected Objects"
+
+#. German translation: Löschen
+#. Default: "Delete"
+#: ./opengever/repository/browser/templates/deletion.pt
+msgid "label_delete"
+msgstr "Delete"
+
+#. German translation: Ordnungsposition löschen
+#. Default: "Delete repository"
+#: ./opengever/repository/browser/templates/deletion.pt
+msgid "label_delete_repository"
+msgstr "Delete repository"
+
+#. German translation: Beschreibung
+#. Default: "Description"
+#: ./opengever/repository/repositoryfolder.py
+msgid "label_description"
+msgstr "Description"
+
+#. German translation: Angebote
+#. Default: "Dispositions"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_dispositions"
+msgstr "Dispositions"
+
+#. German translation: Dokumente
+#. Default: "Documents"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_documents"
+msgstr "Documents"
+
+#. German translation: Dossiers
+#. Default: "Dossiers"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_dossiers"
+msgstr "Dossiers"
+
+#. German translation: nein
+#. Default: "No"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_false"
+msgstr "No"
+
+#. German translation: Früheres Zeichen
+#. Default: "Former reference"
+#: ./opengever/repository/repositoryfolder.py
+msgid "label_former_reference"
+msgstr "Former reference"
+
+#. German translation: Dossiers hinzufügen
+#. Default: "Create dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_contributor_role"
+msgstr "Create dossiers"
+
+#. German translation: Dossiers bearbeiten
+#. Default: "Edit dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_editor_role"
+msgstr "Edit dossiers"
+
+#. German translation: Dossiers verwalten
+#. Default: "Manage dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_manager_role"
+msgstr "Manage dossiers"
+
+#. German translation: Dossiers reaktivieren
+#. Default: "Reactivate dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_publisher_role"
+msgstr "Reactivate dossiers"
+
+#. German translation: Dossiers lesen
+#. Default: "Read dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_reader_role"
+msgstr "Read dossiers"
+
+#. German translation: Dossiers abschliessen
+#. Default: "Close dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_reviewer_role"
+msgstr "Close dossiers"
+
+#. German translation: Info
+#. Default: "Info"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_info"
+msgstr "Info"
+
+#. German translation: Journal
+#. Default: "Journal"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_journal"
+msgstr "Journal"
+
+#. German translation: Standort
+#. Default: "Location"
+#: ./opengever/repository/repositoryfolder.py
+msgid "label_location"
+msgstr "Location"
+
+#. German translation: Übersicht
+#. Default: "Overview"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_overview"
+msgstr "Overview"
+
+#. German translation: Anträge
+#. Default: "Proposals"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_proposals"
+msgstr "Proposals"
+
+#. German translation: Präfix des Aktenzeichens
+#. Default: "Reference Prefix"
+#: ./opengever/repository/behaviors/referenceprefix.py
+msgid "label_reference_number_prefix"
+msgstr "Reference Prefix"
+
+#. German translation: Leistung
+#. Default: "Referenced activity"
+#: ./opengever/repository/repositoryfolder.py
+msgid "label_referenced_activity"
+msgstr "Referenced activity"
+
+#. German translation: Ordnungspositionsnummer
+#. Default: "Repository number"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repository_number"
+msgstr "Repository number"
+
+#. German translation: Beschreibung (optional)
+#. Default: "Repositoryfolder description"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_description"
+msgstr "Repositoryfolder description"
+
+#. German translation: Titel der Ordnungsposition
+#. Default: "Repositoryfolder title (German)"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_title_de"
+msgstr "Repositoryfolder title (German)"
+
+#. German translation: Titel der Ordnungsposition (französisch)
+#. Default: "Repositoryfolder title (French)"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_title_fr"
+msgstr "Repositoryfolder title (French)"
+
+#. German translation: Die Ordnungsposition wurde erfolgreich gelöscht.
+#. Default: "The repository have been successfully deleted."
+#: ./opengever/repository/browser/deletion.py
+msgid "label_successfully_deleted"
+msgstr "The repository have been successfully deleted."
+
+#. German translation: Aufgaben
+#. Default: "Tasks"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_tasks"
+msgstr "Tasks"
+
+#. German translation: ja
+#. Default: "Yes"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_true"
+msgstr "Yes"
+
+#. German translation: Gültig ab
+#. Default: "Valid from"
+#: ./opengever/repository/repositoryfolder.py
+#: ./opengever/repository/repositoryroot.py
+msgid "label_valid_from"
+msgstr "Valid from"
+
+#. German translation: Gültig bis
+#. Default: "Valid until"
+#: ./opengever/repository/repositoryfolder.py
+#: ./opengever/repository/repositoryroot.py
+msgid "label_valid_until"
+msgstr "Valid until"
+
+#. German translation: Version
+#. Default: "Version"
+#: ./opengever/repository/repositoryroot.py
+msgid "label_version"
+msgstr "Version"
+
+#. German translation: Warnung
+#. Default: "Warning"
+#: ./opengever/repository/browser/templates/deletion.pt
+msgid "label_warning"
+msgstr "Warning"
+
+#. German translation: Status
+#. Default: "State"
+#: ./opengever/repository/viewlets/byline.py
+msgid "label_workflow_state"
+msgstr "State"
+
+#. German translation: Möchten Sie die aktuelle Ordnungsposition wirklich löschen?
+#. Default: "Do you really want to delete the current repository?"
+#: ./opengever/repository/browser/templates/deletion.pt
+msgid "msg_delete_confirmation"
+msgstr "Do you really want to delete the current repository?"
+
+#. German translation: Sie fügen eine Ordnungsposition einem Blattknoten hinzu, der bereits Dossiers enthält. Dies ist nur vorübergehend erlaubt und darin enthaltene Dossiers müssen anschliessend wieder in einen Blattknoten verschoben werden.
+#. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
+#: ./opengever/repository/browser/repositoryfolder_forms.py
+msgid "msg_leafnode_warning"
+msgstr "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
+
+#. German translation: Name
+#. Default: "Name"
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
+msgid "name"
+msgstr "Name"
+
+#. German translation: Position
+#. Default: "Position"
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
+msgid "position"
+msgstr "Position"
+
+#. German translation: Aktenzeichen Präfix Manager
+#. Default: "Reference Prefix Manager"
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
+msgid "prefman_title"
+msgstr "Reference Prefix Manager"
+
+#. German translation: Federführendes Amt
+#. Default: "Responsible organisation unit"
+#: ./opengever/repository/behaviors/responsibleorg.py
+msgid "responsible_org_unit"
+msgstr "Responsible organisation unit"
+
+#. German translation: Das Aktenzeichen Präfix wird noch verwendet.
+#. Default: "The reference you try to unlock is still in use."
+#: ./opengever/repository/browser/referenceprefix_manager.py
+msgid "statmsg_prefix_unlock_failure"
+msgstr "The reference you try to unlock is still in use."
+
+#. German translation: Aktenzeichen Präfix wurde freigegeben.
+#. Default: "Reference prefix has been unlocked."
+#: ./opengever/repository/browser/referenceprefix_manager.py
+msgid "statmsg_prefix_unlocked"
+msgstr "Reference prefix has been unlocked."
+
+#. German translation: Dokumente
+#. Default: "Documents:"
+#: ./opengever/repository/browser/templates/repositoryrootoverview.pt
+msgid "th_documents"
+msgstr "Documents:"
+
+#. German translation: Dossiers
+#. Default: "Dossiers:"
+#: ./opengever/repository/browser/templates/repositoryrootoverview.pt
+msgid "th_dossiers"
+msgstr "Dossiers:"
+
+#. German translation: Aufgaben
+#. Default: "Tasks:"
+#: ./opengever/repository/browser/templates/repositoryrootoverview.pt
+msgid "th_task"
+msgstr "Tasks:"
+
+#. German translation: Freigeben
+#. Default: "Unlock"
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
+msgid "unlock"
+msgstr "Unlock"

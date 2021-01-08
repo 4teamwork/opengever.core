@@ -1,0 +1,80 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Bearbeitungskommentar
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "Checkin comment:"
+msgstr "Checkin comment:"
+
+#. German translation: Ersteller:
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "Creator:"
+msgstr "Creator:"
+
+#. German translation: Beschreibung:
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "Description:"
+msgstr "Description:"
+
+#. German translation: Dokumentdatum:
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "Document date:"
+msgstr "Document date:"
+
+#. German translation: Dossier:
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "Dossier:"
+msgstr "Dossier:"
+
+#. German translation: Datei:
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "File:"
+msgstr "File:"
+
+#. German translation: Aktenzeichen:
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "Reference number:"
+msgstr "Reference number:"
+
+#. German translation: Mehr anzeigen
+#. Default: "Show more"
+#: ./opengever/bumblebee/browser/templates/preview_listing.pt
+msgid "documentsShowMore"
+msgstr "Show more"
+
+#. German translation: Keine Inhalte
+#. Default: "No contents"
+#: ./opengever/bumblebee/browser/templates/preview_listing.pt
+msgid "label_no_contents"
+msgstr "No contents"
+
+#. German translation: Vorschau kann für diesen Inhalt nicht neu erstellt werden.
+#. Default: "Reviving the preview is not available for this context."
+#: ./opengever/bumblebee/browser/revive_preview.py
+msgid "preview_revive_not_available"
+msgstr "Reviving the preview is not available for this context."
+
+#. German translation: Vorschau wurde erstellt und wird in wenigen Sekunden zur Verfügung stehen.
+#. Default: "Preview revived and will be available soon"
+#: ./opengever/bumblebee/browser/revive_preview.py
+msgid "preview_revived"
+msgstr "Preview revived and will be available soon"
+
+#. German translation: Sie sehen sich eine alte Version an.
+#. Default: "You are looking at a versioned file."
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "warning_on_versioned_context"
+msgstr "You are looking at a versioned file."

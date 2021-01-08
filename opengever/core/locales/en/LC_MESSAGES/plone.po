@@ -2,15 +2,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2017-12-20 16:47+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
@@ -18,400 +22,515 @@ msgstr ""
 msgid "Active"
 msgstr "Active"
 
+#. German translation: Verwalten
+msgid "DossierManager"
+msgstr "DossierManager"
+
+#. German translation: Als Excel exportieren
+#. Default: "Download Excel"
+#: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
+msgid "Download Excel"
+msgstr "Download Excel"
+
+#. German translation: Beispiels-Sitzungsdaten einfüllen
+#. Default: "Fill meeting template"
+#: opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
+msgid "Fill meeting template"
+msgstr "Fill meeting template"
+
+#. German translation: Inaktiv
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "Inactive"
 msgstr "Inactive"
 
+#. German translation: Reaktivieren
+msgid "Publisher"
+msgstr "Publisher"
+
+#. German translation: Deaktivieren
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "deactivate"
 msgstr "deactivate"
 
+#. German translation: Gremien-AdministratorIn
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--CommitteeAdministrator"
 msgstr "committee admin"
 
+#. German translation: Gremien-Mitglied
 #. Default: "committee member"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--CommitteeMember"
 msgstr "committee member"
 
+#. German translation: Gremien-Verantwortliche(r)
 #. Default: "committee responsible"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--CommitteeResponsible"
 msgstr "committee responsible"
 
+#. German translation: Manager
 #. Default: "manager"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--Manager"
 msgstr "manager"
 
+#. German translation: Ein Gremien-Mitglied ist Teil eines Gremiums und kann Inhalte wie Sitzungen und Anträge des Gremiums ansehen.
 #. Default: "A committe member is part of a committee and can view the committee data, such as meetings and proposals."
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeMember"
 msgstr "A committe member is part of a committee and can view the committee data, such as meetings and proposals."
 
+#. German translation: Die Gremien-Verantwortliche Person ist zuständig für ein Kommitee. Sie erstellt, traktandiert und protokolliert Sitzungen und kann das Gremium konfigurieren und deaktivieren. Diese Rolle wird vom System automatisch vergeben.
 #. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee. The committee responsible role is assigned automatically to the group that can be configured per committee."
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
 msgstr "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee. The committee responsible role is assigned automatically to the group that can be configured per committee."
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--STATUS--active"
 msgstr "Active"
 
+#. German translation: Inaktiv
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--STATUS--inactive"
 msgstr "Inactive"
 
+#. German translation: deaktivieren
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--TRANSITION--deactivate--active_inactive"
 msgstr "deactivate"
 
+#. German translation: reaktivieren
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--TRANSITION--reactivate--inactive_active"
 msgstr "reactivate"
 
+#. German translation: Gremien-AdministratorIn
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--CommitteeAdministrator"
 msgstr "committee admin"
 
+#. German translation: Manager
 #. Default: "manager"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--Manager"
 msgstr "manager"
 
+#. German translation: SitzungsbenutzerIn
 #. Default: "meeting user"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--MeetingUser"
 msgstr "meeting user"
 
+#. German translation: Ein/e Gremien-AdministratorIn ist verantwortlich für das erstellen und verwalten der Gremien, sowie für das Konfigurieren der Benutzer-Rollen in den jeweiligen Gremien.
 #. Default: "The committee admin is responsible for creating and managing committees and manging the roles of the committees."
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--CommitteeAdministrator"
 msgstr "The committee admin is responsible for creating and managing committees and manging the roles of the committees."
 
+#. German translation: Alle Personen, die mit dem Sitzungsmodul arbeiten, werden als SitzungsbenutzerIn bezeichnet. Dadurch sehen sie den Reiter «Sitzungen». Um auf die verschiedenen Gremien zugreifen zu können sind pro Gremium weitere Rollen zu vergeben.
 #. Default: "Anyone who works with the meeting module is a meeting user. Meeting users have read access to the meeting area. Additional roles on committe level are required for accessing the committees."
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--MeetingUser"
 msgstr "Anyone who works with the meeting module is a meeting user. Meeting users have read access to the meeting area. Additional roles on committe level are required for accessing the committees."
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--STATUS--active"
 msgstr "Active"
 
+#. German translation: Gremien-AdministratorIn
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "opengever_period_workflow--ROLE--CommitteeAdministrator"
 msgstr "committee admin"
 
+#. German translation: Gremien-Mitglied
 #. Default: "committee member"
 #: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "opengever_period_workflow--ROLE--CommitteeMember"
 msgstr "committee member"
 
+#. German translation: Gremien-Verantwortliche(r)
 #. Default: "committee responsible"
 #: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "opengever_period_workflow--ROLE--CommitteeResponsible"
 msgstr "committee responsible"
 
+#. German translation: Manager
 #. Default: "manager"
 #: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "opengever_period_workflow--ROLE--Manager"
 msgstr "manager"
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "opengever_period_workflow--STATUS--active"
 msgstr "Active"
 
+#. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--Administrator"
 msgstr "admin"
 
+#. German translation: System Administrator
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--Manager"
 msgstr "systems administrator"
 
+#. German translation: Admin
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--WorkspaceAdmin"
 msgstr "workspace admin"
 
+#. German translation: Gast
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--WorkspaceGuest"
 msgstr "workspace guest"
 
+#. German translation: Teammitglied
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--WorkspaceMember"
 msgstr "workspace member"
 
+#. German translation: Admins verwalten die Teammitglieder und haben lesenden und schreibenden Zugriff auf alle Inhalte.
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceAdmin"
 msgstr "Workspace admins can manage the team as well as read and modify all contents."
 
+#. German translation: Gäste haben lesenden Zugriff auf alle Inhalten, können aber keine Inhalte verändern.
 #. Default: "A workspace guest has read access to the content but cannot change anything."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceGuest"
 msgstr "A workspace guest has read access to the content but cannot change anything."
 
+#. German translation: Teammitglieder haben lesenden und schreibenden Zugriff auf alle Inhalte.
 #. Default: "Workspace members can read and modify all contents of the workspace."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceMember"
 msgstr "Workspace members can read and modify all contents of the workspace."
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--STATUS--active"
 msgstr "Active"
 
+#. German translation: Inaktiv
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--STATUS--inactive"
 msgstr "Inactive"
 
+#. German translation: Deaktivieren
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--TRANSITION--deactivate--active_inactive"
 msgstr "deactivate"
 
+#. German translation: Reaktivieren
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--TRANSITION--reactivate--inactive_active"
 msgstr "reactivate"
 
+#. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE--Administrator"
 msgstr "admin"
 
+#. German translation: System Administrator
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE--Manager"
 msgstr "systems administrator"
 
+#. German translation: Admin
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE--WorkspaceAdmin"
 msgstr "workspace admin"
 
+#. German translation: Gast
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE--WorkspaceGuest"
 msgstr "workspace guest"
 
+#. German translation: Teammitglied
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE--WorkspaceMember"
 msgstr "workspace member"
 
+#. German translation: Admins verwalten die Teammitglieder und haben lesenden und schreibenden Zugriff auf alle Inhalte.
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE-DESCRIPTION--WorkspaceAdmin"
 msgstr "Workspace admins can manage the team as well as read and modify all contents."
 
+#. German translation: Gäste haben lesenden Zugriff auf alle Inhalten, können aber keine Inhalte verändern.
 #. Default: "A workspace guest has read access to the content but cannot change anything."
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE-DESCRIPTION--WorkspaceGuest"
 msgstr "A workspace guest has read access to the content but cannot change anything."
 
+#. German translation: Teammitglieder haben lesenden und schreibenden Zugriff auf alle Inhalte.
 #. Default: "Workspace members can read and modify all contents of the workspace."
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--ROLE-DESCRIPTION--WorkspaceMember"
 msgstr "Workspace members can read and modify all contents of the workspace."
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--STATUS--active"
 msgstr "Active"
 
+#. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--Administrator"
 msgstr "admin"
 
+#. German translation: System Administrator
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--Manager"
 msgstr "systems administrator"
 
+#. German translation: Admin
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceAdmin"
 msgstr "workspace admin"
 
+#. German translation: Gast
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceGuest"
 msgstr "workspace guest"
 
+#. German translation: Teammitglied
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceMember"
 msgstr "workspace member"
 
+#. German translation: Admins verwalten die Teammitglieder und haben lesenden und schreibenden Zugriff auf alle Inhalte.
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceAdmin"
 msgstr "Workspace admins can manage the team as well as read and modify all contents."
 
+#. German translation: Gäste haben lesenden Zugriff auf alle Inhalten, können aber keine Inhalte verändern.
 #. Default: "A workspace guest has read access to the content but cannot change anything."
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceGuest"
 msgstr "A workspace guest has read access to the content but cannot change anything."
 
+#. German translation: Teammitglieder haben lesenden und schreibenden Zugriff auf alle Inhalte.
 #. Default: "Workspace members can read and modify all contents of the workspace."
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceMember"
 msgstr "Workspace members can read and modify all contents of the workspace."
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--STATUS--active"
 msgstr "Active"
 
+#. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "opengever_workspace_meeting--ROLE--Administrator"
 msgstr "admin"
 
+#. German translation: Manager
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "opengever_workspace_meeting--ROLE--Manager"
 msgstr "systems administrator"
 
+#. German translation: Admin
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "opengever_workspace_meeting--ROLE--WorkspaceAdmin"
 msgstr "workspace admin"
 
+#. German translation: Gast
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "opengever_workspace_meeting--ROLE--WorkspaceGuest"
 msgstr "workspace guest"
 
+#. German translation: Teammitglied
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "opengever_workspace_meeting--ROLE--WorkspaceMember"
 msgstr "workspace member"
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "opengever_workspace_meeting--STATUS--active"
 msgstr "Active"
 
+#. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Administrator"
 msgstr "admin"
 
+#. German translation: System Administrator
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Manager"
 msgstr "systems administrator"
 
+#. German translation: Teamräume-Ersteller
 #. Default: "workspaces creator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--WorkspacesCreator"
 msgstr "workspaces creator"
 
+#. German translation: Teamräume-Benutzer
 #. Default: "workspaces user"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--WorkspacesUser"
 msgstr "workspaces user"
 
+#. German translation: Teamräume-Ersteller dürfen neue Teamräume erstellen.
 #. Default: "Workspaces creators are allowed to create new workspaces."
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE-DESCRIPTION--WorkspacesCreator"
 msgstr "Workspaces creators are allowed to create new workspaces."
 
+#. German translation: Die Teamräume-Benutzer-Rolle macht den Navigationspunkt «Teamräume» sichtbar. Sie wird an alle Benutzer des Teamraum-Moduls erteilt.
 #. Default: "Anyone who uses the workspace module is a workspace user. Workspace users can see the workspace root."
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE-DESCRIPTION--WorkspacesUser"
 msgstr "Anyone who uses the workspace module is a workspace user. Workspace users can see the workspace root."
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--STATUS--active"
 msgstr "Active"
 
+#. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--ROLE--Administrator"
 msgstr "admin"
 
+#. German translation: System Administrator
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--ROLE--Manager"
 msgstr "systems administrator"
 
+#. German translation: Admin
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--ROLE--WorkspaceAdmin"
 msgstr "workspace admin"
 
+#. German translation: Gast
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--ROLE--WorkspaceGuest"
 msgstr "workspace guest"
 
+#. German translation: Teammitglied
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--ROLE--WorkspaceMember"
 msgstr "workspace member"
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--STATUS--active"
 msgstr "Active"
 
+#. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--ROLE--Administrator"
 msgstr "admin"
 
+#. German translation: System Administrator
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--ROLE--Manager"
 msgstr "systems administrator"
 
+#. German translation: Admin
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--ROLE--WorkspaceAdmin"
 msgstr "workspace admin"
 
+#. German translation: Gast
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--ROLE--WorkspaceGuest"
 msgstr "workspace guest"
 
+#. German translation: Teammitglied
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--ROLE--WorkspaceMember"
 msgstr "workspace member"
 
+#. German translation: Aktiv
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
 msgid "opengever_workspace_todolist--STATUS--active"
 msgstr "Active"
 
+#. German translation: reaktivieren
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "reactivate"
 msgstr "reactivate"
+
+#. German translation: Hinzufügen
+msgid "title_can_add"
+msgstr "title_can_add"
+
+#. German translation: Bearbeiten
+msgid "title_can_edit"
+msgstr "title_can_edit"
+
+#. German translation: Abschliessen
+msgid "title_can_review"
+msgstr "title_can_review"
+
+#. German translation: Lesen
+msgid "title_can_view"
+msgstr "title_can_view"

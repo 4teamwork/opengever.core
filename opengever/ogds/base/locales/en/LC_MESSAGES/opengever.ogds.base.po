@@ -1,0 +1,181 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2016-07-22 16:54+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"Language: de\n"
+"X-Generator: Weblate 2.7-dev\n"
+
+#. German translation: Amtswechsler umschalten
+#: ./opengever/ogds/base/upgrades/profiles/4002/actions.xml
+msgid "Toggle orgunit selector"
+msgstr "Toggle orgunit selector"
+
+#. German translation: Nein
+#. Default: "No"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "active_no"
+msgstr "No"
+
+#. German translation: Ja
+#. Default: "Yes"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "active_yes"
+msgstr "Yes"
+
+#. German translation: Eingangskorb: ${client}
+#. Default: "Inbox: ${client}"
+#: ./opengever/ogds/base/actor.py
+#: ./opengever/ogds/base/sources.py
+msgid "inbox_label"
+msgstr "Inbox: ${client}"
+
+#. German translation: Aktiv
+#. Default: "Active"
+#: ./opengever/ogds/base/browser/team_forms.py
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_active"
+msgstr "Active"
+
+#. German translation: Team hinzufügen
+#. Default: "Add team"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_add_team"
+msgstr "Add team"
+
+#. German translation: Adresse
+#. Default: "Address"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_address"
+msgstr "Address"
+
+#. German translation: Zugehörige Organisationseinheit
+#. Default: "Assigned org unit"
+#: ./opengever/ogds/base/browser/templates/teamdetails.pt
+msgid "label_assigned_orgunit"
+msgstr "Assigned org unit"
+
+#. German translation: Amt
+#. Default: "Department"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_department"
+msgstr "Department"
+
+#. German translation: Beschreibung
+#. Default: "Description"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_description"
+msgstr "Description"
+
+#. German translation: Direktion
+#. Default: "Directorate"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_directorate"
+msgstr "Directorate"
+
+#. German translation: Team bearbeiten
+#. Default: "Edit team"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_edit_team"
+msgstr "Edit team"
+
+#. German translation: E-Mail Adresse
+#. Default: "Email"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_email"
+msgstr "Email"
+
+#. German translation: Alternative E-Mail Adresse
+#. Default: "Email 2"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_email2"
+msgstr "Email 2"
+
+#. German translation: Name
+#. Default: "Name"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_fullname"
+msgstr "Name"
+
+#. German translation: Gruppe
+#. Default: "Group"
+#: ./opengever/ogds/base/browser/team_forms.py
+#: ./opengever/ogds/base/browser/templates/teamdetails.pt
+msgid "label_group"
+msgstr "Group"
+
+#. German translation: Gruppen
+#. Default: "Groups"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_groups"
+msgstr "Groups"
+
+#. German translation: Mitglieder
+#. Default: "Members"
+#: ./opengever/ogds/base/browser/templates/teamdetails.pt
+msgid "label_members"
+msgstr "Members"
+
+#. German translation: Organisationseinheit
+#. Default: "Org Unit"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_org_unit"
+msgstr "Org Unit"
+
+#. German translation: Fax
+#. Default: "Fax"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_phone_fax"
+msgstr "Fax"
+
+#. German translation: Mobiltelefon
+#. Default: "Mobile phone"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_phone_mobile"
+msgstr "Mobile phone"
+
+#. German translation: Telefon Büro
+#. Default: "Office phone"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_phone_office"
+msgstr "Office phone"
+
+#. German translation: Anrede
+#. Default: "Salutation"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_salutation"
+msgstr "Salutation"
+
+#. German translation: Teams
+#. Default: "Teams"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_teams"
+msgstr "Teams"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: Homepage
+#. Default: "URL"
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
+msgid "label_url"
+msgstr "URL"
+
+#. German translation: Alle Benutzer anzeigen
+#. Default: "Show all users"
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
+msgid "link_all_users"
+msgstr "Show all users"

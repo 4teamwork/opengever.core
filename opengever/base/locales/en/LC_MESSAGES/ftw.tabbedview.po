@@ -1,0 +1,303 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-08-11 09:27+0000\n"
+"PO-Revision-Date: 2010-10-14 18:19+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Bereich
+msgid "By Area"
+msgstr "By Area"
+
+#. German translation: Verantwortlicher
+msgid "By Responsible Manager"
+msgstr "By Responsible Manager"
+
+#. German translation: Einstufung
+msgid "By Severity"
+msgstr "By Severity"
+
+#. German translation: Status
+msgid "By State"
+msgstr "By State"
+
+#. German translation: Ziel Release
+msgid "By Target Release"
+msgstr "By Target Release"
+
+#. German translation: Monat
+msgid "Month"
+msgstr "Month"
+
+#. German translation: Übersicht
+msgid "accounting_overview"
+msgstr "accounting_overview"
+
+#. German translation: Details
+msgid "additional_contact"
+msgstr "additional_contact"
+
+#. German translation: Alle Einträge
+msgid "all_entries"
+msgstr "all_entries"
+
+#. German translation: Alle Tickets
+msgid "all_issues"
+msgstr "all_issues"
+
+#. German translation: Alle erteilten Aufgaben
+msgid "allissuedtasks"
+msgstr "allissuedtasks"
+
+#. German translation: Alle Aufgaben
+msgid "alltasks"
+msgstr "alltasks"
+
+#. German translation: Archiv
+msgid "archive"
+msgstr "archive"
+
+#. German translation: Erhaltene Aufgaben
+msgid "assigned_inbox_tasks"
+msgstr "assigned_inbox_tasks"
+
+#. German translation: Zugewiesene Aufgaben
+msgid "assignedtasks"
+msgstr "assignedtasks"
+
+#. German translation: verrechenb. Std.
+msgid "billable"
+msgstr "billable"
+
+#. German translation: Letzte Änderungen
+msgid "changes"
+msgstr "changes"
+
+#. German translation: Abgeschlossene Weiterleitungen
+msgid "closed-forwardings"
+msgstr "closed-forwardings"
+
+#. German translation: Gremien
+msgid "committees"
+msgstr "committees"
+
+#. German translation: Kontakte
+msgid "contacts"
+msgstr "contacts"
+
+#. German translation: Angebote
+msgid "dispositions"
+msgstr "dispositions"
+
+#. German translation: Dokumente
+msgid "documents"
+msgstr "documents"
+
+#. German translation: Dokumente
+msgid "documents-proxy"
+msgstr "documents-proxy"
+
+#. German translation: Dossiers
+msgid "dossiers"
+msgstr "dossiers"
+
+#. German translation: Termine
+msgid "events"
+msgstr "events"
+
+#. German translation: Ordner
+msgid "folders"
+msgstr "folders"
+
+#. German translation: Allgemein
+msgid "generally"
+msgstr "generally"
+
+#. German translation: Konstenstelle
+msgid "getAccount"
+msgstr "getAccount"
+
+#. German translation: verrechenbar
+msgid "getBillable"
+msgstr "getBillable"
+
+#. German translation: Geleistete Std.
+msgid "getEffectiveHours"
+msgstr "getEffectiveHours"
+
+#. German translation: Geschätzte Std.
+msgid "getEstimatedHours"
+msgstr "getEstimatedHours"
+
+#. German translation: geleistet
+msgid "getHours"
+msgstr "getHours"
+
+#. German translation: Vollmachten
+msgid "getResponsible"
+msgstr "getResponsible"
+
+#. German translation: Zuständigkeit
+msgid "getResponsibleManager"
+msgstr "getResponsibleManager"
+
+#. German translation: Übersicht
+msgid "important_contact"
+msgstr "important_contact"
+
+#. German translation: Info
+msgid "info"
+msgstr "info"
+
+#. German translation: Erteilte Aufgaben
+msgid "issued_inbox_tasks"
+msgstr "issued_inbox_tasks"
+
+#. German translation: Meine Aufträge
+msgid "issued_issues"
+msgstr "issued_issues"
+
+#. German translation: Meine erteilten Aufgaben
+msgid "issuedtasks"
+msgstr "issuedtasks"
+
+#. German translation: Journal
+msgid "journal"
+msgstr "journal"
+
+#. German translation: Kostenstelle
+msgid "label_account"
+msgstr "label_account"
+
+#. German translation: Lokal
+msgid "local"
+msgstr "local"
+
+#. German translation: Mitglieder
+msgid "members"
+msgstr "members"
+
+#. German translation: Meine Tickets
+msgid "my_issues"
+msgstr "my_issues"
+
+#. German translation: Meine Dokumente
+msgid "mydocuments"
+msgstr "mydocuments"
+
+#. German translation: Meine Dokumente
+msgid "mydocuments-proxy"
+msgstr "mydocuments-proxy"
+
+#. German translation: Meine Dossiers
+msgid "mydossiers"
+msgstr "mydossiers"
+
+#. German translation: Erteilte Aufgaben
+msgid "myissuedtasks"
+msgstr "myissuedtasks"
+
+#. German translation: Meine Aufgaben
+msgid "mytasks"
+msgstr "mytasks"
+
+#. German translation: Alle Aufgaben
+msgid "ogds-cp-alltasks"
+msgstr "ogds-cp-alltasks"
+
+#. German translation: Offene Tickets
+msgid "open_issues"
+msgstr "open_issues"
+
+#. German translation: Übersicht
+msgid "overview"
+msgstr "overview"
+
+#. German translation: Beteiligungen
+msgid "participants"
+msgstr "participants"
+
+#. German translation: Vorschau
+msgid "preview"
+msgstr "preview"
+
+#. German translation: Fortschritt
+msgid "process"
+msgstr "process"
+
+#. German translation: Anträge
+msgid "proposals"
+msgstr "proposals"
+
+#. German translation: Verwande Dokumente
+msgid "related_documents"
+msgstr "related_documents"
+
+#. German translation: Dokumente
+msgid "relateddocuments"
+msgstr "relateddocuments"
+
+#. German translation: Dokumente
+msgid "relateddocuments-proxy"
+msgstr "relateddocuments-proxy"
+
+#. German translation: Arbeitsrapporte
+msgid "reports"
+msgstr "reports"
+
+#. German translation: Sablon Vorlagen
+msgid "sablontemplates"
+msgstr "sablontemplates"
+
+#. German translation: Info
+msgid "sharing"
+msgstr "sharing"
+
+#. German translation: Subdossiers
+msgid "subdossiers"
+msgstr "subdossiers"
+
+#. German translation: Aufgaben
+msgid "tasks"
+msgstr "tasks"
+
+#. German translation: Standardabläufe
+msgid "tasktemplatefolders"
+msgstr "tasktemplatefolders"
+
+#. German translation: Aufgabenvorlagen
+msgid "tasktemplates"
+msgstr "tasktemplates"
+
+#. German translation: Tickets
+msgid "tickets"
+msgstr "tickets"
+
+#. German translation: Info
+msgid "tracker_info"
+msgstr "tracker_info"
+
+#. German translation: Übersicht
+msgid "tracker_overview"
+msgstr "tracker_overview"
+
+#. German translation: Papierkorb
+msgid "trash-proxy"
+msgstr "trash-proxy"
+
+#. German translation: OGDS
+msgid "users"
+msgstr "users"
+
+#. German translation: Versionen
+msgid "versions"
+msgstr "versions"

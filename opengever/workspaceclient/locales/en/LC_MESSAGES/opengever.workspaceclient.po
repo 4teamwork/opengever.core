@@ -1,0 +1,63 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Dokument aus Teamraum zurückgeführt.
+#. Default: "Document retrieved from teamraum"
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "document_retrieved_from_teamraum_change_note"
+msgstr "Document retrieved from teamraum"
+
+#. German translation: Dokument ${doc_title} wurde aus teamraum ${workspace_title} kopiert und neu erstellt
+#. Default: "Document ${doc_title} copied from workspace ${workspace_title} as a new document."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_document_copied_from_workspace"
+msgstr "Document ${doc_title} copied from workspace ${workspace_title} as a new document."
+
+#. German translation: Dokument ${doc_title} in Teamraum ${workspace_title} kopiert.
+#. Default: "Document ${doc_title} copied to workspace ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_document_copied_to_workspace"
+msgstr "Document ${doc_title} copied to workspace ${workspace_title}."
+
+#. German translation: Dokument freigegeben - Neue Version mit Dokument aus teamraum erstellt.
+#. Default: "Document unlocked - created new version with document from teamraum."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_document_retrieved_as_new_version_from_teamraum"
+msgstr "Document unlocked - created new version with document from teamraum."
+
+#. German translation: Dokument ${doc_title} wurde aus teamraum zurückgeführt.
+#. Default: "Document ${doc_title} retrieved from workspace."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_document_retrieved_from_workspace"
+msgstr "Document ${doc_title} retrieved from workspace."
+
+#. German translation: Initialversion - Dokument aus teamraum ${workspace_title} kopiert.
+#. Default: "Initial version - Document copied from teamraum ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_initial_version_document_copied_from_teamraum"
+msgstr "Initial version - Document copied from teamraum ${workspace_title}."
+
+#. German translation: Teamraum ${workspace_title} zu diesem Dossier eröffnet.
+#. Default: "Linked workspace ${workspace_title} created."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_linked_workspace_created"
+msgstr "Linked workspace ${workspace_title} created."
+
+#. German translation: Mit Teamraum ${workspace_title} verknüpft.
+#. Default: "Linked to workspace ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_workspace_linked"
+msgstr "Linked to workspace ${workspace_title}."

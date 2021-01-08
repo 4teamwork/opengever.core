@@ -1,0 +1,391 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Der Report konnte nicht generiert werden.
+#: ./opengever/disposition/browser/excel_export.py
+msgid "The report could not been generated."
+msgstr "The report could not been generated."
+
+#. German translation: Aktiv
+#: ./opengever/disposition/browser/listing.py
+msgid "active"
+msgstr "active"
+
+#. German translation: Alle
+#: ./opengever/disposition/browser/listing.py
+msgid "all"
+msgstr "all"
+
+#. German translation: bewertungsliste
+#. Default: "appraisal_list"
+#: ./opengever/disposition/browser/excel_export.py
+msgid "appraisal_list"
+msgstr "appraisal_list"
+
+#. German translation: Laufnummer
+#. Default: "Sequence Number"
+#: ./opengever/disposition/browser/listing.py
+msgid "document_sequence_number"
+msgstr "Sequence Number"
+
+#. German translation: Ablieferungsnummer bearbeiten
+#. Default: "Edit transfer number"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "edit_transfer_number"
+msgstr "Edit transfer number"
+
+#. German translation: Das Dossier ${title} ist bereits in einem anderen Angebot angeboten.
+#. Default: "The dossier ${title} is already offered in a different disposition."
+#: ./opengever/disposition/validators.py
+msgid "error_offered_in_a_different_disposition"
+msgstr "The dossier ${title} is already offered in a different disposition."
+
+#. German translation: Die Aufbewahrungsfrist der selektierten Dossiers ist nicht abgelaufen.
+#. Default: "The retention period of the selected dossiers is not expired."
+#: ./opengever/disposition/validators.py
+msgid "error_retention_period_not_expired"
+msgstr "The retention period of the selected dossiers is not expired."
+
+#. German translation: Allgemein
+#. Default: "Common"
+#: ./opengever/disposition/disposition.py
+msgid "fieldset_common"
+msgstr "Common"
+
+#. German translation: Aktion
+#. Default: "Action"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_action"
+msgstr "Action"
+
+#. German translation: Akteur
+#. Default: "Actor"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_actor"
+msgstr "Actor"
+
+#. German translation: Bewertungsentscheid
+#. Default: "Appraisal"
+#: ./opengever/disposition/browser/excel_export.py
+msgid "label_appraisal"
+msgstr "Appraisal"
+
+#. German translation: Archivieren
+#. Default: "Archive"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_archive"
+msgstr "Archive"
+
+#. German translation: Alle archivieren
+#. Default: "Archive all"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_archive_all"
+msgstr "Archive all"
+
+#. German translation: Archiviert
+#. Default: "Archived"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_archived"
+msgstr "Archived"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_cancel"
+msgstr "Cancel"
+
+#. German translation: Ablieferungsstatus
+#. Default: "Delivery Status"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_delivery_status"
+msgstr "Delivery Status"
+
+#. German translation: Zustellung fehlgeschlagen
+#. Default: "Delivery failed"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_failed"
+msgstr "Delivery failed"
+
+#. German translation: Zustellung geplant
+#. Default: "Scheduled for delivery"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_scheduled"
+msgstr "Scheduled for delivery"
+
+#. German translation: Erfolgreich zugestellt
+#. Default: "Delivered successfully"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_success"
+msgstr "Delivered successfully"
+
+#. German translation: Details:
+#. Default: "Details:"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_details"
+msgstr "Details:"
+
+#. German translation: Angebot
+#. Default: "Disposition"
+#: ./opengever/disposition/disposition.py
+msgid "label_disposition"
+msgstr "Disposition"
+
+#. German translation: Angebot hinzugefügt
+#. Default: "Disposition added"
+#: ./opengever/disposition/activities.py
+#: ./opengever/disposition/history.py
+msgid "label_disposition_added"
+msgstr "Disposition added"
+
+#. German translation: Angebot bearbeitet
+#. Default: "Disposition edited"
+#: ./opengever/disposition/history.py
+msgid "label_disposition_edited"
+msgstr "Disposition edited"
+
+#. German translation: Ablieferungspaket herunterladen
+#. Default: "Download disposition package"
+#: ./opengever/disposition/browser/overview.py
+msgid "label_dispositon_package_download"
+msgstr "Download disposition package"
+
+#. German translation: Nicht archivieren
+#. Default: "Don't archive"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_dont_archive"
+msgstr "Don't archive"
+
+#. German translation: Alle nicht archivieren
+#. Default: "Do not archive all"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_dont_archive_all"
+msgstr "Do not archive all"
+
+#. German translation: Dossier
+#. Default: "Dossier"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_dossier"
+msgstr "Dossier"
+
+#. German translation: Dossiers
+#. Default: "Dossiers"
+#: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/browser/templates/overview.pt
+#: ./opengever/disposition/disposition.py
+msgid "label_dossiers"
+msgstr "Dossiers"
+
+#. German translation: Löschprotokoll herunterladen
+#. Default: "Download removal protocol"
+#: ./opengever/disposition/browser/overview.py
+msgid "label_download_removal_protocol"
+msgstr "Download removal protocol"
+
+#. German translation: Bearbeiten
+#. Default: "Edit"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_edit"
+msgstr "Edit"
+
+#. German translation: Bewertungsliste als Excel exportieren
+#. Default: "Export appraisal list as excel"
+#: ./opengever/disposition/browser/overview.py
+msgid "label_export_appraisal_list_as_excel"
+msgstr "Export appraisal list as excel"
+
+#. German translation: Verlauf
+#. Default: "History"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_history"
+msgstr "History"
+
+#. German translation: Stornierte Dossiers
+#. Default: "Inactive Dossiers"
+#: ./opengever/disposition/browser/overview.py
+msgid "label_inactive_dossiers"
+msgstr "Inactive Dossiers"
+
+#. German translation: Metadaten
+#. Default: "Metadata"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_metadata"
+msgstr "Metadata"
+
+#. German translation: Nein
+#. Default: "No"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_no"
+msgstr "No"
+
+#. German translation: Prozess
+#. Default: "Process"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_process"
+msgstr "Process"
+
+#. German translation: Aktenzeichen
+#. Default: "Reference number"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_reference_number"
+msgstr "Reference number"
+
+#. German translation: Löschprotokoll
+#. Default: "Removal protocol"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_removal_protocol"
+msgstr "Removal protocol"
+
+#. German translation: Abgeschlossene Dossiers
+#. Default: "Resolved Dossiers"
+#: ./opengever/disposition/browser/overview.py
+msgid "label_resolved_dossiers"
+msgstr "Resolved Dossiers"
+
+#. German translation: Status
+#. Default: "Review state"
+#: ./opengever/disposition/browser/listing.py
+msgid "label_review_state"
+msgstr "Review state"
+
+#. German translation: Speichern
+#. Default: "Save"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_save"
+msgstr "Save"
+
+#. German translation: SIP Dateiname
+#. Default: "SIP Filename"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_sip_filename"
+msgstr "SIP Filename"
+
+#. German translation: Zeitpunkt
+#. Default: "Time"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_time"
+msgstr "Time"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/disposition/browser/listing.py
+#: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/disposition.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: Ablieferungsnummer
+#. Default: "Transfer number"
+#: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/browser/templates/overview.pt
+#: ./opengever/disposition/disposition.py
+msgid "label_transfer_number"
+msgstr "Transfer number"
+
+#. German translation: Ja
+#. Default: "Yes"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "label_yes"
+msgstr "Yes"
+
+#. German translation: Die Bewertung ist nicht komplett, die Bewertung konnte nicht finalisiert werden.
+#. Default: "The appraisal is incomplete, appraisal could not be finalized."
+#: ./opengever/disposition/browser/views.py
+msgid "msg_appraisal_incomplete"
+msgstr "The appraisal is incomplete, appraisal could not be finalized."
+
+#. German translation: Hinzugefügt durch ${user}
+#. Default: "Added by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_added"
+msgstr "Added by ${user}"
+
+#. German translation: Bewertung finalisiert durch ${user}
+#. Default: "Appraisal finalized by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_appraised"
+msgstr "Appraisal finalized by ${user}"
+
+#. German translation: Archivierung bestätigt durch ${user}
+#. Default: "The archiving confirmed by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_archived"
+msgstr "The archiving confirmed by ${user}"
+
+#. German translation: Angebot abgeschlossen und alle Dossiers vernichtet durch ${user}
+#. Default: "Disposition closed and all dossiers destroyed by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_close"
+msgstr "Disposition closed and all dossiers destroyed by ${user}"
+
+#. German translation: Zur Archivierung angeboten durch ${user}
+#. Default: "Disposition disposed for the archive by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_disposed"
+msgstr "Disposition disposed for the archive by ${user}"
+
+#. German translation: Editiert durch ${user}
+#. Default: "Edited by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_edited"
+msgstr "Edited by ${user}"
+
+#. German translation: Angebot abgelehnt durch ${user}
+#. Default: "Disposition refused by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_refuse"
+msgstr "Disposition refused by ${user}"
+
+#. German translation: Aktualisiert durch ${user}
+#. Default: "Updated by ${user}"
+#: ./opengever/disposition/history.py
+msgid "msg_disposition_updated"
+msgstr "Updated by ${user}"
+
+#. German translation: Es wurde noch kein SIP Paket generiert für dieses Angebot.
+#. Default: "No SIP Package generated for this disposition."
+#: ./opengever/disposition/browser/ech0160.py
+msgid "msg_no_sip_package_generated"
+msgstr "No SIP Package generated for this disposition."
+
+#. German translation: SIP Paket erfolgreich generiert.
+#. Default: "SIP Package generated successfully."
+#: ./opengever/disposition/browser/ech0160.py
+msgid "msg_sip_package_sucessfully_generated"
+msgstr "SIP Package generated successfully."
+
+#. German translation: Periode
+#. Default: "Period"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "period"
+msgstr "Period"
+
+#. German translation: Verlauf
+#. Default: "Progress"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "progress"
+msgstr "Progress"
+
+#. German translation: Neues Angebot hinzugefügt durch ${user} im Mandanten ${admin_unit}
+#. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
+#: ./opengever/disposition/activities.py
+msgid "summary_disposition_added"
+msgstr "New disposition added by ${user} on admin unit ${admin_unit}"
+
+#. German translation: Löschprotokoll zu ${disposition}
+#. Default: "Removal protocol for ${disposition}"
+#: ./opengever/disposition/browser/removal_protocol.py
+msgid "title_removal_protocol"
+msgstr "Removal protocol for ${disposition}"

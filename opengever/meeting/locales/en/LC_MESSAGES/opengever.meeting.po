@@ -1,0 +1,2288 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2017-10-23 18:40+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Eine neu eingereichte Version des Dokuments ${title} wurde erstellt.
+#: ./opengever/meeting/command.py
+msgid "A new submitted version of document ${title} has been created."
+msgstr "A new submitted version of document ${title} has been created."
+
+#. German translation: Sitzungsdossier hinzufügen
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "Add Dossier for Meeting"
+msgstr "Add Dossier for Meeting"
+
+#. German translation: Sitzung hinzufügen
+#. Default: "Add Meeting"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "Add Meeting"
+msgstr "Add Meeting"
+
+#. German translation: Mitglied hinzufügen
+#. Default: "Add Member"
+#: ./opengever/meeting/browser/members.py
+msgid "Add Member"
+msgstr "Add Member"
+
+#. German translation: Mitgliedschaft hinzufügen
+#. Default: "Add Membership"
+#: ./opengever/meeting/browser/memberships.py
+msgid "Add Membership"
+msgstr "Add Membership"
+
+#. German translation: Gremium hinzufügen
+#: ./opengever/meeting/browser/committeeforms.py
+msgid "Add committee"
+msgstr "Add committee"
+
+#. German translation: Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht.
+#: ./opengever/meeting/command.py
+msgid "Additional document ${title} has been submitted successfully."
+msgstr "Additional document ${title} has been submitted successfully."
+
+#. German translation: Traktandenliste für die Sitzung ${title} wurde erfolgreich erstellt.
+#: ./opengever/meeting/command.py
+msgid "Agenda item list for meeting ${title} has been generated successfully."
+msgstr "Agenda item list for meeting ${title} has been generated successfully."
+
+#. German translation: Traktandenliste für die Sitzung ${title} wurde erfolgreich aktualisiert.
+#: ./opengever/meeting/command.py
+msgid "Agenda item list for meeting ${title} has been updated successfully."
+msgstr "Agenda item list for meeting ${title} has been updated successfully."
+
+#. German translation: Ein unerwarteter Fehler ist aufgetreten
+#. Default: "An unexpected error has occurred"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "An unexpected error has occurred"
+msgstr "An unexpected error has occurred"
+
+#. German translation: Wollen Sie diese Sitzung wirklich stornieren?
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Are you sure you want to cancel this meeting?"
+msgstr "Are you sure you want to cancel this meeting?"
+
+#. German translation: Wollen Sie diese Sitzung wirklich abschliessen?
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Are you sure you want to close this meeting?"
+msgstr "Are you sure you want to close this meeting?"
+
+#. German translation: Wollen sie das Protokoll wirklich neu generieren?
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Are you sure you want to regenerate the protocol?"
+msgstr "Are you sure you want to regenerate the protocol?"
+
+#. German translation: Wollen Sie diesen Protokollauszug wirklich im Ursprungsdossier ablegen?
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Are you sure you want to return this excerpt to the proposer?"
+msgstr "Are you sure you want to return this excerpt to the proposer?"
+
+#. German translation: Sind Sie sicher, dass Sie dieses Traktandum abschliessen möchten?
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Are you sure, you want to decide this agendaitem?"
+msgstr "Are you sure, you want to decide this agendaitem?"
+
+#. German translation: Die Mitgliedschaft kann nicht erstellt werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis ${date_to} überschneidet.
+#: ./opengever/meeting/browser/memberships.py
+msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
+msgstr "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
+
+#. German translation: Die Mitgliedschaft kann nicht geändert werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis zum ${date_to} überschneidet.
+#: ./opengever/meeting/browser/memberships.py
+msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}."
+msgstr "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}."
+
+#. German translation: Filter leeren
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Clear filter"
+msgstr "Clear filter"
+
+#. German translation: Das Protokoll wird automatisch neu generiert, als es keine manuelle Änderungen beinhaltet
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Closing the meeting will automatically (re-)create the protocol."
+msgstr "Closing the meeting will automatically (re-)create the protocol."
+
+#. German translation: Das Protokoll wird beim erneuten Sitzungsabschluss nicht automatisch aktualisiert. <br /> Bitte übertragen Sie allfällige Änderungen manuell oder generieren Sie das Protokoll neu.
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Closing the meeting will not update the protocol automatically. <br /> Make sure to transfer your changes or recreate the protocol."
+msgstr "Closing the meeting will not update the protocol automatically. <br /> Make sure to transfer your changes or recreate the protocol."
+
+#. German translation: Löschen
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Delete"
+msgstr "Delete"
+
+#. German translation: Das Dokument ${title} wurde bereits in dieser Version eingereicht.
+#: ./opengever/meeting/command.py
+msgid "Document ${title} has already been submitted in that version."
+msgstr "Document ${title} has already been submitted in that version."
+
+#. German translation: Die Sablonvorlage konnte nicht verarbeitet werden
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+#: ./opengever/meeting/browser/meetings/agendaitem_list.py
+#: ./opengever/meeting/browser/protocol.py
+msgid "Error while processing Sablon template"
+msgstr "Error while processing Sablon template"
+
+#. German translation: Bestehendes Dokument
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "Existing document"
+msgstr "Existing document"
+
+#. German translation: Speichern fehlgeschlagen.
+#: ./opengever/meeting/browser/meetings/participants.py
+msgid "Failed to save."
+msgstr "Failed to save."
+
+#. German translation: Teilnehmende filtern
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Filter participants"
+msgstr "Filter participants"
+
+#. German translation: Ab Vorlage
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "From template"
+msgstr "From template"
+
+#. German translation: Verlauf
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "History"
+msgstr "History"
+
+#. German translation: Unzureichende Berechtigungen auf dem Sitzungsdossier
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "Insufficient privileges on meeting dossier"
+msgstr "Insufficient privileges on meeting dossier"
+
+#. German translation: Ablageposition
+#: ./opengever/meeting/committee.py
+msgid "Linked repository folder"
+msgstr "Linked repository folder"
+
+#. German translation: Sitzungsdossier
+#: ./opengever/meeting/upgrades/profiles/4604/types/opengever.meeting.meetingdossier.xml
+msgid "Meeting Dossier"
+msgstr "Meeting Dossier"
+
+#. German translation: Sitzungsnummer
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
+msgid "Meeting number"
+msgstr "Meeting number"
+
+#. German translation: Mitgliedschaften
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "Memberships"
+msgstr "Memberships"
+
+#. German translation: Fehlende Periode
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "Missing period"
+msgstr "Missing period"
+
+#. German translation: Keine Inhalte
+#: ./opengever/meeting/browser/committee.py
+#: ./opengever/meeting/browser/templates/overview.pt
+msgid "No content"
+msgstr "No content"
+
+#. German translation: Eigenschaften
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "Properties"
+msgstr "Properties"
+
+#. German translation: Antrag
+#. Default: "Proposal"
+#: ./opengever/meeting/browser/documents/submit.py
+msgid "Proposal"
+msgstr "Proposal"
+
+#. German translation: Antragsvorlage
+#: ./opengever/meeting/upgrades/20170407103324_add_proposal_template_fti/types/opengever.meeting.proposaltemplate.xml
+msgid "Proposal Template"
+msgstr "Proposal Template"
+
+#. German translation: Protokoll
+#: ./opengever/meeting/model/meeting.py
+msgid "Protocol"
+msgstr "Protocol"
+
+#. German translation: Protokollauszug
+#: ./opengever/meeting/model/meeting.py
+msgid "Protocol Excerpt"
+msgstr "Protocol Excerpt"
+
+#. German translation: Protokoll für die Sitzung ${title} wurde erfolgreich erstellt.
+#: ./opengever/meeting/command.py
+msgid "Protocol for meeting ${title} has been generated successfully."
+msgstr "Protocol for meeting ${title} has been generated successfully."
+
+#. German translation: Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert.
+#: ./opengever/meeting/command.py
+msgid "Protocol for meeting ${title} has been updated successfully."
+msgstr "Protocol for meeting ${title} has been updated successfully."
+
+#. German translation: Protokoll für die Sitzung ${title} wurde nicht aktualisiert. Das Protokoll beinhaltet manuelle Änderungen, die beim erneuten generieren des Protokolls überschrieben wären.
+#: ./opengever/meeting/command.py
+msgid "Protocol for meeting ${title} has not been updated. The protocol has been modified manually and these modifications will be lost if you regenerate the protocol."
+msgstr "Protocol for meeting ${title} has not been updated. The protocol has been modified manually and these modifications will be lost if you regenerate the protocol."
+
+#. German translation: Sablon Vorlage
+#: ./opengever/meeting/upgrades/profiles/4301/types/opengever.meeting.sablontemplate.xml
+msgid "Sablon Template"
+msgstr "Sablon Template"
+
+#. German translation: Speichern
+#. Default: "Save"
+#: ./opengever/meeting/browser/committeeforms.py
+msgid "Save"
+msgstr "Save"
+
+#. German translation: Erfolgreich traktandiert
+#: ./opengever/meeting/browser/meetings/unscheduled_proposals.py
+msgid "Scheduled Successfully"
+msgstr "Scheduled Successfully"
+
+#. German translation: Die Sitzung und das dazugehörige Sitzungsdossier wurden erfolgreich erstellt.
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "The meeting and its dossier were created successfully"
+msgstr "The meeting and its dossier were created successfully"
+
+#. German translation: Das End-Datum einer Periode kann nicht vor ihrem Start-Datum liegen.
+#: ./opengever/meeting/period.py
+msgid "The period's end date can't be before its start date."
+msgstr "The period's end date can't be before its start date."
+
+#. German translation: Die Zeitspanne der Periode überschneidet die folgenden bestehenden Perioden: ${periods}
+#: ./opengever/meeting/period.py
+msgid "The period's range overlaps the following periods: ${periods}"
+msgstr "The period's range overlaps the following periods: ${periods}"
+
+#. German translation: Der Antrag wurde erfolgreich zurückgewiesen.
+#: ./opengever/meeting/model/proposal.py
+msgid "The proposal has been rejected successfully"
+msgstr "The proposal has been rejected successfully"
+
+#. German translation: Das Protokoll beinhaltet manuelle Änderungen. Beim erneuten generieren des Protokolls werden diese Änderungen überschrieben.
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "The protocol has been modified manually. These modifications will be lost if you regenerate the protocol."
+msgstr "The protocol has been modified manually. These modifications will be lost if you regenerate the protocol."
+
+#. German translation: Entfernen
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Unschedule"
+msgstr "Unschedule"
+
+#. German translation: Traktandum entfernen
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Unschedule proposal"
+msgstr "Unschedule proposal"
+
+#. German translation: Das Dokument wurde durch eine neuere Version aus dem Ursprungsdossier überschrieben.
+#: ./opengever/meeting/browser/submitdocuments.py
+msgid "Updated with a newer docment version from proposal's dossier."
+msgstr "Updated with a newer docment version from proposal's dossier."
+
+#. German translation: Das Dokument wurde durch eine neuere Version des Protokollauszugs überschrieben.
+#: ./opengever/meeting/browser/excerpt.py
+msgid "Updated with a newer excerpt version."
+msgstr "Updated with a newer excerpt version."
+
+#. German translation: Mit einer neuen Version der Sitzung ${title} aktualisiert.
+#: ./opengever/meeting/command.py
+msgid "Updated with a newer generated version from meeting ${title}."
+msgstr "Updated with a newer generated version from meeting ${title}."
+
+#. German translation: Alle anzeigen
+#: ./opengever/meeting/browser/templates/overview.pt
+msgid "View all"
+msgstr "View all"
+
+#. German translation: Sie haben nicht die nötigen Rechte, um Änderungen vorzunehmen.
+#: ./opengever/meeting/browser/meetings/participants.py
+msgid "You are not allowed to change the meeting details."
+msgstr "You are not allowed to change the meeting details."
+
+#. German translation: Sitzung stornieren
+#. Default: "Cancel meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "action_cancel_meeting"
+msgstr "Cancel meeting"
+
+#. German translation: Sitzung abschliessen
+#. Default: "Close meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "action_close_meeting"
+msgstr "Close meeting"
+
+#. German translation: Aufgabe erstellen
+#. Default: "Create task"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_create_task"
+msgstr "Create task"
+
+#. German translation: Dateien für docxcompose herunterladen
+#. Default: "Debug excerpt docxcompose"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_debug_excerpt_docxcompose"
+msgstr "Debug excerpt docxcompose"
+
+#. German translation: Traktandum abschliessen
+#. Default: "Decide"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_decide"
+msgstr "Decide"
+
+#. German translation: Dokument herunterladen
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "action_download_document"
+msgstr "action_download_document"
+
+#. German translation: In Word bearbeiten
+#. Default: "Edit with word"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_edit_document"
+msgstr "Edit with word"
+
+#. German translation: Dokument neu generieren
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "action_generate_document"
+msgstr "action_generate_document"
+
+#. German translation: Protokollauszug generieren
+#. Default: "Generate excerpt"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_generate_excerpt"
+msgstr "Generate excerpt"
+
+#. German translation: Traktandum streichen
+#. Default: "Remove agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_remove_agenda_item"
+msgstr "Remove agenda item"
+
+#. German translation: Zwischentitel streichen
+#. Default: "Remove paragraph"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_remove_agenda_paragraph"
+msgstr "Remove paragraph"
+
+#. German translation: Traktandum bearbeiten
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_rename_agenda_item"
+msgstr "Rename agenda item"
+
+#. German translation: Zwischentitel neu setzen
+#. Default: "Rename paragraph"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_rename_agenda_paragraph"
+msgstr "Rename paragraph"
+
+#. German translation: Wieder öffnen
+#. Default: "Reopen agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_reopen"
+msgstr "Reopen agenda item"
+
+#. German translation: Sitzung wieder öffnen
+#. Default: "Reopen meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "action_reopen_meeting"
+msgstr "Reopen meeting"
+
+#. German translation: Protokollauszug ablegen
+#. Default: "Return to proposal"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_return_excerpt"
+msgstr "Return to proposal"
+
+#. German translation: Aktiv
+#. Default: "Active"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/model/committee.py
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "active"
+msgstr "Active"
+
+#. German translation: Traktanden ohne Antrag
+#. Default: "Ad hoc agendaitems"
+#: ./opengever/meeting/toc/dossier_refnum.py
+#: ./opengever/meeting/toc/repository.py
+#: ./opengever/meeting/toc/repository_refnum.py
+msgid "ad_hoc_toc_group_title"
+msgstr "Ad hoc agendaitems"
+
+#. German translation: Traktandum kann nicht abgeschlossen werden: das Beschlussdokument ist noch von einer anderen Person ausgecheckt.
+#. Default: "Cannot decide agenda item: someone else has checked out the document."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_cannot_decide_document_checked_out"
+msgstr "Cannot decide agenda item: someone else has checked out the document."
+
+#. German translation: Traktandum wurde abgeschlossen.
+#. Default: "Agenda Item decided."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_decided"
+msgstr "Agenda Item decided."
+
+#. German translation: Traktandum wurde erfolgreich entfernt.
+#. Default: "Agenda Item Successfully deleted"
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_deleted"
+msgstr "Agenda Item Successfully deleted"
+
+#. German translation: Das Traktandum wurde abgeschlossen und die Sitzung wurde durchgeführt.
+#. Default: "Agendaitem has been decided and the meeting has been held."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_meeting_held"
+msgstr "Agendaitem has been decided and the meeting has been held."
+
+#. German translation: Die Reihenfolge der Traktanden wurde aktualisiert.
+#. Default: "Agenda Item order updated."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_order_updated"
+msgstr "Agenda Item order updated."
+
+#. German translation: Das Traktandum wurde wieder eröffnet.
+#. Default: "Agenda Item successfully reopened."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_reopened"
+msgstr "Agenda Item successfully reopened."
+
+#. German translation: Das Traktandum wurde erfolgreich überarbeitet.
+#. Default: "Agenda Item revised successfully."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_revised"
+msgstr "Agenda Item revised successfully."
+
+#. German translation: Der Titel eines Traktandums darf nicht leer sein.
+#. Default: "Agenda Item title must not be empty."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_update_empty_string"
+msgstr "Agenda Item title must not be empty."
+
+#. German translation: Der Traktandums-Titel ist zu lang.
+#. Default: "Agenda Item title is too long."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_update_too_long_title"
+msgstr "Agenda Item title is too long."
+
+#. German translation: Traktandum erfolgreich aktualisiert.
+#. Default: "Agenda Item updated."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "agenda_item_updated"
+msgstr "Agenda Item updated."
+
+#. German translation: Alle
+#. Default: "All"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/tabs/meetinglisting.py
+#: ./opengever/meeting/tabs/membershiplisting.py
+msgid "all"
+msgstr "All"
+
+#. German translation: Beilage
+#. Default: "Attachments"
+#: ./opengever/meeting/zipexport.py
+msgid "attachments"
+msgstr "Attachments"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/meeting/browser/documents/submit.py
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/submitdocuments.py
+msgid "button_cancel"
+msgstr "Cancel"
+
+#. German translation: Bestätigen
+#. Default: "Confirm"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "button_confirm"
+msgstr "Confirm"
+
+#. German translation: Weiter
+#. Default: "Continue"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "button_continue"
+msgstr "Continue"
+
+#. German translation: Protokollgenehmigung erstellen
+#. Default: "Create protocol approval proposal"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "button_create_protocol_approval_proposal"
+msgstr "Create protocol approval proposal"
+
+#. German translation: Folgeantrag erstellen
+#. Default: "Create successor proposal"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "button_create_successor_proposal"
+msgstr "Create successor proposal"
+
+#. German translation: Beilagen einreichen
+#. Default: "Submit Attachments"
+#: ./opengever/meeting/browser/documents/submit.py
+#: ./opengever/meeting/browser/submitdocuments.py
+msgid "button_submit_attachments"
+msgstr "Submit Attachments"
+
+#. German translation: Stornieren
+#. Default: "Cancel"
+#: ./opengever/meeting/model/meeting.py
+msgid "cancel"
+msgstr "Cancel"
+
+#. German translation: Storniert
+#. Default: "Cancelled"
+#: ./opengever/meeting/model/meeting.py
+#: ./opengever/meeting/model/proposal.py
+msgid "cancelled"
+msgstr "Cancelled"
+
+#. German translation: Abschliessen
+#. Default: "Close meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/model/meeting.py
+msgid "close_meeting"
+msgstr "Close meeting"
+
+#. German translation: Abgeschlossen
+#. Default: "Closed"
+#: ./opengever/meeting/model/meeting.py
+msgid "closed"
+msgstr "Closed"
+
+#. German translation: Gremium
+#. Default: "Comittee"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_comittee"
+msgstr "Comittee"
+
+#. German translation: Datum
+#. Default: "Date"
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "column_date"
+msgstr "Date"
+
+#. German translation: Von
+#. Default: "Date from"
+#: ./opengever/meeting/tabs/membershiplisting.py
+msgid "column_date_from"
+msgstr "Date from"
+
+#. German translation: Eingereicht am
+#. Default: "Date of submission"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_date_of_submission"
+msgstr "Date of submission"
+
+#. German translation: Bis
+#. Default: "Date to"
+#: ./opengever/meeting/tabs/membershiplisting.py
+msgid "column_date_to"
+msgstr "Date to"
+
+#. German translation: Beschreibung
+#. Default: "Description"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_description"
+msgstr "Description"
+
+#. German translation: E-Mail
+#. Default: "E-Mail"
+#: ./opengever/meeting/tabs/memberlisting.py
+msgid "column_email"
+msgstr "E-Mail"
+
+#. German translation: Vorname
+#. Default: "Firstname"
+#: ./opengever/meeting/tabs/memberlisting.py
+msgid "column_firstname"
+msgstr "Firstname"
+
+#. German translation: Von
+#. Default: "From"
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "column_from"
+msgstr "From"
+
+#. German translation: Nachname
+#. Default: "Lastname"
+#: ./opengever/meeting/tabs/memberlisting.py
+msgid "column_lastname"
+msgstr "Lastname"
+
+#. German translation: Sitzungsort
+#. Default: "Location"
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "column_location"
+msgstr "Location"
+
+#. German translation: Sitzung
+#. Default: "Meeting"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_meeting"
+msgstr "Meeting"
+
+#. German translation: Mitglied
+#. Default: "Member"
+#: ./opengever/meeting/tabs/membershiplisting.py
+msgid "column_member"
+msgstr "Member"
+
+#. German translation: Rolle
+#. Default: "Role"
+#: ./opengever/meeting/tabs/membershiplisting.py
+msgid "column_role"
+msgstr "Role"
+
+#. German translation: Status
+#. Default: "State"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "column_state"
+msgstr "State"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/tabs/committeelisting.py
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "column_title"
+msgstr "Title"
+
+#. German translation: Bis
+#. Default: "To"
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "column_to"
+msgstr "To"
+
+#. German translation: Protokollauszug generieren
+#. Default: "Create Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "create_excerpt"
+msgstr "Create Excerpt"
+
+#. German translation: Beschliessen
+#. Default: "Decide"
+#: ./opengever/meeting/model/agendaitem.py
+#: ./opengever/meeting/model/proposal.py
+msgid "decide"
+msgstr "Decide"
+
+#. German translation: Traktandum abschliessen
+#. Default: "Decide Agendaitem"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "decide_agendaitem"
+msgstr "Decide Agendaitem"
+
+#. German translation: Beschlossen
+#. Default: "Decided"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/model/agendaitem.py
+#: ./opengever/meeting/model/proposal.py
+msgid "decided"
+msgstr "Decided"
+
+#. German translation: Falls sie die Originaldateien anstatt der PDF-Dateien als Zip herunterladen möchten können sie dies hier tun. Auch dieses Zip enthält eine JSON-Datei mit der es in die Sitzungsapp importiert werden kann.
+#. Default: "If you need the original files instead of the PDFs a Zip file can be downloaded here. That Zip file will also contain a JSON file which allows it to be imported by the meeting app."
+#: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
+msgid "desc_download_original_files"
+msgstr "If you need the original files instead of the PDFs a Zip file can be downloaded here. That Zip file will also contain a JSON file which allows it to be imported by the meeting app."
+
+#. German translation: Das Zip enthält eine PDF-Datei für jedes Dokument in dieser Sitzung und eine JSON-Datei mit der das Zip in die Sitzungsapp importiert werden kann.
+#. Default: "The zip contains a PDF file for each document in this meeting and a JSON file which allows it to be imported by the meeting app."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "desc_pdf_zip_contents"
+msgstr "The zip contains a PDF file for each document in this meeting and a JSON file which allows it to be imported by the meeting app."
+
+#. German translation: Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden.
+#. Default: "Only visible for managers. Only change this if you know what you are doing!"
+#: ./opengever/meeting/behaviors/period.py
+msgid "description_decision_sequence_number"
+msgstr "Only visible for managers. Only change this if you know what you are doing!"
+
+#. German translation: Diese Gruppe kann die Kommission bearbeiten und einsehen.
+#. Default: "Automatically configure permissions on the committee for this group."
+#: ./opengever/meeting/committee.py
+msgid "description_group"
+msgstr "Automatically configure permissions on the committee for this group."
+
+#. German translation: Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden.
+#. Default: "Only visible for managers. Only change this if you know what you are doing!"
+#: ./opengever/meeting/behaviors/period.py
+msgid "description_meeting_sequence_number"
+msgstr "Only visible for managers. Only change this if you know what you are doing!"
+
+#. German translation: Sie dürfen das Dokument nicht auschecken.
+#. Default: "You are not allowed to checkout the document."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "document_checkout_not_allowed"
+msgstr "You are not allowed to checkout the document."
+
+#. German translation: Traktandenliste
+#. Default: "Agenda item list"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "document_label_agenda_item_list"
+msgstr "Agenda item list"
+
+#. German translation: Vorprotokoll
+#. Default: "Pre-protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_pre_protocol"
+msgstr "Pre-protocol"
+
+#. German translation: Protokoll
+#. Default: "Protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_protocol"
+msgstr "Protocol"
+
+#. German translation: Zuletzt verändert: ${date}
+#. Default: "Modified at ${date}"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "document_last_modified"
+msgstr "Modified at ${date}"
+
+#. German translation: Noch nicht generiert.
+#. Default: "Not yet generated."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "document_not_yet_generated"
+msgstr "Not yet generated."
+
+#. German translation: Dossier
+#. Default: "Dossier"
+#: ./opengever/meeting/tabs/meetinglisting.py
+msgid "dossier"
+msgstr "Dossier"
+
+#. German translation: Bearbeiten ist nicht erlaubt.
+#. Default: "Editing is not allowed."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "editing_not_allowed"
+msgstr "Editing is not allowed."
+
+#. German translation: Der Abschnitt darf nicht leer sein.
+#. Default: "Paragraph must not be empty."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "empty_paragraph"
+msgstr "Paragraph must not be empty."
+
+#. German translation: Der Freitext darf nicht leer sein.
+#. Default: "Proposal must not be empty."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "empty_proposal"
+msgstr "Proposal must not be empty."
+
+#. German translation: Die Standardvorlage für Traktanden ohne Antrag sollte bei den erlaubten Vorlagen ausgewählt sein.
+#. Default: "The default ad-hoc agenda item template has to be amongst the allowed ones for this committee."
+#: ./opengever/meeting/committee.py
+msgid "error_default_template_is_in_allowed_templates"
+msgstr "The default ad-hoc agenda item template has to be amongst the allowed ones for this committee."
+
+#. German translation: Es können nur Objekte aus aktiven Dossiers verschoben werden.
+#. Default: "Can only move objects from open dossiers"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "error_move_proposal_dossier_not_open"
+msgstr "Can only move objects from open dossiers"
+
+#. German translation: Der Status kann nicht geändert werden solange der Antrag ausgecheckte Dokumente enthält.
+#. Default: "Cannot change the state because the proposal contains checked out documents."
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "error_must_checkin_documents_for_transition"
+msgstr "Cannot change the state because the proposal contains checked out documents."
+
+#. German translation: Sie haben kein Element ausgewählt
+#. Default: "You have not selected any items"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "error_no_items_selected"
+msgstr "You have not selected any items"
+
+#. German translation: Ungenügende Berechtigungen zum Hinzufügen eines Dokumentes im Sitzungsdossier.
+#. Default: "Insufficient privileges to add a document to the meeting dossier."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "error_no_permission_to_add_document"
+msgstr "Insufficient privileges to add a document to the meeting dossier."
+
+#. German translation: Nur .docx Dateien sind als Antragsdokumente erlaubt.
+#. Default: "Only .docx files allowed as proposal documents."
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "error_only_docx_files_allowed_as_proposal_documents"
+msgstr "Only .docx files allowed as proposal documents."
+
+#. German translation: Nur Word-Dateien (.docx) sind erlaubt.
+#. Default: "Only word files (.docx) can be added here."
+#: ./opengever/meeting/proposaltemplate.py
+msgid "error_prosal_template_not_docx"
+msgstr "Only word files (.docx) can be added here."
+
+#. German translation: Bitte wählen sie entweder eine Antragsvorlage oder ein Antragsdokument aus.
+#. Default: "Either a proposal template or a proposal document is required."
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "error_template_or_document_required_for_creation"
+msgstr "Either a proposal template or a proposal document is required."
+
+#. German translation: Protokollauszug ${title}
+#. Default: "Excerpt ${title}"
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "excerpt_document_default_title"
+msgstr "Excerpt ${title}"
+
+#. German translation: Protokollauszug erfolgreich generiert.
+#. Default: "Excerpt was created successfully."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "excerpt_generated"
+msgstr "Excerpt was created successfully."
+
+#. German translation: Der Protokollauszug wurde im Ursprungsdossier abgelegt.
+#. Default: "Excerpt was returned to proposer."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "excerpt_returned"
+msgstr "Excerpt was returned to proposer."
+
+#. German translation: Entschuldigt
+#. Default: "Excused"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "excused"
+msgstr "Excused"
+
+#. German translation: Vorlagen Protokollauszug
+#. Default: "Excerpt templates"
+#: ./opengever/meeting/committee.py
+msgid "fieldset_excerpt_templates"
+msgstr "Excerpt templates"
+
+#. German translation: Vorlagen Protokoll
+#. Default: "Protocol templates"
+#: ./opengever/meeting/committee.py
+msgid "fieldset_protocol_templates"
+msgstr "Protocol templates"
+
+#. German translation: Inhaltsverzeichnis ${period} ${committee} alphabetisch
+#. Default: "Alphabetical Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_alphabetical_toc"
+msgstr "Alphabetical Toc ${period} ${committee}"
+
+#. German translation: Inhaltsverzeichnis ${period} ${committee} nach Aktenzeichen
+#. Default: "Dossier Reference Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_dossier_reference_number_toc"
+msgstr "Dossier Reference Number Toc ${period} ${committee}"
+
+#. German translation: Inhaltsverzeichnis ${period} ${committee} nach Positionsnummer
+#. Default: "Repository Reference Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_repository_reference_number_toc"
+msgstr "Repository Reference Number Toc ${period} ${committee}"
+
+#. German translation: Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition
+#. Default: "Repository Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_repository_toc"
+msgstr "Repository Toc ${period} ${committee}"
+
+#. German translation: Durchgeführt
+#. Default: "Held"
+#: ./opengever/meeting/model/meeting.py
+msgid "held"
+msgstr "Held"
+
+#. German translation: Wählen Sie alle Vorlagen für Traktanden ohne Antrag aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Vorlage aus, um alle zu erlauben.
+#. Default: "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
+#: ./opengever/meeting/committee.py
+msgid "help_allowed_ad_hoc_agenda_item_templates"
+msgstr "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
+
+#. German translation: Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Antragsvorlagen aus, um alle Vorlagen zu erlauben.
+#. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
+#: ./opengever/meeting/committee.py
+msgid "help_allowed_proposal_templates"
+msgstr "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
+
+#. German translation: Neue Aufgabe im Sitzungsdossier erstellen und diesen Protokollauszug beilegen.
+#. Default: "Create a new task the meeting dossier and attach this excerpt."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_create_task"
+msgstr "Create a new task the meeting dossier and attach this excerpt."
+
+#. German translation: Sitzungsvorlage mit vordefinierten Zwischentiteln
+#. Default: "Template containing the predifined paragraphs"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_meeting_template"
+msgstr "Template containing the predifined paragraphs"
+
+#. German translation: Diesen Protokollauszug als definitive Antwort im Ursprungsdossier ablegen.
+#. Default: "Return this excerpt the as official answer to the proposal."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_return_excerpt"
+msgstr "Return this excerpt the as official answer to the proposal."
+
+#. German translation: Dieser Protokollauszug wurde als Antwort im Ursprungsdossier abgelegt.
+#. Default: "This excerpt was returned to the dossier"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_returned_excerpt"
+msgstr "This excerpt was returned to the dossier"
+
+#. German translation: Sitzung durchführen
+#. Default: "Hold meeting"
+#: ./opengever/meeting/model/meeting.py
+msgid "hold"
+msgstr "Hold meeting"
+
+#. German translation: Inaktiv
+#. Default: "Inactive"
+#: ./opengever/meeting/model/committee.py
+msgid "inactive"
+msgstr "Inactive"
+
+#. German translation: Diese Aktion kann im aktuellen Zustand des Traktandums nicht durchgeführt werden.
+#. Default: "The agenda item is in an invalid state for this action."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "invalid_agenda_item_state"
+msgstr "The agenda item is in an invalid state for this action."
+
+#. German translation: Standardvorlage für Traktanden ohne Antrag
+#. Default: "Ad hoc agenda item template"
+#: ./opengever/meeting/committee.py
+msgid "label_ad_hoc_template"
+msgstr "Ad hoc agenda item template"
+
+#. German translation: Abgeschlossen
+#. Default: "Decided"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_decided"
+msgstr "Decided"
+
+#. German translation: Kopfvorlage Traktandum in Protokoll
+#. Default: "Agenda item header template for the protocol"
+#: ./opengever/meeting/committee.py
+msgid "label_agenda_item_header_template"
+msgstr "Agenda item header template for the protocol"
+
+#. German translation: Nummer des Traktandums in dieser Sitzung
+#. Default: "Agenda item number"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_number"
+msgstr "Agenda item number"
+
+#. German translation: Nummer des Traktandums in dieser Sitzung (unformattiert)
+#. Default: "Agenda item number (unformatted)"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_number_raw"
+msgstr "Agenda item number (unformatted)"
+
+#. German translation: Schlussteilvorlage Traktandum in Protokoll
+#. Default: "Agenda item suffix template for the protocol"
+#: ./opengever/meeting/committee.py
+msgid "label_agenda_item_suffix_template"
+msgstr "Agenda item suffix template for the protocol"
+
+#. German translation: Traktandenliste
+#. Default: "Agendaitem list"
+#: ./opengever/meeting/model/meeting.py
+#: ./opengever/meeting/protocol.py
+msgid "label_agendaitem_list"
+msgstr "Agendaitem list"
+
+#. German translation: Vorlage Traktandenliste
+#. Default: "Agendaitem list template"
+#: ./opengever/meeting/committee.py
+msgid "label_agendaitem_list_template"
+msgstr "Agendaitem list template"
+
+#. German translation: Erlaubte Vorlagen für Traktanden ohne Antrag
+#. Default: "Allowed ad-hoc agenda item templates"
+#: ./opengever/meeting/committee.py
+msgid "label_allowed_ad_hoc_agenda_item_templates"
+msgstr "Allowed ad-hoc agenda item templates"
+
+#. German translation: Erlaubte Antragsvorlagen
+#. Default: "Allowed proposal templates"
+#: ./opengever/meeting/committee.py
+msgid "label_allowed_proposal_templates"
+msgstr "Allowed proposal templates"
+
+#. German translation: Beilagen
+#. Default: "Attachments"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/submitdocuments.py
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_attachments"
+msgstr "Attachments"
+
+#. German translation: Zurück zur Sitzung
+#. Default: "Back to the meeting"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_backlink_to_meeting"
+msgstr "Back to the meeting"
+
+#. German translation: Zip wird generiert ...
+#. Default: "Generating Zip ..."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_button_creation_in_progress"
+msgstr "Generating Zip ..."
+
+#. German translation: Zip herunterladen
+#. Default: "Download Zip"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_button_download_zip"
+msgstr "Download Zip"
+
+#. German translation: Zip fehler
+#. Default: "Error Generating Zip"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_button_error"
+msgstr "Error Generating Zip"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_cancel"
+msgstr "Cancel"
+
+#. German translation: Sitzung stornieren
+#. Default: "Cancel meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_cancel_meeting"
+msgstr "Cancel meeting"
+
+#. German translation: Die Sitzung kann nicht abgeschlossen werden solange noch nicht alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und abgelegt wurden.
+#. Default: "The meeting cannot be closed because it has undecided agenda items."
+#: ./opengever/meeting/model/meeting.py
+msgid "label_close_error_has_undecided_agenda_items"
+msgstr "The meeting cannot be closed because it has undecided agenda items."
+
+#. German translation: Vergangene Sitzungen
+#. Default: "Closed meetings"
+#: ./opengever/meeting/browser/committee.py
+msgid "label_closed_meetings"
+msgstr "Closed meetings"
+
+#. German translation: Kommentar
+#. Default: "Comment"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+#: ./opengever/meeting/proposal_transition_comment.py
+#: ./opengever/meeting/proposaltransition.py
+msgid "label_comment"
+msgstr "Comment"
+
+#. German translation: Gremium erfolgreich deaktiviert.
+#. Default: "Committee deactivated successfully"
+#: ./opengever/meeting/browser/committeetransitioncontroller.py
+msgid "label_committe_deactivated"
+msgstr "Committee deactivated successfully"
+
+#. German translation: Gremium erfolgreich reaktiviert.
+#. Default: "Committee reactivated successfully"
+#: ./opengever/meeting/browser/committeetransitioncontroller.py
+msgid "label_committe_reactivated"
+msgstr "Committee reactivated successfully"
+
+#. German translation: Gremium
+#. Default: "Committee"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/templates/member.pt
+#: ./opengever/meeting/proposal.py
+msgid "label_committee"
+msgstr "Committee"
+
+#. German translation: Gremien-Verantwortliche
+#. Default: "Committeeresponsible"
+#: ./opengever/meeting/committee.py
+msgid "label_committee_responsible"
+msgstr "Committeeresponsible"
+
+#. German translation: Generieren
+#. Default: "Generate Protocol"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_confirm_generate_protocol"
+msgstr "Generate Protocol"
+
+#. German translation: Protokollauszug generieren
+#. Default: "Create Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_create_excerpt"
+msgstr "Create Excerpt"
+
+#. German translation: Aufgabe erstellen
+#. Default: "Create task"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_create_task_from_proposal"
+msgstr "Create task"
+
+#. German translation: Ersteller
+#. Default: "Creator"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_creator"
+msgstr "Creator"
+
+#. German translation: Aktuelle Mitglieder
+#. Default: "Current members"
+#: ./opengever/meeting/browser/committee.py
+msgid "label_current_members"
+msgstr "Current members"
+
+#. German translation: Aktuelle Periode
+#. Default: "Current Period"
+#: ./opengever/meeting/browser/committee.py
+msgid "label_current_period"
+msgstr "Current Period"
+
+#. German translation: Von
+#. Default: "Start date"
+#: ./opengever/meeting/behaviors/period.py
+#: ./opengever/meeting/browser/memberships.py
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_date_from"
+msgstr "Start date"
+
+#. German translation: Eingereicht am
+#. Default: "Date of submission"
+#: ./opengever/meeting/proposal.py
+msgid "label_date_of_submission"
+msgstr "Date of submission"
+
+#. German translation: Bis
+#. Default: "End date"
+#: ./opengever/meeting/behaviors/period.py
+#: ./opengever/meeting/browser/memberships.py
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_date_to"
+msgstr "End date"
+
+#. German translation: Gremium deaktivieren
+#. Default: "Deactivate committee"
+#: ./opengever/meeting/model/committee.py
+msgid "label_deactivate"
+msgstr "Deactivate committee"
+
+#. German translation: Abschliessen
+#. Default: "Decide"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_decide"
+msgstr "Decide"
+
+#. German translation: Beschlussnummer
+#. Default: "Decision number"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/proposal.py
+msgid "label_decision_number"
+msgstr "Decision number"
+
+#. German translation: Beschluss-Sequenzummer
+#. Default: "Sequence number for decisions"
+#: ./opengever/meeting/behaviors/period.py
+msgid "label_decision_sequence_number"
+msgstr "Sequence number for decisions"
+
+#. German translation: Wollen Sie dieses Element wirklich streichen?
+#. Default: "Are you sure you want to delete this agendaitem?"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_delete_agenda_item_confirm_text"
+msgstr "Are you sure you want to delete this agendaitem?"
+
+#. German translation: Beschreibung
+#. Default: "Description"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/proposal.py
+msgid "label_description"
+msgstr "Description"
+
+#. German translation: Zieldossier
+#. Default: "Destination"
+#: ./opengever/meeting/browser/move_proposal_items.py
+msgid "label_destination"
+msgstr "Destination"
+
+#. German translation: Dossier
+#. Default: "Dossier"
+#: ./opengever/meeting/proposal.py
+msgid "label_dossier"
+msgstr "Dossier"
+
+#. German translation: Dossier nicht verfügbar
+#. Default: "Dossier not available"
+#: ./opengever/meeting/proposal.py
+msgid "label_dossier_not_available"
+msgstr "Dossier not available"
+
+#. German translation: Inhaltsverzeichnis alphabetisch
+#. Default: "download TOC alphabetical"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_alphabetical_toc"
+msgstr "download TOC alphabetical"
+
+#. German translation: Inhaltsverzeichnis alphabetisch JSON
+#. Default: "download TOC json alphabetical"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_alphabetical_toc_json"
+msgstr "download TOC json alphabetical"
+
+#. German translation: Inhaltsverzeichnis nach Aktenzeichen
+#. Default: "download TOC by dossier reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_dossier_refnum_toc"
+msgstr "download TOC by dossier reference number"
+
+#. German translation: Inhaltsverzeichnis nach Aktenzeichen JSON
+#. Default: "download TOC json by dossier reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_dossier_refnum_toc_json"
+msgstr "download TOC json by dossier reference number"
+
+#. German translation: Inhaltsverzeichnis nach Positionsnummer
+#. Default: "download TOC by repository reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_refnum_toc"
+msgstr "download TOC by repository reference number"
+
+#. German translation: Inhaltsverzeichnis nach Positionsnummer JSON
+#. Default: "download TOC json by repository reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_refnum_toc_json"
+msgstr "download TOC json by repository reference number"
+
+#. German translation: Inhaltsverzeichnis nach Ordnungsposition
+#. Default: "download TOC by repository"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_toc"
+msgstr "download TOC by repository"
+
+#. German translation: Inhaltsverzeichnis nach Ordnungsposition JSON
+#. Default: "download TOC json repository"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_toc_json"
+msgstr "download TOC json repository"
+
+#. German translation: Zip der Originaldateien herunterladen
+#. Default: "Download Zip of original files"
+#: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
+msgid "label_download_zip_original_files"
+msgstr "Download Zip of original files"
+
+#. German translation: Bearbeiten
+#. Default: "Edit"
+#: ./opengever/meeting/browser/templates/member.pt
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_edit"
+msgstr "Edit"
+
+#. German translation: Nach dem Hinzufügen bearbeiten
+#. Default: "Edit after creation"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_edit_after_creation"
+msgstr "Edit after creation"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_edit_cancel"
+msgstr "Cancel"
+
+#. German translation: Mitgliedschaft bearbeiten
+#. Default: "Edit Membership"
+#: ./opengever/meeting/browser/memberships.py
+msgid "label_edit_membership"
+msgstr "Edit Membership"
+
+#. German translation: Speichern
+#. Default: "Save"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_edit_save"
+msgstr "Save"
+
+#. German translation: E-Mail
+#. Default: "E-Mail"
+#: ./opengever/meeting/browser/members.py
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_email"
+msgstr "E-Mail"
+
+#. German translation: Ende
+#. Default: "End"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_end"
+msgstr "End"
+
+#. German translation: Fehler
+#. Default: "Error"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_error"
+msgstr "Error"
+
+#. German translation: Protokollauszug
+#. Default: "Excerpt"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_excerpt"
+msgstr "Excerpt"
+
+#. German translation: Vorlage Kopf für Protokollauszüge
+#. Default: "Excerpt header template"
+#: ./opengever/meeting/committee.py
+msgid "label_excerpt_header_template"
+msgstr "Excerpt header template"
+
+#. German translation: Vorlage Schlussteil für Protokollauszüge
+#. Default: "Excerpt suffix template"
+#: ./opengever/meeting/committee.py
+msgid "label_excerpt_suffix_template"
+msgstr "Excerpt suffix template"
+
+#. German translation: Protokollauszüge
+#. Default: "Excerpts"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/proposal.py
+msgid "label_excerpts"
+msgstr "Excerpts"
+
+#. German translation: Datei
+#. Default: "File"
+#: ./opengever/meeting/proposaltemplate.py
+msgid "label_file"
+msgstr "File"
+
+#. German translation: Filtern
+#. Default: "Filter"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_filter_proposal"
+msgstr "Filter"
+
+#. German translation: Vorname
+#. Default: "Firstname"
+#: ./opengever/meeting/browser/members.py
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_firstname"
+msgstr "Firstname"
+
+#. German translation: Information
+#. Default: "Information"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_info"
+msgstr "Information"
+
+#. German translation: Einfügen
+#. Default: "Insert"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_insert"
+msgstr "Insert"
+
+#. German translation: Gültigkeitsstatus
+#. Default: "Sablon template invalid"
+#: ./opengever/meeting/browser/templates/sablon_validation_state.pt
+msgid "label_invalid_sablon_template"
+msgstr "Sablon template invalid"
+
+#. German translation: Antragssteller
+#. Default: "Issuer"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/proposal.py
+msgid "label_issuer"
+msgstr "Issuer"
+
+#. German translation: Letzte Sitzung:
+#. Default: "Last Meeting:"
+#: ./opengever/meeting/browser/templates/committee.pt
+msgid "label_last_meeting"
+msgstr "Last Meeting:"
+
+#. German translation: Nachname
+#. Default: "Lastname"
+#: ./opengever/meeting/browser/members.py
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_lastname"
+msgstr "Lastname"
+
+#. German translation: Sitzung
+#. Default: "Linked meeting"
+#: ./opengever/meeting/browser/dossier/overview.py
+msgid "label_linked_meeting"
+msgstr "Linked meeting"
+
+#. German translation: Alle automatisch generierten Sitzungsdossiers und Dokumente werden in dieser Ordnungsposition abgelegt.
+#. Default: "Contains automatically generated dossiers and documents for this committee."
+#: ./opengever/meeting/committee.py
+msgid "label_linked_repository_folder"
+msgstr "Contains automatically generated dossiers and documents for this committee."
+
+#. German translation: Sitzungsort
+#. Default: "Location"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_location"
+msgstr "Location"
+
+#. German translation: Eigenschaften
+#. Default: "Main Atrributes"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_main_attributes"
+msgstr "Main Atrributes"
+
+#. German translation: Sitzung
+#. Default: "Meeting"
+#: ./opengever/meeting/proposal.py
+msgid "label_meeting"
+msgstr "Meeting"
+
+#. German translation: Sitzung abgeschlossen
+#. Default: "Meeting closed"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_meeting_closed"
+msgstr "Meeting closed"
+
+#. German translation: Die Sitzung kann nicht storniert werden solange sie Traktanden hat.
+#. Default: "The meeting already has agenda items and can't be cancelled"
+#: ./opengever/meeting/model/meeting.py
+msgid "label_meeting_has_agenda_items"
+msgstr "The meeting already has agenda items and can't be cancelled"
+
+#. German translation: Sitzungs-Sequenznummer
+#. Default: "Sequence number for meetings"
+#: ./opengever/meeting/behaviors/period.py
+msgid "label_meeting_sequence_number"
+msgstr "Sequence number for meetings"
+
+#. German translation: Sitzungsvorlage
+#. Default: "Meeting Template"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_meeting_template"
+msgstr "Meeting Template"
+
+#. German translation: Mitglied
+#. Default: "Member"
+#: ./opengever/meeting/browser/memberships.py
+msgid "label_member"
+msgstr "Member"
+
+#. German translation: Zuletzt bearbeitet
+#. Default: "Modified"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_modified"
+msgstr "Modified"
+
+#. German translation: Nächste Sitzung:
+#. Default: "Next Meeting:"
+#: ./opengever/meeting/browser/templates/committee.pt
+msgid "label_next_meeting"
+msgstr "Next Meeting:"
+
+#. German translation: Dieser Benutzer hat keine Mitgliedschaften.
+#. Default: "This member has no memberships."
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_no_memberships"
+msgstr "This member has no memberships."
+
+#. German translation: Keine Anträge eingereicht
+#. Default: "No proposals submitted"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_no_proposals"
+msgstr "No proposals submitted"
+
+#. German translation: Weitere Teilnehmende
+#. Default: "Other Participants"
+#: ./opengever/meeting/browser/meetings/protocol.py
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_other_participants"
+msgstr "Other Participants"
+
+#. German translation: Vorlage für Zwischentitel
+#. Default: "Paragraph template"
+#: ./opengever/meeting/committee.py
+msgid "label_paragraph_template"
+msgstr "Paragraph template"
+
+#. German translation: Teilnehmende
+#. Default: "Participants"
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_participants"
+msgstr "Participants"
+
+#. German translation: Vorgänger
+#. Default: "Predecessor"
+#: ./opengever/meeting/proposal.py
+msgid "label_predecessor"
+msgstr "Predecessor"
+
+#. German translation: Vorsitz
+#. Default: "Presidency"
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_presidency"
+msgstr "Presidency"
+
+#. German translation: Antragsdokument
+#. Default: "Proposal Document"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_proposal_document"
+msgstr "Proposal Document"
+
+#. German translation: Antragsvorlage
+#. Default: "Proposal template"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_proposal_template"
+msgstr "Proposal template"
+
+#. German translation: Protokollgenehmigung
+#. Default: "Approve protocol"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_protocol_approval"
+msgstr "Approve protocol"
+
+#. German translation: Vorlage Protokollkopf
+#. Default: "Protocol header template"
+#: ./opengever/meeting/committee.py
+msgid "label_protocol_header_template"
+msgstr "Protocol header template"
+
+#. German translation: Beginn Seitennummerierung Protokoll
+#. Default: "Protocol start-page"
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_protocol_start_page_number"
+msgstr "Protocol start-page"
+
+#. German translation: Vorlage Schlussteil des Protokolls
+#. Default: "Protocol suffix template"
+#: ./opengever/meeting/committee.py
+msgid "label_protocol_suffix_template"
+msgstr "Protocol suffix template"
+
+#. German translation: Gremium reaktivieren
+#. Default: "Reactivate committee"
+#: ./opengever/meeting/model/committee.py
+msgid "label_reactivate"
+msgstr "Reactivate committee"
+
+#. German translation: Löschen
+#. Default: "Remove"
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_remove"
+msgstr "Remove"
+
+#. German translation: Protokollauszug ablegen
+#. Default: "Return Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_return_excerpt"
+msgstr "Return Excerpt"
+
+#. German translation: In Dossier abgelegt.
+#. Default: "Returned"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_returned_excerpt"
+msgstr "Returned"
+
+#. German translation: Rolle
+#. Default: "Role"
+#: ./opengever/meeting/browser/memberships.py
+#: ./opengever/meeting/browser/templates/member.pt
+msgid "label_role"
+msgstr "Role"
+
+#. German translation: Vorlage-Datei
+#. Default: "File"
+#: ./opengever/meeting/sablontemplate.py
+msgid "label_sablon_template_file"
+msgstr "File"
+
+#. German translation: Speichern
+#. Default: "Save"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_save"
+msgstr "Save"
+
+#. German translation: Traktandieren
+#. Default: "Schedule"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_schedule"
+msgstr "Schedule"
+
+#. German translation: Protokollführung
+#. Default: "Secretary"
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_secretary"
+msgstr "Secretary"
+
+#. German translation: Start
+#. Default: "Start"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_start"
+msgstr "Start"
+
+#. German translation: Zusätzliche Beilagen einreichen
+#. Default: "Submit Additional Documents"
+#: ./opengever/meeting/browser/documents/submit.py
+#: ./opengever/meeting/browser/submitdocuments.py
+msgid "label_submit_additional_documents"
+msgstr "Submit Additional Documents"
+
+#. German translation: Nachreichen einer neuen Version
+#. Default: "Submit Updated Documents"
+#: ./opengever/meeting/browser/documents/submit.py
+msgid "label_submit_updated_documents"
+msgstr "Submit Updated Documents"
+
+#. German translation: Folgeanträge
+#. Default: "Successors"
+#: ./opengever/meeting/proposal.py
+msgid "label_successors"
+msgstr "Successors"
+
+#. German translation: Antragsdokument
+#. Default: "Proposal document type"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_template_or_existing_document"
+msgstr "Proposal document type"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/meeting/behaviors/period.py
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/protocol.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: Titel
+#. Default: "Excerpt title"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_title_excerpt"
+msgstr "Excerpt title"
+
+#. German translation: Vorlage Inhaltsverzeichnis
+#. Default: "Table of contents template"
+#: ./opengever/meeting/committee.py
+msgid "label_toc_template"
+msgstr "Table of contents template"
+
+#. German translation: Beilagen anzeigen / ausblenden
+#. Default: "Toggle attachments"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_toggle_attachments"
+msgstr "Toggle attachments"
+
+#. German translation: Transition
+#. Default: "Transition"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "label_transition"
+msgstr "Transition"
+
+#. German translation: Statusänderung ${transition} ausgeführt
+#. Default: "Transition ${transition} executed"
+#: ./opengever/meeting/browser/meetings/transitions.py
+msgid "label_transition_executed"
+msgstr "Transition ${transition} executed"
+
+#. German translation: Entkoppelte Beilagen
+#. Default: "Unlocked attachments"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
+msgid "label_unlocked_attachments"
+msgstr "Unlocked attachments"
+
+#. German translation: Wollen Sie dieses Traktandum wirklich aus der Traktandenliste entfernen?
+#. Default: "Are you sure you want to unschedule this agendaitem?"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_unschedule_agenda_item_confirm_text"
+msgstr "Are you sure you want to unschedule this agendaitem?"
+
+#. German translation: Nicht traktandierte Anträge
+#. Default: "Unscheduled proposals"
+#: ./opengever/meeting/browser/committee.py
+msgid "label_unscheduled_proposals"
+msgstr "Unscheduled proposals"
+
+#. German translation: Kommende Sitzungen
+#. Default: "Upcoming meetings"
+#: ./opengever/meeting/browser/committee.py
+msgid "label_upcoming_meetings"
+msgstr "Upcoming meetings"
+
+#. German translation: Warnung
+#. Default: "Warning"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_warning"
+msgstr "Warning"
+
+#. German translation: Status
+#. Default: "State"
+#: ./opengever/meeting/proposal.py
+msgid "label_workflow_state"
+msgstr "State"
+
+#. German translation: Sprache
+#. Default: "Language"
+#: ./opengever/meeting/proposal.py
+msgid "language"
+msgstr "Language"
+
+#. German translation: Ende
+#. Default: "End"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_end"
+msgstr "End"
+
+#. German translation: Ort
+#. Default: "Location"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_location"
+msgstr "Location"
+
+#. German translation: Sitzungsdossier
+#. Default: "Meeting dossier"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_meetin_dossier"
+msgstr "Meeting dossier"
+
+#. German translation: Vorsitz
+#. Default: "Presidency"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_presidency"
+msgstr "Presidency"
+
+#. German translation: Protokollführung
+#. Default: "Secretary"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_secretary"
+msgstr "Secretary"
+
+#. German translation: Beginn
+#. Default: "Start"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_start"
+msgstr "Start"
+
+#. German translation: Status
+#. Default: "State"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_workflow_state"
+msgstr "State"
+
+#. German translation: Vorsitz
+#. Default: "Presidency"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "meeting_role_presidency"
+msgstr "Presidency"
+
+#. German translation: Protokollführung
+#. Default: "Secretary"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "meeting_role_secretary"
+msgstr "Secretary"
+
+#. German translation: Sitzungen
+#. Default: "Meetings"
+#: ./opengever/meeting/browser/tabbed.py
+msgid "meetings"
+msgstr "Meetings"
+
+#. German translation: Mitgliedschaften
+#. Default: "Memberships"
+#: ./opengever/meeting/browser/tabbed.py
+msgid "memberships"
+msgstr "Memberships"
+
+#. German translation: Das Antragsdokument wurde von ${creator} ausgecheckt.
+#. Default: "The proposal document is being checked out by ${creator}."
+#: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
+msgid "message_checkout_info"
+msgstr "The proposal document is being checked out by ${creator}."
+
+#. German translation: Das Gremium ${committee_title} wurde deaktiviert.
+#. Default: "The committee ${committee_title} is no longer active."
+#: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
+msgid "message_committee_inactive_warning"
+msgstr "The committee ${committee_title} is no longer active."
+
+#. German translation: Die Änderungen konnten nicht gespeichert werden, das Protokoll wurde von ${username} gesperrt.
+#. Default: "Your changes were not saved, the protocol is locked by ${username}."
+#: ./opengever/meeting/browser/meetings/edit_meeting.py
+msgid "message_locked_by_another_user"
+msgstr "Your changes were not saved, the protocol is locked by ${username}."
+
+#. German translation: Die Änderungen konnten nicht gespeichert werden, das Protokoll wurde in der Zwischenzeit modifiziert.
+#. Default: "Your changes were not saved, the protocol has been modified in the meantime."
+#: ./opengever/meeting/browser/meetings/edit_meeting.py
+msgid "message_write_conflict"
+msgstr "Your changes were not saved, the protocol has been modified in the meantime."
+
+#. German translation: Es konnte keine Vorlage für ein Traktandum gefunden werden.
+#. Default: "No ad-hoc agenda-item template has been configured."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "missing_ad_hoc_template"
+msgstr "No ad-hoc agenda-item template has been configured."
+
+#. German translation: Wählen Sie einen aussagekräftigen Titel um die Protokollauszüge besser unterscheiden zu können.
+#. Default: "Choose a meaningful title to distinguish the created excerpts better."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "msg_confirm_create_excerpt_dialog"
+msgstr "Choose a meaningful title to distinguish the created excerpts better."
+
+#. German translation: Der Protokollauszug wird im Ursprungsdossier des Antrags abgelegt. Es können keine weiteren Protokollauszüge abgelegt werden.
+#. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "msg_confirm_return_excerpt_dialog"
+msgstr "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
+
+#. German translation: Originaldateien anstatt PDF-Dateien herunterladen.
+#. Default: "Download original files rather than PDF files."
+#: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
+msgid "msg_download_original_files"
+msgstr "Download original files rather than PDF files."
+
+#. German translation: Die Traktandenliste für die Sitzung ${title} wurde bereits erstellt.
+#. Default: "The agenda item list for meeting ${title} has already been generated."
+#: ./opengever/meeting/browser/meetings/agendaitem_list.py
+msgid "msg_error_agendaitem_list_already_generated"
+msgstr "The agenda item list for meeting ${title} has already been generated."
+
+#. German translation: Es ist keine Vorlage für die Traktandenliste konfiguriert, die Traktandenliste konnte nicht generiert werden.
+#. Default: "There is no agendaitem list template configured, agendaitem list could not be generated."
+#: ./opengever/meeting/browser/meetings/agendaitem_list.py
+msgid "msg_error_agendaitem_list_missing_template"
+msgstr "There is no agendaitem list template configured, agendaitem list could not be generated."
+
+#. German translation: Nach Abschluss eines Traktandums kann die Traktandenliste nicht mehr bearbeitet werden.
+#. Default: "When deciding an agendaitem the agenda list is no longer editable."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "msg_hold_meeting_dialog"
+msgstr "When deciding an agendaitem the agenda list is no longer editable."
+
+#. German translation: Die Sitzung ${title} wurde erfolgreich storniert.
+#. Default: "The meeting ${title} has been successfully cancelled."
+#: ./opengever/meeting/model/meeting.py
+msgid "msg_meeting_successfully_cancelled"
+msgstr "The meeting ${title} has been successfully cancelled."
+
+#. German translation: Die Sitzung ${title} wurde erfolgreich abgeschlossen.
+#. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
+#: ./opengever/meeting/model/meeting.py
+msgid "msg_meeting_successfully_closed"
+msgstr "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
+
+#. German translation: Die Mitgliedschaft wurde erfolgreich gelöscht
+#. Default: "The membership was deleted successfully."
+#: ./opengever/meeting/browser/memberships.py
+msgid "msg_membership_deleted"
+msgstr "The membership was deleted successfully."
+
+#. German translation: Für die Job ID ${job_id} konnte keine Zip-Datei gefunden werden.
+#. Default: "No zip job could be found for the supplied job id ${job_id}."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_no_export_for_job_id"
+msgstr "No zip job could be found for the supplied job id ${job_id}."
+
+#. German translation: Es ist keine Vorlage für das Inhaltsverzeichnis konfiguriert, das Inhaltsverzeichnis konnte nicht generiert werden.
+#. Default: "There is no toc template configured, toc could not be generated."
+#: ./opengever/meeting/browser/toc.py
+msgid "msg_no_toc_template"
+msgstr "There is no toc template configured, toc could not be generated."
+
+#. German translation: Nicht alle Sitzungen sind abgeschlossen.
+#. Default: "Not all meetings are closed."
+#: ./opengever/meeting/browser/committeetransitioncontroller.py
+msgid "msg_pending_meetings"
+msgstr "Not all meetings are closed."
+
+#. German translation: Die Sitzung kann erst abgeschlossen werden, wenn alle Traktanden abgeschlossen sind und bei allen eingereichten Anträgen die Protokollauszüge abgelegt sind.
+#. Default: "The meeting can only be closed when all agenda items are decided."
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "msg_require_all_agenda_items_decided_for_closing"
+msgstr "The meeting can only be closed when all agenda items are decided."
+
+#. German translation: Es konnte nicht alle Dokumente in das PDF-Format konvertiert werden, deshalb wurden für die betroffenen Dokumente die Originaldateien in die Zip-Datei eingefügt.
+#. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_some_documents_remain_unconverted"
+msgstr "Some documents could not be converted to PDF, their original files will be included in the Zip."
+
+#. German translation: Das Objekt wurde erfolgreich gelöscht.
+#. Default: "The object was deleted successfully."
+#: ./opengever/meeting/browser/views.py
+msgid "msg_successfully_deleted"
+msgstr "The object was deleted successfully."
+
+#. German translation: Status erfolgreich geändert.
+#. Default: "Review state changed successfully."
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "msg_transition_successful"
+msgstr "Review state changed successfully."
+
+#. German translation: Es gibt nicht traktandierte Anträge, die diesem Gremium zugewiesen sind.
+#. Default: "There are unscheduled proposals submitted to this committee."
+#: ./opengever/meeting/browser/committeetransitioncontroller.py
+msgid "msg_unscheduled_proposals"
+msgstr "There are unscheduled proposals submitted to this committee."
+
+#. German translation: Eine Zip-Datei für alle Dokumente dieser Sitzung wird erstellt.
+#. Default: "A Zip file with PDFs for all documents of this meeting is being generated."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_creation_in_progress"
+msgstr "A Zip file with PDFs for all documents of this meeting is being generated."
+
+#. German translation: Beim Erstellen der Zip-Datei ist ein Fehler aufgetreten.
+#. Default: "There was an error while generating the Zip."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_error"
+msgstr "There was an error while generating the Zip."
+
+#. German translation: Die Zip-Datei steht zum herunterladen bereit.
+#. Default: "The zip file is ready for download."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_ready_for_download"
+msgstr "The zip file is ready for download."
+
+#. German translation: Das Erstellen der Zip-Datei hat zu lange gedauert.
+#. Default: "Generating the Zip took too long."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_timeout"
+msgstr "Generating the Zip took too long."
+
+#. German translation: Neu eingereichte Anträge
+#. Default: "New unscheduled proposals:"
+#: ./opengever/meeting/browser/templates/committee.pt
+msgid "new_unscheduled_proposals"
+msgstr "New unscheduled proposals:"
+
+#. German translation: Sie haben keine Rechte das Sitzungsdossier zu bearbeiten und Inhalte hinzuzufügen:
+#. Default: "User does not have permission to edit the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_edit_permissions_on_meeting_dossier"
+msgstr "User does not have permission to edit the meeting dossier:"
+
+#. German translation: Für das Sitzungsdatum ${start} ist keine Periode verfügbar. Sie sollten entweder das Sitzungsdatum anpassen oder eine neue Periode für das Gremium erfassen:
+#. Default: "There is no period available for the meeting date ${start}. You should either change the meeting date or add a new period to the committee:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_period_for_meeting_date"
+msgstr "There is no period available for the meeting date ${start}. You should either change the meeting date or add a new period to the committee:"
+
+#. German translation: Sie haben keine Rechte das Sitzungsdossier anzusehen:
+#. Default: "User does not have permission to view the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_view_permissions_on_meeting_dossier"
+msgstr "User does not have permission to view the meeting dossier:"
+
+#. German translation: Übersicht
+#. Default: "Overview"
+#: ./opengever/meeting/browser/tabbed.py
+msgid "overview"
+msgstr "Overview"
+
+#. German translation: Zwischentitel erfolgreich hinzugefügt.
+#. Default: "Paragraph successfully added."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "paragraph_added"
+msgstr "Paragraph successfully added."
+
+#. German translation: In Bearbeitung
+#. Default: "Pending"
+#: ./opengever/meeting/model/agendaitem.py
+#: ./opengever/meeting/model/meeting.py
+#: ./opengever/meeting/model/proposal.py
+msgid "pending"
+msgstr "Pending"
+
+#. German translation: Perioden
+#. Default: "Periods"
+#: ./opengever/meeting/browser/tabbed.py
+msgid "periods"
+msgstr "Periods"
+
+#. German translation: Vorgängiger Antrag
+#. Default: "Predecessor proposal"
+#: ./opengever/meeting/proposal.py
+msgid "predecessor_proposal_label"
+msgstr "Predecessor proposal"
+
+#. German translation: Dokument ${title} eingereicht
+#. Default: "Document ${title} submitted"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_submitted"
+msgstr "Document ${title} submitted"
+
+#. German translation: Eingereichtes Dokument ${title} aktualisiert zu Version ${version}
+#. Default: "Submitted document ${title} updated to version ${version}"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_updated"
+msgstr "Submitted document ${title} updated to version ${version}"
+
+#. German translation: Antragsdokument
+#. Default: "Proposal document"
+#: ./opengever/meeting/proposal.py
+msgid "proposal_document"
+msgstr "Proposal document"
+
+#. German translation: Storniert durch ${user}
+#. Default: "Proposal cancelled by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_cancelled"
+msgstr "Proposal cancelled by ${user}"
+
+#. German translation: Kommentiert durch ${user}
+#. Default: "Proposal commented by ${user}"
+#: ./opengever/meeting/activity/activities.py
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_commented"
+msgstr "Proposal commented by ${user}"
+
+#. German translation: Erstellt durch ${user}
+#. Default: "Created by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_created"
+msgstr "Created by ${user}"
+
+#. German translation: Antrag beschlossen durch ${user}
+#. Default: "Proposal decided by ${user}"
+#: ./opengever/meeting/activity/activities.py
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_decided"
+msgstr "Proposal decided by ${user}"
+
+#. German translation: Dokument ${title} in Version ${version} eingereicht durch ${user}
+#. Default: "Document ${title} submitted in version ${version} by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_document_submitted"
+msgstr "Document ${title} submitted in version ${version} by ${user}"
+
+#. German translation: Eingereichtes Dokument ${title} wurde entkoppelt durch ${user}
+#. Default: "Submitted document ${title} permanently unlocked by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_document_unlocked"
+msgstr "Submitted document ${title} permanently unlocked by ${user}"
+
+#. German translation: Eingereichtes Dokument ${title} aktualisiert zu Version ${version} durch ${user}
+#. Default: "Submitted document ${title} updated to version ${version} by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_document_updated"
+msgstr "Submitted document ${title} updated to version ${version} by ${user}"
+
+#. German translation: Wieder eröffnet durch ${user}
+#. Default: "Proposal reactivated by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_reactivated"
+msgstr "Proposal reactivated by ${user}"
+
+#. German translation: Zurückgewiesen von ${user}
+#. Default: "Rejected by ${user}"
+#: ./opengever/meeting/activity/activities.py
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_rejected"
+msgstr "Rejected by ${user}"
+
+#. German translation: Von der Traktandenliste der Sitzung ${meeting} entfernt durch ${user}
+#. Default: "Removed from schedule of meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_remove_scheduled"
+msgstr "Removed from schedule of meeting ${meeting} by ${user}"
+
+#. German translation: Antrag zur Überarbeitung wiedereröffnet durch ${user}
+#. Default: "Proposal reopened by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_reopened"
+msgstr "Proposal reopened by ${user}"
+
+#. German translation: Antragsbeschluss überarbeitet durch ${user}
+#. Default: "Proposal revised by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_revised"
+msgstr "Proposal revised by ${user}"
+
+#. German translation: Geplant für die Sitzung ${meeting} durch ${user}
+#. Default: "Scheduled for meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_scheduled"
+msgstr "Scheduled for meeting ${meeting} by ${user}"
+
+#. German translation: Eingereicht durch ${user}
+#. Default: "Submitted by ${user}"
+#: ./opengever/meeting/activity/activities.py
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_submitted"
+msgstr "Submitted by ${user}"
+
+#. German translation: Folgeantrag «${successor_link}» erstellt durch ${user}
+#. Default: "Successor proposal ${successor_link} created by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_successor_created"
+msgstr "Successor proposal ${successor_link} created by ${user}"
+
+#. German translation: Protokoll
+#. Default: "Protocol"
+#: ./opengever/meeting/protocol.py
+msgid "protocol"
+msgstr "Protocol"
+
+#. German translation: Protokollauszug
+#. Default: "Protocol-Excerpt"
+#: ./opengever/meeting/protocol.py
+msgid "protocol_excerpt"
+msgstr "Protocol-Excerpt"
+
+#. German translation: Zurückweisen
+#. Default: "Reject"
+#: ./opengever/meeting/model/proposal.py
+msgid "reject"
+msgstr "Reject"
+
+#. German translation: Wieder eröffnen
+#. Default: "Reopen"
+#: ./opengever/meeting/model/agendaitem.py
+#: ./opengever/meeting/model/meeting.py
+msgid "reopen"
+msgstr "Reopen"
+
+#. German translation: Protokollauszug ablegen
+#. Default: "Return Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "return_excerpt"
+msgstr "Return Excerpt"
+
+#. German translation: Überarbeiten
+#. Default: "Revise"
+#: ./opengever/meeting/model/agendaitem.py
+msgid "revise"
+msgstr "Revise"
+
+#. German translation: Überarbeitung
+#. Default: "Revision"
+#: ./opengever/meeting/model/agendaitem.py
+msgid "revision"
+msgstr "Revision"
+
+#. German translation: Diese Vorlage wird nicht verarbeitet werden können.
+#. Default: "This template will not render correctly."
+#: ./opengever/meeting/browser/templates/sablon_validation_state.pt
+msgid "sablon_template_is_invalid"
+msgstr "This template will not render correctly."
+
+#. German translation: Traktandieren
+#. Default: "Schedule"
+#: ./opengever/meeting/model/proposal.py
+msgid "schedule"
+msgstr "Schedule"
+
+#. German translation: Traktandiert
+#. Default: "Scheduled"
+#: ./opengever/meeting/model/proposal.py
+msgid "scheduled"
+msgstr "Scheduled"
+
+#. German translation: E-Mail senden
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "send email"
+msgstr "send email"
+
+#. German translation: Eingereicht
+#. Default: "Submitted"
+#: ./opengever/meeting/model/proposal.py
+msgid "submitted"
+msgstr "Submitted"
+
+#. German translation: Anträge
+#. Default: "Submitted Proposals"
+#: ./opengever/meeting/browser/tabbed.py
+msgid "submittedproposals"
+msgstr "Submitted Proposals"
+
+#. German translation: ${amount} Treffer
+#. Default: "${amount} matches"
+#: ./opengever/meeting/browser/templates/no_selection.pt
+msgid "tab_matches"
+msgstr "${amount} matches"
+
+#. German translation: Übersicht
+#. Default: "Overview"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "tab_overview"
+msgstr "Overview"
+
+#. German translation: ${count} Teilnehmende
+#. Default: "${count} Participants"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "tab_participants"
+msgstr "${count} Participants"
+
+#. German translation: Traktandum erfolgreich hinzugefügt
+#. Default: "Text successfully added."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "text_added"
+msgstr "Text successfully added."
+
+#. German translation: Traktandum ${number}
+#. Default: "Agenda item ${agenda_item_number}"
+#: ./opengever/meeting/zipexport.py
+msgid "title_agenda_item"
+msgstr "Agenda item ${agenda_item_number}"
+
+#. German translation: Element streichen
+#. Default: "Delete proposal"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "title_confirm_delete_agenda_item"
+msgstr "Delete proposal"
+
+#. German translation: Titel und Beschreibung modifizieren
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "title_rename_agenda_item"
+msgstr "Rename agenda item"
+
+#. German translation: Zip-Export: ${title}
+#. Default: "Zip export: ${title}"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "title_zip_export"
+msgstr "Zip export: ${title}"
+
+#. German translation: Traktandum entfernen
+#. Default: "Remove from schedule"
+#: ./opengever/meeting/model/proposal.py
+msgid "un-schedule"
+msgstr "Remove from schedule"
+
+#. German translation: Hinzufügen
+#. Default: "Add"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "view_label_add"
+msgstr "Add"
+
+#. German translation: Zwischentitel einfügen:
+#. Default: "Add section header:"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "view_label_add_section_header"
+msgstr "Add section header:"
+
+#. German translation: Traktanden
+#. Default: "Agenda items"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "view_label_agenda_items"
+msgstr "Agenda items"
+
+#. German translation: Traktandum einfügen:
+#. Default: "Schedule ad hoc agenda item:"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "view_label_schedule_ad_hoc"
+msgstr "Schedule ad hoc agenda item:"
+
+#. German translation: Antrag traktandieren:
+#. Default: "Schedule proposal:"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "view_label_schedule_proposal"
+msgstr "Schedule proposal:"
