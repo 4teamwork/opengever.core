@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2020-10-19 15:33+0000\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -27,7 +27,6 @@ msgid "Business Case Dossier"
 msgstr "Dossier"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180403175143_add_confirmation_to_cancel_checkout/actions.xml
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -64,7 +63,6 @@ msgid "ContactFolder"
 msgstr "Répertoire de contact"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20170718083059_add_copy_action_for_single_documents/actions.xml
 #: ./opengever/core/upgrades/20190823113658_do_not_show_copy_action_for_checked_out_documents/actions.xml
 msgid "Copy Item"
 msgstr "Copier"
@@ -93,8 +91,6 @@ msgid "Create Disposition"
 msgstr "Créer une offre d'archivage"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180623132731_add_a_create_proposal_action/actions.xml
-#: ./opengever/core/upgrades/20180813145550_create_proposal_unavailable_if_meeting_feature_disabled/actions.xml
 msgid "Create Proposal"
 msgstr "Créer une requête"
 
@@ -104,7 +100,6 @@ msgid "Create Task"
 msgstr "Créer une tâche"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
 msgid "Debug docxcompose"
 msgstr "Télécharger les fichiers docxcompose"
 
@@ -125,13 +120,10 @@ msgid "Dossier template"
 msgstr "Modèle de dossier"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
 msgid "Download protocol json"
 msgstr "Télécharger les données JSON de la réunion"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20170920132556_add_zipexport_action_for_meetings/actions.xml
-#: ./opengever/core/upgrades/20181002163514_use_demand_view_to_generate_meeting_zips_by_default/actions.xml
 msgid "Export as Zip"
 msgstr "Exporter comme fichier ZIP"
 
@@ -170,7 +162,6 @@ msgid "Meeting Dossier"
 msgstr "Dossier de réunion"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingtemplate.xml
-#: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.meetingtemplate.xml
 msgid "Meeting Template"
 msgstr "Modèle de séance"
 
@@ -185,7 +176,6 @@ msgid "Move Items"
 msgstr "Déplacer éléments"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180122154722_add_my_invitation_action/actions.xml
 msgid "My Invitations"
 msgstr "Invitations Teamraum"
 
@@ -194,7 +184,6 @@ msgid "My repository"
 msgstr "Mon dépôt"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.paragraphtemplate.xml
-#: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.paragraphtemplate.xml
 msgid "Paragraph Template"
 msgstr "Modèle d'intertitre"
 
@@ -204,7 +193,6 @@ msgid "Participant"
 msgstr "Participation"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180119143619_update_actions_for_workspace/actions.xml
 msgid "Participants"
 msgstr "Participants"
 
@@ -238,7 +226,6 @@ msgid "Private folder"
 msgstr "Dossier personnel"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180221144648_update_properties_action_available_expression/actions.xml
 msgid "Properties"
 msgstr "Afficher les métadonnées"
 
@@ -260,7 +247,6 @@ msgid "RepositoryRoot"
 msgstr "Système de classement"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180122090342_add_revive_bumblebee_preview_action/actions.xml
 msgid "Revive preview"
 msgstr "Générer l'aperçu à nouveau"
 
@@ -330,13 +316,11 @@ msgid "Unlock unused repository prefixes."
 msgstr "Déblocage de préfixes de référence inutilisés."
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.workspace.xml
-#: ./opengever/core/upgrades/20171213174551_add_workspace_content_type/types/opengever.workspace.workspace.xml
 #: ./opengever/core/upgrades/20200909192905_update_workspace_workflow/types/opengever.workspace.workspace.xml
 msgid "Workspace"
 msgstr "Teamraum"
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.folder.xml
-#: ./opengever/core/upgrades/20171220151710_add_workspace_folder_content_type/types/opengever.workspace.folder.xml
 msgid "WorkspaceFolder"
 msgstr "Fichier"
 
@@ -354,18 +338,12 @@ msgid "YearFolder"
 msgstr "Classeur pour l'année"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180327114419_homogenize_e_ch_0147_import_export_action_titles/actions.xml
 msgid "eCH-0147 Export"
 msgstr "Export eCH-0147"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
 msgid "eCH-0147 Import"
 msgstr "Import eCH-0147"
-
-#: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
-msgid "eCH-0147/eCH-0039 Export"
-msgstr "Export eCH-0147/eCH-0039"
 
 msgid "opengever.document.document"
 msgstr "Document"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-06-07 11:47+0000\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -260,7 +260,7 @@ msgstr "Auftraggeber"
 #. Default: "Keywords"
 #: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
 #: ./opengever/tabbedview/browser/generic_with_filters.pt
-#: ./opengever/tabbedview/browser/tabs.py
+#: ./opengever/tabbedview/browser/selection_with_filters.pt
 msgid "label_keywords"
 msgstr "Schlagwörter"
 
