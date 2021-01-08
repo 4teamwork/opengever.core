@@ -45,6 +45,7 @@
   <adapter factory=".task.TaskDeserializeFromJson" />
   <adapter factory=".task.SerializeTaskModelToJson" />
   <adapter factory=".task.SerializeTaskModelToJsonSummary" />
+  <adapter factory=".tasktemplate.TaskTemplateDeserializeFromJson" />
   <adapter factory=".users.SerializeUserToJson" />
   <adapter factory=".proposal.SerializeProposalResponseToJson" />
   <adapter factory=".proposal.SerializeProposalToJson" />
