@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-05 18:17+0000\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
 "PO-Revision-Date: 2016-07-22 16:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
@@ -21,12 +21,12 @@ msgid "Toggle orgunit selector"
 msgstr "Amtswechsler umschalten"
 
 #. Default: "No"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "active_no"
 msgstr "Nein"
 
 #. Default: "Yes"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "active_yes"
 msgstr "Ja"
 
@@ -38,7 +38,7 @@ msgstr "Eingangskorb: ${client}"
 
 #. Default: "Active"
 #: ./opengever/ogds/base/browser/team_forms.py
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_active"
 msgstr "Aktiv"
 
@@ -48,7 +48,7 @@ msgid "label_add_team"
 msgstr "Team hinzufügen"
 
 #. Default: "Address"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_address"
 msgstr "Adresse"
 
@@ -58,17 +58,17 @@ msgid "label_assigned_orgunit"
 msgstr "Zugehörige Organisationseinheit"
 
 #. Default: "Department"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_department"
 msgstr "Amt"
 
 #. Default: "Description"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Directorate"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_directorate"
 msgstr "Direktion"
 
@@ -78,17 +78,17 @@ msgid "label_edit_team"
 msgstr "Team bearbeiten"
 
 #. Default: "Email"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_email"
 msgstr "E-Mail Adresse"
 
 #. Default: "Email 2"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_email2"
 msgstr "Alternative E-Mail Adresse"
 
 #. Default: "Name"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_fullname"
 msgstr "Name"
 
@@ -99,7 +99,7 @@ msgid "label_group"
 msgstr "Gruppe"
 
 #. Default: "Groups"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_groups"
 msgstr "Gruppen"
 
@@ -114,27 +114,27 @@ msgid "label_org_unit"
 msgstr "Organisationseinheit"
 
 #. Default: "Fax"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_phone_fax"
 msgstr "Fax"
 
 #. Default: "Mobile phone"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_phone_mobile"
 msgstr "Mobiltelefon"
 
 #. Default: "Office phone"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_phone_office"
 msgstr "Telefon Büro"
 
 #. Default: "Salutation"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_salutation"
 msgstr "Anrede"
 
 #. Default: "Teams"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_teams"
 msgstr "Teams"
 
@@ -144,7 +144,7 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "URL"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt
+#: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_url"
 msgstr "Homepage"
 

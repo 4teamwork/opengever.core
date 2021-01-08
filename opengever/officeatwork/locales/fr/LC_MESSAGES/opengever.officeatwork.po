@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
 "PO-Revision-Date: 2017-06-06 08:42+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-officeatwork/fr/>\n"
@@ -27,4 +27,3 @@ msgstr "Créer avec officeatwork"
 #: ./opengever/officeatwork/browser/documentfromofficeatwork.py
 msgid "Creation with officeatwork initiated successfully"
 msgstr "Création du contenu a été démarrée avec succès par le biais d'officeatwork"
-
