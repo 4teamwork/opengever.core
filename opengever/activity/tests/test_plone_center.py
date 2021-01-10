@@ -138,7 +138,7 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals(
-            ['A problem has occurred during the notification creation. '
-             'Notification could not or only partially produced.'],
+            ['A problem has occurred when trying to dispatch a notification. '
+             'The notification therefore was not dispatched (or only partially).'],
             warning_messages())
         self.assertEquals(['Item created'], info_messages())

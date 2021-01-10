@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-11 15:53+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgstr "Cancel"
 #. Default: "Reset"
 #: ./opengever/activity/browser/settings.py
 msgid "btn_reset"
-msgstr "Reset"
+msgstr "Reset to Defaults"
 
 #. German translation: Speichern
 #. Default: "Save"
@@ -96,7 +96,7 @@ msgstr "Disposition appraised"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-archive"
-msgstr "Disposition archived"
+msgstr "Archival confirmed"
 
 #. German translation: Angebot abgeschlossen
 #. Default: "Disposition closed"
@@ -110,7 +110,7 @@ msgstr "Disposition closed"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-dispose"
-msgstr "Disposition disposed"
+msgstr "Offered for archival"
 
 #. German translation: Angebot abgelehnt
 #. Default: "Disposition refused"
@@ -226,7 +226,7 @@ msgstr "General"
 #. Default: "Mail"
 #: ./opengever/activity/browser/settings.py
 msgid "label_mail"
-msgstr "Mail"
+msgstr "Email"
 
 #. German translation: Benachrichtigungs-Einstellungen
 #. Default: "Notification settings"
@@ -239,7 +239,7 @@ msgstr "Notification settings"
 #. Default: "All Notifications"
 #: ./opengever/activity/viewlets/notification.pt
 msgid "label_notifications_overview"
-msgstr "All Notifications"
+msgstr "All notifications"
 
 #. German translation: Anträge
 #. Default: "Proposals"
@@ -275,25 +275,25 @@ msgstr "Workspaces"
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/error_handling.py
 msgid "msg_error_not_notified"
-msgstr "A problem has occurred during the notification creation. Notification could not or only partially produced."
+msgstr "A problem has occurred when trying to dispatch a notification. The notification therefore was not dispatched (or only partially)."
 
 #. German translation: Alle Benachrichtigungen aufgrund von Eingangskorbberechtigung aktivieren bzw. deaktivieren.
 #. Default: "Activate, respectively deactivate, all notifications due to your inbox permissions."
 #: ./opengever/activity/browser/settings.py
 msgid "notify_inbox_actions_help"
-msgstr "Activate, respectively deactivate, all notifications due to your inbox permissions."
+msgstr "Enabled or disable, respectively, all notifications based on your inbox permissions."
 
 #. German translation: Benachrichtigungen für Eingangskorb aktivieren
 #. Default: "Enable notifications for inbox actions"
 #: ./opengever/activity/browser/settings.py
 msgid "notify_inbox_actions_title"
-msgstr "Enable notifications for inbox actions"
+msgstr "Enable notifications for inbox activities"
 
 #. German translation: Standardmässig werden für selbst ausgeführte Aktionen keine Benachrichtigungen ausgelöst. Mit dieser Option kann dieses Verhalten verändert werden. Persönlich vorgenommene Benachrichtigungseinstellungen pro Aktionstyp gelten dabei nach wie vor.
 #. Default: "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
 #: ./opengever/activity/browser/settings.py
 msgid "notify_own_actions_help"
-msgstr "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
+msgstr "By default no notifications are emitted for a user's own actions. This option allows to modify this behavior. Irrespective of this setting, individual settings for specific action types will still get applied."
 
 #. German translation: Benachrichtigung für eigene Aktionen aktivieren
 #. Default: "Enable notifications for own actions"
@@ -303,6 +303,7 @@ msgstr "Enable notifications for own actions"
 
 #. German translation: Zusätzliche Beilagen eingereicht
 #. Default: "Additional documents submitted"
+#. MARKER: supplementary-documents
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "proposal-additional-documents-submitted"
@@ -310,6 +311,7 @@ msgstr "Additional documents submitted"
 
 #. German translation: Beilage aktualisiert
 #. Default: "Attachment updated"
+#. MARKER: supplementary-documents
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "proposal-attachment-updated"
@@ -496,7 +498,7 @@ msgstr "Task skipped"
 #. Default: "Task reassign"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-reassign"
-msgstr "Task reassign"
+msgstr "Task reassigned"
 
 #. German translation: Aufgabe wieder eröffnet
 #. Default: "Task reopened"
@@ -514,7 +516,7 @@ msgstr "Task skipped"
 #. Default: "Task revision wanted"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-resolved-in-progress"
-msgstr "Task revision wanted"
+msgstr "Task revision requested"
 
 #. German translation: Aufgabe abgeschlossen
 #. Default: "Task closed"
@@ -544,7 +546,7 @@ msgstr "Task issuer"
 #. Default: "Task former responsible"
 #: ./opengever/activity/roles.py
 msgid "task_old_responsible"
-msgstr "Task former responsible"
+msgstr "Former task responsible"
 
 #. German translation: Beobachter
 #. Default: "Watcher"
