@@ -1,0 +1,286 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Ungültige eCH-0147 Nachricht. message.xml fehlt.
+#: ./opengever/ech0147/browser/import.py
+msgid "Invalid message. Missing message.xml"
+msgstr "Invalid message. Missing message.xml"
+
+#. German translation: Nachricht wurde importiert.
+#: ./opengever/ech0147/browser/import.py
+msgid "Message has been imported"
+msgstr "Message has been imported"
+
+#. German translation: Nachricht-Import fehlgeschlagen. Das Objekt ${title} beinhaltet ungültige Feldwerte. <br /> ${details}
+#: ./opengever/ech0147/browser/import.py
+msgid "Message import failed. The object ${title} has invalid field data. <br /> ${details}"
+msgstr "Message import failed. The object ${title} has invalid field data. <br /> ${details}"
+
+#. German translation: Diese Nachricht enthält Dokumente auf oberster Stufe und kann daher nur in einem Dossier importiert werden.
+#: ./opengever/ech0147/browser/import.py
+msgid "This message contains toplevel documents. It can only be imported within a dossier."
+msgstr "This message contains toplevel documents. It can only be imported within a dossier."
+
+#. German translation: Fachliche Austauschanweisung für den Empfänger der Nachricht.
+#: ./opengever/ech0147/browser/export.py
+msgid "help_action"
+msgstr "help_action"
+
+#. German translation: Bearbeitungsanweisung für den Empfänger der Nachricht.
+#: ./opengever/ech0147/browser/export.py
+msgid "help_directive"
+msgstr "help_directive"
+
+#. German translation: Eine eCH-0147 konforme ZIP-Datei
+#. Default: "A ZIP file containing an eCH-147 message."
+#: ./opengever/ech0147/browser/import.py
+msgid "help_message"
+msgstr "A ZIP file containing an eCH-147 message."
+
+#. German translation: Empfänger der Nachricht (z.B. E-Mail-Adresse). Pro Zeile ein Empfänger.
+#. Default: "Recipients of the message. Enter one recipient per line."
+#: ./opengever/ech0147/browser/export.py
+msgid "help_recipients"
+msgstr "Recipients of the message. Enter one recipient per line."
+
+#. German translation: Federführende Person bei Dossiers, die durch den eCH-0147 Import erstellt werden.
+#. Default: "Responsible for dossiers created by eCH-0147 import."
+#: ./opengever/ech0147/browser/import.py
+msgid "help_responsible"
+msgstr "Responsible for dossiers created by eCH-0147 import."
+
+#. German translation: Aktion
+#. Default: "Action"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_action"
+msgstr "Action"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/ech0147/browser/export.py
+#: ./opengever/ech0147/browser/import.py
+msgid "label_cancel"
+msgstr "Cancel"
+
+#. German translation: Kommentar
+#. Default: "Comment"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_comment"
+msgstr "Comment"
+
+#. German translation: Frist
+#. Default: "Deadline"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_deadline"
+msgstr "Deadline"
+
+#. German translation: Anweisung
+#. Default: "Directive"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_directive"
+msgstr "Directive"
+
+#. German translation: eCH-0147 Export
+#. Default: "eCH 0147 Export"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_ech0147_export_form"
+msgstr "eCH 0147 Export"
+
+#. German translation: eCH-0147 Import
+#. Default: "eCH 0147 Import"
+#: ./opengever/ech0147/browser/import.py
+msgid "label_ech0147_import_form"
+msgstr "eCH 0147 Import"
+
+#. German translation: Exportieren
+#. Default: "Export"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_export"
+msgstr "Export"
+
+#. German translation: Als eCH-0147 Nachricht exportiert
+#. Default: "Exported as eCH-0147 message"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_exported_as_ech0147"
+msgstr "Exported as eCH-0147 message"
+
+#. German translation: Feld
+#. Default: "Field"
+#: ./opengever/ech0147/browser/import.py
+msgid "label_field"
+msgstr "Field"
+
+#. German translation: Importieren
+#. Default: "Import"
+#: ./opengever/ech0147/browser/import.py
+msgid "label_import"
+msgstr "Import"
+
+#. German translation: Datei
+#. Default: "File"
+#: ./opengever/ech0147/browser/import.py
+msgid "label_message"
+msgstr "File"
+
+#. German translation: Pfade
+#. Default: "Paths"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_paths"
+msgstr "Paths"
+
+#. German translation: Priorität
+#. Default: "Priority"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_priority"
+msgstr "Priority"
+
+#. German translation: Empfänger
+#. Default: "Recipient(s)"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_recipients"
+msgstr "Recipient(s)"
+
+#. German translation: Federführend
+#. Default: "Responsible"
+#: ./opengever/ech0147/browser/import.py
+msgid "label_reponsible"
+msgstr "Responsible"
+
+#. German translation: Betreff
+#. Default: "Subject"
+#: ./opengever/ech0147/browser/export.py
+msgid "label_subject"
+msgstr "Subject"
+
+#. German translation: Nicht-valides XML. ${details}
+#. Default: "Invalid content. ${details}"
+#: ./opengever/ech0147/browser/import.py
+msgid "msg_ech0147_invalid_content"
+msgstr "Invalid content. ${details}"
+
+#. German translation: neu
+#. Default: "new"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_1"
+msgstr "new"
+
+#. German translation: Weiterleitung
+#. Default: "forwarding"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_10"
+msgstr "forwarding"
+
+#. German translation: Mahnung
+#. Default: "reminder"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_12"
+msgstr "reminder"
+
+#. German translation: Widerruf
+#. Default: "revocation"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_3"
+msgstr "revocation"
+
+#. German translation: Korrektur
+#. Default: "correction"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_4"
+msgstr "correction"
+
+#. German translation: Anfrage
+#. Default: "inquiry"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_5"
+msgstr "inquiry"
+
+#. German translation: Antwort
+#. Default: "response"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_6"
+msgstr "response"
+
+#. German translation: Schlüsselaustausch
+#. Default: "key exchange"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_action_7"
+msgstr "key exchange"
+
+#. German translation: zur Genehmigung
+#. Default: "approve"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_approve"
+msgstr "approve"
+
+#. German translation: zur Stellungnahme
+#. Default: "comment"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_comment"
+msgstr "comment"
+
+#. German translation: zum Abschliessen
+#. Default: "complete"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_complete"
+msgstr "complete"
+
+#. German translation: Externe Bearbeitung
+#. Default: "external process"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_external_process"
+msgstr "external process"
+
+#. German translation: zur Kenntnis
+#. Default: "informationrocess"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_information"
+msgstr "informationrocess"
+
+#. German translation: zur Bearbeitung
+#. Default: "process"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_process"
+msgstr "process"
+
+#. German translation: zum Versand
+#. Default: "send"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_send"
+msgstr "send"
+
+#. German translation: zum Visieren
+#. Default: "sign"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_directive_sign"
+msgstr "sign"
+
+#. German translation: hoch
+#. Default: "high"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_priority_high"
+msgstr "high"
+
+#. German translation: mittel
+#. Default: "medium"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_priority_medium"
+msgstr "medium"
+
+#. German translation: nicht zugewiesen
+#. Default: "undefined"
+#: ./opengever/ech0147/browser/export.py
+msgid "term_priority_undefined"
+msgstr "undefined"

@@ -1,0 +1,551 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-08-11 09:27+0000\n"
+"PO-Revision-Date: 2017-03-09 17:52+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Antwort
+msgid "Add response"
+msgstr "Add response"
+
+#. German translation: Standardablauf auslösen
+msgid "Add task from template"
+msgstr "Add task from template"
+
+#. German translation: Kopie Dokument aus eigenem Mandant
+msgid "Attach remote document"
+msgstr "Attach remote document"
+
+#. German translation: Einchecken
+msgid "Checkin"
+msgstr "Checkin"
+
+#. German translation: Auschecken
+msgid "Checkout"
+msgstr "Checkout"
+
+#. German translation: Mitglied
+msgid "Committee Member"
+msgstr "Committee Member"
+
+#. German translation: Folgeaufgabe erstellen
+msgid "Create successor task"
+msgstr "Create successor task"
+
+#. German translation: Delegieren
+msgid "Delegate task"
+msgstr "Delegate task"
+
+#. German translation: Dokumentstatus verändert: Ausgecheckt
+msgid "Document state changed to document-state-checked_out"
+msgstr "Document state changed to document-state-checked_out"
+
+#. German translation: Dokumentstatus verändert: Entwurf
+msgid "Document state changed to document-state-draft"
+msgstr "Document state changed to document-state-draft"
+
+#. German translation: Dokumentstatus verändert: Hängig
+msgid "Document state changed to document-state-pending"
+msgstr "Document state changed to document-state-pending"
+
+#. German translation: Dokument status verändert: Zurückweisen
+msgid "Document state changed to document-state-reject"
+msgstr "Document state changed to document-state-reject"
+
+#. German translation: Dokumentstatus verändert: Arbeitskopie
+msgid "Document state changed to document-state-working_copy"
+msgstr "Document state changed to document-state-working_copy"
+
+#. German translation: Status des Dossiers geändert zu In Bearbeitung
+msgid "Dossier state changed to dossier-state-active"
+msgstr "Dossier state changed to dossier-state-active"
+
+#. German translation: Status des Dossiers geändert zu Archiviert
+msgid "Dossier state changed to dossier-state-archived"
+msgstr "Dossier state changed to dossier-state-archived"
+
+#. German translation: Status des Dossiers geändert zu Storniert
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr "Dossier state changed to dossier-state-inactive"
+
+#. German translation: Status des Dossiers geändert zu Angeboten
+msgid "Dossier state changed to dossier-state-offered"
+msgstr "Dossier state changed to dossier-state-offered"
+
+#. German translation: Status des Dossiers geändert zu Abgeschlossen
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr "Dossier state changed to dossier-state-resolved"
+
+#. German translation: Geschäftsdossier aus Vorlage
+msgid "Dossier with template"
+msgstr "Dossier with template"
+
+#. German translation: Metadaten bearbeiten
+msgid "Edit metadata"
+msgstr "Edit metadata"
+
+#. German translation: Ablagenummer vergeben
+msgid "Give Filing Number"
+msgstr "Give Filing Number"
+
+#. German translation: Info
+msgid "Info success"
+msgstr "Info success"
+
+#. German translation: Sitzung
+msgid "Meeting"
+msgstr "Meeting"
+
+#. German translation: Mitgliedschaft
+msgid "Membership"
+msgstr "Membership"
+
+#. German translation: Frist ändern
+msgid "Modify deadline"
+msgstr "Modify deadline"
+
+#. German translation: Pendenzenliste
+msgid "Open tasks report"
+msgstr "Open tasks report"
+
+#. German translation: Übersicht
+msgid "Overview"
+msgstr "Overview"
+
+#. German translation: Beteiligung
+msgid "Participant"
+msgstr "Participant"
+
+#. German translation: PDF speichern unter
+msgid "Save document as PDF"
+msgstr "Save document as PDF"
+
+#. German translation: OneGov GEVER durchsuchen
+msgid "Search OneGov Gever"
+msgstr "Search OneGov Gever"
+
+#. German translation: Suchresultate
+#: plone.app.search/plone/app/search/search.pt:59
+msgid "Search results"
+msgstr "Search results"
+
+#. German translation: Suchresultate für ${term}
+#: plone.app.search/plone/app/search/search.pt:68
+msgid "Search results for ${term}"
+msgstr "Search results for ${term}"
+
+#. German translation: Zusätzliche Beilage einreichen
+msgid "Submit additional document"
+msgstr "Submit additional document"
+
+#. German translation: Zusätzliche Beilagen einreichen
+msgid "Submit additional documents"
+msgstr "Submit additional documents"
+
+#. German translation: Nutzung
+msgid "Usage"
+msgstr "Usage"
+
+#. German translation: alphabetisch
+#: plone.app.search/plone/app/search/browser.py:121
+msgid "alphabetically"
+msgstr "alphabetically"
+
+#. German translation: ${number} Artikel gefunden.
+msgid "batch_x_items_matching_your_criteria"
+msgstr "batch_x_items_matching_your_criteria"
+
+#. German translation: herunterladen
+msgid "button_download"
+msgstr "button_download"
+
+#. German translation: Änderungsdatum (absteigend)
+#: plone.app.search/plone/app/search/browser.py:119
+msgid "date (newest first)"
+msgstr "date (newest first)"
+
+#. German translation: Bewertet
+msgid "disposition-state-appraised"
+msgstr "disposition-state-appraised"
+
+#. German translation: Archiviert
+msgid "disposition-state-archived"
+msgstr "disposition-state-archived"
+
+#. German translation: Abgeschlossen
+msgid "disposition-state-closed"
+msgstr "disposition-state-closed"
+
+#. German translation: In Ablieferung
+msgid "disposition-state-disposed"
+msgstr "disposition-state-disposed"
+
+#. German translation: In Bearbeitung
+msgid "disposition-state-in-progress"
+msgstr "disposition-state-in-progress"
+
+#. German translation: Bewertung finalisieren
+msgid "disposition-transition-appraise"
+msgstr "disposition-transition-appraise"
+
+#. German translation: Dossiers aussondern
+msgid "disposition-transition-appraised-to-closed"
+msgstr "disposition-transition-appraised-to-closed"
+
+#. German translation: Archivierung bestätigen
+msgid "disposition-transition-archive"
+msgstr "disposition-transition-archive"
+
+#. German translation: Dossiers aussondern
+msgid "disposition-transition-close"
+msgstr "disposition-transition-close"
+
+#. German translation: Abliefern
+msgid "disposition-transition-dispose"
+msgstr "disposition-transition-dispose"
+
+#. German translation: Ablehnen
+msgid "disposition-transition-refuse"
+msgstr "disposition-transition-refuse"
+
+#. German translation: nicht definiert
+msgid "document-state-draft"
+msgstr "document-state-draft"
+
+#. German translation: Hängig
+msgid "document-state-pending"
+msgstr "document-state-pending"
+
+#. German translation: Gelöscht
+msgid "document-state-removed"
+msgstr "document-state-removed"
+
+#. German translation: Arbeitskopie
+msgid "document-state-working_copy"
+msgstr "document-state-working_copy"
+
+#. German translation: Löschen
+msgid "document-transition-remove"
+msgstr "document-transition-remove"
+
+#. German translation: Wiederherstellen
+msgid "document-transition-restore"
+msgstr "document-transition-restore"
+
+#. German translation: Dokument aus officeatwork
+msgid "document_from_officeatwork"
+msgstr "document_from_officeatwork"
+
+#. German translation: Dokument aus OneOffixx Vorlage
+msgid "document_with_oneoffixx_template"
+msgstr "document_with_oneoffixx_template"
+
+#. German translation: Dokument aus Vorlage
+msgid "document_with_template"
+msgstr "document_with_template"
+
+#. German translation: In Bearbeitung
+msgid "dossier-state-active"
+msgstr "dossier-state-active"
+
+#. German translation: Archiviert
+msgid "dossier-state-archived"
+msgstr "dossier-state-archived"
+
+#. German translation: Storniert
+msgid "dossier-state-inactive"
+msgstr "dossier-state-inactive"
+
+#. German translation: Angeboten
+msgid "dossier-state-offered"
+msgstr "dossier-state-offered"
+
+#. German translation: Abgeschlossen
+msgid "dossier-state-resolved"
+msgstr "dossier-state-resolved"
+
+#. German translation: Aktivieren
+msgid "dossier-transition-activate"
+msgstr "dossier-transition-activate"
+
+#. German translation: Archivierung bestätigen
+msgid "dossier-transition-archive"
+msgstr "dossier-transition-archive"
+
+#. German translation: Stornieren
+msgid "dossier-transition-deactivate"
+msgstr "dossier-transition-deactivate"
+
+#. German translation: Wieder öffnen
+msgid "dossier-transition-reactivate"
+msgstr "dossier-transition-reactivate"
+
+#. German translation: Abschliessen
+msgid "dossier-transition-resolve"
+msgstr "dossier-transition-resolve"
+
+#. German translation: Abgeschlossen
+msgid "forwarding-state-closed"
+msgstr "forwarding-state-closed"
+
+#. German translation: Offen
+msgid "forwarding-state-open"
+msgstr "forwarding-state-open"
+
+#. German translation: Abgelehnt
+msgid "forwarding-state-refused"
+msgstr "forwarding-state-refused"
+
+#. German translation: Akzeptieren
+msgid "forwarding-transition-accept"
+msgstr "forwarding-transition-accept"
+
+#. German translation: Einem Dossier zuweisen
+msgid "forwarding-transition-assign-to-dossier"
+msgstr "forwarding-transition-assign-to-dossier"
+
+#. German translation: Abschliessen
+msgid "forwarding-transition-close"
+msgstr "forwarding-transition-close"
+
+#. German translation: Neu zuweisen
+msgid "forwarding-transition-reassign"
+msgstr "forwarding-transition-reassign"
+
+#. German translation: Weiterleiten
+msgid "forwarding-transition-reassign-refused"
+msgstr "forwarding-transition-reassign-refused"
+
+#. German translation: Ablehnen
+msgid "forwarding-transition-refuse"
+msgstr "forwarding-transition-refuse"
+
+#. German translation: Offen
+msgid "inbox-state-default"
+msgstr "inbox-state-default"
+
+#. German translation: Weitere Aktionen
+msgid "label_actions_menu"
+msgstr "label_actions_menu"
+
+#. German translation: Fehler bei der Verarbeitung Ihrer Suchanfrage. Bitte beachten Sie, dass Ausdrücke wie AND, NOT und OR nur in der erweiterten Suche erlaubt sind.
+msgid "label_has_parse_errors"
+msgstr "label_has_parse_errors"
+
+#. German translation: zurücksetzen
+msgid "label_reset"
+msgstr "label_reset"
+
+#. German translation: Löschen
+msgid "mail-transition-remove"
+msgstr "mail-transition-remove"
+
+#. German translation: Wiederherstellen
+msgid "mail-transition-restore"
+msgstr "mail-transition-restore"
+
+#. German translation: In Bearbeitung
+msgid "proposal-state-active"
+msgstr "proposal-state-active"
+
+#. German translation: Storniert
+msgid "proposal-state-cancelled"
+msgstr "proposal-state-cancelled"
+
+#. German translation: Beschlossen
+msgid "proposal-state-decided"
+msgstr "proposal-state-decided"
+
+#. German translation: Traktandiert
+msgid "proposal-state-scheduled"
+msgstr "proposal-state-scheduled"
+
+#. German translation: Eingereicht
+msgid "proposal-state-submitted"
+msgstr "proposal-state-submitted"
+
+#. German translation: Stornieren
+msgid "proposal-transition-cancel"
+msgstr "proposal-transition-cancel"
+
+#. German translation: Wieder eröffnen
+msgid "proposal-transition-reactivate"
+msgstr "proposal-transition-reactivate"
+
+#. German translation: Einreichen
+msgid "proposal-transition-submit"
+msgstr "proposal-transition-submit"
+
+#. German translation: aktiv
+msgid "repositoryfolder-state-active"
+msgstr "repositoryfolder-state-active"
+
+#. German translation: inaktiv
+msgid "repositoryfolder-state-inactive"
+msgstr "repositoryfolder-state-inactive"
+
+#. German translation: aktivieren
+msgid "repositoryfolder-transition-activate"
+msgstr "repositoryfolder-transition-activate"
+
+#. German translation: deaktivieren
+msgid "repositoryfolder-transition-inactivate"
+msgstr "repositoryfolder-transition-inactivate"
+
+#. German translation: Anhänge speichern
+msgid "save attachments"
+msgstr "save attachments"
+
+#. German translation: Aufgabe hinzugefügt.
+msgid "task-added"
+msgstr "task-added"
+
+#. German translation: Abgebrochen
+msgid "task-state-cancelled"
+msgstr "task-state-cancelled"
+
+#. German translation: In Arbeit
+msgid "task-state-in-progress"
+msgstr "task-state-in-progress"
+
+#. German translation: Folgeaufgabe wird erstellt
+msgid "task-state-new-successor"
+msgstr "task-state-new-successor"
+
+#. German translation: Offen
+msgid "task-state-open"
+msgstr "task-state-open"
+
+#. German translation: Geplant
+msgid "task-state-planned"
+msgstr "task-state-planned"
+
+#. German translation: Abgelehnt
+msgid "task-state-rejected"
+msgstr "task-state-rejected"
+
+#. German translation: Erledigt
+msgid "task-state-resolved"
+msgstr "task-state-resolved"
+
+#. German translation: Übersprungen
+msgid "task-state-skipped"
+msgstr "task-state-skipped"
+
+#. German translation: Abgeschlossen
+msgid "task-state-tested-and-closed"
+msgstr "task-state-tested-and-closed"
+
+#. German translation: Wieder eröffnen
+msgid "task-transition-cancelled-open"
+msgstr "task-transition-cancelled-open"
+
+#. German translation: Delegieren
+msgid "task-transition-delegate"
+msgstr "task-transition-delegate"
+
+#. German translation: Abbrechen
+msgid "task-transition-in-progress-cancelled"
+msgstr "task-transition-in-progress-cancelled"
+
+#. German translation: Erledigen
+msgid "task-transition-in-progress-resolved"
+msgstr "task-transition-in-progress-resolved"
+
+#. German translation: Abschliessen
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr "task-transition-in-progress-tested-and-closed"
+
+#. German translation: Frist ändern
+msgid "task-transition-modify-deadline"
+msgstr "task-transition-modify-deadline"
+
+#. German translation: Abbrechen
+msgid "task-transition-open-cancelled"
+msgstr "task-transition-open-cancelled"
+
+#. German translation: Akzeptieren
+msgid "task-transition-open-in-progress"
+msgstr "task-transition-open-in-progress"
+
+#. German translation: Planen
+msgid "task-transition-open-planned"
+msgstr "task-transition-open-planned"
+
+#. German translation: Ablehnen
+msgid "task-transition-open-rejected"
+msgstr "task-transition-open-rejected"
+
+#. German translation: Erledigen
+msgid "task-transition-open-resolved"
+msgstr "task-transition-open-resolved"
+
+#. German translation: Abschliessen
+msgid "task-transition-open-tested-and-closed"
+msgstr "task-transition-open-tested-and-closed"
+
+#. German translation: Starten
+msgid "task-transition-planned-open"
+msgstr "task-transition-planned-open"
+
+#. German translation: Überspringen
+msgid "task-transition-planned-skipped"
+msgstr "task-transition-planned-skipped"
+
+#. German translation: Neu zuweisen
+msgid "task-transition-reassign"
+msgstr "task-transition-reassign"
+
+#. German translation: Wieder eröffnen
+msgid "task-transition-rejected-open"
+msgstr "task-transition-rejected-open"
+
+#. German translation: Überspringen
+msgid "task-transition-rejected-skipped"
+msgstr "task-transition-rejected-skipped"
+
+#. German translation: Überarbeiten
+msgid "task-transition-resolved-in-progress"
+msgstr "task-transition-resolved-in-progress"
+
+#. German translation: Abschliessen
+msgid "task-transition-resolved-tested-and-closed"
+msgstr "task-transition-resolved-tested-and-closed"
+
+#. German translation: Wieder eröffnen
+msgid "task-transition-skipped-open"
+msgstr "task-transition-skipped-open"
+
+#. German translation: Aktiv
+msgid "tasktemplate-state-active"
+msgstr "tasktemplate-state-active"
+
+#. German translation: Aktiv
+msgid "tasktemplatefolder-state-activ"
+msgstr "tasktemplatefolder-state-activ"
+
+#. German translation: Inaktiv
+msgid "tasktemplatefolder-state-inactiv"
+msgstr "tasktemplatefolder-state-inactiv"
+
+#. German translation: Deaktivieren
+msgid "tasktemplatefolder-transition-activ-inactiv"
+msgstr "tasktemplatefolder-transition-activ-inactiv"
+
+#. German translation: Aktivieren
+msgid "tasktemplatefolder-transition-inactiv-activ"
+msgstr "tasktemplatefolder-transition-inactiv-activ"
+
+#. German translation: Dokument hinzugefügt
+msgid "transition-add-document"
+msgstr "transition-add-document"

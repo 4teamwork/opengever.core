@@ -107,12 +107,11 @@ class CheckinContextCommentForm(form.Form):
             # Add a warning onto a locked document checkin view
             msg = _(
                 u'label_warn_checkout_locked',
-                default=u' '.join((
-                    'This document is currently being worked on.',
-                    'When you check it in manually you will lose the changes.',
-                    'Please allow for the process to be finished first.'
-                    )),
-                )
+                default=(
+                    u'This document is currently being worked on. '
+                    u'When you check it in manually you will lose the changes. '
+                    u'Please allow for the process to be finished first.')
+            )
             IStatusMessage(self.request).addStatusMessage(msg, type=u'warning')
 
         self.checkin_controller = CheckinController(self.request)

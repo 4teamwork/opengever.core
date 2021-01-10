@@ -1,0 +1,319 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2012-02-23 14:39+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Beschreibung
+msgid "Description"
+msgstr "Description"
+
+#. German translation: Parallel
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "Parallel"
+msgstr "Parallel"
+
+#. German translation: Sequenziell
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "Sequential"
+msgstr "Sequential"
+
+#. German translation: Titel
+msgid "Title"
+msgstr "Title"
+
+#. German translation: Aufgabenvorlage hinzufügen
+#: ./opengever/tasktemplates/browser/form.pt
+msgid "add tasktemplate"
+msgstr "add tasktemplate"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "button_cancel"
+msgstr "Cancel"
+
+#. German translation: Weiter
+#. Default: "Continue"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "button_continue"
+msgstr "Continue"
+
+#. German translation: Auslösen
+#. Default: "Trigger"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "button_trigger"
+msgstr "Trigger"
+
+#. German translation: Vorlage auswählen
+#: ./opengever/tasktemplates/browser/form.pt
+msgid "choose template"
+msgstr "choose template"
+
+#. German translation: Interaktiver Benutzer
+#. Default: "Interactive users"
+#: ./opengever/tasktemplates/vocabularies.py
+msgid "client_interactive_users"
+msgstr "Interactive users"
+
+#. German translation: Erste Aufgabe nach Erstellung sofort starten.
+#. Default: "Immediately open the first task after creation."
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "description_start_immediately"
+msgstr "Immediately open the first task after creation."
+
+#. German translation: Allgemein
+#. Default: "Common"
+#: ./opengever/tasktemplates/content/tasktemplate.py
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "fieldset_common"
+msgstr "Common"
+
+#. German translation: Frist in Tagen ab Startdatum der Aufgabe.
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_deadline"
+msgstr "help_deadline"
+
+#. German translation: Wählen Sie einen Auftraggeber aus. Sie können auch die interaktiven Benutzer \"Federführender\" oder \"Sachbearbeiter\" auswählen.
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_issuer"
+msgstr "help_issuer"
+
+#. German translation: Diese Vorlage gehört zur Standardauswahl des Standardablaufs.
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_preselected"
+msgstr "help_preselected"
+
+#. German translation: Wählen Sie einen Auftragnehmer aus. Sie können auch die interaktiven Benutzer \"Federführender\" oder \"Sachbearbeiter\" auswählen.
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_responsible"
+msgstr "help_responsible"
+
+#. German translation: Wählen Sie den Mandanten des Auftragnehmers aus oder wählen Sie \"Interaktiver Benutzer\".
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_responsible_client"
+msgstr "help_responsible_client"
+
+#. German translation: Wählen Sie den Typ der Aufgabe aus.
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_task_type"
+msgstr "help_task_type"
+
+#. German translation: Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein.
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_text"
+msgstr "help_text"
+
+#. German translation: Der Name der Aufgabe.
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "help_title"
+msgstr "help_title"
+
+#. German translation: Sachbearbeiter
+#. Default: "Current user"
+#: ./opengever/tasktemplates/sources.py
+msgid "interactive_user_current_user"
+msgstr "Current user"
+
+#. German translation: Federführender
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/sources.py
+msgid "interactive_user_responsible"
+msgstr "Responsible"
+
+#. German translation: Weiter
+#. Default: "Continue"
+#: ./opengever/tasktemplates/browser/form.pt
+msgid "label_continue"
+msgstr "Continue"
+
+#. German translation: Erstelldatum
+#. Default: "Created"
+#: ./opengever/tasktemplates/browser/form.py
+msgid "label_created"
+msgstr "Created"
+
+#. German translation: Frist in Tagen
+#. Default: "Deadline in Days"
+#: ./opengever/tasktemplates/browser/tasktemplates.py
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "label_deadline"
+msgstr "Deadline in Days"
+
+#. German translation: Auftraggeber
+#. Default: "Issuer"
+#: ./opengever/tasktemplates/browser/tasktemplates.py
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "label_issuer"
+msgstr "Issuer"
+
+#. German translation: Vorselektiert
+#. Default: "Preselect"
+#: ./opengever/tasktemplates/browser/tasktemplates.py
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "label_preselected"
+msgstr "Preselect"
+
+#. German translation: Verweise
+#. Default: "Related documents"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_related_documents"
+msgstr "Related documents"
+
+#. German translation: Mandant des Auftragnehmers
+#. Default: "Responsible Client"
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "label_resonsible_client"
+msgstr "Responsible Client"
+
+#. German translation: Auftragnehmer
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "label_responsible"
+msgstr "Responsible"
+
+#. German translation: Auftragnehmer «${template_title}»
+#. Default: "Responsible «${template_title}»"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_responsible_for_task"
+msgstr "Responsible «${template_title}»"
+
+#. German translation: Auftragnehmer
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/browser/tasktemplates.py
+msgid "label_responsible_task"
+msgstr "Responsible"
+
+#. German translation: Auswahl Auftragnehmer
+#. Default: "Responsibles selection"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_responsibles_selection"
+msgstr "Responsibles selection"
+
+#. German translation: Status
+#. Default: "Review state"
+#: ./opengever/tasktemplates/browser/templatefolders.py
+msgid "label_review_state"
+msgstr "Review state"
+
+#. German translation: Auswahl Auftragnehmer
+#. Default: "Select responsibles"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_select_responsibles"
+msgstr "Select responsibles"
+
+#. German translation: Auswahl Standardablauf
+#. Default: "Select tasktemplatefolder"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_select_tasktemplatefolder"
+msgstr "Select tasktemplatefolder"
+
+#. German translation: Auswahl Aufgabenvorlagen
+#. Default: "Select tasktemplates"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_select_tasktemplates"
+msgstr "Select tasktemplates"
+
+#. German translation: Ablauftyp
+#. Default: "Type"
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+#: ./opengever/tasktemplates/viewlets/byline.py
+msgid "label_sequence_type"
+msgstr "Type"
+
+#. German translation: Sofort auslösen
+#. Default: "Start immediately"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_start_immediately"
+msgstr "Start immediately"
+
+#. German translation: Auftragstyp
+#. Default: "Task Type"
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "label_task_type"
+msgstr "Task Type"
+
+#. German translation: Auswahl Aufgabenvorlagen
+#. Default: "Tasktemplate selection"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_tasktemplate_selection"
+msgstr "Tasktemplate selection"
+
+#. German translation: Standardablauf
+#. Default: "Tasktemplatefolder"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_tasktemplatefolder"
+msgstr "Tasktemplatefolder"
+
+#. German translation: Auswahl Standardablauf
+#. Default: "Tasktemplatefolder selection"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_tasktemplatefolder_selection"
+msgstr "Tasktemplatefolder selection"
+
+#. German translation: Aufgabenvorlage
+#. Default: "Tasktemplates"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_tasktemplates"
+msgstr "Tasktemplates"
+
+#. German translation: Kommentar
+#. Default: "Text"
+#: ./opengever/tasktemplates/content/tasktemplate.py
+msgid "label_text"
+msgstr "Text"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/tasktemplates/browser/form.py
+#: ./opengever/tasktemplates/browser/tasktemplates.py
+#: ./opengever/tasktemplates/browser/templatefolders.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: Ja
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/templates/view.pt
+msgid "label_yes"
+msgstr "Yes"
+
+#. German translation: Sie haben keine Vorlagen ausgewählt.
+#. Default: "You have not selected any templates"
+#: ./opengever/tasktemplates/browser/form.py
+msgid "message_no_templates_selected"
+msgstr "You have not selected any templates"
+
+#. German translation: Alle Aufgaben aus gewähltem Standardablauf wurden erstellt.
+#. Default: "tasks created"
+#: ./opengever/tasktemplates/browser/form.py
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "message_tasks_created"
+msgstr "tasks created"
+
+#. German translation: Zurzeit sind keine aktiven Standardabläufe hinterlegt.
+#. Default: "Currently there are no active task template folders registered."
+#: ./opengever/tasktemplates/browser/form.py
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "msg_no_active_tasktemplatefolders"
+msgstr "Currently there are no active task template folders registered."
+
+#. German translation: Ja
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates.py
+msgid "preselected_yes"
+msgstr "Yes"
+
+#. German translation: Aufgaben auswählen
+#: ./opengever/tasktemplates/browser/form.pt
+msgid "select tasks"
+msgstr "select tasks"

@@ -1,0 +1,224 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2013-11-19 16:25+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Geändert von
+#. Default: "Changed by"
+#: ./opengever/latex/listing.py
+msgid "label_creator"
+msgstr "Changed by"
+
+#. German translation: Zu erledigen bis
+#. Default: "Deadline"
+#: ./opengever/latex/listing.py
+msgid "label_deadline"
+msgstr "Deadline"
+
+#. German translation: Ausgangsdatum
+#. Default: "Delivery date"
+#: ./opengever/latex/listing.py
+msgid "label_delivery_date"
+msgstr "Delivery date"
+
+#. German translation: Beschreibung
+#. Default: "Description"
+#: ./opengever/latex/dossiercover.py
+#: ./opengever/latex/listing.py
+msgid "label_description"
+msgstr "Description"
+
+#. German translation: Details Dossier
+#. Default: "Details Dossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailsdossier"
+msgstr "Details Dossier"
+
+#. German translation: Details Subdossier
+#. Default: "Details Subdossier"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_detailssubdossier"
+msgstr "Details Subdossier"
+
+#. German translation: Autor
+#. Default: "Document author"
+#: ./opengever/latex/listing.py
+msgid "label_document_author"
+msgstr "Document author"
+
+#. German translation: Dokumentdatum
+#. Default: "Document date"
+#: ./opengever/latex/listing.py
+msgid "label_document_date"
+msgstr "Document date"
+
+#. German translation: Dokumente
+#. Default: "Documents"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_documents"
+msgstr "Documents"
+
+#. German translation: Journal zu Dossier \"${title} (${reference_number})\
+#. Default: "Journal of dossier \"${title} (${reference_number})\""
+#: ./opengever/latex/dossierjournal.py
+msgid "label_dossier_journal"
+msgstr "Journal of dossier \"${title} (${reference_number})\""
+
+#. German translation: Aufgabenliste zu Dossier \"${title} (${reference_number})\
+#. Default: "Task list for dossier \"${title} (${reference_number})\""
+#: ./opengever/latex/dossiertasks.py
+msgid "label_dossier_tasks"
+msgstr "Task list for dossier \"${title} (${reference_number})\""
+
+#. German translation: Ende
+#. Default: "End"
+#: ./opengever/latex/dossiercover.py
+#: ./opengever/latex/dossierdetails.py
+#: ./opengever/latex/listing.py
+msgid "label_end"
+msgstr "End"
+
+#. German translation: Auftraggeber
+#. Default: "Issuer"
+#: ./opengever/latex/listing.py
+msgid "label_issuer"
+msgstr "Issuer"
+
+#. German translation: Seite
+#. Default: "Page"
+#: ./opengever/latex/layouts/default.py
+msgid "label_page"
+msgstr "Page"
+
+#. German translation: Beteiligung
+#. Default: "Participants"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_participants"
+msgstr "Participants"
+
+#. German translation: Eingangsdatum
+#. Default: "Receipt date"
+#: ./opengever/latex/listing.py
+msgid "label_receipt_date"
+msgstr "Receipt date"
+
+#. German translation: Aktenzeichen
+#. Default: "Reference number"
+#: ./opengever/latex/dossiercover.py
+#: ./opengever/latex/dossierdetails.py
+#: ./opengever/latex/listing.py
+msgid "label_reference_number"
+msgstr "Reference number"
+
+#. German translation: Ordnungsposition
+#. Default: "Repository"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_repository"
+msgstr "Repository"
+
+#. German translation: Ordnungsposition
+#. Default: "Repositoryfolder"
+#: ./opengever/latex/listing.py
+msgid "label_repository_title"
+msgstr "Repositoryfolder"
+
+#. German translation: Federführend
+#. Default: "Responsible"
+#: ./opengever/latex/dossiercover.py
+#: ./opengever/latex/dossierdetails.py
+#: ./opengever/latex/listing.py
+msgid "label_responsible"
+msgstr "Responsible"
+
+#. German translation: Status
+#. Default: "State"
+#: ./opengever/latex/dossierdetails.py
+#: ./opengever/latex/listing.py
+msgid "label_review_state"
+msgstr "State"
+
+#. German translation: Laufnummer
+#. Default: "Sequence number"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_sequence_number"
+msgstr "Sequence number"
+
+#. German translation: Beginn
+#. Default: "Start"
+#: ./opengever/latex/dossiercover.py
+#: ./opengever/latex/dossierdetails.py
+#: ./opengever/latex/listing.py
+msgid "label_start"
+msgstr "Start"
+
+#. German translation: Titel Subdossier
+#. Default: "Subdossier Title"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_subdossier_title"
+msgstr "Subdossier Title"
+
+#. German translation: Subdossiers
+#. Default: "Subdossiers"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_subdossiers"
+msgstr "Subdossiers"
+
+#. German translation: Auftragnehmer
+#. Default: "Responsible"
+#: ./opengever/latex/listing.py
+msgid "label_task_responsible"
+msgstr "Responsible"
+
+#. German translation: Art
+#. Default: "Task type"
+#: ./opengever/latex/listing.py
+msgid "label_task_type"
+msgstr "Task type"
+
+#. German translation: Aufgaben
+#. Default: "Tasks"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_tasks"
+msgstr "Tasks"
+
+#. German translation: Zeitpunkt
+#. Default: "Time"
+#: ./opengever/latex/listing.py
+msgid "label_time"
+msgstr "Time"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/latex/dossierdetails.py
+#: ./opengever/latex/listing.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: Aktion
+#. Default: "Transition"
+#: ./opengever/latex/listing.py
+msgid "label_transition"
+msgstr "Transition"
+
+#. German translation: Version Ordnungssystem
+#. Default: "Repository version"
+#: ./opengever/latex/dossiercover.py
+msgid "repository_version"
+msgstr "Repository version"
+
+#. German translation: Nr.
+#. Default: "No."
+#: ./opengever/latex/listing.py
+msgid "short_label_sequence_number"
+msgstr "No."

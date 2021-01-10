@@ -1,0 +1,81 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. German translation: Dieses Dokument wurde in einen verknüpften Teamraum kopiert und kann nicht direkt bearbeitet werden. ${unlock_button}
+#. Default: "This document has been copied to a linked workspace and cannot be edited directly. ${unlock_button}"
+#: ./opengever/locking/templates/copied_to_workspace_lock.pt
+msgid "description_locked_copied_to_workspace_document"
+msgstr "This document has been copied to a linked workspace and cannot be edited directly. ${unlock_button}"
+
+#. German translation: Dieses Dokument ist eine Kopie eines Protokollauszugs aus einer Sitzung und kann nicht direkt bearbeitet werden.
+#. Default: "This document is a copy of an excerpt from a meeting and cannot be edited directly."
+#: ./opengever/locking/templates/excerpt_document_lock_template.pt
+msgid "description_locked_excerpt_document"
+msgstr "This document is a copy of an excerpt from a meeting and cannot be edited directly."
+
+#. German translation: Dieses Dokument ist eine Kopie des Protokollauszugs ${document} aus der Sitzung ${meeting} und kann nicht direkt bearbeitet werden.
+#. Default: "This document is a copy of the excerpt ${document} from the meeting ${meeting} and cannot be edited directly."
+#: ./opengever/locking/templates/excerpt_document_lock_template.pt
+msgid "description_locked_linked_excerpt_document"
+msgstr "This document is a copy of the excerpt ${document} from the meeting ${meeting} and cannot be edited directly."
+
+#. German translation: Dieses Dokument wurde als Kopie von ${document} eingereicht und kann nicht direkt bearbeitet werden. ${unlock_button}
+#. Default: "This document has been submitted as a copy of ${document} and cannot be edited directly. ${unlock_button}"
+#: ./opengever/locking/templates/submitted_document_lock_template.pt
+msgid "description_locked_linked_submitted_document"
+msgstr "This document has been submitted as a copy of ${document} and cannot be edited directly. ${unlock_button}"
+
+#. German translation: Dieses Dokument wurde als Kopie eingereicht und kann nicht direkt bearbeitet werden. ${unlock_button}
+#. Default: "This document has been submitted as a copy and cannot be edited directly. ${unlock_button}"
+#: ./opengever/locking/templates/submitted_document_lock_template.pt
+msgid "description_locked_submitted_document"
+msgstr "This document has been submitted as a copy and cannot be edited directly. ${unlock_button}"
+
+#. German translation: Wollen Sie dieses Dokument wirklich entsperren?
+#. Default: "Unlock document confirmation"
+#: ./opengever/locking/browser/templates/unlock_document_form.pt
+msgid "label_unlock_document_confirmation"
+msgstr "Unlock document confirmation"
+
+#. German translation: Warnung
+#. Default: "Warning"
+#: ./opengever/locking/browser/templates/unlock_document_form.pt
+msgid "label_warning"
+msgstr "Warning"
+
+#. German translation: Änderungen, welche an diesem Dokument in GEVER vorgenommen werden, könnten durch ein Zurückführen des Dokuments aus Teamraum als neue Version überschrieben werden.
+#. Default: "Modifications made to this document in Gever might get overwritten when copying the document back from the linked workspace as a new version of this document."
+#: ./opengever/locking/browser/unlock_forms.py
+msgid "msg_unlock_document_copied_to_workspace"
+msgstr "Modifications made to this document in Gever might get overwritten when copying the document back from the linked workspace as a new version of this document."
+
+#. German translation: Dadurch wird das eingereichte Dokument vom originalen Dokument entkoppelt. Sie können das Dokument anschliessend bearbeiten.<br />Einreichen neuer Versionen wird dadurch nicht mehr möglich sein.
+#. Default: "This will decouple the submitted document from the original one. You will then be able to modify this document but submitting a new version will not be possible anymore."
+#: ./opengever/locking/browser/unlock_forms.py
+msgid "msg_unlock_submitted_document"
+msgstr "This will decouple the submitted document from the original one. You will then be able to modify this document but submitting a new version will not be possible anymore."
+
+#. German translation: Dokument wurde freigegeben.
+#. Default: "Document has been unlocked"
+#: ./opengever/locking/browser/unlock_forms.py
+msgid "statmsg_document_unlocked"
+msgstr "Document has been unlocked"
+
+#. German translation: Dies kann nicht rückgängig gemacht werden.
+#. Default: "This cannot be undone."
+#: ./opengever/locking/browser/templates/unlock_document_form.pt
+msgid "warning_unlock_document"
+msgstr "This cannot be undone."

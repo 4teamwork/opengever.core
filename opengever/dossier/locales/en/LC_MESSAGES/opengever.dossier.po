@@ -1,0 +1,1235 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"PO-Revision-Date: 2017-05-23 04:53+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"Language: de\n"
+"X-Generator: Weblate 2.13.1\n"
+
+#. German translation:  (nächtliche Abschlussarbeiten ausstehend)
+#: ./opengever/dossier/viewlets/byline.py
+msgid " (after resolve jobs pending)"
+msgstr " (after resolve jobs pending)"
+
+#. German translation:  (wird gerade abgeschlossen)
+#: ./opengever/dossier/viewlets/byline.py
+msgid " (currently being resolved)"
+msgstr " (currently being resolved)"
+
+#. German translation: ${copied_items} Elemente wurden erfolgreich verschoben
+#: ./opengever/dossier/move_items.py
+msgid "${copied_items} Elements were moved successfully"
+msgstr "${copied_items} Elements were moved successfully"
+
+#. German translation: Ein Dossier-Verwalter muss ausgewählt werden um das Dossier schützen zu können.
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "A dossier manager must be selected  when protecting a dossier"
+msgstr "A dossier manager must be selected  when protecting a dossier"
+
+#. German translation: Geschäftsdossier hinzufügen
+#. Default: "Geschäftsdossier"
+msgid "Add Business Case Dossier"
+msgstr "Geschäftsdossier"
+
+#. German translation: Subdossier hinzufügen
+#: ./opengever/dossier/browser/forms.py
+#: ./opengever/dossier/dossiertemplate/dossiertemplate.py
+msgid "Add Subdossier"
+msgstr "Add Subdossier"
+
+#. German translation: Dossier hinzufügen
+#: ./opengever/dossier/dossiertemplate/form.py
+msgid "Add dossier"
+msgstr "Add dossier"
+
+#. German translation: Es können nur Objekte aus aktiven Dossiers verschoben werden!
+#: ./opengever/dossier/move_items.py
+msgid "Can only move objects from open dossiers!"
+msgstr "Can only move objects from open dossiers!"
+
+#. German translation: Beschreibung
+#: ./opengever/dossier/browser/overview.py
+msgid "Description"
+msgstr "Description"
+
+#. German translation: Dieses Dossier wurde bereits abgeschlossen.
+#: ./opengever/dossier/resolve.py
+msgid "Dossier has already been resolved."
+msgstr "Dossier has already been resolved."
+
+#. German translation: Der Abschlussvorgang für dieses Dossier läuft bereits.
+#: ./opengever/dossier/resolve.py
+msgid "Dossier is already being resolved"
+msgstr "Dossier is already being resolved"
+
+#. German translation: Dieses Dossier kann nicht abgeschlossen werden, weil es nicht aktiv ist.
+#: ./opengever/dossier/resolve.py
+msgid "Dossier is not active and cannot be resolved."
+msgstr "Dossier is not active and cannot be resolved."
+
+#. German translation: Dieses Dossier kann nicht wieder eröffnet werden, weil es nicht abgeschlossen ist.
+#: ./opengever/dossier/reactivate.py
+msgid "Dossier is not resolved and cannot be reactivated."
+msgstr "Dossier is not resolved and cannot be reactivated."
+
+#. German translation: Dossier-Struktur
+#: ./opengever/dossier/browser/templates/overview.pt
+msgid "Dossier structure"
+msgstr "Dossier structure"
+
+#. German translation: Dossiervorlage
+#: ./opengever/dossier/upgrades/20161122103454_add_dossier_templates/types/opengever.dossier.dossiertemplate.xml
+msgid "Dossier template"
+msgstr "Dossier template"
+
+#. German translation: Das Dossier wurde erfolgreich wieder eröffnet.
+#: ./opengever/dossier/reactivate.py
+msgid "Dossiers successfully reactivated."
+msgstr "Dossiers successfully reactivated."
+
+#. German translation: Subdossier bearbeiten
+#: ./opengever/dossier/browser/forms.py
+#: ./opengever/dossier/dossiertemplate/dossiertemplate.py
+msgid "Edit Subdossier"
+msgstr "Edit Subdossier"
+
+#. German translation: Auswahl exportieren
+#: ./opengever/dossier/upgrades/profiles/2601/actions.xml
+msgid "Export selection"
+msgstr "Export selection"
+
+#. German translation: Folgende Elemente konnten nicht verschoben werden: ${failed_objects}
+#: ./opengever/dossier/move_items.py
+msgid "Failed to move following objects: ${failed_objects}"
+msgstr "Failed to move following objects: ${failed_objects}"
+
+#. German translation: Folgende Elemente konnten nicht verschoben werden: ${failed_objects}. Sie werden zurzeit im Office Connector bearbeitet.
+#: ./opengever/dossier/move_items.py
+msgid "Failed to move following objects: ${failed_objects}. They are currently being edited in the Office Connector."
+msgstr "Failed to move following objects: ${failed_objects}. They are currently being edited in the Office Connector."
+
+#. German translation: Sie dürfen dieses Objekt nicht an den Zielort verschieben.
+#: ./opengever/dossier/move_items.py
+msgid "It isn't allowed to add such items there."
+msgstr "It isn't allowed to add such items there."
+
+#. German translation: Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossier muss wieder eröffnet werden.
+#: ./opengever/dossier/reactivate.py
+msgid "It isn't possible to reactivate a sub dossier."
+msgstr "It isn't possible to reactivate a sub dossier."
+
+#. German translation: Neuste Dokumente
+#: ./opengever/dossier/browser/overview.py
+msgid "Newest documents"
+msgstr "Newest documents"
+
+#. German translation: Neuste Aufgaben
+#: ./opengever/dossier/browser/overview.py
+msgid "Newest tasks"
+msgstr "Newest tasks"
+
+#. German translation: Keine Subdossiers
+#: ./opengever/dossier/browser/templates/overview.pt
+msgid "No Subdossiers"
+msgstr "No Subdossiers"
+
+#. German translation: Nicht alle verlinkten Teamräume sind deaktiviert.
+#: ./opengever/dossier/resolve.py
+msgid "Not all linked workspaces are deactivated."
+msgstr "Not all linked workspaces are deactivated."
+
+#. German translation: Nicht alle benötigten Felder wurden ausgefüllt.
+#: ./opengever/dossier/archive.py
+msgid "Not all required fields are filled."
+msgstr "Not all required fields are filled."
+
+#. German translation: Beteiligungen
+#: ./opengever/dossier/browser/overview.py
+msgid "Participants"
+msgstr "Participants"
+
+#. German translation: Beteiligungen
+#: ./opengever/dossier/browser/overview.py
+msgid "Participations"
+msgstr "Participations"
+
+#. German translation: Dokument auswählen
+#: ./opengever/dossier/templatefolder/form.py
+msgid "Select document"
+msgstr "Select document"
+
+#. German translation: Vorlage auswählen
+#: ./opengever/dossier/dossiertemplate/form.py
+msgid "Select dossiertemplate"
+msgstr "Select dossiertemplate"
+
+#. German translation: Empfänger-Adresse auswählen
+#: ./opengever/dossier/templatefolder/form.py
+msgid "Select recipient address"
+msgstr "Select recipient address"
+
+#. German translation: Subdossier
+#: ./opengever/dossier/dossiertemplate/menu.py
+#: ./opengever/dossier/menu.py
+msgid "Subdossier"
+msgstr "Subdossier"
+
+#. German translation: Vorlagenordner
+#: ./opengever/dossier/upgrades/20170214083741_rename_template_dossier_to_template_folder/types/opengever.dossier.templatefolder.xml
+msgid "Template Folder"
+msgstr "Template Folder"
+
+#. German translation: Vorlagen
+#. Default: "expired"
+msgid "Templates"
+msgstr "expired"
+
+#. German translation: Der Benutzer darf das Dossier ${dossier} nicht stornieren.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} can't be deactivated by the user."
+msgstr "The Dossier ${dossier} can't be deactivated by the user."
+
+#. German translation: Das Dossier ${dossier} enthält ein Subdossier welches der Benutzer nicht stornieren darf.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} contains a subdossier which can't be deactivated by the user."
+msgstr "The Dossier ${dossier} contains a subdossier which can't be deactivated by the user."
+
+#. German translation: Das Dossier kann nicht storniert werden, es enthält aktive Anträge.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, it contains active proposals."
+msgstr "The Dossier can't be deactivated, it contains active proposals."
+
+#. German translation: Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Dokumente eingecheckt sind.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, not all contained documents are checked in."
+msgstr "The Dossier can't be deactivated, not all contained documents are checked in."
+
+#. German translation: Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Aufgaben abgeschlossen sind.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
+msgstr "The Dossier can't be deactivated, not all contained tasks are in a closed state."
+
+#. German translation: Das Dossier kann nicht storniert werden, da nicht alle verlinkten Teamräume deaktiviert sind.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, not all linked workspaces are deactivated."
+msgstr "The Dossier can't be deactivated, not all linked workspaces are deactivated."
+
+#. German translation: Das Dossier konnte nicht storniert werden, da das Subdossier ${dossier} bereits abgeschlossen ist. Das Subdossier muss vorgängig wieder eröffnet werden.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."
+msgstr "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."
+
+#. German translation: Das Dossier wurde aktiviert.
+#: ./opengever/dossier/activate.py
+msgid "The Dossier has been activated"
+msgstr "The Dossier has been activated"
+
+#. German translation: Das Dossier wurde storniert.
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier has been deactivated"
+msgstr "The Dossier has been deactivated"
+
+#. German translation: Das Dossier wurde erfolgreich abgeschlossen
+#: ./opengever/dossier/archive.py
+msgid "The Dossier has been resolved"
+msgstr "The Dossier has been resolved"
+
+#. German translation: Das Dossier ${dossier} hat ein ungültiges Enddatum.
+#: ./opengever/dossier/resolve.py
+msgid "The dossier ${dossier} has a invalid end_date"
+msgstr "The dossier ${dossier} has a invalid end_date"
+
+#. German translation: Das Dossier enthält aktive Anträge.
+#: ./opengever/dossier/resolve.py
+msgid "The dossier contains active proposals."
+msgstr "The dossier contains active proposals."
+
+#. German translation: Das Dossier wurde erfolgreich abgeschlossen.
+#: ./opengever/dossier/resolve.py
+msgid "The dossier has been succesfully resolved."
+msgstr "The dossier has been succesfully resolved."
+
+#. German translation: Die Ablagenummer wurde vergeben.
+#: ./opengever/dossier/archive.py
+msgid "The filing number has been given."
+msgstr "The filing number has been given."
+
+#. German translation: Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das Datum des jüngsten enthaltenen Dokuments (${date}).
+#: ./opengever/dossier/archive.py
+msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
+msgstr "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
+
+#. German translation: Das angegeben Ablagejahr ist ungültig.
+#: ./opengever/dossier/archive.py
+msgid "The given value is not a valid Year."
+msgstr "The given value is not a valid Year."
+
+#. German translation: Die selektierten Objekte konnten nicht gefunden werden, bitte versuchen Sie es erneut.
+#: ./opengever/dossier/move_items.py
+msgid "The selected objects can't be found, please try it again."
+msgstr "The selected objects can't be found, please try it again."
+
+#. German translation: Das Beginn-Datum muss vor dem Ende-Datum liegen.
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "The start date must be before the end date."
+msgstr "The start date must be before the end date."
+
+#. German translation: Das Beginn- oder Ende-Datum ist ungültig.
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "The start or end date is invalid"
+msgstr "The start or end date is invalid"
+
+#. German translation: Das Subdossier wurde erfolgreich abgeschlossen.
+#: ./opengever/dossier/resolve.py
+msgid "The subdossier has been succesfully resolved."
+msgstr "The subdossier has been succesfully resolved."
+
+#. German translation: Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossier nicht aktiv ist.
+#: ./opengever/dossier/activate.py
+msgid "This subdossier can't be activated, because the main dossiers is not active"
+msgstr "This subdossier can't be activated, because the main dossiers is not active"
+
+#. German translation: Mit einer neuen Version des Dossiers ${title} aktualisiert.
+#: ./opengever/dossier/resolve.py
+msgid "Updated with a newer generated version from dossier ${title}."
+msgstr "Updated with a newer generated version from dossier ${title}."
+
+#. German translation: Für die Vergabe der Ablagenummer, werden alle Felder benötigt.
+#: ./opengever/dossier/archive.py
+msgid "When the Action give filing number is selected,                         all fields are required."
+msgstr "When the Action give filing number is selected,                         all fields are required."
+
+#. German translation: Sie haben kein Element ausgewählt
+#: ./opengever/dossier/move_items.py
+msgid "You have not selected any items"
+msgstr "You have not selected any items"
+
+#. German translation: Zusatzattribute
+msgid "additional_attributes"
+msgstr "additional_attributes"
+
+#. German translation: Alle
+#: ./opengever/dossier/indexers.py
+msgid "any_participant"
+msgstr "any_participant"
+
+#. German translation: Alle
+#: ./opengever/dossier/indexers.py
+msgid "any_role"
+msgstr "any_role"
+
+#. German translation: Erstellen
+#. Default: "Add"
+#: ./opengever/dossier/browser/forms.py
+msgid "button_add"
+msgstr "Add"
+
+#. German translation: Speichern
+#. Default: "Archive"
+#: ./opengever/dossier/archive.py
+msgid "button_archive"
+msgstr "Archive"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/browser/forms.py
+#: ./opengever/dossier/dossiertemplate/form.py
+msgid "button_cancel"
+msgstr "Cancel"
+
+#. German translation: Weiter
+#. Default: "Continue"
+#: ./opengever/dossier/dossiertemplate/form.py
+msgid "button_continue"
+msgstr "Continue"
+
+#. German translation: Speichern
+#. Default: "Save"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "button_save"
+msgstr "Save"
+
+#. German translation: Verschieben
+#. Default: "Move"
+#: ./opengever/dossier/move_items.py
+msgid "button_submit"
+msgstr "Move"
+
+#. German translation: Kontakt
+#. Default: "Contact"
+#: ./opengever/dossier/browser/participants.py
+msgid "column_contact"
+msgstr "Contact"
+
+#. German translation: Rolle
+#. Default: "role_list"
+#: ./opengever/dossier/browser/participants.py
+msgid "column_rolelist"
+msgstr "role_list"
+
+#. German translation: Dokument aus Vorlage erstellen
+#. Default: "Create document from template"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "create_document_with_template"
+msgstr "Create document from template"
+
+#. German translation: Geschäftsdossier aus Vorlage erstellen
+#. Default: "Create dossier from template"
+#: ./opengever/dossier/dossiertemplate/form.py
+msgid "create_dossier_with_template"
+msgstr "Create dossier from template"
+
+#. German translation: Wählen Sie hier einen Benutzer oder eine Gruppe, welche nach dem Schützen des Dossiers den Schutz anpassen oder wieder aufheben kann. Dies sind normalerweise Sie selbst.
+#. Default: "This user or group will get the dossier manager role after protecting the dossier."
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_dossier_manager"
+msgstr "This user or group will get the dossier manager role after protecting the dossier."
+
+#. German translation: Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagwörter bereits vorausgefüllt.
+#. Default: "The defined keywords will be preselected for new dossies from template."
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "description_predefined_keywords"
+msgstr "The defined keywords will be preselected for new dossies from template."
+
+#. German translation: Wählen Sie Benutzer und Gruppen aus, welche im Dossier ausschliesslich lesend Zugriff erhalten sollen.
+#. Default: "Choose users and groups which have only readable access to the dossier"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_reading"
+msgstr "Choose users and groups which have only readable access to the dossier"
+
+#. German translation: Wählen Sie Benutzer und Gruppen aus, welche im Dossier lesend und schreibend Zugriff erhalten sollen. Die Benutzer dieser Gruppe werden dazu berechtigt, das Dossier zu bearbeiten, Inhalte zu erstellen und zu bearbeiten.
+#. Default: "Choose users and groups which have readable and writing access to the dossier"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_reading_and_writing"
+msgstr "Choose users and groups which have readable and writing access to the dossier"
+
+#. German translation: Durch Aktivieren dieser Option stehen bei der Erstellung des Dossiers ab Vorlage nur noch die in der Vorlage angegebenen Schlagwörter zur Auswahl.<br>Der Benutzer kann dadurch auch keine neuen Schlagwörter erfassen.
+#. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "description_restrict_keywords"
+msgstr "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
+
+#. German translation: Dokumente
+msgid "documents"
+msgstr "documents"
+
+#. German translation: Die lokalen Berechtigungen stimmen nicht mit den Dossier-Schutz Einstellungen überein. Wenn Sie dieses Formular speichern, werden die aktuellen lokalen Berechtigungen mit den Dossier-Schutz Einstellungen überschrieben.
+#. Default: "The local roles do not match with the current dossier protection settings. If you save this form, the local roles will be overridden."
+#: ./opengever/dossier/browser/protect_dossier.py
+msgid "dossier_protection_inconsistency_warning"
+msgstr "The local roles do not match with the current dossier protection settings. If you save this form, the local roles will be overridden."
+
+#. German translation: Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}
+#. Default: "It isn't allowed to add such items there: ${failed_objects}"
+#: ./opengever/dossier/move_items.py
+msgid "error_NotInContentTypes ${failed_objects}"
+msgstr "It isn't allowed to add such items there: ${failed_objects}"
+
+#. German translation: Enddatum erforderlich
+#. Default: "The enddate is required."
+#: ./opengever/dossier/archive.py
+msgid "error_enddate"
+msgstr "The enddate is required."
+
+#. German translation: Sie haben keine Objekte ausgewählt.
+#. Default: "You have not selected any items."
+#: ./opengever/dossier/browser/report.py
+msgid "error_no_items"
+msgstr "You have not selected any items."
+
+#. German translation: Für diesen Kontakt existiert bereits eine Beteiligung.
+#. Default: "There is already a participation for this contact."
+#: ./opengever/dossier/browser/forms.py
+msgid "error_participant_already_exists"
+msgstr "There is already a participation for this contact."
+
+#. German translation: ${item} konnte nicht verschoben werden.
+#. Default: "Failed to move ${item}."
+#: ./opengever/dossier/move_items.py
+msgid "failed_to_move_item"
+msgstr "Failed to move ${item}."
+
+#. German translation: Allgemein
+#. Default: "Common"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "fieldset_common"
+msgstr "Common"
+
+#. German translation: Ablage
+#. Default: "Filing"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/behaviors/filing.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "fieldset_filing"
+msgstr "Filing"
+
+#. German translation: Schützen
+#. Default: "Protect"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "fieldset_protect"
+msgstr "Protect"
+
+#. German translation: Aktion
+#. Default: "Action"
+#: ./opengever/dossier/archive.py
+msgid "filing_action"
+msgstr "Action"
+
+#. German translation: Ablagenummer
+#. Default: "Filing number"
+#: ./opengever/dossier/behaviors/filing.py
+#: ./opengever/dossier/filing/report.py
+msgid "filing_no"
+msgstr "Filing number"
+
+#. German translation: Ablage
+#: ./opengever/dossier/filing/report.py
+msgid "filing_no_filing"
+msgstr "filing_no_filing"
+
+#. German translation: Ablagenummer
+#: ./opengever/dossier/filing/report.py
+msgid "filing_no_number"
+msgstr "filing_no_number"
+
+#. German translation: Ablagejahr
+#: ./opengever/dossier/filing/report.py
+msgid "filing_no_year"
+msgstr "filing_no_year"
+
+#. German translation: Ablagenummer vergeben
+msgid "filing_nr"
+msgstr "filing_nr"
+
+#. German translation: Ablagenummer
+#. Default: "Filing Number"
+#: ./opengever/dossier/filing/tabs.py
+msgid "filing_number"
+msgstr "Filing Number"
+
+#. German translation: Ablage Präfix
+#. Default: "filing prefix"
+#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/overview.py
+msgid "filing_prefix"
+msgstr "filing prefix"
+
+#. German translation: Ablage Jahr
+#. Default: "filing Year"
+#: ./opengever/dossier/archive.py
+msgid "filing_year"
+msgstr "filing Year"
+
+#. German translation: Dossier ablegen
+#. Default: "Archive Dossier"
+#: ./opengever/dossier/archive.py
+msgid "heading_archive_form"
+msgstr "Archive Dossier"
+
+#. German translation: Kommentar zu Dossier `${title}`
+#. Default: "${title} notes / comments"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "heading_dossier_note"
+msgstr "${title} notes / comments"
+
+#. German translation: Element verschieben
+#. Default: "Move Item"
+#: ./opengever/dossier/move_items.py
+msgid "heading_move_item"
+msgstr "Move Item"
+
+#. German translation: Elemente verschieben
+#. Default: "Move Items"
+#: ./opengever/dossier/move_items.py
+msgid "heading_move_items"
+msgstr "Move Items"
+
+#. German translation: Wählen Sie einen Benutzer oder einen Kontakt aus.
+#: ./opengever/dossier/behaviors/participation.py
+msgid "help_contact"
+msgstr "help_contact"
+
+#. German translation: Standortangabe des Behälters, in dem ein Dossier in Papierform abgelegt ist
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "help_container_location"
+msgstr "help_container_location"
+
+#. German translation: Art des Behälters, in dem ein Dossier in Papierform abgelegt ist
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "help_container_type"
+msgstr "help_container_type"
+
+#. German translation: Live Search: Durchsuchen Sie diesen Mandanten
+#. Default: "Live Search: search the Plone Site"
+#: ./opengever/dossier/move_items.py
+msgid "help_destination"
+msgstr "Live Search: search the Plone Site"
+
+#. German translation: Geben Sie die vollständige Ablagenummer an.
+#: ./opengever/dossier/filing/advanced_search.py
+msgid "help_filing_number"
+msgstr "help_filing_number"
+
+#. German translation: Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition.\nACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen).
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "help_keywords"
+msgstr "help_keywords"
+
+#. German translation: Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "help_number_of_containers"
+msgstr "help_number_of_containers"
+
+#. German translation: Neuen Kommentar erfassen.
+#. Default: "Create a new note"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "help_text_add_note"
+msgstr "Create a new note"
+
+#. German translation: Es wurde ein Kommentar erfasst!
+#. Default: "There is a note"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "help_text_edit_note"
+msgstr "There is a note"
+
+#. German translation: Kommentar anzeigen.
+#. Default: "View note"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "help_text_view_note"
+msgstr "View note"
+
+#. German translation: Empfehlung für Titel. Wird beim Erstellen eines Dossiers ab Vorlage als Hilfetext dargestellt.
+#. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "help_title_help"
+msgstr "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
+
+#. German translation: Die Beteiligung wurde gespeichert.
+#. Default: "Participation created."
+#: ./opengever/dossier/browser/forms.py
+msgid "info_participation_create"
+msgstr "Participation created."
+
+#. German translation: Die Beteiligungen wurde entfernt.
+#. Default: "Removed participations."
+#: ./opengever/dossier/browser/forms.py
+msgid "info_removed_participations"
+msgstr "Removed participations."
+
+#. German translation: ${item} wurde verschoben.
+#. Default: "${item} was moved."
+#: ./opengever/dossier/move_items.py
+msgid "item_moved"
+msgstr "${item} was moved."
+
+#. German translation: Erfassen
+#. Default: "Add Note"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "label_add_note"
+msgstr "Add Note"
+
+#. German translation: Erlaubte Dossiervorlagen
+#. Default: "Addable dossier templates"
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_addable_dossier_templates"
+msgstr "Addable dossier templates"
+
+#. German translation: Adresse
+#. Default: "Address"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_address"
+msgstr "Address"
+
+#. German translation: Geschützte Objekte
+#. Default: "Protected Objects"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_blocked_local_roles"
+msgstr "Protected Objects"
+
+#. German translation: Federführend: ${author}
+#. Default: "by ${author}"
+#: ./opengever/dossier/project_templates/byline.pt
+msgid "label_by_author"
+msgstr "by ${author}"
+
+#. German translation: Abbrechen
+#. Default: "Cancel"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "label_cancel"
+msgstr "Cancel"
+
+#. German translation: Schliessen
+#. Default: "Close"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "label_close"
+msgstr "Close"
+
+#. German translation: Kommentar
+#. Default: "Comments"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_comments"
+msgstr "Comments"
+
+#. German translation: Person
+#. Default: "Contact"
+#: ./opengever/dossier/behaviors/participation.py
+msgid "label_contact"
+msgstr "Contact"
+
+#. German translation: Behältnis-Standort
+#. Default: "Container Location"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_container_location"
+msgstr "Container Location"
+
+#. German translation: Behältnis-Art
+#. Default: "Container Type"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_container_type"
+msgstr "Container Type"
+
+#. German translation: Erstellt von
+#. Default: "Creator"
+#: ./opengever/dossier/dossiertemplate/form.py
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_creator"
+msgstr "Creator"
+
+#. German translation: Beschreibung
+#. Default: "Description"
+#: ./opengever/dossier/templatefolder/tabs.py
+msgid "label_description"
+msgstr "Description"
+
+#. German translation: Zielposition / Zieldossier
+#. Default: "Destination"
+#: ./opengever/dossier/move_items.py
+msgid "label_destination"
+msgstr "Destination"
+
+#. German translation: Dokumente
+#. Default: "Documents"
+#: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_documents"
+msgstr "Documents"
+
+#. German translation: Dossier-Verwalter
+#. Default: "Dossier manager"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_dossier_manager"
+msgstr "Dossier manager"
+
+#. German translation: Kommentar erfassen
+#. Default: "Create Dossier note"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "label_dossier_note_placeholder"
+msgstr "Create Dossier note"
+
+#. German translation: Dossier überfällig
+#. Default: "Overdue dossier"
+#: ./opengever/dossier/activities.py
+msgid "label_dossier_overdue_activity"
+msgstr "Overdue dossier"
+
+#. German translation: Dossiervorlagen
+#. Default: "Dossier templates"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_dossier_templates"
+msgstr "Dossier templates"
+
+#. German translation: Nach dem Hinzufügen bearbeiten
+#. Default: "Edit after creation"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_edit_after_creation"
+msgstr "Edit after creation"
+
+#. German translation: Bearbeiten
+#. Default: "Edit Note"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "label_edit_note"
+msgstr "Edit Note"
+
+#. German translation: E-Mail
+#. Default: "E-Mail"
+#: ./opengever/dossier/viewlets/byline.py
+msgid "label_email_address"
+msgstr "E-Mail"
+
+#. German translation: Ende
+#. Default: "Closing Date"
+#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/report.py
+msgid "label_end"
+msgstr "Closing Date"
+
+#. German translation: Ende
+#. Default: "to"
+#: ./opengever/dossier/project_templates/byline.pt
+#: ./opengever/dossier/viewlets/byline.py
+msgid "label_end_byline"
+msgstr "to"
+
+#. German translation: Externe Referenz
+#. Default: "External Reference"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/viewlets/byline.py
+msgid "label_external_reference"
+msgstr "External Reference"
+
+#. German translation: Ablagenummer
+#. Default: "Filing Number"
+#: ./opengever/dossier/filing/byline.py
+msgid "label_filing_no"
+msgstr "Filing Number"
+
+#. German translation: Ablagenummer
+#. Default: "Filing number"
+#: ./opengever/dossier/filing/advanced_search.py
+msgid "label_filing_number"
+msgstr "Filing number"
+
+#. German translation: Früheres Aktenzeichen
+#. Default: "Reference Number"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_former_reference_number"
+msgstr "Reference Number"
+
+#. German translation: Info
+#. Default: "Info"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_info"
+msgstr "Info"
+
+#. German translation: Journal
+#. Default: "Journal"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_journal"
+msgstr "Journal"
+
+#. German translation: Schlagwörter
+#. Default: "Keywords"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_keywords"
+msgstr "Keywords"
+
+#. German translation: Label
+#. Default: "Label"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_label"
+msgstr "Label"
+
+#. German translation: Verlinkte Dossiers
+#. Default: "Linked Dossiers"
+#: ./opengever/dossier/browser/overview.py
+msgid "label_linked_dossiers"
+msgstr "Linked Dossiers"
+
+#. German translation: Mail Addresse
+#. Default: "Mail-Address"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_mail_address"
+msgstr "Mail-Address"
+
+#. German translation: Sitzungsvorlagen
+#. Default: "Meeting Templates"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_meeting_templates"
+msgstr "Meeting Templates"
+
+#. German translation: Zuletzt Bearbeitet
+#. Default: "Modified"
+#: ./opengever/dossier/dossiertemplate/form.py
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_modified"
+msgstr "Modified"
+
+#. German translation: Die Archivnummer wird erst beim Erstellen generiert.
+#. Default: "Reference Number will be generated                 after content creation"
+#: ./opengever/dossier/widget.py
+msgid "label_no_reference_number"
+msgstr "Reference Number will be generated                 after content creation"
+
+#. German translation: Das Dokument «${name}» befindet sich in einem Antrag und ist nicht verschiebbar. Verschieben sie den Antrag.
+#. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_inside_proposal"
+msgstr "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
+
+#. German translation: Das Dokument «${name}» befindet sich in einer Aufgabe und ist nicht verschiebbar. Verschieben Sie die Aufgabe.
+#. Default: "Document ${name} is inside a task and therefore not movable. Move the task instead"
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_inside_task"
+msgstr "Document ${name} is inside a task and therefore not movable. Move the task instead"
+
+#. German translation: Das Dokument «${name}» ist gesperrt und ist nicht verschiebbar.
+#. Default: "Document ${name} is locked and therefore not movable."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_locked"
+msgstr "Document ${name} is locked and therefore not movable."
+
+#. German translation: Anzahl Behältnisse
+#. Default: "Number of Containers"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_number_of_containers"
+msgstr "Number of Containers"
+
+#. German translation: OneOffixx
+#. Default: "OneOffixx"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_oneoffixx_templates"
+msgstr "OneOffixx"
+
+#. German translation: Übersicht
+#. Default: "Overview"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_overview"
+msgstr "Overview"
+
+#. German translation: Beteiligungen
+#. Default: "Participants"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_participants"
+msgstr "Participants"
+
+#. German translation: Beteiligung
+#. Default: "Participation"
+#: ./opengever/dossier/browser/forms.py
+msgid "label_participation"
+msgstr "Participation"
+
+#. German translation: Beteiligungen
+#. Default: "Participations"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_participations"
+msgstr "Participations"
+
+#. German translation: Telefonnummer
+#. Default: "Phonenumber"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_phonenumber"
+msgstr "Phonenumber"
+
+#. German translation: Schlagwörter vorausfüllen
+#. Default: "Predefined Keywords"
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_predefined_keywords"
+msgstr "Predefined Keywords"
+
+#. German translation: Antragsvorlagen
+#. Default: "Proposal Templates"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_proposal_templates"
+msgstr "Proposal Templates"
+
+#. German translation: Anträge
+#. Default: "Proposals"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_proposals"
+msgstr "Proposals"
+
+#. German translation: Lesend
+#. Default: "Reading"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_reading"
+msgstr "Reading"
+
+#. German translation: Lesend & schreibend
+#. Default: "Reading and writing"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_reading_and_writing"
+msgstr "Reading and writing"
+
+#. German translation: Empfänger
+#. Default: "Recipient"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_recipient"
+msgstr "Recipient"
+
+#. German translation: Aktenzeichen
+#. Default: "Reference Number"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/report.py
+#: ./opengever/dossier/viewlets/byline.py
+msgid "label_reference_number"
+msgstr "Reference Number"
+
+#. German translation: Verwandte Dossiers
+#. Default: "Related Dossier"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_related_dossier"
+msgstr "Related Dossier"
+
+#. German translation: Federführend
+#. Default: "Responsible"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/browser/participants.py
+msgid "label_responsible"
+msgstr "Responsible"
+
+#. German translation: Schlagwortkatalog einschränken
+#. Default: "Restrict Keywords"
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_restrict_keywords"
+msgstr "Restrict Keywords"
+
+#. German translation: Status
+#. Default: "Review state"
+#: ./opengever/dossier/browser/report.py
+msgid "label_review_state"
+msgstr "Review state"
+
+#. German translation: Rollen
+#. Default: "Roles"
+#: ./opengever/dossier/behaviors/participation.py
+msgid "label_roles"
+msgstr "Roles"
+
+#. German translation: Sablon Vorlagen
+#. Default: "Sablon Templates"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_sablon_templates"
+msgstr "Sablon Templates"
+
+#. German translation: Speichern
+#. Default: "Save"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "label_save"
+msgstr "Save"
+
+#. German translation: Laufnummer
+#. Default: "Sequence Number"
+#: ./opengever/dossier/viewlets/byline.py
+msgid "label_sequence_number"
+msgstr "Sequence Number"
+
+#. German translation: Anzeigen
+#. Default: "Show Note"
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "label_show_note"
+msgstr "Show Note"
+
+#. German translation: Beginn
+#. Default: "Opening Date"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/report.py
+msgid "label_start"
+msgstr "Opening Date"
+
+#. German translation: Beginn
+#. Default: "from"
+#: ./opengever/dossier/project_templates/byline.pt
+#: ./opengever/dossier/viewlets/byline.py
+msgid "label_start_byline"
+msgstr "from"
+
+#. German translation: Subdossiers
+#. Default: "Subdossiers"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_subdossiers"
+msgstr "Subdossiers"
+
+#. German translation: Aufgaben
+#. Default: "Tasks"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_tasks"
+msgstr "Tasks"
+
+#. German translation: Standardabläufe
+#. Default: "Tasktemplate Folders"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_tasktemplate_folders"
+msgstr "Tasktemplate Folders"
+
+#. German translation: Vorlage
+#. Default: "Template"
+#: ./opengever/dossier/dossiertemplate/form.py
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_template"
+msgstr "Template"
+
+#. German translation: Vorlagengruppe
+#. Default: "Template group"
+#: ./opengever/dossier/templatefolder/tabs.py
+msgid "label_template_group"
+msgstr "Template group"
+
+#. German translation: Titel
+#. Default: "Title"
+#: ./opengever/dossier/browser/report.py
+#: ./opengever/dossier/dossiertemplate/form.py
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_title"
+msgstr "Title"
+
+#. German translation: Titelhilfe
+#. Default: "Title help"
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_title_help"
+msgstr "Title help"
+
+#. German translation: Änderungsdatum des Dossiers oder seines Inhalts
+#. Default: "Date of modification of the dossier or its content"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_touched"
+msgstr "Date of modification of the dossier or its content"
+
+#. German translation: Papierkorb
+#. Default: "Trash"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_trash"
+msgstr "Trash"
+
+#. German translation: URL
+#. Default: "URL"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_url"
+msgstr "URL"
+
+#. German translation: Status
+#. Default: "State"
+#: ./opengever/dossier/project_templates/byline.pt
+#: ./opengever/dossier/viewlets/byline.py
+msgid "label_workflow_state"
+msgstr "State"
+
+#. German translation: Änderungen wurde nicht gespeichert
+#. Default: "Changes not saved"
+#: ./opengever/dossier/viewlets/comment.py
+msgid "message_body_error"
+msgstr "Changes not saved"
+
+#. German translation: Änderungen gespeichert
+#. Default: "Changes saved"
+#: ./opengever/dossier/viewlets/comment.py
+msgid "message_body_info"
+msgstr "Changes saved"
+
+#. German translation: Das Object `${title}` ist nicht in einem Dossier abgelegt.
+#. Default: "The object `${title}` is not stored inside a dossier."
+#: ./opengever/dossier/browser/redirect_to_maindossier.py
+msgid "msg_main_dossier_not_found"
+msgstr "The object `${title}` is not stored inside a dossier."
+
+#. German translation: Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt.
+#: ./opengever/dossier/resolve.py
+msgid "not all documents and tasks are stored in a subdossier."
+msgstr "not all documents and tasks are stored in a subdossier."
+
+#. German translation: Es sind nicht alle Dokumente eingecheckt
+#: ./opengever/dossier/resolve.py
+msgid "not all documents are checked in"
+msgstr "not all documents are checked in"
+
+#. German translation: Es sind nicht alle Aufgaben abgeschlossen
+#: ./opengever/dossier/resolve.py
+msgid "not all task are closed"
+msgstr "not all task are closed"
+
+#. German translation: Sie haben nicht gespeicherte Änderungen, wollen Sie wirklich abbrechen?
+#. Default: "Confirm abbord"
+#: ./opengever/dossier/viewlets/comment.py
+msgid "note_text_confirm_abord"
+msgstr "Confirm abbord"
+
+#. German translation: Nur abschliessen (keine Ablagenummer vergeben)
+#: ./opengever/dossier/archive.py
+msgid "only resolve, set filing no later"
+msgstr "only resolve, set filing no later"
+
+#. German translation: Abschliessen und Ablagenummer neu vergeben
+#: ./opengever/dossier/archive.py
+msgid "resolve and set a new filing no"
+msgstr "resolve and set a new filing no"
+
+#. German translation: Abschliessen und Ablagenummer vergeben
+#: ./opengever/dossier/archive.py
+msgid "resolve and set filing no"
+msgstr "resolve and set filing no"
+
+#. German translation: Abschliessen und die existierende Ablagenummer verwenden
+#: ./opengever/dossier/archive.py
+msgid "resolve and take the existing filing no"
+msgstr "resolve and take the existing filing no"
+
+#. German translation: Ablagenummer vergeben
+#: ./opengever/dossier/archive.py
+msgid "set a filing no"
+msgstr "set a filing no"
+
+#. German translation: Beteiligungen
+msgid "sharing"
+msgstr "sharing"
+
+#. German translation: Subdossiers
+msgid "subdossiers"
+msgstr "subdossiers"
+
+#. German translation: Das Dossier hat sein Enddatum überschritten und ist somit überfällig.<br>Bitte überprüfen Sie ob das Dossier abgeschlossen werden kann.
+#. Default: "The dossier is still open after exceeding its end date."
+#: ./opengever/dossier/activities.py
+msgid "summary_dossier_overdue_activity"
+msgstr "The dossier is still open after exceeding its end date."
+
+#. German translation: Aufgaben
+msgid "tasks"
+msgstr "tasks"
+
+#. German translation: Temporäres früheres Aktenzeichen
+#. Default: "Temporary former reference number"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "temporary_former_reference_number"
+msgstr "Temporary former reference number"
+
+#. German translation: Kommentar löschen (Löscht den Kommentar und schliesst das Overlay).
+#: ./opengever/dossier/viewlets/templates/note.pt
+msgid "text_delete_note"
+msgstr "text_delete_note"
+
+#. German translation: Es wurde kein Beginn-Datum gesetzt.
+#: ./opengever/dossier/resolve.py
+msgid "the dossier start date is missing."
+msgstr "the dossier start date is missing."
+
+#. German translation: abgelaufen
+#. Default: "expired"
+#: ./opengever/dossier/project_templates/byline.pt
+msgid "time_expired"
+msgstr "expired"
+
+#. German translation: Dossier Journal ${title}, ${timestamp}
+#. Default: "Journal of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_journal"
+msgstr "Journal of dossier ${title}, ${timestamp}"
+
+#. German translation: Aufgabenliste des Dossiers ${title}, ${timestamp}
+#. Default: "Task list of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_tasks"
+msgstr "Task list of dossier ${title}, ${timestamp}"
+
+#. German translation: Sie haben keine Beteiligungen ausgewählt.
+#. Default: "You didn't select any participants."
+#: ./opengever/dossier/browser/forms.py
+msgid "warning_no_participants_selected"
+msgstr "You didn't select any participants."

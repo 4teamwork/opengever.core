@@ -14,7 +14,7 @@
 # then syncs translations to the .respective po files for all languages
 # defined in $LANGUAGES.
 
-LANGUAGES="de fr"
+LANGUAGES="de fr en"
 
 pkg_dir=`bin/package-directory`
 core_dir=`dirname $pkg_dir`
