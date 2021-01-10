@@ -42,8 +42,8 @@ class TestSearchFormObjectProvidesDescription(IntegrationTestCase):
         browser.open(self.portal, view='advanced_search')
 
         self.assertEquals(
-            ['Select the contenttype to be searched for.It searches '
-             'only items from the current client.'],
+            ['Select the content type to be searched for. '
+             'Searches only items from the current admin unit.'],
             browser.css('#formfield-form-widgets-object_provides span.formHelp').text)
 
     @browsing
@@ -52,7 +52,7 @@ class TestSearchFormObjectProvidesDescription(IntegrationTestCase):
         browser.open(self.portal, view='advanced_search')
 
         self.assertEquals(
-            ['Select the contenttype to be searched for.'],
+            ['Select content type to be searched for.'],
             browser.css('#formfield-form-widgets-object_provides span.formHelp').text)
 
 
