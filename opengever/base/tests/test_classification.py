@@ -319,7 +319,7 @@ class TestPrivacyLayerVocabulary(IntegrationTestCase):
 
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
-        form_field = browser.find('Privacy layer')
+        form_field = browser.find('Privacy protection')
         self.assertEqual(
             ['privacy_layer_no', 'privacy_layer_yes'],
             form_field.options_values)
@@ -333,7 +333,7 @@ class TestPrivacyLayerVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Privacy layer')
+        form_field = browser.find('Privacy protection')
         self.assertIn('privacy_layer_yes', form_field.options_values)
 
     @browsing
@@ -345,7 +345,7 @@ class TestPrivacyLayerVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Privacy layer')
+        form_field = browser.find('Privacy protection')
         self.assertSetEqual(
             set(['privacy_layer_yes']),
             set(form_field.options_values))
@@ -359,7 +359,7 @@ class TestPrivacyLayerVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Privacy layer')
+        form_field = browser.find('Privacy protection')
 
         self.assertEqual('privacy_layer_yes', form_field.value)
         # Default listed first
@@ -375,7 +375,7 @@ class TestPrivacyLayerVocabulary(IntegrationTestCase):
         browser.fill({'Title': 'My Dossier'}).save()
 
         browser.click_on('Edit')
-        form_field = browser.find('Privacy layer')
+        form_field = browser.find('Privacy protection')
         self.assertSetEqual(
             set(['privacy_layer_yes']),
             set(form_field.options_values))
@@ -411,7 +411,7 @@ class TestPrivacyLayerPropagation(IntegrationTestCase):
 
         # Make privacy layer more strict
         browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Privacy layer': 'privacy_layer_yes'}).save()
+        browser.fill({'Privacy protection': 'privacy_layer_yes'}).save()
 
         # Stricter privacy layer should have propagated to dossier
         self.assertEqual(u'privacy_layer_yes', self.get_privacy_layer(dossier))
@@ -424,13 +424,13 @@ class TestPrivacyLayerPropagation(IntegrationTestCase):
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({
             'Title': 'My Dossier',
-            'Privacy layer': 'privacy_layer_yes'}).save()
+            'Privacy protection': 'privacy_layer_yes'}).save()
         dossier = browser.context
 
         self.assertEqual(u'privacy_layer_yes', self.get_privacy_layer(dossier))
 
         browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Privacy layer': 'privacy_layer_no'}).save()
+        browser.fill({'Privacy protection': 'privacy_layer_no'}).save()
 
         self.assertEqual(u'privacy_layer_yes', self.get_privacy_layer(dossier))
 
@@ -456,7 +456,7 @@ class TestPrivacyLayerPropagation(IntegrationTestCase):
 
         # Reduce privacy layer on top level repofolder
         browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Privacy layer': 'privacy_layer_yes'}).save()
+        browser.fill({'Privacy protection': 'privacy_layer_yes'}).save()
 
         # Reduced privacy layer should have propagated to repofolder2, but
         # not dossier (because of depth limitation)
@@ -511,7 +511,7 @@ class TestPublicTrialField(IntegrationTestCase):
 
         browser.open(self.dossier)
         factoriesmenu.add(u'Document')
-        form_field = browser.find('Public Trial')
+        form_field = browser.find('Public access level')
         self.assertEqual(
             ['unchecked', 'public', 'limited-public', 'private'],
             form_field.options_values)
@@ -523,7 +523,7 @@ class TestPublicTrialField(IntegrationTestCase):
 
         browser.open(self.dossier)
         factoriesmenu.add(u'Document')
-        form_field = browser.find('Public Trial')
+        form_field = browser.find('Public access level')
         self.assertEqual(
             ['unchecked', 'public', 'limited-public', 'private'],
             form_field.options_values)
@@ -541,12 +541,12 @@ class TestPublicTrialField(IntegrationTestCase):
         factoriesmenu.add('Business Case Dossier')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public trial statement should be hidden')
+                        'Public access level statement should be hidden')
 
         browser.open(self.dossier, view='edit')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public trial statement should be hidden')
+                        'Public access level statement should be hidden')
 
     @browsing
     def test_public_trial_is_hidden_on_repofolder(self, browser):
@@ -561,12 +561,12 @@ class TestPublicTrialField(IntegrationTestCase):
         factoriesmenu.add('RepositoryFolder')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public trial statement should be hidden')
+                        'Public access level statement should be hidden')
 
         browser.visit(self.leaf_repofolder, view='edit')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public trial statement should be hidden')
+                        'Public access level statement should be hidden')
 
 
 class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
@@ -576,7 +576,7 @@ class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.document, view='edit')
-        browser.fill({'Public Trial': 'public'}).save()
+        browser.fill({'Public access level': 'public'}).save()
 
         self.assert_journal_entry(
             self.document, 'Public trial modified',
@@ -587,7 +587,7 @@ class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.document, view='edit_public_trial')
-        browser.fill({'Public Trial': 'public'}).save()
+        browser.fill({'Public access level': 'public'}).save()
 
         self.assert_journal_entry(
             self.document, 'Public trial modified',

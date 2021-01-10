@@ -102,7 +102,7 @@ class TestDocument(IntegrationTestCase):
     def test_documents_tabbedview(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, view='@@tabbed_view')
-        self.assertEqual(['overview', 'versions', 'journal', 'sharing'], browser.css('.formTabs .formTab').text)
+        self.assertEqual(['Overview', 'Versions', 'Journal', 'Info'], browser.css('.formTabs .formTab').text)
 
     @browsing
     def test_documents_properties_view(self, browser):

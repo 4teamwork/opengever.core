@@ -163,7 +163,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         browser.click_on('Delete')
 
         self.assertEquals(
-            ['Items successfully deleted.'], info_messages())
+            ['Items deleted successfully.'], info_messages())
         self.assertEquals([], self.tasktemplatefolder.listFolderContents())
 
     @browsing

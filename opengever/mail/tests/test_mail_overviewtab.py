@@ -46,9 +46,9 @@ class TestOverview(FunctionalTestCase):
                   ['Date of receipt', date_format_helper(date.today())],
                   ['Date of delivery', ''],
                   ['Classification', 'unprotected'],
-                  ['Privacy layer', 'privacy_layer_no'],
-                  ['Public Trial', 'unchecked'],
-                  ['Public trial statement', '']]
+                  ['Privacy protection', 'no'],
+                  ['Public access level', 'not assessed'],
+                  ['Public access level statement', '']]
 
         self.assertEquals(expect,
                           browser.css('table').first.lists())

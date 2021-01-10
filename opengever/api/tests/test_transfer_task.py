@@ -360,7 +360,7 @@ class TestTransferTaskInterAdminUnit(IntegrationTestCase):
                 self.assertEqual({
                     'cause': {
                         'id': ASSIGNMENT_VIA_TASK,
-                        'title': u'By task',
+                        'title': u'Via task',
                     },
                     'principal': new_userid,
                     'reference': {

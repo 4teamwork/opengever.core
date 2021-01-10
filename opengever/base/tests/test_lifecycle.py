@@ -101,7 +101,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         )
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
 
         # Restricted based on fallback default (30)
         self.assertEqual([u'30', u'99'], form_field.options_values)
@@ -112,7 +112,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
 
         browser.open(self.repository_root)
         factoriesmenu.add(u'RepositoryFolder')
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
         self.assertEqual(
             ['0', '30', '100', '150'],
             form_field.options_values)
@@ -130,7 +130,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
         self.assertEqual(
             ['0', '30', '100', '150'],
             form_field.options_values)
@@ -148,7 +148,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
         self.assertEqual(
             ['0', '30', '100', '150'],
             form_field.options_values)
@@ -162,7 +162,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
         self.assertIn('30', form_field.options_values)
 
     @browsing
@@ -174,7 +174,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
         self.assertSetEqual(
             set(['100', '150']),
             set(form_field.options_values))
@@ -188,7 +188,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
 
         self.assertEqual('100', form_field.value)
         # Default listed first
@@ -205,7 +205,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         browser.fill({'Title': 'My Dossier'}).save()
 
         browser.click_on('Edit')
-        form_field = browser.find('Custody period (years)')
+        form_field = browser.find('Regular safeguard period (years)')
         self.assertSetEqual(
             set(['100', '150']),
             set(form_field.options_values))
@@ -241,7 +241,7 @@ class TestCustodyPeriodPropagation(IntegrationTestCase):
 
         browser.open(self.leaf_repofolder, view='edit')
         # Increase custody period
-        browser.fill({'Custody period (years)': '100'}).save()
+        browser.fill({'Regular safeguard period (years)': '100'}).save()
 
         value = self.get_custody_period(dossier)
         # Increased custody period should have propagated to dossier
@@ -255,14 +255,14 @@ class TestCustodyPeriodPropagation(IntegrationTestCase):
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({
             'Title': 'My Dossier',
-            'Custody period (years)': '150'}).save()
+            'Regular safeguard period (years)': '150'}).save()
         dossier = browser.context
 
         value = self.get_custody_period(dossier)
         self.assertEqual(150, value)
 
         browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Custody period (years)': '30'}).save()
+        browser.fill({'Regular safeguard period (years)': '30'}).save()
 
         value = self.get_custody_period(dossier)
         self.assertEqual(150, value)
@@ -290,7 +290,7 @@ class TestCustodyPeriodPropagation(IntegrationTestCase):
 
         browser.open(self.branch_repofolder, view='edit')
         # Increase custody period on top level repofolder
-        browser.fill({'Custody period (years)': '100'}).save()
+        browser.fill({'Regular safeguard period (years)': '100'}).save()
 
         # Increased custody period should have propagated to repofolder2, but
         # not dossier (because of depth limitation)

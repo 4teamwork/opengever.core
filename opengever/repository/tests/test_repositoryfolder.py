@@ -152,7 +152,7 @@ class TestDossierTemplateFactoryMenu(IntegrationTestCase):
 
     def setUp(self):
         super(TestDossierTemplateFactoryMenu, self).setUp()
-        self.factory_label = 'Dossier with template'
+        self.factory_label = 'Dossier from template'
 
     @browsing
     def test_adding_from_template_allowed_on_leaf_nodes(self, browser):

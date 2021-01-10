@@ -47,7 +47,7 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
              'Date of delivery',
              'Related Documents',
              'Classification',
-             'Privacy layer',
-             'Public Trial',
-             'Public trial statement'],
+             'Privacy protection',
+             'Public access level',
+             'Public access level statement'],
             field_headers)

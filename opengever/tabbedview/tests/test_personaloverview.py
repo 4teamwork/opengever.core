@@ -46,12 +46,12 @@ class TestPersonalOverview(IntegrationTestCase):
         browser.open(view='personal_overview')
 
         expected_tabs = [
-            'mydossiers',
-            'mydocuments-proxy',
-            'mytasks',
-            'myissuedtasks',
-            'alltasks',
-            'allissuedtasks',
+            'My dossiers',
+            'My documents',
+            'My tasks',
+            'My issued tasks',
+            'All tasks',
+            'All issued tasks',
             ]
 
         self.assertEqual(expected_tabs, browser.css('li.formTab a').text)
@@ -62,12 +62,12 @@ class TestPersonalOverview(IntegrationTestCase):
         browser.open(view='personal_overview')
 
         expected_tabs = [
-            'mydossiers',
-            'mydocuments-proxy',
-            'mytasks',
-            'myissuedtasks',
-            'alltasks',
-            'allissuedtasks',
+            'My dossiers',
+            'My documents',
+            'My tasks',
+            'My issued tasks',
+            'All tasks',
+            'All issued tasks',
             ]
 
         self.assertEqual(expected_tabs, browser.css('li.formTab a').text)
@@ -78,10 +78,10 @@ class TestPersonalOverview(IntegrationTestCase):
         browser.open(view='personal_overview')
 
         expected_tabs = [
-            'mydossiers',
-            'mydocuments-proxy',
-            'mytasks',
-            'myissuedtasks',
+            'My dossiers',
+            'My documents',
+            'My tasks',
+            'My issued tasks',
             ]
 
         self.assertEqual(expected_tabs, browser.css('li.formTab a').text)
@@ -95,10 +95,10 @@ class TestPersonalOverview(IntegrationTestCase):
         browser.open(view='personal_overview')
 
         expected_tabs = [
-            'mydossiers',
-            'mydocuments-proxy',
-            'mytasks',
-            'myissuedtasks',
+            'My dossiers',
+            'My documents',
+            'My tasks',
+            'My issued tasks',
             ]
 
         self.assertEqual(expected_tabs, browser.css('li.formTab a').text)
@@ -117,13 +117,13 @@ class TestPersonalOverviewActivitySupport(IntegrationTestCase):
         browser.open(view='personal_overview')
 
         expected_tabs = [
-            'mydossiers',
-            'mydocuments-proxy',
-            'mytasks',
-            'myissuedtasks',
+            'My dossiers',
+            'My documents',
+            'My tasks',
+            'My issued tasks',
             'My notifications',
-            'alltasks',
-            'allissuedtasks',
+            'All tasks',
+            'All issued tasks',
             ]
 
         self.assertEqual(expected_tabs, browser.css('li.formTab a').text)
@@ -132,10 +132,10 @@ class TestPersonalOverviewActivitySupport(IntegrationTestCase):
         browser.open(view='personal_overview')
 
         expected_tabs = [
-            'mydossiers',
-            'mydocuments-proxy',
-            'mytasks',
-            'myissuedtasks',
+            'My dossiers',
+            'My documents',
+            'My tasks',
+            'My issued tasks',
             'My notifications',
             ]
 
@@ -155,13 +155,13 @@ class TestPersonalOverviewMeetingSupport(IntegrationTestCase):
         browser.open(view='personal_overview')
 
         expected_tabs = [
-            'mydossiers',
-            'mydocuments-proxy',
-            'mytasks',
-            'myissuedtasks',
+            'My dossiers',
+            'My documents',
+            'My tasks',
+            'My issued tasks',
             'My proposals',
-            'alltasks',
-            'allissuedtasks',
+            'All tasks',
+            'All issued tasks',
             ]
 
         self.assertEqual(expected_tabs, browser.css('li.formTab a').text)

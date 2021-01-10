@@ -37,7 +37,7 @@ class TestCopyItems(IntegrationTestCase):
         browser.open(self.dossier, data=data, view='copy_items')
 
         self.assertEqual(self.dossier.absolute_url(), browser.url)
-        self.assertEqual(['Selected objects successfully copied.'], info_messages())
+        self.assertEqual(['Selected objects copied successfully.'], info_messages())
 
     @browsing
     def test_cannot_copy_checked_out_document(self, browser):
@@ -59,7 +59,7 @@ class TestCopyItems(IntegrationTestCase):
 
         browser.open(self.leaf_repofolder, data=data, view='copy_items')
         self.assertEqual(self.leaf_repofolder.absolute_url(), browser.url)
-        self.assertEqual(['Selected objects successfully copied.'], info_messages())
+        self.assertEqual(['Selected objects copied successfully.'], info_messages())
         self.assertEqual([], error_messages())
 
         self.checkout_document(self.document)
@@ -78,7 +78,7 @@ class TestCopyItem(IntegrationTestCase):
         browser.open(self.document, view='copy_item')
 
         self.assertEqual(self.document.absolute_url(), browser.url)
-        self.assertEqual(['Selected objects successfully copied.'],
+        self.assertEqual(['Selected objects copied successfully.'],
                          info_messages())
 
     @browsing
@@ -98,7 +98,7 @@ class TestCopyItem(IntegrationTestCase):
 
         browser.open(self.dossier, view='copy_item')
         self.assertEqual(self.dossier.absolute_url(), browser.url)
-        self.assertEqual(['Selected objects successfully copied.'],
+        self.assertEqual(['Selected objects copied successfully.'],
                          info_messages())
         self.assertEqual([], error_messages())
 
@@ -119,7 +119,7 @@ class TestCopyItem(IntegrationTestCase):
         browser.css('#contentActionMenus a#paste').first.click()
 
         self.assertEqual(self.empty_dossier.absolute_url(), browser.url)
-        self.assertEqual(['Objects from clipboard successfully pasted.'],
+        self.assertEqual(['Objects from clipboard pasted successfully.'],
                          info_messages())
 
     @browsing
@@ -128,7 +128,7 @@ class TestCopyItem(IntegrationTestCase):
         browser.open(self.mail_eml, view='copy_item')
 
         self.assertEqual(self.mail_eml.absolute_url(), browser.url)
-        self.assertEqual(['Selected objects successfully copied.'],
+        self.assertEqual(['Selected objects copied successfully.'],
                          info_messages())
 
     @browsing
@@ -140,7 +140,7 @@ class TestCopyItem(IntegrationTestCase):
         browser.css('#contentActionMenus a#paste').first.click()
 
         self.assertEqual(self.empty_dossier.absolute_url(), browser.url)
-        self.assertEqual(['Objects from clipboard successfully pasted.'],
+        self.assertEqual(['Objects from clipboard pasted successfully.'],
                          info_messages())
 
 
@@ -198,7 +198,7 @@ class TestCopyPaste(IntegrationTestCase):
         browser.css('#contentActionMenus a#paste').first.click()
 
         self.assertEqual(1, len(self.empty_dossier.objectValues()))
-        self.assertEqual(["Objects from clipboard successfully pasted."],
+        self.assertEqual(["Objects from clipboard pasted successfully."],
                          info_messages())
 
     @browsing
@@ -210,7 +210,7 @@ class TestCopyPaste(IntegrationTestCase):
             data=self.make_path_param(self.empty_dossier))
         browser.css('#contentActionMenus a#paste').first.click()
 
-        self.assertEqual(["Objects from clipboard successfully pasted."],
+        self.assertEqual(["Objects from clipboard pasted successfully."],
                          info_messages())
         self.assertEqual(1, len(self.empty_repofolder.objectValues()))
 
@@ -225,7 +225,7 @@ class TestCopyPaste(IntegrationTestCase):
             data=self.make_path_param(self.empty_dossier))
         browser.css('#contentActionMenus a#paste').first.click()
 
-        self.assertEqual(["Objects from clipboard successfully pasted."],
+        self.assertEqual(["Objects from clipboard pasted successfully."],
                          info_messages())
 
         dossier_copy = self.leaf_repofolder.objectValues()[-1]
@@ -583,7 +583,7 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.click_on('Paste')
 
         self.assertItemsEqual(info_messages(),
-                              ["Objects from clipboard successfully pasted."])
+                              ["Objects from clipboard pasted successfully."])
 
         manager = RoleAssignmentManager(self.subdossier)
         manager.add_or_update_assignment(
@@ -600,7 +600,7 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
 
         self.assertItemsEqual(info_messages(),
                               ["Some local roles were copied with the objects",
-                               "Objects from clipboard successfully pasted."])
+                               "Objects from clipboard pasted successfully."])
 
     @browsing
     def test_status_message_shown_when_local_roles_on_subdossier_are_copied(self, browser):
@@ -617,7 +617,7 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.click_on('Paste')
 
         self.assertItemsEqual(info_messages(),
-                              ["Objects from clipboard successfully pasted."])
+                              ["Objects from clipboard pasted successfully."])
 
         manager = RoleAssignmentManager(self.subsubdossier)
         manager.add_or_update_assignment(
@@ -634,7 +634,7 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
 
         self.assertItemsEqual(info_messages(),
                               ["Some local roles were copied with the objects",
-                               "Objects from clipboard successfully pasted."])
+                               "Objects from clipboard pasted successfully."])
 
 
 class TestClipboardCaching(IntegrationTestCase):

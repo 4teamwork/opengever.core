@@ -113,7 +113,7 @@ class TestRepositoryFolderDocumentsTab(SolrIntegrationTestCase):
             'File extension': '.docx',
             'Keywords': 'Wichtig',
             'Modification Date': '31.08.2016',
-            'Public Trial': 'unchecked',
+            'Public Trial': 'not assessed',
             'Receipt Date': '03.01.2010',
             'Reference Number': 'Client1 1.1 / 1 / 14',
             'Sequence Number': '14',

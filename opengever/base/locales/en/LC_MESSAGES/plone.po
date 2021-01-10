@@ -28,11 +28,11 @@ msgstr "Attach remote document"
 
 #. German translation: Einchecken
 msgid "Checkin"
-msgstr "Checkin"
+msgstr "Check in"
 
 #. German translation: Auschecken
 msgid "Checkout"
-msgstr "Checkout"
+msgstr "Check out"
 
 #. German translation: Mitglied
 msgid "Committee Member"
@@ -47,6 +47,7 @@ msgid "Delegate task"
 msgstr "Delegate task"
 
 #. German translation: Dokumentstatus verändert: Ausgecheckt
+#. MARKER: I suspect many (or all) of the messages below aren't actually used
 msgid "Document state changed to document-state-checked_out"
 msgstr "Document state changed to document-state-checked_out"
 
@@ -88,7 +89,7 @@ msgstr "Dossier state changed to dossier-state-resolved"
 
 #. German translation: Geschäftsdossier aus Vorlage
 msgid "Dossier with template"
-msgstr "Dossier with template"
+msgstr "Dossier from template"
 
 #. German translation: Metadaten bearbeiten
 msgid "Edit metadata"
@@ -96,11 +97,11 @@ msgstr "Edit metadata"
 
 #. German translation: Ablagenummer vergeben
 msgid "Give Filing Number"
-msgstr "Give Filing Number"
+msgstr "Issue filing number"
 
 #. German translation: Info
 msgid "Info success"
-msgstr "Info success"
+msgstr "Info"
 
 #. German translation: Sitzung
 msgid "Meeting"
@@ -132,7 +133,7 @@ msgstr "Save document as PDF"
 
 #. German translation: OneGov GEVER durchsuchen
 msgid "Search OneGov Gever"
-msgstr "Search OneGov Gever"
+msgstr "Search OneGov GEVER"
 
 #. German translation: Suchresultate
 #: plone.app.search/plone/app/search/search.pt:59
@@ -145,10 +146,12 @@ msgid "Search results for ${term}"
 msgstr "Search results for ${term}"
 
 #. German translation: Zusätzliche Beilage einreichen
+#. MARKER: supplementary-documents
 msgid "Submit additional document"
 msgstr "Submit additional document"
 
 #. German translation: Zusätzliche Beilagen einreichen
+#. MARKER: supplementary-documents
 msgid "Submit additional documents"
 msgstr "Submit additional documents"
 
@@ -163,11 +166,11 @@ msgstr "alphabetically"
 
 #. German translation: ${number} Artikel gefunden.
 msgid "batch_x_items_matching_your_criteria"
-msgstr "batch_x_items_matching_your_criteria"
+msgstr "Found ${number} items."
 
 #. German translation: herunterladen
 msgid "button_download"
-msgstr "button_download"
+msgstr "Download"
 
 #. German translation: Änderungsdatum (absteigend)
 #: plone.app.search/plone/app/search/browser.py:119

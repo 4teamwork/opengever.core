@@ -19,7 +19,7 @@ class TestForceCheckin(IntegrationTestCase):
 
         # checkout
         browser.open(self.document)
-        browser.click_on('Checkout')
+        browser.click_on('Check out')
         self.assertEquals(self.dossier_responsible.getId(),
                           manager.get_checked_out_by())
         assert_message(u'Checked out: Vertr\xe4gsentwurf')
@@ -37,7 +37,7 @@ class TestForceCheckin(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
         # checkout
         browser.open(self.document)
-        browser.click_on('Checkout')
+        browser.click_on('Check out')
         assert_message(u'Checked out: Vertr\xe4gsentwurf')
 
         # force checkin as regular_user

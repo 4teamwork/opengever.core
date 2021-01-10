@@ -838,7 +838,7 @@ class TestDossierDefaults(TestDefaultsBase):
 
         with freeze(FROZEN_NOW):
             browser.open(self.leaf_repofolder)
-            factoriesmenu.add(u'Dossier with template')
+            factoriesmenu.add(u'Dossier from template')
 
             token = browser.css(
                 'input[title="My title"]').first.attrib.get('value')  # noqa
@@ -868,7 +868,7 @@ class TestDossierDefaults(TestDefaultsBase):
 
         with freeze(FROZEN_NOW):
             browser.open(self.leaf_repofolder)
-            factoriesmenu.add(u'Dossier with template')
+            factoriesmenu.add(u'Dossier from template')
             token = browser.css(
                 'input[title="Main template"]').first.attrib.get('value')  # noqa
             browser.fill({'form.widgets.template': token}).submit()
@@ -1047,7 +1047,7 @@ class TestDocumentDefaults(TestDefaultsBase):
 
         with freeze(FROZEN_NOW):
             browser.open(self.leaf_repofolder)
-            factoriesmenu.add(u'Dossier with template')
+            factoriesmenu.add(u'Dossier from template')
             token = browser.css(
                 'input[title="My title"]').first.attrib.get('value')  # noqa
             browser.fill({'form.widgets.template': token}).submit()

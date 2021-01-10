@@ -401,7 +401,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.assertEquals(
             [{u'cause': {
                 u'id': ASSIGNMENT_VIA_TASK,
-                u'title': u'By task'},
+                u'title': u'Via task'},
               u'roles': [u'Editor'],
               u'reference': {
                   u'url': self.task.absolute_url(),
@@ -409,7 +409,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
               u'principal': u'kathi.barfuss'},
              {u'cause': {
                  u'id': ASSIGNMENT_VIA_TASK_AGENCY,
-                 u'title': u'By task agency'},
+                 u'title': u'Via task agency'},
               u'roles': [u'Reader'],
               u'reference': None,
               u'principal': u'kathi.barfuss'}],
@@ -431,7 +431,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.assertEquals(
             [{u'cause': {
                 u'id': ASSIGNMENT_VIA_TASK,
-                u'title': u'By task'},
+                u'title': u'Via task'},
               u'roles': [u'Editor'],
               u'reference': {
                   u'url': self.task.absolute_url(),

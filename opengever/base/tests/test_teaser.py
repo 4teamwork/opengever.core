@@ -12,7 +12,7 @@ class TestTeaser(IntegrationTestCase):
     def test_new_frontend_teaser_is_shown(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.portal)
-        self.assertEqual(u'Do you already know the new user interface of OneGov GEVER? '
+        self.assertEqual(u'Have you seen the new OneGov GEVER user interface yet? '
                          u'Try it out now. \xd7',
                          browser.css('#new-frontend-teaser').first.text)
 

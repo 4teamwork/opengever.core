@@ -51,8 +51,8 @@ class TestReferencePrefixManager(IntegrationTestCase):
 
         browser.open(self.branch_repofolder, view='referenceprefix_manager')
         self.assertEquals(
-            [['1', '-- Already removed object --', 'Unlock'],
-             ['3', '-- Already removed object --', 'Unlock']],
+            [['1', '-- Already removed --', 'Unlock'],
+             ['3', '-- Already removed --', 'Unlock']],
             browser.css('#reference_prefix_manager_table').first.lists())
 
     @browsing

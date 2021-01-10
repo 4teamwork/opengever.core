@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-11 00:11+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -26,17 +26,17 @@ msgstr "(INACTIVE)"
 #. German translation: Wollen Sie diese Inhalte wirklich löschen?
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt
 msgid "Are you sure you want to deleted this items?"
-msgstr "Are you sure you want to deleted this items?"
+msgstr "Are you sure you want to delete these items?"
 
 #. German translation: Report konnte nicht generiert werden.
 #: ./opengever/base/browser/reporting_view.py
 msgid "Could not generate the report."
-msgstr "Could not generate the report."
+msgstr "Could not generate report."
 
 #. German translation: Inhalte wurden erfolgreich gelöscht.
 #: ./opengever/base/browser/folder_delete_confirmation.py
 msgid "Items successfully deleted."
-msgstr "Items successfully deleted."
+msgstr "Items deleted successfully."
 
 #. German translation: Keine Inhalte
 #: ./opengever/base/browser/templates/gever-macros.pt
@@ -46,7 +46,7 @@ msgstr "No content"
 #. German translation: In dieser Version ist keine Datei vorhanden
 #: ./opengever/base/viewlets/download.py
 msgid "No file in in this version"
-msgstr "No file in in this version"
+msgstr "No file in this version"
 
 #. German translation: Es werden keine Inhalte gelöscht
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt
@@ -68,7 +68,7 @@ msgstr "Some items won't be deleted!"
 #. German translation: Die folgenden Inhalte werden von anderen Inhalten referenziert und werden deshalb nicht gelöscht.
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt
 msgid "The following items are referenced by another item and will not be deleted"
-msgstr "The following items are referenced by another item and will not be deleted"
+msgstr "The following items are referenced by other items and will not be deleted"
 
 #. German translation: In dieser Gruppe befinden sich keine Benutzer.
 #: ./opengever/base/browser/list_groupmembers.pt
@@ -125,31 +125,31 @@ msgstr "Confirm that you'd like to perform this action."
 #. Default: "If you need to report this to the responsible person, please include this entry number in your message."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_include_error_in_admin_message"
-msgstr "If you need to report this to the responsible person, please include this entry number in your message."
+msgstr "If you'd like to report this error to you application administrator, please make sure to include this number in your message."
 
 #. German translation: Sie haben unzureichende Berechtigungen um diese Seite anzuzeigen. Wenn Sie meinen diese Meldung fehlerhafterweise angezeigt zu bekommen, kontaktieren Sie bitte die fachapplikationsverantwortliche Person.
 #. Default: "You do not have sufficient privileges to view this page. If you believe you are receiving this message by mistake, please contact the responsible person."
 #: ./opengever/base/skins/opengever.base_scripts/insufficient_privileges.pt
 msgid "description_no_privileges_for_page"
-msgstr "You do not have sufficient privileges to view this page. If you believe you are receiving this message by mistake, please contact the responsible person."
+msgstr "You do not have sufficient privileges to view this page. If you believe you are receiving this message in error, please contact your application administrator."
 
 #. German translation: Bitte melden sie diesen Fehler dem Fachapplikationsverantwortlichen unter Angabe der Aktion welche Sie durchzuführen versucht haben, und der untenstehenden Fehlernummer.
 #. Default: "Please notify your administrator about this error, and include a description the action you tried to perform as well as the error number below."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_please_notify_admin"
-msgstr "Please notify your administrator about this error, and include a description the action you tried to perform as well as the error number below."
+msgstr "Please notify your application administrator about this error, and include a description of the action you tried to perform as well as the error number below."
 
 #. German translation: Entschuldigung, aber die Webseite die Sie versucht haben zu erreichen ist hier nicht verfügbar.
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error"
-msgstr "We apologize for the inconvenience, but the page you were trying to access is not at this address."
+msgstr "We apologize for the inconvenience, but the page you were trying to access is not available at this address."
 
 #. German translation: Bitte kontaktieren Sie die fachapplikationsverantwortliche Person, wenn dieses Problem längerfristig besteht.
 #. Default: "Please contact the responsible person if this problem persists."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error_site_admin"
-msgstr "Please contact the responsible person if this problem persists."
+msgstr "Please contact your application administrator if this problem persists."
 
 #. German translation: Das System befindet sich zurzeit im ReadOnly-Modus, und alle Schreibzugriffe werden deshalb verhindert.
 #. Default: "The system currently is in ReadOnly mode, and therefore all write operations will be blocked."
@@ -210,45 +210,47 @@ msgstr "Error: Unexpected write attempt during ReadOnly mode"
 #. Default: "Archival value code"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "help_archival_value"
-msgstr "Archival value code"
+msgstr "Archival value"
 
 #. German translation: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen.
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py
 msgid "help_classification"
-msgstr ""
+msgstr "Degree to which files must be restricted from disclosure to unauthorized parties"
 
 #. German translation: Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind.
+#. MARKER: questionable
+#. The field should probably be named 'regular safeguard period'
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "help_custody_period"
-msgstr "help_custody_period"
+msgstr "Duration for which documents are restricted from public disclosure after having been archived"
 
 #. German translation: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten.
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py
 msgid "help_privacy_layer"
-msgstr ""
+msgstr "Whether the files contain particularly sensitive personal data or personal profiles according to data privacy laws."
 
 #. German translation: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht.
 #: ./opengever/base/behaviors/classification.py
 msgid "help_public_trial"
-msgstr "help_public_trial"
+msgstr "Whether the files are publicly accessible according to Freedom of Information Act (ÖffG, Öffentlichkeitsgesetz)"
 
 #. German translation: Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier
 #: ./opengever/base/behaviors/classification.py
 msgid "help_public_trial_statement"
-msgstr "help_public_trial_statement"
+msgstr "Date of request, applicant, date of decision, reference to request dossier in GEVER"
 
 #. German translation: Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird.
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "help_retention_period"
-msgstr "help_retention_period"
+msgstr "Time period between the most recent date of a any document contained in a dossier and the point in time at which it is no longer required for the organization to conduct its business matters."
 
 #. German translation: -- Bereits gelöscht --
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py
 msgid "label_already_removed"
-msgstr "-- Already removed object --"
+msgstr "-- Already removed --"
 
 #. German translation: Archivwürdigkeit
 #. Default: "Archival value"
@@ -260,19 +262,19 @@ msgstr "Archival value"
 #. Default: "archivalValueAnnotation"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_archival_value_annotation"
-msgstr "archivalValueAnnotation"
+msgstr "Comment about archival value assessment"
 
 #. German translation: Durch Mitgliedschaft in Gremiumsgruppe
 #. Default: "By committee group"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_committee_group"
-msgstr "By committee group"
+msgstr "Via committee group"
 
 #. German translation: Durch «Dossier schützen»
 #. Default: "By protect dossier"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_protect_dossier"
-msgstr "By protect dossier"
+msgstr "Via 'protect dossier'"
 
 #. German translation: Durch manuelle Freigabe
 #. Default: "Via sharing"
@@ -284,19 +286,20 @@ msgstr "Via sharing"
 #. Default: "By task"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_task"
-msgstr "By task"
+msgstr "Via task"
 
 #. German translation: Durch Aufgabe (Stellvertretung)
 #. Default: "By task agency"
+#. MARKER: agency
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_task_agency"
-msgstr "By task agency"
+msgstr "Via task agency"
 
 #. German translation: Durch eine Teamraum-Einladung
 #. Default: "By workspace invitation"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_workspace_invitation"
-msgstr "By workspace invitation"
+msgstr "Via workspace invitation"
 
 #. German translation: Abbrechen
 #. Default: "Cancel"
@@ -310,7 +313,7 @@ msgstr "Cancel"
 #. Default: "Change public trial information."
 #: ./opengever/base/browser/edit_public_trial.py
 msgid "label_change_public_trial"
-msgstr "Change public trial information."
+msgstr "Change public access level assessment"
 
 #. German translation: Ausgecheckt
 #. Default: "Checked out"
@@ -338,9 +341,10 @@ msgstr "Created"
 
 #. German translation: Archivische Schutzfrist (Jahre)
 #. Default: "Custody period (years)"
+#. MARKER: Field should probably be named regular safeguard period
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_custody_period"
-msgstr "Custody period (years)"
+msgstr "Regular safeguard period (years)"
 
 #. German translation: Kassationsdatum
 #. Default: "Date of cassation"
@@ -394,13 +398,13 @@ msgstr "No checked out documents"
 #. Default: "No favorites exists."
 #: ./opengever/base/viewlets/favorites_menu.py
 msgid "label_no_favorites"
-msgstr "No favorites exists."
+msgstr "No favorites exist"
 
 #. German translation: Keine kürzlich bearbeiteten Dokumente
 #. Default: "No recently touched documents yet"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_no_recently_touched_docs"
-msgstr "No recently touched documents yet"
+msgstr "No recently modified documents yet"
 
 #. German translation: Keine Werte
 #. Default: "None"
@@ -422,27 +426,28 @@ msgstr "Overview"
 
 #. German translation: Datenschutz
 #. Default: "Privacy layer"
+#. MARKER: double check this
 #: ./opengever/base/behaviors/classification.py
 msgid "label_privacy_layer"
-msgstr "Privacy layer"
+msgstr "Privacy protection"
 
 #. German translation: Öffentlichkeitsstatus
 #. Default: "Public Trial"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_public_trial"
-msgstr "Public Trial"
+msgstr "Public access level"
 
 #. German translation: Bearbeitungsinformation
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_public_trial_statement"
-msgstr "Public trial statement"
+msgstr "Public access level statement"
 
 #. German translation: Kürzlich bearbeitet
 #. Default: "Recently touched"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_recently_touched"
-msgstr "Recently touched"
+msgstr "Recently modified"
 
 #. German translation: Aufbewahrungsdauer (Jahre)
 #. Default: "Retention period (years)"
@@ -454,7 +459,7 @@ msgstr "Retention period (years)"
 #. Default: "retentionPeriodAnnotation"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_retention_period_annotation"
-msgstr "retentionPeriodAnnotation"
+msgstr "Comment about retention period assessment"
 
 #. German translation: Suche
 #. Default: "Search"
@@ -490,9 +495,10 @@ msgstr "Title (French)"
 
 #. German translation: Eingeschränkt öffentlich
 #. Default: "limited-public"
+#. MARKER: double check this
 #: opengever/repository/classification.py
 msgid "limited-public"
-msgstr "limited-public"
+msgstr "public (with restrictions)"
 
 #. German translation: Lokale Berechtigungen wurden auch mitkopiert
 #. Default: "Some local roles were copied with the objects"
@@ -565,25 +571,25 @@ msgstr "Can't paste items, it's not allowed to add objects of this type."
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py
 msgid "msg_successfuly_copied"
-msgstr "Selected objects successfully copied."
+msgstr "Selected objects copied successfully."
 
 #. German translation: Die Objekte der Zwischenablage wurden eingefügt.
 #. Default: "Objects from clipboard successfully pasted."
 #: ./opengever/base/browser/paste.py
 msgid "msg_successfuly_pasted"
-msgstr "Objects from clipboard successfully pasted."
+msgstr "Objects from clipboard pasted successfully."
 
 #. German translation: Bitte bestätigen Sie, dass Sie selbst diese Aktion durchgeführt haben und nicht durch einen Link in einem E-Mail oder von einer externen Website auf GEVER weitergeleitet wurden. Dies ist eine Sicherheitsmassnahme, um sogenannte CSRF-Angriffe zu verhindern. Falls Sie diese Meldung sehen, obwohl Sie eine Aktion innerhalb GEVER durchgeführt haben, teilen Sie dies bitte dem Support mit (inkl. einem Screenshot dieser Meldung und der untenstehenden URL).
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt
 msgid "msg_verify_you_performed_this_action"
-msgstr "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
+msgstr "Please confirm that you intended to perform this action yourself, and haven't been lead here by clicking a link in an Email or an external web page. This is a safety precaution to avoid so called Cross-Site-Request-Forgery (CSRF) attacks. If you're seeing this message even though you performed an action inside OneGOV GEVER, it's a false-positive and you can safely proceed by confirming your intended action."
 
 #. German translation: Kennen Sie bereits die neue Benutzeroberfläche von OneGov GEVER? Jetzt <a href=\"javascript:switchUI()\">ausprobieren</a>.
 #. Default: "Do you already know the new user interface of OneGov GEVER? <a href=\"javascript:switchUI()\">Try it out</a> now."
 #: ./opengever/base/viewlets/teaser.pt
 msgid "new_frontend_teaser"
-msgstr "Do you already know the new user interface of OneGov GEVER? <a href=\"javascript:switchUI()\">Try it out</a> now."
+msgstr "Have you seen the new OneGov GEVER user interface yet? <a href=\"javascript:switchUI()\">Try it out</a> now."
 
 #. German translation: Nicht archivwürdig
 #. Default ""
@@ -595,13 +601,13 @@ msgstr "not archival worthy"
 #. Default ""
 #: opengever/repository/classification.py
 msgid "privacy_layer_no"
-msgstr "privacy_layer_no"
+msgstr "no"
 
 #. German translation: Ja
 #. Default: ""
 #: opengever/repository/classification.py
 msgid "privacy_layer_yes"
-msgstr ""
+msgstr "yes"
 
 #. German translation: Nicht öffentlich
 #. Default: "private"
@@ -636,7 +642,7 @@ msgstr "Advanced Search"
 #. German translation: Alle anzeigen
 #: ./opengever/base/browser/templates/gever-macros.pt
 msgid "show all"
-msgstr "show all"
+msgstr "Show all"
 
 #. German translation: Zurück zum Portal
 #. Default: "Back to the portal"
@@ -648,7 +654,7 @@ msgstr "Back to the portal"
 #. Default: "Confirming User Action."
 #: ./opengever/base/browser/confirm.pt
 msgid "title_confirming_user_action"
-msgstr "Confirming User Action."
+msgstr "Confirm User Action."
 
 #. German translation: Favoriten
 #. Default: "Favorites"
@@ -679,7 +685,7 @@ msgstr "You are not allowed to see this reference"
 #. Default ""
 #: opengever/repository/classification.py
 msgid "unchecked"
-msgstr "unchecked"
+msgstr "not assessed"
 
 #. German translation: Nicht klassifiziert
 #. Default: "unprotected"

@@ -39,7 +39,7 @@ class TestDispositionOverview(IntegrationTestCase):
             browser.css('.dispositions .date_period').text)
 
         self.assertEquals(
-            ['Public Trial: limited-public', 'Public Trial: unchecked'],
+            ['Public access level: public (with restrictions)', 'Public access level: not assessed'],
             browser.css('.dispositions .public_trial').text)
 
         self.assertEquals(

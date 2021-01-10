@@ -346,7 +346,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
     def test_only_show_dossiertemplates_without_subdossiers(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         self.assertEqual(
             ['Bauvorhaben klein'],
@@ -366,7 +366,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         self.login(self.regular_user, browser=browser)
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         self.assertEqual(
             ['Bauvorhaben gross'],
@@ -377,7 +377,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         self.login(self.regular_user, browser=browser)
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
@@ -399,7 +399,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.dossiertemplate.predefined_keywords = False
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
@@ -416,7 +416,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.dossiertemplate.predefined_keywords = True
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
@@ -441,7 +441,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
@@ -464,7 +464,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
     def test_add_recursive_documents_and_subdossiers(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
         browser.fill({'form.widgets.template': token}).submit()
@@ -497,7 +497,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.subdossiertemplate.__ac_local_roles_block__ = True
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
         browser.fill({'form.widgets.template': token}).submit()
@@ -520,7 +520,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.subdossiertemplate.__ac_local_roles_block__ = False
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
         browser.fill({'form.widgets.template': token}).submit()
@@ -542,7 +542,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
         browser.fill({'form.widgets.template': token}).submit()
@@ -560,7 +560,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
                                   ['Reader', 'Contributor', 'Editor']))
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
         browser.fill({'form.widgets.template': token}).submit()
@@ -591,7 +591,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
             'add-dossier-from-template').form.recursive_content_creation
 
         browser.login().visit(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
         browser.fill({'form.widgets.template': token}).submit()
@@ -610,7 +610,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
@@ -630,7 +630,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.dossiertemplate.title_help = u"This is a help text"
 
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('Dossier with template')
+        factoriesmenu.add('Dossier from template')
 
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')

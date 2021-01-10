@@ -81,7 +81,7 @@ class TestFolderDeleteConfirmation(IntegrationTestCase):
 
         browser.css('form#folder_delete_confirmation').first.submit()
 
-        statusmessages.assert_message('Items successfully deleted.')
+        statusmessages.assert_message('Items deleted successfully.')
         self.assertIn(dossiertemplate_with_backref, self.templates.objectValues())
         with self.assertRaises(KeyError):
             self.dossiertemplate

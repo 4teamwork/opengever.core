@@ -18,7 +18,7 @@ class TestDocumentListing(SolrIntegrationTestCase):
             'Document Author': 'test_user_1_',
             'Document Date': '03.01.2010',
             'File extension': '.docx',
-            'Public Trial': 'unchecked',
+            'Public Trial': 'not assessed',
             'Receipt Date': '03.01.2010',
             'Reference Number': 'Client1 1.1 / 1 / 14',
             'Sequence Number': '14',

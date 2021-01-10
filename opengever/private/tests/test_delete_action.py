@@ -26,7 +26,7 @@ class TestDeleteActionInPrivateFolderTabbedViewsSolr(SolrIntegrationTestCase):
 
         browser.find('Delete').click()
 
-        statusmessages.assert_message(u'Items successfully deleted.')
+        statusmessages.assert_message(u'Items deleted successfully.')
 
         with self.assertRaises(KeyError):
             self.assertIsNone(self.private_dossier)
