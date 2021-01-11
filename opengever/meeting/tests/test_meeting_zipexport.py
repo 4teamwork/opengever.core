@@ -65,6 +65,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 u'checksum': agenda_item_list[0].get('checksum'),
                 u'file': u'Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx',
                 u'modified': u'2017-12-13T00:00:00+01:00',
+                u'title': u'Agendaitem list-9. Sitzung der Rechnungspr\xfcfungskommission',
             },
             agenda_item_list[0])
 
@@ -309,6 +310,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     u'checksum': 'unpredictable',
                     u'file': u'Traktandenliste-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
                     u'modified': u'2017-12-14T00:00:00+01:00',
+                    u'title': u'Traktandenliste-9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich',
                 }],
                 u'start': u'2016-09-12T15:30:00+00:00',
                 u'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich',

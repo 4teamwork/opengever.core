@@ -174,6 +174,7 @@ class MeetingJSONSerializer(MeetingDocumentWithFileTraverser):
             'checksum': IBumblebeeDocument(document).get_checksum(),
             'file': self.zipper.get_filename(document),
             'modified': format_modified(document.modified()),
+            'title': safe_unicode(document.Title())
         }]
 
     def traverse_agenda_item(self, agenda_item):
