@@ -20,8 +20,8 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility
 from zope.component import getAdapter
+from zope.component import getUtility
 from zope.component.hooks import setSite
 import datetime
 import pytz
@@ -238,6 +238,16 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         indexed_value = response.docs[0].get('SearchableText')
         self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 44 44 foo bar',
                       indexed_value)
+
+    def test_removing_document_type_gets_indexed_correctly(self):
+        self.login(self.regular_user)
+        self.assertEqual('contract', solr_data_for(self.document, 'document_type'))
+
+        self.document.document_type = None
+        self.document.reindexObject(idxs=['document_type'])
+        self.commit_solr()
+
+        self.assertIsNone(solr_data_for(self.document, 'document_type'))
 
 
 class TestDefaultDocumentIndexer(MockTestCase):
