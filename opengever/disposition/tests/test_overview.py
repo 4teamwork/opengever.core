@@ -68,7 +68,7 @@ class TestDispositionOverview(IntegrationTestCase):
             ['Archive', "Don't archive"],
             [link.get('title') for link
              in browser.css('.appraisal-button-group').first.css('a')])
-        browser.find('disposition-transition-appraise').click()
+        browser.find('Appraise disposition').click()
 
         browser.open(self.disposition, view='overview')
         self.assertEquals(
@@ -118,8 +118,8 @@ class TestDispositionOverview(IntegrationTestCase):
 
         self.login(self.archivist, browser)
         browser.open(self.disposition, view='overview')
-        self.assertEquals(['disposition-transition-appraise',
-                           'disposition-transition-refuse'],
+        self.assertEquals(['Appraise disposition',
+                           'Refuse'],
                           browser.css('.transitions li').text)
 
         browser.css('.transitions li a').first.click()
@@ -131,7 +131,7 @@ class TestDispositionOverview(IntegrationTestCase):
 
         self.login(self.records_manager, browser)
         browser.open(self.disposition, view='overview')
-        self.assertEquals(['disposition-transition-dispose'],
+        self.assertEquals(['Submit disposition'],
                           browser.css('.transitions li').text)
 
     @browsing
@@ -147,11 +147,11 @@ class TestDispositionOverview(IntegrationTestCase):
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
 
-        browser.find('disposition-transition-appraise').click()
+        browser.find('Appraise disposition').click()
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
 
-        browser.find('disposition-transition-dispose').click()
+        browser.find('Submit disposition').click()
 
         self.assertEquals(['Export appraisal list as excel',
                            'Download disposition package'],
@@ -164,11 +164,11 @@ class TestDispositionOverview(IntegrationTestCase):
             os.path.join(self.disposition.absolute_url(), 'download_excel'),
             browser.find('Export appraisal list as excel').get('href'))
 
-        browser.find('disposition-transition-archive').click()
+        browser.find('Confirm archival').click()
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
 
-        browser.find('disposition-transition-close').click()
+        browser.find('Dispose of dossiers').click()
         self.assertEquals(['Export appraisal list as excel',
                            'Download removal protocol'],
                           browser.css('ul.actions li').text)
@@ -182,11 +182,11 @@ class TestDispositionOverview(IntegrationTestCase):
         browser.open(self.disposition, view='overview')
 
         self.assertEquals(
-            ['disposition-state-in-progress',
-             'disposition-state-appraised',
-             'disposition-state-disposed',
-             'disposition-state-archived',
-             'disposition-state-closed'],
+            ['In progress',
+             'Appraised',
+             'Submitted',
+             'Archived',
+             'Closed'],
             browser.css('.wizard_steps li').text)
 
     @browsing
@@ -195,7 +195,7 @@ class TestDispositionOverview(IntegrationTestCase):
         browser.open(self.disposition, view='overview')
 
         self.assertEquals(
-            ['disposition-state-in-progress'],
+            ['In progress'],
             browser.css('.wizard_steps li.selected').text)
 
     @browsing

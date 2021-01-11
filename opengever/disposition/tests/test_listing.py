@@ -53,19 +53,19 @@ class TestDispositionListing(SolrIntegrationTestCase):
         browser.open(self.repository_root, view='tabbedview_view-dispositions')
         self.assertEquals(
             [{'': '',
-              'Review state': 'disposition-state-appraised',
+              'Review state': 'Appraised',
               'Sequence Number': '3',
               'Title': 'Angebot FD 1.2.2003'},
              {'': '',
-              'Review state': 'disposition-state-disposed',
+              'Review state': 'Submitted',
               'Sequence Number': '4',
               'Title': 'Angebot FD 1.2.1995'},
              {'': '',
-              'Review state': 'disposition-state-in-progress',
+              'Review state': 'In progress',
               'Sequence Number': '1',
               'Title': 'Angebot 31.8.2016'},
              {'': '',
-              'Review state': 'disposition-state-disposed',
+              'Review state': 'Submitted',
               'Sequence Number': '2',
               'Title': 'Angebot 30.12.1997'}],
             browser.css('.listing').first.dicts())
@@ -185,9 +185,9 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
                                      self.disposition.get_history())
 
         expected_rows = [
-            ['Nov 16, 2016 08:12 AM', 'Flucht Ramon (ramon.flucht)', 'disposition-transition-archive'],
-            ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'disposition-transition-dispose'],
-            ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'disposition-transition-appraise'],
+            ['Nov 16, 2016 08:12 AM', 'Flucht Ramon (ramon.flucht)', 'Confirm archival'],
+            ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'Submit disposition'],
+            ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'Appraise disposition'],
             ['Nov 01, 2016 11:00 AM', 'Flucht Ramon (ramon.flucht)', 'Disposition edited'],
             ['Aug 31, 2016 07:07 PM', 'Flucht Ramon (ramon.flucht)', 'Disposition added']]
 

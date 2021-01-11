@@ -59,7 +59,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         self.assertEquals(
             u'Appraisal finalized by {}'.format(actor.get_link()),
             activity.summary)
-        self.assertEquals(u'disposition-transition-appraise', activity.label)
+        self.assertEquals(u'Appraise disposition', activity.label)
         self.assertIsNone(activity.description)
 
     def test_dispose_activity_is_recorded(self):
@@ -78,7 +78,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         self.assertEquals(
             u'Disposition disposed for the archive by {}'.format(actor.get_link()),
             activity.summary)
-        self.assertEquals(u'disposition-transition-dispose', activity.label)
+        self.assertEquals(u'Submit disposition', activity.label)
         self.assertIsNone(activity.description)
 
     def test_appraised_to_close_activity_is_recorded(self):
@@ -98,7 +98,7 @@ class TestDispositionNotifications(IntegrationTestCase):
             u'Disposition closed and all dossiers destroyed by {}'.format(
                 actor.get_link()),
             activity.summary)
-        self.assertEquals(u'disposition-transition-appraised-to-closed', activity.label)
+        self.assertEquals(u'Dispose of dossiers', activity.label)
         self.assertIsNone(activity.description)
 
     def test_archive_activity_is_recorded(self):
@@ -114,7 +114,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         self.assertEquals(
             u'The archiving confirmed by {}'.format(actor.get_link()),
             activity.summary)
-        self.assertEquals(u'disposition-transition-archive', activity.label)
+        self.assertEquals(u'Confirm archival', activity.label)
         self.assertIsNone(activity.description)
 
     def test_close_activity_is_recorded(self):
@@ -130,7 +130,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         self.assertEquals(
             u'Disposition closed and all dossiers '
             'destroyed by {}'.format(actor.get_link()), activity.summary)
-        self.assertEquals(u'disposition-transition-close', activity.label)
+        self.assertEquals(u'Dispose of dossiers', activity.label)
         self.assertIsNone(activity.description)
 
     def test_refuse_activity_is_recorded(self):
@@ -146,5 +146,5 @@ class TestDispositionNotifications(IntegrationTestCase):
         self.assertEquals(
             u'Disposition refused by {}'.format(actor.get_link()),
             activity.summary)
-        self.assertEquals(u'disposition-transition-refuse', activity.label)
+        self.assertEquals(u'Refuse', activity.label)
         self.assertIsNone(activity.description)

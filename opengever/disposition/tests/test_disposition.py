@@ -259,7 +259,7 @@ class TestDispositionEditForm(IntegrationTestCase):
         self.set_workflow_state('disposition-state-appraised', self.disposition)
 
         browser.open(self.disposition, view='overview')
-        browser.click_on('disposition-transition-dispose')
+        browser.click_on('Submit disposition')
 
         self.assertEquals(['Item state changed.'], info_messages())
         self.assertTrue(self.disposition.has_sip_package())
@@ -276,15 +276,15 @@ class TestDispositionEditForm(IntegrationTestCase):
         self.set_workflow_state('disposition-state-appraised', self.disposition)
         browser.open(self.disposition, view='overview')
 
-        browser.click_on('disposition-transition-dispose')
+        browser.click_on('Submit disposition')
         self.assertTrue(self.disposition.has_sip_package())
 
         with self.login(self.archivist, browser=browser):
             browser.open(self.disposition, view='overview')
-            browser.click_on('disposition-transition-archive')
+            browser.click_on('Confirm archival')
 
         browser.open(self.disposition, view='overview')
-        browser.click_on('disposition-transition-close')
+        browser.click_on('Dispose of dossiers')
 
         self.assertEquals(['Item state changed.'], info_messages())
         self.assertFalse(self.disposition.has_sip_package())
@@ -312,7 +312,7 @@ class TestDispositionDelivery(IntegrationTestCase):
         self.assertEqual({}, scheduler.get_statuses())
 
         browser.open(self.disposition, view='overview')
-        browser.click_on('disposition-transition-dispose')
+        browser.click_on('Submit disposition')
 
         self.assertTrue(scheduler.is_scheduled_for_delivery())
         self.assertEqual({u'filesystem': STATUS_SCHEDULED},
@@ -330,7 +330,7 @@ class TestDispositionDelivery(IntegrationTestCase):
         self.enable_filesystem_transport()
 
         browser.open(self.disposition, view='overview')
-        browser.click_on('disposition-transition-dispose')
+        browser.click_on('Submit disposition')
 
         tbl_delivery_status = browser.css('#delivery-status').first
         self.assertEqual(
@@ -347,7 +347,7 @@ class TestDispositionDelivery(IntegrationTestCase):
         self.enable_filesystem_transport()
 
         browser.open(self.disposition, view='overview')
-        browser.click_on('disposition-transition-dispose')
+        browser.click_on('Submit disposition')
 
         tbl_delivery_status = browser.css('#delivery-status').first
         self.assertEqual(

@@ -179,47 +179,47 @@ msgstr "date (newest first)"
 
 #. German translation: Bewertet
 msgid "disposition-state-appraised"
-msgstr "disposition-state-appraised"
+msgstr "Appraised"
 
 #. German translation: Archiviert
 msgid "disposition-state-archived"
-msgstr "disposition-state-archived"
+msgstr "Archived"
 
 #. German translation: Abgeschlossen
 msgid "disposition-state-closed"
-msgstr "disposition-state-closed"
+msgstr "Closed"
 
 #. German translation: In Ablieferung
 msgid "disposition-state-disposed"
-msgstr "disposition-state-disposed"
+msgstr "Submitted"
 
 #. German translation: In Bearbeitung
 msgid "disposition-state-in-progress"
-msgstr "disposition-state-in-progress"
+msgstr "In progress"
 
 #. German translation: Bewertung finalisieren
 msgid "disposition-transition-appraise"
-msgstr "disposition-transition-appraise"
+msgstr "Appraise disposition"
 
 #. German translation: Dossiers aussondern
 msgid "disposition-transition-appraised-to-closed"
-msgstr "disposition-transition-appraised-to-closed"
+msgstr "Dispose of dossiers"
 
 #. German translation: Archivierung bestätigen
 msgid "disposition-transition-archive"
-msgstr "disposition-transition-archive"
+msgstr "Confirm archival"
 
 #. German translation: Dossiers aussondern
 msgid "disposition-transition-close"
-msgstr "disposition-transition-close"
+msgstr "Dispose of dossiers"
 
 #. German translation: Abliefern
 msgid "disposition-transition-dispose"
-msgstr "disposition-transition-dispose"
+msgstr "Submit disposition"
 
 #. German translation: Ablehnen
 msgid "disposition-transition-refuse"
-msgstr "disposition-transition-refuse"
+msgstr "Refuse"
 
 #. German translation: nicht definiert
 msgid "document-state-draft"
