@@ -197,41 +197,6 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             },
             browser.json,
         )
-        storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
-
-    @browsing
-    def test_property_sheet_schema_definition_post_requires_unique_assignment(
-        self, browser
-    ):
-        self.login(self.manager, browser)
-        storage = PropertySheetSchemaStorage()
-        fixture = PropertySheetSchemaDefinition.create(
-            "fixture",
-            assignments=[u"IDocumentMetadata.document_type.question"]
-        )
-        storage.save(fixture)
-
-        data = {
-            "fields": {"foo": {"field_type": "bool"}},
-            "assignments": [u"IDocumentMetadata.document_type.question"],
-        }
-        with browser.expect_http_error(400):
-            browser.open(
-                view="@propertysheets/invalidassignment",
-                method="POST",
-                data=json.dumps(data),
-                headers=self.api_headers,
-            )
-
-        self.assertDictContainsSubset(
-            {
-                u"message": u"The assignment 'IDocumentMetadata.document_type."
-                            "question' is already in use.",
-                "type": "BadRequest",
-            },
-            browser.json,
-        )
         self.assertEqual(1, len(storage.list()))
 
     @browsing
