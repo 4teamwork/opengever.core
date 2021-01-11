@@ -13,7 +13,8 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
 
     def test_save_schema_definition(self):
         definition = PropertySheetSchemaDefinition.create(
-            "myschema", assignments=["qux", "foo.bar"]
+            "myschema",
+            assignments=[u"IDocumentMetadata.document_type.question"]
         )
         definition.add_field("bool", u"yesorno", u"y/n", u"", False)
 
@@ -35,7 +36,8 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
             serialized["myschema"]["assignments"], PersistentList
         )
         self.assertEqual(
-            ["qux", "foo.bar"], serialized["myschema"]["assignments"]
+            [u"IDocumentMetadata.document_type.question"],
+            serialized["myschema"]["assignments"]
         )
         deserialized = loadString(serialized["myschema"]["schema"])
         self.assertIn("myschema", deserialized.schemata)
@@ -74,32 +76,67 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
     def test_prevents_duplicate_assignments(self):
         storage = PropertySheetSchemaStorage()
         fixture = PropertySheetSchemaDefinition.create(
-            "fixture", assignments=['foo', 'bar', 'qux']
+            "fixture",
+            assignments=[
+                u"IDocumentMetadata.document_type.offer",
+                u"IDocumentMetadata.document_type.report"
+            ]
         )
         storage.save(fixture)
 
         conflict = PropertySheetSchemaDefinition.create(
-            "conflict", assignments=[u'foo']
+            "conflict", assignments=[u"IDocumentMetadata.document_type.report"]
         )
         with self.assertRaises(InvalidSchemaAssignment) as cm:
             storage.save(conflict)
 
         exc = cm.exception
         self.assertEqual(
-            u"The assignment 'foo' is already in use.", exc.message
+            u"The assignment 'IDocumentMetadata.document_type.report' "
+            "is already in use.",
+            exc.message
         )
 
     def test_query_for_schema_by_assignment(self):
         storage = PropertySheetSchemaStorage()
         fixture = PropertySheetSchemaDefinition.create(
-            "fixture", assignments=["foo", "bar"]
+            "fixture",
+            assignments=[
+                u"IDocumentMetadata.document_type.question",
+                u"IDocumentMetadata.document_type.report"
+            ]
         )
         storage.save(fixture)
 
-        schema = storage.query("bar")
+        schema = storage.query(u"IDocumentMetadata.document_type.report")
         self.assertIsNotNone(schema)
         self.assertEqual("fixture", schema.name)
 
     def test_query_for_nonexistent_assignment(self):
         storage = PropertySheetSchemaStorage()
         self.assertIsNone(storage.query("foo"))
+
+    def test_remove_nonexistent_sheet(self):
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual([], storage.list())
+        storage.remove("nix")
+        self.assertEqual([], storage.list())
+
+    def test_remove_sheet(self):
+        storage = PropertySheetSchemaStorage()
+        fixture = PropertySheetSchemaDefinition.create("removeme")
+        storage.save(fixture)
+        self.assertEqual(1, len(storage.list()))
+
+        storage.remove("removeme")
+
+        self.assertEqual([], storage.list())
+
+    def test_containment(self):
+        storage = PropertySheetSchemaStorage()
+        fixture = PropertySheetSchemaDefinition.create("imin")
+        storage.save(fixture)
+
+        self.assertIn('imin', storage)
+        self.assertNotIn(None, storage)
+        self.assertNotIn('foo', storage)

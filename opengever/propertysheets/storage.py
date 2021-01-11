@@ -15,6 +15,12 @@ class PropertySheetSchemaStorage(object):
     def __init__(self):
         self.context = api.portal.get()
 
+    def __contains__(self, name):
+        annotations = IAnnotations(self.context)
+        storage = annotations.get(self.ANNOTATIONS_KEY, {})
+
+        return name in storage
+
     def list(self):
         annotations = IAnnotations(self.context)
 
@@ -62,3 +68,8 @@ class PropertySheetSchemaStorage(object):
                 return self.get(name)
 
         return None
+
+    def remove(self, name):
+        annotations = IAnnotations(self.context)
+        storage = annotations.get(self.ANNOTATIONS_KEY, {})
+        storage.pop(name, None)

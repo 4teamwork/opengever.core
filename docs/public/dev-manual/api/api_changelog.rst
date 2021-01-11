@@ -16,7 +16,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
-- No changes yet
+- A new endpoint ``@propertysheets`` is added (see :ref:`docs <propertysheets>`).
 
 
 2021.1.0 (2021-01-06)

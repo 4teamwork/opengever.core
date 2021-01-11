@@ -7,9 +7,16 @@
     xmlns:z3c="http://namespaces.zope.org/z3c"
     i18n_domain="opengever.propertysheets">
 
+  <include package=".api" />
+
   <utility
       factory=".schemapolicy.PropertySheetSchemaPolicy"
       name="propertysheets"
+      />
+
+  <utility
+      factory=".assignment.PropertySheetAssignmentVocabulary"
+      name="opengever.propertysheets.PropertySheetAssignmentsVocabulary"
       />
 
 </configure>

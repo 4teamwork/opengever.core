@@ -1,12 +1,19 @@
+from opengever.base.filename import filenamenormalizer
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
+from opengever.propertysheets.exceptions import InvalidSchemaAssignment
+from opengever.propertysheets.schema import get_property_sheet_schema
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
+from plone.restapi.serializer.converters import IJsonCompatible
 from plone.schemaeditor import fields
 from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
 import keyword
 import re
 import tokenize
@@ -14,6 +21,10 @@ import tokenize
 
 def isidentifier(val):
     return re.match(tokenize.Name + r'\Z', val) and not keyword.iskeyword(val)
+
+
+def ascii_token(text):
+    return filenamenormalizer.normalize(text)
 
 
 class PropertySheetSchemaDefinition(object):
@@ -37,6 +48,7 @@ class PropertySheetSchemaDefinition(object):
 
         class SchemaClass(model.Schema):
             pass
+        SchemaClass.__name__ = name
 
         return cls(name, SchemaClass, assignments=assignments)
 
@@ -45,9 +57,31 @@ class PropertySheetSchemaDefinition(object):
         self.schema_class = schema_class
         if assignments is None:
             assignments = tuple()
-        else:
-            assignments = tuple(assignments)
         self.assignments = assignments
+
+    @property
+    def assignments(self):
+        return self._assignments
+
+    @assignments.setter
+    def assignments(self, values):
+        vocabulary_factory = getUtility(
+            IVocabularyFactory,
+            name="opengever.propertysheets.PropertySheetAssignmentsVocabulary"
+        )
+        vocabulary = vocabulary_factory(None)
+
+        assignments = []
+        for token in values:
+            try:
+                term = vocabulary.getTermByToken(token)
+                assignments.append(term.value)
+            except LookupError:
+                raise InvalidSchemaAssignment(
+                    "The assignment '{}' is invalid.".format(token)
+                )
+
+        self._assignments = tuple(assignments)
 
     def add_field(self, field_type, name, title, description, required, values=None):
         if field_type not in self.FACTORIES:
@@ -71,7 +105,14 @@ class PropertySheetSchemaDefinition(object):
                 raise InvalidFieldTypeDefinition(
                     "For 'choice' fields types values are required."
                 )
-            properties['values'] = values
+            terms = [SimpleVocabulary.createTerm(item, ascii_token(item), item)
+                     for item in values]
+            properties['vocabulary'] = SimpleVocabulary(terms)
+            # The field factory injects an empty list as values argument if it
+            # is not set. This will lead to a conflict with the vocabylary we
+            # provide here. We prevent this error by actively setting the
+            # values argument to None.
+            properties['values'] = None
         elif values:
             raise InvalidFieldTypeDefinition(
                 "The argument 'values' is only valid for 'choice' fields."
@@ -80,6 +121,11 @@ class PropertySheetSchemaDefinition(object):
         field = factory(**properties)
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
+
+    def get_json_schema(self):
+        schema_info = get_property_sheet_schema(self.schema_class)
+        schema_info["assignments"] = IJsonCompatible(self.assignments)
+        return schema_info
 
     def _save(self, storage):
         serialized_schema = serializeSchema(self.schema_class, name=self.name)

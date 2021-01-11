@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.propertysheets">
+
+  <include package="plone.rest" file="meta.zcml" />
+  <include package="plone.restapi" file="permissions.zcml" />
+
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".get.PropertySheetsGet"
+      name="@propertysheets"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".post.PropertySheetsPost"
+      name="@propertysheets"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="cmf.ManagePortal"
+      />
+
+  <plone:service
+      method="DELETE"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".delete.PropertySheetsDelete"
+      name="@propertysheets"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="cmf.ManagePortal"
+      />
+
+</configure>
