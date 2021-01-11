@@ -250,11 +250,10 @@ class TestNotificationSettingsGet(IntegrationTestCase):
         self.assertEqual({
             u'@id': u'http://nohost/plone/@notification-settings/general/notify_inbox_actions',
             u'group': u'general',
-            u'help_text': u'Activate, respectively deactivate, all notifications due to your '
-            u'inbox permissions.',
+            u'help_text': u'Enabled or disable, respectively, all notifications based on your inbox permissions.',
             u'id': u'notify_inbox_actions',
             u'personal': False,
-            u'title': u'Enable notifications for inbox actions',
+            u'title': u'Enable notifications for inbox activities',
             u'value': True
         }, browser.json['general']['items'][-1])
 
@@ -309,10 +308,10 @@ class TestNotificationSettingsGet(IntegrationTestCase):
                 u'items': [{
                     u'@id': u'http://nohost/plone/@notification-settings/general/notify_own_actions',
                     u'group': u'general',
-                    u'help_text': u"By default no notifications are emitted for a users'own "
+                    u'help_text': u"By default no notifications are emitted for a user's own "
                                   u"actions. This option allows to modify this behavior. "
-                                  u"Notwithstanding this configuration, user notification settings "
-                                  u"for each action type will get applied anyway.",
+                                  u"Irrespective of this setting, individual settings for specific "
+                                  u"action types will still get applied.",
                     u'id': u'notify_own_actions',
                     u'personal': False,
                     u'title': u'Enable notifications for own actions',
