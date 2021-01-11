@@ -55,17 +55,18 @@ class TestMeetingZipExportView(IntegrationTestCase):
         meeting_json = json.loads(zip_file.open('meeting.json').read())
         meeting = meeting_json.get('meetings')[0]
 
-        self.assertIn('agenda_item_list', meeting)
+        self.assertIn('documents', meeting)
 
-        agenda_item_list = meeting.get('agenda_item_list')
+        agenda_item_list = meeting.get('documents')
 
+        self.assertEqual(1, len(agenda_item_list))
         self.assertDictEqual(
             {
-                u'checksum': agenda_item_list.get('checksum'),
+                u'checksum': agenda_item_list[0].get('checksum'),
                 u'file': u'Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx',
                 u'modified': u'2017-12-13T00:00:00+01:00',
             },
-            agenda_item_list)
+            agenda_item_list[0])
 
     @browsing
     def test_zip_export_agenda_items_attachments(self, browser):
@@ -258,7 +259,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         # the protocol and agenda_item_list are generated during the tests and
         # their checksums cannot be predicted
         meeting_json['meetings'][0]['protocol']['checksum'] = 'unpredictable'
-        meeting_json['meetings'][0]['agenda_item_list']['checksum'] = 'unpredictable'
+        meeting_json['meetings'][0]['documents'][0]['checksum'] = 'unpredictable'
         meeting_json['meetings'][0].pop('opengever_id')
         for agenda_item in meeting_json['meetings'][0]['agenda_items']:
             agenda_item.pop('opengever_id')
@@ -304,11 +305,11 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     u'file': u'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
                     u'modified': u'2017-12-14T00:00:00+01:00',
                 },
-                u'agenda_item_list': {
+                u'documents': [{
                     u'checksum': 'unpredictable',
                     u'file': u'Traktandenliste-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
                     u'modified': u'2017-12-14T00:00:00+01:00',
-                },
+                }],
                 u'start': u'2016-09-12T15:30:00+00:00',
                 u'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich',
             }],
