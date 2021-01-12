@@ -391,23 +391,23 @@ msgstr "Submit"
 
 #. German translation: aktiv
 msgid "repositoryfolder-state-active"
-msgstr "repositoryfolder-state-active"
+msgstr "Active"
 
 #. German translation: inaktiv
 msgid "repositoryfolder-state-inactive"
-msgstr "repositoryfolder-state-inactive"
+msgstr "Inactive"
 
 #. German translation: aktivieren
 msgid "repositoryfolder-transition-activate"
-msgstr "repositoryfolder-transition-activate"
+msgstr "Activate"
 
 #. German translation: deaktivieren
 msgid "repositoryfolder-transition-inactivate"
-msgstr "repositoryfolder-transition-inactivate"
+msgstr "Deactivate"
 
 #. German translation: Anhänge speichern
 msgid "save attachments"
-msgstr "save attachments"
+msgstr "Save attachments"
 
 #. German translation: Aufgabe hinzugefügt.
 msgid "task-added"
