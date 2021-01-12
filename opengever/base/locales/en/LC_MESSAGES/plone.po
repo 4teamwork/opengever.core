@@ -223,39 +223,39 @@ msgstr "Refuse"
 
 #. German translation: nicht definiert
 msgid "document-state-draft"
-msgstr "document-state-draft"
+msgstr "undefined"
 
 #. German translation: Hängig
 msgid "document-state-pending"
-msgstr "document-state-pending"
+msgstr "Pending"
 
 #. German translation: Gelöscht
 msgid "document-state-removed"
-msgstr "document-state-removed"
+msgstr "Removed"
 
 #. German translation: Arbeitskopie
 msgid "document-state-working_copy"
-msgstr "document-state-working_copy"
+msgstr "Working copy"
 
 #. German translation: Löschen
 msgid "document-transition-remove"
-msgstr "document-transition-remove"
+msgstr "Remove"
 
 #. German translation: Wiederherstellen
 msgid "document-transition-restore"
-msgstr "document-transition-restore"
+msgstr "Restore"
 
 #. German translation: Dokument aus officeatwork
 msgid "document_from_officeatwork"
-msgstr "document_from_officeatwork"
+msgstr "Document from officeatwork"
 
 #. German translation: Dokument aus OneOffixx Vorlage
 msgid "document_with_oneoffixx_template"
-msgstr "document_with_oneoffixx_template"
+msgstr "Document from OneOffixx template"
 
 #. German translation: Dokument aus Vorlage
 msgid "document_with_template"
-msgstr "document_with_template"
+msgstr "Document from template"
 
 #. German translation: In Bearbeitung
 msgid "dossier-state-active"

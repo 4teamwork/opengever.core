@@ -66,7 +66,7 @@ class TestWorkflowPost(IntegrationTestCase):
             method='POST', headers=self.api_headers)
 
         self.assertDictContainsSubset(
-            {u'title': u'document-state-removed',
+            {u'title': u'Removed',
              u'actor': u'kathi.barfuss',
              u'action': u'document-transition-remove',
              u'review_state': u'document-state-removed'},

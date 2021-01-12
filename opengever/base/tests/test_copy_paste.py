@@ -293,7 +293,7 @@ class TestCopyPaste(IntegrationTestCase):
         expected_actions = [
             u'Add new\u2026 \u25bc',
             'Document',
-            'document_with_template',
+            'Document from template',
             'Task',
             'Add task from template',
             'Subdossier',

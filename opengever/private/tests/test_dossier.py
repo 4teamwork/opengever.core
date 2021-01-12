@@ -143,7 +143,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
 
         self.assertEquals(
             ['Document',
-             'document_with_template',
+             'Document from template',
              'Subdossier'],
             factoriesmenu.addable_types())
 
