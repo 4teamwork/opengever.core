@@ -148,9 +148,9 @@ class TestPrivateFolderTabbedViewSolr(SolrIntegrationTestCase):
             [['', 'Reference Number', 'Title',
               'Review state', 'Responsible', 'Start', 'End', 'Keywords'],
              ['', 'P Client1 kathi-barfuss / 2', 'Mein Dossier 2',
-              'dossier-state-active', '', '31.08.2016', '', ''],
+              'Active', '', '31.08.2016', '', ''],
              ['', 'P Client1 kathi-barfuss / 1', 'Mein Dossier 1',
-              'dossier-state-active', '', '31.08.2016', '', '']],
+              'Active', '', '31.08.2016', '', '']],
             browser.css('.listing').first.lists())
 
     @browsing

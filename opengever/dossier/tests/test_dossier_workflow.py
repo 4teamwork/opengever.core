@@ -35,7 +35,7 @@ class TestDossierWorkflow(IntegrationTestCase):
         self.login(self.dossier_manager, browser)
         browser.visit(self.dossier)
         expected = ['Cover (PDF)', 'Export as Zip', 'Print details (PDF)',
-                    'Properties', 'dossier-transition-deactivate']
+                    'Properties', 'Deactivate']
         self.assertItemsEqual(expected, self.get_action_menu_content())
 
     @browsing
@@ -43,6 +43,6 @@ class TestDossierWorkflow(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.visit(self.dossier)
         expected = ['Cover (PDF)', 'Export as Zip', 'Print details (PDF)',
-                    'Properties', 'Sharing', 'dossier-transition-deactivate',
-                    'dossier-transition-resolve', 'Policy...']
+                    'Properties', 'Sharing', 'Deactivate',
+                    'Resolve', 'Policy...']
         self.assertItemsEqual(expected, self.get_action_menu_content())

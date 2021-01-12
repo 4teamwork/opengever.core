@@ -168,7 +168,7 @@ class TestDossierTouched(IntegrationTestCase):
 
         with freeze(datetime(2020, 6, 12)):
             browser.open(self.subdossier)
-            browser.click_on("dossier-transition-resolve")
+            browser.click_on("Resolve")
             self.assert_workflow_state('dossier-state-resolved', self.subdossier)
             self.assertEqual("2020-06-12", str(IDossier(self.dossier).touched))
             self.assertEqual("2020-06-12", str(IDossier(self.subdossier).touched))

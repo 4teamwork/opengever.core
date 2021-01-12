@@ -43,7 +43,7 @@ class TestRetentionExpirationDate(FunctionalTestCase):
             transaction.commit()
 
             browser.login().open(self.dossier)
-            browser.find('dossier-transition-resolve').click()
+            browser.find('Resolve').click()
             self.assertEqual(date(2036, 1, 1),
                              self.dossier.get_retention_expiration_date())
             self.assertEqual(date(2036, 1, 1),
@@ -60,7 +60,7 @@ class TestRetentionExpirationDate(FunctionalTestCase):
         former_indexed_value = index_data_for(self.dossier).get('retention_expiration')
 
         browser.login().open(self.dossier)
-        browser.find('dossier-transition-resolve').click()
+        browser.find('Resolve').click()
 
         self.assertNotEqual(
             former_indexed_value,

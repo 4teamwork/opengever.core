@@ -33,7 +33,7 @@ class TestDossierReporter(IntegrationTestCase):
              datetime(2016, 1, 1),
              None,
              u'Ziegler Robert (robert.ziegler)',
-             u'dossier-state-active',
+             u'Active',
              u'Client1 1.1 / 1'],
             [cell.value for cell in rows[1]])
 
@@ -42,7 +42,7 @@ class TestDossierReporter(IntegrationTestCase):
              datetime(2016, 1, 1, 0, 0),
              datetime(2016, 12, 31, 0, 0),
              u'Ziegler Robert (robert.ziegler)',
-             u'dossier-state-inactive',
+             u'Inactive',
              u'Client1 1.1 / 3'],
             [cell.value for cell in rows[2]])
 
@@ -67,7 +67,7 @@ class TestDossierReporter(IntegrationTestCase):
              datetime(2016, 1, 1),
              None,
              u'Ziegler Robert (robert.ziegler)',
-             u'dossier-state-active',
+             u'Active',
              u'Client1 1.1 / 1'],
             [cell.value for cell in rows[1]])
 
@@ -76,7 +76,7 @@ class TestDossierReporter(IntegrationTestCase):
              datetime(2016, 1, 1, 0, 0),
              datetime(2016, 12, 31, 0, 0),
              u'Ziegler Robert (robert.ziegler)',
-             u'dossier-state-inactive',
+             u'Inactive',
              u'Client1 1.1 / 3'],
             [cell.value for cell in rows[2]])
 
@@ -148,7 +148,7 @@ class TestDossierReporter(IntegrationTestCase):
              2012,
              1,
              u'Client1-Leitung-2012-1',
-             u'dossier-state-active',
+             u'Active',
              u'Client1 1.1 / 1'],
             [cell.value for cell in list(workbook.active.rows)[1]])
 

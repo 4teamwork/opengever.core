@@ -40,7 +40,7 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
         self.assert_state('dossier-state-resolved', self.resolvable_dossier)
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            {u'title': u'dossier-state-resolved',
+            {u'title': u'Resolved',
              u'comments': u'',
              u'actor': u'jurgen.konig',
              u'time': u'2018-04-29T22:00:00+00:00',
@@ -63,7 +63,7 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
         self.assert_state('dossier-state-active', self.resolvable_dossier)
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            {u'title': u'dossier-state-active',
+            {u'title': u'Active',
              u'comments': u'',
              u'actor': u'jurgen.konig',
              u'time': u'2018-04-29T22:00:00+00:00',
@@ -83,7 +83,7 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
         self.assert_state('dossier-state-inactive', self.resolvable_dossier)
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            {u'title': u'dossier-state-inactive',
+            {u'title': u'Inactive',
              u'comments': u'',
              u'actor': u'jurgen.konig',
              u'time': u'2018-04-29T22:00:00+00:00',
@@ -103,7 +103,7 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
         self.assert_state('dossier-state-active', self.inactive_dossier)
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            {u'title': u'dossier-state-active',
+            {u'title': u'Active',
              u'comments': u'',
              u'actor': u'jurgen.konig',
              u'time': u'2018-04-29T22:00:00+00:00',

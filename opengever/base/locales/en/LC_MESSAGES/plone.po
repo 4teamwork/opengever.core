@@ -259,43 +259,43 @@ msgstr "Document from template"
 
 #. German translation: In Bearbeitung
 msgid "dossier-state-active"
-msgstr "dossier-state-active"
+msgstr "Active"
 
 #. German translation: Archiviert
 msgid "dossier-state-archived"
-msgstr "dossier-state-archived"
+msgstr "Archived"
 
 #. German translation: Storniert
 msgid "dossier-state-inactive"
-msgstr "dossier-state-inactive"
+msgstr "Inactive"
 
 #. German translation: Angeboten
 msgid "dossier-state-offered"
-msgstr "dossier-state-offered"
+msgstr "Offered"
 
 #. German translation: Abgeschlossen
 msgid "dossier-state-resolved"
-msgstr "dossier-state-resolved"
+msgstr "Resolved"
 
 #. German translation: Aktivieren
 msgid "dossier-transition-activate"
-msgstr "dossier-transition-activate"
+msgstr "Activate"
 
 #. German translation: Archivierung bestätigen
 msgid "dossier-transition-archive"
-msgstr "dossier-transition-archive"
+msgstr "Confirm archival"
 
 #. German translation: Stornieren
 msgid "dossier-transition-deactivate"
-msgstr "dossier-transition-deactivate"
+msgstr "Deactivate"
 
 #. German translation: Wieder öffnen
 msgid "dossier-transition-reactivate"
-msgstr "dossier-transition-reactivate"
+msgstr "Reactivate"
 
 #. German translation: Abschliessen
 msgid "dossier-transition-resolve"
-msgstr "dossier-transition-resolve"
+msgstr "Resolve"
 
 #. German translation: Abgeschlossen
 msgid "forwarding-state-closed"

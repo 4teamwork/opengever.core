@@ -138,7 +138,7 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
         self.assertEquals(expected_url, browser.url)
         self.assertDictContainsSubset(
-            {u'title': u'dossier-state-resolved',
+            {u'title': u'Resolved',
              u'comments': u'',
              u'actor': api.user.get_current().getId(),
              u'action': u'dossier-transition-resolve',
@@ -1691,7 +1691,7 @@ class TestResolveLocking(TestBylineBase, ResolveTestHelper):
         browser.open(self.empty_dossier)
 
         wfstate = self.get_byline_value_by_label('State:').text
-        self.assertEqual('dossier-state-active (currently being resolved)', wfstate)
+        self.assertEqual('Active (currently being resolved)', wfstate)
 
     @browsing
     def test_expired_resolve_lock_is_recognized(self, browser):

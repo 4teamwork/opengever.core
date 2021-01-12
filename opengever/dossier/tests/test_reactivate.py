@@ -146,7 +146,7 @@ class TestReactivatingRESTAPI(TestReactivating):
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-reactivate'
         self.assertEquals(expected_url, browser.url)
         self.assertDictContainsSubset(
-            {u'title': u'dossier-state-active',
+            {u'title': u'Active',
              u'comments': u'',
              u'actor': api.user.get_current().getId(),
              u'action': u'dossier-transition-reactivate',
