@@ -90,7 +90,7 @@ class TestAssignForwarding(FunctionalTestCase):
 
     def assign_forwarding(self, new_client, response, browser=default_browser):
         browser.login().open(self.forwarding)
-        browser.click_on('forwarding-transition-reassign-refused')
+        browser.click_on('Forward')
         browser.fill({'Response': 'Fake response'})
 
         form = browser.find_form_by_field('Responsible')

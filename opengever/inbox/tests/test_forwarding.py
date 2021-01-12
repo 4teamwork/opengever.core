@@ -162,7 +162,7 @@ class TestForwarding(IntegrationTestCase):
     def test_forwarding_can_reassigned_to_a_team(self, browser):
         self.login(self.secretariat_user, browser=browser)
         browser.open(self.inbox_forwarding)
-        browser.click_on('forwarding-transition-reassign')
+        browser.click_on('Reassign')
 
         # Fill responsible manually
         form = browser.find_form_by_field('Responsible')

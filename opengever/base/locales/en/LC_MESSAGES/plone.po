@@ -299,43 +299,43 @@ msgstr "Resolve"
 
 #. German translation: Abgeschlossen
 msgid "forwarding-state-closed"
-msgstr "forwarding-state-closed"
+msgstr "Closed"
 
 #. German translation: Offen
 msgid "forwarding-state-open"
-msgstr "forwarding-state-open"
+msgstr "Open"
 
 #. German translation: Abgelehnt
 msgid "forwarding-state-refused"
-msgstr "forwarding-state-refused"
+msgstr "Refused"
 
 #. German translation: Akzeptieren
 msgid "forwarding-transition-accept"
-msgstr "forwarding-transition-accept"
+msgstr "Accept"
 
 #. German translation: Einem Dossier zuweisen
 msgid "forwarding-transition-assign-to-dossier"
-msgstr "forwarding-transition-assign-to-dossier"
+msgstr "Assign to dossier"
 
 #. German translation: Abschliessen
 msgid "forwarding-transition-close"
-msgstr "forwarding-transition-close"
+msgstr "Close"
 
 #. German translation: Neu zuweisen
 msgid "forwarding-transition-reassign"
-msgstr "forwarding-transition-reassign"
+msgstr "Reassign"
 
 #. German translation: Weiterleiten
 msgid "forwarding-transition-reassign-refused"
-msgstr "forwarding-transition-reassign-refused"
+msgstr "Forward"
 
 #. German translation: Ablehnen
 msgid "forwarding-transition-refuse"
-msgstr "forwarding-transition-refuse"
+msgstr "Refuse"
 
 #. German translation: Offen
 msgid "inbox-state-default"
-msgstr "inbox-state-default"
+msgstr "Open"
 
 #. German translation: Weitere Aktionen
 msgid "label_actions_menu"
