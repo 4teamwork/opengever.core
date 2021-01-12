@@ -181,7 +181,7 @@ class TestDossierTouched(IntegrationTestCase):
 
         with freeze(datetime(2020, 6, 13)):
             browser.open(self.task)
-            browser.click_on("task-transition-open-cancelled")
+            browser.click_on("Cancel")
             browser.click_on("Save")
 
             self.assert_workflow_state('task-state-cancelled', self.task)

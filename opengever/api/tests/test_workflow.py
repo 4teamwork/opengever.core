@@ -22,7 +22,7 @@ class TestWorkflowPost(IntegrationTestCase):
         )
 
         self.assertDictContainsSubset(
-            {u'title': u'task-state-in-progress',
+            {u'title': u'In progress',
              u'actor': u'kathi.barfuss',
              u'action': u'task-transition-reassign',
              u'review_state': u'task-state-in-progress'},
@@ -43,7 +43,7 @@ class TestWorkflowPost(IntegrationTestCase):
         )
 
         self.assertDictContainsSubset(
-            {u'title': u'task-state-tested-and-closed',
+            {u'title': u'Closed',
              u'actor': u'kathi.barfuss',
              u'action': u'task-transition-in-progress-tested-and-closed',
              u'review_state': u'task-state-tested-and-closed'},

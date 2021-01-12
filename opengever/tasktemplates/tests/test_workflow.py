@@ -24,7 +24,7 @@ class TestWorfklowForTasksFromTemplatefolders(IntegrationTestCase):
 
 
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-in-progress-cancelled')
+        browser.click_on('Cancel')
         browser.fill({'Response': u'Projekt wurde gestoppt.'})
         browser.click_on('Save')
 

@@ -202,7 +202,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # close
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
 
@@ -228,7 +228,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # close
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
 
@@ -256,7 +256,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # assign
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-reassign')
+        browser.click_on('Reassign')
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
         browser.fill({'Response': 'For you'})
@@ -287,7 +287,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # assign
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-reassign')
+        browser.click_on('Reassign')
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
         browser.fill({'Response': 'For you'})
@@ -317,7 +317,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # reject
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-open-rejected')
+        browser.click_on('Reject')
         browser.fill({'Response': 'Nope!'})
         browser.click_on('Save')
 
@@ -371,7 +371,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         )
         # close
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
         expected_oguids = [
@@ -400,7 +400,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # close
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
 
@@ -435,7 +435,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         notify(ObjectModifiedEvent(self.task))
 
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         self.assertEqual([], proposal_storage._storage())
@@ -471,7 +471,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         notify(ObjectModifiedEvent(self.task))
 
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         self.assertEqual(expected_assignments, proposal_storage._storage())
@@ -504,11 +504,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # close subtask
         browser.open(self.meeting_subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         browser.open(self.meeting_task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         self.assertEqual([], storage._storage())
@@ -550,11 +550,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # close subtask
         browser.open(self.meeting_subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         browser.open(self.meeting_task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         self.assertEqual(
@@ -580,7 +580,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # cancel
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-open-cancelled')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         storage = RoleAssignmentManager(self.subtask).storage
@@ -594,7 +594,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # cancel
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-open-cancelled')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         storage = RoleAssignmentManager(self.subtask).storage
@@ -619,7 +619,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # close
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-in-progress-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         storage = RoleAssignmentManager(self.subtask).storage
@@ -635,7 +635,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # close
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-in-progress-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         storage = RoleAssignmentManager(self.subtask).storage
@@ -667,7 +667,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # skip
         browser.open(self.seq_subtask_2, view='tabbedview_view-overview')
-        browser.click_on('task-transition-planned-skipped')
+        browser.click_on('Skip')
         browser.click_on('Save')
 
         self.assertEqual([], storage._storage())
@@ -690,7 +690,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         # skip
         browser.open(self.seq_subtask_2, view='tabbedview_view-overview')
-        browser.click_on('task-transition-planned-skipped')
+        browser.click_on('Skip')
         browser.click_on('Save')
 
         self.assertEqual(
@@ -790,7 +790,7 @@ class TestLocalRolesReindexing(IntegrationTestCase):
                       .relate_to(self.document))
 
         browser.open(task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-reassign')
+        browser.click_on('Reassign')
 
         # Reassign
         form = browser.find_form_by_field('Responsible')

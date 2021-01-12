@@ -168,10 +168,10 @@ class TestOpenTaskReport(FunctionalTestCase):
 
         self.assertEqual(
             ['1 & Task 1 & To comment &  & Client1 & Peter Peter & '
-             'Org Unit 1 / Meier Hans & 01.07.2014 & task"=state"=open'],
+             'Org Unit 1 / Meier Hans & 01.07.2014 & Open'],
             arguments['outgoing'])
 
         self.assertEqual(
             ['1 & Task 1 & To comment &  & Client1 & Org Unit 1 / Peter '
-             'Peter & Meier Hans & 01.07.2014 & task"=state"=open'],
+             'Peter & Meier Hans & 01.07.2014 & Open'],
             arguments['incoming'], )

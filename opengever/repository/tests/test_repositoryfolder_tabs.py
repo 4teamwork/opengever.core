@@ -177,7 +177,7 @@ class TestRepositoryFolderTasksTab(IntegrationTestCase):
             'Issuer': 'Ziegler Robert (robert.ziegler)',
             'Organisational Unit': u'Finanz\xe4mt',
             'Responsible': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-            'Review state': 'task-state-in-progress',
+            'Review state': 'In progress',
             'Sequence number': '1',
             'Subdossier': '',
             'Task type': 'For confirmation / correction',

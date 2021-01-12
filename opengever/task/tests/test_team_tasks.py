@@ -43,7 +43,7 @@ class TestTeamTasks(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
-            ['task-transition-reassign', 'label_add_comment'],
+            ['Reassign', 'label_add_comment'],
             browser.css('.actionButtons li').text,
             'Expect none responsible actions, because the regular_user is not '
             'a team member and therefore not a responsible.')
@@ -51,10 +51,10 @@ class TestTeamTasks(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
-            ['task-transition-open-in-progress',
-             'task-transition-open-rejected',
-             'task-transition-open-resolved',
-             'task-transition-reassign',
+            ['Accept',
+             'Reject',
+             'Resolve',
+             'Reassign',
              'label_add_comment'],
             browser.css('.actionButtons li').text,
             'Expect responsible actions, because the meeting_user is a team '
@@ -100,7 +100,7 @@ class TestTeamTasks(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
 
-        browser.click_on('task-transition-open-in-progress')
+        browser.click_on('Accept')
         browser.fill({'Response': u'Das \xfcbernehme ich!'})
         browser.click_on('Save')
 
@@ -118,7 +118,7 @@ class TestTeamTasks(IntegrationTestCase):
         self.set_workflow_state('task-state-open', self.task)
 
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-open-in-progress')
+        browser.click_on('Accept')
         browser.fill({'Response': u'Das \xfcbernehme ich!'})
         browser.click_on('Save')
 
@@ -172,7 +172,7 @@ class TestTeamTasks(IntegrationTestCase):
         self.set_workflow_state('task-state-open', self.task)
 
         browser.open(self.task)
-        browser.click_on('task-transition-open-in-progress')
+        browser.click_on('Accept')
         browser.fill({'Accept the task and ...': 'participate'})
         browser.click_on('Continue')
 

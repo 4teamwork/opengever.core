@@ -31,7 +31,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
 
     def _change_deadline(self, task, new_deadline, text=u'', browser=default_browser):
         browser.open(task)
-        browser.click_on('task-transition-modify-deadline')
+        browser.click_on('Modify deadline')
         browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y'),
                       'Response': text})
         browser.click_on('Save')
@@ -42,7 +42,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         new_deadline = datetime.date(2013, 10, 1)
 
         browser.open(self.task)
-        browser.click_on('task-transition-modify-deadline')
+        browser.click_on('Modify deadline')
         browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y')})
         browser.click_on('Save')
 
@@ -54,7 +54,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         browser.open(self.task)
-        browser.click_on('task-transition-modify-deadline')
+        browser.click_on('Modify deadline')
         browser.fill({'New Deadline': self.task.deadline.strftime('%d.%m.%Y')})
         browser.click_on('Save')
 

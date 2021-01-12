@@ -411,144 +411,144 @@ msgstr "Save attachments"
 
 #. German translation: Aufgabe hinzugefügt.
 msgid "task-added"
-msgstr "task-added"
+msgstr "Task added"
 
 #. German translation: Abgebrochen
 msgid "task-state-cancelled"
-msgstr "task-state-cancelled"
+msgstr "Cancelled"
 
 #. German translation: In Arbeit
 msgid "task-state-in-progress"
-msgstr "task-state-in-progress"
+msgstr "In progress"
 
 #. German translation: Folgeaufgabe wird erstellt
 msgid "task-state-new-successor"
-msgstr "task-state-new-successor"
+msgstr "Successor task is being created"
 
 #. German translation: Offen
 msgid "task-state-open"
-msgstr "task-state-open"
+msgstr "Open"
 
 #. German translation: Geplant
 msgid "task-state-planned"
-msgstr "task-state-planned"
+msgstr "Planned"
 
 #. German translation: Abgelehnt
 msgid "task-state-rejected"
-msgstr "task-state-rejected"
+msgstr "Rejected"
 
 #. German translation: Erledigt
 msgid "task-state-resolved"
-msgstr "task-state-resolved"
+msgstr "Resolved"
 
 #. German translation: Übersprungen
 msgid "task-state-skipped"
-msgstr "task-state-skipped"
+msgstr "Skipped"
 
 #. German translation: Abgeschlossen
 msgid "task-state-tested-and-closed"
-msgstr "task-state-tested-and-closed"
+msgstr "Closed"
 
 #. German translation: Wieder eröffnen
 msgid "task-transition-cancelled-open"
-msgstr "task-transition-cancelled-open"
+msgstr "Reopen"
 
 #. German translation: Delegieren
 msgid "task-transition-delegate"
-msgstr "task-transition-delegate"
+msgstr "Delegate"
 
 #. German translation: Abbrechen
 msgid "task-transition-in-progress-cancelled"
-msgstr "task-transition-in-progress-cancelled"
+msgstr "Cancel"
 
 #. German translation: Erledigen
 msgid "task-transition-in-progress-resolved"
-msgstr "task-transition-in-progress-resolved"
+msgstr "Resolve"
 
 #. German translation: Abschliessen
 msgid "task-transition-in-progress-tested-and-closed"
-msgstr "task-transition-in-progress-tested-and-closed"
+msgstr "Close"
 
 #. German translation: Frist ändern
 msgid "task-transition-modify-deadline"
-msgstr "task-transition-modify-deadline"
+msgstr "Modify deadline"
 
 #. German translation: Abbrechen
 msgid "task-transition-open-cancelled"
-msgstr "task-transition-open-cancelled"
+msgstr "Cancel"
 
 #. German translation: Akzeptieren
 msgid "task-transition-open-in-progress"
-msgstr "task-transition-open-in-progress"
+msgstr "Accept"
 
 #. German translation: Planen
 msgid "task-transition-open-planned"
-msgstr "task-transition-open-planned"
+msgstr "Plan"
 
 #. German translation: Ablehnen
 msgid "task-transition-open-rejected"
-msgstr "task-transition-open-rejected"
+msgstr "Reject"
 
 #. German translation: Erledigen
 msgid "task-transition-open-resolved"
-msgstr "task-transition-open-resolved"
+msgstr "Resolve"
 
 #. German translation: Abschliessen
 msgid "task-transition-open-tested-and-closed"
-msgstr "task-transition-open-tested-and-closed"
+msgstr "Close"
 
 #. German translation: Starten
 msgid "task-transition-planned-open"
-msgstr "task-transition-planned-open"
+msgstr "Start"
 
 #. German translation: Überspringen
 msgid "task-transition-planned-skipped"
-msgstr "task-transition-planned-skipped"
+msgstr "Skip"
 
 #. German translation: Neu zuweisen
 msgid "task-transition-reassign"
-msgstr "task-transition-reassign"
+msgstr "Reassign"
 
 #. German translation: Wieder eröffnen
 msgid "task-transition-rejected-open"
-msgstr "task-transition-rejected-open"
+msgstr "Reopen"
 
 #. German translation: Überspringen
 msgid "task-transition-rejected-skipped"
-msgstr "task-transition-rejected-skipped"
+msgstr "Skip"
 
 #. German translation: Überarbeiten
 msgid "task-transition-resolved-in-progress"
-msgstr "task-transition-resolved-in-progress"
+msgstr "Request revision"
 
 #. German translation: Abschliessen
 msgid "task-transition-resolved-tested-and-closed"
-msgstr "task-transition-resolved-tested-and-closed"
+msgstr "Close"
 
 #. German translation: Wieder eröffnen
 msgid "task-transition-skipped-open"
-msgstr "task-transition-skipped-open"
+msgstr "Reopen"
 
 #. German translation: Aktiv
 msgid "tasktemplate-state-active"
-msgstr "tasktemplate-state-active"
+msgstr "Active"
 
 #. German translation: Aktiv
 msgid "tasktemplatefolder-state-activ"
-msgstr "tasktemplatefolder-state-activ"
+msgstr "Active"
 
 #. German translation: Inaktiv
 msgid "tasktemplatefolder-state-inactiv"
-msgstr "tasktemplatefolder-state-inactiv"
+msgstr "Inactive"
 
 #. German translation: Deaktivieren
 msgid "tasktemplatefolder-transition-activ-inactiv"
-msgstr "tasktemplatefolder-transition-activ-inactiv"
+msgstr "Deactivate"
 
 #. German translation: Aktivieren
 msgid "tasktemplatefolder-transition-inactiv-activ"
-msgstr "tasktemplatefolder-transition-inactiv-activ"
+msgstr "Activate"
 
 #. German translation: Dokument hinzugefügt
 msgid "transition-add-document"
-msgstr "transition-add-document"
+msgstr "Document added"

@@ -276,7 +276,7 @@ class TestTaskListings(BaseLatexListingTest):
              'For approval',
              'Org Unit 1 / Boss Hugo',
              'Org Unit 1 / Boss Hugo',
-             'task-state-in-progress',
+             'In progress',
              'Task A',
              '06.11.2013'], rows[0])
 

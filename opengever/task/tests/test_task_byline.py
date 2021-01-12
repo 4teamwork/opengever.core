@@ -28,7 +28,7 @@ class TestTaskByline(TestBylineBase):
         browser.open(self.task)
 
         state = self.get_byline_value_by_label('State:')
-        self.assertEquals('task-state-in-progress', state.text)
+        self.assertEquals('In progress', state.text)
 
     @browsing
     def test_task_byline_start_date_display(self, browser):

@@ -10,7 +10,7 @@ class TestClosingForInformationTask(IntegrationTestCase):
     def test_closes_task_directly_when_no_document_is_selected(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.info_task, view=u'tabbedview_view-overview')
-        browser.click_on('task-transition-open-tested-and-closed')
+        browser.click_on('Close')
         browser.fill({'Response': u'OK!'})
         browser.click_on('Save')
         self.assertEquals('task-state-tested-and-closed', api.content.get_state(self.info_task))
