@@ -99,7 +99,7 @@ class TestProposalSubmit(IntegrationTestCase):
         self.assertIsNone(self.draft_proposal.date_of_submission)
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-submit")
+        browser.click_on("Submit")
         browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Review state changed successfully.')
@@ -125,7 +125,7 @@ class TestProposalSubmit(IntegrationTestCase):
                 self.as_relation_value(self.mail_eml))
 
             browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-            browser.click_on("proposal-transition-submit")
+            browser.click_on("Submit")
             browser.click_on('Confirm')
 
             submitted_proposal = self.draft_proposal.load_model().resolve_submitted_proposal()
@@ -137,7 +137,7 @@ class TestProposalSubmit(IntegrationTestCase):
 
         with self.login(self.dossier_responsible, browser):
             browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-            browser.click_on("proposal-transition-submit")
+            browser.click_on("Submit")
             browser.click_on('Confirm')
 
             statusmessages.assert_message('Review state changed successfully.')
@@ -150,7 +150,7 @@ class TestProposalSubmit(IntegrationTestCase):
             'View', self.draft_proposal.get_committee()))
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
         browser.visit(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-submit")
+        browser.click_on("Submit")
         browser.click_on("Confirm")
         self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
         statusmessages.assert_no_error_messages()

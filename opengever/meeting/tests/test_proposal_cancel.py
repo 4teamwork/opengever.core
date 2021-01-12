@@ -19,7 +19,7 @@ class TestProposalCancel(IntegrationTestCase):
         self.assert_workflow_state('proposal-state-active', self.draft_proposal)
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-cancel")
+        browser.click_on("Cancel")
         browser.click_on("Confirm")
 
         statusmessages.assert_no_error_messages()

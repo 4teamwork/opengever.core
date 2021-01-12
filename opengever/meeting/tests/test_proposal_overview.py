@@ -24,8 +24,8 @@ class TestProposalOverview(IntegrationTestCase):
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
 
         self.assertEqual(
-            ['proposal-transition-cancel',
-             'proposal-transition-submit',
+            ['Cancel',
+             'Submit',
              'Comment',
              'Create task'],
             browser.css('.actionButtons .regular_buttons li').text
@@ -59,14 +59,14 @@ class TestProposalOverview(IntegrationTestCase):
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
 
         self.assertEqual(
-            ['proposal-transition-cancel',
-             'proposal-transition-submit',
+            ['Cancel',
+             'Submit',
              'Comment',
              'Create task'],
             browser.css('.actionButtons .regular_buttons li').text
         )
         self.assertEqual(
-            ['proposal-transition-cancel', 'Comment', 'Create task'],
+            ['Cancel', 'Comment', 'Create task'],
             browser.css('.actionButtons .regular_buttons li a').text
         )
 

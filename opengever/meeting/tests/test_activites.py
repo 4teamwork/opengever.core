@@ -346,7 +346,7 @@ class TestMeetingActivities(IntegrationTestCase):
 
     def submit_proposal(self, proposal, browser, comment=''):
         browser.open(proposal)
-        browser.click_on('proposal-transition-submit ')
+        browser.click_on('Submit')
         if comment:
             browser.fill({'Comment': comment})
         browser.click_on('Confirm')

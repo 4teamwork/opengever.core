@@ -22,7 +22,7 @@ class TestProposalReactivate(IntegrationTestCase):
         self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-reactivate")
+        browser.click_on("Reopen")
         browser.click_on("Confirm")
 
         statusmessages.assert_no_error_messages()

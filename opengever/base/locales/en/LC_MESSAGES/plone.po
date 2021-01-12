@@ -359,35 +359,35 @@ msgstr "Restore"
 
 #. German translation: In Bearbeitung
 msgid "proposal-state-active"
-msgstr "proposal-state-active"
+msgstr "Active"
 
 #. German translation: Storniert
 msgid "proposal-state-cancelled"
-msgstr "proposal-state-cancelled"
+msgstr "Cancelled"
 
 #. German translation: Beschlossen
 msgid "proposal-state-decided"
-msgstr "proposal-state-decided"
+msgstr "Decided"
 
 #. German translation: Traktandiert
 msgid "proposal-state-scheduled"
-msgstr "proposal-state-scheduled"
+msgstr "Scheduled"
 
 #. German translation: Eingereicht
 msgid "proposal-state-submitted"
-msgstr "proposal-state-submitted"
+msgstr "Submitted"
 
 #. German translation: Stornieren
 msgid "proposal-transition-cancel"
-msgstr "proposal-transition-cancel"
+msgstr "Cancel"
 
 #. German translation: Wieder eröffnen
 msgid "proposal-transition-reactivate"
-msgstr "proposal-transition-reactivate"
+msgstr "Reopen"
 
 #. German translation: Einreichen
 msgid "proposal-transition-submit"
-msgstr "proposal-transition-submit"
+msgstr "Submit"
 
 #. German translation: aktiv
 msgid "repositoryfolder-state-active"

@@ -612,7 +612,7 @@ class TestProposal(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.set_related_items(self.draft_proposal, [self.mail_eml])
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-submit")
+        browser.click_on("Submit")
         browser.click_on("Confirm")
 
         self.login(self.committee_responsible)
@@ -626,7 +626,7 @@ class TestProposal(IntegrationTestCase):
         changed_title = u'\xc4nderung'
         self.draft_proposal.get_proposal_document().title = changed_title
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-submit")
+        browser.click_on("Submit")
         browser.click_on("Confirm")
         self.login(self.committee_responsible)
         # submitted proposal created
@@ -662,7 +662,7 @@ class TestProposal(IntegrationTestCase):
         proposal_model = self.draft_proposal.load_model()
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on("proposal-transition-submit")
+        browser.click_on("Submit")
         browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Review state changed successfully.')

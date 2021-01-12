@@ -153,7 +153,7 @@ class TestDossierTouched(IntegrationTestCase):
 
         with freeze(datetime(2020, 6, 13)):
             browser.open(proposal, view='tabbedview_view-overview')
-            browser.click_on("proposal-transition-cancel")
+            browser.click_on("Cancel")
             browser.click_on("Confirm")
             self.assert_workflow_state('proposal-state-cancelled', proposal)
 

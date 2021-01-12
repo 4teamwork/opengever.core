@@ -104,7 +104,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.open_overview(browser, self.draft_proposal)
         # submit proposal
-        browser.click_on('proposal-transition-submit')
+        browser.click_on('Submit')
         browser.fill({'Comment': u'Bitte \xfcbernehmen'}).submit()
         expected_history = u'Submitted by B\xe4rfuss K\xe4thi (kathi.barfuss)'
         expected_comment = u'Bitte \xfcbernehmen'
@@ -134,7 +134,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.open_overview(browser, self.draft_proposal)
         # cancel proposal
-        browser.click_on("proposal-transition-cancel")
+        browser.click_on("Cancel")
         browser.fill({'Comment': u'Unn\xf6tig'}).submit()
 
         self.assert_proposal_history_records(
@@ -144,7 +144,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             expected_comments=u'Unn\xf6tig'
             )
         # reactivate proposal
-        browser.click_on("proposal-transition-reactivate")
+        browser.click_on("Reopen")
         browser.fill({'Comment': u'N\xf6tig'}).submit()
         self.assert_proposal_history_records(
             u'Proposal reactivated by B\xe4rfuss K\xe4thi (kathi.barfuss)',
