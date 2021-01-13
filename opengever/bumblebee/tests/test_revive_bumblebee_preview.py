@@ -55,7 +55,7 @@ class TestReviveBumblebeePreview(IntegrationTestCase):
         browser.visit(self.document)
         browser.css('.actionMenuContent li').find('Revive preview').first.click()
 
-        statusmessages.assert_message('Preview revived and will be available soon')
+        statusmessages.assert_message('Preview was revived and will be available soon.')
 
     @browsing
     def test_update_checksum_on_reviving(self, browser):
