@@ -1150,19 +1150,19 @@ class TestSQLDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase)
         self.assertEqual(self.dossier.absolute_url(), item['@id'])
         self.assertEqual(IUUID(self.dossier), item['UID'])
         self.assertItemsEqual(
-            [u'B\xfchler Josef', u'Meier AG', u'any_participant'],
+            [u'B\xfchler Josef', u'Meier AG', u'Any participant'],
             item['participants'])
         self.assertItemsEqual(
-            [u'any_role', u'Participation', u'Final drawing'],
+            [u'Any role', u'Participation', u'Final drawing'],
             item['participation_roles'])
         self.assertItemsEqual(
-            [u'B\xfchler Josef|any_role',
+            [u'B\xfchler Josef|Any role',
              u'B\xfchler Josef|Final drawing',
-             u'any_participant|Participation',
-             u'Meier AG|any_role',
+             u'Any participant|Participation',
+             u'Meier AG|Any role',
              u'B\xfchler Josef|Participation',
              u'Meier AG|Final drawing',
-             u'any_participant|Final drawing'],
+             u'Any participant|Final drawing'],
             item['participations'])
 
 
@@ -1209,21 +1209,21 @@ class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCas
         self.assertItemsEqual(
             [u'Ziegler Robert (robert.ziegler)',
              u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-             u'any_participant'],
+             u'Any participant'],
             item['participants'])
         self.assertItemsEqual(
-            [u'any_role', u'Regard', u'Participation', u'Final drawing'],
+            [u'Any role', u'Regard', u'Participation', u'Final drawing'],
             item['participation_roles'])
         self.assertItemsEqual(
             [u'Ziegler Robert (robert.ziegler)|Regard',
-             u'Ziegler Robert (robert.ziegler)|any_role',
-             u'any_participant|Regard',
+             u'Ziegler Robert (robert.ziegler)|Any role',
+             u'Any participant|Regard',
              u'B\xe4rfuss K\xe4thi (kathi.barfuss)|Participation',
              u'B\xe4rfuss K\xe4thi (kathi.barfuss)|Regard',
-             u'any_participant|Participation',
-             u'B\xe4rfuss K\xe4thi (kathi.barfuss)|any_role',
+             u'Any participant|Participation',
+             u'B\xe4rfuss K\xe4thi (kathi.barfuss)|Any role',
              u'B\xe4rfuss K\xe4thi (kathi.barfuss)|Final drawing',
-             u'any_participant|Final drawing'],
+             u'Any participant|Final drawing'],
             item['participations'])
 
     @browsing

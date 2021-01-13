@@ -177,7 +177,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
                      {'_authenticator': createToken()},
                      view='transition-resolve')
 
-        self.assertEquals(['The dossier has been succesfully resolved.'],
+        self.assertEquals(['Dossier has been resolved succesfully.'],
                           info_messages())
         self.assertEqual('dossier-state-resolved',
                          api.content.get_state(self.private_dossier))

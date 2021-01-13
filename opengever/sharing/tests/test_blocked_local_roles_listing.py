@@ -211,8 +211,8 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill(self.regular_user.getId())
         browser.click_on('Save')
         new_dossier = browser.context
 
@@ -236,8 +236,8 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill(self.regular_user.getId())
         browser.click_on('Save')
         new_dossier = browser.context
 

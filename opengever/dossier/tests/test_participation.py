@@ -188,8 +188,8 @@ class TestParticipationAddForm(IntegrationTestCase):
         browser.visit(self.dossier)
         factoriesmenu.add('Participant')
         browser.fill({'Roles': roles})
-        form = browser.find_form_by_field('Contact')
-        form.find_widget('Contact').fill(contact_id)
+        form = browser.find_form_by_field('Person')
+        form.find_widget('Person').fill(contact_id)
         browser.find('Add').click()
 
     @browsing
@@ -201,6 +201,6 @@ class TestParticipationAddForm(IntegrationTestCase):
         self.assertEqual([], error_messages())
 
         self.add_participation_to_dossier(self.regular_user.getId(), ['Participation'], browser)
-        self.assertEqual(['There is already a participation for this contact.'], error_messages())
+        self.assertEqual(['A participation already exists for this contact.'], error_messages())
         self.assertEqual('http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
                          'dossier-1/add-plone-participation', browser.url)

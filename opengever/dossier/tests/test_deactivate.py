@@ -245,7 +245,7 @@ class TestDossierDeactivationWithWorkspaceClientFeatureEnabled(FunctionalWorkspa
             self.deactivate_dossier(self.dossier, browser)
             self.assert_deactivated(self.dossier)
             self.assert_success(self.dossier, browser,
-                                ['The Dossier has been deactivated'])
+                                ['Dossier has been deactivated'])
 
     @browsing
     def test_dossier_is_deactivated_when_deactivated_workspace_is_linked(self, browser):
@@ -261,7 +261,7 @@ class TestDossierDeactivationWithWorkspaceClientFeatureEnabled(FunctionalWorkspa
             self.deactivate_dossier(self.dossier, browser)
             self.assert_deactivated(self.dossier)
             self.assert_success(self.dossier, browser,
-                                ['The Dossier has been deactivated'])
+                                ['Dossier has been deactivated'])
 
 
 class TestDossierDeactivationWithWorkspaceClientFeatureEnabledRESTAPI(

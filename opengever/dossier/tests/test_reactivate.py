@@ -42,7 +42,7 @@ class TestReactivating(IntegrationTestCase):
 
         self.assert_workflow_state('dossier-state-active', self.resolvable_subdossier)
         self.assert_success(self.resolvable_subdossier, browser,
-                            ['Dossiers successfully reactivated.'])
+                            ['Dossier successfully reactivated.'])
 
     @browsing
     def test_reactivating_a_main_dossier_reactivates_subdossiers_recursively(self, browser):
@@ -92,7 +92,7 @@ class TestReactivating(IntegrationTestCase):
         self.reactivate(self.resolvable_subdossier, browser)
 
         self.assert_errors(self.resolvable_subdossier, browser,
-                           ["It isn't possible to reactivate a sub dossier."])
+                           ["A subdossier may not be reopened on its own. Please reopen the main dossier."])
         self.assert_workflow_state('dossier-state-resolved',
                                    self.resolvable_subdossier)
 

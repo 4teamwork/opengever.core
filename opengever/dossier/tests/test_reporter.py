@@ -112,7 +112,7 @@ class TestDossierReporter(IntegrationTestCase):
 
         rows = list(workbook.active.rows)
         self.assertSequenceEqual(
-            [u'Title', u'Review state', u'Reference Number', u'Closing Date',
+            [u'Title', u'Review state', u'Reference Number', u'End date',
              u'Responsible'],
             [cell.value for cell in rows[0]])
 
@@ -134,9 +134,9 @@ class TestDossierReporter(IntegrationTestCase):
             workbook = load_workbook(tmpfile.name)
 
         labels = [cell.value for cell in list(workbook.active.rows)[0]]
-        self.assertIn(u'filing_no_filing', labels)
-        self.assertIn(u'filing_no_year', labels)
-        self.assertIn(u'filing_no_number', labels)
+        self.assertIn(u'Filing', labels)
+        self.assertIn(u'Filing year', labels)
+        self.assertIn(u'Filing number', labels)
         self.assertIn(u'Filing number', labels)
 
         self.assertSequenceEqual(

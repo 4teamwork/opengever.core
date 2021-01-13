@@ -171,14 +171,14 @@ class TestDossierTemplate(IntegrationTestCase):
         factoriesmenu.add('Dossier template')
 
         self.assertEqual([
-            u'Title help',
+            u'Title hint',
             u'Title',
             u'Description',
             u'Keywords',
-            u'Predefined Keywords',
+            u'Prefill keywords',
             u'Restrict Keywords',
             u'Comments',
-            u'filing prefix'],
+            u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
 
@@ -188,14 +188,14 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.dossiertemplate, view="edit")
         self.assertEqual([
-            u'Title help',
+            u'Title hint',
             u'Title',
             u'Description',
             u'Keywords',
-            u'Predefined Keywords',
+            u'Prefill keywords',
             u'Restrict Keywords',
             u'Comments',
-            u'filing prefix'],
+            u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
 
@@ -204,13 +204,13 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.dossiertemplate, view="edit")
 
-        self.assertTrue(browser.find_field_by_text('Predefined Keywords'),
-                        'Expect the "Predefined Keywords" field')
+        self.assertTrue(browser.find_field_by_text('Prefill keywords'),
+                        'Expect the "Prefill keywords" field')
 
         form_labels = browser.form_field_labels
-        self.assertGreater(form_labels.index('Predefined Keywords'),
+        self.assertGreater(form_labels.index('Prefill keywords'),
                            form_labels.index('Keywords'),
-                           '"Predefined Keywords" should be after "Keywords"')
+                           '"Prefill keywords" should be after "Keywords"')
 
     @browsing
     def test_dossiertemplate_restrict_keywords_is_there(self, browser):
@@ -222,7 +222,7 @@ class TestDossierTemplate(IntegrationTestCase):
 
         form_labels = browser.form_field_labels
         self.assertGreater(form_labels.index('Restrict Keywords'),
-                           form_labels.index('Predefined Keywords'),
+                           form_labels.index('Prefill keywords'),
                            '"Restrict Keywords" should be after "Predefined '
                            'Keywords"')
 

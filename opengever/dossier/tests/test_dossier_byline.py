@@ -54,7 +54,7 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        start_date = self.get_byline_value_by_label('from:')
+        start_date = self.get_byline_value_by_label('Start:')
         self.assertEquals('Jan 01, 2016', start_date.text)
 
     @browsing
@@ -62,7 +62,7 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        seq_number = self.get_byline_value_by_label('Sequence Number:')
+        seq_number = self.get_byline_value_by_label('Sequence number:')
         self.assertEquals('1', seq_number.text)
 
     @browsing
@@ -78,7 +78,7 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        mail_to_link = self.get_byline_value_by_label('E-Mail:')
+        mail_to_link = self.get_byline_value_by_label('Email:')
         self.assertEquals('1014013300@example.org', mail_to_link.text)
         self.assertEquals(
             'mailto:1014013300@example.org', mail_to_link.get('href'))

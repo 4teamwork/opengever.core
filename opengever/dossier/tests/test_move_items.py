@@ -650,7 +650,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
         self.assertEqual(self.dossier.absolute_url(), browser.url)
         self.assertEqual(
-            "The selected objects can't be found, please try it again.",
+            "The selected objects can't be found, please try again.",
             error_messages()[0])
 
     @browsing
@@ -661,7 +661,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
             obj=self.taskdocument, target=self.empty_dossier)
 
         self.assertEqual(
-            'Document {} is inside a task and therefore not movable. Move the task instead'.format(self.taskdocument.title),
+            'Document {} is inside a task and therefore not movable. Please move the task instead.'.format(self.taskdocument.title),
             error_messages()[0])
         self.assertIn(self.taskdocument, self.task.objectValues())
         self.assertNotIn(self.taskdocument, self.empty_dossier.objectValues())
@@ -672,8 +672,8 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         mail = create(Builder('mail').titled('Good news').within(self.task))
         self.move_items(browser, src=self.task, obj=mail, target=self.empty_dossier)
 
-        self.assertEqual('Document {} is inside a task and therefore not movable. Move the task'
-                         ' instead'.format(mail.title), error_messages()[0])
+        self.assertEqual('Document {} is inside a task and therefore not movable. Please move the task'
+                         ' instead.'.format(mail.title), error_messages()[0])
         self.assertIn(mail, self.task.objectValues())
         self.assertNotIn(mail, self.empty_dossier.objectValues())
 

@@ -279,7 +279,7 @@ class TestOverview(SolrIntegrationTestCase):
 
         browser.open(self.tested_dossier)
 
-        self.assertEqual('Show Note', browser.css('.editNoteLink').first.text)
+        self.assertEqual('Show note', browser.css('.editNoteLink').first.text)
 
     @browsing
     def test_dossier_editlink_for_comments(self, browser):

@@ -21,7 +21,7 @@ class TestStardEndValidator(FunctionalTestCase):
         browser.click_on('Save')
 
         self.assertEquals(
-            ['The start date must be before the end date.'],
+            ['Start date must be before end date.'],
             browser.css('div.error').text)
 
     @browsing
@@ -33,7 +33,7 @@ class TestStardEndValidator(FunctionalTestCase):
                                  end=date(2013, 01, 01)))
 
         browser.login().open(dossier, view='edit')
-        browser.fill({'Closing Date': '02.02.2013'})
+        browser.fill({'End date': '02.02.2013'})
         browser.click_on('Save')
 
         self.assertEquals(['Changes saved'], info_messages())

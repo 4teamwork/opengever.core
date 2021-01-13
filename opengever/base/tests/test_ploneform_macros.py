@@ -30,7 +30,7 @@ class TestRegressionPloneformMacros(IntegrationTestCase):
         factoriesmenu.add(u'Business Case Dossier')
 
         # fill invalid
-        browser.fill({'Title': 'foo', 'Opening Date': 'invalid'})
+        browser.fill({'Title': 'foo', 'Start date': 'invalid'})
         browser.find('Save').click()
         self.assertEqual([], info_messages())
         self.assertEqual(['There were some errors.'], error_messages())
