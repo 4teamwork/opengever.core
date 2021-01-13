@@ -1,3 +1,4 @@
+from copy import deepcopy
 from opengever.base.filename import filenamenormalizer
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
@@ -12,7 +13,10 @@ from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
 from zope.component import getUtility
+from zope.schema import getFieldsInOrder
+from zope.schema import ValidationError
 from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.interfaces import WrongType
 from zope.schema.vocabulary import SimpleVocabulary
 import keyword
 import re
@@ -126,6 +130,33 @@ class PropertySheetSchemaDefinition(object):
         schema_info = get_property_sheet_schema(self.schema_class)
         schema_info["assignments"] = IJsonCompatible(self.assignments)
         return schema_info
+
+    def validate(self, data):
+        """Validate data against the definition's schema.
+
+        The parameter data is expected to be a dict containing field name and
+        field value as items. Validation of field values is delegated to
+        the corresponding fields.
+        Partial data for non-required fields is allowed. No remainders are
+        allowed, each item in data must correspond to a field.
+
+        """
+        if data is None:
+            data_to_validate = {}
+        else:
+            if not isinstance(data, dict):
+                raise WrongType("Only 'dict' is allowed for properties.")
+            data_to_validate = deepcopy(data)
+
+        for name, field in getFieldsInOrder(self.schema_class):
+            value = data_to_validate.pop(name, None)
+            field.validate(value)
+
+        # prevent setting arbitrary properties, don't allow remainders
+        if data_to_validate:
+            raise ValidationError("Cannot set properties '{}'.".format(
+                "', '".join(data_to_validate.keys()))
+            )
 
     def _save(self, storage):
         serialized_schema = serializeSchema(self.schema_class, name=self.name)
