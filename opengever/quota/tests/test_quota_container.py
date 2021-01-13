@@ -143,7 +143,7 @@ class TestSizeQuota(FunctionalTestCase):
         factoriesmenu.add('Document')
         browser.fill({'File': ('Some data', 'file.txt', 'text/plain')}).save()
         statusmessages.assert_message(
-            'Can not add this item because it exhausts the quota.')
+            'Cannot add this item because it would exceed your storage quota.')
 
     @contextmanager
     def assert_usage_change(self, container, increase, action):
