@@ -170,11 +170,12 @@ class MeetingJSONSerializer(MeetingDocumentWithFileTraverser):
         }
 
     def traverse_agenda_item_list_document(self, document):
-        self.data['agenda_item_list'] = {
+        self.data['documents'] = [{
             'checksum': IBumblebeeDocument(document).get_checksum(),
             'file': self.zipper.get_filename(document),
             'modified': format_modified(document.modified()),
-        }
+            'title': safe_unicode(document.Title())
+        }]
 
     def traverse_agenda_item(self, agenda_item):
         self.current_agenda_item_data = {
