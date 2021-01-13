@@ -511,14 +511,14 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertEquals(
-            'privacy_layer_no',
+            'no',
             browser.css(
                 '#form-widgets-IClassification-privacy_layer',
                 ).first.text,
             )
 
         self.assertEquals(
-            'unchecked',
+            'not assessed',
             browser.css(
                 '#form-widgets-IClassification-public_trial',
                 ).first.text,
@@ -609,9 +609,9 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Date of delivery',
             'Related Documents',
             'Classification',
-            'Privacy layer',
-            'Public Trial',
-            'Public trial statement',
+            'Privacy protection',
+            'Public access level',
+            'Public access level statement',
             ]
 
         self.assertEquals(document_attributes, browser.css('.listing th').text)
@@ -733,7 +733,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Edit metadata',
             u'Actions \u25bc',
             'Properties',
-            u'Checkin \u25bc',
+            u'Check in \u25bc',
             'with comment',
             ]
 

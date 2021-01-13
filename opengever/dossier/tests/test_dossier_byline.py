@@ -47,7 +47,7 @@ class TestDossierByline(TestDossierBylineBase):
         browser.open(self.dossier)
 
         state = self.get_byline_value_by_label('State:')
-        self.assertEquals('dossier-state-active', state.text)
+        self.assertEquals('Active', state.text)
 
     @browsing
     def test_dossier_byline_start_date_display(self, browser):

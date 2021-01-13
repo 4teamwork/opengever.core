@@ -9,6 +9,8 @@ from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 class TestDossierListing(SolrIntegrationTestCase):
@@ -34,10 +36,11 @@ class TestDossierListing(SolrIntegrationTestCase):
 
     @staticmethod
     def get_folder_data(dossier):
+        review_state = api.content.get_state(dossier)
         data = ['',
                 dossier.get_reference_number(),
                 dossier.title,
-                api.content.get_state(dossier),
+                translate(review_state, context=getRequest(), domain='plone'),
                 dossier.responsible_label,
                 readable_date(dossier, IDossier(dossier).start),
                 readable_date(dossier, IDossier(dossier).end),
@@ -63,7 +66,7 @@ class TestDossierListing(SolrIntegrationTestCase):
             data=data)
 
     @staticmethod
-    def filter_data(data, state='dossier-state-active'):
+    def filter_data(data, state='Active'):
         return filter(lambda folder_data: folder_data[3] == state, data)
 
     def solr_response(self, *facets):
@@ -84,7 +87,7 @@ class TestDossierListing(SolrIntegrationTestCase):
             ['',
              'Client1 1.1 / 2',
              u'Abgeschlossene Vertr\xe4ge',
-             'dossier-state-resolved',
+             'Resolved',
              u'Ziegler Robert (robert.ziegler)',
              '01.01.1995',
              '31.12.2000',
@@ -121,8 +124,8 @@ class TestDossierListing(SolrIntegrationTestCase):
         expected_data = self.get_listing_data(self.leaf_repofolder)
 
         # Make sure that there are dossiers that would normally get filtered out.
-        inactive_dossiers_data = self.filter_data(expected_data, state='dossier-state-inactive')
-        resolved_dossiers_data = self.filter_data(expected_data, state='dossier-state-resolved')
+        inactive_dossiers_data = self.filter_data(expected_data, state='Inactive')
+        resolved_dossiers_data = self.filter_data(expected_data, state='Resolved')
         self.assertTrue(len(inactive_dossiers_data) > 0)
         self.assertTrue(len(resolved_dossiers_data) > 0)
 
@@ -232,7 +235,7 @@ class TestDossierListing(SolrIntegrationTestCase):
         browser.open(self.subdossier, view='tabbedview_view-subdossiers')
         expected_content = [
             u'Reference Number Title Review state Responsible Start End Keywords',
-            u'Client1 1.1 / 1.1.1 Subsubdossier dossier-state-active 31.08.2016 '
+            u'Client1 1.1 / 1.1.1 Subsubdossier Active 31.08.2016 '
             u'Subsubkeyword, Subsubkeyw\xf6rd',
             ]
         self.assertEqual(expected_content, browser.css('.listing tr').text)

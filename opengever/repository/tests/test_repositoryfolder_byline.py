@@ -11,7 +11,7 @@ class TestRepositoryfolderByline(IntegrationTestCase):
         browser.open(self.branch_repofolder)
         # XXX The English transalation of the values are missing.
         self.assertDictContainsSubset(
-            {'Privacy layer:': 'privacy_layer_no'},
+            {'Privacy protection:': 'no'},
             byline.text_dict())
 
     @browsing
@@ -19,7 +19,7 @@ class TestRepositoryfolderByline(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.branch_repofolder)
         self.assertDictContainsSubset(
-            {'Archival value:': 'unchecked'},
+            {'Archival value:': 'not assessed'},
             byline.text_dict())
 
     @browsing

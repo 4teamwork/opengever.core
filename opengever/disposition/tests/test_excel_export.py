@@ -21,8 +21,8 @@ class TestDispositionExcelExport(IntegrationTestCase):
 
             self.assertEquals(
                 [u'Reference Number', u'Title', u'Opening Date',
-                 u'Closing Date', u'Public Trial', u'Archival value',
-                 u'archivalValueAnnotation', u'Appraisal'],
+                 u'Closing Date', u'Public access level', u'Archival value',
+                 u'Comment about archival value assessment', u'Appraisal'],
                 [cell.value for cell in list(workbook.active.rows)[0]])
             self.assertTrue(workbook.active['A1'].font.bold)
 
@@ -45,13 +45,13 @@ class TestDispositionExcelExport(IntegrationTestCase):
 
             self.assertEquals(
                 [u'Client1 1.1 / 12', u'Hannah Baufrau', datetime(2000, 1, 1, 0, 0),
-                 datetime(2000, 1, 31, 0, 0), u'limited-public',
+                 datetime(2000, 1, 31, 0, 0), u'public (with restrictions)',
                  u'archival worthy', None, u'archival worthy'],
                 [cell.value for cell in rows[1]])
 
             self.assertEquals(
                 [u'Client1 1.1 / 14', u'Hans Baumann', datetime(2000, 1, 1, 0, 0),
-                 datetime(2000, 1, 15, 0, 0), u'unchecked',
+                 datetime(2000, 1, 15, 0, 0), u'not assessed',
                  u'not archival worthy', u'In Absprache mit ARCH.',
                  u'not archival worthy'],
                 [cell.value for cell in rows[2]])

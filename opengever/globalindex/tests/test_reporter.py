@@ -33,7 +33,7 @@ class TestTaskReporter(IntegrationTestCase):
 
         # self.task
         self.assertSequenceEqual(
-            [self.task.title,  u'task-state-in-progress',
+            [self.task.title,  u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
              self.dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
@@ -42,7 +42,7 @@ class TestTaskReporter(IntegrationTestCase):
 
         # self.meeting_task
         self.assertSequenceEqual(
-            [self.meeting_task.title, u'task-state-in-progress',
+            [self.meeting_task.title, u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
              self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
@@ -108,7 +108,7 @@ class TestTaskReporter(IntegrationTestCase):
 
         # self.task
         self.assertSequenceEqual(
-            [self.task.title,  u'task-state-in-progress',
+            [self.task.title,  u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
              self.dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
@@ -117,7 +117,7 @@ class TestTaskReporter(IntegrationTestCase):
 
         # self.meeting_task
         self.assertSequenceEqual(
-            [self.meeting_task.title, u'task-state-in-progress',
+            [self.meeting_task.title, u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
              self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',

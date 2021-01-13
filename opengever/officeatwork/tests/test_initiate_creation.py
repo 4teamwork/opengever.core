@@ -19,7 +19,7 @@ class TestInitiateCreationWithOfficeatwork(FunctionalTestCase):
     @browsing
     def test_creation_initiated_with_officeatwork_creates_shadow_doc(self, browser):
         browser.login().open(self.dossier.absolute_url())
-        factoriesmenu.add('document_from_officeatwork')
+        factoriesmenu.add('Document from officeatwork')
         # No file, not preserved as paper, validator is skipped on purpose
         browser.fill({'Title': 'A doc'})
         browser.find('Create with officeatwork').click()

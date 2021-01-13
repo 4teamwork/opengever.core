@@ -196,7 +196,7 @@ class TestRevokePermissionsAction(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.subtask.revoke_permissions = False
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         storage = RoleAssignmentManager(self.subtask).storage

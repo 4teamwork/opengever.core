@@ -86,7 +86,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
     @browsing
     def test_modifying_the_public_trial_metadata_is_journalized(self, browser):
         browser.login().open(self.document, view='edit')
-        browser.fill({'Public Trial': PUBLIC_TRIAL_PRIVATE})
+        browser.fill({'Public access level': PUBLIC_TRIAL_PRIVATE})
         browser.css('#form-buttons-save').first.click()
 
         entry = self.get_journal_entries()[-1]
@@ -98,7 +98,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
     @browsing
     def test_modifying_the_public_trial_metadata_is_journalized_separately(self, browser):
         browser.login().open(self.document, view='edit')
-        browser.fill({'Public Trial': PUBLIC_TRIAL_PRIVATE,
+        browser.fill({'Public access level': PUBLIC_TRIAL_PRIVATE,
                       'Description': 'Foo'})
         browser.css('#form-buttons-save').first.click()
 
@@ -114,7 +114,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
     @browsing
     def test_modifying_the_public_trial_statement_is_journalized_as_a_metadata_change(self, browser):
         browser.login().open(self.document, view='edit')
-        browser.fill({'Public trial statement': 'Fook'}).save()
+        browser.fill({'Public access level statement': 'Fook'}).save()
 
         entries = self.get_journal_entries()
 

@@ -4,6 +4,8 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.task.browser.transitioncontroller import TaskTransitionController
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import IntegrationTestCase
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import alsoProvides
 import unittest
 
@@ -57,6 +59,10 @@ class BaseTransitionGuardTests(unittest.TestCase):
         return TaskTransitionController(task, None)
 
 
+def translated(transition):
+    return translate(transition, context=getRequest(), domain='plone')
+
+
 class TestCancelledOpenGuard(IntegrationTestCase):
     transition = 'task-transition-cancelled-open'
 
@@ -80,9 +86,9 @@ class TestCancelledOpenGuard(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
 
-        self.assertIn(self.transition, browser.css('.agency_buttons a').text)
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
         self.assertNotIn(
-            self.transition, browser.css('.regular_buttons a').text)
+            translated(self.transition), browser.css('.regular_buttons a').text)
 
     @browsing
     def test_administrator_has_agency_permission(self, browser):
@@ -91,9 +97,9 @@ class TestCancelledOpenGuard(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
 
-        self.assertIn(self.transition, browser.css('.agency_buttons a').text)
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
         self.assertNotIn(
-            self.transition, browser.css('.regular_buttons a').text)
+            translated(self.transition), browser.css('.regular_buttons a').text)
 
     def test_not_available_if_dossier_is_closed(self):
         self.login(self.administrator)
@@ -149,9 +155,9 @@ class TestOpenCancelledGuard(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
 
-        self.assertIn(self.transition, browser.css('.agency_buttons a').text)
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
         self.assertNotIn(
-            self.transition, browser.css('.regular_buttons a').text)
+            translated(self.transition), browser.css('.regular_buttons a').text)
 
     @browsing
     def test_issuing_inbox_group_has_agency_permission(self, browser):
@@ -160,9 +166,9 @@ class TestOpenCancelledGuard(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
 
-        self.assertIn(self.transition, browser.css('.agency_buttons a').text)
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
         self.assertNotIn(
-            self.transition, browser.css('.regular_buttons a').text)
+            translated(self.transition), browser.css('.regular_buttons a').text)
 
 
 class TestInProgressCancelledGuard(IntegrationTestCase):

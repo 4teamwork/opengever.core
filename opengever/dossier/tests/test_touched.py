@@ -153,7 +153,7 @@ class TestDossierTouched(IntegrationTestCase):
 
         with freeze(datetime(2020, 6, 13)):
             browser.open(proposal, view='tabbedview_view-overview')
-            browser.click_on("proposal-transition-cancel")
+            browser.click_on("Cancel")
             browser.click_on("Confirm")
             self.assert_workflow_state('proposal-state-cancelled', proposal)
 
@@ -168,7 +168,7 @@ class TestDossierTouched(IntegrationTestCase):
 
         with freeze(datetime(2020, 6, 12)):
             browser.open(self.subdossier)
-            browser.click_on("dossier-transition-resolve")
+            browser.click_on("Resolve")
             self.assert_workflow_state('dossier-state-resolved', self.subdossier)
             self.assertEqual("2020-06-12", str(IDossier(self.dossier).touched))
             self.assertEqual("2020-06-12", str(IDossier(self.subdossier).touched))
@@ -181,7 +181,7 @@ class TestDossierTouched(IntegrationTestCase):
 
         with freeze(datetime(2020, 6, 13)):
             browser.open(self.task)
-            browser.click_on("task-transition-open-cancelled")
+            browser.click_on("Cancel")
             browser.click_on("Save")
 
             self.assert_workflow_state('task-state-cancelled', self.task)

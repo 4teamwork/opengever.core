@@ -26,7 +26,7 @@ class TestDossierDeactivation(IntegrationTestCase):
     def deactivate(self, dossier, browser, use_editbar=False):
         if use_editbar:
             browser.open(dossier)
-            editbar.menu_option('Actions', 'dossier-transition-deactivate').click()
+            editbar.menu_option('Actions', 'Deactivate').click()
         else:
             browser.open(dossier, view='transition-deactivate',
                          send_authenticator=True)
@@ -296,7 +296,7 @@ class TestDossierDeactivationWithWorkspaceClientFeatureEnabledRESTAPI(
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-deactivate'
         self.assertEquals(expected_url, browser.url)
         self.assertDictContainsSubset(
-            {u'title': u'dossier-state-inactive',
+            {u'title': u'Inactive',
              u'comments': u'',
              u'actor': api.user.get_current().getId(),
              u'action': u'dossier-transition-deactivate',

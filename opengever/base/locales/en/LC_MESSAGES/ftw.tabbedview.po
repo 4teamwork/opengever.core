@@ -56,11 +56,11 @@ msgstr "all_issues"
 
 #. German translation: Alle erteilten Aufgaben
 msgid "allissuedtasks"
-msgstr "allissuedtasks"
+msgstr "All issued tasks"
 
 #. German translation: Alle Aufgaben
 msgid "alltasks"
-msgstr "alltasks"
+msgstr "All tasks"
 
 #. German translation: Archiv
 msgid "archive"
@@ -172,7 +172,7 @@ msgstr "issuedtasks"
 
 #. German translation: Journal
 msgid "journal"
-msgstr "journal"
+msgstr "Journal"
 
 #. German translation: Kostenstelle
 msgid "label_account"
@@ -184,7 +184,7 @@ msgstr "local"
 
 #. German translation: Mitglieder
 msgid "members"
-msgstr "members"
+msgstr "Members"
 
 #. German translation: Meine Tickets
 msgid "my_issues"
@@ -192,23 +192,23 @@ msgstr "my_issues"
 
 #. German translation: Meine Dokumente
 msgid "mydocuments"
-msgstr "mydocuments"
+msgstr "My documents"
 
 #. German translation: Meine Dokumente
 msgid "mydocuments-proxy"
-msgstr "mydocuments-proxy"
+msgstr "My documents"
 
 #. German translation: Meine Dossiers
 msgid "mydossiers"
-msgstr "mydossiers"
+msgstr "My dossiers"
 
 #. German translation: Erteilte Aufgaben
 msgid "myissuedtasks"
-msgstr "myissuedtasks"
+msgstr "My issued tasks"
 
 #. German translation: Meine Aufgaben
 msgid "mytasks"
-msgstr "mytasks"
+msgstr "My tasks"
 
 #. German translation: Alle Aufgaben
 msgid "ogds-cp-alltasks"
@@ -220,15 +220,15 @@ msgstr "open_issues"
 
 #. German translation: Übersicht
 msgid "overview"
-msgstr "overview"
+msgstr "Overview"
 
 #. German translation: Beteiligungen
 msgid "participants"
-msgstr "participants"
+msgstr "Participations"
 
 #. German translation: Vorschau
 msgid "preview"
-msgstr "preview"
+msgstr "Preview"
 
 #. German translation: Fortschritt
 msgid "process"
@@ -236,19 +236,19 @@ msgstr "process"
 
 #. German translation: Anträge
 msgid "proposals"
-msgstr "proposals"
+msgstr "Proposals"
 
 #. German translation: Verwande Dokumente
 msgid "related_documents"
-msgstr "related_documents"
+msgstr "Related documents"
 
 #. German translation: Dokumente
 msgid "relateddocuments"
-msgstr "relateddocuments"
+msgstr "Documents"
 
 #. German translation: Dokumente
 msgid "relateddocuments-proxy"
-msgstr "relateddocuments-proxy"
+msgstr "Documents"
 
 #. German translation: Arbeitsrapporte
 msgid "reports"
@@ -256,19 +256,19 @@ msgstr "reports"
 
 #. German translation: Sablon Vorlagen
 msgid "sablontemplates"
-msgstr "sablontemplates"
+msgstr "Sablon templates"
 
 #. German translation: Info
 msgid "sharing"
-msgstr "sharing"
+msgstr "Info"
 
 #. German translation: Subdossiers
 msgid "subdossiers"
-msgstr "subdossiers"
+msgstr "Subdossiers"
 
 #. German translation: Aufgaben
 msgid "tasks"
-msgstr "tasks"
+msgstr "Tasks"
 
 #. German translation: Standardabläufe
 msgid "tasktemplatefolders"
@@ -276,7 +276,7 @@ msgstr "tasktemplatefolders"
 
 #. German translation: Aufgabenvorlagen
 msgid "tasktemplates"
-msgstr "tasktemplates"
+msgstr "Task templates"
 
 #. German translation: Tickets
 msgid "tickets"
@@ -291,13 +291,14 @@ msgid "tracker_overview"
 msgstr "tracker_overview"
 
 #. German translation: Papierkorb
+#. MARKER: recycle-bin
 msgid "trash-proxy"
-msgstr "trash-proxy"
+msgstr "Trash"
 
 #. German translation: OGDS
 msgid "users"
-msgstr "users"
+msgstr "OGDS"
 
 #. German translation: Versionen
 msgid "versions"
-msgstr "versions"
+msgstr "Versions"

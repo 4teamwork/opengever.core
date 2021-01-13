@@ -149,7 +149,7 @@ class TestInboxWorkflow(IntegrationTestCase):
         self.assertEqual(self.regular_user.getId(), assignment["principal"])
 
         browser.open(self.inbox_forwarding)
-        browser.click_on('forwarding-transition-reassign')
+        browser.click_on('Reassign')
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
         browser.click_on('Assign')
@@ -185,7 +185,7 @@ class TestInboxWorkflow(IntegrationTestCase):
                          index_data_for(mail)['allowedRolesAndUsers'])
 
         browser.open(self.inbox_forwarding)
-        browser.click_on('forwarding-transition-reassign')
+        browser.click_on('Reassign')
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.meeting_user)
         browser.click_on('Assign')
@@ -214,7 +214,7 @@ class TestInboxWorkflowSolr(SolrIntegrationTestCase):
 
         # step 1
         browser.open(self.inbox_forwarding, view='tabbedview_view-overview')
-        browser.click_on('forwarding-transition-assign-to-dossier')
+        browser.click_on('Assign to dossier')
         browser.fill({'Assign to a ...': 'existing_dossier',
                       'Response': 'Sample response'}).submit()
         # step 2

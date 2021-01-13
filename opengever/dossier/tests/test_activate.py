@@ -15,7 +15,7 @@ class TestDossierActivation(IntegrationTestCase):
     def activate(self, dossier, browser, use_editbar=False):
         if use_editbar:
             browser.open(dossier)
-            editbar.menu_option('Actions', 'dossier-transition-activate').click()
+            editbar.menu_option('Actions', 'Activate').click()
         else:
             browser.open(dossier, view='transition-activate',
                          send_authenticator=True)
@@ -149,7 +149,7 @@ class TestDossierActivationRESTAPI(TestDossierActivation):
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-activate'
         self.assertEquals(expected_url, browser.url)
         self.assertDictContainsSubset(
-            {u'title': u'dossier-state-active',
+            {u'title': u'Active',
              u'comments': u'',
              u'actor': api.user.get_current().getId(),
              u'action': u'dossier-transition-activate',

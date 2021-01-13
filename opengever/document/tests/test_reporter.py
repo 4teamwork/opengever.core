@@ -41,7 +41,7 @@ class TestDocumentReporter(IntegrationTestCase):
              u'Jan 03, 2010',
              u'Jan 03, 2010',
              None,
-             u'unchecked',
+             u'not assessed',
              u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
             [cell.value for cell in list(workbook.active.rows)[1]])
 
@@ -54,7 +54,7 @@ class TestDocumentReporter(IntegrationTestCase):
              u'Aug 31, 2016',
              None,
              None,
-             u'unchecked',
+             u'not assessed',
              u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
             [cell.value for cell in list(workbook.active.rows)[2]])
 
@@ -84,7 +84,7 @@ class TestDocumentReporter(IntegrationTestCase):
              u'Jan 03, 2010',
              u'Jan 03, 2010',
              None,
-             u'unchecked',
+             u'not assessed',
              u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
             [cell.value for cell in list(workbook.active.rows)[1]])
 
@@ -97,7 +97,7 @@ class TestDocumentReporter(IntegrationTestCase):
              u'Aug 31, 2016',
              None,
              None,
-             u'unchecked',
+             u'not assessed',
              u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
             [cell.value for cell in list(workbook.active.rows)[2]])
 

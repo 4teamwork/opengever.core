@@ -32,17 +32,17 @@ class TestActionmenuViewlet(FunctionalTestCase):
         browser.login().open(self.task, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['task-transition-open-in-progress',
-             'task-transition-open-rejected',
-             'task-transition-open-resolved',
-             'task-transition-reassign',
+            ['Accept',
+             'Reject',
+             'Resolve',
+             'Reassign',
              'label_add_comment'],
             browser.css('ul.regular_buttons a').text)
 
         self.assertEquals(
-            ['task-transition-modify-deadline',
-             'task-transition-open-cancelled',
-             'task-transition-open-tested-and-closed'],
+            ['Modify deadline',
+             'Cancel',
+             'Close'],
             browser.css('dl.agency_buttons ul a').text)
 
     @browsing

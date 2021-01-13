@@ -104,7 +104,7 @@ class TestPrivateDossierTabbedView(IntegrationTestCase):
 
         self.assertEqual(
             ['Delete', 'Export as Zip', 'Properties',
-             'dossier-transition-resolve'],
+             'Resolve'],
             editbar.menu_options("Actions"))
 
     @browsing
@@ -143,7 +143,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
 
         self.assertEquals(
             ['Document',
-             'document_with_template',
+             'Document from template',
              'Subdossier'],
             factoriesmenu.addable_types())
 

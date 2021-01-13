@@ -104,7 +104,7 @@ class TestDossierListing(BaseLatexListingTest):
              '1.1. Repository XY',
              'Dossier A',
              'Admin Unit 1 / Boss Hugo (hugo.boss)',
-             'dossier-state-resolved',
+             'Resolved',
              '01.11.2013',
              '31.12.2013'], rows[0])
 
@@ -114,7 +114,7 @@ class TestDossierListing(BaseLatexListingTest):
              '1.1. Repository XY',
              'Dossier B',
              'Admin Unit 1 / Boss Hugo (hugo.boss)',
-             'dossier-state-active',
+             'Active',
              '01.11.2013',
              ''], rows[1])
 
@@ -194,7 +194,7 @@ class TestSubDossierListing(BaseLatexListingTest):
             ['1',
              'Dossier A',
              'Admin Unit 1 / Boss Hugo (hugo.boss)',
-             'dossier-state-resolved',
+             'Resolved',
              '01.11.2013',
              '31.12.2013'], rows[0])
 
@@ -276,7 +276,7 @@ class TestTaskListings(BaseLatexListingTest):
              'For approval',
              'Org Unit 1 / Boss Hugo',
              'Org Unit 1 / Boss Hugo',
-             'task-state-in-progress',
+             'In progress',
              'Task A',
              '06.11.2013'], rows[0])
 

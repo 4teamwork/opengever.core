@@ -36,7 +36,7 @@ class TestPastingAllowed(IntegrationTestCase):
         browser.open(self.dossier, {'paths:list': ['/'.join(self.document.getPhysicalPath())]}, view='copy_items')
         browser.open(self.mail_eml)
         actions = browser.css('#plone-contentmenu-actions li').text
-        self.assertSequenceEqual(['Copy Item', 'Move Item', 'Properties', 'save attachments'], actions)
+        self.assertSequenceEqual(['Copy Item', 'Move Item', 'Properties', 'Save attachments'], actions)
 
     @browsing
     def test_pasting_not_allowed_if_disallowed_subobject_type(self, browser):

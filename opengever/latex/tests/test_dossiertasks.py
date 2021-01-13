@@ -131,7 +131,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
         browser.find('Save').click()
 
         browser.open('http://nohost/plone/repository/dossier-1/task-1')
-        browser.click_on("task-transition-open-resolved")
+        browser.click_on("Resolve")
         browser.fill({'Response': 'response text'})
         browser.click_on("Save")
 

@@ -40,7 +40,7 @@ class TestTaskTemplateFolder(IntegrationTestCase):
                      data=self.make_path_param(self.tasktemplatefolder))
         browser.click_on('Delete')
 
-        self.assertEquals(['Items successfully deleted.'], info_messages())
+        self.assertEquals(['Items deleted successfully.'], info_messages())
         with self.assertRaises(KeyError):
             self.tasktemplatefolder
 
@@ -51,7 +51,7 @@ class TestTaskTemplateFolder(IntegrationTestCase):
                      data=self.make_path_param(self.tasktemplatefolder))
         browser.click_on('Delete')
 
-        self.assertEquals(['Items successfully deleted.'], info_messages())
+        self.assertEquals(['Items deleted successfully.'], info_messages())
         with self.assertRaises(KeyError):
             self.tasktemplatefolder
 

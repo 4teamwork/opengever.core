@@ -245,7 +245,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.successor)
-        browser.find('task-transition-reassign').click()
+        browser.find('Reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
@@ -265,7 +265,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.task)
-        browser.find('task-transition-reassign').click()
+        browser.find('Reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
@@ -285,7 +285,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.successor)
-        browser.find('task-transition-reassign').click()
+        browser.find('Reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
@@ -308,7 +308,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.task)
-        browser.find('task-transition-reassign').click()
+        browser.find('Reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)

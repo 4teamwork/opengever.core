@@ -106,7 +106,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
     def test_oneoffixx_wizard_shows_filter(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
         self.assertEqual(
             'Filter',
             browser.css('input.tableradioSearchbox').first.get('placeholder'),
@@ -116,7 +116,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
     def test_document_creation_from_oneoffixx_template_creates_shadow_doc(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
 
         node = browser.css("#form-widgets-template-2574d08d-95ea-4639-beab-3103fe4c3bc7").first
         browser.fill({'Title': 'A doc'})
@@ -151,7 +151,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
     def test_retry_button_visible_on_shadow_doc(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
         node = browser.css("#form-widgets-template-2574d08d-95ea-4639-beab-3103fe4c3bc7").first
         browser.fill({'Title': 'A doc'})
         browser.fill({'Template': node.get("title")})
@@ -163,7 +163,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
     def test_template_id_stored_in_annotations(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
 
         node = browser.css("#form-widgets-template-2574d08d-95ea-4639-beab-3103fe4c3bc7").first
         browser.fill({'Title': 'A doc'})
@@ -336,7 +336,7 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
     def test_document_creation_from_oneoffixx_lists_only_whitelisted_template_types(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
         self.assertFalse(browser.css("#form-widgets-template-826b692c-f8b6-404c-9cf0-0f585649daa8"))
         self.assertTrue(browser.css("#form-widgets-template-2574d08d-95ea-4639-beab-3103fe4c3bc7"))
 
@@ -360,7 +360,7 @@ class TestCreateDocFromUnconfiguredOneoffixxTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
         browser.exception_bubbling = True
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
 
         # Do note this will not fail if you actually do have the config file!
         self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
@@ -380,7 +380,7 @@ class TestCreateDocFromUnconfiguredOneoffixxFakeSIDTemplate(IntegrationTestCase)
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
         browser.exception_bubbling = True
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
 
         self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
 
@@ -443,7 +443,7 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
         browser.open(self.dossier)
         browser.exception_bubbling = True
 
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
         self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
 
     @browsing
@@ -462,7 +462,7 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
         browser.open(self.dossier)
         browser.exception_bubbling = True
 
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
 
         self.assertEqual(['Connection to OneOffixx failed.'], error_messages())
 
@@ -477,7 +477,7 @@ class TestOneOffixxTemplateFeature(IntegrationTestCase):
 
         self.assertEquals(
             ['Document',
-             'document_with_template',
+             'Document from template',
              'Task',
              'Add task from template',
              'Subdossier',
@@ -488,8 +488,8 @@ class TestOneOffixxTemplateFeature(IntegrationTestCase):
         browser.open(self.dossier)
         self.assertEquals(
             ['Document',
-             'document_with_template',
-             'document_with_oneoffixx_template',
+             'Document from template',
+             'Document from OneOffixx template',
              'Task',
              'Add task from template',
              'Subdossier',
@@ -589,7 +589,7 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
     def test_oneoffixx_favorites_listed_as_a_category(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
-        factoriesmenu.add('document_with_oneoffixx_template')
+        factoriesmenu.add('Document from OneOffixx template')
         expected_categories = [
             'All templates',
             'Favorites',

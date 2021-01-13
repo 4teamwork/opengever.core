@@ -227,7 +227,7 @@ class TestSolrBlobIndexingFunctional(SolrFunctionalTestCase):
 
         with self.observe_children(self.repofolder) as children:
             browser.open(self.repofolder)
-            factoriesmenu.add('Dossier with template')
+            factoriesmenu.add('Dossier from template')
             token = browser.css(
                 'input[name="form.widgets.template"]').first.attrib.get('value')
             browser.fill({'form.widgets.template': token}).submit()

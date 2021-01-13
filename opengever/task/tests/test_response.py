@@ -15,7 +15,7 @@ class TestTaskResponses(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         browser.open(self.task)
-        browser.click_on('task-transition-modify-deadline')
+        browser.click_on('Modify deadline')
         browser.fill({'Response': u'Nicht mehr so dringend ...',
                       'New Deadline': '1.1.2017'})
         browser.click_on('Save')
@@ -33,7 +33,7 @@ class TestTaskResponseForm(IntegrationTestCase):
     def test_shows_revoke_warn_message_only_on_final_transitions(self, browser):
         self.login(self.dossier_responsible, browser=browser)
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
 
         self.assertEquals(
             ['This transtion revokes temporary permissions for the responsible '
@@ -43,7 +43,7 @@ class TestTaskResponseForm(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         self.set_workflow_state('task-state-tested-and-closed', self.subtask)
         browser.open(self.task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-in-progress-resolved')
+        browser.click_on('Resolve')
 
         self.assertEquals([], info_messages())
 
@@ -52,7 +52,7 @@ class TestTaskResponseForm(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
         self.subtask.revoke_permissions = False
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
 
         self.assertEquals(['Temporary permissions will not be revoked by this '
                            'transtion as revoke permissions is unchecked for '
@@ -63,7 +63,7 @@ class TestTaskResponseForm(IntegrationTestCase):
     def test_redirects_to_task_if_user_has_access_rights(self, browser):
         self.login(self.dossier_responsible, browser=browser)
         browser.open(self.subtask, view='tabbedview_view-overview')
-        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         self.assertEquals(['Review state successfully changed.'],
@@ -80,7 +80,7 @@ class TestTaskResponseForm(IntegrationTestCase):
 
         self.login(self.regular_user, browser=browser)
         browser.open(self.task_in_protected_dossier, view='tabbedview_view-overview')
-        browser.click_on('task-transition-open-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         self.assertEquals(

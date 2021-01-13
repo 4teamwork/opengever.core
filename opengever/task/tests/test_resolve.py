@@ -32,7 +32,7 @@ class TestResolveMultiAdminUnitTasks(IntegrationTestCase):
 
         self.register_successor(self.private_task, self.inbox_task)
         browser.open(self.inbox_task, view='tabbedview_view-overview')
-        browser.click_on('task-transition-in-progress-resolved')
+        browser.click_on('Resolve')
 
         document_label = '%s (%s, %s)' % (
             self.document.Title(),

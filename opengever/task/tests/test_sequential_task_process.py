@@ -229,9 +229,9 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         # Complete the first subtask. This will trigger a state change
         # of the second subtask. This is just for the understanding of this test.
         browser.open(self.seq_subtask_1)
-        browser.click_on('task-transition-open-in-progress')
+        browser.click_on('Accept')
         browser.click_on('Save')
-        browser.click_on('task-transition-in-progress-tested-and-closed')
+        browser.click_on('Close')
         browser.click_on('Save')
 
         # The state of the second subtask has changed. No we can assert some things.

@@ -253,7 +253,7 @@ class TestTaskTextTransformation(IntegrationTestCase):
              u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'Der Entwurf befindet sich im Anhang',
              'For confirmation / correction',
-             'task-state-in-progress',
+             'In progress',
              'November 1, 2016',
              'No reminder',
              u'Finanz\xe4mt / Ziegler Robert (robert.ziegler)',

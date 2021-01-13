@@ -154,7 +154,7 @@ class TestDispositionWorkflowIntegration(IntegrationTestCase):
         appraisal.update(dossier=self.offered_dossier_to_archive, archive=None)
 
         browser.open(self.disposition)
-        browser.click_on('disposition-transition-appraise')
+        browser.click_on('Appraise disposition')
 
         self.assertEquals(
             ['The appraisal is incomplete, appraisal could not be finalized.'],
@@ -165,7 +165,7 @@ class TestDispositionWorkflowIntegration(IntegrationTestCase):
         appraisal.update(dossier=self.offered_dossier_to_archive, archive=True)
 
         browser.open(self.disposition)
-        browser.click_on('disposition-transition-appraise')
+        browser.click_on('Appraise disposition')
         self.assertEquals('disposition-state-appraised',
                           api.content.get_state(self.disposition))
 

@@ -436,7 +436,7 @@ class TestTaskActivites(FunctionalTestCase):
                       .within(self.dossier))
 
         browser.login().open(task)
-        browser.find('task-transition-delegate').click()
+        browser.find('Delegate').click()
         # fill responsibles step
         form = browser.find_form_by_field('Responsibles')
         form.find_widget('Responsibles').fill(['org-unit-1:hugo.boss'])
