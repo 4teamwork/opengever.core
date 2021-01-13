@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-13 14:31+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -23,7 +23,7 @@ msgstr "Active"
 #. Default: "Add Person"
 #: ./opengever/contact/browser/person.py
 msgid "Add Person"
-msgstr "Add Person"
+msgstr "Add person"
 
 #. German translation: Kontakt
 #: ./opengever/contact/contact.py
@@ -38,17 +38,17 @@ msgstr "Delete"
 #. German translation: E-Mail-Adresse löschen
 #: ./opengever/contact/browser/templates/person_edit.pt
 msgid "Delete mailaddress"
-msgstr "Delete mailaddress"
+msgstr "Delete email address"
 
 #. German translation: E-Mail-Adresse
 #: ./opengever/contact/browser/templates/person_edit.pt
 msgid "Emailadddress"
-msgstr "Emailadddress"
+msgstr "Email address"
 
 #. German translation: E-Mail-Adressen
 #: ./opengever/contact/browser/templates/person_edit.pt
 msgid "Emailaddresses"
-msgstr "Emailaddresses"
+msgstr "Email address"
 
 #. German translation: Label
 #: ./opengever/contact/browser/templates/person_edit.pt
@@ -95,20 +95,20 @@ msgstr "Active"
 #. Default: "Firstname"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_firstname"
-msgstr "Firstname"
+msgstr "First name"
 
 #. German translation: Frühere Kontakt ID
 #. Default: "Former contact id"
 #: ./opengever/contact/browser/organization_listing.py
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_former_contact_id"
-msgstr "Former contact id"
+msgstr "Former contact ID"
 
 #. German translation: Nachname
 #. Default: "Lastname"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_lastname"
-msgstr "Lastname"
+msgstr "Last name"
 
 #. German translation: Name
 #. Default: "Name"
@@ -124,6 +124,7 @@ msgstr "Organizations"
 
 #. German translation: Anrede
 #. Default: "Salutation"
+#. MARKER: questionable
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_salutation"
 msgstr "Salutation"
@@ -196,7 +197,7 @@ msgstr "Active"
 #. Default: "Add Participation"
 #: ./opengever/contact/browser/participation_forms.py
 msgid "label_add_participation"
-msgstr "Add Participation"
+msgstr "Add participation"
 
 #. German translation: Adresse (Strasse / Nr.)
 #. Default: "Address 1"
@@ -222,33 +223,33 @@ msgstr "Addresses"
 #: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_addresses"
-msgstr "Archived Addresses"
+msgstr "Archived addresses"
 
 #. German translation: Archivierte E-Mail-Adressen
 #. Default: "Archived Mail Addresses"
 #: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_mail"
-msgstr "Archived Mail Addresses"
+msgstr "Archived email addresses"
 
 #. German translation: Archivierte Informationen
 #. Default: "Archived Information"
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_archived_organizations"
-msgstr "Archived Information"
+msgstr "Archived information"
 
 #. German translation: Archivierte persönliche Informationen
 #. Default: "Archived Personal Information"
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_persons"
-msgstr "Archived Personal Information"
+msgstr "Archived personal information"
 
 #. German translation: Archivierte Telefonnummern
 #. Default: "Archived Phone Numbers"
 #: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_phone_numbers"
-msgstr "Archived Phone Numbers"
+msgstr "Archived phone numbers"
 
 #. German translation: Abbrechen
 #. Default: "Cancel"
@@ -285,7 +286,7 @@ msgstr "Country"
 #. Default: "Are you sure you want to delete this mail address?"
 #: ./opengever/contact/browser/templates/person_edit.pt
 msgid "label_delete_mail_address_confirm_text"
-msgstr "Are you sure you want to delete this mail address?"
+msgstr "Are you sure you want to delete this email address?"
 
 #. German translation: Abteilung
 #. Default: "Department"
@@ -302,6 +303,7 @@ msgstr "Description"
 
 #. German translation: Beteiligung von ${title} bearbeiten
 #. Default: "Edit ${title}"
+#. MARKER: double check
 #: ./opengever/contact/browser/participation_forms.py
 msgid "label_edit_participation"
 msgstr "Edit ${title}"
@@ -311,7 +313,7 @@ msgstr "Edit ${title}"
 #: ./opengever/contact/browser/contacts_tab.py
 #: ./opengever/contact/contact.py
 msgid "label_email"
-msgstr "email"
+msgstr "Email 1"
 
 #. German translation: E-Mail 2
 #. Default: "Email 2"
@@ -331,7 +333,7 @@ msgstr "Fax"
 #: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_firstname"
-msgstr "Firstname"
+msgstr "First name"
 
 #. German translation: Frühere Kontakt ID
 #. Default: "Former contact ID"
@@ -357,13 +359,13 @@ msgstr "Inactive"
 #: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_lastname"
-msgstr "Lastname"
+msgstr "Last name"
 
 #. German translation: Letzte Beteiligungen
 #. Default: "Latest participations"
 #: ./opengever/contact/browser/templates/latest_participations.pt
 msgid "label_latest_participations"
-msgstr "Latest participations"
+msgstr "Most recent participations"
 
 #. German translation: Lokal
 #. Default: "Local"
@@ -376,7 +378,7 @@ msgstr "Local"
 #: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_mail"
-msgstr "Mail Addresses"
+msgstr "Email Addresses"
 
 #. German translation: Mobiltelefon
 #. Default: "Mobile"
@@ -407,7 +409,7 @@ msgstr "Office"
 #. Default: "Org Unit"
 #: ./opengever/contact/browser/tabs.py
 msgid "label_org_unit"
-msgstr "Org Unit"
+msgstr "Organizational unit"
 
 #. German translation: Organisationen
 #. Default: "Organizations"
@@ -430,6 +432,7 @@ msgstr "Personal information:"
 
 #. German translation: Personen
 #. Default: "Persons"
+#. MARKER: This might actually be correct here (instead of 'People'). Double check.
 #: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
@@ -439,13 +442,13 @@ msgstr "Persons"
 #. Default: "Fax"
 #: ./opengever/contact/contact.py
 msgid "label_phone_fax"
-msgstr "Fax"
+msgstr "Fax (work)"
 
 #. German translation: Telefon Privat
 #. Default: "Phone home"
 #: ./opengever/contact/contact.py
 msgid "label_phone_home"
-msgstr "Phone home"
+msgstr "Phone (home)"
 
 #. German translation: Telefon Mobile
 #. Default: "Mobile"
@@ -465,7 +468,7 @@ msgstr "Phone numbers"
 #: ./opengever/contact/browser/contacts_tab.py
 #: ./opengever/contact/contact.py
 msgid "label_phone_office"
-msgstr "Phone office"
+msgstr "Phone (work)"
 
 #. German translation: Bild
 #. Default: "Picture"
@@ -487,6 +490,7 @@ msgstr "Roles"
 
 #. German translation: Anrede
 #. Default: "Salutation"
+#. MARKER: questionable
 #: ./opengever/contact/browser/person.py
 #: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
@@ -497,7 +501,7 @@ msgstr "Salutation"
 #. Default: "Sequence Number"
 #: ./opengever/contact/browser/byline.py
 msgid "label_sequence_number"
-msgstr "Sequence Number"
+msgstr "Sequence number"
 
 #. German translation: Alle ${total} Beteiligungen anzeigen
 #. Default: "Show all ${total} participations"
@@ -508,7 +512,7 @@ msgstr "Show all ${total} participations"
 #. German translation: Alle
 #: ./opengever/contact/browser/tabs.py
 msgid "label_tabbedview_filter_all"
-msgstr "label_tabbedview_filter_all"
+msgstr "All"
 
 #. German translation: Teams
 #. Default: "Teams"
@@ -526,7 +530,7 @@ msgstr "Title"
 #. Default: "Url"
 #: ./opengever/contact/contact.py
 msgid "label_url"
-msgstr "Url"
+msgstr "URL"
 
 #. German translation: URLs
 #. Default: "URLs"
@@ -545,7 +549,7 @@ msgstr "Users"
 #. Default: "ZIP"
 #: ./opengever/contact/contact.py
 msgid "label_zip"
-msgstr "ZIP"
+msgstr "ZIP code"
 
 #. German translation: Funktion
 #. Default: "Function"
@@ -557,19 +561,19 @@ msgstr "Function"
 #. Default: "Mailaddress successfully deleted"
 #: ./opengever/contact/browser/mail.py
 msgid "mail_address_deleted"
-msgstr "Mailaddress successfully deleted"
+msgstr "Email address deleted successfully"
 
 #. German translation: Für diesen Kontakt existiert bereits eine Beteiligung.
 #. Default: "There already exists a participation for this contact."
 #: ./opengever/contact/browser/participation_forms.py
 msgid "msg_participation_already_exists"
-msgstr "There already exists a participation for this contact."
+msgstr "A participation already exists for this contact."
 
 #. German translation: Persönliche Angaben
 #. Default: "Personal Stuff"
 #: ./opengever/contact/contact.py
 msgid "personal"
-msgstr "Personal Stuff"
+msgstr "Personal details"
 
 #. German translation: ${amount} Treffer
 #. Default: "${amount} matches"
@@ -581,4 +585,4 @@ msgstr "${amount} matches"
 #. Default: "Telefon"
 #: ./opengever/contact/contact.py
 msgid "telefon"
-msgstr "Telefon"
+msgstr "Phone"

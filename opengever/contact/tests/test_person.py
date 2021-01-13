@@ -31,8 +31,8 @@ class TestPerson(FunctionalTestCase):
 
         browser.fill({'Salutation': u'Sir',
                       'Academic title': u'Dr',
-                      'Firstname': u'Hanspeter',
-                      'Lastname': u'Hansj\xf6rg',
+                      'First name': u'Hanspeter',
+                      'Last name': u'Hansj\xf6rg',
                       'Description': u'Pellentesque posuere.'}).submit()
 
         self.assertEquals([u'Record created'], info_messages())
@@ -59,8 +59,8 @@ class TestPerson(FunctionalTestCase):
 
         browser.fill({'Salutation': u'Sir',
                       'Academic title': u'Dr',
-                      'Firstname': u'Hanspeter',
-                      'Lastname': u'Hansj\xf6rg',
+                      'First name': u'Hanspeter',
+                      'Last name': u'Hansj\xf6rg',
                       'Description': u'Pellentesque posuere.'}).submit()
 
         self.assertEquals([u'Changes saved'], info_messages())

@@ -19,12 +19,12 @@ class TestContactByline(FunctionalTestCase):
 
         browser.login().open(self.contactfolder, view=person.wrapper_id)
         self.assertEquals(
-            ['Sequence Number: 1'],
+            ['Sequence number: 1'],
             browser.css('#plone-document-byline .sequenceNumber').text)
 
         browser.open(self.contactfolder, view=organization.wrapper_id)
         self.assertEquals(
-            ['Sequence Number: 2'],
+            ['Sequence number: 2'],
             browser.css('#plone-document-byline .sequenceNumber').text)
 
     @browsing

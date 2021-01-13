@@ -14,19 +14,19 @@ class TestTeamListing(IntegrationTestCase):
             {
                 'Active': 'Yes',
                 'Group': 'Projekt A',
-                'Org Unit': u'Finanz\xe4mt',
+                'Organizational unit': u'Finanz\xe4mt',
                 'Title': u'Projekt \xdcberbaung Dorfmatte',
             },
             {
                 'Active': 'Yes',
                 'Group': u'Projekt L\xc3\xa4\xc3\xa4r',
-                'Org Unit': u'Finanz\xe4mt',
+                'Organizational unit': u'Finanz\xe4mt',
                 'Title': 'Sekretariat Abteilung Null',
             },
             {
                 'Active': 'Yes',
                 'Group': 'Projekt B',
-                'Org Unit': u'Finanz\xe4mt',
+                'Organizational unit': u'Finanz\xe4mt',
                 'Title': 'Sekretariat Abteilung XY',
             },
         ]
