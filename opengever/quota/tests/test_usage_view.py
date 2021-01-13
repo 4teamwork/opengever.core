@@ -28,7 +28,7 @@ class TestUsageView(FunctionalTestCase):
 
         browser.login().open(user_folder).find('Usage').click()
         self.assertEquals(
-            [['Usage', '4.0 Bytes'],
+            [['Storage usage', '4.0 Bytes'],
              ['Soft limit', 'unlimited'],
              ['Hard limit', 'unlimited']],
             browser.css('table.usage').first.lists())
@@ -42,7 +42,7 @@ class TestUsageView(FunctionalTestCase):
         transaction.commit()
         browser.reload()
         self.assertEquals(
-            [['Usage', '30.0 Bytes'],
+            [['Storage usage', '30.0 Bytes'],
              ['Soft limit', '40.0 Bytes (75.0%)'],
              ['Hard limit', '50.0 Bytes (60.0%)']],
             browser.css('table.usage').first.lists())

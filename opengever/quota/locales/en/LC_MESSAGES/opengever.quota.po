@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-13 11:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr "Back"
 #. German translation: Dieser Inhalt kann nicht hinzugefügt werden, weil damit der Ihnen zur Verfügung stehende Speicherplatz überschritten würde.
 #: ./opengever/quota/sizequota.py
 msgid "Can not add this item because it exhausts the quota."
-msgstr "Can not add this item because it exhausts the quota."
+msgstr "Cannot add this item because it would exceed your storage quota."
 
 #. German translation: Hard-Limit
 #: ./opengever/quota/browser/templates/usage.pt
@@ -37,7 +37,7 @@ msgstr "Soft limit"
 #. German translation: Nutzung
 #: ./opengever/quota/browser/templates/usage.pt
 msgid "Usage"
-msgstr "Usage"
+msgstr "Storage usage"
 
 #. German translation: unlimitiert
 #: ./opengever/quota/browser/usage.py
@@ -48,4 +48,4 @@ msgstr "unlimited"
 #. Default: "Usage of «${title}»"
 #: ./opengever/quota/browser/templates/usage.pt
 msgid "usage_title"
-msgstr "Usage of «${title}»"
+msgstr "Storage usage of «${title}»"
