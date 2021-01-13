@@ -1,5 +1,6 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 
@@ -9,16 +10,13 @@ class TestSchemaDefinitionDelete(IntegrationTestCase):
     @browsing
     def test_property_sheet_schema_definition_delete_existing_schema(self, browser):
         self.login(self.manager, browser)
-
-        sheet = PropertySheetSchemaDefinition.create("sheet")
-        storage = PropertySheetSchemaStorage()
-        storage.save(sheet)
+        create(Builder("property_sheet_schema").named("sheet"))
 
         browser.open(
             view="@propertysheets/sheet", method="DELETE", headers=self.api_headers
         )
         self.assertEqual(browser.status_code, 204)
-        self.assertEqual([], storage.list())
+        self.assertEqual([], PropertySheetSchemaStorage().list())
 
     @browsing
     def test_property_sheet_schema_definition_delete_requires_name(
@@ -65,10 +63,7 @@ class TestSchemaDefinitionDelete(IntegrationTestCase):
     @browsing
     def test_non_managers_cannot_delete(self, browser):
         self.login(self.administrator, browser)
-
-        sheet = PropertySheetSchemaDefinition.create("sheet")
-        storage = PropertySheetSchemaStorage()
-        storage.save(sheet)
+        create(Builder("property_sheet_schema").named("sheet"))
 
         with browser.expect_unauthorized():
             browser.open(
