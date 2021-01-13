@@ -4,6 +4,10 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import CommitteeActor
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
+from opengever.ogds.base.actor import INTERACTIVE_ACTORS_BY_ID
+from opengever.ogds.base.actor import InteractiveActor
 from opengever.ogds.base.actor import NullActor
 from opengever.ogds.base.actor import OGDSGroupActor
 from opengever.ogds.base.actor import OGDSUserActor
@@ -155,6 +159,34 @@ class TestActorLookup(IntegrationTestCase):
             u'Meier Foo &lt;b onmouseover=alert(&apos;Foo!&apos;)&gt;click me!&lt;/b&gt; (meier.f@example.com)'
             u'</a>',
             actor.get_link())
+
+    def test_interactive_actor_lookup(self):
+        self.login(self.regular_user)
+
+        responsible_actor = Actor.lookup(INTERACTIVE_ACTOR_RESPONSIBLE.get('id'))
+        self.assertIsInstance(responsible_actor, InteractiveActor)
+        self.assertEqual('Responsible',
+                         responsible_actor.get_label())
+
+        current_user_actor = Actor.lookup(INTERACTIVE_ACTOR_CURRENT_USER.get('id'))
+        self.assertIsInstance(current_user_actor, InteractiveActor)
+        self.assertEqual('Logged in user',
+                         current_user_actor.get_label())
+
+    def test_interactive_actor_lookup_raises_an_error_for_unknown_actors(self):
+        self.login(self.regular_user)
+
+        unknown_interactive_actor = 'unknown'
+
+        self.assertNotIn(unknown_interactive_actor, INTERACTIVE_ACTORS_BY_ID)
+
+        with self.assertRaises(ValueError) as error:
+            InteractiveActor(unknown_interactive_actor)
+
+        self.assertEqual(
+            'Interactive actor must be one of '
+            'interactive_actor:responsible, interactive_actor:current_user',
+            str(error.exception))
 
 
 class TestActorCorresponding(IntegrationTestCase):
