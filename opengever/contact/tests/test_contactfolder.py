@@ -51,7 +51,7 @@ class TestLocalContactListing(SolrIntegrationTestCase):
         browser.open(self.contactfolder, view='tabbedview_view-local')
 
         self.assertEquals(
-            [u'Lastname Firstname email Phone office',
+            [u'Last name First name Email 1 Phone (work)',
              u'D\xfcrr Hanspeter',
              u'Meier Franz meier.f@example.com'],
             browser.css('.listing').first.rows.text)

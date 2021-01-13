@@ -32,8 +32,8 @@ class TestContact(SolrIntegrationTestCase):
 
         browser.open(self.contactfolder)
         factoriesmenu.add('Contact')
-        browser.fill({'Firstname': 'Hanspeter',
-                      'Lastname': 'D\xc3\xbcrr'})
+        browser.fill({'First name': 'Hanspeter',
+                      'Last name': 'D\xc3\xbcrr'})
         browser.find('Save').click()
 
         self.assertEqual(
@@ -46,7 +46,7 @@ class TestContact(SolrIntegrationTestCase):
         self.login(self.regular_user)
 
         browser.login().open(self.hanspeter_duerr, view='edit')
-        browser.fill({'Lastname': 'Walter'})
+        browser.fill({'Last name': 'Walter'})
         browser.find('Save').click()
 
         self.assertEqual('Walter Hanspeter', browser.css('h1').first.text)

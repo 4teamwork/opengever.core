@@ -345,7 +345,7 @@ class TestAddForm(FunctionalTestCase):
 
         self.assertEquals(['There were some errors.'], error_messages())
         self.assertEquals(
-            ['There already exists a participation for this contact.'],
+            ['A participation already exists for this contact.'],
             browser.css('div.error').text),
 
 

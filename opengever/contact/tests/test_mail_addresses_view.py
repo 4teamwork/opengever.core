@@ -132,7 +132,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(self.contactfolder, view='contact-1/mails/1/delete')
 
         self.assertDictContainsSubset({
-            'message': 'Mailaddress successfully deleted',
+            'message': 'Email address deleted successfully',
             'messageClass': 'info'},
             browser.json.get('messages')[0])
 

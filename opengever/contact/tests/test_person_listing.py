@@ -6,8 +6,8 @@ from opengever.testing import FunctionalTestCase
 
 class TestPersonListing(FunctionalTestCase):
 
-    labels = ['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Active', 'Organizations', 'Former contact id']
+    labels = ['Salutation', 'Academic title', 'First name',
+              'Last name', 'Active', 'Organizations', 'Former contact ID']
 
     def setUp(self):
         super(TestPersonListing, self).setUp()
@@ -67,7 +67,7 @@ class TestPersonListing(FunctionalTestCase):
         table = browser.css('.listing').first
         self.assertEquals(
             ['Albert', 'Mustermann', u'M\xfcller'],
-            [row.get('Lastname') for row in table.dicts()])
+            [row.get('Last name') for row in table.dicts()])
 
     @browsing
     def test_first_and_lastname_are_linked_to_person_view(self, browser):

@@ -28,7 +28,7 @@ class TestOrganizationListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-organizations')
 
         self.assertEquals(
-            [[u'Name', 'Active', 'Former contact id'],
+            [[u'Name', 'Active', 'Former contact ID'],
              [u'AAA Design', 'Yes', '445566'],
              [u'Meier AG', 'Yes', '112233']],
             browser.css('.listing').first.lists())
@@ -51,7 +51,7 @@ class TestOrganizationListing(FunctionalTestCase):
             data={'organization_state_filter': 'filter_all'})
 
         self.assertEquals(
-            [[u'Name', 'Active', 'Former contact id'],
+            [[u'Name', 'Active', 'Former contact ID'],
              [u'AAA Design', 'Yes', '445566'],
              [u'Meier AG', 'Yes', '112233'],
              [u'M\xfcller', 'No', '']],
@@ -74,6 +74,6 @@ class TestOrganizationListing(FunctionalTestCase):
             data={'searchable_text': 'Design'})
 
         self.assertEquals(
-            [[u'Name', 'Active', 'Former contact id'],
+            [[u'Name', 'Active', 'Former contact ID'],
              [u'AAA Design', 'Yes', '445566']],
             browser.css('.listing').first.lists())

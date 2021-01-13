@@ -1441,8 +1441,8 @@ class TestContactDefaults(TestDefaultsBase):
             browser.login().open(self.contactfolder)
             factoriesmenu.add(u'Contact')
             browser.fill({
-                u'Firstname': CONTACT_REQUIREDS['firstname'],
-                u'Lastname': CONTACT_REQUIREDS['lastname']}).save()
+                u'First name': CONTACT_REQUIREDS['firstname'],
+                u'Last name': CONTACT_REQUIREDS['lastname']}).save()
             contact = browser.context
 
         persisted_values = get_persisted_values_for_obj(contact)
