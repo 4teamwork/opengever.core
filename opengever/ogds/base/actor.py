@@ -13,6 +13,7 @@ The lookup results are
  - a TeamActor if the identifier starts with "team:"
  - a CommitteeActor if the identifier starts with "committee:"
  - a PloneUserActor or an OGDSUserActor for any other string.
+ - an InteractiveActor if the identifier is one of the INTERACTIVE_ACTORS id
 
 For known actor types use:
 >> Actor.user('my-identifier', user=user)
@@ -44,6 +45,19 @@ from zope.interface import implementer
 
 
 SYSTEM_ACTOR_ID = '__system__'
+
+INTERACTIVE_ACTOR_RESPONSIBLE = {
+    'id': 'interactive_actor:responsible',
+    'label': _(u'interactive_actor_responsible', default=u'Responsible')
+}
+
+INTERACTIVE_ACTOR_CURRENT_USER = {
+    'id': 'interactive_actor:current_user',
+    'label': _(u'interactive_actor_current_user', default=u'Current user')
+}
+
+INTERACTIVE_ACTORS = [INTERACTIVE_ACTOR_RESPONSIBLE, INTERACTIVE_ACTOR_CURRENT_USER]
+INTERACTIVE_ACTORS_BY_ID = {actor.get('id'): actor for actor in INTERACTIVE_ACTORS}
 
 
 @implementer(IActor)
@@ -451,6 +465,43 @@ class OGDSGroupActor(Actor):
         return None
 
 
+@implementer(IActor)
+class InteractiveActor(Actor):
+
+    css_class = 'actor-interactive-actor'
+    actor_type = 'interactive_actor'
+
+    def __init__(self, identifier):
+        actor = INTERACTIVE_ACTORS_BY_ID.get(identifier)
+        if not actor:
+            raise ValueError('Interactive actor must be one of {}'.format(
+                             ', '.join(INTERACTIVE_ACTORS_BY_ID)))
+
+        self.identifier = identifier
+        self.actor = actor
+
+    def corresponds_to(self, user):
+        return False
+
+    def get_profile_url(self):
+        return None
+
+    def get_label(self, with_principal=True):
+        return translate(self.actor.get('label'), context=getRequest())
+
+    def get_link(self, with_icon=False):
+        return u''
+
+    def represents(self):
+        return None
+
+    def representatives(self):
+        return []
+
+    def get_portrait_url(self):
+        return None
+
+
 class ActorLookup(object):
 
     def __init__(self, identifier):
@@ -470,6 +521,9 @@ class ActorLookup(object):
 
     def is_team(self):
         return self.identifier.startswith('team:')
+
+    def is_interactive_actor(self):
+        return self.identifier in INTERACTIVE_ACTORS_BY_ID
 
     def create_team_actor(self, team=None):
         if not team:
@@ -551,6 +605,9 @@ class ActorLookup(object):
     def create_system_actor(self):
         return SystemActor(self.identifier)
 
+    def create_interactive_actor(self):
+        return InteractiveActor(self.identifier)
+
     def lookup(self):
         if not self.identifier:
             return self.create_null_actor()
@@ -569,6 +626,9 @@ class ActorLookup(object):
 
         elif self.is_committee():
             return self.create_committee_actor()
+
+        elif self.is_interactive_actor():
+            return self.create_interactive_actor()
 
         user = self.load_user()
         if user:
