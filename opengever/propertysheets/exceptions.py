@@ -8,3 +8,7 @@ class InvalidFieldTypeDefinition(Exception):
 
 class InvalidSchemaAssignment(Exception):
     pass
+
+
+class BadCustomPropertiesFactoryConfiguration(Exception):
+    pass

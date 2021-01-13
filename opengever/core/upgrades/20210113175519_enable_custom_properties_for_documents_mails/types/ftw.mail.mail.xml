@@ -1,0 +1,7 @@
+<object name="ftw.mail.mail" meta_type="Dexterity FTI">
+
+  <property name="behaviors" purge="False">
+    <element value="opengever.document.behaviors.customproperties.IDocumentCustomProperties" />
+  </property>
+
+</object>

@@ -1,0 +1,7 @@
+<object name="opengever.document.document" meta_type="Dexterity FTI">
+
+  <property name="behaviors" purge="False">
+    <element value="opengever.document.behaviors.customproperties.IDocumentCustomProperties" />
+  </property>
+
+</object>
