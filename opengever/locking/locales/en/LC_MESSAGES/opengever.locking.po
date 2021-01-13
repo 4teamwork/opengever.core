@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-13 14:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr "This document has been submitted as a copy and cannot be edited directly
 #. Default: "Unlock document confirmation"
 #: ./opengever/locking/browser/templates/unlock_document_form.pt
 msgid "label_unlock_document_confirmation"
-msgstr "Unlock document confirmation"
+msgstr "Do you really want to unlock this document?"
 
 #. German translation: Warnung
 #. Default: "Warning"
@@ -60,7 +60,7 @@ msgstr "Warning"
 #. Default: "Modifications made to this document in Gever might get overwritten when copying the document back from the linked workspace as a new version of this document."
 #: ./opengever/locking/browser/unlock_forms.py
 msgid "msg_unlock_document_copied_to_workspace"
-msgstr "Modifications made to this document in Gever might get overwritten when copying the document back from the linked workspace as a new version of this document."
+msgstr "Modifications made to this document in GEVER might get overwritten when copying the document back from the linked workspace as a new version of this document."
 
 #. German translation: Dadurch wird das eingereichte Dokument vom originalen Dokument entkoppelt. Sie können das Dokument anschliessend bearbeiten.<br />Einreichen neuer Versionen wird dadurch nicht mehr möglich sein.
 #. Default: "This will decouple the submitted document from the original one. You will then be able to modify this document but submitting a new version will not be possible anymore."
