@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-13 10:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. German translation: Bearbeitungskommentar
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
 msgid "Checkin comment:"
-msgstr "Checkin comment:"
+msgstr "Check-in comment:"
 
 #. German translation: Ersteller:
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
@@ -71,7 +71,7 @@ msgstr "Reviving the preview is not available for this context."
 #. Default: "Preview revived and will be available soon"
 #: ./opengever/bumblebee/browser/revive_preview.py
 msgid "preview_revived"
-msgstr "Preview revived and will be available soon"
+msgstr "Preview was revived and will be available soon."
 
 #. German translation: Sie sehen sich eine alte Version an.
 #. Default: "You are looking at a versioned file."
