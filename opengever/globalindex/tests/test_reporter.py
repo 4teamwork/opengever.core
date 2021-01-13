@@ -24,11 +24,11 @@ class TestTaskReporter(IntegrationTestCase):
 
         # labels
         self.assertSequenceEqual(
-            [u'label_title', u'review_state',
-             u'label_deadline', u'label_completed',
-             u'label_dossier', u'label_issuer',
-             u'label_issuing_org_unit', u'label_responsible',
-             u'label_task_type', 'label_admin_unit_id', u'label_sequence_number'],
+            [u'Title', u'State',
+             u'Deadline', u'Completed on',
+             u'Dossier', u'Issuer',
+             u'Issuing organization', u'Responsible',
+             u'Task type', 'Tenant', u'Sequence number'],
             [cell.value for cell in list(workbook.active.rows)[0]])
 
         # self.task
@@ -86,10 +86,10 @@ class TestTaskReporter(IntegrationTestCase):
 
         # labels
         self.assertSequenceEqual(
-            [u'label_sequence_number', u'review_state',
-             u'label_responsible', u'label_issuer',
-             u'label_task_type', u'label_title',
-             u'label_dossier'],
+            [u'Sequence number', u'State',
+             u'Responsible', u'Issuer',
+             u'Task type', u'Title',
+             u'Dossier'],
             [cell.value for cell in list(workbook.active.rows)[0]])
 
     @browsing
