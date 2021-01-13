@@ -63,6 +63,17 @@ class PropertySheetSchemaDefinition(object):
             assignments = tuple()
         self.assignments = assignments
 
+    def __eq__(self, other):
+        if isinstance(other, PropertySheetSchemaDefinition):
+            return other.name == self.name
+        return NotImplemented
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
     @property
     def assignments(self):
         return self._assignments
