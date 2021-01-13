@@ -140,7 +140,7 @@ class TestDossierTemplate(IntegrationTestCase):
         factoriesmenu.add('Subdossier')
 
         self.assertEqual(
-            'Add Subdossier',
+            'Add subdossier',
             browser.css('#content h1').first.text)
 
     @browsing
@@ -160,7 +160,7 @@ class TestDossierTemplate(IntegrationTestCase):
         browser.open(self.subdossiertemplate, view="edit")
 
         self.assertEqual(
-            'Edit Subdossier',
+            'Edit subdossier',
             browser.css('#content h1').first.text)
 
     @browsing
@@ -176,7 +176,7 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Description',
             u'Keywords',
             u'Prefill keywords',
-            u'Restrict Keywords',
+            u'Restrict keywords',
             u'Comments',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
@@ -193,7 +193,7 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Description',
             u'Keywords',
             u'Prefill keywords',
-            u'Restrict Keywords',
+            u'Restrict keywords',
             u'Comments',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
@@ -217,13 +217,13 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.dossiertemplate, view="edit")
 
-        self.assertTrue(browser.find_field_by_text('Restrict Keywords'),
-                        'Expect the "Restrict Keywords" field')
+        self.assertTrue(browser.find_field_by_text('Restrict keywords'),
+                        'Expect the "Restrict keywords" field')
 
         form_labels = browser.form_field_labels
-        self.assertGreater(form_labels.index('Restrict Keywords'),
+        self.assertGreater(form_labels.index('Restrict keywords'),
                            form_labels.index('Prefill keywords'),
-                           '"Restrict Keywords" should be after "Predefined '
+                           '"Restrict keywords" should be after "Predefined '
                            'Keywords"')
 
 

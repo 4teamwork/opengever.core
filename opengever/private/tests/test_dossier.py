@@ -113,7 +113,7 @@ class TestPrivateDossierTabbedView(IntegrationTestCase):
         browser.open(self.private_dossier, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['Dossier structure', 'Comments', 'Linked Dossiers',
+            ['Dossier structure', 'Comments', 'Linked dossiers',
              'Newest documents', 'Description', 'Keywords'],
             browser.css('.box h2').text)
 

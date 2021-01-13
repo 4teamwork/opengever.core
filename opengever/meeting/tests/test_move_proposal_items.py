@@ -22,7 +22,7 @@ class TestMoveProposalItems(SolrIntegrationTestCase):
         browser.fill({'Destination': self.subdossier})
         browser.css('#form-buttons-button_submit').first.click()
 
-        assert_message('1 Elements were moved successfully')
+        assert_message('1 elements were moved successfully')
         self.assertIn(proposal, self.subdossier.objectValues())
 
     @browsing

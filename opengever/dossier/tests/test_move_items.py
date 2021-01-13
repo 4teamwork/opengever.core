@@ -799,7 +799,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         """
         self.login(self.regular_user, browser)
         browser.open(self.empty_dossier)
-        self.assertEquals('Reference Number: Client1 1.1 / 4',
+        self.assertEquals('Reference number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'Unexpected reference number. Test fixture changed?')
         dossier_intid = getUtility(IIntIds).getId(self.empty_dossier)
@@ -813,7 +813,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         # transaction.begin()  # sync
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
-        self.assertEquals('Reference Number: Client1 1.1 / 4',
+        self.assertEquals('Reference number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'Moving to the current parent should not change'
                           ' the reference number because the location does'
@@ -826,7 +826,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         """
         self.login(self.regular_user, browser)
         browser.open(self.empty_dossier)
-        self.assertEquals('Reference Number: Client1 1.1 / 4',
+        self.assertEquals('Reference number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'Unexpected reference number. Test fixture changed?')
         dossier_intid = getUtility(IIntIds).getId(self.empty_dossier)
@@ -840,7 +840,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
 
-        self.assertEquals('Reference Number: Client1 2 / 1',
+        self.assertEquals('Reference number: Client1 2 / 1',
                           browser.css('.reference_number').first.text,
                           'Unexpected reference number after moving.')
 
@@ -853,7 +853,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
-        self.assertEquals('Reference Number: Client1 1.1 / 4',
+        self.assertEquals('Reference number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'When moving back, the old reference_number should be'
                           ' recycled.')

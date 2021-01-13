@@ -112,7 +112,7 @@ class TestDossierReporter(IntegrationTestCase):
 
         rows = list(workbook.active.rows)
         self.assertSequenceEqual(
-            [u'Title', u'Review state', u'Reference Number', u'End date',
+            [u'Title', u'Review state', u'Reference number', u'End date',
              u'Responsible'],
             [cell.value for cell in rows[0]])
 

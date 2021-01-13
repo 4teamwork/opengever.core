@@ -299,7 +299,7 @@ class TestArchiveForm(IntegrationTestCase):
         browser.open(self.empty_dossier, view='transition-archive')
 
         browser.fill({'Filing number prefix': 'Government',
-                      'filing Year': u'2017',
+                      'Filing year': u'2017',
                       'Action': 'resolve and set filing no'})
         browser.click_on('Archive')
 
@@ -318,7 +318,7 @@ class TestArchiveForm(IntegrationTestCase):
         browser.open(self.empty_dossier, view='transition-archive')
 
         browser.fill({'Filing number prefix': 'Government',
-                      'filing Year': u'2017',
+                      'Filing year': u'2017',
                       'Action': 'resolve and take the existing filing no'})
         browser.click_on('Archive')
 
@@ -337,7 +337,7 @@ class TestArchiveForm(IntegrationTestCase):
         browser.open(self.empty_dossier, view='transition-archive')
 
         browser.fill({'Filing number prefix': 'Government',
-                      'filing Year': u'2017',
+                      'Filing year': u'2017',
                       'Action': 'resolve and take the existing filing no'})
         browser.click_on('Archive')
 
@@ -356,7 +356,7 @@ class TestArchiveForm(IntegrationTestCase):
         browser.open(self.empty_dossier, view='transition-archive')
 
         browser.fill({'Filing number prefix': 'Government',
-                      'filing Year': u'2017',
+                      'Filing year': u'2017',
                       'Action': 'resolve and set a new filing no'})
         browser.click_on('Archive')
 
@@ -373,7 +373,7 @@ class TestArchiveForm(IntegrationTestCase):
         browser.open(self.empty_dossier, view='transition-archive')
 
         browser.fill({'Filing number prefix': 'Government',
-                      'filing Year': u'2017',
+                      'Filing year': u'2017',
                       'Action': 'set a filing no'})
         browser.click_on('Archive')
 
@@ -430,7 +430,7 @@ class TestArchiveForm(IntegrationTestCase):
         browser.open(self.empty_dossier, view='transition-archive')
 
         browser.fill({'Filing number prefix': 'Government',
-                      'filing Year': u'2017',
+                      'Filing year': u'2017',
                       'Action': 'resolve and set filing no'})
         browser.click_on('Archive')
 

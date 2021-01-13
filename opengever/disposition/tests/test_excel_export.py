@@ -20,7 +20,7 @@ class TestDispositionExcelExport(IntegrationTestCase):
             workbook = load_workbook(tmpfile.name)
 
             self.assertEquals(
-                [u'Reference Number', u'Title', u'Start date',
+                [u'Reference number', u'Title', u'Start date',
                  u'End date', u'Public access level', u'Archival value',
                  u'Comment about archival value assessment', u'Appraisal'],
                 [cell.value for cell in list(workbook.active.rows)[0]])
