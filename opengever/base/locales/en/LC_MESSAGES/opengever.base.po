@@ -125,7 +125,7 @@ msgstr "Confirm that you'd like to perform this action."
 #. Default: "If you need to report this to the responsible person, please include this entry number in your message."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_include_error_in_admin_message"
-msgstr "If you'd like to report this error to you application administrator, please make sure to include this number in your message."
+msgstr "If you'd like to report this error to your application administrator, please make sure to include this number in your message."
 
 #. German translation: Sie haben unzureichende Berechtigungen um diese Seite anzuzeigen. Wenn Sie meinen diese Meldung fehlerhafterweise angezeigt zu bekommen, kontaktieren Sie bitte die fachapplikationsverantwortliche Person.
 #. Default: "You do not have sufficient privileges to view this page. If you believe you are receiving this message by mistake, please contact the responsible person."
@@ -583,7 +583,7 @@ msgstr "Objects from clipboard pasted successfully."
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt
 msgid "msg_verify_you_performed_this_action"
-msgstr "Please confirm that you intended to perform this action yourself, and haven't been lead here by clicking a link in an Email or an external web page. This is a safety precaution to avoid so called Cross-Site-Request-Forgery (CSRF) attacks. If you're seeing this message even though you performed an action inside OneGOV GEVER, it's a false-positive and you can safely proceed by confirming your intended action."
+msgstr "Please confirm that you intended to perform this action yourself, and haven't been led here by clicking a link in an Email or an external web page. This is a safety precaution to avoid so called Cross-Site-Request-Forgery (CSRF) attacks. If you're seeing this message even though you performed an action inside OneGOV GEVER, it's a false-positive and you can safely proceed by confirming your intended action."
 
 #. German translation: Kennen Sie bereits die neue Benutzeroberfläche von OneGov GEVER? Jetzt <a href=\"javascript:switchUI()\">ausprobieren</a>.
 #. Default: "Do you already know the new user interface of OneGov GEVER? <a href=\"javascript:switchUI()\">Try it out</a> now."

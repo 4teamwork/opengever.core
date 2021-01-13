@@ -224,7 +224,7 @@ msgstr "Overview"
 
 #. German translation: Beteiligungen
 msgid "participants"
-msgstr "Participants"
+msgstr "Participations"
 
 #. German translation: Vorschau
 msgid "preview"

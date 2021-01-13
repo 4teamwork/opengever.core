@@ -291,7 +291,7 @@ msgstr "Deactivate"
 
 #. German translation: Wieder öffnen
 msgid "dossier-transition-reactivate"
-msgstr "Reactivate"
+msgstr "Reopen"
 
 #. German translation: Abschliessen
 msgid "dossier-transition-resolve"
@@ -382,6 +382,7 @@ msgid "proposal-transition-cancel"
 msgstr "Cancel"
 
 #. German translation: Wieder eröffnen
+#. MARKER: double check
 msgid "proposal-transition-reactivate"
 msgstr "Reopen"
 
