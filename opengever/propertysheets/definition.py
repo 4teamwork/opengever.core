@@ -73,12 +73,12 @@ class PropertySheetSchemaDefinition(object):
             IVocabularyFactory,
             name="opengever.propertysheets.PropertySheetAssignmentsVocabulary"
         )
-        vocabulary = vocabulary_factory(None)
+        assignment_slots = vocabulary_factory(None)
 
         assignments = []
         for token in values:
             try:
-                term = vocabulary.getTermByToken(token)
+                term = assignment_slots.getTermByToken(token)
                 assignments.append(term.value)
             except LookupError:
                 raise InvalidSchemaAssignment(
