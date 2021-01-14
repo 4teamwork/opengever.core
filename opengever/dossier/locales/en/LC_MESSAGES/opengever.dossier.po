@@ -197,7 +197,7 @@ msgstr "Templates"
 #. German translation: Der Benutzer darf das Dossier ${dossier} nicht stornieren.
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier ${dossier} can't be deactivated by the user."
-msgstr "Dossier ${dossier} may not by the user."
+msgstr "Dossier ${dossier} may not be deactivated by the user."
 
 #. German translation: Das Dossier ${dossier} enthält ein Subdossier welches der Benutzer nicht stornieren darf.
 #. MARKER: used-in-api-response
@@ -589,7 +589,7 @@ msgstr "Live search: Search this site"
 #. German translation: Geben Sie die vollständige Ablagenummer an.
 #: ./opengever/dossier/filing/advanced_search.py
 msgid "help_filing_number"
-msgstr "Exact filling number"
+msgstr "Complete filling number"
 
 #. German translation: Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition.\nACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen).
 #: ./opengever/dossier/behaviors/dossier.py
@@ -606,6 +606,7 @@ msgstr "Number of physical containers (for large files)"
 
 #. German translation: Neuen Kommentar erfassen.
 #. Default: "Create a new note"
+#. MARKER: Check whether "Notiz" would be more appropriate in German
 #: ./opengever/dossier/viewlets/templates/note.pt
 msgid "help_text_add_note"
 msgstr "Add a new note"
