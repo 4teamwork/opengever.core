@@ -45,7 +45,7 @@ class TestProposalOverview(IntegrationTestCase):
         browser.open(self.draft_proposal)
 
         self.assertEqual(
-            ['The proposal document is being checked out by Ziegler Robert '
+            ['The proposal document is currently checked out by Ziegler Robert '
              '(robert.ziegler).'],
             info_messages())
 

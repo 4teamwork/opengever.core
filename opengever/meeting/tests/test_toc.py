@@ -146,8 +146,8 @@ class TestAlphabeticalTOC(FunctionalTestCase):
 
     view_name = 'alphabetical_toc'
     toc_class = AlphabeticalToc
-    toc_filename = 'Alphabetical Toc 2010 my-committee.docx'
-    download_button_label = 'download TOC alphabetical'
+    toc_filename = 'Alphabetical TOC 2010 my-committee.docx'
+    download_button_label = 'TOC alphabetical'
 
     expected_toc_json = {'toc': [{
         'group_title': u'A',
@@ -383,7 +383,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         # when an error happens here, the view returns an error
         # and the page is reloaded in Javascript. Here we reload manually
         browser.open(self.period)
-        self.assertEqual(u'There is no toc template configured, toc could '
+        self.assertEqual(u'There is no TOC template configured, TOC could '
                          'not be generated.',
                          error_messages()[0])
 
@@ -425,8 +425,8 @@ class TestTOCByRepository(TestAlphabeticalTOC):
 
     view_name = 'repository_toc'
     toc_class = RepositoryBasedTOC
-    toc_filename = 'Repository Toc 2010 my-committee.docx'
-    download_button_label = 'download TOC by repository'
+    toc_filename = 'Repository TOC 2010 my-committee.docx'
+    download_button_label = 'TOC by repository'
 
     expected_toc_json = {'toc': [{
         'group_title': u'Ad hoc agendaitems',
@@ -511,8 +511,8 @@ class TestTOCByDossierReferenceNumber(TestAlphabeticalTOC):
 
     view_name = 'dossier_refnum_toc'
     toc_class = DossierReferenceNumberBasedTOC
-    toc_filename = 'Dossier Reference Number Toc 2010 my-committee.docx'
-    download_button_label = 'download TOC by dossier reference number'
+    toc_filename = 'Dossier reference number TOC 2010 my-committee.docx'
+    download_button_label = 'TOC by dossier reference number'
 
     expected_toc_json = {'toc': [{
         'group_title': u'Ad hoc agendaitems',
@@ -600,8 +600,8 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
 
     view_name = 'repository_refnum_toc'
     toc_class = RepositoryReferenceNumberBasedTOC
-    toc_filename = 'Repository Reference Number Toc 2010 my-committee.docx'
-    download_button_label = 'download TOC by repository reference number'
+    toc_filename = 'Repository reference number TOC 2010 my-committee.docx'
+    download_button_label = 'TOC by repository reference number'
 
     expected_toc_json = {'toc': [{
         'group_title': u'Ad hoc agendaitems',

@@ -35,7 +35,7 @@ class TestAgendaItemList(IntegrationTestCase):
 
         with self.login(self.committee_responsible, browser):
             browser.open(self.committee, view='edit')
-            browser.fill({'Agendaitem list template': custom_template})
+            browser.fill({'Agenda item list template': custom_template})
             browser.css('#form-buttons-save').first.click()
 
             self.assertEqual(custom_template,
@@ -52,8 +52,8 @@ class TestAgendaItemList(IntegrationTestCase):
 
         self.assertEqual(self.meeting.model.get_url(), browser.url)
         self.assertEqual(
-            u'There is no agendaitem list template configured, '
-            'agendaitem list could not be generated.',
+            u'There is no agenda item list template configured, '
+            'agenda item list could not be generated.',
             error_messages()[0])
 
     @browsing
