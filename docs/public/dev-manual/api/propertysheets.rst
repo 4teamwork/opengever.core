@@ -82,7 +82,7 @@ Assignment-Slot zuzuweisen ist im Moment nicht unterstützt.
 
   {
     "fields": {
-      "foo": {
+      "yesorno": {
         "field_type": "bool",
         "title": "Y/N",
         "description": "yes or no",
@@ -106,20 +106,20 @@ Assignment-Slot zuzuweisen ist im Moment nicht unterstützt.
       "fieldsets": [
           {
               "behavior": "plone",
-              "fields": ["foo"],
+              "fields": ["yesorno"],
               "id": "default",
               "title": "Default"
           }
       ],
       "properties": {
-          "foo": {
+          "yesorno": {
               "description": "yes or no",
               "factory": "Yes/No",
               "title": "Y/N",
               "type": "boolean"
           }
       },
-      "required": ["foo"],
+      "required": ["yesorno"],
       "title": "question",
       "type": "object"
   }
