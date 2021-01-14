@@ -344,7 +344,7 @@ class TestProposal(IntegrationTestCase):
         }).save()
         expected_errors = [
             'Error There were some errors.',
-            'Only .docx files allowed as proposal documents.',
+            'Only .docx files are allowed as proposal documents.',
             ]
         self.assertEqual(expected_errors, browser.css('.error').text)
 
@@ -362,7 +362,7 @@ class TestProposal(IntegrationTestCase):
         }).save()
         expected_errors = [
             'Error There were some errors.',
-            'Only .docx files allowed as proposal documents.',
+            'Only .docx files are allowed as proposal documents.',
             ]
         self.assertEqual(expected_errors, browser.css('.error').text)
 

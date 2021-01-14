@@ -243,7 +243,7 @@ class TestRepositoryFolderProposalsTabWithMeeting(IntegrationTestCase):
         tabbedview.open('Proposals')
         # XXX - Should eventually figure out how to amend the columns helper for this
         expected_rows = [
-            ['Decision number', 'Title', 'Description', 'State', 'Comittee', 'Meeting', 'Date of submission', 'Issuer'],
+            ['Decision number', 'Title', 'Description', 'State', 'Committee', 'Meeting', 'Date of submission', 'Issuer'],
             ['', u'Vertr\xe4ge', u'F\xfcr weitere Bearbeitung bewilligen', 'Submitted', 'Submitted', u'Rechnungspr\xfcfungskommission', '', '31.08.2016', 'Ziegler Robert (robert.ziegler)'],  # noqa
             ['', u'Antrag f\xfcr Kreiselbau', '', 'Pending', 'Pending', u'Kommission f\xfcr Verkehr', '', '', 'Ziegler Robert (robert.ziegler)'],  # noqa
         ]

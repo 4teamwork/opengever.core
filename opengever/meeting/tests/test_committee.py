@@ -16,7 +16,7 @@ class TestCommittee(IntegrationTestCase):
 
     features = ('meeting',)
 
-    group_field_name = 'Committeeresponsible'
+    group_field_name = 'Committee responsible'
     maxDiff = None
 
     def test_committee_id_is_generated(self):
@@ -241,7 +241,7 @@ class TestCommittee(IntegrationTestCase):
         browser.fill(
             {'Title': u'A c\xf6mmittee',
              'Protocol header template': self.sablon_template,
-             'Protocol suffix template': self.sablon_template,
+             'Protocol footer template': self.sablon_template,
              'Excerpt header template': self.sablon_template,
              'Table of contents template': self.sablon_template,
              'Linked repository folder': self.leaf_repofolder,
@@ -298,7 +298,7 @@ class TestCommittee(IntegrationTestCase):
 
         browser.open(self.committee, view='edit')
         self.assertEqual(
-            'committee_ver_group', browser.find('Committeeresponsible').value)
+            'committee_ver_group', browser.find('Committee responsible').value)
 
 
 class TestCommitteeWorkflow(IntegrationTestCase):
@@ -406,9 +406,9 @@ class TestCommitteeWorkflow(IntegrationTestCase):
 
         expected_field_names = [
             'Title',
-            'Committeeresponsible',
+            'Committee responsible',
             'Linked repository folder',
-            'Agendaitem list template',
+            'Agenda item list template',
             'Table of contents template',
             'Allowed proposal templates',
             'Allowed ad-hoc agenda item templates',
@@ -416,10 +416,10 @@ class TestCommitteeWorkflow(IntegrationTestCase):
             'Protocol header template',
             'Paragraph template',
             'Agenda item header template for the protocol',
-            'Agenda item suffix template for the protocol',
-            'Protocol suffix template',
+            'Agenda item footer template for the protocol',
+            'Protocol footer template',
             'Excerpt header template',
-            'Excerpt suffix template',
+            'Excerpt footer template',
         ]
 
         with self.login(self.administrator, browser):

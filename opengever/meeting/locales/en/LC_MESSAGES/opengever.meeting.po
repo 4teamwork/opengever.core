@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-14 13:48+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,12 +89,12 @@ msgstr "Are you sure you want to regenerate the protocol?"
 #. German translation: Wollen Sie diesen Protokollauszug wirklich im Ursprungsdossier ablegen?
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to return this excerpt to the proposer?"
-msgstr "Are you sure you want to return this excerpt to the proposer?"
+msgstr "Are you sure you want to return this excerpt to the originating dossier?"
 
 #. German translation: Sind Sie sicher, dass Sie dieses Traktandum abschliessen möchten?
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure, you want to decide this agendaitem?"
-msgstr "Are you sure, you want to decide this agendaitem?"
+msgstr "Are you sure you want to decide this agenda item?"
 
 #. German translation: Die Mitgliedschaft kann nicht erstellt werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis ${date_to} überschneidet.
 #: ./opengever/meeting/browser/memberships.py
@@ -112,6 +112,7 @@ msgid "Clear filter"
 msgstr "Clear filter"
 
 #. German translation: Das Protokoll wird automatisch neu generiert, als es keine manuelle Änderungen beinhaltet
+#. MARKER: double check
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Closing the meeting will automatically (re-)create the protocol."
 msgstr "Closing the meeting will automatically (re-)create the protocol."
@@ -350,7 +351,7 @@ msgstr "Decide"
 #. German translation: Dokument herunterladen
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_download_document"
-msgstr "action_download_document"
+msgstr "Download document"
 
 #. German translation: In Word bearbeiten
 #. Default: "Edit with word"
@@ -361,7 +362,7 @@ msgstr "Edit with word"
 #. German translation: Dokument neu generieren
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_generate_document"
-msgstr "action_generate_document"
+msgstr "Regenerate document"
 
 #. German translation: Protokollauszug generieren
 #. Default: "Generate excerpt"
@@ -409,7 +410,7 @@ msgstr "Reopen meeting"
 #. Default: "Return to proposal"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
-msgstr "Return to proposal"
+msgstr "File excerpt alongside proposal"
 
 #. German translation: Aktiv
 #. Default: "Active"
@@ -449,7 +450,7 @@ msgstr "Agenda Item Successfully deleted"
 #. Default: "Agendaitem has been decided and the meeting has been held."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_meeting_held"
-msgstr "Agendaitem has been decided and the meeting has been held."
+msgstr "Agenda item has been decided and the meeting has been held."
 
 #. German translation: Die Reihenfolge der Traktanden wurde aktualisiert.
 #. Default: "Agenda Item order updated."
@@ -570,7 +571,7 @@ msgstr "Closed"
 #. Default: "Comittee"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 msgid "column_comittee"
-msgstr "Comittee"
+msgstr "Committee"
 
 #. German translation: Datum
 #. Default: "Date"
@@ -606,13 +607,13 @@ msgstr "Description"
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py
 msgid "column_email"
-msgstr "E-Mail"
+msgstr "Email"
 
 #. German translation: Vorname
 #. Default: "Firstname"
 #: ./opengever/meeting/tabs/memberlisting.py
 msgid "column_firstname"
-msgstr "Firstname"
+msgstr "First name"
 
 #. German translation: Von
 #. Default: "From"
@@ -624,7 +625,7 @@ msgstr "From"
 #. Default: "Lastname"
 #: ./opengever/meeting/tabs/memberlisting.py
 msgid "column_lastname"
-msgstr "Lastname"
+msgstr "Last name"
 
 #. German translation: Sitzungsort
 #. Default: "Location"
@@ -688,7 +689,7 @@ msgstr "Decide"
 #. Default: "Decide Agendaitem"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "decide_agendaitem"
-msgstr "Decide Agendaitem"
+msgstr "Decide agenda item"
 
 #. German translation: Beschlossen
 #. Default: "Decided"
@@ -702,13 +703,13 @@ msgstr "Decided"
 #. Default: "If you need the original files instead of the PDFs a Zip file can be downloaded here. That Zip file will also contain a JSON file which allows it to be imported by the meeting app."
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
 msgid "desc_download_original_files"
-msgstr "If you need the original files instead of the PDFs a Zip file can be downloaded here. That Zip file will also contain a JSON file which allows it to be imported by the meeting app."
+msgstr "If you need the original files instead of the PDFs, a ZIP file can be downloaded here. That ZIP file will also contain a JSON file which allows it to be imported by the meeting app."
 
 #. German translation: Das Zip enthält eine PDF-Datei für jedes Dokument in dieser Sitzung und eine JSON-Datei mit der das Zip in die Sitzungsapp importiert werden kann.
 #. Default: "The zip contains a PDF file for each document in this meeting and a JSON file which allows it to be imported by the meeting app."
 #: ./opengever/meeting/browser/meetings/zipexport.py
 msgid "desc_pdf_zip_contents"
-msgstr "The zip contains a PDF file for each document in this meeting and a JSON file which allows it to be imported by the meeting app."
+msgstr "The ZIP file contains a PDF file for each document in this meeting and a JSON file which allows it to be imported by the meeting app."
 
 #. German translation: Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden.
 #. Default: "Only visible for managers. Only change this if you know what you are doing!"
@@ -732,7 +733,7 @@ msgstr "Only visible for managers. Only change this if you know what you are doi
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "document_checkout_not_allowed"
-msgstr "You are not allowed to checkout the document."
+msgstr "You are not allowed to check out the document."
 
 #. German translation: Traktandenliste
 #. Default: "Agenda item list"
@@ -823,7 +824,7 @@ msgstr "Insufficient privileges to add a document to the meeting dossier."
 #. Default: "Only .docx files allowed as proposal documents."
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "error_only_docx_files_allowed_as_proposal_documents"
-msgstr "Only .docx files allowed as proposal documents."
+msgstr "Only .docx files are allowed as proposal documents."
 
 #. German translation: Nur Word-Dateien (.docx) sind erlaubt.
 #. Default: "Only word files (.docx) can be added here."
@@ -853,7 +854,7 @@ msgstr "Excerpt was created successfully."
 #. Default: "Excerpt was returned to proposer."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "excerpt_returned"
-msgstr "Excerpt was returned to proposer."
+msgstr "Excerpt was filed in originating dossier."
 
 #. German translation: Entschuldigt
 #. Default: "Excused"
@@ -877,25 +878,25 @@ msgstr "Protocol templates"
 #. Default: "Alphabetical Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_alphabetical_toc"
-msgstr "Alphabetical Toc ${period} ${committee}"
+msgstr "Alphabetical TOC ${period} ${committee}"
 
 #. German translation: Inhaltsverzeichnis ${period} ${committee} nach Aktenzeichen
 #. Default: "Dossier Reference Number Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_dossier_reference_number_toc"
-msgstr "Dossier Reference Number Toc ${period} ${committee}"
+msgstr "Dossier reference number TOC ${period} ${committee}"
 
 #. German translation: Inhaltsverzeichnis ${period} ${committee} nach Positionsnummer
 #. Default: "Repository Reference Number Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_repository_reference_number_toc"
-msgstr "Repository Reference Number Toc ${period} ${committee}"
+msgstr "Repository reference number TOC ${period} ${committee}"
 
 #. German translation: Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition
 #. Default: "Repository Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_repository_toc"
-msgstr "Repository Toc ${period} ${committee}"
+msgstr "Repository TOC ${period} ${committee}"
 
 #. German translation: Durchgeführt
 #. Default: "Held"
@@ -907,25 +908,25 @@ msgstr "Held"
 #. Default: "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
 msgid "help_allowed_ad_hoc_agenda_item_templates"
-msgstr "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
+msgstr "Select the ad-hoc agenda item templates allowed for this committee, or select no templates to allow all templates."
 
 #. German translation: Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Antragsvorlagen aus, um alle Vorlagen zu erlauben.
 #. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
 msgid "help_allowed_proposal_templates"
-msgstr "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
+msgstr "Select the proposal templates allowed for this committee, or select no templates to allow all templates."
 
 #. German translation: Neue Aufgabe im Sitzungsdossier erstellen und diesen Protokollauszug beilegen.
 #. Default: "Create a new task the meeting dossier and attach this excerpt."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_create_task"
-msgstr "Create a new task the meeting dossier and attach this excerpt."
+msgstr "Create a new task in the meeting dossier and attach this excerpt."
 
 #. German translation: Sitzungsvorlage mit vordefinierten Zwischentiteln
 #. Default: "Template containing the predifined paragraphs"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_meeting_template"
-msgstr "Template containing the predifined paragraphs"
+msgstr "Template containing the predefined paragraphs"
 
 #. German translation: Diesen Protokollauszug als definitive Antwort im Ursprungsdossier ablegen.
 #. Default: "Return this excerpt the as official answer to the proposal."
@@ -937,7 +938,7 @@ msgstr "Return this excerpt the as official answer to the proposal."
 #. Default: "This excerpt was returned to the dossier"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_returned_excerpt"
-msgstr "This excerpt was returned to the dossier"
+msgstr "This excerpt was filed as a response in the originating dossier."
 
 #. German translation: Sitzung durchführen
 #. Default: "Hold meeting"
@@ -991,10 +992,11 @@ msgstr "Agenda item number (unformatted)"
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py
 msgid "label_agenda_item_suffix_template"
-msgstr "Agenda item suffix template for the protocol"
+msgstr "Agenda item footer template for the protocol"
 
 #. German translation: Traktandenliste
 #. Default: "Agendaitem list"
+#. MARKER: used-in-api-response
 #: ./opengever/meeting/model/meeting.py
 #: ./opengever/meeting/protocol.py
 msgid "label_agendaitem_list"
@@ -1004,7 +1006,7 @@ msgstr "Agendaitem list"
 #. Default: "Agendaitem list template"
 #: ./opengever/meeting/committee.py
 msgid "label_agendaitem_list_template"
-msgstr "Agendaitem list template"
+msgstr "Agenda item list template"
 
 #. German translation: Erlaubte Vorlagen für Traktanden ohne Antrag
 #. Default: "Allowed ad-hoc agenda item templates"
@@ -1036,19 +1038,19 @@ msgstr "Back to the meeting"
 #. Default: "Generating Zip ..."
 #: ./opengever/meeting/browser/meetings/zipexport.py
 msgid "label_button_creation_in_progress"
-msgstr "Generating Zip ..."
+msgstr "Generating ZIP..."
 
 #. German translation: Zip herunterladen
 #. Default: "Download Zip"
 #: ./opengever/meeting/browser/meetings/zipexport.py
 msgid "label_button_download_zip"
-msgstr "Download Zip"
+msgstr "Download ZIP"
 
 #. German translation: Zip fehler
 #. Default: "Error Generating Zip"
 #: ./opengever/meeting/browser/meetings/zipexport.py
 msgid "label_button_error"
-msgstr "Error Generating Zip"
+msgstr "Error generating ZIP"
 
 #. German translation: Abbrechen
 #. Default: "Cancel"
@@ -1106,7 +1108,7 @@ msgstr "Committee"
 #. Default: "Committeeresponsible"
 #: ./opengever/meeting/committee.py
 msgid "label_committee_responsible"
-msgstr "Committeeresponsible"
+msgstr "Committee responsible"
 
 #. German translation: Generieren
 #. Default: "Generate Protocol"
@@ -1197,7 +1199,7 @@ msgstr "Sequence number for decisions"
 #. Default: "Are you sure you want to delete this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_delete_agenda_item_confirm_text"
-msgstr "Are you sure you want to delete this agendaitem?"
+msgstr "Are you sure you want to delete this agenda item?"
 
 #. German translation: Beschreibung
 #. Default: "Description"
@@ -1228,55 +1230,55 @@ msgstr "Dossier not available"
 #. Default: "download TOC alphabetical"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc"
-msgstr "download TOC alphabetical"
+msgstr "TOC alphabetical"
 
 #. German translation: Inhaltsverzeichnis alphabetisch JSON
 #. Default: "download TOC json alphabetical"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc_json"
-msgstr "download TOC json alphabetical"
+msgstr "TOC JSON alphabetical"
 
 #. German translation: Inhaltsverzeichnis nach Aktenzeichen
 #. Default: "download TOC by dossier reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_dossier_refnum_toc"
-msgstr "download TOC by dossier reference number"
+msgstr "TOC by dossier reference number"
 
 #. German translation: Inhaltsverzeichnis nach Aktenzeichen JSON
 #. Default: "download TOC json by dossier reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_dossier_refnum_toc_json"
-msgstr "download TOC json by dossier reference number"
+msgstr "TOC JSON by dossier reference number"
 
 #. German translation: Inhaltsverzeichnis nach Positionsnummer
 #. Default: "download TOC by repository reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_refnum_toc"
-msgstr "download TOC by repository reference number"
+msgstr "TOC by repository reference number"
 
 #. German translation: Inhaltsverzeichnis nach Positionsnummer JSON
 #. Default: "download TOC json by repository reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_refnum_toc_json"
-msgstr "download TOC json by repository reference number"
+msgstr "TOC JSON by repository reference number"
 
 #. German translation: Inhaltsverzeichnis nach Ordnungsposition
 #. Default: "download TOC by repository"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_toc"
-msgstr "download TOC by repository"
+msgstr "TOC by repository"
 
 #. German translation: Inhaltsverzeichnis nach Ordnungsposition JSON
 #. Default: "download TOC json repository"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_toc_json"
-msgstr "download TOC json repository"
+msgstr "TOC JSON by repository"
 
 #. German translation: Zip der Originaldateien herunterladen
 #. Default: "Download Zip of original files"
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
 msgid "label_download_zip_original_files"
-msgstr "Download Zip of original files"
+msgstr "Download ZIP of original files"
 
 #. German translation: Bearbeiten
 #. Default: "Edit"
@@ -1314,7 +1316,7 @@ msgstr "Save"
 #: ./opengever/meeting/browser/members.py
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_email"
-msgstr "E-Mail"
+msgstr "Email"
 
 #. German translation: Ende
 #. Default: "End"
@@ -1345,7 +1347,7 @@ msgstr "Excerpt header template"
 #. Default: "Excerpt suffix template"
 #: ./opengever/meeting/committee.py
 msgid "label_excerpt_suffix_template"
-msgstr "Excerpt suffix template"
+msgstr "Excerpt footer template"
 
 #. German translation: Protokollauszüge
 #. Default: "Excerpts"
@@ -1371,7 +1373,7 @@ msgstr "Filter"
 #: ./opengever/meeting/browser/members.py
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
-msgstr "Firstname"
+msgstr "First name"
 
 #. German translation: Information
 #. Default: "Information"
@@ -1393,6 +1395,7 @@ msgstr "Sablon template invalid"
 
 #. German translation: Antragssteller
 #. Default: "Issuer"
+#. MARKER: Might want to change this to "Proposer"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 #: ./opengever/meeting/proposal.py
 msgid "label_issuer"
@@ -1409,7 +1412,7 @@ msgstr "Last Meeting:"
 #: ./opengever/meeting/browser/members.py
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_lastname"
-msgstr "Lastname"
+msgstr "Last name"
 
 #. German translation: Sitzung
 #. Default: "Linked meeting"
@@ -1434,7 +1437,7 @@ msgstr "Location"
 #. Default: "Main Atrributes"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_main_attributes"
-msgstr "Main Atrributes"
+msgstr "Main attributes"
 
 #. German translation: Sitzung
 #. Default: "Meeting"
@@ -1562,7 +1565,7 @@ msgstr "Protocol start-page"
 #. Default: "Protocol suffix template"
 #: ./opengever/meeting/committee.py
 msgid "label_protocol_suffix_template"
-msgstr "Protocol suffix template"
+msgstr "Protocol footer template"
 
 #. German translation: Gremium reaktivieren
 #. Default: "Reactivate committee"
@@ -1599,7 +1602,7 @@ msgstr "Role"
 #. Default: "File"
 #: ./opengever/meeting/sablontemplate.py
 msgid "label_sablon_template_file"
-msgstr "File"
+msgstr "Template file"
 
 #. German translation: Speichern
 #. Default: "Save"
@@ -1700,7 +1703,7 @@ msgstr "Unlocked attachments"
 #. Default: "Are you sure you want to unschedule this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_unschedule_agenda_item_confirm_text"
-msgstr "Are you sure you want to unschedule this agendaitem?"
+msgstr "Are you sure you want to unschedule this agenda item?"
 
 #. German translation: Nicht traktandierte Anträge
 #. Default: "Unscheduled proposals"
@@ -1803,7 +1806,7 @@ msgstr "Memberships"
 #. Default: "The proposal document is being checked out by ${creator}."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
 msgid "message_checkout_info"
-msgstr "The proposal document is being checked out by ${creator}."
+msgstr "The proposal document is currently checked out by ${creator}."
 
 #. German translation: Das Gremium ${committee_title} wurde deaktiviert.
 #. Default: "The committee ${committee_title} is no longer active."
@@ -1839,7 +1842,7 @@ msgstr "Choose a meaningful title to distinguish the created excerpts better."
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_confirm_return_excerpt_dialog"
-msgstr "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
+msgstr "When returning an excerpt to the proposer the selected document will be sent back to the proposal's originating dossier. No other excerpts can be returned."
 
 #. German translation: Originaldateien anstatt PDF-Dateien herunterladen.
 #. Default: "Download original files rather than PDF files."
@@ -1857,13 +1860,13 @@ msgstr "The agenda item list for meeting ${title} has already been generated."
 #. Default: "There is no agendaitem list template configured, agendaitem list could not be generated."
 #: ./opengever/meeting/browser/meetings/agendaitem_list.py
 msgid "msg_error_agendaitem_list_missing_template"
-msgstr "There is no agendaitem list template configured, agendaitem list could not be generated."
+msgstr "There is no agenda item list template configured, agenda item list could not be generated."
 
 #. German translation: Nach Abschluss eines Traktandums kann die Traktandenliste nicht mehr bearbeitet werden.
 #. Default: "When deciding an agendaitem the agenda list is no longer editable."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_hold_meeting_dialog"
-msgstr "When deciding an agendaitem the agenda list is no longer editable."
+msgstr "When deciding an agenda item, the agenda list is no longer editable."
 
 #. German translation: Die Sitzung ${title} wurde erfolgreich storniert.
 #. Default: "The meeting ${title} has been successfully cancelled."
@@ -1887,13 +1890,13 @@ msgstr "The membership was deleted successfully."
 #. Default: "No zip job could be found for the supplied job id ${job_id}."
 #: ./opengever/meeting/browser/meetings/zipexport.py
 msgid "msg_no_export_for_job_id"
-msgstr "No zip job could be found for the supplied job id ${job_id}."
+msgstr "No ZIP job could be found for the supplied job id ${job_id}."
 
 #. German translation: Es ist keine Vorlage für das Inhaltsverzeichnis konfiguriert, das Inhaltsverzeichnis konnte nicht generiert werden.
 #. Default: "There is no toc template configured, toc could not be generated."
 #: ./opengever/meeting/browser/toc.py
 msgid "msg_no_toc_template"
-msgstr "There is no toc template configured, toc could not be generated."
+msgstr "There is no TOC template configured, TOC could not be generated."
 
 #. German translation: Nicht alle Sitzungen sind abgeschlossen.
 #. Default: "Not all meetings are closed."
@@ -2133,6 +2136,7 @@ msgstr "Protocol"
 
 #. German translation: Protokollauszug
 #. Default: "Protocol-Excerpt"
+#. MARKER: used-in-api-response
 #: ./opengever/meeting/protocol.py
 msgid "protocol_excerpt"
 msgstr "Protocol-Excerpt"
@@ -2189,7 +2193,7 @@ msgstr "Scheduled"
 #. German translation: E-Mail senden
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "send email"
-msgstr "send email"
+msgstr "Send email"
 
 #. German translation: Eingereicht
 #. Default: "Submitted"
@@ -2235,6 +2239,7 @@ msgstr "Agenda item ${agenda_item_number}"
 
 #. German translation: Element streichen
 #. Default: "Delete proposal"
+#. MARKER: double check (agenda item vs. proposal)
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "title_confirm_delete_agenda_item"
 msgstr "Delete proposal"

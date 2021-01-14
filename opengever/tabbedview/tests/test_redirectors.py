@@ -13,7 +13,7 @@ class RedirectorTests(IntegrationTestCase):
         sablon_template = assets.load('valid_sablon_template.docx')
         browser.fill({
             'Title': u'Sablonv\xferlage',
-            'File': (sablon_template, 'valid_sablon_template.docx', 'text/plain'),
+            'Template file': (sablon_template, 'valid_sablon_template.docx', 'text/plain'),
         }).save()
         statusmessages.assert_no_error_messages()
 

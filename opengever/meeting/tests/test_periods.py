@@ -24,10 +24,10 @@ class TestPathBar(IntegrationTestCase):
         listing = browser.css('#period_listing').first
         self.assertEqual(
             '2016 (Jan 01, 2016 - Dec 31, 2016) '
-            'download TOC alphabetical '
-            'download TOC by repository '
-            'download TOC by dossier reference number '
-            'download TOC by repository reference number',
+            'TOC alphabetical '
+            'TOC by repository '
+            'TOC by dossier reference number '
+            'TOC by repository reference number',
             listing.text
             )
 
@@ -188,16 +188,16 @@ class TestPeriod(IntegrationTestCase):
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
             ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'download TOC alphabetical download TOC by repository '
-             'download TOC by dossier reference number download TOC by repository reference number',
+             'TOC alphabetical TOC by repository '
+             'TOC by dossier reference number TOC by repository reference number',
              'Edit'],
             ['2011 (Jan 01, 2011 - Dec 31, 2011)',
-             'download TOC alphabetical download TOC by repository '
-             'download TOC by dossier reference number download TOC by repository reference number',
+             'TOC alphabetical TOC by repository '
+             'TOC by dossier reference number TOC by repository reference number',
              'Edit'],
             ['2010 (Jan 01, 2010 - Dec 31, 2010)',
-             'download TOC alphabetical download TOC by repository '
-             'download TOC by dossier reference number download TOC by repository reference number',
+             'TOC alphabetical TOC by repository '
+             'TOC by dossier reference number TOC by repository reference number',
              'Edit']
         ], text_by_period)
 
@@ -228,8 +228,8 @@ class TestPeriod(IntegrationTestCase):
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
             ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'download TOC alphabetical download TOC by repository '
-             'download TOC by dossier reference number download TOC by repository reference number',
+             'TOC alphabetical TOC by repository '
+             'TOC by dossier reference number TOC by repository reference number',
              'Edit'],
         ], text_by_period)
 
@@ -239,11 +239,11 @@ class TestPeriod(IntegrationTestCase):
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
             ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'download TOC alphabetical download TOC by repository '
-             'download TOC by dossier reference number download TOC by repository reference number',
+             'TOC alphabetical TOC by repository '
+             'TOC by dossier reference number TOC by repository reference number',
              'Edit',
-             'download TOC json alphabetical download TOC json repository '
-             'download TOC json by dossier reference number download TOC json by repository reference number'],
+             'TOC JSON alphabetical TOC JSON by repository '
+             'TOC JSON by dossier reference number TOC JSON by repository reference number'],
         ], text_by_period)
 
     @browsing
@@ -251,7 +251,7 @@ class TestPeriod(IntegrationTestCase):
         self.login(self.manager, browser)
 
         browser.open(self.committee, view='tabbedview_view-periods')
-        button = browser.find('download TOC json alphabetical')
+        button = browser.find('TOC JSON alphabetical')
 
         button.click()
         toc_content = {u'toc': [{u'group_title': u'I',
@@ -270,7 +270,7 @@ class TestPeriod(IntegrationTestCase):
     def test_toc_json_repository_button(self, browser):
         self.login(self.manager, browser)
         browser.open(self.committee, view='tabbedview_view-periods')
-        button = browser.find('download TOC json repository')
+        button = browser.find('TOC JSON by repository')
 
         button.click()
         toc_content = {u'toc': [{u'group_title': u'Vertr\xe4ge und Vereinbarungen',
@@ -290,7 +290,7 @@ class TestPeriod(IntegrationTestCase):
     def test_toc_json_dossier_reference_number_button(self, browser):
         self.login(self.manager, browser)
         browser.open(self.committee, view='tabbedview_view-periods')
-        button = browser.find('download TOC json by dossier reference number')
+        button = browser.find('TOC JSON by dossier reference number')
 
         button.click()
         toc_content = {u'toc': [{u'group_title': u'Client1 1.1 / 1',
@@ -311,7 +311,7 @@ class TestPeriod(IntegrationTestCase):
         self.login(self.manager, browser)
 
         browser.open(self.committee, view='tabbedview_view-periods')
-        button = browser.find('download TOC json by repository reference number')
+        button = browser.find('TOC JSON by repository reference number')
 
         button.click()
         toc_content = {u'toc': [{u'group_title': u'Client1 1.1',

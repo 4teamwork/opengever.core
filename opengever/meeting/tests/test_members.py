@@ -66,9 +66,9 @@ class TestMemberListing(FunctionalTestCase):
     def test_members_can_be_added_in_browser(self, browser):
         self.grant("Administrator", "CommitteeAdministrator")
         browser.login().open(self.container, view='add-member')
-        browser.fill({'Firstname': u'Hanspeter',
-                      'Lastname': u'Hansj\xf6rg',
-                      'E-Mail': u'foo@example.com'}).submit()
+        browser.fill({'First name': u'Hanspeter',
+                      'Last name': u'Hansj\xf6rg',
+                      'Email': u'foo@example.com'}).submit()
         self.assertEquals([u'Record created'], info_messages())
 
         hans = Member.query.filter_by(firstname=u'Hanspeter').first()
@@ -86,9 +86,9 @@ class TestMemberListing(FunctionalTestCase):
         browser.login()
         browser.open(self.member.get_edit_url(self.container))
 
-        browser.fill({'Firstname': u'Hanspeter',
-                      'Lastname': u'Hansj\xf6rg',
-                      'E-Mail': u'foo@example.com'}).submit()
+        browser.fill({'First name': u'Hanspeter',
+                      'Last name': u'Hansj\xf6rg',
+                      'Email': u'foo@example.com'}).submit()
 
         self.assertEquals([u'Changes saved'], info_messages())
 
@@ -120,7 +120,7 @@ class TestMemberListing(FunctionalTestCase):
         items = browser.css('table.listing').first.dicts()
         self.assertEqual(1, len(items))
         self.assertEqual(
-            [{'Lastname': u'M\xfcller', 'Firstname': 'Peter', 'E-Mail': ''}],
+            [{'Last name': u'M\xfcller', 'First name': 'Peter', 'Email': ''}],
             items
         )
 
@@ -171,9 +171,9 @@ class TestMemberView(FunctionalTestCase):
         browser.login().open(self.member.get_url(self.container))
 
         self.assertEqual(
-            [['Lastname', u'M\xfcller'],
-             ['Firstname', 'Peter'],
-             ['E-Mail', 'p.meier@example.com']],
+            [['Last name', u'M\xfcller'],
+             ['First name', 'Peter'],
+             ['Email', 'p.meier@example.com']],
             browser.css('table#properties').first.lists())
 
     @browsing

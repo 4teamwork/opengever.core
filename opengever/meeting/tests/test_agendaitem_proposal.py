@@ -437,7 +437,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
 
         browser.open(return_excerpt_url)
         self.assertEqual(
-            u'Excerpt was returned to proposer.',
+            u'Excerpt was filed in originating dossier.',
             browser.json['messages'][0]['message'])
 
         self.assertIsNotNone(agenda_item.proposal.excerpt_document)
