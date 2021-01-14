@@ -27,7 +27,7 @@ msgstr "Inbox"
 #. German translation: Eingangskorb Ordner
 #: ./opengever/inbox/upgrades/profiles/4003/types/opengever.inbox.container.xml
 msgid "Inbox Container"
-msgstr "Inbox Container"
+msgstr "Inbox container"
 
 #. German translation: Abschliessen
 #. Default: "Close"
@@ -97,7 +97,7 @@ msgstr "Added as watcher of the forwarding"
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py
 msgid "label_inbox_group"
-msgstr "Inbox Group"
+msgstr "Inbox group"
 
 #. German translation: Erteilte Aufgaben
 #. Default: "Issued tasks"
@@ -115,7 +115,7 @@ msgstr "Refuse"
 #. Default: "Refuse Forwarding"
 #: ./opengever/inbox/browser/refuse.py
 msgid "label_refuse_forwarding"
-msgstr "Refuse Forwarding"
+msgstr "Refuse forwarding"
 
 #. German translation: Auftragnehmer
 #. Default: "Responsible"
@@ -139,7 +139,7 @@ msgstr "Added as watcher of the forwarding by ${user}"
 #. Default: "Assign Forwarding"
 #: ./opengever/inbox/browser/assign.py
 msgid "title_assign_forwarding"
-msgstr "Assign Forwarding"
+msgstr "Assign forwarding"
 
 #. German translation: Weiterleitung abschliessen
 #. Default: "Close orwarding"
