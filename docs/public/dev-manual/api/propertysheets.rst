@@ -123,3 +123,80 @@ Assignment-Slot zuzuweisen ist im Moment nicht unterstützt.
       "title": "question",
       "type": "object"
   }
+
+
+Serialisierung/Deserialisierung von Custom Properties
+-----------------------------------------------------
+
+Im Moment sind Custom Properties auf Dokumenten und Mails unterstützt. Die
+Auswahl des zu validerenden Property Sheets basiert auf dem Wert des Feldes
+`document_type`. Ist für den Assignment-Slot
+``IDocumentMetadata.document_type.<document_type_value>`` ein Property Sheet
+registriert, so werden Feldwerte dieses Property Sheets validiert. Hat das
+Property Sheet also obligatorische Felder, so müssen die Custom Properties
+zwingend Daten für dieses Property Sheet beinhalten. Serialisierung und
+Deserialisierung der Custom Properties basiert auf folgendem Format:
+
+
+.. sourcecode:: json
+
+  {
+      "<assignment_slot_name>": {
+          "<property_sheet_field_name>": "<field value>"
+      }
+  }
+
+
+Es werden immer alle einmal gespeicherten Custom Properties serialisiert und
+ausgegeben, unabhängig vom Wert des Feldes ``document_type``.
+
+.. sourcecode:: http
+
+  GET /ordnungssystem/dossier-23/document-123 HTTP/1.1
+  Accept: application/json
+
+.. sourcecode:: http
+
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+
+  {
+      "@id": "/ordnungssystem/dossier-23/document-123",
+      "custom_properties": {
+          "IDocumentMetadata.document_type.question": {
+              "yesorno": false
+          },
+          "IDocumentMetadata.document_type.protocol": {
+              "location": "Dammweg 9",
+              "responsible": "Hans Muster"
+          }
+      },
+      "...": "..."
+  }
+
+
+Beim Speichern der Custom Properties können Properties für alle erlaubten
+Assigmnet-Slots angegeben werden. Es werden immer alle angegebenen Custom
+Properties validiert. Das Speichern erfolg kumulativ, wenn man ein Subset
+der möglichen Assignment-Slots verwendet, werden die Custom Propterties anderer
+Slots nicht überschrieben.
+
+  .. sourcecode:: http
+
+    PATCH /ordnungssystem/dossier-23/document-123 HTTP/1.1
+    Accept: application/json
+
+    {
+          "IDocumentMetadata.document_type.question": {
+              "yesorno": true
+          }
+    }
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No content
+    Content-Type: application/json
+
+
+
+
