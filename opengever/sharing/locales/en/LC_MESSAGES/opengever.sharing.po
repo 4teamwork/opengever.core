@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-14 11:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,13 @@ msgstr ""
 #. Default: "By default, permissions from the container of this item are inherited. If you disable this, only the explicitly defined sharing permissions will be valid."
 #: ./opengever/sharing/browser/sharing.py
 msgid "help_inherit_local_roles"
-msgstr "By default, permissions from the container of this item are inherited. If you disable this, only the explicitly defined sharing permissions will be valid."
+msgstr "By default, an object inherits permissions from its container (and any permissions granted here apply in addition to those). If inheritance is disabled, ONLY permissions granted here will apply."
 
 #. German translation: Vererbte Berechtigung
 #. Default: "Acquired permission"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_acquired_permission"
-msgstr "Acquired permission"
+msgstr "Inherited permission"
 
 #. German translation: Automatische Berechtigung
 #. Default: "Automatic permission"
@@ -36,7 +36,7 @@ msgstr "Automatic permission"
 #. Default: "Protected Objects"
 #: ./opengever/sharing/browser/admin_list.py
 msgid "label_blocked_local_roles"
-msgstr "Protected Objects"
+msgstr "Protected objects"
 
 #. German translation: Lokale Berechtigung
 #. Default: "Local permission"
@@ -60,60 +60,60 @@ msgstr "Local roles successfully changed"
 #. Default: "Local roles save failed."
 #: ./opengever/sharing/browser/sharing.py
 msgid "message_save_failed"
-msgstr "Local roles save failed."
+msgstr "Failed to save local roles."
 
 #. German translation: Suche Benutzer oder Gruppen
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py
 msgid "principal_search_placeholder"
-msgstr "Search for Users and Groups"
+msgstr "Search for users and groups"
 
 #. German translation: Hinzufügen
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_contributor"
-msgstr "sharing_contributor"
+msgstr "Add"
 
 #. German translation: Dossiers hinzufügen
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_contributor"
-msgstr "sharing_dossier_contributor"
+msgstr "Add dossiers"
 
 #. German translation: Dossiers bearbeiten
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_editor"
-msgstr "sharing_dossier_editor"
+msgstr "Edit dossiers"
 
 #. German translation: Dossiers verwalten
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_manager"
-msgstr "sharing_dossier_manager"
+msgstr "Manage dossiers"
 
 #. German translation: Dossiers reaktivieren
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_publisher"
-msgstr "sharing_dossier_publisher"
+msgstr "Reactivate dossiers"
 
 #. German translation: Lesen
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reader"
-msgstr "sharing_dossier_reader"
+msgstr "Read"
 
 #. German translation: Dossiers abschliessen
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
-msgstr "sharing_dossier_reviewer"
+msgstr "Resolve dossiers"
 
 #. German translation: Bearbeiten
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_editor"
-msgstr "sharing_editor"
+msgstr "Edit"
 
 #. German translation: Lesen
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_reader"
-msgstr "sharing_reader"
+msgstr "Read"
 
 #. German translation: Rollen verwalten
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_role_manager"
-msgstr "sharing_role_manager"
+msgstr "Manage roles"
