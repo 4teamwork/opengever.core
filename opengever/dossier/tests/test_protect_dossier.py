@@ -69,8 +69,8 @@ class TestProtectDossier(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading and writing').fill([self.regular_user.getId()])
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill([self.regular_user.getId()])
         browser.click_on('Save')
         new_dossier = browser.context
 
@@ -99,8 +99,8 @@ class TestProtectDossier(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill(self.regular_user.getId())
         browser.click_on('Save')
 
         new_dossier = browser.context
@@ -115,9 +115,9 @@ class TestProtectDossier(IntegrationTestCase):
 
         browser.open(new_dossier, view="@@edit")
         browser.fill({'Title': 'My new Dossier'})
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading and writing').fill([])
-        form.find_widget('Reading').fill([self.regular_user.getId()])
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill([])
+        form.find_widget('Read only access').fill([self.regular_user.getId()])
         browser.click_on('Save')
 
         self.assert_local_roles(
@@ -159,9 +159,9 @@ class TestProtectDossier(IntegrationTestCase):
         self.login(self.dossier_manager, browser)
 
         browser.open(self.dossier, view="@@edit")
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading').fill('projekt_a')
-        form.find_widget('Reading and writing').fill('projekt_b')
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read only access').fill('projekt_a')
+        form.find_widget('Read/Write access').fill('projekt_b')
         form.find_widget('Dossier manager').fill(self.dossier_manager.getId())
         browser.click_on('Save')
 
@@ -215,7 +215,7 @@ class TestProtectDossier(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
-        form = browser.find_form_by_field('Reading')
+        form = browser.find_form_by_field('Read only access')
 
         # Guard assertion - make sure the widget's value has been prefilled
         dossier_manager_widget = form.find_widget('Dossier manager')
@@ -238,8 +238,8 @@ class TestProtectDossier(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading').fill(self.regular_user.getId())
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read only access').fill(self.regular_user.getId())
         browser.click_on('Save')
 
         self.assert_local_roles(
@@ -251,8 +251,8 @@ class TestProtectDossier(IntegrationTestCase):
         self.login(self.dossier_manager, browser)
 
         browser.open(self.dossier, view="@@edit")
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading').fill(self.regular_user.getId())
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read only access').fill(self.regular_user.getId())
         form.find_widget('Dossier manager').fill(self.dossier_manager.getId())
         browser.click_on('Save')
 
@@ -407,7 +407,7 @@ class TestProtectDossier(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
-        form = browser.find_form_by_field('Reading')
+        form = browser.find_form_by_field('Read only access')
         form.find_widget('Dossier manager').fill('')
         browser.click_on('Save')
 
@@ -421,12 +421,12 @@ class TestProtectDossier(IntegrationTestCase):
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
 
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading').fill(self.regular_user.getId())
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read only access').fill(self.regular_user.getId())
         form.find_widget('Dossier manager').fill('')
         browser.click_on('Save')
         self.assertIn('There were some errors.', error_messages())
-        form = browser.find_form_by_fields("Reading")
+        form = browser.find_form_by_fields("Read only access")
         self.assertIn('A dossier manager must be selected when protecting a dossier',
                       form.text)
 
@@ -438,11 +438,11 @@ class TestProtectDossier(IntegrationTestCase):
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'})
 
-        form = browser.find_form_by_field('Reading')
-        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill(self.regular_user.getId())
         form.find_widget('Dossier manager').fill('')
         browser.click_on('Save')
         self.assertIn('There were some errors.', error_messages())
-        form = browser.find_form_by_fields("Reading")
+        form = browser.find_form_by_fields("Read only access")
         self.assertIn('A dossier manager must be selected when protecting a dossier',
                       form.text)

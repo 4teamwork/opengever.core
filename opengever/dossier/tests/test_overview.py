@@ -279,7 +279,7 @@ class TestOverview(SolrIntegrationTestCase):
 
         browser.open(self.tested_dossier)
 
-        self.assertEqual('Show Note', browser.css('.editNoteLink').first.text)
+        self.assertEqual('Show note', browser.css('.editNoteLink').first.text)
 
     @browsing
     def test_dossier_editlink_for_comments(self, browser):
@@ -288,7 +288,7 @@ class TestOverview(SolrIntegrationTestCase):
         browser.open(self.tested_dossier)
 
         # There are both labels (show/hide by css/js)
-        self.assertEquals(['Edit Note', 'Add Note'],
+        self.assertEquals(['Edit note', 'Add note'],
                           browser.css('.editNoteLink .linkLabel').text)
 
     @browsing
@@ -315,7 +315,7 @@ class TestOverview(SolrIntegrationTestCase):
         # No comments
         self.assertEquals(dict, type(json.loads(link.attrib['data-i18n'])))
         self.assertEquals('', link.attrib['data-notecache'])
-        self.assertEquals('Add Note', link.css('.add .linkLabel').first.text)
+        self.assertEquals('Add note', link.css('.add .linkLabel').first.text)
 
         # With comments
         IDossier(self.tested_dossier).comments = u'This is a comment'
@@ -324,7 +324,7 @@ class TestOverview(SolrIntegrationTestCase):
         link = browser.css('.editNoteWrapper').first
         self.assertEquals(
             str(u'This is a comment'), link.attrib['data-notecache'])
-        self.assertEquals('Edit Note', link.css('.edit .linkLabel').first.text)
+        self.assertEquals('Edit note', link.css('.edit .linkLabel').first.text)
 
     @browsing
     def test_dossier_save_comments_endpoint(self, browser):

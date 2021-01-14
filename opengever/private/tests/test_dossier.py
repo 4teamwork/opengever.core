@@ -113,7 +113,7 @@ class TestPrivateDossierTabbedView(IntegrationTestCase):
         browser.open(self.private_dossier, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['Dossier structure', 'Comments', 'Linked Dossiers',
+            ['Dossier structure', 'Comments', 'Linked dossiers',
              'Newest documents', 'Description', 'Keywords'],
             browser.css('.box h2').text)
 
@@ -177,7 +177,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
                      {'_authenticator': createToken()},
                      view='transition-resolve')
 
-        self.assertEquals(['The dossier has been succesfully resolved.'],
+        self.assertEquals(['Dossier has been resolved succesfully.'],
                           info_messages())
         self.assertEqual('dossier-state-resolved',
                          api.content.get_state(self.private_dossier))

@@ -177,7 +177,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
     def test_show_oneoffixx_templates_tab(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.templates)
-        expected_template_tabs = ['OneOffixx', 'Documents', 'Tasktemplate Folders']
+        expected_template_tabs = ['OneOffixx', 'Documents', 'Task template folders']
         self.assertEqual(expected_template_tabs, browser.css('.formTab').text)
 
     @browsing

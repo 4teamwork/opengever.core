@@ -54,7 +54,7 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        start_date = self.get_byline_value_by_label('from:')
+        start_date = self.get_byline_value_by_label('Start:')
         self.assertEquals('Jan 01, 2016', start_date.text)
 
     @browsing
@@ -62,7 +62,7 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        seq_number = self.get_byline_value_by_label('Sequence Number:')
+        seq_number = self.get_byline_value_by_label('Sequence number:')
         self.assertEquals('1', seq_number.text)
 
     @browsing
@@ -70,7 +70,7 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        ref_number = self.get_byline_value_by_label('Reference Number:')
+        ref_number = self.get_byline_value_by_label('Reference number:')
         self.assertEquals('Client1 1.1 / 1', ref_number.text)
 
     @browsing
@@ -78,7 +78,7 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        mail_to_link = self.get_byline_value_by_label('E-Mail:')
+        mail_to_link = self.get_byline_value_by_label('Email:')
         self.assertEquals('1014013300@example.org', mail_to_link.text)
         self.assertEquals(
             'mailto:1014013300@example.org', mail_to_link.get('href'))
@@ -97,7 +97,7 @@ class TestDossierByline(TestDossierBylineBase):
         browser.open(self.dossier)
 
         external_reference = self.get_byline_value_by_label(
-                'External Reference:')
+                'External reference:')
         self.assertEquals(u'qpr-900-9001-\xf7', external_reference.text)
 
     @browsing
@@ -112,14 +112,14 @@ class TestDossierByline(TestDossierBylineBase):
         transaction.commit()
         browser.login().open(self.dossier)
         external_reference = self.get_byline_value_by_label(
-                'External Reference:')
+                'External reference:')
         self.assertIsNone(external_reference.node.find("a"))
 
         IDossier(self.dossier).external_reference = valid_url
         transaction.commit()
         browser.login().open(self.dossier)
         external_reference = self.get_byline_value_by_label(
-                'External Reference:')
+                'External reference:')
         self.assertEquals(valid_url, external_reference.node.find("a").get("href"))
 
 
@@ -134,5 +134,5 @@ class TestFilingBusinessCaseByline(TestBylineBase):
 
         browser.open(self.dossier)
 
-        filing_number = self.get_byline_value_by_label('Filing Number:')
+        filing_number = self.get_byline_value_by_label('Filing number:')
         self.assertEquals('OG-Amt-2013-5', filing_number.text)

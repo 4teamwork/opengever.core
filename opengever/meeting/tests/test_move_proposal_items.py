@@ -22,7 +22,7 @@ class TestMoveProposalItems(SolrIntegrationTestCase):
         browser.fill({'Destination': self.subdossier})
         browser.css('#form-buttons-button_submit').first.click()
 
-        assert_message('1 Elements were moved successfully')
+        assert_message('1 elements were moved successfully')
         self.assertIn(proposal, self.subdossier.objectValues())
 
     @browsing
@@ -35,7 +35,7 @@ class TestMoveProposalItems(SolrIntegrationTestCase):
         browser.fill({'Destination': self.subdossier})
         browser.css('#form-buttons-button_submit').first.click()
 
-        assert_message("The selected objects can't be found, please try it again.")
+        assert_message("The selected objects can't be found, please try again.")
 
     @browsing
     def test_proposal_inside_closed_dossier_is_not_movable(self, browser):

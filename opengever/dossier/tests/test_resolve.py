@@ -209,7 +209,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_resolved(self.empty_dossier)
         self.assert_success(self.empty_dossier, browser,
-                            ['The dossier has been succesfully resolved.'])
+                            ['Dossier has been resolved succesfully.'])
 
     @browsing
     def test_resolving_subdossier_when_parent_dossier_contains_documents(self, browser):
@@ -222,7 +222,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_resolved(self.subdossier)
         self.assert_success(self.subdossier, browser,
-                            ['The subdossier has been succesfully resolved.'])
+                            ['Subdossier has been resolved succesfully.'])
 
     @browsing
     def test_archive_form_is_omitted_when_resolving_subdossiers(self, browser):
@@ -232,7 +232,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_resolved(self.subdossier)
         self.assert_success(self.subdossier, browser,
-                            ['The subdossier has been succesfully resolved.'])
+                            ['Subdossier has been resolved succesfully.'])
 
     @browsing
     def test_cant_resolve_already_resolved_dossier(self, browser):
@@ -253,7 +253,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
         self.assert_resolved(self.resolvable_dossier)
         self.assert_resolved(self.resolvable_subdossier)
         self.assert_success(self.resolvable_dossier, browser,
-                            ['The dossier has been succesfully resolved.'])
+                            ['Dossier has been resolved succesfully.'])
 
         self.reactivate(self.resolvable_dossier, browser)
         self.assert_active(self.resolvable_dossier)
@@ -263,7 +263,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
         self.assert_resolved(self.resolvable_dossier)
         self.assert_resolved(self.resolvable_subdossier)
         self.assert_success(self.resolvable_dossier, browser,
-                            ['The dossier has been succesfully resolved.'])
+                            ['Dossier has been resolved succesfully.'])
 
 
 class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiers):
@@ -1317,7 +1317,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['not all documents and tasks are stored in a subdossier.'])
+                           ['Not all documents and tasks have been filed into subdossiers.'])
 
     @browsing
     def test_resolving_is_cancelled_when_documents_are_checked_out(self, browser):
@@ -1329,7 +1329,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['not all documents are checked in'])
+                           ['Not all documents have been checked in yet.'])
 
     @browsing
     def test_resolving_is_cancelled_when_documents_in_subsubdossiers_are_checked_out(self, browser):
@@ -1345,7 +1345,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['not all documents are checked in'])
+                           ['Not all documents have been checked in yet.'])
 
     @browsing
     def test_resolving_is_cancelled_when_active_tasks_exist(self, browser):
@@ -1376,7 +1376,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_resolved(self.resolvable_dossier)
         self.assert_success(self.resolvable_dossier, browser,
-                            ['The dossier has been succesfully resolved.'])
+                            ['Dossier has been resolved succesfully.'])
 
     @browsing
     def test_resolving_is_cancelled_when_subdossier_has_an_invalid_end_date(self, browser):
@@ -1409,7 +1409,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_resolved(self.resolvable_dossier)
         self.assert_success(self.resolvable_dossier, browser,
-                            ['The dossier has been succesfully resolved.'])
+                            ['Dossier has been resolved succesfully.'])
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):
@@ -1423,7 +1423,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_subdossier)
         self.assert_errors(self.resolvable_subdossier, browser,
-                           ['The dossier contains active proposals.'])
+                           ['Dossier contains active proposals.'])
 
     @browsing
     def test_dossier_is_resolved_when_all_tasks_are_closed_and_documents_checked_in(self, browser):
@@ -1443,7 +1443,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_resolved(self.resolvable_dossier)
         self.assert_success(self.resolvable_dossier, browser,
-                            ['The dossier has been succesfully resolved.'])
+                            ['Dossier has been resolved succesfully.'])
 
 
 class TestResolveConditionsRESTAPI(ResolveTestHelperRESTAPI, TestResolveConditions):
@@ -1475,7 +1475,7 @@ class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
             self.resolve(self.dossier, browser)
             self.assert_resolved(self.dossier)
             self.assert_success(self.dossier, browser,
-                                ['The dossier has been succesfully resolved.'])
+                                ['Dossier has been resolved succesfully.'])
 
     @browsing
     def test_subdossier_is_resolvable_with_activated_workspace_client(self, browser):
@@ -1487,7 +1487,7 @@ class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
             self.resolve(subdossier, browser)
             self.assert_resolved(subdossier)
             self.assert_success(subdossier, browser,
-                                ['The subdossier has been succesfully resolved.'])
+                                ['Subdossier has been resolved succesfully.'])
 
     @browsing
     def test_dossier_is_resolved_when_deactivated_workspace_is_linked(self, browser):
@@ -1507,7 +1507,7 @@ class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
             self.resolve(self.dossier, browser)
             self.assert_resolved(self.dossier)
             self.assert_success(self.dossier, browser,
-                                ['The dossier has been succesfully resolved.'])
+                                ['Dossier has been resolved succesfully.'])
 
 
 class TestResolveConditionsWithWorkspaceClientFeatureEnabledRESTAPI(
@@ -1575,7 +1575,7 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
         self.assert_resolved(self.resolvable_dossier)
         self.assert_resolved(self.resolvable_subdossier)
         self.assert_success(self.resolvable_dossier, browser,
-                            ['The dossier has been succesfully resolved.'])
+                            ['Dossier has been resolved succesfully.'])
 
     @browsing
     def test_handles_already_resolved_subdossiers(self, browser):

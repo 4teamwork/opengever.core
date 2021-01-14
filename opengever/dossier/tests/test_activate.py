@@ -45,7 +45,7 @@ class TestDossierActivation(IntegrationTestCase):
 
         self.activate(self.dossier, browser, use_editbar=True)
         self.assert_success(self.dossier, browser,
-                            ['The Dossier has been activated'])
+                            ['Dossier has been activated'])
 
         self.assert_workflow_state('dossier-state-active', self.dossier)
         self.assert_workflow_state('dossier-state-active', self.subdossier)

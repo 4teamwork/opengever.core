@@ -112,7 +112,7 @@ class TestDossier(IntegrationTestCase):
 
         browser.open(self.subdossier, view='edit')
 
-        self.assertEqual('Edit Subdossier', browser.css('h1').first.text)
+        self.assertEqual('Edit subdossier', browser.css('h1').first.text)
 
     def test_nested_subdossiers_is_not_possible_by_default(self):
         self.login(self.dossier_responsible)

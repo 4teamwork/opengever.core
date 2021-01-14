@@ -1052,7 +1052,7 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
     def test_visible_tabs(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.templates, view='tabbed_view')
-        expected_tabs = ['Documents', 'Tasktemplate Folders']
+        expected_tabs = ['Documents', 'Task template folders']
         self.assertEqual(expected_tabs, browser.css('.tabbedview-tabs span').text)
 
     @browsing
@@ -1103,7 +1103,7 @@ class TestTemplateDocumentTabsWithOneoffixx(IntegrationTestCase):
     def test_visible_tabs(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.templates, view='tabbed_view')
-        expected_tabs = ['OneOffixx', 'Documents', 'Tasktemplate Folders']
+        expected_tabs = ['OneOffixx', 'Documents', 'Task template folders']
         self.assertEqual(expected_tabs, browser.css('.tabbedview-tabs span').text)
 
 
@@ -1116,7 +1116,7 @@ class TestDossierTemplateFeature(IntegrationTestCase):
     def test_visible_tabs(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.templates, view='tabbed_view')
-        expected_tabs = ['Documents', 'Dossier templates', 'Tasktemplate Folders']
+        expected_tabs = ['Documents', 'Dossier templates', 'Task template folders']
         self.assertEqual(expected_tabs, browser.css('.tabbedview-tabs span').text)
 
     @browsing

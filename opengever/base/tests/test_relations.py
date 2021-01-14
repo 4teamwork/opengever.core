@@ -14,7 +14,7 @@ class TestRelations(IntegrationTestCase):
         browser.open(self.leaf_repofolder,
                      view='++add++opengever.dossier.businesscasedossier')
         browser.fill({'Title': 'Dossier B with relations',
-                      'Related Dossier': [self.dossier]})
+                      'Related dossiers': [self.dossier]})
         browser.find('Save').click()
 
         rel_catalog = getUtility(ICatalog)
@@ -34,7 +34,7 @@ class TestRelations(IntegrationTestCase):
 
         browser.open(self.empty_dossier, view='edit')
         browser.fill({'Title': 'Dossier B with relations',
-                      'Related Dossier': [self.dossier]})
+                      'Related dossiers': [self.dossier]})
         browser.find('Save').click()
 
         rel_catalog = getUtility(ICatalog)

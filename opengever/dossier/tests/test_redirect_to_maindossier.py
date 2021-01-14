@@ -24,7 +24,7 @@ class TestRedirectToMainDossier(IntegrationTestCase):
 
         self.assertEquals(self.leaf_repofolder, browser.context)
         self.assertEquals(
-            [u'The object `1.1. Vertr\xe4ge und Vereinbarungen` is not stored inside a dossier.'],
+            [u'Object `1.1. Vertr\xe4ge und Vereinbarungen` is not stored inside a dossier.'],
             error_messages())
 
     @browsing

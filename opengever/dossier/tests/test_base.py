@@ -252,7 +252,7 @@ class TestDateCalculations(IntegrationTestCase):
         with freeze(datetime(2015, 12, 22)):
             browser.open(self.leaf_repofolder)
             factoriesmenu.add('Business Case Dossier')
-            self.assertEquals('22.12.2015', browser.find('Opening Date').value)
+            self.assertEquals('22.12.2015', browser.find('Start date').value)
 
     def test_earliest_possible_is_none_for_empty_dossiers(self):
         self.login(self.dossier_responsible)
