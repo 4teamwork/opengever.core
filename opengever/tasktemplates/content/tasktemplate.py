@@ -65,7 +65,7 @@ class ITaskTemplate(model.Schema):
                 default=u'Responsible Client'),
         description=_(u'help_responsible_client',
                       default=u''),
-        vocabulary='opengever.tasktemplates.ResponsibleOrgUnitVocabulary',
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=False)
 
     form.widget('responsible', KeywordFieldWidget, async=True)
