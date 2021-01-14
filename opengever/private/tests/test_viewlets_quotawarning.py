@@ -28,14 +28,14 @@ class TestQuotaWarningViewlet(IntegrationTestCase):
         settings.size_soft_limit = 70
         browser.reload()
         statusmessages.assert_message(
-            u'The quota of your private folder will exceed soon.')
+            u'The quota of your private folder will soon be exceeded. Remove existing files to free up storage space.')
 
         settings.size_hard_limit = 80
         transaction.commit()
         browser.reload()
         statusmessages.assert_message(
-            u'The quota of your private folder has exceeded,'
-            ' you can not add any new files or mails.')
+            u'The quota of your private folder has been exceeded - '
+            'you cannot add any new files or emails.')
 
         settings.size_soft_limit = 0
         settings.size_hard_limit = 0
