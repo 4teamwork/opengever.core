@@ -1,7 +1,21 @@
 .. _propertysheets:
 
-Property Sheets (Benutzerdefinierte Felder)
-===========================================
+Benutzerdefinierte Felder
+=========================
+
+Das Bearbeiten der Schemas für Benutzerdefinierte Felder und
+Serialisieren/Deserialisieren auf Inhalten verwendet die folgenden Begriffe:
+
+- ``Property Sheet``: Ein Property Sheet definiert ein Schema. Dieses Schema
+                      wird zur Validierung der Custom Properties verwendet.
+- ``Assignment Slot``: Ein Assignment Slot definiert einen Steckplatz dem
+                       maximal ein Property Sheet zugewiesen werden kann.
+- ``Assignment``: Ein Assignment ist die Zuweisung eines Property Sheets an
+                  einen Assignment Slot. Ein Property Sheet kann mehrere
+                  Assignments haben.
+- ``Custom Properties``: Custom Properties sind die konkreten Daten auf den
+                         Inhaltsobjekten. Custom Properties werden gegen ihr
+                         zugehöriges Property Sheet validiert.
 
 Mittels Property Sheets ist es möglich benutzerdefinierte Schemata mit einem
 oder mehreren Feldern zu definieren damit zusätzliche Properties in GEVER
