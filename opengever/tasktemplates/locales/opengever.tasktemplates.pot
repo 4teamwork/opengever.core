@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-29 14:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,11 +52,6 @@ msgstr ""
 
 #: ./opengever/tasktemplates/browser/form.pt
 msgid "choose template"
-msgstr ""
-
-#. Default: "Interactive users"
-#: ./opengever/tasktemplates/vocabularies.py
-msgid "client_interactive_users"
 msgstr ""
 
 #. Default: "Immediately open the first task after creation."

@@ -58,7 +58,6 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.task.unidirectional_by_reference',
     'opengever.task.unidirectional_by_value',
     'opengever.tasktemplates.active_tasktemplatefolders',
-    'opengever.tasktemplates.ResponsibleOrgUnitVocabulary',
     'opengever.tasktemplates.tasktemplates',
     'opengever.workspace.PossibleWorkspaceFolderParticipantsVocabulary',
     'opengever.workspace.RolesVocabulary',
