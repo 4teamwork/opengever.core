@@ -67,10 +67,10 @@ Einzelne Felder werden in folgendem Format erwartet:
 - ``required``: Ob das Feld erforderlich ist
 - ``values``: Auswahlmöglichkeiten für das Feld, nur für ``choice`` Feldtyp
 
-Assignments müssen aus dem Vokabular
+Die für das Assigmnet verwendeten Assignment-Slots müssen aus dem Vokabular
 ``opengever.propertysheets.PropertySheetAssignmentsVocabulary`` stammen. Zudem
-müssen Assignments eindeutig sein, mehrere Property Sheets für das gleiche
-Assignment sind im Moment nicht unterstützt.
+müssen Assignments eindeutig sein, mehrere Property Sheets dem gleichen
+Assignment-Slot zuzuweisen ist im Moment nicht unterstützt.
 
 
 **Beispiel-Request**:
