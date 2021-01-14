@@ -178,7 +178,7 @@ def get_documents_of_task(task, include_mails=False):
 
 def update_reponsible_field_data(data):
     """The responsible field always contains the orgunit id and the userid
-    separated by a colon.
+    separated by a colon. Interactive users don't provide an orgunit.
     """
     if not data['responsible']:
         return
@@ -192,6 +192,9 @@ def update_reponsible_field_data(data):
         team = Team.query.get_by_actor_id(data['responsible'])
         data['responsible_client'] = team.org_unit.unit_id
         data['responsible'] = data['responsible']
+
+    elif ActorLookup(data['responsible']).is_interactive_actor():
+        data['responsible_client'] = None
 
     else:
         client, user = data['responsible'].split(':', 1)
