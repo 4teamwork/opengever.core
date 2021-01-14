@@ -82,7 +82,7 @@ class TestInboxView(FunctionalTestCase):
         browser.login().open(self.container)
         self.assertEqual(self.container.absolute_url(), browser.url)
         self.assertEquals(
-            ['Your not allowed to access the inbox of Org Unit 1.'],
+            ["You're not allowed to access the inbox of Org Unit 1."],
             statusmessages.messages().get('warning'))
 
     @skip("This test currently fails in a flaky way on CI."
