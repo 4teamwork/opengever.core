@@ -128,8 +128,8 @@ class TestTaskTemplates(SolrIntegrationTestCase):
 
         tasktemplate = self.tasktemplatefolder.listFolderContents()[-1]
 
-        self.assertEquals('interactive_actor', tasktemplate.responsible_client)
-        self.assertEquals('responsible', tasktemplate.responsible)
+        self.assertIsNone(tasktemplate.responsible_client)
+        self.assertEquals('interactive_actor:responsible', tasktemplate.responsible)
         self.assertEquals('interactive_actor:responsible', tasktemplate.issuer)
 
     @browsing
