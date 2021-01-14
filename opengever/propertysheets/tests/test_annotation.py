@@ -51,6 +51,23 @@ class TestCustomPropertiesStorage(FunctionalTestCase):
     def test_custom_property_storage_is_none_per_default(self):
         self.assertIsNone(self.props.custom_properties)
 
+    def test_custom_property_storage_initialzes_none_in_annotations(self):
+        self.assertNotIn(self.key, self.annotations)
+
+        self.props.custom_properties = None
+        self.assertIn(self.key, self.annotations)
+        self.assertIsNone(self.annotations[self.key])
+
+        self.assertIsNone(self.props.custom_properties)
+
+    def test_custom_property_storage_initialzes_empty_dict_in_annotations(self):
+        self.assertNotIn(self.key, self.annotations)
+
+        self.props.custom_properties = {}
+        self.assertIn(self.key, self.annotations)
+        self.assertIsInstance(self.annotations[self.key], PersistentDict)
+        self.assertEqual(PersistentDict(), self.annotations[self.key])
+
     def test_custom_property_storage_raises_attribute_error_for_unknowns(self):
         with self.assertRaises(AttributeError):
             self.props.foo

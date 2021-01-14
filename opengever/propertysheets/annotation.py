@@ -43,8 +43,13 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
         if name not in self.__dict__['schema']:
             super(AnnotationsFactoryImpl, self).__setattr__(name, value)
         else:
-            # early return if the value to `None`
+            prefixed_name = self.__dict__['prefix'] + name
             if value is None:
+                # Early return if the value is `None`, but make sure to
+                # initialize annotations with `None` as this is expected by the
+                # default value patches.
+                if prefixed_name not in self.__dict__['annotations']:
+                    self.__dict__['annotations'][prefixed_name] = value
                 return
 
             # for not `None` values always validate type first
@@ -54,8 +59,6 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
                 )
 
             new_value = make_persistent(value)
-            prefixed_name = self.__dict__['prefix'] + name
-
             value_to_update = self.__dict__['annotations'].get(prefixed_name)
             # we could have an initial stored value of `None`
             if value_to_update is None:
