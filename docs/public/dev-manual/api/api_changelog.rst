@@ -18,6 +18,7 @@ Other Changes
 
 - A new endpoint ``@white-labeling-settings`` is added (see :ref:`docs <white-labeling-settings>`).
 - ``@config``: New feature flag ``hubspot`` added (see :ref:`docs <config>`).
+- Documents and Mails now support serialization and deserialization of ``custom_properties`` (see :ref:`docs <propertysheets>`).
 - A new endpoint ``@propertysheets`` is added (see :ref:`docs <propertysheets>`).
 
 
