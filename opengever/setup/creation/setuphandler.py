@@ -1,7 +1,9 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
+from opengever.base.interfaces import IWhiteLabelingSettings
 from opengever.setup.creation.adminunit import AdminUnitCreator
 from opengever.setup.creation.orgunit import OrgUnitCreator
 from plone import api
+import json
 import os
 
 
@@ -129,3 +131,25 @@ class LocalRoleConfiguration(BaseSetupHandler):
         transmogrifier = Transmogrifier(self.setup.getSite())
         transmogrifier(u'opengever.setup.local_roles',
                        jsonsource=dict(directory=self.path))
+
+
+def set_geverui_white_labeling_settings(context):
+    logo_image = context.readDataFile('white_labeling/customer_logo.png')
+    if logo_image:
+        api.portal.set_registry_record('logo_src', logo_image, interface=IWhiteLabelingSettings)
+
+    settings_file = context.readDataFile('white_labeling/settings.json')
+    if settings_file:
+        settings = json.loads(settings_file)
+        seperately_treated_fields = ['color_scheme_light', 'logo_src']
+        white_labeling_fields = [field for field in IWhiteLabelingSettings.names()
+                                 if field not in seperately_treated_fields]
+        for field in white_labeling_fields:
+            if field in settings:
+                api.portal.set_registry_record(
+                    field, settings[field], interface=IWhiteLabelingSettings)
+        if 'color_scheme_light' in settings:
+            api.portal.set_registry_record(
+                'color_scheme_light',
+                json.dumps(settings['color_scheme_light'], ensure_ascii=False),
+                interface=IWhiteLabelingSettings)
