@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-14 11:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr "Edit"
 #. German translation: Webaktion bearbeiten
 #: ./opengever/webactions/browser/forms.py
 msgid "Edit Webaction"
-msgstr "Edit Webaction"
+msgstr "Edit webaction"
 
 #. German translation: Bearbeitung abgebrochen
 #: ./opengever/webactions/browser/forms.py
