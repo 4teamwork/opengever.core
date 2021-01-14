@@ -40,6 +40,7 @@ Inhalt:
    assigned_users.rst
    notification_settings.rst
    usersettings.rst
+   white_labeling_settings.rst
    tasks.rst
    globalindex.rst
    resolve_oguid.rst

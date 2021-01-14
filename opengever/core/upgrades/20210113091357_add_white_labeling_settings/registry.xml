@@ -1,0 +1,15 @@
+<registry>
+
+  <!-- White Labeling -->
+  <records interface="opengever.base.interfaces.IWhiteLabelingSettings">
+    <value key="color_scheme_light">{}</value>
+    <value key="custom_support_markup_de" />
+    <value key="custom_support_markup_en" />
+    <value key="custom_support_markup_fr" />
+    <value key="logo_src" />
+    <value key="show_created_by">True</value>
+  </records>
+
+</registry>
+
+
