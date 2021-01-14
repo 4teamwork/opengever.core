@@ -410,7 +410,7 @@ msgstr "Reopen meeting"
 #. Default: "Return to proposal"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
-msgstr "File excerpt alongside proposal"
+msgstr "File excerpt in originating dossier"
 
 #. German translation: Aktiv
 #. Default: "Active"
@@ -1842,7 +1842,7 @@ msgstr "Choose a meaningful title to distinguish the created excerpts better."
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_confirm_return_excerpt_dialog"
-msgstr "When returning an excerpt to the proposer the selected document will be sent back to the proposal's originating dossier. No other excerpts can be returned."
+msgstr "When filing an excerpt in the originating dossier the selected document will be sent back to the proposal's originating dossier. No other excerpts can be filed in such a way."
 
 #. German translation: Originaldateien anstatt PDF-Dateien herunterladen.
 #. Default: "Download original files rather than PDF files."
@@ -1866,7 +1866,7 @@ msgstr "There is no agenda item list template configured, agenda item list could
 #. Default: "When deciding an agendaitem the agenda list is no longer editable."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_hold_meeting_dialog"
-msgstr "When deciding an agenda item, the agenda list is no longer editable."
+msgstr "When deciding an agenda item, the agenda item list is no longer editable."
 
 #. German translation: Die Sitzung ${title} wurde erfolgreich storniert.
 #. Default: "The meeting ${title} has been successfully cancelled."
