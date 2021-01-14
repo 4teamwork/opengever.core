@@ -9,6 +9,46 @@ import json
 class TestMailCustomPropertiesPatch(IntegrationTestCase):
 
     @browsing
+    def test_correctly_stores_custom_properties_with_all_field_types(self, browser):
+        self.login(self.manager, browser)
+
+        choices = ["one", "two", "three"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", True)
+            .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("text", u"text", u"Some lines of text", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+        )
+        self.mail_eml.document_type = u"question"
+
+        self.login(self.regular_user, browser)
+        good_data = {
+            "custom_properties": {
+                "IDocumentMetadata.document_type.question": {
+                    "yesorno": False,
+                    "choose": "two",
+                    "num": 123,
+                    "text": u"bl\xe4\nblub",
+                    "textline": u"bl\xe4",
+                },
+            }
+        }
+        browser.open(
+            self.mail_eml,
+            method="PATCH",
+            data=json.dumps(good_data),
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            good_data["custom_properties"],
+            IDocumentCustomProperties(self.mail_eml).custom_properties,
+        )
+
+    @browsing
     def test_does_not_allow_arbitrary_json_in_custom_properties(self, browser):
         self.login(self.regular_user, browser)
 
