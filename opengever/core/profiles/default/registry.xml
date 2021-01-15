@@ -182,6 +182,9 @@
   <!-- Usersnap -->
   <records interface="opengever.base.interfaces.IUserSnapSettings" />
 
+  <!-- White Labeling -->
+  <records interface="opengever.base.interfaces.IWhiteLabelingSettings" />
+
   <!-- WOPI (Office Online) -->
   <records interface="opengever.wopi.interfaces.IWOPISettings" />
 

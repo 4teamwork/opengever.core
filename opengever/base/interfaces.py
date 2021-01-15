@@ -445,3 +445,24 @@ class IPortalSettings(Interface):
                     u'be used to generate the workspace invitation url. '
                     u'Leave it blank to use an auto generated portal url to '
                     u'[cluster-base-url]/portal')
+
+
+class IWhiteLabelingSettings(Interface):
+
+    color_scheme_light = schema.TextLine(
+        title=u'Color scheme light',
+        description=u'In json format, eg. {"primary":"#55ff00"}', default=u'{}')
+
+    show_created_by = schema.Bool(
+        title=u'Show created by section',
+        description=u'Whether created by section should be shown',
+        default=True)
+
+    custom_support_markup_de = schema.Text(title=u'Custom support markup de', required=False)
+
+    custom_support_markup_en = schema.Text(title=u'Custom support markup en', required=False)
+
+    custom_support_markup_fr = schema.Text(title=u'Custom support markup fr', required=False)
+
+    logo_src = schema.Bytes(title=u'Logo image',
+                            description=u'Format must be png, height must be 30px')

@@ -16,6 +16,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- A new endpoint ``@white-labeling-settings`` is added (see :ref:`docs <white-labeling-settings>`).
 - A new endpoint ``@propertysheets`` is added (see :ref:`docs <propertysheets>`).
 
 

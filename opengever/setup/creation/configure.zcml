@@ -40,4 +40,11 @@
     <depends name="ftw.inflator.content_creation" />
   </genericsetup:importStep>
 
+  <genericsetup:importStep
+      name="opengever.setup.set_geverui_white_labeling_settings"
+      title="opengever.setup: geverui white labeling settings"
+      description="Set geverui white labeling settings in registry"
+      handler="opengever.setup.creation.setuphandler.set_geverui_white_labeling_settings"
+      />
+
 </configure>

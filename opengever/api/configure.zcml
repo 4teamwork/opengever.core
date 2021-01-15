@@ -823,6 +823,14 @@
 
   <plone:service
       method="GET"
+      name="@white-labeling-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".white_labeling_settings.WhiteLabelingSettingsGet"
+      permission="zope.Public"
+      />
+
+  <plone:service
+      method="GET"
       name="@globalindex"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".globalindex.GlobalIndexGet"
