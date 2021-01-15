@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-14 15:22+0000\n"
 "PO-Revision-Date: 2015-03-30 08:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr "Inbox"
 #. German translation: Eingangskorb Ordner
 #: ./opengever/inbox/upgrades/profiles/4003/types/opengever.inbox.container.xml
 msgid "Inbox Container"
-msgstr "Inbox Container"
+msgstr "Inbox container"
 
 #. German translation: Abschliessen
 #. Default: "Close"
@@ -39,7 +39,7 @@ msgstr "Close"
 #. Default: "Your not allowed to access the inbox of ${current_org_unit}."
 #: ./opengever/inbox/browser/view.py
 msgid "current_inbox_not_available"
-msgstr "Your not allowed to access the inbox of ${current_org_unit}."
+msgstr "You're not allowed to access the inbox of ${current_org_unit}."
 
 #. German translation: Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll.
 #. Default: "Error: Please select at least one document to forward."
@@ -62,12 +62,12 @@ msgstr "Forwarding"
 #. German translation: Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird.
 #: ./opengever/inbox/inbox.py
 msgid "help_inbox_group"
-msgstr "help_inbox_group"
+msgstr "This group will be granted permissions on tasks that get assigned to the inbox."
 
 #. German translation: Wählen Sie die verantwortliche Person bzw. den Eingangskorb des zuständigen Mandanten aus.
 #: ./opengever/inbox/forwarding.py
 msgid "help_responsible"
-msgstr "help_responsible"
+msgstr "Choose the responsible user, or the inbox of the responsible organization / department."
 
 #. German translation: Erhaltene Aufgaben
 #. Default: "Assigned tasks"
@@ -97,7 +97,7 @@ msgstr "Added as watcher of the forwarding"
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py
 msgid "label_inbox_group"
-msgstr "Inbox Group"
+msgstr "Inbox group"
 
 #. German translation: Erteilte Aufgaben
 #. Default: "Issued tasks"
@@ -115,7 +115,7 @@ msgstr "Refuse"
 #. Default: "Refuse Forwarding"
 #: ./opengever/inbox/browser/refuse.py
 msgid "label_refuse_forwarding"
-msgstr "Refuse Forwarding"
+msgstr "Refuse forwarding"
 
 #. German translation: Auftragnehmer
 #. Default: "Responsible"
@@ -139,13 +139,13 @@ msgstr "Added as watcher of the forwarding by ${user}"
 #. Default: "Assign Forwarding"
 #: ./opengever/inbox/browser/assign.py
 msgid "title_assign_forwarding"
-msgstr "Assign Forwarding"
+msgstr "Assign forwarding"
 
 #. German translation: Weiterleitung abschliessen
 #. Default: "Close orwarding"
 #: ./opengever/inbox/browser/close.py
 msgid "title_close_forwarding"
-msgstr "Close orwarding"
+msgstr "Close forwarding"
 
 #. German translation: Abgeschlossen ${year}
 #. Default: "Closed ${year}"
