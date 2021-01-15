@@ -17,6 +17,7 @@ Other Changes
 ^^^^^^^^^^^^^
 
 - A new endpoint ``@white-labeling-settings`` is added (see :ref:`docs <white-labeling-settings>`).
+- ``@config``: New feature flag ``hubspot`` added (see :ref:`docs <config>`).
 - A new endpoint ``@propertysheets`` is added (see :ref:`docs <propertysheets>`).
 
 

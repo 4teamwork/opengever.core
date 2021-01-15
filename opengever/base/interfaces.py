@@ -376,6 +376,14 @@ class IGeverUI(Interface):
         default=False)
 
 
+class IHubSpotSettings(Interface):
+
+    is_feature_enabled = schema.Bool(
+        title=u'Enable HubSpot',
+        description=u'Whether HubSpot is enabled',
+        default=False)
+
+
 class IUserSnapSettings(Interface):
 
     api_key = schema.TextLine(

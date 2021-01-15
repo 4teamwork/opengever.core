@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.base.interfaces.IHubSpotSettings">
+    <value key="is_feature_enabled">False</value>
+  </records>
+</registry>

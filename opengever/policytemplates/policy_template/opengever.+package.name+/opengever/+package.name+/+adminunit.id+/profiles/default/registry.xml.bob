@@ -48,6 +48,12 @@
   </records>
 
 {{% endif %}}
+{{% if setup.hubspot %}}
+  <records interface="opengever.base.interfaces.IHubSpotSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
+
+{{% endif %}}
 {{% if is_gever %}}
 {{% if setup.enable_meeting_feature %}}
   <record interface="opengever.meeting.interfaces.IMeetingSettings" field="is_feature_enabled">
