@@ -109,13 +109,13 @@ class TestFileOrPaperValidatorInEditForm(FunctionalTestCase):
     @browsing
     def test_mail_preserved_as_paper_is_valid(self, browser):
         browser.login().open(self.mail, view='edit')
-        browser.fill({'Preserved as paper': True}).save()
+        browser.fill({'Physical file': True}).save()
         self.assertTrue(self.mail.preserved_as_paper)
         assert_no_error_messages()
 
     @browsing
     def test_mail_not_preserved_as_paper_is_valid(self, browser):
         browser.login().open(self.mail, view='edit')
-        browser.fill({'Preserved as paper': False}).save()
+        browser.fill({'Physical file': False}).save()
         self.assertFalse(self.mail.preserved_as_paper)
         assert_no_error_messages()

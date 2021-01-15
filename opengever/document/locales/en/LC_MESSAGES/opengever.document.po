@@ -354,7 +354,7 @@ msgstr "help_keywords"
 #. Default: ""
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_preserved_as_paper"
-msgstr ""
+msgstr "Whether the document (also) exists as a physical file on paper."
 
 #. German translation: Online Voransicht des Originaldokuments
 #. Default: ""
@@ -668,7 +668,7 @@ msgstr "Open document preview"
 #. Default: "Preserved as paper"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_preserved_as_paper"
-msgstr "Preserved as paper"
+msgstr "Physical file"
 
 #. German translation: Vorschau
 #. Default: "Preview"

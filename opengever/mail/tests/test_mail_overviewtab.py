@@ -42,7 +42,7 @@ class TestOverview(FunctionalTestCase):
                    'Text.txt 1 KB '
                    'Save attachments'],
                   ['Digital Available', 'yes'],
-                  ['Preserved as paper', 'yes'],
+                  ['Physical file', 'yes'],
                   ['Date of receipt', date_format_helper(date.today())],
                   ['Date of delivery', ''],
                   ['Classification', 'unprotected'],

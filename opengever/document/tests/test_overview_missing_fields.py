@@ -42,7 +42,7 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
              'Foreign Reference',
              'Checked out',
              'Digital Available',
-             'Preserved as paper',
+             'Physical file',
              'Date of receipt',
              'Date of delivery',
              'Related Documents',
