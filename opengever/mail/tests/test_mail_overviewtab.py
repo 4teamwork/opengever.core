@@ -26,13 +26,13 @@ class TestOverview(FunctionalTestCase):
                           'mail_with_multiple_attachments.eml'))
         browser.login().visit(mail, view='tabbedview_view-overview')
 
-        expect = [['Document Date', date_format_helper(get_header_date(mail))],
-                  ['Document Type', ''],
+        expect = [['Document date', date_format_helper(get_header_date(mail))],
+                  ['Document type', ''],
                   ['Author', get_author_by_email(mail)],
                   ['Creator', 'Test User (test_user_1_)'],
                   ['Description', ''],
                   ['Keywords', ''],
-                  ['Foreign Reference', ''],
+                  ['Foreign reference', ''],
                   ['Message',
                    u'Mehrere Anhaenge.eml \u2014 32 KB '
                    u'Check out and edit Download copy Attach to email'],

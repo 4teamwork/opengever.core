@@ -592,22 +592,22 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         document_attributes = [
             'Title',
-            'Document Date',
+            'Document date',
             'File',
             'Created',
             'Modified',
-            'Document Type',
+            'Document type',
             'Author',
             'Creator',
             'Description',
             'Keywords',
-            'Foreign Reference',
+            'Foreign reference',
             'Checked out',
             'Has digital file',
             'Physical file',
             'Date of receipt',
             'Date of delivery',
-            'Related Documents',
+            'Related documents',
             'Classification',
             'Privacy protection',
             'Public access level',
@@ -619,7 +619,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(self.expired_document, view='tabbedview_view-overview')
 
-        document_attributes.extend(["Archival File", "Archival file state"])
+        document_attributes.extend(["Archival file", "Archival file state"])
 
         self.assertEquals(document_attributes, browser.css('.listing th').text)
 
@@ -675,11 +675,11 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         browser.open(self.expired_document, view='tabbedview_view-overview')
 
-        archival_file_row_index = browser.css('.listing tr th').text.index("Archival File")
+        archival_file_row_index = browser.css('.listing tr th').text.index("Archival file")
         archival_file_row = browser.css('.listing tr')[archival_file_row_index]
 
         self.assertEquals(
-            'Archival File',
+            'Archival file',
             archival_file_row.css('th').first.text,
             )
 

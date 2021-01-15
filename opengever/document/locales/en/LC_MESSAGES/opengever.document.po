@@ -203,7 +203,7 @@ msgstr "Are you sure you want to cancel the checkout? This will discard any chan
 #. Default: "copy of"
 #: ./opengever/document/subscribers.py
 msgid "copy_of"
-msgstr "copy of"
+msgstr "Copy of"
 
 #. German translation: Sie sind dabei, eine Kopie des Dokuments ${filename} herunterzuladen.
 #. Default: "You're downloading a copy of the document ${filename}"
@@ -327,7 +327,7 @@ msgstr "Date on which the document was sent by mail."
 #. Default: "Live Search: search for the dossier"
 #: ./opengever/document/forms.py
 msgid "help_destination"
-msgstr "Live Search: Search for target dossier"
+msgstr "Live search: Search for target dossier"
 
 #. German translation: Datum des Dokuments
 #: ./opengever/document/behaviors/metadata.py
@@ -390,7 +390,7 @@ msgstr "Changed by"
 #: ./opengever/document/behaviors/metadata.py
 #: ./opengever/document/browser/overview.py
 msgid "label_archival_file"
-msgstr "Archival File"
+msgstr "Archival file"
 
 #. German translation: Status Archivdatei
 #. Default: "Archival file state"
@@ -466,7 +466,7 @@ msgstr "Checked out"
 #. Default: "Journal Comment"
 #: ./opengever/document/checkout/checkin.py
 msgid "label_checkin_journal_comment"
-msgstr "Journal Comment"
+msgstr "Journal comment"
 
 #. German translation: Auschecken
 #. Default: "Checkout"
@@ -545,7 +545,7 @@ msgstr "Collaborators: ${collaborators}"
 #: ./opengever/document/behaviors/metadata.py
 #: ./opengever/document/browser/report.py
 msgid "label_document_date"
-msgstr "Document Date"
+msgstr "Document date"
 
 #. German translation: Eingangsdatum
 #. MARKER: receipt-delivery-date-mixup double check!
@@ -573,7 +573,7 @@ msgstr "Sequence number"
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
-msgstr "Document Type"
+msgstr "Document type"
 
 #. German translation: Dossier-Titel
 #: ./opengever/document/browser/report.py
@@ -623,7 +623,7 @@ msgstr "File"
 #. MARKER: double check
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_foreign_reference"
-msgstr "Foreign Reference"
+msgstr "Foreign reference"
 
 #. German translation: Schlagwörter
 #. Default: "Keywords"
@@ -648,7 +648,7 @@ msgstr "Modified"
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
 msgid "label_no"
-msgstr "no"
+msgstr "No"
 
 #. German translation: OK
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
@@ -708,14 +708,14 @@ msgstr "Date of receipt"
 #. Default: "Reference Number"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_reference_number"
-msgstr "Reference Number"
+msgstr "Reference number"
 
 #. German translation: Verwandte Dokumente
 #. Default: "Related Documents"
 #: ./opengever/document/behaviors/related_docs.py
 #: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
-msgstr "Related Documents"
+msgstr "Related documents"
 
 #. German translation: Mit Oneoffixx wiederholen
 #. Default: "Oneoffixx retry"
@@ -745,7 +745,7 @@ msgstr "Save PDF as"
 #. Default: "Sequence Number"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_sequence_number"
-msgstr "Sequence Number"
+msgstr "Sequence number"
 
 #. German translation: Dokumentdatum
 #. Default: "from"
@@ -758,7 +758,7 @@ msgstr "Document date"
 #. Default: "Submitted Proposal"
 #: ./opengever/document/browser/overview.py
 msgid "label_submitted_proposal"
-msgstr "Submitted Proposal"
+msgstr "Submitted proposal"
 
 #. German translation: Kurzbild
 #. Default: "Thumbnail"

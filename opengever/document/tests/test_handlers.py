@@ -163,7 +163,7 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
             ('ogg.document.reference_number', 'Client1 / 2 / 2'),
             ('ogg.document.sequence_number', '2'),
-            ('ogg.document.title', 'copy of Document with file'),
+            ('ogg.document.title', 'Copy of Document with file'),
             ('ogg.document.version_number', 0),
             ('ogg.dossier.reference_number', 'Client1 / 2'),
             ('ogg.dossier.sequence_number', '2'),
@@ -205,7 +205,7 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
             ('ogg.document.reference_number', 'Client1 / 2.1 / 2'),
             ('ogg.document.sequence_number', '2'),
-            ('ogg.document.title', 'copy of Document with file'),
+            ('ogg.document.title', 'Copy of Document with file'),
             ('ogg.document.version_number', 0),
             ('ogg.dossier.reference_number', 'Client1 / 2.1'),
             ('ogg.dossier.sequence_number', '3'),
@@ -301,5 +301,5 @@ class TestHandlers(FunctionalTestCase):
         copied = api.content.copy(source=invalid_docx,
                                   target=self.target_dossier)
 
-        self.assertEqual('copy of Invalid DOCX', copied.title)
+        self.assertEqual('Copy of Invalid DOCX', copied.title)
 

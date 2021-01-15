@@ -140,7 +140,7 @@ class TestDocumentReporter(IntegrationTestCase):
             [u'Sequence number',
              u'Title',
              u'Author',
-             u'Document Date',
+             u'Document date',
              u'label_document_receipt_date',
              u'label_document_delivery_date',
              u'Checked out by',

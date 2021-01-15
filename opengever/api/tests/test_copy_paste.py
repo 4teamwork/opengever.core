@@ -21,7 +21,7 @@ class TestCopyPasteAPI(IntegrationTestCase):
 
         self.assertEqual(1, len(children["added"]))
         copy = children["added"].pop()
-        self.assertEqual("copy of " + self.document.title, copy.title)
+        self.assertEqual("Copy of " + self.document.title, copy.title)
         self.assertEqual([{u'source': self.document.absolute_url(),
                            u'target': copy.absolute_url()}],
                          browser.json)

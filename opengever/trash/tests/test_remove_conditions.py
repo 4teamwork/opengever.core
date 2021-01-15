@@ -33,7 +33,7 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
         self.trash_documents(self.empty_document)
 
         browser.open(self.taskdocument, view='edit')
-        browser.fill({'Related Documents': [self.empty_document]})
+        browser.fill({'Related documents': [self.empty_document]})
         browser.find('Save').click()
 
         checker = RemoveConditionsChecker(self.empty_document)
@@ -49,7 +49,7 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
         self.login(self.manager, browser=browser)
 
         browser.open(self.taskdocument, view='edit')
-        browser.fill({'Related Documents': [self.empty_document]})
+        browser.fill({'Related documents': [self.empty_document]})
         browser.find('Save').click()
 
         self.trash_documents(self.empty_document)

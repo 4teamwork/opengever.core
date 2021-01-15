@@ -607,7 +607,7 @@ class TestCheckinViews(IntegrationTestCase):
         # fill and submit checkin form
         journal_comment = u'Checkinerino'
         browser.fill({
-            u'Journal Comment': journal_comment,
+            u'Journal comment': journal_comment,
             })
 
         browser.css('#form-buttons-button_checkin').first.click()
@@ -662,7 +662,7 @@ class TestCheckinViews(IntegrationTestCase):
         # fill and submit checkin form
         journal_comment = u'Checkinerino'
         browser.fill({
-            u'Journal Comment': journal_comment,
+            u'Journal comment': journal_comment,
             })
 
         browser.css('#form-buttons-button_checkin_anyway').first.click()
@@ -707,7 +707,7 @@ class TestCheckinViews(IntegrationTestCase):
         # fill and submit checkin form
         journal_comment = u'Checkini'
         browser.fill({
-            'Journal Comment': journal_comment,
+            'Journal comment': journal_comment,
             })
 
         browser.css('#form-buttons-button_checkin').first.click()

@@ -250,7 +250,7 @@ class TestCopyPaste(IntegrationTestCase):
         listing = browser.css('.listing').first
         self.assertEqual(
             [u'Dossier added: An empty dossier',
-             u'Document added: copy of Testdokum\xe4nt',
+             u'Document added: Copy of Testdokum\xe4nt',
              u'Document added: Testdokum\xe4nt',
              u'Dossier added: An empty dossier'],
             [row.get('Title') for row in listing.dicts()])

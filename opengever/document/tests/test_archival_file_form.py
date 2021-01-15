@@ -64,7 +64,7 @@ class TestArchivalFileForm(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.document, view='edit_archival_file')
         browser.fill(
-            {'Archival File': ('FILE DATA', 'archival_file.pdf')}).submit()
+            {'Archival file': ('FILE DATA', 'archival_file.pdf')}).submit()
 
         archival_file = IDocumentMetadata(self.document).archival_file
         self.assertTrue(isinstance(archival_file, NamedBlobFile))
