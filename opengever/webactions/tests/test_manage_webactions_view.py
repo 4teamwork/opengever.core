@@ -207,7 +207,7 @@ class TestWebactionsManagementView(IntegrationTestCase):
                          [action.find("Edit").get("href") for action in webactions])
 
         webactions[0].find("Edit").click()
-        self.assertEqual('Edit Webaction',
+        self.assertEqual('Edit webaction',
                          browser.css(".documentFirstHeading").first.text)
 
         form = browser.find_form_by_field("Title")
