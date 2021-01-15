@@ -83,8 +83,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_type='Local roles modified',
             action_title='Local roles modified at %s.' % (
                 repo.title_or_id()),
-            comment='ratman: sharing_dossier_reader; test_user: '
-                    'sharing_dossier_reader, sharing_dossier_publisher')
+            comment='ratman: Read; test_user: '
+                    'Read, Reactivate dossiers')
 
     def test_integration_dossier_events(self):
         """ Trigger every event of a dossier at least one times
@@ -156,8 +156,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier,
             action_type='Local roles modified',
             action_title='Local roles modified.',
-            comment='ratman: sharing_dossier_reader; test_user: '
-                    'sharing_dossier_reader, sharing_dossier_publisher')
+            comment='ratman: Read; test_user: '
+                    'Read, Reactivate dossiers')
 
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
