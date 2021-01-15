@@ -69,7 +69,7 @@ class TestSavePDFUnderForm(IntegrationTestCase):
 
         error_nodes = browser.css("div.fieldErrorBox div.error")
         self.assertTrue(len(error_nodes) > 0)
-        self.assertEqual("User is not allowed to add a document there.",
+        self.assertEqual("You're not allowed to add documents in the target container.",
                          error_nodes.first.text)
 
     @browsing
@@ -90,7 +90,7 @@ class TestSavePDFUnderForm(IntegrationTestCase):
 
         error_nodes = browser.css("div.fieldErrorBox div.error")
         self.assertTrue(len(error_nodes) > 0)
-        self.assertEqual('User is not allowed to add a document there.',
+        self.assertEqual("You're not allowed to add documents in the target container.",
                          error_nodes.first.text)
 
     @browsing

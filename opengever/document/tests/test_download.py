@@ -63,7 +63,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_download_confirmation_for_empty_file(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.empty_document, view='file_download_confirmation')
-        self.assertEqual([u'The Document L\xe4\xe4r has no File.'], warning_messages())
+        self.assertEqual([u'Document L\xe4\xe4r has no file.'], warning_messages())
 
     @browsing
     def test_download_confirmation_view_for_download(self, browser):
@@ -97,7 +97,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_download_view_redirects_to_listing_for_missing_files(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.empty_document, view='download')
-        self.assertEqual([u'The Document L\xe4\xe4r has no File.'], error_messages())
+        self.assertEqual([u'Document L\xe4\xe4r has no file.'], error_messages())
 
     @browsing
     def test_download_view_downloads_working_copy_if_document_checked_out_by_current_user(self, browser):

@@ -137,12 +137,12 @@ msgstr "Submitted with"
 #: ./opengever/document/browser/download.py
 #: ./opengever/document/browser/edit.py
 msgid "The Document ${title} has no File."
-msgstr "The Document ${title} has no File."
+msgstr "Document ${title} has no file."
 
 #. German translation: Das Dokument ist bereits von ${userid} ausgecheckt.
 #: ./opengever/document/browser/edit.py
 msgid "The Document is already checked out by: ${userid}"
-msgstr "The Document is already checked out by: ${userid}"
+msgstr "Document is already checked out by: ${userid}"
 
 #. German translation: Eingereichte Version aktualisieren
 #: ./opengever/document/browser/templates/submitted_with.pt
@@ -197,7 +197,7 @@ msgstr "Save"
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 #: ./opengever/document/checkout/templates/cancelconfirmationform.pt
 msgid "cancel_checkout_confirmation"
-msgstr "Are you sure you want to cancel the checkout?"
+msgstr "Are you sure you want to cancel the checkout? This will discard any changes made since the time of checkout."
 
 #. German translation: Kopie von
 #. Default: "copy of"
@@ -215,19 +215,19 @@ msgstr "You're downloading a copy of the document ${filename}"
 #. Default: "User is not allowed to add a document there."
 #: ./opengever/document/forms.py
 msgid "error_NotInContentTypes"
-msgstr "User is not allowed to add a document there."
+msgstr "You're not allowed to add documents in the target container."
 
 #. German translation: Sie haben weder eine Datei ausgewählt noch ist das Dokument in Papierform aufbewahrt, bitte korrigieren.
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
 #: ./opengever/document/behaviors/metadata.py
 msgid "error_file_and_preserved_as_paper"
-msgstr "You don't select a file and document is also not preserved in paper_form, please correct it."
+msgstr "You didn't select a file, but neither is the document flagged as being preserved as a physical file. Please remedy this."
 
 #. German translation: Es ist nicht erlaubt hier E-Mails anzufügen. Bitte senden Sie das E-Mail an die Addresse ${mailaddress} oder ziehen Sie es in das Dossier (Drag'n'Drop).
 #. Default: "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."
 #: ./opengever/document/document.py
 msgid "error_mail_upload"
-msgstr "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."
+msgstr "Emails can't be added here. Please send it to ${mailaddress} or use drag and drop."
 
 #. German translation: Sie haben keine Objekte ausgewählt.
 #. Default: "You have not selected any Items"
@@ -256,6 +256,7 @@ msgstr "Either the title or the file is required."
 
 #. German translation: Archivdatei
 #. Default: "Archive file"
+#. MARKER: double check
 #: ./opengever/document/behaviors/metadata.py
 msgid "fieldset_archive_file"
 msgstr "Archive file"
@@ -302,7 +303,7 @@ msgstr "Save as PDF"
 #. Default: ""
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_archival_file"
-msgstr ""
+msgstr "Document rendition suitable for archival"
 
 #. German translation: Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst)
 #. Default: "Surname firstname or a userid(would be automatically resolved to fullname)"

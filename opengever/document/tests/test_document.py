@@ -547,8 +547,8 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         self.assertEquals(
             erroneous_fields(),
             {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
     @browsing
     def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
@@ -595,7 +595,7 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         selector = '#formfield-form-widgets-file.field.error'
         error_field = browser.css(selector).first
         self.assertIn(
-            "It's not possible to add E-mails here, please send it to",
+            "Emails can't be added here. Please send it to",
             error_field.text)
 
         self.assertEqual(
@@ -639,8 +639,8 @@ class TestDocumentValidatorsInEditForm(FunctionalTestCase):
         self.assertEquals(
             erroneous_fields(),
             {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
 
 class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
@@ -681,8 +681,8 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
         self.assertEquals(
             erroneous_fields(),
             {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
     @browsing
     def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
@@ -709,8 +709,8 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
         self.assertEquals(
             erroneous_fields(),
             {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
 
 class TestPublicTrial(FunctionalTestCase):
