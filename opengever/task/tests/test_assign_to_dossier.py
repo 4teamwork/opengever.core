@@ -19,7 +19,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
 
         # Step 1 - choose method
         browser.fill(
-            {'Assign to a ...': 'new_dossier',
+            {'Assign to ...': 'new_dossier',
              'Response': 'Sample response'}).submit()
 
         # Step 2 - choose repository
@@ -76,7 +76,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
 
         # Step 1 - choose method
         browser.fill(
-            {'Assign to a ...': 'existing_dossier',
+            {'Assign to ...': 'existing_dossier',
              'Response': 'Sample response'}).submit()
 
         # Step 2 - choose dossier

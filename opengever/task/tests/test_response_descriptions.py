@@ -83,7 +83,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'reactivate')
 
         self.assertEqual(
-            u'Reactivate by M\xfcller Hans (test_user_1_)',
+            u'Reactivated by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
@@ -190,7 +190,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'revise')
 
         self.assertEqual(
-            u'Revised by M\xfcller Hans (test_user_1_)',
+            u'Revision requested by M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing

@@ -28,7 +28,7 @@ class TestDelegateTaskToInbox(IntegrationTestCase):
 
         browser.css('#form-buttons-save').first.click()  # can't use submit()
 
-        self.assertEqual(['1 subtasks were create.'],
+        self.assertEqual(['1 subtasks were created.'],
                          statusmessages.info_messages())
 
 
@@ -48,7 +48,7 @@ class TestDelegateTaskForm(IntegrationTestCase):
         # step 2
         browser.css('#form-buttons-save').first.click()
 
-        self.assertEqual(['1 subtasks were create.'],
+        self.assertEqual(['1 subtasks were created.'],
                          statusmessages.info_messages())
 
         subtask = self.task.objectValues()[-1]
@@ -96,7 +96,7 @@ class TestDelegateTaskForm(IntegrationTestCase):
         browser.css('#form-buttons-save').first.click()  # can't use submit()
 
         self.assertEqual(
-            ['1 subtasks were create.'], statusmessages.info_messages())
+            ['1 subtasks were created.'], statusmessages.info_messages())
 
 
 class TestAttachableDocumentsVocabulary(IntegrationTestCase):

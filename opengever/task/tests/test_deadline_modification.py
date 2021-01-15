@@ -61,7 +61,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         self.assertEquals('{}/@@modify_deadline'.format(self.task.absolute_url()),
                           browser.url)
         self.assertEquals(
-            ['The given deadline, is the current one.'],
+            ['The entered deadline is the same as the current one.'],
             browser.css('#formfield-form-widgets-new_deadline .error').text)
 
     @browsing

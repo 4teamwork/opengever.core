@@ -400,7 +400,7 @@ class TestTaskActivites(FunctionalTestCase):
              ['Deadline', 'Mar 07, 2015'],
              ['Task Type', 'To comment'],
              ['Dossier title', 'Dossier XY'],
-             ['Containing tasks', u'Abkl\xe4rung Fall Meier'],
+             ['Main task', u'Abkl\xe4rung Fall Meier'],
              ['Text', 'Lorem ipsum'],
              ['Responsible', 'Boss Hugo (hugo.boss)'],
              ['Issuer', 'Boss Hugo (hugo.boss)']],
@@ -729,12 +729,12 @@ class TestWatcherAddedActivity(IntegrationTestCase):
         TaskWatcherAddedActivity(self.task, self.request, self.meeting_user.getId()).record()
         activity = Activity.query.first()
         self.assertEqual('task-watcher-added', activity.kind)
-        self.assertEqual('Added as watcher of the task', activity.label)
+        self.assertEqual('Added as watcher of task', activity.label)
         self.assertEqual(
           u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
           activity.title)
         self.assertEqual('kathi.barfuss', activity.actor_id)
-        self.assertEqual(u'Added as watcher of the task by <a href="http://nohost/plone/'
+        self.assertEqual(u'Added as watcher of task by <a href="http://nohost/plone/'
                          u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
                          activity.summary)
 
@@ -771,7 +771,7 @@ class TestWatcherAddedActivity(IntegrationTestCase):
         process_mail_queue()
         mails = Mailing(self.portal).get_messages()
         self.assertEqual(1, len(mails))
-        self.assertIn('Added as watcher of the task by', mails[0])
+        self.assertIn('Added as watcher of task by', mails[0])
 
         DigestMailer().send_digests()
         process_mail_queue()
@@ -779,7 +779,7 @@ class TestWatcherAddedActivity(IntegrationTestCase):
 
         self.assertEqual(2, len(mails))
         self.assertIn('Daily Digest', mails[1])
-        self.assertIn('Added as watcher of the task by', mails[1])
+        self.assertIn('Added as watcher of task by', mails[1])
 
     def test_only_added_watcher_is_notified(self):
         self.login(self.regular_user)

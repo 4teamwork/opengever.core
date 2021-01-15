@@ -9,7 +9,7 @@ class TestTaskByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.task)
 
-        responsible = self.get_byline_value_by_label('by:')
+        responsible = self.get_byline_value_by_label('Responsible:')
         self.assertEquals(u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
                           responsible.text)
 
@@ -18,7 +18,7 @@ class TestTaskByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.task)
 
-        responsible = self.get_byline_value_by_label('by:')
+        responsible = self.get_byline_value_by_label('Responsible:')
         self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
                          responsible.get('href'))
 

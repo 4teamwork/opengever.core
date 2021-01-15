@@ -37,7 +37,7 @@ class TestTaskReminderTypes(IntegrationTestCase):
     def test_reminders_can_be_serialized(self):
         self.assertEqual(
             {'option_type': 'same_day',
-             'option_title': 'At the morging of the deadline',
+             'option_title': 'On morning of deadline',
              'params': {}},
             ReminderSameDay().serialize())
 
@@ -55,7 +55,7 @@ class TestTaskReminderTypes(IntegrationTestCase):
 
         self.assertEqual(
             {'option_type': 'beginning_of_week',
-             'option_title': 'At the beginning of the week of the deadline',
+             'option_title': 'At the start of the week of deadline',
              'params': {}},
             ReminderBeginningOfWeek().serialize())
 

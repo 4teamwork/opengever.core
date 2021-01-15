@@ -124,8 +124,8 @@ class TestAssignTask(IntegrationTestCase):
         self.assign_task(u'gdgs:johnny.english', u'Please make that for me.')
 
         self.assertEquals(
-            [u'Admin unit changes are not allowed if the task or forwarding is'
-             u' already accepted.'],
+            [u'Organization / department changes are not allowed if the task or forwarding '
+             u'has already been accepted.'],
             browser.css('.fieldErrorBox .error').text)
 
         self.assertEquals(self.regular_user.id, self.task.responsible)

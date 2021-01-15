@@ -173,7 +173,7 @@ class TestTeamTasks(IntegrationTestCase):
 
         browser.open(self.task)
         browser.click_on('Accept')
-        browser.fill({'Accept the task and ...': 'participate'})
+        browser.fill({'Accept task and ...': 'participate'})
         browser.click_on('Continue')
 
         self.assertEquals(self.regular_user.getId(), self.task.responsible)
