@@ -57,6 +57,17 @@ class IWorkspaceMeetingSchema(model.Schema):
         title=_(u'label_video_call_link', default=u'Video Call Link'),
         required=False)
 
+    form.widget('participants', KeywordFieldWidget, async=True)
+    participants = schema.List(
+        title=_(u"label_participants", default=u"Participants"),
+        value_type=schema.Choice(
+            source=ActualWorkspaceMembersSourceBinder(),
+        ),
+        required=False,
+        missing_value=list(),
+        default=list()
+    )
+
 
 class WorkspaceMeeting(Container):
     implements(IWorkspaceMeeting)
