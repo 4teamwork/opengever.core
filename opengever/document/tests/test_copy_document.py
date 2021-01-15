@@ -17,12 +17,12 @@ class TestCopyDocuments(IntegrationTestCase):
     def test_copying_a_document_prefixes_title_with_copy_of(self):
         self.login(self.regular_user)
         copy = api.content.copy(source=self.document, target=self.subdossier)
-        self.assertEqual(u'copy of Vertr\xe4gsentwurf', copy.title)
+        self.assertEqual(u'Copy of Vertr\xe4gsentwurf', copy.title)
 
     def test_copying_a_mail_prefixes_title_with_copy_of(self):
         self.login(self.regular_user)
         copy = api.content.copy(source=self.mail_eml, target=self.subdossier)
-        self.assertEqual(u'copy of Die B\xfcrgschaft', copy.title)
+        self.assertEqual(u'Copy of Die B\xfcrgschaft', copy.title)
 
     def test_copying_a_mail_does_not_create_versions(self):
         self.login(self.regular_user)
@@ -93,8 +93,8 @@ class TestCopyDocuments(IntegrationTestCase):
                              'containing_dossier': self.empty_dossier.Title(),
                              'containing_subdossier': '',
                              # title and filename
-                             'Title': 'copy of {}'.format(self.subdocument.Title()),
-                             'filename': u'copy of {}'.format(self.subdocument.get_filename())}
+                             'Title': 'Copy of {}'.format(self.subdocument.Title()),
+                             'filename': u'Copy of {}'.format(self.subdocument.get_filename())}
 
         unchanged_metadata = ['Description',
                               'Subject', 'Type',

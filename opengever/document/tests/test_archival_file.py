@@ -112,7 +112,7 @@ class TestArchivalFileState(IntegrationTestCase):
 
         browser.open(self.document, view='edit')
         browser.fill(
-            {'Archival File': ('FILE DATA', 'archival_file.pdf')})
+            {'Archival file': ('FILE DATA', 'archival_file.pdf')})
         browser.click_on('Save')
 
         self.assertEquals(
@@ -142,7 +142,7 @@ class TestArchivalFileState(IntegrationTestCase):
 
         browser.open(self.document, view='edit')
         browser.fill(
-            {'Archival File': ('NEW FILE DATA', 'ddd.pdf')})
+            {'Archival file': ('NEW FILE DATA', 'ddd.pdf')})
         browser.click_on('Save')
 
         self.assertEquals(
@@ -171,7 +171,7 @@ class TestArchivalFileState(IntegrationTestCase):
 
         browser.open(self.document, view='edit_archival_file')
         browser.fill(
-            {'Archival File': ('FILE DATA', 'archival_file.pdf')})
+            {'Archival file': ('FILE DATA', 'archival_file.pdf')})
         browser.click_on('Save')
 
         self.assertEquals(
@@ -186,7 +186,7 @@ class TestArchivalFileState(IntegrationTestCase):
 
         browser.open(self.document, view='edit_archival_file')
         browser.fill(
-            {'Archival File': ('NEW FILE DATA', 'ddd.pdf')})
+            {'Archival file': ('NEW FILE DATA', 'ddd.pdf')})
         browser.click_on('Save')
 
         self.assertEquals(

@@ -49,7 +49,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
     @browsing
     def test_modifying_metadata_is_journalized(self, browser):
         browser.login().open(self.document, view='edit')
-        browser.fill({'Description': 'Foo', 'Preserved as paper': True})
+        browser.fill({'Description': 'Foo', 'Physical file': True})
         browser.css('#form-buttons-save').first.click()
 
         entry = self.get_journal_entries()[-1]

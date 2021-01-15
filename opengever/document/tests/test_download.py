@@ -20,7 +20,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         versioner.create_version('Some updates.')
         browser.open(self.document, view='tabbed_view/listing', data={'view_name': 'overview'})
         browser.find('Download copy').click()
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy current version (1)')
 
     @browsing
@@ -31,12 +31,12 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         versioner.create_version('Some updates.')
         browser.open(self.document, view='tabbedview_view-versions')
         browser.css('a.function-download-copy').first.click()
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy version 1')
         versioner.create_version('Oops.')
         browser.open(self.document, view='tabbedview_view-versions')
         browser.css('a.function-download-copy').first.click()
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy version 2')
 
     @browsing
@@ -63,7 +63,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_download_confirmation_for_empty_file(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.empty_document, view='file_download_confirmation')
-        self.assertEqual([u'The Document L\xe4\xe4r has no File.'], warning_messages())
+        self.assertEqual([u'Document L\xe4\xe4r has no file.'], warning_messages())
 
     @browsing
     def test_download_confirmation_view_for_download(self, browser):
@@ -73,7 +73,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
             "You're downloading a copy of the document Vertraegsentwurf.docx",
             browser.css(".details > p").first.text,
         )
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assertEqual("{}/download".format(self.document.absolute_url()), browser.url)
         self.assertEqual(self.document.file.data, browser.contents)
 
@@ -88,7 +88,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
             "You're downloading a copy of the document Vertraegsentwurf.docx",
             browser.css(".details > p").first.text,
         )
-        browser.find('label_download').click()
+        browser.find('Download').click()
         expected_url = "{}/download_file_version?version_id=1".format(self.document.absolute_url())
         self.assertEqual(expected_url, browser.url)
         self.assertEqual(self.document.file.data, browser.contents)
@@ -97,7 +97,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_download_view_redirects_to_listing_for_missing_files(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.empty_document, view='download')
-        self.assertEqual([u'The Document L\xe4\xe4r has no File.'], error_messages())
+        self.assertEqual([u'Document L\xe4\xe4r has no file.'], error_messages())
 
     @browsing
     def test_download_view_downloads_working_copy_if_document_checked_out_by_current_user(self, browser):

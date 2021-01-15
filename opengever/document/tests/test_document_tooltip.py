@@ -44,8 +44,8 @@ class TestDocumentTooltip(IntegrationTestCase):
             '/edit_checker',
             metadata.get('href'))
 
-        # checkout and edit
-        self.assertEquals('Checkout and edit', checkout.text)
+        # Check out and edit
+        self.assertEquals('Check out and edit', checkout.text)
         self.assertTrue(checkout.get('href').startswith(
             'http://nohost/plone/ordnungssystem/fuhrung'
             '/vertrage-und-vereinbarungen/dossier-1/document-14'
@@ -77,7 +77,7 @@ class TestDocumentTooltip(IntegrationTestCase):
             '.file-action-buttons a')
 
         self.assertEquals('Edit metadata', metadata.text)
-        self.assertEquals('Checkout and edit', checkout.text)
+        self.assertEquals('Check out and edit', checkout.text)
 
         self.assertEquals('Edit in Office Online', edit_in_office_online.text)
         self.assertTrue(edit_in_office_online.get('href').startswith(
@@ -94,15 +94,15 @@ class TestDocumentTooltip(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tooltip')
-        self.assertIn('Checkout and edit',
+        self.assertIn('Check out and edit',
                       browser.css('.file-action-buttons a').text)
 
         browser.open(self.mail_eml, view='tooltip')
-        self.assertNotIn('Checkout and edit',
+        self.assertNotIn('Check out and edit',
                          browser.css('.file-action-buttons a').text)
 
         browser.open(self.mail_msg, view='tooltip')
-        self.assertNotIn('Checkout and edit',
+        self.assertNotIn('Check out and edit',
                          browser.css('.file-action-buttons a').text)
 
     @browsing

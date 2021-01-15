@@ -578,7 +578,7 @@ class TestCheckinViews(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         browser.open(self.document)
         browser.css('#checkin_with_comment').first.click()
@@ -598,7 +598,7 @@ class TestCheckinViews(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         # open checkin form
         browser.open(self.document)
@@ -607,7 +607,7 @@ class TestCheckinViews(IntegrationTestCase):
         # fill and submit checkin form
         journal_comment = u'Checkinerino'
         browser.fill({
-            u'Journal Comment': journal_comment,
+            u'Journal comment': journal_comment,
             })
 
         browser.css('#form-buttons-button_checkin').first.click()
@@ -631,7 +631,7 @@ class TestCheckinViews(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         # Lock document
         IRefreshableLockable(self.document).lock()
@@ -645,12 +645,12 @@ class TestCheckinViews(IntegrationTestCase):
             ' '.join((
                 'This document is currently being worked on.',
                 'When you check it in manually you will lose the changes.',
-                'Please allow for the process to be finished first.',
+                'Please try advising the respective user to check it in first.',
                 ))
             )
 
         self.assertIn(
-            'Checkin anyway',
+            'Check in anyway',
             browser.css('#form-buttons-button_checkin_anyway')[0].outerHTML
             )
 
@@ -662,7 +662,7 @@ class TestCheckinViews(IntegrationTestCase):
         # fill and submit checkin form
         journal_comment = u'Checkinerino'
         browser.fill({
-            u'Journal Comment': journal_comment,
+            u'Journal comment': journal_comment,
             })
 
         browser.css('#form-buttons-button_checkin_anyway').first.click()
@@ -686,10 +686,10 @@ class TestCheckinViews(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         browser.open(self.subdocument, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         browser.open(
             self.dossier,
@@ -707,7 +707,7 @@ class TestCheckinViews(IntegrationTestCase):
         # fill and submit checkin form
         journal_comment = u'Checkini'
         browser.fill({
-            'Journal Comment': journal_comment,
+            'Journal comment': journal_comment,
             })
 
         browser.css('#form-buttons-button_checkin').first.click()
@@ -732,7 +732,7 @@ class TestCheckinViews(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         browser.open(self.document)
 
@@ -757,10 +757,10 @@ class TestCheckinViews(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         browser.open(self.subdocument, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         browser.open(
             self.dossier,
@@ -827,7 +827,7 @@ class TestCheckinViews(IntegrationTestCase):
                 },
             )
 
-        browser.click_on('Checkin')
+        browser.click_on('Check in')
 
         self.assertEquals(
             ['You have not selected any documents.'],
@@ -844,10 +844,10 @@ class TestCheckinViews(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         browser.open(self.subdocument, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         lockable = IRefreshableLockable(self.document)
         lockable.lock()

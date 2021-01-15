@@ -170,7 +170,7 @@ class TestExcerptOverview(IntegrationTestCase):
         agenda_item.return_excerpt(excerpt1)
 
         expected_fields = [
-            'Submitted Proposal',
+            'Submitted proposal',
             'Proposal',
             'Meeting'
         ]
@@ -180,10 +180,10 @@ class TestExcerptOverview(IntegrationTestCase):
             msg='The committee responsible can view the meeting and the case '
                 'dossier thus all links should appear')
 
-        self.assertEqual(u'Vertr\xe4ge', fields['Submitted Proposal'].text)
+        self.assertEqual(u'Vertr\xe4ge', fields['Submitted proposal'].text)
         self.assertEqual(
             self.submitted_proposal.absolute_url(),
-            fields['Submitted Proposal'].css('a').first.get('href'))
+            fields['Submitted proposal'].css('a').first.get('href'))
 
         self.assertEqual(
             u'9. Sitzung der Rechnungspr\xfcfungskommission',
@@ -209,7 +209,7 @@ class TestExcerptOverview(IntegrationTestCase):
         self.dossier.__ac_local_roles_block__ = True
 
         expected_fields = [
-            'Submitted Proposal',
+            'Submitted proposal',
             'Meeting'
         ]
         browser.open(excerpt1, view='tabbedview_view-overview')
@@ -219,10 +219,10 @@ class TestExcerptOverview(IntegrationTestCase):
             msg='The user we test with should see a link to submitted '
                 'proposal and meeting, but not to the proposal')
 
-        self.assertEqual(u'Vertr\xe4ge', fields['Submitted Proposal'].text)
+        self.assertEqual(u'Vertr\xe4ge', fields['Submitted proposal'].text)
         self.assertEqual(
             self.submitted_proposal.absolute_url(),
-            fields['Submitted Proposal'].css('a').first.get('href'))
+            fields['Submitted proposal'].css('a').first.get('href'))
 
         self.assertEqual(
             u'9. Sitzung der Rechnungspr\xfcfungskommission',

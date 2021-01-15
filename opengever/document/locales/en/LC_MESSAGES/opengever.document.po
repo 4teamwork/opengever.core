@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 17:25+0000\n"
+"POT-Creation-Date: 2021-01-15 17:46+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -18,12 +18,12 @@ msgstr ""
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
 #: ./opengever/document/upgrades/20170424163920_adjust_sort_order_of_actions/actions.xml
 msgid "Attach selection"
-msgstr "Attach selection"
+msgstr "Send as attachment with email client"
 
 #. German translation: Das Dokument kann momentan nicht bearbeitet werden, es ist gesperrt.
 #: ./opengever/document/browser/edit.py
 msgid "Can't edit the document at moment, beacuse it's locked."
-msgstr "Can't edit the document at moment, beacuse it's locked."
+msgstr "Can't edit document because it's locked."
 
 #. German translation: Checkout widerrufen
 #. Default: "Cancel checkout"
@@ -53,13 +53,13 @@ msgstr "Checked out: ${title}"
 #: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
-msgstr "Checkin with comment"
+msgstr "Check in with comment"
 
 #. German translation: Ohne Kommentar einchecken
 #: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
-msgstr "Checkin without comment"
+msgstr "Check in without comment"
 
 #. German translation: Gewählte Dokumente
 #: ./opengever/document/checkout/templates/cancelconfirmationform.pt
@@ -137,12 +137,12 @@ msgstr "Submitted with"
 #: ./opengever/document/browser/download.py
 #: ./opengever/document/browser/edit.py
 msgid "The Document ${title} has no File."
-msgstr "The Document ${title} has no File."
+msgstr "Document ${title} has no file."
 
 #. German translation: Das Dokument ist bereits von ${userid} ausgecheckt.
 #: ./opengever/document/browser/edit.py
 msgid "The Document is already checked out by: ${userid}"
-msgstr "The Document is already checked out by: ${userid}"
+msgstr "Document is already checked out by: ${userid}"
 
 #. German translation: Eingereichte Version aktualisieren
 #: ./opengever/document/browser/templates/submitted_with.pt
@@ -178,13 +178,13 @@ msgstr "Cancel"
 #. Default: "Checkin"
 #: ./opengever/document/checkout/checkin.py
 msgid "button_checkin"
-msgstr "Checkin"
+msgstr "Check in"
 
 #. German translation: Trotzdem einchecken
 #. Default: "Checkin anyway"
 #: ./opengever/document/checkout/checkin.py
 msgid "button_checkin_anyway"
-msgstr "Checkin anyway"
+msgstr "Check in anyway"
 
 #. German translation: Speichern
 #. Default: "Save"
@@ -197,13 +197,13 @@ msgstr "Save"
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 #: ./opengever/document/checkout/templates/cancelconfirmationform.pt
 msgid "cancel_checkout_confirmation"
-msgstr "Are you sure you want to cancel the checkout?"
+msgstr "Are you sure you want to cancel the checkout? This will discard any changes made since the time of checkout."
 
 #. German translation: Kopie von
 #. Default: "copy of"
 #: ./opengever/document/subscribers.py
 msgid "copy_of"
-msgstr "copy of"
+msgstr "Copy of"
 
 #. German translation: Sie sind dabei, eine Kopie des Dokuments ${filename} herunterzuladen.
 #. Default: "You're downloading a copy of the document ${filename}"
@@ -215,19 +215,19 @@ msgstr "You're downloading a copy of the document ${filename}"
 #. Default: "User is not allowed to add a document there."
 #: ./opengever/document/forms.py
 msgid "error_NotInContentTypes"
-msgstr "User is not allowed to add a document there."
+msgstr "You're not allowed to add documents in the target container."
 
 #. German translation: Sie haben weder eine Datei ausgewählt noch ist das Dokument in Papierform aufbewahrt, bitte korrigieren.
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
 #: ./opengever/document/behaviors/metadata.py
 msgid "error_file_and_preserved_as_paper"
-msgstr "You don't select a file and document is also not preserved in paper_form, please correct it."
+msgstr "You didn't select a file, but neither is the document flagged as being preserved as a physical file. Please remedy this."
 
 #. German translation: Es ist nicht erlaubt hier E-Mails anzufügen. Bitte senden Sie das E-Mail an die Addresse ${mailaddress} oder ziehen Sie es in das Dossier (Drag'n'Drop).
 #. Default: "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."
 #: ./opengever/document/document.py
 msgid "error_mail_upload"
-msgstr "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."
+msgstr "Emails can't be added here. Please send it to ${mailaddress} or use drag and drop."
 
 #. German translation: Sie haben keine Objekte ausgewählt.
 #. Default: "You have not selected any Items"
@@ -256,9 +256,10 @@ msgstr "Either the title or the file is required."
 
 #. German translation: Archivdatei
 #. Default: "Archive file"
+#. MARKER: double check
 #: ./opengever/document/behaviors/metadata.py
 msgid "fieldset_archive_file"
-msgstr "Archive file"
+msgstr "Archival file"
 
 #. German translation: Allgemein
 #. Default: "Common"
@@ -290,7 +291,7 @@ msgstr "Replace with new file"
 #. Default: "Checkin Documents"
 #: ./opengever/document/checkout/checkin.py
 msgid "heading_checkin_comment_form"
-msgstr "Checkin Documents"
+msgstr "Check in documents"
 
 #. German translation: PDF speichern unter
 #. Default: "Save as PDF"
@@ -302,58 +303,61 @@ msgstr "Save as PDF"
 #. Default: ""
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_archival_file"
-msgstr ""
+msgstr "Document rendition suitable for archival"
 
 #. German translation: Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst)
 #. Default: "Surname firstname or a userid(would be automatically resolved to fullname)"
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_author"
-msgstr "Surname firstname or a userid(would be automatically resolved to fullname)"
+msgstr "Last name, first name or user ID (will be resolved to full name)"
 
 #. German translation: Was wurde am Dokument geändert?
 #. Default: "Describe, why you checkin the selected documents"
 #: ./opengever/document/checkout/checkin.py
 msgid "help_checkin_journal_comment"
-msgstr "Describe, why you checkin the selected documents"
+msgstr "Description of changes"
 
 #. German translation: Datum, an dem das Dokument über den Korrespondenzweg versandt worden ist
+#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_delivery_date"
-msgstr "help_delivery_date"
+msgstr "Date on which the document was sent by mail."
 
 #. German translation: Live Search: Suchen sie ein Zieldossier
 #. Default: "Live Search: search for the dossier"
 #: ./opengever/document/forms.py
 msgid "help_destination"
-msgstr "Live Search: search for the dossier"
+msgstr "Live search: Search for target dossier"
 
 #. German translation: Datum des Dokuments
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_document_date"
-msgstr "help_document_date"
+msgstr "Document date"
 
 #. German translation: Datei, die zu einem Dossier hinzugefügt wird
 #. Default: ""
 #: ./opengever/document/document.py
 msgid "help_file"
-msgstr ""
+msgstr "The document's digital file"
 
 #. German translation: Referenz auf das entsprechende Dossier des Absenders
 #. Default: ""
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_foreign_reference"
-msgstr ""
+msgstr "Reference to the sender's dossier"
 
 #. German translation: Schlagwörter zur Umschreibung eines Dokuments. Nicht zu verwechseln mit der Ordnungsposition.\nACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen).
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_keywords"
-msgstr "help_keywords"
+msgstr ""
+"Keywords that describe this document.\n"
+"Important: Keep privacy concerns in mind when choosing keywords (e.g. avoid personal data)."
 
 #. German translation: In Papierform aufbewahrt
 #. Default: ""
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_preserved_as_paper"
-msgstr ""
+msgstr "Whether the document (also) exists as a physical file on paper."
 
 #. German translation: Online Voransicht des Originaldokuments
 #. Default: ""
@@ -362,9 +366,10 @@ msgid "help_preview"
 msgstr ""
 
 #. German translation: Datum, an dem das Dokument über den Korrespondenzweg angekommen ist
+#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_receipt_date"
-msgstr "help_receipt_date"
+msgstr "Date on which the document was received by mail."
 
 #. German translation: Dokument erstellt (Initialversion)
 #. Default: "Initial version"
@@ -381,10 +386,11 @@ msgstr "Changed by"
 
 #. German translation: Archivdatei
 #. Default: "Archival File"
+#. MARKER: double check
 #: ./opengever/document/behaviors/metadata.py
 #: ./opengever/document/browser/overview.py
 msgid "label_archival_file"
-msgstr "Archival File"
+msgstr "Archival file"
 
 #. German translation: Status Archivdatei
 #. Default: "Archival file state"
@@ -416,7 +422,7 @@ msgstr "Back to source document"
 #. Default: "Generating"
 #: ./opengever/document/browser/save_pdf_document_under.py
 msgid "label_button_creation_in_progress"
-msgstr "Generating"
+msgstr "Generating PDF..."
 
 #. German translation: Zum generiertem Dokument
 #. Default: "Go to destination document"
@@ -428,19 +434,19 @@ msgstr "Go to destination document"
 #. Default: "Error"
 #: ./opengever/document/browser/save_pdf_document_under.py
 msgid "label_button_error"
-msgstr "Error"
+msgstr "PDF error"
 
 #. German translation: Autor
 #. Default: "by"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_by_author"
-msgstr "by"
+msgstr "Author"
 
 #. German translation: Abbrechen
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 msgid "label_cancel"
-msgstr "label_cancel"
+msgstr "Cancel"
 
 #. German translation: Archivdatei ändern
 #. Default: "Change archival file"
@@ -460,19 +466,19 @@ msgstr "Checked out"
 #. Default: "Journal Comment"
 #: ./opengever/document/checkout/checkin.py
 msgid "label_checkin_journal_comment"
-msgstr "Journal Comment"
+msgstr "Journal comment"
 
 #. German translation: Auschecken
 #. Default: "Checkout"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_checkout"
-msgstr "Checkout"
+msgstr "Check out"
 
 #. German translation: Auschecken und Bearbeiten
 #. Default: "Checkout and edit"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_checkout_and_edit"
-msgstr "Checkout and edit"
+msgstr "Check out and edit"
 
 #. German translation: Kommentar
 #. Default: "Comment"
@@ -490,7 +496,7 @@ msgstr "Created"
 #. Default: "creator"
 #: ./opengever/document/browser/overview.py
 msgid "label_creator"
-msgstr "creator"
+msgstr "Creator"
 
 #. German translation: Datum
 #. Default: "Date"
@@ -500,6 +506,7 @@ msgstr "Date"
 
 #. German translation: Ausgangsdatum
 #. Default: "Date of delivery"
+#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_delivery_date"
 msgstr "Date of delivery"
@@ -520,12 +527,12 @@ msgstr "Destination"
 #. Default: "Digital Available"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_digitally_available"
-msgstr "Digital Available"
+msgstr "Has digital file"
 
 #. German translation: In Bearbeitung
 #: ./opengever/document/browser/report.py
 msgid "label_document_checked_out_by"
-msgstr "label_document_checked_out_by"
+msgstr "Checked out by"
 
 #. German translation: Bearbeitet durch: ${collaborators}
 #. Default: "Collaborators: ${collaborators}"
@@ -538,14 +545,16 @@ msgstr "Collaborators: ${collaborators}"
 #: ./opengever/document/behaviors/metadata.py
 #: ./opengever/document/browser/report.py
 msgid "label_document_date"
-msgstr "Document Date"
+msgstr "Document date"
 
 #. German translation: Eingangsdatum
+#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/browser/report.py
 msgid "label_document_delivery_date"
 msgstr "label_document_delivery_date"
 
 #. German translation: Ausgangsdatum
+#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/browser/report.py
 msgid "label_document_receipt_date"
 msgstr "label_document_receipt_date"
@@ -553,28 +562,28 @@ msgstr "label_document_receipt_date"
 #. German translation: Aktenzeichen
 #: ./opengever/document/browser/report.py
 msgid "label_document_reference_number"
-msgstr "label_document_reference_number"
+msgstr "Reference number"
 
 #. German translation: Laufnummer
 #: ./opengever/document/browser/report.py
 msgid "label_document_sequence_number"
-msgstr "label_document_sequence_number"
+msgstr "Sequence number"
 
 #. German translation: Dokumenttyp
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
-msgstr "Document Type"
+msgstr "Document type"
 
 #. German translation: Dossier-Titel
 #: ./opengever/document/browser/report.py
 msgid "label_dossier_title"
-msgstr "label_dossier_title"
+msgstr "Dossier title"
 
 #. German translation: Herunterladen
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_download"
-msgstr "label_download"
+msgstr "Download"
 
 #. German translation: Kopie herunterladen
 #. Default: "Download copy"
@@ -588,7 +597,7 @@ msgstr "Download copy"
 #. Default: "Edit"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_edit"
-msgstr "Edit"
+msgstr "Edit again"
 
 #. German translation: In Office Online bearbeiten
 #. Default: "Edit in Office Online"
@@ -611,9 +620,10 @@ msgstr "File"
 
 #. German translation: Fremdzeichen
 #. Default: "Foreign Reference"
+#. MARKER: double check
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_foreign_reference"
-msgstr "Foreign Reference"
+msgstr "Foreign reference"
 
 #. German translation: Schlagwörter
 #. Default: "Keywords"
@@ -638,12 +648,12 @@ msgstr "Modified"
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
 msgid "label_no"
-msgstr "no"
+msgstr "No"
 
 #. German translation: OK
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_ok"
-msgstr "label_ok"
+msgstr "OK"
 
 #. German translation: Detailansicht öffnen
 #. Default: "Open detail view"
@@ -667,7 +677,7 @@ msgstr "Open document preview"
 #. Default: "Preserved as paper"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_preserved_as_paper"
-msgstr "Preserved as paper"
+msgstr "Physical file"
 
 #. German translation: Vorschau
 #. Default: "Preview"
@@ -685,10 +695,11 @@ msgstr "Proposal"
 #. German translation: Öffentlichkeitsstatus
 #: ./opengever/document/browser/report.py
 msgid "label_public_trial"
-msgstr "label_public_trial"
+msgstr "Public access level"
 
 #. German translation: Eingangsdatum
 #. Default: "Date of receipt"
+#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_receipt_date"
 msgstr "Date of receipt"
@@ -697,20 +708,20 @@ msgstr "Date of receipt"
 #. Default: "Reference Number"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_reference_number"
-msgstr "Reference Number"
+msgstr "Reference number"
 
 #. German translation: Verwandte Dokumente
 #. Default: "Related Documents"
 #: ./opengever/document/behaviors/related_docs.py
 #: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
-msgstr "Related Documents"
+msgstr "Related documents"
 
 #. German translation: Mit Oneoffixx wiederholen
 #. Default: "Oneoffixx retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_oneoffixx"
-msgstr "Oneoffixx retry"
+msgstr "Retry with OneOffixx"
 
 #. German translation: Zurücksetzen
 #. Default: "Revert"
@@ -728,25 +739,26 @@ msgstr "Revert document"
 #. Default: "Save PDF"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_save_pdf"
-msgstr "Save PDF"
+msgstr "Save PDF as"
 
 #. German translation: Laufnummer
 #. Default: "Sequence Number"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_sequence_number"
-msgstr "Sequence Number"
+msgstr "Sequence number"
 
 #. German translation: Dokumentdatum
 #. Default: "from"
+#. MARKER: double check
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
-msgstr "from"
+msgstr "Document date"
 
 #. German translation: Eingereichter Antrag
 #. Default: "Submitted Proposal"
 #: ./opengever/document/browser/overview.py
 msgid "label_submitted_proposal"
-msgstr "Submitted Proposal"
+msgstr "Submitted proposal"
 
 #. German translation: Kurzbild
 #. Default: "Thumbnail"
@@ -771,7 +783,7 @@ msgstr "Version"
 #. Default: "This document is currently being worked on. When you check it in manually you will lose the changes. Please allow for the process to be finished first."
 #: ./opengever/document/checkout/checkin.py
 msgid "label_warn_checkout_locked"
-msgstr "This document is currently being worked on. When you check it in manually you will lose the changes. Please allow for the process to be finished first."
+msgstr "This document is currently being worked on. When you check it in manually you will lose the changes. Please try advising the respective user to check it in first."
 
 #. German translation: Ja
 #. Default: "yes"
@@ -783,19 +795,19 @@ msgstr "yes"
 #. Default: "This item is being checked out by ${creator}."
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
-msgstr "This item is being checked out by ${creator}."
+msgstr "This document is currently checked out by ${creator}."
 
 #. German translation: Dieses Dokument wird von ${creator} gerade in Office Online bearbeitet.
 #. Default: "This item is being edited in Office Online by ${creator}."
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_collaborative_checkout_info"
-msgstr "This item is being edited in Office Online by ${creator}."
+msgstr "This document is being edited in Office Online by ${creator}."
 
 #. German translation: Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Check-in-/Check-out-Prozess nicht unterstützen.
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
-msgstr "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
+msgstr "Could not cancel checkout for document ${title}, emails do not support the checkout process."
 
 #. German translation: Fehler beim PDF generieren
 #. Default: "PDF generation error"
@@ -838,13 +850,13 @@ msgstr "No file"
 #. Default: "Office connector unsupported type"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
-msgstr "Office connector unsupported type"
+msgstr "This file format is not supported by Office Connector and therefore can't be edited directly."
 
 #. German translation: PDF von ${title} speichern unter ${destination}
 #. Default: "Save PDF of ${title} under ${destination}"
 #: ./opengever/document/browser/save_pdf_document_under.py
 msgid "title_save_pdf"
-msgstr "Save PDF of ${title} under ${destination}"
+msgstr "Save PDF of ${title} to ${destination}"
 
 #. German translation: Dieses Dokument kann nicht zu einem PDF konvertiert werden
 #. Default: "This document cannot be converted to PDF."
@@ -856,13 +868,13 @@ msgstr "This document cannot be converted to PDF."
 #. Default: "Document Version"
 #: ./opengever/document/forms.py
 msgid "version_id"
-msgstr "Document Version"
+msgstr "Version"
 
 #. German translation: Bitte beachten Sie, dass in diesem Fall Änderungen an diesem Dokument NICHT in GEVER gespeichert werden.
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "warning_download_confirmation"
-msgstr "Please note that in this case changes on the document wouldn't be saved in to GEVER."
+msgstr "Please note that in this case any changes made to the document WON'T be saved to GEVER."
 
 #. German translation: Dieses Dokument befindet sich im Papierkorb.
 #. Default: "This document is trashed."
@@ -873,9 +885,9 @@ msgstr "This document is trashed."
 #. German translation: Mit Kommentar
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"
-msgstr "with comment"
+msgstr "With comment"
 
 #. German translation: Ohne Kommentar
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
-msgstr "without comment"
+msgstr "Without comment"

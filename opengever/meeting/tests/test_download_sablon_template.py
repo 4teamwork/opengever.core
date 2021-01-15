@@ -20,7 +20,7 @@ class TestSablonTemplateDownloadView(FunctionalTestCase):
     def test_download_sablon_template(self, browser):
         browser.login().open(self.template, view='tabbedview_view-overview')
         browser.find('Download copy').click()
-        browser.find('label_download').click()
+        browser.find('Download').click()
 
         self.assertEqual('attachment; filename="toest.txt"',
                          browser.headers['content-disposition'])

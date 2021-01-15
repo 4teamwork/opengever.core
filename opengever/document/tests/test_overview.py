@@ -253,7 +253,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertEquals(
-            'Checkout and edit',
+            'Check out and edit',
             edit_button.first.text,
             )
 
@@ -328,7 +328,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         # Tabbedview gets in the way of the redirect so we'll have to revisit
         browser.open(self.document, view='tabbedview_view-overview')
@@ -341,7 +341,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertIn(
-            'creator Ziegler Robert (robert.ziegler)',
+            'Creator Ziegler Robert (robert.ziegler)',
             document_metadata,
             )
 
@@ -353,17 +353,17 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         self.assertIn(
-            'Edit',
+            'Edit again',
             file_actions,
             )
 
         self.assertIn(
-            'Checkin without comment',
+            'Check in without comment',
             file_actions,
             )
 
         self.assertIn(
-            'Checkin with comment',
+            'Check in with comment',
             file_actions,
             )
 
@@ -388,7 +388,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         self.assertEquals(
             self.document.absolute_url(),
@@ -422,7 +422,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         self.login(self.regular_user, browser)
 
@@ -434,7 +434,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertEquals(
-            'Checkout and edit',
+            'Check out and edit',
             browser.css('.function-edit-inactive').first.text,
             )
 
@@ -470,7 +470,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         )
 
         self.assertEquals(
-            'Checkout',
+            'Check out',
             edit_button.first.text,
         )
 
@@ -592,22 +592,22 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         document_attributes = [
             'Title',
-            'Document Date',
+            'Document date',
             'File',
             'Created',
             'Modified',
-            'Document Type',
+            'Document type',
             'Author',
-            'creator',
+            'Creator',
             'Description',
             'Keywords',
-            'Foreign Reference',
+            'Foreign reference',
             'Checked out',
-            'Digital Available',
-            'Preserved as paper',
+            'Has digital file',
+            'Physical file',
             'Date of receipt',
             'Date of delivery',
-            'Related Documents',
+            'Related documents',
             'Classification',
             'Privacy protection',
             'Public access level',
@@ -619,7 +619,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(self.expired_document, view='tabbedview_view-overview')
 
-        document_attributes.extend(["Archival File", "Archival file state"])
+        document_attributes.extend(["Archival file", "Archival file state"])
 
         self.assertEquals(document_attributes, browser.css('.listing th').text)
 
@@ -675,11 +675,11 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         browser.open(self.expired_document, view='tabbedview_view-overview')
 
-        archival_file_row_index = browser.css('.listing tr th').text.index("Archival File")
+        archival_file_row_index = browser.css('.listing tr th').text.index("Archival file")
         archival_file_row = browser.css('.listing tr')[archival_file_row_index]
 
         self.assertEquals(
-            'Archival File',
+            'Archival file',
             archival_file_row.css('th').first.text,
             )
 
@@ -698,7 +698,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         lockable = IRefreshableLockable(self.document)
         lockable.lock()
@@ -707,8 +707,8 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-overview')
 
         file_actions = [
-            'Edit',
-            'Checkin with comment',
+            'Edit again',
+            'Check in with comment',
             'Download copy',
             ]
 
@@ -722,7 +722,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         lockable = IRefreshableLockable(self.document)
         lockable.lock()
@@ -893,7 +893,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
 
         edit_buttons = browser.css('a.function-edit')
 
-        self.assertEquals(['Checkout and edit', 'Edit in Office Online'],
+        self.assertEquals(['Check out and edit', 'Edit in Office Online'],
                           [btn.text for btn in edit_buttons])
 
         self.assertIn('/editing_document', edit_buttons[0].attrib['href'])
@@ -973,7 +973,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         # Tabbedview gets in the way of the redirect so we'll have to revisit
         browser.open(self.document, view='tabbedview_view-overview')
@@ -989,9 +989,9 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
 
         # "Edit in Office Online" action not shown (regular checkout by self)
         self.assertEquals(
-            ['Edit',
-             'Checkin without comment',
-             'Checkin with comment',
+            ['Edit again',
+             'Check in without comment',
+             'Check in with comment',
              'Cancel checkout',
              'Download copy'],
             file_actions)
@@ -1001,7 +1001,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         self.login(self.regular_user, browser)
 

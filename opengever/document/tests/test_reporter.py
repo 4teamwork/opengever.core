@@ -137,12 +137,12 @@ class TestDocumentReporter(IntegrationTestCase):
             workbook = load_workbook(tmpfile.name)
 
         self.assertEquals(
-            [u'label_document_sequence_number',
+            [u'Sequence number',
              u'Title',
              u'Author',
-             u'Document Date',
+             u'Document date',
              u'label_document_receipt_date',
              u'label_document_delivery_date',
-             u'label_document_checked_out_by',
-             u'label_document_reference_number'],
+             u'Checked out by',
+             u'Reference number'],
             [cell.value for cell in list(workbook.active.rows)[0]])

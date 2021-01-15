@@ -543,12 +543,12 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         factoriesmenu.add('Document')
         # No file, not preserved as paper
         browser.fill({'Title': 'My Document',
-                      'Preserved as paper': False}).save()
+                      'Physical file': False}).save()
         self.assertEquals(
             erroneous_fields(),
-            {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+            {'Physical file': [
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
     @browsing
     def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
@@ -558,7 +558,7 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         factoriesmenu.add('Document')
         # No file, but preserved as paper
         browser.fill({'Title': 'My Document',
-                      'Preserved as paper': True}).save()
+                      'Physical file': True}).save()
         assert_message('Item created')
 
     @browsing
@@ -569,7 +569,7 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         factoriesmenu.add('Document')
         # File, but not preserved as paper
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
-                      'Preserved as paper': False}).save()
+                      'Physical file': False}).save()
         assert_message('Item created')
 
     @browsing
@@ -580,7 +580,7 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         factoriesmenu.add('Document')
         # File AND preserved as paper
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
-                      'Preserved as paper': True}).save()
+                      'Physical file': True}).save()
         assert_message('Item created')
 
     @browsing
@@ -590,12 +590,12 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
 
         factoriesmenu.add('Document')
         browser.fill({'File': ('hello', 'mail.eml', 'message/rfc822'),
-                      'Preserved as paper': False}).save()
+                      'Physical file': False}).save()
 
         selector = '#formfield-form-widgets-file.field.error'
         error_field = browser.css(selector).first
         self.assertIn(
-            "It's not possible to add E-mails here, please send it to",
+            "Emails can't be added here. Please send it to",
             error_field.text)
 
         self.assertEqual(
@@ -635,12 +635,12 @@ class TestDocumentValidatorsInEditForm(FunctionalTestCase):
     def test_doc_without_either_file_or_paper_form_is_invalid(self, browser):
         browser.login().open(self.doc_without_file.absolute_url() + '/edit')
         # No file, not preserved as paper
-        browser.fill({'Preserved as paper': False}).save()
+        browser.fill({'Physical file': False}).save()
         self.assertEquals(
             erroneous_fields(),
-            {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+            {'Physical file': [
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
 
 class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
@@ -677,19 +677,19 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
     def test_doc_without_either_file_or_paper_form_is_invalid(self, browser):
         browser.login().open(self.doc_without_file.absolute_url() + '/edit')
         # No file, not preserved as paper
-        browser.fill({'Preserved as paper': False}).save()
+        browser.fill({'Physical file': False}).save()
         self.assertEquals(
             erroneous_fields(),
-            {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+            {'Physical file': [
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
     @browsing
     def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
         browser.login().open(self.doc_with_file.absolute_url() + '/edit')
         # Remove file, but add preserved as paper
         browser.fill({'Remove existing file': 'remove',
-                      'Preserved as paper': True}).save()
+                      'Physical file': True}).save()
         assert_no_error_messages()
 
     @browsing
@@ -697,20 +697,20 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
         browser.login().open(self.doc_without_file.absolute_url() + '/edit')
         # Add File, but remove preserved as paper
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
-                      'Preserved as paper': False}).save()
+                      'Physical file': False}).save()
         assert_no_error_messages()
 
     @browsing
     def test_doc_without_paper_form_and_removing_the_file_is_invalid(self, browser):
         browser.login().open(self.doc_with_file, view='edit')
         browser.fill({'Remove existing file': 'remove',
-                      'Preserved as paper': False}).save()
+                      'Physical file': False}).save()
 
         self.assertEquals(
             erroneous_fields(),
-            {'Preserved as paper': [
-                "You don't select a file and document is also not preserved"
-                " in paper_form, please correct it."]})
+            {'Physical file': [
+                "You didn't select a file, but neither is the document flagged as "
+                "being preserved as a physical file. Please remedy this."]})
 
 
 class TestPublicTrial(FunctionalTestCase):
@@ -773,4 +773,4 @@ class TestArchivalFileField(FunctionalTestCase):
         archival_file_field = browser.css(
             '#form-widgets-IDocumentMetadata-archival_file').first
         self.assertEquals(
-            'Archive file', archival_file_field.parent('fieldset legend').text)
+            'Archival file', archival_file_field.parent('fieldset legend').text)

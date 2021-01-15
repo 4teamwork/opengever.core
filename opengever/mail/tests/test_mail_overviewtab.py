@@ -26,23 +26,23 @@ class TestOverview(FunctionalTestCase):
                           'mail_with_multiple_attachments.eml'))
         browser.login().visit(mail, view='tabbedview_view-overview')
 
-        expect = [['Document Date', date_format_helper(get_header_date(mail))],
-                  ['Document Type', ''],
+        expect = [['Document date', date_format_helper(get_header_date(mail))],
+                  ['Document type', ''],
                   ['Author', get_author_by_email(mail)],
-                  ['creator', 'Test User (test_user_1_)'],
+                  ['Creator', 'Test User (test_user_1_)'],
                   ['Description', ''],
                   ['Keywords', ''],
-                  ['Foreign Reference', ''],
+                  ['Foreign reference', ''],
                   ['Message',
                    u'Mehrere Anhaenge.eml \u2014 32 KB '
-                   u'Checkout and edit Download copy Attach to email'],
+                   u'Check out and edit Download copy Attach to email'],
                   ['Attachments',
                    u'Inneres Testma\u0308il ohne Attachments.eml 1 KB '
                    'word_document.docx 22.4 KB '
                    'Text.txt 1 KB '
                    'Save attachments'],
-                  ['Digital Available', 'yes'],
-                  ['Preserved as paper', 'yes'],
+                  ['Has digital file', 'yes'],
+                  ['Physical file', 'yes'],
                   ['Date of receipt', date_format_helper(date.today())],
                   ['Date of delivery', ''],
                   ['Classification', 'unprotected'],
