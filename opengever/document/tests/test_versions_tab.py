@@ -214,7 +214,7 @@ class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
               'Download copy': 'Download copy',
               'Preview': 'Preview',
               'Revert': '',
-              'Save PDF': 'Save PDF',
+              'Save PDF as': 'Save PDF as',
               'Version': '0',
               'Date': 'Nov 06, 2016 12:00 AM',
               'Changed by': 'Test User (test_user_1_)'}],

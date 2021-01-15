@@ -208,7 +208,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
         self.assertEqual(
             [
                 'Edit metadata',
-                'Edit',
+                'Edit again',
                 'Check in without comment',
                 'Check in with comment',
                 'Cancel checkout',
@@ -376,7 +376,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
         self.assertEqual(
             [
                 'Edit metadata',
-                'Edit',
+                'Edit again',
                 'Check in without comment',
                 'Check in with comment',
                 'Cancel checkout',

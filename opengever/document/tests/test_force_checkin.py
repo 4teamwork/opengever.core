@@ -48,6 +48,6 @@ class TestForceCheckin(IntegrationTestCase):
             browser.click_on('without comment')
 
         browser.open(self.document, view='@@checkin_without_comment')
-        assert_message("This item is being checked out by Ziegler Robert (robert.ziegler).")
+        assert_message("This document is currently checked out by Ziegler Robert (robert.ziegler).")
 
         assert_message(u"Could not check in document Vertr\xe4gsentwurf")

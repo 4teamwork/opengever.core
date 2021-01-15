@@ -118,8 +118,8 @@ class TestCancelDocuments(FunctionalTestCase):
                              view='cancel_document_checkouts', )
 
         self.assertEquals(self.dossier, browser.context)
-        self.assertEquals([u'Could not cancel checkout on document [No Subject], '
-                           'mails does not support the checkin checkout process.'],
+        self.assertEquals([u'Could not cancel checkout for document [No Subject], '
+                           'emails do not support the checkout process.'],
                           error_messages())
 
 

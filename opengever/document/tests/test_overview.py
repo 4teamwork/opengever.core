@@ -341,7 +341,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertIn(
-            'creator Ziegler Robert (robert.ziegler)',
+            'Creator Ziegler Robert (robert.ziegler)',
             document_metadata,
             )
 
@@ -353,7 +353,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         self.assertIn(
-            'Edit',
+            'Edit again',
             file_actions,
             )
 
@@ -598,12 +598,12 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Modified',
             'Document Type',
             'Author',
-            'creator',
+            'Creator',
             'Description',
             'Keywords',
             'Foreign Reference',
             'Checked out',
-            'Digital Available',
+            'Has digital file',
             'Physical file',
             'Date of receipt',
             'Date of delivery',
@@ -707,7 +707,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-overview')
 
         file_actions = [
-            'Edit',
+            'Edit again',
             'Check in with comment',
             'Download copy',
             ]
@@ -989,7 +989,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
 
         # "Edit in Office Online" action not shown (regular checkout by self)
         self.assertEquals(
-            ['Edit',
+            ['Edit again',
              'Check in without comment',
              'Check in with comment',
              'Cancel checkout',

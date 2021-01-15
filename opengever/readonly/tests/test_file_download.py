@@ -24,7 +24,7 @@ class TestFileDownloadInReadOnly(IntegrationTestCase):
 
         with ZODBStorageInReadonlyMode():
             browser.find('Download copy').click()
-            browser.find('label_download').click()
+            browser.find('Download').click()
             transaction.commit()
 
         self.assertEqual(200, browser.status_code)

@@ -29,7 +29,7 @@ class TestOverview(FunctionalTestCase):
         expect = [['Document Date', date_format_helper(get_header_date(mail))],
                   ['Document Type', ''],
                   ['Author', get_author_by_email(mail)],
-                  ['creator', 'Test User (test_user_1_)'],
+                  ['Creator', 'Test User (test_user_1_)'],
                   ['Description', ''],
                   ['Keywords', ''],
                   ['Foreign Reference', ''],
@@ -41,7 +41,7 @@ class TestOverview(FunctionalTestCase):
                    'word_document.docx 22.4 KB '
                    'Text.txt 1 KB '
                    'Save attachments'],
-                  ['Digital Available', 'yes'],
+                  ['Has digital file', 'yes'],
                   ['Physical file', 'yes'],
                   ['Date of receipt', date_format_helper(date.today())],
                   ['Date of delivery', ''],

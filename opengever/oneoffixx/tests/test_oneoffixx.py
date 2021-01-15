@@ -157,7 +157,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         browser.fill({'Template': node.get("title")})
         browser.find('Save').click()
         browser.open(browser.context, view='tabbedview_view-overview')
-        self.assertEqual(['Oneoffixx retry'], browser.css('a.oc-checkout').text)
+        self.assertEqual(['Retry with OneOffixx'], browser.css('a.oc-checkout').text)
 
     @browsing
     def test_template_id_stored_in_annotations(self, browser):

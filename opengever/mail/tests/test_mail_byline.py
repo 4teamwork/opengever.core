@@ -9,7 +9,7 @@ class TestMailByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.mail_eml)
 
-        start_date = self.get_byline_value_by_label('from:')
+        start_date = self.get_byline_value_by_label('Document date:')
         self.assertEquals('Jan 01, 1999', start_date.text)
 
     @browsing
@@ -31,6 +31,6 @@ class TestMailByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.mail_eml)
 
-        document_author = self.get_byline_value_by_label('by:')
+        document_author = self.get_byline_value_by_label('Author:')
         self.assertEquals(u'Freddy H\xf6lderlin <from@example.org>',
                           document_author.text)

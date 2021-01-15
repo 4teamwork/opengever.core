@@ -10,7 +10,7 @@ class TestDocumentByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.document)
 
-        start_date = self.get_byline_value_by_label('from:')
+        start_date = self.get_byline_value_by_label('Document date:')
         self.assertEquals('Jan 03, 2010', start_date.text)
 
     @browsing
@@ -34,5 +34,5 @@ class TestDocumentByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.document)
 
-        document_author = self.get_byline_value_by_label('by:')
+        document_author = self.get_byline_value_by_label('Author:')
         self.assertEquals(TEST_USER_ID, document_author.text)

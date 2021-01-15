@@ -773,4 +773,4 @@ class TestArchivalFileField(FunctionalTestCase):
         archival_file_field = browser.css(
             '#form-widgets-IDocumentMetadata-archival_file').first
         self.assertEquals(
-            'Archive file', archival_file_field.parent('fieldset legend').text)
+            'Archival file', archival_file_field.parent('fieldset legend').text)

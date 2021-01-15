@@ -20,7 +20,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         versioner.create_version('Some updates.')
         browser.open(self.document, view='tabbed_view/listing', data={'view_name': 'overview'})
         browser.find('Download copy').click()
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy current version (1)')
 
     @browsing
@@ -31,12 +31,12 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         versioner.create_version('Some updates.')
         browser.open(self.document, view='tabbedview_view-versions')
         browser.css('a.function-download-copy').first.click()
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy version 1')
         versioner.create_version('Oops.')
         browser.open(self.document, view='tabbedview_view-versions')
         browser.css('a.function-download-copy').first.click()
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy version 2')
 
     @browsing
@@ -73,7 +73,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
             "You're downloading a copy of the document Vertraegsentwurf.docx",
             browser.css(".details > p").first.text,
         )
-        browser.find('label_download').click()
+        browser.find('Download').click()
         self.assertEqual("{}/download".format(self.document.absolute_url()), browser.url)
         self.assertEqual(self.document.file.data, browser.contents)
 
@@ -88,7 +88,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
             "You're downloading a copy of the document Vertraegsentwurf.docx",
             browser.css(".details > p").first.text,
         )
-        browser.find('label_download').click()
+        browser.find('Download').click()
         expected_url = "{}/download_file_version?version_id=1".format(self.document.absolute_url())
         self.assertEqual(expected_url, browser.url)
         self.assertEqual(self.document.file.data, browser.contents)

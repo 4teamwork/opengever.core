@@ -645,7 +645,7 @@ class TestCheckinViews(IntegrationTestCase):
             ' '.join((
                 'This document is currently being worked on.',
                 'When you check it in manually you will lose the changes.',
-                'Please allow for the process to be finished first.',
+                'Please try advising the respective user to check it in first.',
                 ))
             )
 

@@ -18,7 +18,7 @@ class TestCheckedOutViewlet(IntegrationTestCase):
         message = browser.css('dl.checked_out_viewlet dd').first
         link = browser.css('dl.checked_out_viewlet a').first
 
-        self.assertEqual(u'This item is being checked out by B\xe4rfuss K\xe4thi (kathi.barfuss).',
+        self.assertEqual(u'This document is currently checked out by B\xe4rfuss K\xe4thi (kathi.barfuss).',
                          message.text)
         self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
                          link.get('href'))
@@ -35,7 +35,7 @@ class TestCheckedOutViewlet(IntegrationTestCase):
         message = browser.css('dl.checked_out_viewlet dd').first
         link = browser.css('dl.checked_out_viewlet a').first
 
-        self.assertEqual(u'This item is being edited in Office Online by B\xe4rfuss K\xe4thi (kathi.barfuss).',
+        self.assertEqual(u'This document is being edited in Office Online by B\xe4rfuss K\xe4thi (kathi.barfuss).',
                          message.text)
         self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
                          link.get('href'))
