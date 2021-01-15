@@ -16,7 +16,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
         browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_open_with_file(self, browser):
@@ -26,7 +26,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertNotIn('javascript:', checkout_url)
@@ -40,7 +40,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_inactive_with_file(self, browser):
@@ -50,7 +50,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_without_file(self, browser):
@@ -59,7 +59,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
         browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_with_file(self, browser):
@@ -70,7 +70,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_without_file(self, browser):
@@ -78,7 +78,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
         browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_with_file(self, browser):
@@ -88,7 +88,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertNotIn('javascript:', checkout_url)
@@ -102,7 +102,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_inactive_with_file(self, browser):
@@ -112,7 +112,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
@@ -123,7 +123,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
@@ -133,7 +133,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
 
 class TestFileActionButtonTemplatesSolr(SolrIntegrationTestCase):
@@ -191,7 +191,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
         browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_open_with_file(self, browser):
@@ -201,7 +201,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertNotIn('javascript:', checkout_url)
@@ -215,7 +215,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_inactive_with_file(self, browser):
@@ -225,7 +225,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_without_file(self, browser):
@@ -236,7 +236,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_with_file(self, browser):
@@ -246,7 +246,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_without_file(self, browser):
@@ -254,7 +254,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
         browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_with_file(self, browser):
@@ -264,7 +264,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertNotIn('javascript:', checkout_url)
@@ -278,7 +278,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_inactive_with_file(self, browser):
@@ -288,7 +288,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
@@ -299,7 +299,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
@@ -309,7 +309,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_open_without_file(self, browser):
@@ -317,7 +317,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
         browser.open(self.empty_document, view='bumblebee-overlay-listing')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_open_with_file(self, browser):
@@ -327,7 +327,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertNotIn('javascript:', checkout_url)
@@ -341,7 +341,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_inactive_with_file(self, browser):
@@ -351,7 +351,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_resolved_without_file(self, browser):
@@ -362,7 +362,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_resolved_with_file(self, browser):
@@ -372,7 +372,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
 
 class TestFileActionButtonTemplatesWithBumblebeeSolr(SolrIntegrationTestCase):
@@ -430,7 +430,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
         browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_open_with_file(self, browser):
@@ -440,7 +440,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -457,7 +457,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_inactive_with_file(self, browser):
@@ -467,7 +467,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -481,7 +481,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_with_file(self, browser):
@@ -491,7 +491,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -502,7 +502,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
         browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_with_file(self, browser):
@@ -512,7 +512,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -529,7 +529,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_inactive_with_file(self, browser):
@@ -539,7 +539,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -553,7 +553,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
@@ -563,7 +563,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -624,7 +624,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
         browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_open_with_file(self, browser):
@@ -634,7 +634,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -651,7 +651,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_inactive_with_file(self, browser):
@@ -661,7 +661,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -675,7 +675,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_with_file(self, browser):
@@ -685,7 +685,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -696,7 +696,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
         browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_with_file(self, browser):
@@ -706,7 +706,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -723,7 +723,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_inactive_with_file(self, browser):
@@ -733,7 +733,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -747,7 +747,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
@@ -757,7 +757,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -768,7 +768,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
         browser.open(self.empty_document, view='bumblebee-overlay-listing')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_open_with_file(self, browser):
@@ -778,7 +778,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -795,7 +795,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_inactive_with_file(self, browser):
@@ -805,7 +805,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -819,7 +819,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_resolved_with_file(self, browser):
@@ -829,7 +829,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
         attach_url = browser.css('.function-attach')[0].get('href')
         self.assertIn('javascript:', attach_url)
@@ -890,7 +890,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
         browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_open_with_file(self, browser):
@@ -900,7 +900,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertIn('javascript:', checkout_url)
@@ -914,7 +914,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_inactive_with_file(self, browser):
@@ -924,7 +924,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_without_file(self, browser):
@@ -935,7 +935,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_with_file(self, browser):
@@ -945,7 +945,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_without_file(self, browser):
@@ -953,7 +953,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
         browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_with_file(self, browser):
@@ -963,7 +963,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertIn('javascript:', checkout_url)
@@ -977,7 +977,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_inactive_with_file(self, browser):
@@ -987,7 +987,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
@@ -998,7 +998,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
@@ -1008,7 +1008,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
 
 class TestFileActionButtonTemplatesWithOCCheckoutSolr(SolrIntegrationTestCase):
@@ -1067,7 +1067,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
         browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_open_with_file(self, browser):
@@ -1077,7 +1077,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertIn('javascript:', checkout_url)
@@ -1091,7 +1091,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_inactive_with_file(self, browser):
@@ -1101,7 +1101,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_without_file(self, browser):
@@ -1112,7 +1112,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_overview_resolved_with_file(self, browser):
@@ -1122,7 +1122,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_without_file(self, browser):
@@ -1130,7 +1130,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
         browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_open_with_file(self, browser):
@@ -1140,7 +1140,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertIn('javascript:', checkout_url)
@@ -1154,7 +1154,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_inactive_with_file(self, browser):
@@ -1164,7 +1164,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
@@ -1175,7 +1175,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
@@ -1185,7 +1185,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_open_without_file(self, browser):
@@ -1193,7 +1193,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
         browser.open(self.empty_document, view='bumblebee-overlay-listing')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_open_with_file(self, browser):
@@ -1203,7 +1203,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertIn('Checkout and edit', actions)
+        self.assertIn('Check out and edit', actions)
 
         checkout_url = browser.css('.function-edit')[0].get('href')
         self.assertIn('javascript:', checkout_url)
@@ -1217,7 +1217,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_inactive_with_file(self, browser):
@@ -1227,7 +1227,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_resolved_without_file(self, browser):
@@ -1238,7 +1238,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
     @browsing
     def test_bumblebee_resolved_with_file(self, browser):
@@ -1248,7 +1248,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
-        self.assertNotIn('Checkout and edit', actions)
+        self.assertNotIn('Check out and edit', actions)
 
 
 class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebeeSolr(SolrIntegrationTestCase):

@@ -35,7 +35,7 @@ class TestOverview(FunctionalTestCase):
                   ['Foreign Reference', ''],
                   ['Message',
                    u'Mehrere Anhaenge.eml \u2014 32 KB '
-                   u'Checkout and edit Download copy Attach to email'],
+                   u'Check out and edit Download copy Attach to email'],
                   ['Attachments',
                    u'Inneres Testma\u0308il ohne Attachments.eml 1 KB '
                    'word_document.docx 22.4 KB '

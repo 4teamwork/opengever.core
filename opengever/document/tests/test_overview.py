@@ -253,7 +253,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertEquals(
-            'Checkout and edit',
+            'Check out and edit',
             edit_button.first.text,
             )
 
@@ -328,7 +328,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         # Tabbedview gets in the way of the redirect so we'll have to revisit
         browser.open(self.document, view='tabbedview_view-overview')
@@ -358,12 +358,12 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertIn(
-            'Checkin without comment',
+            'Check in without comment',
             file_actions,
             )
 
         self.assertIn(
-            'Checkin with comment',
+            'Check in with comment',
             file_actions,
             )
 
@@ -388,7 +388,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         self.assertEquals(
             self.document.absolute_url(),
@@ -422,7 +422,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         self.login(self.regular_user, browser)
 
@@ -434,7 +434,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertEquals(
-            'Checkout and edit',
+            'Check out and edit',
             browser.css('.function-edit-inactive').first.text,
             )
 
@@ -470,7 +470,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         )
 
         self.assertEquals(
-            'Checkout',
+            'Check out',
             edit_button.first.text,
         )
 
@@ -698,7 +698,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         lockable = IRefreshableLockable(self.document)
         lockable.lock()
@@ -708,7 +708,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         file_actions = [
             'Edit',
-            'Checkin with comment',
+            'Check in with comment',
             'Download copy',
             ]
 
@@ -722,7 +722,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         lockable = IRefreshableLockable(self.document)
         lockable.lock()
@@ -893,7 +893,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
 
         edit_buttons = browser.css('a.function-edit')
 
-        self.assertEquals(['Checkout and edit', 'Edit in Office Online'],
+        self.assertEquals(['Check out and edit', 'Edit in Office Online'],
                           [btn.text for btn in edit_buttons])
 
         self.assertIn('/editing_document', edit_buttons[0].attrib['href'])
@@ -973,7 +973,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         # Tabbedview gets in the way of the redirect so we'll have to revisit
         browser.open(self.document, view='tabbedview_view-overview')
@@ -990,8 +990,8 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         # "Edit in Office Online" action not shown (regular checkout by self)
         self.assertEquals(
             ['Edit',
-             'Checkin without comment',
-             'Checkin with comment',
+             'Check in without comment',
+             'Check in with comment',
              'Cancel checkout',
              'Download copy'],
             file_actions)
@@ -1001,7 +1001,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
-        browser.find('Checkout and edit').click()
+        browser.find('Check out and edit').click()
 
         self.login(self.regular_user, browser)
 

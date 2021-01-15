@@ -52,7 +52,7 @@ class TestInboxWorkflow(IntegrationTestCase):
         self.assertEquals(200, browser.status_code)
 
         browser.open(self.inbox_document, view='tabbedview_view-overview')
-        browser.click_on('Checkout and edit')
+        browser.click_on('Check out and edit')
 
         self.assertEquals(200, browser.status_code)
         self.assertEquals(self.secretariat_user.id,

@@ -173,7 +173,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
         self.assertEqual(
             [
                 'Edit metadata',
-                'Checkout and edit',
+                'Check out and edit',
                 'Download copy',
                 'Attach to email',
                 'Open as PDF',
@@ -209,8 +209,8 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
             [
                 'Edit metadata',
                 'Edit',
-                'Checkin without comment',
-                'Checkin with comment',
+                'Check in without comment',
+                'Check in with comment',
                 'Cancel checkout',
                 'Download copy',
                 'Attach to email',
@@ -343,7 +343,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
         self.assertEqual(
             [
                 'Edit metadata',
-                'Checkout and edit',
+                'Check out and edit',
                 'Download copy',
                 'Attach to email',
                 'Open as PDF',
@@ -377,8 +377,8 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
             [
                 'Edit metadata',
                 'Edit',
-                'Checkin without comment',
-                'Checkin with comment',
+                'Check in without comment',
+                'Check in with comment',
                 'Cancel checkout',
                 'Download copy',
                 'Attach to email',
