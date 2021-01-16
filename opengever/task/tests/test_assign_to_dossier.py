@@ -35,7 +35,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
         browser.css('#form-buttons-save').first.click()
 
         # Step 4 - edit task form
-        browser.fill({'Task Type': 'comment',
+        browser.fill({'Task type': 'comment',
                       'Deadline': '9/24/14',
                       'Issuer': 'inbox:fa'})
 
@@ -86,7 +86,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
         browser.css('#form-buttons-save').first.click()
 
         # Step 3 - edit task form
-        browser.fill({'Task Type': 'comment',
+        browser.fill({'Task type': 'comment',
                       'Deadline': '9/24/14',
                       'Issuer': 'inbox:fa'})
 

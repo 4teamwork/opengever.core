@@ -245,7 +245,7 @@ class TestProposalOverview(IntegrationTestCase):
         browser.open(self.proposal, view='tabbedview_view-overview')
         browser.find('Create task').click()
 
-        browser.fill({'Task Type': 'To comment'})
+        browser.fill({'Task type': 'To comment'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
             'fa:' + self.dossier_responsible.getId())

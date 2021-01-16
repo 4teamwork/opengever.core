@@ -268,7 +268,7 @@ class TestInitialStateForSubtasks(IntegrationTestCase):
 
         with self.observe_children(self.task) as children:
             browser.open(self.task, view='++add++opengever.task.task')
-            browser.fill({'Title': 'Subtas', 'Task Type': 'comment'})
+            browser.fill({'Title': 'Subtas', 'Task type': 'comment'})
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill(self.secretariat_user)
             browser.click_on('Save')
@@ -284,7 +284,7 @@ class TestInitialStateForSubtasks(IntegrationTestCase):
 
         with self.observe_children(self.task) as children:
             browser.open(self.task, view='++add++opengever.task.task')
-            browser.fill({'Title': 'Subtas', 'Task Type': 'comment'})
+            browser.fill({'Title': 'Subtas', 'Task type': 'comment'})
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill(self.secretariat_user)
             browser.click_on('Save')
@@ -310,7 +310,7 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
 
         browser.open(self.sequential_task,
                      view='++add++opengever.task.task?position=1')
-        browser.fill({'Title': 'Subtask', 'Task Type': 'comment'})
+        browser.fill({'Title': 'Subtask', 'Task type': 'comment'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
         browser.click_on('Save')
@@ -330,7 +330,7 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
         with self.observe_children(self.sequential_task) as subtasks:
             browser.open(self.sequential_task,
                          view='++add++opengever.task.task?position=1')
-            browser.fill({'Title': 'Subtask', 'Task Type': 'comment'})
+            browser.fill({'Title': 'Subtask', 'Task type': 'comment'})
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill(self.secretariat_user)
             browser.click_on('Save')
@@ -347,7 +347,7 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.sequential_task, view='++add++opengever.task.task')
-        browser.fill({'Title': 'Subtask', 'Task Type': 'comment'})
+        browser.fill({'Title': 'Subtask', 'Task type': 'comment'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.secretariat_user)
         browser.click_on('Save')
@@ -372,7 +372,7 @@ class TestAddingSubtaskToSequentialSubtask(IntegrationTestCase):
         browser.open(self.seq_subtask_1)
         factoriesmenu.add('Subtask')
         browser.fill({'Title': 'Vertiefte Recherche',
-                      'Task Type': 'For direct execution'})
+                      'Task type': 'For direct execution'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.regular_user)
         browser.click_on('Save')

@@ -365,7 +365,7 @@ class TestRevokePermissionsDefault(SolrIntegrationTestCase):
         with self.observe_children(self.dossier) as children:
             browser.open(self.dossier, view='++add++opengever.task.task')
             browser.fill({'Title': u'Test default revoke permissions',
-                          'Task Type': 'comment'})
+                          'Task type': 'comment'})
 
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill(self.secretariat_user)
@@ -409,7 +409,7 @@ class TestRevokePermissionsDefault(SolrIntegrationTestCase):
         with self.observe_children(self.dossier) as children:
             browser.open(self.dossier, view='++add++opengever.task.task')
             browser.fill({'Title': u'Test default revoke permissions',
-                          'Task Type': 'comment'})
+                          'Task type': 'comment'})
 
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill(self.secretariat_user)

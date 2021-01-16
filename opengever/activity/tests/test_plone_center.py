@@ -68,7 +68,7 @@ class TestPloneNotificationCenter(FunctionalTestCase):
     def test_add_watcher_adds_subscription_for_each_actor(self, member):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Task Type': 'comment'})
+                      'Task type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('inbox:org-unit-1')
@@ -110,7 +110,7 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Task Type': 'comment'})
+                      'Task type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('inbox:org-unit-1')
@@ -129,7 +129,7 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Task Type': 'comment'})
+                      'Task type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('hugo.boss')

@@ -51,7 +51,7 @@ class TestTaskByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.task)
 
-        seq_number = self.get_byline_value_by_label('Sequence Number:')
+        seq_number = self.get_byline_value_by_label('Sequence number:')
         self.assertEquals('Client1 1', seq_number.text)
 
     @browsing

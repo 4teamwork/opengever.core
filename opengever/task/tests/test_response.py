@@ -17,7 +17,7 @@ class TestTaskResponses(IntegrationTestCase):
         browser.open(self.task)
         browser.click_on('Modify deadline')
         browser.fill({'Response': u'Nicht mehr so dringend ...',
-                      'New Deadline': '1.1.2017'})
+                      'New deadline': '1.1.2017'})
         browser.click_on('Save')
 
         response = IResponseContainer(self.task).list()[-1]

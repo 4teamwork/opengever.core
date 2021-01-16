@@ -218,7 +218,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         # Modify deadline
         self.click_task_button(browser, 'modifyDeadline',
                                save_and_reload=False)
-        browser.fill({'New Deadline': '07.07.2015'})
+        browser.fill({'New deadline': '07.07.2015'})
         browser.forms.get('form').save()
         self.visit_overview(browser)
 

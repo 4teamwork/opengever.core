@@ -19,7 +19,7 @@ class TestTaskRedirector(FunctionalTestCase):
         browser.login().open(self.dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Main task',
-                      'Task Type': 'direct-execution'})
+                      'Task type': 'direct-execution'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(TEST_USER_ID)
@@ -42,7 +42,7 @@ class TestTaskRedirector(FunctionalTestCase):
         browser.login().open(task)
         factoriesmenu.add('Subtask')
         browser.fill({'Title': 'Subtask',
-                      'Task Type': 'direct-execution'})
+                      'Task type': 'direct-execution'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(TEST_USER_ID)

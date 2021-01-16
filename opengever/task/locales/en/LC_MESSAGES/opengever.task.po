@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-16 18:00+0000\n"
+"POT-Creation-Date: 2021-01-16 18:45+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -575,13 +575,13 @@ msgstr "You are not allowed to edit this response."
 #. Default: "effective cost"
 #: ./opengever/task/task.py
 msgid "label_effectiveCost"
-msgstr "effective cost"
+msgstr "Effective cost"
 
 #. German translation: Effektive Dauer (h)
 #. Default: "effective duration"
 #: ./opengever/task/task.py
 msgid "label_effectiveDuration"
-msgstr "effective duration"
+msgstr "Effective duration"
 
 #. German translation: Bitte tragen sie ihre Antwort unten ein
 #. Default: "Please enter your response below"
@@ -593,7 +593,7 @@ msgstr "Please enter your response below"
 #. Default: "expected cost"
 #: ./opengever/task/task.py
 msgid "label_expectedCost"
-msgstr "expected cost"
+msgstr "Expected cost"
 
 #. German translation: Geschätzte Dauer (h)
 #. Default: "Expected duration"
@@ -651,7 +651,7 @@ msgstr "Properties"
 #: ./opengever/task/browser/modify_deadline.py
 #: ./opengever/task/transition.py
 msgid "label_new_deadline"
-msgstr "New Deadline"
+msgstr "New deadline"
 
 #. German translation: Nächste Aufgabe
 #. Default: "Next task"
@@ -701,7 +701,7 @@ msgstr "New task (private) opened by ${user}"
 #: ./opengever/task/response.py
 #: ./opengever/task/task.py
 msgid "label_related_items"
-msgstr "Related Items"
+msgstr "Related items"
 
 #. German translation: Erinnerung
 #. Default: "Reminder"
@@ -755,7 +755,7 @@ msgstr "Sequence"
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_sequence_number"
-msgstr "Sequence Number"
+msgstr "Sequence number"
 
 #. German translation: Sequenzieller Ablauf
 #. Default: "Sequential process"
@@ -800,7 +800,7 @@ msgstr "Task title"
 #: ./opengever/task/browser/overview.py
 #: ./opengever/task/task.py
 msgid "label_task_type"
-msgstr "Task Type"
+msgstr "Task type"
 
 #. German translation: Als Beobachter der Aufgabe hinzugefügt
 #. Default: "Added as watcher of the task"
@@ -1059,7 +1059,7 @@ msgstr "Reassign task"
 #. Default: "Assign to Dossier"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "title_assign_to_dossier"
-msgstr "Assign to Dossier"
+msgstr "Assign to dossier"
 
 #. German translation: Aufgabe abschliessen
 #. Default: "Close task"

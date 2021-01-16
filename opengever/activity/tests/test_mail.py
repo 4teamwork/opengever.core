@@ -41,7 +41,7 @@ class TestEmailNotification(IntegrationTestCase):
 
     def create_task_via_browser(self, browser, inbox=False, description=None):
         browser.open(self.dossier, view='++add++opengever.task.task')
-        browser.fill({'Title': 'Test Task', 'Task Type': 'comment'})
+        browser.fill({'Title': 'Test Task', 'Task type': 'comment'})
         if description is not None:
             browser.fill({"Text": description})
         form = browser.find_form_by_field('Responsible')

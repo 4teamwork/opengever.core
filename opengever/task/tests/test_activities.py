@@ -56,7 +56,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
                       'Responsible': u'hugo.boss',
-                      'Task Type': 'comment',
+                      'Task type': 'comment',
                       'Deadline': '13.02.2015',
                       'Text': 'Lorem ipsum'})
 
@@ -78,7 +78,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
             [['Task title', u'Abkl\xe4rung Fall Meier'],
              ['Deadline', 'Feb 13, 2015'],
-             ['Task Type', 'To comment'],
+             ['Task type', 'To comment'],
              ['Dossier title', 'Dossier XY'],
              ['Text', 'Lorem ipsum'],
              ['Responsible', 'Boss Hugo (hugo.boss)'],
@@ -94,7 +94,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
+                      'Task type': 'comment',
                       'Deadline': '13.02.2015',
                       'Text': 'Lorem ipsum'})
 
@@ -120,7 +120,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
+                      'Task type': 'comment',
                       'Deadline': '13.02.2015',
                       'Text': 'Lorem ipsum'})
 
@@ -145,7 +145,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
+                      'Task type': 'comment',
                       'Deadline': '13.02.2015',
                       'Text': 'Lorem ipsum'})
 
@@ -175,7 +175,7 @@ class TestTaskActivites(FunctionalTestCase):
             True)
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
+                      'Task type': 'comment',
                       'Private task': True,
                       'Text': 'Lorem ipsum'})
 
@@ -191,7 +191,7 @@ class TestTaskActivites(FunctionalTestCase):
     def test_adding_task_adds_responsible_and_issuer_to_watchers(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
+                      'Task type': 'comment',
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
@@ -344,7 +344,7 @@ class TestTaskActivites(FunctionalTestCase):
             data={'form.widgets.transition': 'task-transition-modify-deadline'})
 
         browser.fill({
-            'New Deadline': '20.03.2016',
+            'New deadline': '20.03.2016',
             'Response': u'nicht dring\xe4nd'}).save()
 
         # Ensure modifying deadline activity is fired only once.
@@ -374,7 +374,7 @@ class TestTaskActivites(FunctionalTestCase):
         with freeze(datetime(2015, 03, 02)):
             browser.login().open(task, view='++add++opengever.task.task')
             browser.fill({'Title': u'Unteraufgabe Abkl\xe4rung Fall Meier',
-                          'Task Type': 'comment',
+                          'Task type': 'comment',
                           'Text': 'Lorem ipsum'})
 
             form = browser.find_form_by_field('Responsible')
@@ -398,7 +398,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
             [['Task title', u'Unteraufgabe Abkl\xe4rung Fall Meier'],
              ['Deadline', 'Mar 07, 2015'],
-             ['Task Type', 'To comment'],
+             ['Task type', 'To comment'],
              ['Dossier title', 'Dossier XY'],
              ['Main task', u'Abkl\xe4rung Fall Meier'],
              ['Text', 'Lorem ipsum'],
