@@ -24,7 +24,7 @@ class TestImport(IntegrationTestCase):
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
             ).text
-        self.assertNotIn('eCH-0147 Import', actions)
+        self.assertNotIn('eCH-0147 import', actions)
 
     @browsing
     def test_actions_menu_contains_ech0147_import(self, browser):
@@ -34,7 +34,7 @@ class TestImport(IntegrationTestCase):
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
             ).text
-        self.assertIn('eCH-0147 Import', actions)
+        self.assertIn('eCH-0147 import', actions)
 
     @browsing
     def test_import_dossier_returns_404_if_disabled(self, browser):

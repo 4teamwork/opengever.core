@@ -43,7 +43,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
     def test_workspace_folder_is_addable_in_workspace(self, browser):
         self.login(self.workspace_owner, browser)
         browser.visit(self.workspace)
-        factoriesmenu.add('WorkspaceFolder')
+        factoriesmenu.add('Workspace Folder')
 
         form = browser.find_form_by_field('Title')
         form.fill({'Title': 'Example Folder'})
@@ -154,7 +154,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             with self.login(user, browser):
                 browser.open(self.workspace)
                 got[user] = factoriesmenu.visible() \
-                    and 'WorkspaceFolder' in factoriesmenu.addable_types()
+                    and 'Workspace Folder' in factoriesmenu.addable_types()
 
         self.assertDictEqual(expected, got)
 
@@ -171,7 +171,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             with self.login(user, browser):
                 browser.open(self.workspace)
                 got[user] = factoriesmenu.visible() \
-                    and 'WorkspaceMeeting' in factoriesmenu.addable_types()
+                    and 'Workspace Meeting' in factoriesmenu.addable_types()
 
         self.assertDictEqual(expected, got)
 
@@ -205,7 +205,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             with self.login(user, browser):
                 browser.open(self.workspace)
                 got[user] = factoriesmenu.visible() \
-                    and 'WorkspaceMeeting' in factoriesmenu.addable_types()
+                    and 'Workspace Meeting' in factoriesmenu.addable_types()
 
         self.maxDiff = None
         self.assertEquals(expected, got)
@@ -223,7 +223,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             with self.login(user, browser):
                 browser.open(self.workspace)
                 got[user] = factoriesmenu.visible() \
-                    and 'ToDo' in factoriesmenu.addable_types()
+                    and 'To-do item' in factoriesmenu.addable_types()
 
         self.maxDiff = None
         self.assertEquals(expected, got)

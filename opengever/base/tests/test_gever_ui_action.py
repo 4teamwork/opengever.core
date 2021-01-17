@@ -24,5 +24,5 @@ class TestGeverUIAction(IntegrationTestCase):
         browser.open(self.repository_root)
 
         self.assertEqual(
-            ['Switch UI'],
+            ['Switch to new UI'],
             browser.css('#portal-personaltools #personaltools-switch_ui').text)

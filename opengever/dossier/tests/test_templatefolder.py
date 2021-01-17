@@ -704,7 +704,7 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.login().open(templatefolder)
 
         self.assertEquals(
-            ['Document', 'TaskTemplateFolder', 'Template Folder'],
+            ['Document', 'Task Template Folder', 'Template Folder'],
             factoriesmenu.addable_types())
 
     @skip("This test currently fails in a flaky way on CI."
@@ -796,7 +796,7 @@ class TestTemplateFolderMeetingEnabled(IntegrationTestCase):
             'Meeting Template',
             'Proposal Template',
             'Sablon Template',
-            'TaskTemplateFolder',
+            'Task Template Folder',
             'Template Folder',
             ]
 
@@ -904,9 +904,9 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
 
         expected_action_menu_content = [
             'Export as Zip',
-            'Copy Items',
+            'Copy items',
             'Export selection',
-            'Move Items',
+            'Move items',
             ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
@@ -916,12 +916,12 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
 
         expected_action_menu_content = [
             'Export as Zip',
-            'Copy Items',
-            'Checkin with comment',
-            'Checkin without comment',
+            'Copy items',
+            'Check in with comment',
+            'Check in without comment',
             'Export selection',
             'Delete',
-            'Move Items',
+            'Move items',
             ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
@@ -961,7 +961,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
 
         expected_actions = [
             'Export as Zip',
-            'Copy Items',
+            'Copy items',
             'Export selection',
             ]
 
@@ -972,9 +972,9 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
 
         expected_actions = [
             'Export as Zip',
-            'Copy Items',
-            'Checkin with comment',
-            'Checkin without comment',
+            'Copy items',
+            'Check in with comment',
+            'Check in without comment',
             'Export selection',
             'Delete',
             ]
@@ -993,7 +993,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
 
         expected_actions = [
             'Export as Zip',
-            'Copy Items',
+            'Copy items',
             'Export selection',
             ]
 
@@ -1004,9 +1004,9 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
 
         expected_actions = [
             'Export as Zip',
-            'Copy Items',
-            'Checkin with comment',
-            'Checkin without comment',
+            'Copy items',
+            'Check in with comment',
+            'Check in without comment',
             'Export selection',
             'Delete',
             ]
@@ -1126,7 +1126,7 @@ class TestDossierTemplateFeature(IntegrationTestCase):
 
         expected_addable_types = ['Document',
                                   'Dossier template',
-                                  'TaskTemplateFolder',
+                                  'Task Template Folder',
                                   'Template Folder']
         self.assertEqual(expected_addable_types, factoriesmenu.addable_types())
 

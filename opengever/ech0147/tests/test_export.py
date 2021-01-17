@@ -15,7 +15,7 @@ class TestExport(IntegrationTestCase):
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
             ).text
-        self.assertNotIn('eCH-0147 Export', actions)
+        self.assertNotIn('eCH-0147 export', actions)
 
     @browsing
     def test_actions_menu_contains_ech0147_export(self, browser):
@@ -25,7 +25,7 @@ class TestExport(IntegrationTestCase):
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
             ).text
-        self.assertIn('eCH-0147 Export', actions)
+        self.assertIn('eCH-0147 export', actions)
 
     @browsing
     def test_export_dossier_if_disabled_returns_404(self, browser):

@@ -12,7 +12,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         browser.open(self.tasktemplatefolder)
-        factoriesmenu.add('TaskTemplate')
+        factoriesmenu.add('Task Template')
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
              'Task Type': 'comment',
@@ -87,7 +87,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         browser.open(self.tasktemplatefolder)
-        factoriesmenu.add('TaskTemplate')
+        factoriesmenu.add('Task Template')
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
              'Task Type': 'comment',
@@ -171,7 +171,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         browser.open(self.tasktemplatefolder)
-        factoriesmenu.add('TaskTemplate')
+        factoriesmenu.add('Task Template')
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
              'Task Type': 'comment',

@@ -214,12 +214,12 @@ class TestPrivateDossierWorkflowSolr(SolrIntegrationTestCase):
         self.commit_solr()
 
         browser.open(self.dossier, view="tabbed_view/listing?view_name=trash")
-        self.assertItemsEqual([u'More actions \u25bc', 'untrashed', 'remove'],
+        self.assertItemsEqual([u'More actions \u25bc', 'Restore from trash', 'Delete'],
                               browser.css('#tabbedview-menu a').text)
 
         ITrashable(self.private_document).trash()
         self.commit_solr()
 
         browser.open(self.private_dossier, view="tabbed_view/listing?view_name=trash")
-        self.assertItemsEqual([u'More actions \u25bc', 'untrashed'],
+        self.assertItemsEqual([u'More actions \u25bc', 'Restore from trash'],
                               browser.css('#tabbedview-menu a').text)

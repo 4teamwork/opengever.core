@@ -13,13 +13,13 @@ class TestTaskRelatedDocumentsTabWithoutOfficeconnector(SolrIntegrationTestCase)
         expected_actions = [
             u"More actions \u25bc",
             "Export as Zip",
-            "Copy Items",
+            "Copy items",
             "Send as email",
-            "Checkout",
+            "Check out",
             "Cancel",
             "Export selection",
-            "Move Items",
-            "trashed",
+            "Move items",
+            "Move to trash",
         ]
         self.assertEqual(expected_actions, browser.css(".actionMenu a").text)
 
@@ -35,12 +35,12 @@ class TestTaskRelatedDocumentsTabWithOfficeconnector(SolrIntegrationTestCase):
         expected_actions = [
             u"More actions \u25bc",
             "Export as Zip",
-            "Copy Items",
-            "Attach selection",
-            "Checkout",
+            "Copy items",
+            "Attach to email",
+            "Check out",
             "Cancel",
             "Export selection",
-            "Move Items",
-            "trashed",
+            "Move items",
+            "Move to trash",
         ]
         self.assertEqual(expected_actions, browser.css(".actionMenu a").text)

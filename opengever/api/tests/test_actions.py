@@ -833,7 +833,7 @@ class TestFolderActions(FolderActionsTestBase):
     features = ('bumblebee',)
     createTaskAction = {
         u'id': u'create_task',
-        u'title': u'Create Task',
+        u'title': u'Create task',
         u'icon': u'',}
 
     @browsing
@@ -890,22 +890,22 @@ class TestFolderActions(FolderActionsTestBase):
             {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
             {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
             {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
             {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
-            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
-            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
-            {u'icon': u'', u'id': u'create_task', u'title': u'Create Task'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
+            {u'icon': u'', u'id': u'create_task', u'title': u'Create task'},
             {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
-            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
-            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Check in with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Check in without comment'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
-            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
-            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'trashed'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'untrashed'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
 
@@ -921,9 +921,9 @@ class TestFolderActions(FolderActionsTestBase):
         expected_folder_buttons = [
             {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
             {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
             {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
-            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
@@ -947,9 +947,9 @@ class TestFolderActions(FolderActionsTestBase):
         expected_folder_buttons = [
             {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
             {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
             {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
-            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach selection'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
@@ -976,7 +976,7 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
 
     copy_documents_from_workspace_action = {
         u'id': u'copy_documents_from_workspace',
-        u'title': u'Copy documents from workspace',
+        u'title': u'Copy back documents from workspace',
         u'icon': u''}
 
     workspace_actions = [list_workspaces_action,
@@ -1114,8 +1114,8 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
         self.login(self.dossier_responsible, browser)
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
-            {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
         ]
         self.assertListEqual(
@@ -1129,8 +1129,8 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
             {u'icon': u'', u'id': u'create_forwarding', u'title': u'Forward'},
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
-            {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
         ]
         self.assertListEqual(
@@ -1148,7 +1148,7 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
         self.login(self.regular_user, browser)
 
         expected_object_buttons = [
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
         ]
 
@@ -1162,7 +1162,7 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
         self.login(self.regular_user, browser)
 
         expected_object_buttons = [
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
         ]
 
@@ -1180,8 +1180,8 @@ class TestObjectButtonsGetForTemplates(ObjectButtonsTestBase):
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
-            {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
         ]
         self.assertListEqual(
@@ -1204,8 +1204,8 @@ class TestObjectButtonsGetForDossierTemplateDocuments(ObjectButtonsTestBase):
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
-            {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
         ]
         self.assertListEqual(
@@ -1225,8 +1225,8 @@ class TestObjectButtonsGetForDossierTemplateDocuments(ObjectButtonsTestBase):
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
-            {u'icon': u'', u'id': u'move_item', u'title': u'Move Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
         ]
         self.assertListEqual(
@@ -1243,7 +1243,7 @@ class TestObjectButtonsGetForProposalTemplates(ObjectButtonsTestBase):
         expected_object_buttons = [
             {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy Item'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'}
         ]
 
@@ -1263,17 +1263,17 @@ class TestFolderButtonsGetForTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
             {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
             {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
-            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
             {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
-            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
-            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Check in with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Check in without comment'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
             {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
-            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
-            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
@@ -1291,17 +1291,17 @@ class TestFolderButtonsGetForTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
             {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
             {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
-            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
             {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
-            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
-            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Check in with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Check in without comment'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
             {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
-            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
-            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
@@ -1322,17 +1322,17 @@ class TestFolderButtonsGetForDossierTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
             {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
             {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
-            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
             {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
-            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
-            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Check in with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Check in without comment'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
             {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
-            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
-            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}
@@ -1350,17 +1350,17 @@ class TestFolderButtonsGetForDossierTemplatesFolder(FolderActionsTestBase):
             {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
             {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
             {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy Items'},
-            {u'icon': u'', u'id': u'checkout', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
             {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
-            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Checkin with comment'},
-            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Checkin without comment'},
+            {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Check in with comment'},
+            {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Check in without comment'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
             {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
-            {u'icon': u'', u'id': u'add_participant', u'title': u'Add Participant'},
-            {u'icon': u'', u'id': u'move_items', u'title': u'Move Items'},
-            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move Items'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}

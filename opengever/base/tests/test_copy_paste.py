@@ -299,7 +299,7 @@ class TestCopyPaste(IntegrationTestCase):
             'Subdossier',
             'Participant',
             u'Actions \u25bc',
-            'Cover (PDF)',
+            'Cover page (PDF)',
             'Export as Zip',
             'Print details (PDF)',
             'Properties',

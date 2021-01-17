@@ -22,14 +22,14 @@ class TestReferenceBehavior(IntegrationTestCase):
     def test_set_next_reference_number_as_default_value(self, browser):
         self.login(self.administrator, browser)
         browser.open(self.branch_repofolder)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         self.assertEquals('2', browser.find('Reference Prefix').value)
 
     @browsing
     def test_using_already_used_prefix_is_not_possible(self, browser):
         self.login(self.administrator, browser)
         browser.open(self.repository_root)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         browser.fill({
             'Title': 'Test repository',
             'Reference Prefix': '1',
@@ -48,7 +48,7 @@ class TestReferenceBehavior(IntegrationTestCase):
                .having(reference_number_prefix='27'))
 
         browser.open(self.repository_root)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         browser.fill({
             'Title': u'Test repository',
             'Reference Prefix': '26',
@@ -62,7 +62,7 @@ class TestReferenceBehavior(IntegrationTestCase):
     def test_works_also_with_alpha_numeric_prefixes(self, browser):
         self.login(self.administrator, browser)
         browser.open(self.repository_root)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         browser.fill({
             'Title': u'Test repository',
             'Reference Prefix': 'a1x10',

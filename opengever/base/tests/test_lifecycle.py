@@ -35,7 +35,7 @@ class TestCustodyPeriodDefault(IntegrationTestCase):
     def test_custody_period_default(self, browser):
         self.login(self.administrator, browser=browser)
         browser.open(self.repository_root)
-        factoriesmenu.add(u'RepositoryFolder')
+        factoriesmenu.add(u'Repository Folder')
         browser.fill({'Title': 'My Dossier'}).save()
 
         self.assertEqual(
@@ -111,7 +111,7 @@ class TestCustodyPeriodVocabulary(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         browser.open(self.repository_root)
-        factoriesmenu.add(u'RepositoryFolder')
+        factoriesmenu.add(u'Repository Folder')
         form_field = browser.find('Regular safeguard period (years)')
         self.assertEqual(
             ['0', '30', '100', '150'],
@@ -319,7 +319,7 @@ class TestRetentionPeriodDefault(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         browser.open(self.repository_root)
-        factoriesmenu.add(u'RepositoryFolder')
+        factoriesmenu.add(u'Repository Folder')
         browser.fill({'Title': 'My Repofolder'}).save()
         dossier = browser.context
 
@@ -642,7 +642,7 @@ class TestArchivalValueDefault(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         browser.open(self.repository_root)
-        factoriesmenu.add(u'RepositoryFolder')
+        factoriesmenu.add(u'Repository Folder')
         browser.fill({'Title': 'My Folder'}).save()
         dossier = browser.context
 
@@ -701,7 +701,7 @@ class TestArchivalValueVocabulary(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         browser.open(self.repository_root)
-        factoriesmenu.add(u'RepositoryFolder')
+        factoriesmenu.add(u'Repository Folder')
         form_field = browser.find('Archival value')
         self.assertEqual(
             ['unchecked',

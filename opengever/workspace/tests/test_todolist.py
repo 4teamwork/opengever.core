@@ -17,7 +17,7 @@ class TestToDoList(SolrIntegrationTestCase):
     def test_todolist_is_addable_in_workspace(self, browser):
         self.login(self.workspace_member, browser)
         browser.visit(self.workspace)
-        factoriesmenu.add('ToDo list')
+        factoriesmenu.add('To-do list')
 
         form = browser.find_form_by_field('Title')
         form.fill({'Title': u'Retrospektive'})
@@ -34,7 +34,7 @@ class TestToDoList(SolrIntegrationTestCase):
         self.login(self.workspace_member, browser)
 
         browser.visit(self.todolist_general)
-        factoriesmenu.add('ToDo')
+        factoriesmenu.add('To-do item')
 
         form = browser.find_form_by_field('Title')
         form.fill({'Title': u'Bitte Vorbereitungen treffen.'})
