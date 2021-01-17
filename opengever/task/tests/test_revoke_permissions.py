@@ -226,7 +226,7 @@ class TestRevokePermissionsAction(IntegrationTestCase):
         self.assertEqual([], info_messages())
 
         browser.click_on("Revoke permissions")
-        self.assertIn('Permissions have been succesfully revoked',
+        self.assertIn('Temporary permissions for the responsible user (and their deputy) have been revoked.',
                       info_messages())
         self.assertEqual(self.subtask, browser.context)
 
@@ -243,8 +243,8 @@ class TestRevokePermissionsAction(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.task_in_protected_dossier)
         browser.click_on("Revoke permissions")
-        self.assertIn('Permissions have been succesfully revoked, '
-                      'you are no longer permitted to access the task.',
+        self.assertIn('Temporary permissions for the responsible user (and their deputy) have been revoked. '
+                      'You are no longer permitted to access the task.',
                       info_messages())
         self.assertEquals(api.portal.get(), browser.context)
 
@@ -259,11 +259,11 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='++add++opengever.task.task')
 
-        self.assertIsNone(browser.forms.get('form').find_field("Revoke permissions."))
+        self.assertIsNone(browser.forms.get('form').find_field("Revoke permissions on completion"))
 
         self.activate_feature('optional-task-permissions-revoking')
         browser.open(self.dossier, view='++add++opengever.task.task')
-        self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions."))
+        self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions on completion"))
 
     @browsing
     def test_revoke_permissions_only_shown_when_feature_is_enabled_in_edit_form(self, browser):
@@ -271,11 +271,11 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         self.set_workflow_state('task-state-open', self.task)
         browser.open(self.task, view='edit')
 
-        self.assertIsNone(browser.forms.get('form').find_field("Revoke permissions."))
+        self.assertIsNone(browser.forms.get('form').find_field("Revoke permissions on completion"))
 
         self.activate_feature('optional-task-permissions-revoking')
         browser.open(self.task, view='edit')
-        self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions."))
+        self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions on completion"))
 
     @browsing
     def test_cant_create_task_over_api_with_revoke_permissions_false_when_feature_disabled(self, browser):
@@ -305,7 +305,7 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         browser.open(self.inbox, view='++add++opengever.inbox.forwarding',
                      data=self.make_path_param(self.inbox_document))
         self.assertIsNone(
-            browser.forms.get('form').find_field("Revoke permissions."))
+            browser.forms.get('form').find_field("Revoke permissions on completion"))
 
         browser.fill({'Title': 'Anfragen'})
         browser.click_on('Save')
@@ -320,7 +320,7 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         browser.open(self.inbox, view='++add++opengever.inbox.forwarding',
                      data=self.make_path_param(self.inbox_document))
         self.assertIsNotNone(
-            browser.forms.get('form').find_field("Revoke permissions."))
+            browser.forms.get('form').find_field("Revoke permissions on completion"))
 
         browser.fill({'Title': 'Anfragen'})
         browser.click_on('Save')
@@ -332,7 +332,7 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
 
         browser.open(self.inbox_forwarding, view='edit')
         self.assertIsNone(
-            browser.forms.get('form').find_field("Revoke permissions."))
+            browser.forms.get('form').find_field("Revoke permissions on completion"))
 
         browser.fill({'Title': 'Anfragen'})
         browser.click_on('Save')
@@ -346,7 +346,7 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
 
         browser.open(self.inbox_forwarding, view='edit')
         self.assertIsNotNone(
-            browser.forms.get('form').find_field("Revoke permissions."))
+            browser.forms.get('form').find_field("Revoke permissions on completion"))
 
         browser.fill({'Title': 'Anfragen'})
         browser.click_on('Save')
@@ -365,7 +365,7 @@ class TestRevokePermissionsDefault(SolrIntegrationTestCase):
         with self.observe_children(self.dossier) as children:
             browser.open(self.dossier, view='++add++opengever.task.task')
             browser.fill({'Title': u'Test default revoke permissions',
-                          'Task Type': 'comment'})
+                          'Task type': 'comment'})
 
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill(self.secretariat_user)
@@ -409,7 +409,7 @@ class TestRevokePermissionsDefault(SolrIntegrationTestCase):
         with self.observe_children(self.dossier) as children:
             browser.open(self.dossier, view='++add++opengever.task.task')
             browser.fill({'Title': u'Test default revoke permissions',
-                          'Task Type': 'comment'})
+                          'Task type': 'comment'})
 
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill(self.secretariat_user)

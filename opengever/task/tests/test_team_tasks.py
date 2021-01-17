@@ -22,7 +22,7 @@ class TestTeamTasks(IntegrationTestCase):
         with self.observe_children(self.dossier) as children:
             browser.open(self.dossier)
             factoriesmenu.add('Task')
-            browser.fill({'Title': u'Team Task', 'Task Type': 'To comment'})
+            browser.fill({'Title': u'Team Task', 'Task type': 'To comment'})
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill('team:1')
             browser.find('Save').click()
@@ -67,7 +67,7 @@ class TestTeamTasks(IntegrationTestCase):
         with self.observe_children(self.dossier) as children:
             browser.open(self.dossier)
             factoriesmenu.add('Task')
-            browser.fill({'Title': u'Team Task', 'Task Type': 'To comment'})
+            browser.fill({'Title': u'Team Task', 'Task type': 'To comment'})
             form = browser.find_form_by_field('Responsible')
             form.find_widget('Responsible').fill('team:2')
             browser.find('Save').click()
@@ -173,7 +173,7 @@ class TestTeamTasks(IntegrationTestCase):
 
         browser.open(self.task)
         browser.click_on('Accept')
-        browser.fill({'Accept the task and ...': 'participate'})
+        browser.fill({'Accept task and ...': 'participate'})
         browser.click_on('Continue')
 
         self.assertEquals(self.regular_user.getId(), self.task.responsible)

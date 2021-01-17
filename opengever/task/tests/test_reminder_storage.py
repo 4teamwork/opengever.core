@@ -24,7 +24,7 @@ class TestTaskReminderStorage(IntegrationTestCase):
         self.assertEqual({
             self.regular_user.id: {
                 'option_type': 'same_day',
-                'option_title': 'At the morging of the deadline',
+                'option_title': 'On morning of deadline',
                 'params': {}}},
             self.storage._annotation_storage())
 
@@ -36,7 +36,7 @@ class TestTaskReminderStorage(IntegrationTestCase):
         self.assertEqual({
             self.dossier_responsible.id: {
                 'option_type': 'same_day',
-                'option_title': 'At the morging of the deadline',
+                'option_title': 'On morning of deadline',
                 'params': {}}
         }, self.storage._annotation_storage())
 

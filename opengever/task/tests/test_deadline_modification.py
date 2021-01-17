@@ -32,7 +32,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
     def _change_deadline(self, task, new_deadline, text=u'', browser=default_browser):
         browser.open(task)
         browser.click_on('Modify deadline')
-        browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y'),
+        browser.fill({'New deadline': new_deadline.strftime('%d.%m.%Y'),
                       'Response': text})
         browser.click_on('Save')
 
@@ -43,7 +43,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
 
         browser.open(self.task)
         browser.click_on('Modify deadline')
-        browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y')})
+        browser.fill({'New deadline': new_deadline.strftime('%d.%m.%Y')})
         browser.click_on('Save')
 
         self.assertEquals(new_deadline, self.task.deadline)
@@ -55,13 +55,13 @@ class TestDeadlineModificationForm(IntegrationTestCase):
 
         browser.open(self.task)
         browser.click_on('Modify deadline')
-        browser.fill({'New Deadline': self.task.deadline.strftime('%d.%m.%Y')})
+        browser.fill({'New deadline': self.task.deadline.strftime('%d.%m.%Y')})
         browser.click_on('Save')
 
         self.assertEquals('{}/@@modify_deadline'.format(self.task.absolute_url()),
                           browser.url)
         self.assertEquals(
-            ['The given deadline, is the current one.'],
+            ['The entered deadline is the same as the current one.'],
             browser.css('#formfield-form-widgets-new_deadline .error').text)
 
     @browsing

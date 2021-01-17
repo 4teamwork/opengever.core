@@ -1271,7 +1271,7 @@ class TestTaskDefaults(TestDefaultsBase):
                 factoriesmenu.add(u'Task')
                 browser.fill({
                     u'Title': TASK_REQUIREDS['title'],
-                    u'Task Type': TASK_REQUIREDS['task_type']})
+                    u'Task type': TASK_REQUIREDS['task_type']})
 
                 form = browser.find_form_by_field('Responsible')
                 form.find_widget('Responsible').fill(':'.join(

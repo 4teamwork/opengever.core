@@ -27,8 +27,8 @@ class TestOfficeconnectorTaskAPIWithCheckoutWithRESTAPI(OCIntegrationTestCase):
         factoriesmenu.add('Task')
         browser.fill({
             'Title': 'Task title',
-            'Task Type': 'For direct execution',
-            'Related Items': document,
+            'Task type': 'For direct execution',
+            'Related items': document,
         })
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(

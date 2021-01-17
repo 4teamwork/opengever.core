@@ -38,7 +38,7 @@ class TestResolveMultiAdminUnitTasks(IntegrationTestCase):
             self.document.Title(),
             IReferenceNumber(self.document).get_number(),
             aq_parent(aq_inner(self.document)).Title())
-        browser.fill({'Documents to deliver': document_label, 'Response': 'Done!'})
+        browser.fill({'Documents to return': document_label, 'Response': 'Done!'})
         browser.click_on('Save')
 
         self.assertEqual('task-state-resolved',
@@ -54,7 +54,7 @@ class TestResolveMultiAdminUnitTasks(IntegrationTestCase):
         browser.open(self.inbox_task, view='tabbedview_view-overview')
 
         self.assertEqual(
-            u'Resolved by B\xe4rfuss K\xe4thi (kathi.barfuss) and Vertr\xe4gsentwurf returned',
+            u'Resolved by B\xe4rfuss K\xe4thi (kathi.barfuss), returned Vertr\xe4gsentwurf',
             browser.css('.answers h3')[0].text)
         self.assertEqual(self.document.absolute_url(),
                          browser.css('.answers h3 a')[1].get('href'))

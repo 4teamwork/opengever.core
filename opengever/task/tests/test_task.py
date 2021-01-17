@@ -75,7 +75,7 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         browser.open(self.dossier, view='++add++opengever.task.task')
 
         browser.fill({'Title': 257 * 'x',
-                      'Task Type': 'To comment',
+                      'Task type': 'To comment',
                       })
 
         org_unit = get_current_org_unit()
@@ -284,7 +284,7 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         factoriesmenu.add('Task')
 
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment'})
+                      'Task type': 'To comment'})
         form = browser.find_form_by_field('Responsible')
         org_unit = get_current_org_unit()
         form.find_widget('Responsible').fill(
@@ -310,7 +310,7 @@ class TestTaskIntegration(SolrIntegrationTestCase):
 
         browser.open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment'})
+                      'Task type': 'To comment'})
 
         # Fill responsible manually
         form = browser.find_form_by_field('Responsible')
@@ -359,8 +359,8 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         browser.visit(self.empty_dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment',
-                      'Related Items': self.document})
+                      'Task type': 'To comment',
+                      'Related items': self.document})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(responsible_users)
@@ -394,7 +394,7 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         browser.visit(self.empty_dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment'})
+                      'Task type': 'To comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(responsible_users)
@@ -485,7 +485,7 @@ class TestDeadlineDefaultValue(IntegrationTestCase):
 
         browser.open(self.empty_dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test task',
-                      'Task Type': 'comment'})
+                      'Task type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
@@ -504,7 +504,7 @@ class TestDeadlineDefaultValue(IntegrationTestCase):
 
         browser.open(self.empty_dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test task',
-                      'Task Type': 'comment'})
+                      'Task type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(

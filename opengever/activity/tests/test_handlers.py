@@ -52,8 +52,8 @@ class TestWatcherAddedEventHandler(IntegrationTestCase):
         notify(WatcherAddedEvent(self.task.oguid, self.meeting_user.getId()))
         activity = Activity.query.first()
         self.assertEqual('task-watcher-added', activity.kind)
-        self.assertEqual('Added as watcher of the task', activity.label)
+        self.assertEqual('Added as watcher of task', activity.label)
         self.assertEqual('kathi.barfuss', activity.actor_id)
-        self.assertEqual(u'Added as watcher of the task by <a href="http://nohost/plone/'
+        self.assertEqual(u'Added as watcher of task by <a href="http://nohost/plone/'
                          u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
                          activity.summary)

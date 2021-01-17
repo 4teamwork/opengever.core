@@ -53,7 +53,7 @@ class TestTaskOverview(SolrIntegrationTestCase):
 
         main_attributes_table = browser.css('#main_attributesBox .listing').first  # noqa
         date_of_completion_row = main_attributes_table.lists()[-1]
-        self.assertEquals(['Date of completion', 'Feb 02, 2015'],
+        self.assertEquals(['Completion date', 'Feb 02, 2015'],
                           date_of_completion_row)
 
     @browsing
@@ -161,14 +161,14 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
 
         browser.open(self.sequential_task, view='tabbedview_view-overview')
         self.assertEquals(
-            [u'Sequential process'],
+            [u'Sequential workflow'],
             browser.css('#sub_taskBox .sequence_type').text)
 
         # parallel
         alsoProvides(self.task, IFromParallelTasktemplate)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
-            [u'Parallel process'],
+            [u'Parallel workflow'],
             browser.css('#sub_taskBox .sequence_type').text)
 
     @browsing

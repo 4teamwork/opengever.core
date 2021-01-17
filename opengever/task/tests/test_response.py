@@ -17,7 +17,7 @@ class TestTaskResponses(IntegrationTestCase):
         browser.open(self.task)
         browser.click_on('Modify deadline')
         browser.fill({'Response': u'Nicht mehr so dringend ...',
-                      'New Deadline': '1.1.2017'})
+                      'New deadline': '1.1.2017'})
         browser.click_on('Save')
 
         response = IResponseContainer(self.task).list()[-1]
@@ -36,8 +36,8 @@ class TestTaskResponseForm(IntegrationTestCase):
         browser.click_on('Close')
 
         self.assertEquals(
-            ['This transtion revokes temporary permissions for the responsible '
-             'user and agency group.'],
+            ['Temporary permissions for the responsible user (and their deputy) '
+             'will be revoked when performing this transition.'],
             info_messages())
 
         self.login(self.regular_user, browser=browser)
@@ -54,9 +54,9 @@ class TestTaskResponseForm(IntegrationTestCase):
         browser.open(self.subtask, view='tabbedview_view-overview')
         browser.click_on('Close')
 
-        self.assertEquals(['Temporary permissions will not be revoked by this '
-                           'transtion as revoke permissions is unchecked for '
-                           'this task'],
+        self.assertEquals(['Temporary permissions for the responsible user '
+                           '(and their deputy) will not be revoked by this transition '
+                           'because that option was disabled for this particular task.'],
                           info_messages())
 
     @browsing
@@ -66,7 +66,7 @@ class TestTaskResponseForm(IntegrationTestCase):
         browser.click_on('Close')
         browser.click_on('Save')
 
-        self.assertEquals(['Review state successfully changed.'],
+        self.assertEquals(['State changed successfully.'],
                           info_messages())
         self.assertEquals(self.subtask, browser.context)
 
@@ -84,7 +84,7 @@ class TestTaskResponseForm(IntegrationTestCase):
         browser.click_on('Save')
 
         self.assertEquals(
-            ['Review state successfully changed, you are no longer permitted '
+            ['State changed successfully, you are no longer permitted '
              'to access the task.'],
             info_messages())
         self.assertEquals(api.portal.get(), browser.context)

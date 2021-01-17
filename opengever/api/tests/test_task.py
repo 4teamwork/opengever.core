@@ -62,7 +62,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         browser.open(self.task)
         browser.click_on('Modify deadline')
         browser.fill({'Response': 'Nicht mehr dringend',
-                      'New Deadline': '1.1.2023'})
+                      'New deadline': '1.1.2023'})
         browser.click_on('Save')
 
         self.login(self.regular_user, browser=browser)

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-16 18:45+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -22,12 +22,12 @@ msgstr "${num} documents were copied."
 #. German translation: ${subtask_num} Unteraufgaben wurden erstellt.
 #: ./opengever/task/browser/delegate/metadata.py
 msgid "${subtask_num} subtasks were create."
-msgstr "${subtask_num} subtasks were create."
+msgstr "${subtask_num} subtasks were created."
 
 #. German translation: Änderungen an der Antwort ${response_id} wurden gespeichert
 #: ./opengever/task/response.py
 msgid "Changes saved to response id ${response_id}."
-msgstr "Changes saved to response id ${response_id}."
+msgstr "Saved changes to ${response_id}."
 
 #. German translation: Löschen
 #: ./opengever/task/viewlets/templates/responseview.pt
@@ -52,17 +52,17 @@ msgstr "No response selected for saving."
 #. German translation: Antwort ${response_id} gelöscht
 #: ./opengever/task/response.py
 msgid "Removed response id ${response_id}."
-msgstr "Removed response id ${response_id}."
+msgstr "Removed response ${response_id}."
 
 #. German translation: Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden
 #: ./opengever/task/response.py
 msgid "Response id ${response_id} does not exist so it cannot be removed."
-msgstr "Response id ${response_id} does not exist so it cannot be removed."
+msgstr "Response ${response_id} doesn't exist and therefore couldn't be removed."
 
 #. German translation: Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden
 #: ./opengever/task/response.py
 msgid "Response id ${response_id} is no integer so it cannot be removed."
-msgstr "Response id ${response_id} is no integer so it cannot be removed."
+msgstr "Response ID ${response_id} is not an integer and therefore couldn't be removed."
 
 #. German translation: Wählen Sie die mit der Aufgabe verknüpften Dokumente aus, die Sie an die neuen Unteraufgaben anhängen wollen.
 #: ./opengever/task/browser/delegate/recipients.py
@@ -94,7 +94,7 @@ msgstr "The forwarding has been stored in the local inbox"
 #: ./opengever/task/browser/accept/existingdossier.py
 #: ./opengever/task/browser/accept/newdossier.py
 msgid "The forwarding has been stored in the local inbox and the succesor task has been created"
-msgstr "The forwarding has been stored in the local inbox and the succesor task has been created"
+msgstr "Forwarding has been stored in the local inbox and successor task has been created"
 
 #. German translation: Die Weiterleitung wurde nun dem Dossier zugewiesen.
 #: ./opengever/task/browser/accept/existingdossier.py
@@ -134,7 +134,7 @@ msgstr "You are not allowed to edit responses."
 #. German translation: Sie sind nicht dem Auftragnehmer-Mandanten (${client}) zugewiesen. Sie können die Aufgabe nur direkt im Dossier des Auftraggebers behandeln.
 #: ./opengever/task/browser/accept/main.py
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
-msgstr "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
+msgstr "You are not assigned to the responsible organization (${client}). You can only process the task in the issuer's dossier."
 
 #. German translation: Sie haben nicht genügend Berechtigungen um Dokumente im ausgewählten Dossier hinzuzfügen. Möglicherweise ist das Dossier bereits abgeschlossen.
 #: ./opengever/task/browser/close.py
@@ -150,19 +150,19 @@ msgstr "You cannot add tasks in the selected dossier. Either the dossier is clos
 #. Default: "file in existing dossier in ${client}"
 #: ./opengever/task/browser/accept/main.py
 msgid "accept_method_existing_dossier"
-msgstr "file in existing dossier in ${client}"
+msgstr "Process in existing dossier on ${client}"
 
 #. German translation: ... im Eingangskorb von ${client} ablegen und in bestehendem Dossier auf ${client} bearbeiten
 #. Default: "... store in  ${client}'s inbox and process in an existing dossier on ${client}"
 #: ./opengever/task/browser/accept/main.py
 msgid "accept_method_forwarding_existing_dossier"
-msgstr "... store in  ${client}'s inbox and process in an existing dossier on ${client}"
+msgstr "... store in ${client}'s inbox and process in existing dossier on ${client}"
 
 #. German translation: ... im Eingangskorb von ${client} ablegen und in neuem Dossier auf ${client} bearbeiten
 #. Default: "... store in  ${client}'s inbox and process in a new dossier on ${client}"
 #: ./opengever/task/browser/accept/main.py
 msgid "accept_method_forwarding_new_dossier"
-msgstr "... store in  ${client}'s inbox and process in a new dossier on ${client}"
+msgstr "... store in ${client}'s inbox and process in new dossier on ${client}"
 
 #. German translation: ... im Eingangskorb von ${client} ablegen
 #. Default: "... store in ${client}'s inbox"
@@ -174,13 +174,13 @@ msgstr "... store in ${client}'s inbox"
 #. Default: "file in new dossier in ${client}"
 #: ./opengever/task/browser/accept/main.py
 msgid "accept_method_new_dossier"
-msgstr "file in new dossier in ${client}"
+msgstr "Process in new dossier on ${client}"
 
 #. German translation: direkt im Dossier des Auftraggebers bearbeiten
 #. Default: "process in issuer's dossier"
 #: ./opengever/task/browser/accept/main.py
 msgid "accept_method_participate"
-msgstr "process in issuer's dossier"
+msgstr "Process in issuer's dossier"
 
 #. German translation: AW
 #. Default: "RE"
@@ -246,13 +246,13 @@ msgstr "Responsibles"
 #. Default: "The documents (${title}) are still checked out.                                 Please checkin them in bevore deliver"
 #: ./opengever/task/validators.py
 msgid "error_checked_out_document"
-msgstr "The documents (${title}) are still checked out.                                 Please checkin them in bevore deliver"
+msgstr "The following documents need to be checked in before proceeding: ${title}"
 
 #. German translation: Mandanten-Wechsel sind bei bereits akzeptierten Aufgaben nicht erlaubt.
 #. Default: "Admin unit changes are not allowed if the task or forwarding is already accepted."
 #: ./opengever/task/browser/assign.py
 msgid "error_no_admin_unit_change_in_progress_state"
-msgstr "Admin unit changes are not allowed if the task or forwarding is already accepted."
+msgstr "Organization / department changes are not allowed if the task or forwarding has already been accepted."
 
 #. German translation: Teams sind nur bei offenen Aufgaben oder Weiterleitungen als Auftragnehmer erlaubt.
 #. Default: "Team responsibles are only allowed if the task or forwarding is open."
@@ -294,7 +294,7 @@ msgstr "existing dossier"
 #. Default: "Additional"
 #: ./opengever/task/task.py
 msgid "fieldset_additional"
-msgstr "Additional"
+msgstr "Advanced"
 
 #. German translation: Allgemein
 #. Default: "Common"
@@ -306,7 +306,7 @@ msgstr "Common"
 #. Default: "Select the target dossier where you like to handle the task."
 #: ./opengever/task/browser/accept/existingdossier.py
 msgid "help_accept_select_dossier"
-msgstr "Select the target dossier where you like to handle the task."
+msgstr "Select target dossier in which you'd like to process the task."
 
 #. German translation: Wählen Sie den Typ des neuen Dossiers aus
 #. Default: "Select the type for the new dossier"
@@ -318,29 +318,30 @@ msgstr "Select the type for the new dossier"
 #. Default: "Select the repository folder within the dossier should be created."
 #: ./opengever/task/browser/accept/newdossier.py
 msgid "help_accept_select_repositoryfolder"
-msgstr "Select the repository folder within the dossier should be created."
+msgstr "Select the repository folder in which the dossier should be created."
 
 #. German translation: Geben Sie einen Text für die automatisch erstellte Antwort ein.
 #. Default: "Enter a answer text which will be shown as response when the task is accepted."
 #: ./opengever/task/browser/accept/main.py
 #: ./opengever/task/browser/close.py
 msgid "help_accept_task_response"
-msgstr "Enter a answer text which will be shown as response when the task is accepted."
+msgstr "Enter an answer text that will be shown as the response when the task is accepted."
 
 #. German translation: Geben sie einen Antwort text ein, dieser wird bei der Aufgabenkopie als Antwort hinzugefügt.
 #. Default: "Enter a answer text which will be shown as response on the succesor task."
 #: ./opengever/task/browser/assign_dossier.py
 msgid "help_assign_to_dossier_task_response"
-msgstr "Enter a answer text which will be shown as response on the succesor task."
+msgstr "Enter an answer text that will be added as a response on the succesor task."
 
 #. German translation: Wählen Sie das Dossier aus, in welche Sie die ausgewählten Dokumente kopieren möchten.
 #. Default: "Choose the target dossier where the documents should be filed."
 #: ./opengever/task/browser/close.py
 msgid "help_close_choose_dossier"
-msgstr "Choose the target dossier where the documents should be filed."
+msgstr "Choose the target dossier into which the documents should be copied."
 
 #. German translation: Wählen Sie hier bei Bedarf die Dokumente aus, die Sie in ein eigenes Dossier kopieren möchten.
 #. Default: "You can copy attached documents to your client by selecting here the documents to copy."
+#. MARKER: check in context
 #: ./opengever/task/browser/close.py
 msgid "help_close_documents"
 msgstr "You can copy attached documents to your client by selecting here the documents to copy."
@@ -361,14 +362,14 @@ msgstr "Enter a answer text which will be shown as response when the task is com
 #: ./opengever/task/response.py
 #: ./opengever/task/task.py
 msgid "help_date_of_completion"
-msgstr "help_date_of_completion"
+msgstr "Date on which the task was completed"
 
 #. German translation: Tragen Sie ein Datum ein, bis wann die Aufgabe erledigt werden muss
 #. Default: "Deadline"
 #: ./opengever/task/browser/delegate/metadata.py
 #: ./opengever/task/task.py
 msgid "help_deadline"
-msgstr "Deadline"
+msgstr "Date by which the task must be completed"
 
 #. German translation: Kosten in CHF
 #. Default: "Cost in CHF"
@@ -397,65 +398,65 @@ msgstr "Duration in h"
 #. German translation: Die ausgewählten Benutzer und Gruppen werden über die Erstellung dieser Aufgabe benachrichtigt.
 #: ./opengever/task/task.py
 msgid "help_informed_principals"
-msgstr "help_informed_principals"
+msgstr "Selected users and groups will be notified about the creation of this task."
 
 #. German translation: Eingangskorb-Stellvertreter Berechtigung für diese Aufgabe deaktivieren
 #. Default: "Deactivates the inbox-group permission."
 #: ./opengever/task/task.py
 msgid "help_is_private"
-msgstr "Deactivates the inbox-group permission."
+msgstr "Disable inbox deputy permissions for this task."
 
 #. German translation: Wann möchten Sie über das Fristende der Aufgabe benachrichtigt werden.
 #. Default: "Set a reminder to get notified based on the duedate"
 #: ./opengever/task/response.py
 msgid "help_reminder"
-msgstr "Set a reminder to get notified based on the duedate"
+msgstr "Set a reminder if you'd like to get a notification when the due date approaches."
 
 #. German translation: Wählen Sie die verantwortlichen Personen aus.
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
 #: ./opengever/task/transition.py
 msgid "help_responsible"
-msgstr "help_responsible"
+msgstr "Choose the responsible user(s)"
 
 #. German translation: Wählen Sie zuerst den Mandanten des Auftragnehmers, anschliessend den Auftragnehmer.
 #: ./opengever/task/task.py
 #: ./opengever/task/transition.py
 msgid "help_responsible_client"
-msgstr "help_responsible_client"
+msgstr "First choose the responsible user's organization / department, then the user."
 
 #. German translation: Berechtigungen für den Auftragnehmer und dessen Stellvertretung nach Abschluss oder Neuzuweisung der Aufgabe entziehen.
 #. Default: "Revoke permissions when closing or reassigning task."
 #: ./opengever/task/task.py
 msgid "help_revoke_permissions"
-msgstr "Revoke permissions when closing or reassigning task."
+msgstr "Revoke access for the responsible user (and their deputy) once this task is closed or reassigned."
 
 #. German translation: Wählen Sie den Auftragstyp
 #: ./opengever/task/task.py
 msgid "help_task_type"
-msgstr "help_task_type"
+msgstr "Choose task type"
 
 #. German translation: Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein
 #: ./opengever/task/browser/delegate/metadata.py
 #: ./opengever/task/task.py
 msgid "help_text"
-msgstr "help_text"
+msgstr "Enter detailed instructions or a comment describing the work"
 
 #. German translation: Der Name der Aufgabe
 #: ./opengever/task/browser/delegate/metadata.py
 #: ./opengever/task/task.py
 msgid "help_title"
-msgstr "help_title"
+msgstr "The task's title"
 
 #. German translation: In Auftrag gegebene Aufgaben
 msgid "issuedtasks"
-msgstr "issuedtasks"
+msgstr "Issued tasks"
 
 #. German translation: Diese Aufgabe akzeptieren und ...
 #. Default: "Accept the task and ..."
 #: ./opengever/task/browser/accept/main.py
 msgid "label_accept_choose_method"
-msgstr "Accept the task and ..."
+msgstr "Accept task and ..."
 
 #. German translation: Weiterleitung akzeptieren und ...
 #. Default: "Accept forwarding and ..."
@@ -491,19 +492,19 @@ msgstr "Add task to sequence"
 #. Default: "Agency"
 #: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
-msgstr "Agency"
+msgstr "Deputy settings"
 
 #. German translation: Weiterleitung zuweisen an ein ...
 #. Default: "Assign to a ..."
 #: ./opengever/task/browser/assign_dossier.py
 msgid "label_assign_choose_method"
-msgstr "Assign to a ..."
+msgstr "Assign to ..."
 
 #. German translation: Auftragnehmer
 #. Default: "by"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_by_author"
-msgstr "by"
+msgstr "Responsible"
 
 #. German translation: Zieldossier
 #. Default: "Target dossier"
@@ -521,14 +522,14 @@ msgstr "Documents to copy"
 #. Default: "Documents to deliver"
 #: ./opengever/task/browser/complete.py
 msgid "label_complete_documents"
-msgstr "Documents to deliver"
+msgstr "Documents to return"
 
 #. German translation: Hauptaufgabe
 #. Default: "Containing tasks"
 #: ./opengever/task/activities.py
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
-msgstr "Containing tasks"
+msgstr "Main task"
 
 #. German translation: erstellt am
 #. Default: "created"
@@ -542,7 +543,7 @@ msgstr "created"
 #: ./opengever/task/response.py
 #: ./opengever/task/task.py
 msgid "label_date_of_completion"
-msgstr "Date of completion"
+msgstr "Completion date"
 
 #. German translation: Zu erledigen bis
 #. Default: "Deadline"
@@ -574,13 +575,13 @@ msgstr "You are not allowed to edit this response."
 #. Default: "effective cost"
 #: ./opengever/task/task.py
 msgid "label_effectiveCost"
-msgstr "effective cost"
+msgstr "Effective cost"
 
 #. German translation: Effektive Dauer (h)
 #. Default: "effective duration"
 #: ./opengever/task/task.py
 msgid "label_effectiveDuration"
-msgstr "effective duration"
+msgstr "Effective duration"
 
 #. German translation: Bitte tragen sie ihre Antwort unten ein
 #. Default: "Please enter your response below"
@@ -592,7 +593,7 @@ msgstr "Please enter your response below"
 #. Default: "expected cost"
 #: ./opengever/task/task.py
 msgid "label_expectedCost"
-msgstr "expected cost"
+msgstr "Expected cost"
 
 #. German translation: Geschätzte Dauer (h)
 #. Default: "Expected duration"
@@ -604,10 +605,11 @@ msgstr "Expected duration"
 #. Default: "Start with work"
 #: ./opengever/task/task.py
 msgid "label_expectedStartOfWork"
-msgstr "Start with work"
+msgstr "Start of work"
 
 #. German translation: Info an
 #. Default: "Info at"
+#. MARKER: double check
 #: ./opengever/task/task.py
 msgid "label_informed_principals"
 msgstr "Info at"
@@ -642,14 +644,14 @@ msgstr "last modified"
 #. Default: "Main Atrributes"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_main_attributes"
-msgstr "Main Atrributes"
+msgstr "Properties"
 
 #. German translation: Neue Frist
 #. Default: "New Deadline"
 #: ./opengever/task/browser/modify_deadline.py
 #: ./opengever/task/transition.py
 msgid "label_new_deadline"
-msgstr "New Deadline"
+msgstr "New deadline"
 
 #. German translation: Nächste Aufgabe
 #. Default: "Next task"
@@ -661,13 +663,13 @@ msgstr "Next task"
 #. Default: "Parallel process"
 #: ./opengever/task/browser/overview.py
 msgid "label_parallel_process"
-msgstr "Parallel process"
+msgstr "Parallel workflow"
 
 #. German translation: Dossiertitel
 #. Default: "Dossiertitle"
 #: ./opengever/task/browser/overview.py
 msgid "label_parent_dossier_title"
-msgstr "Dossiertitle"
+msgstr "Dossier title"
 
 #. German translation: Vorgänger
 #. Default: "Predecessor"
@@ -699,7 +701,7 @@ msgstr "New task (private) opened by ${user}"
 #: ./opengever/task/response.py
 #: ./opengever/task/task.py
 msgid "label_related_items"
-msgstr "Related Items"
+msgstr "Related items"
 
 #. German translation: Erinnerung
 #. Default: "Reminder"
@@ -713,7 +715,7 @@ msgstr "Reminder"
 #: ./opengever/task/task.py
 #: ./opengever/task/transition.py
 msgid "label_resonsible_client"
-msgstr "Responsible Client"
+msgstr "Responsible user's organization / department"
 
 #. German translation: Antworttext
 #. Default: "Response"
@@ -735,13 +737,13 @@ msgstr "Responsible"
 #. Default: "Return to issue."
 #: ./opengever/task/templates/edit_response.pt
 msgid "label_return_to_issue"
-msgstr "Return to issue."
+msgstr "Back to task"
 
 #. German translation: Berechtigungen nach Abschluss entziehen
 #. Default: "Revoke permissions."
 #: ./opengever/task/task.py
 msgid "label_revoke_permissions"
-msgstr "Revoke permissions."
+msgstr "Revoke permissions on completion"
 
 #. German translation: Ablauf
 #. Default: "Sequence"
@@ -753,19 +755,19 @@ msgstr "Sequence"
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_sequence_number"
-msgstr "Sequence Number"
+msgstr "Sequence number"
 
 #. German translation: Sequenzieller Ablauf
 #. Default: "Sequential process"
 #: ./opengever/task/browser/overview.py
 msgid "label_sequential_process"
-msgstr "Sequential process"
+msgstr "Sequential workflow"
 
 #. German translation: Unteraufgaben
 #. Default: "Sub tasks"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_sub_task"
-msgstr "Sub tasks"
+msgstr "Subtasks"
 
 #. German translation: Kopierte Aufgabe
 #. Default: "Successor task"
@@ -783,7 +785,7 @@ msgstr "New task opened by ${user}"
 #. Default: "Task commented"
 #: ./opengever/task/response_description.py
 msgid "label_task_commented"
-msgstr "Task commented"
+msgstr "Comment added"
 
 #. German translation: Aufgabentitel
 #. Default: "Task title"
@@ -798,19 +800,19 @@ msgstr "Task title"
 #: ./opengever/task/browser/overview.py
 #: ./opengever/task/task.py
 msgid "label_task_type"
-msgstr "Task Type"
+msgstr "Task type"
 
 #. German translation: Als Beobachter der Aufgabe hinzugefügt
 #. Default: "Added as watcher of the task"
 #: ./opengever/task/activities.py
 msgid "label_task_watcher_added"
-msgstr "Added as watcher of the task"
+msgstr "Added as watcher of task"
 
 #. German translation: Standardablauf Position
 #. Default: "Tasktemplate Position"
 #: ./opengever/task/task.py
 msgid "label_tasktemplate_position"
-msgstr "Tasktemplate Position"
+msgstr "Task template position"
 
 #. German translation: Beschreibung
 #. Default: "Text"
@@ -833,7 +835,7 @@ msgstr "Title"
 #: ./opengever/task/browser/complete.py
 #: ./opengever/task/browser/modify_deadline.py
 msgid "label_transition"
-msgstr "Transition"
+msgstr "Action"
 
 #. German translation: Status
 #. Default: "State"
@@ -851,7 +853,7 @@ msgstr "State"
 #. Default: "Choose remind date"
 #: ./opengever/task/response.py
 msgid "lable_reminder_choose_date"
-msgstr "Choose remind date"
+msgstr "Reminder date"
 
 #. German translation: Frist wurde erfolgreich angepasst.
 #. Default: "Deadline successfully changed."
@@ -863,25 +865,25 @@ msgstr "Deadline successfully changed."
 #. Default: "Temporary permissions will not be revoked by this transtion as revoke permissions is unchecked for this task"
 #: ./opengever/task/response.py
 msgid "msg_not_revoking_permissions"
-msgstr "Temporary permissions will not be revoked by this transtion as revoke permissions is unchecked for this task"
+msgstr "Temporary permissions for the responsible user (and their deputy) will not be revoked by this transition because that option was disabled for this particular task."
 
 #. German translation: Diese Statusänderung führt dazu, dass temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung entzogen werden.
 #. Default: "This transtion revokes temporary permissions for the responsible user and agency group."
 #: ./opengever/task/response.py
 msgid "msg_revoking_permissions"
-msgstr "This transtion revokes temporary permissions for the responsible user and agency group."
+msgstr "Temporary permissions for the responsible user (and their deputy) will be revoked when performing this transition."
 
 #. German translation: Die temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung wurden entzogen.
 #. Default: "Permissions have been succesfully revoked"
 #: ./opengever/task/browser/revoke_permissions.py
 msgid "msg_revoking_successful"
-msgstr "Permissions have been succesfully revoked"
+msgstr "Temporary permissions for the responsible user (and their deputy) have been revoked."
 
 #. German translation: Die temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung wurden entzogen. Sie sind nicht länger berechtigt auf die Aufgabe zuzugreifen.
 #. Default: "Permissions have been succesfully revoked, you are no longer permitted to access the task."
 #: ./opengever/task/browser/revoke_permissions.py
 msgid "msg_revoking_successful_no_longer_permission_to_access"
-msgstr "Permissions have been succesfully revoked, you are no longer permitted to access the task."
+msgstr "Temporary permissions for the responsible user (and their deputy) have been revoked. You are no longer permitted to access the task."
 
 #. German translation: Aufgabe erfolgreich neu zugewiesen.
 #. Default: "Task successfully reassigned."
@@ -905,17 +907,17 @@ msgstr "Commented by ${user}"
 #. Default: "Review state successfully changed."
 #: ./opengever/task/response.py
 msgid "msg_transition_successful"
-msgstr "Review state successfully changed."
+msgstr "State changed successfully."
 
 #. German translation: Status erfolgreich geändert, Sie sind nicht länger berechtigt auf die Aufgabe zuzugreifen.
 #. Default: "Review state successfully changed, you are no longer permitted to access the task."
 #: ./opengever/task/response.py
 msgid "msg_transition_successful_no_longer_permission_to_access"
-msgstr "Review state successfully changed, you are no longer permitted to access the task."
+msgstr "State changed successfully, you are no longer permitted to access the task."
 
 #. German translation: Meine Aufgaben
 msgid "mytasks"
-msgstr "mytasks"
+msgstr "My tasks"
 
 #. German translation: neues Dossier
 #. Default: "new dossier"
@@ -927,7 +929,7 @@ msgstr "new dossier"
 #. Default: "Please choose a remind date"
 #: ./opengever/task/response.py
 msgid "no_remind_date_error"
-msgstr "Please choose a remind date"
+msgstr "Please choose a reminder date"
 
 #. German translation: Keine Erinnerung
 #. Default: "No reminder"
@@ -945,13 +947,13 @@ msgstr "Rejected by ${user}."
 #. Default: "Progress:"
 #: ./opengever/task/viewlets/templates/responseview.pt
 msgid "progress"
-msgstr "Progress:"
+msgstr "History"
 
 #. German translation: Zu Beginn der Woche
 #. Default: "At the beginning of the week of the deadline"
 #: ./opengever/task/reminder/model.py
 msgid "reminder_option_title_beginning_of_week"
-msgstr "At the beginning of the week of the deadline"
+msgstr "At the start of the week of deadline"
 
 #. German translation: An bestimmtem Tag
 #. Default: "On a specific date"
@@ -975,7 +977,7 @@ msgstr "One week before deadline"
 #. Default: "At the morging of the deadline"
 #: ./opengever/task/reminder/model.py
 msgid "reminder_option_title_today"
-msgstr "At the morging of the deadline"
+msgstr "On morning of deadline"
 
 #. German translation: Antwort
 #. Default: "Response"
@@ -987,7 +989,7 @@ msgstr "Response"
 #. Default: "The given deadline, is the current one."
 #: ./opengever/task/browser/modify_deadline.py
 msgid "same_deadline_error"
-msgstr "The given deadline, is the current one."
+msgstr "The entered deadline is the same as the current one."
 
 #. German translation: Speichern
 #. Default: "Save"
@@ -1027,7 +1029,7 @@ msgstr "Step 4"
 #. Default: "Added as watcher of the task by ${user}"
 #: ./opengever/task/activities.py
 msgid "summary_task_watcher_added"
-msgstr "Added as watcher of the task by ${user}"
+msgstr "Added as watcher of task by ${user}"
 
 #. German translation: Die Aufgaben-Frist endet am ${deadline}
 #. Default: "Deadline is on ${deadline}"
@@ -1051,13 +1053,13 @@ msgstr "Accept task"
 #. Default: "Assign task"
 #: ./opengever/task/browser/assign.py
 msgid "title_assign_task"
-msgstr "Assign task"
+msgstr "Reassign task"
 
 #. German translation: Einem Dossier zuweisen
 #. Default: "Assign to Dossier"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "title_assign_to_dossier"
-msgstr "Assign to Dossier"
+msgstr "Assign to dossier"
 
 #. German translation: Aufgabe abschliessen
 #. Default: "Close task"
@@ -1220,7 +1222,7 @@ msgstr "Task resolved"
 #. Default: "Task revised"
 #: ./opengever/task/response_description.py
 msgid "transition_label_revise"
-msgstr "Task revised"
+msgstr "Task revision requested"
 
 #. German translation: Aufgabe übersprungen
 #. Default: "Task skipped"
@@ -1242,6 +1244,7 @@ msgstr "Accepted by ${user}, responsible changed from ${old_responsible} to ${ne
 
 #. German translation: Einem Dossier zugewiesen durch ${user} Nachfolgeaufgabe=${successor}
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
+#. MARKER: double check
 #: ./opengever/task/response_description.py
 msgid "transition_msg_assign_to_dossier"
 msgstr "Assigned to dossier by ${user} successor=${successor}"
@@ -1298,7 +1301,7 @@ msgstr "Task opened automatically"
 #. Default: "Reactivate by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_reactivate"
-msgstr "Reactivate by ${user}"
+msgstr "Reactivated by ${user}"
 
 #. German translation: Neu zugewiesen von ${responsible_old} an ${responsible_new}
 #. Default: "Reassigned from ${responsible_old} to ${responsible_new}"
@@ -1334,13 +1337,13 @@ msgstr "Resolved by ${user}"
 #. Default: "Resolved by ${user} and ${documents} returned"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_resolve_with_documents"
-msgstr "Resolved by ${user} and ${documents} returned"
+msgstr "Resolved by ${user}, returned ${documents}"
 
 #. German translation: Überarbeitung angefordert durch ${user}
 #. Default: "Revised by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_revise"
-msgstr "Revised by ${user}"
+msgstr "Revision requested by ${user}"
 
 #. German translation: Übersprungen durch ${user}
 #. Default: "Skipped by ${user}"

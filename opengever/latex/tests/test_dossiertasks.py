@@ -124,7 +124,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
         browser.login().visit(dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment'})
+                      'Task type': 'To comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(TEST_USER_ID)

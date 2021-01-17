@@ -113,7 +113,7 @@ class TestHasSameTypeChildren(IntegrationTestCase):
         browser.open(self.inbox_task)
         factoriesmenu.add('Subtask')
         browser.fill({'Title': 'Subtask',
-                      'Task Type': 'direct-execution'})
+                      'Task type': 'direct-execution'})
         form = browser.find_form_by_field('Issuer')
         form.find_widget('Issuer').fill(self.regular_user.id)
         form.find_widget('Responsible').fill(self.regular_user)

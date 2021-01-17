@@ -19,7 +19,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
 
         # Step 1 - choose method
         browser.fill(
-            {'Assign to a ...': 'new_dossier',
+            {'Assign to ...': 'new_dossier',
              'Response': 'Sample response'}).submit()
 
         # Step 2 - choose repository
@@ -35,7 +35,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
         browser.css('#form-buttons-save').first.click()
 
         # Step 4 - edit task form
-        browser.fill({'Task Type': 'comment',
+        browser.fill({'Task type': 'comment',
                       'Deadline': '9/24/14',
                       'Issuer': 'inbox:fa'})
 
@@ -76,7 +76,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
 
         # Step 1 - choose method
         browser.fill(
-            {'Assign to a ...': 'existing_dossier',
+            {'Assign to ...': 'existing_dossier',
              'Response': 'Sample response'}).submit()
 
         # Step 2 - choose dossier
@@ -86,7 +86,7 @@ class TestAssignForwardingToDossier(SolrIntegrationTestCase):
         browser.css('#form-buttons-save').first.click()
 
         # Step 3 - edit task form
-        browser.fill({'Task Type': 'comment',
+        browser.fill({'Task type': 'comment',
                       'Deadline': '9/24/14',
                       'Issuer': 'inbox:fa'})
 

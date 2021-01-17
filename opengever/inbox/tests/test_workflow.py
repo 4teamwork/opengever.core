@@ -215,7 +215,7 @@ class TestInboxWorkflowSolr(SolrIntegrationTestCase):
         # step 1
         browser.open(self.inbox_forwarding, view='tabbedview_view-overview')
         browser.click_on('Assign to dossier')
-        browser.fill({'Assign to a ...': 'existing_dossier',
+        browser.fill({'Assign to ...': 'existing_dossier',
                       'Response': 'Sample response'}).submit()
         # step 2
         browser.fill(

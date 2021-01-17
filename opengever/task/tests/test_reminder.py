@@ -325,7 +325,7 @@ class TestTaskReminderResponseForm(IntegrationTestCase):
         self.set_workflow_state('task-state-open', self.task)
         browser.open(self.task)
         browser.css('#workflow-transition-task-transition-open-in-progress').first.click()
-        browser.fill({'Reminder': ReminderOnDate.option_type, 'Choose remind date': '31.10.2019'})
+        browser.fill({'Reminder': ReminderOnDate.option_type, 'Reminder date': '31.10.2019'})
         browser.css('#form-buttons-save').first.click()
 
         self.assertIsInstance(self.task.get_reminder(), ReminderOnDate)
