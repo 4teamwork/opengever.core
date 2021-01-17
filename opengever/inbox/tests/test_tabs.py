@@ -19,10 +19,10 @@ class TestInboxTabbedview(SolrIntegrationTestCase):
         browser.open(self.inbox, view='tabbedview_view-trash')
 
         self.assertEquals(
-            ['', 'Sequence Number', 'Title', 'Document Author',
-             'Document Date', 'Modification Date', 'Creation Date',
-             'Receipt Date', 'Delivery Date', 'Public Trial',
-             'Reference Number', 'File extension', 'Keywords'],
+            ['', 'Sequence number', 'Title', 'Author',
+             'Document date', 'Modification date', 'Creation date',
+             'Received date', 'Sent date', 'Public access level',
+             'Reference number', 'File extension', 'Keywords'],
             browser.css('.listing th').text)
 
     @browsing
@@ -32,9 +32,9 @@ class TestInboxTabbedview(SolrIntegrationTestCase):
         browser.open(self.inbox, view='tabbedview_view-documents')
 
         self.assertEquals(
-            ['', 'Sequence Number', 'Title', 'Document Author',
-             'Document Date', 'Modification Date', 'Creation Date',
-             'Receipt Date', 'Delivery Date', 'Public Trial',
+            ['', 'Sequence number', 'Title', 'Author',
+             'Document date', 'Modification date', 'Creation date',
+             'Received date', 'Sent date', 'Public access level',
              'File extension', 'Keywords'],
             browser.css('.listing th').text)
 

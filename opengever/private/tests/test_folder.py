@@ -145,8 +145,8 @@ class TestPrivateFolderTabbedViewSolr(SolrIntegrationTestCase):
         browser.open(self.private_folder, view='tabbedview_view-dossiers')
 
         self.assertEquals(
-            [['', 'Reference Number', 'Title',
-              'Review state', 'Responsible', 'Start', 'End', 'Keywords'],
+            [['', 'Reference number', 'Title',
+              'State', 'Responsible', 'Start', 'End', 'Keywords'],
              ['', 'P Client1 kathi-barfuss / 2', 'Mein Dossier 2',
               'Active', '', '31.08.2016', '', ''],
              ['', 'P Client1 kathi-barfuss / 1', 'Mein Dossier 1',

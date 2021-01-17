@@ -16,9 +16,9 @@ from zope.i18n import translate
 class TestDossierListing(SolrIntegrationTestCase):
 
     listing_fields = ['',
-                      'Reference Number',
+                      'Reference number',
                       'Title',
-                      'Review state',
+                      'State',
                       'Responsible',
                       'Start',
                       'End',
@@ -136,20 +136,20 @@ class TestDossierListing(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
 
-        self.assertEquals(['label_tabbedview_filter_all', 'Active', 'overdue'],
+        self.assertEquals(['Any', 'Active', 'Overdue'],
                           browser.css('.state_filters a').text)
 
     @browsing
     def test_expired_filter_only_avaiable_for_record_managers(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
-        self.assertEquals(['label_tabbedview_filter_all', 'Active', 'overdue'],
+        self.assertEquals(['Any', 'Active', 'Overdue'],
                           browser.css('.state_filters a').text)
 
         self.login(self.records_manager, browser=browser)
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
         self.assertEquals(
-            ['label_tabbedview_filter_all', 'Active', 'expired', 'overdue'],
+            ['Any', 'Active', 'Expired', 'Overdue'],
             browser.css('.state_filters a').text)
 
     @browsing
@@ -210,7 +210,7 @@ class TestDossierListing(SolrIntegrationTestCase):
     def test_expired_filters_is_hidden_on_subdossier_listings(self, browser):
         self.login(self.records_manager, browser=browser)
         browser.visit(self.dossier, view='tabbedview_view-subdossiers')
-        self.assertEquals(['label_tabbedview_filter_all', 'Active'],
+        self.assertEquals(['Any', 'Active'],
                           browser.css('.state_filters a').text)
 
     @browsing
@@ -234,7 +234,7 @@ class TestDossierListing(SolrIntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.subdossier, view='tabbedview_view-subdossiers')
         expected_content = [
-            u'Reference Number Title Review state Responsible Start End Keywords',
+            u'Reference number Title State Responsible Start End Keywords',
             u'Client1 1.1 / 1.1.1 Subsubdossier Active 31.08.2016 '
             u'Subsubkeyword, Subsubkeyw\xf6rd',
             ]
