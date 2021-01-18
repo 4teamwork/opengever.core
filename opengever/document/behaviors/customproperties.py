@@ -20,7 +20,7 @@ class IDocumentCustomProperties(model.Schema):
     )
 
     model.fieldset(
-        u'properties',
+        u'custom_properties',
         label=u'Custom properties',
         fields=[
             u'custom_properties',
