@@ -20,7 +20,7 @@ msgstr "Add response"
 
 #. German translation: Standardablauf auslösen
 msgid "Add task from template"
-msgstr "Add task from template"
+msgstr "Task from template"
 
 #. German translation: Kopie Dokument aus eigenem Mandant
 msgid "Attach remote document"

@@ -295,7 +295,7 @@ class TestCopyPaste(IntegrationTestCase):
             'Document',
             'Document from template',
             'Task',
-            'Add task from template',
+            'Task from template',
             'Subdossier',
             'Participant',
             u'Actions \u25bc',
