@@ -597,7 +597,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
         with freeze(FROZEN_NOW):
             browser.open()
-            factoriesmenu.add(u'RepositoryRoot')
+            factoriesmenu.add(u'Repository Root')
             browser.fill({u'Title': REPOROOT_REQUIREDS['title_de']}).save()
 
         reporoot = browser.context
@@ -690,7 +690,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
         with freeze(FROZEN_NOW):
             browser.open(self.empty_repofolder)
-            factoriesmenu.add(u'RepositoryFolder')
+            factoriesmenu.add(u'Repository Folder')
             browser.fill({u'Title': REPOFOLDER_REQUIREDS['title_de']}).save()
 
         repofolder = browser.context

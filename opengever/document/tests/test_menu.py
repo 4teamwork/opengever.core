@@ -10,11 +10,11 @@ class TestActionMenu(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document)
-        self.assertIn('Copy Item', editbar.menu_options('Actions'))
+        self.assertIn('Copy item', editbar.menu_options('Actions'))
 
         self.checkout_document(self.document)
         browser.open(self.document)
-        self.assertNotIn('Copy Item', editbar.menu_options('Actions'))
+        self.assertNotIn('Copy item', editbar.menu_options('Actions'))
 
     @browsing
     def test_delete_available_for_templates(self, browser):

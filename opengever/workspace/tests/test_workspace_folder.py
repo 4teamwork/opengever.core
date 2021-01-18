@@ -13,7 +13,7 @@ class TestWorkspaceFolder(IntegrationTestCase):
     def test_workspacefolder_is_addable_in_workspacefolder(self, browser):
         self.login(self.workspace_member, browser)
         browser.visit(self.workspace_folder)
-        factoriesmenu.add('WorkspaceFolder')
+        factoriesmenu.add('Workspace Folder')
 
         form = browser.find_form_by_field('Title')
         form.fill({'Title': u'Ein Unter\xf6rdnerli'})
@@ -87,6 +87,6 @@ class TestWorkspaceFolder(IntegrationTestCase):
             with self.login(user, browser):
                 browser.open(self.workspace_folder)
                 got[user] = factoriesmenu.visible() \
-                            and 'WorkspaceFolder' in factoriesmenu.addable_types()
+                            and 'Workspace Folder' in factoriesmenu.addable_types()
 
         self.assertEquals(expected, got)

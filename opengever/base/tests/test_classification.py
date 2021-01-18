@@ -558,7 +558,7 @@ class TestPublicTrialField(IntegrationTestCase):
                      'statement .hidden-widget')
 
         browser.open(self.branch_repofolder)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
                         'Public access level statement should be hidden')

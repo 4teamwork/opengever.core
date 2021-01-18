@@ -14,7 +14,7 @@ class TestWorkspaceRoot(IntegrationTestCase):
     def test_can_be_added_as_manager(self, browser):
         self.login(self.manager, browser)
         browser.open(view='folder_contents')
-        factoriesmenu.add('WorkspaceRoot')
+        factoriesmenu.add('Workspace Root')
         browser.fill({'Title (German)': u'Teamr\xe4ume',
                       'Title (French)': u'Ateliers'}).save()
         statusmessages.assert_no_error_messages()

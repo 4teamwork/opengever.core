@@ -7,7 +7,7 @@ from opengever.testing.helpers import localized_datetime
 from pyquery import PyQuery
 
 
-ZIP_EXPORT_ACTION_LABEL = 'Export as Zip'
+ZIP_EXPORT_ACTION_LABEL = 'Export as ZIP file'
 
 
 class TestMeeting(IntegrationTestCase):

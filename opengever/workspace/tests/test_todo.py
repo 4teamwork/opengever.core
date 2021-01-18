@@ -21,7 +21,7 @@ class TestToDo(SolrIntegrationTestCase):
 
     def create_to_do(self, browser, workspace, title, responsible=None):
         browser.visit(workspace)
-        factoriesmenu.add('ToDo')
+        factoriesmenu.add('To-do item')
 
         with self.observe_children(self.workspace) as children:
             form = browser.find_form_by_field('Title')
@@ -112,7 +112,7 @@ class TestToDo(SolrIntegrationTestCase):
         opengever.workspace.subscribers.TODO_NUMBER_LIMIT = len(todos) + 1
 
         browser.visit(self.workspace)
-        factoriesmenu.add('ToDo')
+        factoriesmenu.add('To-do item')
         form = browser.find_form_by_field('Title')
         form.fill({'Title': u'Ein ToDo'})
         form.save()
@@ -120,7 +120,7 @@ class TestToDo(SolrIntegrationTestCase):
         assert_no_error_messages(browser)
 
         browser.visit(self.workspace)
-        factoriesmenu.add('ToDo')
+        factoriesmenu.add('To-do item')
         form = browser.find_form_by_field('Title')
         form.fill({'Title': u'Ein anderes ToDo'})
         with browser.expect_http_error(500):

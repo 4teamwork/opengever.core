@@ -110,7 +110,7 @@ class TestProposalSolr(SolrIntegrationTestCase):
     def test_create_proposal_visible_in_dossier_actions_for_regular_user_when_meeting_enabled(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='tabbedview_view-documents-proxy')
-        self.assertEqual(browser.css('.tabbedview-menu-create_proposal').text, ['Create Proposal'])
+        self.assertEqual(browser.css('.tabbedview-menu-create_proposal').text, ['Create proposal'])
 
         self.deactivate_feature('meeting')
         browser.open(self.dossier, view='tabbedview_view-documents-proxy')

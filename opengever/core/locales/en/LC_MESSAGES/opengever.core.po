@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-17 16:16+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -17,12 +17,12 @@ msgstr ""
 #. German translation: Beteiligung hinzufügen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Add Participant"
-msgstr "Add Participant"
+msgstr "Add participant"
 
 #. German translation: Mit Mailprogramm versenden
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Attach selection"
-msgstr "Attach selection"
+msgstr "Attach to email"
 
 #. German translation: Geschäftsdossier
 #. Default: "Business Case Dossier"
@@ -39,18 +39,18 @@ msgstr "Cancel"
 #. German translation: Mit Kommentar einchecken
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Checkin with comment"
-msgstr "Checkin with comment"
+msgstr "Check in with comment"
 
 #. German translation: Ohne Kommentar einchecken
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Checkin without comment"
-msgstr "Checkin without comment"
+msgstr "Check in without comment"
 
 #. German translation: Auschecken
 #. Default: "Checkout"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Checkout"
-msgstr "Checkout"
+msgstr "Check out"
 
 #. German translation: Gremium
 #: ./opengever/core/profiles/default/types/opengever.meeting.committee.xml
@@ -75,25 +75,26 @@ msgstr "Contact Folder"
 #. German translation: Kontaktordner
 #: ./opengever/core/profiles/default/types/opengever.contact.contactfolder.xml
 msgid "ContactFolder"
-msgstr "ContactFolder"
+msgstr "Contact Folder"
 
 #. German translation: Kopieren
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20190823113658_do_not_show_copy_action_for_checked_out_documents/actions.xml
 msgid "Copy Item"
-msgstr "Copy Item"
+msgstr "Copy item"
 
 #. German translation: Kopieren
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Copy Items"
-msgstr "Copy Items"
+msgstr "Copy items"
 
 #. German translation: Dokumente aus Arbeitsraum zurückführen
+#. MARKER: double check. "Retrieve" would be nicer, but "copy back" makes it more obvious what will happen
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200309163442_add_copy_documents_from_workspace_action/actions.xml
 #: ./opengever/core/upgrades/20200311140946_move_copy_documents_from_workspace_to_folder_actions/actions.xml
 msgid "Copy documents from workspace"
-msgstr "Copy documents from workspace"
+msgstr "Copy back documents from workspace"
 
 #. German translation: Dokumente in Arbeitsraum kopieren
 #: ./opengever/core/profiles/default/actions.xml
@@ -104,28 +105,28 @@ msgstr "Copy documents to workspace"
 #. German translation: Deckblatt (PDF)
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Cover (PDF)"
-msgstr "Cover (PDF)"
+msgstr "Cover page (PDF)"
 
 #. German translation: Aussonderungsangebot erstellen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Disposition"
-msgstr "Create Disposition"
+msgstr "Create disposition"
 
 #. German translation: Antrag erstellen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Proposal"
-msgstr "Create Proposal"
+msgstr "Create proposal"
 
 #. German translation: Aufgabe erstellen
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200205102852_add_new_task_from_documents_action/actions.xml
 msgid "Create Task"
-msgstr "Create Task"
+msgstr "Create task"
 
 #. German translation: Dateien für docxcompose herunterladen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Debug docxcompose"
-msgstr "Debug docxcompose"
+msgstr "Download docxcompose debug files"
 
 #. German translation: Löschen
 #: ./opengever/core/profiles/default/actions.xml
@@ -150,12 +151,12 @@ msgstr "Dossier template"
 #. German translation: JSON Sitzungsdaten herunterladen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Download protocol json"
-msgstr "Download protocol json"
+msgstr "Download meeting protocol JSON"
 
 #. German translation: Als Zip-Datei exportieren
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Export as Zip"
-msgstr "Export as Zip"
+msgstr "Export as ZIP file"
 
 #. German translation: Auswahl exportieren
 #: ./opengever/core/profiles/default/actions.xml
@@ -192,7 +193,7 @@ msgstr "List workspaces"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20190401163048_add_manage_webactions_action/actions.xml
 msgid "Manage Webactions"
-msgstr "Manage Webactions"
+msgstr "Manage webactions"
 
 #. German translation: Sitzungsdossier
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
@@ -208,20 +209,21 @@ msgstr "Meeting Template"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200909160057_add_move_item_action/actions.xml
 msgid "Move Item"
-msgstr "Move Item"
+msgstr "Move item"
 
 #. German translation: Elemente verschieben
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200129170738_add_move_proposal_items_action/actions.xml
 msgid "Move Items"
-msgstr "Move Items"
+msgstr "Move items"
 
 #. German translation: Teamraum Einladungen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "My Invitations"
-msgstr "My Invitations"
+msgstr "My invitations"
 
 #. German translation: Meine Ablage
+#. MARKER: double check
 #: ./opengever/core/profiles/default/actions.xml
 msgid "My repository"
 msgstr "My repository"
@@ -251,7 +253,7 @@ msgstr "Period"
 #. German translation: Aktenzeichen Präfix Manager
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Prefix Manager"
-msgstr "Prefix Manager"
+msgstr "Reference number manager"
 
 #. German translation: Details drucken (PDF)
 #: ./opengever/core/profiles/default/actions.xml
@@ -298,17 +300,17 @@ msgstr "Proposal Template"
 #. Default: "RepositoryFolder"
 #: ./opengever/core/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
-msgstr "RepositoryFolder"
+msgstr "Repository Folder"
 
 #. German translation: Ordnungssystem
 #: ./opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
 msgid "RepositoryRoot"
-msgstr "RepositoryRoot"
+msgstr "Repository Root"
 
 #. German translation: Vorschau neu generieren
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Revive preview"
-msgstr "Revive preview"
+msgstr "Regenerate PDF preview"
 
 #. German translation: Berechtigungen entziehen
 #: ./opengever/core/profiles/default/actions.xml
@@ -347,7 +349,7 @@ msgstr "Submitted Proposal"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20191028103858_add_ui_switcher/actions.xml
 msgid "Switch UI"
-msgstr "Switch UI"
+msgstr "Switch to new UI"
 
 #. German translation: Aufgabe
 #: ./opengever/core/profiles/default/types/opengever.task.task.xml
@@ -357,12 +359,13 @@ msgstr "Task"
 #. German translation: Aufgabenvorlage
 #: ./opengever/core/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
 msgid "TaskTemplate"
-msgstr "TaskTemplate"
+msgstr "Task Template"
 
 #. German translation: Standardablauf
+#. MARKER: check if we can find a better name. Maybe something along the lines of "Process template"?
 #: ./opengever/core/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
 msgid "TaskTemplateFolder"
-msgstr "TaskTemplateFolder"
+msgstr "Task Template Folder"
 
 #. German translation: Vorlagenordner
 #: ./opengever/core/profiles/default/types/opengever.dossier.templatefolder.xml
@@ -373,23 +376,23 @@ msgstr "Template Folder"
 #: ./opengever/core/profiles/default/types/opengever.workspace.todo.xml
 #: ./opengever/core/upgrades/20190710151706_install_workspace_todo_type/types/opengever.workspace.todo.xml
 msgid "ToDo"
-msgstr "ToDo"
+msgstr "To-do item"
 
 #. German translation: ToDo Liste
 #: ./opengever/core/profiles/default/types/opengever.workspace.todolist.xml
 #: ./opengever/core/upgrades/20190716140644_add_to_do_list_contenttype/types/opengever.workspace.todolist.xml
 msgid "ToDo list"
-msgstr "ToDo list"
+msgstr "To-do list"
 
 #. German translation: Amtswechsler umschalten
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Toggle orgunit selector"
-msgstr "Toggle orgunit selector"
+msgstr "Switch organization / department"
 
 #. German translation: Freigabe von ungebrauchten Aktenzeichen Prefixen.
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Unlock unused repository prefixes."
-msgstr "Unlock unused repository prefixes."
+msgstr "Unlock unused reference numbers."
 
 #. German translation: Teamraum
 #: ./opengever/core/profiles/default/types/opengever.workspace.workspace.xml
@@ -400,60 +403,60 @@ msgstr "Workspace"
 #. German translation: Ordner
 #: ./opengever/core/profiles/default/types/opengever.workspace.folder.xml
 msgid "WorkspaceFolder"
-msgstr "WorkspaceFolder"
+msgstr "Workspace Folder"
 
 #. German translation: Meeting
 #: ./opengever/core/profiles/default/types/opengever.workspace.meeting.xml
 #: ./opengever/core/upgrades/20201016095810_install_workspace_meeting_type/types/opengever.workspace.meeting.xml
 msgid "WorkspaceMeeting"
-msgstr "WorkspaceMeeting"
+msgstr "Workspace Meeting"
 
 #. German translation: Teamräume
 #: ./opengever/core/profiles/default/types/opengever.workspace.root.xml
 msgid "WorkspaceRoot"
-msgstr "WorkspaceRoot"
+msgstr "Workspace Root"
 
 #. German translation: Jahresordner
 #: ./opengever/core/profiles/default/types/opengever.inbox.yearfolder.xml
 msgid "YearFolder"
-msgstr "YearFolder"
+msgstr "Year Folder"
 
 #. German translation: eCH-0147 Export
 #: ./opengever/core/profiles/default/actions.xml
 msgid "eCH-0147 Export"
-msgstr "eCH-0147 Export"
+msgstr "eCH-0147 export"
 
 #. German translation: eCH-0147 Import
 #: ./opengever/core/profiles/default/actions.xml
 msgid "eCH-0147 Import"
-msgstr "eCH-0147 Import"
+msgstr "eCH-0147 import"
 
 #. German translation: Dokument
 msgid "opengever.document.document"
-msgstr "opengever.document.document"
+msgstr "Document"
 
 #. German translation: Antrag
 msgid "opengever.meeting.proposal"
-msgstr "opengever.meeting.proposal"
+msgstr "Proposal"
 
 #. German translation: Aufgabe
 msgid "opengever.task.task"
-msgstr "opengever.task.task"
+msgstr "Task"
 
 #. German translation: Löschen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "remove"
-msgstr "remove"
+msgstr "Delete"
 
 #. German translation: In den Papierkorb verschieben
 #: ./opengever/core/profiles/default/actions.xml
 msgid "trashed"
-msgstr "trashed"
+msgstr "Move to trash"
 
 #. German translation: Reaktivieren
 #: ./opengever/core/profiles/default/actions.xml
 msgid "untrashed"
-msgstr "untrashed"
+msgstr "Restore from trash"
 
 #. German translation: Mit Kommentar
 #: ./opengever/core/profiles/default/actions.xml

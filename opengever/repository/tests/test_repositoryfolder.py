@@ -55,7 +55,7 @@ class TestRepositoryFolder(IntegrationTestCase):
     def test_create_repository_folder(self, browser):
         self.login(self.administrator, browser)
         browser.open(self.branch_repofolder)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         browser.fill({'Title': 'Custody'}).save()
         statusmessages.assert_no_error_messages()
         self.assertEquals(('tabbed_view', 'opengever-repository-repositoryfolder'),
@@ -83,21 +83,21 @@ class TestRepositoryFolder(IntegrationTestCase):
                                    self.leaf_repofolder.objectValues())),
                         'Expected at least one dossier within leaf_repofolder.')
         browser.open(self.leaf_repofolder)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         statusmessages.assert_message(warning)
 
         self.assertFalse(any(filter(IDossierMarker.providedBy,
                                     self.branch_repofolder.objectValues())),
                          'Expected no dossiers within branch_repofolder.')
         browser.open(self.branch_repofolder)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         statusmessages.assert_no_messages()
 
         self.assertFalse(any(filter(IDossierMarker.providedBy,
                                     self.empty_repofolder.objectValues())),
                          'Expected no dossiers within empty_repofolder.')
         browser.open(self.empty_repofolder)
-        factoriesmenu.add('RepositoryFolder')
+        factoriesmenu.add('Repository Folder')
         statusmessages.assert_no_messages()
 
     @browsing
@@ -113,7 +113,7 @@ class TestRepositoryFolder(IntegrationTestCase):
                         'Expected repositories within branch_repofolder.')
         browser.open(self.branch_repofolder)
         self.assertEquals(
-            ['RepositoryFolder'],
+            ['Repository Folder'],
             factoriesmenu.addable_types())
 
     @browsing
@@ -129,7 +129,7 @@ class TestRepositoryFolder(IntegrationTestCase):
                          'Expected no repositories within empty_repofolder.')
         browser.open(self.empty_repofolder)
         self.assertEquals(
-            ['Business Case Dossier', 'RepositoryFolder'],
+            ['Business Case Dossier', 'Repository Folder'],
             factoriesmenu.addable_types())
 
     @browsing
@@ -137,13 +137,13 @@ class TestRepositoryFolder(IntegrationTestCase):
         self.login(self.administrator, browser)
 
         browser.open(self.leaf_repofolder)
-        self.assertIn('RepositoryFolder', factoriesmenu.addable_types())
+        self.assertIn('Repository Folder', factoriesmenu.addable_types())
 
         api.portal.set_registry_record(
             'maximum_repository_depth', 1,
             interface=IRepositoryFolderRecords)
         browser.reload()
-        self.assertNotIn('RepositoryFolder', factoriesmenu.addable_types())
+        self.assertNotIn('Repository Folder', factoriesmenu.addable_types())
 
 
 class TestDossierTemplateFactoryMenu(IntegrationTestCase):

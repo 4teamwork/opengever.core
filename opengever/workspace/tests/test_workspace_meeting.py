@@ -12,7 +12,7 @@ class TestWorkspaceMeeting(IntegrationTestCase):
         self.login(self.workspace_member, browser)
         browser.visit(self.workspace)
         with self.observe_children(self.workspace) as children:
-            factoriesmenu.add('WorkspaceMeeting')
+            factoriesmenu.add('Workspace Meeting')
             browser.fill({'Title': u'Ein Meeting',
                           'Start': '10.10.2020 23:56'})
             form = browser.find_form_by_field('Organizer')

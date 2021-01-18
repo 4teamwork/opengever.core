@@ -74,14 +74,14 @@ class TestRepositoryFolderDocumentsTab(SolrIntegrationTestCase):
         tabbedview.open('Documents')
 
         expected_actions = [
-            'Copy Items',
-            'Attach selection',
-            'Checkout',
+            'Copy items',
+            'Attach to email',
+            'Check out',
             'Cancel',
-            'Checkin with comment',
-            'Checkin without comment',
+            'Check in with comment',
+            'Check in without comment',
             'Export selection',
-            'Move Items',
+            'Move items',
             ]
 
         self.assertEquals(expected_actions, tabbedview.minor_actions().text)
@@ -94,7 +94,7 @@ class TestRepositoryFolderDocumentsTab(SolrIntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(self.branch_repofolder)
         tabbedview.open('Documents')
-        self.assertEquals(['Create Proposal'], tabbedview.major_actions().text)
+        self.assertEquals(['Create proposal'], tabbedview.major_actions().text)
 
     @browsing
     def test_columns(self, browser):
@@ -154,7 +154,7 @@ class TestRepositoryFolderTasksTab(IntegrationTestCase):
 
         expected_actions = [
             'Export selection',
-            'Move Items',
+            'Move items',
             'Print selection (PDF)',
             ]
 

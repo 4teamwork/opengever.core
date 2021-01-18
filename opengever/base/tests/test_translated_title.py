@@ -217,7 +217,7 @@ class TestTranslatedTitle(IntegrationTestCase):
         self.login(self.manager, browser=browser)
 
         browser.open(self.portal)
-        factoriesmenu.add('RepositoryRoot')
+        factoriesmenu.add('Repository Root')
 
         browser.fill({"Title (German)": "Ablage",
                       "Title (French)": u"syst\xe8me d'ordre"})
@@ -323,7 +323,7 @@ class TestTranslatedTitleAddForm(IntegrationTestCase):
         self.login(self.manager, browser=browser)
 
         browser.open(self.portal)
-        factoriesmenu.add('RepositoryRoot')
+        factoriesmenu.add('Repository Root')
 
         browser.fill({'Title (German)': u'Ordnungssystem',
                       u'Title (French)': u"syst\xe8me d'ordre"})
@@ -335,7 +335,7 @@ class TestTranslatedTitleAddForm(IntegrationTestCase):
 
         self.lang_tool.supported_langs = ['fr-ch']
         browser.open(self.portal)
-        factoriesmenu.add('RepositoryRoot')
+        factoriesmenu.add('Repository Root')
 
         self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
                           browser.forms.get('form').css('label').text)
@@ -344,7 +344,7 @@ class TestTranslatedTitleAddForm(IntegrationTestCase):
 
         self.lang_tool.supported_langs = ['de-ch']
         browser.open(self.portal)
-        factoriesmenu.add('RepositoryRoot')
+        factoriesmenu.add('Repository Root')
 
         self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
                           browser.forms.get('form').css('label').text)
@@ -358,7 +358,7 @@ class TestTranslatedTitleAddForm(IntegrationTestCase):
         self.lang_tool.supported_langs = ['fr-ch']
 
         browser.open(self.portal)
-        factoriesmenu.add('RepositoryRoot')
+        factoriesmenu.add('Repository Root')
 
         self.assertEquals(
             'Title',

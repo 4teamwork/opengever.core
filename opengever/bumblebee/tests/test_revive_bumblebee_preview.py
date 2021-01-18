@@ -18,7 +18,7 @@ class TestReviveBumblebeePreviewWithDisabledFeature(IntegrationTestCase):
 
         self.assertTrue(IBumblebeeable.providedBy(self.document))
         self.assertNotIn(
-            'Revive preview',
+            'Regenerate PDF preview',
             browser.css('.actionMenuContent li').text)
 
 
@@ -34,7 +34,7 @@ class TestReviveBumblebeePreview(IntegrationTestCase):
 
         self.assertFalse(IBumblebeeable.providedBy(self.task))
         self.assertNotIn(
-            'Revive preview',
+            'Regenerate PDF preview',
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -45,7 +45,7 @@ class TestReviveBumblebeePreview(IntegrationTestCase):
 
         self.assertTrue(IBumblebeeable.providedBy(self.document))
         self.assertIn(
-            'Revive preview',
+            'Regenerate PDF preview',
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -53,7 +53,7 @@ class TestReviveBumblebeePreview(IntegrationTestCase):
         self.login(self.administrator, browser)
 
         browser.visit(self.document)
-        browser.css('.actionMenuContent li').find('Revive preview').first.click()
+        browser.css('.actionMenuContent li').find('Regenerate PDF preview').first.click()
 
         statusmessages.assert_message('Preview was revived and will be available soon.')
 
@@ -64,7 +64,7 @@ class TestReviveBumblebeePreview(IntegrationTestCase):
         browser.visit(self.document)
         self.document.file = NamedBlobFile(data='some other text', filename=u'foo.pdf')
         checksum_before_reviving = IBumblebeeDocument(self.document).get_checksum()
-        browser.css('.actionMenuContent li').find('Revive preview').first.click()
+        browser.css('.actionMenuContent li').find('Regenerate PDF preview').first.click()
         checksum_after_reviving = IBumblebeeDocument(self.document).get_checksum()
 
         self.assertNotEqual(checksum_before_reviving, checksum_after_reviving)
@@ -78,6 +78,6 @@ class TestReviveBumblebeePreview(IntegrationTestCase):
 
         self.assertEquals(0, len(get_queue()))
 
-        browser.css('.actionMenuContent li').find('Revive preview').first.click()
+        browser.css('.actionMenuContent li').find('Regenerate PDF preview').first.click()
 
         self.assertEquals(1, len(get_queue()))

@@ -150,8 +150,8 @@ class TestFileActionButtonTemplatesSolr(SolrIntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -161,8 +161,8 @@ class TestFileActionButtonTemplatesSolr(SolrIntegrationTestCase):
         browser.open(self.inactive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -172,8 +172,8 @@ class TestFileActionButtonTemplatesSolr(SolrIntegrationTestCase):
         browser.open(self.expired_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
 
@@ -390,8 +390,8 @@ class TestFileActionButtonTemplatesWithBumblebeeSolr(SolrIntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -401,8 +401,8 @@ class TestFileActionButtonTemplatesWithBumblebeeSolr(SolrIntegrationTestCase):
         browser.open(self.inactive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -412,8 +412,8 @@ class TestFileActionButtonTemplatesWithBumblebeeSolr(SolrIntegrationTestCase):
         browser.open(self.expired_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
 
@@ -583,8 +583,8 @@ class TestFileActionButtonTemplatesWithOCAttachSolr(SolrIntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertIn('Attach selection', actions)
-        self.assertIn('Checkout', actions)
+        self.assertIn('Attach to email', actions)
+        self.assertIn('Check out', actions)
         self.assertNotIn('Send as email', actions)
 
     @browsing
@@ -594,8 +594,8 @@ class TestFileActionButtonTemplatesWithOCAttachSolr(SolrIntegrationTestCase):
         browser.open(self.inactive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertNotIn('Send as email', actions)
 
     @browsing
@@ -605,8 +605,8 @@ class TestFileActionButtonTemplatesWithOCAttachSolr(SolrIntegrationTestCase):
         browser.open(self.expired_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertNotIn('Send as email', actions)
 
 
@@ -850,8 +850,8 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebeeSolr(SolrIntegrationT
         browser.open(self.dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertIn('Attach selection', actions)
-        self.assertIn('Checkout', actions)
+        self.assertIn('Attach to email', actions)
+        self.assertIn('Check out', actions)
         self.assertNotIn('Send as email', actions)
 
     @browsing
@@ -861,8 +861,8 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebeeSolr(SolrIntegrationT
         browser.open(self.inactive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertNotIn('Send as email', actions)
 
     @browsing
@@ -872,8 +872,8 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebeeSolr(SolrIntegrationT
         browser.open(self.expired_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertNotIn('Send as email', actions)
 
 
@@ -1026,8 +1026,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutSolr(SolrIntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -1037,8 +1037,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutSolr(SolrIntegrationTestCase):
         browser.open(self.inactive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -1048,8 +1048,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutSolr(SolrIntegrationTestCase):
         browser.open(self.expired_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
 
@@ -1266,8 +1266,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebeeSolr(SolrIntegratio
         browser.open(self.dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -1277,8 +1277,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebeeSolr(SolrIntegratio
         browser.open(self.inactive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
 
     @browsing
@@ -1288,6 +1288,6 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebeeSolr(SolrIntegratio
         browser.open(self.expired_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
-        self.assertNotIn('Attach selection', actions)
-        self.assertNotIn('Checkout', actions)
+        self.assertNotIn('Attach to email', actions)
+        self.assertNotIn('Check out', actions)
         self.assertIn('Send as email', actions)
