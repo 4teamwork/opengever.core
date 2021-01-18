@@ -59,7 +59,7 @@ class TestSendDocument(FunctionalTestCase):
         mail = self.send_documents(dossier, [document, ])
         self.assertEquals(mail, None)
         self.assertEquals(
-            ['The files you selected are larger than the maximum size'],
+            ['The files you selected exceed the maximum allowed size.'],
             browser.css('#formfield-form-widgets-documents .error').text)
 
         mail = self.send_documents(dossier, [document, ], as_links=True)
@@ -76,7 +76,7 @@ class TestSendDocument(FunctionalTestCase):
 
         self.assertEquals(mail, None)
         self.assertEquals(
-            ['You have to select a intern or enter a extern mail-addres'],
+            ['Select at least one internal or external email address.'],
             browser.css('div.error').text)
 
     @browsing
@@ -262,16 +262,16 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         browser.login().open(container,
                              {'paths:list': documents},
                              view='send_documents')
-        browser.fill({'Send documents only als links': attr.get('as_links'),
+        browser.fill({'Send document links only (no attachments)': attr.get('as_links'),
                       'Subject': attr.get('subject', ''),
                       'Message': attr.get('message', '')})
 
         if attr.get('extern_receiver', ''):
-            browser.fill({'Extern receiver': attr.get('extern_receiver')})
+            browser.fill({'External recipient': attr.get('extern_receiver')})
 
         if attr.get('intern_receiver', None):
-            form = browser.find_form_by_field('Intern receiver')
-            form.find_widget('Intern receiver').fill(
+            form = browser.find_form_by_field('Internal recipient')
+            form.find_widget('Internal recipient').fill(
                 attr.get('intern_receiver'))
 
         browser.click_on('Send')

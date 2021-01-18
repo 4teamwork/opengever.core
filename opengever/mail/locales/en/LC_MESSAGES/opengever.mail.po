@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 12:35+0000\n"
 "PO-Revision-Date: 2016-07-22 16:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/de/>\n"
@@ -24,7 +24,7 @@ msgstr "Cancel"
 #. German translation: Keine E-Mail Adresse
 #: ./opengever/mail/browser/send_document.py
 msgid "No Mail Address"
-msgstr "No Mail Address"
+msgstr "No email address"
 
 #. German translation: Anhänge speichern
 #: ./opengever/mail/browser/templates/extract_attachments.pt
@@ -39,12 +39,12 @@ msgstr "Sent mail filed as '${title}'."
 #. German translation: Die Grösse der ausgewählten Dateien überschreitet die erlaubte Maximalgrösse.
 #: ./opengever/mail/validators.py
 msgid "The files you selected are larger than the maximum size"
-msgstr "The files you selected are larger than the maximum size"
+msgstr "The files you selected exceed the maximum allowed size."
 
 #. German translation: Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse.
 #: ./opengever/mail/browser/send_document.py
 msgid "You have to select a intern                             or enter a extern mail-addres"
-msgstr "You have to select a intern                             or enter a extern mail-addres"
+msgstr "Select at least one internal or external email address."
 
 #. German translation: Senden
 #. Default: "Send"
@@ -68,7 +68,7 @@ msgstr "Already extracted"
 #. Default: "Filename"
 #: ./opengever/mail/browser/extract_attachments.py
 msgid "column_attachment_filename"
-msgstr "Filename"
+msgstr "File name"
 
 #. German translation: Grösse
 #. Default: "Size"
@@ -92,13 +92,13 @@ msgstr "You have not selected any attachments."
 #. Default: "This mail has no attachments to extract."
 #: ./opengever/mail/browser/extract_attachments.py
 msgid "error_no_attachments_to_extract"
-msgstr "This mail has no attachments to extract."
+msgstr "This email has no attachments to extract."
 
 #. German translation: Externer Empfänger
 #. Default: "Extern receiver"
 #: ./opengever/mail/browser/send_document.py
 msgid "extern_receiver"
-msgstr "Extern receiver"
+msgstr "External recipient"
 
 #. German translation: (nur für aktive Dossiers möglich)
 #. Default: "(only possible for open dossiers)"
@@ -122,13 +122,13 @@ msgstr "Select the attachments that should be saved. From every selected attachm
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
 #: ./opengever/mail/browser/send_document.py
 msgid "help_extern_receiver"
-msgstr "email addresses of the receivers. Enter manually the addresses, one per each line."
+msgstr "Email addresses of the recipients. Enter one address per line."
 
 #. German translation: Live Search: Nachname/Vorname der internen Mitarbeiter oder Kontakte eingeben. Mehrauswahl möglich.
 #. Default: "Live Search: search for users and contacts"
 #: ./opengever/mail/browser/send_document.py
 msgid "help_intern_receiver"
-msgstr "Live Search: search for users and contacts"
+msgstr "Live Search: enter first or last names of internal users or contacts. Multiple selections are possible."
 
 #. German translation: Dokument wurde erstellt: ${title}
 #. Default: "Created document ${title}"
@@ -140,19 +140,19 @@ msgstr "Created document ${title}"
 #. Default: "E-mail has been sent."
 #: ./opengever/mail/browser/send_document.py
 msgid "info_mail_sent"
-msgstr "E-mail has been sent."
+msgstr "Email has been sent."
 
 #. German translation: Interne Empfänger
 #. Default: "Intern receiver"
 #: ./opengever/mail/browser/send_document.py
 msgid "intern_receiver"
-msgstr "Intern receiver"
+msgstr "Internal recipient"
 
 #. German translation: Zu speichernde Anhänge
 #. Default: "Attachments to save"
 #: ./opengever/mail/browser/templates/extract_attachments.pt
 msgid "label_attachments_to_save"
-msgstr "Attachments to save"
+msgstr "Attachments to be saved"
 
 #. German translation: Anhänge
 #. Default: "Attachments"
@@ -166,7 +166,7 @@ msgstr "Attachments"
 #. Default: "Send documents only als links"
 #: ./opengever/mail/browser/send_document.py
 msgid "label_documents_as_link"
-msgstr "Send documents only als links"
+msgstr "Send document links only (no attachments)"
 
 #. German translation: Kopie des versandten Mails in Dossier ablegen
 #. Default: "File a copy of the sent mail in dossier"
@@ -184,7 +184,7 @@ msgstr "Journal"
 #. Default: "Journal initialized"
 #: ./opengever/mail/upgrades/to3406.py
 msgid "label_journal_initialized"
-msgstr "Journal initialized"
+msgstr "Document migrated"
 
 #. German translation: Schlagwörter
 #. Default: "Keywords"
@@ -202,7 +202,7 @@ msgstr "Message"
 #. Default: "Message source"
 #: ./opengever/mail/mail.py
 msgid "label_message_source"
-msgstr "Message source"
+msgstr "Original message source"
 
 #. German translation: Drag & Drop Upload
 #. Default: "Drag and drop upload"
@@ -256,13 +256,13 @@ msgstr "Save attachments"
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py
 msgid "label_see_attachment"
-msgstr "see attachment"
+msgstr "see attachment(s)"
 
 #. German translation: Info
 #. Default: "Sharing"
 #: ./opengever/mail/browser/tabbed.py
 msgid "label_sharing"
-msgstr "Sharing"
+msgstr "Info"
 
 #. German translation: Betreff
 #. Default: "Subject"
@@ -279,15 +279,15 @@ msgstr "Yes"
 #. German translation: E-Mails
 #: ./opengever/mail/browser/send_document.py
 msgid "mails"
-msgstr "mails"
+msgstr "Emails"
 
 #. German translation: Empfänger
 #: ./opengever/mail/browser/send_document.py
 msgid "receiver"
-msgstr "receiver"
+msgstr "Recipient"
 
 #. German translation: Dieses E-Mail befindet sich im Papierkorb.
 #. Default: "This mail is trashed."
 #: ./opengever/mail/browser/tabbed.py
 msgid "warning_trashed"
-msgstr "This mail is trashed."
+msgstr "This email was moved to the trash."

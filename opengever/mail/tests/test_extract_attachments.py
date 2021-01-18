@@ -29,7 +29,7 @@ class TestExtractAttachmentView(FunctionalTestCase):
         browser.login().open(self.mail, view='extract_attachments')
         table = browser.css('table').first
         self.assertEqual(
-            [['', 'Already extracted', 'Type', 'Filename', 'Size'],
+            [['', 'Already extracted', 'Type', 'File name', 'Size'],
              ['', 'No', '', u'B\xfccher.txt', '1 KB']],
             table.lists())
 
@@ -39,7 +39,7 @@ class TestExtractAttachmentView(FunctionalTestCase):
         browser.open(self.mail, view='extract_attachments')
         table = browser.css('table').first
         self.assertEqual(
-            [['', 'Already extracted', 'Type', 'Filename', 'Size'],
+            [['', 'Already extracted', 'Type', 'File name', 'Size'],
              ['', 'Yes', '', u'B\xfccher.txt', '1 KB']],
             table.lists())
 
@@ -102,7 +102,7 @@ class TestExtractAttachmentView(FunctionalTestCase):
         mail = create(Builder('mail').within(self.dossier))
         browser.login().open(mail, view='extract_attachments')
 
-        self.assertEquals(['This mail has no attachments to extract.'],
+        self.assertEquals(['This email has no attachments to extract.'],
                           statusmessages.messages().get('warning'))
         self.assertEquals(mail.absolute_url(), browser.url)
 
