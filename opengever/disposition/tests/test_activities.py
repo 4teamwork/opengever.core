@@ -76,7 +76,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         activity = Activity.query.all()[-1]
         self.assertEquals('disposition-transition-dispose', activity.kind)
         self.assertEquals(
-            u'Disposition disposed for the archive by {}'.format(actor.get_link()),
+            u'Disposition offered for archival by {}'.format(actor.get_link()),
             activity.summary)
         self.assertEquals(u'Submit disposition', activity.label)
         self.assertIsNone(activity.description)
@@ -112,7 +112,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         activity = Activity.query.all()[-1]
         self.assertEquals('disposition-transition-archive', activity.kind)
         self.assertEquals(
-            u'The archiving confirmed by {}'.format(actor.get_link()),
+            u'Archival confirmed by {}'.format(actor.get_link()),
             activity.summary)
         self.assertEquals(u'Confirm archival', activity.label)
         self.assertIsNone(activity.description)

@@ -132,7 +132,7 @@ class TestDisposition(IntegrationTestCase):
 
             self.assertEquals(['There were some errors.'], error_messages())
             self.assertEquals(
-                ['The retention period of the selected dossiers is not expired.'],
+                ['The retention period of the selected dossiers has not expired yet.'],
                 browser.css('.fieldErrorBox .error').text)
 
         with freeze(datetime(2021, 1, 1)):

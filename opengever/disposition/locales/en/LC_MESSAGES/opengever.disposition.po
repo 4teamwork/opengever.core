@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 10:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,29 +17,29 @@ msgstr ""
 #. German translation: Der Report konnte nicht generiert werden.
 #: ./opengever/disposition/browser/excel_export.py
 msgid "The report could not been generated."
-msgstr "The report could not been generated."
+msgstr "Failed to generate report."
 
 #. German translation: Aktiv
 #: ./opengever/disposition/browser/listing.py
 msgid "active"
-msgstr "active"
+msgstr "Active"
 
 #. German translation: Alle
 #: ./opengever/disposition/browser/listing.py
 msgid "all"
-msgstr "all"
+msgstr "All"
 
 #. German translation: bewertungsliste
 #. Default: "appraisal_list"
 #: ./opengever/disposition/browser/excel_export.py
 msgid "appraisal_list"
-msgstr "appraisal_list"
+msgstr "appraisal list"
 
 #. German translation: Laufnummer
 #. Default: "Sequence Number"
 #: ./opengever/disposition/browser/listing.py
 msgid "document_sequence_number"
-msgstr "Sequence Number"
+msgstr "Sequence number"
 
 #. German translation: Ablieferungsnummer bearbeiten
 #. Default: "Edit transfer number"
@@ -57,7 +57,7 @@ msgstr "The dossier ${title} is already offered in a different disposition."
 #. Default: "The retention period of the selected dossiers is not expired."
 #: ./opengever/disposition/validators.py
 msgid "error_retention_period_not_expired"
-msgstr "The retention period of the selected dossiers is not expired."
+msgstr "The retention period of the selected dossiers has not expired yet."
 
 #. German translation: Allgemein
 #. Default: "Common"
@@ -81,7 +81,7 @@ msgstr "Actor"
 #. Default: "Appraisal"
 #: ./opengever/disposition/browser/excel_export.py
 msgid "label_appraisal"
-msgstr "Appraisal"
+msgstr "Appraisal decision"
 
 #. German translation: Archivieren
 #. Default: "Archive"
@@ -111,7 +111,7 @@ msgstr "Cancel"
 #. Default: "Delivery Status"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_delivery_status"
-msgstr "Delivery Status"
+msgstr "Delivery status"
 
 #. German translation: Zustellung fehlgeschlagen
 #. Default: "Delivery failed"
@@ -204,7 +204,7 @@ msgstr "Edit"
 #. Default: "Export appraisal list as excel"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_export_appraisal_list_as_excel"
-msgstr "Export appraisal list as excel"
+msgstr "Export appraisal list as an Excel file"
 
 #. German translation: Verlauf
 #. Default: "History"
@@ -216,7 +216,7 @@ msgstr "History"
 #. Default: "Inactive Dossiers"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_inactive_dossiers"
-msgstr "Inactive Dossiers"
+msgstr "Inactive dossiers"
 
 #. German translation: Metadaten
 #. Default: "Metadata"
@@ -252,13 +252,13 @@ msgstr "Removal protocol"
 #. Default: "Resolved Dossiers"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_resolved_dossiers"
-msgstr "Resolved Dossiers"
+msgstr "Resolved dossiers"
 
 #. German translation: Status
 #. Default: "Review state"
 #: ./opengever/disposition/browser/listing.py
 msgid "label_review_state"
-msgstr "Review state"
+msgstr "State"
 
 #. German translation: Speichern
 #. Default: "Save"
@@ -322,7 +322,7 @@ msgstr "Appraisal finalized by ${user}"
 #. Default: "The archiving confirmed by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_archived"
-msgstr "The archiving confirmed by ${user}"
+msgstr "Archival confirmed by ${user}"
 
 #. German translation: Angebot abgeschlossen und alle Dossiers vernichtet durch ${user}
 #. Default: "Disposition closed and all dossiers destroyed by ${user}"
@@ -334,7 +334,7 @@ msgstr "Disposition closed and all dossiers destroyed by ${user}"
 #. Default: "Disposition disposed for the archive by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_disposed"
-msgstr "Disposition disposed for the archive by ${user}"
+msgstr "Disposition offered for archival by ${user}"
 
 #. German translation: Editiert durch ${user}
 #. Default: "Edited by ${user}"
@@ -358,13 +358,13 @@ msgstr "Updated by ${user}"
 #. Default: "No SIP Package generated for this disposition."
 #: ./opengever/disposition/browser/ech0160.py
 msgid "msg_no_sip_package_generated"
-msgstr "No SIP Package generated for this disposition."
+msgstr "No SIP package generated yet for this disposition."
 
 #. German translation: SIP Paket erfolgreich generiert.
 #. Default: "SIP Package generated successfully."
 #: ./opengever/disposition/browser/ech0160.py
 msgid "msg_sip_package_sucessfully_generated"
-msgstr "SIP Package generated successfully."
+msgstr "SIP package generated successfully."
 
 #. German translation: Periode
 #. Default: "Period"
@@ -374,6 +374,7 @@ msgstr "Period"
 
 #. German translation: Verlauf
 #. Default: "Progress"
+#. MARKER: double check. Maybe "History" is better. But might actually be "Progress" in this case.
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "progress"
 msgstr "Progress"

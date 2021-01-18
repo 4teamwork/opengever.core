@@ -144,16 +144,16 @@ class TestDispositionOverview(IntegrationTestCase):
 
         browser.open(self.disposition, view='overview')
 
-        self.assertEquals(['Export appraisal list as excel'],
+        self.assertEquals(['Export appraisal list as an Excel file'],
                           browser.css('ul.actions li').text)
 
         browser.find('Appraise disposition').click()
-        self.assertEquals(['Export appraisal list as excel'],
+        self.assertEquals(['Export appraisal list as an Excel file'],
                           browser.css('ul.actions li').text)
 
         browser.find('Submit disposition').click()
 
-        self.assertEquals(['Export appraisal list as excel',
+        self.assertEquals(['Export appraisal list as an Excel file',
                            'Download disposition package'],
                           browser.css('ul.actions li').text)
 
@@ -162,14 +162,14 @@ class TestDispositionOverview(IntegrationTestCase):
             browser.find('Download disposition package').get('href'))
         self.assertEquals(
             os.path.join(self.disposition.absolute_url(), 'download_excel'),
-            browser.find('Export appraisal list as excel').get('href'))
+            browser.find('Export appraisal list as an Excel file').get('href'))
 
         browser.find('Confirm archival').click()
-        self.assertEquals(['Export appraisal list as excel'],
+        self.assertEquals(['Export appraisal list as an Excel file'],
                           browser.css('ul.actions li').text)
 
         browser.find('Dispose of dossiers').click()
-        self.assertEquals(['Export appraisal list as excel',
+        self.assertEquals(['Export appraisal list as an Excel file',
                            'Download removal protocol'],
                           browser.css('ul.actions li').text)
         self.assertEquals(
@@ -218,7 +218,7 @@ class TestDispositionOverview(IntegrationTestCase):
 
         # resolved
         self.assertEquals(
-            ['Resolved Dossiers', 'Archive'],
+            ['Resolved dossiers', 'Archive'],
             resolved_list.css('.label h3').text)
         self.assertEquals(
             ['Client1 1.1 / 12 Hannah Baufrau'],
@@ -226,7 +226,7 @@ class TestDispositionOverview(IntegrationTestCase):
 
         # inactive
         self.assertEquals(
-            ['Inactive Dossiers', 'Archive'],
+            ['Inactive dossiers', 'Archive'],
             inactive_list.css('.label h3').text)
         self.assertEquals(
             ['Client1 1.1 / 14 Hans Baumann'],

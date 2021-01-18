@@ -41,7 +41,7 @@ class TestECH0160StoreView(IntegrationTestCase):
             browser.open(self.disposition, view='ech0160_store')
 
         self.assertEquals(
-            ['SIP Package generated successfully.'], info_messages())
+            ['SIP package generated successfully.'], info_messages())
         self.assertTrue(self.disposition.has_sip_package())
 
 
@@ -53,7 +53,7 @@ class TestECH0160DownloadView(IntegrationTestCase):
 
         self.set_workflow_state('disposition-state-disposed', self.disposition)
         browser.open(self.disposition, view='ech0160_download')
-        self.assertEquals([u'No SIP Package generated for this disposition.'],
+        self.assertEquals([u'No SIP package generated yet for this disposition.'],
                           error_messages())
 
     @browsing

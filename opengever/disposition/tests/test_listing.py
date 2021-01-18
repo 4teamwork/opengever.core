@@ -53,20 +53,20 @@ class TestDispositionListing(SolrIntegrationTestCase):
         browser.open(self.repository_root, view='tabbedview_view-dispositions')
         self.assertEquals(
             [{'': '',
-              'Review state': 'Appraised',
-              'Sequence Number': '3',
+              'State': 'Appraised',
+              'Sequence number': '3',
               'Title': 'Angebot FD 1.2.2003'},
              {'': '',
-              'Review state': 'Submitted',
-              'Sequence Number': '4',
+              'State': 'Submitted',
+              'Sequence number': '4',
               'Title': 'Angebot FD 1.2.1995'},
              {'': '',
-              'Review state': 'In progress',
-              'Sequence Number': '1',
+              'State': 'In progress',
+              'Sequence number': '1',
               'Title': 'Angebot 31.8.2016'},
              {'': '',
-              'Review state': 'Submitted',
-              'Sequence Number': '2',
+              'State': 'Submitted',
+              'Sequence number': '2',
               'Title': 'Angebot 30.12.1997'}],
             browser.css('.listing').first.dicts())
 
