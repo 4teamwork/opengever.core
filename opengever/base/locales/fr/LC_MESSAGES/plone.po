@@ -261,6 +261,9 @@ msgstr "Actions supplémentaires"
 msgid "label_has_parse_errors"
 msgstr "Erreur lors du traitement de votre demande de recherche. Veuillez noter que les expressions comme AND, NOT et OR ne sont autorisées que lors d'une recherche avancée."
 
+msgid "label_name"
+msgstr "Nom"
+
 msgid "label_reset"
 msgstr "Remettre"
 

@@ -345,6 +345,10 @@ msgstr "label_actions_menu"
 msgid "label_has_parse_errors"
 msgstr "An error occurred while handling your search query. Please note that operators like AND, NOT and OR are only allowed in advanced search."
 
+#. German translation: Name
+msgid "label_name"
+msgstr "Name"
+
 #. German translation: zurücksetzen
 msgid "label_reset"
 msgstr "Reset"
