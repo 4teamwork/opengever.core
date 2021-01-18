@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 09:44+0000\n"
 "PO-Revision-Date: 2017-05-03 09:38+0200\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -18,12 +18,12 @@ msgstr ""
 #. German translation: Das Objekt ${title} darf nicht in den Papierkorb verschoben werden.
 #: ./opengever/trash/browser/trash.py
 msgid "Trashing ${title} is forbidden"
-msgstr "Trashing ${title} is forbidden"
+msgstr "Moving object ${title} to trash is not allowed."
 
 #. German translation: Das Objekt ${title} darf nicht aus dem Papierkorb reaktiviert werden.
 #: ./opengever/trash/browser/trash.py
 msgid "Untrashing ${title} is forbidden"
-msgstr "Untrashing ${title} is forbidden"
+msgstr "Restoring object ${title} from trash is not allowed."
 
 #. German translation: Sie haben keine Objekte ausgewählt
 #: ./opengever/trash/browser/trash.py
@@ -33,22 +33,22 @@ msgstr "You have not selected any items."
 #. German translation: Das Objekt ${obj} wurde bereits in den Papierkorb verschoben
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is already trashed"
-msgstr "could not trash the object ${obj}, it is already trashed"
+msgstr "Object ${obj} is already in the trash."
 
 #. German translation: Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ein Protokollauszug, welcher als Antwort im Ursprungsdossier abgelegt wurde.
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is an excerpt that has been returned to the proposal."
-msgstr "could not trash the object ${obj}, it is an excerpt that has been returned to the proposal."
+msgstr "Could not move object ${obj} to the trash: it's a protocol excerpt that was returned to the proposal in the originating dossier."
 
 #. German translation: Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt.
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."
-msgstr "could not trash the object ${obj}, it is checked out."
+msgstr "Could not move document ${obj} to the trash: it's currently checked out."
 
 #. German translation: Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist gesperrt.
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is locked."
-msgstr "could not trash the object ${obj}, it is locked."
+msgstr "Could not move document ${obj} to the trash: it's currently locked."
 
 #. German translation: Sie haben keine Objekte ausgewählt.
 #. Default: "You have not selected any items."
@@ -102,13 +102,13 @@ msgstr "The selected documents can't be removed, see error messages below."
 #. Default: "The document is referred by ${links}."
 #: ./opengever/trash/remover.py
 msgid "msg_document_has_backreferences"
-msgstr "The document is referred by ${links}."
+msgstr "The document is referred to by ${links}."
 
 #. German translation: Das Dokument referenziert andere Dokumente.
 #. Default: "The document contains relations."
 #: ./opengever/trash/remover.py
 msgid "msg_document_has_relations"
-msgstr "The document contains relations."
+msgstr "The document has outgoing references to other documents."
 
 #. German translation: Das Dokument ist noch ausgecheckt.
 #. Default: "The document is still checked out."
@@ -120,20 +120,20 @@ msgstr "The document is still checked out."
 #. Default: "The document is not trashed."
 #: ./opengever/trash/remover.py
 msgid "msg_is_not_trashed"
-msgstr "The document is not trashed."
+msgstr "The document has not been moved to the trash yet."
 
 #. German translation: Das Dokument ist schon gelöscht
 #. Default: "The document is already removed."
 #: ./opengever/trash/remover.py
 msgid "msg_is_removed"
-msgstr "The document is already removed."
+msgstr "The document has already been removed."
 
 #. German translation: Löschen
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml
 msgid "remove"
-msgstr "remove"
+msgstr "Remove"
 
 #. German translation: Das Objekt ${obj} wurde in den Papierkorb verschoben.
 #: ./opengever/trash/browser/trash.py
 msgid "the object ${obj} trashed"
-msgstr "the object ${obj} trashed"
+msgstr "Object ${obj} has been moved to the trash."

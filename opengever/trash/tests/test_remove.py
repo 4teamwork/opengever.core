@@ -74,7 +74,7 @@ class TestRemoveConfirmationView(IntegrationTestCase):
         browser.open(self.dossier, self.make_path_param(self.empty_document), view='remove_confirmation')
 
         error_div = browser.css('div.documents div.error').first
-        self.assertEqual('The document is not trashed.', error_div.text)
+        self.assertEqual('The document has not been moved to the trash yet.', error_div.text)
         self.assertEqual([u'L\xe4\xe4r'], error_div.parent().css('a').text)
 
     @browsing

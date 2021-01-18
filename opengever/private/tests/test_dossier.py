@@ -167,7 +167,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
                 '_authenticator': createToken()}
 
         browser.open(self.private_dossier, view="trashed", data=data)
-        self.assertEquals([u'the object Testdokum\xe4nt trashed'],
+        self.assertEquals([u'Object Testdokum\xe4nt has been moved to the trash.'],
                           info_messages())
 
     @browsing
