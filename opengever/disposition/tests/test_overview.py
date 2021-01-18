@@ -218,7 +218,7 @@ class TestDispositionOverview(IntegrationTestCase):
 
         # resolved
         self.assertEquals(
-            ['Resolved Dossiers', 'Archive'],
+            ['Resolved dossiers', 'Archive'],
             resolved_list.css('.label h3').text)
         self.assertEquals(
             ['Client1 1.1 / 12 Hannah Baufrau'],
@@ -226,7 +226,7 @@ class TestDispositionOverview(IntegrationTestCase):
 
         # inactive
         self.assertEquals(
-            ['Inactive Dossiers', 'Archive'],
+            ['Inactive dossiers', 'Archive'],
             inactive_list.css('.label h3').text)
         self.assertEquals(
             ['Client1 1.1 / 14 Hans Baumann'],

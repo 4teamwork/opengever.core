@@ -54,19 +54,19 @@ class TestDispositionListing(SolrIntegrationTestCase):
         self.assertEquals(
             [{'': '',
               'State': 'Appraised',
-              'Sequence Number': '3',
+              'Sequence number': '3',
               'Title': 'Angebot FD 1.2.2003'},
              {'': '',
               'State': 'Submitted',
-              'Sequence Number': '4',
+              'Sequence number': '4',
               'Title': 'Angebot FD 1.2.1995'},
              {'': '',
               'State': 'In progress',
-              'Sequence Number': '1',
+              'Sequence number': '1',
               'Title': 'Angebot 31.8.2016'},
              {'': '',
               'State': 'Submitted',
-              'Sequence Number': '2',
+              'Sequence number': '2',
               'Title': 'Angebot 30.12.1997'}],
             browser.css('.listing').first.dicts())
 
