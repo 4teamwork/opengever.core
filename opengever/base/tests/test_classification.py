@@ -580,7 +580,7 @@ class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
 
         self.assert_journal_entry(
             self.document, 'Public trial modified',
-            u'Public trial changed to "public".')
+            u'Public access level changed to "public".')
 
     @browsing
     def test_public_trial_edit_form_journalizes_changes(self, browser):
@@ -591,4 +591,4 @@ class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
 
         self.assert_journal_entry(
             self.document, 'Public trial modified',
-            u'Public trial changed to "public".')
+            u'Public access level changed to "public".')

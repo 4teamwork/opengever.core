@@ -253,12 +253,12 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             document,
             action_type='Object moved to trash',
-            action_title='Object moved to trash: %s' % (
+            action_title='Document moved to trash: %s' % (
                 document.title_or_id()), )
         self.check_annotation(
             dossier,
             action_type='Object moved to trash',
-            action_title='Object moved to trash: %s' % (
+            action_title='Document moved to trash: %s' % (
                 document.title_or_id()), )
 
         # Untrash-Event
@@ -266,12 +266,12 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             document,
             action_type='Object restore',
-            action_title='Object restored: %s' % (
+            action_title='Document restored: %s' % (
                 document.title_or_id()), )
         self.check_annotation(
             dossier,
             action_type='Object restore',
-            action_title='Object restored: %s' % (
+            action_title='Document restored: %s' % (
                 document.title_or_id()), )
 
     def test_integration_participation_events(self):
@@ -345,7 +345,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier1,
             action_type='Object moved',
-            action_title='Object moved: %s' % document.title_or_id(), )
+            action_title='Object pasted: %s' % document.title_or_id(), )
 
         # Test that a normal ObjectAddedEvent does not result in an object
         # moved journal entry.
@@ -498,7 +498,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             obj,
             action_type='Reverted document file',
-            action_title='Reverte document file to version v%s' % (
+            action_title='Reverted file to version v%s' % (
                 "1"))
 
     def check_document_sent(self, obj, doc):
@@ -508,17 +508,17 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             obj,
             action_type='Document Sent',
-            action_title=u'Document sent by Mail: test mail',
+            action_title=u'Document sent by email: test mail',
             actor=TEST_USER_ID,
             comment=(
                 'Attachments: <span>'
                 '<a href="{}">{}</a>'
-                '</span> | Receivers: test@example.com |'
+                '</span> | Recipients: test@example.com |'
                 ' Message: Mymessage'.format(doc.absolute_url(), doc.Title()))
             )
 
     def check_document_copy_downloaded(self, obj):
-        title = u'Download copy current version (0)'
+        title = u'Document copy downloaded current version (0)'
         self.check_annotation(
             obj,
             action_type='File copy downloaded',

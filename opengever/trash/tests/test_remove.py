@@ -165,9 +165,9 @@ class TestRestoreJournalization(IntegrationTestCase):
         api.content.transition(obj=self.empty_document, transition=self.empty_document.restore_transition)
 
     def test_restoring_is_journalized_on_object(self):
-        self.assert_journal_entry(self.mail_eml, OBJECT_RESTORED, u'Document Die B\xfcrgschaft restored.')
-        self.assert_journal_entry(self.empty_document, OBJECT_RESTORED, u'Document L\xe4\xe4r restored.')
+        self.assert_journal_entry(self.mail_eml, OBJECT_RESTORED, u'Document Die B\xfcrgschaft restored from trash.')
+        self.assert_journal_entry(self.empty_document, OBJECT_RESTORED, u'Document L\xe4\xe4r restored from trash.')
 
     def test_restoring_is_journalized_on_parent(self):
-        self.assert_journal_entry(self.subdossier, OBJECT_RESTORED, u'Document L\xe4\xe4r restored.')
-        self.assert_journal_entry(self.dossier, OBJECT_RESTORED, u'Document Die B\xfcrgschaft restored.')
+        self.assert_journal_entry(self.subdossier, OBJECT_RESTORED, u'Document L\xe4\xe4r restored from trash.')
+        self.assert_journal_entry(self.dossier, OBJECT_RESTORED, u'Document Die B\xfcrgschaft restored from trash.')

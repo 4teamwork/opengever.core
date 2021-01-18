@@ -21,7 +21,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         browser.open(self.document, view='tabbed_view/listing', data={'view_name': 'overview'})
         browser.find('Download copy').click()
         browser.find('Download').click()
-        self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy current version (1)')
+        self.assert_journal_entry(self.document, 'File copy downloaded', 'Document copy downloaded current version (1)')
 
     @browsing
     def test_download_versioned_copy_creates_journal_entries_with_versions_in_title(self, browser):
@@ -32,12 +32,12 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-versions')
         browser.css('a.function-download-copy').first.click()
         browser.find('Download').click()
-        self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy version 1')
+        self.assert_journal_entry(self.document, 'File copy downloaded', 'Document copy downloaded version 1')
         versioner.create_version('Oops.')
         browser.open(self.document, view='tabbedview_view-versions')
         browser.css('a.function-download-copy').first.click()
         browser.find('Download').click()
-        self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy version 2')
+        self.assert_journal_entry(self.document, 'File copy downloaded', 'Document copy downloaded version 2')
 
     @browsing
     def test_download_copy_without_overlay_creates_journal_entry(self, browser):
@@ -47,7 +47,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         DownloadConfirmationHelper(self.document).deactivate()
         browser.open(self.document, view='tabbed_view/listing', data={'view_name': 'overview'})
         browser.find('Download copy').click()
-        self.assert_journal_entry(self.document, 'File copy downloaded', 'Download copy current version (0)')
+        self.assert_journal_entry(self.document, 'File copy downloaded', 'Document copy downloaded current version (0)')
 
     @browsing
     def test_disable_copy_download_overlay(self, browser):
