@@ -32,13 +32,16 @@ class TaskTree(object):
         result['tasktree']['children'] = self.task_tree()
         return result
 
-    def task_tree(self):
+    def get_main_task(self):
         main_task = self.context
         parent = aq_parent(main_task)
         while ITask.providedBy(parent):
             main_task = parent
             parent = aq_parent(main_task)
+        return main_task
 
+    def task_tree(self):
+        main_task = self.get_main_task()
         solr = getUtility(ISolrSearch)
         filters = make_filters(
             path={
