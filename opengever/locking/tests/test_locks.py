@@ -245,7 +245,7 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
         browser.open(self.dossier, view="trashed", data=data)
 
         self.assertEqual(
-            [u'could not trash the object {}, it is locked.'.format(
+            [u"Could not move document Vertr\xe4gsentwurf to the trash: it's currently locked.".format(
                 self.document.title)],
             error_messages())
         self.assertFalse(ITrashed.providedBy(self.document))

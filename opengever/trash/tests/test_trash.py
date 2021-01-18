@@ -37,7 +37,7 @@ class TestTrash(IntegrationTestCase):
         browser.open(self.dossier, view="trashed", data=data)
 
         self.assertEquals(
-            [u'the object {} trashed'.format(self.subdocument.title)],
+            [u'Object {} has been moved to the trash.'.format(self.subdocument.title)],
             info_messages())
         self.assertEquals(
             '{}#documents'.format(self.dossier.absolute_url()), browser.url)
@@ -212,7 +212,7 @@ class TestTrash(IntegrationTestCase):
         browser.open(self.dossier, view="trashed", data=data)
 
         self.assertEquals(
-            [u'could not trash the object {}, it is already trashed'.format(
+            [u'Object {} is already in the trash.'.format(
                 self.subdocument.title)],
             error_messages())
         self.assertEquals(
@@ -228,7 +228,7 @@ class TestTrash(IntegrationTestCase):
         browser.open(self.dossier, view="trashed", data=data)
 
         self.assertEquals(
-            [u'could not trash the object {}, it is checked out.'.format(
+            [u"Could not move document {} to the trash: it's currently checked out.".format(
                 self.subdocument.title)],
             error_messages())
         self.assertEquals(
@@ -291,7 +291,7 @@ class TestUntrash(IntegrationTestCase):
         browser.open(self.dossier, view="untrashed", data=data)
 
         self.assertEquals(
-            [u'Untrashing {} is forbidden'.format(self.subdocument.title)],
+            [u'Restoring object {} from trash is not allowed.'.format(self.subdocument.title)],
             error_messages())
 
     @browsing
@@ -309,7 +309,7 @@ class TestUntrash(IntegrationTestCase):
 
         self.assertTrue(ITrashed.providedBy(self.empty_document))
         self.assertEquals(
-            [u'Untrashing {} is forbidden'.format(self.empty_document.title)],
+            [u'Restoring object {} from trash is not allowed.'.format(self.empty_document.title)],
             error_messages())
 
         # When restored, document can be untrashed

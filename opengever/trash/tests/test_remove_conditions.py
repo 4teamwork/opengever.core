@@ -25,7 +25,7 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
 
         self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
-            [u'The document contains relations.'], checker.error_msg)
+            [u'The document has outgoing references to other documents.'], checker.error_msg)
 
     @browsing
     def test_document_must_not_have_backreferences(self, browser):
@@ -40,7 +40,7 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
 
         self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
-            [u'The document is referred by <a href={}>Document: {}</a>.'.format(
+            [u'The document is referred to by <a href={}>Document: {}</a>.'.format(
                 self.taskdocument.absolute_url(), self.taskdocument.title)],
             checker.error_msg)
 
@@ -69,7 +69,7 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
         checker = RemoveConditionsChecker(self.empty_document)
         self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
-            [u'The document is not trashed.'], checker.error_msg)
+            [u'The document has not been moved to the trash yet.'], checker.error_msg)
 
     def test_document_must_not_already_be_removed(self):
         self.login(self.manager)
@@ -80,7 +80,7 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
         checker = RemoveConditionsChecker(self.empty_document)
         self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
-            [u'The document is already removed.'],
+            [u'The document has already been removed.'],
             checker.error_msg)
 
     def test_removal_allowed(self):
