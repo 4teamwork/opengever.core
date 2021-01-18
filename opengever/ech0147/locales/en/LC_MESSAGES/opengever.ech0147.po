@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 16:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. German translation: Ungültige eCH-0147 Nachricht. message.xml fehlt.
 #: ./opengever/ech0147/browser/import.py
 msgid "Invalid message. Missing message.xml"
-msgstr "Invalid message. Missing message.xml"
+msgstr "Invalid eCH-0147 message. Missing message.xml"
 
 #. German translation: Nachricht wurde importiert.
 #: ./opengever/ech0147/browser/import.py
@@ -37,12 +37,12 @@ msgstr "This message contains toplevel documents. It can only be imported within
 #. German translation: Fachliche Austauschanweisung für den Empfänger der Nachricht.
 #: ./opengever/ech0147/browser/export.py
 msgid "help_action"
-msgstr "help_action"
+msgstr "Exchange instruction addressed to the recipient of the message."
 
 #. German translation: Bearbeitungsanweisung für den Empfänger der Nachricht.
 #: ./opengever/ech0147/browser/export.py
 msgid "help_directive"
-msgstr "help_directive"
+msgstr "Processing directive addressed to the recipient of the message."
 
 #. German translation: Eine eCH-0147 konforme ZIP-Datei
 #. Default: "A ZIP file containing an eCH-147 message."
@@ -54,7 +54,7 @@ msgstr "A ZIP file containing an eCH-147 message."
 #. Default: "Recipients of the message. Enter one recipient per line."
 #: ./opengever/ech0147/browser/export.py
 msgid "help_recipients"
-msgstr "Recipients of the message. Enter one recipient per line."
+msgstr "Recipients of the message (e.g. email address). Enter one recipient per line."
 
 #. German translation: Federführende Person bei Dossiers, die durch den eCH-0147 Import erstellt werden.
 #. Default: "Responsible for dossiers created by eCH-0147 import."
@@ -169,7 +169,7 @@ msgstr "Subject"
 #. Default: "Invalid content. ${details}"
 #: ./opengever/ech0147/browser/import.py
 msgid "msg_ech0147_invalid_content"
-msgstr "Invalid content. ${details}"
+msgstr "Invalid XML content. ${details}"
 
 #. German translation: neu
 #. Default: "new"
@@ -247,7 +247,7 @@ msgstr "external process"
 #. Default: "informationrocess"
 #: ./opengever/ech0147/browser/export.py
 msgid "term_directive_information"
-msgstr "informationrocess"
+msgstr "information"
 
 #. German translation: zur Bearbeitung
 #. Default: "process"
