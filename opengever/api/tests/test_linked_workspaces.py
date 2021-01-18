@@ -1098,7 +1098,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
 
             self.assertEqual(new_content, new_version.file.data)
             self.assertEqual(initial_filename, new_version.file.filename)
-            self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
+            self.assertEqual(u'Document copied back from teamraum', new_version_md.comment)
 
             self.assertEqual(
                 RETRIEVAL_MODE_VERSION,

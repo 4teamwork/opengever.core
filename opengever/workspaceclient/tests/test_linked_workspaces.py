@@ -567,7 +567,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
             self.assertEqual(new_content, new_version.file.data)
             self.assertEqual(initial_filename, new_version.file.filename)
-            self.assertEqual(u'Document retrieved from teamraum', new_version_md.comment)
+            self.assertEqual(u'Document copied back from teamraum', new_version_md.comment)
 
             document_journal = self.get_journal_entries(gever_doc)
             self.assertEqual(2, len(document_journal))
@@ -581,7 +581,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assert_journal_entry(
                 self.dossier,
                 action_type='Document retrieved from teamraum',
-                title=u'Document Testdokum\xe4nt retrieved from workspace.',
+                title=u'Document Testdokum\xe4nt copied back from workspace.',
             )
 
     def test_copy_document_from_workspace_as_new_version_unlocks_document(self):
