@@ -175,7 +175,7 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
             u'responsible_client': {u'title': u'Finanz\xe4mt', u'token': u'fa'},
             u'review_state': u'task-state-resolved',
             u'revoke_permissions': True,
-            u'task_type': {u'title': u'For confirmation / correction',
+            u'task_type': {u'title': u'For your review',
                            u'token': u'correction'},
             u'title': u'Inquiry from a concerned citizen'},
             response)

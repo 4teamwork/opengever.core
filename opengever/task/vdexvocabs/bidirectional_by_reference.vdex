@@ -7,6 +7,7 @@
         <termIdentifier>comment</termIdentifier>
         <caption>
             <langstring language="en">To comment</langstring>
+            <langstring language="en-us">To comment</langstring>
             <langstring language="de-ch">Zur Stellungnahme</langstring>
             <langstring language="de">Zur Stellungnahme</langstring>
             <langstring language="fr">Pour prise de position</langstring>
@@ -17,7 +18,8 @@
     <term>
         <termIdentifier>approval</termIdentifier>
         <caption>
-            <langstring language="en">For approval</langstring>
+            <langstring language="en">For your approval</langstring>
+            <langstring language="en-us">For your approval</langstring>
             <langstring language="de">Zur Genehmigung</langstring>
             <langstring language="de-ch">Zur Genehmigung</langstring>
             <langstring language="fr">Pour accord</langstring>
@@ -28,7 +30,8 @@
     <term>
         <termIdentifier>correction</termIdentifier>
         <caption>
-            <langstring language="en">For confirmation / correction</langstring>
+            <langstring language="en">For your review</langstring>
+            <langstring language="en-us">For your review</langstring>
             <langstring language="de-ch">Zur Prüfung / Korrektur</langstring>
             <langstring language="de">Zur Prüfung / Korrektur</langstring>
             <langstring language="fr">Pour contrôle / correction</langstring>
@@ -40,6 +43,7 @@
         <termIdentifier>report</termIdentifier>
         <caption>
             <langstring language="en">To report / request</langstring>
+            <langstring language="en-us">To report / request</langstring>
             <langstring language="de-ch">Zum Bericht / Antrag</langstring>
             <langstring language="de">Zum Bericht / Antrag</langstring>
             <langstring language="fr">Pour rapport / demande</langstring>

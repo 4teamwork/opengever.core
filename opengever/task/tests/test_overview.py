@@ -252,7 +252,7 @@ class TestTaskTextTransformation(IntegrationTestCase):
             [u'Vertragsentwurf \xdcberpr\xfcfen',
              u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'Der Entwurf befindet sich im Anhang',
-             'For confirmation / correction',
+             'For your review',
              'In progress',
              'November 1, 2016',
              'No reminder',

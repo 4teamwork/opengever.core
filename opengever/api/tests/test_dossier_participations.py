@@ -25,11 +25,13 @@ class TestParticipationsGet(IntegrationTestCase):
         expected_json = {
             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
                     u'/dossier-1/@participations',
-            u'available_roles': [{u'title': u'Final drawing',
+            u'available_roles': [{u'title': u'Final signature',
                                   u'token': u'final-drawing'},
+                                 {u'title': u'For your information',
+                                  u'token': u'regard'},
                                  {u'title': u'Participation',
                                   u'token': u'participation'},
-                                 {u'title': u'Regard', u'token': u'regard'}],
+                                 ],
             u'items': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
                         u'vertrage-und-vereinbarungen/dossier-1/@participations/kathi.barfuss',
                         u'participant_id': u'kathi.barfuss',
@@ -81,6 +83,8 @@ class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
 
     @browsing
     def test_get_participations(self, browser):
+        self.maxDiff = None
+
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.dossier.absolute_url() + '/@participations',
@@ -88,11 +92,13 @@ class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
         expected_json = {
             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
                     u'vertrage-und-vereinbarungen/dossier-1/@participations',
-            u'available_roles': [{u'title': u'Final drawing',
+            u'available_roles': [{u'title': u'Final signature',
                                   u'token': u'final-drawing'},
+                                 {u'title': u'For your information',
+                                  u'token': u'regard'},
                                  {u'title': u'Participation',
                                   u'token': u'participation'},
-                                 {u'title': u'Regard', u'token': u'regard'}],
+                                 ],
             u'items': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
                                 u'vereinbarungen/dossier-1/@participations/organization:2',
                         u'participant_id': u'organization:2',
@@ -599,11 +605,13 @@ class TestParticipationsExpansion(IntegrationTestCase):
 
         expected = {
             u'@id': url,
-            u'available_roles': [{u'title': u'Final drawing',
+            u'available_roles': [{u'title': u'Final signature',
                                   u'token': u'final-drawing'},
+                                  {u'title': u'For your information',
+                                   u'token': u'regard'},
                                  {u'title': u'Participation',
                                   u'token': u'participation'},
-                                 {u'title': u'Regard', u'token': u'regard'}],
+                                 ],
             u'items': [{u'@id': '{}/{}'.format(url, data.participant_id),
                         u'participant_id': data.participant_id,
                         u'participant_title': data.participant_title,

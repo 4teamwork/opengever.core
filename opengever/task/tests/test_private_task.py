@@ -66,7 +66,7 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
 
         browser.visit(self.dossier)
         factoriesmenu.add('Task')
-        browser.fill({'Title': u'Testaufgabe', 'Task type': 'For information'})
+        browser.fill({'Title': u'Testaufgabe', 'Task type': 'For your information'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.regular_user)
         browser.click_on('Save')

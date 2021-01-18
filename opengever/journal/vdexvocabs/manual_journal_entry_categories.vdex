@@ -7,6 +7,7 @@
         <termIdentifier>phone-call</termIdentifier>
         <caption>
             <langstring language="en">Phone call</langstring>
+            <langstring language="en-us">Phone call</langstring>
             <langstring language="de-ch">Telefongespräch</langstring>
             <langstring language="de">Telefongespräch</langstring>
             <langstring language="fr">Conversation téléphonique</langstring>
@@ -17,6 +18,7 @@
         <termIdentifier>meeting</termIdentifier>
         <caption>
             <langstring language="en">Meeting</langstring>
+            <langstring language="en-us">Meeting</langstring>
             <langstring language="de-ch">Sitzung</langstring>
             <langstring language="de">Sitzung</langstring>
             <langstring language="fr">Séance</langstring>
@@ -27,6 +29,7 @@
         <termIdentifier>information</termIdentifier>
         <caption>
             <langstring language="en">Information</langstring>
+            <langstring language="en-us">Information</langstring>
             <langstring language="de-ch">Information</langstring>
             <langstring language="de">Information</langstring>
             <langstring language="fr">Information</langstring>
@@ -37,6 +40,7 @@
         <termIdentifier>other</termIdentifier>
         <caption>
             <langstring language="en">Other</langstring>
+            <langstring language="en-us">Other</langstring>
             <langstring language="de-ch">Sonstiges</langstring>
             <langstring language="de">Sonstiges</langstring>
             <langstring language="fr">Divers</langstring>

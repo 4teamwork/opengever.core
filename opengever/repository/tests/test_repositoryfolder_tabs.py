@@ -180,7 +180,7 @@ class TestRepositoryFolderTasksTab(IntegrationTestCase):
             'State': 'In progress',
             'Sequence number': '1',
             'Subdossier': '',
-            'Task type': 'For confirmation / correction',
+            'Task type': 'For your review',
             'Title': u'Vertragsentwurf \xdcberpr\xfcfen',
             }
 

@@ -192,7 +192,7 @@ class TestAcceptRemoteTaskPost(IntegrationTestCase):
                                     u'token': u'fa'},
             u'review_state': u'task-state-in-progress',
             u'revoke_permissions': True,
-            u'task_type': {u'title': u'For confirmation / correction',
+            u'task_type': {u'title': u'For your review',
                            u'token': u'correction'},
             u'title': u'Task x'},
             browser.json)
