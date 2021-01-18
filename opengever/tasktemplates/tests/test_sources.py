@@ -22,11 +22,11 @@ class TestTaskTemplateIssuerSource(base.TestUsersContactsInboxesSource):
         self.assertEquals('responsible', result[0].value)
         self.assertEquals('Responsible', result[0].title)
 
-        result = self.source.search('Current')
+        result = self.source.search('Logged in')
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
         self.assertEquals('current_user', result[0].token)
         self.assertEquals('current_user', result[0].value)
-        self.assertEquals('Current user', result[0].title)
+        self.assertEquals('Logged in user', result[0].title)
 
 
 class TestTaskResponsibleSource(base.TestAllUsersInboxesAndTeamsSource):
@@ -46,8 +46,8 @@ class TestTaskResponsibleSource(base.TestAllUsersInboxesAndTeamsSource):
         self.assertEquals('interactive_users:responsible', result[0].value)
         self.assertEquals('Responsible', result[0].title)
 
-        result = self.source.search('Current')
+        result = self.source.search('Logged in')
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
         self.assertEquals('interactive_users:current_user', result[0].token)
         self.assertEquals('interactive_users:current_user', result[0].value)
-        self.assertEquals('Current user', result[0].title)
+        self.assertEquals('Logged in user', result[0].title)

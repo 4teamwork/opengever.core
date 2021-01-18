@@ -23,10 +23,10 @@ class TestTaskTemplateActivites(IntegrationTestCase):
                .within(self.tasktemplatefolder))
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.fill({'Task template folder': u'Verfahren Neuanstellung'})
         browser.click_on('Continue')
 
-        browser.fill({'Tasktemplates': ['Arbeitsplatz einrichten.',
+        browser.fill({'Task template': ['Arbeitsplatz einrichten.',
                                         u'Notebook einrichten.']})
 
         browser.click_on('Continue')
@@ -59,10 +59,10 @@ class TestTaskTemplateActivites(IntegrationTestCase):
                .within(self.tasktemplatefolder))
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.fill({'Task template folder': u'Verfahren Neuanstellung'})
         browser.click_on('Continue')
 
-        browser.fill({'Tasktemplates': ['Arbeitsplatz einrichten.',
+        browser.fill({'Task template': ['Arbeitsplatz einrichten.',
                                         u'Notebook einrichten.']})
 
         browser.click_on('Continue')

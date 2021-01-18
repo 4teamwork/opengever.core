@@ -15,7 +15,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         factoriesmenu.add('Task Template')
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
-             'Task Type': 'comment',
+             'Task type': 'comment',
              'Deadline in Days': u'10'})
 
         form = browser.find_form_by_field('Responsible')
@@ -90,7 +90,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         factoriesmenu.add('Task Template')
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
-             'Task Type': 'comment',
+             'Task type': 'comment',
              'Deadline in Days': u'10'})
 
         form = browser.find_form_by_field('Responsible')
@@ -174,7 +174,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         factoriesmenu.add('Task Template')
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
-             'Task Type': 'comment',
+             'Task type': 'comment',
              'Deadline in Days': u'10'})
 
         form = browser.find_form_by_field('Responsible')

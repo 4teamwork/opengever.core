@@ -22,13 +22,13 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             templates=None, documents=None, start_immediately=None):
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': folder})
+        browser.fill({'Task template folder': folder})
         if documents:
             browser.fill({'Related documents': documents})
         browser.click_on('Continue')
 
         if templates:
-            browser.fill({'Tasktemplates': templates})
+            browser.fill({'Task template': templates})
 
         if start_immediately is not None:
             browser.fill({'Start immediately': start_immediately})
@@ -47,7 +47,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         browser.open(self.dossier, view='add-tasktemplate')
         self.assertEquals(self.dossier.absolute_url(), browser.url)
         self.assertEquals(
-            ['Currently there are no active task template folders registered.'],
+            ['Currently there are no active task template folders.'],
             error_messages())
 
     @browsing
@@ -89,7 +89,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         .within(self.tasktemplatefolder))
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': 'Verfahren Neuanstellung'})
+        browser.fill({'Task template folder': 'Verfahren Neuanstellung'})
         browser.click_on('Continue')
 
         self.assertItemsEqual(
@@ -115,10 +115,10 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
                .within(self.tasktemplatefolder))
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': 'Verfahren Neuanstellung'})
+        browser.fill({'Task template folder': 'Verfahren Neuanstellung'})
         browser.click_on('Continue')
 
-        browser.fill({'Tasktemplates': []})
+        browser.fill({'Task template': []})
         browser.click_on('Continue')
 
         self.assertEquals(
@@ -236,9 +236,10 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
                .within(self.tasktemplatefolder))
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.fill({'Task template folder': u'Verfahren Neuanstellung'})
         browser.click_on('Continue')
-        browser.fill({'Tasktemplates': [u'Eintrittsgespr\xe4ch vorbereiten und planen.',
+
+        browser.fill({'Task template': [u'Eintrittsgespr\xe4ch vorbereiten und planen.',
                                         'User Accounts erstellen.',
                                         'Arbeitsplatz einrichten.']})
         browser.click_on('Continue')
@@ -261,7 +262,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         form.find_widget(field_name).fill(self.secretariat_user)
         browser.click_on('Trigger')
 
-        self.assertEquals(['tasks created'], info_messages())
+        self.assertEquals(['All tasks from the selected task template have been created.'], info_messages())
         main_task = self.dossier.listFolderContents()[-1]
         ids = main_task.objectIds()
         task1, task2, task3 = [main_task.get(_id) for _id in ids]
@@ -283,9 +284,9 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.tasktemplate.responsible_client = None
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.fill({'Task template folder': u'Verfahren Neuanstellung'})
         browser.click_on('Continue')
-        browser.fill({'Tasktemplates': ['Arbeitsplatz einrichten.']})
+        browser.fill({'Task template': ['Arbeitsplatz einrichten.']})
         browser.click_on('Continue')
 
         browser.click_on('Trigger')
@@ -306,9 +307,9 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.tasktemplate.responsible_client = INTERACTIVE_USERS
 
         browser.open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.fill({'Task template folder': u'Verfahren Neuanstellung'})
         browser.click_on('Continue')
-        browser.fill({'Tasktemplates': ['Arbeitsplatz einrichten.']})
+        browser.fill({'Task template': ['Arbeitsplatz einrichten.']})
         browser.click_on('Continue')
 
         fields =  browser.forms['form'].fields
