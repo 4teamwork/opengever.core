@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-17 18:19+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -33,7 +33,7 @@ msgstr "Choose"
 #. German translation: Ersteller
 #. Default: "Ersteller"
 msgid "Creator"
-msgstr "Ersteller"
+msgstr "Creator"
 
 #. German translation: Treffer pro Seite
 #: ./opengever/tabbedview/browser/batching.pt
@@ -60,7 +60,7 @@ msgstr "Titel"
 #. German translation: Akteur
 #. Default: "Akteur"
 msgid "actor"
-msgstr "Akteur"
+msgstr "Actor"
 
 #. German translation: Zusätzliches
 msgid "additional_contact"
@@ -68,7 +68,7 @@ msgstr "additional_contact"
 
 #. German translation: Alle Kontakte
 msgid "all_contacts"
-msgstr "all_contacts"
+msgstr "All contacts"
 
 #. German translation: Alle Gremien
 msgid "all_orgunits"
@@ -82,13 +82,13 @@ msgstr "More actions &#9660;"
 
 #. German translation: in Bearbeitung
 msgid "checked_out"
-msgstr "checked_out"
+msgstr "Checked out"
 
 #. German translation: Erledigt am
 #. Default: "Date of completion"
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "column_date_of_completion"
-msgstr "Date of completion"
+msgstr "Completion date"
 
 #. German translation: Zu erledigen bis
 #. Default: "Deadline"
@@ -100,7 +100,7 @@ msgstr "Deadline"
 #. Default: "Issued at"
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "column_issued_at"
-msgstr "Issued at"
+msgstr "Issued on"
 
 #. German translation: Organisationseinheit
 #. Default: "Organisational Unit"
@@ -112,7 +112,7 @@ msgstr "Organisational Unit"
 #. Default: "Review state"
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "column_review_state"
-msgstr "Review state"
+msgstr "State"
 
 #. German translation: Laufnummer
 #. Default: "Sequence number"
@@ -135,15 +135,15 @@ msgstr "Title"
 #. German translation: Kommentar
 #. Default: "Kommentar"
 msgid "comment"
-msgstr "Kommentar"
+msgstr "Comment"
 
 #. German translation: Kommentar
 msgid "comments"
-msgstr "comments"
+msgstr "Comment"
 
 #. German translation: Beteiligter
 msgid "contact"
-msgstr "contact"
+msgstr "Participant"
 
 #. German translation: Dossier
 #. Default: "Dossier"
@@ -153,52 +153,52 @@ msgstr "Dossier"
 
 #. German translation: Erstellt am
 msgid "created"
-msgstr "created"
+msgstr "Created"
 
 #. German translation: Erledigt am
 msgid "date_of_completion"
-msgstr "date_of_completion"
+msgstr "Completion date"
 
 #. German translation: Frist
 msgid "deadline"
-msgstr "deadline"
+msgstr "Deadline"
 
 #. German translation: Ausgangsdatum
 msgid "delivery_date"
-msgstr "delivery_date"
+msgstr "Sent date"
 
 #. German translation: Autor
 msgid "document_author"
-msgstr "document_author"
+msgstr "Author"
 
 #. German translation: Dokumentdatum
 msgid "document_date"
-msgstr "document_date"
+msgstr "Document date"
 
 #. German translation: Laufnummer
 #. Default: "Sequence Number"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "document_sequence_number"
-msgstr "Sequence Number"
+msgstr "Sequence number"
 
 #. German translation: Dokumente
 #. Default: "Dokumente"
 msgid "documents"
-msgstr "Dokumente"
+msgstr "Documents"
 
 #. German translation: Galerieansicht
 #. Default: "Gallery"
 #: ./opengever/tabbedview/browser/bumblebee_gallery.pt
 #: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
 msgid "documents_pill_documents"
-msgstr "Gallery"
+msgstr "Gallery view"
 
 #. German translation: Listenansicht
 #. Default: "List"
 #: ./opengever/tabbedview/browser/bumblebee_gallery.pt
 #: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
 msgid "documents_pill_list"
-msgstr "List"
+msgstr "List view"
 
 #. German translation: Dossiers
 #. Default: "Dossiers"
@@ -207,21 +207,21 @@ msgstr "Dossiers"
 
 #. German translation: E-Mail
 msgid "email"
-msgstr "email"
+msgstr "Email"
 
 #. German translation: Ende
 msgid "end"
-msgstr "end"
+msgstr "End"
 
 #. German translation: Termine
 #. Default: "Termine"
 msgid "events"
-msgstr "Termine"
+msgstr "Events"
 
 #. German translation: Abgelaufen
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "expired"
-msgstr "expired"
+msgstr "Expired"
 
 #. German translation: Allgemein
 msgid "important_contact"
@@ -229,7 +229,7 @@ msgstr "important_contact"
 
 #. German translation: Zugewiesen von
 msgid "issuer"
-msgstr "issuer"
+msgstr "Issued by"
 
 #. German translation: Journal
 #. Default: "Journal"
@@ -252,13 +252,13 @@ msgstr "Checked out by"
 #. Default: "Creation Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_created_date"
-msgstr "Creation Date"
+msgstr "Creation date"
 
 #. German translation: Ausgangsdatum
 #. Default: "Delivery Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_delivery_date"
-msgstr "Delivery Date"
+msgstr "Sent date"
 
 #. German translation: Amt
 #. Default: "Department"
@@ -276,13 +276,13 @@ msgstr "Directorate"
 #. Default: "Document Author"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_document_author"
-msgstr "Document Author"
+msgstr "Author"
 
 #. German translation: Dokumentdatum
 #. Default: "Document Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_document_date"
-msgstr "Document Date"
+msgstr "Document date"
 
 #. German translation: Dateiendung
 #. Default: "File extension"
@@ -294,7 +294,7 @@ msgstr "File extension"
 #. Default: "Reference Number"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_document_reference"
-msgstr "Reference Number"
+msgstr "Reference number"
 
 #. German translation: Federführung
 #. Default: "Responsible"
@@ -326,7 +326,7 @@ msgstr "Keywords"
 #. Default: "Modification Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_modified_date"
-msgstr "Modification Date"
+msgstr "Modification date"
 
 #. German translation: Meine Benachrichtigungen
 #. Default: "My notifications"
@@ -357,19 +357,19 @@ msgstr "Preview"
 #. Default: "Public Trial"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_public_trial"
-msgstr "Public Trial"
+msgstr "Public access level"
 
 #. German translation: Eingangsdatum
 #. Default: "Receipt Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_receipt_date"
-msgstr "Receipt Date"
+msgstr "Received date"
 
 #. German translation: Aktenzeichen
 #. Default: "Reference Number"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_reference"
-msgstr "Reference Number"
+msgstr "Reference number"
 
 #. German translation: Auftragnehmer
 #. Default: "Responsible"
@@ -381,13 +381,13 @@ msgstr "Responsible"
 #. Default: "Review state"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_review_state"
-msgstr "Review state"
+msgstr "State"
 
 #. German translation: Version ${version} vom ${timestamp}
 #. Default: "Version ${version} of ${timestamp}"
 #: ./opengever/tabbedview/helper.py
 msgid "label_showroom_version_title"
-msgstr "Version ${version} of ${timestamp}"
+msgstr "Version ${version} from ${timestamp}"
 
 #. German translation: Beginn
 #. Default: "Start"
@@ -406,7 +406,7 @@ msgstr "Subdossier"
 #: ./opengever/tabbedview/browser/tabs.py
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "label_tabbedview_filter_all"
-msgstr "label_tabbedview_filter_all"
+msgstr "Any"
 
 #. German translation: Titel
 #. Default: "Title"
@@ -424,39 +424,39 @@ msgstr "Email"
 #. Default: "Firstname"
 #: ./opengever/tabbedview/browser/users.py
 msgid "label_userstab_firstname"
-msgstr "Firstname"
+msgstr "First name"
 
 #. German translation: Nachname
 #. Default: "Lastname"
 #: ./opengever/tabbedview/browser/users.py
 msgid "label_userstab_lastname"
-msgstr "Lastname"
+msgstr "Last name"
 
 #. German translation: Telefon Geschäft
 #. Default: "Office Phone"
 #: ./opengever/tabbedview/browser/users.py
 msgid "label_userstab_phone_office"
-msgstr "Office Phone"
+msgstr "Phone (work)"
 
 #. German translation: Benutzerid
 #. Default: "Userid"
 #: ./opengever/tabbedview/browser/users.py
 msgid "label_userstab_userid"
-msgstr "Userid"
+msgstr "User ID"
 
 #. German translation: Änderungsdatum
 #. Default: "Änderungsdatum"
 msgid "modified"
-msgstr "Änderungsdatum"
+msgstr "Modification date"
 
 #. German translation: Meine Aufgaben
 msgid "mytasks"
-msgstr "mytasks"
+msgstr "My tasks"
 
 #. German translation: Keine
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt
 msgid "none"
-msgstr "none"
+msgstr "None"
 
 #. German translation: Gremien
 msgid "orgunit_contact"
@@ -465,16 +465,16 @@ msgstr "orgunit_contact"
 #. German translation: Überfällig
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "overdue"
-msgstr "overdue"
+msgstr "Overdue"
 
 #. German translation: Übersicht
 #. Default: "Übersicht"
 msgid "overview"
-msgstr "Übersicht"
+msgstr "Overview"
 
 #. German translation: Beteiligte
 msgid "participants"
-msgstr "participants"
+msgstr "Participants"
 
 #. German translation: Persönliche Übersicht: ${user_name}
 #. Default: "Personal Overview: ${user_name}"
@@ -484,40 +484,40 @@ msgstr "Personal Overview: ${user_name}"
 
 #. German translation: Telefon Nummer
 msgid "phone_office"
-msgstr "phone_office"
+msgstr "Phone number"
 
 #. German translation: Nach Schlagwörtern filtern...
 #. Default: "Filter by subjects..."
 #: ./opengever/tabbedview/filters.py
 msgid "placeholder_filter_by_subjects"
-msgstr "Filter by subjects..."
+msgstr "Filter by keywords..."
 
 #. German translation: Vorschau
 #. Default: "Vorschau"
 msgid "preview"
-msgstr "Vorschau"
+msgstr "Preview"
 
 #. German translation: Eingangsdatum
 msgid "receipt_date"
-msgstr "receipt_date"
+msgstr "Received date"
 
 #. German translation: Aktenzeichen
 #. Default: "Reference Number"
 msgid "reference"
-msgstr "Reference Number"
+msgstr "Reference number"
 
 #. German translation: Ref Nr
 msgid "reference_number"
-msgstr "reference_number"
+msgstr "Reference number"
 
 #. German translation: Verwandte Dossiers
 msgid "relateddossiers"
-msgstr "relateddossiers"
+msgstr "Related dossiers"
 
 #. German translation: Ordnungspositionen
 #. Default: "Ordnungspositionen"
 msgid "repostories"
-msgstr "Ordnungspositionen"
+msgstr "Repository folders"
 
 #. German translation: Federführend
 #. Default: "Responsible"
@@ -526,25 +526,25 @@ msgstr "Responsible"
 
 #. German translation: Status
 msgid "review_state"
-msgstr "review_state"
+msgstr "State"
 
 #. German translation: Rollen
 msgid "role_list"
-msgstr "role_list"
+msgstr "Roles"
 
 #. German translation: Beteiligte
 #. Default: "Beteiligte"
 msgid "sharing"
-msgstr "Beteiligte"
+msgstr "Participants"
 
 #. German translation: Titel
 #. Default: "Titel"
 msgid "sortable_title"
-msgstr "Titel"
+msgstr "Title"
 
 #. German translation: Beginn
 msgid "start"
-msgstr "start"
+msgstr "Start"
 
 #. German translation: Subdossiers
 #. Default: "Subdossiers"
@@ -560,18 +560,18 @@ msgstr "${amount} matches"
 #. German translation: Aufgaben
 #. Default: "Aufgaben"
 msgid "tasks"
-msgstr "Aufgaben"
+msgstr "Tasks"
 
 #. German translation: Datum
 #. Default: "Datum"
 msgid "time"
-msgstr "Datum"
+msgstr "Date"
 
 #. German translation: Titel
 #. Default: "Titel"
 msgid "title"
-msgstr "Titel"
+msgstr "Title"
 
 #. German translation: Papierkorb
 msgid "trash"
-msgstr "trash"
+msgstr "Trash"

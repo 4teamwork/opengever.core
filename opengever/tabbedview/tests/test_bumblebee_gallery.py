@@ -360,7 +360,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(self.dossier, view="tabbedview_view-documents-proxy")
 
         self.assertEqual(
-            'List',
+            'List view',
             browser.css('.ViewChooser .active').first.text)
 
         # Set cookie for gallery-view
@@ -369,7 +369,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(self.dossier, view="tabbedview_view-documents-proxy")
 
         self.assertEqual(
-            'Gallery',
+            'Gallery view',
             browser.css('.ViewChooser .active').first.text)
 
     @browsing
@@ -379,7 +379,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(self.dossiertemplate, view="tabbedview_view-documents-proxy")
 
         self.assertEqual(
-            'List',
+            'List view',
             browser.css('.ViewChooser .active').first.text)
 
         # Set cookie for gallery-view
@@ -388,7 +388,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.login().visit(self.dossiertemplate, view="tabbedview_view-documents-proxy")
 
         self.assertEqual(
-            'Gallery',
+            'Gallery view',
             browser.css('.ViewChooser .active').first.text)
 
     @browsing
@@ -398,7 +398,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
             self.portal, view="tabbedview_view-mydocuments-proxy")
 
         self.assertEqual(
-            'List',
+            'List view',
             browser.css('.ViewChooser .active').first.text)
 
         # Set cookie for gallery-view
@@ -408,7 +408,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(view="tabbedview_view-mydocuments-proxy")
 
         self.assertEqual(
-            'Gallery',
+            'Gallery view',
             browser.css('.ViewChooser .active').first.text)
 
     @browsing
@@ -418,7 +418,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(self.dossier, view="tabbedview_view-trash-proxy")
 
         self.assertEqual(
-            'List',
+            'List view',
             browser.css('.ViewChooser .active').first.text)
 
         # Set cookie for gallery-view
@@ -427,7 +427,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(self.dossier, view="tabbedview_view-trash-proxy")
 
         self.assertEqual(
-            'Gallery',
+            'Gallery view',
             browser.css('.ViewChooser .active').first.text)
 
     @browsing
@@ -437,7 +437,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(self.task, view="tabbedview_view-relateddocuments-proxy")
 
         self.assertEqual(
-            'List',
+            'List view',
             browser.css('.ViewChooser .active').first.text)
 
         # Set cookie for gallery-view
@@ -446,7 +446,7 @@ class TestProxyViewsWithActivatedFeature(SolrIntegrationTestCase):
         browser.visit(self.task, view="tabbedview_view-relateddocuments-proxy")
 
         self.assertEqual(
-            'Gallery',
+            'Gallery view',
             browser.css('.ViewChooser .active').first.text)
 
     @browsing
