@@ -40,7 +40,7 @@ class TestPreviewTab(IntegrationTestCase):
         browser.open(self.mail_eml, view='tabbed_view')
 
         self.assertEquals(
-            ['Overview', 'Preview', 'Journal', 'Sharing'],
+            ['Overview', 'Preview', 'Journal', 'Info'],
             browser.css('.formTab').text)
 
         api.portal.set_registry_record(
@@ -49,5 +49,5 @@ class TestPreviewTab(IntegrationTestCase):
 
         browser.open(self.mail_eml, view='tabbed_view')
         self.assertEquals(
-            ['Overview', 'Journal', 'Sharing'],
+            ['Overview', 'Journal', 'Info'],
             browser.css('.formTab').text)

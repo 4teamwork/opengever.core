@@ -102,7 +102,7 @@ class TestTrash(IntegrationTestCase):
             send_authenticator=True,
         )
         browser.open(self.mail_eml)
-        self.assertEqual(['This mail is trashed.'], warning_messages())
+        self.assertEqual(['This email was moved to the trash.'], warning_messages())
 
     @browsing
     def test_does_not_show_statusmessage_on_next_view_after_viewing_trashed_mail_eml(self, browser):
@@ -152,7 +152,7 @@ class TestTrash(IntegrationTestCase):
             send_authenticator=True,
         )
         browser.open(self.mail_msg)
-        self.assertEqual(['This mail is trashed.'], warning_messages())
+        self.assertEqual(['This email was moved to the trash.'], warning_messages())
 
     @browsing
     def test_does_not_show_statusmessage_on_next_view_after_viewing_trashed_mail_msg(self, browser):
@@ -394,7 +394,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         )
         browser.open(self.mail_eml, view='bumblebee-overlay-document')
         self.assertEqual(
-            ['This mail is trashed.'],
+            ['This email was moved to the trash.'],
             browser.css('.portalMessage.warning dd').text,
         )
 
@@ -409,7 +409,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         )
         browser.open(self.mail_eml, view='bumblebee-overlay-listing')
         self.assertEqual(
-            ['This mail is trashed.'],
+            ['This email was moved to the trash.'],
             browser.css('.portalMessage.warning dd').text,
         )
 
@@ -424,7 +424,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         )
         browser.open(self.mail_msg, view='bumblebee-overlay-document')
         self.assertEqual(
-            ['This mail is trashed.'],
+            ['This email was moved to the trash.'],
             browser.css('.portalMessage.warning dd').text,
         )
 
@@ -439,6 +439,6 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         )
         browser.open(self.mail_msg, view='bumblebee-overlay-listing')
         self.assertEqual(
-            ['This mail is trashed.'],
+            ['This email was moved to the trash.'],
             browser.css('.portalMessage.warning dd').text,
         )

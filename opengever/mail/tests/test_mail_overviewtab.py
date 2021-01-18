@@ -17,7 +17,7 @@ class TestOverview(FunctionalTestCase):
     """Test the overview view of uploaded emails."""
 
     expected_original_msg_label = 'Raw *.msg message before conversion'
-    expected_message_source_label = 'Message source'
+    expected_message_source_label = 'Original message source'
 
     @browsing
     def test_mail_overview_tab(self, browser):
