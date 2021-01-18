@@ -1,5 +1,6 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from zope import schema
@@ -108,10 +109,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     @browsing
     def test_property_sheet_schema_definition_post_replaces_existing_schema(self, browser):
         self.login(self.manager, browser)
-
-        definition = PropertySheetSchemaDefinition.create("question")
-        storage = PropertySheetSchemaStorage()
-        storage.save(definition)
+        create(Builder("property_sheet_schema").named("question"))
 
         data = {
             "fields": {
@@ -130,6 +128,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             headers=self.api_headers,
         )
 
+        storage = PropertySheetSchemaStorage()
         self.assertEqual(1, len(storage.list()))
         definition = storage.get("question")
 
@@ -170,12 +169,11 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self, browser
     ):
         self.login(self.manager, browser)
-        storage = PropertySheetSchemaStorage()
-        fixture = PropertySheetSchemaDefinition.create(
-            "fixture",
-            assignments=[u"IDocumentMetadata.document_type.question"]
+        create(
+            Builder("property_sheet_schema")
+            .named("fixture")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
         )
-        storage.save(fixture)
 
         data = {
             "fields": {"foo": {"field_type": "bool"}},
@@ -198,40 +196,6 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             browser.json,
         )
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
-
-    @browsing
-    def test_property_sheet_schema_definition_post_requires_unique_assignment(
-        self, browser
-    ):
-        self.login(self.manager, browser)
-        storage = PropertySheetSchemaStorage()
-        fixture = PropertySheetSchemaDefinition.create(
-            "fixture",
-            assignments=[u"IDocumentMetadata.document_type.question"]
-        )
-        storage.save(fixture)
-
-        data = {
-            "fields": {"foo": {"field_type": "bool"}},
-            "assignments": [u"IDocumentMetadata.document_type.question"],
-        }
-        with browser.expect_http_error(400):
-            browser.open(
-                view="@propertysheets/invalidassignment",
-                method="POST",
-                data=json.dumps(data),
-                headers=self.api_headers,
-            )
-
-        self.assertDictContainsSubset(
-            {
-                u"message": u"The assignment 'IDocumentMetadata.document_type."
-                            "question' is already in use.",
-                "type": "BadRequest",
-            },
-            browser.json,
-        )
         self.assertEqual(1, len(storage.list()))
 
     @browsing

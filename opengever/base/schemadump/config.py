@@ -183,6 +183,7 @@ DEFAULT_OVERRIDES = {
 # Dropped from all schema dumps
 IGNORED_FIELDS = [
     'plone.app.versioningbehavior.behaviors.IVersionable.changeNote',
+    'opengever.document.behaviors.customproperties.IDocumentCustomProperties.custom_properties',
     'opengever.document.behaviors.metadata.IDocumentMetadata.digitally_available',
     'opengever.document.behaviors.metadata.IDocumentMetadata.preview',
     'opengever.document.behaviors.metadata.IDocumentMetadata.thumbnail',

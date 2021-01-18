@@ -7,6 +7,7 @@ Changelog
 - Add new API endpoint @white-labeling-settings. [tinagerber]
 - Add relatedItems field to todo. [tinagerber]
 - Add HubSpot feature flag. [tinagerber]
+- Implement serialization and deserialization of custom properties via API, currently available for documents and mails. [deiferni]
 - Bump docxcompose to version 1.3.1 to add support for dateformats. [njohner]
 - Change key for agenda item list document to "documents" in zip export. [njohner]
 - Bump ftw.solr to 2.9.2 to fix a bug with setting document_type back to None. [njohner]

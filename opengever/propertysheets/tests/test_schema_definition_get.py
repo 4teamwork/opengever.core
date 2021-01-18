@@ -1,7 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from jsonschema import Draft4Validator
-from opengever.propertysheets.definition import PropertySheetSchemaDefinition
-from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 
 
@@ -28,12 +28,8 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
     def test_property_sheet_schema_definition_get_list(self, browser):
         self.login(self.regular_user, browser)
 
-        definition1 = PropertySheetSchemaDefinition.create("schema1")
-        definition2 = PropertySheetSchemaDefinition.create("schema2")
-
-        storage = PropertySheetSchemaStorage()
-        storage.save(definition1)
-        storage.save(definition2)
+        create(Builder("property_sheet_schema").named("schema1"))
+        create(Builder("property_sheet_schema").named("schema2"))
 
         browser.open(
             view="@propertysheets", method="GET", headers=self.api_headers
@@ -53,16 +49,16 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
     def test_property_sheet_schema_definition_get_sheet_schema(self, browser):
         self.login(self.regular_user, browser)
 
-        definition = PropertySheetSchemaDefinition.create(
-            "schema", assignments=[u"IDocumentMetadata.document_type.question"]
-        )
-        definition.add_field("bool", u"yesorno", u"y/n", u"", False)
         choices = ["one", "two", "three"]
-        definition.add_field(
-            "choice", u"chooseone", u"choose", u"", False, values=choices
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("bool", u"yesorno", u"y/n", u"", False)
+            .with_field(
+                "choice", u"chooseone", u"choose", u"", False, values=choices
+            )
         )
-        storage = PropertySheetSchemaStorage()
-        storage.save(definition)
 
         browser.open(
             view="@propertysheets/schema",

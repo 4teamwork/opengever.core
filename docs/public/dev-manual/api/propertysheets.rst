@@ -1,7 +1,21 @@
 .. _propertysheets:
 
-Property Sheets (Benutzerdefinierte Felder)
-===========================================
+Benutzerdefinierte Felder
+=========================
+
+Das Bearbeiten der Schemas für Benutzerdefinierte Felder und
+Serialisieren/Deserialisieren auf Inhalten verwendet die folgenden Begriffe:
+
+- ``Property Sheet``: Ein Property Sheet definiert ein Schema. Dieses Schema
+                      wird zur Validierung der Custom Properties verwendet.
+- ``Assignment Slot``: Ein Assignment Slot definiert einen Steckplatz dem
+                       maximal ein Property Sheet zugewiesen werden kann.
+- ``Assignment``: Ein Assignment ist die Zuweisung eines Property Sheets an
+                  einen Assignment Slot. Ein Property Sheet kann mehrere
+                  Assignments haben.
+- ``Custom Properties``: Custom Properties sind die konkreten Daten auf den
+                         Inhaltsobjekten. Custom Properties werden gegen ihr
+                         zugehöriges Property Sheet validiert.
 
 Mittels Property Sheets ist es möglich benutzerdefinierte Schemata mit einem
 oder mehreren Feldern zu definieren damit zusätzliche Properties in GEVER
@@ -67,10 +81,10 @@ Einzelne Felder werden in folgendem Format erwartet:
 - ``required``: Ob das Feld erforderlich ist
 - ``values``: Auswahlmöglichkeiten für das Feld, nur für ``choice`` Feldtyp
 
-Assignments müssen aus dem Vokabular
+Die für das Assigmnet verwendeten Assignment-Slots müssen aus dem Vokabular
 ``opengever.propertysheets.PropertySheetAssignmentsVocabulary`` stammen. Zudem
-müssen Assignments eindeutig sein, mehrere Property Sheets für das gleiche
-Assignment sind im Moment nicht unterstützt.
+müssen Assignments eindeutig sein, mehrere Property Sheets dem gleichen
+Assignment-Slot zuzuweisen ist im Moment nicht unterstützt.
 
 
 **Beispiel-Request**:
@@ -82,7 +96,7 @@ Assignment sind im Moment nicht unterstützt.
 
   {
     "fields": {
-      "foo": {
+      "yesorno": {
         "field_type": "bool",
         "title": "Y/N",
         "description": "yes or no",
@@ -106,20 +120,97 @@ Assignment sind im Moment nicht unterstützt.
       "fieldsets": [
           {
               "behavior": "plone",
-              "fields": ["foo"],
+              "fields": ["yesorno"],
               "id": "default",
               "title": "Default"
           }
       ],
       "properties": {
-          "foo": {
+          "yesorno": {
               "description": "yes or no",
               "factory": "Yes/No",
               "title": "Y/N",
               "type": "boolean"
           }
       },
-      "required": ["foo"],
+      "required": ["yesorno"],
       "title": "question",
       "type": "object"
   }
+
+
+Serialisierung/Deserialisierung von Custom Properties
+-----------------------------------------------------
+
+Im Moment sind Custom Properties auf Dokumenten und Mails unterstützt. Die
+Auswahl des zu validerenden Property Sheets basiert auf dem Wert des Feldes
+`document_type`. Ist für den Assignment-Slot
+``IDocumentMetadata.document_type.<document_type_value>`` ein Property Sheet
+registriert, so werden Feldwerte dieses Property Sheets validiert. Hat das
+Property Sheet also obligatorische Felder, so müssen die Custom Properties
+zwingend Daten für dieses Property Sheet beinhalten. Serialisierung und
+Deserialisierung der Custom Properties basiert auf folgendem Format:
+
+
+.. sourcecode:: json
+
+  {
+      "<assignment_slot_name>": {
+          "<property_sheet_field_name>": "<field value>"
+      }
+  }
+
+
+Es werden immer alle einmal gespeicherten Custom Properties serialisiert und
+ausgegeben, unabhängig vom Wert des Feldes ``document_type``.
+
+.. sourcecode:: http
+
+  GET /ordnungssystem/dossier-23/document-123 HTTP/1.1
+  Accept: application/json
+
+.. sourcecode:: http
+
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+
+  {
+      "@id": "/ordnungssystem/dossier-23/document-123",
+      "custom_properties": {
+          "IDocumentMetadata.document_type.question": {
+              "yesorno": false
+          },
+          "IDocumentMetadata.document_type.protocol": {
+              "location": "Dammweg 9",
+              "responsible": "Hans Muster"
+          }
+      },
+      "...": "..."
+  }
+
+
+Beim Speichern der Custom Properties können Properties für alle erlaubten
+Assigmnet-Slots angegeben werden. Es werden immer alle angegebenen Custom
+Properties validiert. Das Speichern erfolg kumulativ, wenn man ein Subset
+der möglichen Assignment-Slots verwendet, werden die Custom Propterties anderer
+Slots nicht überschrieben.
+
+  .. sourcecode:: http
+
+    PATCH /ordnungssystem/dossier-23/document-123 HTTP/1.1
+    Accept: application/json
+
+    {
+          "IDocumentMetadata.document_type.question": {
+              "yesorno": true
+          }
+    }
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No content
+    Content-Type: application/json
+
+
+
+

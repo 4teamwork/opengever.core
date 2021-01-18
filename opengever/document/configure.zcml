@@ -91,6 +91,15 @@
       for="*"
       />
 
+  <!-- Property sheet support for documents -->
+  <plone:behavior
+      title="Document property sheet integration"
+      description="Property sheets for document like objects"
+      provides="opengever.document.behaviors.customproperties.IDocumentCustomProperties"
+      for="opengever.document.behaviors.IBaseDocument"
+      factory="opengever.propertysheets.annotation.CustomPropertiesStorage"
+      />
+
   <!-- custom add form for documents -->
   <adapter
       for="Products.CMFCore.interfaces.IFolderish

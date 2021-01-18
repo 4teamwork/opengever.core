@@ -135,6 +135,7 @@ DOCUMENT_REQUIREDS = {
 DOCUMENT_DEFAULTS = {
     'changed': FROZEN_NOW,
     'classification': u'unprotected',
+    'custom_properties': None,
     'description': u'',
     'digitally_available': True,
     'document_date': FROZEN_TODAY,
@@ -165,6 +166,7 @@ MAIL_REQUIREDS = {}
 MAIL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'classification': u'unprotected',
+    'custom_properties': None,
     'description': u'',
     'digitally_available': True,
     'document_author': u'from@example.org',

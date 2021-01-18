@@ -5,21 +5,36 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
+DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX = "IDocumentMetadata.document_type"
+
+
 @implementer(IVocabularyFactory)
 class PropertySheetAssignmentVocabulary(object):
-    """Return valid property sheet assignments."""
-
+    """Factory for vocabulary of all valid property sheet assignment slots."""
     def __call__(self, context):
-        vocabulary_factory = getUtility(
-            IVocabularyFactory, name="opengever.document.document_types"
-        )
-        document_types_vocabulary = vocabulary_factory(context)
-
         assignment_terms = []
-        for term in document_types_vocabulary:
-            name = u"IDocumentMetadata.document_type.{}".format(
-                term.value
-            )
-            assignment_terms.append(SimpleTerm(name))
-
+        for slot_name in get_document_assignment_slots():
+            assignment_terms.append(SimpleTerm(slot_name))
         return SimpleVocabulary(assignment_terms)
+
+
+def get_document_assignment_slots():
+    """"Return a list of all valid assignment slots for documents.
+
+    Currently this is limited to one slot per possible value of the
+    `document_type` field.
+    """
+    vocabulary_factory = getUtility(
+        IVocabularyFactory, name="opengever.document.document_types"
+    )
+    return [
+        document_type_assignment_slot_name(term.value)
+        for term in vocabulary_factory(None)
+    ]
+
+
+def document_type_assignment_slot_name(value):
+    return u"{}.{}".format(
+        DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX,
+        value
+    )

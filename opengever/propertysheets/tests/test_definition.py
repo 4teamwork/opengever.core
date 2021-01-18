@@ -47,6 +47,65 @@ class TestAsciiToken(TestCase):
         self.assertEqual(u'ueasd asd', ascii_token(u'\xfcasd//%asd'))
 
 
+class TestSchemaDefinitionRichComparison(FunctionalTestCase):
+
+    def test_eq_truthy(self):
+        self.assertTrue(
+            PropertySheetSchemaDefinition.create('foo')
+            == PropertySheetSchemaDefinition.create('foo')
+        )
+
+    def test_eq_falsy_other_name(self):
+        self.assertFalse(
+            PropertySheetSchemaDefinition.create('foo')
+            == PropertySheetSchemaDefinition.create('bar')
+        )
+
+    def test_eq_falsy_other_object(self):
+        self.assertFalse(
+            PropertySheetSchemaDefinition.create('foo') == object()
+        )
+
+    def test_eq_falsy_other_primitive(self):
+        self.assertFalse(
+            PropertySheetSchemaDefinition.create('foo') == 123
+        )
+
+    def test_eq_falsy_none(self):
+        val = None  # prevent code style complaints via indirection
+        self.assertFalse(
+            PropertySheetSchemaDefinition.create('foo') == val
+        )
+
+    def test_ne_falsy(self):
+        self.assertFalse(
+            PropertySheetSchemaDefinition.create('foo')
+            != PropertySheetSchemaDefinition.create('foo')
+        )
+
+    def test_ne_truthy_other_name(self):
+        self.assertTrue(
+            PropertySheetSchemaDefinition.create('foo')
+            != PropertySheetSchemaDefinition.create('qux')
+        )
+
+    def test_ne_truthy_other_object(self):
+        self.assertTrue(
+            PropertySheetSchemaDefinition.create('foo') != object()
+        )
+
+    def test_ne_truthy_other_primitive(self):
+        self.assertTrue(
+            PropertySheetSchemaDefinition.create('foo') != 123
+        )
+
+    def test_ne_truthy_none(self):
+        val = None  # prevent code style complaints via indirection
+        self.assertTrue(
+            PropertySheetSchemaDefinition.create('foo') != val
+        )
+
+
 class TestSchemaDefinition(FunctionalTestCase):
 
     def test_create_empty_schema_definition(self):
