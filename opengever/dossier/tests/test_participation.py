@@ -196,7 +196,7 @@ class TestParticipationAddForm(IntegrationTestCase):
     def test_participant_can_only_have_one_participation_per_context(self, browser):
         self.login(self.regular_user, browser)
 
-        self.add_participation_to_dossier(self.regular_user.getId(), ['Regard'], browser)
+        self.add_participation_to_dossier(self.regular_user.getId(), ['For your information'], browser)
         self.assertEqual(['Participation created.'], info_messages())
         self.assertEqual([], error_messages())
 

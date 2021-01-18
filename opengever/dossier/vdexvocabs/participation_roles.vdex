@@ -7,6 +7,7 @@
         <termIdentifier>participation</termIdentifier>
         <caption>
             <langstring language="en">Participation</langstring>
+            <langstring language="en-us">Participation</langstring>
             <langstring language="de-ch">Mitwirkung</langstring>
             <langstring language="de">Mitwirkung</langstring>
             <langstring language="fr">Participation</langstring>
@@ -16,7 +17,8 @@
     <term>
         <termIdentifier>final-drawing</termIdentifier>
         <caption>
-            <langstring language="en">Final drawing</langstring>
+            <langstring language="en">Final signature</langstring>
+            <langstring language="en-us">Final signature</langstring>
             <langstring language="de-ch">Schlusszeichnung</langstring>
             <langstring language="de">Schlusszeichnung</langstring>
             <langstring language="fr">Signature finale</langstring>
@@ -26,7 +28,8 @@
     <term>
         <termIdentifier>regard</termIdentifier>
         <caption>
-            <langstring language="en">Regard</langstring>
+            <langstring language="en">For your information</langstring>
+            <langstring language="en-us">For your information</langstring>
             <langstring language="de-ch">Kenntnisnahme</langstring>
             <langstring language="de">Kenntnisnahme</langstring>
             <langstring language="fr">Prise de connaissance</langstring>

@@ -22,7 +22,7 @@ class TestTaskPredecessorGet(IntegrationTestCase):
                 u'@type': u'opengever.task.task',
                 u'oguid': Oguid.for_object(self.task).id,
                 u'review_state': u'task-state-in-progress',
-                u'task_type': u'For confirmation / correction',
+                u'task_type': u'For your review',
                 u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
             }
         }
@@ -46,7 +46,7 @@ class TestTaskPredecessorGet(IntegrationTestCase):
                 u'@type': u'opengever.task.task',
                 u'oguid': Oguid.for_object(self.task).id,
                 u'review_state': u'task-state-in-progress',
-                u'task_type': u'For confirmation / correction',
+                u'task_type': u'For your review',
                 u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
             }
         }
@@ -86,7 +86,7 @@ class TestTaskPredecessorGet(IntegrationTestCase):
                 u'@type': u'opengever.task.task',
                 u'oguid': Oguid.for_object(self.task).id,
                 u'review_state': u'task-state-in-progress',
-                u'task_type': u'For confirmation / correction',
+                u'task_type': u'For your review',
                 u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
             }
         }

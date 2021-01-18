@@ -7,6 +7,7 @@
         <termIdentifier>folder</termIdentifier>
         <caption>
             <langstring language="en">Folder</langstring>
+            <langstring language="en-us">Folder</langstring>
             <langstring language="de-ch">Ordner</langstring>
             <langstring language="de">Ordner</langstring>
             <langstring language="fr">Classeur</langstring>
@@ -17,6 +18,7 @@
         <termIdentifier>box</termIdentifier>
         <caption>
             <langstring language="en">Box</langstring>
+            <langstring language="en-us">Box</langstring>
             <langstring language="de-ch">Schachtel</langstring>
             <langstring language="de">Schachtel</langstring>
             <langstring language="fr">Boîte</langstring>
@@ -27,6 +29,7 @@
         <termIdentifier>dossier</termIdentifier>
         <caption>
             <langstring language="en">Dossier</langstring>
+            <langstring language="en-us">Dossier</langstring>
             <langstring language="de-ch">Dossier</langstring>
             <langstring language="de">Dossier</langstring>
             <langstring language="fr">Dossier</langstring>

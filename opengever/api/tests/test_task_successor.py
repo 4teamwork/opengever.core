@@ -23,7 +23,7 @@ class TestTaskSuccessorsGet(IntegrationTestCase):
                 u'@type': u'opengever.task.task',
                 u'oguid': Oguid.for_object(self.expired_task).id,
                 u'review_state': u'task-state-resolved',
-                u'task_type': u'For confirmation / correction',
+                u'task_type': u'For your review',
                 u'title': u'Vertr\xe4ge abschliessen',
             }]
         }
@@ -48,7 +48,7 @@ class TestTaskSuccessorsGet(IntegrationTestCase):
                 u'@type': u'opengever.task.task',
                 u'oguid': Oguid.for_object(self.expired_task).id,
                 u'review_state': u'task-state-resolved',
-                u'task_type': u'For confirmation / correction',
+                u'task_type': u'For your review',
                 u'title': u'Vertr\xe4ge abschliessen',
             }]
         }
@@ -89,7 +89,7 @@ class TestTaskSuccessorsGet(IntegrationTestCase):
                 u'@type': u'opengever.task.task',
                 u'oguid': Oguid.for_object(self.expired_task).id,
                 u'review_state': u'task-state-resolved',
-                u'task_type': u'For confirmation / correction',
+                u'task_type': u'For your review',
                 u'title': u'Vertr\xe4ge abschliessen',
             }]
         }

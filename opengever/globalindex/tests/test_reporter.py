@@ -37,7 +37,7 @@ class TestTaskReporter(IntegrationTestCase):
              datetime(2016, 11, 1, 0, 0), None,
              self.dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-             u'For confirmation / correction', u'plone', 1],
+             u'For your review', u'plone', 1],
             [cell.value for cell in list(workbook.active.rows)[1]])
 
         # self.meeting_task
@@ -46,7 +46,7 @@ class TestTaskReporter(IntegrationTestCase):
              datetime(2016, 11, 1, 0, 0), None,
              self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
-             u'For confirmation / correction', u'plone', 9],
+             u'For your review', u'plone', 9],
             [cell.value for cell in list(workbook.active.rows)[2]])
 
     @browsing
@@ -112,7 +112,7 @@ class TestTaskReporter(IntegrationTestCase):
              datetime(2016, 11, 1, 0, 0), None,
              self.dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-             u'For confirmation / correction', u'plone', 1],
+             u'For your review', u'plone', 1],
             [cell.value for cell in list(workbook.active.rows)[1]])
 
         # self.meeting_task
@@ -121,5 +121,5 @@ class TestTaskReporter(IntegrationTestCase):
              datetime(2016, 11, 1, 0, 0), None,
              self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
-             u'For confirmation / correction', u'plone', 9],
+             u'For your review', u'plone', 9],
             [cell.value for cell in list(workbook.active.rows)[2]])

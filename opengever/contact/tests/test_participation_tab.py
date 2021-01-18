@@ -84,7 +84,7 @@ class ParticipationTab(FunctionalTestCase):
         row1, row2, row3 = browser.css('#participation_listing > li')
 
         self.assertEquals([u'M\xfcller Hans'], row1.css('.contact').text)
-        self.assertEquals(['Regard', 'Final drawing'], row1.css('.roles li').text)
+        self.assertEquals(['For your information', 'Final signature'], row1.css('.roles li').text)
 
         self.assertEquals([u'Peter AG'], row2.css('.contact').text)
         self.assertEquals(['Participation'], row2.css('.roles li').text)

@@ -24,7 +24,7 @@ class TestPropertySheetAssignmentVocabulary(FunctionalTestCase):
             name="opengever.propertysheets.PropertySheetAssignmentsVocabulary",
         )(self.portal)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS,
             [term.value for term in vocabulary],
         )
@@ -33,7 +33,7 @@ class TestPropertySheetAssignmentVocabulary(FunctionalTestCase):
 class TestPropertySheetDocumentAssignmentSlots(FunctionalTestCase):
 
     def test_assignemnt_vocabulary_contains_document_types(self):
-        self.assertEqual(
+        self.assertItemsEqual(
             EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS,
             get_document_assignment_slots(),
         )

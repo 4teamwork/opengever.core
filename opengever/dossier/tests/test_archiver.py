@@ -298,7 +298,7 @@ class TestArchiveForm(IntegrationTestCase):
         self.login(self.secretariat_user, browser)
         browser.open(self.empty_dossier, view='transition-archive')
 
-        browser.fill({'Filing number prefix': 'Government',
+        browser.fill({'Filing number prefix': 'Cantonal Government',
                       'Filing year': u'2017',
                       'Action': 'resolve and set filing no'})
         browser.click_on('Archive')
@@ -306,7 +306,7 @@ class TestArchiveForm(IntegrationTestCase):
         self.assert_workflow_state(
             'dossier-state-resolved', self.empty_dossier)
         statusmessages.assert_message('Dossier has been resolved')
-        self.assertEquals('Hauptmandant-Government-2017-1',
+        self.assertEquals('Hauptmandant-Cantonal Government-2017-1',
                           IFilingNumber(self.empty_dossier).filing_no)
 
     @browsing
@@ -317,7 +317,7 @@ class TestArchiveForm(IntegrationTestCase):
         IFilingNumber(self.empty_dossier).filing_no = former_filing_number
         browser.open(self.empty_dossier, view='transition-archive')
 
-        browser.fill({'Filing number prefix': 'Government',
+        browser.fill({'Filing number prefix': 'Cantonal Government',
                       'Filing year': u'2017',
                       'Action': 'resolve and take the existing filing no'})
         browser.click_on('Archive')
@@ -336,7 +336,7 @@ class TestArchiveForm(IntegrationTestCase):
         IFilingNumber(self.empty_dossier).filing_no = former_filing_number
         browser.open(self.empty_dossier, view='transition-archive')
 
-        browser.fill({'Filing number prefix': 'Government',
+        browser.fill({'Filing number prefix': 'Cantonal Government',
                       'Filing year': u'2017',
                       'Action': 'resolve and take the existing filing no'})
         browser.click_on('Archive')
@@ -355,7 +355,7 @@ class TestArchiveForm(IntegrationTestCase):
         IFilingNumber(self.empty_dossier).filing_no = former_filing_number
         browser.open(self.empty_dossier, view='transition-archive')
 
-        browser.fill({'Filing number prefix': 'Government',
+        browser.fill({'Filing number prefix': 'Cantonal Government',
                       'Filing year': u'2017',
                       'Action': 'resolve and set a new filing no'})
         browser.click_on('Archive')
@@ -363,7 +363,7 @@ class TestArchiveForm(IntegrationTestCase):
         self.assert_workflow_state(
             'dossier-state-resolved', self.empty_dossier)
         statusmessages.assert_message('Dossier has been resolved')
-        self.assertEquals('Hauptmandant-Government-2017-1',
+        self.assertEquals('Hauptmandant-Cantonal Government-2017-1',
                           IFilingNumber(self.empty_dossier).filing_no)
 
     @browsing
@@ -372,7 +372,7 @@ class TestArchiveForm(IntegrationTestCase):
         self.set_workflow_state('dossier-state-resolved', self.empty_dossier)
         browser.open(self.empty_dossier, view='transition-archive')
 
-        browser.fill({'Filing number prefix': 'Government',
+        browser.fill({'Filing number prefix': 'Cantonal Government',
                       'Filing year': u'2017',
                       'Action': 'set a filing no'})
         browser.click_on('Archive')
@@ -380,7 +380,7 @@ class TestArchiveForm(IntegrationTestCase):
         self.assert_workflow_state(
             'dossier-state-resolved', self.empty_dossier)
         statusmessages.assert_message('Filing number issued.')
-        self.assertEquals('Hauptmandant-Government-2017-1',
+        self.assertEquals('Hauptmandant-Cantonal Government-2017-1',
                           IFilingNumber(self.empty_dossier).filing_no)
 
     @browsing
@@ -429,7 +429,7 @@ class TestArchiveForm(IntegrationTestCase):
 
         browser.open(self.empty_dossier, view='transition-archive')
 
-        browser.fill({'Filing number prefix': 'Government',
+        browser.fill({'Filing number prefix': 'Cantonal Government',
                       'Filing year': u'2017',
                       'Action': 'resolve and set filing no'})
         browser.click_on('Archive')

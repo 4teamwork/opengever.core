@@ -265,7 +265,7 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_person(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Roles': ['Regard']})
+        browser.fill({'Roles': ['For your information']})
         form = browser.find_form_by_field('Contact')
         form.find_widget('Contact').fill(get_contacts_token(self.peter))
 
@@ -281,7 +281,7 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_ogds_user(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Roles': ['Regard']})
+        browser.fill({'Roles': ['For your information']})
         form = browser.find_form_by_field('Contact')
         form.find_widget('Contact').fill(get_contacts_token(self.hans))
 
@@ -297,7 +297,7 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_organization(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Roles': ['Final drawing', 'Regard']})
+        browser.fill({'Roles': ['Final signature', 'For your information']})
         form = browser.find_form_by_field('Contact')
         form.find_widget('Contact').fill(get_contacts_token(self.meier_ag))
 
@@ -316,7 +316,7 @@ class TestAddForm(FunctionalTestCase):
             person=self.peter, organization=self.meier_ag, function=u'cheffe'))
 
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Roles': ['Final drawing']})
+        browser.fill({'Roles': ['Final signature']})
         form = browser.find_form_by_field('Contact')
         form.find_widget('Contact').fill(get_contacts_token(org_role))
 
@@ -337,7 +337,7 @@ class TestAddForm(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='add-sql-participation')
 
-        browser.fill({'Roles': ['Final drawing', 'Regard']})
+        browser.fill({'Roles': ['Final signature', 'For your information']})
         form = browser.find_form_by_field('Contact')
         form.find_widget('Contact').fill(get_contacts_token(self.peter))
 
@@ -374,10 +374,10 @@ class TestEditForm(FunctionalTestCase):
         browser.click_on('Edit')
 
         field = browser.forms['form'].find_field('Roles')
-        self.assertEquals(['Final drawing', 'Participation', 'Regard'],
+        self.assertEquals(['Final signature', 'For your information', 'Participation'],
                           field.options)
 
-        browser.fill({'Roles': ['Participation', 'Regard']})
+        browser.fill({'Roles': ['Participation', 'For your information']})
         browser.click_on('Save')
 
         self.assertEquals(['Changes saved'], info_messages())
@@ -405,10 +405,10 @@ class TestEditForm(FunctionalTestCase):
         browser.click_on('Edit')
 
         field = browser.forms['form'].find_field('Roles')
-        self.assertEquals(['Final drawing', 'Participation', 'Regard'],
+        self.assertEquals(['Final signature', 'For your information', 'Participation'],
                           field.options)
 
-        browser.fill({'Roles': ['Participation', 'Regard']})
+        browser.fill({'Roles': ['Participation', 'For your information']})
         browser.click_on('Save')
 
         self.assertEquals(['Changes saved'], info_messages())
@@ -433,10 +433,10 @@ class TestEditForm(FunctionalTestCase):
         browser.click_on('Edit')
 
         field = browser.forms['form'].find_field('Roles')
-        self.assertEquals(['Final drawing', 'Participation', 'Regard'],
+        self.assertEquals(['Final signature', 'For your information', 'Participation'],
                           field.options)
 
-        browser.fill({'Roles': ['Participation', 'Regard']})
+        browser.fill({'Roles': ['Participation', 'For your information']})
         browser.click_on('Save')
 
         self.assertEquals(['Changes saved'], info_messages())

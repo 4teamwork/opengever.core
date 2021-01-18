@@ -273,7 +273,7 @@ class TestTaskListings(BaseLatexListingTest):
 
         self.assert_row_values(
             ['1',
-             'For approval',
+             'For your approval',
              'Org Unit 1 / Boss Hugo',
              'Org Unit 1 / Boss Hugo',
              'In progress',

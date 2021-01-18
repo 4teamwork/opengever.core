@@ -7,6 +7,7 @@
         <termIdentifier>department</termIdentifier>
         <caption>
             <langstring language="en">Department</langstring>
+            <langstring language="en-us">Department</langstring>
             <langstring language="de-ch">Amt</langstring>
             <langstring language="de">Amt</langstring>
             <langstring language="fr">Service</langstring>
@@ -17,6 +18,7 @@
         <termIdentifier>directorate</termIdentifier>
         <caption>
             <langstring language="en">Directorate</langstring>
+            <langstring language="en-us">Directorate</langstring>
             <langstring language="de-ch">Direktion</langstring>
             <langstring language="de">Direktion</langstring>
             <langstring language="fr">Direction</langstring>
@@ -26,7 +28,8 @@
     <term>
         <termIdentifier>personal</termIdentifier>
         <caption>
-            <langstring language="en">Personal</langstring>
+            <langstring language="en">Human Resources</langstring>
+            <langstring language="en-us">Human Resources</langstring>
             <langstring language="de-ch">Personal</langstring>
             <langstring language="de">Personal</langstring>
             <langstring language="fr">Personnel</langstring>
@@ -37,6 +40,7 @@
         <termIdentifier>administration</termIdentifier>
         <caption>
             <langstring language="en">Administration</langstring>
+            <langstring language="en-us">Administration</langstring>
             <langstring language="de-ch">Leitung</langstring>
             <langstring language="de">Leitung</langstring>
             <langstring language="fr">Administration</langstring>
@@ -46,7 +50,8 @@
     <term>
         <termIdentifier>government</termIdentifier>
         <caption>
-            <langstring language="en">Government</langstring>
+            <langstring language="en">Cantonal Government</langstring>
+            <langstring language="en-us">Cantonal Government</langstring>
             <langstring language="de-ch">Regierungsrat</langstring>
             <langstring language="de">Regierungsrat</langstring>
             <langstring language="fr">Gouvernement</langstring>

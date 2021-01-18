@@ -7,6 +7,7 @@
         <termIdentifier>request</termIdentifier>
         <caption>
             <langstring language="en">Request</langstring>
+            <langstring language="en-us">Request</langstring>
             <langstring language="de-ch">Antrag</langstring>
             <langstring language="de">Antrag</langstring>
             <langstring language="fr">Requête</langstring>
@@ -16,7 +17,8 @@
     <term>
         <termIdentifier>question</termIdentifier>
         <caption>
-            <langstring language="en">Question</langstring>
+            <langstring language="en">Inquiry</langstring>
+            <langstring language="en-us">Inquiry</langstring>
             <langstring language="de-ch">Anfrage</langstring>
             <langstring language="de">Anfrage</langstring>
             <langstring language="fr">Demande</langstring>
@@ -27,6 +29,7 @@
         <termIdentifier>report</termIdentifier>
         <caption>
             <langstring language="en">Report</langstring>
+            <langstring language="en-us">Report</langstring>
             <langstring language="de-ch">Bericht</langstring>
             <langstring language="de">Bericht</langstring>
             <langstring language="fr">Rapport</langstring>
@@ -37,6 +40,7 @@
         <termIdentifier>offer</termIdentifier>
         <caption>
             <langstring language="en">Offer</langstring>
+            <langstring language="en-us">Offer</langstring>
             <langstring language="de">Offerte</langstring>
             <langstring language="de-ch">Offerte</langstring>
             <langstring language="fr">Offre</langstring>
@@ -47,6 +51,7 @@
         <termIdentifier>protocol</termIdentifier>
         <caption>
             <langstring language="en">Protocol</langstring>
+            <langstring language="en-us">Protocol</langstring>
             <langstring language="de-ch">Protokoll</langstring>
             <langstring language="de">Protokoll</langstring>
             <langstring language="fr">Procès-verbal</langstring>
@@ -57,6 +62,7 @@
         <termIdentifier>contract</termIdentifier>
         <caption>
             <langstring language="en">Contract</langstring>
+            <langstring language="en-us">Contract</langstring>
             <langstring language="de-ch">Vertrag</langstring>
             <langstring language="de">Vertrag</langstring>
             <langstring language="fr">Contrat</langstring>
@@ -67,6 +73,7 @@
         <termIdentifier>directive</termIdentifier>
         <caption>
             <langstring language="en">Directive</langstring>
+            <langstring language="en-us">Directive</langstring>
             <langstring language="de-ch">Weisung</langstring>
             <langstring language="de">Weisung</langstring>
             <langstring language="fr">Directive</langstring>
@@ -77,6 +84,7 @@
         <termIdentifier>regulations</termIdentifier>
         <caption>
             <langstring language="en">Regulations</langstring>
+            <langstring language="en-us">Regulations</langstring>
             <langstring language="de-ch">Reglement</langstring>
             <langstring language="de">Reglement</langstring>
             <langstring language="fr">Règlement</langstring>
