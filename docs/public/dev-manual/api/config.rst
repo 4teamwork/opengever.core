@@ -70,6 +70,7 @@ GEVER-Mandanten abgefragt werden.
               "ech0147_import": true,
               "favorites": true,
               "gever_ui_enabled": false,
+              "hubspot": false,
               "journal_pdf": false,
               "meetings": true,
               "officeatwork": true,
@@ -187,6 +188,9 @@ features
 
     gever_ui_enabled
         Neue Benutzeroberfläche aktiviert
+
+    hubspot
+        Einbindung von HubSpot Chat in der neuen Benutzeroberfläche
 
     journal_pdf
         Journal PDF erstellen beim Abschliessen eines Dossiers

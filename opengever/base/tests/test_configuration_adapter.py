@@ -70,6 +70,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('ech0147_import', False),
                 ('favorites', True),
                 ('gever_ui_enabled', False),
+                ('hubspot', False),
                 ('journal_pdf', False),
                 ('tasks_pdf', False),
                 ('meetings', False),

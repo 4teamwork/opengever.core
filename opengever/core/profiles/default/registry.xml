@@ -84,6 +84,9 @@
   <!-- Gever-UI -->
   <records interface="opengever.base.interfaces.IGeverUI" />
 
+  <!-- HubSpot -->
+  <records interface="opengever.base.interfaces.IHubSpotSettings" />
+
   <!-- LATEX -->
   <records interface="opengever.latex.interfaces.ILaTeXSettings" />
 
