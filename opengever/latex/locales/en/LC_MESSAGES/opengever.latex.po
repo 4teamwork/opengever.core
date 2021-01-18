@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 13:15+0000\n"
 "PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr "Deadline"
 #. Default: "Delivery date"
 #: ./opengever/latex/listing.py
 msgid "label_delivery_date"
-msgstr "Delivery date"
+msgstr "Sent date"
 
 #. German translation: Beschreibung
 #. Default: "Description"
@@ -43,19 +43,19 @@ msgstr "Description"
 #. Default: "Details Dossier"
 #: ./opengever/latex/dossierdetails.py
 msgid "label_detailsdossier"
-msgstr "Details Dossier"
+msgstr "Dossier details"
 
 #. German translation: Details Subdossier
 #. Default: "Details Subdossier"
 #: ./opengever/latex/dossierdetails.py
 msgid "label_detailssubdossier"
-msgstr "Details Subdossier"
+msgstr "Subdossier details"
 
 #. German translation: Autor
 #. Default: "Document author"
 #: ./opengever/latex/listing.py
 msgid "label_document_author"
-msgstr "Document author"
+msgstr "Author"
 
 #. German translation: Dokumentdatum
 #. Default: "Document date"
@@ -111,7 +111,7 @@ msgstr "Participants"
 #. Default: "Receipt date"
 #: ./opengever/latex/listing.py
 msgid "label_receipt_date"
-msgstr "Receipt date"
+msgstr "Received date"
 
 #. German translation: Aktenzeichen
 #. Default: "Reference number"
@@ -131,7 +131,7 @@ msgstr "Repository"
 #. Default: "Repositoryfolder"
 #: ./opengever/latex/listing.py
 msgid "label_repository_title"
-msgstr "Repositoryfolder"
+msgstr "Repository folder"
 
 #. German translation: Federführend
 #. Default: "Responsible"
@@ -166,7 +166,7 @@ msgstr "Start"
 #. Default: "Subdossier Title"
 #: ./opengever/latex/dossierdetails.py
 msgid "label_subdossier_title"
-msgstr "Subdossier Title"
+msgstr "Subdossier title"
 
 #. German translation: Subdossiers
 #. Default: "Subdossiers"
@@ -209,7 +209,7 @@ msgstr "Title"
 #. Default: "Transition"
 #: ./opengever/latex/listing.py
 msgid "label_transition"
-msgstr "Transition"
+msgstr "Action"
 
 #. German translation: Version Ordnungssystem
 #. Default: "Repository version"
