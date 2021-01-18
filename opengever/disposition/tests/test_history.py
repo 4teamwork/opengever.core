@@ -75,7 +75,7 @@ class TestHistoryEntries(IntegrationTestCase):
         self.assertTrue(isinstance(entry, Disposed))
         self.assertEquals('dispose', entry.css_class)
         self.assertEquals(
-            u'Disposition disposed for the archive by {}'.format(self.current_user_link),
+            u'Disposition offered for archival by {}'.format(self.current_user_link),
             translate(entry.msg(), context=self.request))
 
     def test_add_history_entry_when_directly_close_a_disposition(self):
@@ -112,7 +112,7 @@ class TestHistoryEntries(IntegrationTestCase):
         self.assertTrue(isinstance(entry, Archived))
         self.assertEquals('archive', entry.css_class)
         self.assertEquals(
-            u'The archiving confirmed by {}'.format(self.current_user_link),
+            u'Archival confirmed by {}'.format(self.current_user_link),
             translate(entry.msg(), context=self.request))
 
     def test_add_history_entry_when_close_a_disposition(self):
