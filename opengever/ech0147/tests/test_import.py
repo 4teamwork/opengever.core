@@ -63,7 +63,7 @@ class TestImport(IntegrationTestCase):
             browser.forms['form'].fill({
                 'File': file_,
             }).submit()
-        self.assertIn('Invalid message. Missing message.xml', browser.contents)
+        self.assertIn('Invalid eCH-0147 message. Missing message.xml', browser.contents)
 
     @browsing
     def test_import_dossier_with_minimal_set_of_metadata(self, browser):
@@ -166,7 +166,7 @@ class TestImport(IntegrationTestCase):
             browser.forms['form'].fill({
                 'File': file_,
             }).submit()
-        self.assertIn('Invalid content.', browser.contents)
+        self.assertIn('Invalid XML content.', browser.contents)
 
 
 class TestImportErrorHandling(FunctionalTestCase):
