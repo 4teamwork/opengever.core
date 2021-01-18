@@ -87,7 +87,7 @@ class TestDossierListing(BaseLatexListingTest):
         cols = table.xpath(CSSSelector('thead th').path)
 
         self.assertEquals(
-            ['Reference number', 'No.', 'Repositoryfolder', 'Title',
+            ['Reference number', 'No.', 'Repository folder', 'Title',
              'Responsible', 'State', 'Start', 'End'],
             [col.text_content().strip() for col in cols])
 
