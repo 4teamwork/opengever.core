@@ -1,16 +1,17 @@
+from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.base.schema import UTCDatetime
 from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Container
+from plone.schema import JSONField
 from plone.supermodel import model
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider
-from opengever.base.schema import UTCDatetime
-from ftw.datepicker.widget import DatePickerFieldWidget
 
 
 @provider(IFormFieldProvider)
@@ -25,6 +26,7 @@ class IWorkspaceMeetingSchema(model.Schema):
             u'end',
             u'location',
             u'videoconferencing_url',
+            u'agenda_items_json',
             ],
         )
 
@@ -67,6 +69,11 @@ class IWorkspaceMeetingSchema(model.Schema):
         missing_value=list(),
         default=list()
     )
+
+    form.order_after(agenda_items_json='participants')
+    agenda_items_json = JSONField(
+        title=u'Agenda items JSON',
+        required=False)
 
 
 class WorkspaceMeeting(Container):
