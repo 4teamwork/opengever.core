@@ -179,7 +179,7 @@ class TestRepositoryDeleter(IntegrationTestCase):
         browser.open(self.empty_repofolder, view='delete_repository')
         browser.click_on('Delete')
         statusmessages.assert_message(
-            'The repository have been successfully deleted.')
+            'The repository folder has been deleted successfully.')
         self.assertEquals(self.repository_root, browser.context)
 
     @browsing

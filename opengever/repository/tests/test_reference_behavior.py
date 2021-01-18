@@ -23,7 +23,7 @@ class TestReferenceBehavior(IntegrationTestCase):
         self.login(self.administrator, browser)
         browser.open(self.branch_repofolder)
         factoriesmenu.add('Repository Folder')
-        self.assertEquals('2', browser.find('Reference Prefix').value)
+        self.assertEquals('2', browser.find('Reference number component').value)
 
     @browsing
     def test_using_already_used_prefix_is_not_possible(self, browser):
@@ -32,12 +32,12 @@ class TestReferenceBehavior(IntegrationTestCase):
         factoriesmenu.add('Repository Folder')
         browser.fill({
             'Title': 'Test repository',
-            'Reference Prefix': '1',
+            'Reference number component': '1',
         }).save()
 
         self.assertEquals(
-            {'Reference Prefix': [
-                'A Sibling with the same reference number is existing.']},
+            {'Reference number component': [
+                'A repository folder with the same reference number already exists on the same level.']},
             z3cform.erroneous_fields(browser.forms['form']))
 
     @browsing
@@ -51,7 +51,7 @@ class TestReferenceBehavior(IntegrationTestCase):
         factoriesmenu.add('Repository Folder')
         browser.fill({
             'Title': u'Test repository',
-            'Reference Prefix': '26',
+            'Reference number component': '26',
         }).save()
         statusmessages.assert_no_error_messages()
 
@@ -65,7 +65,7 @@ class TestReferenceBehavior(IntegrationTestCase):
         factoriesmenu.add('Repository Folder')
         browser.fill({
             'Title': u'Test repository',
-            'Reference Prefix': 'a1x10',
+            'Reference number component': 'a1x10',
         }).save()
         statusmessages.assert_no_error_messages()
 
