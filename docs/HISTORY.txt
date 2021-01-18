@@ -18,6 +18,7 @@ Changelog
 - Add 'en-us' as supported language in example content. [lgraf]
 - Implement API to create, list and delete property sheet schema definitions. [deiferni]
 - Implement storage for property sheet schemas in plone-site annotations. [deiferni]
+- Fix loading next batch in gallery view. [buchi]
 
 
 2021.1.0 (2021-01-06)

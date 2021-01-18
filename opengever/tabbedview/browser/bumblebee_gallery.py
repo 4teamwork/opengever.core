@@ -56,6 +56,12 @@ class BumblebeeGalleryMixin(object):
         if isinstance(query, dict) and 'sort_on' not in query:
             query['sort_on'] = 'modified'
             query['sort_order'] = 'descending'
+
+        doc_pointer = int(self.request.get('documentPointer', 0))
+        if doc_pointer > 0:
+            page_number = doc_pointer / self.table_source.config.pagesize
+            self.table_source.config.batching_current_page = page_number + 1
+
         return self.table_source.search_results(query)
 
     def fetch(self):

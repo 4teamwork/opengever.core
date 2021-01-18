@@ -236,6 +236,19 @@ class TestBumblebeeGalleryMixinFetch(SolrIntegrationTestCase):
 
         self.assertEqual('', view.fetch())
 
+    @browsing
+    def test_fetch_next_batch(self, browser):
+        self.login(self.regular_user)
+
+        self.request.set('documentPointer', 10)
+
+        view = getMultiAdapter(
+            (self.dossier, self.request), name="tabbedview_view-documents-gallery")
+        view.table_source.config.pagesize = 10
+
+        browser.open_html(view.fetch())
+        self.assertEqual(2, len(browser.css('.imageContainer')))
+
 
 class TestBumblebeeGalleryViewChooserWithoutFeature(SolrIntegrationTestCase):
 
