@@ -74,10 +74,10 @@ class TestRepositoryFolder(IntegrationTestCase):
         """
         self.login(self.administrator, browser)
 
-        warning = u'You are adding a repositoryfolder to a leafnode ' \
+        warning = u'You are adding a repository folder to a leaf node ' \
                   u'which already contains dossiers. This is only ' \
-                  u'temporarily allowed and all dossiers must be moved into ' \
-                  u'a new leafnode afterwards.'
+                  u'allowed temporarily and all dossiers must be moved into ' \
+                  u'a new leaf node afterwards.'
 
         self.assertTrue(any(filter(IDossierMarker.providedBy,
                                    self.leaf_repofolder.objectValues())),

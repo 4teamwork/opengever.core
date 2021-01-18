@@ -32,7 +32,7 @@ class TestRepositoryFolderTabs(IntegrationTestCase):
             'Documents',
             'Tasks',
             'Info',
-            'Protected Objects',
+            'Protected objects',
             ]
 
         self.assertEquals(expected_tabs, tabbedview.tabs().text)

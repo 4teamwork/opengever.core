@@ -30,7 +30,7 @@ class TestReferencePrefixManager(IntegrationTestCase):
 
         browser.click_on('Unlock')
         statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Reference prefix has been unlocked.')
+        statusmessages.assert_message('Reference number has been unlocked.')
         self.assertEquals(
             [['3', u'Vertr\xe4ge und Vereinbarungen', 'In use']],
             browser.css('#reference_prefix_manager_table').first.lists())
@@ -61,7 +61,7 @@ class TestReferencePrefixManager(IntegrationTestCase):
         browser.open(self.leaf_repofolder, view='referenceprefix_manager')
 
         self.assertEquals(
-            'No nested repositorys available.',
+            'No nested repository folders available.',
             browser.css('#reference_prefix_manager_table tbody').first.text)
 
     @browsing
@@ -89,4 +89,4 @@ class TestReferencePrefixManager(IntegrationTestCase):
         browser.open(self.branch_repofolder,
                      view='referenceprefix_manager?prefix=3')
         statusmessages.assert_message(
-            'The reference you try to unlock is still in use.')
+            "The reference number you're trying to unlock is still in use.")

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 14:10+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -20,7 +20,7 @@ msgstr ""
 #. German translation: Rapport konnte nicht generiert werden.
 #: ./opengever/repository/browser/excel_export.py
 msgid "Could not generate the report."
-msgstr "Could not generate the report."
+msgstr "Failed to generate report."
 
 #. German translation: Wird verwendet
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
@@ -30,36 +30,36 @@ msgstr "In use"
 #. German translation: Aktenzeichen Präfix Manager
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Prefix Manager"
-msgstr "Prefix Manager"
+msgstr "Reference number manager"
 
 #. German translation: Freigabe von ungebrauchten Aktenzeichen Prefixen.
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Unlock unused repository prefixes."
-msgstr "Unlock unused repository prefixes."
+msgstr "Unlock unused repository numbers."
 
 #. German translation: Hinzufügen von Geschäftsdossiers erlauben
 #. Default: "Allow add businesscase dossier"
 #: ./opengever/repository/repositoryfolder.py
 msgid "allow_add_businesscase_dossier"
-msgstr "Allow add businesscase dossier"
+msgstr "Allow creation of regular business case dossiers"
 
 #. German translation: Wählen Sie, ob es in dieser Ordnungsposition erlaubt ist, Geschäftsdossiers hinzuzufügen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.
 #. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_allow_add_businesscase_dossier"
-msgstr "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
+msgstr "Choose whether the user is allowed to add regular business case dossiers or only dossiers created from a dossier template."
 
 #. German translation: Keine untergeordnete Ordnungspositionen verfügbar.
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "empty_repository"
-msgstr "No nested repositorys available."
+msgstr "No nested repository folders available."
 
 #. German translation: Eine Ordnungsposition mit diesem Aktenzeichen existiert bereits auf gleicher Stufe.
 #. Default: "A Sibling with the same reference number is existing."
 #: ./opengever/repository/behaviors/referenceprefix.py
 msgid "error_sibling_reference_number_existing"
-msgstr "A Sibling with the same reference number is existing."
+msgstr "A repository folder with the same reference number already exists on the same level."
 
 #. German translation: Allgemein
 #. Default: "Common"
@@ -97,7 +97,7 @@ msgstr "Blocked inheritance"
 #. Default: "Protected Objects"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_blocked_local_roles"
-msgstr "Protected Objects"
+msgstr "Protected objects"
 
 #. German translation: Löschen
 #. Default: "Delete"
@@ -107,9 +107,10 @@ msgstr "Delete"
 
 #. German translation: Ordnungsposition löschen
 #. Default: "Delete repository"
+#. MARKER: double check
 #: ./opengever/repository/browser/templates/deletion.pt
 msgid "label_delete_repository"
-msgstr "Delete repository"
+msgstr "Delete repository folder"
 
 #. German translation: Beschreibung
 #. Default: "Description"
@@ -217,10 +218,11 @@ msgstr "Proposals"
 #. Default: "Reference Prefix"
 #: ./opengever/repository/behaviors/referenceprefix.py
 msgid "label_reference_number_prefix"
-msgstr "Reference Prefix"
+msgstr "Reference number component"
 
 #. German translation: Leistung
 #. Default: "Referenced activity"
+#. MARKER: double check
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_referenced_activity"
 msgstr "Referenced activity"
@@ -251,9 +253,10 @@ msgstr "Repositoryfolder title (French)"
 
 #. German translation: Die Ordnungsposition wurde erfolgreich gelöscht.
 #. Default: "The repository have been successfully deleted."
+#. MARKER: double check
 #: ./opengever/repository/browser/deletion.py
 msgid "label_successfully_deleted"
-msgstr "The repository have been successfully deleted."
+msgstr "The repository folder has been deleted successfully."
 
 #. German translation: Aufgaben
 #. Default: "Tasks"
@@ -301,15 +304,16 @@ msgstr "State"
 
 #. German translation: Möchten Sie die aktuelle Ordnungsposition wirklich löschen?
 #. Default: "Do you really want to delete the current repository?"
+#. MARKER: double check
 #: ./opengever/repository/browser/templates/deletion.pt
 msgid "msg_delete_confirmation"
-msgstr "Do you really want to delete the current repository?"
+msgstr "Do you really want to delete the current repository folder?"
 
 #. German translation: Sie fügen eine Ordnungsposition einem Blattknoten hinzu, der bereits Dossiers enthält. Dies ist nur vorübergehend erlaubt und darin enthaltene Dossiers müssen anschliessend wieder in einen Blattknoten verschoben werden.
 #. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
 #: ./opengever/repository/browser/repositoryfolder_forms.py
 msgid "msg_leafnode_warning"
-msgstr "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
+msgstr "You are adding a repository folder to a leaf node which already contains dossiers. This is only allowed temporarily and all dossiers must be moved into a new leaf node afterwards."
 
 #. German translation: Name
 #. Default: "Name"
@@ -327,43 +331,43 @@ msgstr "Position"
 #. Default: "Reference Prefix Manager"
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "prefman_title"
-msgstr "Reference Prefix Manager"
+msgstr "Reference number manager"
 
 #. German translation: Federführendes Amt
 #. Default: "Responsible organisation unit"
 #: ./opengever/repository/behaviors/responsibleorg.py
 msgid "responsible_org_unit"
-msgstr "Responsible organisation unit"
+msgstr "Responsible organization / department"
 
 #. German translation: Das Aktenzeichen Präfix wird noch verwendet.
 #. Default: "The reference you try to unlock is still in use."
 #: ./opengever/repository/browser/referenceprefix_manager.py
 msgid "statmsg_prefix_unlock_failure"
-msgstr "The reference you try to unlock is still in use."
+msgstr "The reference number you're trying to unlock is still in use."
 
 #. German translation: Aktenzeichen Präfix wurde freigegeben.
 #. Default: "Reference prefix has been unlocked."
 #: ./opengever/repository/browser/referenceprefix_manager.py
 msgid "statmsg_prefix_unlocked"
-msgstr "Reference prefix has been unlocked."
+msgstr "Reference number has been unlocked."
 
 #. German translation: Dokumente
 #. Default: "Documents:"
 #: ./opengever/repository/browser/templates/repositoryrootoverview.pt
 msgid "th_documents"
-msgstr "Documents:"
+msgstr "Documents"
 
 #. German translation: Dossiers
 #. Default: "Dossiers:"
 #: ./opengever/repository/browser/templates/repositoryrootoverview.pt
 msgid "th_dossiers"
-msgstr "Dossiers:"
+msgstr "Dossiers"
 
 #. German translation: Aufgaben
 #. Default: "Tasks:"
 #: ./opengever/repository/browser/templates/repositoryrootoverview.pt
 msgid "th_task"
-msgstr "Tasks:"
+msgstr "Tasks"
 
 #. German translation: Freigeben
 #. Default: "Unlock"
