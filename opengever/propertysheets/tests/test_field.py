@@ -3,17 +3,11 @@ from ftw.builder import create
 from mock import Mock
 from opengever.propertysheets.assignment import DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX
 from opengever.propertysheets.field import PropertySheetField
+from opengever.propertysheets.tests.fixture import fixture_assignment_factory
 from opengever.testing import FunctionalTestCase
 from zope.schema import ValidationError
 from zope.schema.interfaces import RequiredMissing
 from zope.schema.interfaces import WrongType
-
-
-def fixture_assignment_factory():
-    return [
-        u"IDocumentMetadata.document_type.contract",
-        u"IDocumentMetadata.document_type.question",
-    ]
 
 
 class TestPropertySheetField(FunctionalTestCase):
