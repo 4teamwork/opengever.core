@@ -19,4 +19,6 @@
       name="opengever.propertysheets.PropertySheetAssignmentsVocabulary"
       />
 
+  <adapter factory=".field.PropertySheetFieldSchemaProvider" />
+
 </configure>

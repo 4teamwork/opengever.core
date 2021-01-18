@@ -1,8 +1,12 @@
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone.restapi.types.adapters import DefaultJsonSchemaProvider
+from plone.restapi.types.interfaces import IJsonSchemaProvider
 from plone.schema import IJSONField
 from plone.schema import JSONField
+from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
+from zope.interface import Interface
 from zope.schema import ValidationError
 
 
@@ -127,3 +131,23 @@ class PropertySheetField(JSONField):
                 continue
 
             optional_sheet.validate(value.get(assignment_slot_name))
+
+
+@adapter(IPropertySheetField, Interface, Interface)
+@implementer(IJsonSchemaProvider)
+class PropertySheetFieldSchemaProvider(DefaultJsonSchemaProvider):
+
+    def __init__(self, field, context, request):
+        super(PropertySheetFieldSchemaProvider, self).__init__(
+            field, context, request
+        )
+
+    def get_schema(self):
+        sheets_for_portal_type = {}
+        storage = PropertySheetSchemaStorage()
+        for slot_name in self.field.valid_assignment_slots_factory():
+            definition = storage.query(slot_name)
+            if definition is not None:
+                sheets_for_portal_type[slot_name] = definition.get_json_schema()
+
+        return sheets_for_portal_type
