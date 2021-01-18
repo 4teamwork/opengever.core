@@ -57,7 +57,7 @@ class TestMailDownloadCopy(FunctionalTestCase):
              'title': u'label_file_copy_downloaded'},
             action)
 
-        self.assertEquals(u'Download copy', translate(action['title']))
+        self.assertEquals(u'Document copy downloaded', translate(action['title']))
 
     @browsing
     def test_mail_download_converts_lf_to_crlf(self, browser):

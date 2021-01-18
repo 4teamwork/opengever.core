@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 16:13+0000\n"
 "PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -98,7 +98,7 @@ msgstr "Canceled document checkout"
 #. Default: "Reverte document file to version ${version_id}"
 #: ./opengever/journal/handlers.py
 msgid "label_document_file_reverted"
-msgstr "Reverte document file to version ${version_id}"
+msgstr "Reverted file to version ${version_id}"
 
 #. German translation: Dokument im Dossier mit Mailprogramm versendet
 #. Default: "Document in dossier attached to email via OfficeConnector"
@@ -122,7 +122,7 @@ msgstr "Changed metadata of document ${title}"
 #. Default: "Public trial changed to \"${public_trial}\"."
 #: ./opengever/journal/handlers.py
 msgid "label_document_public_trial_modified"
-msgstr "Public trial changed to \"${public_trial}\"."
+msgstr "Public access level changed to \"${public_trial}\"."
 
 #. German translation: Dokument ${title} gelöscht.
 #. Default: "Document ${title} removed."
@@ -134,25 +134,25 @@ msgstr "Document ${title} removed."
 #. Default: "Document ${title} restored."
 #: ./opengever/journal/handlers.py
 msgid "label_document_restored"
-msgstr "Document ${title} restored."
+msgstr "Document ${title} restored from trash."
 
 #. German translation: Dokumentversand per E-Mail: ${subject}
 #. Default: "Document sent by Mail: ${subject}"
 #: ./opengever/journal/handlers.py
 msgid "label_document_sent"
-msgstr "Document sent by Mail: ${subject}"
+msgstr "Document sent by email: ${subject}"
 
 #. German translation: Anhänge: ${documents} | Empfänger: ${receiver} | Nachricht: ${message}
 #. Default: "Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}"
 #: ./opengever/journal/handlers.py
 msgid "label_document_sent_comment"
-msgstr "Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}"
+msgstr "Attachments: ${documents} | Recipients: ${receiver} | Message: ${message}"
 
 #. German translation: Dokument in ZIP-Export aufgenommen: ${title}
 #. Default: "Document included in a zip export: ${title}"
 #: ./opengever/journal/handlers.py
 msgid "label_document_zipped"
-msgstr "Document included in a zip export: ${title}"
+msgstr "Document included in ZIP export: ${title}"
 
 #. German translation: Dokumente
 #. Default: "Documents"
@@ -176,13 +176,13 @@ msgstr "Dossier modified: ${title}"
 #. Default: "Dossier included in a zip export: ${title}"
 #: ./opengever/journal/handlers.py
 msgid "label_dossier_zipped"
-msgstr "Dossier included in a zip export: ${title}"
+msgstr "Dossier included in ZIP export: ${title}"
 
 #. German translation: Download Kopie
 #. Default: "Download copy"
 #: ./opengever/journal/handlers.py
 msgid "label_file_copy_downloaded"
-msgstr "Download copy"
+msgstr "Document copy downloaded"
 
 #. German translation: aktuelle Version (${version_id})
 #. Default: "current version (${version_id})"
@@ -204,6 +204,7 @@ msgstr "${title} ${version_string}"
 
 #. German translation: Vererbung der Berechtigungen aktiviert.
 #. Default: "Local roles aquistion activated."
+#. MARKER: double check all these in context (acquisition vs. inheritance, roles vs. permissions)
 #: ./opengever/journal/handlers.py
 msgid "label_local_roles_acquisition_activated"
 msgstr "Local roles aquistion activated."
@@ -254,7 +255,7 @@ msgstr "Object cut: ${title}"
 #. Default: "Object moved: ${title}"
 #: ./opengever/journal/handlers.py
 msgid "label_object_moved"
-msgstr "Object moved: ${title}"
+msgstr "Object pasted: ${title}"
 
 #. German translation: Beteiligung hinzugefügt für ${contact} als ${roles}
 #. Default: "Participant added: ${contact} with roles ${roles}"
@@ -266,7 +267,7 @@ msgstr "Participant added: ${contact} with roles ${roles}"
 #. Default: "Participant modified: ${contact}"
 #: ./opengever/journal/handlers.py
 msgid "label_participant_modified"
-msgstr "Participant modified: ${contact}"
+msgstr "Participation modified for ${contact}"
 
 #. German translation: Beteiligung von ${contact} entfernt
 #. Default: "Participant removed: ${contact}"
@@ -284,7 +285,7 @@ msgstr "PDF downloaded"
 #. Default: "Unlocked prefix ${prefix} in ${repository}."
 #: ./opengever/journal/handlers.py
 msgid "label_prefix_unlocked"
-msgstr "Unlocked prefix ${prefix} in ${repository}."
+msgstr "Unlocked reference number component ${prefix} in ${repository}."
 
 #. German translation: Referenzen
 #. Default: "References"
@@ -296,13 +297,13 @@ msgstr "References"
 #. Default: "Related Documents"
 #: ./opengever/journal/form.py
 msgid "label_related_documents"
-msgstr "Related Documents"
+msgstr "Related documents"
 
 #. German translation: Dokument ${title} reaktiviert
 #. Default: "Object restored: ${title}"
 #: ./opengever/journal/handlers.py
 msgid "label_restore"
-msgstr "Object restored: ${title}"
+msgstr "Document restored: ${title}"
 
 #. German translation: Aufgabe hinzugefügt: ${title}
 #. Default: "Task added: ${title}"
@@ -332,7 +333,7 @@ msgstr "Title"
 #. Default: "Object moved to trash: ${title}"
 #: ./opengever/journal/handlers.py
 msgid "label_to_trash"
-msgstr "Object moved to trash: ${title}"
+msgstr "Document moved to trash: ${title}"
 
 #. German translation: Journal
 #. Default: "Journal"

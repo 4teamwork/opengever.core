@@ -54,7 +54,7 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.fill({
             'Category': u'phone-call',
             'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
-            'Related Documents': [doc1, doc2]})
+            'Related documents': [doc1, doc2]})
         browser.css('#form-buttons-add').first.click()
 
         browser.open(self.dossier, view=u'tabbedview_view-journal')

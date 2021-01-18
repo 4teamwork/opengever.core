@@ -93,7 +93,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
 
         self.assert_journal_entry(
             PUBLIC_TRIAL_MODIFIED_ACTION,
-            u'Public trial changed to "private".', entry)
+            u'Public access level changed to "private".', entry)
 
     @browsing
     def test_modifying_the_public_trial_metadata_is_journalized_separately(self, browser):
@@ -106,7 +106,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
 
         self.assert_journal_entry(
             PUBLIC_TRIAL_MODIFIED_ACTION,
-            u'Public trial changed to "private".', entries[-1])
+            u'Public access level changed to "private".', entries[-1])
 
         self.assert_journal_entry(
             DOCUMENT_MODIIFED_ACTION, u'Changed metadata', entries[-2])

@@ -28,12 +28,12 @@ class TestZipExportJournalizations(FunctionalTestCase):
 
         self.assert_journal_entry(self.document,
                                   DOCUMENT_EXPORTED,
-                                  u'Document included in a zip export: {0}'
+                                  u'Document included in ZIP export: {0}'
                                   .format(self.document.title_or_id())
                                   )
 
         self.assert_journal_entry(self.dossier,
                                   DOSSIER_EXPORTED,
-                                  u'Dossier included in a zip export: {0}'
+                                  u'Dossier included in ZIP export: {0}'
                                   .format(self.dossier.title_or_id())
                                   )

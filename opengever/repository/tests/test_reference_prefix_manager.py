@@ -80,7 +80,7 @@ class TestReferencePrefixManager(IntegrationTestCase):
         # get last journal entry
         journal = get_journal_entry(self.repository_root, entry=-1)
         self.assertEquals(
-            'Unlocked prefix 1 in fuhrung.',
+            'Unlocked reference number component 1 in fuhrung.',
             translate(journal.get('action').get('title')))
 
     @browsing
