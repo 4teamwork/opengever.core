@@ -11,6 +11,7 @@ from opengever.testing import SolrIntegrationTestCase
 from opengever.workspace.todo import IToDoSchema
 from plone import api
 from unittest import skip
+from zExceptions import BadRequest
 from zope.schema import getSchemaValidationErrors
 import json
 import opengever.workspace.subscribers
@@ -169,6 +170,40 @@ class TestAPISupportForTodo(IntegrationTestCase):
         self.assertEqual(u'opengever.workspace.todo', browser.json['@type'])
         self.assertEqual(u'opengever_workspace_todo--STATUS--active',
                          browser.json['review_state'])
+
+    @browsing
+    def test_document_related_with_todo(self, browser):
+        self.login(self.workspace_member, browser)
+        self.set_related_items(self.todo, [self.workspace_document])
+        browser.open(self.todo, method='GET', headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(1, len(browser.json['relatedItems']))
+
+        self.assertEqual(
+            {u'@id': self.workspace_document.absolute_url(),
+             u'@type': self.workspace_document.portal_type,
+             u'description': u'',
+             u'is_leafnode': None,
+             u'review_state': u'opengever_workspace_document--STATUS--active',
+             u'title': self.workspace_document.title},
+            browser.json['relatedItems'][0])
+
+    @browsing
+    def test_document_outside_workspace_cannot_be_set_in_related_items_field(self, browser):
+        self.login(self.workspace_member, browser)
+        data = {'relatedItems': [{'@id': self.workspace_document.absolute_url()}]}
+        browser.open(self.todo, method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+        self.assertEqual(204, browser.status_code)
+
+        data = {'relatedItems': [{'@id': self.document.absolute_url()}]}
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as cm:
+            browser.open(self.todo, method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+        self.assertEqual("[{'field': 'relatedItems', 'message': u'Constraint not satisfied',"
+                         " 'error': 'ValidationError'}]", str(cm.exception))
 
     @browsing
     def test_update(self, browser):

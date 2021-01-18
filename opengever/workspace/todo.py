@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.response import IResponseSupported
+from opengever.base.source import WorkspacePathSourceBinder
 from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IToDo
@@ -12,6 +13,8 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider
@@ -45,6 +48,22 @@ class IToDoSchema(model.Schema):
         title=_(u'label_completed', default='Completed'),
         default=False,
         required=False)
+
+    relatedItems = RelationList(
+        title=_(u'label_related_items', default=u'Related items'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u"Related",
+            source=WorkspacePathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'review_state': {'not': 'document-state-shadow'},
+                },
+            ),
+        ),
+        required=False,
+    )
 
 
 class ToDo(Container):

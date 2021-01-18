@@ -219,3 +219,42 @@ class DossierPathSourceBinder(SolrObjPathSourceBinder):
         del source.navigation_tree_query['portal_type']
 
         return source
+
+
+class WorkspacePathSourceBinder(SolrObjPathSourceBinder):
+    """A Special PathSourceBinder wich only search in the workspace
+    of the actual context
+    """
+
+    def __init__(self, navigation_tree_query=None, filter_class=CustomFilter, **kw):
+        self.selectable_filter = filter_class(**kw)
+        self.navigation_tree_query = navigation_tree_query
+
+    def __call__(self, context):
+        """ gets workspace path and uses it in the navigation_tree_query """
+        workspace_path = ''
+        parent = context
+        while not IPloneSiteRoot.providedBy(parent) and \
+                parent.portal_type != 'opengever.workspace.root':
+            workspace_path = '/'.join(parent.getPhysicalPath())
+            parent = aq_parent(aq_inner(parent))
+        if not self.navigation_tree_query:
+            self.navigation_tree_query = {}
+
+        self.navigation_tree_query['path'] = {'query': workspace_path}
+
+        # Extend path in selectable_filter, to make sure only objects
+        # inside the current workspace are selectable.
+        self.selectable_filter.criteria['path'] = {'query': workspace_path}
+
+        source = self.path_source(
+            context,
+            selectable_filter=self.selectable_filter,
+            navigation_tree_query=self.navigation_tree_query)
+
+        # The PathSource builds its query using the navtree.QueryBuilder,
+        # which adds a portal_type filter to only show certain portal_types.
+        # This is not desired here, so we remove that part of the query
+        del source.navigation_tree_query['portal_type']
+
+        return source
