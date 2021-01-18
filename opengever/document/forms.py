@@ -7,12 +7,13 @@ from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_SOURCE_UUID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_SOURCE_VERSION_KEY
 from opengever.document.document import IDocumentSchema
-from opengever.document.versioner import Versioner
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentSavedAsPDFMarker
 from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.document.interfaces import NO_DOWNLOAD_INPUT_MODE
+from opengever.document.versioner import Versioner
 from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.propertysheets.form import omit_custom_properties_group
 from plone import api
 from plone.autoform import directives
 from plone.dexterity.browser import add
@@ -21,14 +22,14 @@ from plone.dexterity.events import EditFinishedEvent
 from plone.dexterity.utils import iterSchemataForType
 from plone.uuid.interfaces import IUUID
 from plone.z3cform import layout
-from zope.annotation import IAnnotations
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
-from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.relation import RelationValue
+from z3c.relationfield.schema import RelationChoice
+from zope.annotation import IAnnotations
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.event import notify
@@ -50,6 +51,10 @@ class DocumentAddForm(add.DefaultAddForm):
     # errors for this add form.
     _nullify_file_on_error = True
 
+    def updateFields(self):
+        super(DocumentAddForm, self).updateFields()
+        self.groups = omit_custom_properties_group(self.groups)
+
 
 class DocumentAddView(add.DefaultAddView):
     """Provide a registerable view for the Document file upload form."""
@@ -61,6 +66,10 @@ class DocumentEditForm(DefaultEditForm):
     """Custom edit form for documents, which displays some
     different and customized edit modes.
     """
+
+    def updateFields(self):
+        super(DocumentEditForm, self).updateFields()
+        self.groups = omit_custom_properties_group(self.groups)
 
     def updateWidgets(self):
         """Using document specific formwidget.namedfile modes.
