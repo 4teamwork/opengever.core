@@ -26,7 +26,7 @@ class TestTeamAddForm(IntegrationTestCase):
         browser.open(self.contactfolder, view='add-team')
         browser.fill({'Title': u'Projekt \xdcberbaung Dorfmatte'})
         form = browser.find_form_by_field('Group')
-        form.find_widget('Org Unit').fill('fa')
+        form.find_widget('Organization / department').fill('fa')
         form.find_widget('Group').fill('projekt_a')
         browser.find('Save').click()
         self.assertEquals(4, len(Team.query.all()))
@@ -60,7 +60,7 @@ class TestTeamEditForm(IntegrationTestCase):
         self.assertEquals(u'Projekt \xdcberbaung Dorfmatte', form.find_field('Title').value)
         self.assertIsNone(form.find_field('Active').get('checked'))
         self.assertEquals(u'projekt_a', form.find_field('Group').value)
-        self.assertEquals(u'fa', form.find_field('Org Unit').value)
+        self.assertEquals(u'fa', form.find_field('Organization / department').value)
 
     @browsing
     def test_editing_is_only_available_for_administrators_and_managers(self, browser):

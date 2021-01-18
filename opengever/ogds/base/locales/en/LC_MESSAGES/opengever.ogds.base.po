@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-18 11:48+0000\n"
 "PO-Revision-Date: 2016-07-22 16:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 #. German translation: Amtswechsler umschalten
 #: ./opengever/ogds/base/upgrades/profiles/4002/actions.xml
 msgid "Toggle orgunit selector"
-msgstr "Toggle orgunit selector"
+msgstr "Switch organization / department"
 
 #. German translation: Nein
 #. Default: "No"
@@ -63,7 +63,7 @@ msgstr "Address"
 #. Default: "Assigned org unit"
 #: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_assigned_orgunit"
-msgstr "Assigned org unit"
+msgstr "Assigned organization / department"
 
 #. German translation: Amt
 #. Default: "Department"
@@ -93,13 +93,13 @@ msgstr "Edit team"
 #. Default: "Email"
 #: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_email"
-msgstr "Email"
+msgstr "Email address"
 
 #. German translation: Alternative E-Mail Adresse
 #. Default: "Email 2"
 #: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_email2"
-msgstr "Email 2"
+msgstr "Email address (alternate)"
 
 #. German translation: Name
 #. Default: "Name"
@@ -130,7 +130,7 @@ msgstr "Members"
 #. Default: "Org Unit"
 #: ./opengever/ogds/base/browser/team_forms.py
 msgid "label_org_unit"
-msgstr "Org Unit"
+msgstr "Organization / department"
 
 #. German translation: Fax
 #. Default: "Fax"
@@ -148,7 +148,7 @@ msgstr "Mobile phone"
 #. Default: "Office phone"
 #: ./opengever/ogds/base/browser/templates/userdetails_table.pt
 msgid "label_phone_office"
-msgstr "Office phone"
+msgstr "Phone (work)"
 
 #. German translation: Anrede
 #. Default: "Salutation"
