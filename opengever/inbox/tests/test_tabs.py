@@ -21,7 +21,7 @@ class TestInboxTabbedview(SolrIntegrationTestCase):
         self.assertEquals(
             ['', 'Sequence number', 'Title', 'Author',
              'Document date', 'Modification date', 'Creation date',
-             'Received date', 'Sent date', 'Public access level',
+             'Received date', 'Sent date', 'Disclosure status',
              'Reference number', 'File extension', 'Keywords'],
             browser.css('.listing th').text)
 
@@ -34,7 +34,7 @@ class TestInboxTabbedview(SolrIntegrationTestCase):
         self.assertEquals(
             ['', 'Sequence number', 'Title', 'Author',
              'Document date', 'Modification date', 'Creation date',
-             'Received date', 'Sent date', 'Public access level',
+             'Received date', 'Sent date', 'Disclosure status',
              'File extension', 'Keywords'],
             browser.css('.listing th').text)
 

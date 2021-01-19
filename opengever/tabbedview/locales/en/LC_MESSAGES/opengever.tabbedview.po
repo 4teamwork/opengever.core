@@ -357,7 +357,7 @@ msgstr "Preview"
 #. Default: "Public Trial"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_public_trial"
-msgstr "Public access level"
+msgstr "Disclosure status"
 
 #. German translation: Eingangsdatum
 #. Default: "Receipt Date"

@@ -695,7 +695,7 @@ msgstr "Proposal"
 #. German translation: Öffentlichkeitsstatus
 #: ./opengever/document/browser/report.py
 msgid "label_public_trial"
-msgstr "Public access level"
+msgstr "Disclosure status"
 
 #. German translation: Eingangsdatum
 #. Default: "Date of receipt"

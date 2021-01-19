@@ -86,7 +86,7 @@ class TestEditPublicTrialForm(IntegrationTestCase):
         self.set_workflow_state('dossier-state-resolved', self.dossier)
 
         browser.open(self.document, view='edit_public_trial')
-        browser.fill({'Public access level': PUBLIC_TRIAL_PRIVATE}).submit()
+        browser.fill({'Disclosure status': PUBLIC_TRIAL_PRIVATE}).submit()
 
         self.assertEquals('private', self.document.public_trial)
 
@@ -96,7 +96,7 @@ class TestEditPublicTrialForm(IntegrationTestCase):
         self.set_workflow_state('dossier-state-resolved', self.dossier)
 
         browser.visit(self.document, view='edit_public_trial')
-        browser.fill({'Public access level statement': 'Foo statement'}).submit()
+        browser.fill({'Disclosure status statement': 'Foo statement'}).submit()
 
         self.assertEquals('Foo statement',
                           self.document.public_trial_statement)

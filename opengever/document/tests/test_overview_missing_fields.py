@@ -48,6 +48,6 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
              'Related documents',
              'Classification',
              'Privacy protection',
-             'Public access level',
-             'Public access level statement'],
+             'Disclosure status',
+             'Disclosure status statement'],
             field_headers)
