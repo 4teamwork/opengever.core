@@ -385,6 +385,11 @@ class SolrQueryBaseService(Service):
         sort = self.extract_sort(params, query)
         field_list = self.extract_field_list(params)
         additional_params = self.prepare_additional_params(params)
+
+        # Using mincount prevent facetting to expose all users if using i.e.
+        # the creator or responsible facet - CROWN
+        additional_params['facet.mincount'] = 1
+
         return query, filters, start, rows, sort, field_list, additional_params
 
     def extract_start(self, params):
