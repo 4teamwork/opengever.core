@@ -49,7 +49,7 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
                 # initialize annotations with `None` as this is expected by the
                 # default value patches.
                 if prefixed_name not in self.__dict__['annotations']:
-                    self.__dict__['annotations'][prefixed_name] = value
+                    self.__dict__['annotations'][prefixed_name] = None
                 return
 
             # for not `None` values always validate type first
