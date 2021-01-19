@@ -24,7 +24,6 @@ class ITestFixtureWithCustomProperties(model.Schema):
         attribute_name='some_attribute',
         assignemnt_prefix=DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX,
         valid_assignment_slots_factory=fixture_assignment_factory,
-        required=False,
     )
 
 

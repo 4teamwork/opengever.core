@@ -58,6 +58,16 @@ class PropertySheetField(JSONField):
         self.assignemnt_prefix = assignemnt_prefix
         self.valid_assignment_slots_factory = valid_assignment_slots_factory
 
+        for name in ("title", "required"):
+            if name in kwargs:
+                raise TypeError(
+                    "Static value for argument '{}' cannot be "
+                    "overwritten via keyword argument.".format(name)
+                )
+
+        kwargs["title"] = u'Property sheets with custom properties'
+        kwargs["required"] = False
+
         super(PropertySheetField, self).__init__(**kwargs)
 
     def _validate(self, value):

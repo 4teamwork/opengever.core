@@ -11,9 +11,7 @@ class IDocumentCustomProperties(model.Schema):
         request_key='form.widgets.IDocumentMetadata.document_type',
         attribute_name='document_type',
         assignemnt_prefix='IDocumentMetadata.document_type',
-        title=u'Property sheets with custom properties.',
         valid_assignment_slots_factory=get_document_assignment_slots,
-        required=False,
     )
 
     model.fieldset(
