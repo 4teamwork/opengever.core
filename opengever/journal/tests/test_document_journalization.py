@@ -86,19 +86,19 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
     @browsing
     def test_modifying_the_public_trial_metadata_is_journalized(self, browser):
         browser.login().open(self.document, view='edit')
-        browser.fill({'Public access level': PUBLIC_TRIAL_PRIVATE})
+        browser.fill({'Disclosure status': PUBLIC_TRIAL_PRIVATE})
         browser.css('#form-buttons-save').first.click()
 
         entry = self.get_journal_entries()[-1]
 
         self.assert_journal_entry(
             PUBLIC_TRIAL_MODIFIED_ACTION,
-            u'Public access level changed to "private".', entry)
+            u'Disclosure status changed to "private".', entry)
 
     @browsing
     def test_modifying_the_public_trial_metadata_is_journalized_separately(self, browser):
         browser.login().open(self.document, view='edit')
-        browser.fill({'Public access level': PUBLIC_TRIAL_PRIVATE,
+        browser.fill({'Disclosure status': PUBLIC_TRIAL_PRIVATE,
                       'Description': 'Foo'})
         browser.css('#form-buttons-save').first.click()
 
@@ -106,7 +106,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
 
         self.assert_journal_entry(
             PUBLIC_TRIAL_MODIFIED_ACTION,
-            u'Public access level changed to "private".', entries[-1])
+            u'Disclosure status changed to "private".', entries[-1])
 
         self.assert_journal_entry(
             DOCUMENT_MODIIFED_ACTION, u'Changed metadata', entries[-2])
@@ -114,7 +114,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
     @browsing
     def test_modifying_the_public_trial_statement_is_journalized_as_a_metadata_change(self, browser):
         browser.login().open(self.document, view='edit')
-        browser.fill({'Public access level statement': 'Fook'}).save()
+        browser.fill({'Disclosure status statement': 'Fook'}).save()
 
         entries = self.get_journal_entries()
 

@@ -610,8 +610,8 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Related documents',
             'Classification',
             'Privacy protection',
-            'Public access level',
-            'Public access level statement',
+            'Disclosure status',
+            'Disclosure status statement',
             ]
 
         self.assertEquals(document_attributes, browser.css('.listing th').text)

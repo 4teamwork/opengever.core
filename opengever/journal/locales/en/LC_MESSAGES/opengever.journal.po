@@ -122,7 +122,7 @@ msgstr "Changed metadata of document ${title}"
 #. Default: "Public trial changed to \"${public_trial}\"."
 #: ./opengever/journal/handlers.py
 msgid "label_document_public_trial_modified"
-msgstr "Public access level changed to \"${public_trial}\"."
+msgstr "Disclosure status changed to \"${public_trial}\"."
 
 #. German translation: Dokument ${title} gelöscht.
 #. Default: "Document ${title} removed."

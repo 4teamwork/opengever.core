@@ -511,7 +511,7 @@ class TestPublicTrialField(IntegrationTestCase):
 
         browser.open(self.dossier)
         factoriesmenu.add(u'Document')
-        form_field = browser.find('Public access level')
+        form_field = browser.find('Disclosure status')
         self.assertEqual(
             ['unchecked', 'public', 'limited-public', 'private'],
             form_field.options_values)
@@ -523,7 +523,7 @@ class TestPublicTrialField(IntegrationTestCase):
 
         browser.open(self.dossier)
         factoriesmenu.add(u'Document')
-        form_field = browser.find('Public access level')
+        form_field = browser.find('Disclosure status')
         self.assertEqual(
             ['unchecked', 'public', 'limited-public', 'private'],
             form_field.options_values)
@@ -541,12 +541,12 @@ class TestPublicTrialField(IntegrationTestCase):
         factoriesmenu.add('Business Case Dossier')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public access level statement should be hidden')
+                        'Disclosure status statement should be hidden')
 
         browser.open(self.dossier, view='edit')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public access level statement should be hidden')
+                        'Disclosure status statement should be hidden')
 
     @browsing
     def test_public_trial_is_hidden_on_repofolder(self, browser):
@@ -561,12 +561,12 @@ class TestPublicTrialField(IntegrationTestCase):
         factoriesmenu.add('Repository Folder')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public access level statement should be hidden')
+                        'Disclosure status statement should be hidden')
 
         browser.visit(self.leaf_repofolder, view='edit')
         self.assertTrue(browser.css(selector), 'Public trial should be hidden')
         self.assertTrue(browser.css(selector2),
-                        'Public access level statement should be hidden')
+                        'Disclosure status statement should be hidden')
 
 
 class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
@@ -576,19 +576,19 @@ class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.document, view='edit')
-        browser.fill({'Public access level': 'public'}).save()
+        browser.fill({'Disclosure status': 'public'}).save()
 
         self.assert_journal_entry(
             self.document, 'Public trial modified',
-            u'Public access level changed to "public".')
+            u'Disclosure status changed to "public".')
 
     @browsing
     def test_public_trial_edit_form_journalizes_changes(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.document, view='edit_public_trial')
-        browser.fill({'Public access level': 'public'}).save()
+        browser.fill({'Disclosure status': 'public'}).save()
 
         self.assert_journal_entry(
             self.document, 'Public trial modified',
-            u'Public access level changed to "public".')
+            u'Disclosure status changed to "public".')

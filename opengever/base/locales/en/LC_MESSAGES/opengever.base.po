@@ -435,13 +435,13 @@ msgstr "Privacy protection"
 #. Default: "Public Trial"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_public_trial"
-msgstr "Public access level"
+msgstr "Disclosure status"
 
 #. German translation: Bearbeitungsinformation
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_public_trial_statement"
-msgstr "Public access level statement"
+msgstr "Disclosure status statement"
 
 #. German translation: Kürzlich bearbeitet
 #. Default: "Recently touched"

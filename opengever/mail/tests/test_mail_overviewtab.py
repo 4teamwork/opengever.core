@@ -47,8 +47,8 @@ class TestOverview(FunctionalTestCase):
                   ['Date of delivery', ''],
                   ['Classification', 'unprotected'],
                   ['Privacy protection', 'no'],
-                  ['Public access level', 'not assessed'],
-                  ['Public access level statement', '']]
+                  ['Disclosure status', 'not assessed'],
+                  ['Disclosure status statement', '']]
 
         self.assertEquals(expect,
                           browser.css('table').first.lists())
