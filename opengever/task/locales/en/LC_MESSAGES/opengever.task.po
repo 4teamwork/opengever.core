@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-16 18:45+0000\n"
+"POT-Creation-Date: 2021-01-19 15:20+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -610,6 +610,7 @@ msgstr "Start of work"
 #. German translation: Info an
 #. Default: "Info at"
 #. MARKER: double check
+#: ./opengever/task/activities.py
 #: ./opengever/task/task.py
 msgid "label_informed_principals"
 msgstr "Info at"

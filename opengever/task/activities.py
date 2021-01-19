@@ -103,6 +103,8 @@ class TaskAddedActivity(BaseTaskActivity):
     def collect_description_data(self, language):
         """Returns a list with [label, value] pairs.
         """
+        informed_principals = [Actor.lookup(actorid).get_label() for actorid in
+                               self.context.informed_principals]
         data = [
             [_('label_task_title', u'Task title'), self.context.title],
             [_('label_deadline', u'Deadline'),
@@ -116,7 +118,9 @@ class TaskAddedActivity(BaseTaskActivity):
             [_('label_responsible', u'Responsible'),
              self.context.get_responsible_actor().get_label()],
             [_('label_issuer', u'Issuer'),
-             self.context.get_issuer_actor().get_label()]
+             self.context.get_issuer_actor().get_label()],
+            [_('label_informed_principals', u'Info at'),
+             ", ".join(informed_principals) or '-'],
             ]
         if self.context.get_is_subtask():
             parent = aq_parent(aq_inner(self.context))
