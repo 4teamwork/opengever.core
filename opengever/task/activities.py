@@ -92,7 +92,7 @@ class TaskAddedActivity(BaseTaskActivity):
     def render_description_markup(self, data, language):
         msg = u'<table><tbody>'
         for label, value in data:
-            msg = u'{}<tr><td class="label">{}</td><td>'.format(
+            msg = u'{}<tr><td valign="top" class="label">{}</td><td>'.format(
                 msg, self.translate(label, language))
             # Break lines correctly in the table rows
             if value:

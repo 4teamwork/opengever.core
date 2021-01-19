@@ -121,7 +121,7 @@ class TestEmailNotification(IntegrationTestCase):
         mail = raw_mail.decode("quopri")
 
         self.assertIn(
-            '<tr><td class="label">Info at</td>'
+            '<tr><td valign="top" class="label">Info at</td>'
             '<td>Kohler Nicole (nicole.kohler), '
             'B\xc3\xa4rfuss K\xc3\xa4thi (kathi.barfuss)</td></tr>',
             mail)
