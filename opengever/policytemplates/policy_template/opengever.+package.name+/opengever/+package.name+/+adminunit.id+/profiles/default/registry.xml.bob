@@ -42,7 +42,7 @@
   </records>
 
 {{% endif %}}
-{{% if setup.usersnap_api_key %}}
+{{% if setup.enable_usersnap %}}
   <records interface="opengever.base.interfaces.IUserSnapSettings">
     <value key="api_key">{{{setup.usersnap_api_key}}}</value>
   </records>
