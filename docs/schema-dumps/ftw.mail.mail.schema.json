@@ -163,6 +163,12 @@
                 "mailin",
                 "upload"
             ]
+        },
+        "custom_properties": {
+            "type": "object",
+            "title": "Benutzerdefinierte Felder",
+            "description": "Enth\u00e4lt die Daten f\u00fcr die benutzerdefinierten Felder.",
+            "_zope_schema_type": "PropertySheetField"
         }
     },
     "field_order": [
@@ -185,6 +191,7 @@
         "archival_file_state",
         "title",
         "original_message",
-        "message_source"
+        "message_source",
+        "custom_properties"
     ]
 }

@@ -154,6 +154,12 @@
             "title": "Status Archivdatei",
             "description": "",
             "_zope_schema_type": "Int"
+        },
+        "custom_properties": {
+            "type": "object",
+            "title": "Benutzerdefinierte Felder",
+            "description": "Enth\u00e4lt die Daten f\u00fcr die benutzerdefinierten Felder.",
+            "_zope_schema_type": "PropertySheetField"
         }
     },
     "field_order": [
@@ -175,6 +181,7 @@
         "document_author",
         "preserved_as_paper",
         "archival_file",
-        "archival_file_state"
+        "archival_file_state",
+        "custom_properties"
     ]
 }

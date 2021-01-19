@@ -50,33 +50,33 @@ class SchemaDocsBuilder(DirectoryHelperMixin):
         return sorted(schema['properties'].items(), key=keyfunc)
 
     def _build_docs_for_type(self, portal_type):
-            schema_filename = '{}.schema.json'.format(portal_type)
-            schema_path = pjoin(self.schema_dumps_dir, schema_filename)
+        schema_filename = '{}.schema.json'.format(portal_type)
+        schema_path = pjoin(self.schema_dumps_dir, schema_filename)
 
-            try:
-                json_schema = json.load(open(schema_path))
-            except IOError:
-                self._show_create_schema_dumps_message()
-                raise
+        try:
+            json_schema = json.load(open(schema_path))
+        except IOError:
+            self._show_create_schema_dumps_message()
+            raise
 
-            field_docs = []
+        field_docs = []
 
-            for field_name, field_info in self.ordered_fields(json_schema):
-                required = field_name in json_schema.get('required', [])
-                field_doc = self._build_docs_for_field(
-                    field_name, field_info, required)
-                field_docs.append(field_doc)
+        for field_name, field_info in self.ordered_fields(json_schema):
+            required = field_name in json_schema.get('required', [])
+            field_doc = self._build_docs_for_field(
+                field_name, field_info, required)
+            field_docs.append(field_doc)
 
-            type_template = env.get_template('type.rst')
-            type_doc = type_template.render(
-                dict(
-                    portal_type=portal_type,
-                    title=json_schema['title'],
-                    field_docs=u'\n'.join(field_docs),
-                )
+        type_template = env.get_template('type.rst')
+        type_doc = type_template.render(
+            dict(
+                portal_type=portal_type,
+                title=json_schema['title'],
+                field_docs=u'\n'.join(field_docs),
             )
+        )
 
-            return type_doc
+        return type_doc
 
     def _build_docs_for_field(self, field_name, field_info, required=False):
         field = field_info.copy()
