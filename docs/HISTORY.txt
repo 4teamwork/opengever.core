@@ -4,6 +4,7 @@ Changelog
 2021.2.0 (unreleased)
 ---------------------
 
+- Clean up English translations. [lgraf]
 - Add new API endpoint @white-labeling-settings. [tinagerber]
 - Add relatedItems field to todo. [tinagerber]
 - Add HubSpot feature flag. [tinagerber]

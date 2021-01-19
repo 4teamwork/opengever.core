@@ -20,7 +20,7 @@ msgstr "Add response"
 
 #. German translation: Standardablauf auslösen
 msgid "Add task from template"
-msgstr "Add task from template"
+msgstr "Task from template"
 
 #. German translation: Kopie Dokument aus eigenem Mandant
 msgid "Attach remote document"
@@ -344,6 +344,10 @@ msgstr "label_actions_menu"
 #. German translation: Fehler bei der Verarbeitung Ihrer Suchanfrage. Bitte beachten Sie, dass Ausdrücke wie AND, NOT und OR nur in der erweiterten Suche erlaubt sind.
 msgid "label_has_parse_errors"
 msgstr "An error occurred while handling your search query. Please note that operators like AND, NOT and OR are only allowed in advanced search."
+
+#. German translation: Name
+msgid "label_name"
+msgstr "Name"
 
 #. German translation: zurücksetzen
 msgid "label_reset"

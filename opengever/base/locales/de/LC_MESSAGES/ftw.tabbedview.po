@@ -38,6 +38,9 @@ msgstr "Übersicht"
 msgid "additional_contact"
 msgstr "Details"
 
+msgid "all (${amount})"
+msgstr "Alle (${amount})"
+
 msgid "all_entries"
 msgstr "Alle Einträge"
 

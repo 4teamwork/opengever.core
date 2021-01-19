@@ -425,3 +425,6 @@ msgstr ""
 
 msgid "mail-transition-restore"
 msgstr ""
+
+msgid "label_name"
+msgstr ""

@@ -28,7 +28,7 @@ msgstr "All visible entries chosen <a href=\"#\">x</a>"
 #. German translation: Auswählen
 #: ./opengever/tabbedview/browser/selection_with_filters.pt
 msgid "Choose"
-msgstr "Choose"
+msgstr "Select"
 
 #. German translation: Ersteller
 #. Default: "Ersteller"

@@ -46,6 +46,9 @@ msgstr "accounting_overview"
 msgid "additional_contact"
 msgstr "additional_contact"
 
+msgid "all (${amount})"
+msgstr "All (${amount})"
+
 #. German translation: Alle Einträge
 msgid "all_entries"
 msgstr "all_entries"

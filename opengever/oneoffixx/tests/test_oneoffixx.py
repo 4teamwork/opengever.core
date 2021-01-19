@@ -479,7 +479,7 @@ class TestOneOffixxTemplateFeature(IntegrationTestCase):
             ['Document',
              'Document from template',
              'Task',
-             'Add task from template',
+             'Task from template',
              'Subdossier',
              'Participant'],
             factoriesmenu.addable_types())
@@ -491,7 +491,7 @@ class TestOneOffixxTemplateFeature(IntegrationTestCase):
              'Document from template',
              'Document from OneOffixx template',
              'Task',
-             'Add task from template',
+             'Task from template',
              'Subdossier',
              'Participant'],
             factoriesmenu.addable_types())
