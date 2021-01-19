@@ -156,15 +156,27 @@ class PropertySheetFieldSchemaProvider(DefaultJsonSchemaProvider):
             field, context, request
         )
 
-    def get_schema(self):
-        sheets_for_portal_type = {}
+        self.sheets_by_slots = {}
         storage = PropertySheetSchemaStorage()
         for slot_name in self.field.valid_assignment_slots_factory():
             definition = storage.query(slot_name)
             if definition is not None:
-                sheets_for_portal_type[slot_name] = definition.get_json_schema()
+                self.sheets_by_slots[slot_name] = definition.get_json_schema()
 
-        return sheets_for_portal_type
+    def additional(self):
+        """Additional info for field."""
+        if not self.sheets_by_slots:
+            return {}
+
+        return {
+            "properties": self.sheets_by_slots
+        }
+
+    def get_type(self):
+        return "object" if self.sheets_by_slots else "null"
+
+    def get_widget_params(self):
+        return None
 
 
 @adapter(IPropertySheetField, IWidget)

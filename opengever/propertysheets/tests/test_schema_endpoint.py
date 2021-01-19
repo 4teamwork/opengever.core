@@ -24,17 +24,17 @@ class TestCustomPropertiesFieldSchemaEndpoint(IntegrationTestCase):
             headers=self.api_headers,
         ).json
 
-        # we just validate presence of the schema, serialization of the
-        # complete schema is tested in functional tests
-
-        self.assertIsNotNone(browser.json["properties"]["custom_properties"])
-        self.assertIn(
-            "IDocumentMetadata.document_type.question",
-            browser.json["properties"]["custom_properties"],
-        )
-
         # smoke-test to validate the schema
         Draft4Validator.check_schema(schema)
+
+        props = schema["properties"]["custom_properties"]["properties"]
+        # we just validate presence of the schema, serialization of the
+        # complete schema is tested in functional tests
+        self.assertIsNotNone(props)
+        self.assertIn(
+            "IDocumentMetadata.document_type.question",
+            props,
+        )
 
     @browsing
     def test_sheet_assigned_to_multiple_slots_is_serialized_for_each_slot(
@@ -58,11 +58,13 @@ class TestCustomPropertiesFieldSchemaEndpoint(IntegrationTestCase):
             headers=self.api_headers,
         ).json
 
+        # smoke-test to validate the schema
+        Draft4Validator.check_schema(schema)
+
+        props = schema["properties"]["custom_properties"]["properties"]
         # we just validate presence of the schema, serialization of the
         # complete schema is tested in functional tests
-
-        self.assertIsNotNone(browser.json["properties"]["custom_properties"])
-        props = browser.json["properties"]["custom_properties"]
+        self.assertIsNotNone(props)
         self.assertIn("IDocumentMetadata.document_type.contract", props)
         self.assertIn("IDocumentMetadata.document_type.question", props)
         self.assertEqual(
@@ -70,12 +72,8 @@ class TestCustomPropertiesFieldSchemaEndpoint(IntegrationTestCase):
             props["IDocumentMetadata.document_type.question"],
         )
 
-        # smoke-test to validate the schema
-        Draft4Validator.check_schema(schema)
-
     @browsing
     def test_representation_when_no_schemas_are_available(self, browser):
-
         self.login(self.regular_user, browser)
         schema = browser.open(
             self.leaf_repofolder,
@@ -86,3 +84,13 @@ class TestCustomPropertiesFieldSchemaEndpoint(IntegrationTestCase):
 
         # smoke-test to validate the schema
         Draft4Validator.check_schema(schema)
+
+        self.assertEqual(
+            {
+                u"behavior": u"opengever.document.behaviors.customproperties.IDocumentCustomProperties",
+                u"description": u"",
+                u"title": u"Property sheets with custom properties",
+                u"type": u"null",
+            },
+            schema["properties"]["custom_properties"],
+        )
