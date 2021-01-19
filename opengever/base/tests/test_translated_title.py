@@ -59,18 +59,27 @@ class TestTranslatedTitleHasTranslationBehavior(IntegrationTestCase):
 
 class TestTranslatedTitleIsOnTop(IntegrationTestCase):
 
-    def assert_translated_title_fields_in_browser(self, browser):
-        translated_fields = [
-            'forms.widgets.ITranslatedTitle.title_{}'.format(lang)
-            for lang in api.portal.get_tool('portal_languages').supported_langs
-            if lang in TranslatedTitle.SUPPORTED_LANGUAGES
-        ]
+    def assert_expected_translated_title_fields_are_displayed_in_browser(
+            self, browser, expected_languages):
+        """Make sure that only fields corresponding to the expected languages
+        are shown. We also check that they are displayed at the top of the form.
+        """
+        expected_fields = [
+            'form.widgets.ITranslatedTitle.title_{}'.format(lang)
+            for lang in expected_languages]
 
         first_fields = [
-            _input.name
-            for _input in browser.css("#form input[type!='hidden']")[:len(translated_fields)]
-        ]
-        self.assertEquals(translated_fields, first_fields)
+            _input.name for _input in browser.css(
+                "#form input[type!='hidden']")[:len(expected_fields)]]
+
+        actual_fields = [
+            _input.name for _input in browser.css("#form input[type!='hidden']")
+            if _input.name and 'form.widgets.ITranslatedTitle' in _input.name]
+
+        self.assertEqual(expected_fields, actual_fields)
+        self.assertEqual(
+            actual_fields, first_fields,
+            "Translated title fields should come at the top of the form")
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_inbox_container(
@@ -84,7 +93,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(inbox_container, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_private_root(
@@ -94,7 +104,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.private_root, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_inbox(self, browser):
@@ -103,7 +114,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.inbox, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_committee_container(
@@ -113,7 +125,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.committee_container, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_templates(
@@ -123,7 +136,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.templates, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_workspace_root(
@@ -133,7 +147,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.workspace_root, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_repository_root(
@@ -143,7 +158,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.repository_root, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_contact_folder(
@@ -153,7 +169,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.contactfolder, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
     @browsing
     def test_translated_title_is_on_top_when_editing_the_repository_folder(
@@ -163,7 +180,8 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
         browser.open(self.branch_repofolder, view='edit')
         statusmessages.assert_no_error_messages()
 
-        self.assert_translated_title_fields_in_browser(browser)
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
 
 
 class TestTranslatedTitleConfig(TestCase):
