@@ -532,6 +532,8 @@ Die Aufgabenhierarchie kann auch direkt über den GET-Request eines Tasks mittel
      GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1?expand=tasktree HTTP/1.1
      Accept: application/json
 
+Für sequenzielle Aufgabenabläufe steht zusätzlich das Feld ``is_task_addable_before`` zur Verfügung.
+
 
 Ursprüngliche Aufgabe
 ---------------------

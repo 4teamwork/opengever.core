@@ -42,6 +42,13 @@ class TestTaskTree(SolrIntegrationTestCase):
         self.assertFalse(browser.json['is_task_addable_in_main_task'])
 
     @browsing
+    def test_is_task_addable_before(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.sequential_task, view="@tasktree", method="GET", headers=self.api_headers)
+        self.assertFalse(browser.json['children'][0]['children'][0]['is_task_addable_before'])
+        self.assertTrue(browser.json['children'][0]['children'][1]['is_task_addable_before'])
+
+    @browsing
     def test_get_task_with_tasktree_expansion(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(

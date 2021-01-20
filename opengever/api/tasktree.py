@@ -4,7 +4,9 @@ from ftw.solr.query import make_filters
 from opengever.base.browser.navigation import make_tree_by_url
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.solr import OGSolrContentListing
+from opengever.task import TASK_STATE_PLANNED
 from opengever.task.task import ITask
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from zope.component import adapter
@@ -40,6 +42,9 @@ class TaskTree(object):
                 return True
         return False
 
+    def is_task_addable_before(self, obj):
+        return (obj.review_state() == TASK_STATE_PLANNED) and self.is_task_addable_in_main_task()
+
     def get_main_task(self):
         main_task = self.context
         parent = aq_parent(main_task)
@@ -51,6 +56,7 @@ class TaskTree(object):
     def task_tree(self):
         main_task = self.get_main_task()
         solr = getUtility(ISolrSearch)
+        is_sequential = IFromSequentialTasktemplate.providedBy(main_task)
         filters = make_filters(
             path={
                 'query': '/'.join(main_task.getPhysicalPath()),
@@ -63,14 +69,18 @@ class TaskTree(object):
             filters=filters, start=0, rows=1000, sort='created asc',
             fl=fieldlist)
 
-        nodes = [
-            {
+        nodes = []
+        for obj in OGSolrContentListing(resp):
+            child = {
                 '@id': obj.getURL(),
                 '@type': obj.PortalType(),
                 'review_state': obj.review_state(),
                 'title': obj.Title(),
-            } for obj in OGSolrContentListing(resp)
-        ]
+            }
+            if is_sequential:
+                child['is_task_addable_before'] = self.is_task_addable_before(obj)
+            nodes.append(child)
+
         return make_tree_by_url(nodes, url_key='@id', children_key='children')
 
 
