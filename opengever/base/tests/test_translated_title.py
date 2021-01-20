@@ -57,7 +57,7 @@ class TestTranslatedTitleHasTranslationBehavior(IntegrationTestCase):
             ttool["opengever.contact.contactfolder"]))
 
 
-class TestTranslatedTitleFieldsInEditForms(IntegrationTestCase):
+class TranslatedTitleTestMixin(object):
 
     def assert_expected_translated_title_fields_are_displayed_in_browser(
             self, browser, expected_languages):
@@ -80,6 +80,9 @@ class TestTranslatedTitleFieldsInEditForms(IntegrationTestCase):
         self.assertEqual(
             actual_fields, first_fields,
             "Translated title fields should come at the top of the form")
+
+
+class TestTranslatedTitleFieldsInEditForms(IntegrationTestCase, TranslatedTitleTestMixin):
 
     def assert_edit_form_shows_translated_title_fields_only_for_active_languages(
             self, browser, obj):
@@ -337,58 +340,144 @@ class TestTranslatedTitle(IntegrationTestCase):
                           obj2brain(self.dossier).Title)
 
 
-class TestTranslatedTitleAddForm(IntegrationTestCase):
+class TestTranslatedTitleAddForm(IntegrationTestCase, TranslatedTitleTestMixin):
 
     def setUp(self):
         super(TestTranslatedTitleAddForm, self).setUp()
-        self.enable_languages()
         self.lang_tool = api.portal.get_tool('portal_languages')
 
+    def assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            self, browser, container, portal_type):
+        self.assertItemsEqual(['en', 'de-ch'], self.lang_tool.supported_langs)
+        self.assertNotIn('en', TranslatedTitle.SUPPORTED_LANGUAGES)
+
+        browser.open(container)
+        factoriesmenu.add(portal_type)
+        statusmessages.assert_no_error_messages()
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
+
+        self.lang_tool.addSupportedLanguage('fr-ch')
+
+        browser.open(container)
+        factoriesmenu.add(portal_type)
+        statusmessages.assert_no_error_messages()
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de', 'fr'])
+
     @browsing
-    def test_language_fields_are_available_by_default(self, browser):
+    def test_setting_language_fields_in_add_form(self, browser):
         self.login(self.manager, browser=browser)
 
-        browser.open(self.portal)
-        factoriesmenu.add('Repository Root')
+        self.lang_tool.supported_langs = ['de-ch', 'fr-ch']
 
-        browser.fill({'Title (German)': u'Ordnungssystem',
-                      u'Title (French)': u"syst\xe8me d'ordre"})
-        browser.find('Save').click()
+        with self.observe_children(self.portal) as children:
+            browser.open(self.portal)
+            factoriesmenu.add('Repository Root')
 
-    @browsing
-    def test_language_fields_of_inactive_languages_are_hidden(self, browser):
-        self.login(self.manager, browser=browser)
+            browser.fill({'Title (German)': u'Ordnungssystem',
+                          u'Title (French)': u"syst\xe8me de classement"})
+            browser.find('Save').click()
 
-        self.lang_tool.supported_langs = ['fr-ch']
-        browser.open(self.portal)
-        factoriesmenu.add('Repository Root')
-
-        self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
-                          browser.forms.get('form').css('label').text)
-        self.assertEquals('form.widgets.ITranslatedTitle.title_fr',
-                          browser.find_field_by_text('Title').get('name'))
-
-        self.lang_tool.supported_langs = ['de-ch']
-        browser.open(self.portal)
-        factoriesmenu.add('Repository Root')
-
-        self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
-                          browser.forms.get('form').css('label').text)
-        self.assertEquals('form.widgets.ITranslatedTitle.title_de',
-                          browser.find_field_by_text('Title').get('name'))
+        self.assertEqual(1, len(children['added']))
+        repo_root = children['added'].pop()
+        self.assertEqual(u'Ordnungssystem', repo_root.title_de)
+        self.assertEqual(u"syst\xe8me de classement", repo_root.title_fr)
 
     @browsing
     def test_label_is_renamed_to_title_for_sites_with_only_one_active_language(self, browser):
         self.login(self.manager, browser=browser)
+        self.lang_tool.supported_langs = ['de-ch', 'fr-ch']
+
+        browser.open(self.portal)
+        factoriesmenu.add('Repository Root')
+        self.assertEquals(
+            'Title (French)',
+            browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
 
         self.lang_tool.supported_langs = ['fr-ch']
 
         browser.open(self.portal)
         factoriesmenu.add('Repository Root')
-
         self.assertEquals(
             'Title',
             browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
+
+    @browsing
+    def test_inbox_container_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.portal, 'Inbox Container')
+
+    @browsing
+    def test_private_root_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.portal, 'Private Root')
+
+    @browsing
+    def test_inbox_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        self.assertItemsEqual(['en', 'de-ch'], self.lang_tool.supported_langs)
+
+        browser.open(self.inbox_container, view='++add++opengever.inbox.inbox')
+        statusmessages.assert_no_error_messages()
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
+
+        self.lang_tool.addSupportedLanguage('fr-ch')
+
+        browser.open(self.inbox_container, view='++add++opengever.inbox.inbox')
+        statusmessages.assert_no_error_messages()
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de', 'fr'])
+
+    @browsing
+    def test_committee_container_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.activate_feature('meeting')
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.portal, 'Committee Container')
+
+    @browsing
+    def test_template_folder_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.portal, 'Template Folder')
+
+    @browsing
+    def test_workspace_root_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.portal, 'Workspace Root')
+
+    @browsing
+    def test_repository_root_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.portal, 'Repository Root')
+
+    @browsing
+    def test_contact_folder_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.portal, 'Contact Folder')
+
+    @browsing
+    def test_repository_folder_add_form_only_shows_translated_title_fields_for_active_languages(
+            self, browser):
+        self.login(self.manager, browser=browser)
+        self.assert_add_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.repository_root, 'Repository Folder')
 
 
 class TestTranslatedTitleLanguageSupport(IntegrationTestCase):
