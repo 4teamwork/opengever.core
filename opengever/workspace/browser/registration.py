@@ -1,4 +1,3 @@
-from Acquisition import aq_base
 from logging import getLogger
 from opengever.base.model import create_session
 from opengever.ogds.models.group import Group
@@ -45,7 +44,7 @@ class SelfRegistrationView(BrowserView):
 
         # Only users in the current site
         acl_users = getToolByName(self, 'acl_users')
-        user = aq_base(acl_users).getUserById(userid, None)
+        user = acl_users.aq_explicit.getUserById(userid, None)
         if user is None:
             return
 
