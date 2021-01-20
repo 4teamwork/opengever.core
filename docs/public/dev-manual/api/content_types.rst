@@ -22,6 +22,16 @@ Das Erstellen und Modifizieren von Inhalten mittels ``POST`` oder ``PATCH``
 erlaubt immer alle übersetzten Felder.
 
 
+Benutzerdefinierte Felder
+-------------------------
+
+Daten für benutzerdefinierte Felder werden im Feld `custom_properties`
+gespeichert. Eine Abfrage auf den ``@schema`` Endpoint liefert die aktuell
+gültigen Schemas der benutzerdefinierten Felder eines Deployments.
+Weitere Dokumentation über Benutzerdefinierte Felder findet man unter
+:ref:`propertysheets`.
+
+
 Schemas
 -------
 

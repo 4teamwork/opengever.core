@@ -16,7 +16,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
-- No changes yet
+- The field ``custom_properties`` is now included in the ``@schema`` endpoint for Documents and Mails (see :ref:`content-types`).
 
 
 2021.2.0 (2021-01-20)
