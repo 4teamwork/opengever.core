@@ -1,12 +1,16 @@
 from Acquisition import aq_base
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.changed import IChangedMarker
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import SORTABLE_TITLE_LENGTH
+from opengever.base.oguid import Oguid
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
 from plone.dexterity.interfaces import IDexterityContent
@@ -23,7 +27,8 @@ from zope.annotation import IAnnotations
 
 # 'getObjPositionInParent' index is only calculated for objects providing
 # one of thoes interfaces.
-CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (ITaskTemplate, IToDo, IToDoList)
+CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (
+    ITaskTemplate, IToDo, IFromSequentialTasktemplate, IToDoList)
 
 
 @indexer(IDexterityContent)
@@ -128,5 +133,9 @@ def getObjPositionInParent(obj):
     plone catalogs 'getObjPositionInParent' index.
     """
     if any(iface.providedBy(obj) for iface in CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT):
+        if IFromSequentialTasktemplate.providedBy(obj) and obj.get_is_subtask():
+            order = aq_parent(aq_inner(obj)).get_tasktemplate_order()
+            if order:
+                return order.index(Oguid.for_object(obj))
         return ploneGetObjPositionInParent(obj)()
     return None

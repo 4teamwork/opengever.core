@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
+import json
 
 
 class TestHasSameTypeChildren(IntegrationTestCase):
@@ -300,6 +301,7 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
                 self.dossier.UID(),
                 self.document.UID(),
                 self.task.UID(),
+                self.seq_subtask_2.UID(),
                 self.proposal.UID(),
                 self.tasktemplate.UID(),
                 self.workspace.UID(),
@@ -320,6 +322,8 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
              u'getObjPositionInParent': None},
             {u'UID': self.task.UID(),
              u'getObjPositionInParent': None},
+            {u'UID': self.seq_subtask_2.UID(),
+             u'getObjPositionInParent': 1},
             {u'UID': self.tasktemplate.UID(),
              u'getObjPositionInParent': 0},
             {u'UID': self.todo.UID(),
@@ -328,4 +332,39 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
              u'getObjPositionInParent': 4},
             {u'UID': self.workspace.UID(),
              u'getObjPositionInParent': None}
-            ], browser.json["items"])
+        ], browser.json["items"])
+
+    @browsing
+    def test_getObjPositionInParent_if_sequential_subtask_is_added(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = '{}/@solrsearch?sort=getObjPositionInParent asc&fl=Title,UID,getObjPositionInParent'\
+              '&depth=1'.format(self.sequential_task.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.maxDiff = None
+
+        self.assertEqual([
+            (self.seq_subtask_1.Title(), 0),
+            (self.seq_subtask_2.Title(), 1),
+            (self.seq_subtask_3.Title(), 2)],
+            [(item['Title'], item['getObjPositionInParent']) for item in browser.json["items"]])
+
+        data = {
+            '@type': 'opengever.task.task',
+            'title': 'Neue Aufgabe',
+            'task_type': 'direct-execution',
+            'position': 2,
+            'responsible': 'fa:{}'.format(self.secretariat_user.id),
+            'issuer': self.regular_user.id,
+        }
+
+        browser.open(self.sequential_task, json.dumps(data),
+                     method="POST", headers=self.api_headers)
+        self.commit_solr()
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual([
+            (self.seq_subtask_1.Title(), 0),
+            (self.seq_subtask_2.Title(), 1),
+            (u'Neue Aufgabe', 2), (self.seq_subtask_3.Title(), 3)],
+            [(item['Title'], item['getObjPositionInParent']) for item in browser.json["items"]])
