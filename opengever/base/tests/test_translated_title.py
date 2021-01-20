@@ -57,7 +57,7 @@ class TestTranslatedTitleHasTranslationBehavior(IntegrationTestCase):
             ttool["opengever.contact.contactfolder"]))
 
 
-class TestTranslatedTitleIsOnTop(IntegrationTestCase):
+class TestTranslatedTitleFieldsInEditForms(IntegrationTestCase):
 
     def assert_expected_translated_title_fields_are_displayed_in_browser(
             self, browser, expected_languages):
@@ -81,107 +81,85 @@ class TestTranslatedTitleIsOnTop(IntegrationTestCase):
             actual_fields, first_fields,
             "Translated title fields should come at the top of the form")
 
+    def assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            self, browser, obj):
+        lang_tool = api.portal.get_tool('portal_languages')
+        self.assertItemsEqual(['en', 'de-ch'], lang_tool.supported_langs)
+        self.assertNotIn('en', TranslatedTitle.SUPPORTED_LANGUAGES)
+
+        browser.open(obj, view='edit')
+        statusmessages.assert_no_error_messages()
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de'])
+
+        lang_tool.addSupportedLanguage('fr-ch')
+
+        browser.open(obj, view='edit')
+        statusmessages.assert_no_error_messages()
+        self.assert_expected_translated_title_fields_are_displayed_in_browser(
+            browser, ['de', 'fr'])
+
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_inbox_container(
+    def test_inbox_container_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        inbox_container = create(Builder('inbox_container')
-                                 .titled(u'Inboxes')
-                                 .within(self.portal))
-
-        browser.open(inbox_container, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.inbox_container)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_private_root(
+    def test_private_root_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.private_root, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.private_root)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_inbox(self, browser):
+    def test_inbox_edit_form_only_shows_translated_title_fields_for_active_languages(self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.inbox, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.inbox)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_committee_container(
+    def test_committee_container_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.committee_container, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.committee_container)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_templates(
+    def test_template_folder_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.templates, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.templates)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_workspace_root(
+    def test_workspace_root_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.workspace_root, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.workspace_root)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_repository_root(
+    def test_repository_root_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.repository_root, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.repository_root)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_contact_folder(
+    def test_contact_folder_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.contactfolder, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.contactfolder)
 
     @browsing
-    def test_translated_title_is_on_top_when_editing_the_repository_folder(
+    def test_repository_folder_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
-
-        browser.open(self.branch_repofolder, view='edit')
-        statusmessages.assert_no_error_messages()
-
-        self.assert_expected_translated_title_fields_are_displayed_in_browser(
-            browser, ['de'])
+        self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
+            browser, self.branch_repofolder)
 
 
 class TestTranslatedTitleConfig(TestCase):
