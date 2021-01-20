@@ -4,7 +4,7 @@ API Changelog
 =============
 
 
-2021.2.0 (unreleased)
+2021.3.0 (unreleased)
 ---------------------
 
 Breaking Changes
@@ -12,6 +12,15 @@ Breaking Changes
 
 - No changes yet
 
+
+Other Changes
+^^^^^^^^^^^^^
+
+- No changes yet
+
+
+2021.2.0 (2021-01-20)
+---------------------
 
 Other Changes
 ^^^^^^^^^^^^^
