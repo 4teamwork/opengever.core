@@ -3,14 +3,15 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
-from zExceptions import Unauthorized
 from ftw.testbrowser import InsufficientPrivileges
+
 
 class TestPrivateRoot(IntegrationTestCase):
 
     @browsing
     def test_is_addable_on_plone_site(self, browser):
         self.login(self.manager, browser=browser)
+        self.enable_languages()
 
         browser.open()
         factoriesmenu.add('Private Root')
@@ -23,6 +24,7 @@ class TestPrivateRoot(IntegrationTestCase):
     @browsing
     def test_is_only_addable_by_manager(self, browser):
         self.login(self.regular_user, browser=browser)
+        self.enable_languages()
 
         with self.assertRaises(InsufficientPrivileges):
             browser.open(self.portal, view='++add++opengever.private.root')

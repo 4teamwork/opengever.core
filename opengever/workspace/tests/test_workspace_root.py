@@ -13,6 +13,7 @@ class TestWorkspaceRoot(IntegrationTestCase):
     @browsing
     def test_can_be_added_as_manager(self, browser):
         self.login(self.manager, browser)
+        self.enable_languages()
         browser.open(view='folder_contents')
         factoriesmenu.add('Workspace Root')
         browser.fill({'Title (German)': u'Teamr\xe4ume',

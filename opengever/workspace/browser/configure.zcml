@@ -71,4 +71,11 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- WorkspaceRoot add form: only show translated title fields for active languages  -->
+  <adapter
+      factory=".forms.WorkspaceRootAddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.workspace.root"
+      />
+
 </configure>
