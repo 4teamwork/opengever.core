@@ -521,7 +521,8 @@ Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung.
             "review_state": "task-state-in-progress",
             "title": "Eine Aufgabe"
           }
-        ]
+        ],
+        "is_task_addable_in_main_task": true
       }
 
 Die Aufgabenhierarchie kann auch direkt über den GET-Request eines Tasks mittels Expansion angefordert werden.

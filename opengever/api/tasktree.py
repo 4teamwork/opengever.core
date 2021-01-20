@@ -30,7 +30,15 @@ class TaskTree(object):
         if not expand:
             return result
         result['tasktree']['children'] = self.task_tree()
+        result['tasktree']['is_task_addable_in_main_task'] = self.is_task_addable_in_main_task()
         return result
+
+    def is_task_addable_in_main_task(self):
+        main_task = self.get_main_task()
+        for fti in main_task.allowedContentTypes():
+            if fti.id == main_task.portal_type:
+                return True
+        return False
 
     def get_main_task(self):
         main_task = self.context

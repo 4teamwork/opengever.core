@@ -29,6 +29,17 @@ class TestTaskTree(SolrIntegrationTestCase):
                 },
             ]
         )
+        self.assertEqual(True, browser.json['is_task_addable_in_main_task'])
+
+    @browsing
+    def test_is_task_addable_in_main_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.seq_subtask_2, view="@tasktree", method="GET", headers=self.api_headers)
+        self.assertTrue(browser.json['is_task_addable_in_main_task'])
+
+        self.set_workflow_state('task-state-resolved', self.sequential_task)
+        browser.open(self.seq_subtask_2, view="@tasktree", method="GET", headers=self.api_headers)
+        self.assertFalse(browser.json['is_task_addable_in_main_task'])
 
     @browsing
     def test_get_task_with_tasktree_expansion(self, browser):
