@@ -4,7 +4,7 @@ Changelog
 2021.3.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix deactivating committees with canceled meetings. [deiferni]
 
 
 2021.2.0 (2021-01-20)
