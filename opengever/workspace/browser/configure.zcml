@@ -63,4 +63,11 @@
       permission="opengever.workspace.ModifyWorkspace"
       />
 
+  <browser:page
+      name="user-self-registration"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".registration.SelfRegistrationView"
+      permission="zope2.View"
+      />
+
 </configure>
