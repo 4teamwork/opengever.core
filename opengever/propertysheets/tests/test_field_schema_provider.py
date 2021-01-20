@@ -49,8 +49,8 @@ class TestPropertySheetFieldSchemaProvider(FunctionalTestCase):
         json_schema = self.schema_provider.get_schema()
         expected = {
             "type": "object",
-            "title": u"Property sheets with custom properties",
-            "description": "",
+            "title": u"Custom properties",
+            "description": u"Contains data for user defined custom properties.",
             "properties": {
                 u"IDocumentMetadata.document_type.question": {
                     "assignments": [
@@ -118,8 +118,8 @@ class TestPropertySheetFieldSchemaProvider(FunctionalTestCase):
         json_schema = self.schema_provider.get_schema()
         self.assertEqual(
             {
-                "description": u"",
-                "title": u"Property sheets with custom properties",
+                "description": u"Contains data for user defined custom properties.",
+                "title": u"Custom properties",
                 "type": "null",
             },
             json_schema,

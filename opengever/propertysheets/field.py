@@ -1,3 +1,4 @@
+from opengever.propertysheets import _
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.types.adapters import DefaultJsonSchemaProvider
@@ -65,7 +66,10 @@ class PropertySheetField(JSONField):
                     "overwritten via keyword argument.".format(name)
                 )
 
-        kwargs["title"] = u'Property sheets with custom properties'
+        kwargs["title"] = _(u"Custom properties")
+        kwargs["description"] = _(
+            u"Contains data for user defined custom properties."
+        )
         kwargs["required"] = False
 
         super(PropertySheetField, self).__init__(**kwargs)

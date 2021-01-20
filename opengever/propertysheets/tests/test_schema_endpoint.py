@@ -88,8 +88,8 @@ class TestCustomPropertiesFieldSchemaEndpoint(IntegrationTestCase):
         self.assertEqual(
             {
                 u"behavior": u"opengever.document.behaviors.customproperties.IDocumentCustomProperties",
-                u"description": u"",
-                u"title": u"Property sheets with custom properties",
+                u"description": u'Contains data for user defined custom properties.',
+                u"title": u"Custom properties",
                 u"type": u"null",
             },
             schema["properties"]["custom_properties"],
