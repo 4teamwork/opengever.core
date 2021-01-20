@@ -63,4 +63,12 @@
       permission="opengever.workspace.ModifyWorkspace"
       />
 
+  <!-- Only show translated title fields for active languages -->
+  <browser:page
+      for="opengever.workspace.interfaces.IWorkspaceRoot"
+      name="edit"
+      class="opengever.base.browser.translated_title.TranslatedTitleEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
