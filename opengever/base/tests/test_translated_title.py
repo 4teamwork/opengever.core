@@ -100,6 +100,36 @@ class TestTranslatedTitleFieldsInEditForms(IntegrationTestCase):
             browser, ['de', 'fr'])
 
     @browsing
+    def test_modifying_language_fields_in_edit_form(self, browser):
+        self.login(self.manager, browser=browser)
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.supported_langs = ['de-ch', 'fr-ch']
+
+        browser.open(self.repository_root, view='edit')
+
+        browser.fill({'Title (German)': u'Ordnungssystem',
+                      u'Title (French)': u"syst\xe8me d'ordre"})
+        browser.find('Save').click()
+
+    @browsing
+    def test_label_is_renamed_to_title_for_sites_with_only_one_active_language(self, browser):
+        self.login(self.manager, browser=browser)
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.supported_langs = ['de-ch', 'fr-ch']
+
+        browser.open(self.repository_root, view='edit')
+        self.assertEquals(
+            'Title (French)',
+            browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
+
+        lang_tool.supported_langs = ['fr-ch']
+
+        browser.open(self.repository_root, view='edit')
+        self.assertEquals(
+            'Title',
+            browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
+
+    @browsing
     def test_inbox_container_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
         self.login(self.manager, browser=browser)
@@ -356,49 +386,6 @@ class TestTranslatedTitleAddForm(IntegrationTestCase):
         browser.open(self.portal)
         factoriesmenu.add('Repository Root')
 
-        self.assertEquals(
-            'Title',
-            browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
-
-
-class TestTranslatedTitleEditForm(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestTranslatedTitleEditForm, self).setUp()
-        self.enable_languages()
-        self.lang_tool = api.portal.get_tool('portal_languages')
-
-    @browsing
-    def test_language_fields_are_available_by_default(self, browser):
-        self.login(self.manager, browser=browser)
-
-        self.lang_tool.supported_langs = ['de-ch', 'fr-ch']
-
-        browser.open(self.repository_root, view='edit')
-
-        browser.fill({'Title (German)': u'Ordnungssystem',
-                      u'Title (French)': u"syst\xe8me d'ordre"})
-        browser.find('Save').click()
-
-    @browsing
-    def test_language_fields_of_inactive_languages_are_hidden(self, browser):
-        self.login(self.manager, browser=browser)
-
-        self.lang_tool.supported_langs = ['fr-ch']
-
-        browser.open(self.repository_root, view='edit')
-        self.assertEquals([u'Title', 'Valid from', 'Valid until', 'Version'],
-                          browser.forms.get('form').css('label').text)
-        self.assertEquals('form.widgets.ITranslatedTitle.title_fr',
-                          browser.find_field_by_text('Title').get('name'))
-
-    @browsing
-    def test_label_is_renamed_to_title_for_sites_with_only_one_active_language(self, browser):
-        self.login(self.manager, browser=browser)
-
-        self.lang_tool.supported_langs = ['fr-ch']
-
-        browser.open(self.repository_root, view='edit')
         self.assertEquals(
             'Title',
             browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
