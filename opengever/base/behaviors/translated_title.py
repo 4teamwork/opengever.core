@@ -10,7 +10,7 @@ from zope.interface import Interface
 from zope.schema import TextLine
 
 
-TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr')
+TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr', 'title_en')
 
 
 def get_active_languages():
@@ -77,6 +77,7 @@ class ITranslatedTitle(model.Schema):
         fields=[
             u'title_de',
             u'title_fr',
+            u'title_en',
             ],
         )
 
@@ -98,6 +99,15 @@ class ITranslatedTitle(model.Schema):
         title=_(u'label_title_fr', default=u'Title (French)'),
         required=True)
 
+    form.order_before(title_en='inbox_group')
+    form.order_before(title_en='protocol_header_template')
+    form.order_before(title_en='valid_from')
+    form.order_before(title_en='description')
+    searchable('title_en')
+    title_en = TranslatedTextLine(
+        title=_(u'label_title_en', default=u'Title (English)'),
+        required=True)
+
 
 alsoProvides(ITranslatedTitle, IFormFieldProvider)
 
@@ -105,7 +115,7 @@ alsoProvides(ITranslatedTitle, IFormFieldProvider)
 class TranslatedTitle(object):
 
     FALLBACK_LANGUAGE = 'de'
-    SUPPORTED_LANGUAGES = ['de', 'fr']
+    SUPPORTED_LANGUAGES = ['de', 'fr', 'en']
 
     def __init__(self, context):
         self.context = context
@@ -144,3 +154,15 @@ class TranslatedTitle(object):
         if not isinstance(value, unicode):
             raise ValueError('title_fr must be unicode.')
         self.context.title_fr = value
+
+    @property
+    def title_en(self):
+        return self.context.title_en
+
+    @title_en.setter
+    def title_en(self, value):
+        if value is None:
+            return
+        if not isinstance(value, unicode):
+            raise ValueError('title_en must be unicode.')
+        self.context.title_en = value
