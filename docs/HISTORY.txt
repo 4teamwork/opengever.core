@@ -4,6 +4,7 @@ Changelog
 2021.3.0 (unreleased)
 ---------------------
 
+- Respect active languages languages in WorkspaceRoot and PrivateRoot forms. [njohner]
 - Fix deactivating committees with canceled meetings. [deiferni]
 
 
