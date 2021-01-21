@@ -10,6 +10,7 @@ Changelog
 - Include custom properties in JSON schema for documents and mails in the `@schema` endpoint. [deiferni]
 - Index getObjPositionInParent for sequential tasks and sort them on getObjPositionInParent in @tasktree endpoint. [tinagerber]
 - Add is_task_addable_in_main_task and is_task_addable_before attributes to @tasktree endpoint. [tinagerber]
+- Implement POST @notifications endpoint to mark all notifications as read. [tinagerber]
 
 
 2021.2.0 (2021-01-20)

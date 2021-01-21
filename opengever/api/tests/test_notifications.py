@@ -269,3 +269,100 @@ class TestNotificationsPatch(IntegrationTestCase):
                 self.portal.absolute_url(), self.dossier_responsible.getId())
             browser.open(url, data=json.dumps({}), method='PATCH',
                          headers={'Accept': 'application/json'})
+
+
+class TestNotificationsPost(IntegrationTestCase):
+
+    features = ('activity', )
+
+    @browsing
+    def test_mark_notifications_as_read(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        TaskAddedActivity(self.task, self.request).record()
+        TaskAddedActivity(self.task, self.request).record()
+        TaskAddedActivity(self.task, self.request).record()
+
+        url = '{}/@notifications/{}'.format(self.portal.absolute_url(), self.regular_user.getId())
+        self.login(self.regular_user, browser=browser)
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual([False, False, False],
+                         [notification.is_read for notification in Notification.query.all()])
+
+        browser.open(url, method='POST', headers=self.api_headers,
+                     data=json.dumps({'mark_all_notifications_as_read': True,
+                                      'latest_client_side_notification': 2}))
+
+        self.assertEqual(204, browser.status_code)
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual([True, True, False],
+                         [notification.is_read for notification in Notification.query.all()])
+
+    @browsing
+    def test_raises_unauthorized_when_accessing_notifications_of_other_user(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        url = '{}/@notifications/{}'.format(self.portal.absolute_url(), self.regular_user.getId())
+        with browser.expect_http_error(401):
+            browser.open(url, method='POST', headers=self.api_headers,
+                         data=json.dumps({'mark_all_notifications_as_read': True,
+                                          'latest_client_side_notification': 0}))
+        self.assertEqual({"message": "It's not allowed to access notifications of other users.",
+                          "type": "Unauthorized"}, browser.json)
+
+    @browsing
+    def test_post_notifications_without_user_id_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+        with browser.expect_http_error(400):
+            browser.open(self.portal.absolute_url() + '/@notifications',
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({'mark_all_notifications_as_read': True,
+                                          'latest_client_side_notification': 0}))
+        self.assertEqual(
+            {"message": "Must supply user ID as path parameter.",
+             "type": "BadRequest"}, browser.json)
+
+    @browsing
+    def test_post_notifications_without_mark_all_notifications_as_read_raises_bad_request(self,
+                                                                                          browser):
+        self.login(self.regular_user, browser=browser)
+        url = '{}/@notifications/{}'.format(self.portal.absolute_url(), self.regular_user.getId())
+        with browser.expect_http_error(400):
+            browser.open(url,
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({'latest_client_side_notification': 0}))
+        self.assertEqual({"message":
+                          "Property 'mark_all_notifications_as_read' is required and must be true.",
+                          "type": "BadRequest"}, browser.json)
+
+    @browsing
+    def test_post_notifications_with_non_numerical_notification_id_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = '{}/@notifications/{}'.format(self.portal.absolute_url(), self.regular_user.getId())
+        with browser.expect_http_error(400):
+            browser.open(url,
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({'mark_all_notifications_as_read': True,
+                                          'latest_client_side_notification': 'invalid'}))
+        self.assertEqual({
+            "message":
+            "Property 'latest_client_side_notification' is required and must be an integer.",
+            "type": "BadRequest"}, browser.json)
+
+    @browsing
+    def test_post_notifications_with_invalid_notification_id_raises_bad_request(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        TaskAddedActivity(self.task, self.request).record()
+        self.login(self.regular_user, browser=browser)
+        url = '{}/@notifications/{}'.format(self.portal.absolute_url(), self.regular_user.getId())
+        with browser.expect_http_error(400):
+            browser.open(url,
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({'mark_all_notifications_as_read': True,
+                                          'latest_client_side_notification': 12}))
+        self.assertEqual({"message": "User has no notification with notification_id 12.",
+                          "type": "BadRequest"}, browser.json)
