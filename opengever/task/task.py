@@ -623,6 +623,7 @@ class Task(Container, TaskReminderSupport):
         annotations[TASK_PROCESS_ORDER_KEY] = oguids
 
         for task in subtasks:
+            task.reindexObject(idxs=['UID', 'getObjPositionInParent'])
             task.sync()
 
     def get_tasktemplate_order(self):

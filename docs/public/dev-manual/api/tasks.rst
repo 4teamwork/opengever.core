@@ -484,10 +484,12 @@ Angaben zum übergeordneten Dossier einer Aufgabe ist in der GET Repräsentation
       }
 
 
+.. _tasktree:
+
 Aufgabenhierarchie
 -------------------
 Zu einer Aufgabe kann die Aufgabenhierarchie bestehend aus Hauptaufgabe und allen Unteraufgaben abgefragt werden.
-Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung.
+Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung. Die Aufgaben werden nach Erstelldatum sortiert zurückgeliefert. Bei sequenziellen Aufgabenabläufen werden die Aufgaben nach Aufgabenfolge sortiert.
 
 **Beispiel-Request**:
 
@@ -521,7 +523,8 @@ Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung.
             "review_state": "task-state-in-progress",
             "title": "Eine Aufgabe"
           }
-        ]
+        ],
+        "is_task_addable_in_main_task": true
       }
 
 Die Aufgabenhierarchie kann auch direkt über den GET-Request eines Tasks mittels Expansion angefordert werden.
@@ -530,6 +533,8 @@ Die Aufgabenhierarchie kann auch direkt über den GET-Request eines Tasks mittel
 
      GET http://example.org/ordnungssystem/fuehrung/dossier-1/task-1?expand=tasktree HTTP/1.1
      Accept: application/json
+
+Für sequenzielle Aufgabenabläufe steht zusätzlich das Feld ``is_task_addable_before`` zur Verfügung.
 
 
 Ursprüngliche Aufgabe
