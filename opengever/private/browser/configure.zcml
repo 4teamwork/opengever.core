@@ -56,4 +56,20 @@
         />
   </class>
 
+
+  <!-- Only show translated title fields for active languages -->
+  <browser:page
+      for="opengever.private.root.IPrivateRoot"
+      name="edit"
+      class="opengever.base.browser.translated_title.TranslatedTitleEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <!-- PrivateRoot add form: only show translated title fields for active languages  -->
+  <adapter
+      factory=".forms.PrivateRootAddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.private.root"
+      />
+
 </configure>
