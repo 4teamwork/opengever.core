@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from zope.component import getUtility
@@ -48,3 +50,22 @@ class TestPossibleWorkspaceFolderParticipantsVocabulary(IntegrationTestCase):
             "The vocabulary should return only the possible participants, not "
             "all. The workspace admin is already a member of the current "
             "folder. It should be excluded")
+
+
+class TestActualWorkspaceMembersVocabulary(IntegrationTestCase):
+
+    def test_vocabulary_list_all_members_of_the_current_workspace(self):
+        self.login(self.workspace_member)
+        factory = getUtility(IVocabularyFactory,
+                             name='opengever.workspace.ActualWorkspaceMembersVocabulary')
+
+        # Workspace 1
+        self.assertItemsEqual(
+            [self.workspace_guest.id, self.workspace_member.id, self.workspace_owner.id, self.workspace_admin.id],
+            [term.token for term in factory(context=self.workspace)])
+
+        # Workspace 2
+        workspace2 = create(Builder('workspace').within(self.workspace_root))
+        self.assertItemsEqual(
+            [self.workspace_member.id],
+            [term.token for term in factory(context=workspace2)])

@@ -14,9 +14,8 @@ class TestWorkspaceMeeting(IntegrationTestCase):
         with self.observe_children(self.workspace) as children:
             factoriesmenu.add('Workspace Meeting')
             browser.fill({'Title': u'Ein Meeting',
-                          'Start': '10.10.2020 23:56'})
-            form = browser.find_form_by_field('Organizer')
-            form.find_widget('Organizer').fill(self.workspace_member.getId(), auto_org_unit=False)
+                          'Start': '10.10.2020 23:56',
+                          'Organizer': self.workspace_member.getId()})
             browser.click_on('Save')
 
         assert_no_error_messages(browser)
