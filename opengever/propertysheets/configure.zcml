@@ -22,6 +22,6 @@
       />
 
   <adapter factory=".field.PropertySheetFieldSchemaProvider" />
-  <adapter factory=".field.PropertySheetFieldDataConverter" />
+  <adapter factory=".widgets.PropertySheetFieldDataConverter" />
 
 </configure>

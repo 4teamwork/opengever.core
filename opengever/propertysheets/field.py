@@ -1,13 +1,9 @@
 from opengever.propertysheets import _
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
-from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.types.adapters import DefaultJsonSchemaProvider
 from plone.restapi.types.interfaces import IJsonSchemaProvider
 from plone.schema import IJSONField
 from plone.schema import JSONField
-from plone.schema.browser.jsonfield import JSONDataConverter
-from z3c.form.interfaces import IDataConverter
-from z3c.form.interfaces import IWidget
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
@@ -181,14 +177,3 @@ class PropertySheetFieldSchemaProvider(DefaultJsonSchemaProvider):
 
     def get_widget_params(self):
         return None
-
-
-@adapter(IPropertySheetField, IWidget)
-@implementer(IDataConverter)
-class PropertySheetFieldDataConverter(JSONDataConverter):
-
-    def toWidgetValue(self, value):
-        """Make sure to convert persistent dicts to json compatible data."""
-
-        value = json_compatible(value)
-        return super(PropertySheetFieldDataConverter, self).toWidgetValue(value)
