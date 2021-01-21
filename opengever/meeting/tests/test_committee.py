@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -10,6 +11,7 @@ from opengever.base.oguid import Oguid
 from opengever.meeting.model import Committee
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
+import pytz
 
 
 class TestCommittee(IntegrationTestCase):
@@ -320,6 +322,42 @@ class TestCommitteeWorkflow(IntegrationTestCase):
         self.login(self.committee_responsible)
         self.assertEqual(Committee.STATE_ACTIVE,
                          self.empty_committee.load_model().get_state())
+
+    def test_committee_with_cancelled_meetings_can_be_deactivated(self):
+        self.login(self.committee_responsible)
+        committee_model = self.empty_committee.load_model()
+        self.assertEqual(Committee.STATE_ACTIVE,
+                         committee_model.get_state())
+
+        cancelled_meeting_dossier = create(
+                Builder('meeting_dossier')
+                .within(self.leaf_repofolder)
+                .titled(u'Sitzungsdossier 10/2016')
+                .having(
+                    start=date(2016, 10, 17),
+                    responsible=self.committee_responsible.getId(),
+                )
+            )
+        create(
+            Builder('meeting')
+            .having(
+                title=u'Stornierte Sitzung der Rechnungspr\xfcfungskommission',
+                committee=committee_model,
+                workflow_state='cancelled',
+                location=u'B\xfcren an der Aare',
+                start=datetime(2016, 10, 17, 13, 30, tzinfo=pytz.UTC),
+                end=datetime(2016, 10, 17, 14, 30, tzinfo=pytz.UTC),
+            )
+            .link_with(cancelled_meeting_dossier)
+        )
+
+        # Weird assertion as `deactivate` will return `False` or `None`
+        self.assertIsNone(
+            committee_model.deactivate(),
+            "Could not deactivate committee."
+        )
+        self.assertEqual(Committee.STATE_INACTIVE,
+                         committee_model.get_state())
 
     @browsing
     def test_deactivating_is_not_possible_when_pending_meetings_exists(

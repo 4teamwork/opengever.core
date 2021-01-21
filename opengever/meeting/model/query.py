@@ -231,7 +231,10 @@ class MeetingQuery(BaseQuery):
 
     def pending_meetings(self, committee):
         query = self._committee_meetings(committee)
-        query = query.filter(Meeting.workflow_state != Meeting.STATE_CLOSED.name)
+        query = query.filter(
+            Meeting.workflow_state != Meeting.STATE_CLOSED.name,
+            Meeting.workflow_state != Meeting.STATE_CANCELLED.name
+        )
         query = query.order_by(Meeting.start.desc())
         return query
 
