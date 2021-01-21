@@ -7,6 +7,8 @@
     xmlns:z3c="http://namespaces.zope.org/z3c"
     i18n_domain="opengever.propertysheets">
 
+  <i18n:registerTranslations directory="locales" />
+
   <include package=".api" />
 
   <utility
@@ -18,5 +20,8 @@
       factory=".assignment.PropertySheetAssignmentVocabulary"
       name="opengever.propertysheets.PropertySheetAssignmentsVocabulary"
       />
+
+  <adapter factory=".field.PropertySheetFieldSchemaProvider" />
+  <adapter factory=".field.PropertySheetFieldDataConverter" />
 
 </configure>

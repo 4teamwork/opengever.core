@@ -106,24 +106,24 @@ class TypeDumper(object):
     """
 
     def dump(self, portal_type):
-            log.info("Dumping schemas for portal_type %r" % portal_type)
-            fti = self._get_fti(portal_type)
-            type_title = translate_de(fti.title, domain=fti.i18n_domain)
+        log.info("Dumping schemas for portal_type %r" % portal_type)
+        fti = self._get_fti(portal_type)
+        type_title = translate_de(fti.title, domain=fti.i18n_domain)
 
-            schemas = []
-            schema_dumper = SchemaDumper()
+        schemas = []
+        schema_dumper = SchemaDumper()
 
-            for schema in iterSchemataForType(portal_type):
-                schema_dump = schema_dumper.dump(schema)
-                schemas.append(schema_dump)
+        for schema in iterSchemataForType(portal_type):
+            schema_dump = schema_dumper.dump(schema)
+            schemas.append(schema_dump)
 
-            type_dump = OrderedDict((
-                ('portal_type', portal_type),
-                ('title', type_title),
-                ('schemas', schemas),
-            ))
+        type_dump = OrderedDict((
+            ('portal_type', portal_type),
+            ('title', type_title),
+            ('schemas', schemas),
+        ))
 
-            return type_dump
+        return type_dump
 
     def _get_fti(self, portal_type):
         types_tool = api.portal.get_tool('portal_types')

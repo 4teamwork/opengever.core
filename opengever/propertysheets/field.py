@@ -1,8 +1,17 @@
+from opengever.propertysheets import _
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone.restapi.serializer.converters import json_compatible
+from plone.restapi.types.adapters import DefaultJsonSchemaProvider
+from plone.restapi.types.interfaces import IJsonSchemaProvider
 from plone.schema import IJSONField
 from plone.schema import JSONField
+from plone.schema.browser.jsonfield import JSONDataConverter
+from z3c.form.interfaces import IDataConverter
+from z3c.form.interfaces import IWidget
+from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
+from zope.interface import Interface
 from zope.schema import ValidationError
 
 
@@ -49,6 +58,19 @@ class PropertySheetField(JSONField):
         self.attribute_name = attribute_name
         self.assignemnt_prefix = assignemnt_prefix
         self.valid_assignment_slots_factory = valid_assignment_slots_factory
+
+        for name in ("title", "required"):
+            if name in kwargs:
+                raise TypeError(
+                    "Static value for argument '{}' cannot be "
+                    "overwritten via keyword argument.".format(name)
+                )
+
+        kwargs["title"] = _(u"Custom properties")
+        kwargs["description"] = _(
+            u"Contains data for user defined custom properties."
+        )
+        kwargs["required"] = False
 
         super(PropertySheetField, self).__init__(**kwargs)
 
@@ -127,3 +149,46 @@ class PropertySheetField(JSONField):
                 continue
 
             optional_sheet.validate(value.get(assignment_slot_name))
+
+
+@adapter(IPropertySheetField, Interface, Interface)
+@implementer(IJsonSchemaProvider)
+class PropertySheetFieldSchemaProvider(DefaultJsonSchemaProvider):
+
+    def __init__(self, field, context, request):
+        super(PropertySheetFieldSchemaProvider, self).__init__(
+            field, context, request
+        )
+
+        self.sheets_by_slots = {}
+        storage = PropertySheetSchemaStorage()
+        for slot_name in self.field.valid_assignment_slots_factory():
+            definition = storage.query(slot_name)
+            if definition is not None:
+                self.sheets_by_slots[slot_name] = definition.get_json_schema()
+
+    def additional(self):
+        """Additional info for field."""
+        if not self.sheets_by_slots:
+            return {}
+
+        return {
+            "properties": self.sheets_by_slots
+        }
+
+    def get_type(self):
+        return "object" if self.sheets_by_slots else "null"
+
+    def get_widget_params(self):
+        return None
+
+
+@adapter(IPropertySheetField, IWidget)
+@implementer(IDataConverter)
+class PropertySheetFieldDataConverter(JSONDataConverter):
+
+    def toWidgetValue(self, value):
+        """Make sure to convert persistent dicts to json compatible data."""
+
+        value = json_compatible(value)
+        return super(PropertySheetFieldDataConverter, self).toWidgetValue(value)

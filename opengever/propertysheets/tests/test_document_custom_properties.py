@@ -156,7 +156,6 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             IDocumentCustomProperties(self.document).custom_properties,
         )
 
-
     @browsing
     def test_allows_other_valid_property_sheet_fields_next_to_selected_assignment(self, browser):
         self.login(self.manager, browser)
@@ -192,6 +191,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             good_data["custom_properties"],
             IDocumentCustomProperties(self.document).custom_properties,
         )
+
 
 class TestDocumentCustomPropertiesPost(IntegrationTestCase):
 

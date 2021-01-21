@@ -3,17 +3,11 @@ from ftw.builder import create
 from mock import Mock
 from opengever.propertysheets.assignment import DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX
 from opengever.propertysheets.field import PropertySheetField
+from opengever.propertysheets.tests.fixture import fixture_assignment_factory
 from opengever.testing import FunctionalTestCase
 from zope.schema import ValidationError
 from zope.schema.interfaces import RequiredMissing
 from zope.schema.interfaces import WrongType
-
-
-def fixture_assignment_factory():
-    return [
-        u"IDocumentMetadata.document_type.contract",
-        u"IDocumentMetadata.document_type.question",
-    ]
 
 
 class TestPropertySheetField(FunctionalTestCase):
@@ -209,3 +203,31 @@ class TestPropertySheetField(FunctionalTestCase):
         field.validate(
             {"IDocumentMetadata.document_type.question": {"yesorno": True}}
         )
+
+    def test_does_not_accept_title_parameter(self):
+        with self.assertRaises(TypeError) as cm:
+            PropertySheetField(
+                "some_request_key",
+                "some_attribute",
+                "some_prefix",
+                lambda: [],
+                title="foo"
+        )
+        self.assertEqual(
+            "Static value for argument 'title' cannot be overwritten via "
+            "keyword argument.",
+            cm.exception.message)
+
+    def test_does_not_accept_required_parameter(self):
+        with self.assertRaises(TypeError) as cm:
+            PropertySheetField(
+                "some_request_key",
+                "some_attribute",
+                "some_prefix",
+                lambda: [],
+                required=True
+        )
+        self.assertEqual(
+            "Static value for argument 'required' cannot be overwritten via "
+            "keyword argument.",
+            cm.exception.message)

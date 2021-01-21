@@ -192,6 +192,15 @@
                     "_zope_schema_type": "Bool",
                     "default": true
                 },
+                "custom_properties": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "title": "Benutzerdefinierte Felder",
+                    "description": "Enth\u00e4lt die Daten f\u00fcr die benutzerdefinierten Felder.",
+                    "_zope_schema_type": "PropertySheetField"
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [
@@ -278,7 +287,8 @@
                 "document_author",
                 "preserved_as_paper",
                 "archival_file",
-                "archival_file_state"
+                "archival_file_state",
+                "custom_properties"
             ]
         }
     }

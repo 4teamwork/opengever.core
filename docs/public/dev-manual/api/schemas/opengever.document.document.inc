@@ -192,3 +192,13 @@
        
        
        
+
+
+   .. py:attribute:: custom_properties
+
+       :Feldname: :field-title:`Benutzerdefinierte Felder`
+       :Datentyp: ``PropertySheetField``
+       
+       
+       :Beschreibung: Enthält die Daten für die benutzerdefinierten Felder.
+       
