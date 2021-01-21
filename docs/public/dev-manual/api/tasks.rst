@@ -487,7 +487,7 @@ Angaben zum übergeordneten Dossier einer Aufgabe ist in der GET Repräsentation
 Aufgabenhierarchie
 -------------------
 Zu einer Aufgabe kann die Aufgabenhierarchie bestehend aus Hauptaufgabe und allen Unteraufgaben abgefragt werden.
-Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung.
+Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung. Die Aufgaben werden nach Erstelldatum sortiert zurückgeliefert. Bei sequenziellen Aufgabenabläufen werden die Aufgaben nach Aufgabenfolge sortiert.
 
 **Beispiel-Request**:
 

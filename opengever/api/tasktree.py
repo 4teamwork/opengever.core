@@ -65,8 +65,9 @@ class TaskTree(object):
             object_provides=ITask.__identifier__,
         )
         fieldlist = ['Title', 'portal_type', 'path', 'review_state']
+        sort = 'getObjPositionInParent asc' if is_sequential else 'created asc'
         resp = solr.search(
-            filters=filters, start=0, rows=1000, sort='created asc',
+            filters=filters, start=0, rows=1000, sort=sort,
             fl=fieldlist)
 
         nodes = []

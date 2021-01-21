@@ -335,7 +335,7 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
         ], browser.json["items"])
 
     @browsing
-    def test_getObjPositionInParent_if_sequential_subtask_is_added(self, browser):
+    def test_get_obj_position_in_parent_if_sequential_subtask_is_added(self, browser):
         self.login(self.administrator, browser=browser)
 
         url = '{}/@solrsearch?sort=getObjPositionInParent asc&fl=Title,UID,getObjPositionInParent'\
