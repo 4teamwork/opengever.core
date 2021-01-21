@@ -53,6 +53,16 @@ class TestTaskActivites(FunctionalTestCase):
 
     @browsing
     def test_task_added(self, browser):
+        create(Builder('ogds_user').id('watcher.user')
+                                   .assign_to_org_units([self.org_unit])
+                                   .having(firstname=u'Watcher',
+                                           lastname=u'User'))
+
+        create(Builder('ogds_user').id('another.watcher')
+                                   .assign_to_org_units([self.org_unit])
+                                   .having(firstname=u'Watcher',
+                                           lastname=u'Another'))
+
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
                       'Responsible': u'hugo.boss',
@@ -62,6 +72,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('hugo.boss')
+        form.find_widget('Info at').fill(['watcher.user', 'another.watcher'])
 
         browser.css('#form-buttons-save').first.click()
 
@@ -70,7 +81,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
           u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
-        self.assertEqual(1, len(activity.notifications))
+        self.assertEqual(3, len(activity.notifications))
 
         browser.open_html(activity.description)
         rows = browser.css('table').first.rows
@@ -82,7 +93,8 @@ class TestTaskActivites(FunctionalTestCase):
              ['Dossier title', 'Dossier XY'],
              ['Text', 'Lorem ipsum'],
              ['Responsible', 'Boss Hugo (hugo.boss)'],
-             ['Issuer', 'Test User (test_user_1_)']],
+             ['Issuer', 'Test User (test_user_1_)'],
+             ['Info at', 'User Watcher (watcher.user), Another Watcher (another.watcher)']],
             [row.css('td').text for row in rows])
 
     @browsing
@@ -403,7 +415,8 @@ class TestTaskActivites(FunctionalTestCase):
              ['Main task', u'Abkl\xe4rung Fall Meier'],
              ['Text', 'Lorem ipsum'],
              ['Responsible', 'Boss Hugo (hugo.boss)'],
-             ['Issuer', 'Boss Hugo (hugo.boss)']],
+             ['Issuer', 'Boss Hugo (hugo.boss)'],
+             ['Info at', '-']],
             [row.css('td').text for row in rows])
 
     @browsing

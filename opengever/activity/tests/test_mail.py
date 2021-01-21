@@ -39,7 +39,7 @@ class TestEmailNotification(IntegrationTestCase):
         # The secretariat user is a part of the inbox group
         create(Builder('watcher').having(actorid=self.secretariat_user.id))
 
-    def create_task_via_browser(self, browser, inbox=False, description=None):
+    def create_task_via_browser(self, browser, inbox=False, description=None, info_at=[]):
         browser.open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task', 'Task type': 'comment'})
         if description is not None:
@@ -51,6 +51,7 @@ class TestEmailNotification(IntegrationTestCase):
             org_unit_id = u'fa'
             inbox_id = u':'.join(('inbox', org_unit_id, ))
             form.find_widget('Issuer').fill(inbox_id)
+        form.find_widget('Info at').fill(info_at)
         browser.css('#form-buttons-save').first.click()
 
     @browsing
@@ -107,6 +108,23 @@ class TestEmailNotification(IntegrationTestCase):
         self.assertIn('<td>Multi<br />', mail)
         self.assertIn('line<br />', mail)
         self.assertIn('comment</td>', mail)
+
+    @browsing
+    def test_add_task_notification_mail_includes_info_at(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.create_task_via_browser(browser, info_at=['nicole.kohler', 'kathi.barfuss'])
+        process_mail_queue()
+
+        mails = Mailing(self.portal).get_messages()
+        self.assertEqual(len(mails), 2)
+        raw_mail = mails[0]
+        mail = raw_mail.decode("quopri")
+
+        self.assertIn(
+            '<tr><td valign="top" class="label">Info at</td>'
+            '<td>Kohler Nicole (nicole.kohler), '
+            'B\xc3\xa4rfuss K\xc3\xa4thi (kathi.barfuss)</td></tr>',
+            mail)
 
     @browsing
     def test_notification_mailer_handle_empty_activity_description(self, browser):
