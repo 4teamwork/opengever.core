@@ -251,7 +251,10 @@ class ParticipationsField(ListingField):
                      for participation in doc.get('participations')})
 
     def index_value_to_label(self, value):
-        return self.helper.index_value_to_label(value)
+        if len(value.rsplit("|", 1)) > 1:
+            # It's a dossier
+            return self.helper.index_value_to_label(value)
+        return value
 
 
 class ParticipantIdField(ParticipationsField):

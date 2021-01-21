@@ -68,6 +68,11 @@
       name="external_reference"
       />
 
+  <adapter
+      factory=".indexers.participations"
+      name="participations"
+      />
+
   <plone:service
       method="PATCH"
       for="opengever.workspace.interfaces.IWorkspace"
