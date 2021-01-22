@@ -316,6 +316,13 @@ class TestTranslatedTitle(IntegrationTestCase):
         brain = obj2brain(self.repository_root)
         self.assertEquals("Ordnungssystem", brain.title_de)
         self.assertEquals(u'Syst\xe8me de classement', brain.title_fr)
+        self.assertEquals(None, brain.title_en)
+
+        self.repository_root.title_en = "Repository"
+        self.repository_root.reindexObject()
+        self.assertEquals("Ordnungssystem", brain.title_de)
+        self.assertEquals(u'Syst\xe8me de classement', brain.title_fr)
+        self.assertEquals('Repository', brain.title_en)
 
     def test_indexer_returns_none_for_objects_without_translated_title_support(self):
         self.login(self.regular_user)
@@ -323,6 +330,7 @@ class TestTranslatedTitle(IntegrationTestCase):
         brain = obj2brain(self.dossier)
         self.assertEquals(None, brain.title_de)
         self.assertEquals(None, brain.title_fr)
+        self.assertEquals(None, brain.title_en)
 
     @browsing
     def test_Title_on_brains_returns_title_in_preferred_language(self, browser):
@@ -491,7 +499,14 @@ class TestTranslatedTitleLanguageSupport(IntegrationTestCase):
     """
 
     titles = dict(de=u'Ordnungssystem',
-                  fr=u'Syst\xe8me de classement')
+                  fr=u'Syst\xe8me de classement',
+                  en=u'Repository root')
+
+    def setUp(self):
+        super(TestTranslatedTitleLanguageSupport, self).setUp()
+        with self.login(self.manager):
+            self.repository_root.title_en = self.titles['en']
+            self.repository_root.reindexObject()
 
     def test_title_getter(self):
         self.login(self.manager)
