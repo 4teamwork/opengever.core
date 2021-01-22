@@ -1,7 +1,4 @@
 from ftw.datepicker.widget import DatePickerFieldWidget
-from ftw.keywordwidget.widget import KeywordFieldWidget
-from opengever.base.schema import UTCDatetime
-from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone.autoform import directives as form
@@ -26,9 +23,9 @@ class IWorkspaceMeetingSchema(model.Schema):
             u'end',
             u'location',
             u'videoconferencing_url',
-            u'agenda_items_json',
-            ],
-        )
+            u'agenda_items',
+        ],
+    )
 
     form.order_after(responsible='IOpenGeverBase.description')
     responsible = schema.Choice(
@@ -68,9 +65,9 @@ class IWorkspaceMeetingSchema(model.Schema):
         default=list()
     )
 
-    form.order_after(agenda_items_json='participants')
-    agenda_items_json = JSONField(
-        title=u'Agenda items JSON',
+    form.order_after(agenda_items='participants')
+    agenda_items = JSONField(
+        title=u'Agenda items',
         required=False)
 
 
