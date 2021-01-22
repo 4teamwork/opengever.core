@@ -170,6 +170,15 @@
                     "description": "",
                     "_zope_schema_type": "TranslatedTextLine"
                 },
+                "title_en": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (englisch)",
+                    "description": "",
+                    "_zope_schema_type": "TranslatedTextLine"
+                },
                 "retention_period": {
                     "type": [
                         "null",
@@ -328,6 +337,11 @@
                             "required": [
                                 "title_fr"
                             ]
+                        },
+                        {
+                            "required": [
+                                "title_en"
+                            ]
                         }
                     ]
                 },
@@ -362,6 +376,7 @@
                 "public_trial_statement",
                 "title_de",
                 "title_fr",
+                "title_en",
                 "retention_period",
                 "retention_period_annotation",
                 "archival_value",

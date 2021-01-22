@@ -16,6 +16,7 @@
     "retention_period_annotation": "",
     "review_state": "repositoryfolder-state-active",
     "title_de": "Personal",
+    "title_fr": "Personnel",
     "valid_from": "2005-01-01",
     "valid_until": "2050-01-01",
     "_permissions": {
@@ -54,6 +55,7 @@
     "retention_period_annotation": "",
     "review_state": "repositoryfolder-state-active",
     "title_de": "Organigramm, Prozesse",
+    "title_en": "Organigrams and processes",
     "valid_from": "2005-01-01",
     "valid_until": "2020-01-01"
   }, {
@@ -75,6 +77,8 @@
     "retention_period": 5,
     "review_state": "repositoryfolder-state-active",
     "title_de": "Organisation",
+    "title_fr": "Organisation",
+    "title_en": "Organisation",
     "valid_from": "2005-01-01",
     "valid_until": "2030-01-01"
   }
