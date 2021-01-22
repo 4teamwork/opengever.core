@@ -1,0 +1,88 @@
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="opengever.workspace"
+    tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="generator" tal:attributes="content options/generator">
+<title tal:content="options/title">Meeting Minutes</title>
+
+<style>
+body {
+  font-family: Helvetica, Arial, Sans-serif;
+  font-size: 10pt;
+  line-height: 120%;
+}
+h1 {
+  font-size: 14pt;
+  line-height: 100%;
+  page-break-before: always;
+}
+h2 {
+  font-size: 11pt;
+}
+h3 {
+  font-size: 10pt;
+  margin: 0;
+}
+h1, h2, h3, h4, h5 {
+  page-break-after: avoid;
+}
+p {
+  margin: 0.5em 0;
+}
+table, figure {
+  page-break-inside: avoid;
+}
+td, th {
+  padding-right: 10pt;
+}
+@page {
+  size: A4;
+  margin-left: 2.5cm;
+  margin-right: 2.5cm;
+  font-family: Helvetica, Arial, Sans-serif;
+  font-size: 10pt;
+  @bottom-right {
+    content: "Seite " counter(page) "/" counter(pages);
+  }
+  @bottom-left {
+    content: "Druckdatum: ${python:toLocalizedTime(options['print_date'], long_format=True)}";
+  }
+}
+h1 {
+
+</style>
+</head>
+
+<body>
+
+  <h1 tal:content="options/title">Meeting Minutes</h1>
+
+  <table>
+    <tr>
+      <th>Ort:</th>
+      <td tal:content="context/location"></td>
+    </tr>
+    <tr>
+      <th>Datum:</th>
+      <td tal:content="python: toLocalizedTime(context.start, long_format=True)"></td>
+    </tr>
+    <tr>
+      <th>Vorsitz:</th>
+      <td tal:content="options/responsible"></td>
+    </tr>
+  </table>
+  <tal:repeat tal:repeat="agenda_item options/agenda_items">
+    <h2><span tal:content="agenda_item/number"></span><span tal:content="agenda_item/title"></span></h2>
+    <div tal:condition="python: agenda_item.get('text')" tal:content="structure agenda_item/text"></div>
+    <div tal:define="decision python: agenda_item.get('decision')" tal:condition="decision">
+      <h3>Beschluss:</h3>
+      <p tal:replace="structure decision">
+    </div>
+  </tal:repeat>
+
+</body>
+</html>

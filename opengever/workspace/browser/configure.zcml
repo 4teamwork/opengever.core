@@ -70,4 +70,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="meeting-minutes-pdf"
+      for="opengever.workspace.interfaces.IWorkspaceMeeting"
+      class=".meeting_pdf.MeetingMinutesPDFView"
+      permission="zope2.View"
+      />
+
 </configure>
