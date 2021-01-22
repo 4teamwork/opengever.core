@@ -383,8 +383,11 @@
         />
 
     <lawgiver:map_permissions
-        action_group="delete todos"
-        permissions="opengever.workspace: Delete Todos"
+        action_group="delete workspacecontents"
+        permissions="
+                     Delete objects,
+                     opengever.workspace: Delete Todos,
+                     "
         />
 
   </lawgiver:workflow>
