@@ -13,4 +13,7 @@ services:
     image: 4teamwork/pdflatex:latest
     ports:
       - 8092:8080
-
+  weasyprint:
+    image: 4teamwork/weasyprint:latest
+    ports:
+      - 8093:8080
