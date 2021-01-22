@@ -108,7 +108,11 @@ class XLSXNode(object):
 
     @property
     def title_fr(self):
-        return self.item['effective_title_fr'] or None
+        return self.item.get('effective_title_fr') or None
+
+    @property
+    def title_en(self):
+        return self.item.get('effective_title_en') or None
 
     @property
     def valid_from(self):
