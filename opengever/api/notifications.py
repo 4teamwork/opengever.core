@@ -1,9 +1,12 @@
 from opengever.activity import notification_center
+from opengever.activity.model.notification import Notification
 from opengever.readonly import is_in_readonly_mode
 from plone import api
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
+from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import true
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -135,5 +138,61 @@ class NotificationPatch(Service):
         if len(self.params) != 2:
             raise BadRequest("Must supply user ID and the notification id "
                              "as path parameter.")
+
+        return self.params
+
+
+class NotificationsPost(Service):
+    """API endpoint to mark all notifications as read.
+
+    POST /@notifications/peter.mueller HTTP/1.1
+
+    Payload: {
+        "mark_all_notifications_as_read": true,
+        "latest_client_side_notification": <id>
+    }
+    """
+    implements(IPublishTraverse)
+
+    def __init__(self, context, request):
+        super(NotificationsPost, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@notifications as parameters
+        self.params.append(name)
+        return self
+
+    def reply(self):
+        userid, = self.read_params()
+        if userid != api.user.get_current().getId():
+            raise Unauthorized(
+                "It's not allowed to access notifications of other users.")
+        if not json_body(self.request).get('mark_all_notifications_as_read'):
+            raise BadRequest(
+                "Property 'mark_all_notifications_as_read' is required and must be true.")
+
+        latest_notification_id = json_body(self.request).get('latest_client_side_notification')
+        if not isinstance(latest_notification_id, int):
+            raise BadRequest(
+                "Property 'latest_client_side_notification' is required and must be an integer.")
+        if Notification.query.by_user(userid).filter(
+                Notification.notification_id == latest_notification_id).count() != 1:
+            raise BadRequest(
+                "User has no notification with notification_id {}.".format(latest_notification_id))
+
+        notifications = (Notification.query.filter(
+            Notification.userid == userid,
+            Notification.is_badge == true(),
+            Notification.is_read == false(),
+            Notification.notification_id <= latest_notification_id).all())
+        notification_ids = [n.notification_id for n in notifications]
+        notification_center().mark_notifications_as_read(notification_ids)
+        self.request.response.setStatus(204)
+        return super(NotificationsPost, self).reply()
+
+    def read_params(self):
+        if len(self.params) != 1:
+            raise BadRequest("Must supply user ID as path parameter.")
 
         return self.params

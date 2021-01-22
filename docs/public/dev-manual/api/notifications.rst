@@ -116,6 +116,32 @@ Durch einen PATCH-Request kann eine Benachrichtigung als gelesen markiert werden
 
       HTTP/1.1 204 No Content
 
+.. _mark-notifications-as-read:
+
+Alle Benachrichtigungen als gelesen markieren
+---------------------------------------------
+Durch einen POST-Request können alle Benachrichtigungen als gelesen markiert werden:
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /@notifications/peter.mueller/3 HTTP/1.1
+       Accept: application/json
+
+       {
+        "mark_all_notifications_as_read": true,
+        "latest_client_side_notification": 215
+       }
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+
 
 Benachrichtigungen unterdrücken
 -------------------------------

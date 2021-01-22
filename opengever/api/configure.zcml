@@ -397,6 +397,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@notifications"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".notifications.NotificationsPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       for="zope.interface.Interface"
       factory=".listing.ListingGet"
