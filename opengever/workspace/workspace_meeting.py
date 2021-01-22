@@ -30,11 +30,10 @@ class IWorkspaceMeetingSchema(model.Schema):
             ],
         )
 
-    form.widget('responsible', KeywordFieldWidget, async=True)
     form.order_after(responsible='IOpenGeverBase.description')
     responsible = schema.Choice(
         title=_('label_organizer', default='Organizer'),
-        source=ActualWorkspaceMembersSourceBinder(),
+        vocabulary='opengever.workspace.ActualWorkspaceMembersVocabulary',
         required=True)
 
     form.widget('start', DatePickerFieldWidget)
@@ -59,11 +58,10 @@ class IWorkspaceMeetingSchema(model.Schema):
         title=_(u'label_video_call_link', default=u'Video Call Link'),
         required=False)
 
-    form.widget('participants', KeywordFieldWidget, async=True)
     participants = schema.List(
         title=_(u"label_participants", default=u"Participants"),
         value_type=schema.Choice(
-            source=ActualWorkspaceMembersSourceBinder(),
+            vocabulary='opengever.workspace.ActualWorkspaceMembersVocabulary',
         ),
         required=False,
         missing_value=list(),

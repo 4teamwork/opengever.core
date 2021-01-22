@@ -27,29 +27,40 @@ def is_within_workspace(context):
     return bool(filter(IWorkspace.providedBy, aq_chain(context)))
 
 
+def get_containing_workspace(context):
+    """ Returns the responsible workspace of the current context
+    """
+    # Avoid circular imports
+    from opengever.workspace.interfaces import IWorkspace
+    workspace = filter(IWorkspace.providedBy, aq_chain(context))
+    return workspace[0] if workspace else None
+
+
 def get_workspace_user_ids(context, disregard_block=False):
     """ Walks up the Acquisition chain and collects all userids assigned
     to a role with the View permission.
     """
-    if not is_within_workspace(context):
+    containing_workspace = get_containing_workspace(context)
+    if not containing_workspace:
         return []
 
     users = set([])
-    allowed_roles_to_view = roles_of_permission(context, 'View')
+    allowed_roles_to_view = roles_of_permission(containing_workspace, 'View')
     portal = api.portal.get()
 
     def is_valid_userid(*args):
         user, roles, role_type, name = args
         return role_type == u'user' and set(roles) & set(allowed_roles_to_view)
 
-    for content in aq_chain(context):
+    for content in aq_chain(containing_workspace):
         if aq_base(content) == aq_base(portal):
             break
         userroles = portal.acl_users._getLocalRolesForDisplay(content)
         users = users.union(set(
             map(itemgetter(0),
                 filter(lambda args: is_valid_userid(*args), userroles))))
-        if getattr(aq_base(context), '__ac_local_roles_block__', None) and not disregard_block:
+        if getattr(aq_base(containing_workspace), '__ac_local_roles_block__', None) \
+                and not disregard_block:
             break
 
     return list(users)
