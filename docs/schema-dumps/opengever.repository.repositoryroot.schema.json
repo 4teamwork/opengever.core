@@ -35,6 +35,12 @@
             "title": "Titel (franz\u00f6sisch)",
             "description": "",
             "_zope_schema_type": "TranslatedTextLine"
+        },
+        "title_en": {
+            "type": "string",
+            "title": "Titel (englisch)",
+            "description": "",
+            "_zope_schema_type": "TranslatedTextLine"
         }
     },
     "allOf": [
@@ -49,6 +55,11 @@
                     "required": [
                         "title_fr"
                     ]
+                },
+                {
+                    "required": [
+                        "title_en"
+                    ]
                 }
             ]
         }
@@ -58,6 +69,7 @@
         "valid_until",
         "version",
         "title_de",
-        "title_fr"
+        "title_fr",
+        "title_en"
     ]
 }
