@@ -24,6 +24,11 @@
       />
 
   <adapter
+      factory=".indexers.title_en_indexer"
+      name="title_en"
+      />
+
+  <adapter
       factory=".indexers.blocked_local_roles"
       name="blocked_local_roles"
       />

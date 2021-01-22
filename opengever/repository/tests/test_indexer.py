@@ -1,10 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.indexes import sortable_title
 from opengever.base.model import CONTENT_TITLE_LENGTH
-from opengever.testing import IntegrationTestCase
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
-from opengever.base.indexes import sortable_title
+from opengever.testing import IntegrationTestCase
 from zope.event import notify
 
 
@@ -22,6 +22,7 @@ class TestRepositoryFolderIndexers(IntegrationTestCase):
                 .having(
                     title_de=title,
                     title_fr=title,
+                    title_en=title,
                 )),
             range(3),
             self.leaf_repofolder,

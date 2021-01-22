@@ -45,6 +45,12 @@ class TestRepositoryFolder(IntegrationTestCase):
         brain = obj2brain(self.leaf_repofolder)
         self.assertEquals(u'1.1. Contrats et accords', brain.title_fr)
         self.assertEquals(u'1.1. Vertr\xe4ge und Vereinbarungen', brain.title_de)
+        self.assertEquals(None, brain.title_en)
+
+        self.leaf_repofolder.title_en = u'branch'
+        self.leaf_repofolder.reindexObject()
+        brain = obj2brain(self.leaf_repofolder)
+        self.assertEquals(u'1.1. branch', brain.title_en)
 
     def test_get_archival_value(self):
         self.login(self.regular_user)
