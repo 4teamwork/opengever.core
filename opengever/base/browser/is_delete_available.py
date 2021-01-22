@@ -6,6 +6,8 @@ from opengever.meeting.interfaces import IParagraphTemplate
 from opengever.private.interfaces import IPrivateContainer
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
+from opengever.workspace.interfaces import IWorkspace
+from opengever.workspace.interfaces import IWorkspaceMeeting
 from Products.Five.browser import BrowserView
 
 
@@ -20,12 +22,14 @@ class IsDeleteAvailable(BrowserView):
         IPrivateContainer,
         ITaskTemplate,
         ITaskTemplateFolderSchema,
+        IWorkspaceMeeting,
     )
 
     authorized_parent_interfaces = (
         ITemplateDossier,
         ITemplateFolder,
         IPrivateContainer,
+        IWorkspace,
     )
 
     def __call__(self):
