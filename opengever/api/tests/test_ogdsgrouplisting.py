@@ -2,13 +2,25 @@ from ftw.testbrowser import browsing
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 
 
 class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
-    def test_group_listing_default_response(self, browser):
+    def test_group_listing_is_not_accessible_for_regular_users(self, browser):
+        """ CROWN
+        """
+        browser.exception_bubbling = True
         self.login(self.regular_user, browser=browser)
+        with self.assertRaises(Unauthorized):
+            browser.open(self.portal,
+                         view='@ogds-user-listing',
+                         headers=self.api_headers)
+
+    @browsing
+    def test_group_listing_default_response(self, browser):
+        self.login(self.manager, browser=browser)
 
         browser.open(self.portal,
                      view='@ogds-group-listing',
@@ -34,7 +46,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_grouplisting_offset(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         browser.open(self.portal,
                      view='@ogds-group-listing?b_size=4&b_start=2',
@@ -52,7 +64,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_large_offset_returns_empty_items(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         browser.open(self.portal,
                      view='@ogds-group-listing?b_start=999',
@@ -64,7 +76,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_disallows_negative_size(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.portal,
@@ -73,7 +85,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_disallows_negative_start(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.portal,
@@ -82,7 +94,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_state_filter_inactive_only(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         ogds_service().fetch_group('projekt_a').active = False
 
@@ -96,7 +108,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_state_filter_active_only(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         ogds_service().fetch_group('projekt_a').active = False
 
@@ -110,7 +122,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_state_filter_active_and_inactive(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         ogds_service().fetch_group('projekt_a').active = False
 
@@ -125,7 +137,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_filter_by_local_only(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         ogds_service().fetch_group('projekt_a').is_local = True
         ogds_service().fetch_group('projekt_b').is_local = None
@@ -141,7 +153,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_filter_by_non_lcoal_only(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         ogds_service().fetch_group('projekt_a').is_local = True
         ogds_service().fetch_group('projekt_b').is_local = None
@@ -158,7 +170,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_search_title(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-group-listing?search=Projekt',
                      headers=self.api_headers)
@@ -171,7 +183,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_search_strips_asterisk(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-group-listing?search=Projekt*',
                      headers=self.api_headers)
@@ -181,7 +193,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
     @browsing
     def test_sort_descending(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-group-listing?sort_order=descending',
                      headers=self.api_headers)
