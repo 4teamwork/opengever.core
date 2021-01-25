@@ -498,6 +498,7 @@ class OpengeverContentFixture(object):
             .with_tree_portlet()
             .having(
                 title_de=u'Ordnungssystem',
+                title_en=u'Ordnungssystem',
                 title_fr=u'Syst\xe8me de classement',
             )
         ))
@@ -519,6 +520,7 @@ class OpengeverContentFixture(object):
             .within(self.root)
             .having(
                 title_de=u'F\xfchrung',
+                title_en=u'F\xfchrung',
                 title_fr=u'Direction',
                 description=u'Alles zum Thema F\xfchrung.',
             )
@@ -535,6 +537,7 @@ class OpengeverContentFixture(object):
             .within(self.repofolder0)
             .having(
                 title_de=u'Vertr\xe4ge und Vereinbarungen',
+                title_en=u'Vertr\xe4ge und Vereinbarungen',
                 title_fr=u'Contrats et accords',
             )
         ))
@@ -544,6 +547,7 @@ class OpengeverContentFixture(object):
             .within(self.root)
             .having(
                 title_de=u'Rechnungspr\xfcfungskommission',
+                title_en=u'Rechnungspr\xfcfungskommission',
                 title_fr=u'Commission de v\xe9rification',
             )
         ))
@@ -557,6 +561,7 @@ class OpengeverContentFixture(object):
             .within(self.root)
             .having(
                 title_de=u'Spinn\xe4nnetzregistrar',
+                title_en=u'Spinn\xe4nnetzregistrar',
                 title_fr=u"Toile d'araign\xe9e",
             )
             .in_state('repositoryfolder-state-inactive')
@@ -570,6 +575,7 @@ class OpengeverContentFixture(object):
                 id='kontakte',
                 title_de=u'Kontakte',
                 title_en=u'Contacts',
+                title_fr=u'Contacts',
             )
         ))
 
@@ -616,7 +622,11 @@ class OpengeverContentFixture(object):
         self.templates = self.register('templates', create(
             Builder('templatefolder')
             .titled(u'Vorlagen')
-            .having(id='vorlagen')
+            .having(
+                id='vorlagen',
+                title_de=u'Vorlagen',
+                title_en=u'Vorlagen',
+                title_fr=u'Mod\xe8le',)
         ))
 
         self.set_roles(
@@ -793,7 +803,10 @@ class OpengeverContentFixture(object):
     def create_committees(self):
         self.committee_container = self.register('committee_container', create(
             Builder('committee_container')
-            .titled(u'Sitzungen')
+            .having(
+                title_de=u'Sitzungen',
+                title_en=u'Sitzungen',
+                title_fr=u'S\xe9ances',)
         ))
 
         self.set_roles(
@@ -919,9 +932,11 @@ class OpengeverContentFixture(object):
     @staticuid()
     def create_inbox_container(self):
         self.inbox_container = self.register('inbox_container', create(
-            Builder('inbox_container')
-            .titled(u'Eingangsk\xf6rbli')
-            .having(id='eingangskorb')
+            Builder('inbox_container').having(
+                id='eingangskorb',
+                title_de=u'Eingangsk\xf6rbli',
+                title_en=u'Eingangsk\xf6rbli',
+                title_fr=u'Bo\xeetes de r\xe9ception')
         ))
 
         # Enable inbox_policy placeful workflow
@@ -942,11 +957,13 @@ class OpengeverContentFixture(object):
         self.inbox = self.register('inbox', create(
             Builder('inbox')
             .within(self.inbox_container)
-            .titled(u'Eingangsk\xf6rbli FA')
             .having(
                 id='eingangskorb_fa',
                 responsible_org_unit='fa',
                 inbox_group=self.org_unit_fa.inbox_group.groupid,
+                title_de=u'Eingangsk\xf6rbli FA',
+                title_en=u'Eingangsk\xf6rbli FA',
+                title_fr=u'Bo\xeete de r\xe9ception FA'
             )
         ))
 
@@ -994,6 +1011,9 @@ class OpengeverContentFixture(object):
                 id='eingangskorb_rk',
                 responsible_org_unit='rk',
                 inbox_group=self.org_unit_fa.inbox_group.groupid,
+                title_de=u'Eingangsk\xf6rbli RK',
+                title_en=u'Eingangsk\xf6rbli RK',
+                title_fr=u'Bo\xeete de r\xe9ception RK'
             )
         ))
 
@@ -1013,7 +1033,9 @@ class OpengeverContentFixture(object):
         # The id of the private_root needs to match the MEMBERSFOLDER_ID
         # and setting the id is not possible when using dexterity builder,
         # we use the id ad title and rename it after creation.
-        self.private_root.title_de = 'Meine Ablage'
+        self.private_root.title_de = u'Meine Ablage'
+        self.private_root.title_en = u'Meine Ablage'
+        self.private_root.title_fr = u'Mon d\xe9p\xf4t'
 
         # Enable opengever.private placeful workflow policy
         private_policy_id = 'opengever_private_policy'
@@ -2112,6 +2134,7 @@ class OpengeverContentFixture(object):
             .having(
                 id=u'workspaces',
                 title_de=u'Teamr\xe4ume',
+                title_en=u'Teamr\xe4ume',
                 title_fr=u'Espace partag\xe9',
             )
         ))
