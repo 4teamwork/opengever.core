@@ -1,13 +1,12 @@
 <html
-    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="opengever.workspace"
     tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
 <meta name="generator" tal:attributes="content options/generator">
-<title tal:content="options/title">Meeting Minutes</title>
+<title>Protokoll: <span tal:replace="context/title">Meeting Minutes</span></title>
 
 <style>
 body {
@@ -33,11 +32,27 @@ h1, h2, h3, h4, h5 {
 p {
   margin: 0.5em 0;
 }
+ol, ul {
+  padding-left: 22pt;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+li > p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
 table, figure {
   page-break-inside: avoid;
 }
+th {
+  text-align: left;
+}
 td, th {
   padding-right: 10pt;
+}
+a {
+  text-decoration: none;
+  color: black;
 }
 @page {
   size: A4;
@@ -59,10 +74,10 @@ h1 {
 
 <body>
 
-  <h1 tal:content="options/title">Meeting Minutes</h1>
+  <h1>Protokoll: <span tal:replace="context/title">Meeting Minutes</span></h1>
 
   <table>
-    <tr>
+    <tr tal:condition="context/location">
       <th>Ort:</th>
       <td tal:content="context/location"></td>
     </tr>
@@ -70,13 +85,21 @@ h1 {
       <th>Datum:</th>
       <td tal:content="python: toLocalizedTime(context.start, long_format=True)"></td>
     </tr>
-    <tr>
+    <tr tal:condition="options/responsible">
       <th>Vorsitz:</th>
       <td tal:content="options/responsible"></td>
     </tr>
   </table>
+  <h2>Traktanden</h2>
+    <ol>
+    <tal:repeat tal:repeat="agenda_item options/agenda_items">
+      <li><a href="" tal:content="agenda_item/title" tal:attributes="href python: '#agenda-item-%s' % repeat['agenda_item'].index">
+    </tal:repeat>
+    </ol>
   <tal:repeat tal:repeat="agenda_item options/agenda_items">
-    <h2><span tal:content="agenda_item/number"></span><span tal:content="agenda_item/title"></span></h2>
+    <h2 tal:attributes="id python: 'agenda-item-%s' % repeat['agenda_item'].index">
+      <span tal:content="agenda_item/number"></span><span tal:content="agenda_item/title"></span>
+    </h2>
     <div tal:condition="python: agenda_item.get('text')" tal:content="structure agenda_item/text"></div>
     <div tal:define="decision python: agenda_item.get('decision')" tal:condition="decision">
       <h3>Beschluss:</h3>
