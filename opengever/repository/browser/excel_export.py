@@ -71,6 +71,10 @@ def generate_report(request, context):
         u'label_repositoryfolder_title_fr',
         default=u'Repositoryfolder title (French)',
         ))
+    label_repositoryfolder_title_en = repository_translater(_(
+        u'label_repositoryfolder_title_en',
+        default=u'Repositoryfolder title (English)',
+        ))
     label_repositoryfolder_description = repository_translater(_(
         u'label_repositoryfolder_description',
         default=u'Repositoryfolder description',
@@ -108,6 +112,7 @@ def generate_report(request, context):
         {'id': 'get_repository_number', 'title': label_repository_number, 'fold_by_method': repository_number_to_outine_level, 'callable': True},  # noqa
         {'id': 'title_de', 'title': label_repositoryfolder_title_de},
         {'id': 'title_fr', 'title': label_repositoryfolder_title_fr},
+        {'id': 'title_en', 'title': label_repositoryfolder_title_en},
         {'id': 'description', 'title': label_repositoryfolder_description},
         {'id': 'classification', 'title': label_classification, 'transform': base_translater, 'default': u''},
         {'id': 'privacy_layer', 'title': label_privacy_layer, 'transform': base_translater, 'default': u''},

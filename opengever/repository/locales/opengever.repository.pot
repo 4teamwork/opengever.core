@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-25 09:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -203,6 +203,11 @@ msgstr ""
 #. Default: "Repositoryfolder title (German)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_de"
+msgstr ""
+
+#. Default: "Repositoryfolder title (English)"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_title_en"
 msgstr ""
 
 #. Default: "Repositoryfolder title (French)"
