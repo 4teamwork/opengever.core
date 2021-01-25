@@ -434,7 +434,7 @@ class TestChangedUpdateForRepositoryFolder(TestChangedUpdateBase):
         self.login(self.administrator, browser)
         with freeze(FREEZING_TIME):
             browser.open(self.branch_repofolder, view='edit')
-            browser.fill({"Title": 'foo'})
+            browser.fill({"Title (German)": 'foo'})
             browser.find('Save').click()
         self.assert_changed_value(self.branch_repofolder, FREEZING_TIME)
 
@@ -452,8 +452,9 @@ class TestChangedUpdateForInbox(TestChangedUpdateBase):
         self.login(self.manager, browser)
         with freeze(FREEZING_TIME):
             browser.open(self.inbox, view='edit')
-            browser.fill({"Title": 'foo'})
+            browser.fill({"Title (German)": 'foo'})
             browser.find('Save').click()
+
         self.assert_changed_value(self.inbox, FREEZING_TIME)
 
 

@@ -13,7 +13,6 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
 
     def test_importability_of_exported_repository_root(self):
         self.login(self.regular_user)
-        self.repository_root.title_en = 'Root'
         report_data = generate_report(api.portal.get().REQUEST, self.repository_root)
         tempdir = mkdtemp()
         with NamedTemporaryFile(dir=tempdir, suffix='.xlsx') as tmpfile:
@@ -46,7 +45,7 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
                 u'Repositoryfolder description': u'',
                 u'Repositoryfolder title (French)': u'Syst\xe8me de classement',
                 u'Repositoryfolder title (German)': u'Ordnungssystem',
-                u'Repositoryfolder title (English)': u'Root',
+                u'Repositoryfolder title': u'Ordnungssystem',
                 }
         self.assertEqual(imported_data[0], expected_reporoot)
         expected_repofolder = {
@@ -73,6 +72,6 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
             u'Repositoryfolder description': u'Alles zum Thema F\xfchrung.',
             u'Repositoryfolder title (French)': u'Direction',
             u'Repositoryfolder title (German)': u'F\xfchrung',
-            u'Repositoryfolder title (English)': u'',
+            u'Repositoryfolder title': u'F\xfchrung',
             }
         self.assertEqual(imported_data[1], expected_repofolder)

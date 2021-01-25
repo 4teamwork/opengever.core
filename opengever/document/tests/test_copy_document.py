@@ -136,6 +136,7 @@ class TestCopyDocuments(IntegrationTestCase):
                               'task_type',
                               'title_de',
                               'title_fr',
+                              'title_en',
                               'trashed']
 
         # Make sure no metadata key is in both lists of unchanged and modified metadata

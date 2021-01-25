@@ -10,7 +10,8 @@ class TestRepositoryRoot(IntegrationTestCase):
     def test_adding(self, browser):
         self.login(self.manager, browser)
         browser.open(view='++add++opengever.repository.repositoryroot')
-        browser.fill({'Title': u'Foob\xe4r'}).save()
+        browser.fill({'Title (English)': u'Foob\xe4r',
+                      'Title (German)': u'Foob\xe4r'}).save()
         statusmessages.assert_no_error_messages()
         self.assertTrue(IRepositoryRoot.providedBy(browser.context))
         self.assertEqual('foobar', browser.context.getId())

@@ -314,13 +314,14 @@ class TestTranslatedTitle(IntegrationTestCase):
         self.login(self.regular_user)
 
         brain = obj2brain(self.repository_root)
-        self.assertEquals("Ordnungssystem", brain.title_de)
+        self.assertEquals(u"Ordnungssystem", brain.title_de)
         self.assertEquals(u'Syst\xe8me de classement', brain.title_fr)
-        self.assertEquals(None, brain.title_en)
+        self.assertEquals(u"Ordnungssystem", brain.title_en)
 
         self.repository_root.title_en = "Repository"
         self.repository_root.reindexObject()
-        self.assertEquals("Ordnungssystem", brain.title_de)
+        brain = obj2brain(self.repository_root)
+        self.assertEquals(u"Ordnungssystem", brain.title_de)
         self.assertEquals(u'Syst\xe8me de classement', brain.title_fr)
         self.assertEquals('Repository', brain.title_en)
 
@@ -500,13 +501,7 @@ class TestTranslatedTitleLanguageSupport(IntegrationTestCase):
 
     titles = dict(de=u'Ordnungssystem',
                   fr=u'Syst\xe8me de classement',
-                  en=u'Repository root')
-
-    def setUp(self):
-        super(TestTranslatedTitleLanguageSupport, self).setUp()
-        with self.login(self.manager):
-            self.repository_root.title_en = self.titles['en']
-            self.repository_root.reindexObject()
+                  en=u'Ordnungssystem')
 
     def test_title_getter(self):
         self.login(self.manager)

@@ -12,7 +12,8 @@ class TestRestrictAddableDossierTemplatesBehavior(FunctionalTestCase):
         self.root = create(Builder('repository_root'))
         self.repository = create(Builder('repository')
                                  .having(title_de=u'Anfragen',
-                                         title_fr=u'Demandes')
+                                         title_fr=u'Demandes',
+                                         title_en=u'Requests')
                                  .within(self.root))
         self.templatefolder = create(Builder('templatefolder'))
 

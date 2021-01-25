@@ -28,16 +28,14 @@ class TestCommitteeContainer(IntegrationTestCase):
         browser.find('Deutsch').click()
         self.assertEquals(u'Sitzungen', browser.css('h1').first.text)
 
-
     def test_portlets_inheritance_is_blocked(self):
         self.login(self.manager)
         self.assert_portlet_inheritance_blocked(
             'plone.leftcolumn', self.committee_container)
 
-
     @browsing
     def test_visible_fields_order_in_form(self, browser):
-        fields = [u'Title']
+        fields = [u'Title (German)', u'Title (English)']
         self.login(self.manager, browser)
 
         browser.open()

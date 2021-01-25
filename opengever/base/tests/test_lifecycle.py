@@ -36,7 +36,8 @@ class TestCustodyPeriodDefault(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.repository_root)
         factoriesmenu.add(u'Repository Folder')
-        browser.fill({'Title': 'My Dossier'}).save()
+        browser.fill({'Title (German)': 'My Repofolder',
+                      'Title (English)': 'My Repofolder'}).save()
 
         self.assertEqual(
             30,
@@ -320,7 +321,8 @@ class TestRetentionPeriodDefault(IntegrationTestCase):
 
         browser.open(self.repository_root)
         factoriesmenu.add(u'Repository Folder')
-        browser.fill({'Title': 'My Repofolder'}).save()
+        browser.fill({'Title (German)': 'My Repofolder',
+                      'Title (English)': 'My Repofolder'}).save()
         dossier = browser.context
 
         value = self.get_retention_period(dossier)
@@ -643,7 +645,8 @@ class TestArchivalValueDefault(IntegrationTestCase):
 
         browser.open(self.repository_root)
         factoriesmenu.add(u'Repository Folder')
-        browser.fill({'Title': 'My Folder'}).save()
+        browser.fill({'Title (German)': 'My Folder',
+                      'Title (English)': 'My Folder'}).save()
         dossier = browser.context
 
         value = self.get_archival_value(dossier)

@@ -45,12 +45,14 @@ class TestRepositoryFolder(IntegrationTestCase):
         brain = obj2brain(self.leaf_repofolder)
         self.assertEquals(u'1.1. Contrats et accords', brain.title_fr)
         self.assertEquals(u'1.1. Vertr\xe4ge und Vereinbarungen', brain.title_de)
-        self.assertEquals(None, brain.title_en)
+        self.assertEquals(u'1.1. Vertr\xe4ge und Vereinbarungen', brain.title_en)
 
-        self.leaf_repofolder.title_en = u'branch'
+        self.leaf_repofolder.title_de = u'Vertr\xe4ge'
+        self.leaf_repofolder.title_en = u'Contracts'
         self.leaf_repofolder.reindexObject()
         brain = obj2brain(self.leaf_repofolder)
-        self.assertEquals(u'1.1. branch', brain.title_en)
+        self.assertEquals(u'1.1. Vertr\xe4ge', brain.title_de)
+        self.assertEquals(u'1.1. Contracts', brain.title_en)
 
     def test_get_archival_value(self):
         self.login(self.regular_user)
@@ -62,7 +64,9 @@ class TestRepositoryFolder(IntegrationTestCase):
         self.login(self.administrator, browser)
         browser.open(self.branch_repofolder)
         factoriesmenu.add('Repository Folder')
-        browser.fill({'Title': 'Custody'}).save()
+        browser.fill({'Title (German)': u'Sorgerecht',
+                      'Title (English)': u'Custody'}).save()
+
         statusmessages.assert_no_error_messages()
         self.assertEquals(('tabbed_view', 'opengever-repository-repositoryfolder'),
                           plone.view_and_portal_type())

@@ -15,7 +15,7 @@ class TestIntegrationTestSetup(IntegrationTestCase):
         self.assertEquals(
             'Ordnungssystem', self.repository_root.Title(),
             'ZODB changes seem not to be isolated between tests.')
-        self.repository_root.title_de = 'Changed Repository Root Title'
+        self.repository_root.title_en = 'Changed Repository Root Title'
         self.assertEquals('Changed Repository Root Title',
                           self.repository_root.Title())
 
@@ -68,6 +68,6 @@ class TestIntegrationTestSetup(IntegrationTestCase):
     @browsing
     def test_preparing_changes_do_not_trigger_csrf_protection(self, browser):
         self.login(self.administrator, browser)
-        self.repository_root.title_de = 'New Repository Root Title'
+        self.repository_root.title_en = 'New Repository Root Title'
         browser.open(self.repository_root)
         self.assertEquals('New Repository Root Title', plone.first_heading())

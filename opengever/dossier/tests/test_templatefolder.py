@@ -7,6 +7,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
+from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from opengever.contact.interfaces import IContactSettings
 from opengever.document.docprops import TemporaryDocFile
@@ -29,7 +30,6 @@ from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletManager
 from unittest import skip
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import os
@@ -675,8 +675,10 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.login().open(self.portal)
         factoriesmenu.add('Template Folder')
 
-        browser.fill({'Title': 'Templates'}).save()
+        browser.fill({'Title (German)': u'Vorlagen',
+                      'Title (English)': u'Templates'}).save()
 
+        statusmessages.assert_no_error_messages()
         self.assertTrue(ITemplateFolder.providedBy(browser.context))
 
     @browsing
@@ -739,8 +741,10 @@ class TestTemplateFolder(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open(self.portal)
         factoriesmenu.add('Template Folder')
-        browser.fill({'Title': 'Templates'}).save()
+        browser.fill({'Title (German)': u'Vorlagen',
+                      'Title (English)': u'Templates'}).save()
 
+        statusmessages.assert_no_error_messages()
         self.assert_portlet_inheritance_blocked(
             'plone.leftcolumn', browser.context)
 
@@ -750,7 +754,10 @@ class TestTemplateFolder(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open(self.portal)
         factoriesmenu.add('Template Folder')
-        browser.fill({'Title': 'Templates'}).save()
+        browser.fill({'Title (German)': u'Vorlagen',
+                      'Title (English)': u'Templates'}).save()
+
+        statusmessages.assert_no_error_messages()
 
         manager = getUtility(
             IPortletManager, name=u'plone.leftcolumn', context=browser.context)
@@ -771,7 +778,9 @@ class TestTemplateFolder(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open(templatefolder)
         factoriesmenu.add('Template Folder')
-        browser.fill({'Title': 'Templates'}).save()
+        browser.fill({'Title (German)': u'Vorlagen',
+                      'Title (English)': u'Templates'}).save()
+        statusmessages.assert_no_error_messages()
 
         manager = getUtility(
             IPortletManager, name=u'plone.leftcolumn', context=browser.context)
