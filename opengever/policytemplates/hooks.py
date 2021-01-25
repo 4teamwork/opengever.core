@@ -1,3 +1,4 @@
+from mrbob.bobexceptions import SkipQuestion
 from mrbob.hooks import to_boolean
 from mrbob.hooks import to_integer
 from mrbob.hooks import validate_choices
@@ -6,9 +7,14 @@ from opengever.base.interfaces import DEFAULT_PREFIX_STARTING_POINT
 from opengever.dossier.interfaces import DEFAULT_DOSSIER_DEPTH
 from opengever.mail.interfaces import DEFAULT_MAIL_MAX_SIZE
 from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
+from os.path import expanduser
+from os.path import isfile
 from pkg_resources import resource_filename
+import json
 import os
 import shutil
+
+POLICYTEMPLATE_DOTFILE_PATH = expanduser('~/.opengever/policytemplate.json')
 
 IGNORED_QUESTIONS = {
     'teamraum': [
@@ -100,6 +106,7 @@ def initialize(configurator, question):
     configurator.variables['is_gever'] = configurator.variables.get('policy.type') == 'gever'
     init_defaults(configurator)
     init_values(configurator)
+    apply_dotfile_settings(configurator)
     filter_questions(configurator)
     add_ignored_directories(configurator)
     add_ignored_files(configurator)
@@ -130,6 +137,23 @@ def init_defaults(configurator):
 
 def init_values(configurator):
     configurator.variables.update(VARIABLE_VALUES[policy_type(configurator)])
+
+
+def apply_dotfile_settings(configurator):
+    """For now, this just reads Usersnap API keys from a dotfile and
+    prefills them as the default for the respective policy type.
+    """
+    ptype = policy_type(configurator)
+
+    if isfile(POLICYTEMPLATE_DOTFILE_PATH):
+        dotfile_settings = json.load(open(POLICYTEMPLATE_DOTFILE_PATH))
+
+        api_key = dotfile_settings.get('usersnap_api_keys', {}).get(ptype)
+        if api_key is None:
+            print "WARNING: No Usersnap API key found for policy type %r in %s" % (
+                ptype, POLICYTEMPLATE_DOTFILE_PATH)
+        else:
+            configurator.defaults['setup.usersnap_api_key'] = api_key
 
 
 def update_defaults(configurator, new_defaults):
@@ -279,6 +303,11 @@ def post_maximum_mail_size(configurator, question, answer):
         return ''
 
     return answer
+
+
+def pre_usersnap_api_key(configurator, question):
+    if not configurator.variables['setup.enable_usersnap']:
+        raise SkipQuestion
 
 
 def post_enable_meeting_feature(configurator, question, answer):
