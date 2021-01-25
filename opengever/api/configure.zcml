@@ -422,7 +422,7 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsuserlisting.OGDSUserListingGet"
       name="@ogds-user-listing"
-      permission="zope2.View"
+      permission="cmf.ManagePortal"
       />
 
   <plone:service
@@ -430,7 +430,7 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsgrouplisting.OGDSGroupListingGet"
       name="@ogds-group-listing"
-      permission="zope2.View"
+      permission="cmf.ManagePortal"
       />
 
   <plone:service

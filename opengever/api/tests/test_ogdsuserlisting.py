@@ -3,13 +3,25 @@ from ftw.testbrowser import browsing
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 
 
 class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
-    def test_user_listing_default_response(self, browser):
+    def test_user_listing_is_not_accessible_for_regular_users(self, browser):
+        """ CROWN
+        """
+        browser.exception_bubbling = True
         self.login(self.regular_user, browser=browser)
+        with self.assertRaises(Unauthorized):
+            browser.open(self.portal,
+                         view='@ogds-user-listing',
+                         headers=self.api_headers)
+
+    @browsing
+    def test_user_listing_default_response(self, browser):
+        self.login(self.manager, browser=browser)
 
         browser.open(self.portal,
                      view='@ogds-user-listing',
@@ -25,6 +37,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'email': u'foo@example.com',
              u'email2': u'bar@example.com',
              u'firstname': u'K\xe4thi',
+             u'last_login': None,
              u'lastname': u'B\xe4rfuss',
              u'phone_fax': u'012 34 56 77',
              u'phone_mobile': u'012 34 56 76',
@@ -39,6 +52,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'email': u'james.bond@gever.local',
              u'email2': None,
              u'firstname': u'James',
+             u'last_login': None,
              u'lastname': u'B\xf6nd',
              u'phone_fax': None,
              u'phone_mobile': None,
@@ -50,7 +64,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_last_login_is_visible_in_ogds_user_listing(self, browser):
-        self.login(self.administrator, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view='@ogds-user-listing',
                      headers=self.api_headers)
@@ -59,7 +73,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_userlisting_offset(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         browser.open(self.portal,
                      view='@ogds-user-listing?b_size=4&b_start=7',
@@ -77,7 +91,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_large_offset_returns_empty_items(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
 
         browser.open(self.portal,
                      view='@ogds-user-listing?b_start=999',
@@ -89,7 +103,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_disallows_negative_size(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.portal,
@@ -98,7 +112,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_batch_disallows_negative_start(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
             browser.open(self.portal,
@@ -107,7 +121,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_state_filter_inactive_only(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         ogds_user = self.get_ogds_user(self.reader_user)
         ogds_user.active = False
 
@@ -120,7 +134,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_state_filter_active_only(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         ogds_user = self.get_ogds_user(self.reader_user)
         ogds_user.active = False
 
@@ -133,7 +147,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_state_filter_active_and_inactive(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         ogds_user = self.get_ogds_user(self.reader_user)
         ogds_user.active = False
 
@@ -148,7 +162,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_last_login_filter(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         filters_expression = 'filters.last_login:record:list=2020-01-01%20TO%202020-04-04'
         browser.open(self.portal,
                      view='@ogds-user-listing?{}'.format(filters_expression),
@@ -171,7 +185,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_search_firstname(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-user-listing?search=L\xfcck',
                      headers=self.api_headers)
@@ -186,6 +200,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'email': u'lucklicher.laser@gever.local',
              u'email2': None,
              u'firstname': u'L\xfccklicher',
+             u'last_login': None,
              u'lastname': u'L\xe4ser',
              u'phone_fax': None,
              u'phone_mobile': None,
@@ -197,7 +212,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_search_fristname_and_lastname(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-user-listing?search=frido gentobler',
                      headers=self.api_headers)
@@ -212,6 +227,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'email': u'fridolin.hugentobler@gever.local',
              u'email2': None,
              u'firstname': u'Fridolin',
+             u'last_login': None,
              u'lastname': u'Hugentobler',
              u'phone_fax': None,
              u'phone_mobile': None,
@@ -223,7 +239,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_search_strips_asterisk(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-user-listing?search=gentobler*',
                      headers=self.api_headers)
@@ -233,7 +249,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_sort_on_firstname(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-user-listing?sort_on=firstname',
                      headers=self.api_headers)
@@ -246,7 +262,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_listing_always_has_a_secondary_sort_by_userid(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-user-listing?sort_on=department',
                      headers=self.api_headers)
@@ -262,7 +278,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_secondary_sort_by_userid_respects_sort_order(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(
             self.portal,
             view=u'@ogds-user-listing?sort_on=department&sort_order=descending',
@@ -280,7 +296,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
     @browsing
     def test_sort_descending(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.manager, browser=browser)
         browser.open(self.portal,
                      view=u'@ogds-user-listing?sort_order=descending',
                      headers=self.api_headers)
