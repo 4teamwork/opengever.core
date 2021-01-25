@@ -32,6 +32,11 @@ class IFieldDefinition(model.Schema):
     title = schema.TextLine(required=False)
     description = schema.TextLine(required=False)
     required = schema.Bool(required=False)
+    values = schema.List(
+        default=None,
+        value_type=schema.TextLine(),
+        required=False,
+    )
 
 
 @implementer(IPublishTraverse)
@@ -105,8 +110,9 @@ class PropertySheetsPost(Service):
             title = field_data.get("title", name)
             description = field_data.get("description", u"")
             required = field_data.get("required", False)
+            values = field_data.get("values", None)
             schema_definition.add_field(
-                field_type, name, title, description, required
+                field_type, name, title, description, required, values
             )
 
         self.storage.save(schema_definition)

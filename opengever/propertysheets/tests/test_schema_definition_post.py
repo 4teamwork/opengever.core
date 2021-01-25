@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from zope import schema
+from zope.schema import getFieldNames
 import json
 
 
@@ -105,6 +106,53 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
         self.assertEqual(u"yes or no", field.description)
         self.assertTrue(field.required)
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_all_field_types(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": {
+                "yn": {
+                    "field_type": u"bool",
+                    "title": u"ja oder nein"
+                },
+                "wahl": {
+                    "field_type": u"choice",
+                    "title": u"w\xe4hl was",
+                    "values": [u"eins", u"zwei"]
+                },
+                "nummer": {
+                    "field_type": u"int",
+                    "title": u"zahl"
+                },
+                "text": {
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True
+                },
+                "zeiletext": {
+                    "field_type": u"textline",
+                    "title": u"zeile"
+                },
+            },
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual(1, len(storage.list()))
+        definition = storage.get("meinschema")
+
+        self.assertItemsEqual(
+            ["yn", "wahl", "nummer", "text", "zeiletext"],
+            getFieldNames(definition.schema_class)
+        )
 
     @browsing
     def test_property_sheet_schema_definition_post_replaces_existing_schema(self, browser):
