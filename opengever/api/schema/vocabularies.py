@@ -1,12 +1,19 @@
 from opengever.base.interfaces import IDuringContentCreation
+from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.vocabularies.get import VocabulariesGet
+from zExceptions import Unauthorized
 from zope.component import ComponentLookupError
 from zope.component import getMultiAdapter
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.schema.interfaces import IVocabularyFactory
+
+VOCABULARY_PERMISSIONS = {
+    'plone.app.vocabularies.Users': 'cmf.ManagePortal',
+    'plone.app.vocabularies.Groups': 'cmf.ManagePortal',
+}
 
 
 class GEVERVocabulariesGet(VocabulariesGet):
@@ -27,6 +34,7 @@ class GEVERVocabulariesGet(VocabulariesGet):
                     "title": vocab[0],
                 }
                 for vocab in getUtilitiesFor(IVocabularyFactory)
+                if self.has_permission(vocab[0])
             ]
 
         elif len(self.params) == 1:
@@ -50,6 +58,8 @@ class GEVERVocabulariesGet(VocabulariesGet):
                 "two (portal_type, vocab_name) parameters"
             )
 
+        if not self.has_permission(vocab_name):
+            raise Unauthorized()
         try:
             factory = getUtility(IVocabularyFactory, name=vocab_name)
         except ComponentLookupError:
@@ -65,3 +75,9 @@ class GEVERVocabulariesGet(VocabulariesGet):
         return serializer(
             "{}/@vocabularies/{}".format(self.context.absolute_url(), vocab_name)
         )
+
+    def has_permission(self, vocab_name):
+        permission = VOCABULARY_PERMISSIONS.get(vocab_name)
+        if permission:
+            return api.user.has_permission(permission, obj=self.context)
+        return True
