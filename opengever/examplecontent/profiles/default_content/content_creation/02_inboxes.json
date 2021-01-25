@@ -6,6 +6,7 @@
         "inbox_group": "og_demo-ftw_users",
         "title_de": "Eingangskorb AFI",
         "title_fr": "Boîte de réception AFI",
+        "title_en": "Inbox AFI",
         "_block-local-roles": true,
         "_ac_local_roles": {
             "og_demo-ftw_users": [
@@ -22,6 +23,7 @@
         "inbox_group": "og_demo-ftw_users",
         "title_de": "Eingangskorb STV",
         "title_fr": "Boîte de réception STV",
+        "title_en": "Inbox STV",
         "_block-local-roles": true,
         "_ac_local_roles": {
             "og_demo-ftw_users": [

@@ -4,6 +4,7 @@
         "_type": "opengever.meeting.committeecontainer",
         "title_de": "Sitzungen",
         "title_fr": "Séances",
+        "title_en": "Meetings",
 
         "_children": [
             {
