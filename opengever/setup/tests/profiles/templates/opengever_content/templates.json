@@ -4,6 +4,7 @@
         "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
         "title_fr": "Modèles",
+        "title_en": "Templates",
         "_children": [
             {
                 "_id": "template-1",
