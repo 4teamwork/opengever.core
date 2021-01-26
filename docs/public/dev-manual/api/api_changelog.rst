@@ -10,6 +10,7 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- ``@notifications``: Only badge notifications are returned (see :ref:`docs <notifications>`).
 - ``@tasktree``: Sequential tasks are now sorted on ``getObjPositionInParent`` (see :ref:`docs <tasktree>`).
 
 

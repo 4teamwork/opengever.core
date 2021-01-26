@@ -4,6 +4,7 @@ Changelog
 2021.3.0 (unreleased)
 ---------------------
 
+- Return only badge notifications in @notifications endpoint. [tinagerber]
 - Enable Usersnap by default in SaaS policy template. [lgraf]
 - Respect active languages languages in WorkspaceRoot and PrivateRoot forms. [njohner]
 - List informed principals in TaskAddedActivity description. [njohner]

@@ -55,7 +55,7 @@ class NotificationsGet(Service):
         return self.serialize(notification)
 
     def get_user_notifications(self):
-        notifications = self.center.get_current_users_notifications()
+        notifications = self.center.get_current_users_notifications(badge_only=True)
         batch = HypermediaBatch(self.request, notifications)
 
         result = {

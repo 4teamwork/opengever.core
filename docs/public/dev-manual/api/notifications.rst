@@ -10,7 +10,7 @@ Der ``@notifications`` Endpoint stellt Funktionen für die Benachrichtigungen zu
 
 Auflistung:
 -----------
-Mittels eines GET-Request können Benachrichtigungen des Benutzers abgefragt werden.
+Mittels eines GET-Request können alle GEVER Benachrichtigungen des Benutzers abgefragt werden.
 
 
 **Beispiel-Request**:
