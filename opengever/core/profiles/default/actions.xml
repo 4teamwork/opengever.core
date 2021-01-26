@@ -309,10 +309,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:++add++opengever.meeting.proposal:method</property>
       <property name="icon_expr" />
-      <property name="available_expr">object/get_setting/meetings</property>
-      <property name="permissions">
-        <element value="opengever.meeting: Add Proposal" />
-      </property>
+      <property name="available_expr">object/@@folder_buttons_availability/is_create_proposal_available</property>
       <property name="visible">True</property>
     </object>
 

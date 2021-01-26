@@ -89,12 +89,12 @@ class TestRepositoryFolderDocumentsTab(SolrIntegrationTestCase):
         self.assertEquals([], tabbedview.major_actions().text)
 
     @browsing
-    def test_create_proposal_visible_when_meeting_feature_enabled(self, browser):
+    def test_create_proposal_action_not_visible(self, browser):
         self.activate_feature('meeting')
         self.login(self.manager, browser)
         browser.open(self.branch_repofolder)
         tabbedview.open('Documents')
-        self.assertEquals(['Create proposal'], tabbedview.major_actions().text)
+        self.assertEquals([], tabbedview.major_actions().text)
 
     @browsing
     def test_columns(self, browser):

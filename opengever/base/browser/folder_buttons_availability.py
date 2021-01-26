@@ -2,6 +2,7 @@ from Acquisition import aq_chain
 from Acquisition import aq_inner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.task.task import ITask
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -24,6 +25,12 @@ class FolderButtonsAvailabilityView(BrowserView):
         may_add_task = api.user.has_permission('opengever.task: Add task',
                                                obj=self.context)
         return (is_dossier or is_task) and may_add_task
+
+    def is_create_proposal_available(self):
+        is_dossier = IDossierMarker.providedBy(self.context)
+        may_add_proposal = api.user.has_permission('opengever.meeting: Add Proposal',
+                                                   obj=self.context)
+        return is_meeting_feature_enabled() and is_dossier and may_add_proposal
 
     def _is_main_dossier(self):
         if not IDossierMarker.providedBy(self.context):

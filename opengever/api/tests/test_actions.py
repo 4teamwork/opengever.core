@@ -830,7 +830,7 @@ class TestUnlockAction(FileActionsTestBase):
 
 class TestFolderActions(FolderActionsTestBase):
 
-    features = ('bumblebee',)
+    features = ('bumblebee', 'meeting')
     createTaskAction = {
         u'id': u'create_task',
         u'title': u'Create task',
@@ -883,6 +883,13 @@ class TestFolderActions(FolderActionsTestBase):
                          self.get_folder_buttons(browser, self.inactive_dossier))
 
     @browsing
+    def test_create_proposal_not_available_if_meeting_feature_disabled(self, browser):
+        self.deactivate_feature('meeting')
+        self.login(self.secretariat_user, browser)
+        self.assertNotIn({u'icon': u'', u'id': u'create_proposal', u'title': u'Create proposal'},
+                         self.get_folder_buttons(browser, self.resolvable_dossier))
+
+    @browsing
     def test_actions_for_dossier(self, browser):
         self.login(self.regular_user, browser)
 
@@ -895,9 +902,12 @@ class TestFolderActions(FolderActionsTestBase):
             {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
             {u'icon': u'', u'id': u'create_task', u'title': u'Create task'},
+            {u'icon': u'', u'id': u'create_proposal', u'title': u'Create proposal'},
             {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
             {u'icon': u'', u'id': u'checkin_with_comment', u'title': u'Check in with comment'},
             {u'icon': u'', u'id': u'checkin_without_comment', u'title': u'Check in without comment'},
+            {u'icon': u'', u'id': u'submit_additional_documents',
+                u'title': u'Submit additional documents'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
             {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
