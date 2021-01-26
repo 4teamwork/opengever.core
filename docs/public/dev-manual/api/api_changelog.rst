@@ -18,6 +18,7 @@ Other Changes
 ^^^^^^^^^^^^^
 
 - Add support for english: new field ``title_en`` is returned wherever appropriate (``@schema``, ``@types`` and simple GET for diverse content types) when English is enabled for the deployment.
+- ``@journal``: Include ``related_documents`` in journal entry serialization (see :ref:`docs <journal>`).
 - The fields ``checked_out`` and ``file_extension`` are now included in the summary serialization of documents and mails.
 - The field ``custom_properties`` is now included in the ``@schema`` endpoint for Documents and Mails (see :ref:`content-types`).
 - ``@tasktree``: Attributes ``is_task_addable_in_main_task`` and ``is_task_addable_before`` added (see :ref:`docs <tasktree>`).

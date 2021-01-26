@@ -1,12 +1,14 @@
 from copy import deepcopy
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.helpers import display_name
+from opengever.base.oguid import Oguid
 from opengever.base.vocabulary import voc_term_title
 from opengever.journal.entry import ManualJournalEntry
 from opengever.journal.form import IManualJournalEntry
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from z3c.form.field import Fields
@@ -112,6 +114,14 @@ class JournalGet(Service):
 
         return result
 
+    def get_related_documents(self, documents):
+        related_documents = []
+        for document in documents:
+            obj = Oguid.parse(document['id']).resolve_object()
+            serialized_document = queryMultiAdapter((obj, self.request), ISerializeToJsonSummary)()
+            related_documents.append(serialized_document)
+        return related_documents
+
     def _create_items(self, batch):
         items = []
         for entry in batch:
@@ -122,6 +132,7 @@ class JournalGet(Service):
             item['actor_id'] = entry.get('actor')
             item['actor_fullname'] = display_name(entry.get('actor'))
             item['comments'] = entry.get('comments')
+            item['related_documents'] = self.get_related_documents(action.get('documents', []))
             items.append(item)
 
         return items

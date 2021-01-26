@@ -198,9 +198,18 @@ class TestJournalGet(IntegrationTestCase):
         ).json
 
         self.assertDictEqual({
-            'actor_fullname': u'B\xe4rfuss K\xe4thi',
-            'actor_id': u'kathi.barfuss',
-            'comments': u'is an agent',
-            'time': u'2017-10-16T00:00:00+00:00',
-            'title': u'Manual entry: Information'
-            }, response.get('items')[0])
+            u'actor_fullname': u'B\xe4rfuss K\xe4thi',
+            u'actor_id': u'kathi.barfuss',
+            u'comments': u'is an agent',
+            u'related_documents': [{
+                u'@id': self.document.absolute_url(),
+                u'@type': u'opengever.document.document',
+                u'checked_out': None,
+                u'description': self.document.description,
+                u'file_extension': u'.docx',
+                u'is_leafnode': None,
+                u'review_state': u'document-state-draft',
+                u'title': self.document.title}],
+            u'time': u'2017-10-16T00:00:00+00:00',
+            u'title': u'Manual entry: Information'
+        }, response.get('items')[0])
