@@ -2,21 +2,21 @@ from opengever.propertysheets import _
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone.restapi.types.adapters import DefaultJsonSchemaProvider
 from plone.restapi.types.interfaces import IJsonSchemaProvider
-from plone.schema import IJSONField
-from plone.schema import JSONField
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.schema import Field
 from zope.schema import ValidationError
+from zope.schema.interfaces import IField
 
 
-class IPropertySheetField(IJSONField):
+class IPropertySheetField(IField):
     pass
 
 
 @implementer(IPropertySheetField)
-class PropertySheetField(JSONField):
+class PropertySheetField(Field):
     """Handle custom properties and validate them against their corresponding
     property sheet schema.
 
