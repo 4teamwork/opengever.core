@@ -8,39 +8,7 @@
   </div>
 
   <tal:block repeat="widget view/widgets" i18n:domain="plone">
-    <div tal:define="hidden python:widget.mode == 'hidden';
-                     error widget/error;
-                     error_class python:error and ' error' or '';
-                     fieldname_class string:kssattr-fieldname-${widget/name};"
-         tal:attributes="class string:custom-field object-widget-field field z3cformInlineValidation ${fieldname_class}${error_class};
-                         data-fieldname widget/name;
-                         id string:formfield-${widget/id};">
-
-      <label class="horizontal"
-          tal:attributes="for widget/id"
-          tal:condition="not:hidden">
-        <span i18n:translate="" tal:replace="widget/label">label</span>
-
-        <span class="required horizontal" title="Required"
-              tal:condition="python:widget.required and not hidden"
-              i18n:attributes="title title_required;">&nbsp;</span>
-
-        <span class="formHelp"
-            tal:define="description widget/field/description"
-            i18n:translate=""
-            tal:content="description"
-            tal:condition="python:description and not hidden"
-            >field description
-        </span>
-      </label>
-
-      <div class="fieldErrorBox"
-          tal:content="structure error/render|nothing">
-          Error
-      </div>
-
-      <input type="text" tal:replace="structure widget/render" />
-    </div>
+    <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
   </tal:block>
 
 </html>

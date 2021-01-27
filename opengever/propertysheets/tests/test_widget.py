@@ -38,11 +38,11 @@ class TestPropertySheetWidget(IntegrationTestCase):
             "#formfield-form-widgets-"
             "IDocumentCustomProperties-custom_properties"
         ).first
-        input_labels = fieldset.css(".custom-field label").text
+        input_labels = fieldset.css(".field label").text
         self.assertEqual(
             [
-                u"",  # checkbox labels are rendered next to input
-                "Yes or no",
+                u"Custom properties",  # the composite fiel label
+                u"Yes or no",
                 u"Choose",
                 u"Number",
                 u"Some lines of text",
