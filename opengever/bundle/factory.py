@@ -206,6 +206,7 @@ class OGGBundleRepoRoot(OGGBundleItemBase):
         super(OGGBundleRepoRoot, self).__init__(node)
         self._data['title_de'] = self._data.pop('title')
         self._data['title_fr'] = getattr(node, 'title_fr', None)
+        self._data['title_en'] = getattr(node, 'title_en', None)
         self._data['valid_from'] = getattr(node, 'valid_from', None)
         self._data['valid_until'] = getattr(node, 'valid_until', None)
         self._data['_permissions'] = {
@@ -232,6 +233,7 @@ class OGGBundleRepoFolder(OGGBundleItemBase):
         'retention_period',
         'retention_period_annotation',
         'title_fr',
+        'title_en',
         'valid_from',
         'valid_until',
     )

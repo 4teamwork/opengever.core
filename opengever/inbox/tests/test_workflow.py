@@ -28,7 +28,8 @@ class TestInboxWorkflow(IntegrationTestCase):
 
         self.login(self.manager, browser=browser)
         browser.open(self.inbox, view='edit')
-        browser.fill({'Title': 'Eingangskorb 1'})
+        browser.fill({'Title (German)': 'Eingangskorb 1',
+                      'Title (English)': 'Eingangskorb 1'})
         browser.click_on('Save')
 
         self.assertEquals(200, browser.status_code)

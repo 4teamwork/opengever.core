@@ -7,6 +7,7 @@ Changelog
 - Return only badge notifications in @notifications endpoint. [tinagerber]
 - Only show create_proposal action on dossiers. [tinagerber]
 - Enable Usersnap by default in SaaS policy template. [lgraf]
+- Add English support for translated titles. [njohner]
 - Respect active languages languages in WorkspaceRoot and PrivateRoot forms. [njohner]
 - List informed principals in TaskAddedActivity description. [njohner]
 - Fix deactivating committees with canceled meetings. [deiferni]

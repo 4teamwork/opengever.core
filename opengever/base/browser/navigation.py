@@ -10,6 +10,7 @@ from Products.CMFPlone.browser.navigation import get_view_url
 from Products.Five import BrowserView
 from zope.component import getMultiAdapter
 import json
+import Missing
 import os.path
 
 
@@ -90,7 +91,11 @@ class JSONNavigation(BrowserView):
         return make_tree_by_url(nodes)
 
     def _brain_to_node(self, brain):
-        return {'text': brain.Title,
+        translated_title = brain.Title
+        if translated_title is Missing.Value:
+            translated_title = None
+
+        return {'text': translated_title,
                 'description': brain.Description,
                 'url': brain.getURL(),
                 'uid': brain.UID,

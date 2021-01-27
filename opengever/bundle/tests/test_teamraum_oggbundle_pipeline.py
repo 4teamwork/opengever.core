@@ -95,6 +95,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
 
         self.assertEqual(u'Teamr\xe4ume', root.title_de)
         self.assertEqual(u'Espace partag\xe9', root.title_fr)
+        self.assertEqual(u'Workspaces', root.title_en)
 
         self.assertEqual(
             'opengever_workspace_root--STATUS--active',

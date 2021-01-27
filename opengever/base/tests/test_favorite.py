@@ -209,7 +209,7 @@ class TestHandlers(IntegrationTestCase):
         create(
             Builder('repository')
             .within(self.empty_repofolder)
-            .having(title_de=u'Child', title_fr=u'Child')
+            .having(title_de=u'Child', title_fr=u'Child', title_en=u'Child')
         )
 
         favorite = Favorite.query.by_object_and_user(
@@ -224,7 +224,7 @@ class TestHandlers(IntegrationTestCase):
         child = create(
             Builder('repository')
             .within(self.empty_repofolder)
-            .having(title_de=u'Child', title_fr=u'Child')
+            .having(title_de=u'Child', title_fr=u'Child', title_en=u'Child')
         )
         create(Builder('favorite')
                .for_object(self.empty_repofolder)

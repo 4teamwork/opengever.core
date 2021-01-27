@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from opengever.inbox.inbox import IInbox
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
@@ -23,8 +24,10 @@ class TestInbox(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open()
         factoriesmenu.add('Inbox')
-        browser.fill({'Title': 'Inbox'}).save()
+        browser.fill({'Title (German)': u'Eingangsk\xf6rbli',
+                      'Title (English)': u'Inbox'}).save()
 
+        statusmessages.assert_no_error_messages()
         self.assertTrue(IInbox.providedBy(browser.context))
 
     @browsing
@@ -89,8 +92,10 @@ class TestInbox(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open()
         factoriesmenu.add('Inbox')
-        browser.fill({'Title': 'Inbox'}).save()
+        browser.fill({'Title (German)': u'Eingangsk\xf6rbli',
+                      'Title (English)': u'Inbox'}).save()
 
+        statusmessages.assert_no_error_messages()
         self.assert_portlet_inheritance_blocked(
             'plone.leftcolumn', browser.context)
 
@@ -102,7 +107,10 @@ class TestInbox(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open(inboxcontainer)
         factoriesmenu.add('Inbox')
-        browser.fill({'Title': 'Inbox'}).save()
+        browser.fill({'Title (German)': u'Eingangsk\xf6rbli',
+                      'Title (English)': u'Inbox'}).save()
+
+        statusmessages.assert_no_error_messages()
 
         manager = getUtility(
             IPortletManager, name=u'plone.leftcolumn', context=browser.context)

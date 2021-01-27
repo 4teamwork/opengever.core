@@ -16,10 +16,11 @@ class TestPrivateRoot(IntegrationTestCase):
         browser.open()
         factoriesmenu.add('Private Root')
         browser.fill({'Title (German)': u'Meine Ablage',
-                      'Title (French)': u'Mon d\xe9p\xf4t'})
+                      'Title (French)': u'Mon d\xe9p\xf4t',
+                      'Title (English)': u'My f\xf4lder'})
         browser.click_on('Save')
 
-        self.assertEquals(['Meine Ablage'], browser.css('h1').text)
+        self.assertEquals([u'My f\xf4lder'], browser.css('h1').text)
 
     @browsing
     def test_is_only_addable_by_manager(self, browser):

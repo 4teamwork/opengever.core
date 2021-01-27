@@ -28,6 +28,15 @@
                     "description": "",
                     "_zope_schema_type": "TranslatedTextLine"
                 },
+                "title_en": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (englisch)",
+                    "description": "",
+                    "_zope_schema_type": "TranslatedTextLine"
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [
@@ -57,13 +66,19 @@
                             "required": [
                                 "title_fr"
                             ]
+                        },
+                        {
+                            "required": [
+                                "title_en"
+                            ]
                         }
                     ]
                 }
             ],
             "field_order": [
                 "title_de",
-                "title_fr"
+                "title_fr",
+                "title_en"
             ]
         },
         "permission": {

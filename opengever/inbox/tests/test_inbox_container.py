@@ -19,8 +19,10 @@ class TestInboxContainer(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open()
         factoriesmenu.add('Inbox Container')
-        browser.fill({'Title': 'Inbox Container'}).save()
+        browser.fill({'Title (German)': u'Eingangsk\xf6rbe',
+                      'Title (English)': u'Inbox Container'}).save()
 
+        statusmessages.assert_no_error_messages()
         self.assertTrue(IInboxContainer.providedBy(browser.context))
 
     @browsing
@@ -47,8 +49,10 @@ class TestInboxContainer(FunctionalTestCase):
         add_languages(['de-ch'])
         browser.login().open()
         factoriesmenu.add('Inbox Container')
-        browser.fill({'Title': 'Inbox Container'}).save()
+        browser.fill({'Title (German)': u'Eingangsk\xf6rbe',
+                      'Title (English)': u'Inbox Container'}).save()
 
+        statusmessages.assert_no_error_messages()
         self.assert_portlet_inheritance_blocked(
             'plone.leftcolumn', browser.context)
 

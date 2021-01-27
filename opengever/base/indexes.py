@@ -52,6 +52,13 @@ def title_fr_indexer(obj):
 
 
 @indexer(IDexterityContent)
+def title_en_indexer(obj):
+    if ITranslatedTitleSupport.providedBy(obj):
+        return ITranslatedTitle(obj).title_en
+    return None
+
+
+@indexer(IDexterityContent)
 def bundle_guid_indexer(obj):
     """Indexes the GUID of an item imported from an OGGBundle.
 

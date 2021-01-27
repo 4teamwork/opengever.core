@@ -138,6 +138,11 @@ class RepositoryFolder(content.Container, RepositoryMixin):
         if title:
             return self._prefix_with_reference_number(title)
 
+    def get_prefixed_title_en(self):
+        title = self.title_en
+        if title:
+            return self._prefix_with_reference_number(title)
+
     def get_archival_value(self):
         return ILifeCycle(self).archival_value
 

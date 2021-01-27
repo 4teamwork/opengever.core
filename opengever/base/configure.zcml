@@ -394,6 +394,11 @@
       />
 
   <adapter
+      factory=".indexes.title_en_indexer"
+      name="title_en"
+      />
+
+  <adapter
       factory=".indexes.bundle_guid_indexer"
       name="bundle_guid"
       />

@@ -513,7 +513,7 @@ class IntegrationTestCase(TestCase):
         return brains[0]
 
     def enable_languages(self):
-        """Enable a multi-language configuration with German and French.
+        """Enable a multi-language configuration with German, French and English.
         """
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.use_combined_language_codes = True

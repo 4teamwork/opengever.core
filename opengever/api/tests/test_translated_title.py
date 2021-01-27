@@ -16,6 +16,7 @@ class TestTranslatedTitlePost(IntegrationTestCase):
             "@type": "opengever.repository.repositoryfolder",
             "title_de": "Folder",
             "title_fr": u"F\xf6lder",
+            "title_en": "Folder"
         }
 
         with self.observe_children(self.repository_root) as children:
@@ -28,9 +29,6 @@ class TestTranslatedTitlePost(IntegrationTestCase):
 
     @browsing
     def test_title_in_all_enabled_languages_is_required(self, browser):
-        language_tool = api.portal.get_tool('portal_languages')
-        language_tool.addSupportedLanguage('fr-ch')
-
         self.login(self.administrator, browser)
         data = {
             "@type": "opengever.repository.repositoryfolder",
@@ -42,7 +40,7 @@ class TestTranslatedTitlePost(IntegrationTestCase):
                          method='POST', headers=self.api_headers)
 
         self.assertEqual(
-            u"[{'field': 'title_fr', "
+            u"[{'field': 'title_en', "
             "'message': u'Required input is missing.', "
             "'error': 'ValidationError'}]",
             browser.json['message'])
@@ -77,7 +75,8 @@ class TestTranslatedTitleGet(IntegrationTestCase):
         response = browser.open(self.empty_repofolder, method="GET",
                                 headers=self.api_headers).json
 
-        expected = {"title_de": u"Rechnungspr\xfcfungskommission"}
+        expected = {"title_de": u"Rechnungspr\xfcfungskommission",
+                    'title_en': u"Rechnungspr\xfcfungskommission"}
         self.assertDictContainsSubset(expected, response)
         self.assertNotIn("title_fr", response)
 
@@ -93,5 +92,6 @@ class TestTranslatedTitleGet(IntegrationTestCase):
         expected = {
             "title_de": u"Rechnungspr\xfcfungskommission",
             "title_fr": u"Commission de v\xe9rification",
+            "title_en": u"Rechnungspr\xfcfungskommission"
             }
         self.assertDictContainsSubset(expected, response)

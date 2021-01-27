@@ -182,7 +182,8 @@ class TestImportErrorHandling(FunctionalTestCase):
 
         root = create(Builder('repository_root')
                       .having(title_de=u'Ordnungssystem',
-                              title_fr=u'Syst\xe8me de classement'))
+                              title_fr=u'Syst\xe8me de classement',
+                              title_en=u'Repository'))
 
         # Set classification to classified on repositoryfolder,
         # to make classification value `confidential`, as it's defined in
@@ -190,6 +191,7 @@ class TestImportErrorHandling(FunctionalTestCase):
         folder = create(Builder('repository')
                         .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
                                 title_fr=u'Contrats et accords',
+                                title_en=u'Contracts and agreements',
                                 classification='classified')
                         .within(root))
 

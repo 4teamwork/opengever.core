@@ -4,6 +4,7 @@
         "_type": "opengever.meeting.committeecontainer",
         "title_de": "Kommitees",
         "title_fr": "Comités",
+        "title_en": "Committees",
         "_children": [
             {
                 "_id": "committee-1",

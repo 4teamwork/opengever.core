@@ -82,6 +82,25 @@ class TestConstructor(IntegrationTestCase):
         self.assertIsNotNone(content)
         self.assertEqual(u'Reporoot', content.title_de)
         self.assertIsNone(content.title_fr)
+        self.assertIsNone(content.title_en)
+
+    def test_creates_itranslated_title_content_with_multiple_languages(self):
+        item = {
+            u"guid": "12345xy",
+            u"_type": u"opengever.repository.repositoryroot",
+            u"title_de": u"Ordn\xfcngsposition",
+            u"title_fr": u"Position",
+            u"title_en": u"Reporoot",
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        portal = api.portal.get()
+        content = portal.get('ordnuengsposition')
+        self.assertIsNotNone(content)
+        self.assertEqual(u'Ordn\xfcngsposition', content.title_de)
+        self.assertEqual(u'Reporoot', content.title_en)
+        self.assertEqual(u'Position', content.title_fr)
 
     def test_creates_simple_title_content(self):
         item = {
@@ -102,7 +121,8 @@ class TestConstructor(IntegrationTestCase):
 
         self.assertEqual(u'Dossier', content.title)
         self.assertFalse(hasattr(aq_base(content), 'title_de'))
-        self.assertFalse(hasattr(aq_base(content), 'title_Fr'))
+        self.assertFalse(hasattr(aq_base(content), 'title_fr'))
+        self.assertFalse(hasattr(aq_base(content), 'title_en'))
 
     def test_title_is_unicode(self):
         item = {
@@ -206,7 +226,8 @@ class TestConstructor(IntegrationTestCase):
 
         self.assertEqual(u'My Mail', content.title)
         self.assertFalse(hasattr(aq_base(content), 'title_de'))
-        self.assertFalse(hasattr(aq_base(content), 'title_Fr'))
+        self.assertFalse(hasattr(aq_base(content), 'title_fr'))
+        self.assertFalse(hasattr(aq_base(content), 'title_en'))
 
     def test_use_formatted_parent_refnum_for_container_path(self):
         item = {

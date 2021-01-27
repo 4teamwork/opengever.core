@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-18 22:37+0000\n"
+"POT-Creation-Date: 2021-01-25 11:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -398,6 +398,11 @@ msgstr ""
 #. Default: "Title (German)"
 #: ./opengever/base/behaviors/translated_title.py
 msgid "label_title_de"
+msgstr ""
+
+#. Default: "Title (English)"
+#: ./opengever/base/behaviors/translated_title.py
+msgid "label_title_en"
 msgstr ""
 
 #. Default: "Title (French)"

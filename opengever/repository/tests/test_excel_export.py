@@ -45,6 +45,7 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
                 u'Repositoryfolder description': u'',
                 u'Repositoryfolder title (French)': u'Syst\xe8me de classement',
                 u'Repositoryfolder title (German)': u'Ordnungssystem',
+                u'Repositoryfolder title': u'Ordnungssystem',
                 }
         self.assertEqual(imported_data[0], expected_reporoot)
         expected_repofolder = {
@@ -71,5 +72,6 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
             u'Repositoryfolder description': u'Alles zum Thema F\xfchrung.',
             u'Repositoryfolder title (French)': u'Direction',
             u'Repositoryfolder title (German)': u'F\xfchrung',
+            u'Repositoryfolder title': u'F\xfchrung',
             }
         self.assertEqual(imported_data[1], expected_repofolder)

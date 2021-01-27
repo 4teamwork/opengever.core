@@ -16,7 +16,7 @@ Inhaltstypen
 Die Felder für übersetzte Titel der Inhalte sind der Vollständigkeit halber
 in der Dokumentation alle aufgeführt. Je nach konfigurierter Sprache auf den
 Systemen stehen sie aber nicht alle zur Verfügung. Betroffen davon sind die
-Felder ``title_de`` und ``title_fr``. Eine Abfrage auf den ``@schema`` Endpoint
+Felder ``title_de``, ``title_fr`` und ``title_en``. Eine Abfrage auf den ``@schema`` Endpoint
 liefert die aktuell gültigen Schemas eines Deployments.
 Das Erstellen und Modifizieren von Inhalten mittels ``POST`` oder ``PATCH``
 erlaubt immer alle übersetzten Felder.

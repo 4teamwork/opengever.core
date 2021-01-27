@@ -43,6 +43,7 @@ DEFAULT_CLIENT = u'fa'
 
 REPOROOT_REQUIREDS = {
     'title_de': DEFAULT_TITLE,
+    'title_en': DEFAULT_TITLE,
 }
 REPOROOT_DEFAULTS = {}
 REPOROOT_FORM_DEFAULTS = {}
@@ -56,6 +57,7 @@ REPOROOT_MISSING_VALUES = {
 
 REPOFOLDER_REQUIREDS = {
     'title_de': DEFAULT_TITLE,
+    'title_en': DEFAULT_TITLE,
 }
 REPOFOLDER_DEFAULTS = {
     'archival_value': u'unchecked',
@@ -570,6 +572,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
                 self.portal,
                 'opengever.repository.repositoryroot',
                 title_de=REPOROOT_REQUIREDS['title_de'],
+                title_en=REPOROOT_REQUIREDS['title_en'],
             )
 
         persisted_values = get_persisted_values_for_obj(reporoot)
@@ -585,6 +588,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
                 'opengever.repository.repositoryroot',
                 'new-reporoot',
                 title_de=REPOROOT_REQUIREDS['title_de'],
+                title_en=REPOROOT_REQUIREDS['title_en'],
             )
             reporoot = self.portal[new_id]
 
@@ -600,7 +604,9 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             browser.open()
             factoriesmenu.add(u'Repository Root')
-            browser.fill({u'Title': REPOROOT_REQUIREDS['title_de']}).save()
+            browser.fill(
+                {u'Title (German)': REPOROOT_REQUIREDS['title_de'],
+                 u'Title (English)': REPOROOT_REQUIREDS['title_en']}).save()
 
         reporoot = browser.context
 
@@ -616,6 +622,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         payload = {
             u'@type': u'opengever.repository.repositoryroot',
             u'title_de': REPOFOLDER_REQUIREDS['title_de'],
+            u'title_en': REPOFOLDER_REQUIREDS['title_en'],
             u'title_fr': u'French Title',
         }
         with freeze(FROZEN_NOW):
@@ -657,6 +664,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
                 self.empty_repofolder,
                 'opengever.repository.repositoryfolder',
                 title_de=REPOFOLDER_REQUIREDS['title_de'],
+                title_en=REPOFOLDER_REQUIREDS['title_en'],
             )
 
         persisted_values = get_persisted_values_for_obj(repofolder)
@@ -675,6 +683,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
                 'opengever.repository.repositoryfolder',
                 'repofolder',
                 title_de=REPOFOLDER_REQUIREDS['title_de'],
+                title_en=REPOFOLDER_REQUIREDS['title_en'],
             )
         repofolder = self.empty_repofolder[new_id]
 
@@ -693,7 +702,9 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         with freeze(FROZEN_NOW):
             browser.open(self.empty_repofolder)
             factoriesmenu.add(u'Repository Folder')
-            browser.fill({u'Title': REPOFOLDER_REQUIREDS['title_de']}).save()
+            browser.fill(
+                {u'Title (German)': REPOFOLDER_REQUIREDS['title_de'],
+                 u'Title (English)': REPOFOLDER_REQUIREDS['title_en']}).save()
 
         repofolder = browser.context
 
@@ -712,6 +723,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         payload = {
             u'@type': u'opengever.repository.repositoryfolder',
             u'title_de': REPOFOLDER_REQUIREDS['title_de'],
+            u'title_en': REPOFOLDER_REQUIREDS['title_en'],
             u'title_fr': u'French Title',
         }
         with freeze(FROZEN_NOW):

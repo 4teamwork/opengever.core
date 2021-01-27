@@ -17,9 +17,10 @@ class TestWorkspaceRoot(IntegrationTestCase):
         browser.open(view='folder_contents')
         factoriesmenu.add('Workspace Root')
         browser.fill({'Title (German)': u'Teamr\xe4ume',
-                      'Title (French)': u'Ateliers'}).save()
+                      'Title (French)': u'Ateliers',
+                      'Title (English)': u'Worksp\xe4ces'}).save()
         statusmessages.assert_no_error_messages()
-        self.assertEquals(u'Teamr\xe4ume', plone.first_heading())
+        self.assertEquals(u'Worksp\xe4ces', plone.first_heading())
 
     @browsing
     def test_workspace_admin_permissions(self, browser):
@@ -56,7 +57,7 @@ class TestWorkspaceRoot(IntegrationTestCase):
         self.assert_root_access(False)
 
     def assert_root_access(self, expect_has_access, browser=default_browser):
-        root_id = 'workspaces'
+        root_id = u'Teamr\xe4ume'
         browser.open()
         if expect_has_access:
             self.assertIn(root_id, globalnav.portaltabs().text)

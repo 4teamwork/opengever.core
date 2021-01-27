@@ -66,4 +66,4 @@ class TestContenttreeFetch(IntegrationTestCase):
         )
         self.assertEqual(len(browser.css('li.navTreeItem')), 10)
         self.assertEqual(
-            browser.css('li>a>span').first.text, 'rechnungsprufungskommission')
+            browser.css('li>a>span').first.text, u'2. Rechnungspr\xfcfungskommission')

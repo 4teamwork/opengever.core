@@ -142,37 +142,37 @@ class TestCatalogNavigationTabs(IntegrationTestCase):
                 {
                     'description': '',
                     'id': 'kontakte',
-                    'name': 'kontakte',
+                    'name': 'Contacts',
                     'url': 'http://nohost/plone/kontakte',
                 },
                 {
                     'description': '',
                     'id': 'ordnungssystem',
-                    'name': 'ordnungssystem',
+                    'name': 'Ordnungssystem',
                     'url': 'http://nohost/plone/ordnungssystem',
                 },
                 {
                     'description': '',
                     'id': 'vorlagen',
-                    'name': 'vorlagen',
+                    'name': 'Vorlagen',
                     'url': 'http://nohost/plone/vorlagen',
                 },
                 {
                     'description': '',
                     'id': 'opengever-meeting-committeecontainer',
-                    'name': 'opengever-meeting-committeecontainer',
+                    'name': 'Sitzungen',
                     'url': 'http://nohost/plone/opengever-meeting-committeecontainer',
                 },
                 {
                     'description': '',
                     'id': 'eingangskorb',
-                    'name': 'eingangskorb',
+                    'name': 'Eingangsk\xc3\xb6rbli',
                     'url': 'http://nohost/plone/eingangskorb',
                 },
                 {
                     'description': '',
                     'id': 'workspaces',
-                    'name': 'workspaces',
+                    'name': 'Teamr\xc3\xa4ume',
                     'url': 'http://nohost/plone/workspaces',
                 }
             ],

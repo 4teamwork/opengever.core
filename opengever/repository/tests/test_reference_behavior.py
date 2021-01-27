@@ -31,7 +31,8 @@ class TestReferenceBehavior(IntegrationTestCase):
         browser.open(self.repository_root)
         factoriesmenu.add('Repository Folder')
         browser.fill({
-            'Title': 'Test repository',
+            'Title (German)': u'Test repository',
+            'Title (English)': u'Test repository',
             'Reference number component': '1',
         }).save()
 
@@ -50,7 +51,8 @@ class TestReferenceBehavior(IntegrationTestCase):
         browser.open(self.repository_root)
         factoriesmenu.add('Repository Folder')
         browser.fill({
-            'Title': u'Test repository',
+            'Title (German)': u'Test repository',
+            'Title (English)': u'Test repository',
             'Reference number component': '26',
         }).save()
         statusmessages.assert_no_error_messages()
@@ -64,7 +66,8 @@ class TestReferenceBehavior(IntegrationTestCase):
         browser.open(self.repository_root)
         factoriesmenu.add('Repository Folder')
         browser.fill({
-            'Title': u'Test repository',
+            'Title (German)': u'Test repository',
+            'Title (English)': u'Test repository',
             'Reference number component': 'a1x10',
         }).save()
         statusmessages.assert_no_error_messages()

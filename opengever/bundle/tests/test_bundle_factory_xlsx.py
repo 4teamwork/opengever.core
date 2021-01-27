@@ -81,6 +81,7 @@ class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
         root = self.find_item_by_title(reporoot_json, u'Ordnungssysteme')
         self.assertIsNotNone(root)
         self.assertEqual(u'Syst\xe8me de classement', root['title_fr'])
+        self.assertEqual(u'Repository', root['title_en'])
         self.assertEqual(u'2000-01-01', root['valid_from'])
         self.assertEqual(u'2099-12-31', root['valid_until'])
 
@@ -96,6 +97,7 @@ class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
         self.assert_repofolder_default_properties(branch)
         self.assertEqual(u'repositoryfolder-state-active', branch['review_state'])
         self.assertEqual(u'leadership', branch['title_fr'])
+        self.assertEqual(u'leadership', branch['title_en'])
         self.assertNotIn('valid_from', branch)
         self.assertNotIn('valid_until', branch)
         self.assertNotIn('description', branch)
@@ -119,6 +121,7 @@ class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
         self.assert_repofolder_default_properties(subbranch)
         self.assertEqual(u'repositoryfolder-state-active', subbranch['review_state'])
         self.assertEqual(u'Contrats et accords', subbranch['title_fr'])
+        self.assertEqual(u'Contracts and agreements', subbranch['title_en'])
         self.assertNotIn('valid_from', subbranch)
         self.assertNotIn('valid_until', subbranch)
         self.assertNotIn('description', subbranch)
@@ -133,3 +136,79 @@ class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
         repos_in_branch = self.find_items_by_parent_guid(repofolders_json, subbranch['guid'])
         self.assertEqual(0, len(repos_in_branch),
                          msg="subbranch should not contain any further repos")
+
+    def test_xlsx_bundle_factory_supports_german_only(self):
+        input_path = assets.get_path('basic_repository_de_only.xlsx')
+
+        args = parse_args([input_path,
+                           self.tempdir,
+                           '--users-group', 'Test group'])
+
+        factory = BundleFactory(args)
+        factory.dump_bundle()
+
+        # Check that factory created a directory containing the json files
+        generated_dirs = os.listdir(self.tempdir)
+        self.assertEqual(1, len(generated_dirs), msg='Should generate one bundle')
+
+        bundle_path = os.path.join(self.tempdir, generated_dirs[0])
+        generated_files = os.listdir(bundle_path)
+        self.assertItemsEqual(['reporoots.json', 'repofolders.json',
+                               'documents.json', 'dossiers.json'],
+                              generated_files)
+
+        # load the json files
+        with open(os.path.join(bundle_path, 'reporoots.json'), 'r') as infile:
+            reporoot_json = json.load(infile)
+
+        with open(os.path.join(bundle_path, 'repofolders.json'), 'r') as infile:
+            repofolders_json = json.load(infile)
+
+        with open(os.path.join(bundle_path, 'dossiers.json'), 'r') as infile:
+            dossiers_json = json.load(infile)
+
+        with open(os.path.join(bundle_path, 'documents.json'), 'r') as infile:
+            documents_json = json.load(infile)
+
+        # Assert that basic properties are set properly on the different
+        # portal types
+        self.assertEqual(1, len(reporoot_json))
+        for reporoot in reporoot_json:
+            self.assert_reporoot_default_properties(reporoot, 'Test group')
+
+        self.assertEqual(2, len(repofolders_json))
+        for repofolder in repofolders_json:
+            self.assert_repofolder_default_properties(repofolder)
+
+        self.assertEqual(0, len(dossiers_json))
+        self.assertEqual(0, len(documents_json))
+
+        # Assert that the structure was generated correctly
+        root = self.find_item_by_title(reporoot_json, u'Ordnungssysteme')
+        self.assertIsNotNone(root)
+        self.assertEqual(u'Ordnungssysteme', root['title_de'])
+        self.assertEqual(None, root['title_en'])
+        self.assertEqual(None, root['title_fr'])
+        self.assertEqual(u'2000-01-01', root['valid_from'])
+        self.assertEqual(u'2099-12-31', root['valid_until'])
+
+        in_root = self.find_items_by_parent_guid(repofolders_json, root['guid'])
+        self.assertEqual(1, len(in_root))
+
+        branch = self.find_item_by_title(in_root, u'F\xfchrung')
+        self.assertIsNotNone(branch)
+        self.assert_repofolder_default_properties(branch)
+        self.assertEqual(u'F\xfchrung', branch['title_de'])
+        self.assertNotIn('title_fr', branch)
+        self.assertNotIn('title_en', branch)
+
+        in_branch = self.find_items_by_parent_guid(repofolders_json, branch['guid'])
+        self.assertEqual(1, len(in_branch))
+
+        subbranch = self.find_item_by_title(in_branch, u'Gemeinderecht')
+        self.assertIsNotNone(subbranch)
+        self.assert_repofolder_default_properties(subbranch)
+        self.assertEqual(u'Gemeinderecht', subbranch['title_de'])
+        self.assertNotIn('title_fr', subbranch)
+        self.assertNotIn('title_en', subbranch)
+        self.assertEqual(25, subbranch['retention_period'])

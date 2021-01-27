@@ -180,7 +180,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
         root = self.portal.get('ordnungssystem-1')
         self.assertEqual('Ordnungssystem', root.Title())
         self.assertEqual(u'Ordnungssystem', root.title_de)
-        self.assertEqual(u'', root.title_fr)
+        self.assertEqual(u'Syst\xe8me de classement', root.title_fr)
+        self.assertIsNone(root.title_en)
         self.assertEqual(date(2000, 1, 1), root.valid_from)
         self.assertEqual(date(2099, 12, 31), root.valid_until)
         self.assertIsNone(getattr(root, 'guid', None))
@@ -194,7 +195,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
         folder_organisation = root.get('organisation')
         self.assertEqual('0. Organisation', folder_organisation.Title())
         self.assertEqual(u'Organisation', folder_organisation.title_de)
-        self.assertIsNone(folder_organisation.title_fr)
+        self.assertEqual(u'Organisation', folder_organisation.title_fr)
+        self.assertEqual(u'Organisation', folder_organisation.title_en)
         self.assertEqual('organisation', folder_organisation.getId())
         self.assertEqual(
             date(2016, 10, 1),
@@ -261,11 +263,12 @@ class TestOggBundlePipeline(IntegrationTestCase):
         return folder_organisation
 
     def assert_empty_repofolder_created(self, parent):
-        folder_process = parent.get('organigramm-prozesse')
-        self.assertEqual('0.0. Organigramm, Prozesse', folder_process.Title())
+        folder_process = parent.get('organigrams-and-processes')
+        self.assertEqual('0.0. Organigrams and processes', folder_process.Title())
         self.assertEqual(u'Organigramm, Prozesse', folder_process.title_de)
+        self.assertEqual(u'Organigrams and processes', folder_process.title_en)
         self.assertIsNone(folder_process.title_fr)
-        self.assertEqual('organigramm-prozesse', folder_process.getId())
+        self.assertEqual('organigrams-and-processes', folder_process.getId())
         self.assertEqual(
             30,
             ILifeCycle(folder_process).custody_period)
@@ -313,7 +316,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
         leaf_repofolder = parent.get('personal')
         self.assertEqual('0.3. Personal', leaf_repofolder.Title())
         self.assertEqual(u'Personal', leaf_repofolder.title_de)
-        self.assertIsNone(leaf_repofolder.title_fr)
+        self.assertEqual(u'Personnel', leaf_repofolder.title_fr)
+        self.assertIsNone(leaf_repofolder.title_en)
         self.assertEqual('personal', leaf_repofolder.getId())
         self.assertEqual(
             u'prompt',

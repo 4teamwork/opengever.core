@@ -25,7 +25,7 @@ class TestRepositoryRootDeletion(IntegrationTestCase):
         empty_root = create(
             Builder('repository_root')
             .with_tree_portlet()
-            .having(title_de=u'empty', title_fr=u'empty'))
+            .having(title_de=u'empty', title_fr=u'empty', title_en=u'empty'))
 
         self.assertFalse(empty_root.objectIds(),
                          'Precondition: Assumed reporoot to have no children.')
@@ -38,7 +38,7 @@ class TestRepositoryRootDeletion(IntegrationTestCase):
         empty_root = create(
             Builder('repository_root')
             .with_tree_portlet()
-            .having(title_de=u'empty', title_fr=u'empty'))
+            .having(title_de=u'empty', title_fr=u'empty', title_en=u'empty'))
 
         browser.open(empty_root, view='delete_confirmation')
 

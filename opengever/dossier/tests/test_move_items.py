@@ -199,6 +199,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'task_type',
                               'title_de',
                               'title_fr',
+                              'title_en',
                               'trashed']
 
         # Make sure no metadata key is in both lists of unchanged and modified metadata
@@ -887,7 +888,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         selectables = browser.css('li.selectable').text
 
         self.assertEquals(
-            ['fuhrung', 'rechnungsprufungskommission', 'drittes-repo'],
+            [u'1. F\xfchrung', u'2. Rechnungspr\xfcfungskommission', 'drittes-repo'],
             selectables)
 
 
@@ -917,11 +918,11 @@ class TestMoveItemsWithTestbrowserSolr(SolrIntegrationTestCase):
         ))
 
         browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.branch_repofolder.title_or_id()))))
-        self.assertEqual('/plone/ordnungssystem/fuhrung|fuhrung', browser.contents)
+        self.assertEqual('/plone/ordnungssystem/fuhrung|1. F\xc3\xbchrung', browser.contents)
 
         browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.leaf_repofolder.title_or_id().replace("-", " ")))))
         self.assertEqual(
-            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen|vertrage-und-vereinbarungen',
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen|1.1. Vertr\xc3\xa4ge und Vereinbarungen',
             browser.contents,
         )
 

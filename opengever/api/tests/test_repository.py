@@ -42,7 +42,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                     u'description': u'Alles zum Thema F\xfchrung.',
                     u'is_leafnode': False,
                     u'review_state': u'repositoryfolder-state-active',
-                    u'title': None,
+                    u'title': u'1. F\xfchrung',
                 },
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem/rechnungsprufungskommission',
@@ -50,7 +50,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                     u'description': u'',
                     u'is_leafnode': True,
                     u'review_state': u'repositoryfolder-state-active',
-                    u'title': None,
+                    u'title': u'2. Rechnungspr\xfcfungskommission',
                 },
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem/spinnannetzregistrar',
@@ -58,7 +58,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                     u'description': u'',
                     u'is_leafnode': True,
                     u'review_state': u'repositoryfolder-state-inactive',
-                    u'title': None,
+                    u'title': u'3. Spinn\xe4nnetzregistrar',
                 },
             ],
             u'items_total': 3,
@@ -81,12 +81,13 @@ class TestRepositoryAPI(IntegrationTestCase):
                 u"@id": u"http://nohost/plone/kontakte",
                 u"@type": u"opengever.contact.contactfolder",
                 u"description": u"",
-                u"title": u"Kontakte"
+                u"title": u"Contacts"
             },
             u'relative_path': u'ordnungssystem',
             u'review_state': u'repositoryroot-state-active',
             u'title_de': u'Ordnungssystem',
             u'title_fr': u'Syst\xe8me de classement',
+            u'title_en': u'Ordnungssystem',
             u'valid_from': None,
             u'valid_until': None,
             u'version': None,

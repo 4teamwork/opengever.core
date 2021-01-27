@@ -99,7 +99,8 @@ class TestHasSameTypeChildren(IntegrationTestCase):
 
         browser.open(self.empty_repofolder)
         factoriesmenu.add('Repository Folder')
-        browser.fill({'Title': u'Sub repository'}).save()
+        browser.fill({'Title (German)': u'Sub repository',
+                      'Title (English)': u'Sub repository'}).save()
 
         self.assert_metadata_value(True, 'has_sametype_children',
                                    self.empty_repofolder)

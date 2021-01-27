@@ -118,6 +118,7 @@ class TestSolr(IntegrationTestCase):
             'predecessor',
             'title_de',
             'title_fr',
+            'title_en',
         ]
 
         for metadata in catalog.schema():

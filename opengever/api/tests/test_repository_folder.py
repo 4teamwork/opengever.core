@@ -17,6 +17,7 @@ class TestRepositoryFolderPost(IntegrationTestCase):
             "@type": "opengever.repository.repositoryfolder",
             "title_de": "Folder",
             "title_fr": u"F\xf6lder",
+            "title_en": "Folder",
             "reference_number_prefix": "1"
         }
         with browser.expect_http_error(code=400, reason='Bad Request'):

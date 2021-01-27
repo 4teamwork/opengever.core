@@ -116,6 +116,12 @@
             "description": "",
             "_zope_schema_type": "TranslatedTextLine"
         },
+        "title_en": {
+            "type": "string",
+            "title": "Titel (englisch)",
+            "description": "",
+            "_zope_schema_type": "TranslatedTextLine"
+        },
         "retention_period": {
             "type": "integer",
             "title": "Aufbewahrungsdauer (Jahre)",
@@ -210,6 +216,11 @@
                     "required": [
                         "title_fr"
                     ]
+                },
+                {
+                    "required": [
+                        "title_en"
+                    ]
                 }
             ]
         }
@@ -230,6 +241,7 @@
         "public_trial_statement",
         "title_de",
         "title_fr",
+        "title_en",
         "retention_period",
         "retention_period_annotation",
         "archival_value",

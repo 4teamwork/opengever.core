@@ -90,6 +90,29 @@ class TestBundleLoader(TestCase):
             ('repositoryroot', 'Ordnungssystem')],
             sorted([(get_portal_type(i), get_title(i)) for i in list(bundle)]))
 
+    def test_supports_multiple_languages(self):
+        bundle = self.load_bundle()
+        items = list(bundle)
+        item = items[0]
+        self.assertEqual(item.get('title_de'), 'Ordnungssystem')
+        self.assertEqual(item.get('title_fr'), 'Syst\xc3\xa8me de classement')
+        self.assertNotIn('title_en', item)
+
+        item = items[1]
+        self.assertEqual(item.get('title_de'), 'Personal')
+        self.assertEqual(item.get('title_fr'), 'Personnel')
+        self.assertNotIn('title_en', item)
+
+        item = items[2]
+        self.assertEqual(item.get('title_de'), 'Organigramm, Prozesse')
+        self.assertNotIn('title_fr', item)
+        self.assertEqual(item.get('title_en'), 'Organigrams and processes')
+
+        item = items[3]
+        self.assertEqual(item.get('title_de'), 'Organisation')
+        self.assertEqual(item.get('title_fr'), 'Organisation')
+        self.assertEqual(item.get('title_en'), 'Organisation')
+
     def test_validates_schemas(self):
         bundle_path = get_bundle_path('schema_violation.oggbundle')
 

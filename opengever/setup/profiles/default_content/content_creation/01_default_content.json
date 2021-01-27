@@ -4,6 +4,7 @@
         "_type": "opengever.private.root",
         "title_de": "Meine Ablage",
         "title_fr": "Mon dépôt",
+        "title_en": "My repository",
         "_placefulworkflow": ["opengever_private_policy",
                               "opengever_private_policy"]
     },
@@ -12,6 +13,7 @@
         "_type": "opengever.inbox.inbox",
         "title_de": "Eingangskorb",
         "title_fr": "Boîte de réception",
+        "title_en": "Inbox",
         "inbox_group": "og_mandant1_eingangskorb",
         "_placefulworkflow": ["opengever_inbox_policy",
                               "opengever_inbox_policy"]
@@ -20,13 +22,15 @@
         "_path": "vorlagen",
         "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
-        "title_fr": "Modèles"
+        "title_fr": "Modèles",
+        "title_en": "Templates"
     },
     {
         "_path": "kontakte",
         "_type": "opengever.contact.contactfolder",
         "title_de": "Kontakte",
         "title_fr": "Contacts",
+        "title_en": "Contacts",
         "_transitions": "publish"
     },
     {
@@ -34,6 +38,7 @@
         "_type": "opengever.workspace.root",
         "title_de": "Teamräume",
         "title_fr": "Espace partagé",
+        "title_en": "Workspaces",
         "_placefulworkflow": ["opengever_workspace_policy",
                               "opengever_workspace_policy"]
     }

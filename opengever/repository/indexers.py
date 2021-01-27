@@ -14,6 +14,11 @@ def title_fr_indexer(obj):
 
 
 @indexer(IRepositoryFolder)
+def title_en_indexer(obj):
+    return obj.get_prefixed_title_en()
+
+
+@indexer(IRepositoryFolder)
 def blocked_local_roles(obj):
     """Return whether acquisition is blocked or not."""
     return bool(getattr(aq_inner(obj), '__ac_local_roles_block__', False))
