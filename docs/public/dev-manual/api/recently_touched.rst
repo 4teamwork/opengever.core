@@ -47,7 +47,9 @@ zwei separaten Listen:
         "checked_out": [
           {
             "icon_class": "icon-dokument_word is-checked-out-by-current-user",
+            "checked_out": "peter.mueller",
             "description": "Wichtige Dokumentation",
+            "file_extension": ".docx",
             "last_touched": "2018-05-31T15:40:23+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-25/document-197",
             "@type": "opengever.document.document",
@@ -56,7 +58,9 @@ zwei separaten Listen:
           },
           {
             "icon_class": "icon-dokument_excel is-checked-out-by-current-user",
+            "checked_out": "peter.mueller",
             "description": "",
+            "file_extension": ".xlsx",
             "last_touched": "2018-05-31T15:40:01+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-25/document-191",
             "@type": "opengever.document.document",
@@ -67,7 +71,9 @@ zwei separaten Listen:
         "recently_touched": [
           {
             "icon_class": "icon-dokument_powerpoint is-checked-out",
+            "checked_out": "",
             "description": "",
+            "file_extension": ".pptx",
             "last_touched": "2018-05-31T15:35:38+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-229",
             "@type": "opengever.document.document",
@@ -79,7 +85,9 @@ zwei separaten Listen:
           },
           {
             "icon_class": "icon-dokument_word",
+            "checked_out": "",
             "description": "",
+            "file_extension": ".docx",
             "last_touched": "2018-05-31T15:34:42+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-236",
             "@type": "opengever.document.document",

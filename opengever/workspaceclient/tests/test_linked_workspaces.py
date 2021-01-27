@@ -442,6 +442,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                  u'UID': document.UID(),
                  u'checked_out': u'',
                  u'description': u'',
+                 u'file_extension': u'',
                  u'filename': u'',
                  u'is_leafnode': None,
                  u'review_state': u'document-state-draft',

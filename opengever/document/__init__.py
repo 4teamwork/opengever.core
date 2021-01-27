@@ -6,6 +6,8 @@ from zope.i18nmessageid import MessageFactory
 
 _ = MessageFactory('opengever.document')
 
+DOCUMENTISH_TYPES = ['ftw.mail.mail', 'opengever.document.document',
+                     'opengever.meeting.proposaltemplate', 'opengever.meeting.sablontemplate']
 
 # Register some additional well-known MIME types to help server-side file
 # format recognition do a better job.
@@ -28,3 +30,7 @@ def initialize(context):
             constructors=(m['form'], m['factory']),
             icon=m['icon'],
         )
+
+
+def is_documentish_portal_type(portal_type):
+    return portal_type in DOCUMENTISH_TYPES

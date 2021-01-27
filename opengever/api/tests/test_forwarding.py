@@ -21,7 +21,9 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
               u'added_objects': [{
                 u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/document-13',
                 u'@type': u'opengever.document.document',
+                u'checked_out': None,
                 u'description': u'',
+                u'file_extension': u'.txt',
                 u'is_leafnode': None,
                 u'review_state': u'document-state-draft',
                 u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung'}],

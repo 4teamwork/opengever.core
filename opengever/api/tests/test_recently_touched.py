@@ -35,12 +35,14 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(200, browser.status_code)
-        self.assertEquals(
+        self.assertEqual(
             {'checked_out': [],
              'recently_touched': [{
                  'icon_class': 'icon-docx',
                  'is_leafnode': None,
+                 'checked_out': u'',
                  'description': u'Wichtige Vertr\xe4ge',
+                 'file_extension': u'.docx',
                  # Because of an incorrect timezone handling in the freezer
                  # last_touched should be `2018-04-30T00:00:00+02:00`
                  'last_touched': '2018-04-30T02:00:00+02:00',
@@ -66,11 +68,13 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(200, browser.status_code)
-        self.assertEquals(
+        self.assertEqual(
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'is_leafnode': None,
+                'checked_out': self.regular_user.getId(),
                 'description': u'Wichtige Vertr\xe4ge',
+                'file_extension': u'.docx',
                 'last_touched': '2018-04-30T00:00:00+02:00',
                 'title': u'Vertr\xe4gsentwurf',
                 'review_state': 'document-state-draft',
@@ -95,12 +99,13 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(200, browser.status_code)
-        self.assertEquals(
+        self.assertEqual(
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'is_leafnode': None,
                 'description': u'Wichtige Vertr\xe4ge',
                 'checked_out': self.regular_user.id,
+                'file_extension': u'.docx',
                 'filename': 'Vertraegsentwurf.docx',
                 # Because of an incorrect timezone handling in the freezer
                 # last_touched should be `2018-04-30T00:00:00+02:00`
@@ -134,12 +139,14 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(200, browser.status_code)
-        self.assertEquals(
+        self.assertEqual(
             {'checked_out': [],
              'recently_touched': [{
                  'icon_class': 'icon-docx is-checked-out',
                  'is_leafnode': None,
+                 'checked_out': self.secretariat_user.getId(),
                  'description': u'Wichtige Vertr\xe4ge',
+                 'file_extension': u'.docx',
                  # Because of an incorrect timezone handling in the freezer
                  # last_touched should be `2018-04-30T00:00:00+02:00`
                  'last_touched': '2018-04-30T02:00:00+02:00',
@@ -170,11 +177,13 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
         # checked out documents section.
 
         self.assertEqual(200, browser.status_code)
-        self.assertEquals(
+        self.assertEqual(
             {'checked_out': [{
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'is_leafnode': None,
+                'checked_out': self.regular_user.getId(),
                 'description': u'Wichtige Vertr\xe4ge',
+                'file_extension': u'.docx',
                 'last_touched': '2018-04-30T00:00:00+02:00',
                 'title': u'Vertr\xe4gsentwurf',
                 'review_state': 'document-state-draft',
