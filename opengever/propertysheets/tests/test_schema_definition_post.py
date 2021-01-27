@@ -358,6 +358,34 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual([], storage.list())
 
     @browsing
+    def test_property_sheet_schema_definition_post_prevents_duplicate_field_name(
+        self, browser
+    ):
+        self.login(self.manager, browser)
+
+        dupe1 = {"name": "dupe", "field_type": "text"}
+        dupe2 = {"name": "foo", "field_type": "text"}
+        data = {"fields": [dupe1, dupe1, dupe2, dupe2]}
+        with browser.expect_http_error(400):
+            browser.open(
+                view="@propertysheets/foo",
+                method="POST",
+                data=json.dumps(data),
+                headers=self.api_headers,
+            )
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"Duplicate fields 'dupe', 'foo'.",
+                "type": "BadRequest",
+            },
+            browser.json,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual([], storage.list())
+
+    @browsing
     def test_property_sheet_schema_definition_post_invalid_type(self, browser):
         self.login(self.manager, browser)
 

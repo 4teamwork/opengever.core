@@ -84,6 +84,17 @@ class PropertySheetsPost(Service):
         if errors:
             raise BadRequest(errors)
 
+        seen = set()
+        duplicates = []
+        for name in [each["name"] for each in fields]:
+            if name in seen:
+                duplicates.append(name)
+            seen.add(name)
+        if duplicates:
+            raise BadRequest(
+                u"Duplicate fields '{}'.".format("', '".join(duplicates))
+            )
+
         assignments = data.get("assignments")
         if assignments is not None:
             assignments = tuple(assignments)
