@@ -139,10 +139,12 @@ class NotificationCenter(object):
 
         return errors
 
-    def get_users_notifications(self, userid, only_unread=False, limit=None):
+    def get_users_notifications(self, userid, only_unread=False, limit=None, badge_only=False):
         query = Notification.query.by_user(userid)
         if only_unread:
             query = query.filter(Notification.is_read == false())
+        if badge_only:
+            query = query.filter(Notification.is_badge == true())
 
         query = query.join(
             Notification.activity).order_by(desc(Activity.created))
@@ -308,11 +310,12 @@ class PloneNotificationCenter(NotificationCenter):
         return super(PloneNotificationCenter, self).count_users_unread_notifications(
             api.user.get_current().getId(), badge_only)
 
-    def get_current_users_notifications(self, only_unread=False, limit=None):
+    def get_current_users_notifications(self, only_unread=False, limit=None, badge_only=False):
         return super(PloneNotificationCenter, self).get_users_notifications(
             api.user.get_current().getId(),
             only_unread=only_unread,
-            limit=limit)
+            limit=limit,
+            badge_only=badge_only)
 
 
 class DisabledNotificationCenter(NotificationCenter):
@@ -364,11 +367,11 @@ class DisabledNotificationCenter(NotificationCenter):
                      notification_recipients=None):
         pass
 
-    def get_users_notifications(self, userid, only_unread=False, limit=None):
+    def get_users_notifications(self, userid, only_unread=False, limit=None, badge_only=False):
         return []
 
     def mark_notification_as_read(self, notification_id):
         pass
 
-    def get_current_users_notifications(self, only_unread=False, limit=None):
+    def get_current_users_notifications(self, only_unread=False, limit=None, badge_only=False):
         return []

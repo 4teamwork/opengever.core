@@ -70,6 +70,25 @@ class TestNotificationsGet(IntegrationTestCase):
             browser.json.get('items'))
 
     @browsing
+    def test_list_only_badge_notifications(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        TaskAddedActivity(self.task, self.request).record()
+        TaskAddedActivity(self.task, self.request).record()
+        TaskAddedActivity(self.task, self.request).record()
+
+        self.login(self.regular_user, browser=browser)
+        url = '{}/@notifications/{}'.format(self.portal.absolute_url(),
+                                            self.regular_user.getId())
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(3, browser.json['items_total'])
+        notification_id = browser.json['items'][1]['notification_id']
+        Notification.query.filter(Notification.notification_id ==
+                                  notification_id).one().is_badge = False
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(2, browser.json['items_total'])
+
+    @browsing
     def test_batch_notifications(self, browser):
         self.login(self.administrator, browser=browser)
 
