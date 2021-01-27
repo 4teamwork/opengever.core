@@ -1,3 +1,4 @@
+from opengever.document import _
 from opengever.propertysheets.assignment import get_document_assignment_slots
 from opengever.propertysheets.field import PropertySheetField
 from plone.autoform.interfaces import IFormFieldProvider
@@ -16,7 +17,7 @@ class IDocumentCustomProperties(model.Schema):
 
     model.fieldset(
         u'custom_properties',
-        label=u'Custom properties',
+        label=_(u'Custom properties'),
         fields=[
             u'custom_properties',
             ],

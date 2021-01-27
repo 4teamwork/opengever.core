@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-20 09:20+0000\n"
+"POT-Creation-Date: 2021-01-27 15:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,4 +23,12 @@ msgstr ""
 
 #: ./opengever/propertysheets/field.py
 msgid "Custom properties"
+msgstr ""
+
+#: ./opengever/propertysheets/widgets.py
+msgid "Custom properties contain some errors."
+msgstr ""
+
+#: ./opengever/propertysheets/templates/propertysheet.pt
+msgid "No custom properties are available."
 msgstr ""

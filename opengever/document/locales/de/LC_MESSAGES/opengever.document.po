@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 17:25+0000\n"
+"POT-Creation-Date: 2021-01-28 09:13+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -81,6 +81,10 @@ msgstr "${title} ist kein Dokument und konnte deshalb nicht ausgecheckt werden."
 #: ./opengever/document/browser/overview.py
 msgid "Current version: ${version}"
 msgstr "Aktuelle Version: ${version}"
+
+#: ./opengever/document/behaviors/customproperties.py
+msgid "Custom properties"
+msgstr "Benutzerdefinierte Felder"
 
 #: ./opengever/document/forms.py
 msgid "Document ${document} was successfully created in ${destination}"
