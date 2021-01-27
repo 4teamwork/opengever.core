@@ -73,6 +73,34 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
             ["schema1", "schema2"], [each.name for each in storage.list()]
         )
 
+    def test_storage_len_empty(self):
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual(0, len(storage))
+
+    def test_storage_len_with_definitions(self):
+        storage = PropertySheetSchemaStorage()
+        definition1 = PropertySheetSchemaDefinition.create("schema1")
+        storage.save(definition1)
+
+        self.assertEqual(1, len(storage))
+
+        storage = PropertySheetSchemaStorage()
+        definition2 = PropertySheetSchemaDefinition.create("schema2")
+        storage.save(definition2)
+
+        self.assertEqual(2, len(storage))
+
+    def test_storage_is_falsy_when_empty(self):
+        storage = PropertySheetSchemaStorage()
+        self.assertFalse(storage)
+
+    def test_storage_is_truthy_when_not_empty(self):
+        storage = PropertySheetSchemaStorage()
+        definition1 = PropertySheetSchemaDefinition.create("schema1")
+        storage.save(definition1)
+
+        self.assertTrue(storage)
+
     def test_prevents_duplicate_assignments(self):
         storage = PropertySheetSchemaStorage()
         fixture = PropertySheetSchemaDefinition.create(
