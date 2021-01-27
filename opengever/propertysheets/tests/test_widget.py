@@ -147,6 +147,28 @@ class TestPropertySheetWidget(IntegrationTestCase):
         )
 
     @browsing
+    def test_render_info_message_when_no_fields_available(self, browser):
+        self.login(self.manager, browser)
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.contract")
+            .with_field(
+                "textline", u"textline", u"Textline", u"A line of text", True
+            )
+        )
+        self.document.document_type = u"question"
+
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view="@@edit")
+
+        node = browser.css(
+            "#formfield-form-widgets-IDocumentCustomProperties-"
+            "custom_properties .noCustomPropertyFields"
+        ).first
+        self.assertEqual("No custom properties are available.", node.text)
+
+    @browsing
     def test_edit_required_textline_rendering_and_error_message(self, browser):
         self.login(self.manager, browser)
 
