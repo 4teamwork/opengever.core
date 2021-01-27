@@ -84,15 +84,16 @@ class PropertySheetField(Field):
             value, mandatory_sheet
         )
 
-    def get_active_assignment_slot(self):
+    def get_active_assignment_slot(self, context=None):
         """Return assignment slot currently considered active."""
         request = getRequest()
 
         value_name = None
+        context = context or self.context
         if self.request_key in request:
             value_name = request.get(self.request_key)[0]
-        elif self.context:
-            value_name = getattr(self.context, self.attribute_name)
+        elif context:
+            value_name = getattr(context, self.attribute_name, None)
 
         if not value_name:
             return None
