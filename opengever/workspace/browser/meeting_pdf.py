@@ -43,7 +43,7 @@ class MeetingMinutesPDFView(BrowserView):
         data['generator'] = portal_state.portal_title()
         data['print_date'] = DateTime()
         data['responsible'] = display_name(self.context.responsible)
-        data['agenda_items'] = self.context.agenda_items.get('items', [])
+        data['agenda_items'] = (self.context.agenda_items or {}).get('items', [])
         for i, agenda_item in enumerate(data['agenda_items']):
             agenda_item[u'number'] = '{}. '.format(i + 1)
         return self.template(self, **data)
