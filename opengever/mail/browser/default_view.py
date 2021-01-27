@@ -1,5 +1,6 @@
 from opengever.base.browser.default_view import OGDefaultView
 from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
+from opengever.propertysheets.form import omit_custom_properties_group
 
 
 class MailDefaultView(OGDefaultView):
@@ -9,6 +10,10 @@ class MailDefaultView(OGDefaultView):
     because then it's possible to download a possibly private working copy
     of the message.
     """
+
+    def update(self):
+        super(MailDefaultView, self).update()
+        self.groups = omit_custom_properties_group(self.groups)
 
     def updateWidgets(self):
         super(MailDefaultView, self).updateWidgets()

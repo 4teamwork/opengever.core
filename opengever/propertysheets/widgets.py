@@ -60,6 +60,7 @@ class PropertySheetWiget(Widget):
             identifier = self._make_widget_identifier(slot_name, name)
             widget.name = identifier
             widget.id = identifier
+            widget.mode = self.mode
             widget.update()  # update is required to set up terms for sequences
             self.widgets.append(widget)
 

@@ -44,4 +44,18 @@
       template="templates/propertysheet.pt"
       />
 
+  <z3c:widgetTemplate
+      mode="display"
+      widget=".widgets.IPropertySheetWiget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/propertysheet_display.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="hidden"
+      widget=".widgets.IPropertySheetWiget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/propertysheet.pt"
+      />
+
 </configure>
