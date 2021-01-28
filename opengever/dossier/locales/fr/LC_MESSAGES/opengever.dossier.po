@@ -943,7 +943,7 @@ msgstr "Pas tous les documents ou tâches ont été classés dans un sous-dossie
 
 #: ./opengever/dossier/resolve.py
 msgid "not all documents are checked in"
-msgstr "Pas tous les documents ont le statut \"checkin\""
+msgstr "Pas tous les documents ont le statut \"checkin\"."
 
 #: ./opengever/dossier/resolve.py
 msgid "not all task are closed"

@@ -79,7 +79,7 @@ class ResolveTestHelper(object):
 
     def assert_already_being_resolved(self, dossier, browser):
         self.assertEquals(
-            ['Dossier is already being resolved'], info_messages())
+            ['Dossier is already being resolved.'], info_messages())
 
     def assert_resolved(self, dossier):
         dossier_state = api.content.get_state(dossier)
@@ -163,7 +163,7 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
         self.assertEquals(400, browser.status_code)
         self.assertEquals({
             u'error': {
-                u'message': u'Dossier is already being resolved',
+                u'message': u'Dossier is already being resolved.',
                 u'type': u'AlreadyBeingResolved'}},
             browser.json)
 
@@ -1363,7 +1363,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['not all task are closed'])
+                           ['Not all tasks are closed.'])
 
     @browsing
     def test_dossier_is_resolved_when_dossier_has_an_invalid_end_date(self, browser):
@@ -1392,7 +1392,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['The dossier Resolvable Subdossier has a invalid end_date'])
+                           ['The dossier Resolvable Subdossier has an invalid end date.'])
 
     @browsing
     def test_dossier_is_resolved_when_resolved_subdossier_has_an_invalid_end_date(self, browser):

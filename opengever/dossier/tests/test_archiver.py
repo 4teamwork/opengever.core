@@ -406,7 +406,7 @@ class TestArchiveForm(IntegrationTestCase):
 
         self.assert_workflow_state(
             'dossier-state-active', self.empty_dossier)
-        self.assertEqual(['not all task are closed'],
+        self.assertEqual(['Not all tasks are closed.'],
                          statusmessages.error_messages())
         self.assertEqual(self.empty_dossier.absolute_url(), browser.url)
 
@@ -436,7 +436,7 @@ class TestArchiveForm(IntegrationTestCase):
 
         self.assert_workflow_state(
             'dossier-state-active', self.empty_dossier)
-        self.assertEqual(['not all task are closed'],
+        self.assertEqual(['Not all tasks are closed.'],
                          statusmessages.error_messages())
         self.assertEquals(None,
                           IFilingNumber(self.empty_dossier).filing_no)

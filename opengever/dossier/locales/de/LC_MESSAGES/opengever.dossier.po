@@ -945,11 +945,11 @@ msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
 
 #: ./opengever/dossier/resolve.py
 msgid "not all documents are checked in"
-msgstr "Es sind nicht alle Dokumente eingecheckt"
+msgstr "Es sind nicht alle Dokumente eingecheckt."
 
 #: ./opengever/dossier/resolve.py
 msgid "not all task are closed"
-msgstr "Es sind nicht alle Aufgaben abgeschlossen"
+msgstr "Es sind nicht alle Aufgaben abgeschlossen."
 
 #. Default: "Confirm abbord"
 #: ./opengever/dossier/viewlets/comment.py

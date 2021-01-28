@@ -70,7 +70,7 @@ msgstr "Dossier has already been resolved."
 #. German translation: Der Abschlussvorgang für dieses Dossier läuft bereits.
 #: ./opengever/dossier/resolve.py
 msgid "Dossier is already being resolved"
-msgstr "Dossier is already being resolved"
+msgstr "Dossier is already being resolved."
 
 #. German translation: Dieses Dossier kann nicht abgeschlossen werden, weil es nicht aktiv ist.
 #: ./opengever/dossier/resolve.py
@@ -254,7 +254,7 @@ msgstr "Dossier has been resolved"
 #. MARKER: used-in-api-response
 #: ./opengever/dossier/resolve.py
 msgid "The dossier ${dossier} has a invalid end_date"
-msgstr "The dossier ${dossier} has a invalid end_date"
+msgstr "The dossier ${dossier} has an invalid end date."
 
 #. German translation: Das Dossier enthält aktive Anträge.
 #: ./opengever/dossier/resolve.py
@@ -1159,7 +1159,7 @@ msgstr "Not all documents have been checked in yet."
 #. MARKER: used-in-api-response
 #: ./opengever/dossier/resolve.py
 msgid "not all task are closed"
-msgstr "not all task are closed"
+msgstr "Not all tasks are closed."
 
 #. German translation: Sie haben nicht gespeicherte Änderungen, wollen Sie wirklich abbrechen?
 #. Default: "Confirm abbord"

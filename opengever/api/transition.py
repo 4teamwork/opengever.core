@@ -184,7 +184,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             # another violated precondition.
             self.request.response.setStatus(400)
             msg = self.translate(str(e))
-            errors = ['The dossier %s has a invalid end_date' % title
+            errors = ['The dossier %s has an invalid end date.' % title
                       for title in e.invalid_dossier_titles]
             return dict(error=dict(
                 type='PreconditionsViolated',
