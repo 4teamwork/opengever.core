@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Add a new solr-index 'is_folderish'. [elioschmutz]
+- Include blocked_local_roles in serialization of dossiers and repofolders. [tinagerber]
 - Index blocked_local_roles in solr and allow field in @listing endpoint. [tinagerber]
 - Return only badge notifications in @notifications endpoint. [tinagerber]
 - Only show create_proposal action on dossiers. [tinagerber]

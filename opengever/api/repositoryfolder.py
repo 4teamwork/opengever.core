@@ -57,5 +57,7 @@ class SerializeRepositoryFolderToJson(GeverSerializeFolderToJson):
 
         ref_num = IReferenceNumber(self.context)
         result[u'reference_number'] = ref_num.get_number()
+        result[u'blocked_local_roles'] = bool(
+            getattr(self.context.aq_inner, '__ac_local_roles_block__', False))
 
         return result

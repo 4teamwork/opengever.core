@@ -64,6 +64,13 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
         self.assertEqual(u'Client1 1.1', browser.json.get(u'reference_number'))
 
     @browsing
+    def test_repofolder_serialization_contains_blocked_local_roles(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertIn('blocked_local_roles', browser.json)
+
+    @browsing
     def test_repofolder_serialization_contains_is_leafnode(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.leaf_repofolder, headers=self.api_headers)

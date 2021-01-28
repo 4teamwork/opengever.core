@@ -30,6 +30,8 @@ class SerializeDossierToJson(GeverSerializeFolderToJson):
         result[u'reference_number'] = self.context.get_reference_number()
         result[u'email'] = IEmailAddress(self.request).get_email_for_object(
             self.context)
+        result[u'blocked_local_roles'] = bool(
+            getattr(self.context.aq_inner, '__ac_local_roles_block__', False))
 
         return result
 
