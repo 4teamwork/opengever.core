@@ -185,6 +185,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
             'name=dossiers',
+            'columns=blocked_local_roles',
             'columns=external_reference',
             'columns=public_trial',
             'columns=reference',
@@ -214,6 +215,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             {u'review_state': u'dossier-state-active',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'UID': IUUID(self.dossier),
+             u'blocked_local_roles': False,
              u'external_reference': u'qpr-900-9001-\xf7',
              u'public_trial': u'Nicht gepr\xfcft',
              u'trashed': False,
