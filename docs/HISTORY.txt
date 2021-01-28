@@ -4,6 +4,7 @@ Changelog
 2021.3.0 (unreleased)
 ---------------------
 
+- Include path in the data submitted by the Solr update chain. [sebastianmanger]
 - Harmonize translations for document sent and received dates. [lgraf]
 - Add a new solr-index 'is_folderish'. [elioschmutz]
 - Do not escape boolean filters in solr endpoints. [tinagerber]
