@@ -4,6 +4,7 @@ Changelog
 2021.3.0 (unreleased)
 ---------------------
 
+- Add a new solr-index 'is_folderish'. [elioschmutz]
 - Return only badge notifications in @notifications endpoint. [tinagerber]
 - Only show create_proposal action on dossiers. [tinagerber]
 - Enable Usersnap by default in SaaS policy template. [lgraf]

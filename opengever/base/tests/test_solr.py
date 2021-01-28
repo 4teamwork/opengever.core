@@ -91,7 +91,6 @@ class TestSolr(IntegrationTestCase):
             'date_of_completion',
             'getId',
             'is_default_page',
-            'is_folderish',
             'predecessor',
             'sortable_author',
         ]
@@ -113,7 +112,6 @@ class TestSolr(IntegrationTestCase):
             'getContentType',
             'getId',
             'in_response_to',
-            'is_folderish',
             'listCreators',
             'predecessor',
             'title_de',

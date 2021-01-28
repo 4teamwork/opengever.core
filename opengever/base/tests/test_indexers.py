@@ -369,3 +369,50 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
             (self.seq_subtask_2.Title(), 1),
             (u'Neue Aufgabe', 2), (self.seq_subtask_3.Title(), 3)],
             [(item['Title'], item['getObjPositionInParent']) for item in browser.json["items"]])
+
+
+class TestIsFolderishIndexer(SolrIntegrationTestCase):
+
+    @browsing
+    def test_is_folderish_solr_index(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = u'{}/@solrsearch?sort=portal_type asc&fl=is_folderish&fq=UID:({})'.format(
+            self.portal.absolute_url(),
+            ' OR '.join([
+                self.leaf_repofolder.UID(),
+                self.dossier.UID(),
+                self.document.UID(),
+                self.task.UID(),
+                self.seq_subtask_2.UID(),
+                self.proposal.UID(),
+                self.tasktemplate.UID(),
+                self.workspace.UID(),
+                self.todolist_general.UID(),
+                self.todo.UID(),
+            ]))
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.maxDiff = None
+
+        self.assertEqual([
+            {u'UID': self.document.UID(),
+             u'is_folderish': False},
+            {u'UID': self.dossier.UID(),
+             u'is_folderish': True},
+            {u'UID': self.proposal.UID(),
+             u'is_folderish': True},
+            {u'UID': self.leaf_repofolder.UID(),
+             u'is_folderish': True},
+            {u'UID': self.task.UID(),
+             u'is_folderish': True},
+            {u'UID': self.seq_subtask_2.UID(),
+             u'is_folderish': True},
+            {u'UID': self.tasktemplate.UID(),
+             u'is_folderish': False},
+            {u'UID': self.todo.UID(),
+             u'is_folderish': True},
+            {u'UID': self.todolist_general.UID(),
+             u'is_folderish': True},
+            {u'UID': self.workspace.UID(),
+             u'is_folderish': True}
+        ], browser.json["items"])
