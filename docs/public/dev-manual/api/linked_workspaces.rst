@@ -162,7 +162,9 @@ Dokumente in einem verknüpften Teamraum auflisten
               "@id": "http://localhost:8080/fd/workspaces/workspace-5/document-126",
               "@type": "opengever.document.document",
               "UID": "39e29affb6f94a7d905f587fce3244f8",
+              "checked_out": "",
               "description": "",
+              "file_extension": ".jpg",
               "filename": "rand_image.jpg",
               "review_state": "document-state-draft",
               "title": "rand_image"
@@ -171,7 +173,9 @@ Dokumente in einem verknüpften Teamraum auflisten
               "@id": "http://localhost:8080/fd/workspaces/workspace-5/document-127",
               "@type": "ftw.mail.mail",
               "UID": "ebb87ebde84a4f9cae5fb91d04c89de8",
+              "checked_out": "",
               "description": "",
+              "file_extension": ".eml",
               "filename": "Test email.eml",
               "review_state": "mail-state-active",
               "title": "Test email"

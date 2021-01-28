@@ -35,8 +35,10 @@ class TestGeverSummarySerializer(IntegrationTestCase):
         self.assertDictEqual(
             {'@id': self.document.absolute_url(),
              '@type': u'opengever.document.document',
+             'checked_out': None,
              'creator': u'robert.ziegler',
              'description': u'Wichtige Vertr\xe4ge',
+             'file_extension': u'.docx',
              'filename': u'Vertraegsentwurf.docx',
              'filesize': 27413,
              'mimetype': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -74,8 +76,10 @@ class TestGeverSummarySerializer(IntegrationTestCase):
         self.assertDictEqual(
             {'@id': self.mail_eml.absolute_url(),
              '@type': u'ftw.mail.mail',
+             'checked_out': None,
              'creator': u'robert.ziegler',
              'description': u'',
+             'file_extension': u'.eml',
              'filename': u'Die Buergschaft.eml',
              'filesize': 1108,
              'mimetype': u'text/plain',

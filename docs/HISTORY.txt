@@ -8,6 +8,8 @@ Changelog
 - Only show create_proposal action on dossiers. [tinagerber]
 - Enable Usersnap by default in SaaS policy template. [lgraf]
 - Add English support for translated titles. [njohner]
+- Return related_documents in journal endpoint. [tinagerber]
+- Include checked_out and file_extension in summary serialization of documents and mails. [tinagerber]
 - Respect active languages languages in WorkspaceRoot and PrivateRoot forms. [njohner]
 - List informed principals in TaskAddedActivity description. [njohner]
 - Fix deactivating committees with canceled meetings. [deiferni]

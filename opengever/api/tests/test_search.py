@@ -133,8 +133,8 @@ class TestSearchEndpoint(IntegrationTestCase):
 
         items = browser.json['items']
         self.assertItemsEqual(
-            [u'@id', u'@type', u'title', u'description', u'review_state',
-             u'preview_image_url', u'preview_pdf_url', u'is_leafnode'],
+            [u'@id', u'@type', u'title', u'checked_out', u'description', u'file_extension',
+             u'review_state', u'preview_image_url', u'preview_pdf_url', u'is_leafnode'],
             items[0].keys())
 
         # Use same bumble_id to compare the urls.

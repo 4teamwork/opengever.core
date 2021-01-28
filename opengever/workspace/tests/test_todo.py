@@ -182,7 +182,9 @@ class TestAPISupportForTodo(IntegrationTestCase):
         self.assertEqual(
             {u'@id': self.workspace_document.absolute_url(),
              u'@type': self.workspace_document.portal_type,
+             u'checked_out': None,
              u'description': u'',
+             u'file_extension': u'.txt',
              u'is_leafnode': None,
              u'review_state': u'opengever_workspace_document--STATUS--active',
              u'title': self.workspace_document.title},

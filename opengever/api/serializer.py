@@ -10,6 +10,8 @@ from opengever.base.response import IResponseSupported
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.base.utils import is_administrator
 from opengever.contact.utils import get_contactfolder_url
+from opengever.document import is_documentish_portal_type
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.base.actor import Actor
@@ -309,6 +311,10 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
         if IRepositoryFolder.providedBy(self.context):
             summary['is_leafnode'] = self.context.is_leaf_node()
 
+        if IBaseDocument.providedBy(self.context):
+            summary['checked_out'] = self.context.checked_out_by()
+            summary['file_extension'] = self.context.get_file_extension()
+
         return summary
 
 
@@ -328,6 +334,10 @@ class SerializeBrainToJsonSummary(DefaultJSONSummarySerializer):
         if self.context.portal_type == 'opengever.repository.repositoryfolder':
             if self.context.has_sametype_children != MissingValue:
                 summary['is_leafnode'] = not self.context.has_sametype_children
+
+        if is_documentish_portal_type(self.context.portal_type):
+            summary['checked_out'] = self.context.checked_out
+            summary['file_extension'] = self.context.file_extension
 
         return summary
 

@@ -201,6 +201,8 @@ class TestAcceptRemoteTaskPost(IntegrationTestCase):
             u'@id': doc_in_successor_task.absolute_url(),
             u'@type': u'opengever.document.document',
             u'description': u'',
+            u'checked_out': u'',
+            u'file_extension': u'.docx',
             u'is_leafnode': None,
             u'review_state': u'document-state-draft',
             u'title': doc_in_successor_task.title}],

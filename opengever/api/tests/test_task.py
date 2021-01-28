@@ -200,7 +200,9 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
                             u'dossier-1/task-1/document-35',
                     u'@type': u'opengever.document.document',
+                    u'checked_out': u'',
                     u'description': u'',
+                    u'file_extension': u'.docx',
                     u'is_leafnode': None,
                     u'review_state': u'document-state-draft',
                     u'title': u'Feedback zum Vertragsentwurf'
