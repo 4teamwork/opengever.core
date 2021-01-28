@@ -38,6 +38,8 @@ def filter_escape(term):
     instead of SPECIAL_CHARS, additionally including a white space. For queries,
     whitespaces should not be escaped, but for filters they should be.
     """
+    if isinstance(term, bool):
+        return term
     for char in TO_ESCAPE:
         term = term.replace(char, '\\' + char)
     return term

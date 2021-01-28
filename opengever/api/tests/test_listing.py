@@ -440,6 +440,21 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual('dossier-state-active', review_states[0])
 
     @browsing
+    def test_filter_by_is_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=is_subdossier'
+                '&filters.review_state:record:boolean=true')
+        browser.open(self.portal, view=view,
+                     headers=self.api_headers)
+
+        items = browser.json['items']
+        is_subdossier = list(set(map(lambda x: x['is_subdossier'], items)))
+        self.assertEqual(1, len(is_subdossier))
+        self.assertTrue(is_subdossier[0])
+
+    @browsing
     def test_filter_by_empty_string(self, browser):
         self.login(self.regular_user, browser=browser)
         manager = getMultiAdapter((self.document, self.request), ICheckinCheckoutManager)
