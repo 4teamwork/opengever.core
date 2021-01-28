@@ -16,7 +16,6 @@ from zope.interface import implementer
 from zope.interface import implementsOnly
 from zope.interface import Invalid
 from zope.schema import getFieldNamesInOrder
-from zope.schema import getFieldsInOrder
 
 
 class IPropertySheetWiget(IWidget):
@@ -53,9 +52,7 @@ class PropertySheetWiget(Widget):
         if definition is None:
             return
 
-        schema_class = definition.schema_class
-
-        for name, field in getFieldsInOrder(schema_class):
+        for name, field in definition.get_fields():
             widget = getMultiAdapter((field, self.request), IFieldWidget)
             identifier = self._make_widget_identifier(slot_name, name)
             widget.name = identifier
@@ -93,14 +90,11 @@ class PropertySheetWiget(Widget):
         if definition is None:
             return default
 
-        schema_class = definition.schema_class
         errors = ()
         sheet_values = {}
         found_request_value = False
 
-        for name, widget in zip(
-            getFieldNamesInOrder(schema_class), self.widgets
-        ):
+        for name, widget in zip(definition.get_fieldnames(), self.widgets):
             value = widget.field.missing_value
             try:
                 widget.setErrors = self.setErrors

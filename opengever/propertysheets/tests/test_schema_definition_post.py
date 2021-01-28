@@ -157,7 +157,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertEqual(
             ["yn", "wahl", "nummer", "text", "zeiletext"],
-            getFieldNamesInOrder(definition.schema_class)
+            definition.get_fieldnames()
         )
 
     @browsing
