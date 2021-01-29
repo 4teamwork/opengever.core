@@ -86,7 +86,6 @@ class TestCopyDocuments(IntegrationTestCase):
                              'Creator': self.regular_user.id,
                              # dates
                              'created': ZOPE_PASTE_TIME,
-                             'start': self.PASTE_TIME.date(),
                              'modified': ZOPE_PASTE_TIME,
                              'changed': self.PASTE_TIME,
                              # containing dossier and subdossier
@@ -133,6 +132,7 @@ class TestCopyDocuments(IntegrationTestCase):
                               'responsible',
                               'retention_expiration',
                               'review_state',
+                              'start',
                               'task_type',
                               'title_de',
                               'title_fr',
@@ -211,7 +211,6 @@ class TestCopyDocuments(IntegrationTestCase):
             # dates
             'changed': paste_time_index,
             'modified': paste_time_index,
-            'start': paste_time_index,
             'created': paste_time_index,
 
             # containing dossier and subdossier
@@ -255,6 +254,7 @@ class TestCopyDocuments(IntegrationTestCase):
                                'retention_expiration',
                                'review_state',
                                'sortable_author',
+                               'start',
                                'task_type',
                                'trashed']
 

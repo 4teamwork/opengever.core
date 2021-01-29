@@ -142,7 +142,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                              # creator
                              'listCreators': ('robert.ziegler', 'kathi.barfuss'),
                              # dates
-                             'start': self.MOVE_TIME.date(),  # acquisition is responsible here
                              'modified': ZOPE_MOVE_TIME,
                              # containing dossier and subdossier
                              'reference': 'Client1 1.1 / 4 / 22',
@@ -196,6 +195,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'responsible',
                               'retention_expiration',
                               'review_state',
+                              'start',
                               'task_type',
                               'title_de',
                               'title_fr',
@@ -258,7 +258,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
 
             # dates
             'modified': paste_time_index,
-            # 'start': paste_time_index,
 
             # containing dossier and subdossier
             'containing_dossier': self.empty_dossier.Title(),
@@ -312,6 +311,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'retention_expiration',
                                'review_state',
                                'sortable_author',
+                               'start',
                                'task_type',
                                'trashed']
 
@@ -345,7 +345,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         # Other data should be up to date but is not. For example the 'reference'
         # is not reindexed on purpose for efficiency, but it actually changes
         # because the reference number changes...
-        not_up_to_date = ['reference', 'start']
+        not_up_to_date = ['reference']
         for key in not_up_to_date:
             self.assertNotEqual(moved_indexdata.pop(key),
                                 reindexed_moved_indexdata.pop(key))
