@@ -78,12 +78,22 @@ class TestWebactionsAddForm(IntegrationTestCase):
         self.assertEqual(0, len(storage.list()))
 
         browser.open(api.portal.getSite(), view="manage-webactions-add")
-        browser.fill({"Title": "Action 1",
-                      "Target URL": "http://example.com",
-                      "Order": "5",
-                      "Display Location": "action-buttons",
-                      "Mode": "self"})
-        browser.click_on("Add webaction")
+
+        authenticator = browser.forms['form'].find_field('_authenticator').value
+        browser.open(
+            api.portal.getSite(),
+            view='manage-webactions-add',
+            data={
+                'form.widgets.title': 'Action 1',
+                'form.widgets.target_url': 'http://example.com',
+                'form.widgets.order': '5',
+                'form.widgets.display:list': 'action-buttons',
+                'form.widgets.mode:list': 'self',
+                'form.buttons.save': 'Add webaction',
+                '_authenticator': authenticator,
+            },
+            method='POST',
+        )
 
         self.assertEqual(['There were some errors.'], error_messages())
 
