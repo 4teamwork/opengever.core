@@ -216,7 +216,7 @@ class TestArchiveFormDefaults(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier, view='transition-archive')
         form_default = browser.css('#form-widgets-filing_prefix').first.value
-        self.assertEqual(None, form_default)
+        self.assertEqual('--NOVALUE--', form_default)
 
         # Dossier has a filing_prefix - default to that one in archive form
         IDossier(self.dossier).filing_prefix = 'department'
