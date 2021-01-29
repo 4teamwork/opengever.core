@@ -70,5 +70,15 @@ class TestExport(IntegrationTestCase):
         self.activate_feature('ech0147-export')
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='ech0147_export')
-        browser.forms['form'].submit()
+
+        authenticator = browser.forms['form'].find_field('_authenticator').value
+        browser.open(
+            self.dossier,
+            view='ech0147_export',
+            data={
+                'form.buttons.label_export': 'Export',
+                '_authenticator': authenticator,
+            },
+            method='POST',
+        )
         self.assertIn('Error', browser.contents)
