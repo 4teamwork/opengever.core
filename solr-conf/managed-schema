@@ -125,6 +125,7 @@
     <field name="Subject" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="UID" type="string" indexed="true" stored="true" required="true" multiValued="false" />
     <field name="getObjPositionInParent" type="pint" indexed="true" stored="true" />
+    <field name="is_folderish" type="boolean" indexed="true" stored="true"/>
 
     <!-- GEVER specific fields -->
     <field name="bumblebee_checksum" type="string" indexed="false" stored="false" />
