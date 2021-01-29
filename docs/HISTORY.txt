@@ -18,6 +18,7 @@ Changelog
 - Index getObjPositionInParent for sequential tasks and sort them on getObjPositionInParent in @tasktree endpoint. [tinagerber]
 - Add is_task_addable_in_main_task and is_task_addable_before attributes to @tasktree endpoint. [tinagerber]
 - Implement POST @notifications endpoint to mark all notifications as read. [tinagerber]
+- Update Plone to version 4.3.20. [buchi]
 
 
 2021.2.0 (2021-01-20)
