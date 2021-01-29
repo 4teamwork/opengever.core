@@ -15,6 +15,7 @@ from requests import HTTPError
 from requests import Timeout
 from zExceptions import BadRequest
 from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -145,11 +146,15 @@ class LinkedWorkspacesPost(LinkedWorkspacesService):
     """API Endpoint to add a new linked workspace.
     """
 
+    def render(self):
+        if not self.context.is_open():
+            raise Unauthorized
+        return super(LinkedWorkspacesPost, self).render()
+
     @request_error_handler
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
-
         # Validation will be done on the remote system
         data = json_body(self.request)
 
@@ -159,6 +164,12 @@ class LinkedWorkspacesPost(LinkedWorkspacesService):
 class LinkToWorkspacePost(LinkedWorkspacesService):
     """API Endpoint to link a dossier to an existing workspace.
     """
+
+    def render(self):
+        if not self.context.is_open():
+            raise Unauthorized
+        return super(LinkToWorkspacePost, self).render()
+
     @request_error_handler
     def reply(self):
         # Disable CSRF protection
