@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-29 14:28+0000\n"
+"POT-Creation-Date: 2021-01-29 14:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,10 +31,6 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "add tasktemplate"
-msgstr ""
-
 #. Default: "Cancel"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "button_cancel"
@@ -48,10 +44,6 @@ msgstr ""
 #. Default: "Trigger"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "button_trigger"
-msgstr ""
-
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "choose template"
 msgstr ""
 
 #. Default: "Immediately open the first task after creation."
@@ -105,16 +97,6 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/sources.py
 msgid "interactive_user_responsible"
-msgstr ""
-
-#. Default: "Continue"
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "label_continue"
-msgstr ""
-
-#. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "label_created"
 msgstr ""
 
 #. Default: "Deadline in Days"
@@ -227,9 +209,9 @@ msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/browser/templatefolders.py
+#: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_title"
 msgstr ""
 
@@ -238,19 +220,12 @@ msgstr ""
 msgid "label_yes"
 msgstr ""
 
-#. Default: "You have not selected any templates"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "message_no_templates_selected"
-msgstr ""
-
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "message_tasks_created"
 msgstr ""
 
 #. Default: "Currently there are no active task template folders registered."
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "msg_no_active_tasktemplatefolders"
 msgstr ""
@@ -258,8 +233,4 @@ msgstr ""
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "preselected_yes"
-msgstr ""
-
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "select tasks"
 msgstr ""

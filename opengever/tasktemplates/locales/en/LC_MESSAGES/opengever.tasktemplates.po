@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-29 14:28+0000\n"
+"POT-Creation-Date: 2021-01-29 14:29+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -32,11 +32,6 @@ msgstr "Sequential"
 msgid "Title"
 msgstr "Title"
 
-#. German translation: Aufgabenvorlage hinzufügen
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "add tasktemplate"
-msgstr "Add task template"
-
 #. German translation: Abbrechen
 #. Default: "Cancel"
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -54,11 +49,6 @@ msgstr "Continue"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "button_trigger"
 msgstr "Trigger"
-
-#. German translation: Vorlage auswählen
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "choose template"
-msgstr "Choose template"
 
 #. German translation: Erste Aufgabe nach Erstellung sofort starten.
 #. Default: "Immediately open the first task after creation."
@@ -125,18 +115,6 @@ msgstr "Logged in user"
 #: ./opengever/tasktemplates/sources.py
 msgid "interactive_user_responsible"
 msgstr "Responsible"
-
-#. German translation: Weiter
-#. Default: "Continue"
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "label_continue"
-msgstr "Continue"
-
-#. German translation: Erstelldatum
-#. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "label_created"
-msgstr "Created"
 
 #. German translation: Frist in Tagen
 #. Default: "Deadline in Days"
@@ -273,9 +251,9 @@ msgstr "Text"
 
 #. German translation: Titel
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/browser/templatefolders.py
+#: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_title"
 msgstr "Title"
 
@@ -285,15 +263,8 @@ msgstr "Title"
 msgid "label_yes"
 msgstr "Yes"
 
-#. German translation: Sie haben keine Vorlagen ausgewählt.
-#. Default: "You have not selected any templates"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "message_no_templates_selected"
-msgstr "You have not selected any templates"
-
 #. German translation: Alle Aufgaben aus gewähltem Standardablauf wurden erstellt.
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "message_tasks_created"
 msgstr "All tasks from the selected task template have been created."
@@ -301,7 +272,6 @@ msgstr "All tasks from the selected task template have been created."
 #. German translation: Zurzeit sind keine aktiven Standardabläufe hinterlegt.
 #. Default: "Currently there are no active task template folders registered."
 #. MARKER: check in context (really a folder?)
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "msg_no_active_tasktemplatefolders"
 msgstr "Currently there are no active task template folders."
@@ -311,8 +281,3 @@ msgstr "Currently there are no active task template folders."
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "preselected_yes"
 msgstr "Yes"
-
-#. German translation: Aufgaben auswählen
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "select tasks"
-msgstr "Select tasks"

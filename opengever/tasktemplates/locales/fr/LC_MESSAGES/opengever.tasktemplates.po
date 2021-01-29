@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-29 14:28+0000\n"
+"POT-Creation-Date: 2021-01-29 14:29+0000\n"
 "PO-Revision-Date: 2017-12-03 11:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-tasktemplates/fr/>\n"
@@ -30,10 +30,6 @@ msgstr "Séquentiel"
 msgid "Title"
 msgstr "Titre"
 
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "add tasktemplate"
-msgstr "Ajouter un modèle de tâches"
-
 #. Default: "Cancel"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "button_cancel"
@@ -48,10 +44,6 @@ msgstr "Continuer"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "button_trigger"
 msgstr "Enclencher"
-
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "choose template"
-msgstr "Choix du modèle"
 
 #. Default: "Immediately open the first task after creation."
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -105,16 +97,6 @@ msgstr "Collaborateur"
 #: ./opengever/tasktemplates/sources.py
 msgid "interactive_user_responsible"
 msgstr "Responsable"
-
-#. Default: "Continue"
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "label_continue"
-msgstr "Continuer"
-
-#. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "label_created"
-msgstr "Date de création"
 
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
@@ -226,9 +208,9 @@ msgid "label_text"
 msgstr "commentaire"
 
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/browser/templatefolders.py
+#: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_title"
 msgstr "Titre"
 
@@ -237,19 +219,12 @@ msgstr "Titre"
 msgid "label_yes"
 msgstr "Oui"
 
-#. Default: "You have not selected any templates"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "message_no_templates_selected"
-msgstr "Vous n'avez sélectionné aucun modèle."
-
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "message_tasks_created"
 msgstr "Toutes les tâches du procédé standard ont été créées."
 
 #. Default: "Currently there are no active task template folders registered."
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "msg_no_active_tasktemplatefolders"
 msgstr "Aucun déroulement standard actif n'est enregistré pour le moment."
@@ -258,7 +233,3 @@ msgstr "Aucun déroulement standard actif n'est enregistré pour le moment."
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "preselected_yes"
 msgstr "Oui"
-
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "select tasks"
-msgstr "Choix des tâches"
