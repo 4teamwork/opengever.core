@@ -91,6 +91,9 @@ def deserialize_responsible(data):
         team = Team.query.get_by_actor_id(responsible)
         responsible_client = team.org_unit.unit_id
 
+    elif ActorLookup(responsible).is_interactive_actor():
+        responsible_client = None
+
     else:
         responsible_client, responsible = responsible.split(':', 1)
 

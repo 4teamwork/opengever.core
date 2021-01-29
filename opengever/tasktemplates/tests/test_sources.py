@@ -48,6 +48,6 @@ class TestTaskResponsibleSource(base.TestAllUsersInboxesAndTeamsSource):
 
         result = self.source.search('Logged in')
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
-        self.assertEquals('interactive_users:current_user', result[0].token)
-        self.assertEquals('interactive_users:current_user', result[0].value)
+        self.assertEquals('interactive_actor:current_user', result[0].token)
+        self.assertEquals('interactive_actor:current_user', result[0].value)
         self.assertEquals('Logged in user', result[0].title)

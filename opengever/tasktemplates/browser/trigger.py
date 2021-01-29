@@ -6,11 +6,12 @@ from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.task.util import update_reponsible_field_data
 from opengever.tasktemplates import _
-from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -221,7 +222,7 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def get_responsible_client(self, template, responsible):
-        if template.responsible_client == INTERACTIVE_USERS:
+        if ActorLookup(template.responsible).is_interactive_actor():
             current_org_unit = get_current_org_unit()
             responsible_org_units = ogds_service().assigned_org_units(responsible)
 
@@ -317,10 +318,10 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
         `responsible`: the reponsible of the main dossier.
         `current_user`: the currently logged in user.
         """
-        if template.responsible_client == INTERACTIVE_USERS:
-            if template.responsible == 'responsible':
+        if ActorLookup(template.responsible).is_interactive_actor():
+            if template.responsible == INTERACTIVE_ACTOR_RESPONSIBLE.get('id'):
                 principal = IDossier(self.context.get_main_dossier()).responsible
-            elif template.responsible == 'current_user':
+            elif template.responsible == INTERACTIVE_ACTOR_CURRENT_USER.get('id'):
                 principal = api.user.get_current().getId()
 
             return get_current_org_unit().id(), principal
