@@ -979,6 +979,11 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         u'title': u'List workspaces',
         u'icon': u''}
 
+    link_to_workspace_action = {
+        u'id': u'link_to_workspace',
+        u'title': u'Link to workspace',
+        u'icon': u''}
+
     copy_documents_to_workspace_action = {
         u'id': u'copy_documents_to_workspace',
         u'title': u'Copy documents to workspace',
@@ -990,6 +995,7 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         u'icon': u''}
 
     workspace_actions = [list_workspaces_action,
+                         link_to_workspace_action,
                          copy_documents_to_workspace_action,
                          copy_documents_from_workspace_action]
 

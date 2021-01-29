@@ -95,6 +95,17 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
             )
 
     @browsing
+    def test_create_linked_workspace_raises_unauthorized_if_dossier_is_closed(self, browser):
+        browser.login()
+        browser.exception_bubbling = True
+        with self.assertRaises(Unauthorized):
+            browser.open(self.expired_dossier, view='/@create-linked-workspace',
+                         data=json.dumps({"title": "My linked workspace"}),
+                         method='POST',
+                         headers={'Accept': 'application/json',
+                                  'Content-Type': 'application/json'})
+
+    @browsing
     def test_only_workspace_client_users_can_use_the_api(self, browser):
         browser.exception_bubbling = True
         browser.login()
@@ -166,6 +177,17 @@ class TestLinkToWorkspacesPost(FunctionalWorkspaceClientTestCase):
                 method='POST',
                 headers={'Accept': 'application/json',
                          'Content-Type': 'application/json'})
+
+    @browsing
+    def test_link_to_workspace_raises_unauthorized_if_dossier_is_closed(self, browser):
+        browser.login()
+        browser.exception_bubbling = True
+        with self.assertRaises(Unauthorized):
+            browser.open(self.expired_dossier, view='/@link-to-workspace',
+                         data=json.dumps({"workspace_uid": self.workspace.UID()}),
+                         method='POST',
+                         headers={'Accept': 'application/json',
+                                  'Content-Type': 'application/json'})
 
     @browsing
     def test_missing_workspace_uid_raises_bad_request(self, browser):

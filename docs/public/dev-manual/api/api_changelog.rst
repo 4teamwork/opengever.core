@@ -10,6 +10,7 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- ``@create-linked-workspace``, ``@link-to-workspace``: Only available if dossier is open.
 - ``@notifications``: Only badge notifications are returned (see :ref:`docs <notifications>`).
 - ``@tasktree``: Sequential tasks are now sorted on ``getObjPositionInParent`` (see :ref:`docs <tasktree>`).
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-29 08:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,6 +94,7 @@ msgid "Create Disposition"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210126165317_update_create_proposal_action/actions.xml
 msgid "Create Proposal"
 msgstr ""
 
@@ -148,6 +149,11 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.inbox.container.xml
 msgid "Inbox Container"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210129083214_add_link_to_workspace_action/actions.xml
+msgid "Link to workspace"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
