@@ -14,6 +14,7 @@ from ZPublisher.HTTPRequest import record
 
 # Fields with no mapping but allowed in the listing endpoint.
 OTHER_ALLOWED_FIELDS = set([
+    'blocked_local_roles',
     'changed',
     'checked_out',
     'completed',

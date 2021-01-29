@@ -17,6 +17,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- The field ``blocked_local_roles`` is now included in the serialization of documents and repository folders.
+- ``@listing``: Add ``blocked_local_roles`` as allowed field (see :ref:`docs <listings>`).
 - Add support for english: new field ``title_en`` is returned wherever appropriate (``@schema``, ``@types`` and simple GET for diverse content types) when English is enabled for the deployment.
 - ``@journal``: Include ``related_documents`` in journal entry serialization (see :ref:`docs <journal>`).
 - The fields ``checked_out`` and ``file_extension`` are now included in the summary serialization of documents and mails.

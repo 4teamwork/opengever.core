@@ -185,6 +185,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
             'name=dossiers',
+            'columns=blocked_local_roles',
             'columns=external_reference',
             'columns=public_trial',
             'columns=reference',
@@ -214,6 +215,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             {u'review_state': u'dossier-state-active',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'UID': IUUID(self.dossier),
+             u'blocked_local_roles': False,
              u'external_reference': u'qpr-900-9001-\xf7',
              u'public_trial': u'Nicht gepr\xfcft',
              u'trashed': False,
@@ -436,6 +438,21 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         review_states = list(set(map(lambda x: x['review_state'], items)))
         self.assertEqual(1, len(review_states))
         self.assertEqual('dossier-state-active', review_states[0])
+
+    @browsing
+    def test_filter_by_is_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=is_subdossier'
+                '&filters.review_state:record:boolean=true')
+        browser.open(self.portal, view=view,
+                     headers=self.api_headers)
+
+        items = browser.json['items']
+        is_subdossier = list(set(map(lambda x: x['is_subdossier'], items)))
+        self.assertEqual(1, len(is_subdossier))
+        self.assertTrue(is_subdossier[0])
 
     @browsing
     def test_filter_by_empty_string(self, browser):
