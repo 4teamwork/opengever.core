@@ -147,7 +147,7 @@ class TestListingStats(SolrIntegrationTestCase):
                      u'value': u'contacts'},
                     {u'count': 12,
                      u'field': u'listing_name',
-                     u'queries': {u'responsible:kathi.barfuss': 1},
+                     u'queries': {u'responsible:kathi.barfuss': 0},
                      u'value': u'documents'},
                     {u'count': 3,
                      u'field': u'listing_name',
@@ -191,7 +191,7 @@ class TestListingStats(SolrIntegrationTestCase):
                      u'value': u'workspaces'},
                     {u'count': 27,
                      u'field': u'listing_name',
-                     u'queries': {u'responsible:kathi.barfuss': 9},
+                     u'queries': {u'responsible:kathi.barfuss': 8},
                      u'value': u'folder_contents'}]
         self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
@@ -219,13 +219,13 @@ class TestListingStats(SolrIntegrationTestCase):
             headers={'Accept': 'application/json'},
         )
         self.assertDictEqual(
-            {u'count': 12,
+            {u'count': 9,
              u'field': u'listing_name',
-             u'value': u'documents',
-             u'queries': {u'responsible:kathi.barfuss': 1,
-                          u'depth:1': 4}
+             u'value': u'tasks',
+             u'queries': {u'responsible:kathi.barfuss': 8,
+                          u'depth:1': 5}
              },
-            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))
+            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'tasks'))
 
     @browsing
     def test_listing_stats_pivot_queries_supports_special_characters(self, browser):
