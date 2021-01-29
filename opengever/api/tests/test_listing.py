@@ -381,21 +381,21 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         view = ('@listing?name=documents&columns:list=title'
-                '&facets:list=creator&facets:list=responsible')
+                '&facets:list=creator&facets:list=document_type')
 
         browser.open(self.repository_root, view=view, method='GET',
                      headers=self.api_headers)
 
         self.assertIn(u'facets', browser.json)
         facets = browser.json['facets']
-        self.assertItemsEqual([u'creator', 'responsible'], facets.keys())
+        self.assertItemsEqual([u'creator', 'document_type'], facets.keys())
         self.assertItemsEqual(
             {u'franzi.muller': {u'count': 4, u'label': u'M\xfcller Fr\xe4nzi'},
              u'robert.ziegler': {u'count': 15, u'label': u'Ziegler Robert'}},
             facets[u'creator'])
         self.assertItemsEqual(
-            {u'kathi.barfuss': {u'count': 1, u'label': u'B\xe4rfuss K\xe4thi'}},
-            facets[u'responsible'])
+            {u'contract': {u'count': 1, u'label': u'Contract'}},
+            facets[u'document_type'])
 
     @browsing
     def test_current_context_is_excluded(self, browser):
