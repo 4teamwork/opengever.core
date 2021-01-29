@@ -10,8 +10,9 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
 from opengever.ogds.models.team import Team
-from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
@@ -469,7 +470,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             Builder('tasktemplate')
             .titled(u'Sag ich nicht')
             .having(**{
-                'issuer': 'responsible',
+                'issuer': INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
                 'responsible_client': 'fa',
                 'responsible': 'robert.ziegler',
                 'deadline': 10,
@@ -591,7 +592,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         template_2 = create(Builder('tasktemplate')
                             .titled(u'Noch was.')
-                            .having(issuer='responsible',
+                            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
                                     responsible_client='fa',
                                     responsible='robert.ziegler',
                                     deadline=10,)
@@ -632,7 +633,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         notebook = create(Builder('tasktemplate')
                           .titled(u'Notebook einrichten.')
-                          .having(issuer='responsible',
+                          .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
                                   responsible_client='fa',
                                   responsible='robert.ziegler',
                                   deadline=10)
@@ -640,7 +641,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         user_accounts = create(Builder('tasktemplate')
                                .titled(u'User Accounts erstellen.')
-                               .having(issuer='responsible',
+                               .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
                                        responsible_client='fa',
                                        responsible='robert.ziegler',
                                        deadline=10)
@@ -842,14 +843,12 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.login(self.regular_user, browser)
         IDossier(self.dossier).responsible = self.secretariat_user.getId()
 
-        interactive_responsible = '{}:responsible'.format(INTERACTIVE_USERS)
-
         data = {
             'tasktemplatefolder': self._get_task_template_item(browser),
             'tasktemplates': [
                 {
                     '@id': self.tasktemplate.absolute_url(),
-                    'responsible': interactive_responsible
+                    'responsible': INTERACTIVE_ACTOR_RESPONSIBLE.get('id'),
                 }
             ],
             'start_immediately': True,
@@ -878,14 +877,12 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         self.login(self.regular_user, browser)
         IDossier(self.dossier).responsible = self.secretariat_user.getId()
 
-        interactive_responsible = '{}:current_user'.format(INTERACTIVE_USERS)
-
         data = {
             'tasktemplatefolder': self._get_task_template_item(browser),
             'tasktemplates': [
                 {
                     '@id': self.tasktemplate.absolute_url(),
-                    'responsible': interactive_responsible
+                    'responsible': INTERACTIVE_ACTOR_CURRENT_USER.get('id')
                 }
             ],
             'start_immediately': True,
@@ -916,7 +913,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         template_2 = create(Builder('tasktemplate')
                             .titled(u'Notebook einrichten.')
-                            .having(issuer='responsible',
+                            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
                                     responsible_client='fa',
                                     responsible='robert.ziegler',
                                     deadline=10,)

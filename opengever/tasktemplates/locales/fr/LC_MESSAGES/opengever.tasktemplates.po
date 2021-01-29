@@ -88,16 +88,6 @@ msgstr "Saisie d'une instruction de travail détaillée ou d'un commentaire."
 msgid "help_title"
 msgstr "Nom de la tâche."
 
-#. Default: "Current user"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_current_user"
-msgstr "Collaborateur"
-
-#. Default: "Responsible"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_responsible"
-msgstr "Responsable"
-
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py

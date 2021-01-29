@@ -49,8 +49,8 @@ Bei jeder ausgewählten Aufgabenvorlage kann der Auftragnehmer überschrieben
 werden. Der Auftragnehmer kann durch einen interaktiven Benutzer ersetzt
 werden. Es gibt dabei folgende Möglichkeiten:
 
-- ``interactive_users:current_user``: Der aktuelle Benutzer
-- ``interactive_users:responsible``:  Die Federführende Person des Dossiers, in dem die Aufgabe erstellt wird
+- ``interactive_actor:current_user``: Der aktuelle Benutzer
+- ``interactive_actor:responsible``:  Die Federführende Person des Dossiers, in dem die Aufgabe erstellt wird
 
 
 **Beispiel-Request**:
@@ -65,7 +65,7 @@ werden. Es gibt dabei folgende Möglichkeiten:
             "tasktemplates": [
                 {
                     "@id": "http://localhost:8080/fd/vorlagen/tasktemplatefolder-1/tasktemplate-1",
-                    "responsible": "interactive_users:current_user"
+                    "responsible": "interactive_actor:current_user"
                 }
             ],
             "start_immediately": false

@@ -21,7 +21,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.dossier_responsible)
-        form.find_widget('Issuer').fill(u'responsible')
+        form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE.get('id'))
 
         browser.click_on('Save')
         self.assertEquals(['Item created'], info_messages())
@@ -30,7 +30,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
         self.assertEquals(u'robert.ziegler', tasktemplate.responsible)
         self.assertEquals('fa', tasktemplate.responsible_client)
-        self.assertEquals(u'responsible', tasktemplate.issuer)
+        self.assertEquals(INTERACTIVE_ACTOR_RESPONSIBLE.get('id'), tasktemplate.issuer)
         self.assertEquals(10, tasktemplate.deadline)
 
     def test_tasktemplate_is_in_active_state_per_default(self):
@@ -96,7 +96,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('team:1')
-        form.find_widget('Issuer').fill(u'responsible')
+        form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE.get('id'))
 
         browser.click_on('Save')
         self.assertEquals(['Item created'], info_messages())
@@ -105,7 +105,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
         self.assertEquals(u'team:1', tasktemplate.responsible)
         self.assertEquals('fa', tasktemplate.responsible_client)
-        self.assertEquals(u'responsible', tasktemplate.issuer)
+        self.assertEquals(INTERACTIVE_ACTOR_RESPONSIBLE.get('id'), tasktemplate.issuer)
         self.assertEquals(10, tasktemplate.deadline)
 
     @browsing
@@ -203,7 +203,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
              'Deadline in Days': u'10'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Issuer').fill(u'responsible')
+        form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE.get('id'))
 
         browser.click_on('Save')
         self.assertEquals(['Item created'], info_messages())

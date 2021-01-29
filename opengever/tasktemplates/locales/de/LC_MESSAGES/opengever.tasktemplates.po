@@ -86,16 +86,6 @@ msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein."
 msgid "help_title"
 msgstr "Der Name der Aufgabe."
 
-#. Default: "Current user"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_current_user"
-msgstr "Sachbearbeiter"
-
-#. Default: "Responsible"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_responsible"
-msgstr "Federführender"
-
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py

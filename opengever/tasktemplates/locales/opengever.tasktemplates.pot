@@ -89,16 +89,6 @@ msgstr ""
 msgid "help_title"
 msgstr ""
 
-#. Default: "Current user"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_current_user"
-msgstr ""
-
-#. Default: "Responsible"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_responsible"
-msgstr ""
-
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py

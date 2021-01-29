@@ -104,18 +104,6 @@ msgstr "Enter detailed instructions or a comment describing the work"
 msgid "help_title"
 msgstr "The task's title"
 
-#. German translation: Sachbearbeiter
-#. Default: "Current user"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_current_user"
-msgstr "Logged in user"
-
-#. German translation: Federführender
-#. Default: "Responsible"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_responsible"
-msgstr "Responsible"
-
 #. German translation: Frist in Tagen
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
