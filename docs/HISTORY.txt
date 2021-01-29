@@ -8,6 +8,7 @@ Changelog
 - Do not escape boolean filters in solr endpoints. [tinagerber]
 - Include blocked_local_roles in serialization of dossiers and repofolders. [tinagerber]
 - Index blocked_local_roles in solr and allow field in @listing endpoint. [tinagerber]
+- Add link_to_workspace folder action. [tinagerber]
 - Return only badge notifications in @notifications endpoint. [tinagerber]
 - Only show create_proposal action on dossiers. [tinagerber]
 - Enable Usersnap by default in SaaS policy template. [lgraf]

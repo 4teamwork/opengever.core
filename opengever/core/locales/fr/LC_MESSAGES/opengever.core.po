@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-29 08:14+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -91,6 +91,7 @@ msgid "Create Disposition"
 msgstr "Créer une offre d'archivage"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210126165317_update_create_proposal_action/actions.xml
 msgid "Create Proposal"
 msgstr "Créer une requête"
 
@@ -146,6 +147,11 @@ msgstr "Boîte de réception"
 #: ./opengever/core/profiles/default/types/opengever.inbox.container.xml
 msgid "Inbox Container"
 msgstr "Conteneur de la boîte de réception"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210129083214_add_link_to_workspace_action/actions.xml
+msgid "Link to workspace"
+msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200310081410_add_list_workspaces_action/actions.xml
