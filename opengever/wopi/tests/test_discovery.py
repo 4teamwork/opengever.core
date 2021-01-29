@@ -13,7 +13,7 @@ import time
 
 
 class MockRegistry:
-    def forInterface(self, interface):
+    def forInterface(self, interface, check=True, omit=(), prefix=None):
         records = Mock()
         records.get.return_value = 'https://officeonline/hosting/discovery'
         return records
