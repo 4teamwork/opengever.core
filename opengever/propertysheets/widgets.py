@@ -70,13 +70,10 @@ class PropertySheetWiget(Widget):
         if definition is None:
             return
 
-        schema_class = definition.schema_class
         obj = self.value or dict()
         sheet_values = obj.get(slot_name, {})
 
-        for name, widget in zip(
-            getFieldNamesInOrder(schema_class), self.widgets
-        ):
+        for name, widget in zip(definition.get_fieldnames(), self.widgets):
             converter = IDataConverter(widget)
             sheet_value = sheet_values.get(name, None)
             widget.value = converter.toWidgetValue(sheet_value)
