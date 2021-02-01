@@ -509,7 +509,7 @@ msgstr "Date"
 #. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_delivery_date"
-msgstr "Date of delivery"
+msgstr "Sent date"
 
 #. German translation: Beschreibung
 #. Default: "Description"
@@ -702,7 +702,7 @@ msgstr "Disclosure status"
 #. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_receipt_date"
-msgstr "Date of receipt"
+msgstr "Received date"
 
 #. German translation: Aktenzeichen
 #. Default: "Reference Number"
