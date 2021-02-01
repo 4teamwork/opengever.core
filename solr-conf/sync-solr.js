@@ -274,6 +274,7 @@ function processAdd(cmd) {
     updateDocument = fillPayload(updateDocument, doc, "Title");
     updateDocument = fillPayload(updateDocument, doc, "portal_type");
     updateDocument = fillPayload(updateDocument, doc, "trashed");
+    updateDocument = fillPayload(updateDocument, doc, "path");
     updateDocument = fillPayload(
       updateDocument,
       doc,
