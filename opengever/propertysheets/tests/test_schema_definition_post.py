@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from zope import schema
+from zope.schema import getFieldNamesInOrder
 import json
 
 
@@ -15,7 +16,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_defaults(self, browser):
         self.login(self.manager, browser)
 
-        data = {"fields": {"foo": {"field_type": "text"}}}
+        data = {"fields": [{"name": "foo", "field_type": "text"}]}
         browser.open(
             view="@propertysheets/question",
             method="POST",
@@ -43,14 +44,15 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.login(self.manager, browser)
 
         data = {
-            "fields": {
-                "foo": {
+            "fields": [
+                {
+                    "name": "foo",
                     "field_type": "bool",
                     "title": u"Y/N",
                     "description": u"yes or no",
                     "required": True,
                 }
-            },
+            ],
             "assignments": [u"IDocumentMetadata.document_type.question"],
         }
         browser.open(
@@ -107,19 +109,72 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertTrue(field.required)
 
     @browsing
+    def test_property_sheet_schema_definition_post_supports_all_field_types(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein"
+                },
+                {
+                    "name": "wahl",
+                    "field_type": u"choice",
+                    "title": u"w\xe4hl was",
+                    "values": [u"eins", u"zwei"]
+                },
+                {
+                    "name": "nummer",
+                    "field_type": u"int",
+                    "title": u"zahl"
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile"
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual(1, len(storage.list()))
+        definition = storage.get("meinschema")
+
+        self.assertEqual(
+            ["yn", "wahl", "nummer", "text", "zeiletext"],
+            definition.get_fieldnames()
+        )
+
+    @browsing
     def test_property_sheet_schema_definition_post_replaces_existing_schema(self, browser):
         self.login(self.manager, browser)
         create(Builder("property_sheet_schema").named("question"))
 
         data = {
-            "fields": {
-                "foo": {
+            "fields": [
+                {
+                    "name": "foo",
                     "field_type": "bool",
                     "title": u"Y/N",
                     "description": u"yes or no",
                     "required": True,
                 }
-            },
+            ],
         }
         browser.open(
             view="@propertysheets/question",
@@ -142,7 +197,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.login(self.manager, browser)
 
         data = {
-            "fields": {"foo": {"field_type": "bool"}},
+            "fields": [{"name": "foo", "field_type": "bool"}],
             "assignments": [u"fail"],
         }
         with browser.expect_http_error(400):
@@ -176,7 +231,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         data = {
-            "fields": {"foo": {"field_type": "bool"}},
+            "fields": [{"name": "foo", "field_type": "bool"}],
             "assignments": [u"IDocumentMetadata.document_type.question"],
         }
         with browser.expect_http_error(400):
@@ -204,7 +259,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     ):
         self.login(self.manager, browser)
 
-        data = {"fields": {"foo": {"field_type": "bool"}}}
+        data = {"fields": [{"name": "foo", "field_type": "bool"}]}
         with browser.expect_http_error(400):
             browser.open(
                 view="@propertysheets",
@@ -230,7 +285,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     ):
         self.login(self.manager, browser)
 
-        data = {"fields": {"foo": {"field_type": "bool"}}}
+        data = {"fields": [{"name": "foo", "field_type": "bool"}]}
         with browser.expect_http_error(400):
             browser.open(
                 view="@propertysheets/in-val.id",
@@ -277,10 +332,64 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual([], storage.list())
 
     @browsing
+    def test_property_sheet_schema_definition_post_requires_valid_fields_type(
+        self, browser
+    ):
+        self.login(self.manager, browser)
+
+        data = {"fields": {"foo": None}}
+        with browser.expect_http_error(400):
+            browser.open(
+                view="@propertysheets/foo",
+                method="POST",
+                data=json.dumps(data),
+                headers=self.api_headers,
+            )
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"Missing or invalid field definitions.",
+                "type": "BadRequest",
+            },
+            browser.json,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual([], storage.list())
+
+    @browsing
+    def test_property_sheet_schema_definition_post_prevents_duplicate_field_name(
+        self, browser
+    ):
+        self.login(self.manager, browser)
+
+        dupe1 = {"name": "dupe", "field_type": "text"}
+        dupe2 = {"name": "foo", "field_type": "text"}
+        data = {"fields": [dupe1, dupe1, dupe2, dupe2]}
+        with browser.expect_http_error(400):
+            browser.open(
+                view="@propertysheets/foo",
+                method="POST",
+                data=json.dumps(data),
+                headers=self.api_headers,
+            )
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"Duplicate fields 'dupe', 'foo'.",
+                "type": "BadRequest",
+            },
+            browser.json,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual([], storage.list())
+
+    @browsing
     def test_property_sheet_schema_definition_post_invalid_type(self, browser):
         self.login(self.manager, browser)
 
-        data = {"fields": {"foo": {"field_type": "invalid"}}}
+        data = {"fields": [{"name": "foo", "field_type": "invalid"}]}
         with browser.expect_http_error(400):
             browser.open(
                 view="@propertysheets/question",
@@ -301,7 +410,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_non_managers_cannot_post(self, browser):
         self.login(self.administrator, browser)
 
-        data = {"fields": {"foo": {"field_type": "text"}}}
+        data = {"fields": [{"name": "foo", "field_type": "text"}]}
         with browser.expect_unauthorized():
             browser.open(
                 view="@propertysheets/test",

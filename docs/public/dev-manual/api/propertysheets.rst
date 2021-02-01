@@ -95,14 +95,15 @@ Assignment-Slot zuzuweisen ist im Moment nicht unterstützt.
   Accept: application/json
 
   {
-    "fields": {
-      "yesorno": {
+    "fields": [
+      {
+        "name": "yesorno",
         "field_type": "bool",
         "title": "Y/N",
         "description": "yes or no",
         "required": true
       }
-    },
+    ],
     "assignments": ["IDocumentMetadata.document_type.question"]
   }
 

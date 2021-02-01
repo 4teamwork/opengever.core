@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="opengever.propertysheets"
+      tal:omit-tag="">
+
+  <div class="noCustomPropertyFields" tal:condition="not: view/widgets" i18n:translate="">
+    No custom properties are available.
+  </div>
+
+  <tal:block repeat="widget view/widgets" i18n:domain="plone">
+
+    <div
+       i18n:domain="plone"
+       tal:define="fieldname_class string:kssattr-fieldname-${widget/name};"
+       tal:attributes="class string:field z3cformInlineValidation ${fieldname_class};
+                       data-fieldname widget/name;
+                       id string:formfield-${widget/id};">
+
+        <label class="horizontal" for="${widget/id}" tal:content="widget/label">
+        </label>
+        <div tal:content="structure widget/render" id="${widget/id}">
+        </div>
+
+    </div>
+  </tal:block>
+
+</html>
+

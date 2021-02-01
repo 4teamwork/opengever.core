@@ -21,6 +21,13 @@ class PropertySheetSchemaStorage(object):
 
         return name in storage
 
+    def __len__(self):
+        annotations = IAnnotations(self.context)
+        return len(annotations.get(self.ANNOTATIONS_KEY, {}))
+
+    def __nonzero__(self):
+        return bool(len(self))
+
     def list(self):
         annotations = IAnnotations(self.context)
 

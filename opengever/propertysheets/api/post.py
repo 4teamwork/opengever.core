@@ -26,12 +26,18 @@ def make_field_types_vocabulary(context):
 
 class IFieldDefinition(model.Schema):
 
+    name = schema.TextLine(required=True)
     field_type = schema.Choice(
         required=True, source=make_field_types_vocabulary
     )
     title = schema.TextLine(required=False)
     description = schema.TextLine(required=False)
     required = schema.Bool(required=False)
+    values = schema.List(
+        default=None,
+        value_type=schema.TextLine(),
+        required=False,
+    )
 
 
 @implementer(IPublishTraverse)
@@ -41,7 +47,7 @@ class PropertySheetsPost(Service):
 
     POST http://localhost:8080/fd/@propertysheets/question HTTP/1.1
     {
-        "fields": {"title": {"type": "text", "required": true}},
+        "fields": [{"name": "foo", field_type": "text", "required": true}],
         "assignments": ["IDocumentMetadata.document_type.question"]
     }
     """
@@ -55,23 +61,21 @@ class PropertySheetsPost(Service):
         return self
 
     def reply(self):
-        if len(self.params) != 1:
-            raise BadRequest(u"Missing parameter sheet_name.")
-
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        data = json_body(self.request)
+        if len(self.params) != 1:
+            raise BadRequest(u"Missing parameter sheet_name.")
         sheet_name = self.params.pop()
-
         if not isidentifier(sheet_name):
             raise BadRequest(u"The name '{}' is invalid.".format(sheet_name))
 
+        data = json_body(self.request)
         fields = data.get("fields")
-        if not fields or not hasattr(fields, "items"):
+        if not fields or not isinstance(fields, list):
             raise BadRequest(u"Missing or invalid field definitions.")
 
         errors = []
-        for name, field_data in fields.items():
+        for field_data in fields:
             field_errors = get_schema_validation_errors(
                 self.context, field_data, IFieldDefinition
             )
@@ -79,6 +83,17 @@ class PropertySheetsPost(Service):
                 errors.extend(field_errors)
         if errors:
             raise BadRequest(errors)
+
+        seen = set()
+        duplicates = []
+        for name in [each["name"] for each in fields]:
+            if name in seen:
+                duplicates.append(name)
+            seen.add(name)
+        if duplicates:
+            raise BadRequest(
+                u"Duplicate fields '{}'.".format("', '".join(duplicates))
+            )
 
         assignments = data.get("assignments")
         if assignments is not None:
@@ -100,13 +115,15 @@ class PropertySheetsPost(Service):
         schema_definition = PropertySheetSchemaDefinition.create(
             sheet_name, assignments=assignments
         )
-        for name, field_data in fields.items():
+        for field_data in fields:
+            name = field_data["name"]
             field_type = field_data["field_type"]
             title = field_data.get("title", name)
             description = field_data.get("description", u"")
             required = field_data.get("required", False)
+            values = field_data.get("values", None)
             schema_definition.add_field(
-                field_type, name, title, description, required
+                field_type, name, title, description, required, values
             )
 
         self.storage.save(schema_definition)

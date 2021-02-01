@@ -13,6 +13,7 @@ from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
 from zope.component import getUtility
+from zope.schema import getFieldNamesInOrder
 from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
 from zope.schema.interfaces import IVocabularyFactory
@@ -137,6 +138,14 @@ class PropertySheetSchemaDefinition(object):
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
 
+    def get_fields(self):
+        """Return a list of (name, field) tuples in native schema order."""
+        return getFieldsInOrder(self.schema_class)
+
+    def get_fieldnames(self):
+        """Return a list of fieldnames in native schema order."""
+        return getFieldNamesInOrder(self.schema_class)
+
     def get_json_schema(self):
         schema_info = get_property_sheet_schema(self.schema_class)
         schema_info["assignments"] = IJsonCompatible(self.assignments)
@@ -159,7 +168,7 @@ class PropertySheetSchemaDefinition(object):
                 raise WrongType("Only 'dict' is allowed for properties.")
             data_to_validate = deepcopy(data)
 
-        for name, field in getFieldsInOrder(self.schema_class):
+        for name, field in self.get_fields():
             value = data_to_validate.pop(name, None)
             field.validate(value)
 

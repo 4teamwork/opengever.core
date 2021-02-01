@@ -1,26 +1,22 @@
 from opengever.propertysheets import _
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
-from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.types.adapters import DefaultJsonSchemaProvider
 from plone.restapi.types.interfaces import IJsonSchemaProvider
-from plone.schema import IJSONField
-from plone.schema import JSONField
-from plone.schema.browser.jsonfield import JSONDataConverter
-from z3c.form.interfaces import IDataConverter
-from z3c.form.interfaces import IWidget
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.schema import Field
 from zope.schema import ValidationError
+from zope.schema.interfaces import IField
 
 
-class IPropertySheetField(IJSONField):
+class IPropertySheetField(IField):
     pass
 
 
 @implementer(IPropertySheetField)
-class PropertySheetField(JSONField):
+class PropertySheetField(Field):
     """Handle custom properties and validate them against their corresponding
     property sheet schema.
 
@@ -88,15 +84,16 @@ class PropertySheetField(JSONField):
             value, mandatory_sheet
         )
 
-    def get_active_assignment_slot(self):
+    def get_active_assignment_slot(self, context=None):
         """Return assignment slot currently considered active."""
         request = getRequest()
 
         value_name = None
+        context = context or self.context
         if self.request_key in request:
             value_name = request.get(self.request_key)[0]
-        elif self.context:
-            value_name = getattr(self.context, self.attribute_name)
+        elif context:
+            value_name = getattr(context, self.attribute_name, None)
 
         if not value_name:
             return None
@@ -181,14 +178,3 @@ class PropertySheetFieldSchemaProvider(DefaultJsonSchemaProvider):
 
     def get_widget_params(self):
         return None
-
-
-@adapter(IPropertySheetField, IWidget)
-@implementer(IDataConverter)
-class PropertySheetFieldDataConverter(JSONDataConverter):
-
-    def toWidgetValue(self, value):
-        """Make sure to convert persistent dicts to json compatible data."""
-
-        value = json_compatible(value)
-        return super(PropertySheetFieldDataConverter, self).toWidgetValue(value)
