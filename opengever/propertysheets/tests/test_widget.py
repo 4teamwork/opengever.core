@@ -147,6 +147,105 @@ class TestPropertySheetWidget(IntegrationTestCase):
         )
 
     @browsing
+    def test_switch_to_previously_set_fields_uses_previous_values(self, browser):
+        self.login(self.manager, browser)
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+        )
+        IDocumentCustomProperties(self.document).custom_properties = {
+                "IDocumentMetadata.document_type.question": {
+                    "num": 3,
+                    "textline": u"b\xe4\xe4",
+                }
+            }
+        self.document.document_type = u"contract"
+
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view="@@edit")
+
+        # we switch the document_type to question, which should still be valid
+        # as it should re-use the values available on the document
+        browser.fill({"Document type": "question"})
+        browser.click_on("Save")
+
+        # the form should be saved in the initial request
+        self.assertEquals(["Changes saved"], info_messages())
+        # the custom properties should remain unchanged
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "num": 3,
+                    "textline": u"b\xe4\xe4",
+                }
+            },
+            IDocumentCustomProperties(self.document).custom_properties,
+        )
+
+    @browsing
+    def test_switch_to_previously_set_fields_handles_changes_to_schema(self, browser):
+        self.login(self.manager, browser)
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+        )
+        IDocumentCustomProperties(self.document).custom_properties = {
+                "IDocumentMetadata.document_type.question": {
+                    "textline": u"b\xe4\xe4",
+                    "iwasremoved": 123,
+                }
+            }
+        self.document.document_type = u"contract"
+
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view="@@edit")
+
+        # we switch the document_type to question, which should load the
+        # the partially available data for `textline`
+        browser.fill({"Document type": "question"})
+        browser.click_on("Save")
+
+        # the form should not validate as the schema has changed and validation
+        # errors occur
+        self.assertEqual(["There were some errors."], error_messages())
+
+        # the num field renders an error message
+        field = browser.css(
+            "#formfield-custom_property-IDocumentMetadata_document_type_question-num"
+        ).first
+        self.assertEqual(
+            'Required input is missing.',
+            field.css(".fieldErrorBox").first.text
+        )
+        # the textline field does not render an error message and contains
+        # the correct value
+        field = browser.css(
+            "#formfield-custom_property-IDocumentMetadata_document_type_question-textline"
+        ).first
+        self.assertEqual('', field.css(".fieldErrorBox").first.text)
+        self.assertEqual(u"b\xe4\xe4", field.css("input").first.value)
+
+        browser.fill({"Number": "4"}).save()
+
+        # the custom properties should be set accoring to the currently active
+        # property sheet
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "num": 4,
+                    "textline": u"b\xe4\xe4",
+                }
+            },
+            IDocumentCustomProperties(self.document).custom_properties,
+        )
+
+    @browsing
     def test_render_info_message_when_no_fields_available(self, browser):
         self.login(self.manager, browser)
         create(
