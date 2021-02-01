@@ -58,6 +58,7 @@ class PropertySheetWiget(Widget):
             widget.name = identifier
             widget.id = identifier
             widget.mode = self.mode
+
             widget.update()  # update is required to set up terms for sequences
             self.widgets.append(widget)
 
@@ -91,6 +92,9 @@ class PropertySheetWiget(Widget):
         sheet_values = {}
         found_request_value = False
 
+        obj = self.value or dict()
+        sheet_values = obj.get(slot_name, {})
+
         for name, widget in zip(definition.get_fieldnames(), self.widgets):
             value = widget.field.missing_value
             try:
@@ -99,6 +103,10 @@ class PropertySheetWiget(Widget):
                 if raw is not default:
                     found_request_value = True
                     value = IDataConverter(widget).toFieldValue(raw)
+                else:
+                    # if there is no request value try falling back to the
+                    # existing value or then the default missing value
+                    value = sheet_values.get(name, widget.field.missing_value)
                 validator = getMultiAdapter(
                     (
                         self.context,
@@ -127,6 +135,7 @@ class PropertySheetWiget(Widget):
                     widget.error = view
                 errors += (view,)
             else:
+                widget.value = IDataConverter(widget).toWidgetValue(value)
                 sheet_values[name] = value
 
         if self.setErrors and errors:
