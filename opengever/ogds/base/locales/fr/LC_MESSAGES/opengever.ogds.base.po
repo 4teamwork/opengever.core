@@ -39,7 +39,7 @@ msgstr "Boîte de réception"
 #. Default: "Current user"
 #: ./opengever/ogds/base/actor.py
 msgid "interactive_actor_current_user"
-msgstr "Collaborateur"
+msgstr "Utilisateur actif"
 
 #. Default: "Responsible"
 #: ./opengever/ogds/base/actor.py
