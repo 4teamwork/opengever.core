@@ -41,7 +41,7 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
 
     def __setattr__(self, name, value):
         if name not in self.__dict__['schema']:
-            super(AnnotationsFactoryImpl, self).__setattr__(name, value)
+            super(CustomPropertiesStorageImpl, self).__setattr__(name, value)
         else:
             prefixed_name = self.__dict__['prefix'] + name
             if value is None:
