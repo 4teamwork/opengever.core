@@ -73,7 +73,7 @@ class TestCustomPropertiesStorage(FunctionalTestCase):
 
     def test_custom_property_storage_converts_values_to_persistent(self):
         self.props.custom_properties = {"foo": 123}
-        self.assertIsInstance(self.props.custom_properties, PersistentDict)
+        self.assertIsInstance(self.annotations[self.key], PersistentDict)
 
     def test_custom_property_storage_updates_existing_values(self):
         self.props.custom_properties = {"foo": 123}
