@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-29 12:29+0000\n"
 "PO-Revision-Date: 2017-12-03 11:29+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/fr/>\n"
@@ -35,6 +35,16 @@ msgstr "Oui"
 #: ./opengever/ogds/base/sources.py
 msgid "inbox_label"
 msgstr "Boîte de réception"
+
+#. Default: "Current user"
+#: ./opengever/ogds/base/actor.py
+msgid "interactive_actor_current_user"
+msgstr "Utilisateur actif"
+
+#. Default: "Responsible"
+#: ./opengever/ogds/base/actor.py
+msgid "interactive_actor_responsible"
+msgstr "Responsable"
 
 #. Default: "Active"
 #: ./opengever/ogds/base/browser/team_forms.py

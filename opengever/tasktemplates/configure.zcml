@@ -22,11 +22,6 @@
   <include package=".content" />
 
   <utility
-      factory=".vocabularies.ResponsibleOrgUnitVocabularyFactory"
-      name="opengever.tasktemplates.ResponsibleOrgUnitVocabulary"
-      />
-
-  <utility
       factory=".vocabularies.ActiveTasktemplatefoldersVocabulary"
       name="opengever.tasktemplates.active_tasktemplatefolders"
       />

@@ -11,8 +11,8 @@ from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import assets
@@ -524,8 +524,8 @@ class TaskTemplateBuilder(DexterityBuilder):
         super(TaskTemplateBuilder, self).__init__(session)
 
         self.arguments = {
-            'responsible_client': INTERACTIVE_USERS,
-            'responsible': 'current_user',
+            'responsible_client': None,
+            'responsible': INTERACTIVE_ACTOR_CURRENT_USER_ID,
             'deadline': 5,
             'issuer': TEST_USER_ID}
 

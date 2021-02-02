@@ -3,11 +3,11 @@ from ftw.table.interfaces import ITableSource
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview import GeverCatalogTableSource
 from opengever.tabbedview.helper import linked
+from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.interfaces import IGeverCatalogTableSourceConfig
 from opengever.task import _ as taskmsg
 from opengever.task.helper import task_type_helper
 from opengever.tasktemplates import _
-from opengever.tasktemplates.browser.helper import interactive_user_helper
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone import api
 from plone.dexterity.browser.view import DefaultView
@@ -91,12 +91,12 @@ class TaskTemplates(BaseCatalogListingTab):
         {'column': 'issuer',
          'column_title': _(u'label_issuer', 'Issuer'),
          'sortable': False,
-         'transform': interactive_user_helper},
+         'transform': readable_ogds_author},
 
         {'column': 'responsible',
          'column_title': _(u'label_responsible_task', default=u'Responsible'),
          'sortable': False,
-         'transform': interactive_user_helper},
+         'transform': readable_ogds_author},
 
         {'column': 'period',
          'sortable': False,
@@ -129,8 +129,8 @@ class View(DefaultView):
 
     def responsible_link(self):
         task = ITaskTemplate(self.context)
-        return interactive_user_helper(task, task.responsible)
+        return readable_ogds_author(task, task.responsible)
 
     def issuer_link(self):
         task = ITaskTemplate(self.context)
-        return interactive_user_helper(task, task.issuer)
+        return readable_ogds_author(task, task.issuer)

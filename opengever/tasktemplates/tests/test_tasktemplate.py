@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 
@@ -20,7 +21,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.dossier_responsible)
-        form.find_widget('Issuer').fill(u'responsible')
+        form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
 
         browser.click_on('Save')
         self.assertEquals(['Item created'], info_messages())
@@ -29,7 +30,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
         self.assertEquals(u'robert.ziegler', tasktemplate.responsible)
         self.assertEquals('fa', tasktemplate.responsible_client)
-        self.assertEquals(u'responsible', tasktemplate.issuer)
+        self.assertEquals(INTERACTIVE_ACTOR_RESPONSIBLE_ID, tasktemplate.issuer)
         self.assertEquals(10, tasktemplate.deadline)
 
     def test_tasktemplate_is_in_active_state_per_default(self):
@@ -95,7 +96,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('team:1')
-        form.find_widget('Issuer').fill(u'responsible')
+        form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
 
         browser.click_on('Save')
         self.assertEquals(['Item created'], info_messages())
@@ -104,8 +105,32 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
         self.assertEquals(u'team:1', tasktemplate.responsible)
         self.assertEquals('fa', tasktemplate.responsible_client)
-        self.assertEquals(u'responsible', tasktemplate.issuer)
+        self.assertEquals(INTERACTIVE_ACTOR_RESPONSIBLE_ID, tasktemplate.issuer)
         self.assertEquals(10, tasktemplate.deadline)
+
+    @browsing
+    def test_interactive_actors_can_be_selected_as_responsible_and_issuer(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add('Task Template')
+        browser.fill(
+            {'Title': 'Arbeitsplatz einrichten.',
+             'Task type': 'comment',
+             'Deadline in Days': u'10'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
+        form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
+
+        browser.click_on('Save')
+        self.assertEquals(['Item created'], info_messages())
+
+        tasktemplate = self.tasktemplatefolder.listFolderContents()[-1]
+
+        self.assertIsNone(tasktemplate.responsible_client)
+        self.assertEquals('interactive_actor:responsible', tasktemplate.responsible)
+        self.assertEquals('interactive_actor:responsible', tasktemplate.issuer)
 
     @browsing
     def test_deleting_a_tasktemplatefolder_is_possible(self, browser):
@@ -178,7 +203,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
              'Deadline in Days': u'10'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Issuer').fill(u'responsible')
+        form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
 
         browser.click_on('Save')
         self.assertEquals(['Item created'], info_messages())

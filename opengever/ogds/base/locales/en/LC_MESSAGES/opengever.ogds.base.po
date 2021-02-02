@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-18 11:48+0000\n"
+"POT-Creation-Date: 2021-01-29 12:29+0000\n"
 "PO-Revision-Date: 2016-07-22 16:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
@@ -39,6 +39,16 @@ msgstr "Yes"
 #: ./opengever/ogds/base/sources.py
 msgid "inbox_label"
 msgstr "Inbox: ${client}"
+
+#. Default: "Current user"
+#: ./opengever/ogds/base/actor.py
+msgid "interactive_actor_current_user"
+msgstr "Logged in user"
+
+#. Default: "Responsible"
+#: ./opengever/ogds/base/actor.py
+msgid "interactive_actor_responsible"
+msgstr "Responsible"
 
 #. German translation: Aktiv
 #. Default: "Active"

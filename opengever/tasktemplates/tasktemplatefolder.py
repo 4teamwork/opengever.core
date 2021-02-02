@@ -1,11 +1,13 @@
 from datetime import date
 from datetime import timedelta
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
-from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
@@ -148,7 +150,7 @@ class TaskTemplateFolderTrigger(object):
 
     def replace_interactive_actors(self, data):
         data['issuer'] = self.get_interactive_representative(data['issuer'])
-        if data['responsible_client'] == INTERACTIVE_USERS:
+        if ActorLookup(data['responsible']).is_interactive_actor():
             data['responsible_client'] = get_current_org_unit().id()
             data['responsible'] = self.get_interactive_representative(
                 data['responsible'])
@@ -159,11 +161,10 @@ class TaskTemplateFolderTrigger(object):
         `responsible`: the reponsible of the main dossier.
         `current_user`: the currently logged in user.
         """
-
-        if principal == 'responsible':
+        if principal == INTERACTIVE_ACTOR_RESPONSIBLE_ID:
             return IDossier(self.dossier.get_main_dossier()).responsible
 
-        elif principal == 'current_user':
+        elif principal == INTERACTIVE_ACTOR_CURRENT_USER_ID:
             return api.user.get_current().getId()
 
         else:

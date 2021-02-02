@@ -1,32 +1,11 @@
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.ogds.base.vocabularies import OrgUnitsVocabularyFactory
-from opengever.tasktemplates import _
-from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.browser.trigger import get_datamanger_key
 from plone import api
 from zope.component import getUtility
-from zope.globalrequest import getRequest
-from zope.i18n import translate
 from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-
-
-@implementer(IVocabularyFactory)
-class ResponsibleOrgUnitVocabularyFactory(OrgUnitsVocabularyFactory):
-    """Vocabulary of all orgunits extend by the "interactive users"
-    unit.
-    """
-
-    def key_value_provider(self):
-        yield (INTERACTIVE_USERS,
-               translate(_(u'client_interactive_users',
-                           default=u'Interactive users'),
-                         context=getRequest()))
-        org_units_vf = super(ResponsibleOrgUnitVocabularyFactory, self)
-        for item in org_units_vf.key_value_provider():
-            yield item
 
 
 @implementer(IVocabularyFactory)

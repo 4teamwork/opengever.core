@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-01-29 14:29+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -28,10 +28,6 @@ msgstr "Sequenziell"
 msgid "Title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "add tasktemplate"
-msgstr "Aufgabenvorlage hinzufügen"
-
 #. Default: "Cancel"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "button_cancel"
@@ -46,15 +42,6 @@ msgstr "Weiter"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "button_trigger"
 msgstr "Auslösen"
-
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "choose template"
-msgstr "Vorlage auswählen"
-
-#. Default: "Interactive users"
-#: ./opengever/tasktemplates/vocabularies.py
-msgid "client_interactive_users"
-msgstr "Interaktiver Benutzer"
 
 #. Default: "Immediately open the first task after creation."
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -98,26 +85,6 @@ msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein."
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_title"
 msgstr "Der Name der Aufgabe."
-
-#. Default: "Current user"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_current_user"
-msgstr "Sachbearbeiter"
-
-#. Default: "Responsible"
-#: ./opengever/tasktemplates/sources.py
-msgid "interactive_user_responsible"
-msgstr "Federführender"
-
-#. Default: "Continue"
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "label_continue"
-msgstr "Weiter"
-
-#. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "label_created"
-msgstr "Erstelldatum"
 
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
@@ -229,9 +196,9 @@ msgid "label_text"
 msgstr "Kommentar"
 
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/browser/templatefolders.py
+#: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_title"
 msgstr "Titel"
 
@@ -240,19 +207,12 @@ msgstr "Titel"
 msgid "label_yes"
 msgstr "Ja"
 
-#. Default: "You have not selected any templates"
-#: ./opengever/tasktemplates/browser/form.py
-msgid "message_no_templates_selected"
-msgstr "Sie haben keine Vorlagen ausgewählt."
-
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "message_tasks_created"
 msgstr "Alle Aufgaben aus gewähltem Standardablauf wurden erstellt."
 
 #. Default: "Currently there are no active task template folders registered."
-#: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "msg_no_active_tasktemplatefolders"
 msgstr "Zurzeit sind keine aktiven Standardabläufe hinterlegt."
@@ -261,7 +221,3 @@ msgstr "Zurzeit sind keine aktiven Standardabläufe hinterlegt."
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "preselected_yes"
 msgstr "Ja"
-
-#: ./opengever/tasktemplates/browser/form.pt
-msgid "select tasks"
-msgstr "Aufgaben auswählen"
