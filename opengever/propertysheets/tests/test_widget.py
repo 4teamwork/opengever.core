@@ -188,17 +188,22 @@ class TestPropertySheetWidget(IntegrationTestCase):
     @browsing
     def test_switch_to_previously_set_fields_handles_changes_to_schema(self, browser):
         self.login(self.manager, browser)
+        choices = ["two", "three"]
         create(
             Builder("property_sheet_schema")
             .named("schema1")
             .assigned_to_slots(u"IDocumentMetadata.document_type.question")
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field(
+                "choice", u"choose", u"Choose", u"", True, values=choices
+            )
         )
         IDocumentCustomProperties(self.document).custom_properties = {
                 "IDocumentMetadata.document_type.question": {
                     "textline": u"b\xe4\xe4",
                     "iwasremoved": 123,
+                    "choose": "inolongerexist",
                 }
             }
         self.document.document_type = u"contract"
@@ -231,7 +236,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self.assertEqual('', field.css(".fieldErrorBox").first.text)
         self.assertEqual(u"b\xe4\xe4", field.css("input").first.value)
 
-        browser.fill({"Number": "4"}).save()
+        browser.fill({"Number": "4", "Choose": "two"}).save()
 
         # the custom properties should be set accoring to the currently active
         # property sheet
@@ -240,6 +245,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 "IDocumentMetadata.document_type.question": {
                     "num": 4,
                     "textline": u"b\xe4\xe4",
+                    "choose": "two",
                 }
             },
             IDocumentCustomProperties(self.document).custom_properties,
