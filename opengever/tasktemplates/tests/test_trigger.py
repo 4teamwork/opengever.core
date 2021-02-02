@@ -6,8 +6,8 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -304,7 +304,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
     def test_step3_interactive_responsibles_are_already_resolved(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.tasktemplate.responsible = INTERACTIVE_ACTOR_RESPONSIBLE.get('id')
+        self.tasktemplate.responsible = INTERACTIVE_ACTOR_RESPONSIBLE_ID
 
         browser.open(self.dossier, view='add-tasktemplate')
         browser.fill({'Task template folder': u'Verfahren Neuanstellung'})
@@ -321,7 +321,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
     def test_replace_interactive_responsible(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        ITaskTemplate(self.tasktemplate).responsible = INTERACTIVE_ACTOR_CURRENT_USER.get('id')
+        ITaskTemplate(self.tasktemplate).responsible = INTERACTIVE_ACTOR_CURRENT_USER_ID
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'])
 
@@ -333,7 +333,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
     def test_set_relateditems_on_every_subtask_when_selected(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        ITaskTemplate(self.tasktemplate).responsible = INTERACTIVE_ACTOR_CURRENT_USER.get('id')
+        ITaskTemplate(self.tasktemplate).responsible = INTERACTIVE_ACTOR_CURRENT_USER_ID
 
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'],

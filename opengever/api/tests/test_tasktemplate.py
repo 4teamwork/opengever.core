@@ -1,5 +1,5 @@
 from ftw.testbrowser import browsing
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.testing import SolrIntegrationTestCase
 import json
 
@@ -15,7 +15,7 @@ class TestTaskTemplatePost(SolrIntegrationTestCase):
             'title': 'Testtasktemplate',
             'task_type': {'token': 'information'},
             'deadline': 7,
-            'issuer': {'token': INTERACTIVE_ACTOR_RESPONSIBLE.get('id')},
+            'issuer': {'token': INTERACTIVE_ACTOR_RESPONSIBLE_ID},
             "responsible": {
                 'token': "fa:{}".format(self.secretariat_user.id),
                 'title': u'Finanzamt: K\xe4thi B\xe4rfuss'

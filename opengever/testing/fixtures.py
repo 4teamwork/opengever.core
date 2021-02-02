@@ -30,7 +30,7 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.storage import RoleAssignmentReportsStorage
 from opengever.mail.tests import MAIL_DATA
 from opengever.officeconnector.helpers import get_auth_plugin
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
@@ -735,7 +735,7 @@ class OpengeverContentFixture(object):
             Builder('tasktemplate')
             .titled(u'Arbeitsplatz einrichten.')
             .having(**{
-                'issuer': INTERACTIVE_ACTOR_RESPONSIBLE.get('id'),
+                'issuer': INTERACTIVE_ACTOR_RESPONSIBLE_ID,
                 'responsible_client': 'fa',
                 'responsible': 'robert.ziegler',
                 'deadline': 10,

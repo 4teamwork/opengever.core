@@ -10,8 +10,8 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.models.team import Team
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -470,7 +470,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             Builder('tasktemplate')
             .titled(u'Sag ich nicht')
             .having(**{
-                'issuer': INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
+                'issuer': INTERACTIVE_ACTOR_CURRENT_USER_ID,
                 'responsible_client': 'fa',
                 'responsible': 'robert.ziegler',
                 'deadline': 10,
@@ -592,7 +592,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         template_2 = create(Builder('tasktemplate')
                             .titled(u'Noch was.')
-                            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
+                            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER_ID,
                                     responsible_client='fa',
                                     responsible='robert.ziegler',
                                     deadline=10,)
@@ -633,7 +633,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         notebook = create(Builder('tasktemplate')
                           .titled(u'Notebook einrichten.')
-                          .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
+                          .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER_ID,
                                   responsible_client='fa',
                                   responsible='robert.ziegler',
                                   deadline=10)
@@ -641,7 +641,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         user_accounts = create(Builder('tasktemplate')
                                .titled(u'User Accounts erstellen.')
-                               .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
+                               .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER_ID,
                                        responsible_client='fa',
                                        responsible='robert.ziegler',
                                        deadline=10)
@@ -848,7 +848,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             'tasktemplates': [
                 {
                     '@id': self.tasktemplate.absolute_url(),
-                    'responsible': INTERACTIVE_ACTOR_RESPONSIBLE.get('id'),
+                    'responsible': INTERACTIVE_ACTOR_RESPONSIBLE_ID,
                 }
             ],
             'start_immediately': True,
@@ -882,7 +882,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             'tasktemplates': [
                 {
                     '@id': self.tasktemplate.absolute_url(),
-                    'responsible': INTERACTIVE_ACTOR_CURRENT_USER.get('id')
+                    'responsible': INTERACTIVE_ACTOR_CURRENT_USER_ID
                 }
             ],
             'start_immediately': True,
@@ -913,7 +913,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         template_2 = create(Builder('tasktemplate')
                             .titled(u'Notebook einrichten.')
-                            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER.get('id'),
+                            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER_ID,
                                     responsible_client='fa',
                                     responsible='robert.ziegler',
                                     deadline=10,)

@@ -1,5 +1,5 @@
 from opengever.ogds.base.actor import ActorLookup
-from opengever.ogds.base.actor import INTERACTIVE_ACTORS
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_IDS
 from opengever.ogds.base.actor import InteractiveActor
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
@@ -30,8 +30,8 @@ class TaskTemplateIssuerSource(UsersContactsInboxesSource):
         return self.terms
 
     def _extend_terms_with_interactive_users(self, query_string):
-        for actor_data in INTERACTIVE_ACTORS:
-            actor = InteractiveActor(actor_data.get('id'))
+        for actor_id in INTERACTIVE_ACTOR_IDS:
+            actor = InteractiveActor(actor_id)
             if query_string.lower() in actor.get_label().lower():
                 self.terms.insert(0, self.getTerm(actor.identifier))
 
@@ -61,8 +61,8 @@ class TaskResponsibleSource(AllUsersInboxesAndTeamsSource):
         return self.terms
 
     def _extend_terms_with_interactive_users(self, query_string):
-        for actor_data in INTERACTIVE_ACTORS:
-            actor = InteractiveActor(actor_data.get('id'))
+        for actor_id in INTERACTIVE_ACTOR_IDS:
+            actor = InteractiveActor(actor_id)
             if query_string.lower() in actor.get_label().lower():
                 self.terms.insert(0, self.getTerm(actor.identifier))
 

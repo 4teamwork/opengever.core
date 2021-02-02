@@ -4,9 +4,9 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import CommitteeActor
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
-from opengever.ogds.base.actor import INTERACTIVE_ACTORS_BY_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_IDS
 from opengever.ogds.base.actor import InteractiveActor
 from opengever.ogds.base.actor import NullActor
 from opengever.ogds.base.actor import OGDSGroupActor
@@ -163,12 +163,12 @@ class TestActorLookup(IntegrationTestCase):
     def test_interactive_actor_lookup(self):
         self.login(self.regular_user)
 
-        responsible_actor = Actor.lookup(INTERACTIVE_ACTOR_RESPONSIBLE.get('id'))
+        responsible_actor = Actor.lookup(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
         self.assertIsInstance(responsible_actor, InteractiveActor)
         self.assertEqual('Responsible',
                          responsible_actor.get_label())
 
-        current_user_actor = Actor.lookup(INTERACTIVE_ACTOR_CURRENT_USER.get('id'))
+        current_user_actor = Actor.lookup(INTERACTIVE_ACTOR_CURRENT_USER_ID)
         self.assertIsInstance(current_user_actor, InteractiveActor)
         self.assertEqual('Logged in user',
                          current_user_actor.get_label())
@@ -178,7 +178,7 @@ class TestActorLookup(IntegrationTestCase):
 
         unknown_interactive_actor = 'unknown'
 
-        self.assertNotIn(unknown_interactive_actor, INTERACTIVE_ACTORS_BY_ID)
+        self.assertNotIn(unknown_interactive_actor, INTERACTIVE_ACTOR_IDS)
 
         with self.assertRaises(ValueError) as error:
             InteractiveActor(unknown_interactive_actor)

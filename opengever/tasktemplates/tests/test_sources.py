@@ -1,4 +1,4 @@
-from opengever.ogds.base.actor import INTERACTIVE_ACTORS
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_IDS
 from opengever.ogds.base.tests import test_sources as base
 from opengever.tasktemplates.sources import TaskResponsibleSource
 from opengever.tasktemplates.sources import TaskTemplateIssuerSource
@@ -11,8 +11,8 @@ class TestTaskTemplateIssuerSource(base.TestUsersContactsInboxesSource):
         self.source = TaskTemplateIssuerSource(self.portal)
 
     def test_interactive_users_are_valid(self):
-        for actor in INTERACTIVE_ACTORS:
-            self.assertIn(actor.get('id'), self.source)
+        for actor_id in INTERACTIVE_ACTOR_IDS:
+            self.assertIn(actor_id, self.source)
 
     def test_search_interactive_users(self):
         result = self.source.search('Resp')
@@ -36,8 +36,8 @@ class TestTaskResponsibleSource(base.TestAllUsersInboxesAndTeamsSource):
         self.source = TaskResponsibleSource(self.portal)
 
     def test_interactive_users_are_valid(self):
-        for actor in INTERACTIVE_ACTORS:
-            self.assertIn(actor.get('id'), self.source)
+        for actor_id in INTERACTIVE_ACTOR_IDS:
+            self.assertIn(actor_id, self.source)
 
     def test_search_interactive_users(self):
         result = self.source.search('Resp')

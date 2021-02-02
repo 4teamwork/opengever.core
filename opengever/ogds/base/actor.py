@@ -13,7 +13,7 @@ The lookup results are
  - a TeamActor if the identifier starts with "team:"
  - a CommitteeActor if the identifier starts with "committee:"
  - a PloneUserActor or an OGDSUserActor for any other string.
- - an InteractiveActor if the identifier is one of the INTERACTIVE_ACTORS id
+ - an InteractiveActor if the identifier is one of the INTERACTIVE_ACTOR_IDS
 
 For known actor types use:
 >> Actor.user('my-identifier', user=user)
@@ -46,18 +46,17 @@ from zope.interface import implementer
 
 SYSTEM_ACTOR_ID = '__system__'
 
-INTERACTIVE_ACTOR_RESPONSIBLE = {
-    'id': 'interactive_actor:responsible',
-    'label': _(u'interactive_actor_responsible', default=u'Responsible')
-}
+INTERACTIVE_ACTOR_RESPONSIBLE_ID = 'interactive_actor:responsible'
+INTERACTIVE_ACTOR_CURRENT_USER_ID = 'interactive_actor:current_user'
 
-INTERACTIVE_ACTOR_CURRENT_USER = {
-    'id': 'interactive_actor:current_user',
-    'label': _(u'interactive_actor_current_user', default=u'Current user')
-}
+INTERACTIVE_ACTOR_IDS = [INTERACTIVE_ACTOR_RESPONSIBLE_ID,
+                         INTERACTIVE_ACTOR_CURRENT_USER_ID]
 
-INTERACTIVE_ACTORS = [INTERACTIVE_ACTOR_RESPONSIBLE, INTERACTIVE_ACTOR_CURRENT_USER]
-INTERACTIVE_ACTORS_BY_ID = {actor.get('id'): actor for actor in INTERACTIVE_ACTORS}
+INTERACTIVE_ACTOR_LABELS = {
+    INTERACTIVE_ACTOR_RESPONSIBLE_ID: _(u'interactive_actor_responsible',
+                                        default=u'Responsible'),
+    INTERACTIVE_ACTOR_CURRENT_USER_ID: _(u'interactive_actor_current_user',
+                                         default=u'Current user')}
 
 
 @implementer(IActor)
@@ -472,13 +471,11 @@ class InteractiveActor(Actor):
     actor_type = 'interactive_actor'
 
     def __init__(self, identifier):
-        actor = INTERACTIVE_ACTORS_BY_ID.get(identifier)
-        if not actor:
+        if identifier not in INTERACTIVE_ACTOR_IDS:
             raise ValueError('Interactive actor must be one of {}'.format(
-                             ', '.join(INTERACTIVE_ACTORS_BY_ID)))
+                             ', '.join(INTERACTIVE_ACTOR_IDS)))
 
         self.identifier = identifier
-        self.actor = actor
 
     def corresponds_to(self, user):
         return False
@@ -487,7 +484,7 @@ class InteractiveActor(Actor):
         return None
 
     def get_label(self, with_principal=True):
-        return translate(self.actor.get('label'), context=getRequest())
+        return translate(INTERACTIVE_ACTOR_LABELS[self.identifier], context=getRequest())
 
     def get_link(self, with_icon=False):
         return u''
@@ -523,7 +520,7 @@ class ActorLookup(object):
         return self.identifier.startswith('team:')
 
     def is_interactive_actor(self):
-        return self.identifier in INTERACTIVE_ACTORS_BY_ID
+        return self.identifier in INTERACTIVE_ACTOR_IDS
 
     def create_team_actor(self, team=None):
         if not team:

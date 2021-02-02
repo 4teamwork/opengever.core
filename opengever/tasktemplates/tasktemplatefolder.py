@@ -2,8 +2,8 @@ from datetime import date
 from datetime import timedelta
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
@@ -161,10 +161,10 @@ class TaskTemplateFolderTrigger(object):
         `responsible`: the reponsible of the main dossier.
         `current_user`: the currently logged in user.
         """
-        if principal == INTERACTIVE_ACTOR_RESPONSIBLE.get('id'):
+        if principal == INTERACTIVE_ACTOR_RESPONSIBLE_ID:
             return IDossier(self.dossier.get_main_dossier()).responsible
 
-        elif principal == INTERACTIVE_ACTOR_CURRENT_USER.get('id'):
+        elif principal == INTERACTIVE_ACTOR_CURRENT_USER_ID:
             return api.user.get_current().getId()
 
         else:

@@ -6,8 +6,8 @@ from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.task.util import update_reponsible_field_data
@@ -319,9 +319,9 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
         `current_user`: the currently logged in user.
         """
         if ActorLookup(template.responsible).is_interactive_actor():
-            if template.responsible == INTERACTIVE_ACTOR_RESPONSIBLE.get('id'):
+            if template.responsible == INTERACTIVE_ACTOR_RESPONSIBLE_ID:
                 principal = IDossier(self.context.get_main_dossier()).responsible
-            elif template.responsible == INTERACTIVE_ACTOR_CURRENT_USER.get('id'):
+            elif template.responsible == INTERACTIVE_ACTOR_CURRENT_USER_ID:
                 principal = api.user.get_current().getId()
 
             return get_current_org_unit().id(), principal
