@@ -367,7 +367,7 @@ msgstr "Whether the document (also) exists as a physical file on paper."
 #. Default: ""
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_preview"
-msgstr ""
+msgstr "Online preview of the original document"
 
 #. German translation: Datum, an dem das Dokument über den Korrespondenzweg angekommen ist
 #. MARKER: receipt-delivery-date-mixup double check!

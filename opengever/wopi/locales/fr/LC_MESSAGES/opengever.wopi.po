@@ -20,4 +20,4 @@ msgstr "Le document est en checkout pour modification exclusive."
 
 #: ./opengever/wopi/browser/edit.py
 msgid "Document is locked."
-msgstr ""
+msgstr "Document verrouillé."
