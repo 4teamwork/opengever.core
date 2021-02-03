@@ -18,7 +18,7 @@ class TestLocalReferenceNumber(IntegrationTestCase):
         self.login(self.regular_user)
 
         self.assertEquals(
-            '', IReferenceNumber(self.repository_root).get_local_number())
+            u'', IReferenceNumber(self.repository_root).get_local_number())
 
     def test_repositoryfolder_returns_reference_prefix_of_the_context(self):
         self.login(self.regular_user)
@@ -175,7 +175,7 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
     def test_reference_number_for_repository_root(self):
         self.login(self.regular_user)
 
-        self.assertEquals("{'repositoryroot': [''], 'site': [u'Client1']} ",
+        self.assertEquals("Client1",
                           IReferenceNumber(self.repository_root).get_number())
 
     def test_reference_number_for_repositoryfolder(self):

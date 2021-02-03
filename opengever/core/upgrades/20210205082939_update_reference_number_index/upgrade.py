@@ -1,5 +1,6 @@
 from ftw.upgrade import UpgradeStep
 from opengever.dossier.templatefolder import ITemplateFolder
+from opengever.repository.repositoryroot import IRepositoryRoot
 from plone.dexterity.interfaces import IDexterityContent
 
 
@@ -21,4 +22,10 @@ class UpdateReferenceNumberIndex(UpgradeStep):
         query = {'object_provides': IDexterityContent.__identifier__,
                  'path': paths}
         for obj in self.objects(query, 'Update reference index for template folder'):
+            obj.reindexObject(idxs=['reference'])
+
+        # Content of repository root is not affected by the wrong value
+        # indexed for the repository root itself.
+        query = {'object_provides': IRepositoryRoot.__identifier__}
+        for obj in self.objects(query, 'Update reference index for repository root'):
             obj.reindexObject(idxs=['reference'])
