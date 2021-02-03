@@ -1,0 +1,34 @@
+<object name="mimetypes_registry" meta_type="MimeTypes Registry">
+  <mimetype
+      name="Cadwork 2d"
+      binary="True"
+      extensions="2d"
+      globs="*.2d"
+      icon_path="icon_dokument_2d.png"
+      mimetypes="application/x-cadwork-2d"
+      />
+  <mimetype
+      name="Cadwork 2dr"
+      binary="True"
+      extensions="2dr"
+      globs="*.2dr"
+      icon_path="icon_dokument_2dr.png"
+      mimetypes="application/x-cadwork-2dr"
+      />
+  <mimetype
+      name="AutoCAD image"
+      binary="True"
+      extensions="dwg"
+      globs="*.dwg"
+      icon_path="icon_dokument_dwg.png"
+      mimetypes="image/vnd.dwg"
+      />
+  <mimetype
+      name="DXF vector image"
+      binary="True"
+      extensions="dxf"
+      globs="*.dxf"
+      icon_path="icon_dokument_dxf.png"
+      mimetypes="image/vnd.dxf"
+      />
+</object>
