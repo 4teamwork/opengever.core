@@ -24,7 +24,7 @@ class TemplateFolderReferenceNumber(BasicReferenceNumber):
     """ Reference number for template folder.
     """
 
-    ref_type = 'dossier'
+    ref_type = 'location_prefix'
 
     def get_local_number(self):
-        return self.context.title
+        return self.context.id

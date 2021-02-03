@@ -106,11 +106,11 @@ class TestLocalReferenceNumber(IntegrationTestCase):
             u'1',
             IReferenceNumber(self.private_dossier).get_local_number())
 
-    def test_template_folder_returns_empty_string(self):
+    def test_template_folder_returns_id(self):
         self.login(self.regular_user)
 
         self.assertEquals(
-            '',
+            'vorlagen',
             IReferenceNumber(self.templates).get_local_number())
 
 
@@ -271,25 +271,25 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
     def test_reference_number_for_template_folder(self):
         self.login(self.regular_user)
 
-        self.assertEquals(u'Client1',
+        self.assertEquals(u'vorlagen Client1',
                           IReferenceNumber(self.templates).get_number())
 
     def test_reference_number_for_document_template(self):
         self.login(self.regular_user)
 
-        self.assertEquals(u'Client1 / 3',
+        self.assertEquals(u'vorlagen Client1 / 3',
                           IReferenceNumber(self.empty_template).get_number())
 
     def test_reference_number_for_tasktemplate(self):
         self.login(self.regular_user)
 
-        self.assertEquals(u'Client1',
+        self.assertEquals(u'vorlagen Client1',
                           IReferenceNumber(self.tasktemplate).get_number())
 
     def test_reference_number_for_dossiertemplate(self):
         self.login(self.regular_user)
 
-        self.assertEquals(u'Client1',
+        self.assertEquals(u'vorlagen Client1',
                           IReferenceNumber(self.subdossiertemplate).get_number())
 
 
