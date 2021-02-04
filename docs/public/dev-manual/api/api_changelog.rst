@@ -17,8 +17,8 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
-- tasktemplates: interactive users for the `issuer` and `responsible` are now stored in the actors format: `interactive_actor:current_user` / `interactive_actor:responsible` and can now be looked up through the `@actors` endpoint.
-- tasktemplates: The `responsible_client` field will no longer be used to identify interactive users for the responsible field. It will be `None` for interactive users. The `responsible_field` will contain all the necessary information to identify an interactive actor.
+- tasktemplates: interactive users for the ``issuer`` and ``responsible`` are now stored in the actors format: ``interactive_actor:current_user`` / ``interactive_actor:responsible`` and can now be looked up through the ``@actors`` endpoint.
+- tasktemplates: The ``responsible_client`` field will no longer be used to identify interactive users for the responsible field. It will be ``None`` for interactive users. The ``responsible_field`` will contain all the necessary information to identify an interactive actor.
 - ``@create-linked-workspace``, ``@link-to-workspace``: Only available if dossier is open.
 - ``@notifications``: Only badge notifications are returned (see :ref:`docs <notifications>`).
 - ``@tasktree``: Sequential tasks are now sorted on ``getObjPositionInParent`` (see :ref:`docs <tasktree>`).
