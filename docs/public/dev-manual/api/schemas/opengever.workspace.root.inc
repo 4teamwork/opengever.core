@@ -22,3 +22,13 @@
        
        
        
+
+
+   .. py:attribute:: title_en
+
+       :Feldname: :field-title:`Titel (englisch)`
+       :Datentyp: ``TranslatedTextLine``
+       
+       
+       
+       

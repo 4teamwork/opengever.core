@@ -154,6 +154,16 @@
        
 
 
+   .. py:attribute:: title_en
+
+       :Feldname: :field-title:`Titel (englisch)`
+       :Datentyp: ``TranslatedTextLine``
+       
+       
+       
+       
+
+
    .. py:attribute:: retention_period
 
        :Feldname: :field-title:`Aufbewahrungsdauer (Jahre)`
