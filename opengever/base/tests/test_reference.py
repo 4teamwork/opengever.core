@@ -68,11 +68,11 @@ class TestLocalReferenceNumber(IntegrationTestCase):
         self.assertEquals(
             u'', IReferenceNumber(self.inbox_container).get_local_number())
 
-    def test_inbox_returns_empty_string(self):
+    def test_inbox_returns_inbox_id(self):
         self.login(self.secretariat_user)
 
         self.assertEquals(
-            u'', IReferenceNumber(self.inbox).get_local_number())
+            u'eingangskorb_fa', IReferenceNumber(self.inbox).get_local_number())
 
     def test_contactfolder_returns_empty_string(self):
         self.login(self.secretariat_user)
@@ -235,7 +235,7 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
     def test_reference_number_for_inbox(self):
         self.login(self.secretariat_user)
 
-        self.assertEquals(u'Client1',
+        self.assertEquals(u'eingangskorb_fa Client1',
                           IReferenceNumber(self.inbox).get_number())
 
     def test_reference_number_for_contactfolder(self):
