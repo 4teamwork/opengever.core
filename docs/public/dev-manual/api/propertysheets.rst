@@ -156,8 +156,9 @@ Deserialisierung der Custom Properties basiert auf folgendem Format:
 .. sourcecode:: json
 
   {
-      "<assignment_slot_name>": {
-          "<property_sheet_field_name>": "<field value>"
+      "custom_properties": {
+          "<assignment_slot_name>": {
+              "<property_sheet_field_name>": "<field value>"
       }
   }
 
@@ -202,9 +203,11 @@ Slots nicht überschrieben.
     Accept: application/json
 
     {
-          "IDocumentMetadata.document_type.question": {
-              "yesorno": true
-          }
+        "custom_properties": {
+            "IDocumentMetadata.document_type.question": {
+                "yesorno": true
+            }
+        }
     }
 
   .. sourcecode:: http
