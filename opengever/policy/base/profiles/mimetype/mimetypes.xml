@@ -683,7 +683,7 @@
       binary="True"
       extensions="2d"
       globs="*.2d"
-      icon_path="application.png"
+      icon_path="icon_dokument_2d.png"
       mimetypes="application/x-cadwork-2d"
       />
 
@@ -719,7 +719,7 @@
       binary="True"
       extensions="2dr"
       globs="*.2dr"
-      icon_path="application.png"
+      icon_path="icon_dokument_2dr.png"
       mimetypes="application/x-cadwork-2dr"
       />
 
@@ -766,6 +766,24 @@
       globs="*.lxz"
       icon_path="application.png"
       mimetypes="application/x-cadwork-lexocad"
+      />
+
+  <!-- AutoCAD -->
+  <mimetype
+      name="AutoCAD image"
+      binary="True"
+      extensions="dwg"
+      globs="*.dwg"
+      icon_path="icon_dokument_dwg.png"
+      mimetypes="image/vnd.dwg"
+      />
+  <mimetype
+      name="DXF vector image"
+      binary="True"
+      extensions="dxf"
+      globs="*.dxf"
+      icon_path="icon_dokument_dxf.png"
+      mimetypes="image/vnd.dxf"
       />
 
   <!-- Various other file formats -->
