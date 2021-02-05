@@ -5,6 +5,7 @@ from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import STATE_CONVERTED
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
+from opengever.document.browser.save_pdf_document_under import get_callback_url
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_SOURCE_UUID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
@@ -279,7 +280,7 @@ class TestSavePDFDocumentUnder(IntegrationTestCase):
         self.assertEqual(created_document.absolute_url(), view.destination_document_url())
 
         expected_callback_url = "/".join([created_document.absolute_url(), "save_pdf_under_callback"])
-        self.assertEqual(expected_callback_url, view.get_callback_url())
+        self.assertEqual(expected_callback_url, get_callback_url(created_document))
 
     @browsing
     def test_demand_document_pdf_conversion_status_is_traversable(self, browser):
