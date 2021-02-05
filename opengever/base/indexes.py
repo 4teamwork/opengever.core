@@ -38,6 +38,11 @@ def referenceIndexer(obj):
 
 
 @indexer(IDexterityContent)
+def sortable_reference_indexer(obj):
+    return IReferenceNumber(obj).get_sortable_number()
+
+
+@indexer(IDexterityContent)
 def title_de_indexer(obj):
     if ITranslatedTitleSupport.providedBy(obj):
         return ITranslatedTitle(obj).title_de

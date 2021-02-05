@@ -53,7 +53,7 @@ def set_former_reference_after_moving(obj, event):
     prefix_adapter = IReferenceNumberPrefix(parent)
     prefix_adapter.set_number(obj)
 
-    obj.reindexObject(idxs=['reference'])
+    obj.reindexObject(idxs=['reference', 'sortable_reference'])
 
 
 # Update reference number when adding / moving content
@@ -88,7 +88,7 @@ def save_reference_number_prefix(obj, event):
     for proposal in proposals:
         ProposalSqlSyncer(proposal.getObject(), None).sync()
 
-    obj.reindexObject(idxs=['reference'])
+    obj.reindexObject(idxs=['reference', 'sortable_reference'])
 
 
 def reindex_containing_subdossier_for_contained_objects(dossier, event):
