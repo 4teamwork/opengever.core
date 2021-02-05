@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      for="*"
+      name="is_docugate_feature_enabled"
+      class=".feature.DocugateFeatureEnabledView"
+      permission="zope2.View"
+      />
+
+</configure>
