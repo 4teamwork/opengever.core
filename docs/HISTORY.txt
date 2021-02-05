@@ -8,6 +8,7 @@ Changelog
 - Update Plone to version 4.3.20. [buchi]
 - Add icons for CAD file types. [buchi]
 - Set SameSite=Lax flag for session authentication cookie. [buchi]
+- Add support for Docugate templates. [buchi]
 
 
 2021.3.0 (2021-02-03)
