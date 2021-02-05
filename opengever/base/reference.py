@@ -28,6 +28,11 @@ class BasicReferenceNumber(object):
 
         return self.get_active_formatter().complete_number(numbers)
 
+    def get_sortable_number(self):
+        numbers = self.get_numbers()
+
+        return self.get_active_formatter().complete_sortable_number(numbers)
+
     def get_active_formatter(self):
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IReferenceNumberSettings)

@@ -97,6 +97,10 @@ class IReferenceNumber(Interface):
         """ Returns the reference number of the context
         """
 
+    def get_sortable_number(self):
+        """ Returns the sortable reference number of the context
+        """
+
     def get_local_number():
         """Returns only the reference number part of the context."""
 

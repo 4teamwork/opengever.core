@@ -166,6 +166,46 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
             '11-1.1',
             IReferenceNumber(self.subdossier).get_number())
 
+    def test_dotted_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            'client00000001 00000001.00000001 / 00000001.00000001.00000001 / 00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
+    def test_grouped_by_three_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='grouped_by_three',
+            interface=IReferenceNumberSettings)
+
+        self.assertEquals(
+            'client00000001 0000000100000001-00000001.00000001.00000001-00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
+    def test_no_client_id_dotted_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='no_client_id_dotted',
+            interface=IReferenceNumberSettings)
+
+        self.assertEquals(
+            '00000001.00000001 / 00000001.00000001.00000001 / 00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
+    def test_no_client_id_grouped_by_three_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='no_client_id_grouped_by_three',
+            interface=IReferenceNumberSettings)
+
+        self.assertEquals(
+            '0000000100000001-00000001.00000001.00000001-00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
     def test_reference_number_for_plone_site(self):
         self.login(self.regular_user)
 
