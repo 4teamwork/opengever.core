@@ -16,4 +16,11 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="docugate-xml"
+      class=".xml.DocugateXMLView"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
