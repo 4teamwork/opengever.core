@@ -5,7 +5,7 @@ from zope.component import adapter
 
 @adapter(IBaseDocument)
 class BaseDocumentSequenceNumberGenerator(DefaultSequenceNumberGenerator):
-    """ All dossier-types should use the same range/key of sequence numbers.
+    """ All document-types should use the same range/key of sequence numbers.
     """
 
     key = 'DefaultSequenceNumberGenerator.opengever.document.document'
