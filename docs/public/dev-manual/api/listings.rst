@@ -105,7 +105,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``public_trial``: Öffentlichkeitsstatus
 - ``receipt_date``: Eingangsdatum
 - ``reference_number``: Aktenzeichen
-- ``reference``: Referenz
+- ``reference``: Aktenzeichen
 - ``relative_path``: Pfad
 - ``responsible_fullname``: Federführung oder Auftragnehmer (Anzeigename)
 - ``responsible``: Federführung (Benutzername)
@@ -207,7 +207,7 @@ siehe Tabelle:
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
     |``reference``             |    ja    |    ja   |      ja      |         ja         |   ja    |  nein   |   ja    |   nein   |       nein      |       nein       |       nein      |    ja    |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
-    |``reference_number``      |    ja    |    ja   |      ja      |         ja         |   ja    |  nein   |   ja    |   nein   |       nein      |       nein       |       nein      |   nein   |
+    |``reference_number``      |    ja    |    ja   |      ja      |         ja         |   ja    |  nein   |   ja    |   nein   |       nein      |       nein       |       nein      |   ja     |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
     |``relative_path``         |    ja    |    ja   |      ja      |         ja         |   ja    |  nein   |   ja    |    ja    |       nein      |       nein       |       ja        |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+
