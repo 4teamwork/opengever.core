@@ -6,6 +6,26 @@ from zope.interface import implementer
 from zope.interface import Interface
 import re
 
+split_numbers_pattern = re.compile('(\\d+)')
+
+
+def transform_string_for_natural_sorting(reference_number):
+    """Adds zero paddings to all numeric parts in a string to allow
+    natural sorting.
+    'client1' -> 'client00000001'
+    'a1.2' -> 'a00000001.00000002'
+    """
+    parts = split_numbers_pattern.split(reference_number)
+    padded_parts = []
+    for part in parts:
+        if not part:
+            continue
+        if part.isdigit():
+            padded_parts.append(part.zfill(8))
+        else:
+            padded_parts.append(part.lower())
+    return "".join(padded_parts)
+
 
 @implementer(IReferenceNumberFormatter)
 @adapter(Interface)
@@ -20,6 +40,27 @@ class DottedReferenceFormatter(object):
 
     def __init__(self, context):
         self.context = context
+
+    @staticmethod
+    def to_sortable_numbers(numbers):
+        """Adds zero-padding to number parts in the numbers dictionary.
+        {'site': ['client1'],
+         'repository': ['3', '5'],
+         'dossier: ['3', '10']'}
+        becomes
+        {'site': ['client00000001'],
+         'repository': ['00000003', '00000005'],
+         'dossier: ['00000003', '00000010']'}
+        """
+        return {ref_type: [transform_string_for_natural_sorting(number) for number in parts]
+                for ref_type, parts in numbers.items()}
+
+    def complete_sortable_number(self, numbers):
+        """Generate the complete sortable reference number, for the given
+        numbers dict. Zero paddings are added wherever necessary to make
+        the number sortable
+        """
+        return self.complete_number(self.to_sortable_numbers(numbers))
 
     def complete_number(self, numbers):
         """Generate the complete reference number, for the given numbers

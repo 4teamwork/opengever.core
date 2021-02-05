@@ -121,6 +121,11 @@ class IReferenceNumberFormatter(Interface):
         """Generate the complete reference number, for the given numbers dict.
         """
 
+    def complete_sortable_number(numbers):
+        """Generate a sortable version of the complete reference number,
+        for the given numbers dict.
+        """
+
     def repository_number(numbers):
         """Generate the reposiotry reference number part,
         for the given numbers dict.

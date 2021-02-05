@@ -767,3 +767,347 @@ class TestNoClientIDGBTSorter(TestNoClientIDGroupedbyThreeFormatterBase):
 
         actual = sorted(unordered, key=self.formatter.sorter)
         self.assertEquals(expected, actual)
+
+
+class TestSortableReferenceNumberForDottedFormatter(TestDottedFormatterBase):
+
+    def setUp(self):
+        super(TestSortableReferenceNumberForDottedFormatter, self).setUp()
+
+        self.formatter = queryAdapter(
+            self.portal, IReferenceNumberFormatter, name='dotted')
+
+    def test_pad_and_separate_repositories_with_a_dot(self):
+        numbers = {'repository': [u'5', u'7', u'3', u'2'], }
+
+        self.assertEquals(
+            '00000005.00000007.00000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_alpanumeric_parts(self):
+        numbers = {'repository': [u'5 foo', u'bar7', u'foo3-4bar'], }
+
+        self.assertEquals(
+            '00000005 foo.bar00000007.foo00000003-00000004bar',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_pad_and_separate_dossiers_and_subdossiers_with_a_dot(self):
+        numbers = {'dossier': [u'4', u'6', u'2'], }
+
+        self.assertEquals(
+            ' / 00000004.00000006.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_part_is_separated_with_space(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2']}
+
+        self.assertEquals(
+            'client00000001 00000005.00000007.00000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_dossier_part_is_separated_with_slash_and_spaces(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2']}
+
+        self.assertEquals(
+            'client00000001 00000005.00000007.00000003.00000002 / '
+            '00000004.00000006.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_document_part_is_padded_and_separated_with_slash_and_space(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2'],
+                   'document': ['213']}
+
+        self.assertEquals(
+            'client00000001 00000005.00000007.00000003.00000002 / '
+            '00000004.00000006.00000002 / 00000213',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_sorting_clients_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['Client1'], 'repository': ['10']},
+            {'site': ['Client10'], 'repository': ['1']},
+            {'site': ['Client2'], 'repository': ['1']},
+            {'site': ['Foo'], 'repository': ['6']},
+            {'site': ['bar'], 'repository': ['1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['bar 00000001.00000001',
+             'client00000001 00000010',
+             'client00000002 00000001',
+             'client00000010 00000001',
+             'foo 00000006'],
+            sorted(sortable_numbers))
+
+    def test_sorting_respositories_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['10']},
+            {'site': ['fd'], 'repository': ['1']},
+            {'site': ['fd'], 'repository': ['6']},
+            {'site': ['fd'], 'repository': ['1', '1']},
+            {'site': ['fd'], 'repository': ['12']},
+            {'site': ['fd'], 'repository': ['5']},
+            {'site': ['fd'], 'repository': ['1', '10', '2']},
+            {'site': ['fd'], 'repository': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '8', '1']},
+            {'site': ['fd'], 'repository': ['10', '0']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001',
+             'fd 00000001.00000001',
+             'fd 00000001.00000008.00000001',
+             'fd 00000001.00000010',
+             'fd 00000001.00000010.00000002',
+             'fd 00000005',
+             'fd 00000006',
+             'fd 00000010',
+             'fd 00000010.00000000',
+             'fd 00000012'],
+            sorted(sortable_numbers))
+
+    def test_sorting_dossiers_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['10'], 'dossier': ['6']},
+            {'site': ['fd'], 'repository': ['1'], 'dossier': ['0']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['10']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['3']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '2']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '0'], 'dossier': ['8']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001 / 00000000',
+             'fd 00000001.00000000 / 00000008',
+             'fd 00000001.00000001 / 00000001',
+             'fd 00000001.00000001 / 00000001.00000002',
+             'fd 00000001.00000001 / 00000001.00000010',
+             'fd 00000001.00000001 / 00000003',
+             'fd 00000001.00000001 / 00000010',
+             'fd 00000010 / 00000006'],
+            sorted(sortable_numbers))
+
+    def test_dossier_are_sorted_before_repositories(self):
+        numbers_list = [
+            {'repository': ['1', '1']},
+            {'repository': ['1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1']},
+            {'repository': ['1', '1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1', '1']},
+            {'repository': ['1', '1', '1', '1'], 'dossier': ['2']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['00000001.00000001',
+             '00000001.00000001 / 00000002',
+             '00000001.00000001.00000001',
+             '00000001.00000001.00000001 / 00000002',
+             '00000001.00000001.00000001.00000001',
+             '00000001.00000001.00000001.00000001 / 00000002'],
+            sorted(sortable_numbers))
+
+    def test_documents_are_sorted_before_subdossiers(self):
+        numbers_list = [
+            {'repository': ['1'], 'dossier': ['1']},
+            {'repository': ['1'], 'dossier': ['1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1']},
+            {'repository': ['1'], 'dossier': ['1', '1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['00000001 / 00000001',
+             '00000001 / 00000001 / 00000002',
+             '00000001 / 00000001.00000001',
+             '00000001 / 00000001.00000001 / 00000002',
+             '00000001 / 00000001.00000001.00000001'],
+            sorted(sortable_numbers))
+
+
+class TestSortableReferenceNumberForGroupedByThreeFormatter(TestDottedFormatterBase):
+
+    def setUp(self):
+        super(TestSortableReferenceNumberForGroupedByThreeFormatter, self).setUp()
+
+        self.formatter = queryAdapter(
+            self.portal, IReferenceNumberFormatter, name='grouped_by_three')
+
+    def test_pad_and_separate_repository_groups_with_a_dot(self):
+        numbers = {'repository': [u'5', u'7', u'3', u'2'], }
+
+        self.assertEquals(
+            '000000050000000700000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_alpanumeric_parts(self):
+        numbers = {'repository': [u'5 foo', u'bar7', u'foo3-4bar'], }
+
+        self.assertEquals(
+            '00000005 foobar00000007foo00000003-00000004bar',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_pad_and_separate_dossier_groups_with_a_dot(self):
+        numbers = {'dossier': [u'4', u'6', u'2', '7', '3'], }
+
+        self.assertEquals(
+            '-00000004.00000006.00000002.00000007.00000003',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_part_is_separated_with_space(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2']}
+
+        self.assertEquals(
+            'client00000001 000000050000000700000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_dossier_part_is_separated_with_dash(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2']}
+
+        self.assertEquals(
+            'client00000001 000000050000000700000003.00000002-'
+            '00000004.00000006.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_document_part_is_padded_and_separated_with_dash(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2'],
+                   'document': ['213']}
+
+        self.assertEquals(
+            'client00000001 000000050000000700000003.00000002-'
+            '00000004.00000006.00000002-00000213',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_sorting_clients_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['Client1'], 'repository': ['7']},
+            {'site': ['Client10'], 'repository': ['1']},
+            {'site': ['Client2'], 'repository': ['1']},
+            {'site': ['Foo'], 'repository': ['6']},
+            {'site': ['bar'], 'repository': ['1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['bar 0000000100000001',
+             'client00000001 00000007',
+             'client00000002 00000001',
+             'client00000010 00000001',
+             'foo 00000006'],
+            sorted(sortable_numbers))
+
+    def test_sorting_respositories_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['10']},
+            {'site': ['fd'], 'repository': ['1']},
+            {'site': ['fd'], 'repository': ['6']},
+            {'site': ['fd'], 'repository': ['1', '1']},
+            {'site': ['fd'], 'repository': ['12']},
+            {'site': ['fd'], 'repository': ['5']},
+            {'site': ['fd'], 'repository': ['1', '10', '2']},
+            {'site': ['fd'], 'repository': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '8', '1']},
+            {'site': ['fd'], 'repository': ['10', '0']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001',
+             'fd 0000000100000001',
+             'fd 000000010000000800000001',
+             'fd 0000000100000010',
+             'fd 000000010000001000000002',
+             'fd 00000005',
+             'fd 00000006',
+             'fd 00000010',
+             'fd 0000001000000000',
+             'fd 00000012'],
+            sorted(sortable_numbers))
+
+    def test_sorting_dossiers_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['2'], 'dossier': ['6']},
+            {'site': ['fd'], 'repository': ['1'], 'dossier': ['0']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['10']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['3']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '2']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '0'], 'dossier': ['8']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001-00000000',
+             'fd 0000000100000000-00000008',
+             'fd 0000000100000001-00000001',
+             'fd 0000000100000001-00000001.00000002',
+             'fd 0000000100000001-00000001.00000010',
+             'fd 0000000100000001-00000003',
+             'fd 0000000100000001-00000010',
+             'fd 00000002-00000006'],
+            sorted(sortable_numbers))
+
+    def test_dossier_are_sorted_before_repositories(self):
+        numbers_list = [
+            {'repository': ['1', '1']},
+            {'repository': ['1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1']},
+            {'repository': ['1', '1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1', '1']},
+            {'repository': ['1', '1', '1', '1'], 'dossier': ['2']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['0000000100000001',
+             '0000000100000001-00000002',
+             '000000010000000100000001',
+             '000000010000000100000001-00000002',
+             '000000010000000100000001.00000001',
+             '000000010000000100000001.00000001-00000002'],
+            sorted(sortable_numbers))
+
+    def test_documents_are_sorted_before_subdossiers(self):
+        numbers_list = [
+            {'repository': ['1'], 'dossier': ['1']},
+            {'repository': ['1'], 'dossier': ['1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1']},
+            {'repository': ['1'], 'dossier': ['1', '1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['00000001-00000001',
+             '00000001-00000001-00000002',
+             '00000001-00000001.00000001',
+             '00000001-00000001.00000001-00000002',
+             '00000001-00000001.00000001.00000001'],
+            sorted(sortable_numbers))
