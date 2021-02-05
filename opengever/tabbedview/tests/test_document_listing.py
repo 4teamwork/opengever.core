@@ -96,3 +96,37 @@ class TestDocumentListing(SolrIntegrationTestCase):
                 u'Wichtig',
             ],
             browser.css('select.keyword-widget option').text)
+
+    @browsing
+    def test_correctly_sorts_on_reference_number(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        data = {'sort': 'reference', 'dir': 'ASC'}
+        browser.visit(self.leaf_repofolder, view='tabbedview_view-documents', data=data)
+
+        data = browser.css('.listing').first.lists()
+        fields = data.pop(0)
+        refnum_index = fields.index('Reference number')
+        refnums = [each[refnum_index] for each in data]
+
+        self.assertEqual(
+            ['Client1 1.1 / 1 / 14',
+             'Client1 1.1 / 1 / 15',
+             'Client1 1.1 / 1 / 18',
+             'Client1 1.1 / 1 / 19',
+             'Client1 1.1 / 1 / 20',
+             'Client1 1.1 / 1 / 29',
+             'Client1 1.1 / 1 / 30',
+             'Client1 1.1 / 1 / 33',
+             'Client1 1.1 / 1 / 35',
+             'Client1 1.1 / 1.1 / 22',
+             'Client1 1.1 / 1.1 / 24',
+             'Client1 1.1 / 1.1.1 / 23',
+             'Client1 1.1 / 2 / 26',
+             'Client1 1.1 / 3 / 27',
+             'Client1 1.1 / 5.1 / 28',
+             'Client1 1.1 / 6 / 31',
+             'Client1 1.1 / 7 / 32',
+             'Client1 1.1 / 7 / 34',
+             'Client1 1.1 / 11 / 43'],
+            refnums)

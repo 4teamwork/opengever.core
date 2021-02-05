@@ -132,6 +132,29 @@ class TestDossierListing(SolrIntegrationTestCase):
         self.assertEqual(expected_data, data)
 
     @browsing
+    def test_correctly_sorts_on_reference_number(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        data = {'sort': 'reference', 'dir': 'ASC'}
+        browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers', data=data)
+
+        data = browser.css('.listing').first.lists()
+
+        self.assertEqual(self.listing_fields, data.pop(0))
+        refnums = [each[1] for each in data]
+
+        self.assertEqual(
+            ['Client1 1.1 / 1',
+             'Client1 1.1 / 4',
+             'Client1 1.1 / 5',
+             'Client1 1.1 / 6',
+             'Client1 1.1 / 7',
+             'Client1 1.1 / 8',
+             'Client1 1.1 / 9',
+             'Client1 1.1 / 11'],
+            refnums)
+
+    @browsing
     def test_active_closed_filter_available(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
