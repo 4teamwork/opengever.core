@@ -186,6 +186,9 @@ msgstr "Effacer"
 msgid "document-transition-restore"
 msgstr "Récupérer"
 
+msgid "document_from_docugate"
+msgstr "Document à partir d'un modèle Docugate"
+
 msgid "document_from_officeatwork"
 msgstr "Document de officeatwork"
 

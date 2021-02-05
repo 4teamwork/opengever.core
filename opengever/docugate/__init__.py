@@ -1,6 +1,10 @@
 from opengever.docugate.interfaces import IDocugateSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from plone import api
+from zope.i18nmessageid import MessageFactory
+
+
+_ = MessageFactory('opengever.docugate')
 
 
 def is_docugate_feature_enabled():

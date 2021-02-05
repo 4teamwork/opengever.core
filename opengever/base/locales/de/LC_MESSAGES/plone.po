@@ -186,6 +186,9 @@ msgstr "Löschen"
 msgid "document-transition-restore"
 msgstr "Wiederherstellen"
 
+msgid "document_from_docugate"
+msgstr "Dokument aus Docugate Vorlage"
+
 msgid "document_from_officeatwork"
 msgstr "Dokument aus officeatwork"
 

@@ -117,6 +117,18 @@
   </action>
 
   <action
+      action_id="document_from_docugate"
+      visible="True"
+      title="document_from_docugate"
+      category="folder_factories"
+      url_expr="string:${object_url}/document_from_docugate"
+      icon_expr=""
+      condition_expr="object/@@is_docugate_feature_enabled"
+      i18n:domain="opengever.core">
+    <permission value="Add portal content" />
+  </action>
+
+  <action
       action_id="add_participant"
       visible="True"
       title="Participant"

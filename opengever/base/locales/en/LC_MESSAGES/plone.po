@@ -245,6 +245,9 @@ msgstr "Remove"
 msgid "document-transition-restore"
 msgstr "Restore"
 
+msgid "document_from_docugate"
+msgstr "Document from Docugate template"
+
 #. German translation: Dokument aus officeatwork
 msgid "document_from_officeatwork"
 msgstr "Document from officeatwork"
