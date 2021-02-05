@@ -8,4 +8,14 @@
 
   <include package=".browser" />
 
+  <include package="plone.rest" />
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      accept="application/json"
+      factory=".service.OfficeConnectorDocugatePayload"
+      name="oc_docugate"
+      permission="zope2.View"
+      />
+
 </configure>
