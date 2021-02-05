@@ -244,14 +244,11 @@ class SavePDFUnderForm(form.Form):
 
 
 def is_version_convertable(document, request, version_id=None):
-    """ The object action is only available for documents that are convertable,
-    but in the version tab, there is a link for each version and convertability
-    is not checked. We therefore only check if it is convertable for requests
-    with a version_id parameter.
-    """
     if not version_id:
-        return True
-    document = Versioner(document).retrieve(version_id)
+        if document.is_checked_out():
+            return False
+    else:
+        document = Versioner(document).retrieve(version_id)
     return IBumblebeeServiceV3(request).is_convertable(document)
 
 
@@ -321,7 +318,8 @@ class SavePDFUnderFormView(layout.FormWrapper):
         return super(SavePDFUnderFormView, self).render()
 
     def is_save_pdf_under_available(self):
-        return IBumblebeeServiceV3(self.request).is_convertable(self.context)
+        is_convertable = IBumblebeeServiceV3(self.request).is_convertable(self.context)
+        return not self.context.is_checked_out() and is_convertable
 
 
 class NotInContentTypes(Invalid):

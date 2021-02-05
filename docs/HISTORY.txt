@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Bump ftw.casauth to 1.3.1. [lgraf]
+- Only allow to save a document as pdf if document isn't checked out. [tinagerber]
 - Update Plone to version 4.3.20. [buchi]
 - Add icons for CAD file types. [buchi]
 - Set SameSite=Lax flag for session authentication cookie. [buchi]
