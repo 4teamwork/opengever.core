@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 
 
@@ -10,7 +11,7 @@ class TestMailDefaultViewWithCustomProperties(IntegrationTestCase):
     CUSTOM_PROPERTIES_LABEL = u"Custom properties"
 
     @browsing
-    def test_document_default_view_displays_custom_properties(self, browser):
+    def test_mail_default_view_displays_custom_properties(self, browser):
         self.login(self.manager)
         create(
             Builder("property_sheet_schema")
@@ -34,7 +35,7 @@ class TestMailDefaultViewWithCustomProperties(IntegrationTestCase):
         )
 
     @browsing
-    def test_document_default_view_displays_no_properties_label(self, browser):
+    def test_mail_default_view_displays_no_properties_label(self, browser):
         self.login(self.manager)
         create(
             Builder("property_sheet_schema")
@@ -59,10 +60,10 @@ class TestMailDefaultViewWithCustomProperties(IntegrationTestCase):
         )
 
     @browsing
-    def test_document_default_view_hides_properties_when_no_sheet_is_defined(
+    def test_mail_default_view_hides_properties_when_no_sheet_is_defined(
         self, browser
     ):
-        self.login(self.manager)
+        PropertySheetSchemaStorage().clear()
 
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, view="view")

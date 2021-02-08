@@ -4,7 +4,6 @@ from ftw.testbrowser import browsing
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from zope import schema
-from zope.schema import getFieldNamesInOrder
 import json
 
 
@@ -24,7 +23,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             headers=self.api_headers,
         )
         storage = PropertySheetSchemaStorage()
-        self.assertEqual(1, len(storage.list()))
+        self.assertEqual(3, len(storage))
         definition = storage.get("question")
 
         self.assertEqual("question", definition.name)
@@ -90,7 +89,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual("application/json+schema", browser.mimetype)
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual(1, len(storage.list()))
+        self.assertEqual(3, len(storage))
         definition = storage.get("question")
 
         self.assertEqual("question", definition.name)
@@ -152,7 +151,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual(1, len(storage.list()))
+        self.assertEqual(3, len(storage))
         definition = storage.get("meinschema")
 
         self.assertEqual(
@@ -184,7 +183,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual(1, len(storage.list()))
+        self.assertEqual(3, len(storage))
         definition = storage.get("question")
 
         self.assertEqual("question", definition.name)
@@ -217,7 +216,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
+        self.assertEqual(2, len(storage))
 
     @browsing
     def test_property_sheet_schema_definition_post_requires_unique_assignment(
@@ -251,7 +250,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             browser.json,
         )
         storage = PropertySheetSchemaStorage()
-        self.assertEqual(1, len(storage.list()))
+        self.assertEqual(3, len(storage))
 
     @browsing
     def test_property_sheet_schema_definition_post_requires_name(
@@ -277,7 +276,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
+        self.assertEqual(2, len(storage))
 
     @browsing
     def test_property_sheet_schema_definition_post_requires_valid_name(
@@ -303,7 +302,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
+        self.assertEqual(2, len(storage))
 
     @browsing
     def test_property_sheet_schema_definition_post_requires_fields(
@@ -329,7 +328,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
+        self.assertEqual(2, len(storage))
 
     @browsing
     def test_property_sheet_schema_definition_post_requires_valid_fields_type(
@@ -355,7 +354,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
+        self.assertEqual(2, len(storage))
 
     @browsing
     def test_property_sheet_schema_definition_post_prevents_duplicate_field_name(
@@ -383,7 +382,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
+        self.assertEqual(2, len(storage))
 
     @browsing
     def test_property_sheet_schema_definition_post_invalid_type(self, browser):
@@ -404,7 +403,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             browser.json,
         )
         storage = PropertySheetSchemaStorage()
-        self.assertEqual([], storage.list())
+        self.assertEqual(2, len(storage))
 
     @browsing
     def test_non_managers_cannot_post(self, browser):

@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from jsonschema import Draft4Validator
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 
 
@@ -12,6 +13,7 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
     @browsing
     def test_property_sheet_schema_definition_get_empty_list(self, browser):
         self.login(self.regular_user, browser)
+        PropertySheetSchemaStorage().clear()
 
         browser.open(
             view="@propertysheets", method="GET", headers=self.api_headers
@@ -27,9 +29,6 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
     @browsing
     def test_property_sheet_schema_definition_get_list(self, browser):
         self.login(self.regular_user, browser)
-
-        create(Builder("property_sheet_schema").named("schema1"))
-        create(Builder("property_sheet_schema").named("schema2"))
 
         browser.open(
             view="@propertysheets", method="GET", headers=self.api_headers
