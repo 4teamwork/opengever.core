@@ -16,7 +16,6 @@ from .extendedpathindex import PatchExtendedPathIndex
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .jsonschema_for_portal_type import PatchGetJsonschemaForPortalType
-from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
@@ -59,7 +58,6 @@ PatchDXCreateContentInContainer()()
 PatchExceptionFormatter()()
 PatchExtendedPathIndex()()
 PatchInvokeFactory()()
-PatchLDAPUserFolderEncoding()()
 PatchMembershipToolCreateMemberarea()()
 PatchMembershipToolSetLoginTimes()()
 PatchNamedfileNamedDataConverter()()
