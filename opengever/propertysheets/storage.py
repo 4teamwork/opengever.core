@@ -80,3 +80,7 @@ class PropertySheetSchemaStorage(object):
         annotations = IAnnotations(self.context)
         storage = annotations.get(self.ANNOTATIONS_KEY, {})
         storage.pop(name, None)
+
+    def clear(self):
+        annotations = IAnnotations(self.context)
+        annotations.pop(self.ANNOTATIONS_KEY, None)

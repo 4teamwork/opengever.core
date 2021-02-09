@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 
 
@@ -62,7 +63,7 @@ class TestDocumentDefaultViewWithCustomProperties(IntegrationTestCase):
     def test_document_default_view_hides_properties_when_no_sheet_is_defined(
         self, browser
     ):
-        self.login(self.manager)
+        PropertySheetSchemaStorage().clear()
 
         self.login(self.regular_user, browser)
         browser.open(self.document, view="view")

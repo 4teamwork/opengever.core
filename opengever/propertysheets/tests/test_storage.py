@@ -168,3 +168,13 @@ class TestPropertySheetSchemaStorage(FunctionalTestCase):
         self.assertIn('imin', storage)
         self.assertNotIn(None, storage)
         self.assertNotIn('foo', storage)
+
+    def test_clear_storage(self):
+        storage = PropertySheetSchemaStorage()
+        fixture = PropertySheetSchemaDefinition.create("removeme")
+        storage.save(fixture)
+        self.assertEqual(1, len(storage.list()))
+
+        storage.clear()
+
+        self.assertEqual([], storage.list())

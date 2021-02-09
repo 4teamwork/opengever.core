@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from jsonschema import Draft4Validator
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 
 
@@ -74,6 +75,8 @@ class TestCustomPropertiesFieldSchemaEndpoint(IntegrationTestCase):
 
     @browsing
     def test_representation_when_no_schemas_are_available(self, browser):
+        PropertySheetSchemaStorage().clear()
+
         self.login(self.regular_user, browser)
         schema = browser.open(
             self.leaf_repofolder,

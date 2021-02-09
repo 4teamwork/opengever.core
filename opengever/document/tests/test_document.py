@@ -109,7 +109,10 @@ class TestDocument(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.document, view='@@view')
         self.assertEqual(u'Vertr\xe4gsentwurf', browser.css('.documentFirstHeading').first.text)
-        self.assertEqual(['Common', 'Classification'], browser.css('.dossier-detail-listing-title').text)
+        self.assertEqual(
+            ['Common', 'Classification', 'Custom properties'],
+            browser.css('.dossier-detail-listing-title').text
+        )
 
     def test_accessors(self):
         self.login(self.regular_user)

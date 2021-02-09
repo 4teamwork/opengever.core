@@ -114,6 +114,8 @@ class OpengeverContentFixture(object):
             self.create_teams()
             self.create_contacts()
 
+        self.create_property_sheets()
+
         with self.freeze_at_hour(7):
             with self.login(self.administrator):
                 self.create_repository_tree()
@@ -490,6 +492,25 @@ class OpengeverContentFixture(object):
                 group=group_empty,
                 org_unit=self.org_unit_fa,
             )
+        )
+
+    def create_property_sheets(self):
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.regulations")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", True)
+            .with_field("choice", u"choose", u"Choose", u"", True,
+                        values=["one", "two", "three"])
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("text", u"text", u"Some lines of text", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+        )
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.directive")
+            .with_field("textline", u"textline", u"A line of text", u"", False)
         )
 
     @staticuid()
