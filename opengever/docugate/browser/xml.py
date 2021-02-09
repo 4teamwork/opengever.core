@@ -1,6 +1,7 @@
 from datetime import datetime
 from lxml import etree
 from lxml.builder import E
+from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.document.docprops import DocPropertyCollector
 from plone import api
 from Products.Five import BrowserView
@@ -24,7 +25,10 @@ class DocugateXMLView(BrowserView):
             doc, pretty_print=True, xml_declaration=True, encoding='utf-8')
 
     def is_allowed(self):
-        if api.content.get_state(self.context) == 'document-state-shadow':
+        if (
+            IDocumentFromDocugate.providedBy(self.context)
+            and self.context.is_shadow_document()
+        ):
             return True
         return False
 

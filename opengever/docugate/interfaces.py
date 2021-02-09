@@ -9,3 +9,8 @@ class IDocugateSettings(Interface):
         description=u'Whether Docugate integration is enabled. '
                     u'This feature can only be used if Office Connector is activated',
         default=False)
+
+
+class IDocumentFromDocugate(Interface):
+    """Marker Interface for documents that are created from Docugate templates
+    """

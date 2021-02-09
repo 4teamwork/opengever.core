@@ -1,6 +1,7 @@
-from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.docugate.interfaces import IDocumentFromDocugate
+from opengever.testing import IntegrationTestCase
 
 
 class TestAddFromDocugateTemplate(IntegrationTestCase):
@@ -17,4 +18,5 @@ class TestAddFromDocugateTemplate(IntegrationTestCase):
 
         self.assertEqual(browser.context.Title(), 'My Docugate document')
         self.assertTrue(browser.context.is_shadow_document())
+        self.assertTrue(IDocumentFromDocugate.providedBy(browser.context))
         self.assertIn("window.location = 'oc:", browser.css('.redirector').first.text)

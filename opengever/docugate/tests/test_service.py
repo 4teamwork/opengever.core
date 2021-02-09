@@ -1,6 +1,8 @@
-from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browsing
+from opengever.docugate.interfaces import IDocumentFromDocugate
+from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from zope.interface import alsoProvides
 import json
 
 
@@ -11,6 +13,7 @@ class TestOfficeConnectorDocugatePayload(IntegrationTestCase):
     @browsing
     def test_oc_docugate_returns_document_url(self, browser):
         self.login(self.dossier_responsible, browser)
+        alsoProvides(self.shadow_document, IDocumentFromDocugate)
 
         headers = {
             'Accept': 'application/json',

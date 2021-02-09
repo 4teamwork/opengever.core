@@ -1,8 +1,10 @@
 from opengever.api.add import FolderPost
+from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.service import OfficeConnectorPayload
 from plone import api
 from zExceptions import Forbidden
+from zope.interface import alsoProvides
 import json
 
 
@@ -17,7 +19,10 @@ class OfficeConnectorDocugatePayload(OfficeConnectorPayload):
 
     @staticmethod
     def document_is_valid(document):
-        return document and document.is_shadow_document()
+        return (
+            IDocumentFromDocugate.providedBy(document)
+            and document.is_shadow_document()
+        )
 
     def render(self):
         payloads = self.get_base_payloads()
@@ -53,6 +58,7 @@ class CreateDocumentFromDocugateTemplate(FolderPost):
 
     def before_deserialization(self, obj):
         obj.as_shadow_document()
+        alsoProvides(obj, IDocumentFromDocugate)
 
     def serialize_object(self):
         return {

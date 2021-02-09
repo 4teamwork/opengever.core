@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browsing
+from opengever.docugate.interfaces import IDocumentFromDocugate
+from opengever.testing import IntegrationTestCase
+from zope.interface import alsoProvides
 
 
 class TestDocugateXMLView(IntegrationTestCase):
@@ -10,6 +12,7 @@ class TestDocugateXMLView(IntegrationTestCase):
     @browsing
     def test_xml_view_returns_docugate_xml(self, browser):
         self.login(self.dossier_responsible, browser)
+        alsoProvides(self.shadow_document, IDocumentFromDocugate)
         browser.open(self.shadow_document, view='@@docugate-xml')
 
         expected_xml = """<?xml version='1.0' encoding='utf-8'?>

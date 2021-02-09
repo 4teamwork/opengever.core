@@ -1,9 +1,11 @@
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.interfaces import IRedirector
 from opengever.docugate import _
+from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.propertysheets.form import omit_custom_properties_group
 from plone.dexterity.browser import add
+from zope.interface import alsoProvides
 
 
 class DocugateAddForm(add.DefaultAddForm):
@@ -20,6 +22,7 @@ class DocugateAddForm(add.DefaultAddForm):
     def create(self, data):
         doc = super(DocugateAddForm, self).create(data)
         doc.as_shadow_document()
+        alsoProvides(doc, IDocumentFromDocugate)
         return doc
 
     def add(self, object):
