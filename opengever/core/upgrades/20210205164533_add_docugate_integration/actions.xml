@@ -1,0 +1,17 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <object name="file_actions" meta_type="CMF Action Category">
+
+    <object name="docugate_retry" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Docugate retry</property>
+      <property name="description" i18n:translate="label_retry_docugate" />
+      <property name="available_expr">object/@@file_actions_availability/is_docugate_retry_action_available</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+</object>

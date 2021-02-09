@@ -7,6 +7,8 @@ from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
 from opengever.base.model.favorite import Favorite
+from opengever.docugate import is_docugate_feature_enabled
+from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import IBaseDocument
@@ -409,6 +411,11 @@ class Document(Item, BaseDocumentMixin):
         return (is_oneoffixx_feature_enabled()
                 and self.is_shadow_document()
                 and not IDocumentSavedAsPDFMarker.providedBy(self))
+
+    def is_docugate_creatable(self):
+        return (is_docugate_feature_enabled()
+                and self.is_shadow_document()
+                and IDocumentFromDocugate.providedBy(self))
 
     def is_checked_out(self):
         return self.checked_out_by() is not None

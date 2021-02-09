@@ -1,11 +1,31 @@
 from opengever.api.add import FolderPost
+from opengever.docugate import is_docugate_feature_enabled
 from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.service import OfficeConnectorPayload
+from opengever.officeconnector.service import OfficeConnectorURL
 from plone import api
 from zExceptions import Forbidden
+from zExceptions import NotFound
 from zope.interface import alsoProvides
 import json
+
+
+class OfficeConnectorDocugateURL(OfficeConnectorURL):
+    """Create oc:<JWT> URLs for javascript to fetch and pass to the OS.
+
+    Instruct where to fetch an OfficeConnector 'docugate' action payload for
+    this document.
+    """
+
+    def render(self):
+        if is_docugate_feature_enabled():
+            payload = {'action': 'docugate'}
+
+            return self.create_officeconnector_url_json(payload)
+
+        # Fail per default
+        raise NotFound
 
 
 class OfficeConnectorDocugatePayload(OfficeConnectorPayload):

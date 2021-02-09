@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-28 09:13+0000\n"
+"POT-Creation-Date: 2021-02-09 10:19+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -594,6 +594,11 @@ msgstr "Aktenzeichen"
 #: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
+
+#. Default: "Docugate retry"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_retry_docugate"
+msgstr "Mit Docugate wiederholen"
 
 #. Default: "Oneoffixx retry"
 #: ./opengever/document/browser/templates/macros.pt

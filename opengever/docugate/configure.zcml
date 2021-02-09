@@ -19,6 +19,15 @@
       />
 
   <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeConnectorDocugateURL"
+      name="@officeconnector_docugate_url"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
       method="POST"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       accept="application/json"

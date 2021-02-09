@@ -83,6 +83,9 @@ class BaseDocumentFileActions(object):
     def is_oneoffixx_retry_action_available(self):
         return False
 
+    def is_docugate_retry_action_available(self):
+        return False
+
     def is_open_as_pdf_action_available(self):
         if not is_bumblebee_feature_enabled():
             return False
@@ -242,6 +245,9 @@ class DocumentFileActions(BaseDocumentFileActions):
 
     def is_oneoffixx_retry_action_available(self):
         return self.context.is_oneoffixx_creatable()
+
+    def is_docugate_retry_action_available(self):
+        return self.context.is_docugate_creatable()
 
     def is_revert_to_version_action_available(self):
         manager = getMultiAdapter(
