@@ -18,4 +18,21 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      accept="application/json"
+      factory=".service.CreateDocumentFromDocugateTemplate"
+      name="@document_from_docugate"
+      permission="opengever.document.AddDocument"
+      />
+  <plone:service
+      method="POST"
+      for="opengever.task.task.ITask"
+      accept="application/json"
+      factory=".service.CreateDocumentFromDocugateTemplate"
+      name="@document_from_docugate"
+      permission="opengever.document.AddDocument"
+      />
+
 </configure>

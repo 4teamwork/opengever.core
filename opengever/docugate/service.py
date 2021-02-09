@@ -1,3 +1,5 @@
+from opengever.api.add import FolderPost
+from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.service import OfficeConnectorPayload
 from plone import api
 from zExceptions import Forbidden
@@ -38,3 +40,23 @@ class OfficeConnectorDocugatePayload(OfficeConnectorPayload):
         self.request.response.setHeader('Content-type', 'application/json')
 
         return json.dumps(payloads)
+
+
+class CreateDocumentFromDocugateTemplate(FolderPost):
+    """API Endpoint to create a document from a Docugate template
+    """
+
+    def extract_data(self):
+        self.type_ = 'opengever.document.document'
+        self.id_ = None
+        self.title_ = self.request_data.get("title", None)
+
+    def before_deserialization(self, obj):
+        obj.as_shadow_document()
+
+    def serialize_object(self):
+        return {
+            '@id': self.obj.absolute_url(),
+            'url': create_oc_url(
+                self.request, self.obj, dict(action='docugate'),),
+        }

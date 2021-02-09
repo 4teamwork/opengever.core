@@ -56,3 +56,31 @@ class TestOfficeConnectorDocugatePayload(IntegrationTestCase):
                 headers=headers,
                 view='oc_docugate',
             )
+
+
+class TestCreateDocumentFromDocugateTemplate(IntegrationTestCase):
+
+    features = ("officeconnector-checkout", "docugate")
+
+    @browsing
+    def test_creates_shadow_document_and_returns_oc_url(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        browser.open(
+            self.dossier,
+            method='POST',
+            data=json.dumps({'title': 'My Docugate document'}),
+            headers=headers,
+            view='@document_from_docugate',
+        )
+        self.assertEqual(browser.status_code, 201)
+        self.assertIn('url', browser.json)
+        self.assertTrue(browser.json['url'].startswith('oc:'))
+
+        doc = self.dossier[browser.json['@id'].split('/')[-1]]
+        self.assertTrue(doc.is_shadow_document())
+        self.assertEqual(doc.Title(), 'My Docugate document')
