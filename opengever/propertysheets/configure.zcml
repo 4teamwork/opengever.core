@@ -23,6 +23,8 @@
 
   <adapter factory=".field.PropertySheetFieldSchemaProvider" />
   <adapter factory=".widgets.PropertySheetFieldDataConverter" />
+  <adapter factory=".deserializer.PropertySheetFieldDeserializer" />
+  <adapter factory=".serializer.PropertySheetFieldSerializer" />
 
   <adapter
       factory=".widgets.PropertySheetFieldWiget"

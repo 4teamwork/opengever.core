@@ -49,6 +49,45 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
         )
 
     @browsing
+    def test_flattens_nested_vocabulary_data_when_storing(self, browser):
+        self.login(self.manager, browser)
+
+        choices = ["one", "two"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+        )
+        self.document.document_type = u"question"
+
+        self.login(self.regular_user, browser)
+        good_data = {
+            "custom_properties": {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": {"title": "two", "token": "two"}
+                },
+            }
+        }
+        browser.open(
+            self.document,
+            method="PATCH",
+            data=json.dumps(good_data),
+            headers=self.api_headers,
+        )
+
+        expected_stored_data = {
+            "IDocumentMetadata.document_type.question": {
+                "choose": "two"
+            }
+        }
+
+        self.assertEqual(
+            expected_stored_data,
+            IDocumentCustomProperties(self.document).custom_properties,
+        )
+
+    @browsing
     def test_does_not_allow_arbitrary_json_in_custom_properties(self, browser):
         self.login(self.regular_user, browser)
 
@@ -304,15 +343,24 @@ class TestDocumentCustomPropertiesGet(IntegrationTestCase):
     def test_always_returns_all_custom_property_data(self, browser):
         self.login(self.regular_user, browser)
 
-        props_data = {
-            "IDocumentMetadata.document_type.question": {
-                "foo": u"f\xfc",
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.regulations": {
+                "choose": u"three",
+                "num": 42,
             },
             "something": {
                 "else": 123,
             }
         }
-        IDocumentCustomProperties(self.document).custom_properties = props_data
 
         browser.open(self.document, method="GET", headers=self.api_headers)
-        self.assertEqual(props_data, browser.json['custom_properties'])
+        expected = {
+            "IDocumentMetadata.document_type.regulations": {
+                "choose": {"title": u"three", "token": u"three"},
+                "num": 42,
+            },
+            "something": {
+                "else": 123,
+            }
+        }
+        self.assertEqual(expected, browser.json['custom_properties'])
