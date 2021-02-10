@@ -27,7 +27,7 @@ class TestPropertySheetFieldSerializer(IntegrationTestCase):
     def test_serializes_choice_fields_as_token_title_object(self):
         self.login(self.regular_user)
 
-        choices = ["one", "two", "three"]
+        choices = [u"one", u"two", u"dr\xfc\xfc"]
         create(
             Builder("property_sheet_schema")
             .named("schema1")
@@ -39,14 +39,17 @@ class TestPropertySheetFieldSerializer(IntegrationTestCase):
         self.document.document_type = u"question"
         IDocumentCustomProperties(self.document).custom_properties = {
             "IDocumentMetadata.document_type.question": {
-                "choose": "two",
+                "choose": u"dr\xfc\xfc",
             }
         }
 
         self.assertEqual(
             {
                 "IDocumentMetadata.document_type.question": {
-                    "choose": {"title": "two", "token": "two"}
+                    "choose": {
+                        "title": u"dr\xfc\xfc",
+                        "token": u"dr\xfc\xfc".encode("unicode_escape")
+                    }
                 }
             },
             self.serializer(),

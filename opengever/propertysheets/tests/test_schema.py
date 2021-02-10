@@ -34,11 +34,14 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                 u"properties": {
                     u"choose": {
                         u"choices": [
-                            [u"blaeh", u"bl\xe4h"],
-                            [u"blueb", u"bl\xfcb"]
+                            [u"bl\xe4h".encode("unicode_escape"), u"bl\xe4h"],
+                            [u"bl\xfcb".encode("unicode_escape"), u"bl\xfcb"]
                         ],
                         u"description": u"",
-                        u"enum": [u"blaeh", u"blueb"],
+                        u"enum": [
+                            u"bl\xe4h".encode("unicode_escape"),
+                            u"bl\xfcb".encode("unicode_escape")
+                        ],
                         u"enumNames": [u"bl\xe4h", u"bl\xfcb"],
                         u"factory": u"Choice",
                         u"title": u"Usw\xe4hle",

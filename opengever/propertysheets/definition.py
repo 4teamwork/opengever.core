@@ -1,5 +1,4 @@
 from copy import deepcopy
-from opengever.base.filename import filenamenormalizer
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
@@ -27,10 +26,6 @@ import tokenize
 
 def isidentifier(val):
     return re.match(tokenize.Name + r'\Z', val) and not keyword.iskeyword(val)
-
-
-def ascii_token(text):
-    return filenamenormalizer.normalize(text)
 
 
 class PropertySheetSchemaDefinition(object):
@@ -144,8 +139,15 @@ class PropertySheetSchemaDefinition(object):
                 raise InvalidFieldTypeDefinition(
                     "For 'choice' fields types values are required."
                 )
-            terms = [SimpleVocabulary.createTerm(item, ascii_token(item), item)
-                     for item in values]
+            # Using `unicode_escape` encoding for tokens is a requirement of
+            # `ChoiceHandler` which otherwise refuses to write the vocabulary
+            # to XML.
+            terms = [
+                SimpleVocabulary.createTerm(
+                    item, item.encode("unicode_escape"), item
+                )
+                for item in values
+            ]
             properties['vocabulary'] = SimpleVocabulary(terms)
             # The field factory injects an empty list as values argument if it
             # is not set. This will lead to a conflict with the vocabylary we

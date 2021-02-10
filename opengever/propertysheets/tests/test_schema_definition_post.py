@@ -122,7 +122,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                     "name": "wahl",
                     "field_type": u"choice",
                     "title": u"w\xe4hl was",
-                    "values": [u"eins", u"zwei"]
+                    "values": [u"\xf6ins", u"zwei"]
                 },
                 {
                     "name": "nummer",

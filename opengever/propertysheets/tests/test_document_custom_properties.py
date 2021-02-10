@@ -12,7 +12,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
     def test_correctly_stores_custom_properties_with_all_field_types(self, browser):
         self.login(self.manager, browser)
 
-        choices = ["one", "two", "three"]
+        choices = ["one", u"zw\xf6i", "three"]
         create(
             Builder("property_sheet_schema")
             .named("schema1")
@@ -30,7 +30,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             "custom_properties": {
                 "IDocumentMetadata.document_type.question": {
                     "yesorno": False,
-                    "choose": "two",
+                    "choose": u"zw\xf6i".encode("unicode_escape"),
                     "num": 123,
                     "text": u"bl\xe4\nblub",
                     "textline": u"bl\xe4",
@@ -43,8 +43,17 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             data=json.dumps(good_data),
             headers=self.api_headers,
         )
+        expected_properties = {
+            "IDocumentMetadata.document_type.question": {
+                "yesorno": False,
+                "choose": u"zw\xf6i",
+                "num": 123,
+                "text": u"bl\xe4\nblub",
+                "textline": u"bl\xe4",
+            },
+        }
         self.assertEqual(
-            good_data["custom_properties"],
+            expected_properties,
             IDocumentCustomProperties(self.document).custom_properties,
         )
 
@@ -52,7 +61,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
     def test_flattens_nested_vocabulary_data_when_storing(self, browser):
         self.login(self.manager, browser)
 
-        choices = ["one", "two"]
+        choices = ["one", u"zw\xf6i"]
         create(
             Builder("property_sheet_schema")
             .named("schema1")
@@ -65,7 +74,10 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
         good_data = {
             "custom_properties": {
                 "IDocumentMetadata.document_type.question": {
-                    "choose": {"title": "two", "token": "two"}
+                    "choose": {
+                        "title": "the title is actually ignored!",
+                        "token": u"zw\xf6i".encode("unicode_escape")
+                    }
                 },
             }
         }
@@ -78,10 +90,9 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
 
         expected_stored_data = {
             "IDocumentMetadata.document_type.question": {
-                "choose": "two"
+                "choose": u"zw\xf6i"
             }
         }
-
         self.assertEqual(
             expected_stored_data,
             IDocumentCustomProperties(self.document).custom_properties,
