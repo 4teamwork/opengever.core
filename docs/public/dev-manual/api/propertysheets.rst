@@ -184,7 +184,11 @@ ausgegeben, unabhängig vom Wert des Feldes ``document_type``.
           },
           "IDocumentMetadata.document_type.protocol": {
               "location": "Dammweg 9",
-              "responsible": "Hans Muster"
+              "responsible": "Hans Muster",
+              "protocol_type": {
+                  "title": "Kurzprotokoll",
+                  "token": "Kurzprotokoll"
+              }
           }
       },
       "...": "..."
@@ -204,8 +208,13 @@ Slots nicht überschrieben.
 
     {
         "custom_properties": {
-            "IDocumentMetadata.document_type.question": {
-                "yesorno": true
+            "IDocumentMetadata.document_type.protocol": {
+                "location": "Dammweg 9",
+                "responsible": "Hans Muster",
+                "protocol_type": {
+                    "title": "Kurzprotokoll",
+                    "token": "Kurzprotokoll"
+                }
             }
         }
     }
