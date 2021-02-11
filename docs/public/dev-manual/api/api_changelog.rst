@@ -8,7 +8,7 @@ API Changelog
 2021.4.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- A new endpoint ``@save-document-as-pdf`` is added (see :ref:`save-document-as-pdf`).
 
 
 2021.3.0 (2021-02-03)

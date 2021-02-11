@@ -1093,6 +1093,30 @@
       />
 
   <plone:service
+      method="POST"
+      name="@save-document-as-pdf"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".save_document_as_pdf.SaveDocumentAsPdfPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
+      name="@save-document-as-pdf"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".save_document_as_pdf.SaveDocumentAsPdfPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
+      name="@save-document-as-pdf"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".save_document_as_pdf.SaveDocumentAsPdfPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
       method="GET"
       name="@groups"
       for="Products.CMFCore.interfaces.ISiteRoot"

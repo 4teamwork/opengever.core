@@ -319,3 +319,25 @@ Versionen auflisten:
             "version": 0
         }
     ]
+
+.. _save-document-as-pdf:
+
+Dokument als PDF speichern
+--------------------------
+
+Mit dem ``@save-document-as-pdf`` kann ein Dokument oder eine Version eines Dokuments als PDF gespeichert werden. Als ``document_uid`` wird die UID des Dokuments erwartet. Wenn keine ``version_id`` mitgegeben wird, wird die aktuelle Version verwendet. Der Endpoint steht auf Stufe Dossier, Teamraum und Teamraum-Ordner zur Verfügung.
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/@save-document-as-pdf HTTP/1.1
+    Accept: application/json
+
+    {
+      "document_uid": "f923b2321f174b408c3bd483db9bfa66",
+      "version_id": 2
+    }
+
+  .. sourcecode:: http
+
+    HTTP/1.1 201 Created
+    Location: /ordnungssystem/dossier-4/document-1
