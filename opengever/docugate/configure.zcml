@@ -1,0 +1,47 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.docugate">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <include package=".browser" />
+
+  <include package="plone.rest" />
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      accept="application/json"
+      factory=".service.OfficeConnectorDocugatePayload"
+      name="oc_docugate"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeConnectorDocugateURL"
+      name="@officeconnector_docugate_url"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
+      method="POST"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      accept="application/json"
+      factory=".service.CreateDocumentFromDocugateTemplate"
+      name="@document_from_docugate"
+      permission="opengever.document.AddDocument"
+      />
+  <plone:service
+      method="POST"
+      for="opengever.task.task.ITask"
+      accept="application/json"
+      factory=".service.CreateDocumentFromDocugateTemplate"
+      name="@document_from_docugate"
+      permission="opengever.document.AddDocument"
+      />
+
+</configure>

@@ -1,0 +1,26 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      for="*"
+      name="is_docugate_feature_enabled"
+      class=".feature.DocugateFeatureEnabledView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="document_from_docugate"
+      class=".add.DocugateAddForm"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="docugate-xml"
+      class=".xml.DocugateXMLView"
+      permission="cmf.ModifyPortalContent"
+      />
+
+</configure>

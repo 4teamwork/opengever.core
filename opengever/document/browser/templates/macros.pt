@@ -183,6 +183,15 @@
         </a>
       </tal:oneoffixx>
 
+      <tal:docugate tal:condition="view/is_docugate_retry_action_available">
+        <a tal:attributes="href view/get_oc_docugate_retry_url;
+                           data-document-url context/absolute_url"
+            class="function-revert oc-checkout"
+            i18n:translate="label_retry_docugate">
+            Docugate retry
+        </a>
+      </tal:docugate>
+
       <tal:block repeat="subMenuItem view/get_webaction_items">
           <a tal:replace="structure subMenuItem" />
       </tal:block>

@@ -67,6 +67,9 @@
   <records interface="opengever.disposition.interfaces.IFilesystemTransportSettings" />
   <records interface="opengever.disposition.interfaces.IFTPSTransportSettings" />
 
+  <!-- DOCUGATE -->
+  <records interface="opengever.docugate.interfaces.IDocugateSettings" />
+
   <!-- DOCUMENT -->
   <records interface="opengever.document.interfaces.IDocumentType" />
   <records interface="opengever.document.interfaces.IDocumentSettings" />

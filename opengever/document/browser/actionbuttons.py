@@ -93,6 +93,12 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
             "'{}/officeconnector_oneoffixx_url'"
             ");".format(self.context.absolute_url()))
 
+    def get_oc_docugate_retry_url(self):
+        return (
+            u"javascript:officeConnectorCheckout("
+            "'{}/@officeconnector_docugate_url'"
+            ");".format(self.context.absolute_url()))
+
     def get_oc_zem_checkout_url(self):
         url = u'{}/editing_document'.format(self.context.absolute_url())
         return addTokenToUrl(url)

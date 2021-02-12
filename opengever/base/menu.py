@@ -22,6 +22,7 @@ def order_factories(context, factories):
                        'document_with_template',
                        'document_with_oneoffixx_template',
                        'document_from_officeatwork',
+                       'document_from_docugate',
                        'Task',
                        'Add task from template',
                        'Mail',

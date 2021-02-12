@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-28 09:13+0000\n"
+"POT-Creation-Date: 2021-02-09 10:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -588,6 +588,11 @@ msgstr ""
 #: ./opengever/document/behaviors/related_docs.py
 #: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
+msgstr ""
+
+#. Default: "Docugate retry"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_retry_docugate"
 msgstr ""
 
 #. Default: "Oneoffixx retry"

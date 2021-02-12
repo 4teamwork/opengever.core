@@ -433,6 +433,9 @@ body.meeting-view{
 #plone-contentmenu-factories dd.actionMenuContent a#document_from_officeatwork:before {
   content: $document;
 }
+#plone-contentmenu-factories dd.actionMenuContent a#document_from_docugate:before {
+  content: $document;
+}
 #plone-contentmenu-factories dd.actionMenuContent a#add_participant:before {
   content: $contact;
 }

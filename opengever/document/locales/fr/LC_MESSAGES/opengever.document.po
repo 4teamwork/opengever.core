@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-28 09:13+0000\n"
+"POT-Creation-Date: 2021-02-09 10:19+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -591,6 +591,11 @@ msgstr "Numéro de référence"
 #: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
 msgstr "Documents liés"
+
+#. Default: "Docugate retry"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_retry_docugate"
+msgstr "Réessayer avec Docugate"
 
 #. Default: "Oneoffixx retry"
 #: ./opengever/document/browser/templates/macros.pt

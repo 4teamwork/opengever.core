@@ -1,0 +1,15 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <action
+      action_id="document_from_docugate"
+      visible="True"
+      title="document_from_docugate"
+      category="folder_factories"
+      url_expr="string:${object_url}/document_from_docugate"
+      icon_expr=""
+      condition_expr="object/@@is_docugate_feature_enabled"
+      i18n:domain="opengever.core">
+    <permission value="Add portal content" />
+  </action>
+
+</object>

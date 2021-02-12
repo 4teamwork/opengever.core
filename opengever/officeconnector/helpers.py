@@ -59,7 +59,8 @@ def parse_documents(request, context, action):
             request['REQUEST_METHOD'] == 'GET'
             or request['REQUEST_METHOD'] == 'POST'
             and ('BODY' not in request
-                 or isinstance(json.loads(request['BODY']), list))
+                 or isinstance(json.loads(request['BODY']), list)
+                 or action == 'docugate')
         ):
         # Feature enabled for the wrong content type
         if not IBaseDocument.providedBy(context):
