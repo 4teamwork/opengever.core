@@ -656,6 +656,15 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             browser.css('#archival_file_edit_link'),
             'Archival file edit link should not be visible.')
 
+        # Same for managers - view should also render properly
+        self.login(self.manager, browser)
+
+        browser.open(self.inbox_document, view='tabbedview_view-overview')
+
+        self.assertFalse(
+            browser.css('#archival_file_edit_link'),
+            'Archival file edit link should not be visible.')
+
     @browsing
     def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):
         self.login(self.manager, browser)
