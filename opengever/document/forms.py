@@ -190,7 +190,7 @@ class SavePDFUnderForm(form.Form):
             # In that case we save the current document as pdf.
             version_id = None
 
-        if not self.check_version_is_convertable(version_id):
+        if not is_version_convertable(self.context, self.request, version_id):
             msg = _(u'unconvertable_document',
                     default=u'This document cannot be converted to PDF.')
             api.portal.show_message(
@@ -202,17 +202,6 @@ class SavePDFUnderForm(form.Form):
 
     def check_has_initial_version(self):
         return Versioner(self.context).has_initial_version()
-
-    def check_version_is_convertable(self, version_id):
-        """ The object action is only available for documents that are convertable,
-        but in the version tab, there is a link for each version and convertability
-        is not checked. We therefore only check if it is convertable for requests
-        with a version_id parameter.
-        """
-        if not version_id:
-            return True
-        document = Versioner(self.context).retrieve(version_id)
-        return IBumblebeeServiceV3(self.request).is_convertable(document)
 
     def updateWidgets(self):
         super(SavePDFUnderForm, self).updateWidgets()
@@ -246,63 +235,77 @@ class SavePDFUnderForm(form.Form):
         return save_pdf_under_url
 
     def create_destination_document(self):
-        # get all the metadata that will be set on the created file.
-        # We blacklist some fields that should not be copied
-        fields_to_skip = set(("file",
-                              "archival_file",
-                              "archival_file_state",
-                              "thumbnail",
-                              "preview",
-                              "digitally_available",
-                              "changeNote",
-                              "changed",
-                              "relatedItems",))
-        metadata = {}
-        for schema in iterSchemataForType(self.context.portal_type):
-            for name, schema_field in getFieldsInOrder(schema):
-                if name in fields_to_skip:
-                    continue
-                field_instance = schema_field.bind(self.context)
-                metadata[name] = field_instance.get(field_instance.interface(self.context))
-
-        command = CreateDocumentCommand(self.destination, None, None, **metadata)
-        destination_document = command.execute()
-
-        # We make it in shadow state until its file is set by the callback view
-        destination_document.as_shadow_document()
-        # Add marker interface. This should be useful in the future for
-        # cleanup jobs, retries if the PDF was not delivered and so on.
-        alsoProvides(destination_document, IDocumentSavedAsPDFMarker)
-        # Add annotations needed for the SavePDFDocumentUnder view.
-        annotations = IAnnotations(destination_document)
-        annotations[PDF_SAVE_SOURCE_UUID_KEY] = IUUID(self.context)
-        annotations[PDF_SAVE_SOURCE_VERSION_KEY] = self.version_id
-
-        # The missing_value attribute of a z3c-form field is used
-        # as soon as an object has no default_value i.e. after creating
-        # an object trough the command-line.
-        #
-        # Because the relatedItems field needs a list as a missing_value,
-        # we will fall into the "mutable keyword argument"-python gotcha.
-        # The relatedItems will be shared between the object-instances.
-        #
-        # Unfortunately the z3c-form field does not provide a
-        # missing_value-factory (like the defaultFactory) which would be
-        # necessary to fix this issue properly.
-        #
-        # As a workaround we make sure that the new document's relatedItems
-        # is different object from the source document's.
-        IRelatedDocuments(destination_document).relatedItems = list(
-            IRelatedDocuments(destination_document).relatedItems)
-
-        IRelatedDocuments(destination_document).relatedItems.append(
-            RelationValue(getUtility(IIntIds).getId(self.context)))
-
+        destination_document = create_destination_document(
+            self.context, self.request, self.version_id, self.destination)
         msg = _(u'Document ${document} was successfully created in ${destination}',
                 mapping={"document": destination_document.title, "destination": self.destination.title})
         api.portal.show_message(msg, self.request, type='info')
-
         return destination_document
+
+
+def is_version_convertable(document, request, version_id=None):
+    if not version_id:
+        if document.is_checked_out():
+            return False
+    else:
+        document = Versioner(document).retrieve(version_id)
+    return IBumblebeeServiceV3(request).is_convertable(document)
+
+
+def create_destination_document(context, request, version_id, destination):
+    # get all the metadata that will be set on the created file.
+    # We blacklist some fields that should not be copied
+    fields_to_skip = set(("file",
+                          "archival_file",
+                          "archival_file_state",
+                          "thumbnail",
+                          "preview",
+                          "digitally_available",
+                          "changeNote",
+                          "changed",
+                          "relatedItems",))
+    metadata = {}
+    for schema in iterSchemataForType(context.portal_type):
+        for name, schema_field in getFieldsInOrder(schema):
+            if name in fields_to_skip:
+                continue
+            field_instance = schema_field.bind(context)
+            metadata[name] = field_instance.get(field_instance.interface(context))
+
+    command = CreateDocumentCommand(destination, None, None, **metadata)
+    destination_document = command.execute()
+
+    # We make it in shadow state until its file is set by the callback view
+    destination_document.as_shadow_document()
+    # Add marker interface. This should be useful in the future for
+    # cleanup jobs, retries if the PDF was not delivered and so on.
+    alsoProvides(destination_document, IDocumentSavedAsPDFMarker)
+    # Add annotations needed for the SavePDFDocumentUnder view.
+    annotations = IAnnotations(destination_document)
+    annotations[PDF_SAVE_SOURCE_UUID_KEY] = IUUID(context)
+    annotations[PDF_SAVE_SOURCE_VERSION_KEY] = version_id
+
+    # The missing_value attribute of a z3c-form field is used
+    # as soon as an object has no default_value i.e. after creating
+    # an object trough the command-line.
+    #
+    # Because the relatedItems field needs a list as a missing_value,
+    # we will fall into the "mutable keyword argument"-python gotcha.
+    # The relatedItems will be shared between the object-instances.
+    #
+    # Unfortunately the z3c-form field does not provide a
+    # missing_value-factory (like the defaultFactory) which would be
+    # necessary to fix this issue properly.
+    #
+    # As a workaround we make sure that the new document's relatedItems
+    # is different object from the source document's.
+    IRelatedDocuments(destination_document).relatedItems = list(
+        IRelatedDocuments(destination_document).relatedItems)
+
+    IRelatedDocuments(destination_document).relatedItems.append(
+        RelationValue(getUtility(IIntIds).getId(context)))
+
+    return destination_document
 
 
 class SavePDFUnderFormView(layout.FormWrapper):
@@ -315,7 +318,8 @@ class SavePDFUnderFormView(layout.FormWrapper):
         return super(SavePDFUnderFormView, self).render()
 
     def is_save_pdf_under_available(self):
-        return IBumblebeeServiceV3(self.request).is_convertable(self.context)
+        is_convertable = IBumblebeeServiceV3(self.request).is_convertable(self.context)
+        return not self.context.is_checked_out() and is_convertable
 
 
 class NotInContentTypes(Invalid):

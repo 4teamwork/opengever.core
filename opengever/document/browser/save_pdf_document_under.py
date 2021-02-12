@@ -26,6 +26,28 @@ PDF_SAVE_STATUS_KEY = 'opengever.document.save_pdf_under_status'
 PDF_SAVE_OWNER_ID_KEY = 'opengever.document.save_pdf_document_owner_id'
 
 
+def trigger_conversion(source_document, destination_document, version_id):
+    token = str(uuid4())
+    annotations = IAnnotations(destination_document)
+    annotations[PDF_SAVE_TOKEN_KEY] = token
+    annotations[PDF_SAVE_OWNER_ID_KEY] = api.user.get_current().getId()
+
+    if version_id is not None:
+        document = Versioner(source_document).retrieve(version_id)
+    else:
+        document = source_document
+
+    if IBumblebeeServiceV3(getRequest()).queue_demand(
+            document, PROCESSING_QUEUE, get_callback_url(destination_document), opaque_id=token):
+        annotations[PDF_SAVE_STATUS_KEY] = "conversion-demanded"
+    else:
+        raise BadRequest("This document is not convertable.")
+
+
+def get_callback_url(destination_document):
+    return "{}/save_pdf_under_callback".format(destination_document.absolute_url())
+
+
 class SavePDFDocumentUnder(BrowserView):
     """Display a view to indicate the status of the pdf generation"""
 
@@ -45,26 +67,8 @@ class SavePDFDocumentUnder(BrowserView):
         self.trigger_conversion()
         return self.template()
 
-    def get_callback_url(self):
-        return "{}/save_pdf_under_callback".format(
-            self.destination_document.absolute_url())
-
     def trigger_conversion(self):
-        token = str(uuid4())
-        annotations = IAnnotations(self.destination_document)
-        annotations[PDF_SAVE_TOKEN_KEY] = token
-        annotations[PDF_SAVE_OWNER_ID_KEY] = api.user.get_current().getId()
-
-        if self.version_id is not None:
-            document = Versioner(self.source_document).retrieve(self.version_id)
-        else:
-            document = self.source_document
-
-        if IBumblebeeServiceV3(getRequest()).queue_demand(
-                document, PROCESSING_QUEUE, self.get_callback_url(), opaque_id=token):
-            annotations[PDF_SAVE_STATUS_KEY] = "conversion-demanded"
-        else:
-            raise BadRequest("This document is not convertable.")
+        trigger_conversion(self.source_document, self.destination_document, self.version_id)
 
     @property
     def vuejs_template(self):
