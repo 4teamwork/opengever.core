@@ -23,9 +23,7 @@ class ConfigGet(Service):
         """
         Injects additional configuration information:
 
-        - is_admin_menu_visible: Indication for the GEVER UI if it should display
-          the menu item "Verwaltung" in the navigation drawer.
-
+        - is_admin: If the current user is a GEVER Admin or not
         - bumblebee_app_id: The Bumblebee app id as configured in Plone (a string).
 
         - private_folder_url: The url to the private folder of the current
@@ -33,7 +31,7 @@ class ConfigGet(Service):
           a private folder or the feature is disabled in Plone.
         """
         config['is_emm_environment'] = is_client_ip_in_office_connector_disallowed_ip_ranges()
-        config['is_admin_menu_visible'] = utils.is_administrator()
+        config['is_admin'] = utils.is_administrator()
         config['bumblebee_app_id'] = bumblebee_config.app_id
         config['private_folder_url'] = get_private_folder_url()
         config['gever_colorization'] = get_color()
