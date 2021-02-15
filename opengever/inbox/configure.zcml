@@ -91,4 +91,6 @@
       name="forwarding-transition-reassign-refused"
       />
 
+  <adapter factory=".reference.InboxReferenceNumber" />
+
 </configure>

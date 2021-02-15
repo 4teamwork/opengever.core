@@ -24,9 +24,14 @@ class BasicReferenceNumber(object):
         self.context = context
 
     def get_number(self):
-        numbers = self.get_parent_numbers()
+        numbers = self.get_numbers()
 
         return self.get_active_formatter().complete_number(numbers)
+
+    def get_sortable_number(self):
+        numbers = self.get_numbers()
+
+        return self.get_active_formatter().complete_sortable_number(numbers)
 
     def get_active_formatter(self):
         registry = getUtility(IRegistry)
@@ -38,15 +43,15 @@ class BasicReferenceNumber(object):
     def get_local_number(self):
         return ''
 
-    def append_local_number(self, numbers):
+    def add_local_number(self, numbers):
         if not numbers.get(self.ref_type):
             numbers[self.ref_type] = []
 
         numbers[self.ref_type].insert(0, self.get_local_number())
 
-    def get_parent_numbers(self):
+    def get_numbers(self):
         numbers = {}
-        self.append_local_number(numbers)
+        self.add_local_number(numbers)
 
         parent = self.context
 
@@ -55,7 +60,7 @@ class BasicReferenceNumber(object):
             parent_reference_adapter = queryAdapter(parent, IReferenceNumber)
 
             if parent_reference_adapter:
-                parent_reference_adapter.append_local_number(numbers)
+                parent_reference_adapter.add_local_number(numbers)
 
         return numbers
 

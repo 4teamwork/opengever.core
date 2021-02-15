@@ -29,5 +29,5 @@ class PrivateFolderReferenceNumber(BasicReferenceNumber):
         return self.context.getId()
 
     def get_repository_number(self):
-        numbers = self.get_parent_numbers()
+        numbers = self.get_numbers()
         return self.get_active_formatter().repository_number(numbers)

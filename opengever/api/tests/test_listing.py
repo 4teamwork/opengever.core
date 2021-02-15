@@ -156,6 +156,16 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         sort = self.solr.search.call_args[1]["sort"]
         self.assertEqual('modified desc', sort)
 
+    @browsing
+    def test_sort_on_reference_number_uses_sortable_reference_index(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=documents&columns=title&sort_on=reference_number'
+        browser.open(self.repository_root, view=view,
+                     headers=self.api_headers)
+        sort = self.solr.search.call_args[1]["sort"]
+        self.assertEqual('sortable_reference desc', sort)
+
 
 class TestListingWithRealSolr(SolrIntegrationTestCase):
 
@@ -223,6 +233,75 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
             results['items'][-1])
+
+    @browsing
+    def test_dossier_listing_sorted_on_reference_number(self, browser):
+        self.enable_languages()
+        self.login(self.regular_user, browser=browser)
+
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=title',
+            'columns=reference_number',
+            'sort_on=reference_number',
+            'sort_order=ascending'
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        results = browser.json
+
+        self.assertEqual(
+            [u'Client1 1.1 / 1',
+             u'Client1 1.1 / 1.1',
+             u'Client1 1.1 / 1.1.1',
+             u'Client1 1.1 / 1.2',
+             u'Client1 1.1 / 2',
+             u'Client1 1.1 / 3',
+             u'Client1 1.1 / 4',
+             u'Client1 1.1 / 5',
+             u'Client1 1.1 / 5.1',
+             u'Client1 1.1 / 6',
+             u'Client1 1.1 / 7',
+             u'Client1 1.1 / 8',
+             u'Client1 1.1 / 9',
+             u'Client1 1.1 / 11',
+             u'Client1 1.1 / 12',
+             u'Client1 1.1 / 13',
+             u'Client1 1.1 / 14'],
+            [each['reference_number'] for each in results['items']]
+            )
+
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=title',
+            'columns=reference',
+            'sort_on=reference',
+            'sort_order=descending'
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        results = browser.json
+
+        self.assertEqual(
+            [u'Client1 1.1 / 14',
+             u'Client1 1.1 / 13',
+             u'Client1 1.1 / 12',
+             u'Client1 1.1 / 11',
+             u'Client1 1.1 / 9',
+             u'Client1 1.1 / 8',
+             u'Client1 1.1 / 7',
+             u'Client1 1.1 / 6',
+             u'Client1 1.1 / 5.1',
+             u'Client1 1.1 / 5',
+             u'Client1 1.1 / 4',
+             u'Client1 1.1 / 3',
+             u'Client1 1.1 / 2',
+             u'Client1 1.1 / 1.2',
+             u'Client1 1.1 / 1.1.1',
+             u'Client1 1.1 / 1.1',
+             u'Client1 1.1 / 1'],
+            [each['reference'] for each in results['items']]
+            )
 
     @browsing
     def test_public_trial_facets_are_translated(self, browser):

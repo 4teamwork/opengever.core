@@ -384,6 +384,11 @@
       />
 
   <adapter
+      factory=".indexes.sortable_reference_indexer"
+      name="sortable_reference"
+      />
+
+  <adapter
       factory=".indexes.title_de_indexer"
       name="title_de"
       />

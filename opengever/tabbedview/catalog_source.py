@@ -73,6 +73,12 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
 
     def _extract_sorting(self, solr, query):
         sort = query.pop('sort_on', self.config.sort_on)
+
+        # This method is only used when solr is enabled. In that case we can
+        # use the sortable_reference index when sorting on reference
+        if sort == 'reference':
+            sort = 'sortable_reference'
+
         if sort in solr.manager.schema.fields:
             if sort == self.config.sort_on:
                 sort_order = query.pop('sort_order', self.config.sort_order)

@@ -18,7 +18,7 @@ class TestLocalReferenceNumber(IntegrationTestCase):
         self.login(self.regular_user)
 
         self.assertEquals(
-            '', IReferenceNumber(self.repository_root).get_local_number())
+            u'', IReferenceNumber(self.repository_root).get_local_number())
 
     def test_repositoryfolder_returns_reference_prefix_of_the_context(self):
         self.login(self.regular_user)
@@ -32,6 +32,87 @@ class TestLocalReferenceNumber(IntegrationTestCase):
         self.assertEquals(
             u'1', IReferenceNumber(self.dossier).get_local_number())
 
+    def test_document_returns_sequence_number_of_context(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'14', IReferenceNumber(self.document).get_local_number())
+
+    def test_task_returns_empty_string(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.task).get_local_number())
+
+    def test_committee_container_returns_empty_string(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.committee_container).get_local_number())
+
+    def test_committee_returns_empty_string(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.committee).get_local_number())
+
+    def test_proposal_returns_empty_string(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.proposal).get_local_number())
+
+    def test_inbox_container_returns_empty_string(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.inbox_container).get_local_number())
+
+    def test_inbox_returns_inbox_id(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(
+            u'eingangskorb_fa', IReferenceNumber(self.inbox).get_local_number())
+
+    def test_contactfolder_returns_empty_string(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.contactfolder).get_local_number())
+
+    def test_contact_returns_empty_string(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'', IReferenceNumber(self.franz_meier).get_local_number())
+
+    def test_private_root_returns_location_prefix(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'P', IReferenceNumber(self.private_root).get_local_number())
+
+    def test_private_folder_returns_urlified_userid(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'kathi-barfuss',
+            IReferenceNumber(self.private_folder).get_local_number())
+
+    def test_private_dossier_returns_reference_prefix_of_the_context(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'1',
+            IReferenceNumber(self.private_dossier).get_local_number())
+
+    def test_template_folder_returns_id(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            'vorlagen',
+            IReferenceNumber(self.templates).get_local_number())
+
 
 class TestReferenceNumberAdapter(IntegrationTestCase):
 
@@ -43,7 +124,7 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
              'repositoryroot': [''],
              'repository': [u'1', u'1'],
              'dossier': [u'1', u'1']},
-            IReferenceNumber(self.subdossier).get_parent_numbers())
+            IReferenceNumber(self.subdossier).get_numbers())
 
     def test_use_dotted_as_default_formatter(self):
         self.login(self.regular_user)
@@ -84,6 +165,172 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
         self.assertEquals(
             '11-1.1',
             IReferenceNumber(self.subdossier).get_number())
+
+    def test_dotted_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            'client00000001 00000001.00000001 / 00000001.00000001.00000001 / 00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
+    def test_grouped_by_three_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='grouped_by_three',
+            interface=IReferenceNumberSettings)
+
+        self.assertEquals(
+            'client00000001 0000000100000001-00000001.00000001.00000001-00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
+    def test_no_client_id_dotted_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='no_client_id_dotted',
+            interface=IReferenceNumberSettings)
+
+        self.assertEquals(
+            '00000001.00000001 / 00000001.00000001.00000001 / 00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
+    def test_no_client_id_grouped_by_three_sortable_reference_number(self):
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='no_client_id_grouped_by_three',
+            interface=IReferenceNumberSettings)
+
+        self.assertEquals(
+            '0000000100000001-00000001.00000001.00000001-00000023',
+            IReferenceNumber(self.subsubdocument).get_sortable_number())
+
+    def test_reference_number_for_plone_site(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.portal).get_number())
+
+    def test_reference_number_for_repository_root(self):
+        self.login(self.regular_user)
+
+        self.assertEquals("Client1",
+                          IReferenceNumber(self.repository_root).get_number())
+
+    def test_reference_number_for_repositoryfolder(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1',
+                          IReferenceNumber(self.leaf_repofolder).get_number())
+
+    def test_reference_number_for_dossier(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1.1',
+                          IReferenceNumber(self.subdossier).get_number())
+
+    def test_reference_number_for_document(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1.1.1 / 23',
+                          IReferenceNumber(self.subsubdocument).get_number())
+
+    def test_reference_number_for_task(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1',
+                          IReferenceNumber(self.subtask).get_number())
+
+    def test_reference_number_for_committee_container(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.committee_container).get_number())
+
+    def test_reference_number_for_committee(self):
+        self.login(self.meeting_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.committee).get_number())
+
+    def test_reference_number_for_proposal(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1',
+                          IReferenceNumber(self.proposal).get_number())
+
+    def test_reference_number_for_proposal_document(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1 1.1 / 1 / 18',
+                          IReferenceNumber(self.proposaldocument).get_number())
+
+    def test_reference_number_for_inbox_container(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.inbox_container).get_number())
+
+    def test_reference_number_for_inbox(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(u'eingangskorb_fa Client1',
+                          IReferenceNumber(self.inbox).get_number())
+
+    def test_reference_number_for_contactfolder(self):
+        self.login(self.secretariat_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.contactfolder).get_number())
+
+    def test_reference_number_for_contact(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'Client1',
+                          IReferenceNumber(self.franz_meier).get_number())
+
+    def test_reference_number_for_private_root(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'P Client1',
+                          IReferenceNumber(self.private_root).get_number())
+
+    def test_reference_number_for_private_folder(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'P Client1 kathi-barfuss',
+                          IReferenceNumber(self.private_folder).get_number())
+
+    def test_reference_number_for_private_dossier(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'P Client1 kathi-barfuss / 1',
+                          IReferenceNumber(self.private_dossier).get_number())
+
+    def test_reference_number_for_template_folder(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'vorlagen Client1',
+                          IReferenceNumber(self.templates).get_number())
+
+    def test_reference_number_for_document_template(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'vorlagen Client1 / 3',
+                          IReferenceNumber(self.empty_template).get_number())
+
+    def test_reference_number_for_tasktemplate(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'vorlagen Client1',
+                          IReferenceNumber(self.tasktemplate).get_number())
+
+    def test_reference_number_for_dossiertemplate(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(u'vorlagen Client1',
+                          IReferenceNumber(self.subdossiertemplate).get_number())
 
 
 class TestDottedFormatterBase(IntegrationTestCase):
@@ -560,3 +807,347 @@ class TestNoClientIDGBTSorter(TestNoClientIDGroupedbyThreeFormatterBase):
 
         actual = sorted(unordered, key=self.formatter.sorter)
         self.assertEquals(expected, actual)
+
+
+class TestSortableReferenceNumberForDottedFormatter(TestDottedFormatterBase):
+
+    def setUp(self):
+        super(TestSortableReferenceNumberForDottedFormatter, self).setUp()
+
+        self.formatter = queryAdapter(
+            self.portal, IReferenceNumberFormatter, name='dotted')
+
+    def test_pad_and_separate_repositories_with_a_dot(self):
+        numbers = {'repository': [u'5', u'7', u'3', u'2'], }
+
+        self.assertEquals(
+            '00000005.00000007.00000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_alpanumeric_parts(self):
+        numbers = {'repository': [u'5 foo', u'bar7', u'foo3-4bar'], }
+
+        self.assertEquals(
+            '00000005 foo.bar00000007.foo00000003-00000004bar',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_pad_and_separate_dossiers_and_subdossiers_with_a_dot(self):
+        numbers = {'dossier': [u'4', u'6', u'2'], }
+
+        self.assertEquals(
+            ' / 00000004.00000006.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_part_is_separated_with_space(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2']}
+
+        self.assertEquals(
+            'client00000001 00000005.00000007.00000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_dossier_part_is_separated_with_slash_and_spaces(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2']}
+
+        self.assertEquals(
+            'client00000001 00000005.00000007.00000003.00000002 / '
+            '00000004.00000006.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_document_part_is_padded_and_separated_with_slash_and_space(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2'],
+                   'document': ['213']}
+
+        self.assertEquals(
+            'client00000001 00000005.00000007.00000003.00000002 / '
+            '00000004.00000006.00000002 / 00000213',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_sorting_clients_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['Client1'], 'repository': ['10']},
+            {'site': ['Client10'], 'repository': ['1']},
+            {'site': ['Client2'], 'repository': ['1']},
+            {'site': ['Foo'], 'repository': ['6']},
+            {'site': ['bar'], 'repository': ['1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['bar 00000001.00000001',
+             'client00000001 00000010',
+             'client00000002 00000001',
+             'client00000010 00000001',
+             'foo 00000006'],
+            sorted(sortable_numbers))
+
+    def test_sorting_respositories_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['10']},
+            {'site': ['fd'], 'repository': ['1']},
+            {'site': ['fd'], 'repository': ['6']},
+            {'site': ['fd'], 'repository': ['1', '1']},
+            {'site': ['fd'], 'repository': ['12']},
+            {'site': ['fd'], 'repository': ['5']},
+            {'site': ['fd'], 'repository': ['1', '10', '2']},
+            {'site': ['fd'], 'repository': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '8', '1']},
+            {'site': ['fd'], 'repository': ['10', '0']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001',
+             'fd 00000001.00000001',
+             'fd 00000001.00000008.00000001',
+             'fd 00000001.00000010',
+             'fd 00000001.00000010.00000002',
+             'fd 00000005',
+             'fd 00000006',
+             'fd 00000010',
+             'fd 00000010.00000000',
+             'fd 00000012'],
+            sorted(sortable_numbers))
+
+    def test_sorting_dossiers_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['10'], 'dossier': ['6']},
+            {'site': ['fd'], 'repository': ['1'], 'dossier': ['0']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['10']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['3']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '2']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '0'], 'dossier': ['8']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001 / 00000000',
+             'fd 00000001.00000000 / 00000008',
+             'fd 00000001.00000001 / 00000001',
+             'fd 00000001.00000001 / 00000001.00000002',
+             'fd 00000001.00000001 / 00000001.00000010',
+             'fd 00000001.00000001 / 00000003',
+             'fd 00000001.00000001 / 00000010',
+             'fd 00000010 / 00000006'],
+            sorted(sortable_numbers))
+
+    def test_dossier_are_sorted_before_repositories(self):
+        numbers_list = [
+            {'repository': ['1', '1']},
+            {'repository': ['1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1']},
+            {'repository': ['1', '1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1', '1']},
+            {'repository': ['1', '1', '1', '1'], 'dossier': ['2']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['00000001.00000001',
+             '00000001.00000001 / 00000002',
+             '00000001.00000001.00000001',
+             '00000001.00000001.00000001 / 00000002',
+             '00000001.00000001.00000001.00000001',
+             '00000001.00000001.00000001.00000001 / 00000002'],
+            sorted(sortable_numbers))
+
+    def test_documents_are_sorted_before_subdossiers(self):
+        numbers_list = [
+            {'repository': ['1'], 'dossier': ['1']},
+            {'repository': ['1'], 'dossier': ['1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1']},
+            {'repository': ['1'], 'dossier': ['1', '1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['00000001 / 00000001',
+             '00000001 / 00000001 / 00000002',
+             '00000001 / 00000001.00000001',
+             '00000001 / 00000001.00000001 / 00000002',
+             '00000001 / 00000001.00000001.00000001'],
+            sorted(sortable_numbers))
+
+
+class TestSortableReferenceNumberForGroupedByThreeFormatter(TestDottedFormatterBase):
+
+    def setUp(self):
+        super(TestSortableReferenceNumberForGroupedByThreeFormatter, self).setUp()
+
+        self.formatter = queryAdapter(
+            self.portal, IReferenceNumberFormatter, name='grouped_by_three')
+
+    def test_pad_and_separate_repository_groups_with_a_dot(self):
+        numbers = {'repository': [u'5', u'7', u'3', u'2'], }
+
+        self.assertEquals(
+            '000000050000000700000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_alpanumeric_parts(self):
+        numbers = {'repository': [u'5 foo', u'bar7', u'foo3-4bar'], }
+
+        self.assertEquals(
+            '00000005 foobar00000007foo00000003-00000004bar',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_pad_and_separate_dossier_groups_with_a_dot(self):
+        numbers = {'dossier': [u'4', u'6', u'2', '7', '3'], }
+
+        self.assertEquals(
+            '-00000004.00000006.00000002.00000007.00000003',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_repository_part_is_separated_with_space(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2']}
+
+        self.assertEquals(
+            'client00000001 000000050000000700000003.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_dossier_part_is_separated_with_dash(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2']}
+
+        self.assertEquals(
+            'client00000001 000000050000000700000003.00000002-'
+            '00000004.00000006.00000002',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_document_part_is_padded_and_separated_with_dash(self):
+        numbers = {'site': ['Client1', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2'],
+                   'document': ['213']}
+
+        self.assertEquals(
+            'client00000001 000000050000000700000003.00000002-'
+            '00000004.00000006.00000002-00000213',
+            self.formatter.complete_sortable_number(numbers))
+
+    def test_sorting_clients_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['Client1'], 'repository': ['7']},
+            {'site': ['Client10'], 'repository': ['1']},
+            {'site': ['Client2'], 'repository': ['1']},
+            {'site': ['Foo'], 'repository': ['6']},
+            {'site': ['bar'], 'repository': ['1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['bar 0000000100000001',
+             'client00000001 00000007',
+             'client00000002 00000001',
+             'client00000010 00000001',
+             'foo 00000006'],
+            sorted(sortable_numbers))
+
+    def test_sorting_respositories_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['10']},
+            {'site': ['fd'], 'repository': ['1']},
+            {'site': ['fd'], 'repository': ['6']},
+            {'site': ['fd'], 'repository': ['1', '1']},
+            {'site': ['fd'], 'repository': ['12']},
+            {'site': ['fd'], 'repository': ['5']},
+            {'site': ['fd'], 'repository': ['1', '10', '2']},
+            {'site': ['fd'], 'repository': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '8', '1']},
+            {'site': ['fd'], 'repository': ['10', '0']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001',
+             'fd 0000000100000001',
+             'fd 000000010000000800000001',
+             'fd 0000000100000010',
+             'fd 000000010000001000000002',
+             'fd 00000005',
+             'fd 00000006',
+             'fd 00000010',
+             'fd 0000001000000000',
+             'fd 00000012'],
+            sorted(sortable_numbers))
+
+    def test_sorting_dossiers_on_sortable_reference_number(self):
+        numbers_list = [
+            {'site': ['fd'], 'repository': ['2'], 'dossier': ['6']},
+            {'site': ['fd'], 'repository': ['1'], 'dossier': ['0']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['10']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['3']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '2']},
+            {'site': ['fd'], 'repository': ['1', '1'], 'dossier': ['1', '10']},
+            {'site': ['fd'], 'repository': ['1', '0'], 'dossier': ['8']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['fd 00000001-00000000',
+             'fd 0000000100000000-00000008',
+             'fd 0000000100000001-00000001',
+             'fd 0000000100000001-00000001.00000002',
+             'fd 0000000100000001-00000001.00000010',
+             'fd 0000000100000001-00000003',
+             'fd 0000000100000001-00000010',
+             'fd 00000002-00000006'],
+            sorted(sortable_numbers))
+
+    def test_dossier_are_sorted_before_repositories(self):
+        numbers_list = [
+            {'repository': ['1', '1']},
+            {'repository': ['1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1']},
+            {'repository': ['1', '1', '1'], 'dossier': ['2']},
+            {'repository': ['1', '1', '1', '1']},
+            {'repository': ['1', '1', '1', '1'], 'dossier': ['2']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['0000000100000001',
+             '0000000100000001-00000002',
+             '000000010000000100000001',
+             '000000010000000100000001-00000002',
+             '000000010000000100000001.00000001',
+             '000000010000000100000001.00000001-00000002'],
+            sorted(sortable_numbers))
+
+    def test_documents_are_sorted_before_subdossiers(self):
+        numbers_list = [
+            {'repository': ['1'], 'dossier': ['1']},
+            {'repository': ['1'], 'dossier': ['1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1']},
+            {'repository': ['1'], 'dossier': ['1', '1'], 'document': ['2']},
+            {'repository': ['1'], 'dossier': ['1', '1', '1']}]
+
+        sortable_numbers = [self.formatter.complete_sortable_number(numbers)
+                            for numbers in numbers_list]
+
+        self.assertEqual(
+            ['00000001-00000001',
+             '00000001-00000001-00000002',
+             '00000001-00000001.00000001',
+             '00000001-00000001.00000001-00000002',
+             '00000001-00000001.00000001.00000001'],
+            sorted(sortable_numbers))

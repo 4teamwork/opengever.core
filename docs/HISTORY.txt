@@ -11,6 +11,7 @@ Changelog
 - Add icons for CAD file types. [buchi]
 - Set SameSite=Lax flag for session authentication cookie. [buchi]
 - Add support for Docugate templates. [buchi]
+- Add sortable_reference solr index. [njohner]
 
 
 2021.3.0 (2021-02-03)

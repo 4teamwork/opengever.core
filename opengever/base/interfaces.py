@@ -97,15 +97,19 @@ class IReferenceNumber(Interface):
         """ Returns the reference number of the context
         """
 
+    def get_sortable_number(self):
+        """ Returns the sortable reference number of the context
+        """
+
     def get_local_number():
         """Returns only the reference number part of the context."""
 
-    def append_local_number(numbers):
-        """Append the number part of the context in the specific list
-        in the given numbers dict."""
+    def add_local_number(numbers):
+        """Adds the number part of the context in the specific list
+        in the passed numbers dict."""
 
-    def get_parent_numbers():
-        """Returns a dict with list of all number parts, from the context up to
+    def get_numbers():
+        """Returns a dict of lists of all number parts, from the context up to
         the plone site, grouped by the context type.
 
         Examples:
@@ -119,6 +123,11 @@ class IReferenceNumberFormatter(Interface):
 
     def complete_number(numbers):
         """Generate the complete reference number, for the given numbers dict.
+        """
+
+    def complete_sortable_number(numbers):
+        """Generate a sortable version of the complete reference number,
+        for the given numbers dict.
         """
 
     def repository_number(numbers):
