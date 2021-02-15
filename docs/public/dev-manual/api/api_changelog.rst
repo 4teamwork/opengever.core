@@ -11,6 +11,7 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- Rename the attribute ``is_admin_menu_visible`` from the ``@config`` endpoint to ``is_admin``.
 - (De-)serialization of choice fields for ``custom_properties`` has been changed to support a nested object containing token and title for each term (see :ref:`propertysheets` for updated examples).
 
 
