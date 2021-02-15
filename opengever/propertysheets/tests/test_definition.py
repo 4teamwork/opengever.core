@@ -1,4 +1,3 @@
-from opengever.propertysheets.definition import ascii_token
 from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
@@ -37,14 +36,6 @@ class TestIsIdentifier(TestCase):
         self.assertFalse(isidentifier('def'))
         self.assertFalse(isidentifier('break'))
         self.assertFalse(isidentifier('import'))
-
-
-class TestAsciiToken(TestCase):
-
-    def test_ascii_token(self):
-        self.assertEqual(u'ue', ascii_token(u'\xfc'))
-        self.assertEqual(u'aa bb', ascii_token(u'aa bb'))
-        self.assertEqual(u'ueasd asd', ascii_token(u'\xfcasd//%asd'))
 
 
 class TestSchemaDefinitionRichComparison(FunctionalTestCase):
@@ -202,7 +193,9 @@ class TestSchemaDefinition(FunctionalTestCase):
 
         self.assertEqual([u"bl\xe4h", u"blub"], voc_values)
         self.assertEqual([u"bl\xe4h", u"blub"], voc_titles)
-        self.assertEqual([u"blaeh", "blub"], voc_tokens)
+        self.assertEqual(
+            [u"bl\xe4h".encode("unicode_escape"), "blub"], voc_tokens
+        )
 
     def test_add_choice_field_requires_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
@@ -220,15 +213,6 @@ class TestSchemaDefinition(FunctionalTestCase):
     def test_add_choice_field_prevents_duplicate_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         choices = ['duplicate', 'duplicate']
-        with self.assertRaises(ValueError):
-            definition.add_field(
-                "choice", u"chooseone", u"choose", u"", False, values=choices
-            )
-
-    def test_add_choice_field_prevents_duplicate_tokens(self):
-        """Use two different values which are normalized to the same tokens."""
-        definition = PropertySheetSchemaDefinition.create("foo")
-        choices = ['dupli cate', 'dupli\\cate']
         with self.assertRaises(ValueError):
             definition.add_field(
                 "choice", u"chooseone", u"choose", u"", False, values=choices

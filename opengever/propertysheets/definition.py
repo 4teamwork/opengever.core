@@ -1,5 +1,4 @@
 from copy import deepcopy
-from opengever.base.filename import filenamenormalizer
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
@@ -13,6 +12,7 @@ from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
 from zope.component import getUtility
+from zope.schema import Choice
 from zope.schema import getFieldNamesInOrder
 from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
@@ -26,10 +26,6 @@ import tokenize
 
 def isidentifier(val):
     return re.match(tokenize.Name + r'\Z', val) and not keyword.iskeyword(val)
-
-
-def ascii_token(text):
-    return filenamenormalizer.normalize(text)
 
 
 class PropertySheetSchemaDefinition(object):
@@ -63,6 +59,28 @@ class PropertySheetSchemaDefinition(object):
         if assignments is None:
             assignments = tuple()
         self.assignments = assignments
+
+        for field in self.get_fields():
+            self._init_field(field[1])
+
+    def _init_field(self, field):
+        """Make sure field initialization is completed.
+
+        Choice fields are constructed by `ChoiceHandler`, a choice-field
+        specific `IFieldExportImportHandler` implementation. It does not seem
+        to construct the fields via their constructor and thus never sets
+        the `_init_field` instance variable to `False` to signal that
+        initialization is complete. This will cause the field to always skip
+        validation.
+
+        To work around this issue we set the attribute manually after the
+        schema class and its fields have been loaded or a field is added.
+
+        This is fixed with https://github.com/plone/plone.supermodel/pull/12
+        and available when we make the move to plone 5.
+        """
+        if isinstance(field, Choice):
+            field._init_field = False
 
     def __eq__(self, other):
         if isinstance(other, PropertySheetSchemaDefinition):
@@ -121,8 +139,15 @@ class PropertySheetSchemaDefinition(object):
                 raise InvalidFieldTypeDefinition(
                     "For 'choice' fields types values are required."
                 )
-            terms = [SimpleVocabulary.createTerm(item, ascii_token(item), item)
-                     for item in values]
+            # Using `unicode_escape` encoding for tokens is a requirement of
+            # `ChoiceHandler` which otherwise refuses to write the vocabulary
+            # to XML.
+            terms = [
+                SimpleVocabulary.createTerm(
+                    item, item.encode("unicode_escape"), item
+                )
+                for item in values
+            ]
             properties['vocabulary'] = SimpleVocabulary(terms)
             # The field factory injects an empty list as values argument if it
             # is not set. This will lead to a conflict with the vocabylary we
@@ -137,6 +162,7 @@ class PropertySheetSchemaDefinition(object):
         field = factory(**properties)
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
+        self._init_field(field)
 
     def get_fields(self):
         """Return a list of (name, field) tuples in native schema order."""

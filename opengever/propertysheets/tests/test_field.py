@@ -170,6 +170,63 @@ class TestPropertySheetField(FunctionalTestCase):
             cm.exception.message,
         )
 
+    def test_choice_validation_fails_for_invalid_field_data(self):
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "choice", "choose", u"Choose", u"", False, values=['xx']
+            )
+        )
+        self.request["some_request_key"] = [u"question"]
+
+        with self.assertRaises(ValidationError):
+            self.field.validate(
+                {
+                    "IDocumentMetadata.document_type.question": {
+                        "choose": 'yy',
+                    }
+                }
+            )
+
+    def test_choice_validation_fails_for_missing_field_data(self):
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "choice", "choose", u"Choose", u"", True, values=['xx']
+            )
+        )
+        self.request["some_request_key"] = [u"question"]
+
+        with self.assertRaises(RequiredMissing):
+            self.field.validate(
+                {
+                    "IDocumentMetadata.document_type.question": {
+                    }
+                }
+            )
+
+    def test_choice_validation_with_good_data(self):
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "choice", "choose", u"Choose", u"", True, values=['xx']
+            )
+        )
+        self.request["some_request_key"] = [u"question"]
+        self.field.validate(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": 'xx',
+                }
+            }
+        )
+
     def test_successful_field_validation_with_active_slot_from_request_key(
         self,
     ):

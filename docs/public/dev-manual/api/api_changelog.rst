@@ -8,6 +8,15 @@ API Changelog
 2021.4.0 (unreleased)
 ---------------------
 
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+- (De-)serialization of choice fields for ``custom_properties`` has been changed to support a nested object containing token and title for each term (see :ref:`propertysheets` for updated examples).
+
+
+Other Changes
+^^^^^^^^^^^^^
+
 - A new endpoint ``@save-document-as-pdf`` is added (see :ref:`save-document-as-pdf`).
 
 

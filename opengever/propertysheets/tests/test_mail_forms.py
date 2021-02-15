@@ -1,5 +1,3 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase

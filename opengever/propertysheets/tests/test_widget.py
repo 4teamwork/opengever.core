@@ -16,7 +16,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
     ):
         self.login(self.manager, browser)
 
-        choices = ["one", "two", "three"]
+        choices = ["one", u"zw\xf6i", "three"]
         create(
             Builder("property_sheet_schema")
             .named("schema1")
@@ -54,7 +54,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
         browser.fill(
             {
                 "Yes or no": True,
-                "Choose": "two",
+                "Choose": u"zw\xf6i",
                 "Number": "3",
                 "Some lines of text": "Foo\nbar",
                 "A line of text": u"b\xe4\xe4",
@@ -68,7 +68,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "text": u"Foo\nbar",
                     "num": 3,
                     "yesorno": True,
-                    "choose": u"two",
+                    "choose": u"zw\xf6i",
                     "textline": u"b\xe4\xe4",
                 }
             },
