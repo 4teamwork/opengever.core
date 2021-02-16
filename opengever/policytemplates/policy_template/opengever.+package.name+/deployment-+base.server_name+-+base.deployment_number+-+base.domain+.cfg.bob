@@ -34,7 +34,7 @@ environment-vars +=
     BUMBLEBEE_INTERNAL_PLONE_URL https://{{{base.domain}}}/
     BUMBLEBEE_PUBLIC_URL https://{{{base.domain}}}/
     BUMBLEBEE_SECRET {{{base.bumblebee_secret}}}
-{{% if is_teamraum %}}
     APPS_ENDPOINT_URL {{{base.apps_endpoint_url}}}
+{{% if is_teamraum %}}
     WORKSPACE_SECRET {{{base.workspace_secret}}}
 {{% endif %}}
