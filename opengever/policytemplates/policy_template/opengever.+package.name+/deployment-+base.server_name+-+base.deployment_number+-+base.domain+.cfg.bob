@@ -26,7 +26,9 @@ supervisor-memmon-instance-size = 1200MB
 supervisor-memmon-options = -p instance1=${buildout:supervisor-memmon-instance-size} -p instance2=${buildout:supervisor-memmon-instance-size} -p instance3=${buildout:supervisor-memmon-instance-size} -p instance4=${buildout:supervisor-memmon-instance-size} -m ${buildout:supervisor-email}
 
 parts -= gems
+{{% if not base.setup_with_services %}}
 sablon-executable = /opt/sablon/bin/sablon
+{{% endif %}}
 
 [instance0]
 environment-vars +=
@@ -35,6 +37,12 @@ environment-vars +=
     BUMBLEBEE_PUBLIC_URL https://{{{base.domain}}}/
     BUMBLEBEE_SECRET {{{base.bumblebee_secret}}}
     APPS_ENDPOINT_URL {{{base.apps_endpoint_url}}}
+{{% if base.setup_with_services %}}
+    MSGCONVERT_URL http://localhost:8090/
+    SABLON_URL http://localhost:8091/
+    PDFLATEX_URL http://localhost:8092/
+{{% endif %}}
+
 {{% if is_teamraum %}}
     WORKSPACE_SECRET {{{base.workspace_secret}}}
 {{% endif %}}
