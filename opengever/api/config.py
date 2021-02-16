@@ -4,6 +4,8 @@ from opengever.base.colorization import get_color
 from opengever.base.interfaces import IGeverSettings
 from opengever.inbox.utils import get_current_inbox
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.models.service import ogds_service
 from opengever.private import get_private_folder_url
 from plone.restapi.services import Service
 
@@ -36,5 +38,9 @@ class ConfigGet(Service):
         config['private_folder_url'] = get_private_folder_url()
         config['gever_colorization'] = get_color()
 
-        inbox = get_current_inbox(self.context)
-        config['inbox_folder_url'] = inbox.absolute_url() if inbox else ''
+        plone_inbox = get_current_inbox(self.context)
+        config['inbox_folder_url'] = plone_inbox.absolute_url() if plone_inbox else ''
+
+        ogds_inbox = get_current_org_unit().inbox()
+        current_user = ogds_service().fetch_current_user()
+        config['is_inbox_user'] = current_user in ogds_inbox.assigned_users()

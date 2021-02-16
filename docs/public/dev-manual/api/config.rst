@@ -98,6 +98,7 @@ GEVER-Mandanten abgefragt werden.
           "gever_colorization": "#37C35A",
           "inbox_folder_url": "https://dev.onegovgever.ch/fd/eingangskorb/eingangskorb_afi",
           "is_admin": false,
+          "is_inbox_user": false,
           "is_emm_environment": false,
           "max_dossier_levels": 5,
           "max_repositoryfolder_levels": 3,

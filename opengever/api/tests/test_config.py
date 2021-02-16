@@ -229,6 +229,20 @@ class TestConfig(IntegrationTestCase):
         self.assertFalse(browser.json.get(u'is_admin'))
 
     @browsing
+    def test_is_inbox_user_is_true_for_users_assigned_to_the_inbox_group(self, browser):
+        self.login(self.secretariat_user, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertTrue(browser.json.get(u'is_inbox_user'))
+
+    @browsing
+    def test_is_inbox_user_is_false_for_regular_user(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertFalse(browser.json.get(u'is_inbox_user'))
+
+    @browsing
     def test_config_contains_bumblebee_app_id(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.config_url, headers=self.api_headers)
