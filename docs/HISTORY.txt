@@ -18,6 +18,7 @@ Changelog
 - Set SameSite=Lax flag for session authentication cookie. [buchi]
 - Add support for Docugate templates. [buchi]
 - Add sortable_reference solr index. [njohner]
+- Rename object and set creator after copying with REST API. [buchi]
 
 
 2021.3.0 (2021-02-03)
