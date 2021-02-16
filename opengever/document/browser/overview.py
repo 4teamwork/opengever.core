@@ -356,8 +356,11 @@ class Overview(DefaultView, GeverTabMixin, VisibleActionButtonRendererMixin):
         except (AssertionError, ValueError):
             return False
 
-        state = api.content.get_state(
-            self.context.get_parent_dossier(), default=None)
+        parent_dossier = self.context.get_parent_dossier()
+        if not parent_dossier:
+            return False
+
+        state = api.content.get_state(parent_dossier, default=None)
         return can_edit and state in DOSSIER_STATES_CLOSED
 
     def get_archival_file_class(self):

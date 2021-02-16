@@ -4,6 +4,7 @@ Changelog
 2021.4.0 (unreleased)
 ---------------------
 
+- Fix inbox document overview for managers. [lgraf]
 - Add 'is_inbox_user' attribute to the @config endpoint [elioschmutz]
 - Rename the attribute 'is_admin_menu_visible' from the @config endpoint to 'is_admin'. [elioschmutz]
 - Fix custom property choice field (de-)serialization. [deiferni]
