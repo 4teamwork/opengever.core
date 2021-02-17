@@ -71,7 +71,7 @@
       policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
       additional_profiles="opengever.{{{package.name}}}.{{{adminunit.id}}}:units
                            opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content
-                           opengever.setup:casauth
+                           opengever.setup:casauth_ianus_portal
                           "
       admin_unit_id="{{{adminunit.id}}}"
       administrator_group="{{{deployment.administrator_group}}}"
@@ -90,7 +90,7 @@
       policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
       additional_profiles="opengever.{{{package.name}}}.{{{adminunit.id}}}:workspaces_content
                            opengever.{{{package.name}}}.{{{adminunit.id}}}:units
-                           opengever.setup:casauth
+                           opengever.setup:casauth_ianus_portal
                           "
       admin_unit_id="{{{adminunit.id}}}"
       administrator_group="{{{deployment.administrator_group}}}"

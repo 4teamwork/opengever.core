@@ -4,6 +4,7 @@ Changelog
 2021.4.0 (unreleased)
 ---------------------
 
+- Adapt policy templates for ianus portal. [njohner]
 - Fix inbox document overview for managers. [lgraf]
 - Always set APPS_ENDPOINT_URL and handle sablon, msg_convert and pdflatex as services in policy templates. [njohner]
 - Add 'is_inbox_user' attribute to the @config endpoint [elioschmutz]
