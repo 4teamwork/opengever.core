@@ -17,6 +17,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
 
+#. Default "Copy of ${title}"
+#: opengever/api/copy_.py
+msgid "copy_of"
+msgstr ""
+
 #. Default: "unprotected"
 #: opengever/repository/classification.py
 msgid "unprotected"

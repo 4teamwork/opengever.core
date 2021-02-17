@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-25 11:32+0000\n"
+"POT-Creation-Date: 2021-02-16 11:20+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -114,6 +114,11 @@ msgstr "classified"
 #: opengever/repository/classification.py
 msgid "confidential"
 msgstr "confidential"
+
+#. Default "Copy of ${title}"
+#: opengever/api/copy_.py
+msgid "copy_of"
+msgstr "Copy of ${title}"
 
 #. German translation: Bestätigen Sie bitte, dass Sie diese Aktion durchführen möchten.
 #. Default: "Confirm that you'd like to perform this action."

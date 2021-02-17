@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-25 11:32+0000\n"
+"POT-Creation-Date: 2021-02-16 11:20+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -97,6 +97,11 @@ msgstr "Strictement confidentiel"
 #: opengever/repository/classification.py
 msgid "confidential"
 msgstr "Confidentiel"
+
+#. Default "Copy of ${title}"
+#: opengever/api/copy_.py
+msgid "copy_of"
+msgstr "Copie de ${title}"
 
 #. Default: "Confirm that you'd like to perform this action."
 #: ./opengever/base/browser/confirm.pt
