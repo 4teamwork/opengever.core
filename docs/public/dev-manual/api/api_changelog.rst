@@ -8,7 +8,10 @@ API Changelog
 2021.5.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+Other Changes
+^^^^^^^^^^^^^
+
+- Add ``breadcrumbs`` option to the ``@solrsearch`` endpoint.
 
 
 2021.4.1 (2021-02-25)
