@@ -4,6 +4,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.exceptions import OneoffixxBackendException
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
+from opengever.oneoffixx.tests import BaseOneOffixxTestCase
 from opengever.oneoffixx.utils import whitelisted_template_types
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -14,41 +15,10 @@ import requests
 import requests_mock
 
 
-class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
-
-    features = ("officeconnector-checkout", "oneoffixx")
+class TestCreateDocFromOneoffixxTemplate(BaseOneOffixxTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxTemplate, self).setUp()
-        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
-        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
-        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
-        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
-
-        access_token = {'access_token': 'all_may_enter'}
-        template_library = {'datasources': [{'id': 1, 'isPrimary': True}]}
-        organization_units = [{'id': 'fake-org-id'}]
-        self.template_word = {
-            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
-            'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
-            'languages': ['2055'],
-            'localizedName': '3 Example Word file',
-            'templateGroupId': 1,
-        }
-        template_excel = {
-            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc8',
-            'metaTemplateId': 'e31ca353-2ab1-4408-921b-a70ae2f57ad1',
-            'languages': ['2055'],
-            'localizedName': '2 Example Excel file',
-            'templateGroupId': 2,
-        }
-        template_powerpoint = {
-            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc9',
-            'metaTemplateId': 'a2c9b700-86cd-4481-a17f-533fe9c504a2',
-            'languages': ['2055'],
-            'localizedName': '1 Example Powerpoint presentation',
-            'templateGroupId': 3,
-        }
         template_groups = [
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532be',
@@ -58,49 +28,16 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bf',
                 'localizedName': 'Excel templates',
-                'templates': [template_excel],
+                'templates': [self.template_excel],
             },
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532c0',
                 'localizedName': 'Powerpoint template folder',
-                'templates': [template_powerpoint],
+                'templates': [self.template_powerpoint],
             },
         ]
         favorites = [self.template_word, ]
-        session = requests.Session()
-        adapter = requests_mock.Adapter()
-        adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
-        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
-        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/OrganizationUnits',
-                             text=json.dumps(organization_units))
-        adapter.register_uri(
-            'GET',
-            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
-            text=json.dumps(template_groups),
-        )
-        adapter.register_uri(
-            'GET',
-            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
-            text=json.dumps(favorites),
-        )
-        session.mount('mock', adapter)
-
-        credentials = {
-            'client_id': 'foo',
-            'client_secret': 'topsecret',
-            'preshared_key': 'horribletruth',
-        }
-
-        OneoffixxAPIClient(session, credentials)
-
-    def tearDown(self):
-        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
-        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
-        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
-        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
-        # Tear down the singleton
-        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
-        super(TestCreateDocFromOneoffixxTemplate, self).tearDown()
+        self.mock_oneoffixx_api_client(template_groups=template_groups, favorites=favorites)
 
     @browsing
     def test_oneoffixx_wizard_shows_filter(self, browser):
@@ -267,20 +204,10 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         self.assertEqual(expected_templates_table, browser.css('table').first.lists())
 
 
-class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
-
-    features = ("officeconnector-checkout", "oneoffixx")
+class TestCreateDocFromOneoffixxFilterTemplate(BaseOneOffixxTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxFilterTemplate, self).setUp()
-        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
-        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
-        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
-        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
-
-        access_token = {'access_token': 'all_may_enter'}
-        template_library = {'datasources': [{'id': 1, 'isPrimary': True}]}
-        organization_units = [{'id': 'fake-org-id'}]
         valid_template = {
             'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
             'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
@@ -296,41 +223,7 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
             'templateGroupId': 1,
         }
         template_groups = [{'templates': [valid_template, invalid_template]}]
-        favorites = []
-        session = requests.Session()
-        adapter = requests_mock.Adapter()
-        adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
-        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
-        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/OrganizationUnits',
-                             text=json.dumps(organization_units))
-        adapter.register_uri(
-            'GET',
-            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
-            text=json.dumps(template_groups),
-        )
-        adapter.register_uri(
-            'GET',
-            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
-            text=json.dumps(favorites),
-        )
-        session.mount('mock', adapter)
-
-        credentials = {
-            'client_id': 'foo',
-            'client_secret': 'topsecret',
-            'preshared_key': 'horribletruth',
-        }
-
-        OneoffixxAPIClient(session, credentials)
-
-    def tearDown(self):
-        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
-        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
-        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
-        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
-        # Tear down the singleton
-        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
-        super(TestCreateDocFromOneoffixxFilterTemplate, self).tearDown()
+        self.mock_oneoffixx_api_client(template_groups=template_groups)
 
     @browsing
     def test_document_creation_from_oneoffixx_lists_only_whitelisted_template_types(self, browser):
@@ -497,93 +390,30 @@ class TestOneOffixxTemplateFeature(IntegrationTestCase):
             factoriesmenu.addable_types())
 
 
-class TestOneoffixxTemplateFavorites(IntegrationTestCase):
-
-    features = ("officeconnector-checkout", "oneoffixx")
+class TestOneoffixxTemplateFavorites(BaseOneOffixxTestCase):
 
     def setUp(self):
         super(TestOneoffixxTemplateFavorites, self).setUp()
-        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
-        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
-        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
-        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
-        access_token = {'access_token': 'all_may_enter'}
-        template_library = {'datasources': [{'id': 1, 'isPrimary': True}]}
-        organization_units = [{'id': 'fake-org-id'}]
-        template_word = {
-            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
-            'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
-            'languages': ['2055'],
-            'localizedName': '3 Example Word file',
-            'templateGroupId': 1,
-        }
-        template_excel = {
-            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc8',
-            'metaTemplateId': 'e31ca353-2ab1-4408-921b-a70ae2f57ad1',
-            'languages': ['2055'],
-            'localizedName': '2 Example Excel file',
-            'templateGroupId': 2,
-        }
-        template_powerpoint = {
-            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc9',
-            'metaTemplateId': 'a2c9b700-86cd-4481-a17f-533fe9c504a2',
-            'languages': ['2055'],
-            'localizedName': '1 Example Powerpoint presentation',
-            'templateGroupId': 3,
-        }
         template_groups = [
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532be',
                 'localizedName': 'Word templates',
-                'templates': [template_word],
+                'templates': [self.template_word],
             },
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bf',
                 'localizedName': 'Excel templates',
-                'templates': [template_excel],
+                'templates': [self.template_excel],
             },
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532c0',
                 'localizedName': 'Powerpoint template folder',
-                'templates': [template_powerpoint],
+                'templates': [self.template_powerpoint],
             },
         ]
-        favorites = [template_powerpoint]
-        session = requests.Session()
-        adapter = requests_mock.Adapter()
-        adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
-        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
-        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/OrganizationUnits',
-                             text=json.dumps(organization_units))
-        adapter.register_uri(
-            'GET',
-            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
-            text=json.dumps(template_groups),
-        )
-        adapter.register_uri(
-            'GET',
-            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
-            text=json.dumps(favorites),
-        )
-        session.mount('mock', adapter)
-
-        credentials = {
-            'client_id': 'foo',
-            'client_secret': 'topsecret',
-            'preshared_key': 'horribletruth',
-        }
-
-        OneoffixxAPIClient(session, credentials)
-
-    def tearDown(self):
-        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
-        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
-        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
-        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
-        # Tear down the singleton
-        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
-        super(TestOneoffixxTemplateFavorites, self).tearDown()
+        favorites = [self.template_powerpoint]
+        self.mock_oneoffixx_api_client(template_groups=template_groups, favorites=favorites)
 
     @browsing
     def test_oneoffixx_favorites_listed_as_a_category(self, browser):
@@ -642,9 +472,7 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
         )
 
 
-class TestOneoffixxClientGrantScopeDefault(IntegrationTestCase):
-
-    features = ("officeconnector-checkout", "oneoffixx")
+class TestOneoffixxClientGrantScopeDefault(BaseOneOffixxTestCase):
 
     def setUp(self):
         super(TestOneoffixxClientGrantScopeDefault, self).setUp()
