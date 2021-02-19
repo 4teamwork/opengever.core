@@ -710,6 +710,11 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
 
     def test_repository_migrator_change_title(self):
         self.login(self.manager)
+
+        # We need to make sure that we are working in German, otherwise setting title_de
+        # will not update the id. Will that actually work in production?
+        self.request['LANGUAGE_TOOL'].LANGUAGE = 'de'
+
         migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_change_title.xlsx')
         analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
         analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
@@ -1707,6 +1712,11 @@ class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
 
     def test_validation_fails_if_title_is_not_set_correctly(self):
         self.login(self.manager)
+
+        # We need to make sure that we are working in German, otherwise setting title_de
+        # will not update the id. Will that actually work in production?
+        self.request['LANGUAGE_TOOL'].LANGUAGE = 'de'
+
         migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_no_changes.xlsx')
         analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
         analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
@@ -1756,6 +1766,11 @@ class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
 
     def test_validation_fails_if_data_is_not_consistent(self):
         self.login(self.manager)
+
+        # We need to make sure that we are working in German, otherwise setting title_de
+        # will not update the id. Will that actually work in production?
+        self.request['LANGUAGE_TOOL'].LANGUAGE = 'de'
+
         migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_no_changes.xlsx')
         analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
         analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
