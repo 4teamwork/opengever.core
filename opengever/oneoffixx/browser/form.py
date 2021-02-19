@@ -4,22 +4,20 @@ from opengever.base.sentry import log_msg_to_sentry
 from opengever.oneoffixx import _
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.command import CreateDocumentFromOneOffixxTemplateCommand
-from opengever.oneoffixx.utils import whitelisted_template_types
+from opengever.oneoffixx.templates import get_whitelisted_oneoffixx_templates
+from opengever.oneoffixx.templates import OneOffixxTemplate
 from plone import api
-from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
-from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-
 
 FAVORITES_FAKE_ID = '__favorites__'
 
@@ -58,13 +56,7 @@ def get_oneoffixx_templates():
 
     We do not want duplicates from favorites here.
     """
-    api_client = OneoffixxAPIClient()
-    return (
-        OneOffixxTemplate(template, template_group.get('localizedName', ''))
-        for template_group in api_client.get_oneoffixx_template_groups()
-        for template in template_group.get("templates")
-        if template.get('metaTemplateId') in whitelisted_template_types
-    )
+    return get_whitelisted_oneoffixx_templates(OneoffixxAPIClient())
 
 
 def default_template_group():
@@ -119,27 +111,6 @@ def list_template_groups(context):
                                                  group.get("id"),
                                                  group.get("localizedName")))
     return MutableObjectVocabulary(terms)
-
-
-class OneOffixxTemplate(object):
-
-    def __init__(self, template, groupname):
-        self.title = template.get("localizedName")
-        self.template_id = template.get("id")
-        self.group = template.get('templateGroupId')
-        self.groupname = groupname
-        template_type = template['metaTemplateId']
-        template_type_info = whitelisted_template_types[template_type]
-        self.content_type = template_type_info['content-type']
-        filename = template.get("localizedName")
-        normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
-        self.filename = normalizer.normalize(filename, extension=template_type_info['extension'])
-        self.languages = template.get("languages")
-
-    def __eq__(self, other):
-        if type(other) == type(self):
-            return self.template_id == other.template_id
-        return False
 
 
 class MutableObjectVocabulary(SimpleVocabulary):
