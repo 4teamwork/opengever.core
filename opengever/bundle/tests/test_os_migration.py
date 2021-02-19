@@ -1764,7 +1764,7 @@ class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(0, len(migrator.validation_errors))
         self.assertTrue(migrator.validation_failed)
 
-    def test_validation_fails_if_data_is_not_consistent(self):
+    def test_validation_does_not_fail_if_data_is_not_consistent(self):
         self.login(self.manager)
 
         # We need to make sure that we are working in German, otherwise setting title_de
@@ -1788,8 +1788,9 @@ class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
         self.branch_repofolder.title_de = "modified"
         self.branch_repofolder.reindexObject()
         self.branch_repofolder.title_de = initial_title
-        with self.assertRaises(MigrationValidationError):
-            migrator.validate()
+        # data consistency in catalog is not enough to make the migration fail
+        # but it adds validation errors
+        migrator.validate()
 
         self.assertEqual([self.branch_repofolder.UID()],
                          migrator.validation_errors.keys())
