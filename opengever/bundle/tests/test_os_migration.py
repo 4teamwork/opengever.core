@@ -1459,7 +1459,7 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
             ['user:fa_inbox_users', 'user:kathi.barfuss'],
             self.get_allowed_users(self.dossier))
 
-    def test_repository_migrator_create_sets_permissions_correctly(self):
+    def test_repository_migrator_sets_permissions_correctly(self):
         self.login(self.manager)
         migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_create.xlsx')
         analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
@@ -1522,9 +1522,11 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
 
         # Check that permissions were not changed on branch_repofolder
         self.assertEqual(
-            False, getattr(self.branch_repofolder, '__ac_local_roles_block__', False))
+            True, getattr(self.branch_repofolder, '__ac_local_roles_block__', True))
+
         self.assertDictEqual(
-            {'faivel.fruhling': ['DossierManager'],
+            {u'group1': ['Contributor', 'Reader'],
+             u'group2': ['Reader'],
              'nicole.kohler': ['Owner']},
             self.branch_repofolder.__ac_local_roles__)
 
