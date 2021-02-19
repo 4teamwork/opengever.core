@@ -11,6 +11,7 @@ API Changelog
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add new endpoint ``@document_from_oneoffixx`` to add a document from a oneoffixx template
 - Add ``breadcrumbs`` option to the ``@solrsearch`` endpoint, only available for small batch sizes (max. 50 items).
 
 

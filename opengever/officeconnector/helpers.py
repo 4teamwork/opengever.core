@@ -60,7 +60,7 @@ def parse_documents(request, context, action):
             or request['REQUEST_METHOD'] == 'POST'
             and ('BODY' not in request
                  or isinstance(json.loads(request['BODY']), list)
-                 or action == 'docugate')
+                 or action in ['docugate', 'oneoffixx'])
         ):
         # Feature enabled for the wrong content type
         if not IBaseDocument.providedBy(context):

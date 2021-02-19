@@ -1,10 +1,29 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.oneoffixx">
 
   <include package=".browser" />
 
   <i18n:registerTranslations directory="locales" />
+
+  <plone:service
+      method="POST"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      accept="application/json"
+      factory=".service.CreateDocumentFromOneOffixxTemplate"
+      name="@document_from_oneoffixx"
+      permission="opengever.document.AddDocument"
+      />
+
+  <plone:service
+      method="POST"
+      for="opengever.task.task.ITask"
+      accept="application/json"
+      factory=".service.CreateDocumentFromOneOffixxTemplate"
+      name="@document_from_oneoffixx"
+      permission="opengever.document.AddDocument"
+      />
 
 </configure>
