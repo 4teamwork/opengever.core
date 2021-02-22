@@ -12,9 +12,22 @@ def get_whitelisted_oneoffixx_templates(api_client):
     ]
 
 
+def get_oneoffixx_favorites(api_client):
+    return [
+        OneOffixxTemplate(template) for template in
+        api_client.get_oneoffixx_favorites()]
+
+
+def get_oneoffixx_template_groups(api_client):
+    return [
+        OneOffixxTemplateGroup(group) for group in
+        api_client.get_oneoffixx_template_groups()
+    ]
+
+
 class OneOffixxTemplate(object):
 
-    def __init__(self, template, groupname):
+    def __init__(self, template, groupname=''):
         self.title = template.get("localizedName")
         self.template_id = template.get("id")
         self.group = template.get('templateGroupId')
@@ -31,3 +44,26 @@ class OneOffixxTemplate(object):
         if type(other) == type(self):
             return self.template_id == other.template_id
         return False
+
+    def json(self):
+        return {
+            "title": self.title,
+            "template_id": self.template_id,
+            "content_type": self.content_type,
+            "filename": self.filename,
+        }
+
+
+class OneOffixxTemplateGroup(object):
+
+    def __init__(self, group):
+        self.title = group.get('localizedName')
+        self.group_id = group.get('id')
+        self.templates = [template.get('id') for template in group.get('templates')]
+
+    def json(self):
+        return {
+            "title": self.title,
+            "group_id": self.group_id,
+            "templates": self.templates,
+        }

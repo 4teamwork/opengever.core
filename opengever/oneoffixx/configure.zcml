@@ -26,4 +26,13 @@
       permission="opengever.document.AddDocument"
       />
 
+  <plone:service
+      method="GET"
+      for="*"
+      accept="application/json"
+      factory=".service.OneOffixxTemplatesGet"
+      name="@oneoffixx-templates"
+      permission="opengever.document.AddDocument"
+      />
+
 </configure>

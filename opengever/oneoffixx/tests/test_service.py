@@ -146,3 +146,89 @@ class TestCreateDocumentFromOneOffixxTemplate(BaseOneOffixxTestCase):
         self.assertEqual(201, browser.status_code)
         doc = self.dossier[browser.json['@id'].split('/')[-1]]
         self.assertEqual('This is a description', doc.description)
+
+
+class TestGetOffixxTemplates(BaseOneOffixxTestCase):
+
+    def setUp(self):
+        super(TestGetOffixxTemplates, self).setUp()
+
+        template_groups = [
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532be',
+                'localizedName': 'Word templates',
+                'templates': [self.template_word],
+            },
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bf',
+                'localizedName': 'Excel templates',
+                'templates': [self.template_excel],
+            },
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532c0',
+                'localizedName': 'Powerpoint template folder',
+                'templates': [self.template_powerpoint],
+            },
+        ]
+        favorites = [self.template_word, ]
+        self.mock_oneoffixx_api_client(template_groups=template_groups, favorites=favorites)
+
+    @browsing
+    def test_get_oneoffixx_templates(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(
+            self.dossier,
+            method='GET',
+            headers=self.api_headers,
+            view='@oneoffixx-templates',
+        )
+
+        self.assertEqual(200, browser.status_code)
+        self.assertDictEqual({
+            u'favorites': [
+                {
+                    u'content_type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    u'filename': u'3 Example Word file.docx',
+                    u'template_id': u'2574d08d-95ea-4639-beab-3103fe4c3bc7',
+                    u'title': u'3 Example Word file'
+                }
+            ],
+            u'groups': [
+                {
+                    u'group_id': u'c2ddc01a-befd-4e0d-b15f-f67025f532be',
+                    u'templates': [u'2574d08d-95ea-4639-beab-3103fe4c3bc7'],
+                    u'title': u'Word templates'
+                },
+                {
+                    u'group_id': u'c2ddc01a-befd-4e0d-b15f-f67025f532bf',
+                    u'templates': [u'2574d08d-95ea-4639-beab-3103fe4c3bc8'],
+                    u'title': u'Excel templates'
+                },
+                {
+                    u'group_id': u'c2ddc01a-befd-4e0d-b15f-f67025f532c0',
+                    u'templates': [u'2574d08d-95ea-4639-beab-3103fe4c3bc9'],
+                    u'title': u'Powerpoint template folder'
+                }
+            ],
+            u'templates': [
+                {
+                    u'content_type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    u'filename': u'3 Example Word file.docx',
+                    u'template_id': u'2574d08d-95ea-4639-beab-3103fe4c3bc7',
+                    u'title': u'3 Example Word file'
+                },
+                {
+                    u'content_type': u'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    u'filename': u'2 Example Excel file.xlsx',
+                    u'template_id': u'2574d08d-95ea-4639-beab-3103fe4c3bc8',
+                    u'title': u'2 Example Excel file'
+                },
+                {
+                    u'content_type': u'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    u'filename': u'1 Example Powerpoint presentation.pptx',
+                    u'template_id': u'2574d08d-95ea-4639-beab-3103fe4c3bc9',
+                    u'title': u'1 Example Powerpoint presentation'
+                }
+            ]
+        }, browser.json)

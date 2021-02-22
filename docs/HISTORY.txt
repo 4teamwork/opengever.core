@@ -9,6 +9,7 @@ Changelog
 - Include mails in SIP package. [njohner]
 - Fix rejecting submitted proposal containing mail with extracted trashed attachment. [njohner]
 - Add create_task_from_proposal action. [tinagerber]
+- Implement GET @oneoffixx-templates to provide oneoffixx templates over the restapi. [elioschmutz]
 - Implement POST @document_from_oneoffixx endpoint to create a document from a oneoffixx template. [elioschmutz]
 - Also set title_en and title_fr for meetings in policy templates. [njohner]
 - Extend solrsearch endpoint, with breadcrumbs information option. [phgross]

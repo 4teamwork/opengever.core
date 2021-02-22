@@ -2,7 +2,10 @@ from opengever.api.add import GeverFolderPost
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
+from opengever.oneoffixx.templates import get_oneoffixx_favorites
+from opengever.oneoffixx.templates import get_oneoffixx_template_groups
 from opengever.oneoffixx.templates import get_whitelisted_oneoffixx_templates
+from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
@@ -64,4 +67,27 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
             '@id': self.obj.absolute_url(),
             'url': create_oc_url(
                 self.request, self.obj, dict(action='oneoffixx'),),
+        }
+
+
+class OneOffixxTemplatesGet(Service):
+    """API Endpoint that returns the data for oneoffix templates.
+
+    GET /@oneoffix-templates HTTP/1.1
+    """
+
+    def reply(self):
+        if not is_oneoffixx_feature_enabled():
+            raise NotFound
+
+        api_client = OneoffixxAPIClient()
+
+        templates = get_whitelisted_oneoffixx_templates(api_client)
+        favorites = get_oneoffixx_favorites(api_client)
+        groups = get_oneoffixx_template_groups(api_client)
+
+        return {
+            "templates": [template.json() for template in templates],
+            "favorites": [template.json() for template in favorites],
+            "groups": [template.json() for template in groups],
         }
