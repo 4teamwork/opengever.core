@@ -1,3 +1,4 @@
+from opengever.base.sentry import maybe_report_exception
 from plone import api
 from ZODB.POSException import ConflictError
 from zope.globalrequest import getRequest
@@ -27,6 +28,7 @@ class NotificationErrorHandler(object):
 
             tb = ''.join(traceback.format_exception(_type, exc, _traceback))
             logger.error('Exception while adding an activity:\n{}'.format(tb))
+            maybe_report_exception(api.portal.get(), getRequest(), _type, exc, _traceback)
             return True
 
     def show_not_notified_message(self):
