@@ -1,8 +1,10 @@
 Release-Notes
 =============
 
-In diesem Bereich finden Sie die Release-Notes zum aktuellen und den vergangenen
-Releases von OneGov GEVER.
+In diesem Bereich finden Sie ältere Release-Notes zu OneGov GEVER Releases bis 2020.2.
+
+    Für Informationen zu aktuellen Releases konsultieren Sie bitte die neue Benutzerdokumentation unter `https://docs.4teamwork.ch/OGG <https://docs.4teamwork.ch/OGG/>`_ .
+
 
 .. toctree::
    :maxdepth: 1
