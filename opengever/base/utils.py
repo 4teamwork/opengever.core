@@ -259,3 +259,36 @@ def check_group_plugin_configuration(portal):
         raise IncorrectConfigurationError(
             "Configuration error: source_groups plugin is not active "
             "for the groups plugin.")
+
+
+def unrestrictedUuidToObject(uuid):
+    """Given a UUID, attempt to return a content object. Will return
+    None if the UUID can't be found.
+    This is the unrestricted version of plone.app.uuid.utils.uuidToObject
+    """
+
+    brain = unrestrictedUuidToCatalogBrain(uuid)
+    if brain is None:
+        return None
+
+    return brain.getObject()
+
+
+def unrestrictedUuidToCatalogBrain(uuid):
+    """Given a UUID, attempt to return a catalog brain.
+    This is the unrestricted version of plone.app.uuid.utils.uuidToCatalogBrain
+    """
+
+    site = getSite()
+    if site is None:
+        return None
+
+    catalog = getToolByName(site, 'portal_catalog', None)
+    if catalog is None:
+        return None
+
+    result = catalog.unrestrictedSearchResults(UID=uuid)
+    if len(result) != 1:
+        return None
+
+    return result[0]
