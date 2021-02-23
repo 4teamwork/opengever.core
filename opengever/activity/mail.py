@@ -2,9 +2,14 @@ from opengever.activity.browser import resolve_notification_url
 from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.mailer import Mailer
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.models.service import ogds_service
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
+import logging
+
+
+logger = logging.getLogger('opengever.activity')
 
 
 # because of circular imports, we can't import from opengever.activity
@@ -23,6 +28,14 @@ class PloneNotificationMailer(NotificationDispatcher, Mailer):
 
     def dispatch_notification(self, notification):
         data = self.get_data(notification)
+
+        recipient_user = ogds_service().fetch_user(notification.userid)
+        if recipient_user and not recipient_user.email:
+            logger.warn(
+                'Notification %s skipped: Missing email address for '
+                'user %r.' % (notification.notification_id, recipient_user))
+            return
+
         msg = self.prepare_mail(
             subject=data.get('subject'),
             to_userid=notification.userid,

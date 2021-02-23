@@ -122,7 +122,7 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         self.assertEquals(['Item created'], info_messages())
 
     @browsing
-    def test_shows_message_if_dispatchers_raise_an_exception(self, member):
+    def test_missing_email_address_for_notification_recipient_doesnt_produce_warning(self, member):
         create(Builder('ogds_user')
                .having(userid='hugo.boss', email=None)
                .in_group(self.org_unit.users_group))
@@ -137,8 +137,5 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
-        self.assertEquals(
-            ['A problem has occurred when trying to dispatch a notification. '
-             'The notification therefore was not dispatched (or only partially).'],
-            warning_messages())
+        self.assertEquals([], warning_messages())
         self.assertEquals(['Item created'], info_messages())

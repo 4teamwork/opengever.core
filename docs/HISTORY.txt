@@ -10,6 +10,7 @@ Changelog
 2021.4.0 (2021-02-18)
 ---------------------
 
+- No longer show warning about failed notification deliveries if recipient user doesn't have an email address. [lgraf]
 - Adapt policy templates for ianus portal. [njohner]
 - Fix inbox document overview for managers. [lgraf]
 - Always set APPS_ENDPOINT_URL and handle sablon, msg_convert and pdflatex as services in policy templates. [njohner]
