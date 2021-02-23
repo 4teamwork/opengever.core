@@ -3,7 +3,7 @@ from opengever.document.subscribers import resolve_document_author
 from opengever.mail.exceptions import SourceMailNotFound
 from opengever.mail.interfaces import IExtractedFromMail
 from opengever.mail.mail import IOGMailMarker
-from plone.app.uuid.utils import uuidToObject
+from opengever.base.utils import unrestrictedUuidToObject
 from plone.uuid.interfaces import IUUID
 from zope.interface import noLongerProvides
 
@@ -47,5 +47,5 @@ def mail_deleted(doc, event):
     for info in doc.get_attachments():
         if not info.get('extracted'):
             continue
-        extracted_doc = uuidToObject(info.get('extracted_document_uid'))
+        extracted_doc = unrestrictedUuidToObject(info.get('extracted_document_uid'))
         noLongerProvides(extracted_doc, IExtractedFromMail)
