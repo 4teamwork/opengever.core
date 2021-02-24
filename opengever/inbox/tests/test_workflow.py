@@ -84,7 +84,7 @@ class TestInboxWorkflow(IntegrationTestCase):
     def test_editors_are_able_to_edit_a_mail(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
-        mail = create(Builder('mail').within(self.inbox))
+        mail = create(Builder('mail').within(self.inbox).with_dummy_message())
 
         browser.open(mail, view='edit')
         browser.fill({'Title': 'Mail Update'})
