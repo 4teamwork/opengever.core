@@ -1,9 +1,12 @@
 from datetime import date
+from DateTime import DateTime
 from dateutil.relativedelta import relativedelta
 from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
 from ftw.builder.dexterity import DexterityBuilder
+from opengever.base.behaviors.changed import IChanged
+from opengever.base.behaviors.changed import IChangedMarker
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.oguid import Oguid
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
@@ -26,9 +29,22 @@ from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
+import pytz
 
 
-class DossierBuilder(DexterityBuilder):
+class GeverDexterityBuilder(DexterityBuilder):
+
+    def set_modification_date(self, obj):
+        super(GeverDexterityBuilder, self).set_modification_date(obj)
+        if IChangedMarker.providedBy(obj):
+            if isinstance(self.modification_date, DateTime):
+                IChanged(obj).changed = self.modification_date.asdatetime()
+            else:
+                IChanged(obj).changed = pytz.utc.localize(self.modification_date)
+            obj.reindexObject(idxs=['changed'])
+
+
+class DossierBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.dossier.businesscasedossier'
 
     def __init__(self, session):
@@ -56,42 +72,42 @@ class MeetingDossierBuilder(DossierBuilder):
 builder_registry.register('meeting_dossier', MeetingDossierBuilder)
 
 
-class TemplateFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+class TemplateFolderBuilder(TranslatedTitleBuilderMixin, GeverDexterityBuilder):
     portal_type = 'opengever.dossier.templatefolder'
 
 
 builder_registry.register('templatefolder', TemplateFolderBuilder)
 
 
-class MeetingTemplateBuilder(DexterityBuilder):
+class MeetingTemplateBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.meeting.meetingtemplate'
 
 
 builder_registry.register('meetingtemplate', MeetingTemplateBuilder)
 
 
-class ParagraphTemplateBuilder(DexterityBuilder):
+class ParagraphTemplateBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.meeting.paragraphtemplate'
 
 
 builder_registry.register('paragraphtemplate', ParagraphTemplateBuilder)
 
 
-class DossierTemplateBuilder(DexterityBuilder):
+class DossierTemplateBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.dossier.dossiertemplate'
 
 
 builder_registry.register('dossiertemplate', DossierTemplateBuilder)
 
 
-class InboxBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+class InboxBuilder(TranslatedTitleBuilderMixin, GeverDexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
 
 
 builder_registry.register('inbox', InboxBuilder)
 
 
-class DocumentBuilder(DexterityBuilder):
+class DocumentBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.document.document'
     _checked_out = None
     _trashed = False
@@ -179,7 +195,7 @@ class SablonTemplateBuilder(DocumentBuilder):
 builder_registry.register('sablontemplate', SablonTemplateBuilder)
 
 
-class TaskBuilder(DexterityBuilder):
+class TaskBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.task.task'
 
     def __init__(self, session):
@@ -257,7 +273,7 @@ class ForwardingBuilder(TaskBuilder):
 builder_registry.register('forwarding', ForwardingBuilder)
 
 
-class MailBuilder(DexterityBuilder):
+class MailBuilder(GeverDexterityBuilder):
     portal_type = 'ftw.mail.mail'
     _trashed = False
 
@@ -308,28 +324,28 @@ class MailBuilder(DexterityBuilder):
 builder_registry.register('mail', MailBuilder)
 
 
-class RepositoryBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+class RepositoryBuilder(TranslatedTitleBuilderMixin, GeverDexterityBuilder):
     portal_type = 'opengever.repository.repositoryfolder'
 
 
 builder_registry.register('repository', RepositoryBuilder)
 
 
-class ContactFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+class ContactFolderBuilder(TranslatedTitleBuilderMixin, GeverDexterityBuilder):
     portal_type = 'opengever.contact.contactfolder'
 
 
 builder_registry.register('contactfolder', ContactFolderBuilder)
 
 
-class ContactBuilder(DexterityBuilder):
+class ContactBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.contact.contact'
 
 
 builder_registry.register('contact', ContactBuilder)
 
 
-class RepositoryRootBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+class RepositoryRootBuilder(TranslatedTitleBuilderMixin, GeverDexterityBuilder):
     portal_type = 'opengever.repository.repositoryroot'
 
     def __init__(self, session):
@@ -352,21 +368,21 @@ class RepositoryRootBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
 builder_registry.register('repository_root', RepositoryRootBuilder)
 
 
-class YearFolderbuilder(DexterityBuilder):
+class YearFolderbuilder(GeverDexterityBuilder):
     portal_type = 'opengever.inbox.yearfolder'
 
 
 builder_registry.register('yearfolder', YearFolderbuilder)
 
 
-class InboxContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+class InboxContainerBuilder(TranslatedTitleBuilderMixin, GeverDexterityBuilder):
     portal_type = 'opengever.inbox.container'
 
 
 builder_registry.register('inbox_container', InboxContainerBuilder)
 
 
-class ProposalBuilder(DexterityBuilder):
+class ProposalBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.meeting.proposal'
 
     def __init__(self, session):
@@ -440,14 +456,14 @@ class ProposalBuilder(DexterityBuilder):
 builder_registry.register('proposal', ProposalBuilder)
 
 
-class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, GeverDexterityBuilder):
     portal_type = 'opengever.meeting.committeecontainer'
 
 
 builder_registry.register('committee_container', CommitteeContainerBuilder)
 
 
-class CommitteeBuilder(DexterityBuilder):
+class CommitteeBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.meeting.committee'
 
     def __init__(self, session):
@@ -499,7 +515,7 @@ class CommitteeBuilder(DexterityBuilder):
 builder_registry.register('committee', CommitteeBuilder)
 
 
-class PeriodBuilder(DexterityBuilder):
+class PeriodBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.meeting.period'
 
     def __init__(self, session):
@@ -510,14 +526,14 @@ class PeriodBuilder(DexterityBuilder):
 builder_registry.register('period', PeriodBuilder)
 
 
-class TaskTemplateFolderBuilder(DexterityBuilder):
+class TaskTemplateFolderBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.tasktemplates.tasktemplatefolder'
 
 
 builder_registry.register('tasktemplatefolder', TaskTemplateFolderBuilder)
 
 
-class TaskTemplateBuilder(DexterityBuilder):
+class TaskTemplateBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.tasktemplates.tasktemplate'
 
     def __init__(self, session):
@@ -533,28 +549,28 @@ class TaskTemplateBuilder(DexterityBuilder):
 builder_registry.register('tasktemplate', TaskTemplateBuilder)
 
 
-class PrivateRootBuilder(DexterityBuilder):
+class PrivateRootBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.private.root'
 
 
 builder_registry.register('private_root', PrivateRootBuilder)
 
 
-class PrivateFolderBuilder(DexterityBuilder):
+class PrivateFolderBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.private.folder'
 
 
 builder_registry.register('private_folder', PrivateFolderBuilder)
 
 
-class PrivateDossierBuilder(DossierBuilder):
+class PrivateDossierBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.private.dossier'
 
 
 builder_registry.register('private_dossier', PrivateDossierBuilder)
 
 
-class DispositionBuilder(DexterityBuilder):
+class DispositionBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.disposition.disposition'
 
     def __init__(self, session):
@@ -580,42 +596,42 @@ class ProposalTemplateBuilder(DocumentBuilder):
 builder_registry.register('proposaltemplate', ProposalTemplateBuilder)
 
 
-class WorkspaceRootBuilder(DexterityBuilder):
+class WorkspaceRootBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.workspace.root'
 
 
 builder_registry.register('workspace_root', WorkspaceRootBuilder)
 
 
-class WorkspaceBuilder(DexterityBuilder):
+class WorkspaceBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.workspace.workspace'
 
 
 builder_registry.register('workspace', WorkspaceBuilder)
 
 
-class WorkspaceFolderBuilder(DexterityBuilder):
+class WorkspaceFolderBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.workspace.folder'
 
 
 builder_registry.register('workspace folder', WorkspaceFolderBuilder)
 
 
-class WorkspaceMeetingBuilder(DexterityBuilder):
+class WorkspaceMeetingBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.workspace.meeting'
 
 
 builder_registry.register('workspace meeting', WorkspaceMeetingBuilder)
 
 
-class ToDoBuilder(DexterityBuilder):
+class ToDoBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.workspace.todo'
 
 
 builder_registry.register('todo', ToDoBuilder)
 
 
-class ToDoListBuilder(DexterityBuilder):
+class ToDoListBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.workspace.todolist'
 
 
