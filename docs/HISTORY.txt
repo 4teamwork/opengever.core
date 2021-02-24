@@ -7,6 +7,7 @@ Changelog
 - Cleanup conditionals protecting for changed date not set yet. [njohner]
 - Use changed instead of modified in date range calculation for SIP packages. [njohner]
 - Include mails in SIP package. [njohner]
+- Fix creating documents from docugate over the restapi in private, inbox and workspace areas. [elioschmutz]
 - Fix rejecting submitted proposal containing mail with extracted trashed attachment. [njohner]
 - Add create_task_from_proposal action. [tinagerber]
 - Implement GET @oneoffixx-templates to provide oneoffixx templates over the restapi. [elioschmutz]

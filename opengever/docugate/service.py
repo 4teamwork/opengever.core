@@ -77,8 +77,16 @@ class CreateDocumentFromDocugateTemplate(FolderPost):
         self.title_ = self.request_data.get("title", None)
 
     def before_deserialization(self, obj):
-        obj.as_shadow_document()
         alsoProvides(obj, IDocumentFromDocugate)
+
+    def add_object_to_context(self):
+        super(CreateDocumentFromDocugateTemplate, self).add_object_to_context()
+
+        # The workflow needs to be set after the object has been added to the
+        # context. If we do it earlier, it will reset the state if we add the
+        # object to a context providing a placeful workflow. This is the case
+        # if we add it i.e. to a private dossier, inbox or workspace.
+        self.obj.as_shadow_document()
 
     def serialize_object(self):
         return {

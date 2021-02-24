@@ -87,3 +87,22 @@ class TestCreateDocumentFromDocugateTemplate(IntegrationTestCase):
         doc = self.dossier[browser.json['@id'].split('/')[-1]]
         self.assertTrue(doc.is_shadow_document())
         self.assertEqual(doc.Title(), 'My Docugate document')
+
+    @browsing
+    def test_can_create_document_in_private_dossier(self, browser):
+        self.login(self.regular_user, browser)
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        browser.open(
+            self.private_dossier,
+            method='POST',
+            data=json.dumps({'title': 'My Docugate document'}),
+            headers=headers,
+            view='@document_from_docugate',
+        )
+        self.assertEqual(browser.status_code, 201)
+        self.assertIn('url', browser.json)
+        self.assertTrue(browser.json['url'].startswith('oc:'))
