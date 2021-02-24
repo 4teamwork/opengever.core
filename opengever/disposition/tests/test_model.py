@@ -182,6 +182,29 @@ class TestDossier(IntegrationTestCase):
         self.assertEquals(date(2016, 12, 27),
                           binding.entstehungszeitraum.bis.datum.date())
 
+    def test_entstehungszeitraum_includes_mails_in_calculation(self):
+        self.login(self.regular_user)
+
+        create(Builder('document')
+               .within(self.empty_dossier)
+               .with_modification_date(DateTime(2016, 3, 1))
+               .with_creation_date(DateTime(2015, 1, 1)))
+        create(Builder('mail')
+               .within(self.empty_dossier)
+               .with_modification_date(DateTime(2016, 1, 15))
+               .with_creation_date(DateTime(2014, 3, 4)))
+        create(Builder('mail')
+               .within(self.empty_dossier)
+               .with_modification_date(DateTime(2016, 12, 27))
+               .with_creation_date(DateTime(2016, 1, 1)))
+
+        binding = Dossier(self.empty_dossier).binding()
+
+        self.assertEquals(date(2014, 3, 4),
+                          binding.entstehungszeitraum.von.datum.date())
+        self.assertEquals(date(2016, 12, 27),
+                          binding.entstehungszeitraum.bis.datum.date())
+
     def test_entstehungszeitraum_is_kein_angabe_when_dossier_is_empty(self):
         self.login(self.regular_user)
 

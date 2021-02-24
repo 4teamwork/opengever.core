@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Cleanup conditionals protecting for changed date not set yet. [njohner]
+- Include mails in SIP package. [njohner]
 - Fix rejecting submitted proposal containing mail with extracted trashed attachment. [njohner]
 - Add create_task_from_proposal action. [tinagerber]
 - Also set title_en and title_fr for meetings in policy templates. [njohner]

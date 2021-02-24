@@ -15,7 +15,7 @@ from Products.CMFCore.utils import getToolByName
 class Dossier(object):
     """eCH-0160 dossierGeverSIP"""
 
-    document_types = ['opengever.document.document']
+    document_types = ['opengever.document.document', 'ftw.mail.mail']
 
     def __init__(self, obj):
         self.obj = obj
