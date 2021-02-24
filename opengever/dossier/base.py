@@ -69,11 +69,6 @@ def as_date(datetime_obj):
     if isinstance(datetime_obj, datetime):
         return datetime_obj.date()
 
-    # XXX Can be deleted once the changed metadata has been filled on all deployments
-    # https://github.com/4teamwork/opengever.core/issues/4988
-    elif isinstance(datetime_obj, DateTime):
-        return as_utc(datetime_obj.asdatetime()).date()
-
     # It is already a date-object
     return datetime_obj
 
