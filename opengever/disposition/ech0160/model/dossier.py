@@ -5,7 +5,7 @@ from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import NOT_SPECIFIED
 from opengever.disposition.ech0160.utils import set_classification_attributes
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository.repositoryroot import IRepositoryRoot
@@ -39,7 +39,7 @@ class Dossier(object):
         for obj in objs:
             if IDossierMarker.providedBy(obj):
                 self.dossiers[obj.UID()] = Dossier(obj)
-            elif IDocumentSchema.providedBy(obj):
+            elif IBaseDocument.providedBy(obj):
                 self.documents[obj.UID()] = Document(obj)
 
     def binding(self):

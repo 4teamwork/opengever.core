@@ -21,8 +21,8 @@ class Folder(object):
             if doc.obj.archival_file:
                 if not doc.obj.is_archival_file_conversion_skipped():
                     self.files.append(File(toc, doc, doc.obj.archival_file))
-            if doc.obj.file:
-                self.files.append(File(toc, doc, doc.obj.file))
+            if doc.obj.get_file():
+                self.files.append(File(toc, doc, doc.obj.get_file()))
 
     def binding(self):
         ordner = arelda.ordnerSIP(self.name)

@@ -215,14 +215,15 @@ class TestDossier(IntegrationTestCase):
             set([self.subdossier, self.subdossier2]),
             set([mod.obj for mod in model.dossiers.values()]))
 
-    def test_add_descendants_adds_all_containing_documents(self):
+    def test_add_descendants_adds_all_contained_documents_and_mails(self):
         self.login(self.manager)
 
         model = Dossier(self.dossier)
         model._add_descendants()
 
         brains = api.content.find(context=self.dossier, depth=1,
-                                  portal_type='opengever.document.document')
+                                  portal_type=['opengever.document.document',
+                                               'ftw.mail.mail'])
         expected_documents = set([brain.getObject() for brain in brains])
 
         self.assertEquals(expected_documents,
@@ -315,9 +316,9 @@ class TestFolderAndFileModel(IntegrationTestCase):
         # self.dossier
         # two subdossiers, self.subdossier and self.subdossier2
         self.assertEquals(2, len(dossier_model.folders))
-        # dossier a contains two files, one for self.document
-        # and one automatically generated for self.decided_proposal
-        self.assertEquals(2, len(dossier_model.files))
+        # dossier a contains 4 files, for self.document, self.mail_eml,
+        # self.mail_msg and one automatically generated for self.decided_proposal
+        self.assertEquals(4, len(dossier_model.files))
         subdossier_model = dossier_model.folders[0]
         subdossier2_model = dossier_model.folders[1]
 
