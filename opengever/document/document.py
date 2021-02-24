@@ -23,7 +23,6 @@ from opengever.officeconnector.helpers import is_client_ip_in_office_connector_d
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
-from opengever.task.task import ITask
 from opengever.wopi.discovery import editable_extensions
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
