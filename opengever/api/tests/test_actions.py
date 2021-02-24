@@ -1269,6 +1269,27 @@ class TestObjectButtonsGetForProposalTemplates(ObjectButtonsTestBase):
         )
 
 
+class TestObjectButtonsGetForProposals(ObjectButtonsTestBase):
+
+    features = ('meeting',)
+
+    @browsing
+    def test_available_object_button_actions_for_proposals(self, browser):
+        self.login(self.meeting_user, browser)
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'create_task_from_proposal',
+             u'title': u'Create task from proposal'},
+            {u'icon': u'', u'id': u'submit_additional_documents',
+             u'title': u'Submit additional documents'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'}
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.proposal),
+        )
+
+
 class TestFolderButtonsGetForTemplatesFolder(FolderActionsTestBase):
 
     @browsing
