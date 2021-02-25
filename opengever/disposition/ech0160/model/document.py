@@ -1,3 +1,4 @@
+from opengever.base.behaviors.changed import IChanged
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.utils import set_classification_attributes
 from opengever.disposition.ech0160.utils import voc_term_title
@@ -34,7 +35,7 @@ class Document(object):
         dokument.entstehungszeitraum.von = arelda.historischerZeitpunkt(
             self.obj.created().asdatetime().date())
         dokument.entstehungszeitraum.bis = arelda.historischerZeitpunkt(
-            self.obj.modified().asdatetime().date())
+            IChanged(self.obj).changed.date())
 
         set_classification_attributes(dokument, self.obj)
 

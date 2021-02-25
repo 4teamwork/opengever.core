@@ -3,6 +3,7 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import staticuid
+from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.classification import IClassification
 from opengever.disposition.ech0160.model import ContentRootFolder
 from opengever.disposition.ech0160.model import Document
@@ -309,11 +310,11 @@ class TestDocumentModel(IntegrationTestCase):
             self.document.created().asdatetime().date(),
             Document(self.document).binding().registrierdatum.datum.date())
 
-    def test_entstehungszeitraum_is_created_to_modified_date_range(self):
+    def test_entstehungszeitraum_is_created_to_changed_date_range(self):
         self.login(self.regular_user)
 
         self.document.creation_date = DateTime(2016, 11, 6)
-        self.document.modification_date = DateTime(2017, 12, 6)
+        IChanged(self.document).changed = DateTime(2017, 12, 6, 12)
 
         entstehungszeitraum = Document(self.document).binding().entstehungszeitraum
         self.assertEquals(date(2016, 11, 6), entstehungszeitraum.von.datum.date())
