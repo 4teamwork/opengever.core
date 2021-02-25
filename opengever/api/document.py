@@ -1,4 +1,5 @@
 from ftw import bumblebee
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.serializer import GeverSerializeToJson
 from opengever.base.helpers import display_name
 from opengever.base.interfaces import IReferenceNumber
@@ -51,6 +52,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             'current_version_id': obj.get_current_version_id(
                 missing_as_zero=True),
             'teamraum_connect_links': ILinkedDocuments(obj).serialize(),
+            'creator': serialize_actor_id_to_json_summary(obj.Creator()),
         }
 
         result.update(additional_metadata)
