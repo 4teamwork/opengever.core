@@ -5,7 +5,15 @@ API Changelog
 
 
 
-2021.4.0 (unreleased)
+2021.4.1 (unreleased)
+---------------------
+
+Other Changes
+^^^^^^^^^^^^^
+
+- Add ``creator`` to the document serializer.
+
+2021.4.0 (2021-02-18)
 ---------------------
 
 Breaking Changes

@@ -4,7 +4,7 @@ Changelog
 2021.4.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Add creator to the document serializer. [elioschmutz]
 
 
 2021.4.0 (2021-02-18)

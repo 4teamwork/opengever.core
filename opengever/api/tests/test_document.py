@@ -73,6 +73,10 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(browser.json['trashed'])
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
+        self.assertDictEqual({
+            u'identifier': u'robert.ziegler',
+            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+        }, browser.json['creator'])
 
     @browsing
     def test_contains_collaborative_checkout_info(self, browser):
