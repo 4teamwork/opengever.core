@@ -62,12 +62,12 @@ class Dossier(object):
         latest_docs = catalog(
             portal_type=self.document_types,
             path='/'.join(self.obj.getPhysicalPath()),
-            sort_on='modified',
+            sort_on='changed',
             sort_order='descending',
             sort_limit=1)
         if oldest_docs:
             dossier.entstehungszeitraum.bis = arelda.historischerZeitpunkt(
-                latest_docs[0].modified.asdatetime().date())
+                latest_docs[0].changed.date())
         else:
             dossier.entstehungszeitraum.bis = NOT_SPECIFIED
 
