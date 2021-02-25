@@ -1,0 +1,13 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.proposal" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <action
+      action_id="create_task_from_proposal"
+      visible="True"
+      title="Create task from proposal"
+      url_expr="string:++add++opengever.task.task:method"
+      condition_expr="object/@@tabbedview_view-overview/is_create_task_from_proposal_allowed"
+      category="object_buttons">
+    <permission value="View" />
+  </action>
+
+</object>

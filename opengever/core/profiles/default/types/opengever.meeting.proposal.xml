@@ -64,6 +64,16 @@
     <permission value="Modify portal content" />
   </action>
 
+  <action
+      action_id="create_task_from_proposal"
+      visible="True"
+      title="Create task from proposal"
+      url_expr="string:++add++opengever.task.task:method"
+      condition_expr="object/@@tabbedview_view-overview/is_create_task_from_proposal_allowed"
+      category="object_buttons">
+    <permission value="View" />
+  </action>
+
   <!-- Tab Actions -->
   <action
       title="overview"
