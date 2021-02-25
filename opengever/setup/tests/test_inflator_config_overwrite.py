@@ -27,7 +27,7 @@ class TestInflatorConfig(TestCase):
         inflator_setup = xpath(inflator_config, XPATH_INFLATOR)
 
         gever_path = resource_filename(
-            'opengever.setup.creation', 'configure.zcml')
+            'opengever.setup', 'overrides.zcml')
         gever_config = etree.parse(gever_path, parser)
         gever_setup = xpath(gever_config, XPATH_GEVER)
         additional_element = xpath(gever_config, XPATH_DEPENDS)

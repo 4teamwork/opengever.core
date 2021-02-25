@@ -1,7 +1,9 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="opengever.setup">
 
   <utility
@@ -13,5 +15,19 @@
       component=".sections.reindexobject.GeverReindexObjectSection"
       name="plone.app.transmogrifier.reindexobject"
       />
+
+  <genericsetup:importStep
+      name="ftw.inflator.content_creation"
+      title="ftw.inflator: content creation"
+      description="Generic content creation from content_creation/*.json files."
+      handler="ftw.inflator.creation.setuphandler.content_creation">
+    <depends name="opengever.setup.unit_creation" />
+    <depends name="typeinfo" />
+    <depends name="workflow" />
+    <depends
+        name="languagetool"
+        zcml:condition="installed plone.app.multilingual"
+        />
+  </genericsetup:importStep>
 
 </configure>
