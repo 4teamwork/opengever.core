@@ -24,6 +24,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add ``creator`` to the document serializer.
 - Add ``is_inbox_user`` attribute to the ``@config`` endpoint.
 - A new endpoint ``@save-document-as-pdf`` is added (see :ref:`save-document-as-pdf`).
 
