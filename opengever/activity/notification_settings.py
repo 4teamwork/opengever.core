@@ -50,7 +50,9 @@ NOTIFICATION_CONFIGURATION = [
     {
         'id': 'task-commented',
         'title': _('task-commented', default=u'Task commented'),
-        'activities': ['task-commented'],
+        'activities': ['task-commented',
+                       'transition-add-document',
+                       ],
         'default_settings': {
             'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
         },
