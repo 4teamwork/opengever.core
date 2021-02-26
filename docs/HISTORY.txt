@@ -4,6 +4,7 @@ Changelog
 2021.5.0 (unreleased)
 ---------------------
 
+- The @sharing endpoint now returns a batched result set if using the search param.  [elioschmutz]
 - Cleanup conditionals protecting for changed date not set yet. [njohner]
 - Use changed instead of modified in date range calculation for SIP packages. [njohner]
 - Include mails in SIP package. [njohner]

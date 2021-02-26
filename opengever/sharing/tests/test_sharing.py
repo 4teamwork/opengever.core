@@ -184,15 +184,16 @@ class TestOpengeverSharing(IntegrationTestCase):
         browser.open(self.empty_dossier, view='@sharing?search=Test',
                      method='Get', headers={'Accept': 'application/json'})
         self.assertEquals(
-            {u'available_roles': [], u'inherit': True, u'entries': []},
+            {u'available_roles': [], u'items_total': 0, u'inherit': True, u'items': []},
             browser.json)
 
         browser.open(self.empty_dossier, view='@sharing?search=Robert',
                      method='Get', headers={'Accept': 'application/json'})
         self.assertEquals(
             {u'available_roles': [],
+             u'items_total': 1,
              u'inherit': True,
-             u'entries': [
+             u'items': [
                  {u'roles': {},
                   u'computed_roles': {},
                   u'automatic_roles': {},
@@ -370,7 +371,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                      method='Get', headers={'Accept': 'application/json'})
 
         self.assertNotIn('rk_inbox_users',
-                         [aa.get('id') for aa in browser.json['entries']])
+                         [aa.get('id') for aa in browser.json['items']])
 
         api.portal.set_registry_record(
             name='group_title_ldap_attribute',
@@ -380,7 +381,31 @@ class TestOpengeverSharing(IntegrationTestCase):
                      method='Get', headers={'Accept': 'application/json'})
 
         self.assertIn('rk_inbox_users',
-                      [aa.get('id') for aa in browser.json['entries']])
+                      [aa.get('id') for aa in browser.json['items']])
+
+    @browsing
+    def test_search_result_is_batched(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.empty_dossier, view='@sharing?search=g&b_size=3',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        result = browser.json
+
+        self.assertEqual(20, result['items_total'])
+        self.assertEqual(3, len(result['items']))
+        self.assertIn('batching', result)
+
+    @browsing
+    def test_search_result_is_batched_for_empty_search_terms(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.empty_dossier, view='@sharing?search=&b_size=1',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        result = browser.json
+
+        self.assertIn('batching', result)
 
 
 class TestRoleAssignmentsGet(IntegrationTestCase):
@@ -521,7 +546,7 @@ class TestWorkspaceSharing(IntegrationTestCase):
         self.assertItemsEqual(
             [u'fridolin.hugentobler', u'hans.peter',
              u'beatrice.schrodinger', u'gunther.frohlich'],
-            [entry['id'] for entry in browser.json.get('entries')])
+            [entry['id'] for entry in browser.json.get('items')])
 
     @browsing
     def test_only_workspace_users_are_shown_for_workspace_owner_on_workspace(self, browser):
@@ -536,7 +561,7 @@ class TestWorkspaceSharing(IntegrationTestCase):
         self.assertItemsEqual(
             [u'fridolin.hugentobler', u'hans.peter',
              u'beatrice.schrodinger', u'gunther.frohlich'],
-            [entry['id'] for entry in browser.json.get('entries')])
+            [entry['id'] for entry in browser.json.get('items')])
 
     @browsing
     def test_all_users_are_shown_for_admins_on_workspace(self, browser):
@@ -551,7 +576,7 @@ class TestWorkspaceSharing(IntegrationTestCase):
         self.assertItemsEqual(
             [u'nicole.kohler', u'fridolin.hugentobler', u'gunther.frohlich',
              u'hans.peter', u'beatrice.schrodinger'],
-            [entry['id'] for entry in browser.json.get('entries')])
+            [entry['id'] for entry in browser.json.get('items')])
 
     @browsing
     def test_only_workspace_users_are_shown_for_workspace_admin_on_workspace_folder(self, browser):
@@ -566,7 +591,7 @@ class TestWorkspaceSharing(IntegrationTestCase):
         self.assertItemsEqual(
             [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger',
              u'gunther.frohlich'],
-            [entry['id'] for entry in browser.json.get('entries')])
+            [entry['id'] for entry in browser.json.get('items')])
 
     @browsing
     def test_only_workspace_users_are_shown_for_workspace_owner_on_workspace_folder(self, browser):
@@ -581,7 +606,7 @@ class TestWorkspaceSharing(IntegrationTestCase):
         self.assertItemsEqual(
             [u'fridolin.hugentobler', u'hans.peter', u'beatrice.schrodinger',
              u'gunther.frohlich'],
-            [entry['id'] for entry in browser.json.get('entries')])
+            [entry['id'] for entry in browser.json.get('items')])
 
     @browsing
     def test_all_users_are_shown_for_admins_on_workspace_folder(self, browser):
@@ -596,4 +621,4 @@ class TestWorkspaceSharing(IntegrationTestCase):
         self.assertItemsEqual(
             [u'nicole.kohler', u'fridolin.hugentobler',
              u'hans.peter', u'beatrice.schrodinger', u'gunther.frohlich'],
-            [entry['id'] for entry in browser.json.get('entries')])
+            [entry['id'] for entry in browser.json.get('items')])

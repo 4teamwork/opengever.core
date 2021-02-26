@@ -15,6 +15,11 @@ Other Changes
 - Add new endpoint ``@document_from_oneoffixx`` to add a document from a oneoffixx template
 - Add ``breadcrumbs`` option to the ``@solrsearch`` endpoint, only available for small batch sizes (max. 50 items).
 
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+- The ``@sharing`` endpoint now returns a batched result set if using the ``search`` param. If using the endpoint with the ``search`` param, it will rename the items key from ``entries`` to the key ``items`` which is the expected key for items in a batched response.
+
 
 2021.4.1 (2021-02-25)
 ---------------------

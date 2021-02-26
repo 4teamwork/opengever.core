@@ -53,6 +53,11 @@
   <adapter factory=".serializer.long_converter" />
   <adapter factory=".field_deserializers.PersistentDefaultFieldDeserializer" />
   <adapter factory=".field_deserializers.PersistentDatetimeFieldDeserializer" />
+  <adapter
+      factory=".local_roles.GeverSerializeLocalRolesToJson"
+      name="local_roles"
+      />
+
 
   <adapter factory=".todo.DeserializeToDoFromJson" />
   <adapter factory=".mail.DeserializeMailFromJson" />

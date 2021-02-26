@@ -64,3 +64,8 @@ Das ``ogds_summary`` Feld ist überholt und das ``actor`` Feld sollte anstatt ve
         ],
         "inherit": true
       }
+
+
+Paginierung
+~~~~~~~~~~~
+Wird der ``@sharing`` Endpoint mit dem ``search`` parameter verwendet, werden ``items`` Paginiert zurückgegeben. Siehe :ref:`Kapitel Paginierung <batching>`.
