@@ -5,7 +5,7 @@ from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import NOT_SPECIFIED
 from opengever.disposition.ech0160.utils import set_classification_attributes
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository.repositoryroot import IRepositoryRoot
@@ -15,7 +15,7 @@ from Products.CMFCore.utils import getToolByName
 class Dossier(object):
     """eCH-0160 dossierGeverSIP"""
 
-    document_types = ['opengever.document.document']
+    document_types = ['opengever.document.document', 'ftw.mail.mail']
 
     def __init__(self, obj):
         self.obj = obj
@@ -39,7 +39,7 @@ class Dossier(object):
         for obj in objs:
             if IDossierMarker.providedBy(obj):
                 self.dossiers[obj.UID()] = Dossier(obj)
-            elif IDocumentSchema.providedBy(obj):
+            elif IBaseDocument.providedBy(obj):
                 self.documents[obj.UID()] = Document(obj)
 
     def binding(self):
@@ -62,12 +62,12 @@ class Dossier(object):
         latest_docs = catalog(
             portal_type=self.document_types,
             path='/'.join(self.obj.getPhysicalPath()),
-            sort_on='modified',
+            sort_on='changed',
             sort_order='descending',
             sort_limit=1)
         if oldest_docs:
             dossier.entstehungszeitraum.bis = arelda.historischerZeitpunkt(
-                latest_docs[0].modified.asdatetime().date())
+                latest_docs[0].changed.date())
         else:
             dossier.entstehungszeitraum.bis = NOT_SPECIFIED
 

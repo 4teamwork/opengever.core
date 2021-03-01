@@ -3,6 +3,7 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import staticuid
+from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.classification import IClassification
 from opengever.disposition.ech0160.model import ContentRootFolder
 from opengever.disposition.ech0160.model import Document
@@ -164,16 +165,39 @@ class TestDossier(IntegrationTestCase):
 
         create(Builder('document')
                .within(self.empty_dossier)
-               .with_modification_date(DateTime(2016, 1, 15))
-               .with_creation_date(DateTime(2014, 3, 4)))
+               .with_modification_date(DateTime(2016, 1, 15, 12))
+               .with_creation_date(DateTime(2014, 3, 4, 12)))
         create(Builder('document')
                .within(self.empty_dossier)
-               .with_modification_date(DateTime(2016, 3, 1))
-               .with_creation_date(DateTime(2015, 1, 1)))
+               .with_modification_date(DateTime(2016, 3, 1, 12))
+               .with_creation_date(DateTime(2015, 1, 1, 12)))
         create(Builder('document')
                .within(self.empty_dossier)
-               .with_modification_date(DateTime(2016, 12, 27))
-               .with_creation_date(DateTime(2016, 1, 1)))
+               .with_modification_date(DateTime(2016, 12, 27, 12))
+               .with_creation_date(DateTime(2016, 1, 1, 12)))
+
+        binding = Dossier(self.empty_dossier).binding()
+
+        self.assertEquals(date(2014, 3, 4),
+                          binding.entstehungszeitraum.von.datum.date())
+        self.assertEquals(date(2016, 12, 27),
+                          binding.entstehungszeitraum.bis.datum.date())
+
+    def test_entstehungszeitraum_includes_mails_in_calculation(self):
+        self.login(self.regular_user)
+
+        create(Builder('document')
+               .within(self.empty_dossier)
+               .with_modification_date(DateTime(2016, 3, 1, 12))
+               .with_creation_date(DateTime(2015, 1, 1, 12)))
+        create(Builder('mail')
+               .within(self.empty_dossier)
+               .with_modification_date(DateTime(2016, 1, 15, 12))
+               .with_creation_date(DateTime(2014, 3, 4, 12)))
+        create(Builder('mail')
+               .within(self.empty_dossier)
+               .with_modification_date(DateTime(2016, 12, 27, 12))
+               .with_creation_date(DateTime(2016, 1, 1, 12)))
 
         binding = Dossier(self.empty_dossier).binding()
 
@@ -215,14 +239,15 @@ class TestDossier(IntegrationTestCase):
             set([self.subdossier, self.subdossier2]),
             set([mod.obj for mod in model.dossiers.values()]))
 
-    def test_add_descendants_adds_all_containing_documents(self):
+    def test_add_descendants_adds_all_contained_documents_and_mails(self):
         self.login(self.manager)
 
         model = Dossier(self.dossier)
         model._add_descendants()
 
         brains = api.content.find(context=self.dossier, depth=1,
-                                  portal_type='opengever.document.document')
+                                  portal_type=['opengever.document.document',
+                                               'ftw.mail.mail'])
         expected_documents = set([brain.getObject() for brain in brains])
 
         self.assertEquals(expected_documents,
@@ -285,11 +310,11 @@ class TestDocumentModel(IntegrationTestCase):
             self.document.created().asdatetime().date(),
             Document(self.document).binding().registrierdatum.datum.date())
 
-    def test_entstehungszeitraum_is_created_to_modified_date_range(self):
+    def test_entstehungszeitraum_is_created_to_changed_date_range(self):
         self.login(self.regular_user)
 
         self.document.creation_date = DateTime(2016, 11, 6)
-        self.document.modification_date = DateTime(2017, 12, 6)
+        IChanged(self.document).changed = DateTime(2017, 12, 6, 12)
 
         entstehungszeitraum = Document(self.document).binding().entstehungszeitraum
         self.assertEquals(date(2016, 11, 6), entstehungszeitraum.von.datum.date())
@@ -315,9 +340,9 @@ class TestFolderAndFileModel(IntegrationTestCase):
         # self.dossier
         # two subdossiers, self.subdossier and self.subdossier2
         self.assertEquals(2, len(dossier_model.folders))
-        # dossier a contains two files, one for self.document
-        # and one automatically generated for self.decided_proposal
-        self.assertEquals(2, len(dossier_model.files))
+        # dossier a contains 4 files, for self.document, self.mail_eml,
+        # self.mail_msg and one automatically generated for self.decided_proposal
+        self.assertEquals(4, len(dossier_model.files))
         subdossier_model = dossier_model.folders[0]
         subdossier2_model = dossier_model.folders[1]
 
