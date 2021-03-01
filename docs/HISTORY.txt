@@ -13,6 +13,7 @@ Changelog
 
 - Fix support in TransitionExtender for RelationChoice fields. [phgross]
 - Allow any authenticated users to use the REST API. [phgross]
+- Fix adding sequential task process on first position. [phgross]
 - The @sharing endpoint now returns a batched result set if using the search param.  [elioschmutz]
 - Cleanup conditionals protecting for changed date not set yet. [njohner]
 - Use changed instead of modified in date range calculation for SIP packages. [njohner]

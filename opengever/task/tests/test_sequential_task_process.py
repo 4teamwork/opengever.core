@@ -360,6 +360,24 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
              u'Subtask'],
             [oguid.resolve_object().title for oguid in oguids])
 
+    @browsing
+    def test_zero_position_is_handled_correctly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.sequential_task, view='++add++opengever.task.task?position=0')
+        browser.fill({'Title': 'Subtask', 'Task type': 'comment'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.secretariat_user)
+        browser.click_on('Save')
+
+        oguids = self.sequential_task.get_tasktemplate_order()
+        self.assertEquals(
+            [u'Subtask',
+             u'Mitarbeiter Dossier generieren',
+             u'Arbeitsplatz vorbereiten',
+             u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [oguid.resolve_object().title for oguid in oguids])
+
 
 class TestAddingSubtaskToSequentialSubtask(IntegrationTestCase):
 

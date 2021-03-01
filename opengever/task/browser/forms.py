@@ -109,7 +109,7 @@ class TaskAddForm(DefaultAddForm):
         # of a sequential process
         if ITask.providedBy(self.context) and self.context.is_sequential_main_task():
             position = data['tasktemplate_position']
-            if not position:
+            if position is None:
                 position = len(self.context.get_tasktemplate_order())
 
             for task in created:
