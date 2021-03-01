@@ -105,7 +105,7 @@ class TestserverLayer(OpengeverFixture):
     def setupLanguageTool(self, portal):
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de')
-        lang_tool.supported_langs = ['de-ch']
+        lang_tool.supported_langs = ['de-ch', 'fr-ch']
 
     def get_fixture_class(self):
         """The fixture of the testserver should be replaceable from the outside.
