@@ -4,7 +4,7 @@ Changelog
 2021.6.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
 
 
 2021.5.0 (2021-03-04)
