@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  httpd:
+    image: 4teamwork/oghttpd:latest
+    build:
+      context: .
+      dockerfile: ./docker/httpd/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - ogui
+      - ogcore
   msgconvert:
     image: 4teamwork/msgconvert:latest
     ports:
@@ -13,4 +23,51 @@ services:
     image: 4teamwork/pdflatex:latest
     ports:
       - 8092:8080
-
+  ogui:
+    image: 4teamwork/ogui:2021.5.3
+  ogcore:
+    build:
+      context: .
+      dockerfile: ./docker/core/Dockerfile
+    image: 4teamwork/ogcore:latest
+    volumes:
+      - ./var/ogcore:/data
+    ports:
+      - "8080:8080"
+      - "8160:8160"
+    environment:
+      - STORAGE=zeoclient
+    depends_on:
+      - zeoserver
+      - ogds
+      - solr
+  zeoserver:
+    image: 4teamwork/zeoserver:4.3.20
+    volumes:
+      - ./var/ogcore:/data
+  ogds:
+    image: 4teamwork/ogds:latest
+    build:
+      context: .
+      dockerfile: ./docker/ogds/Dockerfile
+    volumes:
+      - ./var/ogds:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: secret
+  solr:
+    image: 4teamwork/ogsolr:latest
+    build:
+      context: .
+      dockerfile: ./docker/solr/Dockerfile
+    command:
+      - solr-precreate
+      - ogg
+      - /opt/solr/server/solr/configsets/ogg
+    volumes:
+      - ./var/ogsolr:/var/solr/data
+    ports:
+      - "8983:8983"
+  ds389:
+    image: docker.io/389ds/dirsrv:1.4
+    volumes:
+      - ./var/ds389:/data

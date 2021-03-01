@@ -1,0 +1,10 @@
+.git
+.vscode
+.gitignore
+__pycache__
+bin
+var
+parts
+lib
+include
+
