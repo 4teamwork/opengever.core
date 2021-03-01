@@ -11,7 +11,7 @@ API Changelog
 Other Changes
 ^^^^^^^^^^^^^
 
-- Add ``breadcrumbs`` option to the ``@solrsearch`` endpoint.
+- Add ``breadcrumbs`` option to the ``@solrsearch`` endpoint, only available for small batch sizes (max. 50 items).
 
 
 2021.4.1 (2021-02-25)

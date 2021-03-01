@@ -505,3 +505,17 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
              u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-10',
              u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-10/document-31'],
             [item['@id'] for item in document['breadcrumbs']])
+
+    @browsing
+    def test_raises_badrequest_if_breadcrumb_is_enabled_and_b_size_is_higher_than_50(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(400):
+            url = u'{}/@solrsearch?q=Programm&breadcrumbs=1&b_size=100'.format(
+            self.portal.absolute_url())
+            browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(
+            {"message": "Breadcrumb flag is only allowed for small batch sizes (max. 50).",
+             "type": "BadRequest"},
+            browser.json)

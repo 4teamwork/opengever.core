@@ -231,7 +231,7 @@ Der Endpoint stellt die Standard-Paginierung gem :ref:`Kapitel Paginierung <batc
 
 Breadcrumbs
 ~~~~~~~~~~~
-Wird eine ``@solrsearch`` Anfrage mit ``breadcrumbs=1`` Parameter ergänzt, so werden die einzelnen Suchtreffer unter dem Key ``breadcrumbs`` mit den Breadcrumb Informationen ergänzt.
+Wird eine ``@solrsearch`` Anfrage mit ``breadcrumbs=1`` Parameter ergänzt, so werden die einzelnen Suchtreffer unter dem Key ``breadcrumbs`` mit den Breadcrumb Informationen ergänzt. Diese Ergänzung ist nur bei kleinen Batchsizes (maximal 50) erlaubt.
 
 
 Teamraum Solr Suche

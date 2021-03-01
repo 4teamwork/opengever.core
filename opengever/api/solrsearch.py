@@ -28,8 +28,15 @@ class SolrSearchGet(SolrQueryBaseService):
         self.show_breadcrumbs = self.extract_show_breadcrumb()
 
     def extract_show_breadcrumb(self):
-        """Extract breadcrumbs flag - to enable """
-        return bool(self.request.form.get('breadcrumbs', False))
+        """Extract breadcrumbs flag and checks if the batchsize is
+        not higher than 50 when enabled."""
+
+        show_breadcrumbs = bool(self.request.form.get('breadcrumbs', False))
+        if show_breadcrumbs:
+            if self.request.form.get('b_size', 0) > 50:
+                raise BadRequest('Breadcrumb flag is only allowed for '
+                                 'small batch sizes (max. 50).')
+        return show_breadcrumbs
 
     def extract_query(self, params):
         if 'q' in params:
