@@ -114,7 +114,7 @@ class TestSolrSearch(IntegrationTestCase):
         self.assertEqual(
             self.solr.search.call_args[1]['fl'],
             ['UID', 'getIcon', 'portal_type', 'path', 'id',
-             'bumblebee_checksum', 'modified', 'reference', 'Title']
+             'bumblebee_checksum', 'reference', 'Title']
             )
 
     def test_solr_start_is_calculated_from_batching_current_page_and_pagesize(self):
