@@ -111,7 +111,7 @@ var sharingApp = {
 
         var current_ids = this.entries.map( function(i) { return i.id})
         this.entries = this.entries.concat(
-          response.data['entries'].filter(function(i) {
+          response.data['items'].filter(function(i) {
             return i.disabled !== false && current_ids.indexOf(i.id) === -1;
           }));
         this.inherit = response.data['inherit'];

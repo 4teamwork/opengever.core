@@ -27,7 +27,7 @@ class SharingGet(APISharingGet):
     def reply(self):
         """Disable `plone.DelegateRoles` permission check.
         """
-
+        searchTerm = self.request.form.get('search')
         serializer = queryMultiAdapter((self.context, self.request),
                                        interface=ISerializeToJson,
                                        name='local_roles')
@@ -38,11 +38,16 @@ class SharingGet(APISharingGet):
 
         if self.request.form.get('ignore_permissions'):
             with disabled_permission_check():
-                data = serializer(search=self.request.form.get('search'))
+                data = serializer(search=searchTerm)
         else:
-            data = serializer(search=self.request.form.get('search'))
+            data = serializer(search=searchTerm)
 
-        for item in data.get('entries', []):
+        if searchTerm is None:
+            items = data.get('entries', [])
+        else:
+            items = data.get('items', [])
+
+        for item in items:
             self.extend_item_with_ogds_summary(item)
             self.extend_item_with_actor(item)
 
