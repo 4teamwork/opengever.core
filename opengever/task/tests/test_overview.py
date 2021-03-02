@@ -356,6 +356,8 @@ class TestSequentialTaskSubtask(IntegrationTestCase):
         task_add_form = '{}/++add++opengever.task.task'.format(
             self.sequential_task.absolute_url())
 
+        self.set_workflow_state('task-state-planned', self.seq_subtask_1)
+
         browser.open(self.sequential_task, view='tabbedview_view-overview')
         self.assertEqual(
             ['{}?position=0'.format(task_add_form),

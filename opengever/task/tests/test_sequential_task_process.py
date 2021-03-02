@@ -9,6 +9,7 @@ from opengever.base.oguid import Oguid
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
+from urlparse import urlparse
 from zope.interface import alsoProvides
 
 
@@ -294,6 +295,24 @@ class TestInitialStateForSubtasks(IntegrationTestCase):
 
 
 class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
+
+    @browsing
+    def test_add_previous_task_buttons_is_only_visible_if_next_task_is_not_yet_started(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # First task is already started - so position 0 button is not available
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEquals(
+            ['position=1', 'position=2', ''],
+            [urlparse(link.get('href')).query for link in browser.css('.add-task')])
+
+        # Second task is also started - so position 0 and 1 button aren't available
+        self.set_workflow_state('task-state-tested-and-closed', self.seq_subtask_1)
+        self.set_workflow_state('task-state-open', self.seq_subtask_2)
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEquals(
+            ['position=2', ''],
+            [urlparse(link.get('href')).query for link in browser.css('.add-task')])
 
     @browsing
     def test_position_field_is_not_visible(self, browser):

@@ -105,7 +105,7 @@
                   <a href="#" class="add-task"
                      title="Add task to sequence"
                      i18n:attributes="title label_add_task_to_sequence"
-                     tal:condition="python: task.adding_next_task_possible()"
+                     tal:condition="python: task.adding_a_previous_task_is_possible()"
                      tal:attributes="href string:${context/absolute_url}/++add++opengever.task.task?position=${position}" />
 
                   <div class="task"
