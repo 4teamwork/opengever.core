@@ -243,6 +243,31 @@ class TestDossierWithWorkspaceClientFeaturesEnabled(FunctionalWorkspaceClientTes
             transaction.commit()
             self.assertTrue(self.dossier.is_linked_to_active_workspaces())
 
+    def test_has_linked_workspaces_without_view_permission_is_false_if_there_are_no_linked_workspaces(self):
+        with self.workspace_client_env():
+            self.login()
+            self.assertFalse(self.dossier.has_linked_workspaces_without_view_permission())
+
+    def test_has_linked_workspaces_without_view_permission_is_false_if_there_are_linked_workspaces_with_view_permission(self):
+        with self.workspace_client_env():
+            self.login()
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.assertFalse(self.dossier.has_linked_workspaces_without_view_permission())
+
+    def test_has_linked_workspaces_without_view_permission_is_true_if_there_are_linked_workspaces_without_view_permission(self):
+        self.login(user_id='service.user')
+        workspace_without_view_permission = create(Builder('workspace').within(self.workspace_root))
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(workspace_without_view_permission.UID())
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.login()
+            self.assertFalse(api.user.has_permission('View', obj=workspace_without_view_permission))
+            self.assertTrue(self.dossier.has_linked_workspaces_without_view_permission())
+
 
 class TestDateCalculations(IntegrationTestCase):
 

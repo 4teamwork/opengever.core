@@ -238,6 +238,23 @@ class TestDossierDeactivationWithWorkspaceClientFeatureEnabled(FunctionalWorkspa
                                 u'not all linked workspaces are deactivated.'])
 
     @browsing
+    def test_deactivating_is_cancelled_when_dossier_is_linked_to_workspaces_without_view_permission(self, browser):
+        self.login(user_id='service.user')
+        workspace_without_view_permission = create(Builder('workspace').within(self.workspace_root))
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(workspace_without_view_permission.UID())
+            transaction.commit()
+            self.login()
+            browser.login()
+            self.grant('Reviewer', *api.user.get_roles())
+            self.assertFalse(api.user.has_permission('View', obj=workspace_without_view_permission))
+            self.deactivate_dossier(self.dossier, browser)
+            self.assert_not_deactivated(self.dossier)
+            self.assert_errors(self.dossier, browser,
+                               [u'Not all linked workspaces are accessible by the current user.'])
+
+    @browsing
     def test_dossier_is_deactivated_when_no_workspace_is_linked(self, browser):
         with self.workspace_client_env():
             self.grant('Reviewer', *api.user.get_roles())

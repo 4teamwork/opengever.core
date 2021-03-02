@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-13 23:16+0000\n"
+"POT-Creation-Date: 2021-03-02 18:53+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -142,6 +142,11 @@ msgstr "Newest tasks"
 #: ./opengever/dossier/browser/templates/overview.pt
 msgid "No Subdossiers"
 msgstr "No subdossiers"
+
+#: ./opengever/dossier/deactivate.py
+#: ./opengever/dossier/resolve.py
+msgid "Not all linked workspaces are accessible by the current user."
+msgstr ""
 
 #. German translation: Nicht alle verlinkten Teamräume sind deaktiviert.
 #: ./opengever/dossier/resolve.py
