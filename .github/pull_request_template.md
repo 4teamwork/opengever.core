@@ -11,15 +11,12 @@ _Screenshot: whenever useful, but only as a visual aid._
 Definition of Done: https://4teamwork.atlassian.net/wiki/spaces/CHX4TW/pages/917562/
 
 
-## Checklist (Must have)
+## Checklist
 
 _Everything has to be done/checked. Checked but not present means the author deemed it unnecessary._
 
 - [ ] Changelog entry
 - [ ] Link to issue (Jira or GitHub) and backlink in issue (Jira)
-
-
-## Checklist (if applicable)
 
 _Only applicable should be left and checked._
 
