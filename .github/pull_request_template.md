@@ -33,6 +33,8 @@ _Only applicable should be left and checked._
 - New functionality:
   - [ ] for `document` also works for `mail`
   - [ ] for `task` also works for `forwarding`
+- Further improvements needed:
+  - [ ] Create follow-up stories and link them in the PR and Jira issue
 - Upgrade steps (changes in profile):
   - [ ] Make it deferrable if possible
   - [ ] Execute as much as possible conditionally
