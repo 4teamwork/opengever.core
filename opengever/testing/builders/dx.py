@@ -624,6 +624,13 @@ class WorkspaceMeetingBuilder(GeverDexterityBuilder):
 builder_registry.register('workspace meeting', WorkspaceMeetingBuilder)
 
 
+class WorkspaceMeetingAgendaItemBuilder(GeverDexterityBuilder):
+    portal_type = 'opengever.workspace.meetingagendaitem'
+
+
+builder_registry.register('workspace meeting agenda item', WorkspaceMeetingAgendaItemBuilder)
+
+
 class ToDoBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.workspace.todo'
 

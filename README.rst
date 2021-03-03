@@ -771,6 +771,7 @@ Objects
         - self.workspace_folder_document
       - self.workspace_mail
       - self.workspace_meeting
+        - self.workspace_meeting_agenda_item
 
 .. </fixture:objects>
 

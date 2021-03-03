@@ -73,3 +73,18 @@ class WorkspaceMeetingNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     implements(IWorkspaceMeetingNameFromTitle)
 
     format = u'meeting-%i'
+
+
+class IWorkspaceMeetingAgendaItemNameFromTitle(INameFromTitle):
+    """Behavior interface for WorkspaceMeetingAgendaItemNameFromTitle.
+    """
+
+
+class WorkspaceMeetingAgendaItemNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
+    """ The ID of a workspace meeting agenda item should be 'agendaitem-{sequence number}'.
+
+    format = u'agendaitem-%i'
+    """
+    implements(IWorkspaceMeetingAgendaItemNameFromTitle)
+
+    format = u'agendaitem-%i'

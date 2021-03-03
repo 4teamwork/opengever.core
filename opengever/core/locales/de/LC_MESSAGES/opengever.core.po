@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-03-09 07:36+0000\n"
+"POT-Creation-Date: 2021-03-11 08:43+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -128,7 +128,7 @@ msgid "Download protocol json"
 msgstr "JSON Sitzungsdaten herunterladen"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20210304104008_add_edit_items_action/actions.xml
+#: ./opengever/core/upgrades/20210310104008_add_edit_items_action/actions.xml
 msgid "Edit metadata"
 msgstr "Metadaten bearbeiten"
 
@@ -344,6 +344,11 @@ msgstr "Ordner"
 #: ./opengever/core/upgrades/20201016095810_install_workspace_meeting_type/types/opengever.workspace.meeting.xml
 msgid "WorkspaceMeeting"
 msgstr "Meeting"
+
+#: ./opengever/core/profiles/default/types/opengever.workspace.meetingagendaitem.xml
+#: ./opengever/core/upgrades/20210303112038_install_workspace_meeting_agenda_item_type/types/opengever.workspace.meetingagendaitem.xml
+msgid "WorkspaceMeetingAgendaItem"
+msgstr "Traktandum"
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.root.xml
 msgid "WorkspaceRoot"

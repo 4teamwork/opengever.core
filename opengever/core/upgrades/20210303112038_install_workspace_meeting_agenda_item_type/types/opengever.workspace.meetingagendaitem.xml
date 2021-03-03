@@ -1,33 +1,27 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.workspace.meeting" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.workspace.meetingagendaitem" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">WorkspaceMeeting</property>
+  <property name="title" i18n:translate="">WorkspaceMeetingAgendaItem</property>
   <property name="description" i18n:translate="" />
   <property name="icon_expr" />
   <property name="allow_discussion">False</property>
   <property name="global_allow">True</property>
-  <property name="allowed_content_types">
-    <element value="opengever.workspace.meetingagendaitem" />
-  </property>
 
   <!-- Schema interface -->
-  <property name="schema">opengever.workspace.workspace_meeting.IWorkspaceMeetingSchema</property>
+  <property name="schema">opengever.workspace.workspace_meeting_agenda_item.IWorkspaceMeetingAgendaItemSchema</property>
 
   <!-- Class used for content items -->
-  <property name="klass">opengever.workspace.workspace_meeting.WorkspaceMeeting</property>
+  <property name="klass">opengever.workspace.workspace_meeting_agenda_item.WorkspaceMeetingAgendaItem</property>
 
   <!-- Add permission -->
   <property name="add_permission">cmf.AddPortalContent</property>
 
   <!-- Enabled behaviors -->
   <property name="behaviors" purge="False">
-    <element value="opengever.base.behaviors.base.IOpenGeverBase" />
     <element value="opengever.base.behaviors.changed.IChanged" />
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
-    <element value="opengever.workspace.behaviors.namefromtitle.IWorkspaceMeetingNameFromTitle" />
-    <element value="opengever.trash.trash.ITrashable" />
+    <element value="opengever.workspace.behaviors.namefromtitle.IWorkspaceMeetingAgendaItemNameFromTitle" />
     <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
-    <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>
 
   <!-- View information -->

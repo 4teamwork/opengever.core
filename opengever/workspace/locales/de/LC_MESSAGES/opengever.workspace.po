@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-15 07:54+0000\n"
+"POT-Creation-Date: 2021-03-03 15:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,6 +144,11 @@ msgstr "Erledigt"
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
+#. Default: "Decision"
+#: ./opengever/workspace/workspace_meeting_agenda_item.py
+msgid "label_decision"
+msgstr "Beschluss"
+
 #. Default: "Description"
 #: ./opengever/workspace/browser/tabs.py
 msgid "label_description"
@@ -186,6 +191,7 @@ msgstr "Organisator"
 
 #. Default: "Related items"
 #: ./opengever/workspace/todo.py
+#: ./opengever/workspace/workspace_meeting_agenda_item.py
 msgid "label_related_items"
 msgstr "Verweise"
 
@@ -201,6 +207,7 @@ msgstr "Beginn"
 
 #. Default: "Text"
 #: ./opengever/workspace/todo.py
+#: ./opengever/workspace/workspace_meeting_agenda_item.py
 msgid "label_text"
 msgstr "Text"
 
