@@ -13,6 +13,7 @@ from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
+from opengever.workspace.interfaces import IWorkspaceMeetingAgendaItem
 from plone.dexterity.interfaces import IDexterityContent
 from plone.i18n.normalizer.base import mapUnicode
 from plone.indexer import indexer
@@ -28,7 +29,11 @@ from zope.annotation import IAnnotations
 # 'getObjPositionInParent' index is only calculated for objects providing
 # one of thoes interfaces.
 CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (
-    ITaskTemplate, IToDo, IFromSequentialTasktemplate, IToDoList)
+    ITaskTemplate,
+    IToDo,
+    IFromSequentialTasktemplate,
+    IToDoList,
+    IWorkspaceMeetingAgendaItem)
 
 
 @indexer(IDexterityContent)

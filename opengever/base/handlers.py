@@ -17,6 +17,7 @@ from opengever.task.task import ITask
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.workspace.interfaces import IToDoList
 from opengever.workspace.interfaces import IWorkspace
+from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
@@ -31,7 +32,8 @@ reindex_after_copy = ['created']
 
 CONTAINERS_SUPPORTING_OBJ_POSITION_IN_PARENT = (IWorkspace,
                                                 IToDoList,
-                                                ITaskTemplateFolderSchema)
+                                                ITaskTemplateFolderSchema,
+                                                IWorkspaceMeeting)
 
 
 def object_copied(context, event):

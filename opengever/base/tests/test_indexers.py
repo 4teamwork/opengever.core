@@ -308,6 +308,7 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
                 self.workspace.UID(),
                 self.todolist_general.UID(),
                 self.todo.UID(),
+                self.workspace_meeting_agenda_item.UID(),
             ]))
         browser.open(url, method='GET', headers=self.api_headers)
         self.maxDiff = None
@@ -326,6 +327,8 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
             {u'UID': self.seq_subtask_2.UID(),
              u'getObjPositionInParent': 1},
             {u'UID': self.tasktemplate.UID(),
+             u'getObjPositionInParent': 0},
+            {u'UID': self.workspace_meeting_agenda_item.UID(),
              u'getObjPositionInParent': 0},
             {u'UID': self.todo.UID(),
              u'getObjPositionInParent': 6},

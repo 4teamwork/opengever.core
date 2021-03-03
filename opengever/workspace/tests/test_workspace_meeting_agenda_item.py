@@ -1,5 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from zExceptions import BadRequest
 import json
 
@@ -124,3 +127,56 @@ class TestWorkspaceMeetingAgendaItem(IntegrationTestCase):
             browser.open(self.workspace_meeting_agenda_item, method='DELETE', headers=self.api_headers)
 
         self.assertIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
+
+
+class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
+    @browsing
+    def test_members_can_change_order(self, browser):
+        self.login(self.workspace_member, browser)
+
+        create(Builder('workspace meeting agenda item')
+               .within(self.workspace_meeting)
+               .titled(u'Intro'))
+
+        self.commit_solr()
+        browser.open(self.workspace_meeting,
+                     view='@solrsearch?sort=getObjPositionInParent asc&depth=1&fl=id',
+                     headers=self.api_headers)
+
+        self.assertEqual(['agendaitem-1', 'agendaitem-2'],
+                         [item.get('id') for item in browser.json.get('items')])
+
+        data = {
+            'ordering': {
+                'obj_id': 'agendaitem-1',
+                'delta': '1',
+                'subset_ids': ['agendaitem-1', 'agendaitem-2']}}
+
+        browser.open(self.workspace_meeting, method='PATCH',
+                     headers=self.api_headers, data=json.dumps(data))
+        self.commit_solr()
+        self.assertEqual(204, browser.status_code)
+        browser.open(self.workspace_meeting,
+                     view='@solrsearch?sort=getObjPositionInParent asc&depth=1&fl=id',
+                     headers=self.api_headers)
+
+        self.assertEqual(['agendaitem-2', 'agendaitem-1'],
+                         [item.get('id') for item in browser.json.get('items')])
+
+    @browsing
+    def test_guests_cannot_change_order(self, browser):
+        self.login(self.workspace_guest, browser)
+
+        create(Builder('workspace meeting agenda item')
+               .within(self.workspace_meeting)
+               .titled(u'Intro'))
+
+        data = {
+            'ordering': {
+                'obj_id': 'agendaitem-1',
+                'delta': '1',
+                'subset_ids': ['agendaitem-1', 'agendaitem-2']}}
+
+        with browser.expect_http_error(401):
+            browser.open(self.workspace_meeting, method='PATCH',
+                         headers=self.api_headers, data=json.dumps(data))
