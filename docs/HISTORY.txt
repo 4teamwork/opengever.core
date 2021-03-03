@@ -13,6 +13,7 @@ Changelog
 
 - Fix support in TransitionExtender for RelationChoice fields. [phgross]
 - Allow any authenticated users to use the REST API. [phgross]
+- Fixed automatic start of a next task inside a sequential task process. [phgross]
 - Only show "add task to process" link, if next task is not yet started. [phgross]
 - Fix adding sequential task process on first position. [phgross]
 - The @sharing endpoint now returns a batched result set if using the search param.  [elioschmutz]

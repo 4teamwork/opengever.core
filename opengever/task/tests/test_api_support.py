@@ -499,7 +499,7 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(
             'task-state-skipped', api.content.get_state(self.seq_subtask_2))
         self.assertEqual(
-            'task-state-open', api.content.get_state(self.seq_subtask_3))
+            'task-state-planned', api.content.get_state(self.seq_subtask_3))
 
         response = IResponseContainer(self.seq_subtask_2).list()[-1]
         self.assertEqual(u'Ist nicht notwendig.', response.text)

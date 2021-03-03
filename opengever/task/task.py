@@ -31,6 +31,7 @@ from opengever.task import FINAL_TASK_STATES
 from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task import is_private_task_feature_enabled
 from opengever.task import TASK_STATE_PLANNED
+from opengever.task import TASK_STATE_SKIPPED
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.reminder.reminder import TaskReminderSupport
@@ -659,20 +660,33 @@ class Task(Container, TaskReminderSupport):
         return order[position].resolve_object()
 
     def open_next_task(self):
+        next_task = self.get_next_planned_task()
+
+        if not next_task:
+            return
+
+        # There is no guarantee that the current user has any permissions
+        # on next task, we therefore need to use elevated_privileges here.
+        with elevated_privileges():
+            with as_internal_workflow_transition():
+                api.content.transition(
+                    obj=next_task, transition='task-transition-planned-open')
+
+        next_task.sync()
+
+    def get_next_planned_task(self):
         next_task = self.get_sql_object().get_next_task()
         if not next_task:
             return
 
         next_task = next_task.oguid.resolve_object()
-        if api.content.get_state(obj=next_task) == TASK_STATE_PLANNED:
-            # There is no guarantee that the current user has any permissions
-            # on next task, we therefore need to use elevated_privileges here.
-            with elevated_privileges():
-                with as_internal_workflow_transition():
-                    api.content.transition(
-                        obj=next_task, transition='task-transition-planned-open')
+        if api.content.get_state(obj=next_task) == TASK_STATE_SKIPPED:
+            return next_task.get_next_planned_task()
 
-            next_task.sync()
+        if api.content.get_state(obj=next_task) == TASK_STATE_PLANNED:
+            return next_task
+
+        return None
 
     def sync(self):
         """Syncs the corresponding SQL task (globalindex).

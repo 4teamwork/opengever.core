@@ -84,7 +84,22 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(self.seq_subtask_2))
 
-    def test_starts_next_task_when_task_gets_skipped(self):
+    def test_open_next_task_skips_skipped_tasks(self):
+        self.login(self.regular_user)
+
+        self.set_workflow_state('task-state-in-progress', self.seq_subtask_1)
+        self.set_workflow_state('task-state-skipped', self.seq_subtask_2)
+
+        api.content.transition(
+            obj=self.seq_subtask_1,
+            transition='task-transition-in-progress-tested-and-closed')
+
+        self.assertEquals('task-state-skipped',
+                          api.content.get_state(self.seq_subtask_2))
+        self.assertEquals('task-state-open',
+                          api.content.get_state(self.seq_subtask_3))
+
+    def test_starts_next_task_when_rejected_task_gets_skipped(self):
         self.login(self.dossier_responsible)
 
         # create subtask
@@ -105,10 +120,12 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         api.content.transition(
             obj=self.subtask, transition='task-transition-planned-skipped')
 
+
+        # Skipping a planned task - does not open the next task
         self.assertEquals(
             'task-state-skipped', api.content.get_state(self.subtask))
         self.assertEquals(
-            'task-state-open', api.content.get_state(subtask2))
+            'task-state-planned', api.content.get_state(subtask2))
 
         self.set_workflow_state('task-state-rejected', self.subtask)
         self.set_workflow_state('task-state-planned', subtask2)
@@ -117,6 +134,8 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         self.assertEquals(
             'task-state-skipped', api.content.get_state(self.subtask))
+
+        # Skipping a rejected task - does not open the next task
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
