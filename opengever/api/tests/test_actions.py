@@ -1018,8 +1018,6 @@ class TestFolderButtons(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
 
@@ -1073,8 +1071,6 @@ class TestFolderButtons(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
 
