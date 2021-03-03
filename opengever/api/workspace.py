@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from ftw.mail.mail import IMail
 from opengever.api.add import GeverFolderPost
 from opengever.api.serializer import GeverSerializeFolderToJson
@@ -6,7 +7,9 @@ from opengever.ogds.base.actor import Actor
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.participation import can_manage_member
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.interface import implementer
@@ -85,3 +88,25 @@ class UploadDocumentCopy(GeverFolderPost):
 
     def before_serialization(self, obj):
         ILinkedDocuments(obj).link_gever_document(self.gever_document_uid)
+
+
+class DeleteWorkspaceContent(Service):
+    """Deletes workspace content
+
+    Use this class for the DELETE endpoint for any deletable workspace content to
+    be able to override the delete permission.
+
+    This is necessary due to a special workflow implementation which is required
+    to provide the activate/deactivate feature of a workspace.
+
+    See https://github.com/4teamwork/opengever.core/pull/6620 for more information
+    """
+    def reply(self):
+
+        parent = aq_parent(self.context)
+        try:
+            parent._delObject(self.context.getId())
+        except LinkIntegrityNotificationException:
+            pass
+
+        return self.reply_no_content()

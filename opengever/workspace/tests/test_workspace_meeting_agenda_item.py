@@ -88,3 +88,39 @@ class TestWorkspaceMeetingAgendaItem(IntegrationTestCase):
 
         self.assertEqual("[{'field': 'relatedItems', 'message': u'Constraint not satisfied', 'error': 'ValidationError'}]",
                          str(cm.exception))
+
+    @browsing
+    def test_members_can_delete_workspace_meeting_agenda_item(self, browser):
+        self.login(self.workspace_member, browser)
+        workspace_meeting_agenda_item_id = self.workspace_meeting_agenda_item.id
+        self.assertIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
+        browser.open(self.workspace_meeting_agenda_item, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
+
+    @browsing
+    def test_admins_can_delete_workspace_meeting_agenda_item(self, browser):
+        self.login(self.workspace_admin, browser)
+        workspace_meeting_agenda_item_id = self.workspace_meeting_agenda_item.id
+        self.assertIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
+        browser.open(self.workspace_meeting_agenda_item, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
+
+    @browsing
+    def test_managers_can_delete_workspace_meeting_agenda_item(self, browser):
+        self.login(self.manager, browser)
+        workspace_meeting_agenda_item_id = self.workspace_meeting_agenda_item.id
+        self.assertIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
+        browser.open(self.workspace_meeting_agenda_item, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
+
+    @browsing
+    def test_guests_cannot_delete_workspace_meeting_agenda_item(self, browser):
+        self.login(self.workspace_guest, browser)
+        workspace_meeting_agenda_item_id = self.workspace_meeting_agenda_item.id
+        with browser.expect_http_error(401):
+            browser.open(self.workspace_meeting_agenda_item, method='DELETE', headers=self.api_headers)
+
+        self.assertIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())
