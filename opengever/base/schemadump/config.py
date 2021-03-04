@@ -15,7 +15,8 @@ GEVER_TYPES = [
     'opengever.workspace.workspace',
     'opengever.workspace.folder',
     'opengever.meeting.proposal',
-    'opengever.workspace.meeting'
+    'opengever.workspace.meeting',
+    'opengever.workspace.meetingagendaitem',
 ]
 
 GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
@@ -240,6 +241,8 @@ JSON_SCHEMA_FIELD_TYPES = {
         'type': 'array'},
     'URI': {
         'type': 'string', 'format': 'uri'},
+    'RichText': {
+        'type': 'object'},
 }
 
 PYTHON_TO_JS_TYPES = {

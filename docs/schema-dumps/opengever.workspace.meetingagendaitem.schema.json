@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Traktandum",
+    "additionalProperties": false,
+    "properties": {
+        "title": {
+            "type": "string",
+            "title": "Titel",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "text": {
+            "type": "object",
+            "title": "Text",
+            "description": "",
+            "_zope_schema_type": "RichText"
+        },
+        "decision": {
+            "type": "object",
+            "title": "Decision",
+            "description": "",
+            "_zope_schema_type": "RichText"
+        },
+        "relatedItems": {
+            "type": "array",
+            "title": "Related items",
+            "description": "",
+            "_zope_schema_type": "RelationList",
+            "default": []
+        },
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        }
+    },
+    "required": [
+        "title"
+    ],
+    "field_order": [
+        "title",
+        "text",
+        "decision",
+        "relatedItems",
+        "changed"
+    ]
+}
