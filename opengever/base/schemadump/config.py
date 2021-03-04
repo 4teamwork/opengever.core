@@ -15,6 +15,7 @@ GEVER_TYPES = [
     'opengever.workspace.workspace',
     'opengever.workspace.folder',
     'opengever.meeting.proposal',
+    'opengever.workspace.meeting'
 ]
 
 GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
@@ -150,6 +151,9 @@ VOCAB_OVERRIDES = {
         'predecessor_proposal': u'<UID eines Antrags>',
         'committee_oguid': u'<OGUID eines Committees>',
         'language': u'<Ein g\xfcltiger Sprach-Code (de, en, fr...)>'
+    },
+    'opengever.workspace.workspace_meeting.IWorkspaceMeetingSchema': {
+        'responsible': u'<G\xfcltige User-ID>',
     },
 }
 
