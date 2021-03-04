@@ -1,3 +1,4 @@
+from copy import deepcopy
 from opengever.base.security import elevated_privileges
 from opengever.base.transition import ITransitionExtender
 from opengever.dossier.activate import DossierActivator
@@ -118,7 +119,7 @@ class GEVERWorkflowTransition(WorkflowTransition):
             adapter = queryMultiAdapter(
                 (obj, getRequest()), ITransitionExtender, name=self.transition)
             if adapter:
-                errors = adapter.validate_schema(data)
+                errors = adapter.validate_schema(deepcopy(data))
                 if errors:
                     raise BadRequest(errors)
 
