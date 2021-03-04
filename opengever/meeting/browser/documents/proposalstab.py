@@ -1,23 +1,19 @@
+import cgi
+
 from ftw.table import helper
-from ftw.table.interfaces import ITableSource
-from ftw.table.interfaces import ITableSourceConfig
+from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting import _
 from opengever.meeting.model import Proposal
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.tabbedview import FilteredListingTab
-from opengever.tabbedview import SqlTableSource
-from opengever.tabbedview.filters import Filter
-from opengever.tabbedview.filters import FilterList
+from opengever.tabbedview import FilteredListingTab, SqlTableSource
+from opengever.tabbedview.filters import Filter, FilterList
 from opengever.tabbedview.helper import linked_ogds_author
 from plone import api
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import implementer
-from zope.interface import implements
-from zope.interface import Interface
-import cgi
+from zope.interface import Interface, implementer, implements
 
 
 class IProposalTableSourceConfig(ITableSourceConfig):
@@ -158,7 +154,7 @@ class ProposalListingTab(FilteredListingTab):
 
             {'column': 'committee_id',
              'column_title': _(u'column_comittee', default=u'Comittee'),
-             'transform': lambda item, value: item.committee.get_link(),
+             'transform': lambda item, value: item.resolve_proposal().committee_name(),
              'width': 180},
 
             {'column': 'generated_meeting_link',

@@ -1,59 +1,56 @@
-from AccessControl import getSecurityManager
-from Acquisition import aq_inner
-from Acquisition import aq_parent
-from collective import dexteritytextindexer
 from datetime import date
+
+import requests
+from AccessControl import getSecurityManager
+from Acquisition import aq_inner, aq_parent
+from collective import dexteritytextindexer
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.oguid import Oguid
-from opengever.base.response import COMMENT_RESPONSE_TYPE
-from opengever.base.response import IResponseContainer
-from opengever.base.response import IResponseSupported
+from opengever.base.response import (COMMENT_RESPONSE_TYPE, IResponseContainer,
+                                     IResponseSupported)
 from opengever.base.security import elevated_privileges
-from opengever.base.source import DossierPathSourceBinder
-from opengever.base.source import SolrObjPathSourceBinder
-from opengever.base.utils import get_preferred_language_code
-from opengever.base.utils import to_html_xweb_intelligent
+from opengever.base.source import (DossierPathSourceBinder,
+                                   SolrObjPathSourceBinder)
+from opengever.base.utils import (get_preferred_language_code,
+                                  to_html_xweb_intelligent)
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
-from opengever.meeting import _
-from opengever.meeting import SUBMITTED_PROPOSAL_STATES
-from opengever.meeting.activity.activities import ProposalCommentedActivity
-from opengever.meeting.activity.activities import ProposalRejectedActivity
-from opengever.meeting.activity.activities import ProposalSubmittedActivity
-from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
-from opengever.meeting.command import CopyProposalDocumentCommand
-from opengever.meeting.command import CreateSubmittedProposalCommand
-from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
-from opengever.meeting.command import UpdateSubmittedDocumentCommand
+from opengever.meeting import SUBMITTED_PROPOSAL_STATES, _
+from opengever.meeting.activity.activities import (ProposalCommentedActivity,
+                                                   ProposalRejectedActivity,
+                                                   ProposalSubmittedActivity)
+from opengever.meeting.activity.watchers import \
+    remove_watchers_on_submitted_proposal_deleted
+from opengever.meeting.command import (CopyProposalDocumentCommand,
+                                       CreateSubmittedProposalCommand,
+                                       NullUpdateSubmittedDocumentCommand,
+                                       UpdateSubmittedDocumentCommand)
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.proposalhistory import ProposalResponse
+from opengever.meeting.risspv import make_ris_session, make_ris_url
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from opengever.ogds.models.service import ogds_service
 from opengever.trash.trash import ITrashed
 from plone import api
 from plone.app.uuid.utils import uuidToObject
-from plone.autoform.directives import mode
-from plone.autoform.directives import omitted
-from plone.autoform.directives import widget
+from plone.autoform.directives import mode, omitted, widget
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
 from z3c.relationfield.event import addRelations
 from z3c.relationfield.relation import RelationValue
-from z3c.relationfield.schema import RelationChoice
-from z3c.relationfield.schema import RelationList
+from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
+from zExceptions import BadRequest
 from zope import schema
 from zope.component import getUtility
-from zope.interface import implements
-from zope.interface import Interface
-from zope.interface import provider
+from zope.interface import Interface, implements, provider
 from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
@@ -187,6 +184,18 @@ class ProposalBase(object):
     def Description(self):
         return self.description.encode('utf-8')
 
+    def committee_name(self):
+        if not self.committee_oguid:
+            return "<Missing>"
+
+        return self.committee_oguid[1]
+
+    def committee_id(self):
+        if not self.committee_oguid:
+            return None
+
+        return self.committee_oguid[0]
+
     def get_overview_attributes(self):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
@@ -200,8 +209,8 @@ class ProposalBase(object):
              'is_html': True},
 
             {'label': _('label_committee', default=u'Committee'),
-             'value': model.committee.get_link(),
-             'is_html': True},
+             'value': self.committee_name
+             },
 
             {'label': _('label_meeting', default=u'Meeting'),
              'value': model.get_meeting_link(),
@@ -528,7 +537,7 @@ class Proposal(Container, ProposalBase):
         return self.load_model().resolve_excerpt_document()
 
     def has_active_committee(self):
-        return self.load_model().committee.is_active()
+        return True
 
     def get_committee(self):
         return Oguid.parse(self.committee_oguid).resolve_object()
@@ -599,18 +608,32 @@ class Proposal(Container, ProposalBase):
     def submit(self, text=u''):
         self.date_of_submission = date.today()
 
-        documents = self.get_documents()
-        create_command = CreateSubmittedProposalCommand(self)
-        copy_commands = [
-            CopyProposalDocumentCommand(
-                self, document,
-                parent_action=create_command,
-                record_activity=False)
-            for document in documents]
+        response = ProposalResponse(u'submitted', text=text)
+        IResponseContainer(self).add(response)
 
-        create_command.execute(text)
-        for copy_command in copy_commands:
-            copy_command.execute()
+        session = make_ris_session()
+        data = {
+            "title": self.title,
+            "description": self.description,
+            "committee_id": self.committee_id(),
+            "source_proposal_url": self.absolute_url(),
+            "issuer": self.issuer,
+        }
+        files = []
+        proposal_file = self.get_proposal_document().file
+        files.append(
+            ('files', (proposal_file.filename, proposal_file.open('r'), proposal_file.contentType)),
+        )
+        for document in self.get_documents():
+            attachment_file = document.file
+            files.append(
+                ('files', (attachment_file.filename, attachment_file.open('r'), attachment_file.contentType)),
+            )
+        response = session.post(make_ris_url('spv/proposals'), data=data, files=files)
+
+        # re-raise issues we had when creating proposal in RIS
+        if not response:
+            raise BadRequest(response.text)
 
         ProposalSubmittedActivity(self, self.REQUEST).record()
 

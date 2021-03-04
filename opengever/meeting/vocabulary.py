@@ -1,21 +1,18 @@
+from operator import attrgetter
+
 from opengever.api.add import SchemaValidationData
 from opengever.base.oguid import Oguid
 from opengever.dossier.templatefolder import get_template_folder
-from opengever.meeting.model import Committee
-from opengever.meeting.model import Member
-from opengever.meeting.model import Membership
+from opengever.meeting.model import Committee, Member, Membership
 from opengever.meeting.proposaltemplate import IProposalTemplate
-from operator import attrgetter
+from opengever.meeting.risspv import make_ris_session, make_ris_url
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.CMFPlone.utils import safe_unicode
-from zope.interface import implementer
-from zope.interface import provider
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.interface import implementer, provider
+from zope.schema.interfaces import IContextSourceBinder, IVocabularyFactory
+from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 
 
 @provider(IContextSourceBinder)
@@ -40,15 +37,15 @@ class CommitteeVocabulary(object):
     committee.
     """
     def __call__(self, context):
-        return SimpleVocabulary([
-            SimpleTerm(value=committee,
-                       token=str(committee.committee_id),
-                       title=committee.title)
-            for committee in self.get_committees()
-        ])
+        session = make_ris_session()
+        response = session.get(make_ris_url('spv/committees'))
 
-    def get_committees(self):
-        return Committee.query.by_current_admin_unit().order_by('title').all()
+        return SimpleVocabulary([
+            SimpleTerm(value=(committee['id'], committee['title']),
+                       token=committee['id'],
+                       title=committee['title'])
+            for committee in response.json()
+        ])
 
 
 @implementer(IVocabularyFactory)
@@ -59,15 +56,16 @@ class ActiveCommitteeVocabulary(object):
     proposal's committee.
     """
     def __call__(self, context):
-        return SimpleVocabulary([
-            SimpleTerm(value=unicode(committee.oguid),
-                       token=str(committee.oguid),
-                       title=committee.title)
-            for committee in self.get_committees()
-        ])
+        session = make_ris_session()
+        response = session.get(make_ris_url('spv/committees'))
 
-    def get_committees(self):
-        return Committee.query.by_current_admin_unit().active().order_by('title').all()
+        return SimpleVocabulary([
+            SimpleTerm(value=(committee['id'], committee['title']),
+                       token=committee['id'],
+                       title=committee['title'])
+            for committee in response.json()
+            if committee['is_active']
+        ])
 
 
 @implementer(IVocabularyFactory)
@@ -207,9 +205,8 @@ class ProposalTemplatesForCommitteeVocabulary(object):
             # view templates and/or during ++widget++ traversal
             return SimpleVocabulary([])
 
-        allowed_uids = self.get_allowed_proposal_templates_UIDS(context)
         objects = self.get_predecessor_proposal_documents(context)
-        objects.extend(self.get_proposal_templates(template_folder, allowed_uids))
+        objects.extend(self.get_proposal_templates(template_folder))
         return self.make_vocabulary_from_objects(objects)
 
     def get_predecessor_proposal_documents(self, context):
@@ -231,11 +228,9 @@ class ProposalTemplatesForCommitteeVocabulary(object):
             return [predecessor.get_proposal_document()]
         return []
 
-    def get_proposal_templates(self, template_folder, allowed_uids):
+    def get_proposal_templates(self, template_folder):
         """Return a list of regular proposal templates.
         This list includes all visible proposal templates.
-        When a list of "allowed_uids" is passed in, it is used as filter
-        so that documents without a listed UID are removed.
         """
         query = {'context': template_folder,
                  'depth': -1,
@@ -243,17 +238,7 @@ class ProposalTemplatesForCommitteeVocabulary(object):
                  'sort_on': 'sortable_title',
                  'sort_order': 'ascending'}
 
-        if allowed_uids:
-            query['UID'] = allowed_uids
-
         return [brain.getObject() for brain in api.content.find(**query)]
-
-    def get_allowed_proposal_templates_UIDS(self, context):
-        committee = self.get_committee(context)
-        if not committee:
-            return None
-
-        return committee.resolve_committee().allowed_proposal_templates
 
     def get_committee(self, context):
         if isinstance(context, SchemaValidationData):

@@ -1,41 +1,29 @@
 from opengever.base import advancedjson
-from opengever.base.model import Base
-from opengever.base.model import UNIT_ID_LENGTH
-from opengever.base.model import USER_ID_LENGTH
-from opengever.base.model import WORKFLOW_STATE_LENGTH
+from opengever.base.model import (UNIT_ID_LENGTH, USER_ID_LENGTH,
+                                  WORKFLOW_STATE_LENGTH, Base)
 from opengever.base.oguid import Oguid
-from opengever.base.request import dispatch_request
-from opengever.base.request import expect_ok_response
+from opengever.base.request import dispatch_request, expect_ok_response
 from opengever.base.response import IResponseContainer
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
-from opengever.meeting.activity.activities import ProposalDecideActivity
-from opengever.meeting.activity.activities import ProposalScheduledActivity
+from opengever.meeting.activity.activities import (ProposalDecideActivity,
+                                                   ProposalScheduledActivity)
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposalhistory import ProposalResponse
-from opengever.meeting.workflow import State
-from opengever.meeting.workflow import Transition
-from opengever.meeting.workflow import Workflow
+from opengever.meeting.workflow import State, Transition, Workflow
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
-from sqlalchemy import Column
-from sqlalchemy import Date
-from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy import UniqueConstraint
-from sqlalchemy.orm import backref
-from sqlalchemy.orm import composite
-from sqlalchemy.orm import relationship
+from sqlalchemy import (Column, Date, ForeignKey, Integer, String,
+                        UniqueConstraint)
+from sqlalchemy.orm import backref, composite, relationship
 from sqlalchemy.schema import Sequence
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
-
 
 MAX_TITLE_LENGTH = 256
 
@@ -160,8 +148,8 @@ class Proposal(Base):
         reference_number = proposal.get_main_dossier_reference_number()
         repository_folder_title = safe_unicode(
             proposal.get_repository_folder_title())
-        committee = Committee.get_one(
-            oguid=Oguid.parse(proposal.committee_oguid))
+        # committee = Committee.get_one(
+        #     oguid=Oguid.parse(proposal.committee_oguid))
 
         # temporarily use mapping from plone workflow state to model workflow
         # state
@@ -170,7 +158,7 @@ class Proposal(Base):
         if new_sql_state:
             self.workflow_state = new_sql_state
 
-        self.committee = committee
+        # self.committee = committee
         self.language = proposal.language
         self.physical_path = proposal.get_physical_path()
         self.dossier_reference_number = reference_number
