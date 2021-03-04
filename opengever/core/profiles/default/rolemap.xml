@@ -203,6 +203,7 @@
       <role name="Contributor" />
       <role name="Manager" />
       <role name="Member" />
+      <role name="Authenticated" />
     </permission>
 
     <permission name="List folder contents" acquire="True">
