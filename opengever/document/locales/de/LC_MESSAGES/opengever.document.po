@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-02-09 10:19+0000\n"
+"POT-Creation-Date: 2021-03-01 18:36+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -102,6 +102,10 @@ msgstr "Auswahl exportieren"
 #: ./opengever/document/checkout/revert.py
 msgid "Reverted file to version ${version_id}."
 msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt."
+
+#: ./opengever/document/forms.py
+msgid "Save"
+msgstr "Speichern"
 
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"

@@ -1,4 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.widgets.file import DexterityFileWidget
 from opengever.testing import IntegrationTestCase
 from requests_toolbelt.utils import formdata
@@ -84,6 +88,43 @@ class TestDocumentIntegration(IntegrationTestCase):
             u'Vertr\xe4gsentwurf',
         ]
         self.assertEqual(expected_documents, browser.css('li').text)
+
+    @browsing
+    def test_add_form_resets_file_when_validation_fails(self, browser):
+        self.login(self.manager, browser)
+
+        choices = ["one", "two", "three"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", True)
+            .with_field(
+                "choice", u"choose", u"Choose", u"", True, values=choices
+            )
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("text", u"text", u"Some lines of text", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+        )
+
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Document')
+        browser.fill({'Title': u'My Document',
+                      'File': ('DATA', 'file.txt', 'text/plain'),
+                      "Document type": "Inquiry"}).save()
+
+        # the initial save will produce errors as we now have a document_type
+        # which requires some mandatory custom properties.
+        self.assertEqual(["There were some errors."], error_messages())
+
+        # We want to make sure that the NamedFileWidget was reset
+        # and does not display an already uploaded file that will
+        # actually not be set
+        form = browser.find_form_by_field('File')
+        widget = form.find_widget('File')
+        self.assertNotIn("Remove existing file", widget.text)
+        self.assertEqual("File The document's digital file", widget.text)
 
 
 class TestDocumentFileUploadForm(IntegrationTestCase):

@@ -55,6 +55,19 @@ class DocumentAddForm(add.DefaultAddForm):
         super(DocumentAddForm, self).updateFields()
         self.groups = omit_custom_properties_group(self.groups)
 
+    @button.buttonAndHandler(_('Save'), name='save')
+    def handleAdd(self, action):
+        """ Reset value of NamedFileWidget when validation fails, to avoid
+        displaying an already uploaded file with "Keep existing file" radio
+        button, which would actually not get set upon form resubmission.
+        """
+        super(DocumentAddForm, self).handleAdd(self, action)
+        if self.status != self.formErrorsMessage:
+            return
+        for group in self.groups:
+            if 'file' in group.widgets:
+                group.widgets.get('file').value = None
+
 
 class DocumentAddView(add.DefaultAddView):
     """Provide a registerable view for the Document file upload form."""
