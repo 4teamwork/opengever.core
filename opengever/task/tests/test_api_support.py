@@ -242,7 +242,8 @@ class TestAPITransitions(IntegrationTestCase):
 
         url = '{}/@workflow/task-transition-in-progress-resolved'.format(self.subtask.absolute_url())
 
-        data = {'text': 'Erledigt, siehe Anhang.'}
+        data = {'text': 'Erledigt, siehe Anhang.',
+                'relatedItems': [self.mail_eml.absolute_url()]}
         browser.open(url, method='POST', data=json.dumps(data),
                      headers=self.api_headers)
 

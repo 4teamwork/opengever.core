@@ -11,6 +11,7 @@ Changelog
 2021.5.0 (2021-03-04)
 ---------------------
 
+- Fix support in TransitionExtender for RelationChoice fields. [phgross]
 - Allow any authenticated users to use the REST API. [phgross]
 - The @sharing endpoint now returns a batched result set if using the search param.  [elioschmutz]
 - Cleanup conditionals protecting for changed date not set yet. [njohner]
