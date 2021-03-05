@@ -4,6 +4,9 @@ Changelog
 2021.6.0 (unreleased)
 ---------------------
 
+- Fixed automatic start of a next task inside a sequential task process. [phgross]
+- Only show "add task to process" link, if next task is not yet started. [phgross]
+- Fix adding sequential task process on first position. [phgross]
 - Don't resolve or deactivate a dossier if it has linked workspaces without view permission. [elioschmutz]
 - Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
 
@@ -13,9 +16,6 @@ Changelog
 
 - Fix support in TransitionExtender for RelationChoice fields. [phgross]
 - Allow any authenticated users to use the REST API. [phgross]
-- Fixed automatic start of a next task inside a sequential task process. [phgross]
-- Only show "add task to process" link, if next task is not yet started. [phgross]
-- Fix adding sequential task process on first position. [phgross]
 - The @sharing endpoint now returns a batched result set if using the search param.  [elioschmutz]
 - Cleanup conditionals protecting for changed date not set yet. [njohner]
 - Use changed instead of modified in date range calculation for SIP packages. [njohner]

@@ -299,6 +299,11 @@
       />
 
   <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-skipped-open"
+      />
+
+  <adapter
       factory=".transition.OpenPlannedTransitionExtender"
       name="task-transition-planned-open"
       />

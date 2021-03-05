@@ -504,3 +504,25 @@ class TestAPITransitions(IntegrationTestCase):
         response = IResponseContainer(self.seq_subtask_2).list()[-1]
         self.assertEqual(u'Ist nicht notwendig.', response.text)
         self.assertEqual('task-transition-planned-skipped', response.transition)
+
+    @browsing
+    def test_reopen_a_skipped_task_successfull(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        self.set_workflow_state('task-state-skipped', self.seq_subtask_2)
+
+        url = '{}/@workflow/task-transition-skipped-open'.format(
+            self.seq_subtask_2.absolute_url())
+        data = {'text': u'Muss trotzdem gemacht werden.'}
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            'task-state-open', api.content.get_state(self.seq_subtask_2))
+        self.assertEqual(
+            'task-state-open', self.seq_subtask_2.get_sql_object().review_state)
+
+        response = IResponseContainer(self.seq_subtask_2).list()[-1]
+        self.assertEqual(u'Muss trotzdem gemacht werden.', response.text)
+        self.assertEqual('task-transition-skipped-open', response.transition)
