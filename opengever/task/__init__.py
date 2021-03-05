@@ -27,6 +27,8 @@ FINISHED_TASK_STATES = [
 
 TASK_STATE_PLANNED = 'task-state-planned'
 
+TASK_STATE_SKIPPED = 'task-state-skipped'
+
 FINAL_TASK_STATES = [
     'task-state-tested-and-closed',
     'task-state-cancelled',

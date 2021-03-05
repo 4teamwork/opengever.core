@@ -92,13 +92,11 @@ def cancel_subtasks(task, event):
 
 
 def start_next_task(task, event):
-    # todo also handle skipped tasks
     if event.action not in ['task-transition-open-resolved',
                             'task-transition-open-tested-and-closed',
                             'task-transition-in-progress-resolved',
                             'task-transition-in-progress-tested-and-closed',
-                            'task-transition-rejected-skipped',
-                            'task-transition-planned-skipped']:
+                            'task-transition-rejected-skipped']:
         return
 
     if task.is_from_sequential_tasktemplate:

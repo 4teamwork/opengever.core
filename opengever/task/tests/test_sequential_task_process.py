@@ -9,6 +9,7 @@ from opengever.base.oguid import Oguid
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
+from urlparse import urlparse
 from zope.interface import alsoProvides
 
 
@@ -83,7 +84,22 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(self.seq_subtask_2))
 
-    def test_starts_next_task_when_task_gets_skipped(self):
+    def test_open_next_task_skips_skipped_tasks(self):
+        self.login(self.regular_user)
+
+        self.set_workflow_state('task-state-in-progress', self.seq_subtask_1)
+        self.set_workflow_state('task-state-skipped', self.seq_subtask_2)
+
+        api.content.transition(
+            obj=self.seq_subtask_1,
+            transition='task-transition-in-progress-tested-and-closed')
+
+        self.assertEquals('task-state-skipped',
+                          api.content.get_state(self.seq_subtask_2))
+        self.assertEquals('task-state-open',
+                          api.content.get_state(self.seq_subtask_3))
+
+    def test_starts_next_task_when_rejected_task_gets_skipped(self):
         self.login(self.dossier_responsible)
 
         # create subtask
@@ -104,10 +120,12 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         api.content.transition(
             obj=self.subtask, transition='task-transition-planned-skipped')
 
+
+        # Skipping a planned task - does not open the next task
         self.assertEquals(
             'task-state-skipped', api.content.get_state(self.subtask))
         self.assertEquals(
-            'task-state-open', api.content.get_state(subtask2))
+            'task-state-planned', api.content.get_state(subtask2))
 
         self.set_workflow_state('task-state-rejected', self.subtask)
         self.set_workflow_state('task-state-planned', subtask2)
@@ -116,6 +134,8 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         self.assertEquals(
             'task-state-skipped', api.content.get_state(self.subtask))
+
+        # Skipping a rejected task - does not open the next task
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
@@ -296,6 +316,24 @@ class TestInitialStateForSubtasks(IntegrationTestCase):
 class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
 
     @browsing
+    def test_add_previous_task_buttons_is_only_visible_if_next_task_is_not_yet_started(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # First task is already started - so position 0 button is not available
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEquals(
+            ['position=1', 'position=2', ''],
+            [urlparse(link.get('href')).query for link in browser.css('.add-task')])
+
+        # Second task is also started - so position 0 and 1 button aren't available
+        self.set_workflow_state('task-state-tested-and-closed', self.seq_subtask_1)
+        self.set_workflow_state('task-state-open', self.seq_subtask_2)
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEquals(
+            ['position=2', ''],
+            [urlparse(link.get('href')).query for link in browser.css('.add-task')])
+
+    @browsing
     def test_position_field_is_not_visible(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -358,6 +396,24 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
              u'Arbeitsplatz vorbereiten',
              u'Vorstellungsrunde bei anderen Mitarbeitern',
              u'Subtask'],
+            [oguid.resolve_object().title for oguid in oguids])
+
+    @browsing
+    def test_zero_position_is_handled_correctly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.sequential_task, view='++add++opengever.task.task?position=0')
+        browser.fill({'Title': 'Subtask', 'Task type': 'comment'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.secretariat_user)
+        browser.click_on('Save')
+
+        oguids = self.sequential_task.get_tasktemplate_order()
+        self.assertEquals(
+            [u'Subtask',
+             u'Mitarbeiter Dossier generieren',
+             u'Arbeitsplatz vorbereiten',
+             u'Vorstellungsrunde bei anderen Mitarbeitern'],
             [oguid.resolve_object().title for oguid in oguids])
 
 
