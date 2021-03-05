@@ -4,6 +4,7 @@ Changelog
 2021.6.0 (unreleased)
 ---------------------
 
+- Don't resolve or deactivate a dossier if it has linked workspaces without view permission. [elioschmutz]
 - Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
 
 

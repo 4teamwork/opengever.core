@@ -300,6 +300,9 @@ class DossierContainer(Container):
         return bool(active_proposals)
 
     def is_linked_to_active_workspaces(self):
+        """Returns all linked active workspaces accessible by the current
+        user.
+        """
         if not is_workspace_client_feature_enabled():
             return False
 
@@ -311,6 +314,22 @@ class DossierContainer(Container):
             params = {'review_state': 'opengever_workspace--STATUS--active'}
             active_workspaces = linked_workspaces_adapter.list_non_cached(**params)['items_total']
             return bool(active_workspaces)
+
+    def has_linked_workspaces_without_view_permission(self):
+        """It's possible that the currently logged in user has no view permission
+        to all linked workspaces. This function returns a boolean to indicate
+        if there are such workspaces linked with the current dossier.
+        """
+        if not is_workspace_client_feature_enabled():
+            return False
+
+        with elevated_privileges():
+            linked_workspaces_adapter = queryAdapter(self, ILinkedWorkspaces)
+            if not linked_workspaces_adapter:
+                return False
+
+            linked_workspaces = linked_workspaces_adapter.list_non_cached()['items_total']
+        return bool(len(linked_workspaces_adapter.storage.list()) - linked_workspaces)
 
     def is_all_checked_in(self):
         """Check if all documents in this path are checked in."""
