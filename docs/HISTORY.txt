@@ -7,6 +7,7 @@ Changelog
 - Fixed automatic start of a next task inside a sequential task process. [phgross]
 - Only show "add task to process" link, if next task is not yet started. [phgross]
 - Fix adding sequential task process on first position. [phgross]
+- Filter out trash and untrash folder buttons in @actions on repository root and folders. [njohner]
 - Don't resolve or deactivate a dossier if it has linked workspaces without view permission. [elioschmutz]
 - Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
 

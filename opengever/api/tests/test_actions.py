@@ -828,13 +828,13 @@ class TestUnlockAction(FileActionsTestBase):
                          self.get_file_actions(browser, self.document))
 
 
-class TestFolderActions(FolderActionsTestBase):
+class TestFolderButtons(FolderActionsTestBase):
 
     features = ('bumblebee', 'meeting')
     createTaskAction = {
         u'id': u'create_task',
         u'title': u'Create task',
-        u'icon': u'',}
+        u'icon': u''}
 
     @browsing
     def test_create_task_available_in_open_dossier(self, browser):
@@ -846,13 +846,13 @@ class TestFolderActions(FolderActionsTestBase):
     def test_create_task_available_in_task(self, browser):
         self.login(self.regular_user, browser)
         self.assertIn(self.createTaskAction,
-                         self.get_folder_buttons(browser, self.task))
+                      self.get_folder_buttons(browser, self.task))
 
     @browsing
     def test_create_task_available_in_meetingdossier(self, browser):
         self.login(self.regular_user, browser)
         self.assertIn(self.createTaskAction,
-                         self.get_folder_buttons(browser, self.meeting_dossier))
+                      self.get_folder_buttons(browser, self.meeting_dossier))
 
     @browsing
     def test_create_task_not_available_in_resolved_dossier(self, browser):
@@ -890,7 +890,7 @@ class TestFolderActions(FolderActionsTestBase):
                          self.get_folder_buttons(browser, self.resolvable_dossier))
 
     @browsing
-    def test_actions_for_dossier(self, browser):
+    def test_folder_buttons_for_dossier(self, browser):
         self.login(self.regular_user, browser)
 
         expected_folder_buttons = [
@@ -925,7 +925,7 @@ class TestFolderActions(FolderActionsTestBase):
         )
 
     @browsing
-    def test_actions_for_inactive_dossier(self, browser):
+    def test_folder_buttons_for_inactive_dossier(self, browser):
         self.login(self.regular_user, browser)
 
         expected_folder_buttons = [
@@ -946,7 +946,7 @@ class TestFolderActions(FolderActionsTestBase):
         )
 
     @browsing
-    def test_actions_for_resolved_dossier(self, browser):
+    def test_folder_buttons_for_resolved_dossier(self, browser):
         self.login(self.secretariat_user, browser)
 
         resolve_manager = LockingResolveManager(self.resolvable_dossier)
@@ -969,6 +969,114 @@ class TestFolderActions(FolderActionsTestBase):
         self.assertListEqual(
             expected_folder_buttons,
             self.get_folder_buttons(browser, self.resolvable_dossier),
+        )
+
+    @browsing
+    def test_folder_buttons_for_repository_folders(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'submit_additional_documents',
+                u'title': u'Submit additional documents'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.leaf_repofolder),
+        )
+
+    @browsing
+    def test_folder_buttons_for_repository_folders_for_admins(self, browser):
+        self.login(self.administrator, browser)
+
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'delete', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'submit_additional_documents',
+                u'title': u'Submit additional documents'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.leaf_repofolder),
+        )
+
+    @browsing
+    def test_folder_buttons_for_repository_root(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'submit_additional_documents',
+                u'title': u'Submit additional documents'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.repository_root),
+        )
+
+    @browsing
+    def test_folder_buttons_for_repository_root_for_admins(self, browser):
+        self.login(self.administrator, browser)
+
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'submit_additional_documents',
+                u'title': u'Submit additional documents'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
+            {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.repository_root),
         )
 
 

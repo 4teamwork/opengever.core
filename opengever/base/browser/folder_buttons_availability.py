@@ -3,6 +3,8 @@ from Acquisition import aq_inner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.repository.interfaces import IRepositoryFolder
+from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.task.task import ITask
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -55,6 +57,12 @@ class FolderButtonsAvailabilityView(BrowserView):
             if ITemplateFolder.providedBy(obj):
                 return True
         return False
+
+    def _is_repository_folder(self):
+        return IRepositoryFolder.providedBy(self.context)
+
+    def _is_repository_root(self):
+        return IRepositoryRoot.providedBy(self.context)
 
     def _can_modify_dossier(self):
         return api.user.has_permission(
@@ -115,10 +123,22 @@ class FolderButtonsAvailabilityView(BrowserView):
         return not self._is_template_area()
 
     def is_trash_available(self):
-        return not self._is_template_area()
+        """Trash action should only be shown on dossier level, as we otherwise
+        don't know whether the documents can be trashed (they could be in an
+        inactive or resolved dossier).
+        """
+        return (not self._is_repository_folder()
+                and not self._is_repository_root()
+                and not self._is_template_area())
 
     def is_untrash_available(self):
-        return not self._is_template_area()
+        """Untrash action should only be shown on dossier level, as we otherwise
+        don't know whether the documents can be untrashed (they could be in an
+        inactive or resolved dossier).
+        """
+        return (not self._is_repository_folder()
+                and not self._is_repository_root()
+                and not self._is_template_area())
 
     def is_attach_documents_available(self):
         return not self._is_template_area()
