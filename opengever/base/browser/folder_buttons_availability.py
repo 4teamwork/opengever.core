@@ -140,5 +140,8 @@ class FolderButtonsAvailabilityView(BrowserView):
                 and not self._is_repository_root()
                 and not self._is_template_area())
 
+    def is_folder_delete_available(self):
+        return not self._is_repository_folder()
+
     def is_attach_documents_available(self):
         return not self._is_template_area()

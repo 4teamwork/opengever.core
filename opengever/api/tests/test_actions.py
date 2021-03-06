@@ -1012,7 +1012,6 @@ class TestFolderButtons(FolderActionsTestBase):
             {u'icon': u'', u'id': u'submit_additional_documents',
                 u'title': u'Submit additional documents'},
             {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'folder_delete_confirmation', u'title': u'Delete'},
             {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
             {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
             {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
