@@ -9,6 +9,7 @@ Changelog
 - Fix adding sequential task process on first position. [phgross]
 - Filter out folder_delete folder button in @actions on repofolders. [njohner]
 - Filter out trash and untrash folder buttons in @actions on repository root and folders. [njohner]
+- Fix tabbedview's upload container position for latest chrome versions. [phgross]
 - Don't resolve or deactivate a dossier if it has linked workspaces without view permission. [elioschmutz]
 - Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
 
