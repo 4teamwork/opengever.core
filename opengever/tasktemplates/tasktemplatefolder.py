@@ -115,6 +115,7 @@ class TaskTemplateFolderTrigger(object):
             responsible=template.responsible,
             responsible_client=template.responsible_client,
             task_type=template.task_type,
+            informed_principals=template.informed_principals,
             text=template.text,
             relatedItems=self.related_documents,
             deadline=date.today() + timedelta(template.deadline),

@@ -1,4 +1,5 @@
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import util
 from opengever.task.util import update_reponsible_field_data
@@ -30,7 +31,8 @@ class ITaskTemplate(model.Schema):
             u'responsible',
             u'deadline',
             u'text',
-            u'preselected'
+            u'preselected',
+            u'informed_principals'
         ],
     )
 
@@ -96,6 +98,24 @@ class ITaskTemplate(model.Schema):
         description=_(u'help_preselected', default=''),
         required=False,
     )
+
+    form.widget(
+        'informed_principals',
+        KeywordFieldWidget,
+        async=True,
+        template_selection='usersAndGroups',
+        template_result='usersAndGroups',
+    )
+    informed_principals = schema.List(
+        title=_(u"label_informed_principals", default=u"Info at"),
+        description=_(u"help_informed_principals", default=u""),
+        value_type=schema.Choice(
+            source=AllUsersAndGroupsSourceBinder(),
+            ),
+        required=False,
+        missing_value=[],
+        default=[]
+        )
 
 
 class TaskTemplate(Item):
