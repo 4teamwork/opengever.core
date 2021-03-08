@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Add edit_items folder action. [tinagerber]
+- Update .gitignore of policytemplates for deployment on CentOS 8. [njohner]
 - Fixed automatic start of a next task inside a sequential task process. [phgross]
 - Only show "add task to process" link, if next task is not yet started. [phgross]
 - Fix adding sequential task process on first position. [phgross]
