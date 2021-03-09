@@ -4,6 +4,7 @@ Changelog
 2019.5.2 (unreleased)
 ---------------------
 
+- Fix tabbedview's upload container position for latest chrome versions. [phgross]
 - Fix to reassign a task to a new inbox group. [elioschmutz]
 - When tearing down test layer, wait for solr to be torn down properly. [siegy]
 
