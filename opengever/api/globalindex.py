@@ -3,6 +3,9 @@ from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.base.helpers import display_name
 from opengever.globalindex.browser.report import task_type_helper
 from opengever.globalindex.model.task import Task
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.team import Team
 from plone.restapi.interfaces import ISerializeToJson
 from sqlalchemy import Date
 from zope.globalrequest import getRequest
@@ -49,6 +52,15 @@ class GlobalIndexGet(OGDSListingBaseService):
             column = getattr(Task, key, None)
             if column is None:
                 continue
+
+            # If filtering by responsible, also include all teams the user
+            # belongs to.
+            if column is Task.responsible and len(value) == 1:
+                value.extend([
+                    team.actor_id() for team in
+                    Team.query.join(Group).join(groups_users)
+                    .filter_by(userid=value[0])
+                ])
 
             if isinstance(column.type, Date):
                 lower, upper = value[0].split(' TO ')
