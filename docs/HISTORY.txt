@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.4.2 (unreleased)
+2021.4.2 (2021-03-09)
 ---------------------
 
 - Fix tabbedview's upload container position for latest chrome versions. [phgross]
