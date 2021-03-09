@@ -9,9 +9,14 @@ Changelog
 - Fix adding sequential task process on first position. [phgross]
 - Filter out folder_delete folder button in @actions on repofolders. [njohner]
 - Filter out trash and untrash folder buttons in @actions on repository root and folders. [njohner]
-- Fix tabbedview's upload container position for latest chrome versions. [phgross]
 - Don't resolve or deactivate a dossier if it has linked workspaces without view permission. [elioschmutz]
 - Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
+
+
+2021.5.1 (2021-03-09)
+---------------------
+
+- Fix tabbedview's upload container position for latest chrome versions. [phgross]
 
 
 2021.5.0 (2021-03-04)
@@ -30,6 +35,12 @@ Changelog
 - Implement POST @document_from_oneoffixx endpoint to create a document from a oneoffixx template. [elioschmutz]
 - Also set title_en and title_fr for meetings in policy templates. [njohner]
 - Extend solrsearch endpoint, with breadcrumbs information option. [phgross]
+
+
+2021.4.2 (2021-03-09)
+---------------------
+
+- Fix tabbedview's upload container position for latest chrome versions. [phgross]
 
 
 2021.4.1 (2021-02-25)
