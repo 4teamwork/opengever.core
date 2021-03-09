@@ -133,3 +133,25 @@ class TestMailDownloadCopy(FunctionalTestCase):
             browser.headers)
 
         self.assertEquals(msg_data, browser.contents)
+
+    @browsing
+    def test_download_copy_changes_p7m_extension_to_eml(self, browser):
+
+        mail_p7m = create(
+            Builder('mail')
+            .with_asset_message('signed.p7m'))
+
+        browser.login().visit(mail_p7m, view='tabbedview_view-overview')
+        browser.find('Download copy').click()
+
+        self.assertDictContainsSubset({
+            'status': '200 Ok',
+            'content-length': str(len(browser.contents)),
+            'content-type': 'application/pkcs7-mime',
+            'content-disposition': 'attachment; filename="Hello.eml"',
+            },
+            browser.headers)
+
+        self.assertEquals(
+            mail_p7m.get_file().data.replace("\r", "").replace("\n", ""),
+            browser.contents.replace("\r", "").replace("\n", ""))
