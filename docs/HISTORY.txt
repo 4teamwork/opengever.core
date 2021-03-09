@@ -4,7 +4,7 @@ Changelog
 2020.14.7 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Fix tabbedview's upload container position for latest chrome versions. [phgross]
 
 
 2020.14.6 (2021-01-08)
