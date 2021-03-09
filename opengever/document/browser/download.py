@@ -59,17 +59,20 @@ class DocumentishDownload(Download):
             return self.request.RESPONSE.redirect(
                 get_redirect_url(self.context))
 
-        if not self.filename:
-            self.filename = getattr(named_file, 'filename', self.fieldname)
-
-        if self.filename:
-            self.filename = self.filename.encode('utf-8')
+        self.extract_filename(named_file)
 
         set_attachment_content_disposition(self.request, self.filename,
                                            named_file)
         notify(FileCopyDownloadedEvent(self.context))
 
         return self.stream_data(named_file)
+
+    def extract_filename(self, named_file):
+        if not self.filename:
+            self.filename = getattr(named_file, 'filename', self.fieldname)
+
+        if self.filename:
+            self.filename = self.filename.encode('utf-8')
 
     def stream_data(self, named_file):
         return stream_data(named_file)
