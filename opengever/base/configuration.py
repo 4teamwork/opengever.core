@@ -24,6 +24,7 @@ from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.ech0147.interfaces import IECH0147Settings
+from opengever.mail.interfaces import IMailDownloadSettings
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
@@ -36,9 +37,9 @@ from opengever.readonly import is_in_readonly_mode
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.task.interfaces import ITaskSettings
-from opengever.workspace.interfaces import IWorkspaceSettings
-from opengever.workspace.interfaces import IWorkspaceMeetingSettings
 from opengever.workspace.interfaces import IToDoSettings
+from opengever.workspace.interfaces import IWorkspaceMeetingSettings
+from opengever.workspace.interfaces import IWorkspaceSettings
 from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
 from pkg_resources import get_distribution
 from plone import api
@@ -108,6 +109,7 @@ class GeverSettingsAdpaterV1(object):
         settings['oneoffixx_settings'] = self.get_oneoffixx_settings()
         settings['user_settings'] = self.get_user_settings()
         settings['sharing_configuration'] = self.get_sharing_configuration()
+        settings['p7m_extension_replacement'] = api.portal.get_registry_record('p7m_extension_replacement', interface=IMailDownloadSettings)  # noqa
         return settings
 
     def get_nightly_jobs_settings(self):

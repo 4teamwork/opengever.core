@@ -55,6 +55,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('white_list_prefix', u'^.+'),
                 ('black_list_prefix', u'^$'),
                 ])),
+            ('p7m_extension_replacement', 'eml'),
             ('features', OrderedDict([
                 ('activity', False),
                 ('archival_file_conversion', False),

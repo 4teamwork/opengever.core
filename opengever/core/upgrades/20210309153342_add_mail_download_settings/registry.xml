@@ -1,0 +1,5 @@
+<registry>
+  <!-- MAIL -->
+  <records interface="opengever.mail.interfaces.IMailDownloadSettings" />
+
+</registry>

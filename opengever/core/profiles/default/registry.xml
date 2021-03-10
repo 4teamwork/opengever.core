@@ -96,6 +96,7 @@
   <!-- MAIL -->
   <records interface="opengever.mail.interfaces.ISendDocumentConf" />
   <records interface="opengever.mail.interfaces.IMailTabbedviewSettings" />
+  <records interface="opengever.mail.interfaces.IMailDownloadSettings" />
 
   <!-- MEETING -->
   <records interface="opengever.meeting.interfaces.IMeetingSettings" />
