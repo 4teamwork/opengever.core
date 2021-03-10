@@ -8,6 +8,10 @@ import os
 
 class TestConfigurationAdapter(IntegrationTestCase):
 
+    def setUp(self):
+        super(TestConfigurationAdapter, self).setUp()
+        os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee.local/'
+
     def test_configuration(self):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
