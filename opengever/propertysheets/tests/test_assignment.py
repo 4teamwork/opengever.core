@@ -15,6 +15,10 @@ EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS = [
     u"IDocumentMetadata.document_type.request",
 ]
 
+EXPECTED_DOCUMENT_DEFAULT_SLOT = [
+    u"IDocument.default",
+]
+
 
 class TestPropertySheetAssignmentVocabulary(FunctionalTestCase):
 
@@ -25,7 +29,7 @@ class TestPropertySheetAssignmentVocabulary(FunctionalTestCase):
         )(self.portal)
 
         self.assertItemsEqual(
-            EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS,
+            EXPECTED_DOCUMENT_DEFAULT_SLOT + EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS,
             [term.value for term in vocabulary],
         )
 
@@ -34,6 +38,6 @@ class TestPropertySheetDocumentAssignmentSlots(FunctionalTestCase):
 
     def test_assignemnt_vocabulary_contains_document_types(self):
         self.assertItemsEqual(
-            EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS,
+            EXPECTED_DOCUMENT_DEFAULT_SLOT + EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS,
             get_document_assignment_slots(),
         )
