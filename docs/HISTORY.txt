@@ -11,6 +11,7 @@ Changelog
 - Filter out trash and untrash folder buttons in @actions on repository root and folders. [njohner]
 - Don't resolve or deactivate a dossier if it has linked workspaces without view permission. [elioschmutz]
 - Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
+- When filtering by responsible in globalindex also return tasks assigned to a team the responsible belongs to. [buchi]
 
 
 2021.5.1 (2021-03-09)

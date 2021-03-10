@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
@@ -145,6 +147,31 @@ class TestGlobalIndexGet(IntegrationTestCase):
 
         self.assertEqual(3, browser.json['items_total'])
         self.assertEqual(3, len(browser.json['items']))
+
+    @browsing
+    def test_filter_by_responsible_includes_teams(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(
+            Builder('task')
+            .titled(u'Vertragsentw\xfcrfe 2018')
+            .within(self.dossier)
+            .having(
+                task_type='direct-execution',
+                responsible_client='fa',
+                responsible='team:1',
+            )
+        )
+        view = '@globalindex?filters.responsible:record={}'.format(
+            self.regular_user.id)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            set([self.regular_user.id, 'team:1']),
+            set([item['responsible'] for item in browser.json['items']]))
+
+        self.assertEqual(13, browser.json['items_total'])
+        self.assertEqual(13, len(browser.json['items']))
 
     @browsing
     def test_filter_by_date(self, browser):
