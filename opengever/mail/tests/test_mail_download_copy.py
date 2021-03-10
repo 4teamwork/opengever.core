@@ -4,9 +4,11 @@ from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from opengever.base.command import CreateEmailCommand
 from opengever.document.browser.download import DownloadConfirmationHelper
+from opengever.mail.interfaces import IMailDownloadSettings
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_string
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from zope.annotation import IAnnotations
 from zope.i18n import translate
@@ -133,3 +135,44 @@ class TestMailDownloadCopy(FunctionalTestCase):
             browser.headers)
 
         self.assertEquals(msg_data, browser.contents)
+
+    @browsing
+    def test_download_copy_changes_p7m_extension_to_eml(self, browser):
+
+        mail_p7m = create(
+            Builder('mail')
+            .with_asset_message('signed.p7m'))
+
+        browser.login().visit(mail_p7m, view='tabbedview_view-overview')
+        browser.find('Download copy').click()
+
+        self.assertDictContainsSubset({
+            'status': '200 Ok',
+            'content-length': str(len(browser.contents)),
+            'content-type': 'application/pkcs7-mime',
+            'content-disposition': 'attachment; filename="Hello.eml"',
+            },
+            browser.headers)
+
+        self.assertEquals(
+            mail_p7m.get_file().data.replace("\r", "").replace("\n", ""),
+            browser.contents.replace("\r", "").replace("\n", ""))
+
+    @browsing
+    def test_download_copy_respects_p7m_extension_replacement_setting(self, browser):
+        api.portal.set_registry_record(
+            'p7m_extension_replacement', u'foo', IMailDownloadSettings)
+        mail_p7m = create(
+            Builder('mail')
+            .with_asset_message('signed.p7m'))
+
+        browser.login().visit(mail_p7m, view='tabbedview_view-overview')
+        browser.find('Download copy').click()
+
+        self.assertDictContainsSubset({
+            'status': '200 Ok',
+            'content-length': str(len(browser.contents)),
+            'content-type': 'application/pkcs7-mime',
+            'content-disposition': 'attachment; filename="Hello.foo"',
+            },
+            browser.headers)

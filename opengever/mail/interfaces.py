@@ -38,5 +38,16 @@ class IMailTabbedviewSettings(Interface):
     )
 
 
+class IMailDownloadSettings(Interface):
+
+    p7m_extension_replacement = schema.TextLine(
+        title=u'p7m mail extension replacement upon mail download',
+        description=u'signed/multipart mails get saved as p7m in Gever. '
+                    u'Upon download the p7m extension gets replaced as it '
+                    u'is not handled correctly by outlook.',
+        default=u'eml',
+    )
+
+
 class IExtractedFromMail(Interface):
     """Used to mark documents extracted from a Mail"""

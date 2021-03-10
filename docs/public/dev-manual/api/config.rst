@@ -113,6 +113,7 @@ GEVER-Mandanten abgefragt werden.
               "scope": "oo_V1WebApi"
           },
           "org_unit": "afi",
+          "p7m_extension_replacement": "eml",
           "portal_url": "https://dev.onegovgever.ch/portal",
           "private_folder_url": "http://localhost:8080/fd/private/john.doe",
           "recently_touched_limit": 10,
@@ -277,8 +278,11 @@ nightly_jobs
     end_time
         Endzeit für NightlyJobs
 
+p7m_extension_replacement
+    Dateiendung die beim Download von Mails anstatt p7m verwendet wird.
+
 portal_url
-  URL des Portals
+    URL des Portals
 
 sharing_configuration
 

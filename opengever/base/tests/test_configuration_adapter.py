@@ -8,6 +8,10 @@ import os
 
 class TestConfigurationAdapter(IntegrationTestCase):
 
+    def setUp(self):
+        super(TestConfigurationAdapter, self).setUp()
+        os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee.local/'
+
     def test_configuration(self):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
@@ -55,6 +59,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('white_list_prefix', u'^.+'),
                 ('black_list_prefix', u'^$'),
                 ])),
+            ('p7m_extension_replacement', 'eml'),
             ('features', OrderedDict([
                 ('activity', False),
                 ('archival_file_conversion', False),

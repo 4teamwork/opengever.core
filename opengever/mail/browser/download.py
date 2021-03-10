@@ -1,17 +1,34 @@
 from opengever.document.browser.download import DocumentishDownload
-from plone.namedfile.interfaces import HAVE_BLOBS
+from opengever.mail.interfaces import IMailDownloadSettings
 from opengever.mail.mail import IOGMail
+from os.path import splitext
+from plone.namedfile.interfaces import HAVE_BLOBS
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+
 
 if HAVE_BLOBS:
     from plone.namedfile.interfaces import IBlobby
 
 
-class MailDownload(DocumentishDownload):
-    """Because MS Outlook has problems displaying *.eml mails
-    with lf line endings, we make sure that we only deliver CRLF.
+def p7m_extension_replacement():
+    """Get the client specific extension that should be used to replace p7m
+    extension in Mail downloads."""
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IMailDownloadSettings)
+    return proxy.p7m_extension_replacement
 
-    To do that conversion manually we can't use an filestream_iterator,
-    for streaming the data.
+
+class MailDownload(DocumentishDownload):
+    """
+    We overwrite the document download for mails for two outlook issues:
+
+    1. MS Outlook has problems displaying *.eml mails with lf line endings,
+    so we make sure that we only deliver CRLF. To do that conversion manually
+    we can't use an filestream_iterator, for streaming the data.
+
+    2. MS Outlook refuses to open .p7m files so we change the extension to .eml
+    for the download.
     """
 
     def convert_line_endings(self, filename):
@@ -39,3 +56,11 @@ class MailDownload(DocumentishDownload):
                 return self.convert_line_endings(filename)
 
         return named_file.data
+
+    def extract_filename(self, named_file):
+        super(MailDownload, self).extract_filename(named_file)
+        if not self.filename:
+            return
+        root, ext = splitext(self.filename)
+        if ext == '.p7m':
+            self.filename = '.'.join((root, p7m_extension_replacement()))
