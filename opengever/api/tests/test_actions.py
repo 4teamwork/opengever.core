@@ -1079,6 +1079,47 @@ class TestFolderButtons(FolderActionsTestBase):
         )
 
 
+class TestFolderActions(IntegrationTestCase):
+
+    def get_folder_actions(self, browser, context):
+        browser.open(context.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        return browser.json['folder_actions']
+
+    @browsing
+    def test_folder_actions_for_dossier(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_folder_actions = [{u'icon': u'', u'id': u'edit_items', u'title': u'Edit metadata'}]
+
+        self.assertListEqual(
+            expected_folder_actions,
+            self.get_folder_actions(browser, self.dossier),
+        )
+
+    @browsing
+    def test_folder_actions_for_repository_folders(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_folder_actions = [{u'icon': u'', u'id': u'edit_items', u'title': u'Edit metadata'}]
+
+        self.assertListEqual(
+            expected_folder_actions,
+            self.get_folder_actions(browser, self.leaf_repofolder),
+        )
+
+    @browsing
+    def test_folder_actions_for_repository_root(self, browser):
+        self.login(self.regular_user, browser)
+
+        expected_folder_actions = [{u'icon': u'', u'id': u'edit_items', u'title': u'Edit metadata'}]
+
+        self.assertListEqual(
+            expected_folder_actions,
+            self.get_folder_actions(browser, self.repository_root),
+        )
+
+
 class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
 
     list_workspaces_action = {

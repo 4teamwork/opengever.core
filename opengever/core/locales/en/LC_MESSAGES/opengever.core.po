@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-29 08:14+0000\n"
+"POT-Creation-Date: 2021-03-09 07:36+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -153,6 +153,11 @@ msgstr "Dossier template"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Download protocol json"
 msgstr "Download meeting protocol JSON"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210304104008_add_edit_items_action/actions.xml
+msgid "Edit metadata"
+msgstr "Edit metadata"
 
 #. German translation: Als Zip-Datei exportieren
 #: ./opengever/core/profiles/default/actions.xml

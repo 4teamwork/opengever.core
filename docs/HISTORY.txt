@@ -4,6 +4,7 @@ Changelog
 2021.6.0 (unreleased)
 ---------------------
 
+- Add edit_items folder action. [tinagerber]
 - Fixed automatic start of a next task inside a sequential task process. [phgross]
 - Only show "add task to process" link, if next task is not yet started. [phgross]
 - Fix adding sequential task process on first position. [phgross]
