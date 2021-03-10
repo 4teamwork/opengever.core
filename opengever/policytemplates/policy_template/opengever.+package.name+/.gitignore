@@ -14,3 +14,7 @@ eggs/
 parts/
 src/
 var/
+include/
+lib/
+lib64
+pip-selfcheck.json
