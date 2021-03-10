@@ -4,6 +4,7 @@ Changelog
 2021.6.1 (unreleased)
 ---------------------
 
+- Introduce customproperties default slots which is enabled for every document. [phgross]
 - No longer fail during deployment if ldap is not in authentication plugins. [njohner]
 - Add id field to the @listing endpoint. [elioschmutz]
 

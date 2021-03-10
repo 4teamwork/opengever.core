@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from jsonschema import Draft4Validator
+from opengever.propertysheets.assignment import DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
 from opengever.propertysheets.assignment import DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX
 from opengever.propertysheets.field import PropertySheetField
 from opengever.propertysheets.tests.fixture import fixture_assignment_factory
@@ -21,6 +22,7 @@ class TestPropertySheetFieldSchemaProvider(FunctionalTestCase):
             "unused_attribute",
             DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX,
             fixture_assignment_factory,
+            DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
         )
 
     @property

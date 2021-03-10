@@ -48,12 +48,14 @@ class PropertySheetField(Field):
         attribute_name,
         assignemnt_prefix,
         valid_assignment_slots_factory,
+        default_slot,
         **kwargs
     ):
         self.request_key = request_key
         self.attribute_name = attribute_name
         self.assignemnt_prefix = assignemnt_prefix
         self.valid_assignment_slots_factory = valid_assignment_slots_factory
+        self.default_slot = default_slot
 
         for name in ("title", "required"):
             if name in kwargs:
@@ -80,6 +82,7 @@ class PropertySheetField(Field):
         self.validate_mandatory_property_sheet(
             value, active_assignment_slot, mandatory_sheet
         )
+        self.validate_default_property_sheet(value)
         self.validate_optional_property_sheets(
             value, mandatory_sheet
         )
@@ -103,6 +106,21 @@ class PropertySheetField(Field):
     def get_mandatory_property_sheet(self, active_assignment_slot):
         return PropertySheetSchemaStorage().query(active_assignment_slot)
 
+    def get_default_property_sheet(self):
+        return PropertySheetSchemaStorage().query(self.default_slot)
+
+    def validate_default_property_sheet(self, value):
+        """Validate default sheet, if available."""
+
+        default_sheet = self.get_default_property_sheet()
+        if default_sheet is None:
+            return
+        if value is None:
+            value = {}
+
+        data = value.get(self.default_slot, {})
+        default_sheet.validate(data)
+
     def validate_mandatory_property_sheet(
         self, value, active_assignment_slot, mandatory_sheet
     ):
@@ -123,6 +141,10 @@ class PropertySheetField(Field):
         valid_assignment_slots = set(self.valid_assignment_slots_factory())
 
         for assignment_slot_name in value:
+            # default schema already validated, take a shortcut
+            if assignment_slot_name == self.default_slot:
+                continue
+
             optional_sheet = PropertySheetSchemaStorage().query(
                 assignment_slot_name
             )

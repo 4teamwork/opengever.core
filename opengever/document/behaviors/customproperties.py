@@ -1,5 +1,6 @@
 from opengever.document import _
 from opengever.propertysheets.assignment import get_document_assignment_slots
+from opengever.propertysheets.assignment import DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
 from opengever.propertysheets.field import PropertySheetField
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
@@ -13,6 +14,7 @@ class IDocumentCustomProperties(model.Schema):
         attribute_name='document_type',
         assignemnt_prefix='IDocumentMetadata.document_type',
         valid_assignment_slots_factory=get_document_assignment_slots,
+        default_slot=DOCUMENT_DEFAULT_ASSIGNMENT_SLOT,
     )
 
     model.fieldset(
