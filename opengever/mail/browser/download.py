@@ -1,10 +1,22 @@
 from opengever.document.browser.download import DocumentishDownload
+from opengever.mail.interfaces import IMailDownloadSettings
 from opengever.mail.mail import IOGMail
 from os.path import splitext
 from plone.namedfile.interfaces import HAVE_BLOBS
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+
 
 if HAVE_BLOBS:
     from plone.namedfile.interfaces import IBlobby
+
+
+def p7m_extension_replacement():
+    """Get the client specific extension that should be used to replace p7m
+    extension in Mail downloads."""
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IMailDownloadSettings)
+    return proxy.p7m_extension_replacement
 
 
 class MailDownload(DocumentishDownload):
@@ -51,4 +63,4 @@ class MailDownload(DocumentishDownload):
             return
         root, ext = splitext(self.filename)
         if ext == '.p7m':
-            self.filename = '.'.join((root, 'eml'))
+            self.filename = '.'.join((root, p7m_extension_replacement()))

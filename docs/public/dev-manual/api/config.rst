@@ -279,7 +279,7 @@ nightly_jobs
         Endzeit für NightlyJobs
 
 p7m_extension_replacement
-    Dateiendung die beim download von Mails anstatt p7m verwendet wird.
+    Dateiendung die beim Download von Mails anstatt p7m verwendet wird.
 
 portal_url
     URL des Portals
