@@ -289,6 +289,18 @@ class BaseDocumentMixin(object):
 
         return dossier.title
 
+    def containing_subdossier_url(self):
+        """"Returns the url of the subdossier which the document is placed in.
+        Returns None when the object is placed directly inside a main dossier.
+        """
+        dossier = self.get_parent_dossier()
+
+        # Return None if the dossier is a main dossier
+        if not IDossierMarker.providedBy(aq_parent(dossier)):
+            return None
+
+        return dossier.absolute_url()
+
 
 def mimetype_lookup(mtr, contenttype):
     """Reimplemented as case insensitive from Products.MimetypesRegistry."""

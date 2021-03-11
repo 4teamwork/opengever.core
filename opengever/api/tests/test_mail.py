@@ -25,6 +25,7 @@ class TestGetMail(IntegrationTestCase):
         self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
                          browser.json['containing_dossier'])
         self.assertIsNone(browser.json['containing_subdossier'])
+        self.assertIsNone(browser.json['containing_subdossier_url'])
         self.assertFalse(browser.json['trashed'])
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
