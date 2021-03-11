@@ -49,6 +49,7 @@ class GeverDeployment(object):
         self.config = config
         self.db_session = db_session
         self.is_development_setup = is_development_setup
+        self.is_policyless = config.get('is_policyless', False)
         self.has_purge_sql = has_purge_sql
         self.ldap_profile = ldap_profile
         self.has_ogds_sync = has_ogds_sync
@@ -78,9 +79,16 @@ class GeverDeployment(object):
         ext_profiles = list(EXTENSION_PROFILES)
         ext_profiles.extend(BASE_PROFILES)
 
+        if self.is_policyless:
+            # For policyless deployments, admin unit will be set up later,
+            # and the Plone site ID won't be tied to it.
+            plone_site_id = 'gever'
+        else:
+            plone_site_id = config.get('admin_unit_id').encode('utf-8')
+
         return addPloneSite(
             self.context,
-            config['admin_unit_id'].encode('utf-8'),
+            plone_site_id,
             title=config['title'],
             profile_id=_DEFAULT_PROFILE,
             extension_ids=ext_profiles,
@@ -153,9 +161,20 @@ class GeverDeployment(object):
         print '===== Done SYNCING LDAP ===='
 
     def configure_admin_unit(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IAdminUnitConfiguration)
-        proxy.current_unit_id = self.config['admin_unit_id'].decode('utf-8')
+        """With classic installations, the admin unit will be created during
+        Plone site setup, and the registry  `current_unit_id` will be
+        set accordingly. The admin unit's ID will be used as the Plone site ID
+        as well.
+
+        In policyless setup style however, the admin unit ID should be omitted
+        from the registerDeployment directive, since it will be created later.
+        """
+        admin_unit_id = self.config.get('admin_unit_id')
+
+        if admin_unit_id:
+            registry = getUtility(IRegistry)
+            proxy = registry.forInterface(IAdminUnitConfiguration)
+            proxy.current_unit_id = admin_unit_id.decode('utf-8')
 
     def install_policy_profile(self):
         # import the default generic setup profiles if needed
