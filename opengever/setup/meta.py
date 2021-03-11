@@ -2,6 +2,7 @@ from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.model import UNIT_ID_LENGTH
 from opengever.setup.directives import deployment_directive
 from opengever.setup.directives import ldap_directive
+from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.fields import Tokens
 from zope.interface import Interface
 from zope.schema import Bool
@@ -10,6 +11,21 @@ from zope.schema import TextLine
 
 def register_deployment(context, **kwargs):
     title = kwargs.get('title')
+
+    policyless = kwargs.get('is_policyless', False)
+    if policyless:
+        if kwargs.get('admin_unit_id') is not None:
+            raise ConfigurationError(
+                'Disallowed parameter:',
+                'admin_unit_id',
+                'Not allowed in policyless setup style.')
+    else:
+        if kwargs.get('admin_unit_id') is None:
+            raise ConfigurationError(
+                'Missing parameter:',
+                'admin_unit_id',
+                'Required unless policyless setup style is used.')
+
     context.action(title, deployment_directive, (title, ), kw=kwargs)
 
 
@@ -35,7 +51,7 @@ class IDeploymentDirective(Interface):
     admin_unit_id = TextLine(
         title=u'AdminUnit ID',
         description=u'AdminUnit corresponding to this plone site',
-        required=True,
+        required=False,
         max_length=UNIT_ID_LENGTH)
 
     mail_domain = TextLine(
@@ -54,6 +70,12 @@ class IDeploymentDirective(Interface):
         description=u'Whether this option should be pre-selected in setup.',
         default=False,
         required=True)
+
+    is_policyless = Bool(
+        title=u'Is policyless',
+        description=u'Whether this is a policyless deployment.',
+        default=False,
+        required=False)
 
     reader_group = TextLine(
         title=u'Reader group',
