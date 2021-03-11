@@ -18,7 +18,7 @@ class BaseConfigurationRegistry(object):
 
     def _list_entries(self):
         results = []
-        for key, values in self.configs.items():
+        for key, values in sorted(self.configs.items()):
             if values['is_default']:
                 results.insert(0, key)
             else:
