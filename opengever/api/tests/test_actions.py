@@ -642,7 +642,7 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
                          self.get_file_actions(browser, self.resolvable_document))
 
     @browsing
-    def test_task_from_doc_not_available_for_doc_in_task(self, browser):
+    def test_task_from_doc_available_for_doc_in_task(self, browser):
         self.login(self.regular_user, browser)
         expected_file_actions = [
             {u'id': u'oc_direct_checkout',
@@ -659,6 +659,9 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
              u'icon': u''},
             {u'id': u'trash_document',
              u'title': u'Trash document',
+             u'icon': u''},
+            {u'id': u'new_task_from_document',
+             u'title': u'New task from document',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,

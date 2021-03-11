@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.api.lock import can_unlock_obj
 from opengever.bumblebee import is_bumblebee_feature_enabled
@@ -114,10 +112,10 @@ class BaseDocumentFileActions(object):
         return trasher.verify_may_untrash(raise_on_violations=False)
 
     def is_new_task_from_document_available(self):
-        parent = aq_parent(aq_inner(self.context))
-        is_inside_dossier = IDossierMarker.providedBy(parent)
-        may_add_task = api.user.has_permission('opengever.task: Add task', obj=parent)
-        return is_inside_dossier and may_add_task
+        dossier = self.context.get_parent_dossier()
+        if not IDossierMarker.providedBy(dossier):
+            return False
+        return api.user.has_permission('opengever.task: Add task', obj=dossier)
 
     def is_unlock_available(self):
         lockable = ILockable(self.context)
