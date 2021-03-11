@@ -72,8 +72,12 @@ class FavoriteManager(object):
         return Favorite.query.by_userid(userid=userid).all()
 
     def list_all_repository_favorites(self, userid):
+        current_au = get_current_admin_unit()
+        if not current_au:
+            return []
+
         favorites = Favorite.query.only_repository_favorites(
-            userid, get_current_admin_unit().id()).all()
+            userid, current_au.id()).all()
         return favorites
 
     def get_favorite(self, obj, user):
