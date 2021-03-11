@@ -8,7 +8,10 @@ API Changelog
 2021.6.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+Other Changes
+^^^^^^^^^^^^^
+
+- Add ``containing_subdossier_url`` to the document serializer.
 
 
 2021.5.0 (2021-03-04)

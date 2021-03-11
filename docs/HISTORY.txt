@@ -4,6 +4,8 @@ Changelog
 2021.6.0 (unreleased)
 ---------------------
 
+- Show add_task_from_document action also for documents within tasks. [tinagerber]
+- Add containing_subdossier_url to document serializer. [tinagerber]
 - Implement a new content-type: opengever.workspace.meetingagendaitem. [elioschmutz]
 - Add edit_items folder action. [tinagerber]
 - Update .gitignore of policytemplates for deployment on CentOS 8. [njohner]

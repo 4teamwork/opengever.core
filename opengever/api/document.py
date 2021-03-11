@@ -47,6 +47,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             'is_locked': obj.is_locked(),
             'containing_dossier': obj.containing_dossier_title(),
             'containing_subdossier': obj.containing_subdossier_title(),
+            'containing_subdossier_url': obj.containing_subdossier_url(),
             'trashed': obj.is_trashed,
             'is_shadow_document': obj.is_shadow_document(),
             'current_version_id': obj.get_current_version_id(
