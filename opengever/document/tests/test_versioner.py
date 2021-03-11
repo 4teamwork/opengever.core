@@ -38,6 +38,22 @@ class TestInitialVersionCreation(IntegrationTestCase):
         self.assertEquals(
             1, versioner.get_history_metadata().getLength(countPurged=False))
 
+    def test_checkin_creates_initial_version(self):
+        self.login(self.regular_user)
+        versioner = Versioner(self.document)
+
+        self.assertFalse(versioner.has_initial_version())
+        self.assertEquals([], versioner.get_history_metadata())
+
+        self.checkout_document(self.document)
+        self.assertFalse(versioner.has_initial_version())
+        self.assertEquals([], versioner.get_history_metadata())
+
+        self.checkin_document(self.document)
+        self.assertTrue(versioner.has_initial_version())
+        self.assertEquals(
+            2, versioner.get_history_metadata().getLength(countPurged=False))
+
     @browsing
     def test_initial_version_date_is_documents_creation_date(self, browser):
         self.login(self.manager)
