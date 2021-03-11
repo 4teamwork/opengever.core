@@ -1,0 +1,75 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Meeting",
+    "additionalProperties": false,
+    "properties": {
+        "responsible": {
+            "type": "string",
+            "title": "Organisator",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<G\u00fcltige User-ID>"
+        },
+        "start": {
+            "type": "string",
+            "title": "Beginn",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        },
+        "end": {
+            "type": "string",
+            "title": "Ende",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        },
+        "location": {
+            "type": "string",
+            "title": "Ort",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "videoconferencing_url": {
+            "type": "string",
+            "title": "Video-Call Link",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "title": {
+            "type": "string",
+            "title": "Titel",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "description": {
+            "type": "string",
+            "title": "Beschreibung",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        }
+    },
+    "required": [
+        "responsible",
+        "start",
+        "title"
+    ],
+    "field_order": [
+        "responsible",
+        "start",
+        "end",
+        "location",
+        "videoconferencing_url",
+        "title",
+        "description",
+        "changed"
+    ]
+}

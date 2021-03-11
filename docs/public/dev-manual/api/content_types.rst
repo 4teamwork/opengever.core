@@ -124,6 +124,18 @@ Teamraum-Ordner
 
 .. include:: schemas/opengever.workspace.folder.inc
 
+
+Teamraum-Meeting
+^^^^^^^^^^^^^^^^
+
+.. include:: schemas/opengever.workspace.meeting.inc
+
+
+Teamraum-Meeting Traktandum
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. include:: schemas/opengever.workspace.meetingagendaitem.inc
+
 --------------------
 
 .. disqus::

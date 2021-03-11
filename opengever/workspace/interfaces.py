@@ -63,3 +63,7 @@ class IToDoList(Interface):
 
 class IWorkspaceMeeting(Interface):
     """ Marker interface for Workspace Meetings """
+
+
+class IWorkspaceMeetingAgendaItem(Interface):
+    """ Marker interface for WorkspaceMeetingAgendaItem"""

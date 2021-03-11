@@ -40,6 +40,7 @@ from plone import api
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
+from plone.app.textfield.value import RichTextValue
 from time import time
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite
@@ -2198,7 +2199,7 @@ class OpengeverContentFixture(object):
             .within(self.workspace)
         ))
 
-        self.register('workspace_document', create(
+        self.workspace_document = self.register('workspace_document', create(
             Builder('document')
             .within(self.workspace)
             .titled(u'Teamraumdokument')
@@ -2218,7 +2219,7 @@ class OpengeverContentFixture(object):
             .with_asset_file('text.txt')
         ))
 
-        self.register('workspace_meeting', create(
+        self.workspace_meeting = self.register('workspace_meeting', create(
             Builder('workspace meeting')
             .within(self.workspace)
             .titled(u'Besprechung Kl\xe4ranlage')
@@ -2226,6 +2227,22 @@ class OpengeverContentFixture(object):
                 start=datetime(2016, 12, 8),
                 responsible=self.workspace_member.getId())
         ))
+
+        self.register('workspace_meeting_agenda_item', create(
+            Builder('workspace meeting agenda item')
+            .within(self.workspace_meeting)
+            .titled(u'Genehmigung des Lageberichts')
+            .having(
+                relatedItems=[self.workspace_document],
+                text=RichTextValue(
+                    raw=u'Der Lagebericht 2018 steht zur Verf\xfcgung und muss genehmigt werden',
+                    mimeType='text/html',
+                    outputMimeType='text/x-html-safe'),
+                decision=RichTextValue(
+                    raw=u'Die <a href="http://example.com">Gener\xe4lversammlung</a> genehmigt den <b>Lagebericht</b> 2018',
+                    mimeType='text/html',
+                    outputMimeType='text/x-html-safe'),
+            )))
 
     def create_todos(self):
         self.todolist_general = self.register('todolist_general', create(

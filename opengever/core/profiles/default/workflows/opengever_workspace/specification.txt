@@ -41,6 +41,7 @@ Status Active:
   A workspace member can update_order.
   A workspace member can soft delete.
   A workspace member can delete todos.
+  A workspace member can delete workspace meeting agenda items.
   A workspace admin can modify workspace.
   A workspace admin can manage security.
   A workspace admin can deactivate.

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-09 07:36+0000\n"
+"POT-Creation-Date: 2021-03-11 08:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,7 +128,7 @@ msgid "Download protocol json"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20210304104008_add_edit_items_action/actions.xml
+#: ./opengever/core/upgrades/20210310104008_add_edit_items_action/actions.xml
 msgid "Edit metadata"
 msgstr ""
 
@@ -341,6 +341,11 @@ msgstr ""
 #: ./opengever/core/profiles/default/types/opengever.workspace.meeting.xml
 #: ./opengever/core/upgrades/20201016095810_install_workspace_meeting_type/types/opengever.workspace.meeting.xml
 msgid "WorkspaceMeeting"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.workspace.meetingagendaitem.xml
+#: ./opengever/core/upgrades/20210303112038_install_workspace_meeting_agenda_item_type/types/opengever.workspace.meetingagendaitem.xml
+msgid "WorkspaceMeetingAgendaItem"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.root.xml

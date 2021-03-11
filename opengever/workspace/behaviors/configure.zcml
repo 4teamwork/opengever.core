@@ -41,4 +41,11 @@
       for="opengever.workspace.interfaces.IWorkspaceMeeting"
       />
 
+  <plone:behavior
+      title="workspace meeting agenda item name from title"
+      provides=".namefromtitle.IWorkspaceMeetingAgendaItemNameFromTitle"
+      factory=".namefromtitle.WorkspaceMeetingAgendaItemNameFromTitle"
+      for="opengever.workspace.interfaces.IWorkspaceMeetingAgendaItem"
+      />
+
 </configure>
