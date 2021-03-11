@@ -44,7 +44,7 @@ class IDeploymentDirective(Interface):
         title=u'Additional profiles',
         description=u'Generic setup profile names (without profile- prefix)',
         default=None,
-        required=True,
+        required=False,
         value_type=TextLine()
     )
 
