@@ -65,7 +65,11 @@ def get_ou_selector(ignore_anonymous=False):
     else:
         users_units = ogds_service().assigned_org_units(member.getId())
 
-    admin_unit_units = get_current_admin_unit().org_units
+    admin_unit = get_current_admin_unit()
+    if not admin_unit:
+        admin_unit_units = []
+    else:
+        admin_unit_units = admin_unit.org_units
 
     if not admin_unit_units:
         return NoAssignedUnitsOrgUnitSelector()
@@ -98,6 +102,11 @@ def get_current_org_unit():
 def get_current_admin_unit():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IAdminUnitConfiguration)
+
+    if not proxy.current_unit_id:
+        # AdminUnit might not be configured yet immediately after Plone setup
+        return None
+
     return ogds_service().fetch_admin_unit(proxy.current_unit_id)
 
 
