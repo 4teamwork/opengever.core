@@ -19,7 +19,6 @@ Other Changes
 
 - Add new endpoint ``@oneoffixx-templates`` to provide oneoffixx templates over the restapi
 - Add new endpoint ``@document_from_oneoffixx`` to add a document from a oneoffixx template
-- Add ``breadcrumbs`` option to the ``@solrsearch`` endpoint, only available for small batch sizes (max. 50 items).
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^

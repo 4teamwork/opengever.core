@@ -1,6 +1,5 @@
 from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
-from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import request_error_handler
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
@@ -22,21 +21,6 @@ BLACKLISTED_ATTRIBUTES = set([
 class SolrSearchGet(SolrQueryBaseService):
     """REST API endpoint for querying Solr
     """
-
-    def __init__(self, context, request):
-        super(SolrSearchGet, self).__init__(context, request)
-        self.show_breadcrumbs = self.extract_show_breadcrumb()
-
-    def extract_show_breadcrumb(self):
-        """Extract breadcrumbs flag and checks if the batchsize is
-        not higher than 50 when enabled."""
-
-        show_breadcrumbs = bool(self.request.form.get('breadcrumbs', False))
-        if show_breadcrumbs:
-            if self.request.form.get('b_size', 0) > 50:
-                raise BadRequest('Breadcrumb flag is only allowed for '
-                                 'small batch sizes (max. 50).')
-        return show_breadcrumbs
 
     def extract_query(self, params):
         if 'q' in params:
@@ -96,19 +80,7 @@ class SolrSearchGet(SolrQueryBaseService):
                 # Requesting additional fields is required in order to determine if
                 # the repository folder is a leaf node.
                 requested_fields.extend(['@type', 'has_sametype_children'])
-
         return requested_fields
-
-    def extract_field_list(self, params):
-        """Add path to the field list, if breadcrumb flag is on. It's used for
-        breadcrumb generation
-        """
-        fields = super(SolrSearchGet, self).extract_field_list(params)
-
-        if self.show_breadcrumbs and 'path' not in fields:
-            fields.append('path')
-
-        return fields
 
     def prepare_additional_params(self, params):
         facet_fields = params.get('facet.field', [])
@@ -150,20 +122,6 @@ class SolrSearchGet(SolrQueryBaseService):
         if field.startswith("_") or field in BLACKLISTED_ATTRIBUTES:
             return False
         return True
-
-    def _create_list_item(self, doc):
-        """Extend object data with breadcrumb information if 'breadcrumbs' flag
-        is true."""
-
-        data = super(SolrSearchGet, self)._create_list_item(doc)
-
-        if self.show_breadcrumbs:
-            path = getattr(doc, 'path', None)
-            obj = api.portal.get().unrestrictedTraverse(path.encode('utf-8'))
-            data['breadcrumbs'] = Breadcrumbs(
-                obj, self.request).get_serialized_breadcrumbs()
-
-        return data
 
 
 class TeamraumSolrSearchGet(Service):
