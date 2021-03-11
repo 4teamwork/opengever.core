@@ -39,7 +39,7 @@ class TestCopyDocuments(IntegrationTestCase):
         self.checkout_document(self.document)
         self.checkin_document(self.document)
         old_history = self.portal.portal_repository.getHistory(self.document)
-        self.assertEqual(len(old_history), 1)
+        self.assertEqual(len(old_history), 2)
 
         cb = self.dossier.manage_copyObjects(self.document.id)
         self.dossier.manage_pasteObjects(cb)

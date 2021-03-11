@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Implement a new content-type: opengever.workspace.meetingagendaitem. [elioschmutz]
+- Create initial version upon checkin. [njohner]
 - Add edit_items folder action. [tinagerber]
 - Update .gitignore of policytemplates for deployment on CentOS 8. [njohner]
 - Change p7m extension to eml (or extension configured in the registry) in mail download. [njohner]
