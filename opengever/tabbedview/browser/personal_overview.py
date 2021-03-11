@@ -153,6 +153,14 @@ class PersonalOverview(TabbedView):
         """
         try:
             current_user = ogds_service().fetch_current_user()
+
+            admin_unit = get_current_admin_unit()
+            if not admin_unit:
+                # No AdminUnit configured yet - this might be the case
+                # immediately after Plone site setup with in "policyless"
+                # style, and should be a temporary situation
+                return True
+
             if get_current_admin_unit().is_user_assigned(current_user):
                 return True
             elif self._is_user_admin():

@@ -2,7 +2,10 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 class TestPersonalOverview(IntegrationTestCase):
@@ -35,10 +38,25 @@ class TestPersonalOverview(IntegrationTestCase):
 
         browser.open(view='personal_overview')
 
-        self.assertEquals(
+        self.assertEqual(
             u'Personal Overview: B\xe4rfuss K\xe4thi',
             browser.css('h1.documentFirstHeading').first.text,
             )
+
+    @browsing
+    def test_personal_overview_doesnt_fail_when_missing_admin_unit(self, browser):
+        registry = getUtility(IRegistry)
+        config = registry.forInterface(IAdminUnitConfiguration)
+        config.current_unit_id = None
+
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='personal_overview')
+
+        self.assertEquals(
+            u'Personal Overview: B\xe4rfuss K\xe4thi',
+            browser.css('h1.documentFirstHeading').first.text,
+        )
 
     @browsing
     def test_additional_tabs_are_shown_for_admins(self, browser):
