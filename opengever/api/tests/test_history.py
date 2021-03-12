@@ -3,6 +3,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
 from plone import api
 import json
+from opengever.document.versioner import Versioner
 
 
 class TestHistoryPatchEndpointForDocuments(IntegrationTestCase):
@@ -182,3 +183,28 @@ class TestHistoryPatchEndpointForDocuments(IntegrationTestCase):
                 u"does not exist. ".format(self.document.absolute_url_path()),
              u'type': u'ArchivistRetrieveError'}, browser.json)
         self.assertEqual('VERSION 0 DATA', self.document.file.data)
+
+
+class TestHistoryGetEndpointForDocuments(IntegrationTestCase):
+
+    @browsing
+    def test_ensures_document_creator_as_creator_of_initial_version(self, browser):
+        self.login(self.regular_user, browser)
+        create_document_version(self.document, 0)
+        versioner = Versioner(self.document)
+
+        self.assertEqual(self.document.Creator(), u'robert.ziegler')
+        self.assertEqual(0, versioner.get_current_version_id())
+        self.assertEqual(
+            'kathi.barfuss',
+            versioner.get_version_metadata(0)['sys_metadata']['principal'])
+
+        browser.open(self.document,
+                     view='@history',
+                     method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        version = browser.json[0]
+        self.assertEqual(0, version[u'version'])
+        self.assertEqual(u'robert.ziegler', version['actor']['id'])

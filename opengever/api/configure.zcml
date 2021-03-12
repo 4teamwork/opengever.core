@@ -152,6 +152,13 @@
       permission="opengever.trash.UntrashContent"
       />
 
+  <plone:service
+      method="GET"
+      name="@history"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".history.GeverHistoryGet"
+      permission="CMFEditions.AccessPreviousVersions"
+      />
 
   <plone:service
       method="PATCH"

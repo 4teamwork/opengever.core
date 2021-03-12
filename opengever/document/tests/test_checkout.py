@@ -176,7 +176,7 @@ class TestCheckinIntegration(IntegrationTestCase):
                              u'B\xe4rfuss K\xe4thi (kathi.barfuss), '
                              u'Ziegler Robert (robert.ziegler)')
 
-        version_metadata = Versioner(self.document).get_version_metadata(0)
+        version_metadata = Versioner(self.document).get_version_metadata(1)
         version_comment = version_metadata['sys_metadata']['comment']
         self.assertEqual(collaborator_note, version_comment)
 

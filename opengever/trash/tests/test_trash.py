@@ -364,8 +364,6 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         # Ensure we have two versions of the document
         self.checkout_document(self.subdocument)
         self.checkin_document(self.subdocument)
-        self.checkout_document(self.subdocument)
-        self.checkin_document(self.subdocument)
         browser.open(
             self.dossier,
             view='trashed',

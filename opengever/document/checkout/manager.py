@@ -208,6 +208,12 @@ class CheckinCheckoutManager(object):
                   mapping={'collaborators': collaborator_list}),
                 target_language=site_language.split('-')[0])
 
+        # In case the document was checked-out and in without having ever
+        # been modified, the initial version will be missing and needs
+        # to be created, as it will not be created by the file setter.
+        # In all other scenarios the initial version should already exist.
+        self.versioner.create_initial_version()
+
         # create new version in CMFEditions
         self.versioner.create_version(comment)
 
