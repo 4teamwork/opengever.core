@@ -41,7 +41,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
         input_labels = fieldset.css(".field label").text
         self.assertEqual(
             [
-                u"Custom properties",  # the composite fiel label
+                u"Custom properties",  # the composite field label
                 u"Yes or no",
                 u"Choose",
                 u"Number",
@@ -366,4 +366,65 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self.assertEqual(
             "Required input is missing.",
             field.css(".fieldErrorBox").first.text,
+        )
+
+    @browsing
+    def test_edit_custom_fields_with_default_slot(self, browser):
+        self.login(self.manager, browser)
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", False)
+        )
+        create(
+            Builder("property_sheet_schema")
+            .named("default_schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("int", u"default_num", u"Default Number",
+                        u"A default Number", False)
+        )
+
+        self.document.document_type = u"question"
+
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view="@@edit")
+
+        fieldset = browser.css(
+            "#formfield-form-widgets-"
+            "IDocumentCustomProperties-custom_properties"
+        ).first
+        input_labels = fieldset.css(".field label").text
+        self.assertEqual(
+            [
+                u"Custom properties",  # the composite fiel label
+                u"Number",
+                u"A line of text",
+                u"Default Number",
+            ],
+            input_labels,
+        )
+
+        browser.fill(
+            {
+                "Number": "3",
+                "A line of text": u"b\xe4\xe4",
+                "Default Number": "123",
+            }
+        )
+        browser.click_on("Save")
+        self.assertEquals(["Changes saved"], info_messages())
+        self.assertEqual(
+            {
+                "IDocument.default": {
+                    "default_num": 123
+                },
+                "IDocumentMetadata.document_type.question": {
+                    "num": 3,
+                    "textline": u"b\xe4\xe4",
+                }
+            },
+            IDocumentCustomProperties(self.document).custom_properties,
         )

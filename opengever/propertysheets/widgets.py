@@ -4,6 +4,7 @@ from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone.restapi.serializer.converters import json_compatible
 from z3c.form import interfaces
 from z3c.form.error import MultipleErrors
+from z3c.form.interfaces import IContextAware
 from z3c.form.interfaces import IDataConverter
 from z3c.form.interfaces import IFieldWidget
 from z3c.form.interfaces import IFormLayer
@@ -47,13 +48,19 @@ class PropertySheetWiget(Widget):
         self.widgets = []
 
         slot_name = self.field.get_active_assignment_slot(context=self.context)
-        definition = PropertySheetSchemaStorage().query(slot_name)
-        if definition is None:
-            return
+        dynamic_definition = PropertySheetSchemaStorage().query(slot_name)
+        default_definition = PropertySheetSchemaStorage().query(self.field.default_slot)
 
+        if dynamic_definition is not None:
+            self._append_widgets(dynamic_definition, slot_name)
+
+        if default_definition is not None:
+            self._append_widgets(default_definition, self.field.default_slot)
+
+    def _append_widgets(self, definition, slot):
         for name, field in definition.get_fields():
             widget = getMultiAdapter((field, self.request), IFieldWidget)
-            identifier = self._make_widget_identifier(slot_name, name)
+            identifier = self._make_widget_identifier(slot, name)
             widget.name = identifier
             widget.id = identifier
             widget.mode = self.mode
@@ -66,76 +73,115 @@ class PropertySheetWiget(Widget):
         self.initialize_widgets()
 
         slot_name = self.field.get_active_assignment_slot(context=self.context)
-        definition = PropertySheetSchemaStorage().query(slot_name)
-        if definition is None:
+        definitions = [
+            (slot_name, PropertySheetSchemaStorage().query(slot_name)),
+            (self.field.default_slot,
+             PropertySheetSchemaStorage().query(self.field.default_slot))]
+
+        if not any(definitions):
             return
 
         obj = self.value or dict()
-        sheet_values = obj.get(slot_name, {})
 
-        for name, widget in zip(definition.get_fieldnames(), self.widgets):
-            converter = IDataConverter(widget)
-            sheet_value = sheet_values.get(name, None)
-            widget.value = converter.toWidgetValue(sheet_value)
-            widget.update()
+        for (slot, definition) in definitions:
+            if not definition:
+                continue
+
+            sheet_values = obj.get(slot, {})
+
+            for name in definition.get_fieldnames():
+                widget = self._get_widget(name)
+                converter = IDataConverter(widget)
+                sheet_value = sheet_values.get(name, None)
+                widget.value = converter.toWidgetValue(sheet_value)
+                widget.update()
+
+    def _get_widget(self, name):
+        return [widget for widget in self.widgets if widget.field.getName() == name][0]
 
     def extract(self, default=interfaces.NO_VALUE):
         self.initialize_widgets()
 
         slot_name = self.field.get_active_assignment_slot(context=self.context)
-        definition = PropertySheetSchemaStorage().query(slot_name)
-        if definition is None:
+        definitions = [
+            (slot_name, PropertySheetSchemaStorage().query(slot_name)),
+            (self.field.default_slot,
+             PropertySheetSchemaStorage().query(self.field.default_slot))]
+
+        if not any(definitions):
             return default
 
         errors = ()
         sheet_values = {}
-        found_request_value = False
-
         obj = self.value or dict()
-        sheet_values = obj.get(slot_name, {})
+        all_sheet_values = {}
+        context_values = {}
 
-        for name, widget in zip(definition.get_fieldnames(), self.widgets):
-            value = widget.field.missing_value
-            try:
-                widget.setErrors = self.setErrors
-                raw = widget.extract(default=default)
-                if raw is not default:
-                    found_request_value = True
-                    value = IDataConverter(widget).toFieldValue(raw)
+        if IContextAware.providedBy(self) and not self.ignoreContext:
+            context_values = getMultiAdapter((self.context, self.field),
+                                             interfaces.IDataManager).query()
+
+        for slot, definition in definitions:
+            if not definition:
+                continue
+
+            found_request_value = False
+
+            sheet_values = obj.get(slot, {})
+
+            for name in definition.get_fieldnames():
+                widget = self._get_widget(name)
+
+                value = widget.field.missing_value
+                try:
+                    widget.setErrors = self.setErrors
+                    raw = widget.extract(default=default)
+                    if raw is not default:
+                        found_request_value = True
+                        value = IDataConverter(widget).toFieldValue(raw)
+                    else:
+                        # if there is no request value try falling back to the
+                        # existing value or then the default missing value
+                        value = sheet_values.get(name, widget.field.missing_value)
+
+                    validator = getMultiAdapter(
+                        (
+                            self.context,
+                            self.request,
+                            self.form,
+                            getattr(widget, "field", None),
+                            widget,
+                        ),
+                        interfaces.IValidator,
+                    )
+                    validator.validate(value)
+                except (Invalid, ValueError, MultipleErrors) as error:
+                    view = getMultiAdapter(
+                        (
+                            error,
+                            self.request,
+                            widget,
+                            widget.field,
+                            self.form,
+                            self.context,
+                        ),
+                        interfaces.IErrorViewSnippet,
+                    )
+                    view.update()
+                    if self.setErrors:
+                        widget.error = view
+                    errors += (view,)
                 else:
-                    # if there is no request value try falling back to the
-                    # existing value or then the default missing value
-                    value = sheet_values.get(name, widget.field.missing_value)
-                validator = getMultiAdapter(
-                    (
-                        self.context,
-                        self.request,
-                        self.form,
-                        getattr(widget, "field", None),
-                        widget,
-                    ),
-                    interfaces.IValidator,
-                )
-                validator.validate(value)
-            except (Invalid, ValueError, MultipleErrors) as error:
-                view = getMultiAdapter(
-                    (
-                        error,
-                        self.request,
-                        widget,
-                        widget.field,
-                        self.form,
-                        self.context,
-                    ),
-                    interfaces.IErrorViewSnippet,
-                )
-                view.update()
-                if self.setErrors:
-                    widget.error = view
-                errors += (view,)
-            else:
-                widget.value = IDataConverter(widget).toWidgetValue(value)
-                sheet_values[name] = value
+                    widget.value = IDataConverter(widget).toWidgetValue(value)
+                    sheet_values[name] = value
+
+            # When changing the slot-field value for example `document_type`,
+            # we need to fetch the data directly from the context.
+            if not found_request_value and context_values:
+                sheet_values = context_values.get(slot)
+
+            if sheet_values:
+                all_sheet_values[slot] = sheet_values
 
         if self.setErrors and errors:
             # raise an error if one of our contained widgets has found an
@@ -143,13 +189,10 @@ class PropertySheetWiget(Widget):
             # to the failing widget.
             raise Invalid(_(u"Custom properties contain some errors."))
 
-        # Be careful not to return the dict we have created in case of no
-        # actual request value. We only want to return the nested data
-        # structure when data is in the request.
-        if not found_request_value:
+        if not all_sheet_values:
             return default
 
-        return {slot_name: sheet_values}
+        return all_sheet_values
 
 
 @adapter(IPropertySheetField, IFormLayer)
