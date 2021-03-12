@@ -5,6 +5,7 @@ from collective.transmogrifier.transmogrifier import Transmogrifier
 from ftw.solr.interfaces import ISolrConnectionManager
 from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.bundle.config.importer import ConfigImporter
 from opengever.bundle.ldap import DisabledLDAP
 from opengever.bundle.loader import GUID_INDEX_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
@@ -12,12 +13,16 @@ from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.commit import INTERMEDIATE_COMMITS_KEY
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
+from os.path import join as pjoin
 from plone import api
 from zope.annotation import IAnnotations
 from zope.component import getUtility
 from zope.interface import alsoProvides
 import argparse
+import codecs
+import json
 import logging
+import os
 import sys
 import transaction
 
@@ -53,6 +58,8 @@ def import_oggbundle(app, args):
 
     # mark request with GEVER layer
     alsoProvides(plone.REQUEST, IOpengeverBaseLayer)
+
+    import_config_from_bundle(app, args)
 
     # Don't use a separate ZODB connection to issue sequence numbers in
     # order to avoid conflict errors during OGGBundle import
@@ -98,6 +105,26 @@ def import_oggbundle(app, args):
         "Finished import of OGGBundle %r" % args.bundle_path)
     transaction.commit()
     log.info("Done.")
+
+
+def import_config_from_bundle(app, args):
+
+    def _load_json(bundle_path, json_name):
+        # TODO: Refactor bundle loader to extract this
+        json_path = pjoin(bundle_path, json_name)
+        log.info("Loading %s" % json_path)
+        try:
+            with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
+                data = json.load(json_file)
+        except IOError as exc:
+            log.info('%s: %s, skipping' % (json_name, exc.strerror))
+            return None
+        return data
+
+    development_mode = bool(os.environ.get('IS_DEVELOPMENT_MODE'))
+    json_data = _load_json(args.bundle_path, 'configuration.json')
+    importer = ConfigImporter(json_data)
+    importer.run(development_mode=development_mode)
 
 
 def add_guid_index():

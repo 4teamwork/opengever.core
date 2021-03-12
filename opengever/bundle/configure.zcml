@@ -3,5 +3,6 @@
     xmlns="http://namespaces.zope.org/zope">
 
   <include file="transmogrifier.zcml" />
+  <include package=".browser" />
 
 </configure>
