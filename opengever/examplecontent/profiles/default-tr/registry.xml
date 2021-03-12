@@ -1,0 +1,27 @@
+<registry>
+
+  <records interface="opengever.latex.interfaces.ILaTeXSettings">
+    <value key="location">Teamraum</value>
+  </records>
+
+  <records interface="opengever.base.interfaces.ISearchSettings">
+    <value key="use_solr">True</value>
+  </records>
+  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
+    <value key="attach_to_outlook_enabled">True</value>
+    <value key="direct_checkout_and_edit_enabled">True</value>
+  </records>
+
+  <records interface="opengever.mail.interfaces.ISendDocumentConf">
+    <value key="max_size">5</value>
+  </records>
+
+  <records interface="opengever.base.interfaces.IGeverUI">
+    <value key="is_feature_enabled">True</value>
+  </records>
+
+  <records interface="opengever.workspace.interfaces.IWorkspaceSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
+
+</registry>

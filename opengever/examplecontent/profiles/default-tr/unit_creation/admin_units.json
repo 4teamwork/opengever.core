@@ -1,0 +1,10 @@
+[
+  {
+    "unit_id": "tr",
+    "title": "Teamraum",
+    "ip_address": "127.0.0.1",
+    "site_url": "http://localhost:8080/tr",
+    "public_url": "http://localhost:8080/tr",
+    "abbreviation": "tr"
+  }
+]

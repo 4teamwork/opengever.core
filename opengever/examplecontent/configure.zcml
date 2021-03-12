@@ -39,6 +39,17 @@
       archivist_group="archiv"
       />
 
+  <opengever:registerDeployment
+      title="Development with teamraum"
+      policy_profile="opengever.examplecontent:default-tr"
+      additional_profiles=""
+      admin_unit_id="tr"
+      administrator_group="tr_administrators"
+      workspace_administrator_group="tr_administrators"
+      workspace_creator_group="tr_creators"
+      workspace_user_group="tr_users"
+      />
+
   <opengever:registerLDAP
       title="4teamwork LDAP"
       ldap_profile="opengever.examplecontent:4teamwork-ldap"
@@ -57,6 +68,13 @@
       name="default-ska"
       title="opengever.examplecontent: default-ska"
       directory="profiles/default-ska"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="default-tr"
+      title="opengever.examplecontent: default-tr"
+      directory="profiles/default-tr"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 

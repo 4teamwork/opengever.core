@@ -1,0 +1,9 @@
+[
+  {
+    "admin_unit_id": "tr",
+    "inbox_group_id": "tr_administrators",
+    "title": "Teamraum",
+    "unit_id": "tr",
+    "users_group_id": "tr_users"
+  }
+]
