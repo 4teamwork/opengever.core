@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.source import WorkspacePathSourceBinder
 from opengever.document import _
@@ -53,3 +55,8 @@ class IWorkspaceMeetingAgendaItemSchema(model.Schema):
 
 class WorkspaceMeetingAgendaItem(Item):
     implements(IWorkspaceMeetingAgendaItem)
+
+    def get_containing_meeting(self):
+        """Return the workspace meeting containing the agendaitem.
+        """
+        return aq_parent(aq_inner(self))

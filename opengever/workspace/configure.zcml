@@ -53,6 +53,18 @@
       handler=".subscribers.response_added"
       />
 
+  <subscriber
+      for="opengever.workspace.interfaces.IWorkspaceMeetingAgendaItem
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.workspace_meeting_agendaitem_added"
+      />
+
+  <subscriber
+      for="opengever.workspace.interfaces.IWorkspaceMeetingAgendaItem
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.workspace_meeting_agendaitem_modified"
+      />
+
   <utility
       factory=".vocabularies.RolesVocabulary"
       name="opengever.workspace.RolesVocabulary"
@@ -66,6 +78,11 @@
   <adapter
       factory=".indexers.external_reference"
       name="external_reference"
+      />
+
+  <adapter
+      factory=".indexers.WorkspaceMeetingSearchableTextExtender"
+      name="IWorkspaceMeeting"
       />
 
   <plone:service
