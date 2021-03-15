@@ -346,6 +346,129 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                          api.content.get_state(subtask))
 
     @browsing
+    def test_overriding_main_task_title_and_text(self, browser):
+        self.login(self.regular_user, browser)
+
+        folder_data = self._get_task_template_item(browser)
+        folder_data.pop('title')
+
+        data = {
+            'tasktemplatefolder': folder_data,
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                }
+            ],
+            'title': u'Neuanstellung Hugo B\xf6ss',
+            'text': u'Bla bla',
+            'start_immediately': True
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+
+        self.assertEqual(u'Neuanstellung Hugo B\xf6ss', main_task.title)
+        self.assertEqual(u'Bla bla', main_task.text)
+
+    @browsing
+    def test_overriding_sub_task_title_and_text(self, browser):
+        self.login(self.regular_user, browser)
+
+        folder_data = self._get_task_template_item(browser)
+        folder_data.pop('title')
+
+        data = {
+            'tasktemplatefolder': folder_data,
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                    'title': u'Arbeitsplatz Hugo B\xf6ss',
+                    'text': None,
+                }
+            ],
+            'start_immediately': True
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+        subtasks = main_task.listFolderContents()
+        self.assertEqual(1, len(subtasks))
+        subtask = subtasks.pop()
+
+        self.assertEqual(u'Arbeitsplatz Hugo B\xf6ss', subtask.title)
+        self.assertIsNone(subtask.text)
+
+    @browsing
+    def test_invalid_main_task_title_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser)
+
+        folder_data = self._get_task_template_item(browser)
+        folder_data.pop('title')
+
+        data = {
+            'tasktemplatefolder': folder_data,
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                }
+            ],
+            'title': None,
+            'text': u'Bla bla',
+            'start_immediately': True
+        }
+
+        with browser.expect_http_error(400):
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {u'message': u'Invalid title "None"', u"type": u"BadRequest"},
+            browser.json)
+
+    @browsing
+    def test_invalid_sub_task_title_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser)
+
+        folder_data = self._get_task_template_item(browser)
+        folder_data.pop('title')
+
+        data = {
+            'tasktemplatefolder': folder_data,
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                    'title': '',
+                    'text': u'Bla bla',
+                }
+            ],
+            'title': 'Valid',
+            'text': u'Bla bla',
+            'start_immediately': True
+        }
+
+        with browser.expect_http_error(400):
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {u'message': u'Invalid title ""', u"type": u"BadRequest"},
+            browser.json)
+
+    @browsing
     def test_trigger_with_non_nested_task_template_folder_input(self, browser):
         self.login(self.regular_user, browser)
 

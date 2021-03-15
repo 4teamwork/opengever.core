@@ -5,9 +5,10 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
+from opengever.dossier.dossiertemplate import is_create_dossier_from_template_available
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.form import CreateDossierContentFromTemplateMixin
-from opengever.dossier.dossiertemplate import is_create_dossier_from_template_available
+from opengever.task.task import ITask
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -186,6 +187,10 @@ class TriggerTaskTemplatePost(Service):
         if errors:
             raise BadRequest(errors)
 
+        main_task_overrides, errors = self._validate_task_overrides(data)
+        if errors:
+            raise BadRequest(', '.join(errors))
+
         # post-process vocabulary based tasktemplatefolder
         tasktemplatefolder = self._get_tasktemplatefolder(
             data['tasktemplatefolder'])
@@ -208,8 +213,10 @@ class TriggerTaskTemplatePost(Service):
         start_immediately = data['start_immediately']
 
         task = tasktemplatefolder.trigger(
-            self.context, tasktemplates, related_documents, responsibles,
-            start_immediately)
+            self.context, tasktemplates, related_documents,
+            responsibles, start_immediately,
+            main_task_overrides=main_task_overrides
+        )
 
         serializer = queryMultiAdapter((task, self.request), ISerializeToJson)
         result = serializer()
@@ -219,6 +226,37 @@ class TriggerTaskTemplatePost(Service):
         # have to make sure to return the correct id.
         result['@id'] = task.absolute_url()
         return result
+
+    def _validate_task_overrides(self, data):
+        task_overrides = {}
+        errors = []
+
+        title_deserializer = queryMultiAdapter(
+            (ITask["title"], self.context, self.request), IFieldDeserializer)
+        text_deserializer = queryMultiAdapter(
+            (ITask["text"], self.context, self.request), IFieldDeserializer)
+
+        if "title" in data:
+            raw_title = data["title"]
+            try:
+                title = title_deserializer(raw_title)
+            except (RequiredMissing, ConstraintNotSatisfied):
+                errors.append(
+                    u'Invalid title "{}"'.format(raw_title))
+            else:
+                task_overrides["title"] = title
+
+        if "text" in data:
+            raw_text = data["text"]
+            try:
+                text = text_deserializer(raw_text)
+            except (RequiredMissing, ConstraintNotSatisfied):
+                errors.append(
+                    u'Invalid text "{}"'.format(raw_text))
+            else:
+                task_overrides["text"] = text
+
+        return task_overrides, errors
 
     def _get_tasktemplatefolder(self, token):
         return api.content.get(UID=token)
@@ -267,6 +305,12 @@ class TriggerTaskTemplatePost(Service):
                     'responsible': template.responsible,
                     'responsible_client': template.responsible_client
                 }
+                overrides, override_errors = self._validate_task_overrides(
+                    template_data
+                )
+                by_template.update(overrides)
+                errors.extend(override_errors)
+
                 responsibles[template.id] = by_template
                 if not raw_responsible:
                     continue
