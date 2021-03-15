@@ -18,13 +18,13 @@
         },
         "decision": {
             "type": "object",
-            "title": "Decision",
+            "title": "Beschluss",
             "description": "",
             "_zope_schema_type": "RichText"
         },
         "relatedItems": {
             "type": "array",
-            "title": "Related items",
+            "title": "Verweise",
             "description": "",
             "_zope_schema_type": "RelationList",
             "default": []

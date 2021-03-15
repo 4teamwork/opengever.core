@@ -1,6 +1,6 @@
 from collective import dexteritytextindexer
 from opengever.base.source import WorkspacePathSourceBinder
-from opengever.document import _
+from opengever.workspace import _
 from opengever.workspace.interfaces import IWorkspaceMeetingAgendaItem
 from plone.app.textfield import RichText
 from plone.autoform.interfaces import IFormFieldProvider
