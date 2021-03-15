@@ -257,7 +257,7 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
             '@type': u'opengever.workspace.meetingagendaitem',
             'title': u'\xc4 new title',
             'text': u'My <b>bold</b> text',
-            'decision': u'My <b>bold</b> decision',
+            'decision': None,
         }
         browser.open(self.workspace_meeting,
                      method='POST',
@@ -268,4 +268,4 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
         searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
         self.assertIn(u'\xc4 new title', searchable_text)
         self.assertIn(u'My bold text', searchable_text)
-        self.assertIn(u'My bold decision', searchable_text)
+        self.assertNotIn(u'None', searchable_text)

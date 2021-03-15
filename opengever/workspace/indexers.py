@@ -21,6 +21,8 @@ INDEXED_IN_MEETING_SEARCHABLE_TEXT = ['title', 'text', 'decision']
 
 def to_safe_utf8(obj, fieldname):
     value = getattr(obj, fieldname)
+    if value is None:
+        return
     if isinstance(value, RichTextValue):
         value = api.portal.get_tool(name='portal_transforms').convertTo(
             'text/plain', value.output, mimetype='text/html').getData()
@@ -57,4 +59,4 @@ class WorkspaceMeetingSearchableTextExtender(object):
                 [to_safe_utf8(agendaitem, fieldname) for fieldname
                  in INDEXED_IN_MEETING_SEARCHABLE_TEXT])
 
-        return ' '.join(searchable)
+        return ' '.join(filter(None, searchable))
