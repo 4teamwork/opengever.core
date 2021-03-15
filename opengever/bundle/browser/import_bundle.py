@@ -1,14 +1,23 @@
 from opengever.bundle.browser.multiuploadwidget import MultiFileUploadField
 from opengever.bundle.config.importer import ConfigImporter
+from opengever.bundle.importer import BundleImporter
+from os.path import join as pjoin
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.supermodel import model
+from tempfile import mkdtemp
 from z3c.form import button
 from z3c.form.form import Form
 from zope import schema
 from zope.globalrequest import getRequest
 import json
+import logging
 import os
+import transaction
+
+
+log = logging.getLogger('opengever.bundle')
+log.setLevel(logging.INFO)
 
 
 class IImportBundleSchema(model.Schema):
@@ -48,10 +57,33 @@ class ImportBundleForm(AutoExtensibleForm, Form):
         importer = ConfigImporter(config_data)
         result = importer.run(development_mode=data['development_mode'])
 
+        bundle_dir = mkdtemp(prefix='ttw-bundle-', suffix='.oggbundle')
+        for filename, uploaded_file in uploaded_files.items():
+            tmp_filename = pjoin(bundle_dir, filename)
+            with open(tmp_filename, 'w') as tmp_file:
+                tmp_file.write(uploaded_file['data'])
+
+        bundle_importer = BundleImporter(
+            self.context,
+            bundle_dir,
+            disable_ldap=True,
+            create_guid_index=True,
+            no_intermediate_commits=True,
+            possibly_unpatch_collective_indexing=False,
+            no_separate_connection_for_sequence_numbers=False,
+        )
+        bundle_importer.run()
+
+        log.info("Committing transaction...")
+        transaction.get().note(
+            "Finished import of OGGBundle %r" % bundle_dir)
+        transaction.commit()
+        log.info("Done.")
+
         if result is not None:
             self._finished = True
             api.portal.show_message(
-                u'Units and registry settings imported.',
+                u'Bundle imported.',
                 request=getRequest(), type='info')
 
     @button.buttonAndHandler(u'Cancel', name='cancel')
