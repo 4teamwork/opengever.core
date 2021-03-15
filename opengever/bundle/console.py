@@ -1,22 +1,11 @@
 # Avoid import error for Products.Archetypes.BaseBTreeFolder
-from Products.Archetypes import atapi  # noqa
-from collective.indexing.monkey import unpatch as unpatch_collective_indexing
-from collective.transmogrifier.transmogrifier import Transmogrifier
-from ftw.solr.interfaces import ISolrConnectionManager
-from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.bundle.config.importer import ConfigImporter
-from opengever.bundle.ldap import DisabledLDAP
-from opengever.bundle.loader import GUID_INDEX_NAME
-from opengever.bundle.sections.bundlesource import BUNDLE_KEY
-from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
-from opengever.bundle.sections.commit import INTERMEDIATE_COMMITS_KEY
+from opengever.bundle.importer import BundleImporter
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from os.path import join as pjoin
-from plone import api
-from zope.annotation import IAnnotations
-from zope.component import getUtility
+from Products.Archetypes import atapi  # noqa
 from zope.interface import alsoProvides
 import argparse
 import codecs
@@ -25,6 +14,9 @@ import logging
 import os
 import sys
 import transaction
+
+# BBB
+from opengever.bundle.importer import add_guid_index  # noqa
 
 
 log = logging.getLogger(__name__)
@@ -61,44 +53,16 @@ def import_oggbundle(app, args):
 
     import_config_from_bundle(app, args)
 
-    # Don't use a separate ZODB connection to issue sequence numbers in
-    # order to avoid conflict errors during OGGBundle import
-    alsoProvides(plone.REQUEST, INoSeparateConnectionForSequenceNumbers)
-
-    # Add index to track imported GUIDs (if it doesn't exist yet)
-    add_guid_index()
-
-    transmogrifier = Transmogrifier(plone)
-
-    ann = IAnnotations(transmogrifier)
-    ann[BUNDLE_PATH_KEY] = args.bundle_path
-    ann[INTERMEDIATE_COMMITS_KEY] = not args.no_intermediate_commits
-
-    solr_enabled = api.portal.get_registry_record(
-        'opengever.base.interfaces.ISearchSettings.use_solr',
-        default=False)
-
-    if solr_enabled:
-        # Check if solr is running
-        conn = getUtility(ISolrConnectionManager).connection
-        if conn.get('/schema').status == -1:
-            raise Exception(
-                "Solr isn't running, but solr reindexing is enabled. "
-                "Skipping solr reindexing via `--skip-solr`.")
-    else:
-        # Disable collective indexing as it can lead to too many
-        # subtransactions
-        unpatch_collective_indexing()
-
-    with DisabledLDAP(plone):
-        transmogrifier(u'opengever.bundle.oggbundle')
-
-    bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
-    timings = bundle.stats['timings']
-
-    if 'migration_finished' in timings:
-        duration = timings['migration_finished'] - timings['start_loading']
-        log.info("Duration: %.2fs" % duration.total_seconds())
+    importer = BundleImporter(
+        plone,
+        args.bundle_path,
+        disable_ldap=True,
+        create_guid_index=True,
+        no_intermediate_commits=args.no_intermediate_commits,
+        possibly_unpatch_collective_indexing=True,
+        no_separate_connection_for_sequence_numbers=True,
+    )
+    importer.run()
 
     log.info("Committing transaction...")
     transaction.get().note(
@@ -125,25 +89,6 @@ def import_config_from_bundle(app, args):
     json_data = _load_json(args.bundle_path, 'configuration.json')
     importer = ConfigImporter(json_data)
     importer.run(development_mode=development_mode)
-
-
-def add_guid_index():
-    """Adds a FieldIndex 'bundle_guid' if it doesn't exist yet.
-
-    This index is only used by OGGBundle imports, and is used to track GUIDs
-    of already imported objects and efficiently query them. This is necessary
-    to enable partial / delta imports, and to accurately query the catalog to
-    build reports about imported objects.
-
-    This index will likely be removed after successful migrations, so code
-    outside the bundle import MUST NOT rely on it being present.
-    """
-    catalog = api.portal.get_tool('portal_catalog')
-    if GUID_INDEX_NAME not in catalog.indexes():
-        log.info("Adding GUID index %r" % GUID_INDEX_NAME)
-        catalog.addIndex(GUID_INDEX_NAME, 'FieldIndex')
-    else:
-        log.info("GUID index %r already exists" % GUID_INDEX_NAME)
 
 
 def setup_logging():
