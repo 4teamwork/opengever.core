@@ -1,14 +1,11 @@
 from ftw.testbrowser import browsing
-from opengever.base.interfaces import ISearchSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
-from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 
 
 class TestOpengeverSearch(IntegrationTestCase):
@@ -69,6 +66,13 @@ class TestOpengeverSearch(IntegrationTestCase):
                         '/advanced_search?SearchableText=M%C3%BCller+and+%7Bco%29')
 
         self.assertEqual(expected_url, advanced_search.get("href"))
+
+    @browsing
+    def test_workspace_meeting_agendaitems_are_excluded_from_search(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(self.portal, view='@@search?UID={}'.format(
+            self.workspace_meeting_agenda_item.UID()))
+        self.assertEqual(0, len(browser.css('dl.searchResults dt')))
 
 
 class TestOpengeverSearchSolr(SolrIntegrationTestCase):
