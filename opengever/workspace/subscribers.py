@@ -11,6 +11,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
+from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
 
 
 def assign_admin_role_to_workspace_creator(workspace, event):
@@ -100,3 +101,26 @@ def response_added(todo, event):
                               getRequest(),
                               event.response_container,
                               event.response).record()
+
+
+def index_containing_meeting_searchable_text(agendaitem):
+    # SearchableText is not in the catalog, so to avoid reindexing the
+    # full object, we also reindex the UID.
+    agendaitem.get_containing_meeting().reindexObject(idxs=['UID', 'SearchableText'])
+
+
+def workspace_meeting_agendaitem_added(agendaitem, event):
+    index_containing_meeting_searchable_text(agendaitem)
+
+
+def workspace_meeting_agendaitem_modified(agendaitem, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
+    index_meeting = False
+    for field in INDEXED_IN_MEETING_SEARCHABLE_TEXT:
+        if is_attribute_changed(event, field, "IWorkspaceMeetingAgendaItemSchema"):
+            index_meeting = True
+            break
+    if index_meeting:
+        index_containing_meeting_searchable_text(agendaitem)

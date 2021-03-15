@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from zExceptions import BadRequest
 import json
@@ -130,6 +131,7 @@ class TestWorkspaceMeetingAgendaItem(IntegrationTestCase):
 
 
 class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
+
     @browsing
     def test_members_can_change_order(self, browser):
         self.login(self.workspace_member, browser)
@@ -180,3 +182,90 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
         with browser.expect_http_error(401):
             browser.open(self.workspace_meeting, method='PATCH',
                          headers=self.api_headers, data=json.dumps(data))
+
+    @browsing
+    def test_workspace_agendaitems_are_indexed_in_meeting_searchable_text(self, browser):
+        self.login(self.workspace_member, browser)
+        # builder of workspace_meeting_agendaitem does not reindex
+        # the workspace meeting
+        self.workspace_meeting.reindexObject()
+        self.commit_solr()
+
+        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+
+        self.assertEqual(
+            u'Genehmigung des Lageberichts',
+            self.workspace_meeting_agenda_item.title)
+        self.assertIn(
+            u'Genehmigung des Lageberichts',
+            searchable_text)
+
+        self.assertEqual(
+            u'Der Lagebericht 2018 steht zur Verf\xfcgung und muss genehmigt werden',
+            self.workspace_meeting_agenda_item.text.raw)
+        self.assertIn(
+            u'Der Lagebericht 2018 steht zur Verf\xfcgung und muss genehmigt werden',
+            searchable_text)
+
+        self.assertEqual(
+            u'Die <a href="http://example.com">Gener\xe4lversammlung</a> '
+            'genehmigt den <b>Lagebericht</b> 2018',
+            self.workspace_meeting_agenda_item.decision.raw)
+        self.assertIn(
+            u'Die  Gener\xe4lversammlung  genehmigt den Lagebericht 2018',
+            searchable_text)
+
+    @browsing
+    def test_workspace_meeting_gets_reindexed_when_agendaitem_is_modified(self, browser):
+        self.login(self.workspace_member, browser)
+        # builder of workspace_meeting_agendaitem does not reindex
+        # the workspace meeting
+        self.workspace_meeting.reindexObject()
+        self.commit_solr()
+
+        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        self.assertNotIn("Danger text", searchable_text)
+        self.assertNotIn("Danger decision", searchable_text)
+
+        headers = self.api_headers.copy()
+        headers.update({'Prefer': 'return=representation'})
+        browser.open(self.workspace_meeting_agenda_item, method='PATCH',
+                     headers=headers,
+                     data=json.dumps({
+                         'text': u'Danger<script>alert("foo")</script> text',
+                         'decision': u'Danger<script>alert("foo")</script> decision'}))
+
+        self.commit_solr()
+        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        self.assertIn("Danger text", searchable_text)
+        self.assertIn("Danger decision", searchable_text)
+
+    @browsing
+    def test_workspace_meeting_gets_reindexed_when_agendaitem_is_added(self, browser):
+        self.login(self.workspace_member, browser)
+        # builder of workspace_meeting_agendaitem does not reindex
+        # the workspace meeting
+        self.workspace_meeting.reindexObject()
+        self.commit_solr()
+
+        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        self.assertNotIn(u'\xc4 new title', searchable_text)
+        self.assertNotIn(u'My <b>bold</b> text', searchable_text)
+        self.assertNotIn(u'My <b>bold</b> decision', searchable_text)
+
+        data = {
+            '@type': u'opengever.workspace.meetingagendaitem',
+            'title': u'\xc4 new title',
+            'text': u'My <b>bold</b> text',
+            'decision': None,
+        }
+        browser.open(self.workspace_meeting,
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.commit_solr()
+        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        self.assertIn(u'\xc4 new title', searchable_text)
+        self.assertIn(u'My bold text', searchable_text)
+        self.assertNotIn(u'None', searchable_text)
