@@ -1,3 +1,4 @@
+from opengever.bundle.browser.multiuploadwidget import MultiFileUploadField
 from opengever.bundle.config.importer import ConfigImporter
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -18,9 +19,9 @@ class IImportBundleSchema(model.Schema):
         defaultFactory=lambda: bool(os.environ.get('IS_DEVELOPMENT_MODE')),
         required=True)
 
-    config_file = schema.Bytes(
-        title=u'Config File',
-        description=u'Select configuration.json from OGGBundle to import',
+    bundle_files = MultiFileUploadField(
+        title=u'Bundle files',
+        description=u'Select JSON files from OGGBundle to import (e.g. configuration.json)',
         required=True)
 
 
@@ -38,14 +39,20 @@ class ImportBundleForm(AutoExtensibleForm, Form):
             self.status = self.formErrorsMessage
             return
 
-        json_data = json.loads(data['config_file'])
-        importer = ConfigImporter(json_data)
+        # TODO: Reject multiple files with same name
+        uploaded_files = {}
+        for upload in data['bundle_files']:
+            uploaded_files[upload['filename']] = upload
+
+        config_data = json.loads(uploaded_files['configuration.json']['data'])
+        importer = ConfigImporter(config_data)
         result = importer.run(development_mode=data['development_mode'])
 
         if result is not None:
             self._finished = True
             api.portal.show_message(
-                u'Units imported.', request=getRequest(), type='info')
+                u'Units and registry settings imported.',
+                request=getRequest(), type='info')
 
     @button.buttonAndHandler(u'Cancel', name='cancel')
     def handle_cancel(self, action):
