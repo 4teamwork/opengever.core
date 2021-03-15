@@ -4,6 +4,7 @@ Changelog
 2021.6.0 (unreleased)
 ---------------------
 
+- Exclude opengever.workspace.meetingagendaitem from search results. [njohner]
 - Index agenda items in the workspace meeting searchable text. [njohner]
 - Show add_task_from_document action also for documents within tasks. [tinagerber]
 - Add containing_subdossier_url to document serializer. [tinagerber]

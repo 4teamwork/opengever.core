@@ -142,7 +142,8 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
 
         self.commit_solr()
         browser.open(self.workspace_meeting,
-                     view='@solrsearch?sort=getObjPositionInParent asc&depth=1&fl=id',
+                     view='@solrsearch?sort=getObjPositionInParent asc&depth=1'
+                          '&fl=id&fq=portal_type:opengever.workspace.meetingagendaitem',
                      headers=self.api_headers)
 
         self.assertEqual(['agendaitem-1', 'agendaitem-2'],
@@ -159,7 +160,8 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
         self.commit_solr()
         self.assertEqual(204, browser.status_code)
         browser.open(self.workspace_meeting,
-                     view='@solrsearch?sort=getObjPositionInParent asc&depth=1&fl=id',
+                     view='@solrsearch?sort=getObjPositionInParent asc&depth=1'
+                          '&fl=id&fq=portal_type:opengever.workspace.meetingagendaitem',
                      headers=self.api_headers)
 
         self.assertEqual(['agendaitem-2', 'agendaitem-1'],
@@ -269,3 +271,12 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
         self.assertIn(u'\xc4 new title', searchable_text)
         self.assertIn(u'My bold text', searchable_text)
         self.assertNotIn(u'None', searchable_text)
+
+    @browsing
+    def test_workspace_meeting_agendaitems_are_excluded_from_search(self, browser):
+        self.login(self.workspace_member, browser)
+        url = u'{}/@solrsearch?fq=UID:{}'.format(
+            self.portal.absolute_url(), self.workspace_meeting_agenda_item.UID())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(0, browser.json["items_total"])

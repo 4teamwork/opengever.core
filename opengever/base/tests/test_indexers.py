@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 import json
 
@@ -295,48 +296,20 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
     def test_index_only_for_whitelisted_types(self, browser):
         self.login(self.administrator, browser=browser)
 
-        url = u'{}/@solrsearch?sort=portal_type asc&fl=getObjPositionInParent&fq=UID:({})'.format(
-            self.portal.absolute_url(),
-            ' OR '.join([
-                self.leaf_repofolder.UID(),
-                self.dossier.UID(),
-                self.document.UID(),
-                self.task.UID(),
-                self.seq_subtask_2.UID(),
-                self.proposal.UID(),
-                self.tasktemplate.UID(),
-                self.workspace.UID(),
-                self.todolist_general.UID(),
-                self.todo.UID(),
-                self.workspace_meeting_agenda_item.UID(),
-            ]))
-        browser.open(url, method='GET', headers=self.api_headers)
-        self.maxDiff = None
+        for obj in [self.document, self.dossier, self.proposal,
+                    self.leaf_repofolder, self.task, self.workspace]:
+            self.assertIsNone(solr_data_for(obj, 'getObjPositionInParent'))
 
-        self.assertEqual([
-            {u'UID': self.document.UID(),
-             u'getObjPositionInParent': None},
-            {u'UID': self.dossier.UID(),
-             u'getObjPositionInParent': None},
-            {u'UID': self.proposal.UID(),
-             u'getObjPositionInParent': None},
-            {u'UID': self.leaf_repofolder.UID(),
-             u'getObjPositionInParent': None},
-            {u'UID': self.task.UID(),
-             u'getObjPositionInParent': None},
-            {u'UID': self.seq_subtask_2.UID(),
-             u'getObjPositionInParent': 1},
-            {u'UID': self.tasktemplate.UID(),
-             u'getObjPositionInParent': 0},
-            {u'UID': self.workspace_meeting_agenda_item.UID(),
-             u'getObjPositionInParent': 0},
-            {u'UID': self.todo.UID(),
-             u'getObjPositionInParent': 6},
-            {u'UID': self.todolist_general.UID(),
-             u'getObjPositionInParent': 4},
-            {u'UID': self.workspace.UID(),
-             u'getObjPositionInParent': None}
-        ], browser.json["items"])
+        self.assertEqual(1, solr_data_for(self.seq_subtask_2,
+                                          'getObjPositionInParent'))
+        self.assertEqual(0, solr_data_for(self.tasktemplate,
+                                          'getObjPositionInParent'))
+        self.assertEqual(0, solr_data_for(self.workspace_meeting_agenda_item,
+                                          'getObjPositionInParent'))
+        self.assertEqual(6, solr_data_for(self.todo,
+                                          'getObjPositionInParent'))
+        self.assertEqual(4, solr_data_for(self.todolist_general,
+                                          'getObjPositionInParent'))
 
     @browsing
     def test_get_obj_position_in_parent_if_sequential_subtask_is_added(self, browser):
