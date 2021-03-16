@@ -1,0 +1,26 @@
+{
+  "units": {
+    "admin_units": [
+      {
+        "unit_id": "musterstadt",
+        "title": "Musterstadt",
+        "ip_address": "127.0.0.1",
+        "site_url": "http://musterstadt.local",
+        "public_url": "http://musterstadt.local",
+        "abbreviation": "MS"
+      }
+    ],
+    "org_units": [
+      {
+        "unit_id": "musterstadt",
+        "title": "Musterstadt",
+        "admin_unit_id": "musterstadt",
+        "users_group_id": "og_demo-ftw_users",
+        "inbox_group_id": "og_demo-ftw_users"
+      }
+    ]
+  },
+  "registry": {
+    "opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled": true
+  }
+}
