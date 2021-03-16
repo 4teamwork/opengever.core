@@ -38,6 +38,7 @@ class ConfigImporter(object):
         admin_units = StringIO(json.dumps(admin_units))
         AdminUnitCreator(
             is_development=self.development_mode,
+            is_policyless=True,
             skip_if_exists=self.allow_skip_units).run(admin_units)
 
         api.portal.set_registry_record(
@@ -49,6 +50,7 @@ class ConfigImporter(object):
         org_units = StringIO(json.dumps(org_units))
         OrgUnitCreator(
             is_development=self.development_mode,
+            is_policyless=True,
             skip_if_exists=self.allow_skip_units).run(org_units)
 
     def import_registry_settings(self):

@@ -11,9 +11,10 @@ class UnitCreator(object):
     required_attributes = tuple()
     key_mapping = {}
 
-    def __init__(self, is_development=False, skip_if_exists=False):
+    def __init__(self, is_development=False, skip_if_exists=False, is_policyless=False):
         self.session = create_session()
         self.is_development = is_development
+        self.is_policyless = is_policyless
         self.skip_if_exists = skip_if_exists
 
     def get_json_data(self, jsonfile):
