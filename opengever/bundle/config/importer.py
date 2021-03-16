@@ -15,8 +15,9 @@ log.setLevel(logging.INFO)
 
 class ConfigImporter(object):
 
-    def __init__(self, json_data):
+    def __init__(self, json_data, allow_skip_units=False):
         self.configuration = json_data
+        self.allow_skip_units = allow_skip_units
 
     def run(self, development_mode=False):
         self.development_mode = development_mode
@@ -35,7 +36,9 @@ class ConfigImporter(object):
         admin_unit_id = admin_units[0]['unit_id'].decode('utf-8')
 
         admin_units = StringIO(json.dumps(admin_units))
-        AdminUnitCreator(is_development=self.development_mode).run(admin_units)
+        AdminUnitCreator(
+            is_development=self.development_mode,
+            skip_if_exists=self.allow_skip_units).run(admin_units)
 
         api.portal.set_registry_record(
             'current_unit_id', admin_unit_id,
@@ -44,7 +47,9 @@ class ConfigImporter(object):
     def create_org_units(self, units_config):
         org_units = units_config['org_units']
         org_units = StringIO(json.dumps(org_units))
-        OrgUnitCreator(is_development=self.development_mode).run(org_units)
+        OrgUnitCreator(
+            is_development=self.development_mode,
+            skip_if_exists=self.allow_skip_units).run(org_units)
 
     def import_registry_settings(self):
         registry = getUtility(IRegistry)

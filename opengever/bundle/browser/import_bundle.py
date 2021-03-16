@@ -33,6 +33,12 @@ class IImportBundleSchema(model.Schema):
         description=u'Select JSON files from OGGBundle to import (e.g. configuration.json)',
         required=True)
 
+    allow_skip_units = schema.Bool(
+        title=u'Skip import of existing AdminUnits or OrgUnits',
+        description=u'Skip import of units if they already exist',
+        default=True,
+        required=True)
+
 
 class ImportBundleForm(AutoExtensibleForm, Form):
 
@@ -54,7 +60,9 @@ class ImportBundleForm(AutoExtensibleForm, Form):
             uploaded_files[upload['filename']] = upload
 
         config_data = json.loads(uploaded_files['configuration.json']['data'])
-        importer = ConfigImporter(config_data)
+        importer = ConfigImporter(
+            config_data,
+            allow_skip_units=data['allow_skip_units'])
         result = importer.run(development_mode=data['development_mode'])
 
         bundle_dir = mkdtemp(prefix='ttw-bundle-', suffix='.oggbundle')
