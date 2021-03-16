@@ -3,6 +3,7 @@ from opengever.setup import DEVELOPMENT_IP_ADDRESS
 from opengever.setup import DEVELOPMENT_SERVER_HOSTNAME
 from opengever.setup import DEVELOPMENT_SERVER_PORT
 from opengever.setup.creation.unit import UnitCreator
+from opengever.setup.deploy import POLICYLESS_SITE_ID
 
 
 class AdminUnitCreator(UnitCreator):
@@ -14,7 +15,7 @@ class AdminUnitCreator(UnitCreator):
 
     def apply_development_config(self, item):
         if self.is_policyless:
-            plone_site_id = 'gever'
+            plone_site_id = POLICYLESS_SITE_ID
         else:
             plone_site_id = item['unit_id']
 

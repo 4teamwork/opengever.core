@@ -37,6 +37,8 @@ BASE_PROFILES = (
     'opengever.policy.base:mimetype',
 )
 
+POLICYLESS_SITE_ID = 'ogsite'
+
 
 class GeverDeployment(object):
 
@@ -82,7 +84,7 @@ class GeverDeployment(object):
         if self.is_policyless:
             # For policyless deployments, admin unit will be set up later,
             # and the Plone site ID won't be tied to it.
-            plone_site_id = 'gever'
+            plone_site_id = POLICYLESS_SITE_ID
         else:
             plone_site_id = config.get('admin_unit_id').encode('utf-8')
 
