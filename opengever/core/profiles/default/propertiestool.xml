@@ -3,6 +3,28 @@
   <!-- SITE PROPERTIES -->
   <object name="site_properties" meta_type="Plone Property Sheet">
     <property name="icon_visibility" type="string">enabled</property>
+
+    <property name="types_not_searched" type="lines">
+      <element value="ATBooleanCriterion" />
+      <element value="ATDateCriteria" />
+      <element value="ATDateRangeCriterion" />
+      <element value="ATListCriterion" />
+      <element value="ATPortalTypeCriterion" />
+      <element value="ATReferenceCriterion" />
+      <element value="ATSelectionCriterion" />
+      <element value="ATSimpleIntCriterion" />
+      <element value="ATSimpleStringCriterion" />
+      <element value="ATSortCriterion" />
+      <element value="ChangeSet" />
+      <element value="Discussion Item" />
+      <element value="Plone Site" />
+      <element value="TempFolder" />
+      <element value="ATCurrentAuthorCriterion" />
+      <element value="ATPathCriterion" />
+      <element value="ATRelativePathCriterion" />
+      <element value="opengever.workspace.meetingagendaitem" />
+    </property>
+
   </object>
 
   <!-- NAVTREE PROPERTIES -->

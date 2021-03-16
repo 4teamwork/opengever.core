@@ -1,14 +1,12 @@
 from ftw.testbrowser import browsing
-from opengever.base.interfaces import ISearchSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
-from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
+from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 
 
 class TestOpengeverSearch(IntegrationTestCase):
@@ -70,6 +68,13 @@ class TestOpengeverSearch(IntegrationTestCase):
 
         self.assertEqual(expected_url, advanced_search.get("href"))
 
+    @browsing
+    def test_workspace_meeting_agendaitems_are_excluded_from_search(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(self.portal, view='@@search?UID={}'.format(
+            self.workspace_meeting_agenda_item.UID()))
+        self.assertEqual(0, len(browser.css('dl.searchResults dt')))
+
 
 class TestOpengeverSearchSolr(SolrIntegrationTestCase):
 
@@ -127,6 +132,14 @@ class TestOpengeverSearchSolr(SolrIntegrationTestCase):
                         '/advanced_search?SearchableText=M%C3%BCller+and+%7Bco%29')
 
         self.assertEqual(expected_url, advanced_search.get("href"))
+
+    @browsing
+    def test_workspace_meeting_agendaitems_are_excluded_from_search(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(self.portal, view='@@search?UID={}'.format(
+            self.workspace_meeting_agenda_item.UID()))
+        self.assertEqual(0, len(browser.css('dl.searchResults dt')))
 
 
 class TestBumblebeePreview(SolrIntegrationTestCase):
@@ -220,13 +233,28 @@ class TestSolrSearch(IntegrationTestCase):
         self.search = self.portal.unrestrictedTraverse('@@search')
         self.solr = self.mock_solr('solr_search.json')
 
+    def default_portal_types_filter(self):
+        plone_utils = getToolByName(self.portal, 'plone_utils')
+        types = plone_utils.getUserFriendlyTypes()
+        types = ['"{}"'.format(el) if ' ' in el else el for el in types]
+        return 'portal_type:({})'.format(' OR '.join(types))
+
+    def remove_portal_types_filter(self, filters):
+        """portal_type filter gets added by default to exclude certain portal_types
+        from the search results. Here we filter it out to make testing easier"""
+        filters = self.search.solr_filters()
+        filters.remove(self.default_portal_types_filter())
+        return filters
+
     def test_solr_filters_ignores_searchabletext(self):
         self.request.form.update({'SearchableText': 'foo'})
-        self.assertEqual(self.search.solr_filters(), [])
+        self.assertEqual(
+            self.remove_portal_types_filter(self.search.solr_filters()), [])
 
     def test_solr_filters_ignores_fields_not_in_schema(self):
         self.request.form.update({'myfield': 'foo'})
-        self.assertEqual(self.search.solr_filters(), [])
+        self.assertEqual(
+            self.remove_portal_types_filter(self.search.solr_filters()), [])
 
     def test_solr_filters_handles_date_min_records(self):
         self.request.environ['QUERY_STRING'] = (
@@ -234,7 +262,7 @@ class TestSolrSearch(IntegrationTestCase):
             'created.range:record=min')
         self.request.processInputs()
         self.assertEqual(
-            self.search.solr_filters(),
+            self.remove_portal_types_filter(self.search.solr_filters()),
             [u'created:[2018\\-01\\-20T00\\:00\\:00Z TO *]'])
 
     def test_solr_filters_handles_date_max_records(self):
@@ -243,7 +271,7 @@ class TestSolrSearch(IntegrationTestCase):
             'created.range:record=max')
         self.request.processInputs()
         self.assertEqual(
-            self.search.solr_filters(),
+            self.remove_portal_types_filter(self.search.solr_filters()),
             [u'created:[* TO 2018\\-01\\-20T00\\:00\\:00Z]'])
 
     def test_solr_filters_handles_date_range_records(self):
@@ -253,7 +281,7 @@ class TestSolrSearch(IntegrationTestCase):
             'created.range:record=minmax')
         self.request.processInputs()
         self.assertEqual(
-            self.search.solr_filters(),
+            self.remove_portal_types_filter(self.search.solr_filters()),
             [u'created:[2018\\-01\\-20T00\\:00\\:00Z TO 2018\\-01\\-25T00\\:00\\:00Z]'])
 
     def test_solr_filters_handles_lists(self):
@@ -263,15 +291,15 @@ class TestSolrSearch(IntegrationTestCase):
         self.request.processInputs()
         self.assertEqual(
             self.search.solr_filters(),
-            [u'portal_type:(opengever.document.document OR '
-             u'opengever.dossier.businesscasedossier)'])
+            [u'portal_type:(opengever.dossier.businesscasedossier OR '
+             u'opengever.document.document)'])
 
     def test_solr_filters_handles_simple_values(self):
         self.request.environ['QUERY_STRING'] = (
             'sequence_number:int=123&responsible=hans.muster')
         self.request.processInputs()
         self.assertEqual(
-            self.search.solr_filters(),
+            self.remove_portal_types_filter(self.search.solr_filters()),
             [u'responsible:hans.muster', u'sequence_number:123'])
 
     def test_solr_filters_switch_path_to_parent_path(self):
@@ -279,7 +307,7 @@ class TestSolrSearch(IntegrationTestCase):
             'sequence_number:int=123&path=/fd/ordnungssystem')
         self.request.processInputs()
         self.assertEqual(
-            self.search.solr_filters(),
+            self.remove_portal_types_filter(self.search.solr_filters()),
             [u'path_parent:\\/fd\\/ordnungssystem', u'sequence_number:123'])
 
     def test_solr_sort_on_date(self):
@@ -309,7 +337,7 @@ class TestSolrSearch(IntegrationTestCase):
                    u'Title:foo^100 OR Title:foo*^20 OR SearchableText:foo^5 '
                    u'OR SearchableText:foo* OR metadata:foo^10 '
                    u'OR metadata:foo*^2 OR sequence_number_string:foo^2000'),
-            filters=[u'trashed:false'],
+            filters=[self.default_portal_types_filter(), u'trashed:false'],
             start=0,
             rows=10,
             sort=None,
@@ -331,7 +359,9 @@ class TestSolrSearch(IntegrationTestCase):
         self.search.solr_results()
         self.solr.search.assert_called_with(
             query=u'*:*',
-            filters=[u'responsible:hans.muster', u'trashed:false'],
+            filters=[self.default_portal_types_filter(),
+                     u'responsible:hans.muster',
+                     u'trashed:false'],
             start=0,
             rows=10,
             sort=None,
@@ -346,6 +376,16 @@ class TestSolrSearch(IntegrationTestCase):
                 'hl.encoder': 'html',
                 'hl.snippets': 3,
             })
+
+    def test_search_filters_portal_types_by_default(self):
+        self.assertEqual(
+            self.search.solr_filters(), [self.default_portal_types_filter()])
+
+    def test_search_respects_portal_types_filters_if_provided(self):
+        self.request.form.update({'portal_type': ['opengever.document.document']})
+        self.assertEqual(
+            self.search.solr_filters(),
+            [u'portal_type:opengever.document.document'])
 
     def test_search_uses_solr_if_enabled(self):
         self.request.environ['QUERY_STRING'] = ('SearchableText=foo')

@@ -7,6 +7,7 @@ from opengever.base.interfaces import ISearchSettings
 from opengever.workspaceclient.client import WorkspaceClient
 from plone import api
 from plone.restapi.services import Service
+from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zExceptions import InternalError
 
@@ -59,6 +60,7 @@ class SolrSearchGet(SolrQueryBaseService):
             filters = []
 
         self.add_path_filters(filters, params)
+        self.add_portal_types_filter(filters)
 
         return filters
 
@@ -76,6 +78,21 @@ class SolrSearchGet(SolrQueryBaseService):
         depth = self.extract_depth(params)
         path = self.extract_path_filter_value(filters)
         filters.extend(make_path_filter(path, depth))
+
+    def contains_portal_types_filter(self, filters):
+        for query in filters:
+            if query.startswith("portal_type:"):
+                return True
+        return False
+
+    def add_portal_types_filter(self, filters):
+        """If portal_types is not specified we respect the UserFriendlyTypes,
+        i.e. we notably exclude the WorkspaceMeetingAgendaItems
+        """
+        if not self.contains_portal_types_filter(filters):
+            plone_utils = getToolByName(self.context, 'plone_utils')
+            types = plone_utils.getUserFriendlyTypes()
+            filters.append('portal_type:({})'.format(' OR '.join(types)))
 
     def extract_sort(self, params, query):
         if 'sort' in params:

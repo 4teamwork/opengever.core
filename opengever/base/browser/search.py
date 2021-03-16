@@ -107,7 +107,15 @@ class OpengeverSearch(Search):
         filters = []
 
         # Avoid mutating nested values in self.request.form
-        for key, value in deepcopy(self.request.form).items():
+        query = deepcopy(self.request.form)
+
+        # respect `types_not_searched` setting
+        types = query.get('portal_type', [])
+        if not isinstance(types, (list, tuple)):
+            types = [types]
+        query['portal_type'] = self.filter_types(types)
+
+        for key, value in query.items():
             if key == 'SearchableText':
                 continue
             if key not in schema.fields:
