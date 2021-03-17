@@ -26,7 +26,7 @@
 
    .. py:attribute:: decision
 
-       :Feldname: :field-title:`Decision`
+       :Feldname: :field-title:`Beschluss`
        :Datentyp: ``RichText``
        
        
@@ -36,9 +36,19 @@
 
    .. py:attribute:: relatedItems
 
-       :Feldname: :field-title:`Related items`
+       :Feldname: :field-title:`Verweise`
        :Datentyp: ``RelationList``
        
        :Default: []
+       
+       
+
+
+   .. py:attribute:: changed
+
+       :Feldname: :field-title:`Zuletzt verändert`
+       :Datentyp: ``Datetime``
+       
+       
        
        
