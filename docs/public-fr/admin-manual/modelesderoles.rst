@@ -52,6 +52,3 @@ Sans l’onglet « Info », dans la vue détaillée d’un dossier, ainsi que so
 |img-rollenmodell-1|
 
 .. |img-rollenmodell-1| image:: img/media/img-rollenmodell-1.png
-
-
-.. disqus::

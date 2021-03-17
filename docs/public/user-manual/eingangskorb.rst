@@ -200,6 +200,3 @@ Sie daher bitte das Kapitel :ref:`label-mü_zusammenarbeit` bei.
 .. |img-eingangskorb-23| image:: img/media/img-eingangskorb-23.png
 .. |img-eingangskorb-24| image:: img/media/img-eingangskorb-24.png
 .. |img-eingangskorb-25| image:: img/media/img-eingangskorb-25.png
-
-
-.. disqus::

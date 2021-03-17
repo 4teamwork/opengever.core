@@ -15,6 +15,3 @@ Auf Ebene Dokument via Schaltfläche «Kommentieren»:
 
 .. |img-sitzungs-app-9| image:: ../img/media/img-sitzungs-app-9.png
 .. |img-sitzungs-app-10| image:: ../img/media/img-sitzungs-app-10.png
-
-
-.. disqus::

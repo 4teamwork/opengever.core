@@ -91,5 +91,3 @@ Wenn ein Datum DocProperty eingefügt wird z.B. ogg.document.document_date kann 
 .. |docprops-7| image:: ../_static/img/kurzref_adm_docprops_7.png
 .. |docprops-8| image:: ../_static/img/kurzref_adm_docprops_8.png
 .. |docprops-9| image:: ../_static/img/kurzref_adm_docprops_9.png
-
-.. disqus::

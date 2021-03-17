@@ -17,11 +17,11 @@ Exemples:
 
 
 .. note::
-   Les modifications apportées par le responsable des rôles sont enregistrées dans le journal. 
-   
-   Il est recommandé d’attribuer le rôle d’un «responsable de rôle» uniquement à des personnes qui sont autorisées de voir tous les dossiers d’un client – dû au fait que ce rôle leur accorde auto-matiquement l’accès aux dossiers ou positions à être modifiés. 
-   
-   En outre nous recommandons de n’autoriser que des groupes, et non pas des personnes singulières  à traiter de dossiers ou des positions taxonomiques, garantissant ainsi une continuité maximale en cas de mutations personnelles.  
+   Les modifications apportées par le responsable des rôles sont enregistrées dans le journal.
+
+   Il est recommandé d’attribuer le rôle d’un «responsable de rôle» uniquement à des personnes qui sont autorisées de voir tous les dossiers d’un client – dû au fait que ce rôle leur accorde auto-matiquement l’accès aux dossiers ou positions à être modifiés.
+
+   En outre nous recommandons de n’autoriser que des groupes, et non pas des personnes singulières  à traiter de dossiers ou des positions taxonomiques, garantissant ainsi une continuité maximale en cas de mutations personnelles.
 
 
 Utilisation
@@ -78,5 +78,3 @@ L’élargissement et la restriction de droits au niveau d’une position taxono
 .. |img-gerstionairederoles-1| image:: img/media/img-gerstionairederoles-1.png
 .. |img-gerstionairederoles-2| image:: img/media/img-gerstionairederoles-2.png
 .. |img-gerstionairederoles-3| image:: img/media/img-gerstionairederoles-3.png
-
-.. disqus::

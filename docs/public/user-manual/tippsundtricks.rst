@@ -190,5 +190,3 @@ reingezogen werden.
 .. |img-grundlagen-26| image:: img/media/img-grundlagen-26.png
 .. |img-grundlagen-27| image:: img/media/img-grundlagen-27.png
 .. |img-grundlagen-40| image:: img/media/img-grundlagen-40.png
-
-.. disqus::

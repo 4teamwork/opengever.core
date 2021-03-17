@@ -106,5 +106,3 @@ Sitzungs- und Protokollverwaltung
 .. |img-release-notes-3.9-4| image:: ../../_static/img/img-release-notes-3.9-4.png
 .. |img-release-notes-3.9-5| image:: ../../_static/img/img-release-notes-3.9-5.png
 .. |img-release-notes-3.9-6| image:: ../../_static/img/img-release-notes-3.9-6.png
-
-.. disqus::

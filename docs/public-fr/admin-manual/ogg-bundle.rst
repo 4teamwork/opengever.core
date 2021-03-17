@@ -27,5 +27,3 @@ Si votre système de classement ne correspond pas aux directives de OneGov GEVER
 .. |img-oggbundle-1| image:: img/media/img-oggbundle-1.png
 .. |img-oggbundle-2| image:: img/media/img-oggbundle-2.png
 .. |img-oggbundle-3| image:: img/media/img-oggbundle-3.png
-
-.. disqus::

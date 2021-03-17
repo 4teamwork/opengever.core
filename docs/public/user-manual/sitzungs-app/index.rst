@@ -13,5 +13,3 @@ Inhalt:
    notizen.rst
    aktualisieren.rst
    sitzungsunterlagen.rst
-
-.. disqus::

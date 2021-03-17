@@ -93,5 +93,3 @@ Korrekturen
 .. |img-release-notes-3.8-4| image:: ../../_static/img/img-release-notes-3.8-4.png
 .. |img-release-notes-3.8-5| image:: ../../_static/img/img-release-notes-3.8-5.png
 .. |img-release-notes-3.8-6| image:: ../../_static/img/img-release-notes-3.8-6.png
-
-.. disqus::

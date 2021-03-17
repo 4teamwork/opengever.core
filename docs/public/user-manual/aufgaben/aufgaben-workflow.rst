@@ -93,5 +93,3 @@ dargestellt.
 |img-aufgaben-workflow-1|
 
 .. |img-aufgaben-workflow-1| image:: ../img/media/img-aufgaben-workflow-1.png
-
-.. disqus::

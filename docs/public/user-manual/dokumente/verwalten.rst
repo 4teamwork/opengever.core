@@ -55,5 +55,3 @@ Version jederzeit rückgängig gemacht werden.
 .. |img-dokumentvorlagen-1| image:: ../img/media/img-dokumentvorlagen-1.png
 .. |img-dokumentvorlagen-2| image:: ../img/media/img-dokumentvorlagen-2.png
 .. |img-dokumentvorlagen-3| image:: ../img/media/img-dokumentvorlagen-3.png
-
-.. disqus::

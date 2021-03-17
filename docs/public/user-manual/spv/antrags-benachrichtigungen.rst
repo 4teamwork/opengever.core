@@ -28,5 +28,3 @@ Verantwortlichen eines Gremiums ausgelöst:
 Diese oben erwähnten Aktionen werden auch in den Benachrichtigungs-Einstellungen
 sichtbar und können von den Benutzern einzeln konfiguriert werden. Mehr
 dazu können Sie unter :ref:`label-benachrichtigungen` nachlesen .
-
-.. disqus::

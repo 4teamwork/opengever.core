@@ -229,5 +229,3 @@ Bugfixes
 .. |img-release-notes-2.5-6| image:: ../../_static/img/img-release-notes-2.5-6.png
 .. |img-release-notes-2.5-7| image:: ../../_static/img/img-release-notes-2.5-7.png
 .. |img-release-notes-2.5-8| image:: ../../_static/img/img-release-notes-2.5-8.png
-
-.. disqus::

@@ -10,5 +10,3 @@ Travailler avec des dossiers
    modeles_dossier
    import_interface_ECH
    recherche_dossier
-
-.. disqus::

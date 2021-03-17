@@ -25,5 +25,3 @@ bereits in der oberen Gruppe erscheint, wird es nicht noch einmal in dieser
 Gruppe aufgelistet.
 
 .. |img-recently-touched-1| image:: img/media/img-recently-touched-1.png
-
-.. disqus::

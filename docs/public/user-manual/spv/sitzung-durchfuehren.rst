@@ -46,5 +46,3 @@ Nr. 3).
 .. |img-spvupdate-26| image:: ../img/media/img-spvupdate-26.png
 .. |img-spvupdate-33| image:: ../img/media/img-spvupdate-33.png
 .. |img-spvupdate-43| image:: ../img/media/img-spvupdate-43.png
-
-.. disqus::

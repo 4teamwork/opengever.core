@@ -55,5 +55,3 @@ Diverses
 
   .. |img-release-notes-2018.2-1| image:: ../_static/img/img-release-notes-2018.2-1.png
   .. |img-release-notes-2018.2-2| image:: ../_static/img/img-release-notes-2018.2-2.png
-
-.. disqus::

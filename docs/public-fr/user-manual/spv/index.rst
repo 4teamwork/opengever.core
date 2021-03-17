@@ -23,5 +23,3 @@ avec OneGovGever.
    approbation_proces_verbal
    exporter_documents
    cloturer_periode
-
-.. disqus::

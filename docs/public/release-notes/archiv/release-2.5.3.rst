@@ -40,5 +40,3 @@ Auf der Testinstallation `gever.onegov.ch <http://gever.onegov.ch/>`_ wird in de
 
 .. |img-release-notes-2.5.3-1| image:: ../../_static/img/img-release-notes-2.5.3-1.png
 .. |img-release-notes-2.5.3-2| image:: ../../_static/img/img-release-notes-2.5.3-2.png
-
-.. disqus::

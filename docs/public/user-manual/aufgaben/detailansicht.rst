@@ -34,5 +34,3 @@ Konkret sind die folgenden Informationsblöcke enthalten:
    um eine Unteraufgabe handelt.
 
 .. |img-aufgaben-5| image:: ../img/media/img-aufgaben-5.png
-
-.. disqus::

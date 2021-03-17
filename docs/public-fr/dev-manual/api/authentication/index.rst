@@ -17,5 +17,3 @@ Les chapitres suivants décrivent les méthodes d'authentification supportées p
    basic_auth
    jwt
    oauth2_token_auth
-
-.. disqus::

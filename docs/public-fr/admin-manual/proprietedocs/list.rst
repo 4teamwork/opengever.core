@@ -100,5 +100,3 @@ Ces ProriétéDocs sont obsolètes et ne doivent plus être utilisées:
 - ``User.FullName`` – prénom et nom de famille de l’utilisateur
 - ``Dossier.Title`` – titre du dossier qui contient le document
 - ``User.ID`` – identification de l’utilisateur inscrit
-
-.. disqus::

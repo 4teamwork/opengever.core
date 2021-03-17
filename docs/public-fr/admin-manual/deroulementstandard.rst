@@ -53,5 +53,3 @@ Pour qu’un déroulement standard soit utilisable dans un dossier (ou sous-doss
 .. |img-deroulementstandard-23| image:: img/media/img-deroulementstandard-23.png
 .. |img-deroulementstandard-30| image:: img/media/img-deroulementstandard-30.png
 .. |img-deroulementstandard-31| image:: img/media/img-deroulementstandard-31.png
-
-.. disqus::

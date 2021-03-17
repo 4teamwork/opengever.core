@@ -18,5 +18,3 @@ nun vom System zusätzliche Informationen geloggt. Dies erlaubt eine
 einfachere Analyse bei Konvertierungsproblemen.
 
 .. |img-release-notes-2.7.1-1| image:: ../../_static/img/img-release-notes-2.7.1-1.png
-
-.. disqus::

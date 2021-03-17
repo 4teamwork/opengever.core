@@ -92,5 +92,3 @@ auf den folgenden Wert gesetzt werden:
 .. code::
 
     "OfficeConnector.Document.1"=hex(0)
-
-.. disqus::

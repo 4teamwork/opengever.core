@@ -2,7 +2,7 @@ Teamaufgaben
 ------------
 
 Mittels den Teamaufgaben können Aufgaben an AD-Gruppen adressiert werden. Diese
-Teams können durch den Adminsitrator erfasst werden. 
+Teams können durch den Adminsitrator erfasst werden.
 
 |img-aufgaben-team-1|
 
@@ -33,5 +33,3 @@ Auftragnehmer angezeigt.
 .. |img-aufgaben-team-3| image:: ../img/media/img-aufgaben-team-3.png
 .. |img-aufgaben-team-4| image:: ../img/media/img-aufgaben-team-4.png
 .. |img-aufgaben-team-5| image:: ../img/media/img-aufgaben-team-5.png
-
-.. disqus::

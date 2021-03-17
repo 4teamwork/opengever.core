@@ -48,5 +48,3 @@ Weiteres
 - Die `Dokumentation <http://docs.onegovgever.ch/>`_ der neuen **RESTful API von OneGov GEVER** wurde stark ausgebaut und verbessert.
 
 - `Request Content Negotiation <https://de.wikipedia.org/wiki/Content_Negotiation>`_ für die vom Benutzer gewünschte Sprache wurde aktiviert.
-
-.. disqus::

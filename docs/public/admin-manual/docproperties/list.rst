@@ -108,5 +108,3 @@ Die folgenden Doc-Properties sind deprecated, und sollten deshalb nicht mehr ver
 - ``User.FullName`` – Vor- und Nachname des angemeldeten Benutzers
 - ``Dossier.Title`` – Titel des Dossiers, welches das Dokument enthält
 - ``User.ID`` – Benutzerkennung des angemeldeten Benutzers
-
-.. disqus::

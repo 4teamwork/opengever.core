@@ -10,5 +10,3 @@ Le plan du système de classement courant peut, à des fins de transparence et c
 
 
 .. |img-osexport-1| image:: img/media/img-osexport-1.png
-
-.. disqus::

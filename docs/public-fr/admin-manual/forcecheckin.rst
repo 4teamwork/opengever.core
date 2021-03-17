@@ -16,12 +16,10 @@ Utilisateur 2 ne peut pas déclencher une action tant que le document est bloqu�
 
 |img-forcecheckin-2|
 
-L’administrateur prend le pas sur l’état du document par l’intermédiaire d’un check-in forcé. 
+L’administrateur prend le pas sur l’état du document par l’intermédiaire d’un check-in forcé.
 
 |img-forcecheckin-3|
 
 .. |img-forcecheckin-1| image:: img/media/img-forcecheckin-1.png
 .. |img-forcecheckin-2| image:: img/media/img-forcecheckin-2.png
 .. |img-forcecheckin-3| image:: img/media/img-forcecheckin-3.png
-
-.. disqus::

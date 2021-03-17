@@ -27,5 +27,3 @@ Verfügung:
   einfacher zu analysieren. Die Entsprechende URL beinhaltet die id des
   Traktandums wie die sonstigen traktandumbasierten Aktionen, z.B.:
   ``meeting-X/agenda_items/YZ/debug_excerpt_docxcompose``.
-
-.. disqus::

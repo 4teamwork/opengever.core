@@ -26,5 +26,3 @@ Modifier des contenus (PATCH)
 -----------------------------
 
 .. literalinclude:: example_patch.py
-
-.. disqus::

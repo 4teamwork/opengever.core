@@ -98,5 +98,3 @@ gesetzt.
 .. |img-aufgaben-2| image:: ../img/media/img-aufgaben-2.png
 .. |img-aufgaben-3| image:: ../img/media/img-aufgaben-3.png
 .. |img-aufgaben-4| image:: ../img/media/img-aufgaben-4.png
-
-.. disqus::

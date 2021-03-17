@@ -18,5 +18,3 @@ Travailler avec des tâches
    cooperation_inter_clients
    controle_taches_en_suspens
    suppleance
-
-.. disqus::

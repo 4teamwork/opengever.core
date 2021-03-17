@@ -40,6 +40,3 @@ Der Antrag zur Protokollgenehmigung erscheint analog der Antragsstellung für Sa
 .. |img-protokollgenehmigung-2| image:: ../img/media/img-protokollgenehmigung-2.png
 .. |img-protokollgenehmigung-3| image:: ../img/media/img-protokollgenehmigung-3.png
 .. |img-protokollgenehmigung-4| image:: ../img/media/img-protokollgenehmigung-4.png
-
-
-.. disqus::

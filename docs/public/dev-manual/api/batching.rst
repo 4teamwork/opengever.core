@@ -98,5 +98,3 @@ Komplettes Beispiel einer paginierten Response:
 
 .. literalinclude:: examples/batching.json
    :language: http
-
-.. disqus::

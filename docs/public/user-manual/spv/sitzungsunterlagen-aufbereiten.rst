@@ -22,5 +22,3 @@ welcher alle Dokumente in Word-Format bestehend bleiben.
 
 
 .. |img-spvupdate-32| image:: ../img/media/img-spvupdate-32.png
-
-.. disqus::

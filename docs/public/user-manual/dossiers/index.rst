@@ -10,5 +10,3 @@ Mit Dossiers arbeiten
    dossiervorlagen
    ech-schnittstelle
    durchsuchen
-
-.. disqus::

@@ -24,6 +24,3 @@ Diese Funktion kann z.B. bei Aufgaben mit personenbezogenen Daten hilfreich sein
 
 .. |image222| image:: ../img/media/image206.png
 .. |img-stellvertretung-1| image:: ../img/media/img-stellvertretung-1.png
-
-
-.. disqus::

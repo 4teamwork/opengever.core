@@ -280,5 +280,3 @@ Um ein oder mehrere Attribute eines Objekts zu aktualisieren, wird ein
        **Code-Beispiel (Python)**
 
     .. literalinclude:: examples/example_patch.py
-
-.. disqus::

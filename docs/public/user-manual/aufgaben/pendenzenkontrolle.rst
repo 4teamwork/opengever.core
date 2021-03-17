@@ -64,9 +64,3 @@ ausgelöst.
 .. |img-aufgaben-37| image:: ../img/media/img-aufgaben-37.png
 .. |img-aufgaben-38| image:: ../img/media/img-aufgaben-38.png
 .. |img-aufgaben-39| image:: ../img/media/img-aufgaben-39.png
-
-
-
-
-
-.. disqus::

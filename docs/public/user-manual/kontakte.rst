@@ -66,5 +66,3 @@ von Dossiers zur Verfügung (siehe :ref:`label-beteiligungen`).
 .. |img-kontakte-1| image:: img/media/img-kontakte-1.png
 .. |img-kontakte-2| image:: img/media/img-kontakte-2.png
 .. |img-kontakte-3| image:: img/media/img-kontakte-3.png
-
-.. disqus::

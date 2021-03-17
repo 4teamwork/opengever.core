@@ -28,7 +28,7 @@ L'Endpoint ``@workflow`` est utilisée pour les aspects de Workflows restants:
 
    Retourne les informations de workflow pour l'objet adressé dans `path`.
 
-   Les informations de workflow contiennent la **Workflow-History** (qui inclut aussi le Workflow-State) ainsi que toutes les **transitions workflow** possibles. 
+   Les informations de workflow contiennent la **Workflow-History** (qui inclut aussi le Workflow-State) ainsi que toutes les **transitions workflow** possibles.
 
    **Exemple de Request**:
 
@@ -61,5 +61,3 @@ L'Endpoint ``@workflow`` est utilisée pour les aspects de Workflows restants:
 
    .. literalinclude:: examples/workflow_post.json
       :language: http
-
-.. disqus::

@@ -20,7 +20,7 @@ PATCH   /{path}      Actualise les attributs individuels d'un objet
 Lire les contenus (GET)
 -----------------------
 
-La requête GET sur l'URL d'un objet permet de sélectionner les données (Métadonnées aussi bien que données primaires) d'un objet. 
+La requête GET sur l'URL d'un objet permet de sélectionner les données (Métadonnées aussi bien que données primaires) d'un objet.
 
 Dans la situation où l'objet est de type "folder" (un conteneur), il existe également un attribut particulier, ``items``, qui contient un ^listing sommaire des sous-objets <summaries>` qui y sont contenus (enfants directs)
 
@@ -113,7 +113,7 @@ Dans la situation où l'objet est de type "folder" (un conteneur), il existe ég
 Créer des contenus (POST)
 -------------------------
 
-Pour créer un nouvel objet, il faut soumettre une Request ``POST`` sur le Container qui doit le contenir. L'ID de l'objet est déterminé par le système et ne doit pas être spécifié. 
+Pour créer un nouvel objet, il faut soumettre une Request ``POST`` sur le Container qui doit le contenir. L'ID de l'objet est déterminé par le système et ne doit pas être spécifié.
 
 .. http:post:: /(container)
 
@@ -194,5 +194,3 @@ Pour modifier un ou plusieurs attributs d'un objet, il faut utiliser la Request 
        **Exemple de code (Python)**
 
     .. literalinclude:: examples/example_patch.py
-
-.. disqus::

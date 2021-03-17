@@ -137,5 +137,3 @@ nochmals etwas hinzugefügt werden, kann die Aufgabe mit
 .. |img-aufgaben-16| image:: ../img/media/img-aufgaben-16.png
 .. |img-aufgaben-17| image:: ../img/media/img-aufgaben-17.png
 .. |img-aufgaben-18| image:: ../img/media/img-aufgaben-18.png
-
-.. disqus::

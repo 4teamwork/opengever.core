@@ -9,5 +9,3 @@ Mit der erweiterten Suche
 In der erweiterten Suche kann beim Inhaltstyp „Dokument“ nach
 aus gecheckten Dokumenten eines Sachbearbeiters/einer
 Sachbearbeiterin gesucht werden.
-
-.. disqus::

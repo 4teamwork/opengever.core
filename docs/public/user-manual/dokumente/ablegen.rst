@@ -92,5 +92,3 @@ Einen Anhang via Drag'n'Drop in OneGov GEVER ziehen:
 .. |img-dokumente-33| image:: ../img/media/img-dokumente-33.png
 .. |img-dokumente-40| image:: ../img/media/img-dokumente-40.png
 .. |img-dokumente-41| image:: ../img/media/img-dokumente-41.png
-
-.. disqus::

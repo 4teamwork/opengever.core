@@ -80,5 +80,3 @@ dieses Release weitere Anpassungen am Benachrichtigungssystem vorgenommen:
 .. |img-release-notes-3.4-2| image:: ../../_static/img/img-release-notes-3.4-2.png
 .. |img-release-notes-3.4-3| image:: ../../_static/img/img-release-notes-3.4-3.png
 .. |img-release-notes-3.4-4| image:: ../../_static/img/img-release-notes-3.4-4.png
-
-.. disqus::

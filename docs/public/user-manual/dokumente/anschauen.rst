@@ -152,5 +152,3 @@ PDF                                   .pdf            PDF Tools builtin
 .. |img-grundlagen-11| image:: ../img/media/img-grundlagen-11.png
 .. |img-grundlagen-12| image:: ../img/media/img-grundlagen-12.png
 .. |img-grundlagen-13| image:: ../img/media/img-grundlagen-13.png
-
-.. disqus::

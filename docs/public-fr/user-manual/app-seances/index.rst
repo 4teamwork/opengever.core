@@ -12,5 +12,3 @@ Index:
    telecharger_documents.rst
    ajouter_notices.rst
    actualiser_documents.rst
-
-.. disqus::

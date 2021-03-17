@@ -113,5 +113,3 @@ Bugfixes
 .. |img-release-notes-2019.1-1| image:: ../_static/img/img-release-notes-2019.1-1.png
 .. |img-benachrichtigungs-einstellungen-5| image:: ../user-manual/img/media/img-benachrichtigungs-einstellungen-5.png
 .. |img-pdf-speichern-unter-1| image:: ../user-manual/img/media/img-pdf-speichern-unter-1.png
-
-.. disqus::

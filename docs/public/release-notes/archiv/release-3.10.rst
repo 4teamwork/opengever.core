@@ -98,5 +98,3 @@ Bugfixes
 
 .. |img-release-notes-3.10-1| image:: ../../_static/img/img-release-notes-3.10-1.png
 .. |img-release-notes-3.10-2| image:: ../../_static/img/img-release-notes-3.10-2.png
-
-.. disqus::

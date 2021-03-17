@@ -48,5 +48,3 @@ RESTful API
 - Durch die Erweiterung der Scanner Schnittstelle, wir ein Upload von Dokumenten
   in OneGov GEVER von einem Scanner-Gerät möglich. Mehr Details dazu finden
   Sie in der `Dokumentation <https://docs.onegovgever.ch/dev-manual/api/scanin/?highlight=scann>`_ .
-
-.. disqus::

@@ -200,6 +200,3 @@ durchsucht.
 .. |img-suchen-8| image:: img/media/img-suchen-8.png
 .. |img-suchen-9| image:: img/media/img-suchen-9.png
 .. |img-suchen-10| image:: img/media/img-suchen-10.png
-
-
-.. disqus::

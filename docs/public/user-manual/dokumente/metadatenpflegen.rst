@@ -84,5 +84,3 @@ werden. Beispiel: Statt "Nicht klassifiziert" kann "Vertraulich" oder
 .. |img-dokumente-1| image:: ../img/media/img-dokumente-1.png
 .. |img-dokumente-2| image:: ../img/media/img-dokumente-2.png
 .. |img-dokumente-3| image:: ../img/media/img-dokumente-3.png
-
-.. disqus::

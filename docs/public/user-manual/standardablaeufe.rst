@@ -125,5 +125,3 @@ Zu beachten bei sequenziellen Aufgaben
 .. |img-standardablauf-36| image:: img/media/img-standardablauf-36.png
 .. |img-standardablauf-37| image:: img/media/img-standardablauf-37.png
 .. |img-standardablauf-38| image:: img/media/img-standardablauf-38.png
-
-.. disqus::

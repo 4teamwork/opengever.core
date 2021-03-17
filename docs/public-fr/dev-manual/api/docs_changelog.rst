@@ -89,5 +89,3 @@ Ce log couvre les changements (significatifs) dans la documentation de l'API One
 
 - Ajout du chapitre "Types de contenus"
 - Création de la version initiale
-
-.. disqus::

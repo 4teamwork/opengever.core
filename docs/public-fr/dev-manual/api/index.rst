@@ -37,5 +37,3 @@ Inhalt:
    workspace/index
    examples/index.rst
    docs_changelog.rst
-
-.. disqus::

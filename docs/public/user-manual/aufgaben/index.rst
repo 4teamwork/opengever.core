@@ -18,5 +18,3 @@ Mit Aufgaben arbeiten
    mandantenuebergreifende_zusammenarbeit
    pendenzenkontrolle
    stellvertretung
-
-.. disqus::

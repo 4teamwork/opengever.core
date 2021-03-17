@@ -32,6 +32,3 @@ Beschluss- und Sitzungsnummern werden folgendermassen vergeben:
 
 .. |img-spv-periode-1| image:: ../img/media/img-spv-periode-1.png
 .. |img-spv-periode-3| image:: ../img/media/img-spv-periode-3.png
-
-
-.. disqus::

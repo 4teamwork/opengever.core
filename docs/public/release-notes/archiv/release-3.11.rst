@@ -41,5 +41,3 @@ Verbesserungen und Anpassungen
 
 - Das Autocomplete Widget beim Erstellen eines manuellen Journaleintrags schränkt
   die Auswahl der Verweismöglichkeiten auf das aktive Dossier ein.
-
-.. disqus::

@@ -16,5 +16,3 @@ zudem die Möglichkeit, den Soft-Delete vorzunehmen.
 |img-soft-delete-1|
 
 .. |img-soft-delete-1| image:: img/media/img-soft-delete-1.png
-
-.. disqus::

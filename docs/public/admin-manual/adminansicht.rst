@@ -11,6 +11,3 @@ oder die Berechtigung haben, `Dossiers zu schützen <https://docs.onegovgever.ch
 |img-admin-ansicht-1|
 
 .. |img-admin-ansicht-1| image:: img/media/img-admin-ansicht-1.png
-
-
-.. disqus::

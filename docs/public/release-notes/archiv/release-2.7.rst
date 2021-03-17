@@ -61,5 +61,3 @@ OneGov GEVER wird noch zuverlässiger:
 
 .. |img-release-notes-2.7-1| image:: ../../_static/img/img-release-notes-2.7-1.png
 .. |img-release-notes-2.7-2| image:: ../../_static/img/img-release-notes-2.7-2.png
-
-.. disqus::

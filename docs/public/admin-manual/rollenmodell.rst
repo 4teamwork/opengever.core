@@ -90,6 +90,3 @@ eine Berechtigung erteilt werden kann. Mehr dazu können Sie unter :ref:`label-a
 |img-rollenmodell-1|
 
 .. |img-rollenmodell-1| image:: img/media/img-rollenmodell-1.png
-
-
-.. disqus::

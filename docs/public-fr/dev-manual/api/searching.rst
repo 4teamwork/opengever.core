@@ -8,7 +8,7 @@ Il est possible re rechercher des contenus dans GEVER à l'aide de l'Endpoint ``
   GET /plone/@search HTTP/1.1
   Accept: application/json
 
-Par défaut, une recherche est **contextuelle**, ce qui veut dire que seuls les contenus de la ressource sur laquelle ``@search`` a été exécuté seront parcourus. Si ``@search`` est par exemple exécuté sur un dossier, la recherche couvrira tous les objets qui se trouvent dans ce dossier (y compris l'objet lui-même). 
+Par défaut, une recherche est **contextuelle**, ce qui veut dire que seuls les contenus de la ressource sur laquelle ``@search`` a été exécuté seront parcourus. Si ``@search`` est par exemple exécuté sur un dossier, la recherche couvrira tous les objets qui se trouvent dans ce dossier (y compris l'objet lui-même).
 
 Si ``/@search`` est exécuté à la racine du client GEVER, la recherche sera globale, puisque tous les objets se trouvent directement ou indirectement sous celle-ci.
 
@@ -17,10 +17,10 @@ Les résultats de recherche sont affichés au même format que les contenus dans
 .. literalinclude:: examples/search.json
    :language: http
 
-La représentation standard d'un résultat de recherche est un bref résumé des propriétés les plus importantes de l'objet. Pour retourner des attributs additionnels provenant du catalogue de recherche, il faut utiliser le paramètre ``metadata_fields`` décrit plus bas. 
+La représentation standard d'un résultat de recherche est un bref résumé des propriétés les plus importantes de l'objet. Pour retourner des attributs additionnels provenant du catalogue de recherche, il faut utiliser le paramètre ``metadata_fields`` décrit plus bas.
 
 .. note::
-        Les résultats de recherche sont **paginés** lorsque le nombre de résultats dépasse la taille de page prévue (25 par défaut). Pour plus de détails concernant la gestion de résultats paginés, voir :doc:`batching`. 
+        Les résultats de recherche sont **paginés** lorsque le nombre de résultats dépasse la taille de page prévue (25 par défaut). Pour plus de détails concernant la gestion de résultats paginés, voir :doc:`batching`.
 
 
 Format de requête
@@ -33,11 +33,11 @@ Les requêtes (queries) et options de recherche sont transmis à la request en t
   GET /plone/@search?SearchableText=lorem HTTP/1.1
 
 
-``SearchableText`` fait référence au soi-disant **index**. Un index est une structure de données maintenant une liste d'informations concernant les objets optimisé pour la recherche. Pour pouvoir chercher sur une propriété ou un attribut d'objet spécifique, un index qui y est spécifique doit exister. 
+``SearchableText`` fait référence au soi-disant **index**. Un index est une structure de données maintenant une liste d'informations concernant les objets optimisé pour la recherche. Pour pouvoir chercher sur une propriété ou un attribut d'objet spécifique, un index qui y est spécifique doit exister.
 
 L'index ``SearchableText`` est l'un des index le plus utilisés et est conçu pour la recherche plein-texte. Cet index contient donc une liste de tous les termes par lesquels l'objet doit être trouvable via la recherche plein-texte:
 
-Titre et description, métadonnées GEVER importantes tel que les Numéros de classement et de dossiers, et pour les documents, le contenu textuel extrait de chaque fichier. 
+Titre et description, métadonnées GEVER importantes tel que les Numéros de classement et de dossiers, et pour les documents, le contenu textuel extrait de chaque fichier.
 
 Autres index utilisés couramment:
 
@@ -75,7 +75,7 @@ Pour représenter directement *toutes* les données disponibles dans le catalogu
    L'utilisation du paramètre ``metadata_fields`` implique une familiarité avec les noms d'index internes et devrait être utilisé après consultation de 4teamwork. Pour la :ref:`liste succincte pour l'utilisation de GET requests <summaries>`, il existe un mécanisme séparé.
 
    Il existe également les paramètres ``preview_image_url`` et ``preview_pdf_url``, qui ne représentent pas réellement des métadonnées
-   
+
 
 Recherche Solr
 --------------
@@ -104,9 +104,9 @@ Exemple pour la recherche de "Court" Dans le champ "Title":
 
 Filters
 ~~~~~~~
-``fq``: Filtrer selon une valeur spécifique du champ. 
+``fq``: Filtrer selon une valeur spécifique du champ.
 
-Exemple d'une recherche filtrés selon portal_type uniquement sur les documents et dossiers. 
+Exemple d'une recherche filtrés selon portal_type uniquement sur les documents et dossiers.
 
 
 .. sourcecode:: http
@@ -185,5 +185,3 @@ Exemple pour une recherche avec des facettes pour ``responsible`` et ``portal_ty
       "rows": 25,
       "start": 0
     }
-
-.. disqus::

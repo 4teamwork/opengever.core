@@ -33,5 +33,3 @@ Weitere kleinere Korrekturen:
 
  .. |img-release-notes-2.6-1| image:: ../../_static/img/img-release-notes-2.6-1.png
  .. |img-release-notes-2.6-2| image:: ../../_static/img/img-release-notes-2.6-2.png
-
- .. disqus::
