@@ -287,7 +287,7 @@ Because automated testing is hard, the tests have to be done manually. This sect
     port = 8984
 
 
-3. Configure the GEVER Solr as documented under `Activating Solr sync`_
+3. Configure the GEVER Solr as documented under `Activating Solr update chain`_
 4. Start GEVER, GEVER Solr and RIS Solr
 5. Go to http://localhost:8984/ and select the ``ris`` Solr core
 6. Make a query with ``q=*:*`` and no active filters
