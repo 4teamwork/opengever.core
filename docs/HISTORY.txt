@@ -4,7 +4,7 @@ Changelog
 2021.6.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Add id field to the @listing endpoint. [elioschmutz]
 
 
 2021.6.0 (2021-03-18)
