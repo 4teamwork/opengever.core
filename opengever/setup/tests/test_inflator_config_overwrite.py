@@ -27,7 +27,7 @@ class TestInflatorConfig(TestCase):
         inflator_setup = xpath(inflator_config, XPATH_INFLATOR)
 
         gever_path = resource_filename(
-            'opengever.setup.creation', 'configure.zcml')
+            'opengever.setup', 'overrides.zcml')
         gever_config = etree.parse(gever_path, parser)
         gever_setup = xpath(gever_config, XPATH_GEVER)
         additional_element = xpath(gever_config, XPATH_DEPENDS)
@@ -35,7 +35,8 @@ class TestInflatorConfig(TestCase):
 
         self.assertMultiLineEqual(
             etree.tostring(inflator_setup, pretty_print=True),
-            etree.tostring(gever_setup, pretty_print=True),
+            etree.tostring(gever_setup, pretty_print=True).replace(
+                'xmlns:five="http://namespaces.zope.org/five" ', ''),
 
             "Gever's overwritten inflator config in "
             "'opengever.setup.creation.configure.zcml' and ftw.inflator's "
