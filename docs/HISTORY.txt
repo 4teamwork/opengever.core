@@ -9,6 +9,7 @@ Changelog
 - Add id field to the @listing endpoint. [elioschmutz]
 - Add action to download meeting minutes as PDF. [buchi]
 - Allow overriding task and subtask title and text in `@trigger-task-template` endpoint. [deiferni]
+- Implement group_by_type parameter in @solrsearch endpoint. [tinagerber]
 - Add repository_folders and template_folders to @listing endpoint. [tinagerber]
 
 

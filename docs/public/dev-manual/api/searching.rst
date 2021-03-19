@@ -222,6 +222,30 @@ Pfadtiefe
 
   GET /plone/@solrsearch?depth=1 HTTP/1.1
 
+
+.. _group-by-type:
+
+Nach Typ grupppieren
+~~~~~~~~~~~~~~~~~~~~
+Mit dem ``group_by_type``-Parameter können Resultate nach Typ sortiert werden. So können z.B. in einer Suche alle Dossiers zuoberst angezeigt werden. Es stehen alle Typen zu Verfügung, die im @listing-Endpoint als Auflistungstyp zur Verfügung stehen (siehe :ref:`docs <listing-names>`)
+
+
+**Beispiel: Zuerst alle Ordnungspositionen, danach alle Dossiers, dann alle anderen Inhalte.**
+
+.. sourcecode:: http
+
+  GET /@solrsearch?group_by_type:list=repository_folders&group_by_type:list=dossiers HTTP/1.1
+  Accept: application/json
+
+
+**Beispiel: Zuerst alle Ordnungspositionen, danach alle Dossiers, dann alle anderen Inhalte. Jede Gruppe wird nach Titel sortiert**
+
+.. sourcecode:: http
+
+  GET /@solrsearch?group_by_type:list=repository_folders&group_by_type:list=dossiers&sort=Title%20asc HTTP/1.1
+  Accept: application/json
+
+
 Batching
 ~~~~~~~~
 Der Endpoint stellt die Standard-Paginierung gem :ref:`Kapitel Paginierung <batching>` zur Verfügung.
