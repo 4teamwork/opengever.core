@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-03 15:27+0000\n"
+"POT-Creation-Date: 2021-03-19 15:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,6 +118,16 @@ msgstr "Member"
 msgid "fieldset_common"
 msgstr "Common"
 
+#. Default: "Agenda Items"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+msgid "heading_agenda_items"
+msgstr "Agenda Items"
+
+#. Default: "Meeting Minutes: ${title}"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+msgid "heading_meeting_minutes"
+msgstr "Meeting Minutes: ${title}"
+
 #. German translation: Verwendete URL um eine Videokonferenz für diesen Teamraum zu starten.
 #. Default: "URL for videoconferencing link"
 #: ./opengever/workspace/workspace.py
@@ -166,6 +176,11 @@ msgstr ""
 msgid "label_completed"
 msgstr "Completed"
 
+#. Default: "Date"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+msgid "label_date"
+msgstr "Date"
+
 #. German translation: Zu erledigen bis
 #. Default: "Deadline"
 #: ./opengever/workspace/todo.py
@@ -173,6 +188,7 @@ msgid "label_deadline"
 msgstr "Deadline"
 
 #. Default: "Decision"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
 #: ./opengever/workspace/workspace_meeting_agenda_item.py
 msgid "label_decision"
 msgstr "Decision"
@@ -215,6 +231,7 @@ msgstr "Linked dossier"
 
 #. German translation: Ort
 #. Default: "Location"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_location"
 msgstr "Location"
@@ -233,6 +250,7 @@ msgstr "Related items"
 
 #. German translation: Verantwortlich
 #. Default: "Responsible"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
 #: ./opengever/workspace/todo.py
 msgid "label_responsible"
 msgstr "Responsible"
