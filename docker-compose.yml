@@ -69,5 +69,8 @@ services:
       - "8983:8983"
   ds389:
     image: docker.io/389ds/dirsrv:1.4
+    ports:
+      - "3389:3389"
+      - "3636:3636"
     volumes:
       - ./var/ds389:/data
