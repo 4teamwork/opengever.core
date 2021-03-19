@@ -21,6 +21,7 @@ from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION_SOLR
 from opengever.core.docker_testing import MSGCONVERT_SERVICE_FIXTURE
 from opengever.core.docker_testing import PDFLATEX_SERVICE_FIXTURE
+from opengever.core.docker_testing import WEASYPRINT_SERVICE_FIXTURE
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
@@ -680,6 +681,10 @@ PDFLATEX_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
 MSGCONVERT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
     bases=(MSGCONVERT_SERVICE_FIXTURE, OPENGEVER_FIXTURE),
     name="opengever.core:msgconvert-service-integration")
+
+WEASYPRINT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
+    bases=(ContentFixtureLayer(), TRAVERSAL_BROWSER_FIXTURE, WEASYPRINT_SERVICE_FIXTURE),
+    name="opengever.core:weasyprint-service-integration")
 
 
 class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
