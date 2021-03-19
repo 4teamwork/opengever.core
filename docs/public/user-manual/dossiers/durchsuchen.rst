@@ -37,6 +37,3 @@ Schlagworte eingegeben werden.
 .. |img-dossier-durchsuchen-0| image:: ../img/media/img-dossier-durchsuchen-0.png
 .. |img-dossier-durchsuchen-1| image:: ../img/media/img-dossier-durchsuchen-1.png
 .. |img-dossier-durchsuchen-2| image:: ../img/media/img-dossier-durchsuchen-2.png
-
-
-.. disqus::

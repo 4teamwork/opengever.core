@@ -35,5 +35,3 @@ Ansicht einer vorbereiteten Sitzung:
 .. |img-spvupdate-21| image:: ../img/media/img-spvupdate-21.png
 .. |img-spvupdate-22| image:: ../img/media/img-spvupdate-22.png
 .. |img-spvupdate-23| image:: ../img/media/img-spvupdate-23.png
-
-.. disqus::

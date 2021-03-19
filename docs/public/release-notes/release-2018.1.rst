@@ -127,5 +127,3 @@ Diverses
 .. |img-release-notes-2018.1-4| image:: ../_static/img/img-release-notes-2018.1-4.png
 .. |img-release-notes-2018.1-5| image:: ../_static/img/img-release-notes-2018.1-5.png
 .. |img-release-notes-2018.1-6| image:: ../_static/img/img-release-notes-2018.1-6.png
-
-.. disqus::

@@ -10,5 +10,3 @@ Pour le débogage, les modèles types de contenus Plone Views suivants sont à l
 - «séance»: ``debug_docxcompose`` permet de télécharger séparément les fichiers «docx» qui seront assemblés en un document de procès-verbal dans au format .zip. Cela facilite l’analyse de problèmes potentiels avec docxcompose.
 
 - «objet de discussion»: ``debug_excerpt_docxcompose`` permet de télécharger séparément les fichiers «docx» qui seront assemblés en un extrait de procès-verbal au format .zip. Cela facilite l’ analyse de problèmes potentiels avec docxcompose. l’URL contient l’ID de l’objet de discussion ainsi que les autres actions qui y sont liées, comme p. ex: ``meeting-X/agenda_items/YZ/debug_excerpt_docxcompose``.
-
-.. disqus::

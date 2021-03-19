@@ -13,5 +13,3 @@ Voici une description de toutes les interfaces teamraum supportées par OneGov G
    role_inheritance
    todos
    todolists
-
-.. disqus::

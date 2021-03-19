@@ -80,5 +80,3 @@ Requêtes
 ^^^^^^^^
 
 .. include:: schemas/opengever.meeting.proposal.inc
-
-.. disqus::

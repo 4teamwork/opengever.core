@@ -52,5 +52,3 @@ Allgemeine Verbesserungen:
 
 .. |img-release-notes-2.8-1| image:: ../../_static/img/img-release-notes-2.8-1.png
 .. |img-release-notes-2.8-2| image:: ../../_static/img/img-release-notes-2.8-2.png
-
-.. disqus::

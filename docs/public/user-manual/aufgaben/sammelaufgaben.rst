@@ -32,5 +32,3 @@ erledigt und bei wem sie noch in Arbeit ist.
 .. |img-aufgaben-27| image:: ../img/media/img-aufgaben-27.png
 .. |img-aufgaben-28| image:: ../img/media/img-aufgaben-28.png
 .. |img-aufgaben-29| image:: ../img/media/img-aufgaben-29.png
-
-.. disqus::

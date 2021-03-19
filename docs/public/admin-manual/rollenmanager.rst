@@ -143,5 +143,3 @@ Ordnungsposition erfolgen gleich wie bei den Dossiers.
 .. |img-rollenmanager-2| image:: img/media/img-rollenmanager-2.png
 .. |img-rollenmanager-3| image:: img/media/img-rollenmanager-3.png
 .. |img-rollenmanager-4| image:: img/media/img-rollenmanager-4.png
-
-.. disqus::

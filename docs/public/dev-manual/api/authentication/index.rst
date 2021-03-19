@@ -25,5 +25,3 @@ von OneGov GEVER unterstützt werden.
    oauth2_token_auth
    jwt
    logout
-
-.. disqus::

@@ -222,9 +222,6 @@ Pfadtiefe
 
   GET /plone/@solrsearch?depth=1 HTTP/1.1
 
-.. disqus::
-
-
 Batching
 ~~~~~~~~
 Der Endpoint stellt die Standard-Paginierung gem :ref:`Kapitel Paginierung <batching>` zur Verfügung.

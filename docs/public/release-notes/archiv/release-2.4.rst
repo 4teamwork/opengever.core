@@ -17,5 +17,3 @@ Der neue Release 2.4 stellt u.a. die folgenden Funktionen zur Verfügung:
 - Überarbeitung der Geschäftsregel beim Abschliessen von Dossiers
 
 - Zahlreiche weitere kleine Anpassungen und Bugfixes
-
-.. disqus::

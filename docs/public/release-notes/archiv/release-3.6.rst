@@ -82,5 +82,3 @@ Allgemeine Anpassungen
 
 - Die französische Übersetzung von "In Bearbeitung" wird neu
   mit "En cours de traitement" übersetzt (gemäss eCH-0039).
-
-.. disqus::

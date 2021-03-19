@@ -200,5 +200,3 @@ Metadaten zu einem Inhaltsverzeichnis-Element:
 - ``meeting_start_page_number``
 
   numéro de la première page de la séance rapporté (integer)
-
-.. disqus::

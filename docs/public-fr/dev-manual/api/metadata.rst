@@ -50,5 +50,3 @@ Délai de protection archivistique
 - Niveau 2: 30
 - Niveau 3: 100
 - Niveau 4: 150
-
-.. disqus::

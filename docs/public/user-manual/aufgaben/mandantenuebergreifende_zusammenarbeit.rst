@@ -352,6 +352,3 @@ werden.
    .. |img-mu-aufgaben-54| image:: ../img/media/img-mu-aufgaben-54.png
    .. |img-mu-aufgaben-55| image:: ../img/media/img-mu-aufgaben-55.png
    .. |img-mu-aufgaben-56| image:: ../img/media/img-mu-aufgaben-56.png
-
-
-.. disqus::

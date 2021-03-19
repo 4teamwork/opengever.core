@@ -14,6 +14,3 @@ Kalenderansicht angezeigt.
 
 .. |img-sitzungs-app-2| image:: ../img/media/img-sitzungs-app-2.png
 .. |img-sitzungs-app-3| image:: ../img/media/img-sitzungs-app-3.png
-
-
-.. disqus::

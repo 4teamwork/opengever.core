@@ -9,5 +9,3 @@ immer zuoberst.
 |img-aufgaben-21|
 
 .. |img-aufgaben-21| image:: ../img/media/img-aufgaben-21.png
-
-.. disqus::

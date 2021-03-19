@@ -132,5 +132,3 @@ zweiten Bild ersichtlich, aufgeklappt werden.
 .. |img-grundlagen-29| image:: img/media/img-grundlagen-29.png
 .. |img-grundlagen-30| image:: img/media/img-grundlagen-30.png
 .. |img-grundlagen-31| image:: img/media/img-grundlagen-31.png
-
-.. disqus::

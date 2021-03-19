@@ -53,5 +53,3 @@ Archivische Schutzfrist
 - Level 2: 30
 - Level 3: 100
 - Level 4: 150
-
-.. disqus::

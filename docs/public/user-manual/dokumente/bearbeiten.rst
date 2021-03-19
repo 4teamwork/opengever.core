@@ -246,5 +246,3 @@ als neuste Version gespeichert.
 .. |img-dokumente-36| image:: ../img/media/img-dokumente-36.png
 .. |img-dokumente-37| image:: ../img/media/img-dokumente-37.png
 .. |img-dokumente-38| image:: ../img/media/img-dokumente-38.png
-
-.. disqus::

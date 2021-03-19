@@ -37,6 +37,3 @@ Ordnungssystembaum zugegriffen werden.
 .. |img-favoriten-2| image:: img/media/img-favoriten-2.png
 .. |img-favoriten-3| image:: img/media/img-favoriten-3.png
 .. |img-favoriten-4| image:: img/media/img-favoriten-4.png
-
-
-.. disqus::

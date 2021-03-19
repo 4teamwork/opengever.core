@@ -23,7 +23,7 @@ abschliessen» anwählen.
 Sie können nun das Protokoll fertigstellen. Klicken Sie auf den Protokoll-Titel
 und dann wie gewohnt auf Auschecken/Bearbeiten. Das Protokoll hat nach Abschluss
 der Sitzung den Platz des Vorprotokolls eingenommen. Bitte beachten Sie, dass
-das Protokoll vor Abschluss der Sitzung generiert werden muss. Ist die Sitzung 
+das Protokoll vor Abschluss der Sitzung generiert werden muss. Ist die Sitzung
 abgeschlossen, muss diese wieder geöffnet werden, damit das Protokoll neu
 generiert werden kann.
 
@@ -42,5 +42,3 @@ Sitzung Aufgaben analog GEVER zu erstellen und zu versenden.
 .. |img-spvupdate-31| image:: ../img/media/img-spvupdate-31.png
 .. |img-spvupdate-34| image:: ../img/media/img-spvupdate-34.png
 .. |img-spvupdate-35| image:: ../img/media/img-spvupdate-35.png
-
-.. disqus::

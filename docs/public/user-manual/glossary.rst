@@ -390,42 +390,40 @@ Glossar
 .. [#ablaufsteuerung] `TERMDAT:GEV09:Ablaufsteuerung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67121>`_,
      abgerufen am 02. März 2017.
 .. [#ablieferung] `TERMDAT:GEV09:Ablieferung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67154>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#abschlussdatum] `TERMDAT:GEV09:Abschlussdatum <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67156>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#aktenzeichen] `TERMDAT:GEV09:Aktenzeichen <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67160>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#aktivitaet] `TERMDAT:GEV09:Aktivität <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67161>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#archiv] `TERMDAT:GEV09:Archiv <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67112>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#archivgut] `TERMDAT:GEV09:Archivgut <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67145>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#archivierung] `TERMDAT:GEV09:Archivierung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67147>`_,
-     abgerufen am 02. März 2017.  
+     abgerufen am 02. März 2017.
 .. [#archivwuerdig] `TERMDAT:GEV09:archivwürdig <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67148>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#bewertung] `TERMDAT:GEV09:Bewertung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67171>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#dokument] `TERMDAT:GEV09:Dokument <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67200>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#dossier] `TERMDAT:GEV09:Dossier <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67173>`_,
      abgerufen am 02. März 2017.
 .. [#geschaeft] `TERMDAT:GEV09:Geschäft <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67140>`_,
-     abgerufen am 02. März 2017.  
+     abgerufen am 02. März 2017.
 .. [#geschaeftsfall] `TERMDAT:GEV12:Geschäftsfall <https://www.termdat.bk.admin.ch/Entry/EntryDetail/379326>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#geschaeftskontrolle] `TERMDAT:GEV09:Geschäftskontrolle <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67141>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#geschaeftsprozess] `TERMDAT:GEV09:Geschäftsprozess <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67202>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#nachvollziehbarkeit] `TERMDAT:GEV09:Nachvollziehbarkeit <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67198>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#unterlagen] `TERMDAT:GEV09:Unterlagen <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67205>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#vorgang] `TERMDAT:GEV09:Vorgang <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67197>`_,
-     abgerufen am 02. März 2017. 
+     abgerufen am 02. März 2017.
 .. [#vorregistrieren] `TERMDAT:GEV12:vorregistrieren <https://www.termdat.bk.admin.ch/Entry/EntryDetail/379390>`_,
-     abgerufen am 02. März 2017. 
-
-.. disqus::
+     abgerufen am 02. März 2017.

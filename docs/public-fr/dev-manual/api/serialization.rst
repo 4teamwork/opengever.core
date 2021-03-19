@@ -1,7 +1,7 @@
 sérialisation
 =============
 
-Dans la REST API, il est nécessaire sérialiser et désérialiser  le contenu de et vers JSON à plusieurs endroits. 
+Dans la REST API, il est nécessaire sérialiser et désérialiser  le contenu de et vers JSON à plusieurs endroits.
 
 Fondamentalement, le format de la sérialisation (Lecture de l'API) est le même que pour la désérialisation (Écriture via l'API).
 
@@ -109,7 +109,7 @@ La liste de références est sérialisée en une liste JSON simple.
 Désérialisation
 ^^^^^^^^^^^^^^^
 
-Diverses méthodes sont disponibles pour créer une références lors de la création ou la mise à jour d'objets. L'un des identifiants ci-dessous peut être utilisé pour identifier clairement la cible référencée.  
+Diverses méthodes sont disponibles pour créer une références lors de la création ou la mise à jour d'objets. L'un des identifiants ci-dessous peut être utilisé pour identifier clairement la cible référencée.
 
 ======================================= ======================================
 Type                                     Exemple
@@ -119,5 +119,3 @@ IntId                                   ``123456``
 Pfad                                    ``'/dossier/doc1'``
 URL                                     ``'http://example.org/dossier/doc1'``
 ======================================= ======================================
-
-.. disqus::

@@ -197,5 +197,3 @@ Die zusätzlichen Features sind nicht mit einem separaten Feature-Flag sondern d
 .. |img-aussonderung-4| image:: img/media/img-aussonderung-4.png
 .. |img-aussonderung-5| image:: img/media/img-aussonderung-5.png
 .. |img-aussonderung-6| image:: img/media/img-aussonderung-6.png
-
-.. disqus::

@@ -113,5 +113,3 @@ Diesen Unterlagen basieren teilweise auf den Schulungsunterlagen des
 Staatsarchivs des Kantons Zug, die dem Verein OneGov.ch freundlicherweise
 zur Verfügung gestellt wurden. Diese Unterlagen werden durch die 4teamwork
 AG laufend erweitert und aktualisiert.
-
-.. disqus::

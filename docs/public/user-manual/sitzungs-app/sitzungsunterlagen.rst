@@ -7,6 +7,3 @@ Beschreibung der Sitzungsunterlagen
 
 
 .. |img-sitzungs-app-11| image:: ../img/media/img-sitzungs-app-11.png
-
-
-.. disqus::

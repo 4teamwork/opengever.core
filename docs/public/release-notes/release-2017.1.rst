@@ -142,5 +142,3 @@ Der Release enthält weitere zahlreiche kleinere Anpassungen und Bugfixes, u.a.:
 .. |img-release-notes-2017.1-2| image:: ../_static/img/img-release-notes-2017.1-2.png
 .. |img-release-notes-2017.1-3| image:: ../_static/img/img-release-notes-2017.1-3.png
 .. |img-release-notes-2017.1-4| image:: ../_static/img/img-release-notes-2017.1-4.png
-
-.. disqus::

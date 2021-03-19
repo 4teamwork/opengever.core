@@ -87,5 +87,3 @@ dazu das Dokument auschecken muss.
 .. |image67| image:: ../img/media/image67.png
 .. |image68| image:: ../img/media/image68.png
 .. |img-dokumente-17| image:: ../img/media/img-dokumente-17.png
-
-.. disqus::

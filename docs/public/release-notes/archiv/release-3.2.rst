@@ -60,5 +60,3 @@ Bugfixes
 
 - Bugfix: Ein Fehler bei der Sortierung basierend auf User/Kontakt-Namen
   in Tabellen wurde behoben.
-
-  .. disqus::

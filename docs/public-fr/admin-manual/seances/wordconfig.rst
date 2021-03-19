@@ -37,5 +37,3 @@ Dans les documents de la gestion de séances et procès-verbaux, pour prédéfin
 .. |lists-4| image:: ../../../public/_static/img/kurzref_adm_lists_4.png
 .. |lists-5| image:: ../../../public/_static/img/kurzref_adm_lists_5.png
 .. |lists-6| image:: ../../../public/_static/img/kurzref_adm_lists_6.png
-
-.. disqus::

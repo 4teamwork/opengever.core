@@ -52,6 +52,3 @@ Die Helper App wird gemäss unten konfiguriert:
 
 .. |img-zem-1| image:: img/media/img-zem-1.png
 .. |img-zem-2| image:: img/media/img-zem-2.png
-
-
-.. disqus::

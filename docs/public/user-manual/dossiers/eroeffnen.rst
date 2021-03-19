@@ -230,5 +230,3 @@ Dossieransicht nach dem Speichern
 .. |img-dossiers-9| image:: ../img/media/img-dossiers-9.png
 .. |img-dossiers-10| image:: ../img/media/img-dossiers-10.png
 .. |img-dossiers-11| image:: ../img/media/img-dossiers-11.png
-
-.. disqus::

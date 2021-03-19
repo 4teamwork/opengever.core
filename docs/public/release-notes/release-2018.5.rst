@@ -99,5 +99,3 @@ Diverses
 .. |img-dossiers-103| image:: ../user-manual/img/media/img-dossiers-103.png
 .. |img-release-notes-2018.5-1| image:: ../_static/img/img-release-notes-2018.5-1.png
 .. |img-aufgaben-39| image:: ../user-manual/img/media/img-aufgaben-39.png
-
-.. disqus::

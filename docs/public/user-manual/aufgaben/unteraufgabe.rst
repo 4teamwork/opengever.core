@@ -18,5 +18,3 @@ in der Unteraufgabe ebenfalls dargestellt:
 
 .. |img-aufgaben-6| image:: ../img/media/img-aufgaben-6.png
 .. |img-aufgaben-7| image:: ../img/media/img-aufgaben-7.png
-
-.. disqus::

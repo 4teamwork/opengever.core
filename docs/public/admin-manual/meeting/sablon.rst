@@ -27,5 +27,3 @@ werden. Kommentare müssen dazu zwischen die Felder ``comment`` und
 
 Eine Dokumentation der DSL findet man unter: https://github.com/senny/sablon#conditionals
 Beispiele einer Sablon Datei findet man unter: https://github.com/senny/sablon#examples
-
-.. disqus::

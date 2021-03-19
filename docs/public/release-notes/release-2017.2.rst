@@ -62,5 +62,3 @@ Weitere Verbesserungen
 .. |img-release-notes-2017.2-2| image:: ../_static/img/img-release-notes-2017.2-2.png
 .. |img-release-notes-2017.2-3| image:: ../_static/img/img-release-notes-2017.2-3.png
 .. |img-release-notes-2017.2-4| image:: ../_static/img/img-release-notes-2017.2-4.png
-
-.. disqus::

@@ -75,5 +75,3 @@ Diese Variante wird unter :ref:`label-emailimportieren` detailliert beschrieben.
 .. |image43| image:: ../img/media/image43.png
 .. |img-dokumente-5| image:: ../img/media/img-dokumente-5.png
 .. |img-dokumente-6| image:: ../img/media/img-dokumente-6.png
-
-.. disqus::

@@ -9,5 +9,3 @@ den Desktop (lokal) gedownloadet werden.
 
 
 .. |img-osexport-1| image:: img/media/img-osexport-1.png
-
-.. disqus::

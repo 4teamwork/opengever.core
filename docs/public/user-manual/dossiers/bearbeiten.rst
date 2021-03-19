@@ -187,5 +187,3 @@ Ein komplettes Dossier kann als ZIP-Datei verpackt und heruntergeladen werden.
 .. |img-dossiers-102| image:: ../img/media/img-dossiers-102.png
 .. |img-dossiers-103| image:: ../img/media/img-dossiers-103.png
 .. |img-dossiers-104| image:: ../img/media/img-dossiers-104.png
-
-.. disqus::

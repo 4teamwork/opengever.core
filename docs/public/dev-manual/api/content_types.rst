@@ -135,7 +135,3 @@ Teamraum-Meeting Traktandum
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. include:: schemas/opengever.workspace.meetingagendaitem.inc
-
---------------------
-
-.. disqus::

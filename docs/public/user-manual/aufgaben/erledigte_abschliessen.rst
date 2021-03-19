@@ -19,5 +19,3 @@ Aktion *Überarbeiten* wieder in den Status *In Bearbeitung setzen*.
 
 .. |img-aufgaben-19| image:: ../img/media/img-aufgaben-19.png
 .. |img-aufgaben-20| image:: ../img/media/img-aufgaben-20.png
-
-.. disqus::

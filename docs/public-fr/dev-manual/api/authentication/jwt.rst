@@ -71,5 +71,3 @@ Si l'invalidation a eu lieu avec succès, le serveur retourne une Response ``204
 
 .. literalinclude:: examples/logout.json
    :language: http
-
-.. disqus::

@@ -11,7 +11,3 @@ auf der Sitzungs-App zur Verfügung gestellt zu werden.
 
 
 .. |img-sitzungs-app-1| image:: ../img/media/img-sitzungs-app-1.png
-
-
-
-.. disqus::

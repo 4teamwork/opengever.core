@@ -39,5 +39,3 @@ Sie können die Rückweisung in einem separaten Feld kommentieren.
 .. |img-spvupdate-17| image:: ../img/media/img-spvupdate-17.png
 .. |img-spvupdate-18| image:: ../img/media/img-spvupdate-18.png
 .. |img-spvupdate-19| image:: ../img/media/img-spvupdate-19.png
-
-.. disqus::

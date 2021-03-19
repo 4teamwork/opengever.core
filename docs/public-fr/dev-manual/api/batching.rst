@@ -85,5 +85,3 @@ Exemple complet d'une réponse avec pagination:
 
 .. literalinclude:: examples/batching.json
    :language: http
-
-.. disqus::

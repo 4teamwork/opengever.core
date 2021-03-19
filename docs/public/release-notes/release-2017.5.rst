@@ -62,5 +62,3 @@ Zudem stehen die folgenden kleineren Anpassungen zur Verfügung:
 .. |img-release-notes-2017.5-1| image:: ../_static/img/img-release-notes-2017.5-1.png
 .. |img-release-notes-2017.5-2| image:: ../_static/img/img-release-notes-2017.5-2.png
 .. |img-release-notes-2017.5-3| image:: ../_static/img/img-release-notes-2017.5-3.png
-
-.. disqus::

@@ -14,5 +14,3 @@ où ´´<liste>´´ correspond à une métadonnée du type «liste» (p. ex. ´�
 De plus, des commentaires qui ne font pas partie des documents Word générés (Procès-verbal, extrait de p.-v., etc.) peuvent être insérés dans le modèle Word. Les commentaires doivent se trouver entre les champs ``comment`` et ``endComment``.
 
 Une documentation (en anglais) de la librairie sablon est disponible sur https://github.com/senny/sablon#conditionals. Des exemples de fichier Sablon peuvent être récupérés sur https://github.com/senny/sablon#examples.
-
-.. disqus::

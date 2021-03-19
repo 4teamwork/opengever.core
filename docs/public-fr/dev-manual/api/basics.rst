@@ -113,5 +113,3 @@ Voir :ref:`Workflow <workflow>` pour des détails concernant les Workflows.
 .. _RESTful: https://fr.wikipedia.org/wiki/Representational_State_Transfer
 .. _HTTP: https://fr.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 .. _JSON-LD: http://json-ld.org/
-
-.. disqus::

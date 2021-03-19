@@ -24,6 +24,3 @@ Sitzungsunterlagen.
 .. |img-sitzungs-app-5| image:: ../img/media/img-sitzungs-app-5.png
 .. |img-sitzungs-app-6| image:: ../img/media/img-sitzungs-app-6.png
 .. |img-sitzungs-app-7| image:: ../img/media/img-sitzungs-app-7.png
-
-
-.. disqus::

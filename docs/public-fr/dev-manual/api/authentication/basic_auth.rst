@@ -14,5 +14,3 @@ Les HTTP Client libraires du langage de programmation utilisé offrent usuelleme
 **Exemple de code (Python)**: Créer une session et définir les headers
 
 .. literalinclude:: ../examples/example_session.py
-
-.. disqus::

@@ -258,6 +258,3 @@ Exemple d'implémentation en Python pour un client à authentification continue.
 .. |tokenauth-usage-logs| image:: ../../../_static/img/tokenauth-usage-logs.png
 .. |tokenauth-auth-flow| image:: ../../../_static/img/tokenauth-auth-flow.png
 .. |tokenauth-client-flow| image:: ../../../_static/img/tokenauth-client-flow.png
-
-
-.. disqus::

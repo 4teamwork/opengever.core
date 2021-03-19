@@ -112,5 +112,3 @@ wurde.
 .. |img-dossiervorlagen-9| image:: ../img/media/img-dossiervorlagen-9.png
 .. |img-dossiervorlagen-10| image:: ../img/media/img-dossiervorlagen-10.png
 .. |img-dossiervorlagen-11| image:: ../img/media/img-dossiervorlagen-11.png
-
-.. disqus::

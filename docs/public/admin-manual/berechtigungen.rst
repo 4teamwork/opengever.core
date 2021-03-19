@@ -72,6 +72,3 @@ Person zugewiesen, wird ihr wie gewohnt die Berechtigung automatisch gegeben.
 .. |img-berechtigungoe-6| image:: img/media/img-berechtigungoe-6.png
 .. |img-berechtigungoe-7| image:: img/media/img-berechtigungoe-7.png
 
-
-
-.. disqus::

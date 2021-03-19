@@ -77,6 +77,3 @@ eingecheckt werden.
 .. |img-spvupdate-14| image:: ../img/media/img-spvupdate-14.png
 .. |img-spvupdate-41| image:: ../img/media/img-spvupdate-41.png
 .. |img-spvupdate-42| image:: ../img/media/img-spvupdate-42.png
-
-
-.. disqus::

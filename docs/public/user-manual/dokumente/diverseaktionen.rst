@@ -235,5 +235,3 @@ Button, welcher direkt zum neuen PDF führt.
 .. |img-pdf-speichern-unter-2| image:: ../img/media/img-pdf-speichern-unter-2.png
 .. |img-pdf-speichern-unter-3| image:: ../img/media/img-pdf-speichern-unter-3.png
 .. |img-pdf-speichern-unter-4| image:: ../img/media/img-pdf-speichern-unter-4.png
-
-.. disqus::

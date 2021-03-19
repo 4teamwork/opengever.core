@@ -12,5 +12,3 @@ Inhalt:
    debugging.rst
    wordconfig.rst
    sitzungsvorlage.rst
-
-.. disqus::

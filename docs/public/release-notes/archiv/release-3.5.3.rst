@@ -16,5 +16,3 @@ Zudem wurde die im Hintergrund stattfindende Generierung von Worddokumenten
 (Protokolle, Protokollauszüge, etc.) auf das neue Eingabeformat mittels Editor umgestellt.
 
 .. |img-release-notes-3.5.3-1| image:: ../../_static/img/img-release-notes-3.5.3-1.png
-
-.. disqus::

@@ -66,5 +66,3 @@ Ausserdem können Sie in diesem Reiter festlegen, über welche Kanäle Sie benac
 .. |img-benachrichtigungs-einstellungen-5| image:: img/media/img-benachrichtigungs-einstellungen-5.png
 .. |img-benachrichtigungs-einstellungen-6| image:: img/media/img-benachrichtigungs-einstellungen-6.png
 .. |img-benachrichtigungs-einstellungen-7| image:: img/media/img-benachrichtigungs-einstellungen-7.png
-
-.. disqus::

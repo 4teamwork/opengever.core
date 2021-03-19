@@ -10,6 +10,7 @@ Changelog
 2021.6.0 (2021-03-18)
 ---------------------
 
+- Remove Disqus from the documentation. [njohner]
 - Exclude opengever.workspace.meetingagendaitem from search results. [njohner]
 - Index agenda items in the workspace meeting searchable text. [njohner]
 - Show add_task_from_document action also for documents within tasks. [tinagerber]

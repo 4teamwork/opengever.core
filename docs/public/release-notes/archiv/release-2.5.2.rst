@@ -17,5 +17,3 @@ OneGov GEVER Release 2.5.2 verfügbar werden:
 - Aktualisierung der französischen Übersetzungen.
 
 .. |img-release-notes-2.5.2-1| image:: ../../_static/img/img-release-notes-2.5.2-1.png
-
-.. disqus::

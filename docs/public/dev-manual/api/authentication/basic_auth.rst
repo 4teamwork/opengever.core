@@ -16,5 +16,3 @@ und Passwort zu generieren.
 **Code-Beispiel (Python)**: Session erzeugen und Headers setzen
 
 .. literalinclude:: ../examples/example_session.py
-
-.. disqus::

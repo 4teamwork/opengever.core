@@ -55,5 +55,3 @@ On peut ainsi facilement naviguer la structure d'un client GEVER au moyen de ``G
 .. |postman-request| image:: ../../_static/img/postman_request.png
 .. |postman-basic-auth| image:: ../../_static/img/postman_basic_auth.png
 .. |postman-headers| image:: ../../_static/img/postman_headers.png
-
-.. disqus::

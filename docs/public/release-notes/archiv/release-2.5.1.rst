@@ -47,5 +47,3 @@ Bugfixes und kleine Anpassungen
 
 - Das Erzeugen von doppelten Journaleinträgen beim Hinzufügen
   von gewissen Objekten wurde korrigiert.
-
-.. disqus::

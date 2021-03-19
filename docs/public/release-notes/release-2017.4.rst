@@ -23,5 +23,3 @@ Migrationsschnittstelle
 
 Das Migrations-Framework von OneGov GEVER (siehe Spezifikation `OGGBundle <https://docs.onegovgever.ch/dev-manual/oggbundle/>`_ ) unterstützt neu
 auch den Import von \*.msg Dateien. Zudem wurden kleinere Anpassungen und Korrekturen an dieser Schnittstelle vorgenommen.
-
-.. disqus::

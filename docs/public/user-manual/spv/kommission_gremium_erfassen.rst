@@ -91,7 +91,3 @@ Nach dem Speichervorgang erscheint die Sitzung neu auch in der Sitzungsübersich
 .. |img-spvupdate-38| image:: ../img/media/img-spvupdate-38.png
 .. |img-spvupdate-39| image:: ../img/media/img-spvupdate-39.png
 .. |img-spvupdate-40| image:: ../img/media/img-spvupdate-40.png
-
-
-
-.. disqus::

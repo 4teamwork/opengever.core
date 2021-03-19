@@ -127,6 +127,3 @@ vorgenommen.
 .. |img-release-notes-3.5-3| image:: ../../_static/img/img-release-notes-3.5-3.png
 .. |img-release-notes-3.5-4| image:: ../../_static/img/img-release-notes-3.5-4.png
 .. |img-release-notes-3.5-5| image:: ../../_static/img/img-release-notes-3.5-5.png
-
-
-.. disqus::

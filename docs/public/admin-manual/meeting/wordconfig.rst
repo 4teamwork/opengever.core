@@ -40,5 +40,3 @@ folgendermassen eingestellt werden:
 .. |lists-4| image:: ../_static/img/kurzref_adm_lists_4.png
 .. |lists-5| image:: ../_static/img/kurzref_adm_lists_5.png
 .. |lists-6| image:: ../_static/img/kurzref_adm_lists_6.png
-
-.. disqus::

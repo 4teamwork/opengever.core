@@ -90,5 +90,3 @@ Diverse Anpassungen
 .. |img-release-notes-2017.7-3| image:: ../_static/img/img-release-notes-2017.7-3.png
 .. |img-release-notes-2017.7-4| image:: ../_static/img/img-release-notes-2017.7-4.png
 .. |img-release-notes-2017.7-5| image:: ../_static/img/img-release-notes-2017.7-5.png
-
-.. disqus::

@@ -43,5 +43,3 @@ Weitere Anpassungen
 .. |img-release-notes-3.1-1| image:: ../../_static/img/img-release-notes-3.1-1.png
 .. |img-release-notes-3.1-2| image:: ../../_static/img/img-release-notes-3.1-2.png
 .. |img-release-notes-3.1-3| image:: ../../_static/img/img-release-notes-3.1-3.png
-
-.. disqus::

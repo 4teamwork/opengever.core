@@ -35,7 +35,7 @@ die Bearbeitungsmaske.
 |img-sitzungsvorlage-7|
 
 Auf der Bearbeitungsmaske kann der Zwischentitel beliebig angepasst werden. Der
-Vorgang wird mit *Speichern* abgeschlossen. 
+Vorgang wird mit *Speichern* abgeschlossen.
 
 |img-sitzungsvorlage-8|
 
@@ -54,5 +54,3 @@ ausgewählt werden.
 .. |img-sitzungsvorlage-6| image:: ../img/media/img-sitzungsvorlage-6.png
 .. |img-sitzungsvorlage-7| image:: ../img/media/img-sitzungsvorlage-7.png
 .. |img-sitzungsvorlage-8| image:: ../img/media/img-sitzungsvorlage-8.png
-
-.. disqus::

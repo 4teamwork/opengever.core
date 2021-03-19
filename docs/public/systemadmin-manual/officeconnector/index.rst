@@ -7,5 +7,3 @@ Inhalt:
    :maxdepth: 2
 
    autoopenfiles.rst
-
-.. disqus::

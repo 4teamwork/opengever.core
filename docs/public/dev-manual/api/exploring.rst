@@ -55,5 +55,3 @@ So lässt sich die Struktur des GEVER-Mandandanten über die API mittels ``GET``
 .. |postman-request| image:: ../_static/img/postman_request.png
 .. |postman-basic-auth| image:: ../_static/img/postman_basic_auth.png
 .. |postman-headers| image:: ../_static/img/postman_headers.png
-
-.. disqus::

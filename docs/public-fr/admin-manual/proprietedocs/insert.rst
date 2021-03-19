@@ -71,5 +71,3 @@ Au cas où une ProriétéDoc concerne une date (p. ex. ogg.document.document_dat
 .. |docprops-6| image:: ../../../public/_static/img/kurzref_adm_docprops_6.png
 .. |docprops-7| image:: ../../../public/_static/img/kurzref_adm_docprops_7.png
 .. |docprops-9| image:: ../../../public/_static/img/kurzref_adm_docprops_9.png
-
-.. disqus::

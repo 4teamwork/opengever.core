@@ -26,5 +26,3 @@ durchgeführt werden.
 .. |img-ech-schnittstelle-1| image:: ../img/media/img-ech-schnittstelle-1.png
 .. |img-ech-schnittstelle-2| image:: ../img/media/img-ech-schnittstelle-2.png
 .. |img-ech-schnittstelle-3| image:: ../img/media/img-ech-schnittstelle-3.png
-
-.. disqus::

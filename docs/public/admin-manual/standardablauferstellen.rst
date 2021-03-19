@@ -87,5 +87,3 @@ Nun kann der Standardablauf wie in der :ref:`Benutzerdokumentation <label-standa
 .. |img-standardablauf-25| image:: img/media/img-standardablauf-25.png
 .. |img-standardablauf-30| image:: img/media/img-standardablauf-30.png
 .. |img-standardablauf-31| image:: img/media/img-standardablauf-31.png
-
-.. disqus::

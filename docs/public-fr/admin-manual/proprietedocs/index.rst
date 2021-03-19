@@ -8,5 +8,3 @@ Inhalt:
 
    list.rst
    insert.rst
-
-.. disqus::

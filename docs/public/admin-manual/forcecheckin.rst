@@ -30,5 +30,3 @@ einchecken:
 .. |img-forcecheckin-1| image:: img/media/img-forcecheckin-1.png
 .. |img-forcecheckin-2| image:: img/media/img-forcecheckin-2.png
 .. |img-forcecheckin-3| image:: img/media/img-forcecheckin-3.png
-
-.. disqus::

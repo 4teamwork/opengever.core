@@ -9,6 +9,3 @@ und Protokollverwaltung) erneut hochgeladen werden. Auf Stufe Sitzung und
 Traktandum erfasste Notizen bleiben bestehen bzw. sind immer noch ersichtlich.
 Via Benachrichtigung kann ein automatischer Hinweis an die Sitzungsteilnehmenden
 versendet werden.
-
-
-.. disqus::
