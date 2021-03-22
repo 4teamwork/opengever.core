@@ -35,6 +35,7 @@ OTHER_ALLOWED_FIELDS = set([
     'has_sametype_children',
     'is_subdossier',
     'is_subtask',
+    'id',
     'lastname',
     'language',
     'location',

@@ -6,7 +6,7 @@ API Changelog
 2021.7.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- ``@listing`` endpoint whitelists the ``id`` field.
 
 
 2021.6.0 (2021-03-18)

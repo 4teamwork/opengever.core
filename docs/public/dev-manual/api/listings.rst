@@ -92,6 +92,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``is_sutask``: Ob die Aufgabe eine Unteraufgabe ist.
 - ``issuer_fullname``: Auftraggeber (Anzeigename)
 - ``issuer``: Auftraggeber (Benutzername)
+- ``id``: ID des Inhalts
 - ``keywords``: Schlagwörter
 - ``lastname``: Nachname
 - ``mimetype``: Mimetype
