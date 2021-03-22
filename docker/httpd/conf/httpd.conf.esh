@@ -147,7 +147,7 @@ LoadModule proxy_http_module modules/mod_proxy_http.so
 #LoadModule proxy_scgi_module modules/mod_proxy_scgi.so
 #LoadModule proxy_uwsgi_module modules/mod_proxy_uwsgi.so
 #LoadModule proxy_fdpass_module modules/mod_proxy_fdpass.so
-#LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
 #LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
 #LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
 #LoadModule proxy_express_module modules/mod_proxy_express.so
@@ -229,7 +229,7 @@ Group daemon
 # e-mailed.  This address appears on some server-generated pages, such
 # as error documents.  e.g. admin@your-domain.com
 #
-ServerAdmin admin@4teamwork.ch
+ServerAdmin <%= ${SERVER_ADMIN:-admin@4teamwork.ch} %>
 
 #
 # ServerName gives the name and port that the server uses to identify itself.
@@ -238,7 +238,7 @@ ServerAdmin admin@4teamwork.ch
 #
 # If your host doesn't have a registered DNS name, enter its IP address here.
 #
-ServerName httpd:80
+ServerName <%= ${SERVER_NAME:-httpd:80} %>
 
 #
 # Deny access to the entirety of your server's filesystem. You must
@@ -556,24 +556,50 @@ SSLRandomSeed connect builtin
 RewriteEngine On
 ProxyTimeout 300
 
+# Deny HEAD requests by Microsoft Office to prevent login popup when clicking on links in Office apps.
+RewriteCond %{REQUEST_METHOD} "HEAD"
+RewriteCond %{HTTP_USER_AGENT} "Microsoft Office" [nocase]
+RewriteRule ^.*$ - [F,L]
+
+# Avoid processing redirects by Microsoft Office
+RewriteCond %{REQUEST_METHOD} "GET"
+RewriteCond %{HTTP_USER_AGENT} ;\sms-office(\)|;)
+RewriteRule .* /usr/local/apache2/htdocs/msoffice.html [L]
+
+# Bumblebee websockets
+RewriteCond %{HTTP:UPGRADE} ^websocket$ [NC]
+RewriteCond %{HTTP:CONNECTION} Upgrade$ [NC]
+RewriteRule ^/YnVtYmxlYmVl/api/(.*) ws://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/YnVtYmxlYmVl/api/$1 [P]
+# Bumblebee
+RewriteRule ^/pdfjs/(.*) http://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/pdfjs/$1 [P,L]
+RewriteRule ^/YnVtYmxlYmVl/(.*) http://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/YnVtYmxlYmVl/$1 [P,L]
+
 # Portal
-RewriteRule ^/portal($|/)(.*) http://portal-frontend/portal$1$2 [P,L,E=preserve_host:yes]
+RewriteRule ^/portal($|/)(.*) http://<%= ${PORTAL_HOST:-portal-frontend:80} %>/portal$1$2 [P,L,E=preserve_host:yes]
 
 # Frontend
 ## Frontend assets
-RewriteRule ^/geverui/assets/(.*) http://ogui/geverui/assets/$1 [P,L]
+RewriteRule ^/geverui/assets/(.*) http://<%= ${FRONTEND_HOST:-ogui:80} %>/geverui/assets/$1 [P,L]
 ## Config endpoints
-RewriteRule /@config$ http://ogcore:8080/VirtualHostBase/https/%{SERVER_NAME}:443/tr/VirtualHostRoot/_vh_share/@config [P,L]
+<% if [ -z "${BACKEND_PREFIX:-}" ]; then -%>
+RewriteRule /@config$ http://<%= ${BACKEND_HOST:-ogcore:8080} %>/VirtualHostBase/<%= ${HTTP_PROTOCOL:-https} %>/%{SERVER_NAME}:<%= ${HTTP_PORT:-443}/${BACKEND_ID:-tr} %>/VirtualHostRoot/@config [P,L]
+<% else -%>
+RewriteRule /@config$ http://<%= ${BACKEND_HOST:-ogcore:8080} %>/VirtualHostBase/<%= ${HTTP_PROTOCOL:-https} %>/%{SERVER_NAME}:<%= ${HTTP_PORT:-443}/${BACKEND_ID:-tr} %>/VirtualHostRoot/_vh_<%= ${BACKEND_PREFIX} %>/@config [P,L]
+<% fi -%>
 ## Deliver the frontend's index.html
 RewriteCond %{REQUEST_METHOD} =GET
 RewriteCond %{HTTP_COOKIE} !geverui=0
 RewriteCond %{HTTP_ACCEPT} !application/json
-RewriteCond %{REQUEST_URI} !/(portal_memberdata/portraits/|@@my-invitations)
-RewriteCond %{REQUEST_URI} !/(download|office_online_edit|bumblebee_download|@@health-check|zauth|add-meeting-dossier|navigation.json|@@update_agendaitem_list|@@merge_docx_protocol|task_redirector)$
+RewriteCond %{REQUEST_URI} !/(portal_memberdata/portraits/|@@)
+RewriteCond %{REQUEST_URI} !/(download|office_online_edit|bumblebee_download|zauth|add-meeting-dossier|navigation.json|task_redirector)$
 RewriteCond %{REQUEST_URI} !^/wopi/
 RewriteCond %{HTTP_REFERER} !/sitzungen/committee
-RewriteCond %{REQUEST_URI} !^/(sitzungen|portal_css|portal_javascripts|customlogo|defaultUser\.png|@@|\+\+)
-RewriteRule ^/ http://ogui/index.html [P,L]
+RewriteCond %{REQUEST_URI} !^/(sitzungen|portal_css|portal_javascripts|customlogo|defaultUser\.png|\+\+)
+RewriteRule ^/ http://<%= ${FRONTEND_HOST:-ogui:80} %>/index.html [P,L]
 
 # Backend
-RewriteRule ^/share($|/)(.*) http://ogcore:8080/VirtualHostBase/https/%{SERVER_NAME}:443/tr/VirtualHostRoot/_vh_share/$2 [P,L]
+<% if [ -z "${BACKEND_PREFIX:-}" ]; then -%>
+RewriteRule ^/(.*) http://<%= ${BACKEND_HOST:-ogcore:8080} %>/VirtualHostBase/<%= ${HTTP_PROTOCOL:-https} %>/%{SERVER_NAME}:<%= ${HTTP_PORT:-443}/${BACKEND_ID:-tr} %>/VirtualHostRoot/$1 [P,L]
+<% else -%>
+RewriteRule ^<%= ${BACKEND_PREFIX} %>($|/)(.*) http://<%= ${BACKEND_HOST:-ogcore:8080} %>/VirtualHostBase/<%= ${HTTP_PROTOCOL:-https} %>/%{SERVER_NAME}:<%= ${HTTP_PORT:-443}/${BACKEND_ID:-tr} %>/VirtualHostRoot/_vh_<%= ${BACKEND_PREFIX} %>/$2 [P,L]
+<% fi -%>

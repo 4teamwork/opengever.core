@@ -11,6 +11,9 @@ services:
     depends_on:
       - ogui
       - ogcore
+    environment:
+      - HTTP_PROTOCOL=http
+      - HTTP_PORT=8000
   msgconvert:
     image: 4teamwork/msgconvert:latest
     ports:
