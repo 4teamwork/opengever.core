@@ -138,7 +138,10 @@ class GeverDeployment(object):
         if not self.is_development_setup:
             # Deactivate 'Authentication' capability for LDAP plugin
             # In production, auth will always be performed by CAS portal
-            plugins.deactivatePlugin(IAuthenticationPlugin, 'ldap')
+            try:
+                plugins.deactivatePlugin(IAuthenticationPlugin, 'ldap')
+            except KeyError:
+                pass
 
     def sync_ogds(self):
         if not self.has_ogds_sync:
