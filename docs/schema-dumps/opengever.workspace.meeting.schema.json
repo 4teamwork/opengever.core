@@ -37,6 +37,13 @@
             "description": "",
             "_zope_schema_type": "TextLine"
         },
+        "attendees": {
+            "type": "array",
+            "title": "Teilnehmer",
+            "description": "",
+            "_zope_schema_type": "List",
+            "default": []
+        },
         "title": {
             "type": "string",
             "title": "Titel",
@@ -68,6 +75,7 @@
         "end",
         "location",
         "videoconferencing_url",
+        "attendees",
         "title",
         "description",
         "changed"

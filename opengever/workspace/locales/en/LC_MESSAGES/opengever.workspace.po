@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-19 15:47+0000\n"
+"POT-Creation-Date: 2021-03-24 15:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,6 +169,11 @@ msgstr ""
 "\n"
 "Please click the following link to accept the invitation:\n"
 "${accept_url}"
+
+#. Default: "Attendees"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_attendees"
+msgstr "Attendees"
 
 #. German translation: Erledigt
 #. Default: "Completed"

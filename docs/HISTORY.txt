@@ -4,6 +4,7 @@ Changelog
 2021.7.0 (unreleased)
 ---------------------
 
+- Add a new field `attendees` for workspace meetings. [elioschmutz]
 - Introduce a new field dossier_type and customproperty slots for dossiers. [phgross]
 - Introduce customproperties default slots which is enabled for every document. [phgross]
 - No longer fail during deployment if ldap is not in authentication plugins. [njohner]
