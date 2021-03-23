@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 services:
   httpd:
@@ -7,13 +7,14 @@ services:
       context: .
       dockerfile: ./docker/httpd/Dockerfile
     ports:
-      - "8000:80"
+      - "8081:80"
     depends_on:
       - ogui
       - ogcore
     environment:
       - HTTP_PROTOCOL=http
-      - HTTP_PORT=8000
+      - HTTP_PORT=8081
+      - PORTAL_HOST=ianus-frontend
   msgconvert:
     image: 4teamwork/msgconvert:latest
     ports:
@@ -34,7 +35,7 @@ services:
       dockerfile: ./docker/core/Dockerfile
     image: 4teamwork/ogcore:latest
     volumes:
-      - ./var/ogcore:/data
+      - ./var/docker/ogcore:/data
     ports:
       - "8080:8080"
       - "8160:8160"
@@ -47,14 +48,14 @@ services:
   zeoserver:
     image: 4teamwork/zeoserver:4.3.20
     volumes:
-      - ./var/ogcore:/data
+      - ./var/docker/ogcore:/data
   ogds:
     image: 4teamwork/ogds:latest
     build:
       context: .
       dockerfile: ./docker/ogds/Dockerfile
     volumes:
-      - ./var/ogds:/var/lib/postgresql/data
+      - ./var/docker/ogds:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: secret
   solr:
@@ -67,7 +68,7 @@ services:
       - ogg
       - /opt/solr/server/solr/configsets/ogg
     volumes:
-      - ./var/ogsolr:/var/solr/data
+      - ./var/docker/ogsolr:/var/solr/data
     ports:
       - "8983:8983"
   ds389:
@@ -76,4 +77,46 @@ services:
       - "3389:3389"
       - "3636:3636"
     volumes:
-      - ./var/ds389:/data
+      - ./var/docker/ds389:/data
+  ianus-frontend:
+    image: ghcr.io/4teamwork/ianus-frontend:2021.1.1
+    ports:
+      - "3000:80"
+    depends_on:
+      - ianus-backend
+    environment:
+      IANUS_BACKEND_HOST: ianus-backend
+      IANUS_PATH_PREFIX: '/portal'
+  ianus-backend:
+    image: ghcr.io/4teamwork/ianus-backend:2021.1.1
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ianus-db
+    environment:
+      - DJANGO_SETTINGS_MODULE=ianus.settings
+      - DJANGO_CONFIGURATION=Production
+      - DJANGO_SECRET_KEY=secret
+      - DJANGO_ALLOWED_HOSTS=localhost,teamraum
+      - DJANGO_PATH_PREFIX=/portal
+      - DJANGO_SESSION_COOKIE_SECURE=False
+      - DJANGO_DATABASE_NAME=ianus
+      - DJANGO_DATABASE_USER=ianus
+      - DJANGO_DATABASE_PASSWORD=secret
+      - DJANGO_DATABASE_HOST=ianus-db
+      - DJANGO_DATABASE_PORT=5432
+      - DJANGO_TWO_FACTOR_REQUIRED=False
+      - DJANGO_OIDC_RP_SIGN_ALGO=HS256
+      - DJANGO_AUTH_LDAP_SERVER_URI=ldap://ds389:3389
+      - DJANGO_AUTH_LDAP_BIND_DN=cn=Manager,dc=teamraum,dc=dev
+      - DJANGO_AUTH_LDAP_BIND_PASSWORD=secret
+      - DJANGO_AUTH_LDAP_USER_BASE_DN=ou=Users,dc=teamraum,dc=dev
+      - DJANGO_AUTH_LDAP_USER_ATTR_MAP={'first_name':'givenName','last_name':'sn','email':'mail','username':'uid'}
+  ianus-db:
+    image: postgres:12-alpine
+    volumes:
+      - ./var/docker/ianus-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ianus
+      POSTGRES_USER: ianus
+      POSTGRES_PASSWORD: secret
