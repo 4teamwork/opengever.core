@@ -71,6 +71,13 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      name="meeting_minutes_pdf"
+      for="opengever.workspace.interfaces.IWorkspaceMeeting"
+      class=".meeting_pdf.MeetingMinutesPDFView"
+      permission="zope2.View"
+      />
+
   <!-- WorkspaceRoot add form: only show translated title fields for active languages  -->
   <adapter
       factory=".forms.WorkspaceRootAddView"

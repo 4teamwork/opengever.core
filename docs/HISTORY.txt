@@ -7,6 +7,7 @@ Changelog
 - Introduce customproperties default slots which is enabled for every document. [phgross]
 - No longer fail during deployment if ldap is not in authentication plugins. [njohner]
 - Add id field to the @listing endpoint. [elioschmutz]
+- Add action to download meeting minutes as PDF. [buchi]
 
 
 2021.6.0 (2021-03-18)

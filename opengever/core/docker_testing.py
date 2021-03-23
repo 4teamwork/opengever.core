@@ -82,6 +82,13 @@ class SablonServiceLayer(DockerServiceLayer):
     service_url_env = 'SABLON_URL'
 
 
+class WeasyPrintServiceLayer(DockerServiceLayer):
+    port_env = 'PORT8'
+    image_name = '4teamwork/weasyprint:latest'
+    service_url_env = 'WEASYPRINT_URL'
+
+
 MSGCONVERT_SERVICE_FIXTURE = MSGConvertServiceLayer()
 PDFLATEX_SERVICE_FIXTURE = PDFLatexServiceLayer()
 SABLON_SERVICE_FIXTURE = SablonServiceLayer()
+WEASYPRINT_SERVICE_FIXTURE = WeasyPrintServiceLayer()
