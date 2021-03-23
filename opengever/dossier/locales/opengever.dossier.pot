@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-02 18:53+0000\n"
+"POT-Creation-Date: 2021-03-23 14:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,10 @@ msgstr ""
 
 #: ./opengever/dossier/move_items.py
 msgid "Can only move objects from open dossiers!"
+msgstr ""
+
+#: ./opengever/dossier/behaviors/customproperties.py
+msgid "Custom properties"
 msgstr ""
 
 #: ./opengever/dossier/browser/overview.py
@@ -622,6 +626,11 @@ msgstr ""
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_dossier_templates"
+msgstr ""
+
+#. Default: "Dossier type"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_dossier_type"
 msgstr ""
 
 #. Default: "Edit after creation"

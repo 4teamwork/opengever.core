@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-02 18:53+0000\n"
+"POT-Creation-Date: 2021-03-23 14:26+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -47,6 +47,10 @@ msgstr "Ajouter le dossier"
 #: ./opengever/dossier/move_items.py
 msgid "Can only move objects from open dossiers!"
 msgstr "Seuls les objets de dossiers actifs peuvent être déplacés!"
+
+#: ./opengever/dossier/behaviors/customproperties.py
+msgid "Custom properties"
+msgstr ""
 
 #: ./opengever/dossier/browser/overview.py
 msgid "Description"
@@ -624,6 +628,11 @@ msgstr "Dossier en souffrance"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_dossier_templates"
 msgstr "Modèles de dossier"
+
+#. Default: "Dossier type"
+#: ./opengever/dossier/behaviors/dossier.py
+msgid "label_dossier_type"
+msgstr ""
 
 #. Default: "Edit after creation"
 #: ./opengever/dossier/templatefolder/form.py
