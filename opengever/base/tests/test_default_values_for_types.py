@@ -109,6 +109,8 @@ DOSSIER_DEFAULTS = {
     'reading_and_writing': [],
     'dossier_manager': None,
     'touched': FROZEN_TODAY,
+    'custom_properties': None,
+    'dossier_type': None,
 }
 DOSSIER_FORM_DEFAULTS = {
     'responsible': 'kathi.barfuss',

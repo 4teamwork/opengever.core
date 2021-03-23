@@ -41,6 +41,7 @@
     <element value="opengever.sharing.behaviors.IDossier" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     <element value="opengever.mail.behaviors.ISendableDocsContainer" />
+    <element value="opengever.dossier.behaviors.customproperties.IDossierCustomProperties" />
   </property>
 
   <!-- View information -->

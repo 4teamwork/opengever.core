@@ -88,4 +88,13 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <!-- customproperties -->
+  <plone:behavior
+      title="Dossier property sheet integration"
+      description="Property sheets for dossier like objects"
+      provides="opengever.dossier.behaviors.customproperties.IDossierCustomProperties"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory="opengever.propertysheets.annotation.CustomPropertiesStorage"
+      />
+
 </configure>

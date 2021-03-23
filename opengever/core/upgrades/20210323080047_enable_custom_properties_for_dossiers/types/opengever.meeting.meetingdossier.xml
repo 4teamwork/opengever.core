@@ -1,0 +1,7 @@
+<object name="opengever.meeting.meetingdossier" meta_type="Dexterity FTI" >
+
+  <property name="behaviors" purge="False">
+    <element value="opengever.dossier.behaviors.customproperties.IDossierCustomProperties" />
+  </property>
+
+</object>
