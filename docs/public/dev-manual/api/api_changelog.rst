@@ -6,7 +6,11 @@ API Changelog
 2021.7.0 (unreleased)
 ---------------------
 
+Other Changes
+^^^^^^^^^^^^^
+
 - ``@listing`` endpoint whitelists the ``id`` field.
+- The endpoint ``@trigger-task-template`` supports overriding ``title`` and ``text`` for each task (see :ref:`trigger_task_template` for updated examples).
 
 
 2021.6.0 (2021-03-18)

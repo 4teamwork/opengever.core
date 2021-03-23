@@ -70,3 +70,44 @@ werden. Es gibt dabei folgende Möglichkeiten:
             ],
             "start_immediately": false
         }
+
+
+Titel und Beschreibung setzen
+-----------------------------
+
+Sowohl für die Hauptaufgabe wie auch für jede der ausgewählten Aufgabenvorlage
+kann Titel und Beschreibung der Aufgabe überschrieben werden. Dafür stehen
+folgende Felder zur Verfügung:
+
+- ``title``: Setzt den Titel der Aufgabe (Default: Titel der Vorlage)
+- ``text``:  Setzt die Beschreibung der Aufgabe (Default: Beschreibung
+  der Vorlage, oder Leer für die Hauptaufgabe)
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+        POST /ordnungssystem/fuehrung/dossier-23/@trigger-task-template HTTP/1.1
+        Accept: application/json
+
+        {
+            "tasktemplatefolder": "67a25fc941354568950439f08f7af3ed",
+            "title": "Meine Aufgabe",
+            "text": "Bitte sofort erledigen!",
+            "tasktemplates": [
+                {
+                    "@id": "http://localhost:8080/fd/vorlagen/tasktemplatefolder-1/tasktemplate-1",
+                    "responsible": "stv:david.erni",
+                    "title": "Unteraufgabe",
+                    "text": "Noch schneller erledigen!"
+                }
+            ],
+            "related_documents": [
+                {
+                    "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/dossier-23/document-23515"
+                }
+            ],
+
+            "start_immediately": true
+        }

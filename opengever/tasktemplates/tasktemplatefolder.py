@@ -34,22 +34,26 @@ class TaskTemplateFolder(Container):
         return self.sequence_type == u'sequential'
 
     def trigger(self, dossier, templates, related_documents,
-                values, start_immediately):
+                values, start_immediately, main_task_overrides=None):
+
+        if main_task_overrides is None:
+            main_task_overrides = {}
 
         trigger = TaskTemplateFolderTrigger(
             self, dossier, templates, related_documents,
-            values, start_immediately)
+            main_task_overrides, values, start_immediately)
         return trigger.generate()
 
 
 class TaskTemplateFolderTrigger(object):
 
     def __init__(self, context, dossier, templates,
-                 related_documents, values, start_immediately):
+                 related_documents, main_task_overrides, values, start_immediately):
         self.context = context
         self.dossier = dossier
         self.selected_templates = templates
         self.related_documents = related_documents
+        self.main_task_overrides = main_task_overrides
         self.values = values
         self.start_immediately = start_immediately
         self.request = getRequest()
@@ -69,8 +73,11 @@ class TaskTemplateFolderTrigger(object):
         return task
 
     def create_main_task(self):
+        title = self.main_task_overrides.get("title", self.context.title)
+        text = self.main_task_overrides.get("text")
         data = dict(
-            title=self.context.title,
+            title=title,
+            text=text,
             issuer=api.user.get_current().getId(),
             responsible=api.user.get_current().getId(),
             responsible_client=get_current_org_unit().id(),
@@ -109,13 +116,15 @@ class TaskTemplateFolderTrigger(object):
             task.set_to_planned_state()
 
     def create_subtask(self, main_task, template, values):
+        title = values.get("title", template.title)
+        text = values.get("text", template.text)
         data = dict(
-            title=template.title,
+            title=title,
             issuer=template.issuer,
             responsible=template.responsible,
             responsible_client=template.responsible_client,
             task_type=template.task_type,
-            text=template.text,
+            text=text,
             relatedItems=self.related_documents,
             deadline=date.today() + timedelta(template.deadline),
         )
