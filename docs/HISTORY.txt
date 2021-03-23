@@ -11,7 +11,7 @@ Changelog
 - Allow overriding task and subtask title and text in `@trigger-task-template` endpoint. [deiferni]
 - Implement group_by_type parameter in @solrsearch endpoint. [tinagerber]
 - Add repository_folders and template_folders to @listing endpoint. [tinagerber]
-
+- Fix oc_checkout endpoint to work with shadow documents that don't have a content-type. [buchi]
 
 
 2021.6.0 (2021-03-18)
