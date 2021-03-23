@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from mock import Mock
+from opengever.propertysheets.assignment import DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
 from opengever.propertysheets.assignment import DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX
 from opengever.propertysheets.field import PropertySheetField
 from opengever.propertysheets.tests.fixture import fixture_assignment_factory
@@ -20,6 +21,7 @@ class TestPropertySheetField(FunctionalTestCase):
             "some_attribute",
             DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX,
             fixture_assignment_factory,
+            DOCUMENT_DEFAULT_ASSIGNMENT_SLOT,
         )
 
     def test_validation_fails_when_required_field_of_mandatory_sheet_is_not_provided(
@@ -268,6 +270,7 @@ class TestPropertySheetField(FunctionalTestCase):
                 "some_attribute",
                 "some_prefix",
                 lambda: [],
+                "default_slot",
                 title="foo"
         )
         self.assertEqual(
@@ -282,9 +285,64 @@ class TestPropertySheetField(FunctionalTestCase):
                 "some_attribute",
                 "some_prefix",
                 lambda: [],
+                "default_slot",
                 required=True
         )
         self.assertEqual(
             "Static value for argument 'required' cannot be overwritten via "
             "keyword argument.",
             cm.exception.message)
+
+    def test_successful_field_validation_with_active_slot_and_default_slot(
+        self,
+    ):
+        create(
+            Builder("property_sheet_schema")
+            .named("default")
+            .assigned_to_slots(DOCUMENT_DEFAULT_ASSIGNMENT_SLOT)
+            .with_simple_boolean_field()
+        )
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_simple_boolean_field()
+        )
+
+        self.request["some_request_key"] = [u"question"]
+
+        self.field.validate(
+            {"IDocument.default": {"yesorno": True},
+             "IDocumentMetadata.document_type.question": {"yesorno": True}}
+        )
+
+    def test_default_slot_gets_validated(self):
+        create(
+            Builder("property_sheet_schema")
+            .named("default")
+            .assigned_to_slots(DOCUMENT_DEFAULT_ASSIGNMENT_SLOT)
+            .with_simple_boolean_field()
+        )
+
+        self.request["some_request_key"] = [u"question"]
+
+        with self.assertRaises(RequiredMissing):
+            self.field.validate(
+                {"IDocumentMetadata.document_type.question": {"yesorno": True}}
+            )
+
+    def test_validation_ingores_default_slot_when_default_slot_is_not_used(
+        self,
+    ):
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_simple_boolean_field()
+        )
+
+        self.request["some_request_key"] = [u"question"]
+
+        self.field.validate(
+            {"IDocumentMetadata.document_type.question": {"yesorno": True}}
+        )

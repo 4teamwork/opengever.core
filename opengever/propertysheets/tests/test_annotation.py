@@ -1,6 +1,7 @@
 from opengever.propertysheets.annotation import CustomPropertiesStorage
 from opengever.propertysheets.annotation import CustomPropertiesStorageImpl
 from opengever.propertysheets.assignment import DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX
+from opengever.propertysheets.assignment import DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
 from opengever.propertysheets.exceptions import BadCustomPropertiesFactoryConfiguration
 from opengever.propertysheets.field import PropertySheetField
 from opengever.testing.test_case import FunctionalTestCase
@@ -24,6 +25,7 @@ class ITestFixtureWithCustomProperties(model.Schema):
         attribute_name='some_attribute',
         assignemnt_prefix=DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX,
         valid_assignment_slots_factory=fixture_assignment_factory,
+        default_slot=DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
     )
 
 
