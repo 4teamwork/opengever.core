@@ -1,4 +1,6 @@
+from opengever.base.monkey.patches.cmf_catalog_aware import CatalogAlreadyPatched
 from opengever.base.monkey.patches.cmf_catalog_aware import DeactivatedCatalogIndexing
+from opengever.base.monkey.patches.cmf_catalog_aware import PatchCMFCatalogAware
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from plone import api
@@ -55,3 +57,27 @@ class TestPatchCMFCatalogAware(IntegrationTestCase):
             self.dossier.indexObject()
 
         self.assertEqual(0, len(self.catalog(UID=self.dossier.UID())))
+
+    def test_cannot_be_applied_twice(self):
+        with DeactivatedCatalogIndexing():
+            with self.assertRaises(CatalogAlreadyPatched):
+                with DeactivatedCatalogIndexing():
+                    pass
+
+    def test_patch_gets_removed_when_exiting_context_manager(self):
+        self.dossier.title = "Foo Bar"
+        self.assertFalse(PatchCMFCatalogAware().is_already_applied())
+
+        with DeactivatedCatalogIndexing():
+            self.assertTrue(PatchCMFCatalogAware().is_already_applied())
+            self.dossier.reindexObject()
+
+        brain = obj2brain(self.dossier)
+        self.assertEqual(
+            'Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+            brain.Title)
+
+        self.assertFalse(PatchCMFCatalogAware().is_already_applied())
+        self.dossier.reindexObject()
+        brain = obj2brain(self.dossier)
+        self.assertEqual('Foo Bar', brain.Title)

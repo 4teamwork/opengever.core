@@ -1,5 +1,4 @@
 from .action_info import PatchActionInfo
-from .cmf_catalog_aware import PatchCMFCatalogAware
 from .cmf_catalog_aware import PatchCMFCatalogAwareHandlers
 from .default_values import PatchBuilderCreate
 from .default_values import PatchDeserializeFromJson
@@ -45,7 +44,6 @@ PatchBaseOrderedViewletManagerExceptions()()
 PatchBuilderCreate()()
 PatchCASAuthSetLoginTimes()()
 PatchCatalogToFilterTrashedDocs()()
-PatchCMFCatalogAware()()
 PatchCMFCatalogAwareHandlers()()
 PatchCMFEditonsHistoryHandlerTool()()
 PatchContentRulesHandlerOnLogin()()
