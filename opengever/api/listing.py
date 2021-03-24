@@ -96,6 +96,12 @@ FILTERS = {
     ],
     u'folder_contents': [
         u'object_provides:plone.dexterity.interfaces.IDexterityContent'
+    ],
+    u'repository_folders': [
+        u'object_provides:opengever.repository.interfaces.IRepositoryFolder',
+    ],
+    u'template_folders': [
+        u'object_provides:opengever.dossier.templatefolder.interfaces.ITemplateFolder',
     ]
 }
 

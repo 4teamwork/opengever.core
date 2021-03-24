@@ -2,6 +2,7 @@ from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
 from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import request_error_handler
+from opengever.api.listing import FILTERS
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from opengever.workspaceclient.client import WorkspaceClient
@@ -103,7 +104,34 @@ class SolrSearchGet(SolrQueryBaseService):
                 sort = None
             else:
                 sort = 'score desc'
-        return sort
+        return self.extend_with_group_by_type(sort, params)
+
+    def extend_with_group_by_type(self, sort, params):
+        group_by_type = params.get('group_by_type', {})
+
+        if not group_by_type:
+            return sort
+        del params['group_by_type']
+        if isinstance(group_by_type, str):
+            group_by_type = [group_by_type]
+        if not sort:
+            return self._build_group_by_type_function_query_string(group_by_type)
+        return '{},{}'.format(self._build_group_by_type_function_query_string(group_by_type), sort)
+
+    @staticmethod
+    def _build_group_by_type_function_query_string(group_by_type):
+        max_score = len(group_by_type)
+        query_string = u''
+
+        for index, name in enumerate(group_by_type):
+            if name not in FILTERS:
+                raise BadRequest("group_by_type type '{}' is not allowed. "
+                                 "Allowed types are: {}.".format(name, ', '.join(FILTERS)))
+
+            interface = FILTERS[name][0].replace('object_provides:', '')
+            query_string += u'if(termfreq(object_provides,{}),{},'.format(interface,
+                                                                          (max_score - index))
+        return '{}0{}{}'.format(query_string, ')' * max_score, u' desc')
 
     def parse_requested_fields(self, params):
         requested_fields = params.pop('fl', None)

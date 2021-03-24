@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.api.solrsearch import SolrSearchGet
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
@@ -203,7 +204,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
     def test_filter_queries(self, browser):
         self.login(self.regular_user, browser=browser)
         url = (u'{}/@solrsearch?q=wichtig'.format(
-                   self.portal.absolute_url()))
+            self.portal.absolute_url()))
         browser.open(url, method='GET', headers=self.api_headers)
         all_items = browser.json["items"]
         self.assertEqual(3, len(all_items))
@@ -542,10 +543,97 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         with browser.expect_http_error(400):
             url = u'{}/@solrsearch?q=Programm&breadcrumbs=1&b_size=100'.format(
-            self.portal.absolute_url())
+                self.portal.absolute_url())
             browser.open(url, headers=self.api_headers)
 
         self.assertEqual(
             {"message": "Breadcrumb flag is only allowed for small batch sizes (max. 50).",
              "type": "BadRequest"},
             browser.json)
+
+    def test_build_group_by_type_function_query_string(self):
+        self.assertEqual(
+            'if(termfreq(object_provides,opengever.dossier.behaviors.dossier.IDossierMarker),1,0) desc',
+            SolrSearchGet._build_group_by_type_function_query_string(['dossiers']))
+
+        self.assertEqual(
+            'if(termfreq(object_provides,opengever.repository.interfaces.IRepositoryFolder),3,'
+            'if(termfreq(object_provides,opengever.dossier.behaviors.dossier.IDossierMarker),2,'
+            'if(termfreq(object_provides,opengever.document.behaviors.IBaseDocument),1,0))) desc',
+            SolrSearchGet._build_group_by_type_function_query_string(['repository_folders', 'dossiers', 'documents']))
+
+    @browsing
+    def test_group_by_type(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query_string = '&'.join((
+            'rows=15',
+            'group_by_type:list=repository_folders',
+            'group_by_type:list=proposals',
+            'group_by_type:list=dossiers',
+        ))
+        view = '?'.join(('@solrsearch', query_string))
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [u'opengever.repository.repositoryfolder',
+             u'opengever.repository.repositoryfolder',
+             u'opengever.repository.repositoryfolder',
+             u'opengever.repository.repositoryfolder',
+             u'opengever.meeting.proposal',
+             u'opengever.meeting.proposal',
+             u'opengever.meeting.proposal',
+             u'opengever.dossier.businesscasedossier',
+             u'opengever.dossier.businesscasedossier',
+             u'opengever.dossier.businesscasedossier',
+             u'opengever.meeting.meetingdossier',
+             u'opengever.meeting.meetingdossier',
+             u'opengever.meeting.meetingdossier',
+             u'opengever.dossier.businesscasedossier',
+             u'opengever.dossier.businesscasedossier'],
+            [item['@type'] for item in browser.json['items']])
+
+    @browsing
+    def test_group_by_type_and_sort_by_title(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query_string = '&'.join((
+            'rows=10',
+            'sort=sortable_title asc',
+            'group_by_type:list=repository_folders',
+            'group_by_type:list=proposals',
+            'group_by_type:list=dossiers',
+        ))
+        view = '?'.join(('@solrsearch', query_string))
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [(u'1. F\xfchrung', u'opengever.repository.repositoryfolder'),
+             (u'1.1. Vertr\xe4ge und Vereinbarungen',
+              u'opengever.repository.repositoryfolder'),
+             (u'2. Rechnungspr\xfcfungskommission',
+              u'opengever.repository.repositoryfolder'),
+             (u'3. Spinn\xe4nnetzregistrar', u'opengever.repository.repositoryfolder'),
+             (u'Antrag f\xfcr Kreiselbau', u'opengever.meeting.proposal'),
+             (u'Initialvertrag f\xfcr Bearbeitung', u'opengever.meeting.proposal'),
+             (u'Vertr\xe4ge', u'opengever.meeting.proposal'),
+             (u'2015', u'opengever.dossier.businesscasedossier'),
+             (u'2016', u'opengever.dossier.businesscasedossier'),
+             (u'A resolvable main dossier', u'opengever.dossier.businesscasedossier')],
+            [(item['title'], item['@type']) for item in browser.json['items']])
+
+    @browsing
+    def test_group_by_type_with_invalid_type_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query_string = '&'.join((
+            'group_by_type:list=invalid',
+            'group_by_type:list=dossiers',
+        ))
+        view = '?'.join(('@solrsearch', query_string))
+
+        with browser.expect_http_error(400):
+            browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(u'BadRequest', browser.json['type'])
+        self.assertIn(u"group_by_type type 'invalid' is not allowed.", browser.json['message'])
