@@ -218,6 +218,14 @@ def safe_int(value, default=0):
         return default
 
 
+def ensure_str(value, encoding='utf8'):
+    if isinstance(value, str):
+        return value
+    elif isinstance(value, unicode):
+        return value.encode(encoding)
+    return str(value)
+
+
 def is_administrator(user=None):
     """
     Returns a boolean indicating if the given user is considered a GEVER administrator.
