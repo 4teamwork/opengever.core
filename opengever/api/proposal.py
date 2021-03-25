@@ -2,16 +2,12 @@ from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.oguid import Oguid
 from opengever.meeting.model import Meeting
-from opengever.meeting.proposal import IProposal
-from opengever.meeting.proposal import ISubmittedProposal
+from opengever.meeting.proposal import IProposal, ISubmittedProposal
 from opengever.meeting.proposalhistory import IProposalResponse
-from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.interfaces import ISerializeToJsonSummary
+from plone.restapi.interfaces import ISerializeToJson, ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
-from zope.component import adapter
-from zope.component import getMultiAdapter
-from zope.interface import implementer
-from zope.interface import Interface
+from zope.component import adapter, getMultiAdapter
+from zope.interface import Interface, implementer
 
 
 @implementer(ISerializeToJson)

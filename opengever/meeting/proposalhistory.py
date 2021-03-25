@@ -1,12 +1,10 @@
 from opengever.base.oguid import Oguid
-from opengever.base.response import IResponse
-from opengever.base.response import Response
+from opengever.base.response import IResponse, Response
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
 from persistent.dict import PersistentDict
-from plone.restapi.interfaces import IFieldDeserializer
-from plone.restapi.interfaces import IFieldSerializer
+from plone.restapi.interfaces import IFieldDeserializer, IFieldSerializer
 from plone.restapi.serializer.converters import json_compatible
 from z3c.form.interfaces import IDataManager
 from zope import schema
@@ -131,7 +129,11 @@ class ProposalResponseDescription(object):
     @property
     def meeting_title(self):
         meeting = Meeting.query.get(self.response.meeting_id)
-        return meeting.get_title() if meeting else u''
+        if meeting:
+            return meeting.title
+        elif hasattr(self.response, 'meeting_title'):
+            return self.response.meeting_title
+        return ''
 
 
 class IProposalResponse(IResponse):

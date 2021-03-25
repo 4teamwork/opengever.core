@@ -1,34 +1,28 @@
+import base64
+import json
+
+import DateTime
 from opengever.base.exceptions import TransportationError
 from opengever.base.interfaces import IDataCollector
 from opengever.base.request import dispatch_json_request
 from opengever.base.security import elevated_privileges
-from opengever.ogds.base.utils import decode_for_json
-from opengever.ogds.base.utils import encode_after_json
+from opengever.ogds.base.utils import decode_for_json, encode_after_json
 from opengever.task.reminder import Reminder
 from opengever.task.task import ITask
 from plone.dexterity.interfaces import IDexterityContent
-from plone.dexterity.utils import addContentToContainer
-from plone.dexterity.utils import createContent
-from plone.dexterity.utils import iterSchemata
+from plone.dexterity.utils import (addContentToContainer, createContent,
+                                   iterSchemata)
 from plone.namedfile.interfaces import INamedFileField
 from Products.Five.browser import BrowserView
-from z3c.relationfield.interfaces import IRelation
-from z3c.relationfield.interfaces import IRelationChoice
-from z3c.relationfield.interfaces import IRelationList
+from z3c.relationfield.interfaces import (IRelation, IRelationChoice,
+                                          IRelationList)
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
-from zope.component import adapter
-from zope.component import getAdapters
-from zope.component import getUtility
+from zope.component import adapter, getAdapters, getUtility
 from zope.event import notify
 from zope.interface import implementer
-from zope.lifecycleevent import ObjectCreatedEvent
-from zope.lifecycleevent import ObjectModifiedEvent
-import base64
-import DateTime
-import json
-
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 
 BASEDATA_KEY = 'basedata'
 FIELDDATA_KEY = 'field-data'
@@ -79,6 +73,9 @@ class Transporter(object):
 
     def receive(self, container, request):
         return self.create(self._extract_data(request), container)
+
+    def receive_data(self, container, data):
+        return self.create(data, container)
 
     def extract(self, obj):
         return DexterityObjectDataExtractor(obj).extract()

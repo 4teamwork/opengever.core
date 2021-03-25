@@ -49,6 +49,7 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zExceptions import BadRequest
 from zope import schema
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.interface import Interface, implements, provider
 from zope.intid.interfaces import IIntIds
@@ -151,6 +152,29 @@ class IProposal(IBaseProposal):
         source=SolrObjPathSourceBinder(portal_type='opengever.meeting.proposal')
         )
 
+    mode(excerpts='hidden')
+    excerpts = RelationList(
+        title=_(u'label_excerpts', default=u'Excerpts'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u"Excerpt",
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'review_state': {'not': 'document-state-shadow'},
+                    'object_provides': [
+                        'opengever.dossier.behaviors.dossier.IDossierMarker',
+                        'opengever.document.document.IDocumentSchema',
+                        'opengever.task.task.ITask',
+                        'opengever.meeting.proposal.IProposal',
+                        'ftw.mail.mail.IMail',
+                        ],
+                    }),
+            ),
+        required=False,
+        )
+
 
 class ISubmittedProposal(IBaseProposal):
 
@@ -213,8 +237,8 @@ class ProposalBase(object):
              },
 
             {'label': _('label_meeting', default=u'Meeting'),
-             'value': model.get_meeting_link(),
-             'is_html': True},
+             'value': self.get_meeting_title()
+             },
 
             {'label': _('label_issuer', default=u'Issuer'),
              'value': Actor.lookup(self.issuer).get_label(),
@@ -240,6 +264,13 @@ class ProposalBase(object):
         ])
 
         return attributes
+
+    def set_meeting_title(self, title):
+        title = title or u''
+        IAnnotations(self)['proposal_meeting_title'] = title
+
+    def get_meeting_title(self):
+        return IAnnotations(self).get('proposal_meeting_title', u'')
 
     def get_state(self):
         return self.load_model().get_state()
@@ -518,6 +549,10 @@ class Proposal(Container, ProposalBase):
             return None
         return ProposalModel.query.get_by_oguid(oguid)
 
+    def sync_with_model(self):
+        model = self.load_model()
+        model.sync_with_proposal(self)
+
     def get_sync_admin_unit_id(self):
         return self.load_model().submitted_admin_unit_id
 
@@ -533,8 +568,47 @@ class Proposal(Container, ProposalBase):
     def get_documents(self):
         return [relation.to_object for relation in self.relatedItems]
 
-    def get_excerpt(self):
-        return self.load_model().resolve_excerpt_document()
+    def get_excerpts(self, unrestricted=False, include_trashed=False):
+        """Return a restricted list of document objects which are excerpts
+        of the current proposal.
+
+        Sorted per excerpt title_or_id().
+        """
+        excerpts = []
+        checkPermission = getSecurityManager().checkPermission
+        for relation_value in getattr(self, 'excerpts', ()):
+            obj = relation_value.to_object
+            if unrestricted or checkPermission('View', obj):
+                excerpts.append(obj)
+        if not include_trashed:
+            excerpts = filter(lambda obj: not ITrashed.providedBy(obj), excerpts)
+        return sorted(excerpts, key=lambda excerpt: excerpt.title_or_id())
+
+    def append_excerpt(self, excerpt_document):
+        """Add a relation to a new excerpt document.
+        """
+        excerpts = getattr(self, 'excerpts', None)
+        if not excerpts:
+            # The missing_value attribute of a z3c-form field is used
+            # as soon as an object has no default_value i.e. after creating
+            # an object trough the command-line.
+            #
+            # Because the excerpts field needs a list as a missing_value,
+            # we will fall into the "mutable keyword argument"-python gotcha.
+            # The excerpts will be shared between the object-instances.
+            #
+            # Unfortunately the z3c-form field does not provide a
+            # missing_value-factory (like the defaultFactory) which would be
+            # necessary to fix this issue properly.
+            #
+            # As a workaround we reassign the field with a new list if the
+            # excerpts-attribute has never been assigned before.
+            excerpts = []
+
+        intid = getUtility(IIntIds).getId(excerpt_document)
+        excerpts.append(RelationValue(intid))
+        self.excerpts = excerpts
+        addRelations(self, None)
 
     def has_active_committee(self):
         return True
