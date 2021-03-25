@@ -5,8 +5,7 @@
 
   <tal:i18n i18n:domain="opengever.meeting"
             tal:define="documents view/default_attachments;
-                        unlocked_documents view/unlocked_attachments;
-                        excerpt view/excerpt;">
+                        unlocked_documents view/unlocked_attachments;">
 
     <div class="boxGroup bumblebee-document-wrapper">
       <div id="main_attributesBox" class="box">
@@ -71,8 +70,14 @@
               </td>
             </tr>
             <tr>
-              <th i18n:translate="label_excerpt">Excerpt</th>
-              <td><span tal:replace="structure view/render_protocol_excerpt_document_link" /></td>
+              <th i18n:translate="label_excerpts">Protokollauszüge</th>
+              <td>
+                <ul>
+                  <li tal:repeat="document view/excerpts">
+                    <a tal:replace="structure document/render_link" />
+                  </li>
+                </ul>
+              </td>
             </tr>
           </table>
           <div class="actionButtons">

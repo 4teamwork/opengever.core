@@ -6,7 +6,8 @@ from opengever.document import _ as document_mf
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.proposal_transition_comment import SubmittedProposalTransitionCommentAddForm
+from opengever.meeting.proposal_transition_comment import \
+    SubmittedProposalTransitionCommentAddForm
 from opengever.meeting.proposalhistory import ProposalResponseDescription
 from opengever.tabbedview import GeverTabMixin
 from opengever.webactions.interfaces import IWebActionsRenderer
@@ -39,9 +40,6 @@ class OverviewBase(object):
         """Return the sprite-css-class for the given object.
         """
         return ' '.join(['rollover-breadcrumb', get_css_class(item)])
-
-    def excerpt(self):
-        return self.context.get_excerpt()
 
     def history(self):
         for response in reversed(IResponseContainer(self.context).list()):
@@ -185,6 +183,9 @@ class ProposalOverview(OverviewBase, BrowserView, GeverTabMixin):
     def default_attachments(self):
         return IContentListing([doc for doc in self.context.get_documents()
                                 if self.show_as_default_attachment(doc)])
+
+    def excerpts(self):
+        return IContentListing([doc for doc in self.context.get_excerpts()])
 
     def unlocked_attachments(self):
         return IContentListing([doc for doc in self.context.get_documents()
