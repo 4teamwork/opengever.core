@@ -138,7 +138,10 @@ class ReceiveProposalRejected(BrowserView):
     This view is only available for internal requests.
     """
     def __call__(self):
-        data = advancedjson.loads(self.request.get('data'))
+        alsoProvides(self.request, IDisableCSRFProtection)  # internal request
+
+        self.request.stdin.seek(0)
+        data = json.loads(self.request.stdin.read())
         text = data['text']
 
         with elevated_privileges():
