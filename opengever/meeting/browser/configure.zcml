@@ -180,7 +180,6 @@
       name="receive-proposal-scheduled"
       class=".receiveproposaltransition.ReceiveProposalScheduled"
       permission="zope.Public"
-      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
       />
 
   <browser:page
@@ -188,7 +187,6 @@
       name="receive-proposal-unscheduled"
       class=".receiveproposaltransition.ReceiveProposalUnscheduled"
       permission="zope.Public"
-      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
       />
 
   <browser:page
@@ -196,7 +194,6 @@
       name="receive-proposal-decided"
       class=".receiveproposaltransition.ReceiveProposalDecided"
       permission="zope.Public"
-      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
       />
 
   <browser:page
@@ -204,7 +201,6 @@
       name="receive-proposal-rejected"
       class=".receiveproposaltransition.ReceiveProposalRejected"
       permission="zope.Public"
-      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
       />
 
   <!-- committee tabs -->
