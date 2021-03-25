@@ -1,3 +1,4 @@
+import json
 from datetime import date
 
 import requests
@@ -693,18 +694,31 @@ class Proposal(Container, ProposalBase):
             "source_proposal_url": self.absolute_url(),
             "issuer": self.issuer,
         }
+        files_metadata = {}
         files = []
-        proposal_file = self.get_proposal_document().file
+
+        proposal_doc = self.get_proposal_document()
+        proposal_file = proposal_doc.file
         files.append(
             ('files', (proposal_file.filename, proposal_file.open('r'), proposal_file.contentType)),
         )
+        # make sure our proposal document is an "Antrag"
+        files_metadata[proposal_file.filename] = {
+            "document_type_id": "request",
+            "title": proposal_doc.title,
+        }
+
         for document in self.get_documents():
             attachment_file = document.file
             files.append(
                 ('files', (attachment_file.filename, attachment_file.open('r'), attachment_file.contentType)),
             )
-        response = session.post(make_ris_url('spv/proposals'), data=data, files=files)
+            files_metadata[attachment_file.filename] = {
+                "title": document.title,
+            }
 
+        data["files_metadata"] = json.dumps(files_metadata)  # huh?
+        response = session.post(make_ris_url('spv/proposals'), data=data, files=files)
         # re-raise issues we had when creating proposal in RIS
         if not response:
             raise BadRequest(response.text)
