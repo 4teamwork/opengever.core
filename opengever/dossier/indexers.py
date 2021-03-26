@@ -3,10 +3,12 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.utils import ensure_str
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.sources import ContactsSource
 from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
 from opengever.dossier import _
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
@@ -30,6 +32,7 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
+from zope.schema import getFields
 
 
 @indexer(IDossierMarker)
@@ -229,6 +232,18 @@ class SearchableTextExtender(object):
         searchable_external_reference = IDossier(self.context).external_reference
         if searchable_external_reference:
             searchable.append(searchable_external_reference.encode('utf-8'))
+
+        # custom properties
+        custom_properties = IDossierCustomProperties(self.context).custom_properties
+        if custom_properties:
+            field = getFields(IDossierCustomProperties).get('custom_properties')
+            active_slot = field.get_active_assignment_slot(self.context)
+            for slot in [active_slot, field.default_slot]:
+                searchable.extend([
+                    ensure_str(value) for value
+                    in custom_properties.get(slot, {}).values()
+                    if not isinstance(value, bool)
+                ])
 
         return ' '.join(searchable)
 

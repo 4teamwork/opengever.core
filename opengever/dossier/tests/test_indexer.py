@@ -1,5 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -178,6 +181,63 @@ class TestDossierIndexers(SolrIntegrationTestCase):
         indexed_value = solr_data_for(self.dossier, 'SearchableText')
 
         self.assertIn(u'qpr-900-9001', indexed_value)
+
+    def test_dossier_searchable_text_contains_custom_properties_from_default_and_active_slot(self):
+        self.login(self.manager)
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("text", u"f1", u"Field 1", u"", False)
+        )
+        self.dossier.dossier_type = u"businesscase"
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {"f1": "indexme-businescase"},
+            "IDossier.dossier_type.meeting": {"f1": "noindex-meeting"},
+            "IDossier.default": {"additional_title": "indexme-default"},
+        }
+        self.dossier.reindexObject()
+        self.commit_solr()
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
+
+        self.assertIn(u'indexme-businescase', indexed_value)
+        self.assertIn(u'indexme-default', indexed_value)
+        self.assertNotIn(u'noindex-meeting', indexed_value)
+
+    def test_dossier_searchable_text_with_custom_properties_for_all_field_types(self):
+        self.login(self.manager)
+
+        choices = ["rot", u"gr\xfcn", "blau"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", True)
+            .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("text", u"text", u"Some lines of text", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+        )
+        self.dossier.dossier_type = u"businesscase"
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {
+                "yesorno": False,
+                "choose": u"gr\xfcn",
+                "num": 122333,
+                "text": u"K\xe4fer\nJ\xe4ger",
+                "textline": u"Kr\xe4he",
+            },
+        }
+        self.dossier.reindexObject()
+        self.commit_solr()
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
+
+        self.assertIn(u"gr\xfcn", indexed_value)
+        self.assertIn(u"122333", indexed_value)
+        self.assertIn(u"K\xe4fer", indexed_value)
+        self.assertIn(u"J\xe4ger", indexed_value)
+        self.assertIn(u"Kr\xe4he", indexed_value)
 
     def test_dossiertemplate_searchable_text_contains_keywords(self):
         self.login(self.regular_user)
