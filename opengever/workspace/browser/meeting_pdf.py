@@ -43,6 +43,10 @@ class MeetingMinutesPDFView(BrowserView):
         data['generator'] = portal_state.portal_title()
         data['print_date'] = DateTime()
         data['responsible'] = display_name(self.context.responsible)
+        data['attendees'] = []
+
+        for attendee in self.context.attendees:
+            data['attendees'].append(display_name(attendee))
 
         data['agenda_items'] = []
         agenda_items = self.context.getFolderContents(

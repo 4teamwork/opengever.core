@@ -54,6 +54,10 @@ a {
   text-decoration: none;
   color: black;
 }
+.attendees ul {
+  padding-left: 0;
+  list-style-type: none;
+}
 @page {
   size: A4;
   margin-left: 2.5cm;
@@ -67,8 +71,6 @@ a {
     content: "${python:toLocalizedTime(options['print_date'], long_format=True)}";
   }
 }
-h1 {
-
 </style>
 </head>
 
@@ -88,6 +90,16 @@ h1 {
     <tr tal:condition="options/responsible">
       <th><span i18n:translate="label_responsible">Responsible</span>:</th>
       <td tal:content="options/responsible"></td>
+    </tr>
+    <tr tal:condition="options/attendees" class="attendees">
+      <th><span i18n:translate="label_attendees">Attendees</span>:</th>
+      <td>
+        <ul>
+          <tal:repeat tal:repeat="attendee options/attendees">
+            <li tal:content="attendee"></li>
+          </tal:repeat>
+        </ul>
+      </td>
     </tr>
   </table>
   <h2 i18n:translate="heading_agenda_items">Agenda Items</h2>

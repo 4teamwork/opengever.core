@@ -1,7 +1,11 @@
+from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.models.user import User
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.participation import PARTICIPATION_ROLES
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from Products.CMFPlone.utils import safe_unicode
+from sqlalchemy import func
+from sqlalchemy.sql.expression import asc
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
@@ -54,5 +58,24 @@ class PossibleWorkspaceFolderParticipantsVocabulary(object):
                                     token=participant.get('token'),
                                     title=safe_unicode(
                                         participant.get('name'))))
+
+        return SimpleVocabulary(terms)
+
+
+@implementer(IVocabularyFactory)
+class ActualWorkspaceMembersVocabulary(object):
+    """ Vocabulary of all users assigned to the current workspace.
+    """
+    def __call__(self, context):
+        terms = []
+        query = ActualWorkspaceMembersSource(context).search_query
+        query = query.filter_by(active=True)
+        query = query.order_by(asc(func.lower(User.lastname)),
+                               asc(func.lower(User.firstname)))
+
+        for member in query.all():
+            terms.append(SimpleTerm(value=member.userid,
+                                    token=member.userid,
+                                    title=member.fullname()))
 
         return SimpleVocabulary(terms)

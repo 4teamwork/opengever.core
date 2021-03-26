@@ -1,5 +1,3 @@
-from ftw.keywordwidget.widget import KeywordFieldWidget
-from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone.autoform import directives as form
@@ -9,7 +7,6 @@ from plone.supermodel import model
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider
-from opengever.base.schema import UTCDatetime
 from ftw.datepicker.widget import DatePickerFieldWidget
 
 
@@ -28,11 +25,10 @@ class IWorkspaceMeetingSchema(model.Schema):
             ],
         )
 
-    form.widget('responsible', KeywordFieldWidget, async=True)
     form.order_after(responsible='IOpenGeverBase.description')
     responsible = schema.Choice(
         title=_('label_organizer', default='Organizer'),
-        source=ActualWorkspaceMembersSourceBinder(),
+        vocabulary='opengever.workspace.ActualWorkspaceMembersVocabulary',
         required=True)
 
     form.widget('start', DatePickerFieldWidget)
@@ -56,6 +52,16 @@ class IWorkspaceMeetingSchema(model.Schema):
     videoconferencing_url = schema.TextLine(
         title=_(u'label_video_call_link', default=u'Video Call Link'),
         required=False)
+
+    attendees = schema.List(
+        title=_(u"label_attendees", default=u"Attendees"),
+        value_type=schema.Choice(
+            vocabulary='opengever.workspace.ActualWorkspaceMembersVocabulary',
+        ),
+        required=False,
+        missing_value=list(),
+        default=list()
+    )
 
 
 class WorkspaceMeeting(Container):
