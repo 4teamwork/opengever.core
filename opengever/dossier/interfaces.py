@@ -250,3 +250,16 @@ class IDossierTasksPdfMarker(Interface):
 
 class IDossierJournalPdfMarker(Interface):
     """Deprecated marker Interface for dossier journal document."""
+
+
+class IDossierType(Interface):
+    """plone.app.registry schema for the dossier types setting."""
+
+    hidden_dossier_types = schema.List(
+        title=u"Dossier Type",
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.dossier.dossier_types',
+        ),
+        default=['businesscase']
+    )

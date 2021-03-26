@@ -1,6 +1,7 @@
 from Acquisition import aq_inner, aq_parent
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.behaviors.utils import hide_fields_from_behavior
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -26,6 +27,17 @@ from z3c.form.form import Form
 from zExceptions import Unauthorized
 from zope.component import getUtility
 import base64
+
+
+def has_active_dossier_types(context):
+    factory = wrap_vocabulary(
+        'opengever.dossier.dossier_types',
+        hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types')
+
+    # The elephantvocabulary does not consider the hidden terms when querying
+    # for the  length, so we need to iterate.
+    terms = [term for term in factory(context)]
+    return len(terms) > 0
 
 
 # TODO: temporary default value (autocompletewidget)
@@ -86,9 +98,13 @@ class DossierAddForm(add.DefaultAddForm):
 
     def updateFields(self):
         super(DossierAddForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        fields = ['IClassification.public_trial',
+                  'IClassification.public_trial_statement']
+
+        if not has_active_dossier_types(self.context):
+            fields.append('IDossier.dossier_type')
+
+        hide_fields_from_behavior(self, fields)
 
     @property
     def label(self):
@@ -131,9 +147,13 @@ class DossierEditForm(edit.DefaultEditForm):
                 group.fields['IDossier.reference_number'].widgetFactory = referenceNumberWidgetFactory
                 group.fields['IDossier.reference_number'].mode = 'display'
 
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        fields = ['IClassification.public_trial',
+                  'IClassification.public_trial_statement']
+
+        if not has_active_dossier_types(self.context):
+            fields.append('IDossier.dossier_type')
+
+        hide_fields_from_behavior(self, fields)
 
     @property
     def label(self):

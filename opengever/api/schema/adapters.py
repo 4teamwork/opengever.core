@@ -1,5 +1,6 @@
 from opengever.api.schema.schema import TYPE_TO_BE_ADDED_KEY
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.vocabulary import WrapperBase
 from plone.restapi.types.adapters import ChoiceJsonSchemaProvider
 from plone.restapi.types.adapters import CollectionJsonSchemaProvider
 from plone.restapi.types.adapters import ListJsonSchemaProvider
@@ -47,11 +48,17 @@ class GEVERChoiceJsonSchemaProvider(ChoiceJsonSchemaProvider):
                                                                parent_field=parent_field)
 
         if 'vocabulary' in result:
-            # Extract vocab_name from URL
-            # (it's not always just self.field.vocabularyName)
-            vocab_url = result['vocabulary']['@id']
-            vocab_name = vocab_url.split('/')[-1]
-            result['vocabulary']['@id'] = get_vocabulary_url(vocab_name, self.context, self.request)
+            vocabulary = getattr(self.field, "vocabulary", None)
+            # Handle elephantvocabularies as sources
+            if isinstance(vocabulary, WrapperBase):
+                result['vocabulary']['@id'] = get_source_url(
+                    self.field, self.context, self.request)
+            else:
+                # Extract vocab_name from URL
+                # (it's not always just self.field.vocabularyName)
+                vocab_url = result['vocabulary']['@id']
+                vocab_name = vocab_url.split('/')[-1]
+                result['vocabulary']['@id'] = get_vocabulary_url(vocab_name, self.context, self.request)
 
         return result
 

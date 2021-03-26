@@ -80,6 +80,7 @@
   <records interface="opengever.dossier.interfaces.ITemplateFolderProperties" />
   <records interface="opengever.dossier.interfaces.IDossierResolveProperties" />
   <records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings" />
+  <records interface="opengever.dossier.interfaces.IDossierType" />
 
   <!-- ECH-0147 -->
   <records interface="opengever.ech0147.interfaces.IECH0147Settings" />

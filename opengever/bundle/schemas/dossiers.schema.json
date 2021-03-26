@@ -178,6 +178,19 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
+                "dossier_type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Dossiertyp",
+                    "description": "",
+                    "_zope_schema_type": "Choice",
+                    "enum": [
+                        null,
+                        "businesscase"
+                    ]
+                },
                 "classification": {
                     "type": [
                         "null",
@@ -327,6 +340,15 @@
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
+                "custom_properties": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "title": "Benutzerdefinierte Felder",
+                    "description": "Enth\u00e4lt die Daten f\u00fcr die benutzerdefinierten Felder.",
+                    "_zope_schema_type": "PropertySheetField"
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [
@@ -407,6 +429,7 @@
                 "relatedDossier",
                 "former_reference_number",
                 "reference_number",
+                "dossier_type",
                 "classification",
                 "privacy_layer",
                 "public_trial",
@@ -417,7 +440,8 @@
                 "archival_value_annotation",
                 "custody_period",
                 "date_of_cassation",
-                "date_of_submission"
+                "date_of_submission",
+                "custom_properties"
             ]
         },
         "permission": {

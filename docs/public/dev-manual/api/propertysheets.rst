@@ -83,8 +83,9 @@ Einzelne Felder werden in folgendem Format erwartet:
 
 Die für das Assigmnet verwendeten Assignment-Slots müssen aus dem Vokabular
 ``opengever.propertysheets.PropertySheetAssignmentsVocabulary`` stammen. Ein
-Spezifalfall ist dabei der Default-Slot ``IDocument.default``, welcher
-unabhängig vom Dokumenttyp Feld immer dargestellt wird.
+Spezialfall ist dabei der Default-Slot ``IDocument.default`` bzw.
+``IDossier.default``, welcher unabhängig vom Dokument- oder Dossiertyp Feld
+immer dargestellt wird.
 
 Zudem müssen Assignments
 eindeutig sein, mehrere Property Sheets dem gleichen Assignment-Slot zuzuweisen
@@ -147,10 +148,11 @@ ist im Moment nicht unterstützt.
 Serialisierung/Deserialisierung von Custom Properties
 -----------------------------------------------------
 
-Im Moment sind Custom Properties auf Dokumenten und Mails unterstützt. Die
-Auswahl des zu validerenden Property Sheets basiert auf dem Wert des Feldes
-`document_type`. Ausnahme ist dabei der Default-Slot ``IDocument.default``
-welcher unabhängig des Feldwertes von ``document_type`` immer dargestellt wird.
+Im Moment sind Custom Properties auf Dokumenten, Mails und Dossiers unterstützt.
+Die Auswahl des zu validierenden Property Sheets basiert auf dem Wert des Feldes
+`document_type` bzw. `dossier_type`. Ausnahme ist dabei der Default-Slot
+``IDocument.default`` bzw. ``IDossier.default`` welcher unabhängig des Typen
+Feldwertes immer dargestellt wird.
 Ist für den Assignment-Slot
 ``IDocumentMetadata.document_type.<document_type_value>`` ein Property Sheet
 registriert, so werden Feldwerte dieses Property Sheets validiert. Hat das
