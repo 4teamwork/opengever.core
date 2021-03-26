@@ -50,7 +50,9 @@ NOTIFICATION_CONFIGURATION = [
     {
         'id': 'task-commented',
         'title': _('task-commented', default=u'Task commented'),
-        'activities': ['task-commented'],
+        'activities': ['task-commented',
+                       'transition-add-document',
+                       ],
         'default_settings': {
             'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
         },
@@ -244,6 +246,12 @@ NOTIFICATION_CONFIGURATION = [
 ]
 
 
+class UnmappedActivityKind(Exception):
+    """Will be raised if an activity kind is not mapped to one of the
+    notification setting groups in the configuration above.
+    """
+
+
 class NotificationSettings(object):
     """Object which provides functions to lookup the notification settings.
     """
@@ -274,6 +282,10 @@ class NotificationSettings(object):
         for a specific activity_kind.
         """
         config = self.get_configuration_by_activity_kind(activity_kind)
+
+        if not config:
+            raise UnmappedActivityKind(activity_kind)
+
         return self.get_setting(config.get('id'), userid)
 
     def get_configuration_by_id(self, notification_id, default=None):

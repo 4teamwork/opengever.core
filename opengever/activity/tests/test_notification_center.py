@@ -9,6 +9,7 @@ from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
+from opengever.activity.notification_settings import UnmappedActivityKind
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
@@ -658,6 +659,27 @@ class TestDispatchers(ActivityTestCase):
 
         self.assertFalse(hugos_note.is_digest)
         self.assertTrue(peters_note.is_digest)
+
+    def test_unmapped_activity_kind_raises_specific_exception(self):
+        """If an activity kind is not mapped to a notification settings group
+        at all, something went wrong and we'll want to know.
+
+        A specific exception should therefore be raised for this. When using
+        the higher level add_activity() method on the PloneNotificationCenter
+        though, it will be caught and won't prevent the attempted
+        operation - it will just be logged and reported to Sentry.
+        """
+        activity = self.center._add_activity(
+            Oguid('fd', '123'),
+            'UNMAPPED-ACTIVITY-KIND',
+            {'en': ''},
+            {'en': ''},
+            {'en': ''},
+            'hugo.boss',
+            {'en': None})
+
+        with self.assertRaises(UnmappedActivityKind):
+            self.center.create_notifications(activity)
 
 
 class TestSuppressNotifications(IntegrationTestCase):

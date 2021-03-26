@@ -5,6 +5,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
@@ -96,6 +97,7 @@ class TestTaskActivites(FunctionalTestCase):
              ['Issuer', 'Test User (test_user_1_)'],
              ['Info at', 'User Watcher (watcher.user), Another Watcher (another.watcher)']],
             [row.css('td').text for row in rows])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_informed_principals_are_notified_of_added_task(self, browser):
@@ -121,6 +123,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertItemsEqual(
           ['hugo.boss', 'watcher.user'],
           [notification.userid for notification in activity.notifications])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_all_users_are_notified_of_added_task_when_informed_principals_is_group(self, browser):
@@ -147,6 +150,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertItemsEqual(
           ['hugo.boss', 'peter.michel', 'james.bond'],
           [notification.userid for notification in activity.notifications])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_informed_principals_not_permanently_added_as_watchers_to_task(self, browser):
@@ -179,6 +183,7 @@ class TestTaskActivites(FunctionalTestCase):
             {u'hugo.boss': [u'task_responsible'],
              u'test_user_1_': [u'task_issuer']},
             watchers_and_roles)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_private_task_added(self, browser):
@@ -198,6 +203,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.one()
         self.assertEquals(u'New task (private) opened by Test User', activity.summary)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_adding_task_adds_responsible_and_issuer_to_watchers(self, browser):
@@ -219,6 +225,7 @@ class TestTaskActivites(FunctionalTestCase):
              (u'test_user_1_', TASK_ISSUER_ROLE)],
             [(subscription.watcher.actorid, subscription.role)
              for subscription in subscriptions])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_task_accepted(self, browser):
@@ -243,6 +250,7 @@ class TestTaskActivites(FunctionalTestCase):
             u'Accepted by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_task_commented(self, browser):
@@ -269,6 +277,7 @@ class TestTaskActivites(FunctionalTestCase):
             u'Commented by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_activity_actor_is_current_user(self, browser):
@@ -288,6 +297,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals('hugo.boss', activity.actor_id)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_task_resolved(self, browser):
@@ -313,6 +323,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
             u'Resolved by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Ist erledigt.', activity.description)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_task_skipped(self, browser):
@@ -341,6 +352,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(
             u'Skipped by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Wird \xfcbersprungen.', activity.description)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_deadline_modified_activity(self, browser):
@@ -373,6 +385,7 @@ class TestTaskActivites(FunctionalTestCase):
             'Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'nicht dring\xe4nd', activity.description)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_adding_a_subtask_creates_activity(self, browser):
@@ -418,6 +431,7 @@ class TestTaskActivites(FunctionalTestCase):
              ['Issuer', 'Boss Hugo (hugo.boss)'],
              ['Info at', '-']],
             [row.css('td').text for row in rows])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_adding_a_document_notifies_watchers(self, browser):
@@ -438,6 +452,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'transition-add-document', activity.kind)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_delegate_activity(self, browser):
@@ -466,6 +481,7 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Dossier XY - Abkl\xe4rung Fall Huber', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
+        self.assertEquals([], warning_messages())
 
 
 class TestTaskReassignActivity(IntegrationTestCase):
@@ -502,6 +518,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
                           u'J\xe4ger Herbert (herbert.jager)</a> by admin (admin)',
                           reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_reassign_message_does_not_include_user_when_he_is_old_responsible(self, browser):
@@ -524,6 +541,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
                           u'J\xe4ger Herbert (herbert.jager)</a>',
                           reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_notifies_old_and_new_responsible_and_issuer(self, browser):
@@ -539,6 +557,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
         self.assertItemsEqual(
             [old_responsible, self.task.responsible, self.task.issuer],
             [notes.userid for notes in reassign_activity.notifications])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):
@@ -552,6 +571,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
         self.assertItemsEqual(
             [(u'robert.ziegler', u'task_issuer'), (u'herbert.jager', TASK_RESPONSIBLE_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_handles_reassign_to_the_same_user_correctly(self, browser):
@@ -576,6 +596,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
             [(self.regular_user.id, TASK_RESPONSIBLE_ROLE),
              (self.dossier_responsible.id, TASK_ISSUER_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
+        self.assertEquals([], warning_messages())
 
     @browsing
     def test_notifies_only_new_responsible_per_mail(self, browser):
@@ -590,6 +611,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals(
             'herbert@jager.com', get_header(mail, 'To'))
+        self.assertEquals([], warning_messages())
 
 
 class TestTaskChangeIssuerActivity(IntegrationTestCase):
