@@ -3,6 +3,7 @@ from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transition import ITransitionExtender
 from opengever.base.transition import TransitionExtender
+from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _
 from opengever.task.activities import TaskAddedActivity
@@ -70,6 +71,20 @@ class INewDeadline(Schema):
     new_deadline = schema.Date(
         title=_(u"label_new_deadline", default=u"New Deadline"),
         required=True)
+
+
+class INewInformedPrincipals(Schema):
+
+    informed_principals = schema.List(
+        title=_(u"label_informed_principals", default=u"Info at"),
+        description=_(u"help_informed_principals", default=u""),
+        value_type=schema.Choice(
+            source=AllUsersAndGroupsSourceBinder(),
+            ),
+        required=False,
+        missing_value=[],
+        default=[]
+    )
 
 
 class INewResponsibleSchema(Schema):
@@ -329,7 +344,7 @@ class RejectTransitionExtender(DefaultTransitionExtender):
 @adapter(ITask, IBrowserRequest)
 class DelegateTransitionExtender(DefaultTransitionExtender):
 
-    schemas = [IUpdateMetadata, ISelectRecipientsSchema]
+    schemas = [IUpdateMetadata, ISelectRecipientsSchema, INewInformedPrincipals]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
         create_subtasks(self.context,
