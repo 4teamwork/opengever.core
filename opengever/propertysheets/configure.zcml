@@ -60,4 +60,15 @@
       template="templates/propertysheet.pt"
       />
 
+  <adapter
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           ftw.solr.interfaces.ISolrConnectionManager"
+      factory=".solr.DossierIndexHandler"
+      />
+  <adapter
+      for="opengever.document.behaviors.IBaseDocument
+           ftw.solr.interfaces.ISolrConnectionManager"
+      factory=".solr.DocumentIndexHandler"
+      />
+
 </configure>
