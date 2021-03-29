@@ -11,13 +11,13 @@ class TestSchemaDefinitionDelete(IntegrationTestCase):
     def test_property_sheet_schema_definition_delete_existing_schema(self, browser):
         self.login(self.manager, browser)
         create(Builder("property_sheet_schema").named("sheet"))
-        self.assertEqual(3, len(PropertySheetSchemaStorage()))
+        self.assertEqual(4, len(PropertySheetSchemaStorage()))
 
         browser.open(
             view="@propertysheets/sheet", method="DELETE", headers=self.api_headers
         )
         self.assertEqual(browser.status_code, 204)
-        self.assertEqual(2, len(PropertySheetSchemaStorage()))
+        self.assertEqual(3, len(PropertySheetSchemaStorage()))
 
     @browsing
     def test_property_sheet_schema_definition_delete_requires_name(

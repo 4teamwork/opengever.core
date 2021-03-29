@@ -37,8 +37,9 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             {
                 u"@id": u"http://nohost/plone/@propertysheets",
                 u"items": [
-                    {u"@id": u"http://nohost/plone/@propertysheets/schema1"},
                     {u"@id": u"http://nohost/plone/@propertysheets/schema2"},
+                    {u"@id": u"http://nohost/plone/@propertysheets/schema1"},
+                    {u"@id": u"http://nohost/plone/@propertysheets/dossier_default"},
                 ],
             },
             browser.json,

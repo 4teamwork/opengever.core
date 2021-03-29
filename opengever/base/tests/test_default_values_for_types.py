@@ -14,6 +14,7 @@ from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import fake_interaction
+from persistent.mapping import PersistentMapping
 from plone import api
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.utils import createContentInContainer
@@ -546,9 +547,14 @@ class TestDefaultsBase(IntegrationTestCase):
         expected_with_type = dict(
             (key, (val, type(val))) for key, val in expected.items()
         )
-        actual_with_type = dict(
-            (key, (val, type(val))) for key, val in actual.items()
-        )
+
+        actual_with_type = {}
+        for key, val in actual.items():
+            if type(val) == PersistentMapping:
+                # Handle persistent mappings as dicts for comparison
+                actual_with_type[key] = (val, dict)
+            else:
+                actual_with_type[key] = (val, type(val))
 
         self.assertDictEqual(expected_with_type, actual_with_type)
 
@@ -813,6 +819,9 @@ class TestDossierDefaults(TestDefaultsBase):
         # XXX: Don't know why this happens
         expected.pop('public_trial_statement')
 
+        # ignore custom_properties
+        persisted_values['custom_properties'] = None
+
         self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
@@ -869,6 +878,9 @@ class TestDossierDefaults(TestDefaultsBase):
 
         # XXX: Don't know why this happens
         expected.pop('public_trial_statement')
+
+        # ignore custom_properties
+        persisted_values['custom_properties'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 

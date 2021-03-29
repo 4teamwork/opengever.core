@@ -513,6 +513,13 @@ class OpengeverContentFixture(object):
             .assigned_to_slots(u"IDocumentMetadata.document_type.directive")
             .with_field("textline", u"textline", u"A line of text", u"", False)
         )
+        create(
+            Builder("property_sheet_schema")
+            .named("dossier_default")
+            .assigned_to_slots(u"IDossier.default")
+            .with_field("textline", u"additional_title",
+                        u"Additional dossier title", u"", False)
+        )
 
     @staticuid()
     def create_repository_tree(self):
