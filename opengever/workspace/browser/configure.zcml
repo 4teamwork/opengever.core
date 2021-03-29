@@ -78,6 +78,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="download_ical"
+      for="opengever.workspace.interfaces.IWorkspaceMeeting"
+      class=".meeting_ical.MeetingICalExportView"
+      permission="zope2.View"
+      />
+
   <!-- WorkspaceRoot add form: only show translated title fields for active languages  -->
   <adapter
       factory=".forms.WorkspaceRootAddView"
