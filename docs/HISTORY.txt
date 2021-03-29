@@ -4,6 +4,7 @@ Changelog
 2021.7.0 (unreleased)
 ---------------------
 
+- When delegating tasks via API, informed_principals can be set. [tinagerber]
 - Add a new field `attendees` for workspace meetings. [elioschmutz]
 - Dispatch notification for documents added to tasks. [lgraf]
 - Introduce a new field dossier_type and customproperty slots for dossiers. [phgross]

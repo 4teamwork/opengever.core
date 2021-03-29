@@ -9,7 +9,8 @@ API Changelog
 Other Changes
 ^^^^^^^^^^^^^
 
-- ``@solrsearch``: Add ``group_by_type`` paramerter (see :ref:`group-by-type`)
+- ``@workflow/task-transition-delegate``: Allow to set ``informed_principals``.
+- ``@solrsearch``: Add ``group_by_type`` parameter (see :ref:`group-by-type`)
 - ``@listing``: Add ``repository_folders`` and ``template_folders`` listing (see :ref:`docs <listing-names>`)
 - ``@listing`` endpoint whitelists the ``id`` field.
 - The endpoint ``@trigger-task-template`` supports overriding ``title`` and ``text`` for each task (see :ref:`trigger_task_template` for updated examples).

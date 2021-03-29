@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
+from opengever.activity.model import Activity
 from opengever.base.response import IResponseContainer
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
@@ -461,6 +462,34 @@ class TestAPITransitions(IntegrationTestCase):
                               [task.responsible for task in tasks])
         self.assertEqual(["Neuer Aufgaben Titel", "Neuer Aufgaben Titel"],
                          [task.title for task in tasks])
+
+    @browsing
+    def test_delegate_a_task_notifies_informed_principals(self, browser):
+        self.activate_feature('activity')
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+
+        url = '{}/@workflow/task-transition-delegate'.format(
+            self.subtask.absolute_url())
+
+        data = {"title": "Neuer Aufgaben Titel",
+                "responsibles": ["fa:{}".format(self.meeting_user.id)],
+                "issuer": self.dossier_responsible.id,
+                "informed_principals": [self.administrator.id, self.archivist.id],
+                "deadline": "2018-12-03"}
+
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        activity = Activity.query.one()
+        self.assertEqual('task-added', activity.kind)
+        self.assertEqual(4, len(activity.notifications))
+        self.assertItemsEqual([
+            self.administrator.id,
+            self.archivist.id,
+            self.dossier_responsible.id,
+            self.meeting_user.id],
+          [notification.userid for notification in activity.notifications])
 
     @browsing
     def test_skip_rejected(self, browser):
