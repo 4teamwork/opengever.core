@@ -2,18 +2,18 @@ from ftw.table import helper
 from opengever.base.schema import TableChoice
 from opengever.base.source import DossierPathSourceBinder
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.meeting import _
-from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
+from opengever.meeting import _, is_meeting_feature_enabled
+from opengever.meeting.activity.watchers import \
+    change_watcher_on_proposal_edited
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.utils import is_docx
-from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.officeconnector.helpers import \
+    is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform import directives as form
-from plone.dexterity.browser.add import DefaultAddForm
-from plone.dexterity.browser.add import DefaultAddView
+from plone.dexterity.browser.add import DefaultAddForm, DefaultAddView
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.supermodel.model import Schema
@@ -22,20 +22,15 @@ from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser import radio
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
-from z3c.form.interfaces import HIDDEN_MODE
-from z3c.form.interfaces import INPUT_MODE
+from z3c.form.interfaces import HIDDEN_MODE, INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
 from zExceptions import Unauthorized
-from zope.component import adapter
-from zope.component import getMultiAdapter
+from zope.component import adapter, getMultiAdapter
 from zope.i18n import translate
-from zope.interface import Invalid
-from zope.interface import invariant
+from zope.interface import Invalid, invariant
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.schema import Bool
-from zope.schema import Choice
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema import Bool, Choice
+from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 
 
 class ProposalEditForm(DefaultEditForm):
@@ -270,8 +265,7 @@ class ProposalAddForm(DefaultAddForm):
 
         predecessor = uuidToObject(self.request.form['predecessor'])
         related_items_paths = []
-        excerpt = predecessor.get_excerpt()
-        if excerpt:
+        for excerpt in predecessor.get_excerpts():
             related_items_paths.append('/'.join(excerpt.getPhysicalPath()))
 
         related_items_paths.extend(
