@@ -374,6 +374,7 @@ DOSSIER_TEMPLATE_DEFAULTS = {
 DOSSIER_TEMPLATE_FORM_DEFAULTS = {
 }
 DOSSIER_TEMPLATE_MISSING_VALUES = {
+    'dossier_type': None,
     'comments': None,
     'filing_prefix': None,
 }
