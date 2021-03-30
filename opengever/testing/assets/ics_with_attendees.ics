@@ -8,6 +8,7 @@ ATTENDEE;CN="Fröhlich Günther";ROLE=REQ-PARTICIPANT:MAILTO:gunther.frohl
  ich@gever.local
 ATTENDEE;CN="Peter Hans";ROLE=REQ-PARTICIPANT:MAILTO:hans.peter@gever.loca
  l
+DESCRIPTION:https://meet.example.org/1234
 LOCATION:Sitzungszimmer 352\, Südweststrasse\, 3000 Bern
 ORGANIZER;CN="Schrödinger Béatrice":MAILTO:beatrice.schrodinger@gever.lo
  cal

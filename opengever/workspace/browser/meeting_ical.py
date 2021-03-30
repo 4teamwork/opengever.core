@@ -27,6 +27,7 @@ class MeetingICalExportView(BrowserView):
         self.add_organizer(event)
         self.add_location(event)
         self.add_attendees(event)
+        self.add_videoconferencing_url(event)
 
         cal.add_component(event)
 
@@ -57,3 +58,7 @@ class MeetingICalExportView(BrowserView):
             attendee.params['cn'] = vText(user.fullname())
             attendee.params['ROLE'] = vText('REQ-PARTICIPANT')
             event.add('attendee', attendee, encode=0)
+
+    def add_videoconferencing_url(self, event):
+        if self.context.videoconferencing_url:
+            event.add('description', self.context.videoconferencing_url)
