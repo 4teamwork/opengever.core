@@ -1,3 +1,4 @@
+from dateutil import tz
 from icalendar import Calendar
 from icalendar import Event
 from icalendar import vCalAddress
@@ -15,9 +16,11 @@ class MeetingICalExportView(BrowserView):
         event = Event()
 
         event.add('summary', self.context.title)
-        event.add('dtstart', self.context.start)
+
+        event.add(
+            'dtstart', self.context.start.replace(tzinfo=tz.tzutc()))
         if self.context.end:
-            event.add('dtend', self.context.end)
+            event.add('dtend', self.context.end.replace(tzinfo=tz.tzutc()))
 
         event.add('dtstamp', self.context.created().asdatetime())
 
