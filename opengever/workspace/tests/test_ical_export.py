@@ -32,6 +32,7 @@ class TestMeetingMinutes(IntegrationTestCase):
         self.workspace_meeting.start = datetime(2021, 12, 8, 8, 30)
         self.workspace_meeting.end = datetime(2021, 12, 8, 10, 0)
         self.workspace_meeting.location = u'Sitzungszimmer 352, S\xfcdweststrasse, 3000 Bern'
+        self.workspace_meeting.videoconferencing_url = u'https://meet.example.org/1234'
         self.workspace_meeting.attendees = [
             self.workspace_owner.id, self.workspace_guest.id]
 

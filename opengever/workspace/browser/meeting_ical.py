@@ -1,3 +1,4 @@
+from dateutil import tz
 from icalendar import Calendar
 from icalendar import Event
 from icalendar import vCalAddress
@@ -15,15 +16,18 @@ class MeetingICalExportView(BrowserView):
         event = Event()
 
         event.add('summary', self.context.title)
-        event.add('dtstart', self.context.start)
+
+        event.add(
+            'dtstart', self.context.start.replace(tzinfo=tz.tzutc()))
         if self.context.end:
-            event.add('dtend', self.context.end)
+            event.add('dtend', self.context.end.replace(tzinfo=tz.tzutc()))
 
         event.add('dtstamp', self.context.created().asdatetime())
 
         self.add_organizer(event)
         self.add_location(event)
         self.add_attendees(event)
+        self.add_videoconferencing_url(event)
 
         cal.add_component(event)
 
@@ -54,3 +58,7 @@ class MeetingICalExportView(BrowserView):
             attendee.params['cn'] = vText(user.fullname())
             attendee.params['ROLE'] = vText('REQ-PARTICIPANT')
             event.add('attendee', attendee, encode=0)
+
+    def add_videoconferencing_url(self, event):
+        if self.context.videoconferencing_url:
+            event.add('description', self.context.videoconferencing_url)
