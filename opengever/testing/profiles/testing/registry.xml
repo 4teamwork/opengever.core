@@ -1,0 +1,5 @@
+<records interface="opengever.dossier.interfaces.IDossierType">
+  <value key="hidden_dossier_types">
+    <element>no_hidden_type</element>
+  </value>
+</records>
