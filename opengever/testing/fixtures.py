@@ -780,6 +780,7 @@ class OpengeverContentFixture(object):
                 'keywords': (u'secret', u'special'),
                 'comments': 'this is very special',
                 'filing_prefix': 'department',
+                'dossier_type': 'businesscase'
             })
             .within(self.templates)
         ))

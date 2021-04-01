@@ -177,6 +177,7 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Keywords',
             u'Prefill keywords',
             u'Restrict keywords',
+            u'Dossier type',
             u'Comments',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
@@ -194,6 +195,7 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Keywords',
             u'Prefill keywords',
             u'Restrict keywords',
+            u'Dossier type',
             u'Comments',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
@@ -391,6 +393,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.assertEqual((u'secret', u'special'), IDossier(dossier).keywords)
         self.assertEqual('this is very special', IDossier(dossier).comments)
         self.assertEqual('department', IDossier(dossier).filing_prefix)
+        self.assertEqual('businesscase', IDossier(dossier).dossier_type)
 
     @browsing
     def test_dossiertemplate_do_not_copy_keywords(self, browser):

@@ -83,6 +83,7 @@ class IDossierTemplate(model.Schema):
         label=base_mf(u'fieldset_common', default=u'Common'),
         fields=[
             u'keywords',
+            u'dossier_type',
             u'comments',
         ],
     )
@@ -97,6 +98,14 @@ class IDossierTemplate(model.Schema):
         required=False,
         missing_value=(),
         default=(),
+    )
+
+    dossier_type = schema.Choice(
+        title=_(u'label_dossier_type', default='Dossier type'),
+        source=wrap_vocabulary(
+            'opengever.dossier.dossier_types',
+            hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types'),
+        required=False,
     )
 
     comments = schema.Text(
