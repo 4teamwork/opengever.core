@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.7.0 (unreleased)
+2021.7.0 (2021-04-01)
 ---------------------
 
 - When delegating tasks via API, informed_principals can be set. [tinagerber]
