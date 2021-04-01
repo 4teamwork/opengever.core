@@ -3,7 +3,12 @@
 API Changelog
 =============
 
-2021.7.0 (unreleased)
+2021.8.0 (unreleased)
+---------------------
+
+- Nothing changed yet.
+
+2021.7.0 (2021-04-01)
 ---------------------
 
 Other Changes
