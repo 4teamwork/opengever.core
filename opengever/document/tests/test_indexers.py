@@ -5,6 +5,7 @@ from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.core.testing import COMPONENT_UNIT_TESTING
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
@@ -16,6 +17,7 @@ from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.interfaces import ISiteRoot
@@ -210,6 +212,63 @@ class TestDocumentIndexers(FunctionalTestCase):
     def test_metadata_contains_foreign_reference(self):
         doc = create(Builder("document").having(foreign_reference=u'Ref 123'))
         self.assertEqual(metadata(doc)(), 'Client1 / 1 Ref 123')
+
+    def test_metadata_contains_custom_properties_from_default_and_active_slot(self):
+        self.login(TEST_USER_NAME)
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("text", u"f1", u"Field 1", u"", False)
+        )
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.report")
+            .with_field("text", u"f1", u"Field 1", u"", False)
+        )
+        doc = create(Builder("document").having(document_type=u"question"))
+        IDocumentCustomProperties(doc).custom_properties = {
+            "IDocumentMetadata.document_type.question": {"f1": "indexme-question"},
+            "IDocumentMetadata.document_type.report": {"f1": "noindex-report"},
+            "IDocument.default": {"f1": "indexme-default"},
+        }
+        self.assertEqual(
+            metadata(doc)(),
+            'Client1 / 1 indexme-question indexme-default',
+        )
+
+    def test_metadata_with_custom_properties_for_all_field_types(self):
+        self.login(TEST_USER_NAME)
+
+        choices = ["rot", u"gr\xfcn", "blau"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", True)
+            .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("text", u"text", u"Some lines of text", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+        )
+        doc = create(Builder("document").having(document_type=u"question"))
+        IDocumentCustomProperties(doc).custom_properties = {
+            "IDocumentMetadata.document_type.question": {
+                "yesorno": False,
+                "choose": u"gr\xfcn",
+                "num": 122333,
+                "text": u"K\xe4fer\nJ\xe4ger",
+                "textline": u"Kr\xe4he",
+            },
+        }
+        indexed_value = metadata(doc)().decode('utf8')
+        self.assertIn(u"gr\xfcn", indexed_value)
+        self.assertIn(u"122333", indexed_value)
+        self.assertIn(u"K\xe4fer", indexed_value)
+        self.assertIn(u"J\xe4ger", indexed_value)
+        self.assertIn(u"Kr\xe4he", indexed_value)
 
 
 class SolrDocumentIndexer(SolrIntegrationTestCase):

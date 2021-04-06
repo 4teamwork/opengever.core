@@ -4,7 +4,9 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.utils import ensure_str
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -20,8 +22,8 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.schema import getFields
 import logging
-import os.path
 
 
 logger = logging.getLogger('opengever.document')
@@ -199,6 +201,17 @@ def metadata(obj):
         metadata.extend([k.encode('utf8') for k in doc_metadata.keywords])
     if doc_metadata.foreign_reference:
         metadata.append(doc_metadata.foreign_reference.encode('utf8'))
+
+    custom_properties = IDocumentCustomProperties(obj).custom_properties
+    if custom_properties:
+        field = getFields(IDocumentCustomProperties).get('custom_properties')
+        active_slot = field.get_active_assignment_slot(obj)
+        for slot in [active_slot, field.default_slot]:
+            metadata.extend([
+                ensure_str(value) for value
+                in custom_properties.get(slot, {}).values()
+                if not isinstance(value, bool)
+            ])
 
     return ' '.join(metadata)
 
