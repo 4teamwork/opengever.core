@@ -6,6 +6,7 @@ Changelog
 
 - Add dossier_type field for dossiertemplates. [phgross]
 - Index custom properties in searchable text. [buchi]
+- Index custom properties in Solr dynamic fields. [buchi]
 
 
 2021.7.0 (2021-04-01)

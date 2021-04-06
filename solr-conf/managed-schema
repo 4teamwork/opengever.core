@@ -182,6 +182,10 @@
     <copyField source="path" dest="path_parent"/>
     <copyField source="sequence_number" dest="sequence_number_string"/>
 
+    <dynamicField name="*_custom_field_string" type="string" indexed="true" stored="false"/>
+    <dynamicField name="*_custom_field_int" type="pint" indexed="true" stored="false"/>
+    <dynamicField name="*_custom_field_boolean" type="boolean" indexed="true" stored="false"/>
+
     <dynamicField name="ignored_*" type="ignored"/>
 
     <!-- Field to use to determine and enforce document uniqueness.
