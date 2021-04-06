@@ -416,7 +416,7 @@ msgstr "Rôles"
 #: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
-msgstr "Titre"
+msgstr "Formule de salutation"
 
 #. Default: "Sequence Number"
 #: ./opengever/contact/browser/byline.py
