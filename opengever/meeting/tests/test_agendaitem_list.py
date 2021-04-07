@@ -149,7 +149,7 @@ class TestAgendaItemList(IntegrationTestCase):
              u'description': u'F\xfcr weitere Bearbeitung bewilligen'},
             {u'decision_number': None,
              u'description': None,
-             u'dossier_reference_number': None,
+             u'dossier_reference_number': u'Client1 1.1 / 6',
              u'is_paragraph': False,
              u'number': '2.',
              u'number_raw': 2,

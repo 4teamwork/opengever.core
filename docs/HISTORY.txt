@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Fix broken task template responsibles [elioschmutz]
+- Provide dossier_reference_number mergefield value also for ad-hoc proposals. [phgross]
 - Add dossier_type field for dossiertemplates. [phgross]
 - Index custom properties in searchable text. [buchi]
 - Index custom properties in Solr dynamic fields. [buchi]

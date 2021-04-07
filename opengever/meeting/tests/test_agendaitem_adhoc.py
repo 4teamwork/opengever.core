@@ -306,3 +306,11 @@ class TestAdHocAgendaItem(IntegrationTestCase):
         self.assertIn(
             'href="{}"'.format(excerpt.absolute_url()),
             excerpt_links[0]['link'])
+
+    @browsing
+    def test_dossier_reference_number_is_meeting_dossiers_reference_number(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
+
+        self.assertEquals('Client1 1.1 / 6',
+                          agenda_item.get_dossier_reference_number())

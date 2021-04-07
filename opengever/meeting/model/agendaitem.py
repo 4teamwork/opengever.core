@@ -7,6 +7,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import to_html_xweb_intelligent
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.dossier.utils import get_main_dossier
 from opengever.meeting import _
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
@@ -184,6 +185,11 @@ class AgendaItem(Base):
     def get_dossier_reference_number(self):
         if self.has_proposal:
             return self.proposal.dossier_reference_number
+
+        if self.ad_hoc_document_int_id:
+            dossier = get_main_dossier(self.resolve_document())
+            return dossier.get_reference_number()
+
         return None
 
     def get_excerpt_header_template(self):
