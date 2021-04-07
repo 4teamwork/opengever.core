@@ -365,9 +365,9 @@ class TestOpengeverSharing(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         group = api.group.get('rk_inbox_users')
-        group.setGroupProperties({'description': 'grouptest'})
+        group.setGroupProperties({'description': 'K%C3%B6nizer Schulen'})
 
-        browser.open(self.empty_dossier, view='@sharing?search=grouptest',
+        browser.open(self.empty_dossier, view='@sharing?search=K%C3%B6niz',
                      method='Get', headers={'Accept': 'application/json'})
 
         self.assertNotIn('rk_inbox_users',
@@ -377,7 +377,7 @@ class TestOpengeverSharing(IntegrationTestCase):
             name='group_title_ldap_attribute',
             value=u'description', interface=IOGDSSyncConfiguration)
 
-        browser.open(self.empty_dossier, view='@sharing?search=grouptest',
+        browser.open(self.empty_dossier, view='@sharing?search=K%C3%B6niz',
                      method='Get', headers={'Accept': 'application/json'})
 
         self.assertIn('rk_inbox_users',
