@@ -1,10 +1,11 @@
+from opengever.base.utils import unrestrictedUuidToObject
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.subscribers import resolve_document_author
 from opengever.mail.exceptions import SourceMailNotFound
 from opengever.mail.interfaces import IExtractedFromMail
 from opengever.mail.mail import IOGMailMarker
-from opengever.base.utils import unrestrictedUuidToObject
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.interface import noLongerProvides
 
 
@@ -23,6 +24,13 @@ def resolve_mail_author(mail, event):
 
 
 def extracted_attachment_deleted(doc, event):
+    # Skip plone site removals. Unfortunately no deletion-order seems to be
+    # guaranteed, when removing the plone site, so unexpected behaviors can
+    # happen, notably that doc will not provide IRelatedDocuments anymore and
+    # hence cannot be adapted.
+    if IPloneSiteRoot.providedBy(event.object):
+        return
+
     uid = IUUID(doc)
     for related_item in IRelatedDocuments(doc).relatedItems:
         related_obj = related_item.to_object
@@ -44,6 +52,12 @@ def mail_deleted(doc, event):
     interface. This interface should be removed if the corresponding mail
     is deleted.
     """
+    # Skip plone site removals. Unfortunately no deletion-order seems to be
+    # guaranteed, when removing the plone site, so unexpected behaviors can
+    # happen.
+    if IPloneSiteRoot.providedBy(event.object):
+        return
+
     for info in doc.get_attachments():
         if not info.get('extracted'):
             continue
