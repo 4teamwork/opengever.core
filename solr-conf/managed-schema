@@ -128,6 +128,7 @@
     <field name="is_folderish" type="boolean" indexed="true" stored="true"/>
 
     <!-- GEVER specific fields -->
+    <field name="attendees" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="blocked_local_roles" type="boolean" indexed="true" stored="false" />
     <field name="bumblebee_checksum" type="string" indexed="false" stored="false" />
     <field name="changed" type="pdate" indexed="true" stored="false" />
