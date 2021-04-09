@@ -484,6 +484,41 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals([], warning_messages())
 
 
+class TestTaskActivityIntegration(IntegrationTestCase):
+
+    features = ('activity', )
+
+    @browsing
+    def test_removes_old_group_responsibles_from_watchers_list_if_accepting_team_task(self, browser):
+        self.login(self.manager)
+        team_task = create(Builder('task')
+                           .having(responsible_client='fa',
+                                   responsible='team:1',
+                                   issuer=self.meeting_user.id,
+                                   task_type='correction')
+                           .within(self.dossier))
+
+        resource = notification_center().fetch_resource(team_task)
+        create_session().refresh(resource)
+        subscriptions = resource.subscriptions
+
+        self.assertItemsEqual(
+            [(u'team:1', TASK_RESPONSIBLE_ROLE), (u'herbert.jager', TASK_ISSUER_ROLE)],
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
+
+        self.login(self.regular_user, browser)
+        url = '/'.join((team_task.absolute_url(), '@workflow', 'task-transition-open-in-progress'))
+        browser.open(url, headers=self.api_headers, method='POST')
+
+        create_session().refresh(resource)
+        subscriptions = resource.subscriptions
+
+        self.assertItemsEqual(
+            [(u'kathi.barfuss', TASK_RESPONSIBLE_ROLE), (u'herbert.jager', TASK_ISSUER_ROLE)],
+            [(sub.watcher.actorid, sub.role) for sub in subscriptions])
+        self.assertEquals([], warning_messages())
+
+
 class TestTaskReassignActivity(IntegrationTestCase):
 
     features = ('activity', )

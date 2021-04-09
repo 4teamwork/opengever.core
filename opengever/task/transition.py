@@ -189,7 +189,13 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
 
     def reassign_team_task(self, response):
         old_responsible = ITask(self.context).responsible
-        ITask(self.context).responsible = api.user.get_current().getId()
+        current_user_id = api.user.get_current().getId()
+
+        center = notification_center()
+        center.add_task_responsible(self.context, current_user_id)
+        center.remove_task_responsible(self.context, old_responsible)
+
+        ITask(self.context).responsible = current_user_id
         response.add_change(
             'responsible',
             old_responsible, ITask(self.context).responsible,

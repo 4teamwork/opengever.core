@@ -7,6 +7,7 @@ Changelog
 - Fix broken task template responsibles [elioschmutz]
 - Provide dossier_reference_number mergefield value also for ad-hoc proposals. [phgross]
 - Fix plone site deletion by skipping certain event handlers. [njohner]
+- Properly reset the responsible watcher if a user accepts a task assigned to a team. [elioschmutz]
 - Add dossier_type field for dossiertemplates. [phgross]
 - Index custom properties in searchable text. [buchi]
 - Index custom properties in Solr dynamic fields. [buchi]
