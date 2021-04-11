@@ -57,7 +57,12 @@ def configure_ldap_credentials(context):
                         if ILDAPMultiPlugin.providedBy(obj)]
     for ldap_plugin in ldap_plugins:
         ldap_uf = ldap_plugin.acl_users
-        server = ldap_uf.getServers()[0]
+        servers = ldap_uf.getServers()
+        if not servers:
+            # Probably a policyless deployment
+            continue
+
+        server = servers[0]
         hostname = server['host']
 
         credentials = get_ldap_credentials(hostname)
@@ -65,15 +70,7 @@ def configure_ldap_credentials(context):
             binduid = credentials[ldap_plugin.id]['user'].encode('utf-8')
             bindpwd = credentials[ldap_plugin.id]['password'].encode('utf-8')
 
-            # Update username and password on the LDAPUserFolder
-            ldap_uf._binduid = binduid
-            ldap_uf._bindpwd = bindpwd
-            ldap_uf.binduid_usage = 1
-
-            # Update username and password on the currently active LDAP connection
-            ldap_uf._delegate.binduid_usage = 1
-            ldap_uf._delegate.bind_dn = binduid
-            ldap_uf._delegate.bind_pwd = bindpwd
+            update_credentials(ldap_uf, binduid, bindpwd)
 
             logger.info("Sucessfully configured LDAP credentials for '%s' (%s)." % (
                 ldap_plugin.id,
@@ -83,3 +80,15 @@ def configure_ldap_credentials(context):
             logger.warn("No LDAP credentials file found for '%s' (%s)! "
                         "Make sure '%s' exists and has the proper format." % (
                         ldap_plugin.id, hostname, creds_file_path))
+
+
+def update_credentials(ldap_uf, binduid, bindpwd):
+    # Update username and password on the LDAPUserFolder
+    ldap_uf._binduid = binduid
+    ldap_uf._bindpwd = bindpwd
+    ldap_uf.binduid_usage = 1
+
+    # Update username and password on the currently active LDAP connection
+    ldap_uf._delegate.binduid_usage = 1
+    ldap_uf._delegate.bind_dn = binduid
+    ldap_uf._delegate.bind_pwd = bindpwd
