@@ -53,7 +53,7 @@ class TestPersonalOverview(IntegrationTestCase):
 
         browser.open(view='personal_overview')
 
-        self.assertEquals(
+        self.assertEqual(
             u'Personal Overview: B\xe4rfuss K\xe4thi',
             browser.css('h1.documentFirstHeading').first.text,
         )
@@ -259,7 +259,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             for row in browser.css('.listing').first.dicts()
             ]
 
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertEqual(expected_tasks, found_tasks)
 
     @browsing
     def test_my_tasks_list_task_issued_by_the_current_user(self, browser):
@@ -276,7 +276,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u're: Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertEqual(expected_tasks, found_tasks)
         self.task.get_sql_object().issuer = 'kathi.barfuss'
         browser.open(view='tabbedview_view-myissuedtasks')
         expected_tasks = [
@@ -289,7 +289,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u're: Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertEqual(expected_tasks, found_tasks)
 
     @browsing
     def test_all_task_list_all_task_assigned_to_current_org_unit(self, browser):
