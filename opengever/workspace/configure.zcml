@@ -86,6 +86,11 @@
       />
 
   <adapter
+      factory=".indexers.attendees"
+      name="attendees"
+      />
+
+  <adapter
       factory=".indexers.WorkspaceMeetingSearchableTextExtender"
       name="IWorkspaceMeeting"
       />

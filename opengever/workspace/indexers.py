@@ -60,3 +60,8 @@ class WorkspaceMeetingSearchableTextExtender(object):
                  in INDEXED_IN_MEETING_SEARCHABLE_TEXT])
 
         return ' '.join(filter(None, searchable))
+
+
+@indexer(IWorkspaceMeeting)
+def attendees(obj):
+    return obj.attendees
