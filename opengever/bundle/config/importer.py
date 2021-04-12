@@ -1,7 +1,10 @@
+from opengever.base.casauth import build_cas_server_url
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.setup.creation.adminunit import AdminUnitCreator
 from opengever.setup.creation.orgunit import OrgUnitCreator
+from opengever.setup.deploy import POLICYLESS_SITE_ID
 from opengever.setup.ldap_creds import get_ldap_credentials
 from opengever.setup.ldap_creds import update_credentials
 from plone import api
@@ -33,6 +36,7 @@ class ConfigImporter(object):
         self.development_mode = development_mode
         self.import_ldap_settings()
         self.import_units()
+        self.update_casauth_settings()
         self.import_registry_settings()
         return True
 
@@ -66,6 +70,33 @@ class ConfigImporter(object):
             is_development=self.development_mode,
             is_policyless=True,
             skip_if_exists=self.allow_skip_units).run(org_units)
+
+    def update_casauth_settings(self):
+        """Update cas_auth plugin settings now that the admin unit exists.
+
+        Because the cas_auth plugin was installed during Plone site creation
+        when no admin unit exists yet in policyless mode, its configuration
+        needs updating.
+        """
+        au = get_current_admin_unit()
+        if au.public_url == 'http://localhost:8080/%s' % POLICYLESS_SITE_ID:
+            # Local development - no rewrite rules, use local Ianus
+            cas_server_url = 'http://localhost:8081/cas'
+        else:
+            # Update placeholder URL with real one based on admin unit
+            cas_server_url = build_cas_server_url('portal/cas')
+
+        self.portal.acl_users.cas_auth.cas_server_url = cas_server_url
+
+        # Rename session cookie
+        # During Plone site creation, this will have been suffixed with the
+        # Plone site ID. Because that's going to be the same for every
+        # deployment in a multi-admin-unit policyless cluster, we rename it
+        # (again) to suffix it with the admin unit ID, which would be unique.
+        plugin = api.portal.get_tool('acl_users')['session']
+        plugin.manage_changeProperties({
+            'cookie_name': '__ac_' + au.id().replace('-', '_'),
+        })
 
     def import_registry_settings(self):
         registry = getUtility(IRegistry)

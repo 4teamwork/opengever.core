@@ -13,6 +13,7 @@
       title="Policyless Deployment"
       policy_profile="opengever.setup.policyless:default"
       is_policyless="True"
+      additional_profiles="opengever.setup:casauth_ianus_portal"
       />
 
   <opengever:registerLDAP

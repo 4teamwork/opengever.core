@@ -19,6 +19,10 @@ def get_cluster_base_url():
     """
     admin_unit = get_current_admin_unit()
 
+    if admin_unit is None:
+        # Policyless deployment - cas_url will be set via bundle config
+        return 'http://NOT-CONFIGURED-YET.local/'
+
     base_url = admin_unit.public_url
     if not base_url.endswith('/'):
         base_url = base_url + '/'
