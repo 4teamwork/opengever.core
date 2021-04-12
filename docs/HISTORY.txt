@@ -4,6 +4,9 @@ Changelog
 2021.9.0 (unreleased)
 ---------------------
 
+- Add policyless deployment. [lgraf]
+- Add TTW bundle import. [lgraf]
+- Add support for configuration import via bundle. [lgraf]
 - API: Reject years before 1900 for date and datetime fields. [lgraf]
 
 
