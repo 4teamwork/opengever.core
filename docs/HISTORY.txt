@@ -4,6 +4,7 @@ Changelog
 2021.7.1 (unreleased)
 ---------------------
 
+- Remove daterange restriction in spv meeting end date. [elioschmutz]
 - Add attendees solr index for workspace meetings. [tinagerber]
 - Fix broken task template responsibles [elioschmutz]
 - Provide dossier_reference_number mergefield value also for ad-hoc proposals. [phgross]
