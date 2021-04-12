@@ -154,7 +154,9 @@ class GeverDeployment(object):
                 pass
 
     def sync_ogds(self):
-        if not self.has_ogds_sync:
+        if not self.has_ogds_sync or self.is_policyless:
+            # TODO: Disable "Sync OGDS" checkbox in setup form for policyless
+            # deployments, since it won't have an effect.
             return
 
         print '===== SYNC LDAP ===='
