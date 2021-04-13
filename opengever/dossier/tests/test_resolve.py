@@ -1481,8 +1481,9 @@ class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
             self.assertFalse(api.user.has_permission('View', obj=workspace_without_view_permission))
             self.resolve(self.dossier, browser)
             self.assert_not_resolved(self.dossier)
-            self.assert_errors(self.dossier, browser,
-                               ['Not all linked workspaces are accessible by the current user.'])
+            self.assert_errors(
+                self.dossier, browser,
+                [u'You can\'t close the dossier because you do not have access to all its linked workspaces.'])
 
     @browsing
     def test_dossier_is_resolved_when_no_workspace_is_linked(self, browser):

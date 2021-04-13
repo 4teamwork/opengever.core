@@ -50,7 +50,7 @@ msgstr "Seuls les objets de dossiers actifs peuvent être déplacés!"
 
 #: ./opengever/dossier/behaviors/customproperties.py
 msgid "Custom properties"
-msgstr ""
+msgstr "Champs personnalisés"
 
 #: ./opengever/dossier/browser/overview.py
 msgid "Description"
@@ -124,7 +124,7 @@ msgstr "Aucun sous-dossier"
 #: ./opengever/dossier/deactivate.py
 #: ./opengever/dossier/resolve.py
 msgid "Not all linked workspaces are accessible by the current user."
-msgstr ""
+msgstr "Vous ne pouvez pas clôturer le dossier, parce que vous n'avez opas accès à tous les espaces de travail liés."
 
 #: ./opengever/dossier/resolve.py
 msgid "Not all linked workspaces are deactivated."
@@ -632,7 +632,7 @@ msgstr "Modèles de dossier"
 #. Default: "Dossier type"
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "label_dossier_type"
-msgstr ""
+msgstr "Type de dossier"
 
 #. Default: "Edit after creation"
 #: ./opengever/dossier/templatefolder/form.py
