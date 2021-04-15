@@ -6,7 +6,11 @@ API Changelog
 2021.8.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+- Deserialization: Years before 1900 will now get rejected for date and datetime fields.
+
 
 2021.7.0 (2021-04-01)
 ---------------------

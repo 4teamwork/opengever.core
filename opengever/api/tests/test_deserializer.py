@@ -1,8 +1,9 @@
+from base64 import b64encode
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-import os
-from base64 import b64encode
 from opengever.testing.assets import path_to_asset
+import json
+import os
 
 
 def _base64_str(s):
@@ -223,3 +224,60 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
         self.assertEqual('ftw.mail.mail', uploaded_mail.portal_type)
         self.assertEqual(file_size, uploaded_mail.get_file().size)
         self.assertIsNone(uploaded_mail.original_message)
+
+
+class TestDatetimeDeserialization(IntegrationTestCase):
+
+    @browsing
+    def test_date_field_deserializer_rejects_year_before_1900(self, browser):
+        self.login(self.regular_user, browser)
+        browser.raise_http_errors = False
+
+        response = browser.open(
+            self.document.absolute_url(),
+            method='PATCH',
+            headers=self.api_headers,
+            data=json.dumps({'document_date': '1700-01-01'})
+        )
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual('BadRequest', response.json['type'])
+        self.assertIn("'field': 'document_date'", response.json['message'])
+        self.assertIn("'year=1700 is invalid. Year must be >= 1900.'",
+                      response.json['message'])
+
+        response = browser.open(
+            self.document,
+            method='PATCH',
+            headers=self.api_headers,
+            data=json.dumps({'document_date': '1900-01-01'})
+        )
+
+        self.assertEqual(204, response.status_code)
+
+    @browsing
+    def test_datetime_field_deserializer_rejects_year_before_1900(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.raise_http_errors = False
+
+        response = browser.open(
+            self.workspace_meeting,
+            method='PATCH',
+            headers=self.api_headers,
+            data=json.dumps({'start': '1700-01-01 13:45:00'})
+        )
+
+        self.assertEqual(400, response.status_code)
+        self.assertEqual('BadRequest', response.json['type'])
+        self.assertIn("'field': 'start'", response.json['message'])
+        self.assertIn("'year=1700 is invalid. Year must be >= 1900.'",
+                      response.json['message'])
+
+        response = browser.open(
+            self.workspace_meeting,
+            method='PATCH',
+            headers=self.api_headers,
+            data=json.dumps({'start': '1900-01-01 13:45:00'})
+        )
+
+        self.assertEqual(204, response.status_code)
