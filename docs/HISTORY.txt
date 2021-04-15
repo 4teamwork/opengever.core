@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.7.1 (unreleased)
+2021.8.0 (2021-04-15)
 ---------------------
 
 - Remove daterange restriction in spv meeting end date. [elioschmutz]
