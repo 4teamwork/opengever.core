@@ -4,6 +4,6 @@
       <element value="Topic" />
       <element value="Topic" />
     </property>
-    <property name="default_language" type="string">de</property>
+    <property name="default_language" type="string">de-ch</property>
   </object>
 </object>
