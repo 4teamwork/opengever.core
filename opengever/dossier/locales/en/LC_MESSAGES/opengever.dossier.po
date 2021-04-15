@@ -150,7 +150,7 @@ msgstr "No subdossiers"
 #: ./opengever/dossier/deactivate.py
 #: ./opengever/dossier/resolve.py
 msgid "Not all linked workspaces are accessible by the current user."
-msgstr ""
+msgstr "You can't close the dossier because you do not have access to all its linked workspaces."
 
 #. German translation: Nicht alle verlinkten Teamräume sind deaktiviert.
 #: ./opengever/dossier/resolve.py

@@ -435,7 +435,7 @@ msgstr "Workspace Meeting"
 #: ./opengever/core/profiles/default/types/opengever.workspace.meetingagendaitem.xml
 #: ./opengever/core/upgrades/20210303112038_install_workspace_meeting_agenda_item_type/types/opengever.workspace.meetingagendaitem.xml
 msgid "WorkspaceMeetingAgendaItem"
-msgstr ""
+msgstr "Agenda item"
 
 #. German translation: Teamräume
 #: ./opengever/core/profiles/default/types/opengever.workspace.root.xml

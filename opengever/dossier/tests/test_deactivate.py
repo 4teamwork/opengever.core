@@ -251,8 +251,9 @@ class TestDossierDeactivationWithWorkspaceClientFeatureEnabled(FunctionalWorkspa
             self.assertFalse(api.user.has_permission('View', obj=workspace_without_view_permission))
             self.deactivate_dossier(self.dossier, browser)
             self.assert_not_deactivated(self.dossier)
-            self.assert_errors(self.dossier, browser,
-                               [u'Not all linked workspaces are accessible by the current user.'])
+            self.assert_errors(
+                self.dossier, browser,
+                [u'You can\'t close the dossier because you do not have access to all its linked workspaces.'])
 
     @browsing
     def test_dossier_is_deactivated_when_no_workspace_is_linked(self, browser):
