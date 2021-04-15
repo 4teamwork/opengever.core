@@ -65,28 +65,26 @@ class ImportBundleForm(AutoExtensibleForm, Form):
             allow_skip_units=data['allow_skip_units'])
         result = importer.run(development_mode=data['development_mode'])
 
-        bundle_dir = mkdtemp(prefix='ttw-bundle-', suffix='.oggbundle')
-        for filename, uploaded_file in uploaded_files.items():
-            tmp_filename = pjoin(bundle_dir, filename)
-            with open(tmp_filename, 'w') as tmp_file:
-                tmp_file.write(uploaded_file['data'])
+        with TempBundleDir() as bundle_dir:
+            for filename, uploaded_file in uploaded_files.items():
+                bundle_dir.save(uploaded_file, filename)
 
-        bundle_importer = BundleImporter(
-            self.context,
-            bundle_dir,
-            disable_ldap=True,
-            create_guid_index=True,
-            no_intermediate_commits=True,
-            possibly_unpatch_collective_indexing=False,
-            no_separate_connection_for_sequence_numbers=False,
-        )
-        bundle_importer.run()
+            bundle_importer = BundleImporter(
+                self.context,
+                bundle_dir.path,
+                disable_ldap=True,
+                create_guid_index=True,
+                no_intermediate_commits=True,
+                possibly_unpatch_collective_indexing=False,
+                no_separate_connection_for_sequence_numbers=False,
+            )
+            bundle_importer.run()
 
-        log.info("Committing transaction...")
-        transaction.get().note(
-            "Finished import of OGGBundle %r" % bundle_dir)
-        transaction.commit()
-        log.info("Done.")
+            log.info("Committing transaction...")
+            transaction.get().note(
+                "Finished import of OGGBundle %r" % bundle_dir.path)
+            transaction.commit()
+            log.info("Done.")
 
         if result is not None:
             self._finished = True
@@ -107,3 +105,22 @@ class ImportBundleForm(AutoExtensibleForm, Form):
             return self.request.response.redirect(self.next_url())
 
         return self.index()
+
+
+class TempBundleDir(object):
+
+    def __enter__(self):
+        self.path = mkdtemp(prefix='ttw-bundle-', suffix='.oggbundle')
+        self.manifest = []
+        return self
+
+    def save(self, uploaded_file, filename):
+        tmp_filename = pjoin(self.path, filename)
+        self.manifest.append(tmp_filename)
+        with open(tmp_filename, 'w') as tmp_file:
+            tmp_file.write(uploaded_file['data'])
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        for file_path in self.manifest:
+            os.remove(file_path)
+        os.rmdir(self.path)
