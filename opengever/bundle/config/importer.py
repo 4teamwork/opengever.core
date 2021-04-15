@@ -177,7 +177,7 @@ class LDAPSettingsImporter(object):
 
             uf._setProperty(key, value)
 
-        sync_ogds(self.portal)
+        sync_ogds(self.portal, update_remote_timestamps=False)
 
     def configure_bind_credentials(self, uf, ldap_config, host):
         """Determine and set LDAP credentials.
