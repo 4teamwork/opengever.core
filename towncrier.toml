@@ -2,7 +2,6 @@
 package = "opengever.core"
 filename = "docs/HISTORY.txt"
 directory = "changes/"
-title_format = "{version} ({project_date})"
 template = "towncrier.rst"
 underlines = ["-", ""]
 
