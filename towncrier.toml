@@ -1,6 +1,6 @@
 [tool.towncrier]
 package = "opengever.core"
-filename = "docs/HISTORY.txt"
+filename = "HISTORY.rst"
 directory = "changes/"
 template = "towncrier.rst"
 underlines = ["-", ""]
