@@ -238,6 +238,20 @@ class TestWorkflowResponseSyncerSender(FunctionalTestCase):
             [task.get_sql_object()],
             sender.get_related_tasks_to_sync(transition='task-transition-reassign'))
 
+    def test_in_progress_to_close_is_synced(self):
+        task = create(Builder('task')
+                      .having(task_type='direct-execution')
+                      .in_state('task-state-in-progress'))
+        successor = create(Builder('task')
+                           .having(task_type='direct-execution')
+                           .in_state('task-state-in-progress')
+                           .successor_from(task))
+
+        sender = WorkflowResponseSyncerSender(successor, self.request)
+        self.assertEqual(
+            [task.get_sql_object()],
+            sender.get_related_tasks_to_sync(transition='task-transition-in-progress-tested-and-closed'))
+
 
 class TestModifyDeadlineResponseSyncerSender(FunctionalTestCase):
 

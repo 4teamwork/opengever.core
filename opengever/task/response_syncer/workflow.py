@@ -34,6 +34,7 @@ class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
     def _is_synced_transition(self, transition):
         return transition in [
             'task-transition-in-progress-resolved',
+            'task-transition-in-progress-tested-and-closed',
             'task-transition-resolved-in-progress',
             'task-transition-resolved-tested-and-closed',
             'task-transition-reassign',
