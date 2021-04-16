@@ -488,36 +488,26 @@ development environments. Please refer to http://bundler.io/ for more details.
 Updating the history file
 -------------------------
 
-The ``docs/HISTORY.txt`` file is a hotspot for git merge conflicts.
-In order to reduce merge conflicts we use the git union merge strategy for
-auto-resolving merge conflicts.
-For this to work smoothly developmers must follow theese rules when adding
-changelog entries:
+The history file is generated automatically from files in the ``changes``
+directory using towncrier when making a release with ``zest.releaser``.
+For this you must have installed the ``zestreleaser.towncrier`` plugin.
 
-1. Always add a new entry at the top of the ``unreleased`` section.
-2. Add your ``[name]`` onto the *same line*, it should never be on a standalone
-   line, otherwise it might be deleted by the union merge.
-3. Do *not* insert any empty lines.
-4. Avoid nested lists in your entry, because it makes auto-merging brittle.
-   It is better to add each change as a separate changelog entry and prefix
-   them, as shown below (see `Feature x`).
-   If you must use nested lists, make sure to add an empty line before and
-   after the list.
-5. You *must rebase* when you do not "make the release", so that your entry is
-   not added to an already released section. Git cannot resolve that.
+To preview the generated history file you can run:
 
-Example:
+.. code::
 
-.. code:: rst
+    towncrier build --draft --version <version-number>
 
-    17.12.72 (unreleased)
-    ---------------------
+To add a changelog entry, create a file in the ``changes`` directory using the
+issue/ticket number as filename and add one of ``.feature``, ``.bugfix``,
+``.other`` as extension to signify the change type (e.g. 6968.feature).
 
-    - Fix critical bug. [Susanne]
-    - Lots of changes after a lot of time. [Fritz]
-    - Update translations. [Fritz]
-    - Feature x: implement new things. [Susanne]
-    - Feature x: fix bug. [Susanne]
+The file should just contain the text describing your change followed by your
+Github username in brackets. Example:
+
+.. code::
+
+    Fix critical bug. [Susanne]
 
 
 Updating API docs
