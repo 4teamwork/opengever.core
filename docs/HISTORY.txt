@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - API: Reject years before 1900 for date and datetime fields. [lgraf]
+- Bump psutil version for compatibility with BigSur. [njohner]
 
 
 2021.8.0 (2021-04-15)
