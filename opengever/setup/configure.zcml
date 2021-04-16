@@ -8,6 +8,7 @@
   <include package=".creation" />
   <include file="profiles.zcml" />
   <include package=".upgrades" />
+  <include package=".policyless" />
   <include file="transmogrifier.zcml" />
 
 </configure>

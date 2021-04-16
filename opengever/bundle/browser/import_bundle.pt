@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.bundle">
+<body>
+
+<metal:main fill-slot="main">
+
+<h1 class="documentFirstHeading">Import GEVER Bundle</h1>
+
+    <h2>Configuration</h2>
+
+    <div id="content-core">
+        <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
+    </div>
+
+</metal:main>
+
+</body>
+</html>

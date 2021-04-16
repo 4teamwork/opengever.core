@@ -1,0 +1,85 @@
+[
+  {
+    "guid": "aed9f3db7b3b4713b61a7d7295362ea4",
+    "parent_guid": "e3718c24d4284b319639057187d86c0e",
+    "archival_value": "prompt",
+    "custody_period": 100,
+    "classification": "confidential",
+    "description": "",
+    "former_reference": "",
+    "privacy_layer": "privacy_layer_yes",
+    "public_trial": "private",
+    "public_trial_statement": "Enthält vertrauliche Personaldossiers.",
+    "reference_number_prefix": "3",
+    "referenced_activity": "",
+    "retention_period": 10,
+    "retention_period_annotation": "",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Personal",
+    "title_fr": "Personnel",
+    "valid_from": "2005-01-01",
+    "valid_until": "2050-01-01",
+    "_permissions": {
+      "block_inheritance": true,
+      "read": [
+        "gever_admins"
+      ],
+      "add": [
+        "gever_admins"
+      ],
+      "edit": [
+        "gever_admins"
+      ],
+      "close": [
+        "gever_admins"
+      ],
+      "reactivate": [
+        "gever_admins"
+      ],
+      "manage_dossiers": [
+        "gever_admins"
+      ]
+    }
+  }, {
+    "guid": "xed7f3db7b3b4713b61a7d729536abcd",
+    "parent_guid": "e3718c24d4284b319639057187d86c0e",
+    "custody_period": 30,
+    "description": "",
+    "former_reference": "",
+    "privacy_layer": "privacy_layer_no",
+    "public_trial": "unchecked",
+    "public_trial_statement": "",
+    "reference_number_prefix": "0",
+    "referenced_activity": "",
+    "retention_period": 5,
+    "retention_period_annotation": "",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Organigramm, Prozesse",
+    "title_en": "Organigrams and processes",
+    "valid_from": "2005-01-01",
+    "valid_until": "2020-01-01"
+  }, {
+    "guid": "e3718c24d4284b319639057187d86c0e",
+    "parent_guid": "754daf80623f45659004a8c38c78dc3e",
+    "archival_value": "unchecked",
+    "archival_value_annotation": "",
+    "classification": "unprotected",
+    "custody_period": 30,
+    "date_of_cassation": "2016-10-1",
+    "date_of_submission": "2016-10-2",
+    "description": "",
+    "location": "Aktenschrank 123",
+    "privacy_layer": "privacy_layer_no",
+    "public_trial": "unchecked",
+    "public_trial_statement": "",
+    "reference_number_prefix": "0",
+    "referenced_activity": "",
+    "retention_period": 5,
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Organisation",
+    "title_fr": "Organisation",
+    "title_en": "Organisation",
+    "valid_from": "2005-01-01",
+    "valid_until": "2030-01-01"
+  }
+]

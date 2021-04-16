@@ -141,7 +141,10 @@
 
     <div id="setup-completed">
         Setup successful!
-        <a href="#">open deployment ...</a>
+        <a class="open-deployment" href="#">open deployment ...</a><br/>
+        For policyless setup style, continue with
+        <a href="http://localhost:8080/ogsite/@@import-bundle">OGGBundle Import</a>
     </div>
+
   </body>
 </html>

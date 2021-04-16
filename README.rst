@@ -1306,6 +1306,60 @@ LDAP profiles can be selected in the setup wizard. They are used to install an L
 
 See https://github.com/4teamwork/opengever.core/blob/master/opengever/setup/meta.py for a list of all possible options.
 
+Policyless Deployments
+^^^^^^^^^^^^^^^^^^^^^^
+
+For policyless deployments, the Plone site can be created with a stock profile, and most settings and content will be set up in a second step, via the import of a Bundle with a ``configuration.json``.
+
+Select "Policyless Deployment" and "Policyless LDAP" on the setup screen to create a minimal policyless Plone site. OGDS sync will not be performed yet during Plone site creation, since LDAP settings will be imported later.
+
+Then, using the ``@@import-bundle`` view, import a Bundle containing the appropriate content as well as a ``configuration.json``.
+
+LDAP credentials can be specified via the classic ``~/.opengever/ldap/<hostname>.json``, or through environment variables ``PLONE_LDAP_BIND_UID`` and ``PLONE_LDAP_BIND_PWD`` (these always take precedence, if set). These credentials will be read and configured once during the import of the bundle configuration.
+
+Example for a ``configuration.json``:
+
+.. code:: json
+
+    {
+      "units": {
+        "admin_units": [
+          {
+            "unit_id": "musterstadt",
+            "title": "Musterstadt",
+            "ip_address": "127.0.0.1",
+            "site_url": "http://localhost:8080/ogsite",
+            "public_url": "http://localhost:8080/ogsite",
+            "abbreviation": "MS"
+          }
+        ],
+        "org_units": [
+          {
+            "unit_id": "musterstadt",
+            "title": "Musterstadt",
+            "admin_unit_id": "musterstadt",
+            "users_group_id": "users_group",
+            "inbox_group_id": "inbox_group"
+          }
+        ]
+      },
+      "registry": {
+        "opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled": true
+      },
+      "ldap": {
+        "users_base": "ou=Users,dc=example,dc=org",
+        "groups_base": "ou=Groups,dc=example,dc=org",
+        "servers": [
+            {
+                "host": "ldap.example.org",
+                "protocol": "ldaps",
+                "port": 636,
+                "conn_timeout": 5,
+                "op_timeout": -1
+            }
+        ]
+      }
+    }
 
 Content creation
 ~~~~~~~~~~~~~~~~

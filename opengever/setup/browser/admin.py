@@ -182,7 +182,7 @@ class CreateDeployment(BrowserView):
             '<script type="text/javascript">'
             '    var iframe = $("#deploy-output", window.parent.document);'
             '    iframe.contents().scrollTop(iframe.contents().height());'
-            '    $("#setup-completed a", window.parent.document)'
+            '    $("#setup-completed a.open-deployment", window.parent.document)'
             '        .attr("href", "{}")'
             '        .html("Open deployment {}");'
             '    $("#setup-completed", window.parent.document).show();'

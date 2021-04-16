@@ -44,7 +44,8 @@ logger = logging.getLogger('opengever.ogds.base')
 logger.setLevel(logging.INFO)
 
 
-def sync_ogds(plone, users=True, groups=True, local_groups=False):
+def sync_ogds(plone, users=True, groups=True, local_groups=False,
+              update_remote_timestamps=True):
     """Syncronize OGDS users and groups by importing users, groups and
     group membership information from LDAP into the respective OGDS SQL tables.
 
@@ -81,8 +82,9 @@ def sync_ogds(plone, users=True, groups=True, local_groups=False):
     elapsed = time.time() - start
     logger.info(u"Done in {:0.1f} seconds.".format(elapsed))
 
-    logger.info(u"Updating LDAP SYNC importstamp...")
-    set_remote_import_stamp(plone)
+    if update_remote_timestamps:
+        logger.info(u"Updating LDAP SYNC importstamp...")
+        set_remote_import_stamp(plone)
 
     logger.info(u"Synchronization Done.")
 

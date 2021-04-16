@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <include file="widget.zcml" />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="import-bundle"
+      class=".import_bundle.ImportBundleForm"
+      permission="zope2.ViewManagementScreens"
+      template="import_bundle.pt"
+      />
+
+</configure>

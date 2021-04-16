@@ -3,6 +3,7 @@ from opengever.setup import DEVELOPMENT_IP_ADDRESS
 from opengever.setup import DEVELOPMENT_SERVER_HOSTNAME
 from opengever.setup import DEVELOPMENT_SERVER_PORT
 from opengever.setup.creation.unit import UnitCreator
+from opengever.setup.deploy import POLICYLESS_SITE_ID
 
 
 class AdminUnitCreator(UnitCreator):
@@ -13,10 +14,14 @@ class AdminUnitCreator(UnitCreator):
                            'public_url', 'abbreviation')
 
     def apply_development_config(self, item):
-        admin_unit_id = item['unit_id']
+        if self.is_policyless:
+            plone_site_id = POLICYLESS_SITE_ID
+        else:
+            plone_site_id = item['unit_id']
+
         url = 'http://{}:{}/{}'.format(DEVELOPMENT_SERVER_HOSTNAME,
                                        DEVELOPMENT_SERVER_PORT,
-                                       admin_unit_id)
+                                       plone_site_id)
         item['site_url'] = url
         item['public_url'] = url
         item['ip_address'] = DEVELOPMENT_IP_ADDRESS

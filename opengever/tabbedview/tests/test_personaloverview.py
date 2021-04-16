@@ -2,7 +2,10 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 class TestPersonalOverview(IntegrationTestCase):
@@ -35,10 +38,25 @@ class TestPersonalOverview(IntegrationTestCase):
 
         browser.open(view='personal_overview')
 
-        self.assertEquals(
+        self.assertEqual(
             u'Personal Overview: B\xe4rfuss K\xe4thi',
             browser.css('h1.documentFirstHeading').first.text,
             )
+
+    @browsing
+    def test_personal_overview_doesnt_fail_when_missing_admin_unit(self, browser):
+        registry = getUtility(IRegistry)
+        config = registry.forInterface(IAdminUnitConfiguration)
+        config.current_unit_id = None
+
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='personal_overview')
+
+        self.assertEqual(
+            u'Personal Overview: B\xe4rfuss K\xe4thi',
+            browser.css('h1.documentFirstHeading').first.text,
+        )
 
     @browsing
     def test_additional_tabs_are_shown_for_admins(self, browser):
@@ -241,7 +259,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             for row in browser.css('.listing').first.dicts()
             ]
 
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertEqual(expected_tasks, found_tasks)
 
     @browsing
     def test_my_tasks_list_task_issued_by_the_current_user(self, browser):
@@ -258,7 +276,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u're: Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertEqual(expected_tasks, found_tasks)
         self.task.get_sql_object().issuer = 'kathi.barfuss'
         browser.open(view='tabbedview_view-myissuedtasks')
         expected_tasks = [
@@ -271,7 +289,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u're: Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertEqual(expected_tasks, found_tasks)
 
     @browsing
     def test_all_task_list_all_task_assigned_to_current_org_unit(self, browser):

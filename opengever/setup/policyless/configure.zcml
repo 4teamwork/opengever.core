@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:opengever="http://namespaces.zope.org/opengever"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    i18n_domain="opengever.setup">
+
+  <include package="ftw.profilehook" />
+
+  <opengever:registerDeployment
+      title="Policyless Deployment"
+      policy_profile="opengever.setup.policyless:default"
+      is_policyless="True"
+      additional_profiles="opengever.setup:casauth_ianus_portal"
+      />
+
+  <opengever:registerLDAP
+      title="Policyless LDAP"
+      ldap_profile="opengever.setup.policyless:policyless-ldap"
+      />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.setup.policyless: default"
+      directory="profiles/default"
+      description="Policyless default profile"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="policyless-ldap"
+      title="opengever.setup.policyless: Policyless LDAP"
+      directory="profiles/policyless-ldap"
+      description="Policyless LDAP configuration"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>

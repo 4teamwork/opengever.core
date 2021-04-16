@@ -1,0 +1,28 @@
+[
+  {
+    "guid": "754daf80623f45659004a8c38c78dc3e",
+    "review_state": "repositoryroot-state-active",
+    "title_de": "Ordnungssystem",
+    "title_fr": "Système de classement",
+    "valid_from": "2000-01-01",
+    "valid_until": "2099-12-31",
+    "version": "",
+    "_permissions": {
+      "read": [
+        "og_demo-ftw_users"
+      ],
+      "add": [
+        "og_demo-ftw_users"
+      ],
+      "edit": [
+        "og_demo-ftw_users"
+      ],
+      "close": [
+        "og_demo-ftw_users"
+      ],
+      "reactivate": [
+        "gever_admins"
+      ]
+    }
+  }
+]
