@@ -1,0 +1,23 @@
+[tool.towncrier]
+package = "opengever.core"
+filename = "docs/HISTORY.txt"
+directory = "changes/"
+title_format = "{version} ({project_date})"
+template = "towncrier.rst"
+underlines = ["-", ""]
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "New features:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bug fixes:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "other"
+name = "Other changes:"
+showcontent = true
+
