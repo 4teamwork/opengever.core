@@ -1,17 +1,12 @@
 Changelog
 =========
 
-2021.9.0 (unreleased)
----------------------
+.. You should *NOT* be adding new change log entries to this file.
+   Create a file in the changes directory instead. Use the issue/ticket number
+   as filename and add one of .feature, .bugfix, .other as extension to signify
+   the change type (e.g. 6968.feature).
 
-- Fix in-progress to close transition (API), for multi adminunit tasks. [phgross]
-- Add is_remote_task to task serialization. [njohner]
-- Add policyless deployment. [lgraf]
-- Add TTW bundle import. [lgraf]
-- Add support for configuration import via bundle. [lgraf]
-- API: Reject years before 1900 for date and datetime fields. [lgraf]
-- Bump psutil version for compatibility with BigSur. [njohner]
-
+.. towncrier release notes start
 
 2021.8.0 (2021-04-15)
 ---------------------

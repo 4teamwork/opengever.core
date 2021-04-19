@@ -1,0 +1,22 @@
+[tool.towncrier]
+package = "opengever.core"
+filename = "HISTORY.rst"
+directory = "changes/"
+template = "towncrier.rst"
+underlines = ["-", ""]
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "New features:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bug fixes:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "other"
+name = "Other changes:"
+showcontent = true
+
