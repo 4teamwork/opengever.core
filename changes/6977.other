@@ -1,1 +1,1 @@
-Add is_remote_task to task serialization. [njohner]
+Add is_remote_task and responsible_admin_unit_url to task serialization. [njohner]
