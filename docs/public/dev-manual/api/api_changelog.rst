@@ -11,6 +11,11 @@ Breaking Changes
 
 - Deserialization: Years before 1900 will now get rejected for date and datetime fields.
 
+Other Changes
+^^^^^^^^^^^^^
+
+- Task serialization now also returns is_remote_task.
+
 
 2021.7.0 (2021-04-01)
 ---------------------

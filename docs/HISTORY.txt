@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Fix in-progress to close transition (API), for multi adminunit tasks. [phgross]
+- Add is_remote_task to task serialization. [njohner]
 - Add policyless deployment. [lgraf]
 - Add TTW bundle import. [lgraf]
 - Add support for configuration import via bundle. [lgraf]
