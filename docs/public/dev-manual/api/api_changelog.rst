@@ -14,7 +14,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
-- Task serialization now also returns is_remote_task.
+- Task serialization now also returns is_remote_task and responsible_admin_unit_url.
 
 
 2021.7.0 (2021-04-01)
