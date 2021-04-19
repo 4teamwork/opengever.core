@@ -3,6 +3,14 @@
 API Changelog
 =============
 
+2021.5.2 (unreleased)
+---------------------
+
+
+Other Changes
+^^^^^^^^^^^^^
+
+- Task serialization now also returns is_remote_task.
 
 
 2021.5.0 (unreleased)

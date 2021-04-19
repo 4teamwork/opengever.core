@@ -5,6 +5,67 @@ Changelog
 ---------------------
 
 - Fix in-progress to close transition (API), for multi adminunit tasks. [phgross]
+- Add is_remote_task to task serialization. [njohner]
+- Add policyless deployment. [lgraf]
+- Add TTW bundle import. [lgraf]
+- Add support for configuration import via bundle. [lgraf]
+- API: Reject years before 1900 for date and datetime fields. [lgraf]
+- Bump psutil version for compatibility with BigSur. [njohner]
+
+
+2021.8.0 (2021-04-15)
+---------------------
+
+- Remove daterange restriction in spv meeting end date. [elioschmutz]
+- Add attendees solr index for workspace meetings. [tinagerber]
+- Fix broken task template responsibles [elioschmutz]
+- Provide dossier_reference_number mergefield value also for ad-hoc proposals. [phgross]
+- Fix plone site deletion by skipping certain event handlers. [njohner]
+- Properly reset the responsible watcher if a user accepts a task assigned to a team. [elioschmutz]
+- Add dossier_type field for dossiertemplates. [phgross]
+- Index custom properties in searchable text. [buchi]
+- Index custom properties in Solr dynamic fields. [buchi]
+
+
+2021.7.0 (2021-04-01)
+---------------------
+
+- When delegating tasks via API, informed_principals can be set. [tinagerber]
+- Add a new field `attendees` for workspace meetings. [elioschmutz]
+- Dispatch notification for documents added to tasks. [lgraf]
+- Introduce a new field dossier_type and customproperty slots for dossiers. [phgross]
+- Add ICal export view and download action for workspace meetings. [phgross]
+- Introduce customproperties default slots which is enabled for every document. [phgross]
+- No longer fail during deployment if ldap is not in authentication plugins. [njohner]
+- Add id field to the @listing endpoint. [elioschmutz]
+- Add action to download meeting minutes as PDF. [buchi]
+- Allow overriding task and subtask title and text in `@trigger-task-template` endpoint. [deiferni]
+- Implement group_by_type parameter in @solrsearch endpoint. [tinagerber]
+- Add repository_folders and template_folders to @listing endpoint. [tinagerber]
+- Fix oc_checkout endpoint to work with shadow documents that don't have a content-type. [buchi]
+
+
+2021.6.0 (2021-03-18)
+---------------------
+
+- Remove Disqus from the documentation. [njohner]
+- Exclude opengever.workspace.meetingagendaitem from search results. [njohner]
+- Index agenda items in the workspace meeting searchable text. [njohner]
+- Show add_task_from_document action also for documents within tasks. [tinagerber]
+- Add containing_subdossier_url to document serializer. [tinagerber]
+- Implement a new content-type: opengever.workspace.meetingagendaitem. [elioschmutz]
+- Create initial version upon checkin. [njohner]
+- Add edit_items folder action. [tinagerber]
+- Update .gitignore of policytemplates for deployment on CentOS 8. [njohner]
+- Change p7m extension to eml (or extension configured in the registry) in mail download. [njohner]
+- Fixed automatic start of a next task inside a sequential task process. [phgross]
+- Only show "add task to process" link, if next task is not yet started. [phgross]
+- Fix adding sequential task process on first position. [phgross]
+- Filter out folder_delete folder button in @actions on repofolders. [njohner]
+- Filter out trash and untrash folder buttons in @actions on repository root and folders. [njohner]
+- Don't resolve or deactivate a dossier if it has linked workspaces without view permission. [elioschmutz]
+- Reset value of NamedFileWidget in DocumentAddForm when validation fails. [njohner]
+- When filtering by responsible in globalindex also return tasks assigned to a team the responsible belongs to. [buchi]
 
 
 2021.5.1 (2021-03-09)
