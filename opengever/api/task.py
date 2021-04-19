@@ -40,7 +40,10 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
         result = super(SerializeTaskToJson, self).__call__(*args, **kwargs)
         result[u'containing_dossier'] = self._get_containing_dossier_summary()
         result[u'sequence_type'] = self._get_sequence_type()
-        result[u'is_remote_task'] = self.context.get_sql_object().is_remote_task
+
+        model = self.context.get_sql_object()
+        result[u'is_remote_task'] = model.is_remote_task
+        result[u'responsible_admin_unit_url'] = model.get_assigned_org_unit().admin_unit.public_url
         return result
 
     def _get_containing_dossier_summary(self):

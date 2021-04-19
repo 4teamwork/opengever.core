@@ -10,7 +10,7 @@ API Changelog
 Other Changes
 ^^^^^^^^^^^^^
 
-- Task serialization now also returns is_remote_task.
+- Task serialization now also returns is_remote_task and responsible_admin_unit_url.
 
 
 2021.5.0 (unreleased)
