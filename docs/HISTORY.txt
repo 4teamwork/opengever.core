@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.5.2 (unreleased)
+2021.5.2 (2021-04-20)
 ---------------------
 
 - Fix in-progress to close transition (API), for multi adminunit tasks. [phgross]
