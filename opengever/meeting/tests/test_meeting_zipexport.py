@@ -2,14 +2,11 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
-from ftw.testing import freeze
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.testing import IntegrationTestCase
 from opengever.testing import set_preferred_language
-from opengever.testing.helpers import localized_datetime
 from StringIO import StringIO
-import json
 
 
 class TestMeetingZipExportView(IntegrationTestCase):
@@ -39,35 +36,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
                       zip_file.namelist())
 
     @browsing
-    def test_zip_export_meeting_json_includes_agenda_item_list(self, browser):
-        self.login(self.committee_responsible, browser)
-
-        with freeze(localized_datetime(2017, 12, 13)):
-            self.generate_agenda_item_list(self.meeting)
-
-        self.assertTrue(self.meeting.model.has_agendaitem_list_document())
-
-        browser.open(self.meeting, view='export-meeting-zip')
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-
-        meeting_json = json.loads(zip_file.open('meeting.json').read())
-        meeting = meeting_json.get('meetings')[0]
-
-        self.assertIn('documents', meeting)
-
-        agenda_item_list = meeting.get('documents')
-
-        self.assertEqual(1, len(agenda_item_list))
-        self.assertDictEqual(
-            {
-                u'checksum': agenda_item_list[0].get('checksum'),
-                u'file': u'Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx',
-                u'modified': u'2017-12-13T00:00:00+01:00',
-                u'title': u'Agendaitem list-9. Sitzung der Rechnungspr\xfcfungskommission',
-            },
-            agenda_item_list[0])
-
-    @browsing
     def test_zip_export_agenda_items_attachments(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
@@ -93,8 +61,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.assertItemsEqual(
             ['Traktandum 1/Vertraege.docx',
              'Traktandum 1/Beilage/1_Vertraegsentwurf.docx',
-             'Traktandum 1/Beilage/2_Uebersicht der Vertraege von 2016.xlsx',
-             'meeting.json'],
+             'Traktandum 1/Beilage/2_Uebersicht der Vertraege von 2016.xlsx'],
             zip_file.namelist())
 
     @browsing
@@ -121,8 +88,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertItemsEqual(
             ['Traktandum 1/Beilage/1_Vertraegsentwurf.docx',
-             'Traktandum 1/Vertraege.docx',
-             'meeting.json'],
+             'Traktandum 1/Vertraege.docx'],
             zip_file.namelist())
 
     @browsing
@@ -166,116 +132,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.assertEquals('application/zip', browser.contenttype)
 
     @browsing
-    def test_exported_meeting_contains_json(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.meeting, view='export-meeting-zip')
-        self.assertEquals('application/zip', browser.contenttype)
-
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertEquals(
-            ['meeting.json'],
-            zip_file.namelist())
-
-    @browsing
-    def test_exported_meeting_json_has_correct_file_names(self, browser):
-        set_preferred_language(self.portal.REQUEST, 'de-ch')
-        browser.append_request_header('Accept-Language', 'de-ch')
-        self.login(self.committee_responsible, browser)
-
-        self.meeting.model.title = u'9. Sitzung der Rechnungspr\xfcfungs' \
-                                   u'kommission, ordentlich'
-        self.schedule_paragraph(self.meeting, u'A Gesch\xfcfte')
-        with freeze(localized_datetime(2017, 12, 13)):
-            self.schedule_ad_hoc(
-                self.meeting, u'Ad-hoc Traktand\xfem'
-            ).decide()
-        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
-        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
-        with freeze(localized_datetime(2017, 12, 14)):
-            self.generate_agenda_item_list(self.meeting)
-            self.meeting.model.close()
-
-        browser.open(self.meeting, view='export-meeting-zip')
-        self.assertEquals('application/zip', browser.contenttype)
-
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-
-        meeting_json = json.loads(zip_file.read('meeting.json'))
-
-        # the protocol and agenda_item_list are generated during the tests and
-        # their checksums cannot be predicted
-        meeting_json['meetings'][0]['protocol']['checksum'] = 'unpredictable'
-        meeting_json['meetings'][0]['documents'][0]['checksum'] = 'unpredictable'
-        meeting_json['meetings'][0].pop('opengever_id')
-        for agenda_item in meeting_json['meetings'][0]['agenda_items']:
-            agenda_item.pop('opengever_id')
-
-        expected_meeting_json = {
-            u'meetings': [{
-                u'agenda_items': [
-                    {u'sort_order': 1, u'title': u'A Gesch\xfcfte'},
-                    {
-                        u'number': u'1.',
-                        u'number_raw': 1,
-                        u'proposal': {
-                            u'checksum': u'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                            u'file': u'Traktandum 1/Ad-hoc Traktandthm.docx',
-                            u'modified': u'2017-12-13T00:00:00+01:00',
-                        },
-                        u'sort_order': 2,
-                        u'title': u'Ad-hoc Traktand\xfem',
-                    },
-                    {
-                        u'attachments': [{
-                            u'checksum': u'51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
-                            u'file': u'Traktandum 2/Beilage/1_Vertraegsentwurf.docx',
-                            u'modified': u'2016-08-31T16:09:33+02:00',
-                            u'title': u'Vertr\xe4gsentwurf',
-                        }],
-                        u'number': u'2.',
-                        u'number_raw': 2,
-                        u'proposal': {
-                            u'checksum': u'114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
-                            u'file': u'Traktandum 2/Vertraege.docx',
-                            u'modified': u'2016-08-31T16:09:33+02:00',
-                        },
-                        u'sort_order': 3,
-                        u'title': u'Vertr\xe4ge',
-                    },
-                ],
-                u'committee': {u'oguid': u'plone:1010073300', u'title': u'Rechnungspr\xfcfungskommission'},
-                u'end': u'2016-09-12T17:00:00+00:00',
-                u'location': u'B\xfcren an der Aare',
-                u'protocol': {
-                    u'checksum': 'unpredictable',
-                    u'file': u'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
-                    u'modified': u'2017-12-14T00:00:00+01:00',
-                },
-                u'documents': [{
-                    u'checksum': 'unpredictable',
-                    u'file': u'Traktandenliste-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
-                    u'modified': u'2017-12-14T00:00:00+01:00',
-                    u'title': u'Traktandenliste-9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich',
-                }],
-                u'start': u'2016-09-12T15:30:00+00:00',
-                u'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich',
-            }],
-            u'version': u'1.0.0',
-        }
-        self.assert_json_structure_equal(expected_meeting_json, meeting_json)
-
-        expected_file_names = [
-            'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
-            'Traktandenliste-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
-            'Traktandum 1/Ad-hoc Traktandthm.docx',
-            'Traktandum 2/Beilage/1_Vertraegsentwurf.docx',
-            'Traktandum 2/Vertraege.docx',
-            'meeting.json',
-            ]
-        file_names = sorted(zip_file.namelist())
-        self.assertEqual(expected_file_names, file_names)
-
-    @browsing
     def test_filename_conflicts_are_avoided_by_prefixing_attachment_number(self, browser):
         set_preferred_language(self.portal.REQUEST, 'de-ch')
         browser.append_request_header('Accept-Language', 'de-ch')
@@ -297,17 +153,11 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.open(self.meeting, view='export-meeting-zip')
         self.assertEquals('application/zip', browser.contenttype)
         zip_file = ZipFile(StringIO(browser.contents), 'r')
-        meeting_json = json.loads(zip_file.read('meeting.json'))
 
         expected_file_names = [u'Traktandum 1/Beilage/1_The same title.doc',
                                u'Traktandum 1/Beilage/2_The same title.doc',
-                               u'Traktandum 1/Beilage/3_The same title.doc']
-        json_file_names = [attachment.get("file") for attachment in
-                           meeting_json["meetings"][0]['agenda_items'][0]["attachments"]]
-
-        self.assertItemsEqual(expected_file_names, json_file_names)
-
-        expected_file_names.extend(['meeting.json', 'Traktandum 1/Fooo.docx'])
+                               u'Traktandum 1/Beilage/3_The same title.doc',
+                               u'Traktandum 1/Fooo.docx']
 
         file_names = zip_file.namelist()
         self.assertItemsEqual(expected_file_names, file_names)

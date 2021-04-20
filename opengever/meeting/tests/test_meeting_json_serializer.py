@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import freeze
 from opengever.meeting.zipexport import MeetingDocumentZipper
 from opengever.meeting.zipexport import MeetingJSONSerializer
@@ -62,3 +64,33 @@ class TestMeetingJSONSerializer(IntegrationTestCase):
         }
 
         self.assertEquals(expected_agenda_items, serializer.data)
+
+    def test_filename_conflicts_are_avoided_by_prefixing_attachment_number(self):
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
+        self.login(self.committee_responsible)
+
+        documents = [
+            create(Builder('document')
+                   .within(self.dossier)
+                   .titled('The same title')
+                   .with_dummy_content())
+            for i in range(3)]
+        proposal, submitted_proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(committee=self.committee.load_model())
+                          .with_submitted()
+                          .relate_to(*documents))
+        self.schedule_proposal(self.meeting, submitted_proposal)
+
+        serializer = MeetingJSONSerializer(
+            self.meeting.model,
+            MeetingDocumentZipper(self.meeting.model, None))
+        serializer.traverse()
+
+        expected_file_names = [u'Traktandum 1/Beilage/1_The same title.doc',
+                               u'Traktandum 1/Beilage/2_The same title.doc',
+                               u'Traktandum 1/Beilage/3_The same title.doc']
+        json_file_names = [attachment.get("file") for attachment in
+                           serializer.data['agenda_items'][0]["attachments"]]
+
+        self.assertItemsEqual(expected_file_names, json_file_names)
