@@ -107,16 +107,6 @@ class TestPrivateDossierTabbedView(IntegrationTestCase):
              'Resolve'],
             editbar.menu_options("Actions"))
 
-    @browsing
-    def test_participation_and_task_box_are_hidden_on_overview(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.private_dossier, view='tabbedview_view-overview')
-
-        self.assertEquals(
-            ['Dossier structure', 'Comments', 'Linked dossiers',
-             'Newest documents', 'Description', 'Keywords'],
-            browser.css('.box h2').text)
-
     def test_columns_are_hidden_in_documents_tab(self):
         """Some columns do not make a lot of sense in a private dossier.
         We hide them in the default configuration.
@@ -130,6 +120,19 @@ class TestPrivateDossierTabbedView(IntegrationTestCase):
         self.assertTrue(columns_by_name['public_trial'].get('hidden', None))
         self.assertTrue(columns_by_name['receipt_date'].get('hidden', None))
         self.assertTrue(columns_by_name['delivery_date'].get('hidden', None))
+
+
+class TestPrivateDossierTabbedViewSolr(SolrIntegrationTestCase):
+
+    @browsing
+    def test_participation_and_task_box_are_hidden_on_overview(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.private_dossier, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['Dossier structure', 'Comments', 'Linked dossiers',
+             'Newest documents', 'Description', 'Keywords'],
+            browser.css('.box h2').text)
 
 
 class TestPrivateDossierWorkflow(IntegrationTestCase):
