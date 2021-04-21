@@ -229,3 +229,131 @@ class TestHistoryGetEndpointForDocuments(IntegrationTestCase):
             headers=self.api_headers
         )
         self.assertEqual([], browser.json)
+
+
+class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
+
+    @browsing
+    def test_ensures_document_creator_as_creator_of_initial_version(self, browser):
+        self.login(self.regular_user, browser)
+        create_document_version(self.document, 0)
+        versioner = Versioner(self.document)
+
+        self.assertEqual(self.document.Creator(), u'robert.ziegler')
+        self.assertEqual(0, versioner.get_current_version_id())
+        self.assertEqual(
+            'kathi.barfuss',
+            versioner.get_version_metadata(0)['sys_metadata']['principal'])
+
+        browser.open(self.document,
+                     view='@versions',
+                     method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        versions = browser.json["items"]
+        self.assertEqual(1, len(versions))
+        version = browser.json["items"][0]
+        self.assertEqual(0, version[u'version'])
+        self.assertEqual(u'robert.ziegler', version['actor']['identifier'])
+
+    @browsing
+    def test_endpoint_is_batched(self, browser):
+        self.login(self.regular_user, browser)
+        for i in range(5):
+            create_document_version(self.document, i)
+
+        browser.open(self.document,
+                     view='@versions?b_size=3',
+                     method='GET',
+                     headers=self.api_headers)
+
+        resp = browser.json
+        self.assertEqual(5, resp[u'items_total'])
+        self.assertEqual(3, len(resp["items"]))
+        self.assertEqual(4, resp["items"][0]['version'])
+        self.assertEqual(2, resp["items"][-1]['version'])
+        self.assertIn('batching', resp)
+        self.assertEqual(
+            "{}/@versions?b_start=3&b_size=3".format(self.document.absolute_url()),
+            resp['batching']['next'])
+
+        browser.open(resp['batching']['next'],
+                     method='GET',
+                     headers=self.api_headers)
+        self.assertEqual([1, 0],
+                         [each['version'] for each in browser.json['items']])
+
+    @browsing
+    def test_returns_initial_version_even_when_it_does_not_exist_yet(self, browser):
+        self.login(self.regular_user, browser)
+        versioner = Versioner(self.document)
+        self.assertFalse(versioner.has_initial_version())
+
+        browser.open(self.document,
+                     view='@versions',
+                     method='GET',
+                     headers=self.api_headers)
+
+        resp = browser.json
+        self.assertEqual(1, resp[u'items_total'])
+        self.assertEqual(1, len(resp["items"]))
+
+        expected_data = {
+            u'@id': "{}/@versions/0".format(self.document.absolute_url()),
+            u'actor': {u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                       u'identifier': u'robert.ziegler'},
+            u'comments': u'Initial version',
+            u'may_revert': False,
+            u'time': u'2016-08-31T16:07:33',
+            u'version': 0}
+
+        self.assertEqual(expected_data, resp["items"][0])
+
+        versioner.create_initial_version()
+        self.assertTrue(versioner.has_initial_version())
+        browser.open(self.document,
+                     view='@versions',
+                     method='GET',
+                     headers=self.api_headers)
+
+        resp = browser.json
+        self.assertEqual(1, resp[u'items_total'])
+        self.assertEqual(1, len(resp["items"]))
+        expected_data['may_revert'] = True
+        self.assertEqual(expected_data, browser.json["items"][0])
+
+    @browsing
+    def test_reader_may_not_revert_to_older_version(self, browser):
+        self.login(self.regular_user, browser)
+        create_document_version(self.document, 0)
+
+        browser.open(
+            self.document,
+            view='@versions',
+            method='GET',
+            headers=self.api_headers
+        )
+        resp = browser.json
+        self.assertEqual(1, resp[u'items_total'])
+        self.assertEqual(1, len(resp["items"]))
+        self.assertTrue(resp['items'][0]['may_revert'])
+
+        RoleAssignmentManager(self.portal).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+        )
+        RoleAssignmentManager(self.leaf_repofolder).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+        )
+
+        self.login(self.reader_user, browser)
+        browser.open(
+            self.document,
+            view='@versions',
+            method='GET',
+            headers=self.api_headers
+        )
+        resp = browser.json
+        self.assertEqual(1, resp[u'items_total'])
+        self.assertEqual(1, len(resp["items"]))
+        self.assertFalse(resp['items'][0]['may_revert'])

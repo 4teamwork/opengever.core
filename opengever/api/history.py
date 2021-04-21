@@ -1,10 +1,18 @@
+from datetime import datetime as dt
+from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.document.browser.versions_tab import LazyHistoryMetadataProxy
+from opengever.document.browser.versions_tab import NoVersionHistoryMetadataProxy
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.ogds.base.actor import Actor
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.restapi.services.history.get import HistoryGet
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.component.hooks import getSite
 
 
@@ -62,3 +70,52 @@ class GeverHistoryGet(HistoryGet):
             }
 
         return json_compatible(history)
+
+
+class VersionsGet(HistoryGet):
+
+    def reply(self):
+        # Traverse to historical version
+        if self.version:
+            serializer = queryMultiAdapter(
+                (self.context, self.request), ISerializeToJson
+            )
+            data = serializer(version=self.version)
+            return data
+
+        # Listing historical data (versions only)
+        shadow_history = Versioner(self.context).get_history_metadata()
+        manager = getMultiAdapter((self.context, self.request), ICheckinCheckoutManager)
+
+        if not shadow_history:
+            history = NoVersionHistoryMetadataProxy(self.context)
+
+        else:
+            history = LazyHistoryMetadataProxy(
+                shadow_history, self.context.absolute_url(),
+                self.context, is_revert_allowed=manager.is_revert_allowed())
+
+        batch = HypermediaBatch(self.request, history)
+
+        versions = []
+        for item in batch:
+            versions.append({
+                "@id": "{}/@versions/{}".format(
+                    self.context.absolute_url(), item.version),
+                "version": item.version,
+                "actor": serialize_actor_id_to_json_summary(item.actor_id),
+                "may_revert": item.is_revert_allowed,
+                "comments": item.comment,
+                "time": dt.fromtimestamp(item.raw_timestamp).isoformat()
+            })
+
+        result = {
+            "@id": batch.canonical_url,
+            "items": versions,
+            "items_total": batch.items_total,
+        }
+        links = batch.links
+        if links:
+            result["batching"] = links
+
+        return result

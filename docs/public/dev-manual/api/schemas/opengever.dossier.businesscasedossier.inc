@@ -174,6 +174,16 @@
        
 
 
+   .. py:attribute:: dossier_type
+
+       :Feldname: :field-title:`Dossiertyp`
+       :Datentyp: ``Choice``
+       
+       
+       
+       :Wertebereich: ["businesscase"]
+
+
    .. py:attribute:: classification
 
        :Feldname: :field-title:`Klassifikation`
@@ -281,4 +291,14 @@
        
        
        
+       
+
+
+   .. py:attribute:: custom_properties
+
+       :Feldname: :field-title:`Benutzerdefinierte Felder`
+       :Datentyp: ``PropertySheetField``
+       
+       
+       :Beschreibung: Enthält die Daten für die benutzerdefinierten Felder.
        

@@ -98,23 +98,30 @@ class VersionDataProxy(object):
         return self._version_data['version_id']
 
     @property
+    def actor_id(self):
+        if self.version == 0:
+            # Always return document's original creator for initial version
+            return self._context.Creator()
+        return self.sys_metadata['principal']
+
+    @property
     def actor(self):
         """Returns a formatted link to the actor that created this version.
         """
-        if self.version == 0:
-            # Always return document's original creator for initial version
-            return Actor.user(self._context.Creator()).get_link()
-
-        principal = self.sys_metadata['principal']
-        actor = Actor.user(principal)
+        actor = Actor.user(self.actor_id)
         return actor.get_link()
+
+    @property
+    def raw_timestamp(self):
+        """Creation timestamp of this version.
+        """
+        return self.sys_metadata['timestamp']
 
     @property
     def timestamp(self):
         """Creation timestamp of this version, formatted as localized time.
         """
-        ts = self.sys_metadata['timestamp']
-        dt = datetime.fromtimestamp(ts)
+        dt = datetime.fromtimestamp(self.raw_timestamp)
         return api.portal.get_localized_time(datetime=dt, long_format=True)
 
     @property
@@ -281,11 +288,21 @@ class InitialVersionDataProxy(object):
         return 0
 
     @property
+    def actor_id(self):
+        return self.obj.Creator()
+
+    @property
     def actor(self):
         """Returns the creator of the document, which we'll be also the
         creator of the initial version.
         """
-        return Actor.user(self.obj.Creator()).get_link()
+        return Actor.user(self.actor_id).get_link()
+
+    @property
+    def raw_timestamp(self):
+        """Returns the creation date of the document as timestamp
+        """
+        return self.obj.created().timeTime()
 
     @property
     def timestamp(self):
