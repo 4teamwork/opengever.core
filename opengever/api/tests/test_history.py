@@ -1,9 +1,11 @@
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
 from plone import api
 import json
-from opengever.document.versioner import Versioner
 
 
 class TestHistoryPatchEndpointForDocuments(IntegrationTestCase):
@@ -208,3 +210,22 @@ class TestHistoryGetEndpointForDocuments(IntegrationTestCase):
         version = browser.json[0]
         self.assertEqual(0, version[u'version'])
         self.assertEqual(u'robert.ziegler', version['actor']['id'])
+
+    @browsing
+    def test_returns_emtpy_list_for_reader(self, browser):
+        with self.login(self.regular_user):
+            RoleAssignmentManager(self.portal).add_or_update_assignment(
+                SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+            )
+            RoleAssignmentManager(self.leaf_repofolder).add_or_update_assignment(
+                SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+            )
+
+        self.login(self.reader_user, browser)
+        browser.open(
+            self.document,
+            view='@history',
+            method='GET',
+            headers=self.api_headers
+        )
+        self.assertEqual([], browser.json)
