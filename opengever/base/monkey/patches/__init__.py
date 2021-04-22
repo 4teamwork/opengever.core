@@ -1,6 +1,7 @@
 from .action_info import PatchActionInfo
 from .cmf_catalog_aware import PatchCMFCatalogAware
 from .cmf_catalog_aware import PatchCMFCatalogAwareHandlers
+from .content_history_viewlet import PatchFullHistory
 from .default_values import PatchBuilderCreate
 from .default_values import PatchDeserializeFromJson
 from .default_values import PatchDexterityContentGetattr
@@ -74,6 +75,7 @@ PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
 ScrubBoboExceptions()()
 PatchGetJsonschemaForPortalType()()
+PatchFullHistory()()
 
 # These three patches implement role and permission filtering during RO mode.
 # We only apply these conditionally when RO mode actually is active.
