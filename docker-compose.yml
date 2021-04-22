@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 services:
   msgconvert:
@@ -23,3 +23,19 @@ services:
       - 3310:3310
     profiles:
       - clamav
+  solr:
+    image: 4teamwork/ogsolr:latest
+    build:
+      context: .
+      dockerfile: ./docker/solr/Dockerfile
+    command:
+      - solr-precreate
+      - ogsite
+      - /opt/solr/server/solr/configsets/ogsite
+    volumes:
+      - ./var/solr:/var/solr/data
+    ports:
+      - 18983:8983
+    profiles:
+      - all
+      - solr
