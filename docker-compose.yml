@@ -23,6 +23,19 @@ services:
       - 3310:3310
     profiles:
       - clamav
+  ogds:
+    image: postgres:12-alpine
+    volumes:
+      - ./var/ogds:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=ogds
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=ogds
+    ports:
+      - 15432:5432
+    profiles:
+      - all
+      - ogds
   solr:
     image: 4teamwork/ogsolr:latest
     build:
