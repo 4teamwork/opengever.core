@@ -241,6 +241,13 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         self.assertEqual({u'title': u'Paralleler Ablauf', u'token': u'parallel'},
                          browser.json['sequence_type'])
 
+    @browsing
+    def test_contains_is_remote_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertIn('is_remote_task', browser.json)
+        self.assertFalse(browser.json['is_remote_task'])
+
 
 class TestTaskCommentSync(FunctionalTestCase):
 
