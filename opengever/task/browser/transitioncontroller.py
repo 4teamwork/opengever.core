@@ -101,7 +101,6 @@ class TaskTransitionController(BrowserView):
         transition = self.request.get('transition')
         if not self.is_transition_possible(transition):
             raise NotFound
-
         else:
             url = self.get_transition_action(transition)
             return self.request.RESPONSE.redirect(addTokenToUrl(url))
@@ -163,9 +162,17 @@ class TaskTransitionController(BrowserView):
     def planned_guard(self, transition, c):
         return IInternalWorkflowTransition.providedBy(getRequest())
 
+    @action('task-transition-planned-open')
+    def planned_to_open_action(self, transition, c):
+        return self._addresponse_form_url(transition)
+
     @guard('task-transition-planned-open')
     def open_guard(self, transition, c):
-        return IInternalWorkflowTransition.providedBy(getRequest())
+        if IInternalWorkflowTransition.providedBy(getRequest()):
+            return True
+        if not self.context.is_from_sequential_tasktemplate:
+            return False
+        return self.context.all_predecessors_are_skipped()
 
     @guard('task-transition-cancelled-open')
     def cancelled_to_open_guard(self, c, include_agency):

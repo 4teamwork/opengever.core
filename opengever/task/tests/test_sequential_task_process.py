@@ -279,6 +279,38 @@ class TestSequentialTaskProcess(IntegrationTestCase):
             answer.css('h3').text
         )
 
+    @browsing
+    def test_can_manually_start_first_task_when_necessary(self, browser):
+        self.login(self.regular_user, browser)
+
+        # create subtask
+        subtask2 = create(Builder('task')
+                          .within(self.task)
+                          .having(responsible_client='fa',
+                                  responsible=self.regular_user.getId(),
+                                  issuer=self.dossier_responsible.getId(),
+                                  task_type='correction',
+                                  deadline=date(2016, 11, 1))
+                          .in_state('task-state-planned'))
+
+        self.set_workflow_state('task-state-planned', self.subtask)
+        alsoProvides(self.subtask, IFromSequentialTasktemplate)
+        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        self.task.set_tasktemplate_order([self.subtask, subtask2])
+
+        wftool = api.portal.get_tool("portal_workflow")
+        actions = wftool.listActionInfos(object=self.subtask)
+        available_transitions = [action['id'] for action in actions
+                                 if action['category'] == 'workflow']
+        self.assertIn('task-transition-planned-open', available_transitions)
+
+        browser.open(self.subtask)
+        browser.click_on("Start")
+        browser.click_on("Save")
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(self.subtask))
+
 
 class TestInitialStateForSubtasks(IntegrationTestCase):
 

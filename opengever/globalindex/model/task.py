@@ -355,6 +355,14 @@ class Task(Base):
 
         return self.tasktemplate_successor
 
+    def all_predecessors_are_skipped(self):
+        previous_task = self.get_previous_task()
+        if not previous_task:
+            return True
+        if previous_task.review_state != 'task-state-skipped':
+            return False
+        return previous_task.all_predecessors_are_skipped()
+
     def adding_a_previous_task_is_possible(self):
         """Check if adding a new task as previous task to the process is possible.
         It checks if the current task is not yet started.

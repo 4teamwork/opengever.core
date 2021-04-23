@@ -688,6 +688,9 @@ class Task(Container, TaskReminderSupport):
 
         return None
 
+    def all_predecessors_are_skipped(self):
+        return self.get_sql_object().all_predecessors_are_skipped()
+
     def sync(self):
         """Syncs the corresponding SQL task (globalindex).
         """
