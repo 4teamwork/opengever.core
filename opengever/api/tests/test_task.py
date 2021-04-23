@@ -248,6 +248,13 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         self.assertIn('is_remote_task', browser.json)
         self.assertFalse(browser.json['is_remote_task'])
 
+    @browsing
+    def test_contains_responsible_admin_unit_public_url(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertIn('responsible_admin_unit_url', browser.json)
+        self.assertEqual('http://nohost/plone', browser.json['responsible_admin_unit_url'])
+
 
 class TestTaskCommentSync(FunctionalTestCase):
 
