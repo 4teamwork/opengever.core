@@ -27,11 +27,11 @@ class ReindexMissingSearchableText(UpgradeStep):
             rows=1000000)
 
         n_tot = len(resp.docs)
-        logger.message('Reindexing {} documents.'.format(n_tot))
+        logger.info('Reindexing {} documents.'.format(n_tot))
 
         for i, doc in enumerate(resp.docs):
             if i % 20 == 0:
-                logger.message('Done {}/{}'.format(i, n_tot))
+                logger.info('Done {}/{}'.format(i, n_tot))
 
             if "SearchableText" in doc:
                 continue
