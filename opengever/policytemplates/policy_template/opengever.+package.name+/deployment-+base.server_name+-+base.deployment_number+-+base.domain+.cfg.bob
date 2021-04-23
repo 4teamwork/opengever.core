@@ -42,10 +42,9 @@ environment-vars +=
     SABLON_URL http://localhost:8091/
     PDFLATEX_URL http://localhost:8092/
 {{% endif %}}
+{{% if is_teamraum %}}
 {{% if setup.enable_workspace_meeting_feature %}}
     WEASYPRINT_URL http://localhost:8093/
 {{% endif %}}
-
-{{% if is_teamraum %}}
     WORKSPACE_SECRET {{{base.workspace_secret}}}
 {{% endif %}}
