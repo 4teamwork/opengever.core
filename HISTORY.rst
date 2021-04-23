@@ -63,6 +63,13 @@ Changelog
 - When filtering by responsible in globalindex also return tasks assigned to a team the responsible belongs to. [buchi]
 
 
+2021.5.2 (2021-04-20)
+---------------------
+
+- Fix in-progress to close transition (API), for multi adminunit tasks. [phgross]
+- Add is_remote_task and responsible_admin_unit_url to task serialization. [njohner]
+
+
 2021.5.1 (2021-03-09)
 ---------------------
 
