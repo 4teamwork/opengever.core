@@ -275,7 +275,7 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         # The answer also features a message. This was not the case until now and
         # this is what we are fixing in this pull request.
         self.assertEquals(
-            [u'Task opened automatically'],
+            [u'Task opened by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
             answer.css('h3').text
         )
 

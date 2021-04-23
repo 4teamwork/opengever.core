@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-19 15:20+0000\n"
+"POT-Creation-Date: 2021-04-23 10:53+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -329,6 +329,7 @@ msgid "help_expectedDuration"
 msgstr ""
 
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_informed_principals"
 msgstr ""
 
@@ -508,6 +509,7 @@ msgstr ""
 #. Default: "Info at"
 #: ./opengever/task/activities.py
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "label_informed_principals"
 msgstr ""
 
@@ -981,7 +983,7 @@ msgstr ""
 msgid "transition_label_modify_deadline"
 msgstr ""
 
-#. Default: "Task opened automatically"
+#. Default: "Task opened"
 #: ./opengever/task/response_description.py
 msgid "transition_label_opened"
 msgstr ""
@@ -1076,7 +1078,7 @@ msgstr ""
 msgid "transition_msg_modify_deadline"
 msgstr ""
 
-#. Default: "Task opened automatically"
+#. Default: "Task opened by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_opened"
 msgstr ""

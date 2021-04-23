@@ -249,11 +249,11 @@ class Open(ResponseDescription):
     css_class = 'open'
 
     def msg(self):
-        return _('transition_msg_opened', u'Task opened automatically',
+        return _('transition_msg_opened', u'Task opened by ${user}',
                  mapping=self._msg_mapping)
 
     def label(self):
-        return _('transition_label_opened', u'Task opened automatically')
+        return _('transition_label_opened', u'Task opened')
 
 
 ResponseDescription.add_description(Open)
