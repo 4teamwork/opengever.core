@@ -56,6 +56,7 @@ $favorite: $fa-var-star;
 
 /* @group Additional icons task */
 $refuse: "\e60f";
+$open: "\e630";
 $reopen: "\e608";
 $reactivate: "\e608";
 $cancelled: "\e60c";
@@ -680,6 +681,7 @@ div.answerType:before {
 /* answer icons */
 div.answer.refuse div.answerType:before { content: $refuse; }
 div.answer.reopen div.answerType:before { content: $reopen; }
+div.answer.open div.answerType:before { content: $open; }
 div.answer.reactivate div.answerType:before { content: $reactivate; }
 div.answer.cancelled div.answerType:before { content: $cancelled; }
 div.answer.accept div.answerType:before { content: $accept; }
