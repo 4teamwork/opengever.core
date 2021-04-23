@@ -54,6 +54,16 @@
        
 
 
+   .. py:attribute:: attendees
+
+       :Feldname: :field-title:`Teilnehmer`
+       :Datentyp: ``List``
+       
+       :Default: []
+       
+       
+
+
    .. py:attribute:: title
 
        :Feldname: :field-title:`Titel`

@@ -25,6 +25,7 @@ Inhalt:
    documents_from_template.rst
    extract_attachments.rst
    trash.rst
+   versions.rst
    workflow.rst
    vocabularies.rst
    scanin.rst

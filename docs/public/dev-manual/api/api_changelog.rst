@@ -15,7 +15,7 @@ Other Changes
 ^^^^^^^^^^^^^
 
 - Task serialization now also returns is_remote_task and responsible_admin_unit_url.
-
+- New ``@version`` that returns the historical versions of a document.
 
 2021.7.0 (2021-04-01)
 ---------------------

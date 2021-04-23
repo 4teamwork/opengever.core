@@ -171,6 +171,14 @@
       />
 
   <plone:service
+      method="GET"
+      name="@versions"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".history.VersionsGet"
+      permission="CMFEditions.AccessPreviousVersions"
+      />
+
+  <plone:service
       method="POST"
       name="@scan-in"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
