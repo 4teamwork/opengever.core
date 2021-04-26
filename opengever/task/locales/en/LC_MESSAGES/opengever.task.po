@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-19 15:20+0000\n"
+"POT-Creation-Date: 2021-04-23 10:53+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -397,6 +397,7 @@ msgstr "Duration in h"
 
 #. German translation: Die ausgewählten Benutzer und Gruppen werden über die Erstellung dieser Aufgabe benachrichtigt.
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_informed_principals"
 msgstr "Selected users and groups will be notified about the creation of this task."
 
@@ -612,6 +613,7 @@ msgstr "Start of work"
 #. MARKER: double check
 #: ./opengever/task/activities.py
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "label_informed_principals"
 msgstr "Info at"
 
@@ -1177,11 +1179,11 @@ msgstr "Task opened"
 msgid "transition_label_modify_deadline"
 msgstr "Task deadline modified"
 
-#. German translation: Aufgabe automatisch gestartet
-#. Default: "Task opened automatically"
+#. German translation: Aufgabe gestartet
+#. Default: "Task opened"
 #: ./opengever/task/response_description.py
 msgid "transition_label_opened"
-msgstr "Task opened automatically"
+msgstr "Task opened"
 
 #. German translation: Aufgabe reaktiviert
 #. Default: "Task reactivated"
@@ -1292,11 +1294,11 @@ msgstr "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
 msgid "transition_msg_modify_deadline"
 msgstr "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
 
-#. German translation: Aufgabe automatisch gestartet
-#. Default: "Task opened automatically"
+#. German translation: Aufgabe gestartet durch ${user}
+#. Default: "Task opened by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_opened"
-msgstr "Task opened automatically"
+msgstr "Task opened by ${user}"
 
 #. German translation: Reaktiviert durch ${user}
 #. Default: "Reactivate by ${user}"

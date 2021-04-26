@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-19 15:20+0000\n"
+"POT-Creation-Date: 2021-04-23 10:53+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -330,6 +330,7 @@ msgid "help_expectedDuration"
 msgstr "Durée effective en h"
 
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_informed_principals"
 msgstr "Les utilisateurs et les groupes séléctionnés seront notifiés de la création de cette tâche."
 
@@ -510,6 +511,7 @@ msgstr "Début du travail"
 #. Default: "Info at"
 #: ./opengever/task/activities.py
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "label_informed_principals"
 msgstr "Info à"
 
@@ -985,10 +987,10 @@ msgstr "Tâche ouverte"
 msgid "transition_label_modify_deadline"
 msgstr "Délai de la tâche modifié"
 
-#. Default: "Task opened automatically"
+#. Default: "Task opened"
 #: ./opengever/task/response_description.py
 msgid "transition_label_opened"
-msgstr "Tâche ouverte automatiquement"
+msgstr "Tâche ouverte"
 
 #. Default: "Task reactivated"
 #: ./opengever/task/response_description.py
@@ -1080,10 +1082,10 @@ msgstr "Attribué à nouveau de ${responsible_old} à ${responsible_new} par ${u
 msgid "transition_msg_modify_deadline"
 msgstr "Délai modifié de ${deadline_old} à ${deadline_new} par ${user}"
 
-#. Default: "Task opened automatically"
+#. Default: "Task opened by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_opened"
-msgstr "Tâche commencée automatiquement"
+msgstr "Tâche ouverte par ${user}"
 
 #. Default: "Reactivate by ${user}"
 #: ./opengever/task/response_description.py

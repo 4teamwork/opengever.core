@@ -2413,6 +2413,8 @@ readers do not read off random characters that represent icons */
 
 .gv-reopen:before, .actionButtons .reopen:before, .actionButtons .reactivate:before, .actionButtons .proposal-transition-reactivate:before { content: ""; }
 
+.gv-open:before, .actionButtons .open:before { content: ""; }
+
 .gv-submit:before, .actionButtons .proposal-transition-submit:before { content: ""; }
 
 .gv-square-check:before, .actionButtons .complete:before { content: ""; }
@@ -3040,6 +3042,8 @@ div.answerType:before { font-family: 'opengever'; content: "x"; position: absolu
 div.answer.refuse div.answerType:before { content: ""; }
 
 div.answer.reopen div.answerType:before { content: ""; }
+
+div.answer.open div.answerType:before { content: ""; }
 
 div.answer.reactivate div.answerType:before { content: ""; }
 
