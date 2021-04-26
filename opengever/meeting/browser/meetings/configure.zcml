@@ -142,4 +142,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="reopen_meeting"
+      class=".reopen.ReopenMeetingForm"
+      permission="cmf.ManagePortal"
+      template="templates/reopen_meeting.pt"
+      />
+
 </configure>

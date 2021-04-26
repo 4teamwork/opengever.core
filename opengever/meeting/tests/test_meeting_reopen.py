@@ -1,6 +1,8 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.meeting.period import Period
 from opengever.meeting.reopen import ReopenMeeting
 from opengever.testing import IntegrationTestCase
@@ -140,3 +142,51 @@ class TestReopenMeeting(IntegrationTestCase):
              u"need to be reopened first."],
             reopener.get_errors()
         )
+
+    @browsing
+    def test_browser_reopen_meeting(self, browser):
+        self.login(self.committee_responsible)
+
+        self.schedule_ad_hoc(self.meeting, 'Foo')
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal
+        )
+        agenda_item.decide()
+        model = self.meeting.model
+        period = Period.get_current(
+            model.committee.resolve_committee(),
+            model.start.date()
+        )
+
+        self.assertEqual(3, period.decision_sequence_number)
+        self.assertEqual(2, period.meeting_sequence_number)
+        self.assertEqual('held', model.workflow_state)
+        self.assertEqual(
+            ['pending', 'decided'],
+            [each.workflow_state for each in model.agenda_items]
+        )
+        self.assertEqual(
+            [2, 3],
+            [each.decision_number for each in model.agenda_items]
+        )
+        self.assertEqual(2, model.meeting_number)
+
+        self.login(self.manager, browser)
+        browser.open(model.get_url(view='reopen_meeting'))
+        browser.find('Confirm').click()
+
+        self.assertEqual([u"The meeting has been reopened."], info_messages())
+
+        self.assertEqual('pending', model.workflow_state)
+        self.assertEqual(
+            ['pending', 'pending'],
+            [each.workflow_state for each in model.agenda_items]
+        )
+        self.assertEqual(1, period.decision_sequence_number)
+        self.assertEqual(1, period.meeting_sequence_number)
+
+    @browsing
+    def test_non_manager_cannot_reopen(self, browser):
+        self.login(self.administrator, browser)
+        with browser.expect_unauthorized():
+            browser.open(self.meeting.model.get_url(view='reopen_meeting'))
