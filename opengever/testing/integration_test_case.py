@@ -618,7 +618,7 @@ class IntegrationTestCase(TestCase):
         command = CreateGeneratedDocumentCommand(
             meeting.get_dossier(), meeting, AgendaItemListOperations(),
             )
-        command.execute()
+        return command.execute()
 
     def as_relation_value(self, obj):
         return RelationValue(getUtility(IIntIds).getId(obj))

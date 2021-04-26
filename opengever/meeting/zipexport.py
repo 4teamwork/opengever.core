@@ -44,11 +44,9 @@ class MeetingDocumentZipper(MeetingDocumentWithFileTraverser):
     def __init__(self, meeting, generator):
         super(MeetingDocumentZipper, self).__init__(meeting)
         self.generator = generator
-        self.json_serializer = MeetingJSONSerializer(self.meeting, self)
 
     def get_zip_file(self):
         self.traverse()
-        self.generator.add_file('meeting.json', self.get_meeting_json_file())
         return self.generator.generate()
 
     def get_filename(self, document):
@@ -104,9 +102,6 @@ class MeetingDocumentZipper(MeetingDocumentWithFileTraverser):
             self.get_file(document).open()
         )
 
-    def get_meeting_json_file(self):
-        return StringIO(self.json_serializer.get_json())
-
 
 class MeetingPDFDocumentZipper(MeetingDocumentZipper):
     """Zip a meetings documents, but replace documents with a PDF if available.
@@ -116,6 +111,14 @@ class MeetingPDFDocumentZipper(MeetingDocumentZipper):
     def __init__(self, meeting, pdfs, generator):
         super(MeetingPDFDocumentZipper, self).__init__(meeting, generator)
         self.pdfs = pdfs
+
+    def get_zip_file(self):
+        self.generator.add_file('meeting.json', self.get_meeting_json_file())
+        return super(MeetingPDFDocumentZipper, self).get_zip_file()
+
+    def get_meeting_json_file(self):
+        json_serializer = MeetingJSONSerializer(self.meeting, self)
+        return StringIO(json_serializer.get_json())
 
     def get_filename(self, document):
         document_id = IUUID(document)
