@@ -198,11 +198,11 @@ SubmittedDocument.query_cls = SubmittedDocumentQuery
 
 class MeetingQuery(BaseQuery):
 
-    def _committee_meetings(self, committee):
+    def by_committee(self, committee):
         return self.filter(Meeting.committee == committee)
 
     def _upcoming_meetings(self, committee):
-        query = self._committee_meetings(committee)
+        query = self.by_committee(committee)
         query = query.filter(
             Meeting.workflow_state != Meeting.STATE_CANCELLED.name)
         query = query.filter(Meeting.start >= utcnow_tz_aware())
@@ -210,7 +210,7 @@ class MeetingQuery(BaseQuery):
         return query
 
     def _past_meetings(self, committee):
-        query = self._committee_meetings(committee)
+        query = self.by_committee(committee)
         query = query.filter(
             Meeting.workflow_state != Meeting.STATE_CANCELLED.name)
         query = query.filter(Meeting.start < utcnow_tz_aware())
@@ -230,7 +230,7 @@ class MeetingQuery(BaseQuery):
         return self._past_meetings(committee).first()
 
     def pending_meetings(self, committee):
-        query = self._committee_meetings(committee)
+        query = self.by_committee(committee)
         query = query.filter(
             Meeting.workflow_state != Meeting.STATE_CLOSED.name,
             Meeting.workflow_state != Meeting.STATE_CANCELLED.name
