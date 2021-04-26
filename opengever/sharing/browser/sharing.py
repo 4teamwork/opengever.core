@@ -387,7 +387,9 @@ class OpengeverSharingView(SharingView):
 
             fields = ['id', 'title']
             if group_attribute:
-                fields.append(group_attribute)
+                # search fields need to be utf-8 otherwise it leads to empty
+                # search results with silent encoding errors.
+                fields.append(group_attribute.encode('utf-8'))
 
             return merge_search_results(
                 chain(*[hunter.searchGroups(**{field: search_term}) for field in fields]), 'groupid')
