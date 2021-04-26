@@ -9,11 +9,14 @@ from zope.globalrequest import getRequest
 class DeactivatedCatalogIndexing(object):
     """Contextmanager: Deactivates catalog-indexing
     """
+    def __init__(self):
+        self.catalog_patch = PatchCMFCatalogAware()
+
     def __enter__(self):
-        PatchCMFCatalogAware()()
+        self.catalog_patch.patch()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        PatchCMFCatalogAware().unpatch()
+        self.catalog_patch.unpatch()
 
 
 class CatalogAlreadyPatched(Exception):
@@ -26,7 +29,7 @@ class PatchCMFCatalogAware(MonkeyPatch):
     """Patch the Products.CMFCore.CMFCatalogAware indexObject, reindexObject
     and unindexObject methods.
 
-    This patch is deactivated is not applied by default and can be activated
+    This patch is not applied by default and can be activated
     through the DeactivatedCatalogIndexing context manager:
 
     >>> with DeactivatedCatalogIndexing():
@@ -36,6 +39,9 @@ class PatchCMFCatalogAware(MonkeyPatch):
 
     If the patch is activated, it skips the catalog index-methods. The patch
     gets removed when exiting the context manager.
+
+    Note that the unpatch method needs to be called on the same
+    instance of this class which was used to apply the patch.
 
     What's the motivation behind this patch?
 
@@ -49,33 +55,39 @@ class PatchCMFCatalogAware(MonkeyPatch):
     and do it manually at the end of your tasks.
     """
 
-    original_indexing_methods = {}
+    def indexObject(self):
+        return
 
-    def __call__(self):
+    def unindexObject(self):
+        return
+
+    def reindexObject(self, idxs=[]):
+        return
+
+    def __init__(self):
+        self.original_indexing_methods = {}
+
+    def patch(self):
 
         if self.is_already_applied():
             raise CatalogAlreadyPatched()
-
-        def indexObject(self):
-            return
-
-        def unindexObject(self):
-            return
-
-        def reindexObject(self, idxs=[]):
-            return
 
         from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
         locals()['__patch_refs__'] = False
         self.original_indexing_methods['indexObject'] = CMFCatalogAware.indexObject
         self.original_indexing_methods['unindexObject'] = CMFCatalogAware.unindexObject
         self.original_indexing_methods['reindexObject'] = CMFCatalogAware.reindexObject
-        self.patch_refs(CMFCatalogAware, 'indexObject', indexObject)
-        self.patch_refs(CMFCatalogAware, 'unindexObject', unindexObject)
-        self.patch_refs(CMFCatalogAware, 'reindexObject', reindexObject)
+        self.patch_refs(CMFCatalogAware, 'indexObject', self.indexObject)
+        self.patch_refs(CMFCatalogAware, 'unindexObject', self.unindexObject)
+        self.patch_refs(CMFCatalogAware, 'reindexObject', self.reindexObject)
 
     def is_already_applied(self):
-        return bool(self.original_indexing_methods)
+        from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
+        return (
+            CMFCatalogAware.indexObject.__func__ is self.indexObject.__func__ and
+            CMFCatalogAware.reindexObject.__func__ is self.reindexObject.__func__ and
+            CMFCatalogAware.unindexObject.__func__ is self.unindexObject.__func__
+            )
 
     def unpatch(self):
         from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
