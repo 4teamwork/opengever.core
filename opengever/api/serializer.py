@@ -307,6 +307,9 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
 
         extend_with_is_subdossier(summary, self.context, self.request)
 
+        if 'oguid' in self.metadata_fields():
+            extend_with_oguid(summary, self.context)
+
         summary['is_leafnode'] = None
         if IRepositoryFolder.providedBy(self.context):
             summary['is_leafnode'] = self.context.is_leaf_node()
