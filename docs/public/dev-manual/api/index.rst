@@ -64,4 +64,5 @@ Inhalt:
    accept_remote_task.rst
    complete_successor_task.rst
    upload_structure.rst
+   close_remote_task.rst
    examples/index.rst
