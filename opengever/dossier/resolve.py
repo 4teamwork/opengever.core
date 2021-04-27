@@ -574,11 +574,7 @@ class AfterResolveJobs(object):
         if not self.get_property('archival_file_conversion_enabled'):
             return
 
-        path = '/'.join(self.context.getPhysicalPath())
-        docs = self.catalog.unrestrictedSearchResults(
-            path=path,
-            object_provides=IBaseDocument.__identifier__)
-        for doc in docs:
+        for doc in self.context.get_contained_documents():
             ArchivalFileConverter(doc.getObject()).trigger_conversion()
 
 
