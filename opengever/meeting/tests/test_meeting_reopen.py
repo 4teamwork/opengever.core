@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.meeting.period import Period
 from opengever.meeting.reopen import ReopenMeeting
@@ -12,6 +13,7 @@ import pytz
 class TestReopenMeeting(IntegrationTestCase):
 
     features = ('meeting',)
+    REOPEN_MEETING_ACTION = 'Reopen meeting'
 
     def test_reopen_held_meeting(self):
         self.login(self.committee_responsible)
@@ -172,7 +174,8 @@ class TestReopenMeeting(IntegrationTestCase):
         self.assertEqual(2, model.meeting_number)
 
         self.login(self.manager, browser)
-        browser.open(model.get_url(view='reopen_meeting'))
+        browser.open(model.get_url())
+        editbar.menu_option('Actions', self.REOPEN_MEETING_ACTION).click()
         browser.find('Confirm').click()
 
         self.assertEqual([u"The meeting has been reopened."], info_messages())
@@ -188,5 +191,9 @@ class TestReopenMeeting(IntegrationTestCase):
     @browsing
     def test_non_manager_cannot_reopen(self, browser):
         self.login(self.administrator, browser)
+        browser.open(self.meeting.model.get_url())
+        self.assertNotIn(
+            self.REOPEN_MEETING_ACTION, editbar.menu_options('Actions')
+        )
         with browser.expect_unauthorized():
             browser.open(self.meeting.model.get_url(view='reopen_meeting'))

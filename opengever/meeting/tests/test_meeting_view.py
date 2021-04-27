@@ -27,7 +27,8 @@ class TestMeetingView(IntegrationTestCase):
     def test_displays_correct_edit_bar_actions_for_manager(self, browser):
         expected_menu = ['Download docxcompose debug files', 'Download meeting protocol JSON',
                          'Export as ZIP file', 'Properties', 'Sharing',
-                         'Policy...', 'Close meeting', 'Cancel']
+                         'Policy...', 'Close meeting', 'Cancel',
+                         'Reopen meeting']
         self.login(self.manager, browser)
         browser.open(self.meeting)
 

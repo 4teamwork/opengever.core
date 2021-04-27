@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-25 20:40+0000\n"
+"POT-Creation-Date: 2021-04-27 08:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -260,6 +260,11 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.proposaltemplate.xml
 msgid "Proposal Template"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210426170717_add_reopen_meeting_action/actions.xml
+msgid "Reopen meeting"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.repository.repositoryfolder.xml
