@@ -387,6 +387,7 @@ class AfterResolveJobs(object):
     def __init__(self, context):
         self.context = context
         self.catalog = api.portal.get_tool('portal_catalog')
+        self.num_pdf_conversions = 0
 
     def get_property(self, name):
         return api.portal.get_registry_record(
@@ -575,7 +576,8 @@ class AfterResolveJobs(object):
             return
 
         for doc in self.context.get_contained_documents():
-            ArchivalFileConverter(doc.getObject()).trigger_conversion()
+            self.num_pdf_conversions += ArchivalFileConverter(
+                doc.getObject()).trigger_conversion()
 
 
 class LenientDossierResolver(StrictDossierResolver):

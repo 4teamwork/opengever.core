@@ -30,12 +30,13 @@ class ArchivalFileConverter(object):
     def trigger_conversion(self):
         if self.document.is_archival_file_conversion_skipped():
             self.set_state(STATE_FAILED_PERMANENTLY)
-            return
+            return False
 
         if self.get_state() == STATE_MANUALLY_PROVIDED:
-            return
+            return False
 
         self.queue_conversion()
+        return True
 
     def queue_conversion(self):
         self.set_state(STATE_CONVERTING)

@@ -16,6 +16,7 @@ from opengever.base.behaviors.changed import IChanged
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
+from opengever.dossier import nightly_after_resolve_job
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.nightly_after_resolve_job import ExecuteNightlyAfterResolveJobs
@@ -1228,6 +1229,10 @@ class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
 
     features = ('nightly-jobs', )
 
+    def setUp(self):
+        super(TestAutomaticPDFAConversionNightly, self).setUp()
+        nightly_after_resolve_job.sent_conversion_requests = 0
+
     def interrupt_if_necessary(self):
         """Stub out the runner's `interrupt_if_necessary` function.
         """
@@ -1247,8 +1252,11 @@ class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
             self.assertEqual(expected, len(jobs))
             self.assertEqual(expected, len(nightly_job_provider))
 
-        for job in jobs:
+        executed_jobs = []
+        for job in nightly_job_provider:
             nightly_job_provider.run_job(job, self.interrupt_if_necessary)
+            executed_jobs.append(job)
+        return executed_jobs
 
     @browsing
     def test_pdf_conversion_job_is_queued_for_every_document(self, browser):
@@ -1313,6 +1321,32 @@ class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
         with RequestsSessionMock.installed():
             self.execute_nightly_jobs()
             self.assertEquals(0, len(get_queue().queue))
+
+    @browsing
+    def test_execution_interrupted_when_max_conversion_is_reached(self, browser):
+        self.activate_feature('bumblebee')
+        self.login(self.secretariat_user, browser)
+
+        api.portal.set_registry_record(
+            'archival_file_conversion_enabled', True,
+            interface=IDossierResolveProperties)
+        api.portal.set_registry_record(
+            'resolver_name', 'lenient', IDossierResolveProperties)
+
+        doc = self.create_additional_doc(self.resolvable_dossier)
+
+        nightly_after_resolve_job.MAX_CONVERSION_REQUESTS_PER_NIGHT = 1
+        # Resolving doesn't trigger the AfterResolveJobs yet...
+        self.resolve(self.resolvable_dossier, browser)
+        self.assertEquals(0, len(get_queue().queue))
+
+        with RequestsSessionMock.installed():
+            # ...executing the nightly jobs will.
+            executed_jobs = self.execute_nightly_jobs(expected=2)
+            # Only first job got executed
+            self.assert_queue_contains_jobs_for([doc])
+            self.assertEqual([{'path': self.resolvable_dossier.absolute_url_path()}],
+                             executed_jobs)
 
 
 class TestResolvingDossiersWithFilingNumberSupport(IntegrationTestCase, ResolveTestHelper):
