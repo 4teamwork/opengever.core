@@ -918,6 +918,18 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="reopen_meeting" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Reopen meeting</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/reopen_meeting</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.meeting.interfaces.IMeetingWrapper')</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
     <object name="revoke_permissions" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Revoke permissions</property>
       <property name="description" i18n:translate="" />

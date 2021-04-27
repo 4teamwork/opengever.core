@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.meeting">
+<body>
+
+<metal:main fill-slot="main" tal:define="reopener view/reopener">
+
+    <h1 class="documentFirstHeading">Reopen meeting</h1>
+
+    <h2>Current state</h2>
+
+    <p>Meeting state: <span tal:replace="reopener/meeting/workflow_state" />
+    </p>
+    <p>Meeting number: <span tal:replace="reopener/meeting/meeting_number" />
+    </p>
+    Decision numbers:
+    <ul>
+        <li tal:repeat="num reopener/decision_numbers" tal:content="num" />
+    </ul>
+    <p>Period decision sequence number: <span tal:replace="reopener/period/decision_sequence_number" /></p>
+    <p>Period meeting sequence number: <span tal:replace="reopener/period/meeting_sequence_number" /></p>
+
+    <tal:block tal:condition="not: view/errors">
+        <h2>Proposed actions</h2>
+        <p tal:condition="python: reopener.reset_decision_number is not None">
+            Set period decision sequence number to: <span tal:replace="reopener/reset_decision_number" />
+        </p>
+        <p>Set period meeting sequence number to: <span tal:replace="reopener/reset_meeting_number" /></p>
+        <p>Set meeting state to: pending</p>
+        <p tal:condition="python: reopener.reset_decision_number is not None">Set agenda item states to: pending</p>
+    </tal:block>
+
+    <tal:block tal:condition="view/errors">
+        <h2>Errors</h2>
+        <ul>
+        <tal:repeat tal:repeat="error view/errors">
+            <li tal:content="error"></li>
+        </tal:repeat>
+        </ul>
+    </tal:block>
+
+    <div id="content-core">
+        <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
+    </div>
+
+</metal:main>
+
+</body>
+</html>
