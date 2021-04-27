@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
@@ -134,6 +135,36 @@ class TestDossierContainer(IntegrationTestCase):
         got = {name: getattr(self, name).get_reference_number()
                for name in expected.keys()}
         self.assertDictEqual(expected, got)
+
+    def test_get_contained_documents(self):
+        self.login(self.manager)
+        docs = self.dossier.get_contained_documents()
+        docs = [brain.getObject() for brain in docs]
+
+        decided_proposal = self.decided_proposal.load_model().resolve_proposal()
+        expected = [
+            self.document, self.draft_proposal.get_proposal_document(),
+            self.mail_eml, self.mail_msg,
+            decided_proposal.get_excerpt(), decided_proposal.get_proposal_document(),
+            self.proposal.get_proposal_document(), self.proposaldocument,
+            self.removed_document, self.shadow_document,
+            self.taskdocument]
+
+        self.assertItemsEqual(expected, docs)
+
+    def test_get_contained_documents_applied_on_each_subdossier_gets_all_documents_once(self):
+        self.login(self.dossier_responsible)
+
+        catalog = api.portal.get_tool('portal_catalog')
+        all_docs = catalog.unrestrictedSearchResults(
+            path='/'.join(self.dossier.getPhysicalPath()),
+            object_provides=IBaseDocument.__identifier__)
+
+        docs = self.dossier.get_contained_documents()
+        for subdossier in self.dossier.get_subdossiers(unrestricted=True):
+            docs.extend(subdossier.getObject().get_contained_documents())
+        self.assertEqual(len(all_docs), len(docs))
+        self.assertEqual(len(docs), 14)
 
 
 class TestDossierChecks(IntegrationTestCase):
