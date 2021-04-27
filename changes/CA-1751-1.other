@@ -1,0 +1,1 @@
+Bump docxcompose to version 1.3.2 which handles DocProperties in a case-insensitive manner. [buchi]
