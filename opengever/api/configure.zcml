@@ -1138,6 +1138,15 @@
       />
 
   <plone:service
+      method="POST"
+      name="@close-remote-task"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".close_remote_task.CloseRemoteTaskPost"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="PATCH"
       name="@tus-upload"
       for="opengever.document.document.IDocumentSchema"
