@@ -1135,9 +1135,9 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
         super(TestAutomaticPDFAConversion, self).setUp()
         reset_queue()
 
-    def create_additional_doc(self):
+    def create_additional_doc(self, dossier):
         doc = create(Builder('document')
-                     .within(self.resolvable_subdossier)
+                     .within(dossier)
                      .attach_file_containing(
                          bumblebee_asset('example.docx').bytes(),
                          u'example.docx'))
@@ -1181,11 +1181,34 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
             'archival_file_conversion_enabled', True,
             interface=IDossierResolveProperties)
 
-        doc = self.create_additional_doc()
+        doc = self.create_additional_doc(self.resolvable_subdossier)
 
         with RequestsSessionMock.installed():
             self.resolve(self.resolvable_dossier, browser)
             self.assert_queue_contains_jobs_for([self.resolvable_document, doc])
+
+    @browsing
+    def test_pdf_conversion_job_is_not_queued_for_documents_in_resolved_subdossier(self, browser):
+        self.activate_feature('bumblebee')
+        self.login(self.secretariat_user, browser)
+
+        api.portal.set_registry_record(
+            'resolver_name', 'lenient', IDossierResolveProperties)
+
+        doc = self.create_additional_doc(self.resolvable_dossier)
+
+        with RequestsSessionMock.installed():
+            self.resolve(self.resolvable_subdossier, browser)
+            self.assert_queue_contains_jobs_for([])
+
+        api.portal.set_registry_record(
+            'archival_file_conversion_enabled', True,
+            interface=IDossierResolveProperties)
+
+        reset_queue()
+        with RequestsSessionMock.installed():
+            self.resolve(self.resolvable_dossier, browser)
+            self.assert_queue_contains_jobs_for([doc])
 
     @browsing
     def test_pdf_conversion_is_disabled_by_default(self, browser):
@@ -1236,7 +1259,7 @@ class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
             'archival_file_conversion_enabled', True,
             interface=IDossierResolveProperties)
 
-        doc = self.create_additional_doc()
+        doc = self.create_additional_doc(self.resolvable_subdossier)
 
         # Resolving doesn't trigger the AfterResolveJobs yet...
         self.resolve(self.resolvable_dossier, browser)
@@ -1246,6 +1269,40 @@ class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
             # ...executing the nightly jobs will.
             self.execute_nightly_jobs(expected=2)
             self.assert_queue_contains_jobs_for([self.resolvable_document, doc])
+
+    @browsing
+    def test_pdf_conversion_job_is_not_queued_for_documents_in_resolved_subdossier(self, browser):
+        self.activate_feature('bumblebee')
+        self.login(self.secretariat_user, browser)
+
+        api.portal.set_registry_record(
+            'resolver_name', 'lenient', IDossierResolveProperties)
+
+        doc = self.create_additional_doc(self.resolvable_dossier)
+
+        # Resolving doesn't trigger the AfterResolveJobs yet...
+        self.resolve(self.resolvable_subdossier, browser)
+        self.assertEquals(0, len(get_queue().queue))
+
+        with RequestsSessionMock.installed():
+            # ...executing the nightly jobs will.
+            self.execute_nightly_jobs(expected=1)
+            self.assert_queue_contains_jobs_for([])
+
+        api.portal.set_registry_record(
+            'archival_file_conversion_enabled', True,
+            interface=IDossierResolveProperties)
+
+        reset_queue()
+
+        # Resolving doesn't trigger the AfterResolveJobs yet...
+        self.resolve(self.resolvable_dossier, browser)
+        self.assertEquals(0, len(get_queue().queue))
+
+        with RequestsSessionMock.installed():
+            # ...executing the nightly jobs will.
+            self.execute_nightly_jobs(expected=1)
+            self.assert_queue_contains_jobs_for([doc])
 
     @browsing
     def test_pdf_conversion_is_disabled_by_default(self, browser):
