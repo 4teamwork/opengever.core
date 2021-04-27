@@ -1,0 +1,13 @@
+apachelog==1.0
+five.z2monitor==0.2
+ftw.contentstats==1.2.0
+ftw.monitor==1.2.0
+ftw.raven==1.2.0
+ftw.zopemaster==1.4.0
+mock==1.0.1
+zc.monitor==0.3.1
+zc.ngi==2.1.0
+zc.z3monitor==0.8.0
+zope.app.appsetup==3.14.0
+zope.minmax==1.1.2
+zope.session==3.9.5

@@ -1,0 +1,6 @@
+<configure xmlns:solr="http://namespaces.plone.org/solr">
+    <include package="ftw.solr" file="meta.zcml" />
+    <solr:connection host="solr"
+                     port="8983"
+                     base="/solr/ogsite"/>
+</configure>

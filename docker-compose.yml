@@ -23,6 +23,32 @@ services:
       - 3310:3310
     profiles:
       - clamav
+  ogcore:
+    build:
+      context: .
+      dockerfile: ./docker/core/Dockerfile
+    image: 4teamwork/ogcore:latest
+    volumes:
+      - ./var/ogcore:/data
+    ports:
+      - "8080:8080"
+      - "8160:8160"
+    environment:
+      - STORAGE=zeoclient
+    depends_on:
+      - zeoserver
+      - ogds
+      - solr
+    profiles:
+      - all
+      - ogcore
+  zeoserver:
+    image: 4teamwork/zeoserver:4.3.20
+    volumes:
+      - ./var/ogcore:/data
+    profiles:
+      - all
+      - ogcore
   ogds:
     image: postgres:12-alpine
     volumes:
