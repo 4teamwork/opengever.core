@@ -92,6 +92,13 @@
 
   <plone:service
       method="DELETE"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".workspace.DeleteWorkspaceContent"
+      permission="opengever.workspace.DeleteDocuments"
+      />
+
+  <plone:service
+      method="DELETE"
       for="opengever.workspace.interfaces.IToDo"
       factory=".workspace.DeleteWorkspaceContent"
       permission="opengever.workspace.DeleteTodos"
