@@ -1396,6 +1396,7 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
             {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
             {u'icon': u'', u'id': u'share_content', u'title': u'Share content'},
+            {u'icon': u'', u'id': u'delete_workspace_document', u'title': u'Delete'},
         ]
 
         self.assertListEqual(
@@ -1414,6 +1415,7 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
             {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
             {u'icon': u'', u'id': u'share_content', u'title': u'Share content'},
+            {u'icon': u'', u'id': u'delete_workspace_document', u'title': u'Delete'},
         ]
 
         self.assertListEqual(
