@@ -1127,7 +1127,8 @@ class TestFolderActions(IntegrationTestCase):
         self.login(self.workspace_member, browser)
 
         expected_folder_actions = [
-            {u'icon': u'', u'id': u'edit_items', u'title': u'Edit metadata'}
+            {u'icon': u'', u'id': u'edit_items', u'title': u'Edit metadata'},
+            {u'icon': u'', u'id': u'delete_workspace_document', u'title': u'Delete'}
         ]
 
         self.assertListEqual(
