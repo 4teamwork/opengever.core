@@ -1122,6 +1122,19 @@ class TestFolderActions(IntegrationTestCase):
             self.get_folder_actions(browser, self.repository_root),
         )
 
+    @browsing
+    def test_folder_actions_for_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+
+        expected_folder_actions = [
+            {u'icon': u'', u'id': u'edit_items', u'title': u'Edit metadata'}
+        ]
+
+        self.assertListEqual(
+            expected_folder_actions,
+            self.get_folder_actions(browser, self.workspace),
+        )
+
 
 class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
 
@@ -1336,6 +1349,75 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
         self.assertListEqual(
             expected_object_buttons,
             self.get_object_buttons(browser, self.inactive_document),
+        )
+
+    @browsing
+    def test_object_buttons_for_document_in_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+            {u'icon': u'', u'id': u'share_content', u'title': u'Share content'}]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.workspace_document),
+        )
+
+    @browsing
+    def test_actions_for_document_in_workspace_folder(self, browser):
+        self.login(self.workspace_member, browser)
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'checkout_document', u'title': u'Checkout'},
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+            {u'icon': u'', u'id': u'share_content', u'title': u'Share content'}
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.workspace_folder_document),
+        )
+
+    @browsing
+    def test_object_buttons_for_trashed_document_in_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(self.workspace_document.absolute_url() + '/@trash',
+                     method='POST', headers={'Accept': 'application/json'})
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+            {u'icon': u'', u'id': u'share_content', u'title': u'Share content'},
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.workspace_document),
+        )
+
+    @browsing
+    def test_actions_for_trashed_document_in_workspace_folder(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(self.workspace_folder_document.absolute_url() + '/@trash',
+                     method='POST', headers={'Accept': 'application/json'})
+
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'copy_item', u'title': u'Copy item'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
+            {u'icon': u'', u'id': u'share_content', u'title': u'Share content'},
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.workspace_folder_document),
         )
 
 
