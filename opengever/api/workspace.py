@@ -1,3 +1,4 @@
+from Acquisition import aq_chain
 from Acquisition import aq_parent
 from ftw.mail.mail import IMail
 from opengever.api.add import GeverFolderPost
@@ -5,12 +6,14 @@ from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.document.document import IDocumentSchema
 from opengever.ogds.base.actor import Actor
 from opengever.workspace.interfaces import IWorkspace
+from opengever.workspace.interfaces import IWorkspaceRoot
 from opengever.workspace.participation import can_manage_member
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -102,6 +105,8 @@ class DeleteWorkspaceContent(Service):
     See https://github.com/4teamwork/opengever.core/pull/6620 for more information
     """
     def reply(self):
+        if not self.is_within_workspace_root():
+            raise Unauthorized()
 
         parent = aq_parent(self.context)
         try:
@@ -110,3 +115,11 @@ class DeleteWorkspaceContent(Service):
             pass
 
         return self.reply_no_content()
+
+    def is_within_workspace_root(context):
+        """ Checks, if the content is within the workspace root.
+
+        We have to be sure that we can't delete a content with this endpoint
+        outside of the teamraum.
+        """
+        return bool(filter(IWorkspaceRoot.providedBy, aq_chain(context)))
