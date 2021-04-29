@@ -23,7 +23,8 @@ def get_entry_by_id(entries, token):
 
 def block_role_inheritance(obj, browser, copy_roles=False):
     browser.open(
-        obj.absolute_url() + '/@role-inheritance',
+        obj,
+        view='@role-inheritance',
         data=json.dumps({'blocked': True, 'copy_roles': copy_roles}),
         method='POST',
         headers=http_headers())
@@ -31,7 +32,8 @@ def block_role_inheritance(obj, browser, copy_roles=False):
 
 def remove_participation(obj, browser, token):
     browser.open(
-        obj.absolute_url() + '/@participations/{}'.format(token),
+        obj,
+        view='@participations/{}'.format(token),
         method='DELETE',
         headers=http_headers(),
     )
@@ -39,7 +41,8 @@ def remove_participation(obj, browser, token):
 
 def add_participation(obj, browser, token, role):
     browser.open(
-        obj.absolute_url() + '/@participations/{}'.format(token),
+        obj,
+        view='/@participations/{}'.format(token),
         method='POST',
         headers=http_headers(),
         data=json.dumps({'participant': token, 'role': role})
@@ -56,7 +59,8 @@ class TestParticipationGet(IntegrationTestCase):
         add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceMember')
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -139,7 +143,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_owner, browser)
 
         response = browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -159,7 +164,8 @@ class TestParticipationGet(IntegrationTestCase):
         block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
 
         response = browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -177,7 +183,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_owner, browser)
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -195,7 +202,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.workspace.__ac_local_roles__ = {'invalid_participant': ['WorkspaceAdmin']}
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -222,7 +230,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_admin, browser)
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -242,7 +251,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_admin, browser)
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -258,7 +268,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_admin, browser)
 
         response = browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -274,7 +285,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_member, browser)
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -288,7 +300,8 @@ class TestParticipationGet(IntegrationTestCase):
         self.login(self.workspace_owner, browser)
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
+            self.workspace,
+            view='@participations/{}'.format(self.workspace_guest.id),
             method='GET',
             headers=http_headers(),
         ).json
@@ -317,7 +330,8 @@ class TestParticipationGet(IntegrationTestCase):
         add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceMember')
 
         response = browser.open(
-            self.workspace.absolute_url() + '/@participations/projekt_a',
+            self.workspace,
+            view='@participations/projekt_a',
             method='GET',
             headers=http_headers(),
         ).json
@@ -347,7 +361,8 @@ class TestParticipationDelete(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -357,7 +372,8 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to have local roles for the user')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
+            self.workspace,
+            view='@participations/{}'.format(self.workspace_guest.id),
             method='DELETE',
             headers=http_headers(),
         )
@@ -365,7 +381,8 @@ class TestParticipationDelete(IntegrationTestCase):
         self.assertEqual(204, browser.status_code)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -381,7 +398,8 @@ class TestParticipationDelete(IntegrationTestCase):
         add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceGuest')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -391,7 +409,8 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to have local roles for the group')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations/projekt_a',
+            self.workspace,
+            view='@participations/projekt_a',
             method='DELETE',
             headers=http_headers(),
         )
@@ -399,7 +418,8 @@ class TestParticipationDelete(IntegrationTestCase):
         self.assertEqual(204, browser.status_code)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -415,7 +435,8 @@ class TestParticipationDelete(IntegrationTestCase):
         block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -425,7 +446,8 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to have local roles for the user')
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
+            self.workspace_folder,
+            view='@participations/{}'.format(self.workspace_guest.id),
             method='DELETE',
             headers=http_headers(),
         )
@@ -433,7 +455,8 @@ class TestParticipationDelete(IntegrationTestCase):
         self.assertEqual(204, browser.status_code)
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -443,7 +466,8 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to have no local roles anymore for the user')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -458,7 +482,8 @@ class TestParticipationDelete(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_admin.id),
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_admin.id),
                 method='DELETE',
                 headers=http_headers(),
             ).json
@@ -495,7 +520,6 @@ class TestParticipationDelete(IntegrationTestCase):
         block_role_inheritance(self.workspace_folder, browser, copy_roles=False)
 
         self.login(self.administrator, browser=browser)
-
         with browser.expect_http_error(400):
             browser.open(
                 self.workspace_folder,
@@ -517,7 +541,8 @@ class TestParticipationDelete(IntegrationTestCase):
 
         with browser.expect_http_error(401):
             browser.open(
-                self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_admin.id),
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_admin.id),
                 method='DELETE',
                 headers=http_headers(),
             ).json
@@ -528,7 +553,8 @@ class TestParticipationDelete(IntegrationTestCase):
 
         with browser.expect_http_error(401):
             browser.open(
-                self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_admin.id),
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_admin.id),
                 method='DELETE',
                 headers=http_headers(),
             ).json
@@ -540,13 +566,15 @@ class TestParticipationDelete(IntegrationTestCase):
         block_role_inheritance(self.workspace_folder, browser)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations/{}'.format(self.workspace_guest.id),
+            self.workspace,
+            view='@participations/{}'.format(self.workspace_guest.id),
             method='DELETE',
             headers=http_headers(),
         )
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -556,7 +584,8 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to have no local roles anymore for the user in the workspace')
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -573,7 +602,8 @@ class TestParticipationPatch(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -594,7 +624,8 @@ class TestParticipationPatch(IntegrationTestCase):
             )
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -611,7 +642,8 @@ class TestParticipationPatch(IntegrationTestCase):
         add_participation(self.workspace, browser, 'projekt_a', 'WorkspaceGuest')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -632,7 +664,8 @@ class TestParticipationPatch(IntegrationTestCase):
             )
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -706,7 +739,8 @@ class TestParticipationPatch(IntegrationTestCase):
         block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -727,7 +761,8 @@ class TestParticipationPatch(IntegrationTestCase):
             )
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -739,7 +774,8 @@ class TestParticipationPatch(IntegrationTestCase):
             'Expect to have the WorkspaceMember role')
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -759,7 +795,8 @@ class TestParticipationPatch(IntegrationTestCase):
                 'role': {'token': 'WorkspaceMember'}
             }))
             browser.open(
-                self.workspace.absolute_url() + '/@participations/{}'.format(self.regular_user.id),
+                self.workspace,
+                view='@participations/{}'.format(self.regular_user.id),
                 method='PATCH',
                 data=data,
                 headers=http_headers(),
@@ -770,7 +807,8 @@ class TestParticipationPatch(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -794,7 +832,8 @@ class TestParticipationPatch(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -823,7 +862,8 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         remove_participation(self.workspace, browser, self.workspace_member.id)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -837,14 +877,16 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         }
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='POST',
             data=json.dumps(data),
             headers=http_headers(),
             )
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -859,7 +901,8 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -873,14 +916,16 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         }
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='POST',
             data=json.dumps(data),
             headers=http_headers(),
             )
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -901,7 +946,8 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace.absolute_url() + '/@participations',
+                self.workspace,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -920,7 +966,8 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace.absolute_url() + '/@participations',
+                self.workspace,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -931,7 +978,8 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
-            self.workspace.absolute_url() + '/@participations',
+            self.workspace,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -946,7 +994,8 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace.absolute_url() + '/@participations',
+                self.workspace,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -963,7 +1012,8 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
         remove_participation(self.workspace_folder, browser, self.workspace_member.id)
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -977,14 +1027,16 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
         }
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='POST',
             data=json.dumps(data),
             headers=http_headers(),
             )
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -1005,7 +1057,8 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
 
         with browser.expect_http_error(403):
             browser.open(
-                self.workspace_folder.absolute_url() + '/@participations',
+                self.workspace_folder,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -1024,7 +1077,8 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace_folder.absolute_url() + '/@participations',
+                self.workspace_folder,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -1044,7 +1098,8 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace_folder.absolute_url() + '/@participations',
+                self.workspace_folder,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -1061,7 +1116,8 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
         block_role_inheritance(self.workspace_folder, browser, copy_roles=True)
 
         browser.open(
-            self.workspace_folder.absolute_url() + '/@participations',
+            self.workspace_folder,
+            view='@participations',
             method='GET',
             headers=http_headers(),
         )
@@ -1076,7 +1132,8 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace_folder.absolute_url() + '/@participations',
+                self.workspace_folder,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -1100,7 +1157,8 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(
-                self.workspace_folder.absolute_url() + '/@participations',
+                self.workspace_folder,
+                view='@participations',
                 method='POST',
                 data=json.dumps(data),
                 headers=http_headers(),
@@ -1132,7 +1190,8 @@ class TestMyInvitationsGet(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         response = browser.open(
-            self.portal.absolute_url() + '/@my-workspace-invitations',
+            self.portal,
+            view='@my-workspace-invitations',
             method='GET',
             headers=http_headers(),
         ).json
@@ -1156,7 +1215,8 @@ class TestInvitationsPOST(IntegrationTestCase):
 
     def get_my_invitations(self, browser):
         return browser.open(
-            self.portal.absolute_url() + '/@my-workspace-invitations',
+            self.portal,
+            view='@my-workspace-invitations',
             method='GET',
             headers=http_headers(),
         ).json
