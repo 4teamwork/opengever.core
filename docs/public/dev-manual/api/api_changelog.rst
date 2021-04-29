@@ -3,19 +3,27 @@
 API Changelog
 =============
 
-2021.8.0 (unreleased)
+2021.10.0 (unreleased)
 ---------------------
 
-Breaking Changes
-^^^^^^^^^^^^^^^^
 
-- Deserialization: Years before 1900 will now get rejected for date and datetime fields.
+2021.9.0 (2021-04-29)
+---------------------
 
 Other Changes
 ^^^^^^^^^^^^^
 
 - Task serialization now also returns is_remote_task and responsible_admin_unit_url.
 - New ``@version`` that returns the historical versions of a document.
+
+
+2021.8.0 (2021-04-15)
+---------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+- Deserialization: Years before 1900 will now get rejected for date and datetime fields.
 
 2021.7.0 (2021-04-01)
 ---------------------
