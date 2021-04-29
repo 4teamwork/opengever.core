@@ -4,7 +4,7 @@ Changelog
 2021.8.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix permanently delete workspace documents. [elioschmutz]
 
 
 2021.8.0 (2021-04-15)
