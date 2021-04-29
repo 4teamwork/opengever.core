@@ -8,6 +8,43 @@ Changelog
 
 .. towncrier release notes start
 
+2021.9.0 (2021-04-29)
+---------------------
+
+New features:
+
+
+- Add policyless deployment. [lgraf]
+- Add TTW bundle import. [lgraf]
+- Add support for configuration import via bundle. [lgraf]
+- Add new @versions endpoint for documents. [njohner]
+
+
+Bug fixes:
+
+
+- Fix searching for group descriptions with umlauts in search terms.
+- Planned tasks can now be opened manually when necessary. [njohner]
+- Fix `@history` endpoint when no history exists. [deiferni]
+- API: Reject years before 1900 for date and datetime fields. [lgraf]
+- Fix in-progress to close transition (API), for multi adminunit tasks. [phgross]
+
+
+Other changes:
+
+
+- Allow meetings to be reopened by a Manager. [deiferni]
+- No longer include `meetings.json` metadata file in ZIP download of original files. [deiferni]
+- Bump ftw.zopemaster to version 1.4.0 which provides support for TLS 1.2. [buchi]
+- Bump docxcompose to version 1.3.2 which handles DocProperties in a case-insensitive manner. [buchi]
+- Fix policygenerator for GEVER policies. [njohner, phgross]
+- Switch GEVER-UI setting to a overall admin_unit setting.
+- Bump ftw.solr to 2.9.3 and reindex documents with missing searchable text. [njohner]
+- Bump psutil version for compatibility with BigSur. [njohner]
+- Open Office Online in new tab. [buchi]
+- Add is_remote_task and responsible_admin_unit_url to task serialization. [njohner]
+
+
 2021.8.0 (2021-04-15)
 ---------------------
 

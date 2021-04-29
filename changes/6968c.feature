@@ -1,1 +1,0 @@
-Add support for configuration import via bundle. [lgraf]
