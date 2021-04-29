@@ -20,6 +20,11 @@ class LinkedWorkspacesStorage(object):
         """
         self._storage.append(uid)
 
+    def remove(self, uid):
+        """Remove a workspace by its UID.
+        """
+        self._storage.remove(uid)
+
     def list(self):
         """Returns the stored linked workspace UID's
         """

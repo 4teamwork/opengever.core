@@ -2,6 +2,7 @@ from opengever.api.add import GeverFolderPost
 from opengever.base.oguid import Oguid
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.utils import get_main_dossier
 from opengever.journal.handlers import journal_entry_factory
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.workspaceclient import _
@@ -27,6 +28,7 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.interface import noLongerProvides
 
 CACHE_TIMEOUT = 24 * 60 * 60
 
@@ -93,9 +95,6 @@ class LinkedWorkspaces(object):
     """
 
     def __init__(self, context):
-        if context.is_subdossier():
-            raise ComponentLookupError()
-
         self.client = WorkspaceClient()
         self.storage = LinkedWorkspacesStorage(context)
         self.context = context
@@ -147,7 +146,9 @@ class LinkedWorkspaces(object):
         return workspace
 
     def link_to_workspace(self, workspace_uid):
-        workspace = self.client.link_to_workspace(workspace_uid, Oguid.for_object(self.context).id)
+        workspace = self.client.link_to_workspace(
+                workspace_uid, Oguid.for_object(self.context).id)
+
         self.storage.add(workspace.get('UID'))
 
         if not ILinkedToWorkspace.providedBy(self.context):
@@ -368,6 +369,35 @@ class LinkedWorkspaces(object):
         """Returns true if the current context has linked workspaces
         """
         return self.list().get('items_total', 0) > 0
+
+    def move_workspace_links_to_main_dossier(self):
+        """Called by event handler when a dossier gets moved in to a subdossier.
+        """
+        main_dossier = get_main_dossier(self.context)
+        if main_dossier == self.context:
+            # dossier is still a main dossier no need for change
+            return
+
+        main_dossier_oguid = Oguid.for_object(main_dossier).id
+        main_dossier_linked_workspace = ILinkedWorkspaces(main_dossier)
+
+        uids = self.storage.list()
+        for workspace_uid in uids:
+            try:
+                self.client.update_dossier_uid(workspace_uid, main_dossier_oguid)
+            except Exception:
+                raise Exception(
+                    u'Linked workspaces could not be updated, '
+                    'moving this dossier into a dossier not possible.')
+
+        self.storage.remove(workspace_uid)
+        noLongerProvides(self.context, ILinkedToWorkspace)
+        self.context.reindexObject(idxs=['object_provides'])
+
+        main_dossier_linked_workspace.storage.add(workspace_uid)
+        if not ILinkedToWorkspace.providedBy(self.context):
+            alsoProvides(main_dossier, ILinkedToWorkspace)
+            main_dossier.reindexObject(idxs=['object_provides'])
 
     def _form_fields(self, obj):
         """Returns a list of all form field names of the given object.

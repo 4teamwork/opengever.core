@@ -184,15 +184,6 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                              [ws.get('@id') for ws in manager.list().get('items')])
             self.assertEqual(self.workspace.external_reference, Oguid.for_object(self.dossier).id)
 
-    def test_subdossiers_do_not_provided_linked_workspaces(self):
-        subdossier = create(Builder('dossier').within(self.dossier))
-
-        with self.workspace_client_env():
-            self.assertTrue(getAdapter(self.dossier, ILinkedWorkspaces))
-
-            with self.assertRaises(ComponentLookupError):
-                getAdapter(subdossier, ILinkedWorkspaces)
-
     def test_copy_document_without_file_to_workspace(self):
         document = create(Builder('document')
                           .within(self.dossier)
@@ -799,6 +790,30 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                             self.workspace.UID(), document.UID())
 
             self.assertEqual(0, len(children['added']))
+
+
+class TestMoveLinkedWorkspacesDossiers(FunctionalWorkspaceClientTestCase):
+
+    def test_move_dossier_inside_a_dossier_moves_linked_workspace_information_to_main_dossier(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            alsoProvides(self.dossier, ILinkedToWorkspace)
+            self.workspace.reindexObject(idxs=['object_provides'])
+            self.workspace.external_reference = self.dossier.UID()
+
+            target_dossier = create(Builder('dossier'))
+            api.content.move(source=self.dossier, target=target_dossier)
+
+            self.assertTrue(ILinkedToWorkspace.providedBy(target_dossier))
+            self.assertFalse(ILinkedToWorkspace.providedBy(self.dossier))
+
+            self.assertEqual({'items_total': 0, 'items': []},
+                             ILinkedWorkspaces(self.dossier).list())
+
+            target_dossier_adapter = ILinkedWorkspaces(target_dossier)
+            self.assertEqual(1, target_dossier_adapter.list()['items_total'])
+            self.assertIn(self.workspace.UID(), target_dossier_adapter.storage)
 
 
 class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
