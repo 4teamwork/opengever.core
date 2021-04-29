@@ -464,6 +464,54 @@ class TestParticipationDelete(IntegrationTestCase):
             ).json
 
     @browsing
+    def test_cannot_delete_the_last_workspace_admin_role_assignment(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        # we have two admins, deleting the first one should work
+        browser.open(
+            self.workspace,
+            view='@participations/{}'.format(self.workspace_owner.id),
+            method='DELETE',
+            headers=http_headers()
+        )
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_admin.id),
+                method='DELETE',
+                headers=http_headers()
+            )
+        self.assertEqual(
+            browser.json,
+            {
+                u'message': u'At least one principal must remain admin.',
+                u'type': u'BadRequest'
+            }
+        )
+
+    @browsing
+    def test_cannot_delete_the_last_folder_admin_role_assignment(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        block_role_inheritance(self.workspace_folder, browser, copy_roles=False)
+
+        self.login(self.administrator, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace_folder,
+                view='@participations/{}'.format(self.workspace_admin.id),
+                method='DELETE',
+                headers=http_headers()
+            )
+        self.assertEqual(
+            browser.json,
+            {
+                u'message': u'At least one principal must remain admin.',
+                u'type': u'BadRequest'
+            }
+        )
+
+    @browsing
     def test_guest_cannot_use_the_endpoint(self, browser):
         self.login(self.workspace_guest, browser=browser)
 
@@ -593,6 +641,63 @@ class TestParticipationPatch(IntegrationTestCase):
         self.assertEquals(
             {u'token': u'WorkspaceMember', u'title': u'Member'},
             entry.get('role'))
+
+    @browsing
+    def test_cannot_modify_the_last_workspace_admin_role_assignment(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        data = json.dumps(json_compatible({
+            'role': {'token': 'WorkspaceMember'}
+        }))
+        # we have two admins, modifying the first one should work
+        browser.open(
+            self.workspace,
+            view='@participations/{}'.format(self.workspace_owner.id),
+            method='PATCH',
+            data=data,
+            headers=http_headers()
+        )
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_admin.id),
+                method='PATCH',
+                data=data,
+                headers=http_headers()
+            )
+        self.assertEqual(
+            browser.json,
+            {
+                u'message': u'At least one principal must remain admin.',
+                u'type': u'BadRequest'
+            }
+        )
+
+    @browsing
+    def test_cannot_modify_the_last_folder_admin_role_assignment(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        block_role_inheritance(self.workspace_folder, browser, copy_roles=False)
+
+        self.login(self.administrator, browser=browser)
+
+        data = json.dumps(json_compatible({
+            'role': {'token': 'WorkspaceMember'}
+        }))
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace_folder,
+                view='@participations/{}'.format(self.workspace_admin.id),
+                method='PATCH',
+                data=data,
+                headers=http_headers()
+            )
+        self.assertEqual(
+            browser.json,
+            {
+                u'message': u'At least one principal must remain admin.',
+                u'type': u'BadRequest'
+            }
+        )
 
     @browsing
     def test_modify_a_users_local_role_on_folder(self, browser):
