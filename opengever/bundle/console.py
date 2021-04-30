@@ -87,8 +87,9 @@ def import_config_from_bundle(app, args):
 
     development_mode = bool(os.environ.get('IS_DEVELOPMENT_MODE'))
     json_data = _load_json(args.bundle_path, 'configuration.json')
-    importer = ConfigImporter(json_data)
-    importer.run(development_mode=development_mode)
+    if json_data:
+        importer = ConfigImporter(json_data)
+        importer.run(development_mode=development_mode)
 
 
 def setup_logging():
