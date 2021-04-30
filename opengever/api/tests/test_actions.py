@@ -1645,6 +1645,88 @@ class TestFolderButtonsGetForDossierTemplatesFolder(FolderActionsTestBase):
         )
 
 
+class TestFolderButtonsGetForWorkspace(FolderActionsTestBase):
+
+    @browsing
+    def test_available_folder_button_actions_for_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
+            {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
+            {u'icon': u'',
+             u'id': u'checkin_with_comment',
+             u'title': u'Check in with comment'},
+            {u'icon': u'',
+             u'id': u'checkin_without_comment',
+             u'title': u'Check in without comment'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
+            {u'icon': u'', u'id': u'create_forwarding', u'title': u'Forward'},
+            {u'icon': u'',
+             u'id': u'pdf_dossierlisting',
+             u'title': u'Print selection (PDF)'},
+            {u'icon': u'',
+             u'id': u'pdf_taskslisting',
+             u'title': u'Print selection (PDF)'}
+        ]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.workspace),
+        )
+
+    @browsing
+    def test_available_folder_button_actions_for_workspace_folder(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_folder_buttons = [
+            {u'icon': u'', u'id': u'rename', u'title': u'Rename'},
+            {u'icon': u'', u'id': u'zip_selected', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'export_tasks', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'copy_items', u'title': u'Copy items'},
+            {u'icon': u'', u'id': u'send_as_email', u'title': u'Send as email'},
+            {u'icon': u'', u'id': u'attach_documents', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'checkout', u'title': u'Check out'},
+            {u'icon': u'', u'id': u'cancel', u'title': u'Cancel'},
+            {u'icon': u'',
+             u'id': u'checkin_with_comment',
+             u'title': u'Check in with comment'},
+            {u'icon': u'',
+             u'id': u'checkin_without_comment',
+             u'title': u'Check in without comment'},
+            {u'icon': u'', u'id': u'export_documents', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'delete_participants', u'title': u'Delete'},
+            {u'icon': u'', u'id': u'add_participant', u'title': u'Add participant'},
+            {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
+            {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
+            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
+            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
+            {u'icon': u'',
+             u'id': u'pdf_dossierlisting',
+             u'title': u'Print selection (PDF)'},
+            {u'icon': u'',
+             u'id': u'pdf_taskslisting',
+             u'title': u'Print selection (PDF)'}
+        ]
+
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.workspace_folder),
+        )
+
+
 class TestWebActionsIntegration(IntegrationTestCase):
 
     @browsing

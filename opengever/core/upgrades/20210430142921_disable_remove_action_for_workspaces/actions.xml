@@ -1,0 +1,20 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- FOLDER BUTTONS -->
+  <object name="folder_buttons" meta_type="CMF Action Category">
+
+    <object name="remove" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">remove</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:./remove_confirmation:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:not (object.restrictedTraverse('@@plone_interface_info').provides('opengever.private.interfaces.IPrivateContainer')  or context.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspace')  or context.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspaceFolder'))</property>
+      <property name="permissions">
+        <element value="Remove GEVER content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+</object>
