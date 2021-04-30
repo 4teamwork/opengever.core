@@ -387,6 +387,7 @@ class AfterResolveJobs(object):
     def __init__(self, context):
         self.context = context
         self.catalog = api.portal.get_tool('portal_catalog')
+        self.num_pdf_conversions = 0
 
     def get_property(self, name):
         return api.portal.get_registry_record(
@@ -574,12 +575,9 @@ class AfterResolveJobs(object):
         if not self.get_property('archival_file_conversion_enabled'):
             return
 
-        path = '/'.join(self.context.getPhysicalPath())
-        docs = self.catalog.unrestrictedSearchResults(
-            path=path,
-            object_provides=IBaseDocument.__identifier__)
-        for doc in docs:
-            ArchivalFileConverter(doc.getObject()).trigger_conversion()
+        for doc in self.context.get_contained_documents(unrestricted=True):
+            self.num_pdf_conversions += ArchivalFileConverter(
+                doc.getObject()).trigger_conversion()
 
 
 class LenientDossierResolver(StrictDossierResolver):
