@@ -1673,7 +1673,6 @@ class TestFolderButtonsGetForWorkspace(FolderActionsTestBase):
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
             {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
-            {u'icon': u'', u'id': u'remove', u'title': u'Delete'},
             {u'icon': u'', u'id': u'create_forwarding', u'title': u'Forward'},
             {u'icon': u'',
              u'id': u'pdf_dossierlisting',

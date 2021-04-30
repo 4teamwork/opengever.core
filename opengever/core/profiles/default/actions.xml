@@ -485,7 +485,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:./remove_confirmation:method</property>
       <property name="icon_expr" />
-      <property name="available_expr">python:not object.restrictedTraverse('@@plone_interface_info').provides('opengever.private.interfaces.IPrivateContainer')</property>
+      <property name="available_expr">python:not (object.restrictedTraverse('@@plone_interface_info').provides('opengever.private.interfaces.IPrivateContainer')  or context.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspace')  or context.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspaceFolder'))</property>
       <property name="permissions">
         <element value="Remove GEVER content" />
       </property>
