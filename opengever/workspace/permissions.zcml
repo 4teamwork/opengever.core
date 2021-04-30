@@ -16,6 +16,8 @@
 
   <permission id="opengever.workspace.DeleteTodos" title="opengever.workspace: Delete Todos" />
 
+  <permission id="opengever.workspace.DeleteDocuments" title="opengever.workspace: Delete Documents" />
+
   <permission id="opengever.workspace.DeleteWorkspaceMeetingAgendaItems" title="opengever.workspace: Delete Workspace Meeting Agenda Items" />
 
 </configure>
