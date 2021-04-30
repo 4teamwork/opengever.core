@@ -233,19 +233,25 @@ class DossierContainer(Container):
 
         return subdossiers
 
-    def get_contained_documents(self):
+    def get_contained_documents(self, unrestricted=False):
         """Returns all documents that are not contained in any subdossier,
         i.e. documents whose parent dossier is this object, this includes
         documents in tasks directly contained in this dossier, etc.
         """
-        path = '/'.join(self.getPhysicalPath())
-        documents = self.portal_catalog.unrestrictedSearchResults(
-            path=path,
-            object_provides=IBaseDocument.__identifier__)
+        query = {
+            'path': '/'.join(self.getPhysicalPath()),
+            'object_provides': IBaseDocument.__identifier__}
+
+        if unrestricted:
+            search_function = self.portal_catalog.unrestrictedSearchResults
+        else:
+            search_function = self.portal_catalog
+
+        documents = search_function(query)
 
         docs_in_subdossiers = set()
         for subdossier in self.get_subdossiers(depth=1, unrestricted=True):
-            results = self.portal_catalog.unrestrictedSearchResults(
+            results = search_function(
                     path=subdossier.getPath(),
                     object_provides=IBaseDocument.__identifier__)
             docs_in_subdossiers.update(brain.UID for brain in results)

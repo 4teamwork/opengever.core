@@ -575,7 +575,7 @@ class AfterResolveJobs(object):
         if not self.get_property('archival_file_conversion_enabled'):
             return
 
-        for doc in self.context.get_contained_documents():
+        for doc in self.context.get_contained_documents(unrestricted=True):
             self.num_pdf_conversions += ArchivalFileConverter(
                 doc.getObject()).trigger_conversion()
 
