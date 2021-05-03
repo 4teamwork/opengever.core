@@ -63,8 +63,7 @@
       />
 
   <utility
-      component=".lifecycle.archival_value_vf"
-      provides="zope.schema.interfaces.IVocabularyFactory"
+      factory=".lifecycle.ArchivalValueVocabulary"
       name="lifecycle_archival_value_vocabulary"
       />
 

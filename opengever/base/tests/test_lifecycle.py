@@ -715,65 +715,7 @@ class TestArchivalValueVocabulary(IntegrationTestCase):
             form_field.options_values)
 
     @browsing
-    def test_invalid_acquired_value_falls_back_to_all_choices(self, browser):
-        # If vocab is supposed to be restricted, but we find an invalid value
-        # via acquisition, the vocab should fall back to offering all choices
-
-        self.login(self.administrator, browser=browser)
-
-        invalid_value = 7
-        self.set_archival_value(self.branch_repofolder, invalid_value)
-        self.set_archival_value(self.leaf_repofolder, invalid_value)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Archival value')
-        self.assertEqual(
-            ['unchecked',
-             'prompt',
-             'archival worthy',
-             'not archival worthy',
-             'archival worthy with sampling'],
-            form_field.options_values)
-
-    @browsing
-    def test_falsy_acquisition_value_falls_back_to_all_choices(self, browser):
-        # If vocab is supposed to be restricted, but we find a  value via
-        # acquisition that is falsy, the vocab should offer all choices
-        # XXX: This probably should check for None instead of falsyness
-        self.login(self.administrator, browser=browser)
-
-        falsy_value = 0
-        self.set_archival_value(self.branch_repofolder, falsy_value)
-        self.set_archival_value(self.leaf_repofolder, falsy_value)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Archival value')
-        self.assertEqual([
-            'unchecked',
-            'prompt',
-            'archival worthy',
-            'not archival worthy',
-            'archival worthy with sampling'],
-            form_field.options_values)
-
-    @browsing
-    def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        self.set_archival_value(self.leaf_repofolder, u'archival worthy')
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Archival value')
-        self.assertIn(u'archival worthy', form_field.options_values)
-
-    @browsing
-    def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
+    def test_vocab_is_not_restricted_by_aq_value(self, browser):
         self.login(self.administrator, browser=browser)
 
         self.set_archival_value(self.leaf_repofolder, u'prompt')
@@ -783,7 +725,8 @@ class TestArchivalValueVocabulary(IntegrationTestCase):
 
         form_field = browser.find('Archival value')
         self.assertSetEqual(
-            set(['prompt',
+            set(['unchecked',
+                 'prompt',
                  'archival worthy',
                  'not archival worthy',
                  'archival worthy with sampling']),
@@ -801,116 +744,6 @@ class TestArchivalValueVocabulary(IntegrationTestCase):
         form_field = browser.find('Archival value')
 
         self.assertEqual('prompt', form_field.value)
-        # Default listed first
-        self.assertEqual('prompt', form_field.options_values[0])
-
-    @browsing
-    def test_restriction_works_in_edit_form(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        self.set_archival_value(self.leaf_repofolder, u'prompt')
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-
-        browser.click_on('Edit')
-        form_field = browser.find('Archival value')
-
-        self.assertSetEqual(
-            set(['archival worthy',
-                 'prompt',
-                 'archival worthy with sampling',
-                 'not archival worthy']),
-            set(form_field.options_values))
-
-
-class TestArchivalValuePropagation(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestArchivalValuePropagation, self).setUp()
-        self.field = ILifeCycle['archival_value']
-
-    def get_archival_value(self, obj):
-        return self.field.get(self.field.interface(obj))
-
-    def set_archival_value(self, obj, value):
-        self.field.set(self.field.interface(obj), value)
-
-    @browsing
-    def test_change_propagates_to_children(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        # Start with a loose archival value
-        self.set_archival_value(self.branch_repofolder, u'unchecked')
-        self.set_archival_value(self.leaf_repofolder, u'unchecked')
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        value = self.get_archival_value(dossier)
-        # Dossier should have inherited archival value from repofolder
-        self.assertEqual(u'unchecked', value)
-
-        browser.open(self.leaf_repofolder, view='edit')
-        # Make archival value more strict
-        browser.fill({'Archival value': 'prompt'}).save()
-
-        value = self.get_archival_value(dossier)
-        # Stricter archival value should have propagated to dossier
-        self.assertEqual(u'prompt', value)
-
-    @browsing
-    def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({
-            'Title': 'My Dossier',
-            'Archival value': 'prompt'}).save()
-        dossier = browser.context
-
-        value = self.get_archival_value(dossier)
-        self.assertEqual('prompt', value)
-
-        browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Archival value': 'unchecked'}).save()
-
-        value = self.get_archival_value(dossier)
-        self.assertEqual('prompt', value)
-
-    @browsing
-    def test_propagation_is_depth_limited(self, browser):
-        """Propagation of archival value is depth limited to 2 levels.
-        Not sure why this was implemented this way, but here we test for it.
-        """
-        self.login(self.administrator, browser=browser)
-
-        # Start with a loose archival value
-        self.set_archival_value(self.branch_repofolder, u'unchecked')
-        repofolder2 = create(Builder('repository').within(self.branch_repofolder))
-        repofolder3 = create(Builder('repository').within(repofolder2))
-
-        browser.open(repofolder3)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        value = self.get_archival_value(dossier)
-        # Dossier should have inherited archival value from repofolder2
-        self.assertEqual(u'unchecked', value)
-
-        browser.open(self.branch_repofolder, view='edit')
-        # Make archival value more strict on top level repofolder
-        browser.fill({'Archival value': 'prompt'}).save()
-
-        # Stricter archival value should have propagated to repofolder2, but
-        # not dossier (because of depth limitation)
-        self.assertEqual(u'prompt', self.get_archival_value(repofolder2))
-        self.assertEqual(u'unchecked', self.get_archival_value(dossier))
 
 
 class TestDateOfSubmission(IntegrationTestCase):

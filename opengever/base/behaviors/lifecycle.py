@@ -14,9 +14,13 @@ from zope import schema
 from zope.component import getUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.interface import alsoProvides
+from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class ILifeCycleMarker(Interface):
@@ -189,20 +193,26 @@ ARCHIVAL_VALUE_PROMPT = u'prompt'
 ARCHIVAL_VALUE_WORTHY = u'archival worthy'
 ARCHIVAL_VALUE_UNWORTHY = u'not archival worthy'
 ARCHIVAL_VALUE_SAMPLING = u'archival worthy with sampling'
-ARCHIVAL_VALUE_CHOICES = (
-    (1, ARCHIVAL_VALUE_UNCHECKED),
-    (2, ARCHIVAL_VALUE_PROMPT),
-    (3, ARCHIVAL_VALUE_WORTHY),
-    (3, ARCHIVAL_VALUE_UNWORTHY),
-    (3, ARCHIVAL_VALUE_SAMPLING),
-)
+ARCHIVAL_VALUE_CHOICES = [
+    ARCHIVAL_VALUE_UNCHECKED,
+    ARCHIVAL_VALUE_PROMPT,
+    ARCHIVAL_VALUE_WORTHY,
+    ARCHIVAL_VALUE_UNWORTHY,
+    ARCHIVAL_VALUE_SAMPLING,
+]
 
 
-archival_value_vf = RestrictedVocabularyFactory(
-    ILifeCycle['archival_value'],
-    ARCHIVAL_VALUE_CHOICES,
-    message_factory=_,
-    restricted=True)
+@implementer(IVocabularyFactory)
+class ArchivalValueVocabulary(object):
+
+    def __call__(self, context):
+        terms = []
+        for archival_value in ARCHIVAL_VALUE_CHOICES:
+            terms.append(
+                SimpleTerm(value=archival_value, token=archival_value,
+                           title=_(archival_value)))
+
+        return SimpleVocabulary(terms)
 
 
 @provider(IContextAwareDefaultFactory)
