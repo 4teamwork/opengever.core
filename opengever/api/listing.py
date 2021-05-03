@@ -51,6 +51,8 @@ OTHER_ALLOWED_FIELDS = set([
     'trashed',
     'UID',
     'watchers',
+    'yesorno_custom_field_boolean',
+    'help_text_custom_field_string',
 ])
 
 ALLOWED_ORDER_GROUP_FIELDS = set([

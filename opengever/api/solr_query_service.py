@@ -372,7 +372,10 @@ class SolrQueryBaseService(Service):
     def __init__(self, context, request):
         super(SolrQueryBaseService, self).__init__(context, request)
         self.solr = getUtility(ISolrSearch)
-        self.solr_fields = set(self.solr.manager.schema.fields.keys())
+        dynamic_fields = set([field.get('name') for field in
+                             self.solr.manager.connection.get('/schema').get('schema').get('dynamicFields')])
+
+        self.solr_fields = set(self.solr.manager.schema.fields.keys()) | dynamic_fields
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
         self.facets = []
@@ -467,10 +470,15 @@ class SolrQueryBaseService(Service):
         requested_solr_fields = set([])
         for field_name in self.response_fields:
             field = self.get_field(field_name)
-            requested_solr_fields.add(field.index)
+            solr_field_name = ''
+            if field.index:
+                solr_field_name = field.index if '_custom_field_' not in field.index else '*_custom_field_{}'.format(field.index.split('_custom_field_')[1])
+            requested_solr_fields.add(solr_field_name)
             # certain fields require data from other solr fields to be computed.
             requested_solr_fields.update(set(field.additional_required_fields))
-        return list(requested_solr_fields & self.solr_fields)
+
+        solr_fields = list(requested_solr_fields & self.solr_fields)
+        solr_fields.extend
 
     def extract_depth(self, params):
         """If depth is not specified we search recursively
