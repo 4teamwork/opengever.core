@@ -11,6 +11,8 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.meeting.handlers import ProposalSqlSyncer
 from opengever.task.task import ITask
+from opengever.workspaceclient.interfaces import ILinkedToWorkspace
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -169,3 +171,18 @@ def update_dossier_touched_date_for_move_event(obj, event):
     """
     if obj == event.object:
         update_dossier_touched_date(obj, event)
+
+
+def move_connected_teamraum_to_main_dossier(obj, event):
+    """If a dossier with linked workspaces gets moved into a dossier,
+    the workspace link needs to be updated and moved to the new main dossier.
+    """
+    # make sure obj wasn't just created or deleted
+    if not event.oldParent or not event.newParent:
+        return
+
+    if not ILinkedToWorkspace.providedBy(obj):
+        return
+
+    linked_workspaces = ILinkedWorkspaces(obj)
+    linked_workspaces.move_workspace_links_to_main_dossier()

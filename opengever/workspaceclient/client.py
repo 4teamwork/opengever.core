@@ -90,6 +90,14 @@ class WorkspaceClient(object):
                                   json={'external_reference': dossier_oguid},
                                   headers={'Prefer': 'return=representation'}).json()
 
+    def update_dossier_uid(self, workspace_uid, new_dossier_oguid):
+        """Updates external_reference on the remote workspace."""
+
+        workspace = self.get_by_uid(uid=workspace_uid)
+        return self.request.patch(
+            workspace.get('@id'),
+            json={'external_reference': new_dossier_oguid})
+
     def get_by_uid(self, uid, **kwargs):
         """Searches on the remote system for an object having the given UID
         and returns it (serialized).

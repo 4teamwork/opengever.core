@@ -251,6 +251,12 @@
 
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.move_connected_teamraum_to_main_dossier"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.reindex_contained_objects"
       />
