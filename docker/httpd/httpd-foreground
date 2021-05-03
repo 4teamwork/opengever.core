@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+# Generate httpd.conf based on environment variables
+esh -o /usr/local/apache2/conf/httpd.conf /usr/local/apache2/conf/httpd.conf.esh
+
+# Apache gets grumpy about PID files pre-existing
+rm -f /usr/local/apache2/logs/httpd.pid
+
+exec httpd -DFOREGROUND "$@"

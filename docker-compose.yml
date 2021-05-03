@@ -1,6 +1,21 @@
 version: "3"
 
 services:
+  httpd:
+    image: 4teamwork/oghttpd:latest
+    build:
+      context: .
+      dockerfile: ./docker/httpd/Dockerfile
+    ports:
+      - "8081:80"
+    depends_on:
+      - ogui
+      - ogcore
+    environment:
+      - HTTP_PROTOCOL=http
+      - HTTP_PORT=8081
+    profiles:
+      - all
   msgconvert:
     image: 4teamwork/msgconvert:latest
     ports:
@@ -23,6 +38,10 @@ services:
       - 3310:3310
     profiles:
       - clamav
+  ogui:
+    image: 4teamwork/ogui:latest
+    profiles:
+      - all
   ogcore:
     build:
       context: .
