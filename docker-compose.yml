@@ -14,6 +14,7 @@ services:
     environment:
       - HTTP_PROTOCOL=http
       - HTTP_PORT=8081
+      - PORTAL_HOST=ianus-frontend
     profiles:
       - all
   msgconvert:
@@ -97,6 +98,55 @@ services:
     profiles:
       - all
       - solr
+  ianus-frontend:
+    image: ghcr.io/4teamwork/ianus-frontend:2021.2.0
+    ports:
+      - "3000:80"
+    depends_on:
+      - ianus-backend
+    environment:
+      - IANUS_BACKEND_HOST=ianus-backend
+      - IANUS_PATH_PREFIX=/portal
+    profiles:
+      - all
+      - ianus
+  ianus-backend:
+    image: ghcr.io/4teamwork/ianus-backend:2021.2.0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ianus-db
+    environment:
+      - DJANGO_SECRET_KEY=secret
+      - DJANGO_ALLOWED_HOSTS=localhost,teamraum
+      - DJANGO_PATH_PREFIX=/portal
+      - DJANGO_SESSION_COOKIE_SECURE=False
+      - DJANGO_DATABASE_NAME=ianus
+      - DJANGO_DATABASE_USER=ianus
+      - DJANGO_DATABASE_PASSWORD=secret
+      - DJANGO_DATABASE_HOST=ianus-db
+      - DJANGO_DATABASE_PORT=5432
+      - DJANGO_TWO_FACTOR_REQUIRED=False
+      - DJANGO_OIDC_RP_SIGN_ALGO=HS256
+      - DJANGO_AUTH_LDAP_SERVER_URI=ldap://389ds:3389
+      - DJANGO_AUTH_LDAP_BIND_DN=cn=Directory Manager
+      - DJANGO_AUTH_LDAP_BIND_PASSWORD=secret
+      - DJANGO_AUTH_LDAP_USER_BASE_DN=ou=Users,dc=example,dc=com
+      - DJANGO_AUTH_LDAP_USER_ATTR_MAP={'first_name':'givenName','last_name':'sn','email':'mail','username':'uid'}
+    profiles:
+      - all
+      - ianus
+  ianus-db:
+    image: postgres:12-alpine
+    volumes:
+      - ./var/ianus-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=ianus
+      - POSTGRES_USER=ianus
+      - POSTGRES_PASSWORD=secret
+    profiles:
+      - all
+      - ianus
   389ds:
     image: 4teamwork/389ds:2.0.4
     ports:
