@@ -71,7 +71,8 @@ class DebugDocxCompose(BrowserView):
     def add_sablon_for_paragraph(self, index, agenda_item, generator):
         committee = self.meeting.committee.resolve_committee()
         template = committee.get_paragraph_template()
-
+        if template is None:
+            return
         sablon = Sablon(template).process(
             ProtocolData(self.meeting, [agenda_item]).as_json())
 
