@@ -6,6 +6,11 @@ API Changelog
 2021.10.0 (unreleased)
 ----------------------
 
+Other Changes
+^^^^^^^^^^^^^
+
+- The ``@participations`` endpoint now prevents removing the last ``WorkspaceAdmin`` from a workspace.
+
 
 2021.9.0 (2021-04-29)
 ---------------------

@@ -17,7 +17,8 @@ from zope.component import getUtility
 import json
 
 
-MANAGED_ROLES = ['WorkspaceGuest', 'WorkspaceMember', 'WorkspaceAdmin']
+ADMIN_ROLE = 'WorkspaceAdmin'
+MANAGED_ROLES = ['WorkspaceGuest', 'WorkspaceMember', ADMIN_ROLE]
 
 
 class ManageParticipants(BrowserView):
@@ -111,6 +112,7 @@ class ManageParticipants(BrowserView):
         elif type_ in ['user', 'group'] and can_manage_member(self.context, Actor.lookup(token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_SHARING, token)
+            self._require_admin_assignment()
             # Avoid circular imports
             from opengever.workspace.activities import WorkspaceWatcherManager
             manager = WorkspaceWatcherManager(self.context)
@@ -147,6 +149,8 @@ class ManageParticipants(BrowserView):
                 assignment = SharingRoleAssignment(token, [role], self.context)
                 RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
+                self._require_admin_assignment()
+
                 self.context.setModificationDate()
                 self.context.reindexObject(idxs=['modified'])
                 self.request.RESPONSE.setStatus(204)
@@ -158,6 +162,21 @@ class ManageParticipants(BrowserView):
             storage.update_invitation(token, role=role)
         else:
             raise BadRequest('Wrong type')
+
+    def _require_admin_assignment(self):
+        """Require at least one admin assignment.
+
+        Call this method after modifying local roles to ensure that there
+        is at least one principal assigned to the admin role.
+        Helps to ensure that users don't irreversibly remove the admin role
+        for all users on a workspace or workspace folder.
+        """
+        manager = RoleAssignmentManager(self.context)
+        for assignment in manager.get_assignments_by_cause(ASSIGNMENT_VIA_SHARING):
+            if ADMIN_ROLE in assignment.get('roles', []):
+                return
+
+        raise BadRequest('At least one principal must remain admin.')
 
     def search(self):
         """ A traversable method to search for users"""

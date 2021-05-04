@@ -16,6 +16,10 @@ Es gibt folgende Beteiligungsrollen:
 
 Diese Endpoints liefern zur Zeit sowohl ``participant`` als auch ``participant_actor`` zurück. ``participant`` wird in einer späteren Version jedoch nicht mehr unterstützt werden, und wird durch ``participant_actor`` abgelöst.
 
+Es wird sichergestellt, dass immer mindestens ein Principal die Rolle
+``WorkspaceAdmin`` hat. Das Entfernen der letzen solchen Rollen-Zuweisung wird
+durch das Backend verhindert und mit dem Status ``400`` beantwortet.
+
 
 Beteiligungen abrufen:
 ----------------------
