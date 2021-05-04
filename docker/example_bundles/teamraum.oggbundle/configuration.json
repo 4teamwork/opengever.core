@@ -1,0 +1,41 @@
+{
+  "units": {
+    "admin_units": [
+      {
+        "unit_id": "entenhausen",
+        "title": "Entenhausen",
+        "ip_address": "127.0.0.1",
+        "site_url": "http://teamraum:8081/",
+        "public_url": "http://teamraum:8081/",
+        "abbreviation": "EH"
+      }
+    ],
+    "org_units": [
+      {
+        "unit_id": "entenhausen",
+        "title": "Entenhausen",
+        "admin_unit_id": "entenhausen",
+        "users_group_id": "tr_users",
+        "inbox_group_id": "tr_administrators"
+      }
+    ]
+  },
+  "registry": {
+    "opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled": true
+  },
+  "ldap": {
+    "users_base": "ou=Users,dc=example,dc=com",
+    "groups_base": "ou=Groups,dc=example,dc=com",
+    "_binduid": "cn=Directory Manager",
+    "_bindpwd": "secret",
+    "servers": [
+        {
+            "host": "389ds",
+            "protocol": "ldap",
+            "port": 3389,
+            "conn_timeout": 5,
+            "op_timeout": 10
+        }
+    ]
+  }
+}
