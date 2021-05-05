@@ -46,6 +46,10 @@ class SolrDynamicField(object):
     DYNAMIC_FIELD_IDENT = '_custom_field_'
 
     @classmethod
+    def is_dynamic_field(cls, name):
+        return cls.DYNAMIC_FIELD_IDENT in name
+
+    @classmethod
     def supports(cls, field):
         return type(field) in cls.SUPPORTED_TYPES
 

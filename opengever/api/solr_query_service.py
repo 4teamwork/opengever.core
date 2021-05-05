@@ -13,6 +13,7 @@ from opengever.base.utils import safe_int
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
+from opengever.propertysheets.definition import SolrDynamicField
 from opengever.task.helper import task_type_helper
 from plone import api
 from plone.restapi.batching import HypermediaBatch
@@ -464,13 +465,17 @@ class SolrQueryBaseService(Service):
         self.response_fields = (set(requested_fields)
                                 | self.required_response_fields)
 
+        dynamic_fields = []
         requested_solr_fields = set([])
         for field_name in self.response_fields:
             field = self.get_field(field_name)
             requested_solr_fields.add(field.index)
             # certain fields require data from other solr fields to be computed.
             requested_solr_fields.update(set(field.additional_required_fields))
-        return list(requested_solr_fields & self.solr_fields)
+            if SolrDynamicField.is_dynamic_field(field_name):
+                dynamic_fields.append(field_name)
+
+        return list(requested_solr_fields & self.solr_fields) + dynamic_fields
 
     def extract_depth(self, params):
         """If depth is not specified we search recursively
