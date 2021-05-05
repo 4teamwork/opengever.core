@@ -4,15 +4,6 @@ from opengever.document.behaviors.customproperties import IDocumentCustomPropert
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from zope.schema import getFields
-from zope.schema import Text
-
-
-SOLR_TYPES = {
-    'unicode': 'string',
-    'str': 'string',
-    'bool': 'boolean',
-    'int': 'int',
-}
 
 
 class CustomPropertiesIndexHandler(DefaultIndexHandler):
@@ -47,15 +38,11 @@ class CustomPropertiesIndexHandler(DefaultIndexHandler):
             if not definition:
                 continue
 
-            for name, custom_field in definition.get_fields():
-                # Custom properties are indexed for filtering and sorting.
-                # This doesn't make sense for multiline text.
-                if type(custom_field) == Text:
-                    continue
+            for solr_field in definition.get_solr_dynamic_fields():
+                name = solr_field.name
                 if name in custom_properties[slot]:
                     value = custom_properties[slot][name]
-                    solr_type = SOLR_TYPES.get(type(value).__name__, 'string')
-                    data['{}_custom_field_{}'.format(name, solr_type)] = value
+                    data[solr_field.solr_field_name] = value
 
         return data
 
