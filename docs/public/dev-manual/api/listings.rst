@@ -126,6 +126,8 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``UID``: UID des Objektes
 - ``watchers``: Liste von Beobachtern des Objekts (Benutzernamen)
 
+Weitere dynamische Felder sind gemäss :ref:`benutzerdefinierte Felder <listing-property_sheets>` verfügbar.
+
 Je nach Auflistungstyp und Inhalt sind bestimmte Felder nicht verfügbar. In diesem
 Fall wird der Wert ``none`` zurückgegeben. So haben Dossiers bspw. keinen Dateinamen,
 siehe Tabelle:
@@ -243,6 +245,54 @@ siehe Tabelle:
     |``watchers``              |   nein   |   nein  |     nein     |        nein        |   ja    |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |      nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+
 
+.. _listing-property_sheets:
+
+Benutzerdefinierte Felder:
+--------------------------
+
+Falls :ref:`benutzerdefinierte Felder <propertysheets>` definiert sind, stehen
+mit dem Endpoint ``@listing-custom-fields`` weitere, dynamische Felder zur
+Verfügung. Der Endpoint kann z.B. dafür benutzt werden um in einem Filtermenü
+sichtbare Spalten darzustellen. Er leifert ``title``, ``type`` und ``name``
+zurück. Der ``name`` kann für den Parameter ``columns`` des ``@listing``
+Endpoints verwendet werden.
+
+  .. sourcecode:: http
+
+    GET /@listing-custom-fields HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+        "documents": {
+            "properties": {
+                "buul_custom_field_boolean": {
+                    "name": "buul_custom_field_boolean",
+                    "title": "J/N",
+                    "type": "boolean"
+                },
+                "choice_custom_field_string": {
+                    "name": "choice_custom_field_string",
+                    "title": "Auswahl",
+                    "type": "string"
+                },
+                "num_custom_field_int": {
+                    "name": "num_custom_field_int",
+                    "title": "Zahl",
+                    "type": "integer"
+                },
+                "textline_custom_field_string": {
+                    "name": "textline_custom_field_string",
+                    "title": "Zeile Text",
+                    "type": "string"
+                }
+            }
+        }
+    }
 
 
 Optionale Parameter:
