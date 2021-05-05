@@ -1,0 +1,105 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.testing import IntegrationTestCase
+
+
+class TestListingCustomFieldsGet(IntegrationTestCase):
+
+    maxDiff = None
+
+    @browsing
+    def test_listing_custom_fields_fixture_slots(self, browser):
+        self.login(self.manager)
+        create(
+            Builder("property_sheet_schema")
+            .named("default_doc_schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("textline", u"f1", u"Field 1", u"", False)
+        )
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@listing-custom-fields',
+                     headers=self.api_headers)
+
+        self.assertEqual(
+            {
+                u"documents": {
+                    u"properties": {
+                        u"choose_custom_field_string": {
+                            u"name": u"choose_custom_field_string",
+                            u"title": u"Choose",
+                            u"type": u"string"
+                        },
+                        u"f1_custom_field_string": {
+                            u"name": u"f1_custom_field_string",
+                            u"title": u"Field 1",
+                            u"type": u"string"
+                        },
+                        u"num_custom_field_int": {
+                            u"name": u"num_custom_field_int",
+                            u"title": u"Number",
+                            u"type": u"integer"
+                        },
+                        u"textline_custom_field_string": {
+                            u"name": u"textline_custom_field_string",
+                            u"title": u"A line of text",
+                            u"type": u"string"
+                        },
+                        u"yesorno_custom_field_boolean": {
+                            u"name": u"yesorno_custom_field_boolean",
+                            u"title": u"Yes or no",
+                            u"type": u"boolean"
+                        }
+                    }
+                },
+                u"dossiers": {
+                    u"properties": {
+                        u"additional_title_custom_field_string": {
+                            u"name": u"additional_title_custom_field_string",
+                            u"title": u"Additional dossier title",
+                            u"type": u"string"
+                        }
+                    }
+                }
+            },
+            browser.json
+        )
+
+    @browsing
+    def test_listing_custom_fields_merges_duplicate_slots(self, browser):
+        self.login(self.manager)
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("bool", u"yesorno", u"Y/N (question)", u"", True)
+        )
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.regulations")
+            .with_field("bool", u"yesorno", u"Y/N (regulations)", u"", True)
+        )
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@listing-custom-fields',
+                     headers=self.api_headers)
+
+        self.assertEqual(
+            {
+                u"documents": {
+                    u"properties": {
+                        u"yesorno_custom_field_boolean": {
+                            u"name": u"yesorno_custom_field_boolean",
+                            u"title": u"Y/N (regulations)",
+                            u"type": u"boolean"
+                        }
+                    }
+                }
+            },
+            browser.json
+        )

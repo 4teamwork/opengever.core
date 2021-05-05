@@ -458,6 +458,14 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".listing_custom_fields.ListingCustomFieldsGet"
+      name="@listing-custom-fields"
+      permission="zope2.View"
+      />
+
   <adapter
       factory=".listing_stats.ListingStats"
       name="listing-stats"
