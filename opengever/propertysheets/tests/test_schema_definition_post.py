@@ -160,6 +160,40 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
     @browsing
+    def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "wahl",
+                    "field_type": u"choice",
+                    "title": u"w\xe4hl was",
+                    "values": [1, True]
+                }
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                view="@propertysheets/foo",
+                method="POST",
+                data=json.dumps(data),
+                headers=self.api_headers,
+            )
+
+        self.assertDictContainsSubset(
+            {
+                "type": "BadRequest",
+            },
+            browser.json,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        self.assertEqual(3, len(storage))
+
+    @browsing
     def test_property_sheet_schema_definition_post_replaces_existing_schema(self, browser):
         self.login(self.manager, browser)
         create(Builder("property_sheet_schema").named("question"))
