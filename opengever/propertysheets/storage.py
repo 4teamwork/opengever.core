@@ -1,4 +1,3 @@
-from opengever.propertysheets.assignment import get_slots_enforcing_unique_field_names
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from persistent.mapping import PersistentMapping
@@ -37,70 +36,25 @@ class PropertySheetSchemaStorage(object):
             result.append(self.get(name))
         return result
 
-    def _validate_schema_definition(self, storage, new_definition):
-        """Validate a new schema definition.
+    def save(self, schema_definition):
+        annotations = IAnnotations(self.context)
 
-        Performs the following validations:
-        - Ensure that there is at most one definition per slot.
-        - Ensure that a definition is not assigned to conflicting slots.
-        - Ensure that fields within the schema definitions do not overlap.
-          Currently an external method defines the relationship between
-          different slots and which slots could overlap other slots.
+        if self.ANNOTATIONS_KEY not in annotations:
+            annotations[self.ANNOTATIONS_KEY] = PersistentMapping()
 
-        """
+        storage = annotations[self.ANNOTATIONS_KEY]
+
         used_assignments = set()
         for definition_data in storage.values():
             used_assignments.update(definition_data['assignments'])
 
-        for new_assignment in new_definition.assignments:
+        for new_assignment in schema_definition.assignments:
             if new_assignment in used_assignments:
                 raise InvalidSchemaAssignment(
                     u"The assignment '{}' is already in use.".format(
                         new_assignment)
                 )
             used_assignments.add(new_assignment)
-
-        maybe_conflicting = set()
-        for slot_name in new_definition.assignments:
-            maybe_conflicting.update(
-                get_slots_enforcing_unique_field_names(slot_name)
-            )
-
-        conflicting_within_new_definition = [
-            assignment for assignment in new_definition.assignments
-            if assignment in maybe_conflicting
-        ]
-        if conflicting_within_new_definition:
-            raise InvalidSchemaAssignment(
-                u"The assignments '{}' cannot be used for the same "
-                u"sheet.".format(
-                    u"', '".join(conflicting_within_new_definition))
-            )
-
-        # sort for stable validation order/output
-        for assignment in sorted(maybe_conflicting):
-            existing_definition = self.query(assignment)
-            if not existing_definition:
-                continue
-
-            intersecting_fields = (
-                set(existing_definition.get_fieldnames())
-                & set(new_definition.get_fieldnames())
-            )
-            if intersecting_fields:
-                raise InvalidSchemaAssignment(
-                    u"Overlapping field names '{}' in assignment '{}'".format(
-                        u"', '".join(intersecting_fields), assignment
-                    )
-                )
-
-    def save(self, schema_definition):
-        annotations = IAnnotations(self.context)
-        if self.ANNOTATIONS_KEY not in annotations:
-            annotations[self.ANNOTATIONS_KEY] = PersistentMapping()
-        storage = annotations[self.ANNOTATIONS_KEY]
-
-        self._validate_schema_definition(storage, schema_definition)
 
         schema_definition._save(storage)
 

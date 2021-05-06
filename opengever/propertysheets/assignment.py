@@ -26,24 +26,21 @@ class PropertySheetAssignmentVocabulary(object):
         return SimpleVocabulary(assignment_terms)
 
 
-def _get_document_type_slots():
-    vocabulary_factory = getUtility(
-        IVocabularyFactory, name="opengever.document.document_types"
-    )
-    return [
-        document_type_assignment_slot_name(term.value)
-        for term in vocabulary_factory(None)
-    ]
-
-
 def get_document_assignment_slots():
     """"Return a list of all valid assignment slots for documents.
 
     This is limited to one slot per possible value of the
     `document_type` field and the default document slot.
     """
+    vocabulary_factory = getUtility(
+        IVocabularyFactory, name="opengever.document.document_types"
+    )
+    terms = [
+        document_type_assignment_slot_name(term.value)
+        for term in vocabulary_factory(None)
+    ]
 
-    return [DOCUMENT_DEFAULT_ASSIGNMENT_SLOT] + _get_document_type_slots()
+    return [DOCUMENT_DEFAULT_ASSIGNMENT_SLOT] + terms
 
 
 def document_type_assignment_slot_name(value):
@@ -53,46 +50,22 @@ def document_type_assignment_slot_name(value):
     )
 
 
-def _get_dossier_type_slots():
-    vocabulary_factory = getUtility(
-        IVocabularyFactory, name="opengever.dossier.dossier_types"
-    )
-    return [
-        dossier_type_assignment_slot_name(term.value)
-        for term in vocabulary_factory(None)
-    ]
-
-
 def get_dossier_assignment_slots():
     """"Return a list of all valid assignment slots for dossiers.
 
     This is limited to one slot per possible value of the
     `dossier_type` field and the default dossier slot.
     """
+    vocabulary_factory = getUtility(
+        IVocabularyFactory, name="opengever.dossier.dossier_types"
+    )
+    terms = [
+        dossier_type_assignment_slot_name(term.value)
+        for term in vocabulary_factory(None)
+    ]
 
-    return [DOSSIER_DEFAULT_ASSIGNMENT_SLOT] + _get_dossier_type_slots()
+    return [DOSSIER_DEFAULT_ASSIGNMENT_SLOT] + terms
 
 
 def dossier_type_assignment_slot_name(value):
     return u"{}.{}".format(DOSSIER_TYPE_ASSIGNMENT_SLOT_PREFIX, value)
-
-
-def get_slots_enforcing_unique_field_names(slot_name):
-    """Return other slots that enforce unique fields names.
-
-    Given a slot name return all other slot names which cannot have field
-    names overlap with this slot.
-
-    This function is used by storage to validate if new property sheets can
-    be added.
-    """
-    if slot_name == DOCUMENT_DEFAULT_ASSIGNMENT_SLOT:
-        return set(_get_document_type_slots())
-    elif slot_name == DOSSIER_DEFAULT_ASSIGNMENT_SLOT:
-        return set(_get_dossier_type_slots())
-    elif slot_name.startswith(DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX):
-        return {DOCUMENT_DEFAULT_ASSIGNMENT_SLOT}
-    elif slot_name.startswith(DOSSIER_TYPE_ASSIGNMENT_SLOT_PREFIX):
-        return {DOSSIER_DEFAULT_ASSIGNMENT_SLOT}
-
-    return {}
