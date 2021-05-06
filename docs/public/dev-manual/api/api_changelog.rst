@@ -10,6 +10,7 @@ Other Changes
 ^^^^^^^^^^^^^
 
 - The ``@participations`` endpoint now prevents removing the last ``WorkspaceAdmin`` from a workspace.
+- Added ``@listing-custom-fields`` endpoint and allow retrieving custom properties in ``@listing``. (see :ref:`docs <listing-property_sheets>`)
 
 
 2021.9.0 (2021-04-29)

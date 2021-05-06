@@ -4,13 +4,13 @@ from opengever.api.solr_query_service import REQUIRED_RESPONSE_FIELDS as DEFAULT
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from opengever.dossier.indexers import ParticipationIndexHelper
+from opengever.propertysheets.definition import SolrDynamicField
 from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
-
 
 # Fields with no mapping but allowed in the listing endpoint.
 OTHER_ALLOWED_FIELDS = set([
@@ -343,4 +343,7 @@ class ListingGet(SolrQueryBaseService):
         return res
 
     def is_field_allowed(self, field):
-        return field in self.allowed_fields
+        return (
+            field in self.allowed_fields
+            or SolrDynamicField.is_dynamic_field(field)
+        )

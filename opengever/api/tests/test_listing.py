@@ -9,6 +9,7 @@ from opengever.api.solr_query_service import filename
 from opengever.api.solr_query_service import filesize
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
@@ -405,6 +406,43 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local'
             '/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/pdf',
             browser.json['items'][-1]['pdf_url'][:120],
+        )
+
+    @browsing
+    def test_listing_custom_properties(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.subsubdocument.document_type = u'regulations'
+        IDocumentCustomProperties(self.subsubdocument).custom_properties = {
+            "IDocumentMetadata.document_type.regulations": {
+                "yesorno": False,
+                "choose": u"two",
+                "num": 122333,
+                "text": u"K\xe4fer\nJ\xe4ger",
+                "textline": u"Kr\xe4he",
+            },
+        }
+        self.subsubdocument.reindexObject()
+        self.commit_solr()
+
+        query_string = '&'.join((
+            'name=documents',
+            'columns:list=yesorno_custom_field_boolean',
+            'columns:list=num_custom_field_int',
+            'columns:list=choose_custom_field_string',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.subsubdossier, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            {
+                u'choose_custom_field_string': u"two",
+                u'num_custom_field_int': 122333,
+                u'@id': self.subsubdocument.absolute_url(),
+                u'UID': IUUID(self.subsubdocument),
+                u'yesorno_custom_field_boolean': False
+            },
+            browser.json['items'][-1]
         )
 
     @browsing

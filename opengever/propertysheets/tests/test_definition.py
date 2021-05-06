@@ -97,6 +97,86 @@ class TestSchemaDefinitionRichComparison(FunctionalTestCase):
         )
 
 
+class TestSchemaDefinitionSolrFields(FunctionalTestCase):
+
+    maxDiff = None
+
+    def test_bool_field_solr_dynamic_field_info(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field("bool", u"yesorno", u"y/n", u"", False)
+
+        self.assertEqual(
+            {
+                'yesorno_custom_field_boolean': {
+                    'name': 'yesorno_custom_field_boolean',
+                    'title': u'y/n',
+                    'type': u'boolean',
+                }
+            },
+            definition.get_solr_dynamic_field_schema()
+        )
+
+    def test_choice_field_solr_dynamic_field_info(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = ['one', 'two', 'three']
+        definition.add_field(
+            "choice", u"chooseone", u"choose", u"", False, values=choices
+        )
+
+        self.assertEqual(
+            {
+                'chooseone_custom_field_string': {
+                    'name': 'chooseone_custom_field_string',
+                    'title': u'choose',
+                    'type': u'string',
+                }
+            },
+            definition.get_solr_dynamic_field_schema()
+        )
+
+    def test_int_field_solr_dynamic_field_info(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "int", u"num", u"A number", u"Put a number.", True
+        )
+
+        self.assertEqual(
+            {
+                'num_custom_field_int': {
+                    'name': 'num_custom_field_int',
+                    'title': u'A number',
+                    'type': u'integer',
+                }
+            },
+            definition.get_solr_dynamic_field_schema()
+        )
+
+    def test_text_field_solr_dynamic_field_info(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "text", u"blabla", u"Text", u"Say something long.", True
+        )
+
+        self.assertEqual({}, definition.get_solr_dynamic_field_schema())
+
+    def test_textline_field_solr_dynamic_field_info(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "textline", u"bla", u"Textline", u"Say something short.", True
+        )
+
+        self.assertEqual(
+            {
+                'bla_custom_field_string': {
+                    'name': 'bla_custom_field_string',
+                    'title': u'Textline',
+                    'type': u'string',
+                }
+            },
+            definition.get_solr_dynamic_field_schema()
+        )
+
+
 class TestSchemaDefinition(FunctionalTestCase):
 
     def test_create_empty_schema_definition(self):

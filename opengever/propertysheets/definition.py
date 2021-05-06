@@ -5,16 +5,23 @@ from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.schema import get_property_sheet_schema
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
+from plone import api
 from plone.restapi.serializer.converters import IJsonCompatible
+from plone.restapi.types.interfaces import IJsonSchemaProvider
 from plone.schemaeditor import fields
 from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
 from zope.component import getUtility
+from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
+from zope.schema import Bool
 from zope.schema import Choice
 from zope.schema import getFieldNamesInOrder
 from zope.schema import getFieldsInOrder
+from zope.schema import Int
+from zope.schema import TextLine
 from zope.schema import ValidationError
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.interfaces import WrongType
@@ -26,6 +33,48 @@ import tokenize
 
 def isidentifier(val):
     return re.match(tokenize.Name + r'\Z', val) and not keyword.iskeyword(val)
+
+
+class SolrDynamicField(object):
+
+    SUPPORTED_TYPES = {
+        Bool: 'boolean',
+        Choice: 'string',
+        Int: 'int',
+        TextLine: 'string',
+    }
+    DYNAMIC_FIELD_IDENT = '_custom_field_'
+
+    @classmethod
+    def is_dynamic_field(cls, name):
+        return cls.DYNAMIC_FIELD_IDENT in name
+
+    @classmethod
+    def supports(cls, field):
+        return type(field) in cls.SUPPORTED_TYPES
+
+    def __init__(self, name, field):
+        assert self.supports(field)
+
+        solr_type = self.SUPPORTED_TYPES[type(field)]
+        self.solr_field_name = '{}{}{}'.format(
+            name, self.DYNAMIC_FIELD_IDENT, solr_type
+        )
+        self.field = field
+        self.name = name
+
+    def get_schema(self):
+        provider = queryMultiAdapter(
+            (self.field, api.portal.get(), getRequest()),
+            interface=IJsonSchemaProvider
+        )
+        schema = provider.get_schema()
+
+        return {
+            'title': schema['title'],
+            'name': self.solr_field_name,
+            'type': schema['type'],
+        }
 
 
 class PropertySheetSchemaDefinition(object):
@@ -168,6 +217,13 @@ class PropertySheetSchemaDefinition(object):
         """Return a list of (name, field) tuples in native schema order."""
         return getFieldsInOrder(self.schema_class)
 
+    def get_solr_dynamic_fields(self):
+        """Return all solr dynamic fields for this definition's schema."""
+        return [
+            SolrDynamicField(name, field) for name, field in self.get_fields()
+            if SolrDynamicField.supports(field)
+        ]
+
     def get_fieldnames(self):
         """Return a list of fieldnames in native schema order."""
         return getFieldNamesInOrder(self.schema_class)
@@ -176,6 +232,12 @@ class PropertySheetSchemaDefinition(object):
         schema_info = get_property_sheet_schema(self.schema_class)
         schema_info["assignments"] = IJsonCompatible(self.assignments)
         return schema_info
+
+    def get_solr_dynamic_field_schema(self):
+        solr_schema = {}
+        for solr_field in self.get_solr_dynamic_fields():
+            solr_schema[solr_field.solr_field_name] = solr_field.get_schema()
+        return solr_schema
 
     def validate(self, data):
         """Validate data against the definition's schema.
