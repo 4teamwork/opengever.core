@@ -298,6 +298,30 @@ class TestSchemaDefinition(FunctionalTestCase):
                 "choice", u"chooseone", u"choose", u"", False, values=choices
             )
 
+    def test_add_choice_field_rejects_integer_values(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = [1, 2]
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "choice", u"chooseone", u"choose", u"", False, values=choices
+            )
+
+    def test_add_choice_field_rejects_boolean_values(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = [True, False]
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "choice", u"chooseone", u"choose", u"", False, values=choices
+            )
+
+    def test_add_choice_field_rejects_mixed_values(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = ["blah", u'blub', 1, True]
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "choice", u"chooseone", u"choose", u"", False, values=choices
+            )
+
     def test_add_non_choice_field_prevents_adding_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         with self.assertRaises(InvalidFieldTypeDefinition):
