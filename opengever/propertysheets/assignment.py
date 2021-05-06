@@ -26,21 +26,24 @@ class PropertySheetAssignmentVocabulary(object):
         return SimpleVocabulary(assignment_terms)
 
 
+def _get_document_type_slots():
+    vocabulary_factory = getUtility(
+        IVocabularyFactory, name="opengever.document.document_types"
+    )
+    return [
+        document_type_assignment_slot_name(term.value)
+        for term in vocabulary_factory(None)
+    ]
+
+
 def get_document_assignment_slots():
     """"Return a list of all valid assignment slots for documents.
 
     This is limited to one slot per possible value of the
     `document_type` field and the default document slot.
     """
-    vocabulary_factory = getUtility(
-        IVocabularyFactory, name="opengever.document.document_types"
-    )
-    terms = [
-        document_type_assignment_slot_name(term.value)
-        for term in vocabulary_factory(None)
-    ]
 
-    return [DOCUMENT_DEFAULT_ASSIGNMENT_SLOT] + terms
+    return [DOCUMENT_DEFAULT_ASSIGNMENT_SLOT] + _get_document_type_slots()
 
 
 def document_type_assignment_slot_name(value):
@@ -50,21 +53,24 @@ def document_type_assignment_slot_name(value):
     )
 
 
+def _get_dossier_type_slots():
+    vocabulary_factory = getUtility(
+        IVocabularyFactory, name="opengever.dossier.dossier_types"
+    )
+    return [
+        dossier_type_assignment_slot_name(term.value)
+        for term in vocabulary_factory(None)
+    ]
+
+
 def get_dossier_assignment_slots():
     """"Return a list of all valid assignment slots for dossiers.
 
     This is limited to one slot per possible value of the
     `dossier_type` field and the default dossier slot.
     """
-    vocabulary_factory = getUtility(
-        IVocabularyFactory, name="opengever.dossier.dossier_types"
-    )
-    terms = [
-        dossier_type_assignment_slot_name(term.value)
-        for term in vocabulary_factory(None)
-    ]
 
-    return [DOSSIER_DEFAULT_ASSIGNMENT_SLOT] + terms
+    return [DOSSIER_DEFAULT_ASSIGNMENT_SLOT] + _get_dossier_type_slots()
 
 
 def dossier_type_assignment_slot_name(value):
