@@ -46,7 +46,9 @@ RUN find /app/opengever -name "*.po" | xargs -I@ sh -c 'msgfmt @ -o "$(dirname @
     find /app/plonetheme -name "*.po" | xargs -I@ sh -c 'msgfmt @ -o "$(dirname @)/$(basename @ .po)".mo'
 
 COPY ./docker/core/etc /app/etc
-COPY ./docker/core/create_zope_conf.py /app/
+RUN chown -R plone:plone /app/etc
+COPY ./docker/core/entrypoint.d /app/entrypoint.d
+COPY ./docker/core/docker-entrypoint.sh ./docker/core/inituser /app/
 
 RUN mkdir -p /app/var/log \
  && ln -sf /dev/stderr /app/var/log/instance.log \

@@ -130,7 +130,7 @@ ZEO_STORAGE_TEMPLATE = """\
       read-only-fallback false
       blob-dir /data/blobstorage
       shared-blob-dir on
-      server zeoserver:8100
+      server {zeo_address}
       storage 1
       name zeostorage
       cache-size 128MB
