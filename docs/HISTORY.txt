@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.7.1 (unreleased)
+2021.7.1 (2021-05-06)
 ---------------------
 
 - Add is_remote_task to task serialization. [njohner]
