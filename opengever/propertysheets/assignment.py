@@ -75,3 +75,24 @@ def get_dossier_assignment_slots():
 
 def dossier_type_assignment_slot_name(value):
     return u"{}.{}".format(DOSSIER_TYPE_ASSIGNMENT_SLOT_PREFIX, value)
+
+
+def get_slots_enforcing_unique_field_names(slot_name):
+    """Return other slots that enforce unique fields names.
+
+    Given a slot name return all other slot names which cannot have field
+    names overlap with this slot.
+
+    This function is used by storage to validate if new property sheets can
+    be added.
+    """
+    if slot_name == DOCUMENT_DEFAULT_ASSIGNMENT_SLOT:
+        return set(_get_document_type_slots())
+    elif slot_name == DOSSIER_DEFAULT_ASSIGNMENT_SLOT:
+        return set(_get_dossier_type_slots())
+    elif slot_name.startswith(DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX):
+        return {DOCUMENT_DEFAULT_ASSIGNMENT_SLOT}
+    elif slot_name.startswith(DOSSIER_TYPE_ASSIGNMENT_SLOT_PREFIX):
+        return {DOSSIER_DEFAULT_ASSIGNMENT_SLOT}
+
+    return {}

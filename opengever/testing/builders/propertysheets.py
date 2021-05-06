@@ -29,6 +29,11 @@ class PropertySheetSchemaBuilder(object):
     def with_simple_boolean_field(self):
         return self.with_field("bool", u"yesorno", u"y/n", u"", True)
 
+    def with_simple_textline_field(self):
+        return self.with_field(
+            "textline", u"shorttext", u"Text", u"Say something.", True
+        )
+
     def with_field(self, field_type, name, title, description, required, values=None):
         self.field_defs.append(
             (field_type, name, title, description, required, values)
