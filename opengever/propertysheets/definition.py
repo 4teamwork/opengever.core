@@ -188,6 +188,12 @@ class PropertySheetSchemaDefinition(object):
                 raise InvalidFieldTypeDefinition(
                     "For 'choice' fields types values are required."
                 )
+
+            if not all(isinstance(choice, basestring) for choice in values):
+                raise InvalidFieldTypeDefinition(
+                    "For 'choice' field types values must be string."
+                )
+
             # Using `unicode_escape` encoding for tokens is a requirement of
             # `ChoiceHandler` which otherwise refuses to write the vocabulary
             # to XML.
