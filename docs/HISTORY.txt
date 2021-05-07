@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.5.3 (unreleased)
+2021.5.3 (2021-05-07)
 ---------------------
 
 - Switch GEVER-UI setting to a overall admin_unit setting. [phgross]
