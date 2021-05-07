@@ -1,4 +1,5 @@
 from opengever.document.document import is_email_upload
+from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
@@ -39,6 +40,10 @@ class UploadStructurePost(Service):
             raise BadRequest("Property 'files' is required")
         return files
 
+    def check_permission(self):
+        if not api.user.has_permission('Add portal content', obj=self.context):
+            raise BadRequest("User is not allowed to add objects here")
+
     def extract_structure(self, files):
         root = {'items': {}}
         max_depth = 0
@@ -70,5 +75,6 @@ class UploadStructurePost(Service):
 
     def reply(self):
         files = self.extract_data()
+        self.check_permission()
         structure = self.extract_structure(files)
         return json_compatible(structure)
