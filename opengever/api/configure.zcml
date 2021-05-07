@@ -1264,4 +1264,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="POST"
+      for="zope.interface.Interface"
+      factory=".upload_structure.UploadStructurePost"
+      name="@upload-structure"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
 </configure>
