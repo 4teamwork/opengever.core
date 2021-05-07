@@ -1,4 +1,6 @@
 from opengever.document.document import is_email_upload
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.interfaces import IDossierContainerTypes
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
@@ -73,8 +75,25 @@ class UploadStructurePost(Service):
         root['items_total'] = items_total
         return root
 
+    def _is_dossier(self):
+        return IDossierMarker.providedBy(self.context)
+
+    def check_dossier_depth(self, structure):
+        if self._is_dossier():
+            current_depth = self.context._get_dossier_depth()
+        else:
+            current_depth = 0
+
+        max_depth = api.portal.get_registry_record(
+            name='maximum_dossier_depth',
+            interface=IDossierContainerTypes
+            )
+        if current_depth + structure["max_container_depth"] > max_depth + 1:
+            raise BadRequest("Maximum dossier depth exceeded")
+
     def reply(self):
         files = self.extract_data()
         self.check_permission()
         structure = self.extract_structure(files)
+        self.check_dossier_depth(structure)
         return json_compatible(structure)

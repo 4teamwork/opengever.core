@@ -102,3 +102,26 @@ class TestUploadStructure(IntegrationTestCase):
             {u'message': u'User is not allowed to add objects here',
              u'type': u'BadRequest'},
             browser.json)
+
+    @browsing
+    def test_upload_structure_raises_if_max_dossier_depth_would_be_exceeded(self, browser):
+        self.login(self.regular_user, browser)
+
+        payload = {
+            u'files': ['folder/file.txt']
+        }
+        browser.open("{}/@upload-structure".format(self.dossier.absolute_url()),
+                     data=json.dumps(payload),
+                     method='POST',
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        with browser.expect_http_error(code=400):
+            browser.open("{}/@upload-structure".format(self.subdossier.absolute_url()),
+                         data=json.dumps(payload),
+                         method='POST',
+                         headers=self.api_headers)
+        self.assertEqual(
+            {u'message': u'Maximum dossier depth exceeded',
+             u'type': u'BadRequest'},
+            browser.json)
