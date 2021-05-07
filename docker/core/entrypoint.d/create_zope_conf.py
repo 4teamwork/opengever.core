@@ -120,6 +120,10 @@ trusted-proxy 127.0.0.1
 </zodb_db>
 
 {zodb_main_storage}
+
+%import collective.taskqueue
+<taskqueue />
+<taskqueue-server />
 """
 
 ZEO_STORAGE_TEMPLATE = """\
