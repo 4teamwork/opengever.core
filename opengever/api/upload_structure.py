@@ -91,9 +91,20 @@ class UploadStructurePost(Service):
         if current_depth + structure["max_container_depth"] > max_depth + 1:
             raise BadRequest("Maximum dossier depth exceeded")
 
+    def check_addable(self, structure):
+        """We check whether the items that would be created directly in
+        the current context are allowed
+        """
+        portal_types = set(item["@type"] for item in structure["items"].values())
+        allowed = [fti.getId() for fti in self.context.allowedContentTypes()]
+        for portal_type in portal_types:
+            if portal_type not in allowed:
+                raise BadRequest("Some of the objects cannot be added here")
+
     def reply(self):
         files = self.extract_data()
         self.check_permission()
         structure = self.extract_structure(files)
         self.check_dossier_depth(structure)
+        self.check_addable(structure)
         return json_compatible(structure)
