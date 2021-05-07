@@ -1,6 +1,7 @@
 from opengever.document.document import is_email_upload
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.workspace.utils import is_within_workspace
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
@@ -19,9 +20,16 @@ class UploadStructurePost(Service):
         "files": ["folder1/file1.txt", "folder1/folder2/file2.eml"]
     }
     """
-    container_type = 'opengever.dossier.businesscasedossier'
+
     mail_type = 'ftw.mail.mail'
     document_type = 'opengever.document.document'
+
+    def __init__(self, context, request):
+        super(UploadStructurePost, self).__init__(context, request)
+        if is_within_workspace(self.context):
+            self.container_type = 'opengever.workspace.folder'
+        else:
+            self.container_type = 'opengever.dossier.businesscasedossier'
 
     def container(self, relative_path):
         return {'@type': self.container_type,

@@ -158,3 +158,70 @@ class TestUploadStructure(IntegrationTestCase):
              u'type': u'BadRequest'},
             browser.json)
 
+    @browsing
+    def test_upload_chooses_correct_portal_types(self, browser):
+        self.login(self.regular_user, browser)
+
+        payload = {
+            u'files': ['folder/file.txt', 'folder/file.msg']
+        }
+        response = browser.open(
+            "{}/@upload-structure".format(self.leaf_repofolder.absolute_url()),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(200, response.status_code)
+        folder = response.json['items']['folder']
+        self.assertEqual(folder['@type'],
+                         u'opengever.dossier.businesscasedossier')
+        self.assertEqual(folder['items']['file.txt']['@type'],
+                         u'opengever.document.document')
+        self.assertEqual(folder['items']['file.msg']['@type'],
+                         u'ftw.mail.mail')
+
+        response = browser.open(
+            "{}/@upload-structure".format(self.dossier.absolute_url()),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(200, response.status_code)
+        folder = response.json['items']['folder']
+        self.assertEqual(folder['@type'],
+                         u'opengever.dossier.businesscasedossier')
+        self.assertEqual(folder['items']['file.txt']['@type'],
+                         u'opengever.document.document')
+        self.assertEqual(folder['items']['file.msg']['@type'],
+                         u'ftw.mail.mail')
+
+        self.login(self.workspace_member, browser)
+        response = browser.open(
+            "{}/@upload-structure".format(self.workspace.absolute_url()),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(200, response.status_code)
+        folder = response.json['items']['folder']
+        self.assertEqual(folder['@type'],
+                         u'opengever.workspace.folder')
+        self.assertEqual(folder['items']['file.txt']['@type'],
+                         u'opengever.document.document')
+        self.assertEqual(folder['items']['file.msg']['@type'],
+                         u'ftw.mail.mail')
+
+        response = browser.open(
+            "{}/@upload-structure".format(self.workspace_folder.absolute_url()),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(200, response.status_code)
+        folder = response.json['items']['folder']
+        self.assertEqual(folder['@type'],
+                         u'opengever.workspace.folder')
+        self.assertEqual(folder['items']['file.txt']['@type'],
+                         u'opengever.document.document')
+        self.assertEqual(folder['items']['file.msg']['@type'],
+                         u'ftw.mail.mail')
