@@ -123,9 +123,17 @@ class TestUploadStructure(IntegrationTestCase):
     def test_upload_structure_raises_if_user_cannot_add_content_in_context(self, browser):
         self.login(self.regular_user, browser)
 
-        self.assert_upload_structure_raises_bad_request(
-            browser, self.inactive_dossier, ['/folder/file.txt'],
-            u'User is not allowed to add objects here')
+        payload = {u'files': ['/folder/file.txt']}
+        with browser.expect_http_error(code=403):
+            browser.open(self.inactive_dossier,
+                         view="@upload-structure",
+                         data=json.dumps(payload),
+                         method='POST',
+                         headers=self.api_headers)
+
+        self.assertEqual(u'User is not allowed to add objects here',
+                         browser.json['message'])
+        self.assertEqual(u'Forbidden', browser.json['type'])
 
     @browsing
     def test_upload_structure_raises_if_max_dossier_depth_would_be_exceeded(self, browser):
