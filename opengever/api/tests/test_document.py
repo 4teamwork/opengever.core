@@ -205,6 +205,45 @@ class TestDocumentPost(IntegrationTestCase):
             browser.json['message'])
 
 
+class TestDocumentDelete(IntegrationTestCase):
+
+    @browsing
+    def test_can_permanently_delete_template_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        template_id = self.normal_template.id
+        self.assertIn(template_id, self.templates.objectIds())
+        browser.open(self.normal_template, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(template_id, self.templates.objectIds())
+
+    @browsing
+    def test_regular_user_cant_permanently_delete_document(self, browser):
+        self.login(self.regular_user, browser)
+        with browser.expect_http_error(403):
+            browser.open(self.document, method='DELETE', headers=self.api_headers)
+
+    @browsing
+    def test_dossier_manager_cant_permanently_delete_document(self, browser):
+        self.login(self.dossier_manager, browser)
+        with browser.expect_http_error(403):
+            browser.open(self.document, method='DELETE', headers=self.api_headers)
+
+    @browsing
+    def test_administrator_cant_permanently_delete_document(self, browser):
+        self.login(self.administrator, browser)
+        with browser.expect_http_error(403):
+            browser.open(self.document, method='DELETE', headers=self.api_headers)
+
+    @browsing
+    def test_manager_can_permanently_delete_document(self, browser):
+        self.login(self.manager, browser)
+        document_id = self.document.id
+        self.assertIn(document_id, self.dossier.objectIds())
+        browser.open(self.document, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(document_id, self.dossier.objectIds())
+
+
 class TestDocumentPatch(IntegrationTestCase):
 
     def setUp(self):

@@ -103,10 +103,16 @@ class DeleteWorkspaceContent(Service):
     """
     def reply(self):
 
-        parent = aq_parent(self.context)
-        try:
-            parent._delObject(self.context.getId())
-        except LinkIntegrityNotificationException:
-            pass
-
+        delete_workspace_content(self.context)
         return self.reply_no_content()
+
+
+def delete_workspace_content(context):
+    """Force deleting the context without an additional permission-check as it
+    is done for the default rest-api DELETE endpoint.
+    """
+    parent = aq_parent(context)
+    try:
+        parent._delObject(context.getId())
+    except LinkIntegrityNotificationException:
+        pass
