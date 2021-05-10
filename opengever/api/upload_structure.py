@@ -51,6 +51,9 @@ class UploadStructurePost(Service):
         files = data.get("files", None)
         if not files:
             raise BadRequest("Property 'files' is required")
+        for file in files:
+            if not file:
+                raise BadRequest("Empty filename not supported")
         return files
 
     def check_permission(self):

@@ -102,6 +102,18 @@ class TestUploadStructure(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_upload_structure_requires_non_empty_filenames(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.assert_upload_structure_raises_bad_request(
+            browser, self.dossier, [''],
+            u'Empty filename not supported')
+
+        self.assert_upload_structure_raises_bad_request(
+            browser, self.dossier, [None],
+            u'Empty filename not supported')
+
+    @browsing
     def test_upload_structure_raises_if_user_cannot_add_content_in_context(self, browser):
         self.login(self.regular_user, browser)
 
