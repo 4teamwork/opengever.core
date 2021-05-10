@@ -137,6 +137,15 @@ class TestUploadStructure(IntegrationTestCase):
             u'Maximum dossier depth exceeded')
 
     @browsing
+    def test_upload_structure_ignores_maximal_depth_in_workspace_area(self, browser):
+        self.login(self.workspace_member, browser)
+
+        self.assert_upload_structure_returns_ok(
+            browser,
+            self.workspace,
+            ['/folder/folder/folder/file.txt'])
+
+    @browsing
     def test_upload_structure_in_inbox_container(self, browser):
         self.login(self.manager, browser)
 

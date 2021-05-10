@@ -93,6 +93,9 @@ class UploadStructurePost(Service):
         return IDossierMarker.providedBy(self.context)
 
     def check_dossier_depth(self, structure):
+        if is_within_workspace(self.context):
+            return
+
         if self._is_dossier():
             current_depth = self.context._get_dossier_depth()
         else:
