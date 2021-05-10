@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from zope.component import getMultiAdapter
@@ -21,7 +22,7 @@ class TestGeverSummarySerializer(IntegrationTestCase):
         self.assertNotIn('creator', serilized_doc)
 
         self.request.form['metadata_fields'] = [
-            'filename', 'filesize', 'mimetype', 'creator']
+            'filename', 'filesize', 'mimetype', 'creator', 'oguid']
         serializer = getMultiAdapter(
             (self.document, self.request),
             ISerializeToJsonSummary)
@@ -42,6 +43,7 @@ class TestGeverSummarySerializer(IntegrationTestCase):
              'filename': u'Vertraegsentwurf.docx',
              'filesize': 27413,
              'mimetype': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+             'oguid': Oguid.for_object(self.document).id,
              'is_leafnode': None,
              'review_state': u'document-state-draft',
              'title': u'Vertr\xe4gsentwurf'},
@@ -62,7 +64,7 @@ class TestGeverSummarySerializer(IntegrationTestCase):
         self.assertNotIn('creator', serilized_doc)
 
         self.request.form['metadata_fields'] = [
-            'filename', 'filesize', 'mimetype', 'creator']
+            'filename', 'filesize', 'mimetype', 'creator', 'oguid']
         serializer = getMultiAdapter(
             (self.mail_eml, self.request),
             ISerializeToJsonSummary)
@@ -83,6 +85,7 @@ class TestGeverSummarySerializer(IntegrationTestCase):
              'filename': u'Die Buergschaft.eml',
              'filesize': 1108,
              'mimetype': u'text/plain',
+             'oguid': Oguid.for_object(self.mail_eml).id,
              'is_leafnode': None,
              'review_state': u'mail-state-active',
              'title': u'Die B\xfcrgschaft'},

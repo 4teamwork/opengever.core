@@ -5,6 +5,7 @@ from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.behaviors.translated_title import get_inactive_languages
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.oguid import Oguid
+from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.sentry import log_msg_to_sentry
@@ -133,6 +134,14 @@ def long_converter(value):
     in a later release.
     """
     return value
+
+
+@adapter(Oguid)
+@implementer(IJsonCompatible)
+def oguid_converter(value):
+    """Returns the id for the Oguid object.
+    """
+    return value.id
 
 
 class SerializeSQLModelToJsonBase(object):
@@ -306,6 +315,9 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
         summary = super(GeverSerializeToJsonSummary, self).__call__(*args, **kwargs)
 
         extend_with_is_subdossier(summary, self.context, self.request)
+
+        if 'oguid' in self.metadata_fields():
+            extend_with_oguid(summary, self.context)
 
         summary['is_leafnode'] = None
         if IRepositoryFolder.providedBy(self.context):

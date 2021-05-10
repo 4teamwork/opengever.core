@@ -1,9 +1,11 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
+from opengever.base.oguid import Oguid
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
 from zope.component import getUtility
@@ -321,3 +323,13 @@ class TestGroupSerializer(IntegrationTestCase):
                                     u'token': u'service.user'}],
                         u'items_total': 17}},
             response)
+
+
+class TestOguidConverter(IntegrationTestCase):
+
+    @browsing
+    def test_oguid_converter(self, browser):
+        self.login(self.manager, browser)
+
+        oguid = Oguid.for_object(self.task)
+        self.assertEqual(oguid.id, json_compatible(oguid))

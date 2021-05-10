@@ -188,35 +188,7 @@ WidgetValidatorDiscriminators(DossierValidator,
                               field=IChooseDossierSchema['dossier'])
 
 
-class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
-    fields = Fields(IChooseDossierSchema)
-    step_name = 'close-task-wizard_choose-dossier'
-
-    @buttonAndHandler(_(u'button_save', default=u'Save'),
-                      name='save')
-    def handle_save(self, action):
-        data, errors = self.extractData()
-
-        if not errors:
-            oguid = self.request.get('oguid')
-            dm = getUtility(IWizardDataStorage)
-            dmkey = 'close:%s' % oguid
-            task = Task.query.by_oguid(oguid)
-
-            self.copy_documents(
-                task, data['dossier'], dm.get(dmkey, 'documents'))
-            self.close_task(task, dm.get(dmkey, 'text'))
-
-            return self.request.RESPONSE.redirect(
-                '{}#documents'.format(data['dossier'].absolute_url()))
-
-    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
-                      name='cancel')
-    def handle_cancel(self, action):
-        portal_url = getToolByName(self.context, 'portal_url')
-        url = '%s/resolve_oguid?oguid=%s' % (
-            portal_url(), self.request.get('oguid'))
-        return self.request.RESPONSE.redirect(url)
+class CloseTaskHelper(object):
 
     def close_task(self, task, text):
         response = dispatch_request(
@@ -237,12 +209,44 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
 
         comment = _(u'version_message_closed_task',
                     default=u'Document copied from task (task closed)')
-        intids_mapping = doc_transporter.copy_documents_from_remote_task(
+        return doc_transporter.copy_documents_from_remote_task(
             task, dossier, documents=documents, comment=comment)
 
-        IStatusMessage(self.request).addStatusMessage(
-            _(u'${num} documents were copied.',
-              mapping={'num': len(intids_mapping)}), 'info')
+
+class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
+    fields = Fields(IChooseDossierSchema)
+    step_name = 'close-task-wizard_choose-dossier'
+
+    @buttonAndHandler(_(u'button_save', default=u'Save'),
+                      name='save')
+    def handle_save(self, action):
+        data, errors = self.extractData()
+
+        if not errors:
+            oguid = self.request.get('oguid')
+            dm = getUtility(IWizardDataStorage)
+            dmkey = 'close:%s' % oguid
+            task = Task.query.by_oguid(oguid)
+
+            closer = CloseTaskHelper()
+            intids_mapping = closer.copy_documents(
+                task, data['dossier'], dm.get(dmkey, 'documents'))
+            closer.close_task(task, dm.get(dmkey, 'text'))
+
+            IStatusMessage(self.request).addStatusMessage(
+                _(u'${num} documents were copied.',
+                  mapping={'num': len(intids_mapping)}), 'info')
+
+            return self.request.RESPONSE.redirect(
+                '{}#documents'.format(data['dossier'].absolute_url()))
+
+    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
+                      name='cancel')
+    def handle_cancel(self, action):
+        portal_url = getToolByName(self.context, 'portal_url')
+        url = '%s/resolve_oguid?oguid=%s' % (
+            portal_url(), self.request.get('oguid'))
+        return self.request.RESPONSE.redirect(url)
 
 
 class ChooseDossierStepView(FormWrapper):
