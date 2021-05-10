@@ -1264,4 +1264,22 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+
+  <adapter factory=".upload_structure.DefaultUploadStructureAnalyser" />
+  <adapter factory=".upload_structure.DossierUploadStructureAnalyser" />
+  <adapter factory=".upload_structure.RepositoryFolderUploadStructureAnalyser" />
+  <adapter factory=".upload_structure.PrivateFolderUploadStructureAnalyser" />
+  <adapter factory=".upload_structure.PrivateDossierUploadStructureAnalyser" />
+  <adapter factory=".upload_structure.WorkspaceUploadStructureAnalyser" />
+  <adapter factory=".upload_structure.WorkspaceFolderUploadStructureAnalyser" />
+
+  <plone:service
+      method="POST"
+      for="zope.interface.Interface"
+      factory=".upload_structure.UploadStructurePost"
+      name="@upload-structure"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
 </configure>

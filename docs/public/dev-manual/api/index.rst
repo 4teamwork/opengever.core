@@ -63,4 +63,5 @@ Inhalt:
    remote_workflow.rst
    accept_remote_task.rst
    complete_successor_task.rst
+   upload_structure.rst
    examples/index.rst
