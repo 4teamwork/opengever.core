@@ -37,13 +37,16 @@ class UploadStructurePost(Service):
     def container(self, relative_path):
         return {'@type': self.container_type,
                 'relative_path': relative_path,
+                'is_container': True,
                 'items': {}}
 
     def file(self, relative_path, filename):
         if is_email_upload(filename):
             return {'@type': self.mail_type,
+                    'is_container': False,
                     'relative_path': relative_path}
         return {'@type': self.document_type,
+                'is_container': False,
                 'relative_path': relative_path}
 
     def extract_data(self):

@@ -41,17 +41,21 @@ class TestUploadStructure(IntegrationTestCase):
                 u'folder': {
                     u'@type': u'opengever.dossier.businesscasedossier',
                     u'relative_path': u'folder',
+                    u'is_container': True,
                     u'items': {
                         u'file.txt': {
                             u'@type': u'opengever.document.document',
-                            u'relative_path': u'folder/file.txt'},
+                            u'relative_path': u'folder/file.txt',
+                            u'is_container': False},
                         u'subfolder': {
                             u'@type': u'opengever.dossier.businesscasedossier',
                             u'relative_path': u'folder/subfolder',
+                            u'is_container': True,
                             u'items': {
                                 u'file2.txt': {
                                     u'@type': u'opengever.document.document',
-                                    u'relative_path': u'folder/subfolder/file2.txt'}
+                                    u'relative_path': u'folder/subfolder/file2.txt',
+                                    u'is_container': False}
                                 }
                             }
                         }
@@ -75,10 +79,12 @@ class TestUploadStructure(IntegrationTestCase):
                 u'folder': {
                     u'@type': u'opengever.dossier.businesscasedossier',
                     u'relative_path': u'/folder',
+                    u'is_container': True,
                     u'items': {
                         u'file.txt': {
                             u'@type': u'opengever.document.document',
-                            u'relative_path': u'/folder/file.txt'},
+                            u'relative_path': u'/folder/file.txt',
+                            u'is_container': False},
                         }
                     }
                 },
