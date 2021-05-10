@@ -3,6 +3,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
+from opengever.workspace import _
 from opengever.workspace.participation import can_manage_member
 from opengever.workspace.participation import invitation_to_item
 from opengever.workspace.participation.storage import IInvitationStorage
@@ -14,6 +15,7 @@ from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.component import getUtility
+from zope.i18n import translate
 import json
 
 
@@ -176,7 +178,11 @@ class ManageParticipants(BrowserView):
             if ADMIN_ROLE in assignment.get('roles', []):
                 return
 
-        raise BadRequest('At least one principal must remain admin.')
+        raise BadRequest(translate(
+            _(
+                'exception_at_least_one_admin',
+                default="At least one principal must remain admin."),
+            context=self.request))
 
     def search(self):
         """ A traversable method to search for users"""
