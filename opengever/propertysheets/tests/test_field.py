@@ -306,14 +306,14 @@ class TestPropertySheetField(FunctionalTestCase):
             Builder("property_sheet_schema")
             .named("schema")
             .assigned_to_slots(u"IDocumentMetadata.document_type.question")
-            .with_simple_boolean_field()
+            .with_simple_textline_field()
         )
 
         self.request["some_request_key"] = [u"question"]
 
         self.field.validate(
             {"IDocument.default": {"yesorno": True},
-             "IDocumentMetadata.document_type.question": {"yesorno": True}}
+             "IDocumentMetadata.document_type.question": {"shorttext": u"bla"}}
         )
 
     def test_default_slot_gets_validated(self):
