@@ -1,6 +1,7 @@
 from opengever.document.document import is_email_upload
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.private.interfaces import IPrivateContainer
 from opengever.workspace.utils import is_within_workspace
 from plone import api
 from plone.restapi.deserializer import json_body
@@ -28,6 +29,8 @@ class UploadStructurePost(Service):
         super(UploadStructurePost, self).__init__(context, request)
         if is_within_workspace(self.context):
             self.container_type = 'opengever.workspace.folder'
+        elif IPrivateContainer.providedBy(context):
+            self.container_type = 'opengever.private.dossier'
         else:
             self.container_type = 'opengever.dossier.businesscasedossier'
 

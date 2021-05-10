@@ -410,3 +410,22 @@ class TestUploadStructure(IntegrationTestCase):
         self.assert_upload_structure_raises_bad_request(
             browser, self.private_root, ['file.txt'],
             u'Some of the objects cannot be added here')
+
+    @browsing
+    def test_upload_structure_in_private_folder(self, browser):
+        self.login(self.regular_user, browser)
+
+        # document cannot be added in private folder
+        self.assert_upload_structure_raises_bad_request(
+            browser, self.private_folder, ['file.txt'],
+            u'Some of the objects cannot be added here')
+
+        # dossier can be added in private folder
+        self.assert_upload_structure_returns_ok(
+            browser, self.private_folder, ['folder/file.txt'])
+
+        folder = browser.json['items']['folder']
+        self.assertEqual(folder['@type'],
+                         u'opengever.private.dossier')
+        self.assertEqual(folder['items']['file.txt']['@type'],
+                         u'opengever.document.document')
