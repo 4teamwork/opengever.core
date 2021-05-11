@@ -114,20 +114,17 @@ class DefaultUploadStructureAnalyser(object):
                 raise TypeNotAddable("Some of the objects cannot be added here")
 
 
-@adapter(IDossierMarker)
-class DossierUploadStructureAnalyser(DefaultUploadStructureAnalyser):
+class DossierDepthCheckMixin(object):
     """Additionally checks that upload would not exceed the maximal allowed
     dossier depth.
     """
-    container_type = 'opengever.dossier.businesscasedossier'
-
     def check_structure(self):
         self.check_dossier_depth()
-        super(DossierUploadStructureAnalyser, self).check_structure()
+        super(DossierDepthCheckMixin, self).check_structure()
 
     @property
     def current_depth(self):
-        return self.context._get_dossier_depth()
+        return 0
 
     def check_dossier_depth(self):
         max_depth = api.portal.get_registry_record(
@@ -138,24 +135,36 @@ class DossierUploadStructureAnalyser(DefaultUploadStructureAnalyser):
             raise MaximalDepthExceeded("Maximum dossier depth exceeded")
 
 
-@adapter(IRepositoryFolder)
-class RepositoryFolderUploadStructureAnalyser(DossierUploadStructureAnalyser):
+@adapter(IDossierMarker)
+class DossierUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
+
+    container_type = 'opengever.dossier.businesscasedossier'
 
     @property
     def current_depth(self):
-        return 0
+        return self.context._get_dossier_depth()
+
+
+@adapter(IRepositoryFolder)
+class RepositoryFolderUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
+
+    container_type = 'opengever.dossier.businesscasedossier'
 
 
 @adapter(IPrivateFolder)
-class PrivateFolderUploadStructureAnalyser(RepositoryFolderUploadStructureAnalyser):
+class PrivateFolderUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
 
     container_type = 'opengever.private.dossier'
 
 
 @adapter(IPrivateDossier)
-class PrivateDossierUploadStructureAnalyser(DossierUploadStructureAnalyser):
+class PrivateDossierUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
 
     container_type = 'opengever.private.dossier'
+
+    @property
+    def current_depth(self):
+        return self.context._get_dossier_depth()
 
 
 @adapter(IWorkspace)
