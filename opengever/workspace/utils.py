@@ -19,6 +19,14 @@ def roles_of_permission(context, permission):
             return roles
 
 
+def is_within_workspace_root(context):
+    """ Checks, if the content is within the workspace root.
+    """
+    # Avoid circular imports
+    from opengever.workspace.interfaces import IWorkspaceRoot
+    return bool(filter(IWorkspaceRoot.providedBy, aq_chain(context)))
+
+
 def is_within_workspace(context):
     """ Checks, if the content is a workspace or is within the workspace.
     """
