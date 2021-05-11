@@ -434,7 +434,7 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                  u'file_extension': u'',
                  u'filename': u'',
                  u'is_leafnode': None,
-                 u'review_state': u'document-state-draft',
+                 u'review_state': u'opengever_workspace_document--STATUS--active',
                  u'title': u'Testdokum\xe4nt'},
                 documents['items'][0])
 

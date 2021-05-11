@@ -6,12 +6,31 @@ from opengever.workspace.activities import ToDoClosedActivity
 from opengever.workspace.activities import ToDoCommentedActivity
 from opengever.workspace.activities import ToDoReopenedActivity
 from opengever.workspace.activities import WorkspaceWatcherManager
+from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
 from plone import api
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
-from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
+
+
+def configure_workspace_root(root, event):
+    """Assign placeful workflow policies to all workspace roots."""
+
+    policy_in = "opengever_workspace_policy"
+    policy_below = "opengever_workspace_policy"
+
+    placeful_workflow = getToolByName(root, 'portal_placeful_workflow')
+    config = placeful_workflow.getWorkflowPolicyConfig(root)
+
+    if not config:
+        root.manage_addProduct[
+            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
+        config = placeful_workflow.getWorkflowPolicyConfig(root)
+
+    config.setPolicyIn(policy=policy_in, update_security=True)
+    config.setPolicyBelow(policy=policy_below, update_security=True)
 
 
 def assign_admin_role_to_workspace_creator(workspace, event):

@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
 from opengever.testing.pages import globalnav
+from plone import api
 from zExceptions import Unauthorized
 
 
@@ -21,6 +22,21 @@ class TestWorkspaceRoot(IntegrationTestCase):
                       'Title (English)': u'Worksp\xe4ces'}).save()
         statusmessages.assert_no_error_messages()
         self.assertEquals(u'Worksp\xe4ces', plone.first_heading())
+
+    @browsing
+    def test_browser_add_workspace_root_placeful_workflow(self, browser):
+        self.login(self.manager, browser)
+        browser.open(view='folder_contents')
+        factoriesmenu.add('Workspace Root')
+        browser.fill({'Title (German)': u'Teamr\xe4ume',
+                      'Title (English)': u'Worksp\xe4ces'}).save()
+
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(browser.context)
+        self.assertEqual(
+            "opengever_workspace_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_workspace_policy", config.getPolicyBelowId())
 
     @browsing
     def test_workspace_admin_permissions(self, browser):

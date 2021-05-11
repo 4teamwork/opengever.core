@@ -98,3 +98,12 @@ class TestTestingFixture(IntegrationTestCase):
                           self.dossier.Title())
         self.assertEquals('2016', self.subdossier.Title())
         self.assertEquals('Abgeschlossene Vertr\xc3\xa4ge', self.expired_dossier.Title())
+
+    def test_fixture_workspace_root_placeful_workflow(self):
+        self.login(self.manager)
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(self.workspace_root)
+        self.assertEqual(
+            "opengever_workspace_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_workspace_policy", config.getPolicyBelowId())
