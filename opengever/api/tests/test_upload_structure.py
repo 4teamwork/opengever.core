@@ -1,9 +1,12 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.api.upload_structure import IUploadStructureAnalyser
+from opengever.testing import SolrIntegrationTestCase
 import json
 
 
-class TestUploadStructure(IntegrationTestCase):
+class TestUploadStructure(SolrIntegrationTestCase):
+
+    maxDiff = None
 
     def assert_upload_structure_returns_ok(self, browser, context, files):
         payload = {u'files': files}
@@ -62,7 +65,8 @@ class TestUploadStructure(IntegrationTestCase):
                     }
                 },
              u'max_container_depth': 2,
-             u'items_total': 4},
+             u'items_total': 4,
+             u'possible_duplicates': {}},
             browser.json)
 
     @browsing
@@ -89,7 +93,8 @@ class TestUploadStructure(IntegrationTestCase):
                     }
                 },
              u'max_container_depth': 1,
-             u'items_total': 2},
+             u'items_total': 2,
+             u'possible_duplicates': {}},
             browser.json)
 
     @browsing
@@ -464,3 +469,125 @@ class TestUploadStructure(IntegrationTestCase):
                          u'opengever.private.dossier')
         self.assertEqual(folder['items']['file.txt']['@type'],
                          u'opengever.document.document')
+
+
+class TestDuplicateControl(SolrIntegrationTestCase):
+
+    def assert_upload_structure_returns_ok(self, browser, context, files):
+        payload = {u'files': files}
+        browser.open(context,
+                     view="@upload-structure",
+                     data=json.dumps(payload),
+                     method='POST',
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+
+    @browsing
+    def test_duplicate_control_handles_unicode(self, browser):
+        self.login(self.manager, browser)
+
+        self.assert_upload_structure_returns_ok(
+            browser, self.subdossier, [u"Vertr\xe4gsentwurf.docx"])
+
+        self.assertIn(u"Vertr\xe4gsentwurf.docx", browser.json['possible_duplicates'])
+        self.assertEqual(
+            [{u'@id': self.document.absolute_url_path(),
+              u'@type': u'opengever.document.document',
+              u'filename': u'Vertraegsentwurf.docx',
+              u'title': u'Vertr\xe4gsentwurf'}],
+            browser.json['possible_duplicates'][u"Vertr\xe4gsentwurf.docx"])
+
+    @browsing
+    def test_duplicate_control_handles_path(self, browser):
+        self.login(self.manager, browser)
+
+        self.assert_upload_structure_returns_ok(
+            browser, self.dossier, [u"foo/Vertr\xe4gsentwurf.docx"])
+
+        self.assertIn(u"foo/Vertr\xe4gsentwurf.docx",
+                      browser.json['possible_duplicates'])
+        self.assertEqual(
+            [{u'@id': self.document.absolute_url_path(),
+              u'@type': u'opengever.document.document',
+              u'filename': u'Vertraegsentwurf.docx',
+              u'title': u'Vertr\xe4gsentwurf'}],
+            browser.json['possible_duplicates'][u"foo/Vertr\xe4gsentwurf.docx"])
+
+    @browsing
+    def test_subdossier_duplicate_control_searches_main_dossier(self, browser):
+        self.login(self.manager, browser)
+
+        self.assert_upload_structure_returns_ok(
+            browser, self.subdossier2,
+            [self.meeting_document.get_filename(),
+             self.document.get_filename(),
+             self.subsubdocument.get_filename()])
+
+        self.assertNotIn(self.meeting_document.get_filename(),
+                         browser.json['possible_duplicates'])
+        self.assertIn(self.document.get_filename(),
+                      browser.json['possible_duplicates'])
+        self.assertIn(self.subsubdocument.get_filename(),
+                      browser.json['possible_duplicates'])
+        self.assertEqual(
+            [{u'@id': self.document.absolute_url_path(),
+              u'@type': u'opengever.document.document',
+              u'filename': u'Vertraegsentwurf.docx',
+              u'title': u'Vertr\xe4gsentwurf'}],
+            browser.json['possible_duplicates'][self.document.get_filename()])
+        self.assertEqual(
+            [{u'@id': self.subsubdocument.absolute_url_path(),
+              u'@type': u'opengever.document.document',
+              u'filename': u'Uebersicht der Vertraege von 2014.xlsx',
+              u'title': u'\xdcbersicht der Vertr\xe4ge von 2014'}],
+            browser.json['possible_duplicates'][self.subsubdocument.get_filename()])
+
+    @browsing
+    def test_duplicate_control_search_root(self, browser):
+        self.login(self.manager, browser)
+
+        # No search performed on these levels
+        analyser = IUploadStructureAnalyser(self.leaf_repofolder)
+        self.assertEqual(None, analyser.duplicate_search_root)
+
+        analyser = IUploadStructureAnalyser(self.private_folder)
+        self.assertEqual(None, analyser.duplicate_search_root)
+
+        # search in main dossier
+        analyser = IUploadStructureAnalyser(self.private_dossier)
+        self.assertEqual(self.private_dossier, analyser.duplicate_search_root)
+
+        analyser = IUploadStructureAnalyser(self.dossier)
+        self.assertEqual(self.dossier, analyser.duplicate_search_root)
+
+        analyser = IUploadStructureAnalyser(self.subsubdossier)
+        self.assertEqual(self.dossier, analyser.duplicate_search_root)
+
+        analyser = IUploadStructureAnalyser(self.subtask)
+        self.assertEqual(self.dossier, analyser.duplicate_search_root)
+
+        # search in main TemplateFolder
+        analyser = IUploadStructureAnalyser(self.templates)
+        self.assertEqual(self.templates, analyser.duplicate_search_root)
+
+        analyser = IUploadStructureAnalyser(self.subtemplates)
+        self.assertEqual(self.templates, analyser.duplicate_search_root)
+
+        # search in main DossierTemplate
+        analyser = IUploadStructureAnalyser(self.dossiertemplate)
+        self.assertEqual(self.dossiertemplate, analyser.duplicate_search_root)
+
+        analyser = IUploadStructureAnalyser(self.subdossiertemplate)
+        self.assertEqual(self.dossiertemplate, analyser.duplicate_search_root)
+
+        # search in current context
+        analyser = IUploadStructureAnalyser(self.inbox)
+        self.assertEqual(self.inbox, analyser.duplicate_search_root)
+
+        # search in workspace
+        analyser = IUploadStructureAnalyser(self.workspace)
+        self.assertEqual(self.workspace, analyser.duplicate_search_root)
+
+        analyser = IUploadStructureAnalyser(self.workspace_folder)
+        self.assertEqual(self.workspace, analyser.duplicate_search_root)
