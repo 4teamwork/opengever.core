@@ -8,6 +8,35 @@ Changelog
 
 .. towncrier release notes start
 
+2021.10.0 (2021-05-12)
+----------------------
+
+New features:
+
+
+- Add `@listing-custom-fields` endpoint and allow retrieving custom properties in `@listing`. [deiferni]
+- Added close-remote-task endpoint, for closing remote tasks of type `information`. [phgross]
+- Add @upload-structure endpoint. [njohner]
+
+
+Bug fixes:
+
+
+- Bundle import: Skip configuration import if not exists. [phgross]
+- Transfer workspace link to parent dossier when moving dossier into another dossier. [phgross]
+- Fix permanently delete workspace documents. [elioschmutz]
+- Handle no template for paragraphs in DebugDocxCompose view. [njohner]
+
+
+Other changes:
+
+
+- Prevent adding property sheets with conflicting field names. [deiferni]
+- Don't allow removing last workspace admin role. [deiferni]
+- Improve archival file conversion job management when resolving dossiers. [njohner]
+- Remove value restriction for the archival_value field. [phgross]
+
+
 2021.9.0 (2021-04-29)
 ---------------------
 
