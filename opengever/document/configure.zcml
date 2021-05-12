@@ -194,6 +194,12 @@
 
   <subscriber
       for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.say_no"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".subscribers.resolve_document_author"
       />

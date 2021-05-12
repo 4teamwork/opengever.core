@@ -12,6 +12,11 @@ def resolve_document_author(document, event):
             document.reindexObject(idxs=['sortable_author'])
 
 
+def say_no(document, event):
+    from zExceptions import Forbidden
+    raise Forbidden("no")
+
+
 def set_digitally_available(doc, event):
     """Set the digitally_available field, if a file exist the document is
     digitally available.
