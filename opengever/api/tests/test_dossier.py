@@ -91,6 +91,24 @@ class TestDossierSerializer(IntegrationTestCase):
         self.assertEqual(u"2016-08-31", browser.json["touched"])
 
 
+    @browsing
+    def test_contains_dossier_backreferences(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.dossier, method="GET", headers=self.api_headers)
+        self.assertEqual(
+            [{u'description': u'',
+              u'title': self.closed_meeting_dossier.title,
+              u'is_subdossier': False, u'is_leafnode': None,
+              u'review_state': u'dossier-state-active',
+              u'@id': self.closed_meeting_dossier.absolute_url(),
+              u'@type': u'opengever.meeting.meetingdossier'}],
+            browser.json['back_references_relatedDossier'])
+
+        browser.open(self.subdossier, method="GET", headers=self.api_headers)
+        self.assertEqual([], browser.json['back_references_relatedDossier'])
+
+
 class TestMainDossierExpansion(IntegrationTestCase):
 
     @browsing

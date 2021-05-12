@@ -1,3 +1,4 @@
+from Acquisition import aq_inner
 from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from Missing import Value as MissingValue
@@ -35,11 +36,14 @@ from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from Products.PlonePAS.interfaces.group import IGroupData
 from Products.ZCatalog.interfaces import ICatalogBrain
 from sqlalchemy import func
+from zc.relation.interfaces import ICatalog
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.intid.interfaces import IIntIds
 import logging
 
 
@@ -88,6 +92,25 @@ def extend_with_groupurl(result, context, request):
     """
     result['groupurl'] = '{}/@groups/{}'.format(
         api.portal.get().absolute_url(), context.groupid)
+
+
+def extend_with_backreferences(result, context, request, reference_attribute_name):
+    """Extend the given result dict with an additional key
+    `back_references_{reference_attribute_name}` for example
+    `back_references_relatedDossiers` and a list of backreferences.
+    """
+    summaries = []
+    intids = getUtility(IIntIds)
+    catalog = getUtility(ICatalog)
+    relations = catalog.findRelations(
+        {'to_id': intids.getId(aq_inner(context)),
+         'from_attribute': reference_attribute_name})
+    summaries = [
+        getMultiAdapter((relation.from_object, request),ISerializeToJsonSummary)()
+        for relation in relations]
+
+    attribute_name = 'back_references_{}'.format(reference_attribute_name)
+    result[attribute_name] = summaries
 
 
 def drop_inactive_language_fields(result):
