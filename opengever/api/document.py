@@ -1,5 +1,6 @@
 from ftw import bumblebee
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.api.serializer import extend_with_backreferences
 from opengever.api.serializer import GeverSerializeToJson
 from opengever.base.helpers import display_name
 from opengever.base.interfaces import IReferenceNumber
@@ -36,6 +37,9 @@ class SerializeDocumentToJson(GeverSerializeToJson):
         result[u'pdf_url'] = bumblebee_service.get_representation_url(
             obj, 'pdf')
         result[u'file_extension'] = self.context.get_file_extension()
+
+        extend_with_backreferences(
+            result, self.context, self.request, 'relatedItems')
 
         checked_out_by = obj.checked_out_by()
         checked_out_by_fullname = display_name(checked_out_by) if checked_out_by else None

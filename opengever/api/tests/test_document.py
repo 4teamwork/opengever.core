@@ -150,6 +150,25 @@ class TestDocumentSerializer(IntegrationTestCase):
         }
         self.assertEqual(expected_links, browser.json['teamraum_connect_links'])
 
+    @browsing
+    def test_contains_dossier_backreferences(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.subdocument, method="GET", headers=self.api_headers)
+        self.assertEqual(
+            [{u'@id': self.subsubdocument.absolute_url(),
+              u'@type': u'opengever.document.document',
+              u'checked_out': None,
+              u'description': u'',
+              u'file_extension': u'.xlsx',
+              u'is_leafnode': None,
+              u'review_state': u'document-state-draft',
+              u'title': self.subsubdocument.title}],
+            browser.json['back_references_relatedItems'])
+
+        browser.open(self.mail_eml, method="GET", headers=self.api_headers)
+        self.assertEqual([], browser.json['back_references_relatedItems'])
+
 
 class TestWorkspaceDocument(IntegrationTestCase):
 

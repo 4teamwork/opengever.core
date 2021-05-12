@@ -1,1 +1,1 @@
-Include backreference list to dossier api serialization. [phgross]
+Include backreference list in dossier and documents api serialization. [phgross]
