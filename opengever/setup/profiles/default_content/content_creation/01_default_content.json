@@ -4,9 +4,7 @@
         "_type": "opengever.private.root",
         "title_de": "Meine Ablage",
         "title_fr": "Mon dépôt",
-        "title_en": "My repository",
-        "_placefulworkflow": ["opengever_private_policy",
-                              "opengever_private_policy"]
+        "title_en": "My repository"
     },
     {
         "_path": "eingangskorb",
