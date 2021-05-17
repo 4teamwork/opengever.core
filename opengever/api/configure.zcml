@@ -1280,6 +1280,7 @@
   <adapter factory=".upload_structure.RepositoryFolderUploadStructureAnalyser" />
   <adapter factory=".upload_structure.PrivateFolderUploadStructureAnalyser" />
   <adapter factory=".upload_structure.PrivateDossierUploadStructureAnalyser" />
+  <adapter factory=".upload_structure.TemplateFolderUploadStructureAnalyser" />
   <adapter factory=".upload_structure.WorkspaceUploadStructureAnalyser" />
   <adapter factory=".upload_structure.WorkspaceFolderUploadStructureAnalyser" />
 

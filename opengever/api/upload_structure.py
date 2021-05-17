@@ -1,18 +1,27 @@
+from collections import defaultdict
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_path_filter
 from opengever.document.document import is_email_upload
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.dossier.templatefolder import get_template_folder
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.dossier.utils import get_main_dossier
 from opengever.private.dossier import IPrivateDossier
 from opengever.private.folder import IPrivateFolder
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
+from opengever.workspace.utils import get_containing_workspace
 from plone import api
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zope.component import adapter
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -48,12 +57,57 @@ class DefaultUploadStructureAnalyser(object):
         self.check_preconditions()
         self.structure = self.extract_structure(files)
         self.check_structure()
+        self.find_possible_duplicates(files)
 
     def check_preconditions(self):
         self.check_permission()
 
     def check_structure(self):
         self.check_addable()
+
+    @property
+    def duplicate_search_root(self):
+        return get_main_dossier(self.context) or self.context
+
+    def find_possible_duplicates(self, files):
+        solr = getUtility(ISolrSearch)
+
+        if not self.duplicate_search_root:
+            self.structure['possible_duplicates'] = {}
+            return
+
+        path = '/'.join(self.duplicate_search_root.getPhysicalPath())
+        filters = make_path_filter(path, depth=-1)
+
+        normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
+        normalized_filenames = {}
+        for file in files:
+            filename = file.rsplit("/")[-1]
+            normalized_filenames[file] = normalizer.normalize(filename)
+
+        quoted_filenames = ['"{}"'.format(el) for el in normalized_filenames.values()]
+        filters.append(
+            u'filename:({})'.format(' or '.join(quoted_filenames))
+            )
+
+        resp = solr.search(
+            filters=filters,
+            fl=['path', 'filename', 'Title', 'portal_type', ])
+
+        serialized_docs = defaultdict(list)
+        for doc in resp.docs:
+            serialized_docs[doc.get('filename')].append(
+                {'@id': doc.get('path'),
+                 '@type': doc.get('portal_type'),
+                 'title': doc.get('Title'),
+                 'filename': doc.get('filename')}
+            )
+        possible_duplicates = {}
+        for file in files:
+            normalized_filename = normalized_filenames[file]
+            if normalized_filename in serialized_docs:
+                possible_duplicates[file] = serialized_docs[normalized_filename]
+        self.structure['possible_duplicates'] = possible_duplicates
 
     def container(self, relative_path):
         return {'@type': self.container_type,
@@ -83,7 +137,7 @@ class DefaultUploadStructureAnalyser(object):
             segments = path.split("/")
             parent = root
             for i, segment in enumerate(segments[:-1]):
-                relative_path = "/".join(segments[:i+1])
+                relative_path = "/".join(segments[:i + 1])
                 if not segment:
                     continue
                 curr_depth += 1
@@ -114,20 +168,17 @@ class DefaultUploadStructureAnalyser(object):
                 raise TypeNotAddable("Some of the objects cannot be added here")
 
 
-@adapter(IDossierMarker)
-class DossierUploadStructureAnalyser(DefaultUploadStructureAnalyser):
+class DossierDepthCheckMixin(object):
     """Additionally checks that upload would not exceed the maximal allowed
     dossier depth.
     """
-    container_type = 'opengever.dossier.businesscasedossier'
-
     def check_structure(self):
         self.check_dossier_depth()
-        super(DossierUploadStructureAnalyser, self).check_structure()
+        super(DossierDepthCheckMixin, self).check_structure()
 
     @property
     def current_depth(self):
-        return self.context._get_dossier_depth()
+        return 0
 
     def check_dossier_depth(self):
         max_depth = api.portal.get_registry_record(
@@ -138,24 +189,44 @@ class DossierUploadStructureAnalyser(DefaultUploadStructureAnalyser):
             raise MaximalDepthExceeded("Maximum dossier depth exceeded")
 
 
-@adapter(IRepositoryFolder)
-class RepositoryFolderUploadStructureAnalyser(DossierUploadStructureAnalyser):
+@adapter(IDossierMarker)
+class DossierUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
+
+    container_type = 'opengever.dossier.businesscasedossier'
 
     @property
     def current_depth(self):
-        return 0
+        return self.context._get_dossier_depth()
+
+
+@adapter(IRepositoryFolder)
+class RepositoryFolderUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
+
+    container_type = 'opengever.dossier.businesscasedossier'
+
+    @property
+    def duplicate_search_root(self):
+        return None
 
 
 @adapter(IPrivateFolder)
-class PrivateFolderUploadStructureAnalyser(RepositoryFolderUploadStructureAnalyser):
+class PrivateFolderUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
 
     container_type = 'opengever.private.dossier'
+
+    @property
+    def duplicate_search_root(self):
+        return None
 
 
 @adapter(IPrivateDossier)
-class PrivateDossierUploadStructureAnalyser(DossierUploadStructureAnalyser):
+class PrivateDossierUploadStructureAnalyser(DossierDepthCheckMixin, DefaultUploadStructureAnalyser):
 
     container_type = 'opengever.private.dossier'
+
+    @property
+    def current_depth(self):
+        return self.context._get_dossier_depth()
 
 
 @adapter(IWorkspace)
@@ -163,11 +234,27 @@ class WorkspaceUploadStructureAnalyser(DefaultUploadStructureAnalyser):
 
     container_type = 'opengever.workspace.folder'
 
+    @property
+    def duplicate_search_root(self):
+        return self.context
+
 
 @adapter(IWorkspaceFolder)
 class WorkspaceFolderUploadStructureAnalyser(DefaultUploadStructureAnalyser):
 
     container_type = 'opengever.workspace.folder'
+
+    @property
+    def duplicate_search_root(self):
+        return get_containing_workspace(self.context)
+
+
+@adapter(ITemplateFolder)
+class TemplateFolderUploadStructureAnalyser(DefaultUploadStructureAnalyser):
+
+    @property
+    def duplicate_search_root(self):
+        return get_template_folder()
 
 
 class UploadStructurePost(Service):
