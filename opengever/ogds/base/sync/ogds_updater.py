@@ -45,7 +45,7 @@ logger.setLevel(logging.INFO)
 
 
 def sync_ogds(plone, users=True, groups=True, local_groups=False,
-              update_remote_timestamps=True):
+              update_remote_timestamps=True, disable_logfile=False):
     """Syncronize OGDS users and groups by importing users, groups and
     group membership information from LDAP into the respective OGDS SQL tables.
 
@@ -57,7 +57,8 @@ def sync_ogds(plone, users=True, groups=True, local_groups=False,
     where you use it, you'll need to take care of that yourself, if necessary.
     """
     # Set up logging to a rotating ogds-update.log
-    setup_ogds_sync_logfile(logger)
+    if not disable_logfile:
+        setup_ogds_sync_logfile(logger)
 
     # We check that the group management is setup correctly. This is not
     # strictly necessary but ensures that this configuration is checked
