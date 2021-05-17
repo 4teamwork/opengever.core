@@ -32,7 +32,7 @@
   <subscriber
       for="opengever.private.root.IPrivateRoot
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
-      handler=".subscribers.configure_private_root_portlets"
+      handler=".subscribers.configure_private_root"
       />
 
   <adapter factory=".reference.PrivateRootReferenceNumber" />

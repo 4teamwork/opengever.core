@@ -1060,15 +1060,6 @@ class OpengeverContentFixture(object):
         self.private_root.title_en = u'Meine Ablage'
         self.private_root.title_fr = u'Mon d\xe9p\xf4t'
 
-        # Enable opengever.private placeful workflow policy
-        private_policy_id = 'opengever_private_policy'
-        self.private_root.manage_addProduct[
-            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
-        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
-        policy_config = pwf_tool.getWorkflowPolicyConfig(self.private_root)
-        policy_config.setPolicyIn(private_policy_id, update_security=False)
-        policy_config.setPolicyBelow(private_policy_id, update_security=False)
-
     @staticuid()
     def create_private_folder(self):
         self.private_folder = self.register('private_folder', create(

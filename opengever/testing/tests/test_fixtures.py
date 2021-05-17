@@ -116,3 +116,12 @@ class TestTestingFixture(IntegrationTestCase):
             "opengever_inbox_policy", config.getPolicyInId())
         self.assertEqual(
             "opengever_inbox_policy", config.getPolicyBelowId())
+
+    def test_fixture_private_root_placeful_workflow(self):
+        self.login(self.manager)
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(self.private_root)
+        self.assertEqual(
+            "opengever_private_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_private_policy", config.getPolicyBelowId())
