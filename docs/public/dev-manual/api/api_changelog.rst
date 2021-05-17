@@ -14,6 +14,7 @@ Other Changes
 ^^^^^^^^^^^^^
 
 - ``@globalindex``: Include ``containing_subdossier``, ``review_state_label`` and ``sequence_number`` in task serialization. (see :ref:`docs <globalindex>`)
+- ``@extract-attachments`` endpoint now also works for mails in a workspace.
 
 2021.10.0 (2021-05-12)
 ----------------------

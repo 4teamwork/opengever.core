@@ -16,6 +16,8 @@ from opengever.meeting.proposal import IBaseProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrashed
+from opengever.workspace.interfaces import IWorkspace
+from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
 from plone.dexterity.content import Item
 from plone.locking.interfaces import ILockable
@@ -72,6 +74,13 @@ class BaseDocumentMixin(object):
         if IInbox.providedBy(parent):
             return parent
 
+        return None
+
+    def get_parent_workspace_container(self):
+        parent = aq_parent(aq_inner(self))
+        if IWorkspaceFolder.providedBy(parent) or \
+           IWorkspace.providedBy(parent):
+            return parent
         return None
 
     def get_submitted_proposal(self, check_security=True):

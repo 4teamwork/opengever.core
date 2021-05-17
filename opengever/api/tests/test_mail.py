@@ -260,6 +260,42 @@ class TestExtractAttachments(IntegrationTestCase):
         self.assertEqual(expected_response, browser.json)
 
     @browsing
+    def test_extracts_attachment_in_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+        mail = create(Builder('mail')
+                      .within(self.workspace)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.workspace) as children:
+            browser.open(
+                "/".join([mail.absolute_url(), "@extract-attachments"]),
+                data=json.dumps({'positions': [4]}),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(1, len(children['added']))
+
+    @browsing
+    def test_extracts_attachment_in_workspace_folder(self, browser):
+        self.login(self.workspace_member, browser)
+        mail = create(Builder('mail')
+                      .within(self.workspace_folder)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.workspace_folder) as children:
+            browser.open(
+                "/".join([mail.absolute_url(), "@extract-attachments"]),
+                data=json.dumps({'positions': [4]}),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(1, len(children['added']))
+
+    @browsing
     def test_returns_error_when_specified_positions_are_not_valid_for_extraction(self, browser):
         self.login(self.regular_user, browser)
         mail = create(Builder('mail')

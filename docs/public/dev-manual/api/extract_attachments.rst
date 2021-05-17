@@ -2,7 +2,7 @@
 Anhänge speichern
 =================
 
-E-Mail-Anhänge können in OneGov GEVER als separate Dokumente gespeichert werden (nur einmal pro Anhang). Dies wird in der REST API mit einem ``POST`` Request auf den ``@extract-attachments`` Endpoint ermöglicht. Der ``positions`` Parameter erlaubt auszuwählen, welche Anhänge extrahiert werden sollen und entspricht der ``position``, die in der Response eines ``GET`` Request auf eine E-Mail für jeden Anhang enthalten ist. Wenn ``positions`` nicht angegeben wird, dann werden alle Anhänge extrahiert, welche noch nicht gespeichert wurden. Die Dokumente werden im selben Gefäss erstellt, in welchem sich die E-Mail befindet.
+E-Mail-Anhänge können als separate Dokumente gespeichert werden (nur einmal pro Anhang). Dies wird in der REST API mit einem ``POST`` Request auf den ``@extract-attachments`` Endpoint ermöglicht. Der ``positions`` Parameter erlaubt auszuwählen, welche Anhänge extrahiert werden sollen und entspricht der ``position``, die in der Response eines ``GET`` Request auf eine E-Mail für jeden Anhang enthalten ist. Wenn ``positions`` nicht angegeben wird, dann werden alle Anhänge extrahiert, welche noch nicht gespeichert wurden. Die Dokumente werden im selben Gefäss erstellt, in welchem sich die E-Mail befindet.
 
 **Beispiel-Request**:
 

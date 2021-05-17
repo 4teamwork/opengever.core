@@ -153,7 +153,8 @@ class OGMail(Mail, BaseDocumentMixin):
 
     def get_extraction_parent(self):
         """Return the parent that accepts extracted attachments."""
-        return self.get_parent_dossier() or self.get_parent_inbox()
+        return self.get_parent_dossier() or self.get_parent_inbox() or \
+            self.get_parent_workspace_container()
 
     def get_attachments(self, unextracted_only=False):
         """Returns a list of dicts describing the attachements.
@@ -185,8 +186,8 @@ class OGMail(Mail, BaseDocumentMixin):
         return dict(info)
 
     def extract_attachments_into_parent(self, positions):
-        """Extract all specified attachments into the mails parent dossier or
-        inbox.
+        """Extract all specified attachments into the mails parent dossier,
+        inbox, workspace or workspace folder.
 
         Also add a reference from all attached documents (*not* mails) to self.
 
@@ -217,7 +218,7 @@ class OGMail(Mail, BaseDocumentMixin):
         parent = self.get_extraction_parent()
         if parent is None:
             raise RuntimeError(
-                "Could not find a parent dossier or inbox for "
+                "Could not find a parent dossier, inbox, workspace or workspace folder for "
                 "{}".format(self.absolute_url()))
 
         data, content_type, filename = self._get_attachment_data(position)
