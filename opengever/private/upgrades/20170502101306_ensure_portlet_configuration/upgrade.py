@@ -1,5 +1,5 @@
 from ftw.upgrade import UpgradeStep
-from opengever.private.subscribers import configure_private_root_portlets
+from opengever.base.portlets import block_context_portlet_inheritance
 
 
 class EnsurePortletConfiguration(UpgradeStep):
@@ -11,4 +11,4 @@ class EnsurePortletConfiguration(UpgradeStep):
                 {'portal_type': ['opengever.private.root']},
                 u'Ensure portlet configuration'):
 
-            configure_private_root_portlets(obj, event=None)
+            block_context_portlet_inheritance(obj)
