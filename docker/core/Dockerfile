@@ -55,6 +55,11 @@ RUN mkdir -p /app/var/log \
  && ln -sf /dev/stdout /app/var/log/instance-json.log \
  && ln -sf /dev/stdout /app/var/log/solr-maintenance.log
 
+# Patch ftw.bumblebee to use time.time() for timestamp generation
+# datetime.now().strftime('%s') does not return the same on Alpine Linux (musl)
+# https://www.openwall.com/lists/musl/2018/01/18/3
+COPY ./docker/core/patches/hashing.py /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
+RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 
 FROM 4teamwork/plone:4.3.20
 
