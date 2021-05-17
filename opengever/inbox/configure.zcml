@@ -50,12 +50,14 @@
   </class>
 
   <subscriber
-      for="opengever.inbox.container.IInboxContainer            zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      for="opengever.inbox.container.IInboxContainer
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.configure_inboxcontainer_portlets"
       />
 
   <subscriber
-      for="opengever.inbox.inbox.IInbox            zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      for="opengever.inbox.inbox.IInbox
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.configure_inbox_portlets"
       />
 

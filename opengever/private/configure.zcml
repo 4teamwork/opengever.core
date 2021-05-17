@@ -30,7 +30,8 @@
   <adapter factory=".quota.PrivateFolderQuotaSizeSettings" />
 
   <subscriber
-      for="opengever.private.root.IPrivateRoot            zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      for="opengever.private.root.IPrivateRoot
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.configure_private_root_portlets"
       />
 
