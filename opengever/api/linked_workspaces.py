@@ -139,6 +139,8 @@ class LinkedWorkspacesGet(ProxyHypermediaBatch):
     """
     def get_remote_client_reply(self):
         response = ILinkedWorkspaces(self.context).list(**self.request.form)
+        response['workspaces_without_view_permission'] = bool(ILinkedWorkspaces(
+            self.context).number_of_linked_workspaces() - response['items_total'])
         return response
 
 

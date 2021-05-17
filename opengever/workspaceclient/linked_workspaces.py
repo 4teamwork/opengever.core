@@ -120,6 +120,9 @@ class LinkedWorkspaces(object):
             metadata_fields="UID",
             **kwargs)
 
+    def number_of_linked_workspaces(self):
+        return len(self.storage.list())
+
     def create(self, **data):
         """Creates a new workspace an links it with the current dossier.
 

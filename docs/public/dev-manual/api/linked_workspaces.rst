@@ -3,6 +3,8 @@ Verknüpfte Arbeitsräume
 
 Arbeitsräume können direkt aus GEVER heraus erstellt und mit einem Dossier verknüpft werden.
 
+.. _get-linked-workspaces:
+
 Verknüpfte Teamräume abrufen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -33,8 +35,11 @@ Ein GET-Request auf den Endpoint `@linked-workspaces` auf einem Dossier gibt die
           "...": "..."
         }
       ],
-      "items_total": 2
+      "items_total": 2,
+      "workspaces_without_view_permission": false
     }
+
+Das Feld `workspaces_without_view_permission` gibt an, ob noch weitere Teamräume existieren, für die der Benutzer keine Leserechte hat.
 
 
 Dossier mit Teamraum verknüpfen
