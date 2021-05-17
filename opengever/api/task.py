@@ -1,5 +1,6 @@
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.add import FolderPost
+from opengever.api.globalindex import translate_review_state
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
@@ -142,13 +143,11 @@ class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
         'admin_unit_id',
         'breadcrumb_title',
         'completed',
-        'containing_subdossier',
         'dossier_sequence_number',
         'icon',
         'int_id',
         'physical_path',
         'reference_number',
-        'sequence_number',
         'tasktemplate_predecessor_id',
         'text',
     ]
@@ -170,6 +169,7 @@ class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
             # XXX deprecated
             'responsible_fullname': display_name(self.context.responsible),
             'responsible_actor': serialize_actor_id_to_json_summary(self.context.responsible),
+            'review_state_label': translate_review_state(self.context.review_state),
             'task_type': task_type_helper(self.context.task_type),
         })
 

@@ -1,4 +1,4 @@
-.. globalindex:
+.. _globalindex:
 
 Globalindex
 ===========
@@ -21,10 +21,11 @@ Die Felder ``issuer_fullname`` und ``responsible_fullname`` sind überholt und d
       "batching": null,
       "facets": {},
       "items": [
-        { "@id": "http://localhost:8080/ordnungssystem/dossier-23/document-123/task-1",
+        { "@id": "http://localhost:8080/ordnungssystem/dossier-23/task-1",
           "@type": "opengever.task.task",
           "assigned_org_unit": "fa",
           "containing_dossier": "Anfragen 2019",
+          "containing_subdossier": "",
           "created": "2016-08-31T18:27:33",
           "deadline": "2020-01-01",
           "is_private": true,
@@ -34,7 +35,7 @@ Die Felder ``issuer_fullname`` und ``responsible_fullname`` sind überholt und d
           "issuer_actor": {
             "@id": "http://localhost:8080/@actors/robert.ziegler"
             "identifier": "robert.ziegler"
-          }
+          },
           "issuing_org_unit": "fa",
           "modified": "2016-08-31T18:27:33",
           "oguid": "plone:1016273300",
@@ -44,8 +45,10 @@ Die Felder ``issuer_fullname`` und ``responsible_fullname`` sind überholt und d
           "responsible_actor": {
             "@id": "http://localhost:8080/@actors/inbox:fa"
             "identifier": "inbox:fa"
-          }
+          },
           "review_state": "task-state-in-progress",
+          "review_state_label": "In Arbeit",
+          "sequence_number": 1,
           "task_id": 14,
           "task_type": "For direct execution",
           "title": "re: Direkte Anfrage"

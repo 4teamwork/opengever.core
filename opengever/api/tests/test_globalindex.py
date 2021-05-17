@@ -22,6 +22,7 @@ class TestGlobalIndexGet(IntegrationTestCase):
              u'@type': u'opengever.task.task',
              u'assigned_org_unit': u'fa',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+             u'containing_subdossier': u'',
              u'created': u'2016-08-31T18:27:33',
              u'deadline': u'2020-01-01',
              u'is_private': True,
@@ -41,6 +42,8 @@ class TestGlobalIndexGet(IntegrationTestCase):
                  u'@id': u'http://nohost/plone/@actors/inbox:fa',
                  u'identifier': u'inbox:fa'},
              u'review_state': u'task-state-in-progress',
+             u'review_state_label': u'In progress',
+             u'sequence_number': 13,
              u'task_id': 14,
              u'task_type': u'For direct execution',
              u'title': u're: Diskr\xe4te Dinge',
@@ -49,6 +52,19 @@ class TestGlobalIndexGet(IntegrationTestCase):
 
         # default row size is 25
         self.assertIsNone(browser.json.get('batching'))
+
+    @browsing
+    def test_globalindex_has_containing_subdossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+        task_in_subdossier = create(Builder('task')
+                                    .within(self.subdossier)
+                                    .having(
+                                        responsible_client='fa',
+                                        responsible=self.regular_user.getId(),
+                                        issuer=self.dossier_responsible.getId(),
+                                    ))
+        browser.open(self.portal, view='@globalindex?sort_on=created', headers=self.api_headers)
+        self.assertEqual(self.subdossier.Title(), browser.json['items'][0]['containing_subdossier'])
 
     @browsing
     def test_respect_batching_parameters(self, browser):

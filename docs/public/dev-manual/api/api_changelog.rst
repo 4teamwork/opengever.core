@@ -13,6 +13,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@globalindex``: Include ``containing_subdossier``, ``review_state_label`` and ``sequence_number`` in task serialization. (see :ref:`docs <globalindex>`)
 
 2021.10.0 (2021-05-12)
 ----------------------

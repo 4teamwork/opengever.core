@@ -1,0 +1,1 @@
+Include `containing_subdossier`, `review_state_label` and `sequence_number` in task model serialization. [tinagerber]
