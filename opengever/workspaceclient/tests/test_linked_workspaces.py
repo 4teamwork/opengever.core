@@ -18,9 +18,7 @@ from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.uuid.interfaces import IUUID
-from zope.component import getAdapter
 from zope.component import getMultiAdapter
-from zope.component.interfaces import ComponentLookupError
 from zope.interface import alsoProvides
 import transaction
 
