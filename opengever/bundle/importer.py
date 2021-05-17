@@ -7,6 +7,7 @@ from opengever.bundle.loader import GUID_INDEX_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.commit import INTERMEDIATE_COMMITS_KEY
+from opengever.bundle.sections.report import SKIP_REPORT_KEY
 from plone import api
 from zope.annotation import IAnnotations
 from zope.component import getUtility
@@ -23,7 +24,8 @@ class BundleImporter(object):
     def __init__(self, site, bundle_path, disable_ldap=True,
                  create_guid_index=True, no_intermediate_commits=False,
                  possibly_unpatch_collective_indexing=True,
-                 no_separate_connection_for_sequence_numbers=True):
+                 no_separate_connection_for_sequence_numbers=True,
+                 skip_report=False):
         self.site = site
         self.bundle_path = bundle_path
 
@@ -32,6 +34,7 @@ class BundleImporter(object):
         self.no_intermediate_commits = no_intermediate_commits
         self.possibly_unpatch_collective_indexing = possibly_unpatch_collective_indexing
         self.no_separate_connection_for_sequence_numbers = no_separate_connection_for_sequence_numbers
+        self.skip_report = skip_report
 
     def run(self):
         log.info("Importing OGGBundle %s" % self.bundle_path)
@@ -50,6 +53,7 @@ class BundleImporter(object):
         ann = IAnnotations(transmogrifier)
         ann[BUNDLE_PATH_KEY] = self.bundle_path
         ann[INTERMEDIATE_COMMITS_KEY] = not self.no_intermediate_commits
+        ann[SKIP_REPORT_KEY] = self.skip_report
 
         solr_enabled = api.portal.get_registry_record(
             'opengever.base.interfaces.ISearchSettings.use_solr',
