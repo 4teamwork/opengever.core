@@ -14,9 +14,7 @@
         "title_de": "Eingangskorb",
         "title_fr": "Boîte de réception",
         "title_en": "Inbox",
-        "inbox_group": "og_mandant1_eingangskorb",
-        "_placefulworkflow": ["opengever_inbox_policy",
-                              "opengever_inbox_policy"]
+        "inbox_group": "og_mandant1_eingangskorb"
     },
     {
         "_path": "vorlagen",
