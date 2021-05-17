@@ -970,14 +970,6 @@ class OpengeverContentFixture(object):
                 title_fr=u'Bo\xeetes de r\xe9ception')
         ))
 
-        # Enable inbox_policy placeful workflow
-        inbox_policy_id = 'opengever_inbox_policy'
-        self.inbox_container.manage_addProduct[
-            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
-        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
-        policy_config = pwf_tool.getWorkflowPolicyConfig(self.inbox_container)
-        policy_config.setPolicyIn(inbox_policy_id, update_security=False)
-        policy_config.setPolicyBelow(inbox_policy_id, update_security=False)
         self.set_roles(self.inbox_container, self.secretariat_user.getId(), ['Reader'])
         self.set_roles(self.inbox_container, self.dossier_manager.getId(), ['Reader'])
 

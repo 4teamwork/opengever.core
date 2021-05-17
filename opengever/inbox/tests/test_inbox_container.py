@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -102,7 +100,7 @@ class TestInboxView(FunctionalTestCase):
                       'Title (French)': u'Bo\xeete de r\xe9ception'})
         browser.find('Save').click()
 
-        browser.find(u'Français').click()
+        browser.find(u'Fran\xe7ais').click()
         self.assertEquals(u'Bo\xeete de r\xe9ception',
                           browser.css('h1').first.text)
 

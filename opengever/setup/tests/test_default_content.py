@@ -20,6 +20,16 @@ class TestSetupDefaultContentProfile(FunctionalTestCase):
         self.assertEqual(
             "opengever_workspace_policy", config.getPolicyBelowId())
 
+    def test_default_content_inbox_placeful_workflow(self):
+        inbox = self.portal['eingangskorb']
+
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(inbox)
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyBelowId())
+
 
 class TestExampleContentDefaultContentProfile(FunctionalTestCase):
 
@@ -37,3 +47,22 @@ class TestExampleContentDefaultContentProfile(FunctionalTestCase):
             "opengever_workspace_policy", config.getPolicyInId())
         self.assertEqual(
             "opengever_workspace_policy", config.getPolicyBelowId())
+
+    def test_default_content_inbox_placeful_workflow(self):
+        inbox_afi = self.portal['eingangskorb']['eingangskorb_afi']
+
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(inbox_afi)
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyBelowId())
+
+        inbox_stv = self.portal['eingangskorb']['eingangskorb_stv']
+
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(inbox_stv)
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyBelowId())

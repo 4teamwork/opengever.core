@@ -52,13 +52,13 @@
   <subscriber
       for="opengever.inbox.container.IInboxContainer
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
-      handler=".subscribers.configure_inboxcontainer_portlets"
+      handler=".subscribers.configure_inbox_container"
       />
 
   <subscriber
       for="opengever.inbox.inbox.IInbox
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
-      handler=".subscribers.configure_inbox_portlets"
+      handler=".subscribers.configure_inbox"
       />
 
   <subscriber
