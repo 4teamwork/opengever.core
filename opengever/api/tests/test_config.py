@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from ftw.testbrowser import browsing
 from opengever.base.interfaces import IUserSnapSettings
@@ -308,3 +310,17 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'bumblebee_notifications_url'), u'http://bumblebee.local/YnVtYmxlYmVl/api/notifications')
+
+    @browsing
+    def test_config_contains_primary_repository(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'primary_repository'), self.repository_root.absolute_url())
+
+        root2 = create(Builder('repository_root').titled(u'Ordnungssystem V2'))
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'primary_repository'), root2.absolute_url())
