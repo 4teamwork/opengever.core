@@ -1,4 +1,4 @@
-from collective.clamav.interfaces import IAVScanner
+from opengever.virusscan.interfaces import IAVScanner
 from six import BytesIO
 from zope.interface import implements
 import clamd
