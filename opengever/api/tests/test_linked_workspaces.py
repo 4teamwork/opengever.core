@@ -261,6 +261,22 @@ class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
                 [self.workspace.absolute_url()],
                 [workspace.get('@id') for workspace in response.get('items')])
 
+            self.assertFalse(response['workspaces_without_view_permission'])
+
+    @browsing
+    def test_workspaces_without_view_permission(self, browser):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add('a_workspace_uid')
+            transaction.commit()
+
+            browser.login()
+            response = browser.open(
+                self.dossier.absolute_url() + '/@linked-workspaces',
+                method='GET', headers={'Accept': 'application/json'}).json
+
+            self.assertTrue(response['workspaces_without_view_permission'])
+
     @browsing
     def test_get_linked_workspaces_replaces_service_url_with_actual_request_url(self, browser):
         url = self.dossier.absolute_url() + '/@linked-workspaces'
