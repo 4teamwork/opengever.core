@@ -13,11 +13,22 @@ clamdConnectionType = SimpleVocabulary(
 class IAVScannerSettings(Interface):
     """ Schema for the clamav settings
     """
-    clamav_enabled = schema.Bool(
-        title=_(u"Scanning enabled"),
-        description=_(u"If not set, no virus scanning will be done"),
-        default=True,
-    )
+
+    scan_before_download = schema.Bool(
+        title=u'Scan for viruses before file download',
+        description=u'Whether a virus check should be performed when '
+                    u'downloading a file from Gever'
+                    u'Note that this requires a correct configuration of the '
+                    u'virus scanner (see IAVScannerSettings)',
+        default=False)
+
+    scan_before_upload = schema.Bool(
+        title=u'Scan for viruses before file upload',
+        description=u'Whether a virus check should be performed when '
+                    u'uploading a file to Gever.'
+                    u'Note that this requires a correct configuration of the '
+                    u'virus scanner (see IAVScannerSettings)',
+        default=False)
 
     clamav_connection = schema.Choice(
         title=u"Connection type to clamd",

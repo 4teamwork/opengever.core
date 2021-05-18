@@ -2,17 +2,18 @@ from opengever.virusscan import _
 from opengever.virusscan.interfaces import IAVScanner
 from opengever.virusscan.interfaces import IAVScannerSettings
 from opengever.virusscan.scanner import ScanError
+from plone import api
+from plone.formwidget.namedfile.interfaces import INamedFileWidget
+from plone.formwidget.namedfile.validator import NamedFileWidgetValidator
+from plone.namedfile.interfaces import INamedField
 from plone.registry.interfaces import IRegistry
 from six import BytesIO
+from z3c.form import validator
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Invalid
 import logging
-from z3c.form import validator
-from plone.namedfile.interfaces import INamedField
-from plone.formwidget.namedfile.interfaces import INamedFileWidget
-from plone.formwidget.namedfile.validator import NamedFileWidgetValidator
 
 logger = logging.getLogger('opengever.virusscan.uploads')
 
@@ -20,11 +21,8 @@ SCAN_RESULT_KEY = 'opengever.virusscan.scan_result'
 
 
 def scanStream(stream):
-
     registry = getUtility(IRegistry)
     settings = registry.forInterface(IAVScannerSettings, check=False)
-    if settings is None or not settings.clamav_enabled:
-        return ''
     scanner = getUtility(IAVScanner)
 
     if settings.clamav_connection == 'net':
@@ -45,6 +43,11 @@ class Z3CFormclamavValidator(NamedFileWidgetValidator):
 
     def validate(self, value):
         super(Z3CFormclamavValidator, self).validate(value)
+
+        # if scanning is disabled for upload, we skip
+        if not api.portal.get_registry_record(name='scan_before_upload',
+                                              interface=IAVScannerSettings):
+            return True
 
         # Get a previous scan result on this REQUEST if there is one - to
         # avoid scanning the same upload twice.
