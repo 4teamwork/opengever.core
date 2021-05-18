@@ -208,4 +208,7 @@
   <!-- WorkspaceClient-->
   <records interface="opengever.workspaceclient.interfaces.IWorkspaceClientSettings" />
 
+  <!-- Virus scanning -->
+  <records interface="opengever.virusscan.interfaces.IAVScannerSettings" />
+
 </registry>

@@ -1,0 +1,7 @@
+<registry>
+
+  <!-- Virus scanning -->
+  <records interface="opengever.virusscan.interfaces.IAVScannerSettings" />
+
+
+</registry>
