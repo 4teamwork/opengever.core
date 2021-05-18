@@ -1,0 +1,47 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="collective.clamav">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <includeDependencies package="." />
+
+  <include package=".browser" />
+
+
+  <genericsetup:registerProfile
+      name="default"
+      title="collective.clamav"
+      directory="profiles/default"
+      description="Installs the collective.clamav add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="collective.clamav (uninstall)"
+      directory="profiles/uninstall"
+      description="Uninstalls the collective.clamav add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="collective.clamav-hiddenprofiles" />
+
+  <utility factory=".scanner.ClamavScanner" />
+
+
+  <adapter
+      name="collective.clamav.file"
+      factory=".schema.VirusFreeFileModifier" />
+
+  <adapter
+     name="collective.clamav.image"
+     factory=".schema.VirusFreeImageModifier" />
+
+  <adapter factory=".validator.Z3CFormclamavValidator" />
+
+</configure>
