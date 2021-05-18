@@ -1,5 +1,6 @@
 from ftw.mail.interfaces import IEmailAddress
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.api.serializer import extend_with_backreferences
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.dossier.behaviors.dossier import IDossier
@@ -10,6 +11,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -32,6 +34,9 @@ class SerializeDossierToJson(GeverSerializeFolderToJson):
             self.context)
         result[u'blocked_local_roles'] = bool(
             getattr(self.context.aq_inner, '__ac_local_roles_block__', False))
+
+        extend_with_backreferences(
+            result, self.context, self.request, 'relatedDossier')
 
         return result
 

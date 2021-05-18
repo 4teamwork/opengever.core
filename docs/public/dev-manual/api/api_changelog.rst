@@ -13,6 +13,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Dossier and document serialization provides now an additional attribute ``back_references_relatedDossiers`` and ``back_references_relatedItems``.
 - ``@globalindex``: Include ``containing_subdossier``, ``review_state_label`` and ``sequence_number`` in task serialization. (see :ref:`docs <globalindex>`)
 - ``@extract-attachments`` endpoint now also works for mails in a workspace.
 - Update ``@upload-structure`` endpoint to also control for possible duplicates. (see :ref:`docs <upload-structure>`)
