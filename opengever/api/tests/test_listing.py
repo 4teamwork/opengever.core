@@ -7,6 +7,7 @@ from opengever.api.listing import ALLOWED_ORDER_GROUP_FIELDS
 from opengever.api.listing import ListingGet
 from opengever.api.solr_query_service import filename
 from opengever.api.solr_query_service import filesize
+from opengever.api.solr_query_service import filter_escape
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
@@ -33,6 +34,14 @@ class TestListingEndpointWithoutSolr(IntegrationTestCase):
             browser.open(self.repository_root,
                          view='@listing',
                          headers=self.api_headers)
+
+    def test_filter_escape(self):
+        self.assertEqual('" leading whitespace\\!"', filter_escape(' leading whitespace!'))
+        self.assertEqual('"trailing whitespace\\? "', filter_escape('trailing whitespace? '))
+        self.assertEqual('no_whitespace', filter_escape('no_whitespace'))
+        self.assertEqual('no_whitespace\\!', filter_escape('no_whitespace!'))
+        self.assertEqual('"text with spaces"', filter_escape('text with spaces'))
+        self.assertEqual('"text \\&& spaces"', filter_escape('text && spaces'))
 
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
@@ -620,6 +629,21 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         view = ('@listing?name=documents&filters.-keywords:record:list=Wichtig')
         browser.open(self.repository_root, view=view, headers=self.api_headers)
         self.assertEqual(17, browser.json['items_total'])
+
+    @browsing
+    def test_filter_by_keywords_with_whitespace(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = (u'{}/@listing?name=dossiers&filters.keywords:record:list=Hello%20World'.format(
+            self.repository_root.absolute_url()))
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(0, browser.json["items_total"])
+
+        IDossier(self.dossier).keywords = (u'Hello World')
+        self.dossier.reindexObject(idxs=['Subject'])
+        self.commit_solr()
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(1, browser.json["items_total"])
 
     @browsing
     def test_filter_by_multiple_review_states(self, browser):
