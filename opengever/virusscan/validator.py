@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger('opengever.virusscan.uploads')
 
-SCAN_RESULT_KEY = 'opengever.virusscan.scan_result'
+SCAN_RESULT_BASE_KEY = 'opengever.virusscan.scan_result'
 
 
 def scanStream(stream):
@@ -51,6 +51,7 @@ class Z3CFormclamavValidator(NamedFileWidgetValidator):
 
         # Get a previous scan result on this REQUEST if there is one - to
         # avoid scanning the same upload twice.
+        SCAN_RESULT_KEY = "{}.{}".format(SCAN_RESULT_BASE_KEY, self.field.getName())
         annotations = IAnnotations(self.request)
         scan_result = annotations.get(SCAN_RESULT_KEY, None)
         if scan_result is not None:

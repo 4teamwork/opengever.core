@@ -25,8 +25,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         browser.open(self.empty_dossier)
         factoriesmenu.add('Document')
         browser.fill({'Title': u'My Document',
-                      'File': (EICAR, 'file.txt', 'text/plain'),
-                      "Document type": "Inquiry"}).save()
+                      'File': (EICAR, 'file.txt', 'text/plain')}).save()
 
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
@@ -47,9 +46,27 @@ class TestVirusScanValidator(IntegrationTestCase):
         browser.open(self.empty_dossier)
         factoriesmenu.add('Document')
         browser.fill({'Title': u'My Document',
-                      'File': (EICAR, 'file.txt', 'text/plain'),
-                      "Document type": "Inquiry"}).save()
+                      'File': (EICAR, 'file.txt', 'text/plain')}).save()
 
+        self.assertEqual([], error_messages())
+        self.assertEqual(1, len(self.empty_dossier.contentItems()))
+
+    @browsing
+    def test_document_add_form_scans_archival_file_field_for_viruses_when_enabled(self, browser):
+        self.login(self.manager, browser)
+        browser.open(self.empty_dossier)
+        factoriesmenu.add('Document')
+        browser.fill({'Title': u'My Document',
+                      'File': ('no virus', 'file.txt', 'text/plain'),
+                      'Archival file': (EICAR, 'archival_file.txt', 'text/plain')}).save()
+
+        self.assertEqual(["There were some errors."], error_messages())
+        self.assertEqual(
+            {'Archival file': ['Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)']},
+            erroneous_fields())
+        self.assertEqual(0, len(self.empty_dossier.contentItems()))
+
+        browser.fill({'Archival file': ("No virus", 'archival_file.txt', 'text/plain')}).save()
         self.assertEqual([], error_messages())
         self.assertEqual(1, len(self.empty_dossier.contentItems()))
 
@@ -83,3 +100,20 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertEqual([], error_messages())
         self.assertIsNotNone(self.empty_document.get_file())
+
+    @browsing
+    def test_document_edit_form_scans_archival_file_field_for_viruses_when_enabled(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.document, view='edit')
+        browser.fill({'Archival file': (EICAR, 'file.txt', 'text/plain')}).save()
+        self.assertEqual(["There were some errors."], error_messages())
+        self.assertEqual(
+            {'Archival file': ['Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)']},
+            erroneous_fields())
+        self.assertIsNone(self.document.archival_file)
+
+        browser.open(self.document, view='edit')
+        browser.fill({'Archival file': ("No virus", 'file.txt', 'text/plain')}).save()
+        self.assertEqual([], error_messages())
+        self.assertIsNotNone(self.document.archival_file)
