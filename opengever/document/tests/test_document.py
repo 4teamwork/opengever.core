@@ -23,6 +23,9 @@ from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.virusscan.interfaces import IAVScannerSettings
+from opengever.virusscan.testing import EICAR
+from opengever.virusscan.testing import register_mock_av_scanner
 from plone import api
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
@@ -31,6 +34,7 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from z3c.form import interfaces
+from z3c.form.interfaces import IFieldWidget
 from zope.component import createObject
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
@@ -445,15 +449,30 @@ class TestUploadValidator(FunctionalTestCase):
             self.assertFalse(validator.validate(mail))
         self.assertEquals('error_mail_upload', str(cm.exception))
 
+    def test_rejects_file_containing_virus(self):
+        register_mock_av_scanner()
+        api.portal.set_registry_record(
+            'scan_before_upload', True,interface=IAVScannerSettings)
+
+        file = NamedBlobFile(EICAR, filename=u'test.txt')
+        validator = UploadValidator(*self.validator_arguments())
+
+        with self.assertRaises(Invalid) as cm:
+            self.assertFalse(validator.validate(file))
+
+        self.assertEquals(
+            'Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)',
+            str(cm.exception))
+
     def validator_arguments(self):
         dossier = create(Builder("dossier"))
         document = create(Builder("document").within(dossier))
         field = getFields(IDocumentSchema).get('file')
+        widget = getMultiAdapter((field, self.request), IFieldWidget)
 
         view = Mock()
         view.parentForm = Mock()
-
-        return (document, document.REQUEST, view, field, None)
+        return (document, document.REQUEST, view, field, widget)
 
 
 class TestDocumentMimetype(FunctionalTestCase):

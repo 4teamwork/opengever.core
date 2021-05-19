@@ -7,6 +7,7 @@ from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
 from opengever.base.model.favorite import Favorite
+from opengever.virusscan.validator import Z3CFormclamavValidator
 from opengever.docugate import is_docugate_feature_enabled
 from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.document import _
@@ -119,7 +120,7 @@ class IDocumentSchema(model.Schema):
                 "portal_type ftw.mail.mail instead.")
 
 
-class UploadValidator(validator.SimpleFieldValidator):
+class UploadValidator(Z3CFormclamavValidator):
     """Validate document uploads."""
 
     def validate(self, value):
@@ -153,6 +154,7 @@ class UploadValidator(validator.SimpleFieldValidator):
                     u'error_proposal_document_type',
                     default=(u"It's not possible to have non-.docx documents as proposal documents.")
                     ))
+        super(UploadValidator, self).validate(value)
 
     def is_proposal_upload(self):
         """The upload form context can be, for example, a Dossier."""
@@ -179,8 +181,8 @@ class UploadValidator(validator.SimpleFieldValidator):
         raise Invalid(_(
             u'error_mail_upload',
             default=(u"It's not possible to add E-mails here, please "
-            "send it to ${mailaddress} or drag it to the dossier "
-            "(Dragn'n'Drop)."),
+                     u"send it to ${mailaddress} or drag it to the dossier "
+                     u"(Dragn'n'Drop)."),
             mapping={'mailaddress': mail_address}
             ))
 
