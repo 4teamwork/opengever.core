@@ -38,6 +38,30 @@ def scanStream(stream):
     return result
 
 
+def validateStream(filename, filelike, request):
+    result = ''
+    try:
+        result = scanStream(filelike)
+    except ScanError as e:
+        logger.error('ScanError %s on %s.' % (e, filename))
+        raise Invalid(
+            _(u'error_while_scanning',
+              default="There was an error while checking the file for "
+                      "viruses: Please contact your system administrator.")
+        )
+
+    if result:
+        message = translate(_(
+                u'validation_failed',
+                default=u"Validation failed, file is virus-infected. (${result})",
+                mapping={u"result": result}
+            ),
+            context=request
+        )
+        logger.warning("{} filename: {}".format(message, filename))
+        raise Invalid(message)
+
+
 class Z3CFormclamavValidator(NamedFileWidgetValidator):
     """z3c.form validator to confirm a file upload is virus-free."""
 
@@ -79,34 +103,14 @@ class Z3CFormclamavValidator(NamedFileWidgetValidator):
         if isinstance(filename, unicode):
             filename = filename.encode('utf-8')
         filelike.seek(0)
-        result = ''
         try:
-            result = scanStream(filelike)
-        except ScanError as e:
-            logger.error('ScanError %s on %s.' % (e, filename))
-            raise Invalid(
-                _(u'error_while_scanning',
-                  default="There was an error while checking the file for "
-                          "viruses: Please contact your system administrator.")
-            )
-
-        if result:
-            annotations[SCAN_RESULT_KEY] = translate(_(
-                    u'validation_failed',
-                    default=u"Validation failed, file is virus-infected. (${result})",
-                    mapping={u"result": result}
-                ),
-                context=self.request
-            )
-            logger.warning("{} filename: {}".format(
-                annotations[SCAN_RESULT_KEY],
-                filename
-            ))
-            raise Invalid(annotations[SCAN_RESULT_KEY])
-        else:
-            annotations[SCAN_RESULT_KEY] = True
-            logger.info("No virus detected in {}".format(filename))
-            return True
+            validateStream(filename, filelike, self.request)
+        except Invalid as e:
+            annotations[SCAN_RESULT_KEY] = e.message
+            raise e
+        annotations[SCAN_RESULT_KEY] = True
+        logger.info("No virus detected in {}".format(filename))
+        return True
 
 
 validator.WidgetValidatorDiscriminators(Z3CFormclamavValidator,
