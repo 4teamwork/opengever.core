@@ -1,9 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser import InsufficientPrivileges
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
-from ftw.testbrowser import InsufficientPrivileges
+from plone import api
 
 
 class TestPrivateRoot(IntegrationTestCase):
@@ -21,6 +22,13 @@ class TestPrivateRoot(IntegrationTestCase):
         browser.click_on('Save')
 
         self.assertEquals([u'My f\xf4lder'], browser.css('h1').text)
+
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(browser.context)
+        self.assertEqual(
+            "opengever_private_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_private_policy", config.getPolicyBelowId())
 
     @browsing
     def test_is_only_addable_by_manager(self, browser):

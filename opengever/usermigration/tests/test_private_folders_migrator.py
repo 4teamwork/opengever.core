@@ -5,6 +5,7 @@ from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from opengever.usermigration.private_folders import PrivateFoldersMigrator
 from plone import api
+from Products.CMFPlacefulWorkflow.PlacefulWorkflowTool import WorkflowPolicyConfig_id
 
 
 class TestPrivateFoldersMigrator(FunctionalTestCase):
@@ -73,7 +74,8 @@ class TestPrivateFoldersMigrator(FunctionalTestCase):
 
         # Old folder shouldn't exist any more
         self.assertEqual(
-            ['test_user_1_', 'hans.muster'], self.root.objectIds())
+            [WorkflowPolicyConfig_id, 'test_user_1_', 'hans.muster'],
+            self.root.objectIds())
 
         # New folder should contain all dossiers
         self.assertItemsEqual(
@@ -108,7 +110,8 @@ class TestPrivateFoldersMigrator(FunctionalTestCase):
 
         # Old folder shouldn't exist any more
         self.assertEqual(
-            ['test_user_1_', 'hans.muster'], self.root.objectIds())
+            [WorkflowPolicyConfig_id, 'test_user_1_', 'hans.muster'],
+            self.root.objectIds())
 
         # New folder should contain dossier
         self.assertItemsEqual(

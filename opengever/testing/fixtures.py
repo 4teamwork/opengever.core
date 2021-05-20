@@ -970,14 +970,6 @@ class OpengeverContentFixture(object):
                 title_fr=u'Bo\xeetes de r\xe9ception')
         ))
 
-        # Enable inbox_policy placeful workflow
-        inbox_policy_id = 'opengever_inbox_policy'
-        self.inbox_container.manage_addProduct[
-            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
-        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
-        policy_config = pwf_tool.getWorkflowPolicyConfig(self.inbox_container)
-        policy_config.setPolicyIn(inbox_policy_id, update_security=False)
-        policy_config.setPolicyBelow(inbox_policy_id, update_security=False)
         self.set_roles(self.inbox_container, self.secretariat_user.getId(), ['Reader'])
         self.set_roles(self.inbox_container, self.dossier_manager.getId(), ['Reader'])
 
@@ -1067,15 +1059,6 @@ class OpengeverContentFixture(object):
         self.private_root.title_de = u'Meine Ablage'
         self.private_root.title_en = u'Meine Ablage'
         self.private_root.title_fr = u'Mon d\xe9p\xf4t'
-
-        # Enable opengever.private placeful workflow policy
-        private_policy_id = 'opengever_private_policy'
-        self.private_root.manage_addProduct[
-            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
-        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
-        policy_config = pwf_tool.getWorkflowPolicyConfig(self.private_root)
-        policy_config.setPolicyIn(private_policy_id, update_security=False)
-        policy_config.setPolicyBelow(private_policy_id, update_security=False)
 
     @staticuid()
     def create_private_folder(self):
@@ -2169,18 +2152,6 @@ class OpengeverContentFixture(object):
                 title_fr=u'Espace partag\xe9',
             )
         ))
-
-        # Enable placeful workflow policy for workspace root
-        self.workspace_root.manage_addProduct[
-            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
-        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
-        policy_config = pwf_tool.getWorkflowPolicyConfig(self.workspace_root)
-        policy_config.setPolicyIn(
-            'opengever_workspace_policy', update_security=False)
-        policy_config.setPolicyBelow(
-            'opengever_workspace_policy', update_security=False)
-
-        self.workspace_root.reindexObjectSecurity()
 
     def create_workspace(self):
         self.workspace = self.register('workspace', create(

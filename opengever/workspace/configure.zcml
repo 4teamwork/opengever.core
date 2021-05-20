@@ -18,6 +18,12 @@
   <adapter factory=".sequence.WorkspaceMeetingSequenceNumberGenerator" />
 
   <subscriber
+      for="opengever.workspace.interfaces.IWorkspaceRoot
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.configure_workspace_root"
+      />
+
+  <subscriber
       for="opengever.workspace.interfaces.IWorkspace
            zope.lifecycleevent.interfaces.IObjectCreatedEvent"
       handler=".subscribers.assign_admin_role_to_workspace_creator"

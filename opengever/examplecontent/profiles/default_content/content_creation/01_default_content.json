@@ -4,9 +4,7 @@
         "_type": "opengever.private.root",
         "title_de": "Meine Ablage",
         "title_fr": "Mon dépôt",
-        "title_en": "My repository",
-        "_placefulworkflow": ["opengever_private_policy",
-                              "opengever_private_policy"]
+        "title_en": "My repository"
     },
     {
         "_path": "eingangskorb",
@@ -14,8 +12,6 @@
         "title_de": "Eingangskorb",
         "title_fr": "Boîte de réception",
         "title_en": "Inbox",
-        "_placefulworkflow": ["opengever_inbox_policy",
-                              "opengever_inbox_policy"],
         "_ac_local_roles": {
             "og_demo-ftw_users": [
                 "Reader"
@@ -42,8 +38,6 @@
         "_type": "opengever.workspace.root",
         "title_de": "Teamräume",
         "title_fr": "Espace partagé",
-        "title_en": "Workspaces",
-        "_placefulworkflow": ["opengever_workspace_policy",
-                              "opengever_workspace_policy"]
+        "title_en": "Workspaces"
     }
 ]

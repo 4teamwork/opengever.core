@@ -110,7 +110,7 @@ class TestScanIn(IntegrationTestCase):
                      data=body)
 
         self.assertEqual(201, browser.status_code)
-        doc = inbox.objectValues()[0]
+        doc = inbox.objectValues()[1]
         self.assertEqual('mydocument', doc.Title())
 
     @browsing
@@ -126,7 +126,7 @@ class TestScanIn(IntegrationTestCase):
                      data=body)
 
         self.assertEqual(201, browser.status_code)
-        doc = inbox.objectValues()[0]
+        doc = inbox.objectValues()[1]
         self.assertEqual('mydocument', doc.Title())
 
     @browsing

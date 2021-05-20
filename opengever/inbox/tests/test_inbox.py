@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -8,6 +6,7 @@ from ftw.testbrowser.pages import statusmessages
 from opengever.inbox.inbox import IInbox
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletManager
 from unittest import skip
@@ -29,6 +28,13 @@ class TestInbox(FunctionalTestCase):
 
         statusmessages.assert_no_error_messages()
         self.assertTrue(IInbox.providedBy(browser.context))
+
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(browser.context)
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_inbox_policy", config.getPolicyBelowId())
 
     @browsing
     def test_is_only_addable_by_manager(self, browser):
@@ -78,7 +84,7 @@ class TestInbox(FunctionalTestCase):
                       'Title (French)': u'Bo\xeete de r\xe9ception'})
         browser.find('Save').click()
 
-        browser.find(u'Français').click()
+        browser.find(u'Fran\xe7ais').click()
         self.assertEquals(u'Bo\xeete de r\xe9ception',
                           browser.css('h1').first.text)
 

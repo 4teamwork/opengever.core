@@ -1,3 +1,4 @@
+from opengever.base.placeful_workflow import assign_placeful_workflow
 from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
@@ -6,12 +7,16 @@ from opengever.workspace.activities import ToDoClosedActivity
 from opengever.workspace.activities import ToDoCommentedActivity
 from opengever.workspace.activities import ToDoReopenedActivity
 from opengever.workspace.activities import WorkspaceWatcherManager
+from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
 from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
-from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
+
+
+def configure_workspace_root(root, event):
+    assign_placeful_workflow(root, "opengever_workspace_policy")
 
 
 def assign_admin_role_to_workspace_creator(workspace, event):

@@ -112,6 +112,14 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             IAnnotations(root)[BUNDLE_GUID_KEY],
             index_data_for(root)[GUID_INDEX_NAME])
+
+        placeful_workflow = api.portal.get_tool('portal_placeful_workflow')
+        config = placeful_workflow.getWorkflowPolicyConfig(root)
+        self.assertEqual(
+            "opengever_workspace_policy", config.getPolicyInId())
+        self.assertEqual(
+            "opengever_workspace_policy", config.getPolicyBelowId())
+
         return root
 
     def assert_workspace_created(self, workspaceroot):
@@ -201,7 +209,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
             [],
             document1.relatedItems)
         self.assertEqual(
-            'document-state-draft',
+            'opengever_workspace_document--STATUS--active',
             api.content.get_state(document1))
         self.assertEqual(
             IAnnotations(document1)[BUNDLE_GUID_KEY],
