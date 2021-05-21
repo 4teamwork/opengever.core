@@ -17,7 +17,7 @@ def get_redirect_url(context):
     referer = context.REQUEST.environ.get('HTTP_REFERER')
     portal_url = '/'.join(context.portal_url().split('/')[:-1])
     if referer:
-        obj_path = referer[len(portal_url):]
+        obj_path = referer[len(portal_url):].split("?")[0]
         try:
             obj = context.restrictedTraverse(obj_path)
         except KeyError:
@@ -30,6 +30,8 @@ def get_redirect_url(context):
             return '%s#mydocuments' % (obj.absolute_url())
         elif IDossierMarker.providedBy(obj):
             return '%s#documents' % (obj.absolute_url())
+        elif isinstance(obj, BrowserView):
+            return obj.context.absolute_url()
         else:
             return obj.absolute_url()
 

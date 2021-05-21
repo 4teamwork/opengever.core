@@ -294,3 +294,31 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             browser.headers['content-type'])
         self.assertEqual(EICAR, browser.contents)
+
+    @browsing
+    def test_download_view_scans_file_from_edit_view(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+        browser.open(self.document, view='edit')
+        browser.click_on("Vertraegsentwurf.docx")
+        browser.click_on("Download")
+
+        self.assertEqual(
+            ['Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)'],
+            error_messages())
+        self.assertEqual('text/html;charset=utf-8',
+                         browser.headers['content-type'])
+        self.assertIsNone(browser.headers.get('content-disposition'))
+        self.assertEqual(self.document.absolute_url(), browser.url)
+
+        self.checkout_document(self.subdocument)
+        browser.open(self.subdocument, view='edit')
+        browser.click_on("Uebersicht der Vertraege von 2016.xlsx")
+        browser.click_on("Download")
+        self.assertEqual(
+            'attachment; filename="Uebersicht der Vertraege von 2016.xlsx"',
+            browser.headers.get('content-disposition'))
+        self.assertEqual(
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            browser.headers['content-type'])
+        self.assertEqual("No virus", browser.contents)
