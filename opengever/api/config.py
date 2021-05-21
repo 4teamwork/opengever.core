@@ -7,6 +7,7 @@ from opengever.officeconnector.helpers import is_client_ip_in_office_connector_d
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.private import get_private_folder_url
+from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
 from plone.restapi.services import Service
 
 
@@ -44,3 +45,7 @@ class ConfigGet(Service):
         ogds_inbox = get_current_org_unit().inbox()
         current_user = ogds_service().fetch_current_user()
         config['is_inbox_user'] = current_user in ogds_inbox.assigned_users()
+
+        primary_root = PrimaryRepositoryRoot(
+            self.context, self.request).get_primary_repository_root()
+        config['primary_repository'] = primary_root.absolute_url()
