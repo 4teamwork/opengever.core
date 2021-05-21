@@ -1,10 +1,9 @@
-from copy import copy
 from copy import deepcopy
 from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
-from ftw.solr.query import SPECIAL_CHARS
+from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
@@ -30,19 +29,14 @@ from zope.i18n import translate
 import Missing
 
 
-TO_ESCAPE = copy(SPECIAL_CHARS)
-TO_ESCAPE.append(' ')
-
-
 def filter_escape(term):
-    """Copy of ftw.solr.query.escape, but using the above defined TO_ESCAPE
-    instead of SPECIAL_CHARS, additionally including a white space. For queries,
-    whitespaces should not be escaped, but for filters they should be.
+    """If there is a space in the term, then quotation marks are required around the term
     """
     if isinstance(term, bool):
         return term
-    for char in TO_ESCAPE:
-        term = term.replace(char, '\\' + char)
+    term = escape(term)
+    if ' ' in term:
+        term = '"{}"'.format(term)
     return term
 
 
