@@ -62,25 +62,35 @@ def validateStream(filename, filelike, request):
         raise Invalid(message)
 
 
+def validateUploadForFieldIfNecessary(fieldname, filename, filelike, request):
+    # if scanning is disabled for upload, we skip
+    if not api.portal.get_registry_record(name='scan_before_upload',
+                                          interface=IAVScannerSettings):
+        return True
+
+    # Get a previous scan result on this REQUEST if there is one - to
+    # avoid scanning the same upload twice.
+    SCAN_RESULT_KEY = "{}.{}".format(SCAN_RESULT_BASE_KEY, fieldname)
+    annotations = IAnnotations(request)
+    scan_result = annotations.get(SCAN_RESULT_KEY, None)
+    if scan_result is not None:
+        logger.debug("File already scanned in this request")
+        return scan_result
+    try:
+        validateStream(filename, filelike, request)
+    except Invalid as e:
+        annotations[SCAN_RESULT_KEY] = e.message
+        raise e
+    annotations[SCAN_RESULT_KEY] = True
+    logger.info("No virus detected in {}".format(filename))
+    return annotations[SCAN_RESULT_KEY]
+
+
 class Z3CFormclamavValidator(NamedFileWidgetValidator):
     """z3c.form validator to confirm a file upload is virus-free."""
 
     def validate(self, value):
         super(Z3CFormclamavValidator, self).validate(value)
-
-        # if scanning is disabled for upload, we skip
-        if not api.portal.get_registry_record(name='scan_before_upload',
-                                              interface=IAVScannerSettings):
-            return True
-
-        # Get a previous scan result on this REQUEST if there is one - to
-        # avoid scanning the same upload twice.
-        SCAN_RESULT_KEY = "{}.{}".format(SCAN_RESULT_BASE_KEY, self.field.getName())
-        annotations = IAnnotations(self.request)
-        scan_result = annotations.get(SCAN_RESULT_KEY, None)
-        if scan_result is not None:
-            logger.debug("File already scanned in this request")
-            return scan_result
 
         if hasattr(value, 'seek'):
             # when submitted a new 'value' is a
@@ -103,14 +113,9 @@ class Z3CFormclamavValidator(NamedFileWidgetValidator):
         if isinstance(filename, unicode):
             filename = filename.encode('utf-8')
         filelike.seek(0)
-        try:
-            validateStream(filename, filelike, self.request)
-        except Invalid as e:
-            annotations[SCAN_RESULT_KEY] = e.message
-            raise e
-        annotations[SCAN_RESULT_KEY] = True
-        logger.info("No virus detected in {}".format(filename))
-        return True
+
+        return validateUploadForFieldIfNecessary(
+            self.field.getName(), filename, filelike, self.request)
 
 
 validator.WidgetValidatorDiscriminators(Z3CFormclamavValidator,

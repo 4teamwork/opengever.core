@@ -23,8 +23,7 @@ from opengever.officeconnector.helpers import is_client_ip_in_office_connector_d
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
-from opengever.virusscan.interfaces import IAVScannerSettings
-from opengever.virusscan.validator import validateStream
+from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from opengever.virusscan.validator import Z3CFormclamavValidator
 from opengever.wopi.discovery import editable_extensions
 from plone import api
@@ -123,11 +122,9 @@ class IDocumentSchema(model.Schema):
 
     @invariant
     def scan_for_virus(data):
-        if not api.portal.get_registry_record(name='scan_before_upload',
-                                              interface=IAVScannerSettings):
-            return True
         if data.file:
-            validateStream(data.file.filename, data.file.open(), getRequest())
+            validateUploadForFieldIfNecessary(
+                "file", data.file.filename, data.file.open(), getRequest())
 
 
 class UploadValidator(Z3CFormclamavValidator):
