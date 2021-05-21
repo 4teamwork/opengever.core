@@ -9,6 +9,7 @@ from opengever.ogds.models.service import ogds_service
 from opengever.private import get_private_folder_url
 from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
 from plone.restapi.services import Service
+from zope.publisher.interfaces import NotFound
 
 
 class ConfigGet(Service):
@@ -46,6 +47,10 @@ class ConfigGet(Service):
         current_user = ogds_service().fetch_current_user()
         config['is_inbox_user'] = current_user in ogds_inbox.assigned_users()
 
-        primary_root = PrimaryRepositoryRoot(
-            self.context, self.request).get_primary_repository_root()
-        config['primary_repository'] = primary_root.absolute_url()
+        try:
+            primary_root = PrimaryRepositoryRoot(
+                self.context, self.request).get_primary_repository_root()
+            config['primary_repository'] = primary_root.absolute_url()
+        except NotFound:
+            # GEVER deployments without a repository-root raises NotFound
+            config['primary_repository'] = None
