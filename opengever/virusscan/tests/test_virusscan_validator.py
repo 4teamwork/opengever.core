@@ -205,3 +205,44 @@ class TestVirusScanValidator(IntegrationTestCase):
         browser.open(self.document, data=json.dumps(data),
                      method='PATCH', headers=self.api_headers)
         self.assertEqual(204, browser.status_code)
+
+    @browsing
+    def test_document_post_scans_archival_file_for_viruses_when_enabled(self, browser):
+        self.login(self.manager, browser)
+
+        with self.observe_children(self.empty_dossier) as children,\
+                browser.expect_http_error(code=400):
+            data = {'@type': 'opengever.document.document',
+                    'file': {'data': "No virus", 'filename': 'file.txt'},
+                    'archival_file': {'data': EICAR, 'filename': 'file.txt'}}
+            browser.open(self.empty_dossier, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(0, len(children['added']))
+        self.assertEqual(
+            u"[{'message': 'Validation failed, file is virus-infected. "
+            u"(Eicar-Test-Signature FOUND)', 'error': 'ValidationError'}]",
+            browser.json['message'])
+
+        data['archival_file']['data'] = "No virus"
+        with self.observe_children(self.empty_dossier) as children:
+            browser.open(self.empty_dossier, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual(1, len(children['added']))
+
+    @browsing
+    def test_document_post_does_not_scan_archival_file_for_viruses_when_disabled(self, browser):
+        self.login(self.manager, browser)
+        api.portal.set_registry_record(
+            'scan_before_upload', False, interface=IAVScannerSettings)
+
+        with self.observe_children(self.empty_dossier) as children:
+            data = {'@type': 'opengever.document.document',
+                    'file': {'data': "No virus", 'filename': 'file.txt'},
+                    'archival_file': {'data': EICAR, 'filename': 'file.txt'}}
+            browser.open(self.empty_dossier, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual(1, len(children['added']))
