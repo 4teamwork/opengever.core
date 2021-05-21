@@ -62,6 +62,14 @@ def validateStream(filename, filelike, request):
         raise Invalid(message)
 
 
+def validateDownloadIfNecessary(filename, file, request):
+    # if scanning is disabled for download, we skip
+    if not api.portal.get_registry_record(name='scan_before_download',
+                                          interface=IAVScannerSettings):
+        return True
+    validateStream(filename, file.open(), request)
+
+
 def validateUploadForFieldIfNecessary(fieldname, filename, filelike, request):
     # if scanning is disabled for upload, we skip
     if not api.portal.get_registry_record(name='scan_before_upload',

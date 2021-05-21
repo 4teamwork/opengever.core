@@ -6,6 +6,7 @@ from opengever.document.browser.edit import get_redirect_url
 from opengever.document.events import FileCopyDownloadedEvent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.mail import IOGMailMarker
+from opengever.virusscan.validator import validateDownloadIfNecessary
 from plone import api
 from plone.memoize import ram
 from plone.memoize.interfaces import ICacheChooser
@@ -22,6 +23,7 @@ from zope.component.hooks import getSite
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import Invalid
 from zope.publisher.interfaces import NotFound
 
 
@@ -35,6 +37,7 @@ class DocumentishDownload(Download):
     - Redirect with notification when instead of raising 404 for missing files
     - Download the latest version instead the current working copy if the
       document is checked out by another user
+    - Scan for viruses if enabled in IAVScannerSettings
     """
 
     def __call__(self):
@@ -60,6 +63,12 @@ class DocumentishDownload(Download):
                 get_redirect_url(self.context))
 
         self.extract_filename(named_file)
+        try:
+            validateDownloadIfNecessary(self.filename, named_file, self.request)
+        except Invalid as exc:
+            api.portal.show_message(exc.message, self.request, type='error')
+            return self.request.RESPONSE.redirect(
+                get_redirect_url(self.context))
 
         set_attachment_content_disposition(self.request, self.filename,
                                            named_file)

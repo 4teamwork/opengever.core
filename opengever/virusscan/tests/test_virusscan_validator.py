@@ -246,3 +246,51 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertEqual(201, browser.status_code)
         self.assertEqual(1, len(children['added']))
+
+
+class TestVirusScanDownloadValidator(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestVirusScanDownloadValidator, self).setUp()
+        register_mock_av_scanner()
+        api.portal.set_registry_record(
+            'scan_before_download', True, interface=IAVScannerSettings)
+        with self.login(self.regular_user):
+            self.document.file.data = EICAR
+            self.subdocument.file.data = "No virus"
+
+    @browsing
+    def test_download_view_scans_file_if_enabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='download')
+        self.assertEqual(
+            ['Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)'],
+            error_messages())
+        self.assertEqual('text/html;charset=utf-8',
+                         browser.headers['content-type'])
+        self.assertIsNone(browser.headers.get('content-disposition'))
+
+        browser.open(self.subdocument, view='download')
+        self.assertEqual(
+            'attachment; filename="Uebersicht der Vertraege von 2016.xlsx"',
+            browser.headers.get('content-disposition'))
+        self.assertEqual(
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            browser.headers['content-type'])
+        self.assertEqual("No virus", browser.contents)
+
+    @browsing
+    def test_download_view_does_not_scan_file_if_disabled(self, browser):
+        api.portal.set_registry_record(
+            'scan_before_download', False, interface=IAVScannerSettings)
+
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='download')
+        self.assertEqual(
+            'attachment; filename="Vertraegsentwurf.docx"',
+            browser.headers.get('content-disposition'))
+        self.assertEqual(
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            browser.headers['content-type'])
+        self.assertEqual(EICAR, browser.contents)
