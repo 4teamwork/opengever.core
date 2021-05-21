@@ -7,7 +7,6 @@ from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
 from opengever.base.model.favorite import Favorite
-from opengever.virusscan.validator import Z3CFormclamavValidator
 from opengever.docugate import is_docugate_feature_enabled
 from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.document import _
@@ -24,6 +23,9 @@ from opengever.officeconnector.helpers import is_client_ip_in_office_connector_d
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
+from opengever.virusscan.interfaces import IAVScannerSettings
+from opengever.virusscan.validator import validateStream
+from opengever.virusscan.validator import Z3CFormclamavValidator
 from opengever.wopi.discovery import editable_extensions
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
@@ -118,6 +120,14 @@ class IDocumentSchema(model.Schema):
             raise Invalid(
                 u"It is not possible to add E-mails as document, use "
                 "portal_type ftw.mail.mail instead.")
+
+    @invariant
+    def scan_for_virus(data):
+        if not api.portal.get_registry_record(name='scan_before_upload',
+                                              interface=IAVScannerSettings):
+            return True
+        if data.file:
+            validateStream(data.file.filename, data.file.open(), getRequest())
 
 
 class UploadValidator(Z3CFormclamavValidator):
