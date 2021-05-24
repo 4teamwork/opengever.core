@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.5.4 (unreleased)
+2021.5.4 (2021-05-24)
 ---------------------
 
 - Nothing changed yet.
