@@ -53,6 +53,11 @@
   <adapter factory=".serializer.long_converter" />
   <adapter factory=".field_deserializers.PersistentDefaultFieldDeserializer" />
   <adapter factory=".field_deserializers.PersistentDatetimeFieldDeserializer" />
+
+  <configure zcml:condition="installed z3c.relationfield">
+    <adapter factory=".relationfield.GeverRelationChoiceFieldDeserializer" />
+  </configure>
+
   <adapter
       factory=".local_roles.GeverSerializeLocalRolesToJson"
       name="local_roles"
