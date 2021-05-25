@@ -992,6 +992,17 @@ class TestMoveItem(IntegrationTestCase):
         assert_message(u'{} was moved.'.format(doc_title.decode('utf-8')))
 
     @browsing
+    def test_move_task(self, browser):
+        self.login(self.regular_user, browser)
+        task_title = self.task.title.encode('utf-8')
+        self.assertIn(task_title, [a.Title for a in self.dossier.getFolderContents()])
+
+        self.move_item(browser, self.task, self.empty_dossier)
+        self.assertIn(task_title, [a.Title for a in self.empty_dossier.getFolderContents()])
+        self.assertNotIn(task_title, [a.Title for a in self.dossier.getFolderContents()])
+        assert_message(u'{} was moved.'.format(task_title.decode('utf-8')))
+
+    @browsing
     def test_checked_out_document_is_not_movable(self, browser):
         self.login(self.regular_user, browser)
         self.checkout_document(self.document)
