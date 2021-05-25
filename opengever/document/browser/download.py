@@ -1,3 +1,4 @@
+from opengever.api.utils import raise_for_api_request
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.viewlets.download import DownloadFileVersion
 from opengever.core import dictstorage
@@ -66,6 +67,7 @@ class DocumentishDownload(Download):
         try:
             validateDownloadIfNecessary(self.filename, named_file, self.request)
         except Invalid as exc:
+            raise_for_api_request(self.request, BadRequest(exc.message))
             api.portal.show_message(exc.message, self.request, type='error')
             return self.request.RESPONSE.redirect(
                 get_redirect_url(self.context))
