@@ -1,6 +1,3 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -15,14 +12,14 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.virusscan\n"
+"Domain: DOMAIN\n"
 
 #. Default: "There was an error while checking the file for viruses."
 #: ./opengever/virusscan/validator.py
 msgid "error_while_scanning"
-msgstr ""
+msgstr "There was an error while checking the file for viruses. Please contact the application administrator."
 
 #. Default: "Validation failed, file is virus-infected."
 #: ./opengever/virusscan/validator.py
 msgid "file_infected"
-msgstr ""
+msgstr "Careful, this file contains a virus."

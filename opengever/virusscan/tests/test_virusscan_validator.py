@@ -32,7 +32,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'File': ['Validation failed, file is virus-infected.']},
+            {'File': ['Careful, this file contains a virus.']},
             erroneous_fields())
         self.assertEqual(0, len(self.empty_dossier.contentItems()))
 
@@ -65,7 +65,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'Archival file': ['Validation failed, file is virus-infected.']},
+            {'Archival file': ['Careful, this file contains a virus.']},
             erroneous_fields())
         self.assertEqual(0, len(self.empty_dossier.contentItems()))
 
@@ -82,7 +82,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         browser.fill({'File': (EICAR, 'file.txt', 'text/plain')}).save()
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'File': ['Validation failed, file is virus-infected.']},
+            {'File': ['Careful, this file contains a virus.']},
             erroneous_fields())
         self.assertIsNone(self.empty_document.get_file())
 
@@ -112,7 +112,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         browser.fill({'Archival file': (EICAR, 'file.txt', 'text/plain')}).save()
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'Archival file': ['Validation failed, file is virus-infected.']},
+            {'Archival file': ['Careful, this file contains a virus.']},
             erroneous_fields())
         self.assertIsNone(self.document.archival_file)
 
@@ -133,7 +133,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertIsNone(result['success'])
         self.assertEqual(
-             u'Validation failed, file is virus-infected.',
+             u'Careful, this file contains a virus.',
              result['error'])
 
         result = factory(filename='file.txt',
@@ -266,7 +266,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
 
         browser.open(self.document, view='download')
         self.assertEqual(
-            ['Validation failed, file is virus-infected.'],
+            ['Careful, this file contains a virus.'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])
@@ -305,7 +305,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
         browser.click_on("Download")
 
         self.assertEqual(
-            ['Validation failed, file is virus-infected.'],
+            ['Careful, this file contains a virus.'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])
@@ -352,7 +352,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
         browser.css('a.function-download-copy').first.click()
         browser.find('Download').click()
         self.assertEqual(
-            ['Validation failed, file is virus-infected.'],
+            ['Careful, this file contains a virus.'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])
