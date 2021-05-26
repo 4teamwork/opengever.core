@@ -11,7 +11,6 @@ from six import BytesIO
 from z3c.form import validator
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
-from zope.i18n import translate
 from zope.interface import Invalid
 import logging
 
@@ -46,19 +45,15 @@ def validateStream(filename, filelike, request):
         logger.error('ScanError %s on %s.' % (e, filename))
         raise Invalid(
             _(u'error_while_scanning',
-              default="There was an error while checking the file for "
-                      "viruses: Please contact your system administrator.")
+              default="There was an error while checking the file for viruses.")
         )
 
     if result:
-        message = translate(_(
-                u'validation_failed',
-                default=u"Validation failed, file is virus-infected. (${result})",
-                mapping={u"result": result}
-            ),
-            context=request
-        )
-        logger.warning("{} filename: {}".format(message, filename))
+        message = _(
+                u'file_infected',
+                default=u"Validation failed, file is virus-infected."
+            )
+        logger.warning(u"{} filename: {}".format(message, filename))
         raise Invalid(message)
 
 

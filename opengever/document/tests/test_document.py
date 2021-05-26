@@ -461,7 +461,7 @@ class TestUploadValidator(FunctionalTestCase):
             self.assertFalse(validator.validate(file))
 
         self.assertEquals(
-            'Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)',
+            'file_infected',
             str(cm.exception))
 
     def validator_arguments(self):
