@@ -41,15 +41,15 @@ class OGDSListingBaseService(Service):
         sort_on, sort_order, search, filters = self.extract_params()
         query = self.get_base_query()
         query = self.extend_query_with_sorting(query, sort_on, sort_order)
-
-        if self.unique_sort_on != sort_on:
-            query = self.extend_query_with_sorting(
-                query, self.unique_sort_on, sort_order)
-
         query = self.extend_query_with_search(query, search)
         query = self.extend_query_with_filters(query, filters)
 
-        batch = SQLHypermediaBatch(self.request, query)
+        if sort_order in ['descending', 'reverse']:
+            order_f = desc
+        else:
+            order_f = asc
+
+        batch = SQLHypermediaBatch(self.request, query, self.unique_sort_on, order_f)
         items = []
         for item in batch:
             serializer = queryMultiAdapter(
