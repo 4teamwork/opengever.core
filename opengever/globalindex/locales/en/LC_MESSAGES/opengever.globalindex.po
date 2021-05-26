@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-13 16:44+0000\n"
+"POT-Creation-Date: 2021-05-26 14:29+0000\n"
 "PO-Revision-Date: 2016-07-22 15:25+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/de/>\n"
@@ -41,6 +41,11 @@ msgstr "Completed on"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_deadline"
 msgstr "Deadline"
+
+#. Default: "Description"
+#: ./opengever/globalindex/browser/report.py
+msgid "label_description"
+msgstr "Description"
 
 #. German translation: Dossier
 #: ./opengever/globalindex/browser/report.py
