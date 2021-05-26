@@ -201,6 +201,17 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
 
         self._init_version_file()
         if self.version_file:
+            try:
+                validateDownloadIfNecessary(
+                    self.version_file.filename.encode('utf-8'),
+                    self.version_file,
+                    self.request)
+            except Invalid as exc:
+                raise_for_api_request(self.request, BadRequest(exc.message))
+                api.portal.show_message(exc.message, self.request, type='error')
+                return self.request.RESPONSE.redirect(
+                    get_redirect_url(self.context))
+
             notify(FileCopyDownloadedEvent(
                 self.context,
                 getattr(self.request, 'version_id', None)))

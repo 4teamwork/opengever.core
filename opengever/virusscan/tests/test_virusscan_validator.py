@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from opengever.virusscan.interfaces import IAVScannerSettings
 from opengever.virusscan.testing import EICAR
@@ -335,6 +336,57 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
             browser.json['message'])
 
         browser.open(self.subdocument, view='download')
+        self.assertEqual(
+            'attachment; filename="Uebersicht der Vertraege von 2016.xlsx"',
+            browser.headers.get('content-disposition'))
+        self.assertEqual(
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            browser.headers['content-type'])
+        self.assertEqual("No virus", browser.contents)
+
+    @browsing
+    def test_download_versioned_copy_scans_file_if_enabled(self, browser):
+        self.login(self.regular_user, browser)
+        Versioner(self.document).create_version('Initial version')
+        browser.open(self.document, view='tabbedview_view-versions')
+        browser.css('a.function-download-copy').first.click()
+        browser.find('Download').click()
+        self.assertEqual(
+            ['Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)'],
+            error_messages())
+        self.assertEqual('text/html;charset=utf-8',
+                         browser.headers['content-type'])
+        self.assertIsNone(browser.headers.get('content-disposition'))
+        self.assertEqual(self.document.absolute_url(), browser.url)
+
+    @browsing
+    def test_download_versioned_copy_over_api_scans_file_if_enabled(self, browser):
+        self.login(self.regular_user, browser)
+        Versioner(self.document).create_version('Initial version')
+        payload = {'version_id': '0'}
+
+        with browser.expect_http_error(code=400):
+            browser.open(
+                "{}/download_file_version".format(self.document.absolute_url()),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(
+            u'Validation failed, file is virus-infected. (Eicar-Test-Signature FOUND)',
+            browser.json['message'])
+
+    @browsing
+    def test_download_versioned_copy_over_api_with_virusscan_enabled(self, browser):
+        self.login(self.regular_user, browser)
+        Versioner(self.subdocument).create_version('Initial version')
+        payload = {'version_id': '0'}
+
+        browser.open(
+            "{}/download_file_version".format(self.subdocument.absolute_url()),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
         self.assertEqual(
             'attachment; filename="Uebersicht der Vertraege von 2016.xlsx"',
             browser.headers.get('content-disposition'))
