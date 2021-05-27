@@ -1,0 +1,1 @@
+The `path_parent` field query of the `@solrsearch` endpoint properly resolves paths relative to the virtual host url and joins multiple `path_parent` field queries with an OR operator. [elioschmutz]
