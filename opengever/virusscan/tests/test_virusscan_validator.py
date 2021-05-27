@@ -4,6 +4,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.document.versioner import Versioner
+from opengever.mail.tests import MAIL_DATA
 from opengever.testing import IntegrationTestCase
 from opengever.virusscan.interfaces import IAVScannerSettings
 from opengever.virusscan.testing import EICAR
@@ -146,6 +147,31 @@ class TestVirusScanValidator(IntegrationTestCase):
         self.assertIsNotNone(result['success'])
         self.assertEqual('No virus', result['success'].file.data)
 
+    def test_quickupload_scans_mail_for_viruses_when_enabled(self):
+        self.login(self.regular_user)
+        factory = IQuickUploadFileFactory(self.dossier)
+        result = factory(filename='file.eml',
+                         title=None,  # ignored by adapter
+                         description=None,  # ignored by adapter
+                         content_type='message/rfc822',
+                         data=EICAR,
+                         portal_type='ftw.mail.mail')
+
+        self.assertIsNone(result['success'])
+        self.assertEqual(
+             u'Careful, this file contains a virus.',
+             result['error'])
+
+        result = factory(filename='file.eml',
+                         title=None,  # ignored by adapter
+                         description=None,  # ignored by adapter
+                         content_type='message/rfc822',
+                         data=MAIL_DATA,
+                         portal_type='ftw.mail.mail')
+
+        self.assertIsNotNone(result['success'])
+        self.assertEqual(MAIL_DATA, result['success'].message.data)
+
     @browsing
     def test_document_post_scans_file_for_viruses_when_enabled(self, browser):
         self.login(self.regular_user, browser)
@@ -282,6 +308,26 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
         self.assertEqual("No virus", browser.contents)
 
     @browsing
+    def test_download_view_scans_mail_if_enabled(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.mail_eml, view='download')
+        self.assertEqual(
+            'attachment; filename="Die Buergschaft.eml"',
+            browser.headers.get('content-disposition'))
+        self.assertEqual(
+            'message/rfc822',
+            browser.headers['content-type'])
+
+        self.mail_eml.message.data = EICAR
+        browser.open(self.mail_eml, view='download')
+        self.assertEqual(
+            ['Careful, this file contains a virus.'],
+            error_messages())
+        self.assertEqual('text/html;charset=utf-8',
+                         browser.headers['content-type'])
+        self.assertIsNone(browser.headers.get('content-disposition'))
+
+    @browsing
     def test_download_view_does_not_scan_file_if_disabled(self, browser):
         api.portal.set_registry_record(
             'scan_before_download', False, interface=IAVScannerSettings)
@@ -343,6 +389,26 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             browser.headers['content-type'])
         self.assertEqual("No virus", browser.contents)
+
+    @browsing
+    def test_download_over_api_scans_mail_if_enabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.mail_eml, view='download')
+        self.assertEqual(
+            'attachment; filename="Die Buergschaft.eml"',
+            browser.headers.get('content-disposition'))
+        self.assertEqual(
+            'message/rfc822',
+            browser.headers['content-type'])
+
+        self.mail_eml.message.data = EICAR
+        with browser.expect_http_error(code=400):
+            browser.open(self.mail_eml, view='download', headers=self.api_headers)
+
+        self.assertEqual(
+            u'file_infected',
+            browser.json['message'])
 
     @browsing
     def test_download_versioned_copy_scans_file_if_enabled(self, browser):
