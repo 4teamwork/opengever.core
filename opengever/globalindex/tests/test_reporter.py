@@ -11,6 +11,8 @@ class TestTaskReporter(IntegrationTestCase):
     @browsing
     def test_task_report(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method='PATCH', headers=self.api_headers,
+                     data=json.dumps({'text': 'A description'}))
 
         browser.open(view='task_report',
                      data={'view_name': 'mytasks',
@@ -28,7 +30,8 @@ class TestTaskReporter(IntegrationTestCase):
              u'Deadline', u'Completed on',
              u'Dossier', u'Issuer',
              u'Issuing organization', u'Responsible',
-             u'Task type', 'Tenant', u'Sequence number'],
+             u'Task type', 'Tenant', u'Sequence number',
+             u'Description'],
             [cell.value for cell in list(workbook.active.rows)[0]])
 
         # self.task
@@ -37,7 +40,7 @@ class TestTaskReporter(IntegrationTestCase):
              datetime(2016, 11, 1, 0, 0), None,
              self.dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-             u'For your review', u'plone', 1],
+             u'For your review', u'plone', 1, u'A description'],
             [cell.value for cell in list(workbook.active.rows)[1]])
 
         # self.meeting_task
@@ -46,7 +49,7 @@ class TestTaskReporter(IntegrationTestCase):
              datetime(2016, 11, 1, 0, 0), None,
              self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
-             u'For your review', u'plone', 9],
+             u'For your review', u'plone', 9, None],
             [cell.value for cell in list(workbook.active.rows)[2]])
 
     @browsing
@@ -107,13 +110,15 @@ class TestTaskReporter(IntegrationTestCase):
             workbook = load_workbook(tmpfile.name)
 
         # self.task
+        task_cells = list(workbook.active.rows)[1]
         self.assertSequenceEqual(
             [self.task.title,  u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
              self.dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-             u'For your review', u'plone', 1],
-            [cell.value for cell in list(workbook.active.rows)[1]])
+             u'For your review', u'plone', 1, None],
+            [cell.value for cell in task_cells])
+        self.assertEqual(self.task.absolute_url(), task_cells[0].hyperlink.target)
 
         # self.meeting_task
         self.assertSequenceEqual(
@@ -121,5 +126,5 @@ class TestTaskReporter(IntegrationTestCase):
              datetime(2016, 11, 1, 0, 0), None,
              self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
-             u'For your review', u'plone', 9],
+             u'For your review', u'plone', 9, None],
             [cell.value for cell in list(workbook.active.rows)[2]])

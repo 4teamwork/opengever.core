@@ -32,6 +32,10 @@ def task_type_helper(value):
         return term.title
 
 
+def get_link(value, task):
+    return task.absolute_url()
+
+
 class TaskReporter(BaseReporterView):
     """View that generate an excel spreadsheet which list all selected
     task and their important attributes from the globalindex.
@@ -42,7 +46,7 @@ class TaskReporter(BaseReporterView):
     @property
     def _columns(self):
         return [
-            {'id': 'title', 'title': _('label_title')},
+            {'id': 'title', 'title': _('label_title'), 'hyperlink': get_link},
             {'id': 'review_state', 'title': _('review_state'),
              'transform': StringTranslater(
                  self.context.REQUEST, 'plone').translate},
@@ -61,6 +65,7 @@ class TaskReporter(BaseReporterView):
              'transform': task_type_helper},
             {'id': 'admin_unit_id', 'title': _('label_admin_unit_id')},
             {'id': 'sequence_number', 'title': _('label_sequence_number')},
+            {'id': 'text', 'title': _('label_description', default=u'Description')},
         ]
 
     def __call__(self):

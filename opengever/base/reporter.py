@@ -136,6 +136,10 @@ class XLSReporter(object):
 
                 cell.value = value
 
+                if 'hyperlink' in attr:
+                    cell.hyperlink = attr.get('hyperlink')(value, obj)
+                    cell.style = 'Hyperlink'
+
                 if 'number_format' in attr:
                     cell.number_format = attr.get('number_format')
 
