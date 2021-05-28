@@ -1526,6 +1526,35 @@ class TestObjectButtonsGetForProposals(ObjectButtonsTestBase):
         )
 
 
+class TestObjectButtonsGetForTasksAndForwardings(ObjectButtonsTestBase):
+
+    @browsing
+    def test_available_object_button_actions_for_tasks(self, browser):
+        self.login(self.regular_user, browser)
+        expected_object_buttons = [
+            {u'icon': u'', u'id': u'zipexport', u'title': u'Export as Zip'},
+            {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
+            {u'icon': u'', u'id': u'properties', u'title': u'Properties'}
+        ]
+
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.task),
+        )
+
+    @browsing
+    def test_available_object_button_actions_for_forwardings(self, browser):
+        self.login(self.secretariat_user, browser)
+        expected_object_buttons = [
+            {u'title': u'Export as Zip', u'id': u'zipexport', u'icon': u''},
+            {u'title': u'Properties', u'id': u'properties', u'icon': u''}
+        ]
+        self.assertListEqual(
+            expected_object_buttons,
+            self.get_object_buttons(browser, self.inbox_forwarding),
+        )
+
+
 class TestFolderButtonsGetForTemplatesFolder(FolderActionsTestBase):
 
     @browsing
