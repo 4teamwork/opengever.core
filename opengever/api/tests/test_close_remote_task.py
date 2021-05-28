@@ -57,6 +57,34 @@ class TestCloseRemoteTaskPost(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_can_close_a_remote_task(self, browser):
+        self.login(self.regular_user, browser)
+
+        task = create(Builder('task')
+                      .within(self.dossier)
+                      .having(issuer=self.dossier_responsible.id,
+                              responsible=self.regular_user.id,
+                              responsible_client='fa',
+                              task_type='information')
+                      .relate_to([self.document, self.mail_eml])
+                      .in_state('task-state-open')
+                      .titled(u'Task x'))
+
+        url = '{}/@close-remote-task'.format(self.portal.absolute_url())
+        request_body = json.dumps({
+            'task_oguid': Oguid.for_object(task).id,
+        })
+
+        with patch('opengever.api.close_remote_task.'
+                   'CloseRemoteTaskPost.is_remote') as mock_is_remote:
+            mock_is_remote.return_value = True
+            browser.open(url, method='POST', data=request_body,
+                         headers=self.api_headers)
+
+        self.assertEqual('task-state-tested-and-closed',
+                         api.content.get_state(task))
+
+    @browsing
     def test_closes_and_copy_documents_successfull(self, browser):
         self.login(self.regular_user, browser)
 

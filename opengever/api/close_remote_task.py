@@ -69,6 +69,7 @@ class CloseRemoteTaskPost(RemoteTaskBaseService):
                 'Oguid %s refers to a local task, however.' % raw_task_oguid)
 
         closer = CloseTaskHelper()
+        dossier = None
         if dossier_uid:
             dossier = uuidToObject(dossier_uid)
             document_intids = [Oguid.parse(oguid).int_id for oguid in document_oguids]
@@ -76,8 +77,11 @@ class CloseRemoteTaskPost(RemoteTaskBaseService):
 
         closer.close_task(task, response_text)
 
-        self.request.response.setStatus(201)
-        self.request.response.setHeader("Location", dossier.absolute_url())
+        if dossier:
+            self.request.response.setStatus(201)
+            self.request.response.setHeader("Location", dossier.absolute_url())
 
-        serialized_dossier = self.serialize(dossier)
-        return serialized_dossier
+            serialized_dossier = self.serialize(dossier)
+            return serialized_dossier
+
+        self.request.response.setStatus(204)
