@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-25 09:56+0000\n"
+"POT-Creation-Date: 2021-05-28 13:17+0000\n"
 "PO-Revision-Date: 2017-12-03 11:31+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
@@ -41,6 +41,11 @@ msgstr "Permettre l'ajout de dossiers commerciaux"
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_allow_add_businesscase_dossier"
 msgstr "Déterminez s'il est permis d'ajouter des dossiers commerciaux à ce niveau. Si cette option est désactivée, l'utilisateur ne peut créer que des dossiers spéciaux ou bien des dossiers à partir d'un modèle."
+
+#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
+#: ./opengever/repository/repositoryroot.py
+msgid "description_reference_number_addendum"
+msgstr ""
 
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
@@ -178,6 +183,11 @@ msgstr "Sommaire"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_proposals"
 msgstr "Requêtes"
+
+#. Default: "Reference number addendum"
+#: ./opengever/repository/repositoryroot.py
+msgid "label_reference_number_addendum"
+msgstr "Numéro de référence addendum"
 
 #. Default: "Reference Prefix"
 #: ./opengever/repository/behaviors/referenceprefix.py

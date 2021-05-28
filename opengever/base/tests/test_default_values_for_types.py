@@ -53,6 +53,7 @@ REPOROOT_MISSING_VALUES = {
     'valid_from': None,
     'valid_until': None,
     'version': None,
+    'reference_number_addendum': None,
 }
 
 

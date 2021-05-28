@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-25 09:56+0000\n"
+"POT-Creation-Date: 2021-05-28 13:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,6 +41,11 @@ msgstr ""
 #. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_allow_add_businesscase_dossier"
+msgstr ""
+
+#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
+#: ./opengever/repository/repositoryroot.py
+msgid "description_reference_number_addendum"
 msgstr ""
 
 #. Default: "No nested repositorys available."
@@ -178,6 +183,11 @@ msgstr ""
 #. Default: "Proposals"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_proposals"
+msgstr ""
+
+#. Default: "Reference number addendum"
+#: ./opengever/repository/repositoryroot.py
+msgid "label_reference_number_addendum"
 msgstr ""
 
 #. Default: "Reference Prefix"

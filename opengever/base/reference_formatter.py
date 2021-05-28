@@ -74,6 +74,9 @@ class DottedReferenceFormatter(object):
                 reference_number,
                 )
 
+        if self.repositoryroot_addendum(numbers):
+            reference_number = u'%s %s' % (reference_number, self.repositoryroot_addendum(numbers))
+
         if self.repository_number(numbers):
             if reference_number:
                 reference_number = u'%s %s' % (
@@ -105,6 +108,9 @@ class DottedReferenceFormatter(object):
         if location_prefix:
             return ''.join(location_prefix)
         return None
+
+    def repositoryroot_addendum(self, numbers):
+        return u''.join(numbers.get('repositoryroot', []))
 
     def repository_number(self, numbers):
         """Generate the reposiotry reference number part.
@@ -276,6 +282,9 @@ class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
         if self.location_prefix(numbers):
             reference_number = self.location_prefix(numbers)
 
+        if self.repositoryroot_addendum(numbers):
+            reference_number = u'%s %s' % (reference_number, self.repositoryroot_addendum(numbers))
+
         if self.repository_number(numbers):
             if reference_number:
                 reference_number = u'%s %s' % (
@@ -314,6 +323,9 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
 
         if self.location_prefix(numbers):
             reference_number = self.location_prefix(numbers)
+
+        if self.repositoryroot_addendum(numbers):
+            reference_number = u'%s %s' % (reference_number, self.repositoryroot_addendum(numbers))
 
         if self.repository_number(numbers):
             if reference_number:

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-25 09:56+0000\n"
+"POT-Creation-Date: 2021-05-28 13:17+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -48,6 +48,11 @@ msgstr "Allow creation of regular business case dossiers"
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_allow_add_businesscase_dossier"
 msgstr "Choose whether the user is allowed to add regular business case dossiers or only dossiers created from a dossier template."
+
+#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
+#: ./opengever/repository/repositoryroot.py
+msgid "description_reference_number_addendum"
+msgstr "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
 
 #. German translation: Keine untergeordnete Ordnungspositionen verfügbar.
 #. Default: "No nested repositorys available."
@@ -213,6 +218,11 @@ msgstr "Overview"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_proposals"
 msgstr "Proposals"
+
+#. Default: "Reference number addendum"
+#: ./opengever/repository/repositoryroot.py
+msgid "label_reference_number_addendum"
+msgstr "Reference number addendum"
 
 #. German translation: Präfix des Aktenzeichens
 #. Default: "Reference Prefix"
