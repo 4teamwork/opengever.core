@@ -4,15 +4,37 @@ Changelog
 .. You should *NOT* be adding new change log entries to this file.
    Create a file in the changes directory instead. Use the issue/ticket number
    as filename and add one of .feature, .bugfix, .other as extension to signify
-2021.12.0 (unreleased)
-----------------------
-
-- Nothing changed yet.
-
-
-2021.11.0 (2021-05-28)
+   the change type (e.g. 6968.feature).
 
 .. towncrier release notes start
+
+2021.11.0 (2021-05-28)
+----------------------
+
+New features:
+
+
+- Add primary_repository URL to the @config endpoint.
+- Include backreference list in dossier and documents api serialization. [phgross]
+- Check for possible duplicate documents in @upload-structure endpoint. [njohner]
+
+
+Bug fixes:
+
+
+- Automatically assign placeful workflow policies when workspace root, private root and inbox are created. [deiferni]
+- Fix filtering on values containing spaces in @listing endpoint. [tinagerber]
+- Fix a problem in relation deserializer when not all path elements are accessible. [phgross]
+- Attachment extraction now also works for mails in a workspace. [tinagerber]
+- Fix closing remote task without copying any documents to a dossier. [elioschmutz]
+
+
+Other changes:
+
+
+- Add `workspaces_without_view_permission` attribute to @linked-workspaces endpoint. [tinagerber]
+- Include `containing_subdossier`, `review_state_label` and `sequence_number` in task model serialization. [tinagerber]
+
 
 2021.10.0 (2021-05-12)
 ----------------------
