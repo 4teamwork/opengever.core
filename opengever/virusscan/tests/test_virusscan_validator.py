@@ -6,10 +6,12 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.document.versioner import Versioner
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import IntegrationTestCase
+from opengever.testing.assets import load
 from opengever.virusscan.interfaces import IAVScannerSettings
 from opengever.virusscan.testing import EICAR
 from opengever.virusscan.testing import register_mock_av_scanner
 from plone import api
+import base64
 import json
 
 
@@ -271,6 +273,59 @@ class TestVirusScanValidator(IntegrationTestCase):
             browser.open(self.empty_dossier, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual(1, len(children['added']))
+
+    @browsing
+    def test_mail_eml_post_scans_message_for_viruses_when_enabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children,\
+                browser.expect_http_error(code=400, reason='Bad Request'):
+            data = {'@type': 'ftw.mail.mail',
+                    'message': {'data': EICAR, 'filename': 'mail.eml'}}
+            browser.open(self.empty_dossier, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(0, len(children['added']))
+        self.assertEqual(
+            u"[{'message': 'file_infected', "
+            u"'error': 'ValidationError'}]",
+            browser.json['message'])
+
+        data['message']['data'] = "No virus"
+        with self.observe_children(self.empty_dossier) as children:
+            browser.open(self.empty_dossier, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual(1, len(children['added']))
+
+    @browsing
+    def test_mail_msg_post_scans_message_for_viruses_when_enabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children,\
+                browser.expect_http_error(code=400, reason='Bad Request'):
+            data = {'@type': 'ftw.mail.mail',
+                    'message': {'data': EICAR, 'filename': 'mail.msg'}}
+            browser.open(self.empty_dossier, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(0, len(children['added']))
+        self.assertEqual(
+            u"[{'message': 'file_infected', "
+            u"'error': 'ValidationError'}]",
+            browser.json['message'])
+
+        msg = base64.b64encode(load('testmail.msg'))
+        data['message']['data'] = msg
+        data['message']['encoding'] = "base64"
+
+        with self.observe_children(self.empty_dossier) as children:
+            browser.open(self.empty_dossier, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
         self.assertEqual(201, browser.status_code)
         self.assertEqual(1, len(children['added']))
 
