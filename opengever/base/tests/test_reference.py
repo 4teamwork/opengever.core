@@ -20,6 +20,13 @@ class TestLocalReferenceNumber(IntegrationTestCase):
         self.assertEquals(
             u'', IReferenceNumber(self.repository_root).get_local_number())
 
+    def test_repository_root_returns_reference_number_addendum(self):
+        self.login(self.regular_user)
+        self.repository_root.reference_number_addendum = u'NO'
+
+        self.assertEquals(
+            u'NO', IReferenceNumber(self.repository_root).get_local_number())
+
     def test_repositoryfolder_returns_reference_prefix_of_the_context(self):
         self.login(self.regular_user)
 
@@ -331,6 +338,13 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
 
         self.assertEquals(u'vorlagen Client1',
                           IReferenceNumber(self.subdossiertemplate).get_number())
+
+    def test_reference_number_contains_addendum(self):
+        self.login(self.regular_user)
+        self.repository_root.reference_number_addendum = u'NO'
+
+        self.assertEquals(u'Client1 NO 1.1 / 1.1',
+                          IReferenceNumber(self.subdossier).get_number())
 
 
 class TestDottedFormatterBase(IntegrationTestCase):

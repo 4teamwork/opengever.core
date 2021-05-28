@@ -4,6 +4,7 @@ from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.repository import _
 from opengever.repository.mixin import RepositoryMixin
 from plone.app.content.interfaces import INameFromTitle
+from plone.autoform import directives as form
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from zope import schema
@@ -22,6 +23,7 @@ class IRepositoryRoot(model.Schema):
             'valid_from',
             'valid_until',
             'version',
+            'reference_number_addendum',
         ],
     )
 
@@ -39,6 +41,15 @@ class IRepositoryRoot(model.Schema):
         title=_(u'label_version', default=u'Version'),
         required=False,
         )
+
+    form.write_permission(reference_number_addendum='cmf.ManagePortal')
+    reference_number_addendum = schema.TextLine(
+        title=_(u'label_reference_number_addendum', default=u'Reference number addendum'),
+        description=_(u'description_reference_number_addendum',
+                      default=u'Attention: Change requires reindexing of "reference" '
+                              u'and "sortable_reference".'),
+        required=False,
+    )
 
 
 class RepositoryRoot(Container, RepositoryMixin, TranslatedTitleMixin):

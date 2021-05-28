@@ -24,6 +24,12 @@
             "description": "",
             "_zope_schema_type": "TextLine"
         },
+        "reference_number_addendum": {
+            "type": "string",
+            "title": "Aktenzeichen Zusatz",
+            "description": "Achtung: \u00c4nderung erfordert Neuindexierung von \"reference\" und \"sortable_reference\".",
+            "_zope_schema_type": "TextLine"
+        },
         "title_de": {
             "type": "string",
             "title": "Titel (deutsch)",
@@ -68,6 +74,7 @@
         "valid_from",
         "valid_until",
         "version",
+        "reference_number_addendum",
         "title_de",
         "title_fr",
         "title_en"

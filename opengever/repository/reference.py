@@ -11,6 +11,9 @@ class RepositoryRootNumber(BasicReferenceNumber):
     """
     ref_type = 'repositoryroot'
 
+    def get_local_number(self):
+        return self.context.reference_number_addendum or ''
+
 
 @adapter(IRepositoryFolderSchema)
 class RepositoryFolderReferenceNumber(BasicReferenceNumber):

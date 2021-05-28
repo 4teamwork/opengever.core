@@ -3,6 +3,7 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import json
 
 
 class TestRepositoryAPI(IntegrationTestCase):
@@ -83,6 +84,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                 u"description": u"",
                 u"title": u"Contacts"
             },
+            u'reference_number_addendum': None,
             u'relative_path': u'ordnungssystem',
             u'review_state': u'repositoryroot-state-active',
             u'title_de': u'Ordnungssystem',
@@ -94,3 +96,24 @@ class TestRepositoryAPI(IntegrationTestCase):
 
         }
         self.assert_json_structure_equal(expected_repository_root, browser.json)
+
+    @browsing
+    def test_admin_cannot_set_reference_number_addendum_field(self, browser):
+        self.login(self.administrator, browser)
+
+        browser.open(self.repository_root, method="PATCH", headers=self.api_headers,
+                     data=json.dumps({'reference_number_addendum': 'NO'}))
+
+        self.assertIsNone(self.repository_root.reference_number_addendum)
+
+    @browsing
+    def test_manager_can_set_reference_number_addendum_field(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.repository_root, method="PATCH", headers=self.api_headers,
+                     data=json.dumps({'reference_number_addendum': 'NO'}))
+
+        self.assertEqual(u'NO', self.repository_root.reference_number_addendum)
+
+        browser.open(self.repository_root, method="GET", headers={"Accept": "application/json"})
+        self.assertEqual(u'NO', browser.json['reference_number_addendum'])
