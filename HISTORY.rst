@@ -4,6 +4,12 @@ Changelog
 .. You should *NOT* be adding new change log entries to this file.
    Create a file in the changes directory instead. Use the issue/ticket number
    as filename and add one of .feature, .bugfix, .other as extension to signify
+2021.12.0 (unreleased)
+----------------------
+
+- Nothing changed yet.
+
+
 2021.11.0 (2021-05-28)
 
 .. towncrier release notes start
