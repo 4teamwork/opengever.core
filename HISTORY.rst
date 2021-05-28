@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+2021.11.1 (2021-05-28)
+----------------------
+
+Other changes:
+
+
+- Fixed changelog for release 2021.11.0 [elioschmutz]
+
+
 2021.11.0 (2021-05-28)
 ----------------------
 
