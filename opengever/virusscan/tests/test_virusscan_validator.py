@@ -4,6 +4,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.document.versioner import Versioner
+from opengever.mail.exceptions import MessageContainsVirus
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
@@ -11,6 +12,7 @@ from opengever.virusscan.interfaces import IAVScannerSettings
 from opengever.virusscan.testing import EICAR
 from opengever.virusscan.testing import register_mock_av_scanner
 from plone import api
+from zope.component import getMultiAdapter
 import base64
 import json
 
@@ -110,7 +112,6 @@ class TestVirusScanValidator(IntegrationTestCase):
     @browsing
     def test_document_edit_form_scans_archival_file_field_for_viruses_when_enabled(self, browser):
         self.login(self.manager, browser)
-
         browser.open(self.document, view='edit')
         browser.fill({'Archival file': (EICAR, 'file.txt', 'text/plain')}).save()
         self.assertEqual(["There were some errors."], error_messages())
@@ -328,6 +329,11 @@ class TestVirusScanValidator(IntegrationTestCase):
                          method='POST', headers=self.api_headers)
         self.assertEqual(201, browser.status_code)
         self.assertEqual(1, len(children['added']))
+
+    def test_inbound_mail_scans_for_virus(self):
+        self.request.set('mail', EICAR)
+        view = getMultiAdapter((self.portal, self.request), name='mail-inbound')
+        self.assertEquals('65:file_infected', view())
 
 
 class TestVirusScanDownloadValidator(IntegrationTestCase):
