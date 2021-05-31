@@ -104,11 +104,11 @@ class DownloadConfirmation(BrowserView):
 
     def download_url(self):
         if self.request.get('version_id'):
-            return '%s/download_file_version?version_id=%s' % (
+            return '%s/download_file_version?version_id=%s&error_as_message=1' % (
                 self.context.absolute_url(),
                 self.request.get('version_id'))
         else:
-            return '%s/download' % (self.context.absolute_url())
+            return '%s/download?error_as_message=1' % (self.context.absolute_url())
 
     def download_available(self):
         """ check whether download is available.
@@ -174,6 +174,10 @@ class DownloadConfirmationHelper(object):
         else:
             clazz = ' '.join(additional_classes)
 
+        if url_extension:
+            url_extension += "&error_as_message=1"
+        else:
+            url_extension += "?error_as_message=1"
         url = '{0}/{1}{2}'.format(file_url, viewname, url_extension)
         if include_token:
             url = addTokenToUrl(url)

@@ -351,7 +351,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
     def test_download_view_scans_file_if_enabled(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.document, view='download')
+        browser.open(self.document, view='download?error_as_message=1')
         self.assertEqual(
             ['Careful, this file contains a virus.'],
             error_messages())
@@ -371,7 +371,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
     @browsing
     def test_download_view_scans_mail_if_enabled(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.mail_eml, view='download')
+        browser.open(self.mail_eml, view='download?error_as_message=1')
         self.assertEqual(
             'attachment; filename="Die Buergschaft.eml"',
             browser.headers.get('content-disposition'))
@@ -380,7 +380,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
             browser.headers['content-type'])
 
         self.mail_eml.message.data = EICAR
-        browser.open(self.mail_eml, view='download')
+        browser.open(self.mail_eml, view='download?error_as_message=1')
         self.assertEqual(
             ['Careful, this file contains a virus.'],
             error_messages())
@@ -394,7 +394,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
             'scan_before_download', False, interface=IAVScannerSettings)
 
         self.login(self.regular_user, browser)
-        browser.open(self.document, view='download')
+        browser.open(self.document, view='download?error_as_message=1')
         self.assertEqual(
             'attachment; filename="Vertraegsentwurf.docx"',
             browser.headers.get('content-disposition'))
