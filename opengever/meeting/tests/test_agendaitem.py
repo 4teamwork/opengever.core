@@ -8,6 +8,7 @@ from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashable
+from opengever.trash.trash import Trasher
 from plone.protect import createToken
 from zope.component import getMultiAdapter
 import json
@@ -321,6 +322,20 @@ class TestDeleteAgendaItems(IntegrationTestCase):
 
         with browser.expect_http_error(code=403):
             browser.open(self.agenda_item_url(agenda_item, 'delete'))
+
+    @browsing
+    def test_delete_handles_already_trashed_documents(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        agenda_item = self.schedule_ad_hoc(self.meeting, 'Gugus')
+        doc = agenda_item.resolve_document()
+        Trasher(doc).trash()
+
+        browser.open(self.agenda_item_url(agenda_item, 'delete'))
+        self.assertEquals([{u'message': u'Agenda Item Successfully deleted',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
 
 
 class TestDecideAgendaItem(IntegrationTestCase):

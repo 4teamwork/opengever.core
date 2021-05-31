@@ -230,7 +230,8 @@ class AgendaItem(Base):
         if self.has_document and not self.has_proposal:
             document = self.resolve_document()
             trasher = ITrashable(document)
-            trasher.trash()
+            if not trasher.is_trashed():
+                trasher.trash()
 
         session = create_session()
         if self.proposal:
