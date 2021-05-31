@@ -50,7 +50,7 @@ class Participations(object):
         participations = handler.get_participations()
 
         if is_contact_feature_enabled():
-            batch = SQLHypermediaBatch(self.request, participations)
+            batch = SQLHypermediaBatch(self.request, participations, 'id')
         else:
             batch = HypermediaBatch(self.request, participations)
 

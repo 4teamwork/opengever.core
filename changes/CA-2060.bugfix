@@ -1,0 +1,1 @@
+Fix SQLHypermediaBatch for undefined sort orders.

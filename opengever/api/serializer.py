@@ -200,7 +200,7 @@ class SerializeSQLModelToJsonBase(object):
         query = self.get_item_query()
         if not query:
             return
-        batch = SQLHypermediaBatch(self.request, query)
+        batch = SQLHypermediaBatch(self.request, query, 'userid')
         items = [queryMultiAdapter((item, self.request), ISerializeToJsonSummary)()
                  for item in batch]
 
