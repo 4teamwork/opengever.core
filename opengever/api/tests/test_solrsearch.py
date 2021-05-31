@@ -637,3 +637,50 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         self.assertEqual(u'BadRequest', browser.json['type'])
         self.assertIn(u"group_by_type type 'invalid' is not allowed.", browser.json['message'])
+
+    @browsing
+    def test_filter_by_path_parent(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?fq=path_parent:/plone/private/kathi-barfuss'.format(
+            self.portal.absolute_url())
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'http://nohost/plone/private/kathi-barfuss/dossier-15',
+                u'http://nohost/plone/private/kathi-barfuss',
+                u'http://nohost/plone/private/kathi-barfuss/dossier-14/document-37',
+                u'http://nohost/plone/private/kathi-barfuss/dossier-14',
+                u'http://nohost/plone/private/kathi-barfuss/dossier-14/document-36'
+            ],
+            [item.get('@id') for item in browser.json.get('items')])
+
+    @browsing
+    def test_filter_by_multiple_path_parents_will_use_an_or_operator(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.portal.absolute_url(),
+            '&'.join([
+                'fq:list=path_parent:/plone/private/kathi-barfuss',
+                'fq:list=path_parent:/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2'
+            ]))
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-24',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4',
+                u'http://nohost/plone/private/kathi-barfuss/dossier-15',
+                u'http://nohost/plone/private/kathi-barfuss',
+                u'http://nohost/plone/private/kathi-barfuss/dossier-14/document-37',
+                u'http://nohost/plone/private/kathi-barfuss/dossier-14',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-22',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4/document-23',
+                u'http://nohost/plone/private/kathi-barfuss/dossier-14/document-36'
+            ],
+            [item.get('@id') for item in browser.json.get('items')])

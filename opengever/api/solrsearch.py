@@ -1,3 +1,4 @@
+from ftw.solr.query import make_filters
 from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
 from opengever.api.breadcrumbs import Breadcrumbs
@@ -60,10 +61,46 @@ class SolrSearchGet(SolrQueryBaseService):
         else:
             filters = []
 
+        self.add_path_parent_filters(filters)
         self.add_path_filters(filters, params)
         self.add_portal_types_filter(filters)
 
         return filters
+
+    def add_path_parent_filters(self, filters):
+        """A frontend usualy only knows the virtual path, not the real physical path
+        of an object. But the solr index value contains the physical path of
+        the object. Thus, we need to replace the paths relative to the virtual root
+        with the physical path of an object.
+
+        In addition, it joins multiple path_parent filters with an OR operator which
+        makes it possible to query for multiple path_parents
+        """
+        requested_parent_paths = []
+        portal = api.portal.get()
+        for query in list(filters):
+            if not query.startswith("path_parent:"):
+                continue
+
+            # extract the path from the query and unescape
+            path = query.split(":", 1)[1].replace('\\', '')
+
+            # A frontend does not know anything about the physical path of an object.
+            # We have to take care of this. So we have to removes the virtual
+            # portal path to get the relative path from the plone site root
+            relativePath = path.lstrip('/').lstrip(portal.virtual_url_path()).lstrip('/')
+
+            # And then we can extend the physical portal path with the requested
+            # relative path
+            physicalPath = portal.getPhysicalPath()
+            if relativePath:
+                physicalPath += (relativePath, )
+
+            requested_parent_paths.append('/'.join(physicalPath))
+            filters.remove(query)
+
+        if (requested_parent_paths):
+            filters.extend(make_filters(path_parent=requested_parent_paths))
 
     def extract_path_filter_value(self, filters):
         """If path is not specified we search in the current context
