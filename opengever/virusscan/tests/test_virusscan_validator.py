@@ -140,7 +140,7 @@ class TestVirusScanValidator(IntegrationTestCase):
              u'Careful, this file contains a virus.',
              result['error'])
 
-        result = factory(filename='file.txt',
+        result = factory(filename=u'f\xefle.txt',
                          title=None,  # ignored by adapter
                          description=None,  # ignored by adapter
                          content_type='text/plain',
@@ -153,7 +153,7 @@ class TestVirusScanValidator(IntegrationTestCase):
     def test_quickupload_scans_mail_for_viruses_when_enabled(self):
         self.login(self.regular_user)
         factory = IQuickUploadFileFactory(self.dossier)
-        result = factory(filename='file.eml',
+        result = factory(filename=u'f\xefle.eml',
                          title=None,  # ignored by adapter
                          description=None,  # ignored by adapter
                          content_type='message/rfc822',
@@ -165,7 +165,7 @@ class TestVirusScanValidator(IntegrationTestCase):
              u'Careful, this file contains a virus.',
              result['error'])
 
-        result = factory(filename='file.eml',
+        result = factory(filename=u'f\xefle.eml',
                          title=None,  # ignored by adapter
                          description=None,  # ignored by adapter
                          content_type='message/rfc822',
@@ -182,7 +182,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         with self.observe_children(self.empty_dossier) as children,\
                 browser.expect_http_error(code=400, reason='Bad Request'):
             data = {'@type': 'opengever.document.document',
-                    'file': {'data': EICAR, 'filename': 'file.txt'}}
+                    'file': {'data': EICAR, 'filename': u'f\xefle.txt'}}
             browser.open(self.empty_dossier, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 
@@ -208,7 +208,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         with self.observe_children(self.empty_dossier) as children:
             data = {'@type': 'opengever.document.document',
-                    'file': {'data': EICAR, 'filename': 'file.txt'}}
+                    'file': {'data': EICAR, 'filename': u'f\xefle.txt'}}
             browser.open(self.empty_dossier, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 
@@ -221,7 +221,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         self.get_checkout_manager(self.document).checkout()
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
-            data = {'file': {'data': EICAR, 'filename': 'file.txt'}}
+            data = {'file': {'data': EICAR, 'filename': u'f\xefle.txt'}}
             browser.open(self.document, data=json.dumps(data),
                          method='PATCH', headers=self.api_headers)
 
@@ -243,8 +243,8 @@ class TestVirusScanValidator(IntegrationTestCase):
         with self.observe_children(self.empty_dossier) as children,\
                 browser.expect_http_error(code=400):
             data = {'@type': 'opengever.document.document',
-                    'file': {'data': "No virus", 'filename': 'file.txt'},
-                    'archival_file': {'data': EICAR, 'filename': 'file.txt'}}
+                    'file': {'data': "No virus", 'filename': u'f\xefle.txt'},
+                    'archival_file': {'data': EICAR, 'filename': u'f\xefle.txt'}}
             browser.open(self.empty_dossier, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 
@@ -269,8 +269,8 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         with self.observe_children(self.empty_dossier) as children:
             data = {'@type': 'opengever.document.document',
-                    'file': {'data': "No virus", 'filename': 'file.txt'},
-                    'archival_file': {'data': EICAR, 'filename': 'file.txt'}}
+                    'file': {'data': "No virus", 'filename': u'f\xefle.txt'},
+                    'archival_file': {'data': EICAR, 'filename': u'f\xefle.txt'}}
             browser.open(self.empty_dossier, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 
@@ -284,7 +284,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         with self.observe_children(self.empty_dossier) as children,\
                 browser.expect_http_error(code=400, reason='Bad Request'):
             data = {'@type': 'ftw.mail.mail',
-                    'message': {'data': EICAR, 'filename': 'mail.eml'}}
+                    'message': {'data': EICAR, 'filename': u'ma\xefl.eml'}}
             browser.open(self.empty_dossier, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 
@@ -309,7 +309,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         with self.observe_children(self.empty_dossier) as children,\
                 browser.expect_http_error(code=400, reason='Bad Request'):
             data = {'@type': 'ftw.mail.mail',
-                    'message': {'data': EICAR, 'filename': 'mail.msg'}}
+                    'message': {'data': EICAR, 'filename': u'ma\xefl.msg'}}
             browser.open(self.empty_dossier, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 

@@ -7,6 +7,7 @@ from plone.formwidget.namedfile.interfaces import INamedFileWidget
 from plone.formwidget.namedfile.validator import NamedFileWidgetValidator
 from plone.namedfile.interfaces import INamedField
 from plone.registry.interfaces import IRegistry
+from Products.validation.i18n import safe_unicode
 from six import BytesIO
 from z3c.form import validator
 from zope.annotation.interfaces import IAnnotations
@@ -42,10 +43,10 @@ def validateStream(filename, filelike, request):
     try:
         result = scanStream(filelike)
     except ScanError as e:
-        logger.error('ScanError %s on %s.' % (e, filename))
+        logger.error(u'ScanError %s on %s.' % (e, safe_unicode(filename)))
         raise Invalid(
             _(u'error_while_scanning',
-              default="There was an error while checking the file for viruses.")
+              default=u"There was an error while checking the file for viruses.")
         )
 
     if result:
@@ -53,7 +54,7 @@ def validateStream(filename, filelike, request):
                 u'file_infected',
                 default=u"Validation failed, file is virus-infected."
             )
-        logger.warning(u"{} filename: {}".format(message, filename))
+        logger.warning(u"{} filename: {}".format(message, safe_unicode(filename)))
         raise Invalid(message)
 
 
@@ -85,7 +86,7 @@ def validateUploadForFieldIfNecessary(fieldname, filename, filelike, request):
         annotations[SCAN_RESULT_KEY] = e.message
         raise e
     annotations[SCAN_RESULT_KEY] = True
-    logger.info("No virus detected in {}".format(filename))
+    logger.info(u"No virus detected in {}".format(safe_unicode(filename)))
     return annotations[SCAN_RESULT_KEY]
 
 
