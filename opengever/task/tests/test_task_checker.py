@@ -88,6 +88,7 @@ class TestTaskControllerChecker(IntegrationTestCase):
         self.login(self.dossier_responsible)
         for state in ('task-state-rejected',
                       'task-state-cancelled',
+                      'task-state-skipped',
                       'task-state-tested-and-closed'):
             self.set_workflow_state(state, self.subtask)
             self.assertTrue(get_checker(self.task).task.all_subtasks_finished)
