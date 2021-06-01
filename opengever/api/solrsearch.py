@@ -78,17 +78,20 @@ class SolrSearchGet(SolrQueryBaseService):
         """
         requested_parent_paths = []
         portal = api.portal.get()
+        portal_absolute_url_path = portal.absolute_url_path()
         for query in list(filters):
             if not query.startswith("path_parent:"):
                 continue
 
             # extract the path from the query and unescape
             path = query.split(":", 1)[1].replace('\\', '')
+            if not path.startswith(portal_absolute_url_path):
+                continue
 
             # A frontend does not know anything about the physical path of an object.
-            # We have to take care of this. So we have to removes the virtual
+            # We have to take care of this. So we have to remove the absolute
             # portal path to get the relative path from the plone site root
-            relativePath = path.lstrip('/').lstrip(portal.virtual_url_path()).lstrip('/')
+            relativePath = path.replace(portal_absolute_url_path, '', 1).strip('/')
 
             # And then we can extend the physical portal path with the requested
             # relative path
