@@ -68,11 +68,6 @@ def set_former_reference_after_moving(obj, event):
     # reset temporary former reference number
     IDossier['temporary_former_reference_number'].set(dossier_repr, u'')
 
-    # setting the new number
-    parent = aq_parent(aq_inner(obj))
-    prefix_adapter = IReferenceNumberPrefix(parent)
-    prefix_adapter.set_number(obj)
-
 
 # Update reference number when adding / moving content
 # (IObjectAddedEvent inherits from IObjectMovedEvent)
