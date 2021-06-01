@@ -127,7 +127,7 @@ class FixInboxWorkflowPolicyAssignment(UpgradeStep):
             # we just activate it for the inbox but do not need to update any
             # document/mail workflows
             if not config:
-                self.context.manage_addProduct[
+                inbox.manage_addProduct[
                     'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
                 config = self.pwf_tool.getWorkflowPolicyConfig(inbox)
             config.setPolicyIn(POLICY_ID, update_security=False)
