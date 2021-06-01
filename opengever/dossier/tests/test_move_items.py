@@ -8,7 +8,9 @@ from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
+from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -890,6 +892,27 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         self.assertEquals(
             [u'1. F\xfchrung', u'2. Rechnungspr\xfcfungskommission', 'drittes-repo'],
             selectables)
+
+
+class TestReferenceNumberUpdateOnMove(IntegrationTestCase):
+
+    @browsing
+    def test_dossier_and_subdossier_reference_number_is_up_to_date(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        catalog = api.portal.get_tool('portal_catalog')
+        api.content.move(source=self.dossier,target=self.empty_repofolder)
+
+        dossier = self.empty_repofolder.listFolderContents()[0]
+        brains = catalog(path='/'.join(dossier.getPhysicalPath()),
+                         portal_type='opengever.dossier.businesscasedossier')
+
+        self.assertEquals(
+            ['Client1 2 / 1',
+             'Client1 2 / 1.1',
+             'Client1 2 / 1.2',
+             'Client1 2 / 1.1.1'],
+            [brain.reference for brain in brains])
 
 
 class TestMoveItemsWithTestbrowserSolr(SolrIntegrationTestCase):
