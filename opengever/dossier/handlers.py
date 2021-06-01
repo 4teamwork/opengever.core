@@ -88,24 +88,6 @@ def save_reference_number_prefix(obj, event):
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
 
-    # because we can't control the order of event handlers we have to sync
-    # all containing tasks manually
-    catalog = api.portal.get_tool('portal_catalog')
-    tasks = catalog({
-        'path': '/'.join(obj.getPhysicalPath()),
-        'object_provides': 'opengever.task.task.ITask',
-        'depth': -1})
-    for task in tasks:
-        TaskSqlSyncer(task.getObject(), None).sync()
-
-    # And also proposals
-    proposals = catalog({
-        'path': '/'.join(obj.getPhysicalPath()),
-        'object_provides': ['opengever.meeting.proposal.IBaseProposal'],
-        'depth': -1})
-    for proposal in proposals:
-        ProposalSqlSyncer(proposal.getObject(), None).sync()
-
     obj.reindexObject(idxs=['reference', 'sortable_reference'])
 
 
