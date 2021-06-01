@@ -3,8 +3,8 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
+from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.versioner import Versioner
-from opengever.mail.exceptions import MessageContainsVirus
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
@@ -428,6 +428,34 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
             browser.headers.get('content-disposition'))
         self.assertEqual(
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            browser.headers['content-type'])
+        self.assertEqual("No virus", browser.contents)
+
+    @browsing
+    def test_download_archival_file_from_edit_view_scans_for_virus(self, browser):
+        self.login(self.manager, browser)
+
+        ArchivalFileConverter(self.document).store_file(EICAR)
+        browser.open(self.document, view='edit')
+        browser.click_on("Vertraegsentwurf.pdf")
+
+        self.assertEqual(
+            ['Careful, this file contains a virus.'],
+            error_messages())
+        self.assertEqual('text/html;charset=utf-8',
+                         browser.headers['content-type'])
+        self.assertIsNone(browser.headers.get('content-disposition'))
+        self.assertEqual(self.document.absolute_url(), browser.url)
+
+        ArchivalFileConverter(self.document).store_file("No virus")
+        browser.open(self.document, view='edit')
+        browser.click_on("Vertraegsentwurf.pdf")
+
+        self.assertEqual(
+            "attachment; filename*=UTF-8''Vertraegsentwurf.pdf",
+            browser.headers.get('content-disposition'))
+        self.assertEqual(
+            'application/pdf',
             browser.headers['content-type'])
         self.assertEqual("No virus", browser.contents)
 

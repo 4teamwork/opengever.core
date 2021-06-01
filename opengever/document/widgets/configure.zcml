@@ -25,4 +25,12 @@
       template="tooltip.pt"
       />
 
+  <browser:page
+      name="download"
+      for="plone.formwidget.namedfile.interfaces.INamedFileWidget"
+      class=".namedfile.GeverNamedFileDownload"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
