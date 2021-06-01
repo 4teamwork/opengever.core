@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.7.2 (unreleased)
+2021.7.2 (2021-06-01)
 ---------------------
 
 - Fix a problem in relation deserializer when not all path elements are accessible. [phgross]
