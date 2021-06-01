@@ -73,8 +73,6 @@ def set_former_reference_after_moving(obj, event):
     prefix_adapter = IReferenceNumberPrefix(parent)
     prefix_adapter.set_number(obj)
 
-    obj.reindexObject(idxs=['reference', 'sortable_reference'])
-
 
 # Update reference number when adding / moving content
 # (IObjectAddedEvent inherits from IObjectMovedEvent)
