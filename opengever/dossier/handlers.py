@@ -21,6 +21,24 @@ from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
 
 
+def initalize_new_reference_number(obj, event):
+    """Initialize new reference_number, to make sure reference number is
+    already up to date when child reindex the reference number.
+    """
+
+    # Skip if obj is not really moved
+    if not event.oldParent or not event.newParent:
+        return
+
+    # Skip events for children of the moved container
+    if aq_parent(aq_inner(obj)) != event.oldParent:
+        return
+
+    # Generate and set the number in the new location
+    prefix_adapter = IReferenceNumberPrefix(event.newParent)
+    prefix_adapter.set_number(obj)
+
+
 def set_former_reference_before_moving(obj, event):
     """Temporarily store current reference number before
     moving the dossier.
@@ -50,13 +68,6 @@ def set_former_reference_after_moving(obj, event):
     # reset temporary former reference number
     IDossier['temporary_former_reference_number'].set(dossier_repr, u'')
 
-    # setting the new number
-    parent = aq_parent(aq_inner(obj))
-    prefix_adapter = IReferenceNumberPrefix(parent)
-    prefix_adapter.set_number(obj)
-
-    obj.reindexObject(idxs=['reference', 'sortable_reference'])
-
 
 # Update reference number when adding / moving content
 # (IObjectAddedEvent inherits from IObjectMovedEvent)
@@ -71,24 +82,6 @@ def save_reference_number_prefix(obj, event):
     prefix_adapter = IReferenceNumberPrefix(parent)
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
-
-    # because we can't control the order of event handlers we have to sync
-    # all containing tasks manually
-    catalog = api.portal.get_tool('portal_catalog')
-    tasks = catalog({
-        'path': '/'.join(obj.getPhysicalPath()),
-        'object_provides': 'opengever.task.task.ITask',
-        'depth': -1})
-    for task in tasks:
-        TaskSqlSyncer(task.getObject(), None).sync()
-
-    # And also proposals
-    proposals = catalog({
-        'path': '/'.join(obj.getPhysicalPath()),
-        'object_provides': ['opengever.meeting.proposal.IBaseProposal'],
-        'depth': -1})
-    for proposal in proposals:
-        ProposalSqlSyncer(proposal.getObject(), None).sync()
 
     obj.reindexObject(idxs=['reference', 'sortable_reference'])
 
