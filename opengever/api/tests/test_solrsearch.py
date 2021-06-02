@@ -6,6 +6,7 @@ from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from unittest import skip
+from zope.component import getMultiAdapter
 
 
 class TestMockSolrSearchGet(IntegrationTestCase):
@@ -684,3 +685,42 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
                 u'http://nohost/plone/private/kathi-barfuss/dossier-14/document-36'
             ],
             [item.get('@id') for item in browser.json.get('items')])
+
+    def test_add_path_parent_filters_does_nothing_if_there_is_no_path_parent_filter(self):
+        solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
+        filters = ['title:Lorem Ipsum']
+        solrsearch.add_path_parent_filters(filters)
+
+        self.assertEqual(['title:Lorem Ipsum'], filters)
+
+    def test_add_path_parent_filters_replaces_an_existing_path_parent_filter_with_the_internal_phyisical_path(self):
+        solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
+        filters = ['path_parent:/plone/ordnungssystem/dossier\\-1']
+        solrsearch.add_path_parent_filters(filters)
+
+        self.assertEqual([u'path_parent:(\\/plone\\/ordnungssystem\\/dossier\\-1)'], filters)
+
+    def test_add_path_parent_filters_connects_multiple_path_parent_filters_with_an_or_operator(self):
+        solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
+        filters = [
+            'path_parent:/plone/inbox',
+            'path_parent:/plone/private',
+            ]
+        solrsearch.add_path_parent_filters(filters)
+
+        self.assertEqual(
+            [u'path_parent:(\\/plone\\/inbox OR \\/plone\\/private)'], filters)
+
+    def test_add_path_parent_filters_does_nothing_if_the_path_parent_is_not_prefixed_with_the_portal_absolute_path(self):
+        solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
+        filters = ['path_parent:\\/inbox']
+        solrsearch.add_path_parent_filters(filters)
+
+        self.assertEqual(['path_parent:\\/inbox'], filters)
+
+    def test_add_path_parent_filters_respects_escaped_filter_values(self):
+        solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
+        filters = ['path_parent:\\/plone\\/inbox']
+        solrsearch.add_path_parent_filters(filters)
+
+        self.assertEqual([u'path_parent:(\\/plone\\/inbox)'], filters)
