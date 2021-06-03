@@ -1,5 +1,6 @@
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
+from opengever.activity.model import NotificationSetting
 from opengever.activity.model import Watcher
 from opengever.base.model import create_session
 from opengever.globalindex.model.task import Task
@@ -33,6 +34,7 @@ class OGDSUserReferencesMigrator(object):
         self.activity_actors_moved = []
         self.watcher_actors_moved = []
         self.notification_userids_moved = []
+        self.notification_setting_userids_moved = []
         self.task_principals_moved = []
         self.task_issuers_moved = []
         self.task_responsibles_moved = []
@@ -107,6 +109,12 @@ class OGDSUserReferencesMigrator(object):
                     old_userid, new_userid)
                 self.notification_userids_moved.extend(moved)
 
+                # Migrate notification settings
+                moved = self._migrate_sql_column(
+                    NotificationSetting.__table__, 'userid',
+                    old_userid, new_userid)
+                self.notification_setting_userids_moved.extend(moved)
+
                 # Migrate watcher actors
                 moved = self._migrate_sql_column(
                     Watcher.__table__, 'actorid',
@@ -148,6 +156,10 @@ class OGDSUserReferencesMigrator(object):
                 'deleted': []},
             'notification_userids': {
                 'moved': self.notification_userids_moved,
+                'copied': [],
+                'deleted': []},
+            'notification_setting_userids': {
+                'moved': self.notification_setting_userids_moved,
                 'copied': [],
                 'deleted': []},
             'task_principals': {

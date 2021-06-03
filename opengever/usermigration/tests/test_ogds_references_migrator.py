@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.activity.model.settings import NotificationSetting
 from opengever.base.model import create_session
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import FunctionalTestCase
@@ -102,3 +103,19 @@ class TestOGDSUserReferencesMigrator(FunctionalTestCase):
         setting = settings[0]
         self.assertEqual(setting.userid, 'hans.muster')
         self.assertTrue(setting.notify_own_actions)
+
+    def test_migrates_notification_settings(self):
+        create(Builder('notification_setting')
+               .having(kind='task-added-or-reassigned',
+                       userid='HANS.MUSTER',
+                       mail_notification_roles=[],
+                       badge_notification_roles=[],
+                       digest_notification_roles=[]))
+
+        OGDSUserReferencesMigrator(
+            self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
+
+        settings = NotificationSetting.query.all()
+        self.assertEqual(1, len(settings))
+        setting = settings[0]
+        self.assertEqual(setting.userid, 'hans.muster')
