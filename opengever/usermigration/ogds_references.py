@@ -6,6 +6,7 @@ from opengever.globalindex.model.task import Task
 from opengever.globalindex.model.task import TaskPrincipal
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.usermigration.exceptions import UserMigrationException
 from operator import itemgetter
 from sqlalchemy import select
@@ -35,6 +36,7 @@ class OGDSUserReferencesMigrator(object):
         self.task_principals_moved = []
         self.task_issuers_moved = []
         self.task_responsibles_moved = []
+        self.user_settings_moved = []
 
     def _verify_user(self, userid):
         ogds_user = ogds_service().fetch_user(userid)
@@ -129,6 +131,12 @@ class OGDSUserReferencesMigrator(object):
                     old_userid, new_userid)
                 self.task_responsibles_moved.extend(moved)
 
+                # Migrate user settings
+                moved = self._migrate_sql_column(
+                    UserSettings.__table__, 'userid',
+                    old_userid, new_userid)
+                self.user_settings_moved.extend(moved)
+
         results = {
             'activity_actors': {
                 'moved': self.activity_actors_moved,
@@ -154,6 +162,9 @@ class OGDSUserReferencesMigrator(object):
                 'moved': self.task_responsibles_moved,
                 'copied': [],
                 'deleted': []},
-
+            'user_settings': {
+                'moved': self.user_settings_moved,
+                'copied': [],
+                'deleted': []},
         }
         return results

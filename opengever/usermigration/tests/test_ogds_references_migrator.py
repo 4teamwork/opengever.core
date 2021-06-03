@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.model import create_session
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import FunctionalTestCase
 from opengever.usermigration.ogds_references import OGDSUserReferencesMigrator
 
@@ -84,3 +85,20 @@ class TestOGDSUserReferencesMigrator(FunctionalTestCase):
 
         create_session().refresh(ogds_task)
         self.assertEquals('hans.muster', ogds_task.issuer)
+
+    def test_migrates_user_settings(self):
+        setting = UserSettings.save_setting_for_user(
+            'HANS.MUSTER', 'notify_own_actions', True
+        )
+        # we migrate the primary key with a low-level query, flushing data here
+        # prevents that we trip up sqlalchemy internals
+        create_session().flush()
+
+        OGDSUserReferencesMigrator(
+            self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
+
+        settings = UserSettings.query.all()
+        self.assertEqual(1, len(settings))
+        setting = settings[0]
+        self.assertEqual(setting.userid, 'hans.muster')
+        self.assertTrue(setting.notify_own_actions)
