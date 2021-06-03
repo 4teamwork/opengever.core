@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.activity.model.settings import NotificationSetting
 from opengever.base.model import create_session
+from opengever.base.model.favorite import Favorite
+from opengever.base.oguid import Oguid
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import FunctionalTestCase
 from opengever.usermigration.ogds_references import OGDSUserReferencesMigrator
@@ -119,3 +121,19 @@ class TestOGDSUserReferencesMigrator(FunctionalTestCase):
         self.assertEqual(1, len(settings))
         setting = settings[0]
         self.assertEqual(setting.userid, 'hans.muster')
+
+    def test_migrates_favorites(self):
+        favorite = Favorite(
+            oguid=Oguid.parse('fd:123'),
+            userid='HANS.MUSTER',
+            title=u'fixture fav 01',
+            plone_uid='1234'
+        )
+        create_session().add(favorite)
+        create_session().flush()
+
+        OGDSUserReferencesMigrator(
+            self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
+
+        create_session().refresh(favorite)
+        self.assertEqual(favorite.userid, 'hans.muster')
