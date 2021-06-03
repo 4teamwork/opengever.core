@@ -1,14 +1,3 @@
-"""
-Migrate user ID references in OGDS SQL tables:
-
-- activity actors
-- watcher actors
-- notification user IDs
-- task principals
-- task issuers
-- task responsibles
-"""
-
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Watcher
