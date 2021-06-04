@@ -17,7 +17,7 @@ class IAVScannerSettings(Interface):
     scan_before_download = schema.Bool(
         title=u'Scan for viruses before file download',
         description=u'Whether a virus check should be performed when '
-                    u'downloading a file from Gever'
+                    u'downloading a file.'
                     u'Note that this requires a correct configuration of the '
                     u'virus scanner (see IAVScannerSettings)',
         default=False)
@@ -25,7 +25,7 @@ class IAVScannerSettings(Interface):
     scan_on_upload = schema.Bool(
         title=u'Scan for viruses before file upload',
         description=u'Whether a virus check should be performed when '
-                    u'uploading a file to Gever.'
+                    u'uploading a file.'
                     u'Note that this requires a correct configuration of the '
                     u'virus scanner (see IAVScannerSettings)',
         default=False)
