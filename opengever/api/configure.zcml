@@ -1100,6 +1100,15 @@
 
   <plone:service
       method="POST"
+      name="@login"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".login.GeverLogin"
+      permission="zope.Public"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="POST"
       name="@logout"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".logout.GeverLogout"
