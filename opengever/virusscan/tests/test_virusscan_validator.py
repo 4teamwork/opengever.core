@@ -23,7 +23,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         super(TestVirusScanValidator, self).setUp()
         register_mock_av_scanner()
         api.portal.set_registry_record(
-            'scan_before_upload', True, interface=IAVScannerSettings)
+            'scan_on_upload', True, interface=IAVScannerSettings)
         api.portal.set_registry_record(
             'scan_before_download', True, interface=IAVScannerSettings)
 
@@ -48,7 +48,7 @@ class TestVirusScanValidator(IntegrationTestCase):
     @browsing
     def test_document_add_form_does_not_scan_file_field_for_viruses_when_disabled(self, browser):
         api.portal.set_registry_record(
-            'scan_before_upload', False, interface=IAVScannerSettings)
+            'scan_on_upload', False, interface=IAVScannerSettings)
 
         self.login(self.regular_user, browser)
         browser.open(self.empty_dossier)
@@ -99,7 +99,7 @@ class TestVirusScanValidator(IntegrationTestCase):
     @browsing
     def test_document_edit_form_does_not_scan_file_field_for_viruses_when_disabled(self, browser):
         api.portal.set_registry_record(
-            'scan_before_upload', False, interface=IAVScannerSettings)
+            'scan_on_upload', False, interface=IAVScannerSettings)
 
         self.login(self.regular_user, browser)
         self.get_checkout_manager(self.document).checkout()
@@ -203,7 +203,7 @@ class TestVirusScanValidator(IntegrationTestCase):
     @browsing
     def test_document_post_does_not_scan_file_for_viruses_when_disabled(self, browser):
         api.portal.set_registry_record(
-            'scan_before_upload', False, interface=IAVScannerSettings)
+            'scan_on_upload', False, interface=IAVScannerSettings)
         self.login(self.regular_user, browser)
 
         with self.observe_children(self.empty_dossier) as children:
@@ -265,7 +265,7 @@ class TestVirusScanValidator(IntegrationTestCase):
     def test_document_post_does_not_scan_archival_file_for_viruses_when_disabled(self, browser):
         self.login(self.manager, browser)
         api.portal.set_registry_record(
-            'scan_before_upload', False, interface=IAVScannerSettings)
+            'scan_on_upload', False, interface=IAVScannerSettings)
 
         with self.observe_children(self.empty_dossier) as children:
             data = {'@type': 'opengever.document.document',

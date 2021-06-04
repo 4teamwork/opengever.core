@@ -74,7 +74,7 @@ def validateDownloadIfNecessary(filename, file, request):
 
 def validateUploadForFieldIfNecessary(fieldname, filename, filelike, request):
     # if scanning is disabled for upload, we skip
-    if not api.portal.get_registry_record(name='scan_before_upload',
+    if not api.portal.get_registry_record(name='scan_on_upload',
                                           interface=IAVScannerSettings):
         return True
 

@@ -452,7 +452,7 @@ class TestUploadValidator(FunctionalTestCase):
     def test_rejects_file_containing_virus(self):
         register_mock_av_scanner()
         api.portal.set_registry_record(
-            'scan_before_upload', True,interface=IAVScannerSettings)
+            'scan_on_upload', True,interface=IAVScannerSettings)
 
         file = NamedBlobFile(EICAR, filename=u'test.txt')
         validator = UploadValidator(*self.validator_arguments())

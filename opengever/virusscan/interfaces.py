@@ -22,7 +22,7 @@ class IAVScannerSettings(Interface):
                     u'virus scanner (see IAVScannerSettings)',
         default=False)
 
-    scan_before_upload = schema.Bool(
+    scan_on_upload = schema.Bool(
         title=u'Scan for viruses before file upload',
         description=u'Whether a virus check should be performed when '
                     u'uploading a file to Gever.'

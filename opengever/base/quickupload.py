@@ -122,7 +122,7 @@ class OGQuickUploadCapableFileFactory(object):
 
     def validate(self, filename, data):
         # if scanning is disabled for upload, we skip
-        if not api.portal.get_registry_record(name='scan_before_upload',
+        if not api.portal.get_registry_record(name='scan_on_upload',
                                               interface=IAVScannerSettings):
             return
 
