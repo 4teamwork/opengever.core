@@ -11,7 +11,7 @@ clamdConnectionType = SimpleVocabulary(
 
 
 class IAVScannerSettings(Interface):
-    """ Schema for the clamav settings
+    """ Schema for the ClamAV settings
     """
 
     scan_before_download = schema.Bool(

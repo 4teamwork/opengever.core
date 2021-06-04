@@ -10,7 +10,7 @@ EICAR = """
 
 
 class MockAVScanner(object):
-    """Mock objects to run tests without clamav present.
+    """Mock objects to run tests without ClamAV present.
     """
 
     implements(IAVScanner)

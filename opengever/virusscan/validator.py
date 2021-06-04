@@ -96,11 +96,11 @@ def validateUploadForFieldIfNecessary(fieldname, filename, filelike, request):
     return annotations[SCAN_RESULT_KEY]
 
 
-class Z3CFormclamavValidator(NamedFileWidgetValidator):
+class Z3CFormClamavValidator(NamedFileWidgetValidator):
     """z3c.form validator to confirm a file upload is virus-free."""
 
     def validate(self, value):
-        super(Z3CFormclamavValidator, self).validate(value)
+        super(Z3CFormClamavValidator, self).validate(value)
 
         if hasattr(value, 'seek'):
             # when submitted a new 'value' is a
@@ -128,6 +128,6 @@ class Z3CFormclamavValidator(NamedFileWidgetValidator):
             self.field.getName(), filename, filelike, self.request)
 
 
-validator.WidgetValidatorDiscriminators(Z3CFormclamavValidator,
+validator.WidgetValidatorDiscriminators(Z3CFormClamavValidator,
                                         field=INamedField,
                                         widget=INamedFileWidget)

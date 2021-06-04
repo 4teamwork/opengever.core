@@ -8,6 +8,6 @@
 
   <utility factory=".scanner.ClamavScanner" />
 
-  <adapter factory=".validator.Z3CFormclamavValidator" />
+  <adapter factory=".validator.Z3CFormClamavValidator" />
 
 </configure>

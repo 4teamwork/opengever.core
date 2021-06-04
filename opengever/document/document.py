@@ -24,7 +24,7 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
-from opengever.virusscan.validator import Z3CFormclamavValidator
+from opengever.virusscan.validator import Z3CFormClamavValidator
 from opengever.wopi.discovery import editable_extensions
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
@@ -127,7 +127,7 @@ class IDocumentSchema(model.Schema):
                 "file", data.file.filename, data.file.open(), getRequest())
 
 
-class UploadValidator(Z3CFormclamavValidator):
+class UploadValidator(Z3CFormClamavValidator):
     """Validate document uploads."""
 
     def validate(self, value):
