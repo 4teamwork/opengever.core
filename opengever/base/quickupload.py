@@ -10,12 +10,17 @@ from opengever.base.command import CreateEmailCommand
 from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.mail.utils import is_rfc822_ish_mimetype
 from opengever.quota.exceptions import ForbiddenByQuota
+from opengever.virusscan.interfaces import IAVScannerSettings
+from opengever.virusscan.validator import validateStream
+from plone import api
 from plone.protect import createToken
 from plone.protect.interfaces import IDisableCSRFProtection
+from six import BytesIO
 from zope.component import adapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.interface import Invalid
 import mimetypes
 import os
 import transaction
@@ -79,6 +84,14 @@ class OGQuickUploadCapableFileFactory(object):
         """Quickupload description inputs are hidden in gever
         therefore we skip the description.
         """
+        try:
+            self.validate(filename, data)
+        except Invalid as exc:
+            # this is an error, we must not commit
+            transaction.abort()
+            return {'error': translate(exc.message,
+                                       context=self.context.REQUEST),
+                    'success': None}
         if self.is_email_upload(filename):
             command = CreateEmailCommand(
                 self.context, filename, data,
@@ -106,3 +119,12 @@ class OGQuickUploadCapableFileFactory(object):
 
     def _get_mimetype(self, extension):
         return mimetypes.types_map.get(extension)
+
+    def validate(self, filename, data):
+        # if scanning is disabled for upload, we skip
+        if not api.portal.get_registry_record(name='scan_on_upload',
+                                              interface=IAVScannerSettings):
+            return
+
+        validateStream(filename, BytesIO(data), self.context.REQUEST)
+        return

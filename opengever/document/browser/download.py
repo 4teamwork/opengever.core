@@ -1,3 +1,4 @@
+from opengever.api.utils import raise_for_api_request
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.viewlets.download import DownloadFileVersion
 from opengever.core import dictstorage
@@ -6,6 +7,7 @@ from opengever.document.browser.edit import get_redirect_url
 from opengever.document.events import FileCopyDownloadedEvent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.mail import IOGMailMarker
+from opengever.virusscan.validator import validateDownloadIfNecessary
 from plone import api
 from plone.memoize import ram
 from plone.memoize.interfaces import ICacheChooser
@@ -22,6 +24,7 @@ from zope.component.hooks import getSite
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import Invalid
 from zope.publisher.interfaces import NotFound
 
 
@@ -35,6 +38,7 @@ class DocumentishDownload(Download):
     - Redirect with notification when instead of raising 404 for missing files
     - Download the latest version instead the current working copy if the
       document is checked out by another user
+    - Scan for viruses if enabled in IAVScannerSettings
     """
 
     def __call__(self):
@@ -60,6 +64,13 @@ class DocumentishDownload(Download):
                 get_redirect_url(self.context))
 
         self.extract_filename(named_file)
+        try:
+            validateDownloadIfNecessary(self.filename, named_file, self.request)
+        except Invalid as exc:
+            raise_for_api_request(self.request, BadRequest(exc.message))
+            api.portal.show_message(exc.message, self.request, type='error')
+            return self.request.RESPONSE.redirect(
+                get_redirect_url(self.context))
 
         set_attachment_content_disposition(self.request, self.filename,
                                            named_file)
@@ -93,11 +104,11 @@ class DownloadConfirmation(BrowserView):
 
     def download_url(self):
         if self.request.get('version_id'):
-            return '%s/download_file_version?version_id=%s' % (
+            return '%s/download_file_version?version_id=%s&error_as_message=1' % (
                 self.context.absolute_url(),
                 self.request.get('version_id'))
         else:
-            return '%s/download' % (self.context.absolute_url())
+            return '%s/download?error_as_message=1' % (self.context.absolute_url())
 
     def download_available(self):
         """ check whether download is available.
@@ -163,6 +174,10 @@ class DownloadConfirmationHelper(object):
         else:
             clazz = ' '.join(additional_classes)
 
+        if url_extension:
+            url_extension += "&error_as_message=1"
+        else:
+            url_extension += "?error_as_message=1"
         url = '{0}/{1}{2}'.format(file_url, viewname, url_extension)
         if include_token:
             url = addTokenToUrl(url)
@@ -190,6 +205,17 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
 
         self._init_version_file()
         if self.version_file:
+            try:
+                validateDownloadIfNecessary(
+                    self.version_file.filename.encode('utf-8'),
+                    self.version_file,
+                    self.request)
+            except Invalid as exc:
+                raise_for_api_request(self.request, BadRequest(exc.message))
+                api.portal.show_message(exc.message, self.request, type='error')
+                return self.request.RESPONSE.redirect(
+                    get_redirect_url(self.context))
+
             notify(FileCopyDownloadedEvent(
                 self.context,
                 getattr(self.request, 'version_id', None)))

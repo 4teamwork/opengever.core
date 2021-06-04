@@ -22,6 +22,7 @@ from opengever.mail.exceptions import InvalidAttachmentPosition
 from opengever.mail.interfaces import IExtractedFromMail
 from opengever.mail.utils import is_rfc822_ish_mimetype
 from opengever.ogds.models.user import User
+from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
@@ -38,6 +39,7 @@ from z3c.relationfield.relation import RelationValue
 from zope import schema
 from zope.component import getUtility
 from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import Interface
@@ -60,6 +62,15 @@ IMail.setTaggedValue(FIELDSETS_KEY, [
              label=base_mf(u'fieldset_common', u'Common'),
              fields=[u'message'])
 ])
+
+
+def scan_for_virus(data):
+    if data.message:
+        validateUploadForFieldIfNecessary(
+            "message", data.message.filename, data.message.open(), getRequest())
+
+
+IMail.setTaggedValue('invariants', [scan_for_virus])
 
 
 class IOGMailMarker(Interface):

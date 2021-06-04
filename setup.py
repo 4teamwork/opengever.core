@@ -84,6 +84,7 @@ setup(name='opengever.core',
       zip_safe=False,
       install_requires=[
           'alembic >= 0.7.0',
+          'clamd',
           'collective.autopermission',
           'collective.blueprint.jsonmigrator',
           'collective.blueprint.usersandgroups',

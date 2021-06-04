@@ -57,7 +57,7 @@ class TestDocumentTooltip(IntegrationTestCase):
         self.assertTrue(download.get('href').startswith(
             'http://nohost/plone/ordnungssystem/fuhrung'
             '/vertrage-und-vereinbarungen/dossier-1/document-14'
-            '/file_download_confirmation?_authenticator='))
+            '/file_download_confirmation?error_as_message=1&_authenticator='))
 
         # link to details
         self.assertEquals('Open detail view', details.text)

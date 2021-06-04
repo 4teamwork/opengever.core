@@ -23,6 +23,8 @@ from opengever.officeconnector.helpers import is_client_ip_in_office_connector_d
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
+from opengever.virusscan.validator import validateUploadForFieldIfNecessary
+from opengever.virusscan.validator import Z3CFormClamavValidator
 from opengever.wopi.discovery import editable_extensions
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
@@ -118,8 +120,14 @@ class IDocumentSchema(model.Schema):
                 u"It is not possible to add E-mails as document, use "
                 "portal_type ftw.mail.mail instead.")
 
+    @invariant
+    def scan_for_virus(data):
+        if data.file:
+            validateUploadForFieldIfNecessary(
+                "file", data.file.filename, data.file.open(), getRequest())
 
-class UploadValidator(validator.SimpleFieldValidator):
+
+class UploadValidator(Z3CFormClamavValidator):
     """Validate document uploads."""
 
     def validate(self, value):
@@ -153,6 +161,7 @@ class UploadValidator(validator.SimpleFieldValidator):
                     u'error_proposal_document_type',
                     default=(u"It's not possible to have non-.docx documents as proposal documents.")
                     ))
+        super(UploadValidator, self).validate(value)
 
     def is_proposal_upload(self):
         """The upload form context can be, for example, a Dossier."""
@@ -179,8 +188,8 @@ class UploadValidator(validator.SimpleFieldValidator):
         raise Invalid(_(
             u'error_mail_upload',
             default=(u"It's not possible to add E-mails here, please "
-            "send it to ${mailaddress} or drag it to the dossier "
-            "(Dragn'n'Drop)."),
+                     u"send it to ${mailaddress} or drag it to the dossier "
+                     u"(Dragn'n'Drop)."),
             mapping={'mailaddress': mail_address}
             ))
 

@@ -1,13 +1,14 @@
 from collective import dexteritytextindexer
-from opengever.base.vocabulary import wrap_vocabulary
 from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.vocabularies import KeywordSearchableAndAddableSourceBinder
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.mail.mail import IMail
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
+from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -16,8 +17,10 @@ from plone.supermodel import model
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
+from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import Invalid
+from zope.interface import invariant
 
 
 def document_date_default():
@@ -171,6 +174,13 @@ class IDocumentMetadata(model.Schema):
         description=_(u'help_preview', default=''),
         required=False,
         )
+
+    @invariant
+    def scan_for_virus(data):
+        if data.archival_file:
+            validateUploadForFieldIfNecessary(
+                "archival_file", data.archival_file.filename,
+                data.archival_file.open(), getRequest())
 
 
 alsoProvides(IDocumentMetadata, IFormFieldProvider)

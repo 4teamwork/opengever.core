@@ -74,7 +74,9 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
             browser.css(".details > p").first.text,
         )
         browser.find('Download').click()
-        self.assertEqual("{}/download".format(self.document.absolute_url()), browser.url)
+        self.assertEqual(
+            "{}/download?error_as_message=1".format(self.document.absolute_url()),
+            browser.url)
         self.assertEqual(self.document.file.data, browser.contents)
 
     @browsing
@@ -89,7 +91,7 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
             browser.css(".details > p").first.text,
         )
         browser.find('Download').click()
-        expected_url = "{}/download_file_version?version_id=1".format(self.document.absolute_url())
+        expected_url = "{}/download_file_version?version_id=1&error_as_message=1".format(self.document.absolute_url())
         self.assertEqual(expected_url, browser.url)
         self.assertEqual(self.document.file.data, browser.contents)
 

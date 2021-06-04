@@ -17,3 +17,9 @@ services:
     image: 4teamwork/weasyprint:latest
     ports:
       - 8093:8080
+  clamav:
+    image: mkodockx/docker-clamav:alpine
+    ports:
+      - 3310:3310
+    profiles:
+      - clamav

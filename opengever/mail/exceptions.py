@@ -1,3 +1,6 @@
+from ftw.mail.exceptions import MailInboundException
+from ftw.mail.config import EXIT_CODES
+
 
 class AlreadyExtractedError(Exception):
     """Attachment already extracted from Mail.
@@ -24,3 +27,10 @@ class SourceMailNotFound(Exception):
     """Raised when a document extracted from a Mail is modified and its
     info cannot be updated in the Mail from which it was extracted because
     it could not be found"""
+
+
+class MessageContainsVirus(MailInboundException):
+
+    def __init__(self, message):
+        MailInboundException.__init__(
+            self, EXIT_CODES['DATAERR'], message)

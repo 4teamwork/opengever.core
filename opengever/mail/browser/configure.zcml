@@ -92,4 +92,12 @@
         />
   </configure>
 
+  <browser:page
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      name="mail-inbound"
+      class=".inbound.GeverMailInbound"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>

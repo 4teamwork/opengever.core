@@ -12,30 +12,31 @@ from zope.component import getMultiAdapter
 
 
 def get_redirect_url(context):
-        """return the url where the editing_document view was called from
-        It should be a document listing."""
-
-        referer = context.REQUEST.environ.get('HTTP_REFERER')
-        portal_url = '/'.join(context.portal_url().split('/')[:-1])
-        if referer:
-            obj_path = referer[len(portal_url):]
-            try:
-                obj = context.restrictedTraverse(obj_path)
-            except KeyError:
-                return '%s#overview' % context.absolute_url()
-
-            # redirect to right tabbedview-tab
-            if ITask.providedBy(obj):
-                return '%s#relateddocuments' % (obj.absolute_url())
-            elif IPloneSiteRoot.providedBy(obj):
-                return '%s#mydocuments' % (obj.absolute_url())
-            elif IDossierMarker.providedBy(obj):
-                return '%s#documents' % (obj.absolute_url())
-            else:
-                return obj.absolute_url()
-
-        else:
+    """return the url where the editing_document view was called from
+    It should be a document listing."""
+    referer = context.REQUEST.environ.get('HTTP_REFERER')
+    portal_url = '/'.join(context.portal_url().split('/')[:-1])
+    if referer:
+        obj_path = referer[len(portal_url):].split("?")[0]
+        try:
+            obj = context.restrictedTraverse(obj_path)
+        except KeyError:
             return '%s#overview' % context.absolute_url()
+
+        # redirect to right tabbedview-tab
+        if ITask.providedBy(obj):
+            return '%s#relateddocuments' % (obj.absolute_url())
+        elif IPloneSiteRoot.providedBy(obj):
+            return '%s#mydocuments' % (obj.absolute_url())
+        elif IDossierMarker.providedBy(obj):
+            return '%s#documents' % (obj.absolute_url())
+        elif isinstance(obj, BrowserView):
+            return obj.context.absolute_url()
+        else:
+            return obj.absolute_url()
+
+    else:
+        return '%s#overview' % context.absolute_url()
 
 
 class EditCheckerView(BrowserView):
@@ -45,8 +46,7 @@ class EditCheckerView(BrowserView):
 
     def __call__(self):
         mtool = getToolByName(self.context, 'portal_membership')
-        if mtool.checkPermission(
-            'Modify portal content', self.context):
+        if mtool.checkPermission('Modify portal content', self.context):
             return self.request.RESPONSE.redirect(
                 '%s/edit' % (self.context.absolute_url()))
         else:
@@ -87,8 +87,8 @@ class EditingDocument(BrowserView):
         if manager.get_checked_out_by() == userid:
             # check if the document is locked
             # otherwies only open with the ext. editor
-            info = getMultiAdapter((self.context, self.request),
-                        name="plone_lock_info")
+            info = getMultiAdapter(
+                (self.context, self.request), name="plone_lock_info")
 
             if info.is_locked():
                 msg = _(u"Can't edit the document at moment, "
