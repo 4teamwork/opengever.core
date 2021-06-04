@@ -37,7 +37,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'File': ['Careful, this file contains a virus.']},
+            {'File': ['Error - Virus detected!']},
             erroneous_fields())
         self.assertEqual(0, len(self.empty_dossier.contentItems()))
 
@@ -70,7 +70,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'Archival file': ['Careful, this file contains a virus.']},
+            {'Archival file': ['Error - Virus detected!']},
             erroneous_fields())
         self.assertEqual(0, len(self.empty_dossier.contentItems()))
 
@@ -87,7 +87,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         browser.fill({'File': (EICAR, 'file.txt', 'text/plain')}).save()
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'File': ['Careful, this file contains a virus.']},
+            {'File': ['Error - Virus detected!']},
             erroneous_fields())
         self.assertIsNone(self.empty_document.get_file())
 
@@ -116,7 +116,7 @@ class TestVirusScanValidator(IntegrationTestCase):
         browser.fill({'Archival file': (EICAR, 'file.txt', 'text/plain')}).save()
         self.assertEqual(["There were some errors."], error_messages())
         self.assertEqual(
-            {'Archival file': ['Careful, this file contains a virus.']},
+            {'Archival file': ['Error - Virus detected!']},
             erroneous_fields())
         self.assertIsNone(self.document.archival_file)
 
@@ -137,7 +137,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertIsNone(result['success'])
         self.assertEqual(
-             u'Careful, this file contains a virus.',
+             u'Error - Virus detected!',
              result['error'])
 
         result = factory(filename=u'f\xefle.txt',
@@ -162,7 +162,7 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertIsNone(result['success'])
         self.assertEqual(
-             u'Careful, this file contains a virus.',
+             u'Error - Virus detected!',
              result['error'])
 
         result = factory(filename=u'f\xefle.eml',
@@ -353,7 +353,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
 
         browser.open(self.document, view='download?error_as_message=1')
         self.assertEqual(
-            ['Careful, this file contains a virus.'],
+            ['Error - Virus detected!'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])
@@ -382,7 +382,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
         self.mail_eml.message.data = EICAR
         browser.open(self.mail_eml, view='download?error_as_message=1')
         self.assertEqual(
-            ['Careful, this file contains a virus.'],
+            ['Error - Virus detected!'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])
@@ -412,7 +412,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
         browser.click_on("Download")
 
         self.assertEqual(
-            ['Careful, this file contains a virus.'],
+            ['Error - Virus detected!'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])
@@ -440,7 +440,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
         browser.click_on("Vertraegsentwurf.pdf")
 
         self.assertEqual(
-            ['Careful, this file contains a virus.'],
+            ['Error - Virus detected!'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])
@@ -507,7 +507,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
         browser.css('a.function-download-copy').first.click()
         browser.find('Download').click()
         self.assertEqual(
-            ['Careful, this file contains a virus.'],
+            ['Error - Virus detected!'],
             error_messages())
         self.assertEqual('text/html;charset=utf-8',
                          browser.headers['content-type'])

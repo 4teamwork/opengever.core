@@ -22,4 +22,4 @@ msgstr "Un erreur s'est produite durant la détection de virus. Veuillez contact
 #. Default: "Validation failed, file is virus-infected."
 #: ./opengever/virusscan/validator.py
 msgid "file_infected"
-msgstr "Attention, ce fichier contient un virus."
+msgstr "Erreur - Virus détecté!"
