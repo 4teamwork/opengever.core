@@ -88,6 +88,9 @@ class TestserverLayer(OpengeverFixture):
         portal.portal_languages.use_combined_language_codes = True
         portal.portal_languages.addSupportedLanguage('de-ch')
 
+        # Disable secure session cookie as tests are run without HTTPS
+        portal.acl_users['session'].secure = False
+
         api.portal.set_registry_record('use_solr', True, interface=ISearchSettings)
         activate_bumblebee_feature()
 
