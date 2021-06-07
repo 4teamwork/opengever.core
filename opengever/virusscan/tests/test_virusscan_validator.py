@@ -1,4 +1,5 @@
 from collective.quickupload.interfaces import IQuickUploadFileFactory
+from ftw.mail.interfaces import IEmailAddress
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
@@ -10,6 +11,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
 from opengever.virusscan.interfaces import IAVScannerSettings
 from opengever.virusscan.testing import EICAR
+from opengever.virusscan.testing import EICAR_MAIL_TEMPLATE
 from opengever.virusscan.testing import register_mock_av_scanner
 from plone import api
 from zope.component import getMultiAdapter
@@ -330,10 +332,23 @@ class TestVirusScanValidator(IntegrationTestCase):
         self.assertEqual(201, browser.status_code)
         self.assertEqual(1, len(children['added']))
 
-    def test_inbound_mail_scans_for_virus(self):
-        self.request.set('mail', EICAR)
-        view = getMultiAdapter((self.portal, self.request), name='mail-inbound')
-        self.assertEquals('65:file_infected', view())
+    def test_inbound_mail_scans_for_virus_when_enabled(self):
+        self.login(self.regular_user)
+        self.regular_user.setMemberProperties(dict(email='from@example.org'))
+        mail_to = IEmailAddress(self.request).get_email_for_object(self.empty_dossier)
+        mail = EICAR_MAIL_TEMPLATE.format(
+            from_address='from@example.org', to_address=mail_to)
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.request.set('mail', mail)
+            view = getMultiAdapter((self.portal, self.request), name='mail-inbound')
+            self.assertEquals('65:file_infected', view())
+        self.assertEqual(0, len(children['added']))
+
+        api.portal.set_registry_record('scan_on_upload', False, interface=IAVScannerSettings)
+        with self.observe_children(self.empty_dossier) as children:
+            self.assertEquals('0:OK', view())
+        self.assertEqual(1, len(children['added']))
 
 
 class TestVirusScanDownloadValidator(IntegrationTestCase):
