@@ -8,6 +8,22 @@ EICAR = """
     WDVPIVAlQEFQWzRcUFpYNTQoUF4pN0NDKTd9JEVJQ0FSLVNUQU5E
     QVJELUFOVElWSVJVUy1URVNU\nLUZJTEUhJEgrSCo=\n""".decode('base64')
 
+EICAR_MAIL_TEMPLATE = """Subject: test mail
+From: {from_address}
+To: {to_address}
+Content-Type: multipart/mixed; boundary="===============1701826978839754121=="
+
+--===============1701826978839754121==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Disposition: attachment
+
+X5O!P%@AP[4\\PZX54(P^)7CC)7}}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+
+--===============1701826978839754121==--
+"""
+
 
 class MockAVScanner(object):
     """Mock objects to run tests without ClamAV present.

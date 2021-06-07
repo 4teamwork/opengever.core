@@ -20,3 +20,4 @@ class GeverMailInbound(MailInbound):
                 'message', filename, filelike, self.request)
         except Invalid as e:
             raise MessageContainsVirus(e.message)
+        return msg
