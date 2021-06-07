@@ -137,3 +137,17 @@ class TestOGDSUserReferencesMigrator(FunctionalTestCase):
 
         create_session().refresh(favorite)
         self.assertEqual(favorite.userid, 'hans.muster')
+
+    def test_migrates_reminder_settings(self):
+        task = create(Builder('task'))
+        reminder = create(
+            Builder('reminder_setting_model')
+            .for_object(task)
+            .having(actor_id='HANS.MUSTER')
+        )
+
+        OGDSUserReferencesMigrator(
+            self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
+
+        create_session().refresh(reminder)
+        self.assertEqual('hans.muster', reminder.actor_id)

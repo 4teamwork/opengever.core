@@ -4,6 +4,7 @@ from opengever.activity.model import NotificationSetting
 from opengever.activity.model import Watcher
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.model.task import TaskPrincipal
 from opengever.ogds.models.service import ogds_service
@@ -41,6 +42,7 @@ class OGDSUserReferencesMigrator(object):
         self.task_responsibles_moved = []
         self.user_settings_moved = []
         self.favorites_moved = []
+        self.reminders_moved = []
 
     def _verify_user(self, userid):
         ogds_user = ogds_service().fetch_user(userid)
@@ -153,6 +155,12 @@ class OGDSUserReferencesMigrator(object):
                     old_userid, new_userid)
                 self.favorites_moved.extend(moved)
 
+                # Migrate task reminders
+                moved = self._migrate_sql_column(
+                    ReminderSetting.__table__, 'actor_id',
+                    old_userid, new_userid)
+                self.reminders_moved.extend(moved)
+
         results = {
             'activity_actors': {
                 'moved': self.activity_actors_moved,
@@ -188,6 +196,10 @@ class OGDSUserReferencesMigrator(object):
                 'deleted': []},
             'favorites': {
                 'moved': self.favorites_moved,
+                'copied': [],
+                'deleted': []},
+            'reminders': {
+                'moved': self.reminders_moved,
                 'copied': [],
                 'deleted': []},
         }
