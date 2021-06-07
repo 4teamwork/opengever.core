@@ -108,7 +108,7 @@ def object_moved_or_added(context, event):
 
     # synchronize with model if necessary
     if ITask.providedBy(context):
-        sync_task(context, event)
+        sync_task(context, event, graceful=True)
 
 
 def remove_favorites(context, event):

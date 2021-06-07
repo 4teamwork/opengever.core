@@ -1,4 +1,5 @@
 from datetime import date
+from ftw.testbrowser import browsing
 from opengever.base.model import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -140,3 +141,26 @@ class TestTaskSQLSyncer(IntegrationTestCase):
             task.physical_path)
         self.assertEqual(1, task.dossier_sequence_number)
         self.assertEqual('Client1 1.1 / 4.1', task.reference_number)
+
+    @browsing
+    def test_handles_temporarily_not_existing_predecessors_during_move(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.sequential_task) as subtasks:
+            browser.open(self.sequential_task,
+                         view='++add++opengever.task.task?position=1')
+            browser.fill({'Title': 'Subtask', 'Task type': 'comment'})
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill(self.secretariat_user)
+            browser.click_on('Save')
+
+        added_task, = subtasks['added']
+        successor = self.seq_subtask_2.get_sql_object()
+
+        self.assertEqual(added_task.get_sql_object(),
+                         successor.tasktemplate_predecessor)
+
+        api.content.move(source=self.dossier, target=self.empty_dossier)
+
+        self.assertEqual(added_task.get_sql_object(),
+                         successor.tasktemplate_predecessor)
