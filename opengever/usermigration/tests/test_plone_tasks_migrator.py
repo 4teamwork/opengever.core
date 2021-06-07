@@ -1,9 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.response import IResponseContainer
+from opengever.task.reminder import Reminder
+from opengever.task.reminder.interfaces import IReminderStorage
+from opengever.task.reminder.storage import REMINDER_ANNOTATIONS_KEY
 from opengever.task.task_response import TaskResponse
 from opengever.testing import FunctionalTestCase
 from opengever.usermigration.plone_tasks import PloneTasksMigrator
+from zope.annotation import IAnnotations
 
 
 class TestPloneTasksMigrator(FunctionalTestCase):
@@ -72,3 +76,17 @@ class TestPloneTasksMigrator(FunctionalTestCase):
             self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
 
         self.assertEquals('hans.muster', response.changes[-1]['after'])
+
+    def test_migrates_plone_task_reminders(self):
+        task = create(Builder('task'))
+        reminders = IReminderStorage(task)
+        reminders.set(Reminder.create('same_day'), user_id='HANS.MUSTER')
+
+        PloneTasksMigrator(
+            self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
+
+        annotations = IAnnotations(task)
+        reminders = annotations.get(REMINDER_ANNOTATIONS_KEY)
+
+        self.assertIn('hans.muster', reminders)
+        self.assertNotIn('HANS.MUSTER', reminders)

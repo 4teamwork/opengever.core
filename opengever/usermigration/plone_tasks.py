@@ -1,14 +1,15 @@
 """
-Migrate user IDs in Plone tasks (issuers, responsibles, responses)
+Migrate user IDs in Plone tasks (issuers, responsibles, responses, reminders)
 """
 
 from opengever.base.response import IResponseContainer
 from opengever.ogds.models.service import ogds_service
+from opengever.task.reminder.storage import REMINDER_ANNOTATIONS_KEY
 from opengever.task.task import ITask
 from opengever.usermigration.exceptions import UserMigrationException
 from plone import api
+from zope.annotation import IAnnotations
 import logging
-
 
 logger = logging.getLogger('opengever.usermigration')
 
@@ -18,6 +19,7 @@ FIELDS_TO_CHECK = ('responsible', 'issuer')
 class PloneTasksMigrator(object):
     """This migrator changes the `issuer` and `responsible` fields on
     Plone tasks, as well as updating responses on tasks as needed.
+    It also migrates task reminders.
 
     It does not however fix local roles assigned to Plone tasks - these can
     be fixed using the "local roles" migration in ftw.usermigration.
@@ -112,6 +114,18 @@ class PloneTasksMigrator(object):
                 self.task_moves[field_name].append(
                     (path, old_userid, new_userid))
 
+    def _migrate_task_reminders(self, obj):
+        annotations = IAnnotations(obj)
+        if REMINDER_ANNOTATIONS_KEY not in annotations:
+            return
+
+        reminders = annotations[REMINDER_ANNOTATIONS_KEY]
+        for old_userid in list(reminders.keys()):
+            if old_userid in self.principal_mapping:
+                new_userid = self.principal_mapping[old_userid]
+                reminders[new_userid] = reminders[old_userid]
+                del reminders[old_userid]
+
     def migrate(self):
         catalog = api.portal.get_tool('portal_catalog')
 
@@ -124,6 +138,7 @@ class PloneTasksMigrator(object):
 
         for obj in all_tasks:
             self._migrate_plone_task(obj)
+            self._migrate_task_reminders(obj)
             self._fix_responses(obj)
 
         for obj in self.to_reindex:
