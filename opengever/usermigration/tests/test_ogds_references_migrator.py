@@ -151,3 +151,15 @@ class TestOGDSUserReferencesMigrator(FunctionalTestCase):
 
         create_session().refresh(reminder)
         self.assertEqual('hans.muster', reminder.actor_id)
+
+    def test_migrates_meeting_secretary(self):
+        committee = create(Builder('committee_model'))
+        meeting = create(Builder('meeting').having(
+            committee=committee, secretary=self.old_ogds_user)
+        )
+
+        OGDSUserReferencesMigrator(
+            self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
+
+        create_session().refresh(meeting)
+        self.assertEqual('hans.muster', meeting.secretary_id)

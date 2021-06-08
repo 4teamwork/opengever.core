@@ -7,6 +7,7 @@ from opengever.base.model.favorite import Favorite
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.model.task import TaskPrincipal
+from opengever.meeting.model import Meeting
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
@@ -43,6 +44,7 @@ class OGDSUserReferencesMigrator(object):
         self.user_settings_moved = []
         self.favorites_moved = []
         self.reminders_moved = []
+        self.secretaries_moved = []
 
     def _verify_user(self, userid):
         ogds_user = ogds_service().fetch_user(userid)
@@ -161,6 +163,12 @@ class OGDSUserReferencesMigrator(object):
                     old_userid, new_userid)
                 self.reminders_moved.extend(moved)
 
+                # Migrate meeting secretary
+                moved = self._migrate_sql_column(
+                    Meeting.__table__, 'secretary_id',
+                    old_userid, new_userid)
+                self.secretaries_moved.extend(moved)
+
         results = {
             'activity_actors': {
                 'moved': self.activity_actors_moved,
@@ -200,6 +208,10 @@ class OGDSUserReferencesMigrator(object):
                 'deleted': []},
             'reminders': {
                 'moved': self.reminders_moved,
+                'copied': [],
+                'deleted': []},
+            'secretaries': {
+                'moved': self.secretaries_moved,
                 'copied': [],
                 'deleted': []},
         }
