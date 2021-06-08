@@ -83,4 +83,12 @@
       name="GEVER: Recently touched objects"
       />
 
+  <adapter
+      factory=".migrations.ProposalsMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: Proposals and submitted proposals"
+      />
+
 </configure>

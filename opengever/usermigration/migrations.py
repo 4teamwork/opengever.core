@@ -14,6 +14,7 @@ from opengever.usermigration.ogds import OGDSMigrator
 from opengever.usermigration.ogds_references import OGDSUserReferencesMigrator
 from opengever.usermigration.plone_tasks import PloneTasksMigrator
 from opengever.usermigration.private_folders import PrivateFoldersMigrator
+from opengever.usermigration.proposals import ProposalsMigrator
 from opengever.usermigration.recently_touched import RecentlyTouchedMigrator
 from opengever.usermigration.task_templates import TaskTemplateMigrator
 
@@ -144,5 +145,18 @@ class RecentlyTouchedMigration(object):
     def execute(self, principal_mapping, mode):
         migrator = RecentlyTouchedMigrator(self.portal, principal_mapping,
                                            mode=mode, strict=True)
+        results = migrator.migrate()
+        return results
+
+
+class ProposalsMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = ProposalsMigrator(self.portal, principal_mapping,
+                                     mode=mode, strict=True)
         results = migrator.migrate()
         return results
