@@ -308,11 +308,6 @@ def set_default_values(content, container, values):
             if field.readonly:
                 continue
 
-            if name in fields_with_value:
-                # Only set default if no *actual* value was supplied as
-                # an argument to object construction
-                continue
-
             if object_has_value_for_field(content, field):
                 # Only set default if a value hasn't been set on the
                 # object yet
