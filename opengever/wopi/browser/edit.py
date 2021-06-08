@@ -17,6 +17,13 @@ import logging
 
 logger = logging.getLogger('opengever.wopi')
 
+# See https://wopi.readthedocs.io/en/latest/faq/languages.html#languages
+LANGUAGE_CODE_MAPPING = {
+    'de-ch': 'de-DE',
+    'fr-ch': 'fr-FR',
+    'en-us': 'en-US',
+}
+
 
 class EditOnlineView(BrowserView):
 
@@ -54,7 +61,7 @@ class EditOnlineView(BrowserView):
         self.access_token_ttl = int(time() + 43200) * 1000
 
         self.params = {
-            'UI_LLCC': '',
+            'UI_LLCC': self.get_WOPI_language_code(),
             'DC_LLCC': '',
             'DISABLE_CHAT': '1',
             'BUSINESS_USER': '0',
@@ -86,6 +93,11 @@ class EditOnlineView(BrowserView):
         self.urlsrc = '?'.join([url, ''.join(params_with_values)])
 
         return self.index()
+
+    def get_WOPI_language_code(self):
+        lang_tool = api.portal.get_tool('portal_languages')
+        language_code = lang_tool.getPreferredLanguage()
+        return LANGUAGE_CODE_MAPPING.get(language_code, '')
 
     def is_locked_but_not_by_WOPI(self):
         if not self.context.is_locked():
