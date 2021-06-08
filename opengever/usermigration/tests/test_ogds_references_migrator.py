@@ -163,3 +163,14 @@ class TestOGDSUserReferencesMigrator(FunctionalTestCase):
 
         create_session().refresh(meeting)
         self.assertEqual('hans.muster', meeting.secretary_id)
+
+    def test_migrates_proposal_issuer(self):
+        proposal = create(Builder('proposal_model').having(
+            issuer='HANS.MUSTER')
+        )
+
+        OGDSUserReferencesMigrator(
+            self.portal, {'HANS.MUSTER': 'hans.muster'}, 'move').migrate()
+
+        create_session().refresh(proposal)
+        self.assertEqual('hans.muster', proposal.issuer)
