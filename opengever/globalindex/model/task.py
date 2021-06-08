@@ -1,5 +1,6 @@
 from datetime import date
 from DateTime import DateTime as ZopeDateTime
+from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.model import is_oracle
@@ -195,7 +196,7 @@ class Task(Base):
     def get_assigned_org_unit(self):
         return ogds_service().fetch_org_unit(self.assigned_org_unit)
 
-    def sync_with(self, plone_task):
+    def sync_with(self, plone_task, graceful=False):
         """Sync this task instace with its corresponding plone taks."""
         self.title = plone_task.safe_title
         self.text = plone_task.text
@@ -236,7 +237,18 @@ class Task(Base):
             plone_task.get_containing_subdossier(),
             )
 
-        predecessor = plone_task.get_tasktemplate_predecessor()
+        try:
+            predecessor = plone_task.get_tasktemplate_predecessor()
+        except InvalidOguidIntIdPart as e:
+            # When moving a dossier with a task_process it is not guaranteed
+            # that the objects are moved in the tasktemplate order, so it can
+            # happen, that the predecessor does not yet exists. Because the
+            # intid stays the same after move, its safe to not updated the predecessor.
+            if not graceful:
+                raise
+
+            predecessor = None
+
         if predecessor:
             self.tasktemplate_predecessor = predecessor.get_sql_object()
 

@@ -4,6 +4,7 @@ from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from zope.container.interfaces import IContainerModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectMovedEvent
 import logging
 
 
@@ -11,6 +12,10 @@ logger = logging.getLogger('opengever.globalindex')
 
 
 class TaskSqlSyncer(SqlSyncer):
+
+    def __init__(self, obj, event, graceful=False):
+        super(TaskSqlSyncer, self).__init__(obj, event)
+        self.graceful = graceful
 
     def get_sql_task(self):
         admin_unit_id = get_current_admin_unit().id()
@@ -31,7 +36,7 @@ class TaskSqlSyncer(SqlSyncer):
 
     def sync_with_sql(self):
         task = self.get_sql_task()
-        task.sync_with(self.obj)
+        task.sync_with(self.obj, graceful=self.graceful)
         logger.info('Task {!r} (modified:{}) has been successfully synchronized '
                     'to globalindex ({!r}).'.format(
                         self.obj,
@@ -39,10 +44,13 @@ class TaskSqlSyncer(SqlSyncer):
                         task))
 
 
-def sync_task(obj, event):
+def sync_task(obj, event, graceful=False):
     """Index the given task in opengever.globalindex.
     """
     if IContainerModifiedEvent.providedBy(event):
         return
 
-    TaskSqlSyncer(obj, event).sync()
+    if IObjectMovedEvent.providedBy(event):
+        TaskSqlSyncer(obj, event, graceful=True).sync()
+    else:
+        TaskSqlSyncer(obj, event, graceful=False).sync()
