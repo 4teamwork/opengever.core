@@ -52,6 +52,14 @@
       />
 
   <adapter
+      factory=".migrations.TaskTemplateMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: Tasks templates (issuers, responsibles)"
+      />
+
+  <adapter
       factory=".migrations.PrivateFoldersMigration"
       provides="ftw.usermigration.interfaces.IPreMigrationHook"
       for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
