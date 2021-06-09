@@ -315,6 +315,11 @@
       name="file_extension"
       />
 
+  <adapter
+      factory=".indexers.watchers"
+      name="watchers"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
   <adapter factory=".fileactions.BaseDocumentFileActions" />

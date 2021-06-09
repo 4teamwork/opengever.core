@@ -1,5 +1,7 @@
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
+from opengever.activity import notification_center
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber
@@ -239,3 +241,11 @@ def file_extension(obj):
     extension of the original_message file if exists.
     """
     return obj.get_file_extension()
+
+
+@indexer(IBaseDocument)
+def watchers(obj):
+    """Index all userids that watch this document in the default watcher role."""
+    center = notification_center()
+    watchers = center.get_watchers(obj, role=WATCHER_ROLE)
+    return [watcher.actorid for watcher in watchers]

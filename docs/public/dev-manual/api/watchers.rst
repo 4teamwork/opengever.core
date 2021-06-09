@@ -1,14 +1,16 @@
+.. _watchers:
+
 Beobachter
 ==========
 
-Der ``@watchers`` Endpoint dient dazu, für Aufgaben und Weiterleitungen Beobachter zu registrieren.
+Der ``@watchers`` Endpoint dient dazu, für Dokumente, Aufgaben und Weiterleitungen Beobachter zu registrieren.
 
 Diese Endpoints liefern zur Zeit sowohl ``referenced_users`` als auch ``referenced_actors`` zurück. ``referenced_users`` wird in einer späteren Version jedoch nicht mehr unterstützt werden, und wird durch ``referenced_actors`` abgelöst.
 
 Auflistung
 ----------
 
-Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftraggeber (``task_issuer``), Auftragnehmer (``task_responsible``) oder Beobachter (``regular_watcher``). Mittels eines GET-Requests können alle Beobachter und alle Rollen einer Aufgabe abgefragt werden.
+Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftraggeber (``task_issuer``), Auftragnehmer (``task_responsible``) oder Beobachter (``regular_watcher``). Mittels eines GET-Requests können alle Beobachter und alle Rollen eines Inhalts abgefragt werden.
 
 **Beispiel-Request**:
 
@@ -78,7 +80,7 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
 Beobachter als erweiterbare Komponente
 --------------------------------------
 
-Die Beobachter können als Kompomente einer Aufgabe direkt über den ``expand``-Parameter eingebettet werden, so dass keine zusätzliche Abfrage nötig ist.
+Die Beobachter können als Komponente eines Inhalts direkt über den ``expand``-Parameter eingebettet werden, so dass keine zusätzliche Abfrage nötig ist.
 
 **Beispiel-Request**:
 
@@ -112,7 +114,7 @@ Die Beobachter können als Kompomente einer Aufgabe direkt über den ``expand``-
 Beobachter hinzufügen
 ---------------------
 
-Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_watcher`` bei einer Aufgabe registriert werden.
+Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_watcher`` bei einem Inhalt registriert werden.
 
 
 **Beispiel-Request**:
@@ -136,7 +138,7 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
 Beobachter entfernen
 --------------------
 
-Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von einer Aufgabe wieder entfernt werden.
+Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von einem Inhalt wieder entfernt werden.
 
 **Beispiel-Request**:
 

@@ -141,6 +141,92 @@ class TestWatchersGet(SolrIntegrationTestCase):
         self.assertEqual(expected_json, browser.json['@components']['watchers'])
 
     @browsing
+    def test_get_watchers_for_documents(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+        center.add_watcher_to_resource(self.document, self.dossier_responsible.id, WATCHER_ROLE)
+        url = self.document.absolute_url() + '/@watchers'
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'referenced_users': [
+                {
+                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'fullname': u'Ziegler Robert',
+                    u'id': u'robert.ziegler'
+                }
+            ],
+            u'referenced_actors': [
+                {
+                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                    u'identifier': u'robert.ziegler'
+                }
+            ],
+            u'referenced_watcher_roles': [
+                {
+                    u'id': u'regular_watcher',
+                    u'title': u'Watcher'
+                }
+            ],
+            u'watchers_and_roles': {
+                u'robert.ziegler': [u'regular_watcher']
+            }
+        }
+
+        self.assertDictEqual(expected_json, browser.json)
+
+        browser.open(self.document, method='GET', headers=self.api_headers)
+        self.assertEqual({u'@id': url},
+                         browser.json['@components']['watchers'])
+        browser.open(self.document.absolute_url() + '?expand=watchers',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual(expected_json, browser.json['@components']['watchers'])
+
+    @browsing
+    def test_get_watchers_for_mails(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+        center.add_watcher_to_resource(self.mail_eml, self.dossier_responsible.id, WATCHER_ROLE)
+        url = self.mail_eml.absolute_url() + '/@watchers'
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'referenced_users': [
+                {
+                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'fullname': u'Ziegler Robert',
+                    u'id': u'robert.ziegler'
+                }
+            ],
+            u'referenced_actors': [
+                {
+                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                    u'identifier': u'robert.ziegler'
+                }
+            ],
+            u'referenced_watcher_roles': [
+                {
+                    u'id': u'regular_watcher',
+                    u'title': u'Watcher'
+                }
+            ],
+            u'watchers_and_roles': {
+                u'robert.ziegler': [u'regular_watcher']
+            }
+        }
+
+        self.assertDictEqual(expected_json, browser.json)
+
+        browser.open(self.mail_eml, method='GET', headers=self.api_headers)
+        self.assertEqual({u'@id': url},
+                         browser.json['@components']['watchers'])
+        browser.open(self.mail_eml.absolute_url() + '?expand=watchers',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual(expected_json, browser.json['@components']['watchers'])
+
+    @browsing
     def test_watchers_endpoint_supports_teams(self, browser):
         center = notification_center()
         self.login(self.regular_user, browser=browser)
@@ -278,6 +364,36 @@ class TestWatchersSolr(SolrIntegrationTestCase):
                          solr_data_for(self.inbox_forwarding, 'watchers'))
 
     @browsing
+    def test_post_watchers_for_document_adds_watcher_to_solr(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.assertIsNone(solr_data_for(self.document, 'watchers'))
+
+        browser.open(self.document, view='@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"userid": self.regular_user.getId()}))
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.document, 'watchers'))
+
+    @browsing
+    def test_post_watchers_for_mail_adds_watcher_to_solr(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.assertIsNone(solr_data_for(self.mail_eml, 'watchers'))
+
+        browser.open(self.mail_eml, view='@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"userid": self.regular_user.getId()}))
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.mail_eml, 'watchers'))
+
+    @browsing
     def test_delete_watchers_for_task(self, browser):
         self.login(self.regular_user, browser=browser)
         notification_center().add_watcher_to_resource(
@@ -310,6 +426,40 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         self.commit_solr()
 
         self.assertIsNone(solr_data_for(self.inbox_forwarding, 'watchers'))
+
+    @browsing
+    def test_delete_watchers_for_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.document, 'watchers'))
+
+        browser.open(self.document, view='@watchers',
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertIsNone(solr_data_for(self.document, 'watchers'))
+
+    @browsing
+    def test_delete_watchers_for_mail(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.mail_eml, self.regular_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+
+        self.assertEqual([self.regular_user.getId()],
+                         solr_data_for(self.mail_eml, 'watchers'))
+
+        browser.open(self.mail_eml, view='@watchers',
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        self.commit_solr()
+
+        self.assertIsNone(solr_data_for(self.mail_eml, 'watchers'))
 
 
 class TestWatchersPost(IntegrationTestCase):
@@ -385,6 +535,45 @@ class TestWatchersPost(IntegrationTestCase):
                           u'robert.ziegler': [u'task_issuer']},
                          browser.json['watchers_and_roles'])
 
+    @browsing
+    def test_post_watchers_for_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.document, view='@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({}, browser.json['watchers_and_roles'])
+        browser.open(self.document, view='@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"userid": self.regular_user.getId()}))
+
+        self.assertEqual(browser.status_code, 204)
+
+        browser.open(self.document, view='@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']},
+                         browser.json['watchers_and_roles'])
+
+    @browsing
+    def test_post_watchers_for_mail(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.mail_eml, view='@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({}, browser.json['watchers_and_roles'])
+        browser.open(self.mail_eml, view='@watchers', method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"userid": self.regular_user.getId()}))
+
+        self.assertEqual(browser.status_code, 204)
+
+        browser.open(self.mail_eml, view='@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']},
+                         browser.json['watchers_and_roles'])
+
 
 class TestWatchersDelete(IntegrationTestCase):
     features = ('activity', )
@@ -444,6 +633,36 @@ class TestWatchersDelete(IntegrationTestCase):
                          watchers_and_roles)
 
     @browsing
+    def test_delete_watchers_for_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = self.get_watchers_and_roles(self.document)
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.document, view='@watchers',
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        watchers_and_roles = self.get_watchers_and_roles(self.document)
+        self.assertEqual({}, watchers_and_roles)
+
+    @browsing
+    def test_delete_watchers_for_mail(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.mail_eml, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = self.get_watchers_and_roles(self.mail_eml)
+        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.mail_eml, view='@watchers',
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        watchers_and_roles = self.get_watchers_and_roles(self.mail_eml)
+        self.assertEqual({}, watchers_and_roles)
+
+    @browsing
     def test_delete_watchers_with_data_raises_bad_request(self, browser):
         self.login(self.regular_user, browser=browser)
         notification_center().add_watcher_to_resource(
@@ -487,6 +706,60 @@ class TestPossibleWatchers(IntegrationTestCase):
         self.assertEqual(expected_json, browser.json)
 
         center.add_watcher_to_resource(self.task, self.dossier_manager.getId(), WATCHER_ROLE)
+        browser.open(url, method='GET', headers=self.api_headers)
+        expected_json = {
+            u'@id': url,
+            u'items': [],
+            u'items_total': 0}
+
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_get_possible_watchers_for_document(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+        url = self.document.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'items': [{
+                u'title': u'Fr\xfchling F\xe4ivel (faivel.fruhling)',
+                u'token': u'faivel.fruhling'
+                }],
+            u'items_total': 1}
+
+        self.assertEqual(expected_json, browser.json)
+
+        center.add_watcher_to_resource(self.document, self.dossier_manager.getId(), WATCHER_ROLE)
+        browser.open(url, method='GET', headers=self.api_headers)
+        expected_json = {
+            u'@id': url,
+            u'items': [],
+            u'items_total': 0}
+
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_get_possible_watchers_for_mail(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+        url = self.mail_eml.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'items': [{
+                u'title': u'Fr\xfchling F\xe4ivel (faivel.fruhling)',
+                u'token': u'faivel.fruhling'
+                }],
+            u'items_total': 1}
+
+        self.assertEqual(expected_json, browser.json)
+
+        center.add_watcher_to_resource(self.mail_eml, self.dossier_manager.getId(), WATCHER_ROLE)
         browser.open(url, method='GET', headers=self.api_headers)
         expected_json = {
             u'@id': url,
