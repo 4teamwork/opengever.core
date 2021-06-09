@@ -1,6 +1,9 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 
@@ -41,6 +44,84 @@ class TestRepositoryPathSourceBinderSolr(SolrIntegrationTestCase):
 
         self.assertItemsEqual(
             ['source test document', 'source test proposal document'],
+            [term.title for term in source.search("source")])
+
+    def test_query_returns_all_reporoots_if_context_is_within_old_reporoot(self):
+        self.login(self.manager)
+
+        root_new = create(Builder('repository_root').having(title_en=u'source new repository'))
+        root_new.reindexObject()
+
+        branch_new = create(Builder('repository').within(root_new).having(title_en=u'source branch new'))
+        branch_new.reindexObject()
+
+        self.repository_root.title_en = u'source old repository'
+        self.repository_root.reindexObject()
+
+        self.document.title = u'source test document'
+        self.document.reindexObject()
+
+        self.proposaldocument.title = u'source test proposal document'
+        self.proposaldocument.reindexObject()
+
+        self.inbox_document.title = u'source test inbox document'
+        self.inbox_document.reindexObject()
+
+        self.private_document.title = u'source test private document'
+        self.private_document.reindexObject()
+        self.commit_solr()
+
+        source_binder = RepositoryPathSourceBinder()
+        source = source_binder(self.branch_repofolder)
+
+        self.assertEqual(
+            root_new,
+            PrimaryRepositoryRoot(self.branch_repofolder, self.request).get_primary_repository_root(),
+            "root_new should be the primary repository root")
+
+        self.assertItemsEqual(
+            [
+                'source old repository', 'source new repository', 'source test document',
+                '1. source branch new', 'source test inbox document',
+                'source test private document', 'source test proposal document'
+            ],
+            [term.title for term in source.search("source")])
+
+    def test_query_returns_only_primary_root_if_context_is_within_new_reporoot(self):
+        self.login(self.manager)
+
+        root_new = create(Builder('repository_root').having(title_en=u'source new repository'))
+        root_new.reindexObject()
+
+        branch_new = create(Builder('repository').within(root_new).having(title_en=u'source branch new'))
+        branch_new.reindexObject()
+
+        self.repository_root.title_en = u'source old repository'
+        self.repository_root.reindexObject()
+
+        self.document.title = u'source test document'
+        self.document.reindexObject()
+
+        self.proposaldocument.title = u'source test proposal document'
+        self.proposaldocument.reindexObject()
+
+        self.inbox_document.title = u'source test inbox document'
+        self.inbox_document.reindexObject()
+
+        self.private_document.title = u'source test private document'
+        self.private_document.reindexObject()
+        self.commit_solr()
+
+        source_binder = RepositoryPathSourceBinder()
+        source = source_binder(branch_new)
+
+        self.assertEqual(
+            root_new,
+            PrimaryRepositoryRoot(self.branch_repofolder, self.request).get_primary_repository_root(),
+            "root_new should be the primary repository root")
+
+        self.assertItemsEqual(
+            ['source new repository', '1. source branch new'],
             [term.title for term in source.search("source")])
 
 

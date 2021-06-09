@@ -5,12 +5,14 @@ from ftw.solr.query import escape
 from ftw.solr.query import make_query
 from opengever.base import interfaces
 from opengever.base import is_solr_feature_enabled
+from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.formwidget.contenttree.source import CustomFilter
 from plone.formwidget.contenttree.source import ObjPathSource
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.publisher.interfaces import NotFound
 
 
 class SolrObjPathSource(ObjPathSource):
@@ -130,19 +132,27 @@ class RepositoryPathSourceBinder(SolrObjPathSourceBinder):
 
     def __call__(self, context):
         """Set the path to the repository root.
+
+        If we have multiple repository roots and we are not within the primary
+        repository root, we set the path to the plone to let the user choose
+        between the new and the old repository root.
         """
+        primary_root = None
+        try:
+            primary_root = PrimaryRepositoryRoot(
+                context, context.REQUEST).get_primary_repository_root()
+        except (NotFound, IndexError):
+            pass
 
-        root_path = ''
         parent = context
+        root_path = '/'.join(parent.getPhysicalPath())
+        while not (
+                IPloneSiteRoot.providedBy(parent)
+                or (primary_root and primary_root.absolute_url() == parent.absolute_url())
+                or (not primary_root and parent.portal_type == 'opengever.repository.repositoryroot')
+                ):
 
-        while not IPloneSiteRoot.providedBy(parent):
-            if parent.portal_type == 'opengever.repository.repositoryroot':
-                root_path = '/'.join(parent.getPhysicalPath())
-                break
-            else:
-                parent = aq_parent(aq_inner(parent))
-
-        if not root_path:
+            parent = aq_parent(aq_inner(parent))
             root_path = '/'.join(parent.getPhysicalPath())
 
         if not self.navigation_tree_query:
