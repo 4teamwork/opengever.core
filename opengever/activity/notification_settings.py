@@ -243,6 +243,14 @@ NOTIFICATION_CONFIGURATION = [
             'digest_notification_roles': [WORKSPACE_MEMBER_ROLE],
         }
     },
+    {
+        'id': 'document-modified',
+        'title': _('document-modified', default=u'Document modified'),
+        'activities': [],
+        'default_settings': {
+            'badge_notification_roles': [WATCHER_ROLE],
+        }
+    },
 ]
 
 

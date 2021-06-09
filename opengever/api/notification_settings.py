@@ -67,6 +67,7 @@ class NotificationSettingsGet(Service):
             'task': not is_workspace_feature_enabled(),
             'watcher': not is_workspace_feature_enabled(),
             'workspace': is_workspace_feature_enabled() and is_todo_feature_enabled(),
+            'document': is_watcher_feature_enabled(),
         }
 
     def general_settings_visibility(self):
