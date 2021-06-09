@@ -58,6 +58,12 @@
   </records>
 
 {{% endif %}}
+{{% if setup.document_watcher %}}
+  <records interface="opengever.document.interfaces.IDocumentSettings">
+    <value key="watcher_feature_enabled">True</value>
+  </records>
+
+{{% endif %}}
 {{% if is_gever %}}
 {{% if setup.enable_meeting_feature %}}
   <record interface="opengever.meeting.interfaces.IMeetingSettings" field="is_feature_enabled">
