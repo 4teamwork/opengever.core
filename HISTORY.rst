@@ -8,6 +8,39 @@ Changelog
 
 .. towncrier release notes start
 
+2021.12.0 (2021-06-10)
+----------------------
+
+New features:
+
+
+- Add virusscan validation upon file download and upload. [njohner]
+- Add move_item action for tasks. [tinagerber]
+- Add reference_number_addendum field to repository root and use it in reference number. [tinagerber]
+- Allow to move contents from an old repository root to a new one. [elioschmutz]
+- Add description to task report and link title to task. [tinagerber]
+
+
+Bug fixes:
+
+
+- Fix SQLHypermediaBatch for undefined sort orders.
+- Add skip state to the list of finished task states. [phgross]
+- Ensure consistent inbox placeful workflow assignment. [deiferni]
+- Fix deleting agenda_items when document is already trashed.
+- Fix reference number generation and indexing when moving dossiers, containing subdossiers. [phgross]
+- Fix copy workspace document into a higher classified gever dossier. [elioschmutz]
+- Fixed moving dossier with a tasktemplate process. [phgross]
+
+
+Other changes:
+
+
+- The `path_parent` field query of the `@solrsearch` endpoint properly resolves paths relative to the virtual host url and joins multiple `path_parent` field queries with an OR operator. [elioschmutz]
+- Bump ftw.casauth to version 1.4.0 which provides support for cookie based authentication using REST API. [buchi]
+- Customize @login endpoint by adding support for cookie based authentication. [buchi]
+
+
 2021.11.1 (2021-05-28)
 ----------------------
 
