@@ -214,6 +214,21 @@ Beispiel für ein Suchabfrage mit Facetten für ``responsible`` und ``portal_typ
       "start": 0
     }
 
+
+Statistiken
+~~~~~~~~~~~
+- ``stats``: Muss auf ``true`` gesetzt sein damit Solr die Statistiken zurückgibt.
+- ``stats.field``: Feld für welches Solr Statistiken zurückgeben soll. Kann mehrmals angegeben werden.
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?stats=true&stats.field=filesize&stats.field=Creator HTTP/1.1
+
+Eine detaillierte Beschreibung der Stats Komponente ist im
+`Solr Reference Guide <https://solr.apache.org/guide/8_8/the-stats-component.html>`_
+zu finden.
+
+
 Pfadtiefe
 ~~~~~~~~~
 ``depth``: Limitierung der maximalen Pfadtiefe, relativ zum Kontext oder angegebener Pfad (mit ``fq=path:/path/to/container``)
