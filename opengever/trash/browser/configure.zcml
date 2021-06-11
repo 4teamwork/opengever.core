@@ -13,14 +13,14 @@
 
   <browser:page
       name="trashed"
-      for="opengever.trash.trash.ITrashableMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
       class=".trash.TrashView"
       permission="opengever.trash.TrashContent"
       />
 
   <browser:page
       name="untrashed"
-      for="opengever.trash.trash.ITrashableMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
       class=".trash.UntrashView"
       permission="opengever.trash.UntrashContent"
       />
