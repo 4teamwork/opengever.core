@@ -1,8 +1,10 @@
+from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.base.response import IResponseContainer
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
@@ -292,6 +294,33 @@ class TestTaskCreation(SolrIntegrationTestCase):
         "title": "Bitte Dokument reviewen",
         "task_type": "direct-execution",
     }
+
+    @browsing
+    def test_persists_default_value_for_deadline_when_passed(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.data.update({
+            "responsible": {
+                'token': "fa:{}".format(self.regular_user.id),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': self.secretariat_user.id,
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            },
+            "deadline": "2016-12-10"
+        })
+
+        with freeze(datetime(2016, 12, 5, 9, 40)), self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, json.dumps(self.data),
+                         method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        task, = children['added']
+
+        persisted_values = get_persisted_values_for_obj(task)
+        self.assertIn("deadline", persisted_values)
+        self.assertEqual(persisted_values["deadline"], date(2016, 12, 10))
 
     @browsing
     def test_with_responsible_containing_responsible_client(self, browser):
