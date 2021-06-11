@@ -1,6 +1,8 @@
 from ftw.upgrade import UpgradeStep
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 
 
 class IndexBlockedLocalRolesInSolrForRepositoryFoldersAndDossiers(UpgradeStep):
@@ -13,7 +15,9 @@ class IndexBlockedLocalRolesInSolrForRepositoryFoldersAndDossiers(UpgradeStep):
         query = {'object_provides': [
             IDossierMarker.__identifier__,
             IRepositoryFolder.__identifier__,
+            IDossierTemplateMarker.__identifier__,
+            IParticipationAwareMarker.__identifier__
         ]}
 
-        for obj in self.objects(query, 'Index blocked_local_roles field in solr.'):
-            obj.reindexObject(idxs=['blocked_local_roles'])
+        for obj in self.objects(query, 'Index blocked_local_roles and participation field in solr.'):
+            obj.reindexObject(idxs=['blocked_local_roles', 'participations'])
