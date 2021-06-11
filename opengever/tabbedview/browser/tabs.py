@@ -223,7 +223,7 @@ class Documents(BaseCatalogListingTab):
             'create_task',
             'create_proposal',
             'submit_additional_documents',
-            'trashed',
+            'trash_content',
             'move_items',
             'copy_items',
             'zip_selected',
@@ -384,7 +384,7 @@ class Trash(Documents):
     search_options = {'trashed': True}
 
     enabled_actions = [
-        'untrashed',
+        'untrash_content',
         'remove',
     ]
 

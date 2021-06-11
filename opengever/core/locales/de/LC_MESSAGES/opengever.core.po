@@ -395,11 +395,11 @@ msgid "remove"
 msgstr "Löschen"
 
 #: ./opengever/core/profiles/default/actions.xml
-msgid "trashed"
+msgid "trash_content"
 msgstr "In den Papierkorb verschieben"
 
 #: ./opengever/core/profiles/default/actions.xml
-msgid "untrashed"
+msgid "untrash_content"
 msgstr "Reaktivieren"
 
 #: ./opengever/core/profiles/default/actions.xml

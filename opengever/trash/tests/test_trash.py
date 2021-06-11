@@ -22,7 +22,7 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertFalse(ITrashed.providedBy(self.document))
         self.assertFalse(obj2brain(self.document).trashed)
@@ -36,7 +36,7 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertEquals(
             [u'Object {} has been moved to the trash.'.format(self.subdocument.title)],
@@ -49,7 +49,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -61,7 +61,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -74,7 +74,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -86,7 +86,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -99,7 +99,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -111,7 +111,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -124,7 +124,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -136,7 +136,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -149,7 +149,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -161,7 +161,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -174,7 +174,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -186,7 +186,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -197,7 +197,7 @@ class TestTrash(IntegrationTestCase):
     @browsing
     def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier, view="trashed")
+        browser.open(self.dossier, view="trash_content")
 
         self.assertEquals(['You have not selected any items.'],
                           error_messages())
@@ -211,7 +211,7 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertEquals(
             [u'Object {} is already in the trash.'.format(
@@ -227,7 +227,7 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertEquals(
             [u"Could not move document {} to the trash: it's currently checked out.".format(
@@ -242,7 +242,7 @@ class TestUntrash(IntegrationTestCase):
     @browsing
     def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier, view="untrashed")
+        browser.open(self.dossier, view="untrash_content")
 
         self.assertEquals(['You have not selected any items.'],
                           error_messages())
@@ -257,7 +257,7 @@ class TestUntrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="untrashed", data=data)
+        browser.open(self.dossier, view="untrash_content", data=data)
 
         self.assertFalse(ITrashed.providedBy(self.subdocument))
         self.assertFalse(obj2brain(self.subdocument).trashed)
@@ -273,7 +273,7 @@ class TestUntrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="untrashed", data=data)
+        browser.open(self.dossier, view="untrash_content", data=data)
 
         self.assertEquals(
             '{}#documents'.format(self.dossier.absolute_url()), browser.url)
@@ -290,7 +290,7 @@ class TestUntrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="untrashed", data=data)
+        browser.open(self.dossier, view="untrash_content", data=data)
 
         self.assertEquals(
             [u'Restoring object {} from trash is not allowed.'.format(self.subdocument.title)],
@@ -307,7 +307,7 @@ class TestUntrash(IntegrationTestCase):
         Remover([self.empty_document]).remove()
 
         # Removed document cannot be untrashed
-        browser.open(self.empty_dossier, view="untrashed", data=data)
+        browser.open(self.empty_dossier, view="untrash_content", data=data)
 
         self.assertTrue(ITrashed.providedBy(self.empty_document))
         self.assertEquals(
@@ -322,7 +322,7 @@ class TestUntrash(IntegrationTestCase):
         self.assertEqual(self.empty_document.active_state,
                          api.content.get_state(self.empty_document))
 
-        browser.open(self.empty_dossier, view="untrashed", data=data)
+        browser.open(self.empty_dossier, view="untrash_content", data=data)
         self.assertFalse(ITrashed.providedBy(self.empty_document))
 
 
@@ -335,7 +335,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -350,7 +350,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -368,7 +368,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.checkin_document(self.subdocument)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -388,7 +388,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -403,7 +403,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -418,7 +418,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -433,7 +433,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )

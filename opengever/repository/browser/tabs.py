@@ -8,7 +8,7 @@ class RepositoryFolderDocuments(Documents):
     disabled_actions = (
         'zip_selected',  # disabled because ZIP does not work on repository folders
         'send_as_email',  # target not available on repository folders
-        'trashed',  # target not available on repository folders
+        'trash_content',  # target not available on repository folders
     )
 
     @property

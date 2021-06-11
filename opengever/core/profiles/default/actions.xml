@@ -456,10 +456,10 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="trashed" meta_type="CMF Action" i18n:domain="opengever.core">
-      <property name="title" i18n:translate="">trashed</property>
+    <object name="trash_content" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">trash_content</property>
       <property name="description" i18n:translate="" />
-      <property name="url_expr">string:./trashed:method</property>
+      <property name="url_expr">string:./trash_content:method</property>
       <property name="icon_expr" />
       <property name="available_expr">object/@@folder_buttons_availability/is_trash_available</property>
       <property name="permissions">
@@ -468,10 +468,10 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="untrashed" meta_type="CMF Action" i18n:domain="opengever.core">
-      <property name="title" i18n:translate="">untrashed</property>
+    <object name="untrash_content" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">untrash_content</property>
       <property name="description" i18n:translate="" />
-      <property name="url_expr">string:./untrashed:method</property>
+      <property name="url_expr">string:./untrash_content:method</property>
       <property name="icon_expr" />
       <property name="available_expr">object/@@folder_buttons_availability/is_untrash_available</property>
       <property name="permissions">

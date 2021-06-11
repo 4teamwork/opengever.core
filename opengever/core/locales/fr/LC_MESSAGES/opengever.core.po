@@ -390,11 +390,11 @@ msgid "remove"
 msgstr "Effacer"
 
 #: ./opengever/core/profiles/default/actions.xml
-msgid "trashed"
+msgid "trash_content"
 msgstr "Déplacer dans la corbeille"
 
 #: ./opengever/core/profiles/default/actions.xml
-msgid "untrashed"
+msgid "untrash_content"
 msgstr "Réactiver"
 
 #: ./opengever/core/profiles/default/actions.xml

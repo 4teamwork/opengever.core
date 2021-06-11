@@ -12,14 +12,14 @@
       />
 
   <browser:page
-      name="trashed"
+      name="trash_content"
       for="plone.dexterity.interfaces.IDexterityContent"
       class=".trash.TrashView"
       permission="opengever.trash.TrashContent"
       />
 
   <browser:page
-      name="untrashed"
+      name="untrash_content"
       for="plone.dexterity.interfaces.IDexterityContent"
       class=".trash.UntrashView"
       permission="opengever.trash.UntrashContent"

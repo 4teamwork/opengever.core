@@ -242,7 +242,7 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
 
         data = self.make_path_param(self.document)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertEqual(
             [u"Could not move document Vertr\xe4gsentwurf to the trash: it's currently locked.".format(

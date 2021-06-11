@@ -169,7 +169,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
         data = {'paths:list': ['/'.join(self.private_document.getPhysicalPath())],
                 '_authenticator': createToken()}
 
-        browser.open(self.private_dossier, view="trashed", data=data)
+        browser.open(self.private_dossier, view="trash_content", data=data)
         self.assertEquals([u'Object Testdokum\xe4nt has been moved to the trash.'],
                           info_messages())
 

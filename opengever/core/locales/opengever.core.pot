@@ -393,11 +393,11 @@ msgid "remove"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
-msgid "trashed"
+msgid "trash_content"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
-msgid "untrashed"
+msgid "untrash_content"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml

@@ -481,12 +481,12 @@ msgstr "Delete"
 
 #. German translation: In den Papierkorb verschieben
 #: ./opengever/core/profiles/default/actions.xml
-msgid "trashed"
+msgid "trash_content"
 msgstr "Move to trash"
 
 #. German translation: Reaktivieren
 #: ./opengever/core/profiles/default/actions.xml
-msgid "untrashed"
+msgid "untrash_content"
 msgstr "Restore from trash"
 
 #. German translation: Mit Kommentar
