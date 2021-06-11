@@ -1,0 +1,5 @@
+<registry>
+  <records interface="ftw.mail.interfaces.IMailSettings">
+        <value key="unwrap_mail">False</value>
+  </records>
+</registry>
