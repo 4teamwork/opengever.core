@@ -9,6 +9,7 @@ from opengever.trash.remover import Remover
 from opengever.trash.trash import ITrashableMarker
 from opengever.trash.trash import ITrashed
 from opengever.trash.trash import ITrasher
+from opengever.trash.trash import TrashError
 from plone import api
 from plone.protect import createToken
 from zExceptions import Unauthorized
@@ -533,8 +534,9 @@ class TestTrasher(IntegrationTestCase):
         obj = self.empty_dossier
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_task_cannot_be_trashed(self):
@@ -542,24 +544,37 @@ class TestTrasher(IntegrationTestCase):
         obj = self.info_task
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_repofolder_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.empty_repofolder
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_disposition_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.disposition
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_proposal_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.proposal
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_template_folder_cannot_be_trashed(self):
         self.login(self.manager)
@@ -573,12 +588,20 @@ class TestTrasher(IntegrationTestCase):
     def test_dossier_template_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.dossiertemplate
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_workspace_root_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.workspace_root
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_workspace_cannot_be_trashed(self):
         self.login(self.manager)
@@ -594,55 +617,75 @@ class TestTrasher(IntegrationTestCase):
         obj = self.workspace_folder
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_todo_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.todo
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_todolist_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.todolist_general
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_workspace_meeting_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.workspace_meeting
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_private_folder_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.private_folder
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_private_dossier_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.private_dossier
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_inbox_container_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.inbox_container
-        self.assertFalse(ITrashableMarker.providedBy(obj))
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
 
     def test_inbox_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.inbox
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_forwarding_cannot_be_trashed(self):
@@ -650,6 +693,7 @@ class TestTrasher(IntegrationTestCase):
         obj = self.inbox_forwarding
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))

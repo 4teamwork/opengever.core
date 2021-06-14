@@ -1,6 +1,8 @@
 from AccessControl import Unauthorized
 from Acquisition import aq_inner, aq_parent
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
+from plone.dexterity.interfaces import IDexterityContent
 from plone.locking.interfaces import ILockable
 from Products.CMFCore.utils import _checkPermission
 from zope.component import adapter
@@ -69,20 +71,17 @@ class Trasher(object):
 
 
 @implementer(ITrasher)
-@adapter(ITrashableMarker)
-class DocumentTrasher(object):
+@adapter(IDexterityContent)
+class DefaultContentTrasher(object):
 
     def __init__(self, context):
         self.context = context
 
     def trash(self):
-        # check that document can be trashed
         self.verify_may_trash()
 
         alsoProvides(self.context, ITrashed)
 
-        # Trashed objects will be filtered from catalog search results by
-        # default via a monkey patch somewhere in opengever.base.monkey
         self.reindex()
         notify(TrashedEvent(self.context))
 
@@ -110,16 +109,6 @@ class DocumentTrasher(object):
                 raise TrashError('Already trashed')
             return False
 
-        if self.is_checked_out():
-            if raise_on_violations:
-                raise TrashError('Document checked out')
-            return False
-
-        if self.is_returned_excerpt():
-            if raise_on_violations:
-                raise TrashError('The document has been returned as excerpt')
-            return False
-
         if self.is_locked():
             if raise_on_violations:
                 raise TrashError('The document is locked')
@@ -133,7 +122,7 @@ class DocumentTrasher(object):
                 raise Unauthorized()
             return False
 
-        if not ITrashed.providedBy(self.context) or self.context.is_removed:
+        if not self.is_trashed() or self.is_removed():
             if raise_on_violations:
                 raise Unauthorized()
             return False
@@ -155,10 +144,44 @@ class DocumentTrasher(object):
                     _checkPermission('opengever.trash: Trash content', container)))
 
     def is_trashable(self):
-        return ITrashableMarker.providedBy(self.context)
+        return False
 
     def is_trashed(self):
         return ITrashed.providedBy(self.context)
+
+    def is_locked(self):
+        return ILockable(self.context).locked()
+
+    def is_removed(self):
+        return False
+
+
+@adapter(IBaseDocument)
+class DocumentTrasher(DefaultContentTrasher):
+    """An object which handles trashing/untrashing documents.
+    """
+
+    def verify_may_trash(self, raise_on_violations=True):
+        if not super(DocumentTrasher, self).verify_may_trash(raise_on_violations):
+            return False
+
+        if self.is_checked_out():
+            if raise_on_violations:
+                raise TrashError('Document checked out')
+            return False
+
+        if self.is_returned_excerpt():
+            if raise_on_violations:
+                raise TrashError('The document has been returned as excerpt')
+            return False
+
+        return True
+
+    def is_trashable(self):
+        return True
+
+    def is_removed(self):
+        return self.context.is_removed
 
     def is_checked_out(self):
         manager = queryMultiAdapter((self.context, self.context.REQUEST),
@@ -174,6 +197,3 @@ class DocumentTrasher(object):
             return False
 
         return submitted_proposal.get_excerpt() == self.context
-
-    def is_locked(self):
-        return ILockable(self.context).locked()
