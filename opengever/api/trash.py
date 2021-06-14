@@ -1,4 +1,4 @@
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.trash.trash import TrashError
 from plone.restapi.services import Service
 from zope.interface import alsoProvides
@@ -15,7 +15,7 @@ class Trash(Service):
         alsoProvides(self.request,
                      plone.protect.interfaces.IDisableCSRFProtection)
 
-        trasher = ITrashable(self.context)
+        trasher = ITrasher(self.context)
         try:
             trasher.trash()
         except TrashError as exc:
@@ -49,7 +49,7 @@ class Untrash(Service):
         alsoProvides(self.request,
                      plone.protect.interfaces.IDisableCSRFProtection)
 
-        trasher = ITrashable(self.context)
+        trasher = ITrasher(self.context)
         trasher.untrash()
 
         self.request.response.setStatus(204)

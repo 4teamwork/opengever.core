@@ -8,7 +8,7 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.protect import createToken
@@ -213,14 +213,14 @@ class TestPrivateDossierWorkflowSolr(SolrIntegrationTestCase):
     def test_remove_action_not_available_in_private_folder(self, browser):
         self.login(self.manager, browser=browser)
 
-        ITrashable(self.document).trash()
+        ITrasher(self.document).trash()
         self.commit_solr()
 
         browser.open(self.dossier, view="tabbed_view/listing?view_name=trash")
         self.assertItemsEqual([u'More actions \u25bc', 'Restore from trash', 'Delete'],
                               browser.css('#tabbedview-menu a').text)
 
-        ITrashable(self.private_document).trash()
+        ITrasher(self.private_document).trash()
         self.commit_solr()
 
         browser.open(self.private_dossier, view="tabbed_view/listing?view_name=trash")

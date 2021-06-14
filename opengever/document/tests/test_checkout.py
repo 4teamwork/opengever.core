@@ -17,7 +17,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
-from opengever.trash.trash import Trasher
+from opengever.trash.trash import ITrasher
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
@@ -334,7 +334,7 @@ class TestReverting(FunctionalTestCase):
         self.assertFalse(self.manager.is_revert_allowed())
 
     def test_revert_disallowed_when_trashed(self):
-        Trasher(self.document).trash()
+        ITrasher(self.document).trash()
         self.assertFalse(self.manager.is_revert_allowed())
 
     def test_manager_raises_unauthorized_when_reverting_disallowed(self):

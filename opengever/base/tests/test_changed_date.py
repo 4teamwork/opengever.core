@@ -9,7 +9,7 @@ from opengever.base.indexes import changed_indexer
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from plone import api
 from zope.component import getMultiAdapter
 import pytz
@@ -64,7 +64,7 @@ class TestChangedUpdateForDocument(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self, browser):
         self.login(self.manager, browser)
         with freeze(FREEZING_TIME):
-            ITrashable(self.document).trash()
+            ITrasher(self.document).trash()
             api.content.transition(obj=self.document, transition="document-transition-remove")
         self.assert_changed_value(self.document, FREEZING_TIME)
 
@@ -127,7 +127,7 @@ class TestChangedUpdateForMail(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self):
         self.login(self.manager)
         with freeze(FREEZING_TIME):
-            ITrashable(self.mail_eml).trash()
+            ITrasher(self.mail_eml).trash()
             api.content.transition(obj=self.mail_eml, transition="mail-transition-remove")
         self.assert_changed_value(self.mail_eml, FREEZING_TIME)
 

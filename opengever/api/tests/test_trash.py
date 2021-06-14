@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.trash.trash import ITrashed
 
 
@@ -69,7 +69,7 @@ class TestTrashAPI(IntegrationTestCase):
     @browsing
     def test_untrash_document(self, browser):
         self.login(self.regular_user, browser)
-        trasher = ITrashable(self.document)
+        trasher = ITrasher(self.document)
         trasher.trash()
         browser.open(self.document.absolute_url() + '/@untrash',
                      method='POST', headers={'Accept': 'application/json'})

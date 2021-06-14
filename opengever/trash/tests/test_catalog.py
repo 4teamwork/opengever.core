@@ -2,7 +2,7 @@ from datetime import datetime
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import index_data_for
-from opengever.trash.trash import Trasher
+from opengever.trash.trash import ITrasher
 from plone import api
 
 
@@ -15,16 +15,16 @@ class TestCatalog(IntegrationTestCase):
         self.login(self.regular_user)
 
         with freeze(datetime(2014, 5, 7, 12, 30)) as clock:
-            Trasher(self.subsubdocument).trash()
+            ITrasher(self.subsubdocument).trash()
             clock.forward(minutes=5)
 
-            Trasher(self.taskdocument).trash()
+            ITrasher(self.taskdocument).trash()
             clock.forward(minutes=5)
 
-            Trasher(self.document).trash()
+            ITrasher(self.document).trash()
             clock.forward(minutes=5)
 
-            Trasher(self.subdocument).trash()
+            ITrasher(self.subdocument).trash()
 
         catalog = api.portal.get_tool('portal_catalog')
         modified_idx = catalog._catalog.indexes['modified']

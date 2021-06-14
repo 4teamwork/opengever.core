@@ -11,7 +11,7 @@ from opengever.quota.interfaces import HARD_LIMIT_EXCEEDED
 from opengever.quota.interfaces import SOFT_LIMIT_EXCEEDED
 from opengever.quota.sizequota import ISizeQuota
 from opengever.testing import FunctionalTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
@@ -68,10 +68,10 @@ class TestSizeQuota(FunctionalTestCase):
                 shared_dossier.manage_cutObjects([doc2.getId()]))
 
         with self.assert_usage_change(user_folder, -3, 'trash document'):
-            ITrashable(doc2).trash()
+            ITrasher(doc2).trash()
 
         with self.assert_usage_change(user_folder, +3, 'restore document'):
-            ITrashable(doc2).untrash()
+            ITrasher(doc2).untrash()
 
         with self.assert_usage_change(user_folder, -3,
                                       'delete'):

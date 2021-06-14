@@ -32,4 +32,6 @@
       name="trashed"
       />
 
+  <adapter factory=".trash.DocumentTrasher" />
+
 </configure>

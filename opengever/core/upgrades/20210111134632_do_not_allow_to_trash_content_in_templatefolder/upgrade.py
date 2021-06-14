@@ -1,5 +1,5 @@
 from ftw.upgrade import UpgradeStep
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from plone import api
 
 
@@ -24,4 +24,4 @@ class DoNotAllowToTrashContentInTemplatefolder(UpgradeStep):
                               'object_provides': 'opengever.document.behaviors.IBaseDocument',
                               'trashed': True}
             for obj in self.objects(document_query, 'Untrash trashed documents in templatefolder'):
-                ITrashable(obj).untrash()
+                ITrasher(obj).untrash()

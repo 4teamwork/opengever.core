@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 import json
 
 
@@ -58,7 +58,7 @@ class TestWorkflowPost(IntegrationTestCase):
             'Remove GEVER content', roles=['Editor'], acquire=True)
 
         self.login(self.regular_user, browser=browser)
-        ITrashable(self.document).trash()
+        ITrasher(self.document).trash()
         # this soft-deletes the document so that `regular_user` no longer has
         # access
         browser.open(

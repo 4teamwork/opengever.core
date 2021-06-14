@@ -3,11 +3,13 @@ from Acquisition import aq_inner, aq_parent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone.locking.interfaces import ILockable
 from Products.CMFCore.utils import _checkPermission
+from zope.component import adapter
 from zope.component import queryMultiAdapter
 from zope.component.interfaces import IObjectEvent
 from zope.component.interfaces import ObjectEvent
 from zope.event import notify
 from zope.interface import alsoProvides
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import noLongerProvides
@@ -20,6 +22,11 @@ class ITrashable(Interface):
 
 class ITrashableMarker(Interface):
     """Marker interface for the trashable behavior.
+    """
+
+
+class ITrasher(Interface):
+    """Interface for the Trasher adapter.
     """
 
 
@@ -58,8 +65,12 @@ class TrashError(Exception):
 
 
 class Trasher(object):
-    """An object which handles trashing/untrashing documents.
-    """
+    pass
+
+
+@implementer(ITrasher)
+@adapter(ITrashableMarker)
+class DocumentTrasher(object):
 
     def __init__(self, context):
         self.context = context

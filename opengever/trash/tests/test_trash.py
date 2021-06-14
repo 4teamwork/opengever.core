@@ -6,9 +6,9 @@ from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.trash.remover import Remover
-from opengever.trash.trash import ITrashable
 from opengever.trash.trash import ITrashableMarker
 from opengever.trash.trash import ITrashed
+from opengever.trash.trash import ITrasher
 from plone import api
 from plone.protect import createToken
 from zExceptions import Unauthorized
@@ -450,7 +450,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.document
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -458,7 +458,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.mail_eml
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -466,7 +466,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.private_document
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -474,7 +474,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.private_document
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -482,7 +482,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.private_mail
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -490,7 +490,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.inbox_document
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -498,7 +498,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.inbox_forwarding_document
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -506,7 +506,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.taskdocument
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
@@ -514,7 +514,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.proposaldocument
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(Unauthorized):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -523,7 +523,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.docprops_template
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(Unauthorized):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -532,7 +532,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.empty_dossier
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(AttributeError):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -541,7 +541,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.info_task
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(AttributeError):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -565,7 +565,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.templates
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(Unauthorized):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -584,7 +584,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.workspace
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(Unauthorized):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -593,7 +593,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.workspace_folder
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(AttributeError):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -612,7 +612,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.workspace_meeting
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(AttributeError):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -626,7 +626,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.private_dossier
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(AttributeError):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -640,7 +640,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.inbox
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(AttributeError):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))
@@ -649,7 +649,7 @@ class TestTrasher(IntegrationTestCase):
         self.login(self.manager)
         obj = self.inbox_forwarding
         self.assertTrue(ITrashableMarker.providedBy(obj))
-        trasher = ITrashable(obj)
+        trasher = ITrasher(obj)
         with self.assertRaises(AttributeError):
             trasher.trash()
         self.assertFalse(ITrashed.providedBy(obj))

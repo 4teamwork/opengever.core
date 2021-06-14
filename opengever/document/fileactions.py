@@ -8,7 +8,7 @@ from opengever.document.interfaces import IFileActions
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.wopi.lock import get_lock_token
 from plone import api
@@ -101,14 +101,14 @@ class BaseDocumentFileActions(object):
         return False
 
     def is_trash_document_available(self):
-        trasher = ITrashable(self.context)
+        trasher = ITrasher(self.context)
         return (
             trasher.verify_may_trash(raise_on_violations=False)
             and not self.context.is_inside_a_template_folder()
             )
 
     def is_untrash_document_available(self):
-        trasher = ITrashable(self.context)
+        trasher = ITrasher(self.context)
         return trasher.verify_may_untrash(raise_on_violations=False)
 
     def is_new_task_from_document_available(self):

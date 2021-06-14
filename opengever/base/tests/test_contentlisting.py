@@ -3,7 +3,7 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
-from opengever.trash.trash import Trasher
+from opengever.trash.trash import ITrasher
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 
@@ -143,7 +143,7 @@ class TestOpengeverContentListing(IntegrationTestCase):
             IContentListingObject(obj2brain(self.document)).is_trashed,
             )
 
-        Trasher(self.document).trash()
+        ITrasher(self.document).trash()
 
         self.assertTrue(
             IContentListingObject(

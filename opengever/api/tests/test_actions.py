@@ -4,7 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -522,7 +522,7 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
     def test_untrashing_available_for_trashed_document(self, browser):
         self.login(self.regular_user, browser)
 
-        trasher = ITrashable(self.document)
+        trasher = ITrasher(self.document)
         trasher.trash()
 
         expected_file_actions = [
