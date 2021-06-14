@@ -9,9 +9,9 @@ from opengever.globalindex.model.task import Task
 from opengever.globalindex.model.task import TaskPrincipal
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
-from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
+from opengever.usermigration.base import BaseUserMigration
 from opengever.usermigration.exceptions import UserMigrationException
 from operator import itemgetter
 from sqlalchemy import select
@@ -22,18 +22,13 @@ import logging
 logger = logging.getLogger('opengever.usermigration')
 
 
-class OGDSUserReferencesMigrator(object):
+class OGDSUserReferencesMigrator(BaseUserMigration):
 
     def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
+        super(OGDSUserReferencesMigrator, self).__init__(
+            portal, principal_mapping, mode=mode, strict=strict
+        )
         self.session = create_session()
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "OGDSUserReferencesMigrator only supports 'move' mode")
-        self.mode = mode
-        self.strict = strict
 
         self.activity_actors_moved = []
         self.watcher_actors_moved = []
@@ -47,12 +42,6 @@ class OGDSUserReferencesMigrator(object):
         self.reminders_moved = []
         self.secretaries_moved = []
         self.proposal_issuers_moved = []
-
-    def _verify_user(self, userid):
-        ogds_user = ogds_service().fetch_user(userid)
-        if ogds_user is None:
-            msg = "User '{}' not found in OGDS!".format(userid)
-            raise UserMigrationException(msg)
 
     def _get_sql_rows_with_old_userid(self, table, column_name, old_userid):
         column = getattr(table.c, column_name)

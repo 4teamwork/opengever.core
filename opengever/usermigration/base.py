@@ -7,21 +7,36 @@ import logging
 logger = logging.getLogger('opengever.usermigration')
 
 
-class BasePloneObjectAttributesMigrator(object):
+class BaseUserMigration(object):
+
+    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+        if mode != 'move':
+            raise NotImplementedError(
+                u"Migration only supports 'move' mode"
+            )
+
+        self.portal = portal
+        self.principal_mapping = principal_mapping
+        self.mode = mode
+        self.strict = strict
+
+    def _verify_user(self, userid):
+        ogds_user = ogds_service().fetch_user(userid)
+        if ogds_user is None:
+            msg = u"User '{}' not found in OGDS!".format(userid)
+            raise UserMigrationException(msg)
+
+
+class BasePloneObjectAttributesMigrator(BaseUserMigration):
 
     fields_to_migrate = tuple()
     interface_to_query = None
     interface_to_adapt = None
 
     def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        if mode != 'move':
-            raise NotImplementedError(
-                "Plone object migrator only supports 'move' mode")
-
-        self.portal = portal
-        self.principal_mapping = principal_mapping
-        self.mode = mode
-        self.strict = strict
+        super(BasePloneObjectAttributesMigrator, self).__init__(
+            portal, principal_mapping, mode=mode, strict=strict
+        )
 
         self.to_reindex = set()
         self.moves = {
@@ -30,12 +45,8 @@ class BasePloneObjectAttributesMigrator(object):
         }
 
     def _verify_users(self):
-        # Verify all new users exist before doing anything
         for new_userid in self.principal_mapping.values():
-            ogds_user = ogds_service().fetch_user(new_userid)
-            if ogds_user is None:
-                msg = "User '{}' not found in OGDS!".format(new_userid)
-                raise UserMigrationException(msg)
+            self._verify_user(new_userid)
 
     @property
     def catalog_query(self):

@@ -4,8 +4,7 @@ Helpers for migrating user and group related data in dictstorage SQL tables.
 
 from ftw.dictstorage.sql import DictStorageModel
 from opengever.base.model import create_session
-from opengever.ogds.models.service import ogds_service
-from opengever.usermigration.exceptions import UserMigrationException
+from opengever.usermigration.base import BaseUserMigration
 import logging
 
 
@@ -19,7 +18,7 @@ def rreplace(s, old, new, maxreplace=-1):
     return new.join(s.rsplit(old, maxreplace))
 
 
-class DictstorageMigrator(object):
+class DictstorageMigrator(BaseUserMigration):
     """Migrates occurences of a username in dictstorage keys in SQL.
 
     Will replace the first occurence of the old user ID *from the right*
@@ -31,25 +30,10 @@ class DictstorageMigrator(object):
     """
 
     def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "OGDSMigrator only supports 'move' mode as of yet")
-        self.mode = mode
-
-        self.strict = strict
+        super(DictstorageMigrator, self).__init__(
+            portal, principal_mapping, mode=mode, strict=strict
+        )
         self.session = create_session()
-
-    def _verify_user(self, userid):
-        ogds_user = ogds_service().fetch_user(userid)
-        if ogds_user is None:
-            msg = "User '{}' not found in OGDS!".format(userid)
-            if self.strict:
-                raise UserMigrationException(msg)
-            else:
-                logger.warn(msg)
 
     def _migrate_dictstorage_keys(self):
         moved = []

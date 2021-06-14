@@ -3,6 +3,7 @@ Helpers for migrating user and group related data in OGDS SQL tables.
 """
 
 from opengever.ogds.models.service import ogds_service
+from opengever.usermigration.base import BaseUserMigration
 from opengever.usermigration.exceptions import UserMigrationException
 import logging
 
@@ -10,17 +11,7 @@ import logging
 logger = logging.getLogger('opengever.usermigration')
 
 
-class OGDSMigrator(object):
-
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "OGDSMigrator only supports 'move' mode")
-        self.mode = mode
-        self.strict = strict
+class OGDSMigrator(BaseUserMigration):
 
     def _verify_group(self, groupid):
         ogds_group = ogds_service().fetch_group(groupid)

@@ -1,4 +1,5 @@
 from opengever.base.touched import RECENTLY_TOUCHED_KEY
+from opengever.usermigration.base import BaseUserMigration
 from zope.annotation import IAnnotations
 import logging
 
@@ -6,17 +7,7 @@ import logging
 logger = logging.getLogger('opengever.usermigration')
 
 
-class RecentlyTouchedMigrator(object):
-
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "RecentlyTouchedMigrator only supports 'move' mode")
-        self.mode = mode
-        self.strict = strict
+class RecentlyTouchedMigrator(BaseUserMigration):
 
     def migrate(self):
         annotations = IAnnotations(self.portal)
