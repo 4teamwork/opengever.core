@@ -197,26 +197,30 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         self.assertEquals(u'Informatik: Doe John (john)',
                           result[0].title)
 
-    def test_users_in_result_are_ordered_by_user_lastname_and_firstname(self):
-        self.john = create(Builder('ogds_user')
-                           .id('user1')
-                           .having(firstname=u'cccc', lastname=u'aaaa')
-                           .assign_to_org_units([self.org_unit1]))
+    def test_users_in_result_are_ordered_by_user_lastname_firstname_and_orgunit_title(self):
+        create(Builder('ogds_user')
+               .id('user1')
+               .having(firstname=u'ccccbb', lastname=u'aaaa')
+               .assign_to_org_units([self.org_unit1]))
 
-        self.john = create(Builder('ogds_user')
-                           .id('user2')
-                           .having(firstname=u'bbbbb', lastname=u'aaaa')
-                           .assign_to_org_units([self.org_unit1]))
+        create(Builder('ogds_user')
+               .id('user2')
+               .having(firstname=u'bbbbb', lastname=u'aaaa')
+               .assign_to_org_units([self.org_unit1]))
 
-        self.john = create(Builder('ogds_user')
-                           .id('user3')
-                           .having(firstname=u'YYYY', lastname=u'ZZZZ')
-                           .assign_to_org_units([self.org_unit1]))
+        create(Builder('ogds_user')
+               .id('user3')
+               .having(firstname=u'YYYY', lastname=u'ZZZZbb')
+               .assign_to_org_units([self.org_unit1]))
+
+        create(Builder('ogds_user')
+               .id('user4')
+               .having(firstname=u'bbbbb', lastname=u'aaaa')
+               .assign_to_org_units([self.org_unit2]))
 
         self.assertEquals(
-            ['inbox:org-unit-1', 'org-unit-1:user2', 'org-unit-1:user1', 'org-unit-1:hugo',
-             'org-unit-1:john', 'org-unit-1:hans', 'org-unit-1:user3'],
-            [term.token for term in self.source.search('Informatik')])
+            ['org-unit-2:user4', 'org-unit-1:user2', 'org-unit-1:user1', 'org-unit-1:user3'],
+            [term.token for term in self.source.search('bb')])
 
     def test_search_for_orgunit(self):
         result = self.source.search('Informatik')
@@ -231,6 +235,16 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
 
         self.assertEquals(1, len(result), 'Expect 1 item')
         self.assertTermKeys([u'inbox:org-unit-1'], result)
+
+    def test_inboxes_are_ordered_by_title(self):
+        create(Builder('org_unit').id('an-inbox')
+               .having(title=u'ZZZ', admin_unit=self.admin_unit).with_default_groups())
+        create(Builder('org_unit').id('another-inbox')
+               .having(title=u'AAA', admin_unit=self.admin_unit).with_default_groups())
+
+        self.assertEquals(
+            ['inbox:another-inbox', 'inbox:org-unit-2', 'inbox:org-unit-1', 'inbox:an-inbox'],
+            [term.token for term in self.source.search('Inbox')])
 
     def test_return_no_search_result_for_inactive_orgunits(self):
         result = self.source.search('Steueramt')
@@ -410,6 +424,23 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         source = AllUsersInboxesAndTeamsSource(self.portal, include_teams=True)
         self.assertIn('team:1', source)
         self.assertNotIn('team:2', source)
+
+    def test_teams_are_ordered_by_title(self):
+        create(Builder('ogds_team')
+               .having(title=u'Projekt B',
+                       group=self.org_unit1.users_group,
+                       org_unit=self.org_unit1))
+        create(Builder('ogds_team')
+               .having(title=u'Projekt A',
+                       group=self.org_unit1.users_group,
+                       org_unit=self.org_unit1))
+        create(Builder('ogds_team')
+               .having(title=u'Projekt C',
+                       group=self.org_unit1.users_group,
+                       org_unit=self.org_unit1))
+
+        source = AllUsersInboxesAndTeamsSource(self.portal, include_teams=True)
+        self.assertTermKeys(['team:2', 'team:1', 'team:3'], source.search('Projekt'))
 
 
 class TestUsersContactsInboxesSource(SolrIntegrationTestCase):

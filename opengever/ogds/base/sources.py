@@ -22,6 +22,7 @@ from sqlalchemy import func
 from sqlalchemy import orm
 from sqlalchemy import sql
 from sqlalchemy.sql.expression import asc
+from sqlalchemy.sql.expression import desc
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -257,7 +258,8 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
         query = query.filter_by(active=True)
         query = query.order_by(asc(func.lower(User.lastname)),
-                               asc(func.lower(User.firstname)))
+                               asc(func.lower(User.firstname)),
+                               asc(func.lower(OrgUnit.title)))
 
         for user, orgunit in query:
             self.terms.append(
@@ -281,6 +283,8 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         query = OrgUnit.query
         query = query.filter(OrgUnit.enabled == True)  # noqa
         query = query.filter(OrgUnit.hidden == False)  # noqa
+        # Sort search results in descending order, as the terms are added in reverse order
+        query = query.order_by(desc(func.lower(OrgUnit.title)))
 
         if self.only_current_inbox:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -295,6 +299,8 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
     def _extend_terms_with_teams(self, text_filters):
         query = Team.query.filter(Team.active == True)  # noqa
+        # Sort search results in descending order, as the terms are added in reverse order
+        query = query.order_by(desc(func.lower(Team.title)))
         query = extend_query_with_textfilter(query, [Team.title], text_filters)
 
         for team in query:

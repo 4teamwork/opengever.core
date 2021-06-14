@@ -34,7 +34,7 @@ msgstr "Oui"
 #: ./opengever/ogds/base/actor.py
 #: ./opengever/ogds/base/sources.py
 msgid "inbox_label"
-msgstr "Boîte de réception"
+msgstr "Boîte de réception: ${client}"
 
 #. Default: "Current user"
 #: ./opengever/ogds/base/actor.py
