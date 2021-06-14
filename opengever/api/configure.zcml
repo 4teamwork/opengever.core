@@ -155,7 +155,7 @@
       method="POST"
       name="@trash"
       for="opengever.document.behaviors.IBaseDocument"
-      factory=".trash.Trash"
+      factory=".trash.TrashPost"
       permission="opengever.trash.TrashContent"
       />
 
@@ -163,7 +163,7 @@
       method="POST"
       name="@untrash"
       for="opengever.document.behaviors.IBaseDocument"
-      factory=".trash.Untrash"
+      factory=".trash.UntrashPost"
       permission="opengever.trash.UntrashContent"
       />
 

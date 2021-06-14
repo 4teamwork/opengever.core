@@ -6,7 +6,7 @@ from zope.interface import alsoProvides
 import plone.protect.interfaces
 
 
-class Trash(Service):
+class TrashPost(Service):
     """Trash a document"""
 
     def reply(self):
@@ -37,10 +37,10 @@ class Trash(Service):
                 }}
 
         self.request.response.setStatus(204)
-        return super(Trash, self).reply()
+        return super(TrashPost, self).reply()
 
 
-class Untrash(Service):
+class UntrashPost(Service):
     """Untrash a document"""
 
     def reply(self):
@@ -53,4 +53,4 @@ class Untrash(Service):
         trasher.untrash()
 
         self.request.response.setStatus(204)
-        return super(Untrash, self).reply()
+        return super(UntrashPost, self).reply()
