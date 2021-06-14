@@ -26,9 +26,9 @@ class PloneTasksMigrator(BasePloneObjectAttributesMigrator):
     interface_to_query = ITask
     interface_to_adapt = ITask
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+    def __init__(self, portal, principal_mapping, mode='move'):
         super(PloneTasksMigrator, self).__init__(
-            portal, principal_mapping, mode=mode, strict=strict
+            portal, principal_mapping, mode=mode
         )
 
         self.response_moves = {

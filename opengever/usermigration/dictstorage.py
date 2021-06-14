@@ -29,9 +29,9 @@ class DictstorageMigrator(BaseUserMigration):
     'user42' and 'other-user42'. That should be highly unlikely though.
     """
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+    def __init__(self, portal, principal_mapping, mode='move'):
         super(DictstorageMigrator, self).__init__(
-            portal, principal_mapping, mode=mode, strict=strict
+            portal, principal_mapping, mode=mode
         )
         self.session = create_session()
 

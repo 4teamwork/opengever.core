@@ -16,9 +16,9 @@ logger = logging.getLogger('opengever.usermigration')
 
 class DossierMigrator(BaseUserMigration):
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+    def __init__(self, portal, principal_mapping, mode='move'):
         super(DossierMigrator, self).__init__(
-            portal, principal_mapping, mode=mode, strict=strict
+            portal, principal_mapping, mode=mode
         )
         self.catalog = api.portal.get_tool('portal_catalog')
         self.dossiers_to_reindex = set()

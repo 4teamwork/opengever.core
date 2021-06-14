@@ -43,19 +43,12 @@ class TestDossierMigratorForResponsible(FunctionalTestCase):
         # Metadata should be up to date
         self.assertEquals('new.user', obj2brain(self.dossier).responsible)
 
-    def test_raises_if_strict_and_user_doesnt_exist(self):
+    def test_raises_if_user_doesnt_exist(self):
         migrator = DossierMigrator(
             self.portal, {'old.user': 'doesnt.exist'}, 'move')
 
         with self.assertRaises(UserMigrationException):
             migrator.migrate()
-
-    def test_doesnt_raise_if_not_strict_and_user_doesnt_exist(self):
-        migrator = DossierMigrator(
-            self.portal, {'old.user': 'doesnt.exist'}, 'move', strict=False)
-
-        migrator.migrate()
-        self.assertEquals('doesnt.exist', IDossier(self.dossier).responsible)
 
     def test_returns_proper_results_for_moving_responsibles(self):
         migrator = DossierMigrator(
@@ -136,22 +129,12 @@ class TestDossierMigratorForParticipants(FunctionalTestCase):
         self.assertEquals('contact:old-contact',
                           self.phandler.get_participations()[-1].contact)
 
-    def test_raises_if_strict_and_user_doesnt_exist(self):
+    def test_raises_if_user_doesnt_exist(self):
         migrator = DossierMigrator(
             self.portal, {'old.participant': 'doesnt.exist'}, 'move')
 
         with self.assertRaises(UserMigrationException):
             migrator.migrate()
-
-    def test_doesnt_raise_if_not_strict_and_user_doesnt_exist(self):
-        migrator = DossierMigrator(
-            self.portal, {'old.participant': 'doesnt.exist'},
-            'move', strict=False)
-
-        migrator.migrate()
-
-        self.assertEquals('doesnt.exist',
-                          self.phandler.get_participations()[0].contact)
 
     def test_returns_proper_results_for_moving_participants(self):
         migrator = DossierMigrator(

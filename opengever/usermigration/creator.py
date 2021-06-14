@@ -14,9 +14,9 @@ logger = logging.getLogger('opengever.usermigration')
 
 class CreatorMigrator(BaseUserMigration):
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+    def __init__(self, portal, principal_mapping, mode='move'):
         super(CreatorMigrator, self).__init__(
-            portal, principal_mapping, mode=mode, strict=strict
+            portal, principal_mapping, mode=mode
         )
 
         self.catalog = api.portal.get_tool('portal_catalog')
@@ -33,10 +33,7 @@ class CreatorMigrator(BaseUserMigration):
         users = pas_search.searchUsers(id=userid)
         if len(users) < 1:
             msg = "User '{}' not found in acl_users!".format(userid)
-            if self.strict:
-                raise UserMigrationException(msg)
-            else:
-                logger.warn(msg)
+            raise UserMigrationException(msg)
 
     def _migrate_creators(self, obj):
         if not hasattr(obj, 'creators'):

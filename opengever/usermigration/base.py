@@ -9,7 +9,7 @@ logger = logging.getLogger('opengever.usermigration')
 
 class BaseUserMigration(object):
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+    def __init__(self, portal, principal_mapping, mode='move'):
         if mode != 'move':
             raise NotImplementedError(
                 u"Migration only supports 'move' mode"
@@ -18,7 +18,6 @@ class BaseUserMigration(object):
         self.portal = portal
         self.principal_mapping = principal_mapping
         self.mode = mode
-        self.strict = strict
 
     def _verify_user(self, userid):
         ogds_user = ogds_service().fetch_user(userid)
@@ -33,9 +32,9 @@ class BasePloneObjectAttributesMigrator(BaseUserMigration):
     interface_to_query = None
     interface_to_adapt = None
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+    def __init__(self, portal, principal_mapping, mode='move'):
         super(BasePloneObjectAttributesMigrator, self).__init__(
-            portal, principal_mapping, mode=mode, strict=strict
+            portal, principal_mapping, mode=mode
         )
 
         self.to_reindex = set()

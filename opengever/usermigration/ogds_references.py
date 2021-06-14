@@ -24,9 +24,9 @@ logger = logging.getLogger('opengever.usermigration')
 
 class OGDSUserReferencesMigrator(BaseUserMigration):
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
+    def __init__(self, portal, principal_mapping, mode='move'):
         super(OGDSUserReferencesMigrator, self).__init__(
-            portal, principal_mapping, mode=mode, strict=strict
+            portal, principal_mapping, mode=mode
         )
         self.session = create_session()
 
