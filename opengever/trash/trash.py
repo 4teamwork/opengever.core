@@ -17,11 +17,13 @@ from zope.interface import Interface
 from zope.interface import noLongerProvides
 
 
+# XXX: Deprecated interface.
 class ITrashable(Interface):
     """Interface proveded by trashable content.
     """
 
 
+# XXX: Deprecated interface.
 class ITrashableMarker(Interface):
     """Marker interface for the trashable behavior.
     """
@@ -64,10 +66,6 @@ class UntrashedEvent(ObjectEvent):
 
 class TrashError(Exception):
     """An error that occurs during a trash/untrash operation."""
-
-
-class Trasher(object):
-    pass
 
 
 @implementer(ITrasher)

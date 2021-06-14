@@ -24,7 +24,6 @@
     <element value="opengever.document.behaviors.metadata.IDocumentMetadata" />
     <element value="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle" />
     <element value="opengever.mail.mail.IOGMail" />
-    <element value="opengever.trash.trash.ITrashable" />
     <element
         value="plone.app.content.interfaces.INameFromTitle"
         remove="True"

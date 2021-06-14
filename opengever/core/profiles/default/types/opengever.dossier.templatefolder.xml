@@ -34,7 +34,6 @@
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
-    <element value="opengever.trash.trash.ITrashable" />
   </property>
 
   <!-- View information -->

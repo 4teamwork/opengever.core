@@ -93,7 +93,6 @@ EXPECTED_INTERFACES = [
     'opengever.sharing.behaviors.IDossier',
     'opengever.task.reminder.interfaces.IReminderSupport',
     'opengever.task.task.ITask',
-    'opengever.trash.trash.ITrashableMarker',
     'persistent.interfaces.IPersistent',
     'plone.app.lockingbehavior.behaviors.ILocking',
     'plone.app.relationfield.interfaces.IDexterityHasRelations',

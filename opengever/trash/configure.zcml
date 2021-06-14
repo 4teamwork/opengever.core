@@ -18,15 +18,6 @@
 
   <include package=".browser" />
 
-  <plone:behavior
-      title="ITrashable Behavior"
-      description="Opengever trash behavior"
-      provides="opengever.trash.trash.ITrashable"
-      factory="opengever.trash.trash.Trasher"
-      marker="opengever.trash.trash.ITrashableMarker"
-      for="plone.dexterity.interfaces.IDexterityContent"
-      />
-
   <adapter
       factory=".indexers.trashed_indexer"
       name="trashed"
