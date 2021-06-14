@@ -1,0 +1,1 @@
+Bump ftw.casauth to version 1.4.1 which includes a fix for authenticating the wrong user if an invalid ticket was supplied. [buchi]
