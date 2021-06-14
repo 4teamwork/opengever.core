@@ -6,10 +6,12 @@ from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.trash.remover import Remover
+from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrashableMarker
 from opengever.trash.trash import ITrashed
 from plone import api
-from plone.locking.interfaces import ILockable
 from plone.protect import createToken
+from zExceptions import Unauthorized
 
 
 class TestTrash(IntegrationTestCase):
@@ -440,3 +442,214 @@ class TestTrashWithBumblebee(IntegrationTestCase):
             ['This email was moved to the trash.'],
             browser.css('.portalMessage.warning dd').text,
         )
+
+
+class TestTrasher(IntegrationTestCase):
+
+    def test_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.document
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_mail_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.mail_eml
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_private_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_document
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_private_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_document
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_private_mail_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_mail
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_inbox_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_document
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_forwarding_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_forwarding_document
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_task_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.taskdocument
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_proposal_document_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.proposaldocument
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(Unauthorized):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_document_template_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.docprops_template
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(Unauthorized):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_dossier_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.empty_dossier
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(AttributeError):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_task_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.info_task
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(AttributeError):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_repofolder_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.empty_repofolder
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_disposition_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.disposition
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_proposal_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.proposal
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_template_folder_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.templates
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(Unauthorized):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_dossier_template_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.dossiertemplate
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_workspace_root_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace_root
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_workspace_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(Unauthorized):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_workspace_folder_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace_folder
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(AttributeError):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_todo_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.todo
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_todolist_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.todolist_general
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_workspace_meeting_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace_meeting
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(AttributeError):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_private_folder_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_folder
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_private_dossier_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_dossier
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(AttributeError):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_inbox_container_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_container
+        self.assertFalse(ITrashableMarker.providedBy(obj))
+
+    def test_inbox_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(AttributeError):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_forwarding_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_forwarding
+        self.assertTrue(ITrashableMarker.providedBy(obj))
+        trasher = ITrashable(obj)
+        with self.assertRaises(AttributeError):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
