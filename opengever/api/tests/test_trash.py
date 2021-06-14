@@ -100,3 +100,11 @@ class TestTrashAPI(IntegrationTestCase):
         self.assertEqual(
             browser.json[u'message'],
             u'You are not authorized to access this resource.')
+
+    @browsing
+    def test_untrashing_non_trashed_object_raises_unathorized(self, browser):
+        self.login(self.manager, browser=browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(self.document.absolute_url() + '/@untrash',
+                         method='POST', headers={'Accept': 'application/json'})

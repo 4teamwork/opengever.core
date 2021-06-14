@@ -162,7 +162,7 @@
   <plone:service
       method="POST"
       name="@untrash"
-      for="opengever.document.behaviors.IBaseDocument"
+      for="plone.dexterity.interfaces.IDexterityContent"
       factory=".trash.UntrashPost"
       permission="opengever.trash.UntrashContent"
       />
