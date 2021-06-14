@@ -43,6 +43,18 @@ class TestTrashAPI(IntegrationTestCase):
             u'Cannot trash a checked-out document')
 
     @browsing
+    def test_trashing_non_trashable_object_raises_bad_request(self, browser):
+        self.login(self.manager, browser=browser)
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.branch_repofolder.absolute_url() + '/@trash',
+                         method='POST', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            browser.json[u'error'][u'message'],
+            u'Object is not trashable')
+
+    @browsing
     def test_trash_document_without_permission_gives_401(self, browser):
         self.login(self.regular_user, browser)
 

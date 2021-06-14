@@ -154,7 +154,7 @@
   <plone:service
       method="POST"
       name="@trash"
-      for="opengever.document.behaviors.IBaseDocument"
+      for="plone.dexterity.interfaces.IDexterityContent"
       factory=".trash.TrashPost"
       permission="opengever.trash.TrashContent"
       />
