@@ -236,6 +236,19 @@ class TestTrash(IntegrationTestCase):
         self.assertEquals(
             '{}#documents'.format(self.dossier.absolute_url()), browser.url)
 
+    @browsing
+    def test_trashing_non_trashable_item_is_not_possible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        data = self.make_path_param(self.task)
+        data['_authenticator'] = createToken()
+        browser.open(self.dossier, view="trash_content", data=data)
+        self.assertEquals(
+            [u'The object {} is not trashable.'.format(self.task.title)],
+            error_messages())
+        self.assertEquals(
+            '{}#documents'.format(self.dossier.absolute_url()), browser.url)
+
 
 class TestUntrash(IntegrationTestCase):
 

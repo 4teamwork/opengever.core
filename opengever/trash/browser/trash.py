@@ -41,6 +41,10 @@ class TrashView(BrowserView):
                         msg = _(
                             u'could not trash the object ${obj}, it is locked.',
                             mapping={'obj': obj.Title().decode('utf-8')})
+                    elif exc.message == 'Not trashable':
+                        msg = _(
+                            u'${obj} is not trashable.',
+                            mapping={'obj': obj.Title().decode('utf-8')})
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
                 except Unauthorized:
