@@ -118,6 +118,13 @@ class DefaultContentTrasher(object):
         return True
 
     def verify_may_untrash(self, raise_on_violations=True):
+        if self.is_parent_trashed():
+            if raise_on_violations:
+                raise Unauthorized()
+            return False
+        return self._verify_may_untrash(raise_on_violations)
+
+    def _verify_may_untrash(self, raise_on_violations=True):
         if not self.check_untrash_permission():
             if raise_on_violations:
                 raise Unauthorized()
@@ -155,6 +162,10 @@ class DefaultContentTrasher(object):
 
     def is_removed(self):
         return False
+
+    def is_parent_trashed(self):
+        container = aq_parent(aq_inner(self.context))
+        return ITrasher(container).is_trashed()
 
 
 @adapter(IBaseDocument)
@@ -213,11 +224,12 @@ class WorkspaceFolderTrasher(DefaultContentTrasher):
                 return False
         return True
 
-    def verify_may_untrash(self, raise_on_violations=True):
-        if not super(WorkspaceFolderTrasher, self).verify_may_untrash(raise_on_violations):
+    def _verify_may_untrash(self, raise_on_violations=True):
+        if not super(WorkspaceFolderTrasher, self)._verify_may_untrash(raise_on_violations):
             return False
+
         for obj in self.context.contentValues():
-            if not ITrasher(obj).verify_may_untrash(raise_on_violations):
+            if not ITrasher(obj)._verify_may_untrash(raise_on_violations):
                 return False
         return True
 

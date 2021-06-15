@@ -796,3 +796,25 @@ class TestWorkspaceFolderTrasher(IntegrationTestCase):
 
         with self.assertRaises(Unauthorized):
             trasher.untrash()
+
+    def test_cannot_untrash_object_with_trashed_parent(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+        self.assertTrue(trasher.verify_may_untrash())
+
+        subfolder_trasher = ITrasher(subfolder)
+        with self.assertRaises(Unauthorized):
+            subfolder_trasher.verify_may_untrash()
+
+        document_trasher = ITrasher(self.workspace_folder_document)
+        with self.assertRaises(Unauthorized):
+            document_trasher.verify_may_untrash()
+
+        noLongerProvides(self.workspace_folder, ITrashed)
+        self.assertTrue(subfolder_trasher.verify_may_untrash())
+        self.assertTrue(document_trasher.verify_may_untrash())
