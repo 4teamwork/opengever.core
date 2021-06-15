@@ -11,10 +11,12 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.wopi.lock import get_lock_token
+from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
 from plone.locking.interfaces import ILockable
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.component import queryAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -100,14 +102,14 @@ class BaseDocumentFileActions(object):
     def is_revert_to_version_action_available(self):
         return False
 
-    def is_trash_document_available(self):
+    def is_trash_context_action_available(self):
         trasher = ITrasher(self.context)
         return (
             trasher.verify_may_trash(raise_on_violations=False)
             and not self.context.is_inside_a_template_folder()
             )
 
-    def is_untrash_document_available(self):
+    def is_untrash_context_action_available(self):
         trasher = ITrasher(self.context)
         return trasher.verify_may_untrash(raise_on_violations=False)
 
@@ -268,3 +270,21 @@ class DocumentFileActions(BaseDocumentFileActions):
         if self.context.is_locked():
             return False
         return True
+
+
+@implementer(IFileActions)
+@adapter(IWorkspaceFolder, Interface)
+class WorkspaceFolderFileActions(object):
+    """Define availability for actions and action sets on IWorkspaceFolder.
+    """
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def is_trash_context_action_available(self):
+        trasher = queryAdapter(self.context, ITrasher)
+        return trasher and trasher.verify_may_trash(raise_on_violations=False)
+
+    def is_untrash_context_action_available(self):
+        trasher = queryAdapter(self.context, ITrasher)
+        return trasher and trasher.verify_may_untrash(raise_on_violations=False)

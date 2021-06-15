@@ -427,7 +427,7 @@ class TestOtherWriteActionsDisabledInReadOnlyAPI(IntegrationTestCase, APITestMix
         with ZODBStorageInReadonlyMode():
             actions = self.get_actions(browser, self.document)
 
-        self.assertNotIn('trash_document', self.action_ids(actions['file_actions']))
+        self.assertNotIn('trash_context', self.action_ids(actions['file_actions']))
 
     @browsing
     def test_cant_set_own_properties_in_ro_mode_via_api(self, browser):

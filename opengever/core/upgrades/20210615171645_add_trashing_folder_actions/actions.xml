@@ -1,0 +1,21 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <object name="file_actions" meta_type="CMF Action Category">
+
+    <object name="trash_context" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="label_trash_context">Trash</property>
+      <property name="available_expr">object/@@file_actions_availability/is_trash_context_action_available</property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="untrash_context" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="label_untrash_context">Untrash</property>
+      <property name="available_expr">object/@@file_actions_availability/is_untrash_context_action_available</property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="trash_document" meta_type="CMF Action" remove="true"></object>
+    <object name="untrash_document" meta_type="CMF Action" remove="true"></object>
+
+  </object>
+</object>

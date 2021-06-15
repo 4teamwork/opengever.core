@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-04-27 08:43+0000\n"
+"POT-Creation-Date: 2021-06-17 08:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,6 +191,7 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200909160057_add_move_item_action/actions.xml
+#: ./opengever/core/upgrades/20210525150331_add_move_item_action_for_tasks/actions.xml
 msgid "Move Item"
 msgstr ""
 
@@ -379,6 +380,18 @@ msgstr ""
 msgid "eCH-0147 Import"
 msgstr ""
 
+#. Default: "Trash"
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210615171645_add_trashing_folder_actions/actions.xml
+msgid "label_trash_context"
+msgstr ""
+
+#. Default: "Untrash"
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210615171645_add_trashing_folder_actions/actions.xml
+msgid "label_untrash_context"
+msgstr ""
+
 msgid "opengever.document.document"
 msgstr ""
 
@@ -389,10 +402,12 @@ msgid "opengever.task.task"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210430142921_disable_remove_action_for_workspaces/actions.xml
 msgid "remove"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210611160146_rename_trashed_view/actions.xml
 msgid "trash_content"
 msgstr ""
 

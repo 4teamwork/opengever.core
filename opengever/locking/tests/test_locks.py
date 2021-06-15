@@ -173,7 +173,7 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
             u'oc_direct_checkout',
             u'download_copy',
             u'attach_to_email',
-            u'trash_document',
+            u'trash_context',
             u'new_task_from_document']
 
         self.assertEqual(

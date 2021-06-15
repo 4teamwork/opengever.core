@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-04-27 08:43+0000\n"
+"POT-Creation-Date: 2021-06-17 08:50+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -229,6 +229,7 @@ msgstr "Meeting Template"
 #. German translation: Verschieben
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20200909160057_add_move_item_action/actions.xml
+#: ./opengever/core/upgrades/20210525150331_add_move_item_action_for_tasks/actions.xml
 msgid "Move Item"
 msgstr "Move item"
 
@@ -462,6 +463,18 @@ msgstr "eCH-0147 export"
 msgid "eCH-0147 Import"
 msgstr "eCH-0147 import"
 
+#. Default: "Trash"
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210615171645_add_trashing_folder_actions/actions.xml
+msgid "label_trash_context"
+msgstr "Move to trash"
+
+#. Default: "Untrash"
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210615171645_add_trashing_folder_actions/actions.xml
+msgid "label_untrash_context"
+msgstr "Restore from trash"
+
 #. German translation: Dokument
 msgid "opengever.document.document"
 msgstr "Document"
@@ -476,11 +489,13 @@ msgstr "Task"
 
 #. German translation: Löschen
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210430142921_disable_remove_action_for_workspaces/actions.xml
 msgid "remove"
 msgstr "Delete"
 
 #. German translation: In den Papierkorb verschieben
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210611160146_rename_trashed_view/actions.xml
 msgid "trash_content"
 msgstr "Move to trash"
 
