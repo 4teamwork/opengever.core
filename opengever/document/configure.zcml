@@ -222,6 +222,24 @@
       handler=".subscribers.set_copyname"
       />
 
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.author_or_title_changed"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectRevertedToVersion"
+      handler=".handlers.document_version_created"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.document_version_created"
+      />
+
   <adapter
       for="opengever.document.document.IDocumentSchema"
       factory=".webdav.DocumentReadFile"

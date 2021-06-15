@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-03-01 18:36+0000\n"
+"POT-Creation-Date: 2021-06-15 06:28+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -715,6 +715,21 @@ msgstr "Keine Datei"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
 msgstr "Dieses Dokumentformat wird vom Office Connector nicht unterstützt und kann deshalb nicht direkt bearbeitet werden."
+
+#. Default: "Author changed by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_author_changed"
+msgstr "Autor geändert durch ${user}"
+
+#. Default: "Title changed by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_title_changed"
+msgstr "Titel geändert durch ${user}"
+
+#. Default: "New document version created by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_version_created"
+msgstr "Neue Dokumentversion erstellt durch ${user}"
 
 #. Default: "Save PDF of ${title} under ${destination}"
 #: ./opengever/document/browser/save_pdf_document_under.py

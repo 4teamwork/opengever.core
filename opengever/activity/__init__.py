@@ -175,4 +175,13 @@ ACTIVITY_TRANSLATIONS = {
     'todo-modified': _(
         'todo-modified',
         default=u'ToDo modified'),
+    'document-author-changed': _(
+        'document-author-changed',
+        default=u'Document author changed'),
+    'document-title-changed': _(
+        'document-title-changed',
+        default=u'Document title changed'),
+    'document-version-created': _(
+        'document-version-created',
+        default=u'New document version created'),
 }

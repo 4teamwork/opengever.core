@@ -103,9 +103,24 @@ msgstr ""
 msgid "disposition-transition-refuse"
 msgstr ""
 
+#. Default: "Document author changed"
+#: ./opengever/activity/__init__.py
+msgid "document-author-changed"
+msgstr ""
+
 #. Default: "Document modified"
 #: ./opengever/activity/notification_settings.py
 msgid "document-modified"
+msgstr ""
+
+#. Default: "Document title changed"
+#: ./opengever/activity/__init__.py
+msgid "document-title-changed"
+msgstr ""
+
+#. Default: "New document version created"
+#: ./opengever/activity/__init__.py
+msgid "document-version-created"
 msgstr ""
 
 #. Default: "Overdue dossier"

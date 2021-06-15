@@ -246,7 +246,9 @@ NOTIFICATION_CONFIGURATION = [
     {
         'id': 'document-modified',
         'title': _('document-modified', default=u'Document modified'),
-        'activities': [],
+        'activities': ['document-title-changed',
+                       'document-author-changed',
+                       'document-version-created'],
         'default_settings': {
             'badge_notification_roles': [WATCHER_ROLE],
         }

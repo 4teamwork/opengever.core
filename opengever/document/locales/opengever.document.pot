@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-01 18:36+0000\n"
+"POT-Creation-Date: 2021-06-15 06:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -709,6 +709,21 @@ msgstr ""
 #. Default: "Office connector unsupported type"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
+msgstr ""
+
+#. Default: "Author changed by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_author_changed"
+msgstr ""
+
+#. Default: "Title changed by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_title_changed"
+msgstr ""
+
+#. Default: "New document version created by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_version_created"
 msgstr ""
 
 #. Default: "Save PDF of ${title} under ${destination}"

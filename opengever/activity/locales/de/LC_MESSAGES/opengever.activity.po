@@ -103,10 +103,25 @@ msgstr "Zur Archivierung angeboten"
 msgid "disposition-transition-refuse"
 msgstr "Angebot abgelehnt"
 
+#. Default: "Document author changed"
+#: ./opengever/activity/__init__.py
+msgid "document-author-changed"
+msgstr "Autor des Dokuments geändert"
+
 #. Default: "Document modified"
 #: ./opengever/activity/notification_settings.py
 msgid "document-modified"
 msgstr "Dokument verändert"
+
+#. Default: "Document title changed"
+#: ./opengever/activity/__init__.py
+msgid "document-title-changed"
+msgstr "Titel des Dokuments geändert"
+
+#. Default: "New document version created"
+#: ./opengever/activity/__init__.py
+msgid "document-version-created"
+msgstr "Neue Dokumentversion erstellt"
 
 #. Default: "Overdue dossier"
 #: ./opengever/activity/__init__.py
