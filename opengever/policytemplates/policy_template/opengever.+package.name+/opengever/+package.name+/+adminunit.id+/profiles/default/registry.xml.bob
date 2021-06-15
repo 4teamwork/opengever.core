@@ -9,6 +9,10 @@
     <value key="is_auto_refresh_enabled">{{{setup.bumblebee_auto_refresh}}}</value>
   </records>
 
+  <records interface="ftw.mail.interfaces.IMailSettings">
+    <value key="unwrap_mail">False</value>
+  </records>
+
   <records interface="opengever.base.interfaces.ISearchSettings">
     <value key="use_solr">True</value>
   </records>
