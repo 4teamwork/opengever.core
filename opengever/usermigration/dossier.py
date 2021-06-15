@@ -6,8 +6,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
-from opengever.ogds.models.service import ogds_service
-from opengever.usermigration.exceptions import UserMigrationException
+from opengever.usermigration.base import BaseUserMigration
 from plone import api
 import logging
 
@@ -15,18 +14,12 @@ import logging
 logger = logging.getLogger('opengever.usermigration')
 
 
-class DossierMigrator(object):
+class DossierMigrator(BaseUserMigration):
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "DossierMigrator only supports 'move' mode as of yet")
-        self.mode = mode
-
-        self.strict = strict
+    def __init__(self, portal, principal_mapping, mode='move'):
+        super(DossierMigrator, self).__init__(
+            portal, principal_mapping, mode=mode
+        )
         self.catalog = api.portal.get_tool('portal_catalog')
         self.dossiers_to_reindex = set()
 
@@ -36,15 +29,6 @@ class DossierMigrator(object):
 
         for brain in dossier_brains:
             yield brain.getObject()
-
-    def _verify_user(self, userid):
-        ogds_user = ogds_service().fetch_user(userid)
-        if ogds_user is None:
-            msg = "User '{}' not found in OGDS!".format(userid)
-            if self.strict:
-                raise UserMigrationException(msg)
-            else:
-                logger.warn(msg)
 
     def _migrate_responsible(self, dossier):
         moved = []

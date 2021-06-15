@@ -2,6 +2,7 @@
 Helper for migrating creators on Dexterity objects.
 """
 
+from opengever.usermigration.base import BaseUserMigration
 from opengever.usermigration.exceptions import UserMigrationException
 from plone import api
 from zope.component import getMultiAdapter
@@ -11,18 +12,13 @@ import logging
 logger = logging.getLogger('opengever.usermigration')
 
 
-class CreatorMigrator(object):
+class CreatorMigrator(BaseUserMigration):
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
-        self.principal_mapping = principal_mapping
+    def __init__(self, portal, principal_mapping, mode='move'):
+        super(CreatorMigrator, self).__init__(
+            portal, principal_mapping, mode=mode
+        )
 
-        if mode != 'move':
-            raise NotImplementedError(
-                "CreatorMigrator only supports 'move' mode as of yet")
-        self.mode = mode
-
-        self.strict = strict
         self.catalog = api.portal.get_tool('portal_catalog')
         self.acl_users = api.portal.get_tool('acl_users')
 
@@ -37,10 +33,7 @@ class CreatorMigrator(object):
         users = pas_search.searchUsers(id=userid)
         if len(users) < 1:
             msg = "User '{}' not found in acl_users!".format(userid)
-            if self.strict:
-                raise UserMigrationException(msg)
-            else:
-                logger.warn(msg)
+            raise UserMigrationException(msg)
 
     def _migrate_creators(self, obj):
         if not hasattr(obj, 'creators'):

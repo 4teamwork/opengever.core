@@ -65,20 +65,12 @@ class TestCreatorMigrator(FunctionalTestCase):
         self.assertEquals('new.user', obj2brain(self.dossier).Creator)
         self.assertEquals('new.user', obj2brain(self.doc).Creator)
 
-    def test_raises_if_strict_and_user_doesnt_exist(self):
+    def test_raises_if_user_doesnt_exist(self):
         migrator = CreatorMigrator(
             self.portal, {'old.user': 'doesnt.exist'}, 'move')
 
         with self.assertRaises(UserMigrationException):
             migrator.migrate()
-
-    def test_doesnt_raise_if_not_strict_and_user_doesnt_exist(self):
-        migrator = CreatorMigrator(
-            self.portal, {'old.user': 'doesnt.exist'}, 'move', strict=False)
-
-        migrator.migrate()
-        self.assertEquals(('doesnt.exist', ), self.dossier.creators)
-        self.assertEquals(('doesnt.exist', ), self.doc.creators)
 
     def test_returns_proper_results_for_moving_creator(self):
         migrator = CreatorMigrator(

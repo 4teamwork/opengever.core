@@ -52,6 +52,14 @@
       />
 
   <adapter
+      factory=".migrations.TaskTemplateMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: Tasks templates (issuers, responsibles)"
+      />
+
+  <adapter
       factory=".migrations.PrivateFoldersMigration"
       provides="ftw.usermigration.interfaces.IPreMigrationHook"
       for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
@@ -65,6 +73,22 @@
       for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
            zope.publisher.interfaces.browser.IBrowserRequest"
       name="GEVER: Checked out documents (checked_out_by and WebDAV locks)"
+      />
+
+  <adapter
+      factory=".migrations.RecentlyTouchedMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: Recently touched objects"
+      />
+
+  <adapter
+      factory=".migrations.ProposalsMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: Proposals and submitted proposals"
       />
 
 </configure>

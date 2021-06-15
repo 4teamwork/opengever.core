@@ -14,6 +14,9 @@ from opengever.usermigration.ogds import OGDSMigrator
 from opengever.usermigration.ogds_references import OGDSUserReferencesMigrator
 from opengever.usermigration.plone_tasks import PloneTasksMigrator
 from opengever.usermigration.private_folders import PrivateFoldersMigrator
+from opengever.usermigration.proposals import ProposalsMigrator
+from opengever.usermigration.recently_touched import RecentlyTouchedMigrator
+from opengever.usermigration.task_templates import TaskTemplateMigrator
 
 
 class OGDSMigration(object):
@@ -23,8 +26,7 @@ class OGDSMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = OGDSMigrator(self.portal, principal_mapping,
-                                mode=mode, strict=True)
+        migrator = OGDSMigrator(self.portal, principal_mapping, mode=mode)
         results = migrator.migrate()
         return results
 
@@ -36,8 +38,7 @@ class DossierMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = DossierMigrator(self.portal, principal_mapping,
-                                   mode=mode, strict=True)
+        migrator = DossierMigrator(self.portal, principal_mapping, mode=mode)
         results = migrator.migrate()
         return results
 
@@ -49,8 +50,7 @@ class CreatorMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = CreatorMigrator(self.portal, principal_mapping,
-                                   mode=mode, strict=True)
+        migrator = CreatorMigrator(self.portal, principal_mapping, mode=mode)
         results = migrator.migrate()
         return results
 
@@ -62,8 +62,9 @@ class DictstorageMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = DictstorageMigrator(self.portal, principal_mapping,
-                                       mode=mode, strict=True)
+        migrator = DictstorageMigrator(
+            self.portal, principal_mapping, mode=mode
+        )
         results = migrator.migrate()
         return results
 
@@ -75,8 +76,9 @@ class OGDSUserReferencesMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = OGDSUserReferencesMigrator(self.portal, principal_mapping,
-                                              mode=mode, strict=True)
+        migrator = OGDSUserReferencesMigrator(
+            self.portal, principal_mapping, mode=mode
+        )
         results = migrator.migrate()
         return results
 
@@ -88,8 +90,23 @@ class PloneTasksMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = PloneTasksMigrator(self.portal, principal_mapping,
-                                      mode=mode, strict=True)
+        migrator = PloneTasksMigrator(
+            self.portal, principal_mapping, mode=mode
+        )
+        results = migrator.migrate()
+        return results
+
+
+class TaskTemplateMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = TaskTemplateMigrator(
+            self.portal, principal_mapping, mode=mode
+        )
         results = migrator.migrate()
         return results
 
@@ -101,8 +118,9 @@ class PrivateFoldersMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = PrivateFoldersMigrator(self.portal, principal_mapping,
-                                          mode=mode, strict=True)
+        migrator = PrivateFoldersMigrator(
+            self.portal, principal_mapping, mode=mode
+        )
         results = migrator.migrate()
         return results
 
@@ -114,7 +132,34 @@ class CheckedOutDocsMigration(object):
         self.request = request
 
     def execute(self, principal_mapping, mode):
-        migrator = CheckedOutDocsMigrator(self.portal, principal_mapping,
-                                          mode=mode, strict=True)
+        migrator = CheckedOutDocsMigrator(
+            self.portal, principal_mapping, mode=mode
+        )
+        results = migrator.migrate()
+        return results
+
+
+class RecentlyTouchedMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = RecentlyTouchedMigrator(
+            self.portal, principal_mapping, mode=mode
+        )
+        results = migrator.migrate()
+        return results
+
+
+class ProposalsMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = ProposalsMigrator(self.portal, principal_mapping, mode=mode)
         results = migrator.migrate()
         return results

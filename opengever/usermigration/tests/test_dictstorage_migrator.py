@@ -51,7 +51,7 @@ class TestDictstorageMigrator(FunctionalTestCase):
         self.assertEquals('ftw.tabbedview-foo-tabbedview_view-bar-new-user',
                           entry.key)
 
-    def test_raises_if_strict_and_user_doesnt_exist(self):
+    def test_raises_if_user_doesnt_exist(self):
         entry = DictStorageModel(key='foo-old.user', value='{}')
         self.session.add(entry)
         migrator = DictstorageMigrator(
@@ -60,20 +60,11 @@ class TestDictstorageMigrator(FunctionalTestCase):
         with self.assertRaises(UserMigrationException):
             migrator.migrate()
 
-    def test_doesnt_raise_if_not_strict_and_user_doesnt_exist(self):
-        entry = DictStorageModel(key='bar-old.user', value='{}')
-        self.session.add(entry)
-        migrator = DictstorageMigrator(
-            self.portal, {'old.user': 'doesnt.exist'}, 'move', strict=False)
-
-        migrator.migrate()
-        self.assertEquals('bar-doesnt.exist', entry.key)
-
     def test_returns_proper_results_for_moving_keys(self):
         entry = DictStorageModel(key='baz-old.user', value='{}')
         self.session.add(entry)
         migrator = DictstorageMigrator(
-            self.portal, {'old.user': 'new.user'}, 'move', strict=False)
+            self.portal, {'old.user': 'new.user'}, 'move')
 
         results = migrator.migrate()
         self.assertIn(

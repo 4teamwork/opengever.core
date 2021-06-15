@@ -2,6 +2,7 @@
 Migrate private folders and their contents for renamed users.
 """
 
+from opengever.usermigration.base import BaseUserMigration
 from plone import api
 import logging
 
@@ -13,17 +14,7 @@ def objpath(obj):
     return '/'.join(obj.getPhysicalPath())
 
 
-class PrivateFoldersMigrator(object):
-
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "PrivateFoldersMigrator only supports 'move' mode")
-        self.mode = mode
-        self.strict = strict
+class PrivateFoldersMigrator(BaseUserMigration):
 
     def migrate(self):
         mtool = api.portal.get_tool('portal_membership')

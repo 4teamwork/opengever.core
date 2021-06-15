@@ -1,22 +1,17 @@
-"""
-Migrate user ID references in OGDS SQL tables:
-
-- activity actors
-- watcher actors
-- notification user IDs
-- task principals
-- task issuers
-- task responsibles
-"""
-
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
+from opengever.activity.model import NotificationSetting
 from opengever.activity.model import Watcher
 from opengever.base.model import create_session
+from opengever.base.model.favorite import Favorite
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.model.task import TaskPrincipal
-from opengever.ogds.models.service import ogds_service
+from opengever.meeting.model import Meeting
+from opengever.meeting.model import Proposal
 from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
+from opengever.usermigration.base import BaseUserMigration
 from opengever.usermigration.exceptions import UserMigrationException
 from operator import itemgetter
 from sqlalchemy import select
@@ -27,31 +22,26 @@ import logging
 logger = logging.getLogger('opengever.usermigration')
 
 
-class OGDSUserReferencesMigrator(object):
+class OGDSUserReferencesMigrator(BaseUserMigration):
 
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
+    def __init__(self, portal, principal_mapping, mode='move'):
+        super(OGDSUserReferencesMigrator, self).__init__(
+            portal, principal_mapping, mode=mode
+        )
         self.session = create_session()
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "OGDSUserReferencesMigrator only supports 'move' mode")
-        self.mode = mode
-        self.strict = strict
 
         self.activity_actors_moved = []
         self.watcher_actors_moved = []
         self.notification_userids_moved = []
+        self.notification_setting_userids_moved = []
         self.task_principals_moved = []
         self.task_issuers_moved = []
         self.task_responsibles_moved = []
-
-    def _verify_user(self, userid):
-        ogds_user = ogds_service().fetch_user(userid)
-        if ogds_user is None:
-            msg = "User '{}' not found in OGDS!".format(userid)
-            raise UserMigrationException(msg)
+        self.user_settings_moved = []
+        self.favorites_moved = []
+        self.reminders_moved = []
+        self.secretaries_moved = []
+        self.proposal_issuers_moved = []
 
     def _get_sql_rows_with_old_userid(self, table, column_name, old_userid):
         column = getattr(table.c, column_name)
@@ -116,6 +106,12 @@ class OGDSUserReferencesMigrator(object):
                     old_userid, new_userid)
                 self.notification_userids_moved.extend(moved)
 
+                # Migrate notification settings
+                moved = self._migrate_sql_column(
+                    NotificationSetting.__table__, 'userid',
+                    old_userid, new_userid)
+                self.notification_setting_userids_moved.extend(moved)
+
                 # Migrate watcher actors
                 moved = self._migrate_sql_column(
                     Watcher.__table__, 'actorid',
@@ -140,6 +136,36 @@ class OGDSUserReferencesMigrator(object):
                     old_userid, new_userid)
                 self.task_responsibles_moved.extend(moved)
 
+                # Migrate user settings
+                moved = self._migrate_sql_column(
+                    UserSettings.__table__, 'userid',
+                    old_userid, new_userid)
+                self.user_settings_moved.extend(moved)
+
+                # Migrate favorites
+                moved = self._migrate_sql_column(
+                    Favorite.__table__, 'userid',
+                    old_userid, new_userid)
+                self.favorites_moved.extend(moved)
+
+                # Migrate task reminders
+                moved = self._migrate_sql_column(
+                    ReminderSetting.__table__, 'actor_id',
+                    old_userid, new_userid)
+                self.reminders_moved.extend(moved)
+
+                # Migrate meeting secretary
+                moved = self._migrate_sql_column(
+                    Meeting.__table__, 'secretary_id',
+                    old_userid, new_userid)
+                self.secretaries_moved.extend(moved)
+
+                # Migrate proposal issuer
+                moved = self._migrate_sql_column(
+                    Proposal.__table__, 'issuer',
+                    old_userid, new_userid)
+                self.proposal_issuers_moved.extend(moved)
+
         results = {
             'activity_actors': {
                 'moved': self.activity_actors_moved,
@@ -151,6 +177,10 @@ class OGDSUserReferencesMigrator(object):
                 'deleted': []},
             'notification_userids': {
                 'moved': self.notification_userids_moved,
+                'copied': [],
+                'deleted': []},
+            'notification_setting_userids': {
+                'moved': self.notification_setting_userids_moved,
                 'copied': [],
                 'deleted': []},
             'task_principals': {
@@ -165,6 +195,25 @@ class OGDSUserReferencesMigrator(object):
                 'moved': self.task_responsibles_moved,
                 'copied': [],
                 'deleted': []},
-
+            'user_settings': {
+                'moved': self.user_settings_moved,
+                'copied': [],
+                'deleted': []},
+            'favorites': {
+                'moved': self.favorites_moved,
+                'copied': [],
+                'deleted': []},
+            'reminders': {
+                'moved': self.reminders_moved,
+                'copied': [],
+                'deleted': []},
+            'secretaries': {
+                'moved': self.secretaries_moved,
+                'copied': [],
+                'deleted': []},
+            'proposal_issuers': {
+                'moved': self.proposal_issuers_moved,
+                'copied': [],
+                'deleted': []},
         }
         return results

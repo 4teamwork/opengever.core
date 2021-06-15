@@ -4,34 +4,17 @@ Migrate user IDs in checked out state for documents as well as WebDAV locks.
 
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.ogds.models.service import ogds_service
-from opengever.usermigration.exceptions import UserMigrationException
+from opengever.usermigration.base import BaseUserMigration
 from plone import api
+from plone.locking.interfaces import IRefreshableLockable
 from zope.component import getMultiAdapter
 import logging
-from plone.locking.interfaces import IRefreshableLockable
 
 
 logger = logging.getLogger('opengever.usermigration')
 
 
-class CheckedOutDocsMigrator(object):
-
-    def __init__(self, portal, principal_mapping, mode='move', strict=True):
-        self.portal = portal
-        self.principal_mapping = principal_mapping
-
-        if mode != 'move':
-            raise NotImplementedError(
-                "CheckedOutDocsMigrator only supports 'move' mode")
-        self.mode = mode
-        self.strict = strict
-
-    def _verify_user(self, userid):
-        ogds_user = ogds_service().fetch_user(userid)
-        if ogds_user is None:
-            msg = "User '{}' not found in OGDS!".format(userid)
-            raise UserMigrationException(msg)
+class CheckedOutDocsMigrator(BaseUserMigration):
 
     def _migrate_checked_out_doc(self, doc, old_userid, new_userid):
         # Migrate "checked out by" information and reindex
