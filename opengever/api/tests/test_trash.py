@@ -108,3 +108,16 @@ class TestTrashAPI(IntegrationTestCase):
         with browser.expect_http_error(code=401, reason='Unauthorized'):
             browser.open(self.document.absolute_url() + '/@untrash',
                          method='POST', headers={'Accept': 'application/json'})
+
+    @browsing
+    def test_trash_workspace_folder(self, browser):
+        self.login(self.workspace_member, browser)
+
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder))
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder_document))
+
+        browser.open(self.workspace_folder.absolute_url() + '/@trash',
+                     method='POST', headers={'Accept': 'application/json'})
+        self.assertEqual(204, browser.status_code)
+        self.assertTrue(ITrashed.providedBy(self.workspace_folder))
+        self.assertTrue(ITrashed.providedBy(self.workspace_folder_document))

@@ -2,6 +2,7 @@ from AccessControl import Unauthorized
 from Acquisition import aq_inner, aq_parent
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.workspace.interfaces import IWorkspaceFolder
 from plone.dexterity.interfaces import IDexterityContent
 from plone.locking.interfaces import ILockable
 from Products.CMFCore.utils import _checkPermission
@@ -77,17 +78,19 @@ class DefaultContentTrasher(object):
 
     def trash(self):
         self.verify_may_trash()
+        self._trash()
 
+    def _trash(self):
         alsoProvides(self.context, ITrashed)
-
         self.reindex()
         notify(TrashedEvent(self.context))
 
     def untrash(self):
         self.verify_may_untrash()
+        self._untrash()
 
+    def _untrash(self):
         noLongerProvides(self.context, ITrashed)
-
         self.reindex()
         notify(UntrashedEvent(self.context))
 
@@ -195,3 +198,38 @@ class DocumentTrasher(DefaultContentTrasher):
             return False
 
         return submitted_proposal.get_excerpt() == self.context
+
+
+@adapter(IWorkspaceFolder)
+class WorkspaceFolderTrasher(DefaultContentTrasher):
+    """An object which handles trashing/untrashing workspace folders.
+    """
+
+    def verify_may_trash(self, raise_on_violations=True):
+        if not super(WorkspaceFolderTrasher, self).verify_may_trash(raise_on_violations):
+            return False
+        for obj in self.context.contentValues():
+            if not ITrasher(obj).verify_may_trash(raise_on_violations):
+                return False
+        return True
+
+    def verify_may_untrash(self, raise_on_violations=True):
+        if not super(WorkspaceFolderTrasher, self).verify_may_untrash(raise_on_violations):
+            return False
+        for obj in self.context.contentValues():
+            if not ITrasher(obj).verify_may_untrash(raise_on_violations):
+                return False
+        return True
+
+    def _trash(self):
+        super(WorkspaceFolderTrasher, self)._trash()
+        for obj in self.context.contentValues():
+            ITrasher(obj)._trash()
+
+    def _untrash(self):
+        super(WorkspaceFolderTrasher, self)._untrash()
+        for obj in self.context.contentValues():
+            ITrasher(obj)._untrash()
+
+    def is_trashable(self):
+        return True

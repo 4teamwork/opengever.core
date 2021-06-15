@@ -1,4 +1,6 @@
 from AccessControl.Permission import Permission
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
@@ -12,6 +14,7 @@ from opengever.trash.trash import TrashError
 from plone import api
 from plone.protect import createToken
 from zExceptions import Unauthorized
+from zope.interface import noLongerProvides
 
 
 class TestTrash(IntegrationTestCase):
@@ -612,15 +615,6 @@ class TestTrasher(IntegrationTestCase):
         self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
-    def test_workspace_folder_cannot_be_trashed(self):
-        self.login(self.manager)
-        obj = self.workspace_folder
-        trasher = ITrasher(obj)
-        with self.assertRaises(TrashError) as exc:
-            trasher.trash()
-        self.assertEqual('Not trashable', str(exc.exception))
-        self.assertFalse(ITrashed.providedBy(obj))
-
     def test_todo_cannot_be_trashed(self):
         self.login(self.manager)
         obj = self.todo
@@ -692,3 +686,113 @@ class TestTrasher(IntegrationTestCase):
             trasher.trash()
         self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
+
+
+class TestWorkspaceFolderTrasher(IntegrationTestCase):
+
+    def test_workspace_folder_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace_folder
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_trashing_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder))
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder_document))
+        self.assertFalse(ITrashed.providedBy(subfolder))
+        self.assertFalse(ITrashed.providedBy(subdocument))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+
+        self.assertTrue(ITrashed.providedBy(self.workspace_folder))
+        self.assertTrue(ITrashed.providedBy(self.workspace_folder_document))
+        self.assertTrue(ITrashed.providedBy(subfolder))
+        self.assertTrue(ITrashed.providedBy(subdocument))
+
+    def test_verify_may_trash_on_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        self.assertTrue(trasher.verify_may_trash())
+
+        self.checkout_document(subdocument)
+        with self.assertRaises(TrashError) as exc:
+            trasher.verify_may_trash()
+        self.assertEqual('Document checked out', str(exc.exception))
+
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Document checked out', str(exc.exception))
+
+    def test_verify_may_trash_on_workspace_folder_recursively_checks_permissions(self):
+        self.login(self.workspace_member)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        self.assertTrue(trasher.verify_may_trash())
+
+        subfolder.__ac_local_roles_block__ = True
+
+        self.login(self.workspace_admin)
+        with self.assertRaises(Unauthorized):
+            trasher.verify_may_trash()
+
+    def test_untrashing_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+        trasher.untrash()
+
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder))
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder_document))
+        self.assertFalse(ITrashed.providedBy(subfolder))
+        self.assertFalse(ITrashed.providedBy(subdocument))
+
+    def test_verify_may_untrash_on_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+        self.assertTrue(trasher.verify_may_untrash())
+
+        noLongerProvides(subdocument, ITrashed)
+
+        with self.assertRaises(Unauthorized):
+            trasher.verify_may_untrash()
+
+        with self.assertRaises(Unauthorized):
+            trasher.untrash()

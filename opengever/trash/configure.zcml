@@ -25,5 +25,6 @@
 
   <adapter factory=".trash.DefaultContentTrasher" />
   <adapter factory=".trash.DocumentTrasher" />
+  <adapter factory=".trash.WorkspaceFolderTrasher" />
 
 </configure>
