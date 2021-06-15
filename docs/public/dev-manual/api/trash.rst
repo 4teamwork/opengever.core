@@ -3,10 +3,10 @@
 Papierkorb
 ==========
 
-Dokumente in den Papierkorb legen
----------------------------------
+Objekte in den Papierkorb legen
+-------------------------------
 
-Dokumente können über den ``/@trash`` Endpoint in den Papierkorb gelegt werden.
+Dokumente und Teamraum Ordner können über den ``/@trash`` Endpoint in den Papierkorb gelegt werden.
 
 **Beispiel-Request**:
 
@@ -27,11 +27,12 @@ Ausgecheckte Dokumente und Dokumente in abgeschlossenen Dossiers können nicht
 in den Papierkorb gelegt werden.
 
 
-Dokumente wiederherstellen
---------------------------
+Objekte wiederherstellen
+------------------------
 
-Dokumente, die sich im Papierkorb befinden, können über den ``/@untrash``
-Endpoint wiederhergestellt werden.
+Objekte, die sich im Papierkorb befinden, können über den ``/@untrash``
+Endpoint wiederhergestellt werden. Ein Objekt kann nur wiederhergestellt werden, wenn
+das übergeordnete Objekt sich nicht im Papierkorb befindet.
 
 **Beispiel-Request**:
 
