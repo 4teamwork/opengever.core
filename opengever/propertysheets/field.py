@@ -49,10 +49,12 @@ class PropertySheetField(Field):
         assignemnt_prefix,
         valid_assignment_slots_factory,
         default_slot,
+        schema_interface=None,
         **kwargs
     ):
         self.request_key = request_key
         self.attribute_name = attribute_name
+        self.schema_interface = schema_interface
         self.assignemnt_prefix = assignemnt_prefix
         self.valid_assignment_slots_factory = valid_assignment_slots_factory
         self.default_slot = default_slot
@@ -96,6 +98,14 @@ class PropertySheetField(Field):
         if self.request_key in request:
             value_name = request.get(self.request_key)[0]
         elif context:
+            if self.schema_interface:
+                try:
+                    context = self.schema_interface(context)
+                except TypeError:
+                    # This happens during context creation in the old ui
+                    # when z3c forms gets initalized the context is the parent
+                    pass
+
             value_name = getattr(context, self.attribute_name, None)
 
         if not value_name:

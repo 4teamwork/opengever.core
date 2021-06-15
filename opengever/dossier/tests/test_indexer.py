@@ -191,7 +191,7 @@ class TestDossierIndexers(SolrIntegrationTestCase):
             .assigned_to_slots(u"IDossier.dossier_type.businesscase")
             .with_field("text", u"f1", u"Field 1", u"", False)
         )
-        self.dossier.dossier_type = u"businesscase"
+        IDossier(self.dossier).dossier_type = u"businesscase"
         IDossierCustomProperties(self.dossier).custom_properties = {
             "IDossier.dossier_type.businesscase": {"f1": "indexme-businescase"},
             "IDossier.dossier_type.meeting": {"f1": "noindex-meeting"},
@@ -219,7 +219,7 @@ class TestDossierIndexers(SolrIntegrationTestCase):
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
         )
-        self.dossier.dossier_type = u"businesscase"
+        IDossier(self.dossier).dossier_type = u"businesscase"
         IDossierCustomProperties(self.dossier).custom_properties = {
             "IDossier.dossier_type.businesscase": {
                 "yesorno": False,
