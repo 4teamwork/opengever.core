@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+2021.12.1 (2021-06-15)
+----------------------
+
+Bug fixes:
+
+
+- Bump ftw.casauth to version 1.4.1 which includes a fix for authenticating the wrong user if an invalid ticket was supplied. [buchi]
+
+
 2021.12.0 (2021-06-10)
 ----------------------
 
