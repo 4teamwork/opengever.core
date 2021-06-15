@@ -94,14 +94,14 @@ class DefaultContentTrasher(object):
         notify(UntrashedEvent(self.context))
 
     def verify_may_trash(self, raise_on_violations=True):
-        if not self.check_trash_permission():
-            if raise_on_violations:
-                raise Unauthorized()
-            return False
-
         if not self.is_trashable():
             if raise_on_violations:
                 raise TrashError('Not trashable')
+            return False
+
+        if not self.check_trash_permission():
+            if raise_on_violations:
+                raise Unauthorized()
             return False
 
         if self.is_trashed():

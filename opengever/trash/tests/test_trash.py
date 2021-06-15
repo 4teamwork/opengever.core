@@ -581,8 +581,9 @@ class TestTrasher(IntegrationTestCase):
         obj = self.templates
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(Unauthorized):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_dossier_template_cannot_be_trashed(self):
@@ -608,8 +609,9 @@ class TestTrasher(IntegrationTestCase):
         obj = self.workspace
         self.assertTrue(ITrashableMarker.providedBy(obj))
         trasher = ITrasher(obj)
-        with self.assertRaises(Unauthorized):
+        with self.assertRaises(TrashError) as exc:
             trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
         self.assertFalse(ITrashed.providedBy(obj))
 
     def test_workspace_folder_cannot_be_trashed(self):
