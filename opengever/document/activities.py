@@ -65,3 +65,33 @@ class DocumenVersionCreatedActivity(BaseActivity):
     @property
     def description(self):
         return {}
+
+
+class DocumentWatcherAddedActivity(BaseActivity):
+    """Activity representation for a watcher being added to a document.
+    """
+
+    kind = 'document-watcher-added'
+
+    def __init__(self, context, request, watcherid):
+        super(DocumentWatcherAddedActivity, self).__init__(context, request)
+        self.watcherid = watcherid
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('summary_document_watcher_added', u'Added as watcher of the document by ${user}',
+              mapping={'user': Actor.lookup(self.actor_id).get_link()}))
+
+    @property
+    def description(self):
+        return {}
+
+    @property
+    def label(self):
+        msg = _('label_document_watcher_added', u'Added as watcher of the document')
+        return self.translate_to_all_languages(msg)
+
+    def add_activity(self):
+        return super(DocumentWatcherAddedActivity, self).add_activity(
+            notification_recipients=[self.watcherid])

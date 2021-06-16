@@ -87,7 +87,7 @@ NOTIFICATION_CONFIGURATION = [
     {
         'id': 'added-as-watcher',
         'title': _('added-as-watcher', default=u'Added as watcher'),
-        'activities': ['task-watcher-added', 'forwarding-watcher-added'],
+        'activities': ['task-watcher-added', 'forwarding-watcher-added', 'document-watcher-added'],
         'default_settings': {
             'badge_notification_roles': [WATCHER_ROLE],
         },

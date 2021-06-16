@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-06-09 13:25+0000\n"
+"POT-Creation-Date: 2021-06-16 06:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,6 +121,11 @@ msgstr ""
 #. Default: "New document version created"
 #: ./opengever/activity/__init__.py
 msgid "document-version-created"
+msgstr ""
+
+#. Default: "Added as watcher to document"
+#: ./opengever/activity/__init__.py
+msgid "document-watcher-added"
 msgstr ""
 
 #. Default: "Overdue dossier"

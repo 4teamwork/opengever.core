@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-06-09 13:25+0000\n"
+"POT-Creation-Date: 2021-06-16 06:03+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -124,6 +124,11 @@ msgstr "Titre du document modifié"
 #: ./opengever/activity/__init__.py
 msgid "document-version-created"
 msgstr "Nouvelle version du document créée"
+
+#. Default: "Added as watcher to document"
+#: ./opengever/activity/__init__.py
+msgid "document-watcher-added"
+msgstr "Ajouté comme observateur à un document"
 
 #. Default: "Overdue dossier"
 #: ./opengever/activity/__init__.py

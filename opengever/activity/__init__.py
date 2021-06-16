@@ -184,4 +184,7 @@ ACTIVITY_TRANSLATIONS = {
     'document-version-created': _(
         'document-version-created',
         default=u'New document version created'),
+    'document-watcher-added': _(
+        'document-watcher-added',
+        default=u'Added as watcher to document'),
 }

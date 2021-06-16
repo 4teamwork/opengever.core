@@ -3,6 +3,7 @@ from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.document.activities import DocumentWatcherAddedActivity
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
@@ -112,13 +113,52 @@ class TestDocumentChangedActivities(IntegrationTestCase):
             self.document, self.meeting_user.getId(),
             WATCHER_ROLE)
 
-        self.assertEqual(0, Notification.query.count())
+        self.assertEqual(1, Notification.query.count())
 
         browser.open(self.document, method='PATCH',
                      data=json.dumps({u'title': u'A new title'}),
                      headers=self.api_headers)
 
-        self.assertEqual(1, Notification.query.count())
-        notification = Notification.query.first()
+        self.assertEqual(2, Notification.query.count())
+        notification = Notification.query.all()[-1]
         self.assertEqual(u'document-title-changed', notification.activity.kind)
         self.assertEqual(self.meeting_user.getId(), notification.userid)
+
+
+class TestDocumentWatcherAddedActivity(IntegrationTestCase):
+
+    features = ('activity', 'document-watchers')
+
+    def setUp(self):
+        super(TestDocumentWatcherAddedActivity, self).setUp()
+        self.center = notification_center()
+
+    def test_watcher_added_activity_attributes(self):
+        self.login(self.regular_user)
+        DocumentWatcherAddedActivity(self.document, self.request,
+                                     self.meeting_user.getId()).record()
+        activity = Activity.query.first()
+        self.assertEqual('document-watcher-added', activity.kind)
+        self.assertEqual('Added as watcher of document', activity.label)
+        self.assertEqual(u'Vertr\xe4gsentwurf', activity.title)
+        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual(u'Added as watcher of document by <a href="http://nohost/plone/'
+                         u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         activity.summary)
+
+    def test_only_added_watcher_is_notified(self):
+        self.login(self.regular_user)
+        self.center.add_watcher_to_resource(self.document, self.meeting_user.getId(), WATCHER_ROLE)
+        notifications = Notification.query.all()
+        self.assertEqual(1, len(notifications))
+        self.center.add_watcher_to_resource(self.document, self.dossier_responsible.getId(),
+                                            WATCHER_ROLE)
+        notifications = Notification.query.all()
+        self.assertEquals(2, len(notifications))
+
+    def test_user_is_not_notified_when_document_watchers_feature_is_disabled(self):
+        self.deactivate_feature('document-watchers')
+        self.login(self.regular_user)
+        self.center.add_watcher_to_resource(self.document, self.meeting_user.getId(), WATCHER_ROLE)
+        notifications = Notification.query.all()
+        self.assertEqual(0, len(notifications))
