@@ -497,6 +497,23 @@ class TestTaskPatch(IntegrationTestCase):
         self.assertEqual('rk', self.task.responsible_client)
         self.assertEqual('james.bond', self.task.responsible)
 
+    @browsing
+    def test_changing_is_private_raise_bad_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # no change
+        browser.open(self.task, json.dumps({"is_private": False}),
+                     method="PATCH", headers=self.api_headers)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as cm:
+            browser.open(self.task, json.dumps({"is_private": True}),
+                         method="PATCH", headers=self.api_headers)
+
+        self.assertEqual(
+            "It's not allowed to change the is_private option of an existing task.",
+            str(cm.exception))
+
 
 class TestTaskTransitions(IntegrationTestCase):
 

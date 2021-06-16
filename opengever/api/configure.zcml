@@ -839,6 +839,13 @@
       />
 
   <plone:service
+      method="PATCH"
+      for="opengever.task.task.ITask"
+      factory=".task.TaskPatch"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
       method="GET"
       name="@notification-settings"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
