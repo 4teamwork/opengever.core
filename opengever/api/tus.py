@@ -1,17 +1,34 @@
 from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
-from plone.restapi.services.content.tus import UploadPatch
 from opengever.meeting.proposaltemplate import IProposalTemplate
+from opengever.quota.exceptions import ForbiddenByQuota
+from plone.restapi.services.content.tus import UploadPatch
 from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.i18n import translate
-from zope.publisher.interfaces import IPublishTraverse
 from zope.interface import implementer
+from zope.publisher.interfaces import IPublishTraverse
+import transaction
 
 
 @implementer(IPublishTraverse)
-class UploadPatch(UploadPatch):
+class GeverUploadPatch(UploadPatch):
+    """TUS upload endpoint for handling PATCH requests"""
+
+    def reply(self):
+        try:
+            data = super(GeverUploadPatch, self).reply()
+        except ForbiddenByQuota as exc:
+            transaction.abort()
+            self.request.response.setStatus(507)
+            return dict(error=dict(type="ForbiddenByQuota", message=str(exc)))
+
+        return data
+
+
+@implementer(IPublishTraverse)
+class UploadPatch(GeverUploadPatch):
     """TUS upload endpoint for handling PATCH requests"""
 
     # In addition to checking permissions we perform additional checks:

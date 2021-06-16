@@ -1,12 +1,14 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
+from opengever.private.interfaces import IPrivateFolderQuotaSettings
 from opengever.testing import IntegrationTestCase
+from plone import api
 from six import BytesIO
 from unittest import skipIf
 
 UPLOAD_DATA = b"abcdefgh"
 UPLOAD_LENGTH = len(UPLOAD_DATA)
-UPLOAD_METADATA = 'filename dGVzdC50eHQ=,content-type dGV4dC9wbGFpbg=='
+UPLOAD_METADATA = 'filename dGVzdC50eHQ=,content-type dGV4dC9wbGFpbg==,@type b3BlbmdldmVyLmRvY3VtZW50LmRvY3VtZW50'
 
 
 class TestTUSUpload(IntegrationTestCase):
@@ -17,6 +19,20 @@ class TestTUSUpload(IntegrationTestCase):
     def prepare_tus_replace(self, doc, browser, headers=None):
         browser.open(
             doc.absolute_url() + '/@tus-replace',
+            method='POST',
+            headers=dict({
+                "Accept": "application/json",
+                "Tus-Resumable": "1.0.0",
+                "Upload-Length": str(UPLOAD_LENGTH),
+                "Upload-Metadata": UPLOAD_METADATA,
+            }, **headers or {}),
+        )
+        self.assertEqual(browser.status_code, 201)
+        return browser.headers.get('Location')
+
+    def prepare_tus_upload(self, folder, browser, headers=None):
+        browser.open(
+            folder.absolute_url() + '/@tus-upload',
             method='POST',
             headers=dict({
                 "Accept": "application/json",
@@ -58,6 +74,23 @@ class TestTUSUpload(IntegrationTestCase):
                 },
                 data=BytesIO(UPLOAD_DATA),
             )
+
+    def assert_tus_upload_fails(self, folder, browser, headers=None, code=403,
+                                 reason='Forbidden'):
+        location = self.prepare_tus_upload(folder, browser, headers=headers)
+        with browser.expect_http_error(code=code, reason=reason):
+            browser.open(
+                location,
+                method='PATCH',
+                headers={
+                    "Accept": "application/json",
+                    "Content-Type": "application/offset+octet-stream",
+                    "Upload-Offset": "0",
+                    "Tus-Resumable": "1.0.0",
+                },
+                data=BytesIO(UPLOAD_DATA),
+            )
+
 
     def checkout(self, doc, browser):
         browser.open(
@@ -136,3 +169,16 @@ class TestTUSUpload(IntegrationTestCase):
 
         self.assert_tus_replace_fails(
             self.proposal_template, browser, code=400, reason='Bad Request')
+
+    @browsing
+    def test_raises_if_quota_is_exceeded(self, browser):
+        self.login(self.regular_user, browser)
+
+        api.portal.set_registry_record(interface=IPrivateFolderQuotaSettings,
+                                       name='size_hard_limit', value=1)
+
+        with self.observe_children(self.private_dossier) as children:
+            self.assert_tus_upload_fails(
+                self.private_dossier, browser, code=507, reason='Insufficient Storage')
+
+        self.assertEqual(0, len(children["added"]))
