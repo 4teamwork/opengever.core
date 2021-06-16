@@ -724,3 +724,75 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         solrsearch.add_path_parent_filters(filters)
 
         self.assertEqual([u'path_parent:(\\/plone\\/inbox)'], filters)
+
+    @browsing
+    def test_returns_stats_for_single_field(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.subdossier.absolute_url(),
+            'stats=true&stats.field=filesize'
+        )
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        stats = browser.json['stats']
+        self.assertEqual(
+            stats,
+            {
+                u'filesize': {
+                    u'count': 3,
+                    u'min': 0.0,
+                    u'max': 19.0,
+                    u'sum': 38.0,
+                    u'missing': 2,
+                    u'sumOfSquares': 722.0,
+                    u'stddev': 10.969655114602888,
+                    u'mean': 12.666666666666666
+                }
+            }
+        )
+
+    @browsing
+    def test_returns_stats_for_multiple_fields(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.subdossier.absolute_url(),
+            'stats=true&stats.field=filesize&stats.field=Creator'
+        )
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        stats = browser.json['stats']
+        self.assertEqual(
+            stats,
+            {
+                u'Creator': {
+                    u'count': 5,
+                    u'max': u'robert.ziegler',
+                    u'min': u'robert.ziegler',
+                    u'missing': 0
+                },
+                u'filesize': {
+                    u'count': 3,
+                    u'min': 0.0,
+                    u'max': 19.0,
+                    u'sum': 38.0,
+                    u'missing': 2,
+                    u'sumOfSquares': 722.0,
+                    u'stddev': 10.969655114602888,
+                    u'mean': 12.666666666666666
+                }
+            }
+        )
+
+    @browsing
+    def test_blacklisted_attributes_stats_are_skipped(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.subdossier.absolute_url(),
+            'stats=true&stats.field=_version_&stats.field=allowedRolesAndUsers'
+        )
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIsNone(browser.json.get('stats'))

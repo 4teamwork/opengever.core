@@ -13,6 +13,9 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add support for the ``stats`` component to the ``@solrsearch`` endpoint.
+
+
 2021.11.0 (2021-05-28)
 ----------------------
 

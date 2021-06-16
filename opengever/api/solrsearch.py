@@ -204,6 +204,18 @@ class SolrSearchGet(SolrQueryBaseService):
                            if self.is_field_allowed(facet)
                            and self.get_field_index(facet) in self.solr_fields]
             params['facet.field'] = map(self.get_field_index, self.facets)
+
+        stats_fields = params.pop('stats.field', [])
+        if not isinstance(stats_fields, list):
+            stats_fields = [stats_fields]
+        if stats_fields:
+            self.stats_fields = [
+                stats_field for stats_field in stats_fields
+                if self.is_field_allowed(stats_field)
+                and stats_field in self.solr_fields
+            ]
+            params['stats.field'] = self.stats_fields
+
         return params
 
     def reply(self):
@@ -226,6 +238,10 @@ class SolrSearchGet(SolrQueryBaseService):
             "rows": rows,
             "facet_counts": self.extract_facets_from_response(resp)
         }
+        # flatten stats and only return field stats if they were requested
+        stats = resp.get('stats', {}).get('stats_fields')
+        if stats:
+            res['stats'] = stats
         self.extend_with_batching(res, resp)
 
         return res
