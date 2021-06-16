@@ -4,7 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 
 
-class DeleteGeverObjects(IntegrationTestCase):
+class APITestDeleteMixin(object):
 
     def assert_cannot_delete(self, obj, browser, code=401):
         parent = aq_parent(aq_inner(obj))
@@ -16,7 +16,11 @@ class DeleteGeverObjects(IntegrationTestCase):
         parent = aq_parent(aq_inner(obj))
         with self.observe_children(parent) as children:
             browser.open(obj, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
         self.assertEqual({obj}, children['removed'])
+
+
+class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
 
     @browsing
     def test_deleting_businesscasedossier_requires_delete_objects_permission(self, browser):
@@ -81,46 +85,77 @@ class DeleteGeverObjects(IntegrationTestCase):
         self.assert_can_delete(obj, browser)
 
 
-class TestDeleteWorkspaceDocument(IntegrationTestCase):
+class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
+
+    @browsing
+    def test_deleting_todos_requires_delete_todos_permission(self, browser):
+        self.login(self.workspace_guest, browser)
+        obj = self.todo
+
+        self.assert_cannot_delete(obj, browser)
+
+        obj.manage_permission("opengever.workspace: Delete Todos", roles=["WorkspacesUser"])
+        self.assert_can_delete(obj, browser)
+
+    @browsing
+    def test_deleting_todolist_requires_delete_todos_permission(self, browser):
+        self.login(self.workspace_guest, browser)
+        obj = self.todolist_general
+
+        self.assert_cannot_delete(obj, browser)
+
+        obj.manage_permission("opengever.workspace: Delete Todos", roles=["WorkspacesUser"])
+        self.assert_can_delete(obj, browser)
+
+    @browsing
+    def test_deleting_workspace_meeting_agendaitem_requires_delete_agendaitems_permission(self, browser):
+        self.login(self.workspace_guest, browser)
+        obj = self.workspace_meeting_agenda_item
+
+        self.assert_cannot_delete(obj, browser)
+
+        self.workspace_meeting.manage_permission(
+            "opengever.workspace: Delete Workspace Meeting Agenda Items",
+            roles=["WorkspacesUser"])
+        self.assert_can_delete(obj, browser)
+
+    @browsing
+    def test_deleting_workspace_document_requires_delete_document_permission(self, browser):
+        self.login(self.workspace_member, browser)
+        obj = self.workspace_document
+
+        self.workspace.manage_permission(
+            "opengever.workspace: Delete Documents",
+            roles=[])
+
+        self.assert_cannot_delete(obj, browser, code=403)
+
+        self.workspace.manage_permission(
+            "opengever.workspace: Delete Documents",
+            roles=["WorkspacesUser"])
+        self.assert_can_delete(obj, browser)
 
     @browsing
     def test_members_can_permanently_delete_document(self, browser):
         self.login(self.workspace_member, browser)
-        workspace_document_id = self.workspace_document.id
-        self.assertIn(workspace_document_id, self.workspace.objectIds())
-        browser.open(self.workspace_document, method='DELETE', headers=self.api_headers)
-        self.assertEqual(204, browser.status_code)
-        self.assertNotIn(workspace_document_id, self.workspace.objectIds())
+        self.assert_can_delete(self.workspace_document, browser)
 
     @browsing
     def test_members_can_permanently_delete_mail(self, browser):
         self.login(self.workspace_member, browser)
-        workspace_mail_id = self.workspace_mail.id
-        self.assertIn(workspace_mail_id, self.workspace.objectIds())
-        browser.open(self.workspace_mail, method='DELETE', headers=self.api_headers)
-        self.assertEqual(204, browser.status_code)
-        self.assertNotIn(workspace_mail_id, self.workspace.objectIds())
+        self.assert_can_delete(self.workspace_mail, browser)
 
     @browsing
     def test_admins_can_permanently_delete_document(self, browser):
         self.login(self.workspace_admin, browser)
-        workspace_document_id = self.workspace_document.id
-        self.assertIn(workspace_document_id, self.workspace.objectIds())
-        browser.open(self.workspace_document, method='DELETE', headers=self.api_headers)
-        self.assertEqual(204, browser.status_code)
-        self.assertNotIn(workspace_document_id, self.workspace.objectIds())
+        self.assert_can_delete(self.workspace_document, browser)
 
     @browsing
     def test_managers_can_permanently_delete_document(self, browser):
         self.login(self.manager, browser)
-        workspace_document_id = self.workspace_document.id
-        self.assertIn(workspace_document_id, self.workspace.objectIds())
-        browser.open(self.workspace_document, method='DELETE', headers=self.api_headers)
-        self.assertEqual(204, browser.status_code)
-        self.assertNotIn(workspace_document_id, self.workspace.objectIds())
+        self.assert_can_delete(self.workspace_document, browser)
 
     @browsing
     def test_guests_cannot_permanently_delete_document(self, browser):
         self.login(self.workspace_guest, browser)
-        with browser.expect_http_error(401):
-            browser.open(self.workspace_document, method='DELETE', headers=self.api_headers)
+        self.assert_cannot_delete(self.workspace_document, browser)
