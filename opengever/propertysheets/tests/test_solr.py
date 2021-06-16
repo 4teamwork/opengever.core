@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 
@@ -69,7 +70,7 @@ class TestCustomPropertiesIndexHandler(SolrIntegrationTestCase):
             .assigned_to_slots(u"IDossier.dossier_type.businesscase")
             .with_field("textline", u"f1", u"Field 1", u"", False)
         )
-        self.dossier.dossier_type = u"businesscase"
+        IDossier(self.dossier).dossier_type = u"businesscase"
         IDossierCustomProperties(self.dossier).custom_properties = {
             "IDossier.dossier_type.businesscase": {"f1": "indexme-businesscase"},
             "IDossier.default": {"additional_title": "indexme-default"},
