@@ -1,8 +1,10 @@
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.private.interfaces import IPrivateFolderQuotaSettings
 from opengever.testing import IntegrationTestCase
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from plone import api
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
@@ -186,6 +188,23 @@ class TestDocumentPost(IntegrationTestCase):
             u"[{'message': 'It is not possible to add E-mails as document, use portal_type ftw.mail.mail"
             " instead.', 'error': 'ValidationError'}]",
             browser.json['message'])
+
+    @browsing
+    def test_raises_if_quota_is_exceeded(self, browser):
+        self.login(self.regular_user, browser)
+
+        api.portal.set_registry_record(interface=IPrivateFolderQuotaSettings,
+                                       name='size_hard_limit', value=1)
+
+
+        with self.observe_children(self.private_dossier) as children:
+            with browser.expect_http_error(code=507, reason='Insufficient Storage'):
+                data = {'@type': 'opengever.document.document',
+                        'file': {'data': 'foo bar', 'filename': 'test.docx'}}
+                browser.open(self.private_dossier, data=json.dumps(data), method='POST',
+                             headers=self.api_headers)
+
+        self.assertEqual(0, len(children["added"]))
 
 
 class TestDocumentDelete(IntegrationTestCase):
