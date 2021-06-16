@@ -594,7 +594,7 @@ msgstr "Le fichier Zip contient un fichier PDF pour chaque document de cette sé
 #. Default: "Only visible for managers. Only change this if you know what you are doing!"
 #: ./opengever/meeting/behaviors/period.py
 msgid "description_decision_sequence_number"
-msgstr "Visible uniquement pour les Managers. Ne devrait normalement pas être modifié."
+msgstr "Visible uniquement pour les Managers. Ne devrait normalement pas être modifié. Correspond au numéro de décision maximal assigné en ce moment. Ce numéro de décision +1 sera assigné au premier point à l'ordre du jour de la prochaine séance clôturée."
 
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
@@ -604,7 +604,7 @@ msgstr "Ce groupe peut modifier et consulter la commission."
 #. Default: "Only visible for managers. Only change this if you know what you are doing!"
 #: ./opengever/meeting/behaviors/period.py
 msgid "description_meeting_sequence_number"
-msgstr "Visible uniquement pour les Managers. Ne devrait normalement pas être modifié."
+msgstr "Visible uniquement pour les Managers. Ne devrait normalement pas être modifié. Correspond au numéro de séance maximal assigné en ce moment. Ce numéro +1 sera assigné à la prochaine séance clòturée."
 
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
