@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2021.5.5 (unreleased)
+2021.5.5 (2021-06-16)
 ---------------------
 
 - Add language code parameter to office online edit link. [phgross]
