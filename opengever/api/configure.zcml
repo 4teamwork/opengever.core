@@ -101,7 +101,7 @@
 
   <plone:service
       method="DELETE"
-      for="opengever.document.document.IDocumentSchema"
+      for="opengever.document.document.IBaseDocument"
       factory=".delete.DeleteDocument"
       permission="cmf.ModifyPortalContent"
       />

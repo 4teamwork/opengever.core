@@ -43,7 +43,7 @@ class DeleteGeverObjects(IntegrationTestCase):
         self.login(self.administrator, browser)
         obj = self.mail_eml
 
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
         obj.manage_permission("Delete objects", roles=["Administrator"])
         self.assert_can_delete(obj, browser)
@@ -91,6 +91,15 @@ class TestDeleteWorkspaceDocument(IntegrationTestCase):
         browser.open(self.workspace_document, method='DELETE', headers=self.api_headers)
         self.assertEqual(204, browser.status_code)
         self.assertNotIn(workspace_document_id, self.workspace.objectIds())
+
+    @browsing
+    def test_members_can_permanently_delete_mail(self, browser):
+        self.login(self.workspace_member, browser)
+        workspace_mail_id = self.workspace_mail.id
+        self.assertIn(workspace_mail_id, self.workspace.objectIds())
+        browser.open(self.workspace_mail, method='DELETE', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertNotIn(workspace_mail_id, self.workspace.objectIds())
 
     @browsing
     def test_admins_can_permanently_delete_document(self, browser):
