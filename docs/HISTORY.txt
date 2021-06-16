@@ -4,7 +4,7 @@ Changelog
 2021.5.5 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Add language code parameter to office online edit link. [phgross]
 
 
 2021.5.4 (2021-05-24)

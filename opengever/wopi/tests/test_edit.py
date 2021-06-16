@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
+from opengever.testing import set_preferred_language
 from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi.token import validate_access_token
 from plone import api
@@ -31,6 +32,23 @@ class TestEditView(IntegrationTestCase):
                 urlsafe_b64decode(access_token),
                 'createtreatydossiers000000000002'),
             'kathi.barfuss')
+
+    @browsing
+    def test_UI_language_is_prefered_language(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.enable_languages()
+        browser.open()
+        browser.click_on("Deutsch")
+
+        browser.open(self.document, view="office_online_edit")
+
+        action = browser.css("#office_form").first.get("action")
+        self.assertEqual(
+            action,
+            "https://FFC-word-edit.officeapps.live.com/we/wordeditorframe.aspx"
+            "?ui=de-DE&rs=&dchat=1&IsLicensedUser=1&WOPISrc=http://nohost"
+            "/plone/wopi/files/createtreatydossiers000000000002&",
+        )
 
     @browsing
     def test_edit_view_returns_form_action_for_non_business_users(self, browser):
