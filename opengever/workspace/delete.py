@@ -3,12 +3,14 @@ from opengever.document.document import IBaseDocument
 from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
+from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.interfaces import IWorkspaceMeetingAgendaItem
 from opengever.workspace.utils import is_within_workspace_root
 from plone import api
 from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from zExceptions import Forbidden
 from zope.component import adapter
+from zope.component import queryAdapter
 from zope.interface import implementer
 
 
@@ -33,8 +35,9 @@ class BaseWorkspaceContenteDeleter(object):
         except LinkIntegrityNotificationException:
             pass
 
-    def verify_may_delete(self):
-        self.check_within_workspace()
+    def verify_may_delete(self, main=True):
+        if main:
+            self.check_within_workspace()
         self.check_delete_permission()
 
     def check_within_workspace(self):
@@ -68,3 +71,17 @@ class WorkspaceMeetingAgendaItemDeleter(BaseWorkspaceContenteDeleter):
 class WorkspaceDocumentDeleter(BaseWorkspaceContenteDeleter):
 
     permission = 'opengever.workspace: Delete Documents'
+
+
+@adapter(IWorkspaceFolder)
+class WorkspaceFolderDeleter(BaseWorkspaceContenteDeleter):
+
+    permission = 'opengever.workspace: Delete Workspace Folders'
+
+    def verify_may_delete(self, main=True):
+        super(WorkspaceFolderDeleter, self).verify_may_delete(main=main)
+        for obj in self.context.contentValues():
+            deleter = queryAdapter(obj, IDeleter)
+            if deleter is None:
+                raise Forbidden()
+            deleter.verify_may_delete(main=False)

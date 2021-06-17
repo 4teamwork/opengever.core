@@ -112,5 +112,6 @@
   <adapter factory=".delete.TodoListDeleter" />
   <adapter factory=".delete.WorkspaceMeetingAgendaItemDeleter" />
   <adapter factory=".delete.WorkspaceDocumentDeleter" />
+  <adapter factory=".delete.WorkspaceFolderDeleter" />
 
 </configure>

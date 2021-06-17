@@ -1,5 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 
@@ -116,6 +118,33 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
             "opengever.workspace: Delete Workspace Meeting Agenda Items",
             roles=["WorkspacesUser"])
         self.assert_can_delete(obj, browser)
+
+    @browsing
+    def test_deleting_workspace_folder_requires_delete_workspace_folders_permission(self, browser):
+        self.login(self.workspace_member, browser)
+        obj = self.workspace_folder
+
+        self.workspace.manage_permission(
+            "opengever.workspace: Delete Workspace Folders",
+            roles=[])
+
+        self.assert_cannot_delete(obj, browser, code=403)
+
+        self.workspace.manage_permission(
+            "opengever.workspace: Delete Workspace Folders",
+            roles=["WorkspacesUser"])
+        self.assert_can_delete(obj, browser)
+
+    @browsing
+    def test_deleting_workspace_folder_checks_permissions_recursively(self, browser):
+        self.login(self.workspace_member, browser)
+        subfolder = create(Builder("workspace folder").within(self.workspace_folder))
+        subfolder.__ac_local_roles_block__ = True
+
+        self.assert_cannot_delete(self.workspace_folder, browser, code=403)
+
+        subfolder.__ac_local_roles_block__ = False
+        self.assert_can_delete(self.workspace_folder, browser)
 
     @browsing
     def test_deleting_workspace_document_requires_delete_document_permission(self, browser):
