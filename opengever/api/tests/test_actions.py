@@ -103,6 +103,37 @@ class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.workspace))
 
+    @browsing
+    def test_available_file_actions_for_workspace_folder(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'trash_context', u'title': u'Trash'},
+            {u'icon': u'', u'id': u'delete_workspace_context', u'title': u'Delete'}
+        ]
+        self.assertListEqual(
+            expected_file_actions,
+            self.get_file_actions(browser, self.workspace_folder),
+        )
+
+
+class TestFileActionsGetForWorkspaceDocument(FileActionsTestBase):
+
+    @browsing
+    def test_available_file_actions_for_workspace_document(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
+            {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
+            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
+            {u'icon': u'', u'id': u'trash_context', u'title': u'Trash'},
+            {u'icon': u'', u'id': u'delete_workspace_context', u'title': u'Delete'}
+        ]
+        self.assertListEqual(
+            expected_file_actions,
+            self.get_file_actions(browser, self.workspace_document),
+        )
+
 
 class TestFileActionsGetForMails(FileActionsTestBase):
 
@@ -1128,7 +1159,7 @@ class TestFolderActions(IntegrationTestCase):
 
         expected_folder_actions = [
             {u'icon': u'', u'id': u'edit_items', u'title': u'Edit metadata'},
-            {u'icon': u'', u'id': u'delete_workspace_document', u'title': u'Delete'}
+            {u'icon': u'', u'id': u'delete_workspace_content', u'title': u'Delete'}
         ]
 
         self.assertListEqual(
@@ -1396,7 +1427,6 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
             {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
             {u'icon': u'', u'id': u'share_content', u'title': u'Share content'},
-            {u'icon': u'', u'id': u'delete_workspace_document', u'title': u'Delete'},
         ]
 
         self.assertListEqual(
@@ -1415,7 +1445,6 @@ class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):
             {u'icon': u'', u'id': u'move_item', u'title': u'Move item'},
             {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
             {u'icon': u'', u'id': u'share_content', u'title': u'Share content'},
-            {u'icon': u'', u'id': u'delete_workspace_document', u'title': u'Delete'},
         ]
 
         self.assertListEqual(
