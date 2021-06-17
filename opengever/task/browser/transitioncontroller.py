@@ -430,7 +430,9 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-reassign')
     def reassign_guard(self, c, include_agency):
-        return api.user.has_permission('Modify portal content', obj=self.context)
+        return (api.user.has_permission('Modify portal content', obj=self.context)
+                and self.context.is_editable) \
+               or api.user.has_permission('opengever.api: Transfer Assignment', obj=self.context)
 
     @action('task-transition-reassign')
     def reassign_action(self, transition, c):

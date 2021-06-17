@@ -228,6 +228,22 @@ class TestTransferTaskPost(IntegrationTestCase):
         activity = Activity.query.one()
         self.assertEqual('task-transition-change-issuer', activity.kind)
 
+    @browsing
+    def test_task_transfer_changes_responsible_of_resolved_task(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.set_workflow_state('task-state-resolved', self.task)
+        browser.open(self.task.absolute_url() + '/@transfer-task', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                        {"old_userid": self.task.responsible,
+                         "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), self.task.responsible)
+
+        sql_task = self.task.get_sql_object()
+        self.assertEqual(self.meeting_user.getId(), sql_task.responsible)
+        activity = Activity.query.one()
+        self.assertEqual('task-transition-reassign', activity.kind)
+
 
 class TestTransferTaskInterAdminUnit(IntegrationTestCase):
 
