@@ -6,10 +6,12 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.task.task import ITask
+from opengever.trash.trash import ITrasher
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from Products.Five import BrowserView
+from zope.component import queryAdapter
 
 
 class FolderButtonsAvailabilityView(BrowserView):
@@ -126,7 +128,11 @@ class FolderButtonsAvailabilityView(BrowserView):
         """Trash action should only be shown on dossier level, as we otherwise
         don't know whether the documents can be trashed (they could be in an
         inactive or resolved dossier).
+        The action also does not need to be available on trashed contents.
         """
+        trasher = queryAdapter(self.context, ITrasher)
+        if trasher and trasher.is_trashed():
+            return False
         return (not self._is_repository_folder()
                 and not self._is_repository_root()
                 and not self._is_template_area())
@@ -135,7 +141,11 @@ class FolderButtonsAvailabilityView(BrowserView):
         """Untrash action should only be shown on dossier level, as we otherwise
         don't know whether the documents can be untrashed (they could be in an
         inactive or resolved dossier).
+        Also untrashing content in a trashed container is not allowed.
         """
+        trasher = queryAdapter(self.context, ITrasher)
+        if trasher and trasher.is_trashed():
+            return False
         return (not self._is_repository_folder()
                 and not self._is_repository_root()
                 and not self._is_template_area())

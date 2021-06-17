@@ -1755,6 +1755,14 @@ class TestFolderButtonsGetForWorkspace(FolderActionsTestBase):
             self.get_folder_buttons(browser, self.workspace_folder),
         )
 
+        ITrasher(self.workspace_folder).trash()
+        expected_folder_buttons.remove({u'icon': u'', u'id': u'trash_content', u'title': u'Move to trash'})
+        expected_folder_buttons.remove({u'icon': u'', u'id': u'untrash_content', u'title': u'Restore from trash'})
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.workspace_folder),
+        )
+
 
 class TestWebActionsIntegration(IntegrationTestCase):
 
