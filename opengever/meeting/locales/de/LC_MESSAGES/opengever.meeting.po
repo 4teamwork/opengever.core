@@ -592,7 +592,7 @@ msgstr "Das Zip enthält eine PDF-Datei für jedes Dokument in dieser Sitzung un
 #. Default: "Only visible for managers. Only change this if you know what you are doing!"
 #: ./opengever/meeting/behaviors/period.py
 msgid "description_decision_sequence_number"
-msgstr "Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden."
+msgstr "Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden. Hier sieht man die momentan höchste vergebene Beschlussnummer. Beim Abchliessen der nächsten Sitzung wird die hier eingegebene Nummer +1 als Beschlussnummer des ersten Traktandums verwendet."
 
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
@@ -602,7 +602,7 @@ msgstr "Diese Gruppe kann die Kommission bearbeiten und einsehen."
 #. Default: "Only visible for managers. Only change this if you know what you are doing!"
 #: ./opengever/meeting/behaviors/period.py
 msgid "description_meeting_sequence_number"
-msgstr "Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden."
+msgstr "Nur für Manager sichtbar. Darf im Normalfall nicht angepasst werden. Hier sieht man die momentan höchste vergebene Sitzungsnummer. Beim Abchliessen der nächsten Sitzung wird die hier eingegebene Nummer +1 als Sitzungsnummer verwendet."
 
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py

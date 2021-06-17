@@ -715,7 +715,7 @@ msgstr "The ZIP file contains a PDF file for each document in this meeting and a
 #. Default: "Only visible for managers. Only change this if you know what you are doing!"
 #: ./opengever/meeting/behaviors/period.py
 msgid "description_decision_sequence_number"
-msgstr "Only visible for managers. Only change this if you know what you are doing!"
+msgstr "Only visible for managers. Only change this if you know what you are doing! Shows the maximum decision number currently assigned. When closing the next meeting this number +1 will be used as the decision sequence number for the first agenda item."
 
 #. German translation: Diese Gruppe kann die Kommission bearbeiten und einsehen.
 #. Default: "Automatically configure permissions on the committee for this group."
@@ -727,7 +727,7 @@ msgstr "Automatically configure permissions on the committee for this group."
 #. Default: "Only visible for managers. Only change this if you know what you are doing!"
 #: ./opengever/meeting/behaviors/period.py
 msgid "description_meeting_sequence_number"
-msgstr "Only visible for managers. Only change this if you know what you are doing!"
+msgstr "Only visible for managers. Only change this if you know what you are doing! Shows the maximum meeting number currently assigned. When closing the next meeting this number +1 will be used as the meeting sequence number."
 
 #. German translation: Sie dürfen das Dokument nicht auschecken.
 #. Default: "You are not allowed to checkout the document."
