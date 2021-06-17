@@ -35,6 +35,7 @@
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".inbox.SerializeInboxToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
+  <adapter factory=".workspace_folder.SerializeWorkspaceFolderToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
   <adapter factory=".mail.SerializeMailToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
