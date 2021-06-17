@@ -88,31 +88,3 @@ class UploadDocumentCopy(GeverFolderPost):
 
     def before_serialization(self, obj):
         ILinkedDocuments(obj).link_gever_document(self.gever_document_uid)
-
-
-class DeleteWorkspaceContent(Service):
-    """Deletes workspace content
-
-    Use this class for the DELETE endpoint for any deletable workspace content to
-    be able to override the delete permission.
-
-    This is necessary due to a special workflow implementation which is required
-    to provide the activate/deactivate feature of a workspace.
-
-    See https://github.com/4teamwork/opengever.core/pull/6620 for more information
-    """
-    def reply(self):
-
-        delete_workspace_content(self.context)
-        return self.reply_no_content()
-
-
-def delete_workspace_content(context):
-    """Force deleting the context without an additional permission-check as it
-    is done for the default rest-api DELETE endpoint.
-    """
-    parent = aq_parent(context)
-    try:
-        parent._delObject(context.getId())
-    except LinkIntegrityNotificationException:
-        pass

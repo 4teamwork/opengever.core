@@ -248,14 +248,14 @@ class TestDeactivateWorkspace(IntegrationTestCase):
     def test_cannot_delete_todo_in_deactivated_workspace(self, browser):
         self.login(self.workspace_admin, browser)
         self.deactivate_workspace(browser)
-        with browser.expect_http_error(401):
+        with browser.expect_http_error(403):
             browser.open(self.todo, method='DELETE', headers=self.api_headers)
 
     @browsing
     def test_cannot_delete_todolist_in_deactivated_workspace(self, browser):
         self.login(self.workspace_admin, browser)
         self.deactivate_workspace(browser)
-        with browser.expect_http_error(401):
+        with browser.expect_http_error(403):
             browser.open(
                 self.todolist_general, method='DELETE',
                 headers=self.api_headers,

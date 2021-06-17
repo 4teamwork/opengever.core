@@ -127,15 +127,9 @@ class TestDossierTemplateDelete(IntegrationTestCase):
     @browsing
     def test_deleting_dossiertemplate_is_forbidden_for_regular_users(self, browser):
         self.login(self.regular_user, browser)
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(403):
             browser.open(self.dossiertemplate, method='DELETE',
                          headers=self.api_headers)
-
-        self.assertEqual(
-            {u'message': u'You are not authorized to access this resource.',
-             u'type': u'Unauthorized'},
-            browser.json
-            )
 
     @browsing
     def test_dossiertemplate_delete(self, browser):

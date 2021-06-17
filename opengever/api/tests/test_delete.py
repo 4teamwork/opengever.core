@@ -27,7 +27,7 @@ class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
         self.login(self.administrator, browser)
         obj = self.empty_dossier
 
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
         obj.manage_permission("Delete objects", roles=["Administrator"])
         self.assert_can_delete(obj, browser)
@@ -57,7 +57,7 @@ class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
         self.login(self.administrator, browser)
         obj = self.task
 
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
         obj.manage_permission("Delete objects", roles=["Administrator"])
         self.assert_can_delete(obj, browser)
@@ -67,21 +67,19 @@ class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
         self.login(self.administrator, browser)
         obj = self.proposal
 
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
         obj.manage_permission("Delete objects", roles=["Administrator"])
         self.assert_can_delete(obj, browser)
 
     @browsing
     def test_deleting_disposition_requires_delete_objects_permission(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.records_manager, browser)
         obj = self.disposition
 
-        # Admins have the Delete objects permission on dispositions...
-        obj.manage_permission("Delete objects", roles=[])
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
-        obj.manage_permission("Delete objects", roles=["Administrator"])
+        obj.manage_permission("Delete objects", roles=["Records Manager"])
         self.assert_can_delete(obj, browser)
 
 
@@ -92,7 +90,7 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
         self.login(self.workspace_guest, browser)
         obj = self.todo
 
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
         obj.manage_permission("opengever.workspace: Delete Todos", roles=["WorkspacesUser"])
         self.assert_can_delete(obj, browser)
@@ -102,7 +100,7 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
         self.login(self.workspace_guest, browser)
         obj = self.todolist_general
 
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
         obj.manage_permission("opengever.workspace: Delete Todos", roles=["WorkspacesUser"])
         self.assert_can_delete(obj, browser)
@@ -112,7 +110,7 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
         self.login(self.workspace_guest, browser)
         obj = self.workspace_meeting_agenda_item
 
-        self.assert_cannot_delete(obj, browser)
+        self.assert_cannot_delete(obj, browser, code=403)
 
         self.workspace_meeting.manage_permission(
             "opengever.workspace: Delete Workspace Meeting Agenda Items",
@@ -158,4 +156,4 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
     @browsing
     def test_guests_cannot_permanently_delete_document(self, browser):
         self.login(self.workspace_guest, browser)
-        self.assert_cannot_delete(self.workspace_document, browser)
+        self.assert_cannot_delete(self.workspace_document, browser, code=403)

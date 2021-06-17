@@ -108,4 +108,9 @@
       permission="opengever.workspace.UpdateContentOrder"
       />
 
+  <adapter factory=".delete.TodoDeleter" />
+  <adapter factory=".delete.TodoListDeleter" />
+  <adapter factory=".delete.WorkspaceMeetingAgendaItemDeleter" />
+  <adapter factory=".delete.WorkspaceDocumentDeleter" />
+
 </configure>
