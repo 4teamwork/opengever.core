@@ -35,7 +35,9 @@ class Builder(Builder):
         files = {'latex': ('export.tex', latex)}
         for filename in os.listdir(self.build_directory):
             key = 'file.{}'.format(filename)
-            files[key] = os.path.join(self.build_directory, filename)
+            path = os.path.join(self.build_directory, filename)
+            with open(path, 'rb') as fp:
+                files[key] = (filename, fp.read())
 
         resp = None
         try:
