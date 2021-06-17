@@ -243,6 +243,7 @@ WRITE_PERMISSIONS = [
     'opengever.webactions: Manage own WebActions',
     'opengever.workspace: Delete Todos',
     'opengever.workspace: Delete Documents',
+    'opengever.workspace: Delete Workspace Folders',
     'opengever.workspace: Delete Workspace Meeting Agenda Items',
     'opengever.workspace: Modify Workspace',
     'opengever.workspace: Update Content Order',

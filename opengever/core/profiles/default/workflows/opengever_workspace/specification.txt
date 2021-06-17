@@ -43,6 +43,7 @@ Status Active:
   A workspace member can delete todos.
   A workspace member can delete workspace documents.
   A workspace member can delete workspace meeting agenda items.
+  A workspace member can delete workspace folders.
   A workspace admin can modify workspace.
   A workspace admin can manage security.
   A workspace admin can deactivate.
