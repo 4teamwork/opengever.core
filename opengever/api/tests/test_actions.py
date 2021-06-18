@@ -107,7 +107,19 @@ class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
     def test_available_file_actions_for_workspace_folder(self, browser):
         self.login(self.workspace_member, browser)
         expected_file_actions = [
-            {u'icon': u'', u'id': u'trash_context', u'title': u'Trash'},
+            {u'icon': u'', u'id': u'trash_context', u'title': u'Trash'}
+        ]
+        self.assertListEqual(
+            expected_file_actions,
+            self.get_file_actions(browser, self.workspace_folder),
+        )
+
+    @browsing
+    def test_available_file_actions_for_trashed_workspace_folder(self, browser):
+        self.login(self.workspace_member, browser)
+        ITrasher(self.workspace_folder).trash()
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'untrash_context', u'title': u'Untrash'},
             {u'icon': u'', u'id': u'delete_workspace_context', u'title': u'Delete'}
         ]
         self.assertListEqual(
@@ -126,7 +138,22 @@ class TestFileActionsGetForWorkspaceDocument(FileActionsTestBase):
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
             {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
-            {u'icon': u'', u'id': u'trash_context', u'title': u'Trash'},
+            {u'icon': u'', u'id': u'trash_context', u'title': u'Trash'}
+        ]
+        self.assertListEqual(
+            expected_file_actions,
+            self.get_file_actions(browser, self.workspace_document),
+        )
+
+    @browsing
+    def test_available_file_actions_for_trashed_workspace_document(self, browser):
+        self.login(self.workspace_member, browser)
+        ITrasher(self.workspace_document).trash()
+        expected_file_actions = [
+            {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
+            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
+            {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
+            {u'icon': u'', u'id': u'untrash_context', u'title': u'Untrash'},
             {u'icon': u'', u'id': u'delete_workspace_context', u'title': u'Delete'}
         ]
         self.assertListEqual(

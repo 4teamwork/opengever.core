@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrasher
 
 
 class APITestDeleteMixin(object):
@@ -123,6 +124,7 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
     def test_deleting_workspace_folder_requires_delete_workspace_folders_permission(self, browser):
         self.login(self.workspace_member, browser)
         obj = self.workspace_folder
+        ITrasher(obj).trash()
 
         self.workspace.manage_permission(
             "opengever.workspace: Delete Workspace Folders",
@@ -139,6 +141,8 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
     def test_deleting_workspace_folder_checks_permissions_recursively(self, browser):
         self.login(self.workspace_member, browser)
         subfolder = create(Builder("workspace folder").within(self.workspace_folder))
+        ITrasher(self.workspace_folder).trash()
+
         subfolder.__ac_local_roles_block__ = True
 
         self.assert_cannot_delete(self.workspace_folder, browser, code=403)
@@ -150,6 +154,7 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
     def test_deleting_workspace_document_requires_delete_document_permission(self, browser):
         self.login(self.workspace_member, browser)
         obj = self.workspace_document
+        ITrasher(obj).trash()
 
         self.workspace.manage_permission(
             "opengever.workspace: Delete Documents",
@@ -165,24 +170,30 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
     @browsing
     def test_members_can_permanently_delete_document(self, browser):
         self.login(self.workspace_member, browser)
+        ITrasher(self.workspace_document).trash()
         self.assert_can_delete(self.workspace_document, browser)
 
     @browsing
     def test_members_can_permanently_delete_mail(self, browser):
         self.login(self.workspace_member, browser)
+        ITrasher(self.workspace_mail).trash()
         self.assert_can_delete(self.workspace_mail, browser)
 
     @browsing
     def test_admins_can_permanently_delete_document(self, browser):
         self.login(self.workspace_admin, browser)
+        ITrasher(self.workspace_document).trash()
         self.assert_can_delete(self.workspace_document, browser)
 
     @browsing
     def test_managers_can_permanently_delete_document(self, browser):
         self.login(self.manager, browser)
+        ITrasher(self.workspace_document).trash()
         self.assert_can_delete(self.workspace_document, browser)
 
     @browsing
     def test_guests_cannot_permanently_delete_document(self, browser):
+        with self.login(self.manager):
+            ITrasher(self.workspace_document).trash()
         self.login(self.workspace_guest, browser)
         self.assert_cannot_delete(self.workspace_document, browser, code=403)

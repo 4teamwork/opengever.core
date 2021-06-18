@@ -1,5 +1,6 @@
 from Acquisition import aq_parent
 from opengever.document.document import IBaseDocument
+from opengever.trash.trash import ITrasher
 from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
@@ -72,6 +73,11 @@ class WorkspaceDocumentDeleter(BaseWorkspaceContenteDeleter):
 
     permission = 'opengever.workspace: Delete Documents'
 
+    def verify_may_delete(self, main=True):
+        super(WorkspaceDocumentDeleter, self).verify_may_delete()
+        if not ITrasher(self.context).is_trashed():
+            raise Forbidden
+
 
 @adapter(IWorkspaceFolder)
 class WorkspaceFolderDeleter(BaseWorkspaceContenteDeleter):
@@ -80,6 +86,9 @@ class WorkspaceFolderDeleter(BaseWorkspaceContenteDeleter):
 
     def verify_may_delete(self, main=True):
         super(WorkspaceFolderDeleter, self).verify_may_delete(main=main)
+        if not ITrasher(self.context).is_trashed():
+            raise Forbidden
+
         for obj in self.context.contentValues():
             deleter = queryAdapter(obj, IDeleter)
             if deleter is None:
