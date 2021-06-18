@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-06-16 06:03+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -105,6 +105,31 @@ msgstr "Proposé pour archivage"
 msgid "disposition-transition-refuse"
 msgstr "Offre refusée"
 
+#. Default: "Document author changed"
+#: ./opengever/activity/__init__.py
+msgid "document-author-changed"
+msgstr "Auteur du document modifié"
+
+#. Default: "Document modified"
+#: ./opengever/activity/notification_settings.py
+msgid "document-modified"
+msgstr "Document modifié"
+
+#. Default: "Document title changed"
+#: ./opengever/activity/__init__.py
+msgid "document-title-changed"
+msgstr "Titre du document modifié"
+
+#. Default: "New document version created"
+#: ./opengever/activity/__init__.py
+msgid "document-version-created"
+msgstr "Nouvelle version du document créée"
+
+#. Default: "Added as watcher to document"
+#: ./opengever/activity/__init__.py
+msgid "document-watcher-added"
+msgstr "Ajouté comme observateur à un document"
+
 #. Default: "Overdue dossier"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
@@ -180,6 +205,11 @@ msgstr "Résumé quotidien"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
 msgstr "Offres"
+
+#. Default: "Documents"
+#: ./opengever/activity/browser/settings.py
+msgid "label_documents"
+msgstr "Documents"
 
 #. Default: "Dossiers"
 #: ./opengever/activity/browser/settings.py

@@ -33,4 +33,10 @@
       handler=".handlers.notify_watcher"
       />
 
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.activity.interfaces.IWatcherAddedEvent"
+      handler=".handlers.notify_document_watcher"
+      />
+
 </configure>

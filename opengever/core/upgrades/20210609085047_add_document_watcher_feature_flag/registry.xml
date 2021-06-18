@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.document.interfaces.IDocumentSettings">
+    <value key="watcher_feature_enabled">False</value>
+  </records>
+</registry>

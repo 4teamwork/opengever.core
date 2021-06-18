@@ -32,11 +32,13 @@
                            data-tab-title-general view/tab_title_general;
                            data-tab-title-task view/tab_title_task;
                            data-tab-title-dossiers view/tab_title_dossiers;
+                           data-tab-title-documents view/tab_title_documents;
                            data-tab-title-proposals view/tab_title_proposals;
                            data-tab-title-reminders view/tab_title_reminders;
                            data-tab-title-dispositions view/tab_title_dispositions;
                            data-tab-title-workspaces view/tab_title_workspaces;
                            data-show-disposition view/show_disposition_tab;
+                           data-show-documents view/show_documents_tab;
                            data-show-proposals view/show_proposals_tab;
                            data-show-workspaces view/show_workspaces_tab;">
 

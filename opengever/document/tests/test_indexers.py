@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.solr.interfaces import ISolrSearch
 from ftw.testing import freeze
 from ftw.testing import MockTestCase
+from opengever.activity import notification_center
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
@@ -307,6 +309,30 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.commit_solr()
 
         self.assertIsNone(solr_data_for(self.document, 'document_type'))
+
+    def test_document_watchers_are_indexed_in_solr(self):
+        self.activate_feature('activity')
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.document, 'watchers')
+        self.assertEqual([self.regular_user.getId()], indexed_value)
+
+    def test_mail_watchers_are_indexed_in_solr(self):
+        self.activate_feature('activity')
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(
+            self.mail_eml, self.regular_user.getId(), WATCHER_ROLE)
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.mail_eml, 'watchers')
+        self.assertEqual([self.regular_user.getId()], indexed_value)
 
 
 class TestDefaultDocumentIndexer(MockTestCase):

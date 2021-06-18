@@ -14,6 +14,7 @@ from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.json_response import JSONResponse
+from opengever.document import is_watcher_feature_enabled
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
@@ -88,6 +89,11 @@ NOTIFICATION_SETTING_TABS = [
      'settings': [
          'todo-assigned',
          'todo-modified'
+     ]},
+    {'id': 'document',
+     'roles': [WATCHER_ROLE],
+     'settings': [
+         'document-modified',
      ]},
 ]
 
@@ -344,11 +350,17 @@ class NotificationSettingsForm(BrowserView):
     def tab_title_dossiers(self):
         return _('label_dossiers', default=u'Dossiers')
 
+    def tab_title_documents(self):
+        return _('label_documents', default=u'Documents')
+
     def tab_title_workspaces(self):
         return _('label_workspaces', default=u'Workspaces')
 
     def show_disposition_tab(self):
         return api.user.has_permission('opengever.disposition: Add disposition')
+
+    def show_documents_tab(self):
+        return is_watcher_feature_enabled()
 
     def show_proposals_tab(self):
         return is_meeting_feature_enabled()

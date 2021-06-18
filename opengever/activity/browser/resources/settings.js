@@ -116,6 +116,12 @@
            activities: this.filterActivitiesByType(values, 'disposition')
         });
       }
+      if (this.getDataAttribute('show-documents') == 'True') {
+        tabs.push({tabId: 'document',
+           tabTitle: this.getDataAttribute('tab-title-documents'),
+           activities: this.filterActivitiesByType(values, 'document')
+        });
+      }
       return this.template({
         tabs: tabs,
         translations: data.translations,

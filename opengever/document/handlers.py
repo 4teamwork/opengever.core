@@ -2,9 +2,16 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.base.sentry import log_msg_to_sentry
+from opengever.document import is_watcher_feature_enabled
+from opengever.document.activities import DocumentAuthorChangedActivity
+from opengever.document.activities import DocumentTitleChangedActivity
+from opengever.document.activities import DocumenVersionCreatedActivity
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.docprops import DocPropertyWriter
+from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from traceback import format_exc
+from zope.container.interfaces import IContainerModifiedEvent
+from zope.globalrequest import getRequest
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 import logging
@@ -104,3 +111,31 @@ def _update_favorites_icon_class(context):
 
     for favorite in favorites_query.all():
         favorite.icon_class = get_css_class(context, for_user=favorite.userid)
+
+
+def document_version_created(context, event):
+    if not is_watcher_feature_enabled():
+        return
+    DocumenVersionCreatedActivity(context, getRequest()).record()
+
+
+def author_or_title_changed(context, event):
+    if not is_watcher_feature_enabled():
+        return
+    if IContainerModifiedEvent.providedBy(event):
+        return
+    if ILocalrolesModifiedEvent.providedBy(event):
+        return
+
+    author_changed = False
+    title_changed = False
+    for desc in event.descriptions:
+        for attr in desc.attributes:
+            if attr in ['IDocumentSchema.title', 'IOGMail.title', 'title']:
+                title_changed = True
+            if attr == 'IDocumentMetadata.document_author':
+                author_changed = True
+    if title_changed:
+        DocumentTitleChangedActivity(context, getRequest()).record()
+    if author_changed:
+        DocumentAuthorChangedActivity(context, getRequest()).record()

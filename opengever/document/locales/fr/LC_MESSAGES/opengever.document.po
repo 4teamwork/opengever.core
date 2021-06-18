@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-01 18:36+0000\n"
+"POT-Creation-Date: 2021-06-16 05:59+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -479,6 +479,11 @@ msgstr "Numéro courant"
 msgid "label_document_type"
 msgstr "Type de document"
 
+#. Default: "Added as watcher of the document"
+#: ./opengever/document/activities.py
+msgid "label_document_watcher_added"
+msgstr "Ajouté en tant qu'observateur du document"
+
 #: ./opengever/document/browser/report.py
 msgid "label_dossier_title"
 msgstr "Titre du dossier"
@@ -712,6 +717,26 @@ msgstr "Aucun fichier trouvé"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
 msgstr "Ce format de document n'est pas supporté par Office Connector et ne peut donc pas être directement édité."
+
+#. Default: "Author changed by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_author_changed"
+msgstr "Auteur modifié par ${user}"
+
+#. Default: "Title changed by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_title_changed"
+msgstr "Titre modifié par ${user}"
+
+#. Default: "New document version created by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_version_created"
+msgstr "Nouvelle version du document créée par ${user}"
+
+#. Default: "Added as watcher of the document by ${user}"
+#: ./opengever/document/activities.py
+msgid "summary_document_watcher_added"
+msgstr "Ajouté en tant qu'observateur du document par ${user}"
 
 #. Default: "Save PDF of ${title} under ${destination}"
 #: ./opengever/document/browser/save_pdf_document_under.py

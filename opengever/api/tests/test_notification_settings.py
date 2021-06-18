@@ -322,6 +322,22 @@ class TestNotificationSettingsGet(IntegrationTestCase):
                 {u'id': u'workspace_member_role',
                  u'title': u'Workspace member'}]}, browser.json)
 
+    @browsing
+    def test_document_watcher_settings_only_available_if_watcher_feature_enabled(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='/@notification-settings',
+                     method='GET', headers=self.api_headers)
+
+        self.assertNotIn('document-modified',
+                         [activity['id'] for activity in browser.json['activities']['items']])
+
+        self.activate_feature('document-watchers')
+        browser.open(self.portal, view='/@notification-settings',
+                     method='GET', headers=self.api_headers)
+
+        self.assertIn('document-modified',
+                      [activity['id'] for activity in browser.json['activities']['items']])
+
 
 class TestNotificationSettingsPatch(IntegrationTestCase):
     features = ('activity', )

@@ -87,7 +87,7 @@ NOTIFICATION_CONFIGURATION = [
     {
         'id': 'added-as-watcher',
         'title': _('added-as-watcher', default=u'Added as watcher'),
-        'activities': ['task-watcher-added', 'forwarding-watcher-added'],
+        'activities': ['task-watcher-added', 'forwarding-watcher-added', 'document-watcher-added'],
         'default_settings': {
             'badge_notification_roles': [WATCHER_ROLE],
         },
@@ -241,6 +241,16 @@ NOTIFICATION_CONFIGURATION = [
         'default_settings': {
             'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
             'digest_notification_roles': [WORKSPACE_MEMBER_ROLE],
+        }
+    },
+    {
+        'id': 'document-modified',
+        'title': _('document-modified', default=u'Document modified'),
+        'activities': ['document-title-changed',
+                       'document-author-changed',
+                       'document-version-created'],
+        'default_settings': {
+            'badge_notification_roles': [WATCHER_ROLE],
         }
     },
 ]

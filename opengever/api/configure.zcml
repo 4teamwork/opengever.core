@@ -1018,9 +1018,25 @@
       />
 
   <plone:service
+      method="GET"
+      name="@watchers"
+      for="opengever.document.behaviors.IBaseDocument"
+      factory=".watchers.WatchersGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       name="@watchers"
       for="opengever.task.task.ITask"
+      factory=".watchers.WatchersPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@watchers"
+      for="opengever.document.behaviors.IBaseDocument"
       factory=".watchers.WatchersPost"
       permission="zope2.View"
       />
@@ -1034,6 +1050,14 @@
       />
 
   <plone:service
+      method="DELETE"
+      name="@watchers"
+      for="opengever.document.behaviors.IBaseDocument"
+      factory=".watchers.WatchersDelete"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       name="@possible-watchers"
       for="opengever.task.task.ITask"
@@ -1041,9 +1065,24 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@possible-watchers"
+      for="opengever.document.behaviors.IBaseDocument"
+      factory=".watchers.PossibleWatchers"
+      permission="zope2.View"
+      />
+
   <adapter
       factory=".watchers.Watchers"
       name="watchers"
+      for="opengever.task.task.ITask opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".watchers.Watchers"
+      name="watchers"
+      for="opengever.document.behaviors.IBaseDocument opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
   <plone:service

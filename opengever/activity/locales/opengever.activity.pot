@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-06-16 06:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -103,6 +103,31 @@ msgstr ""
 msgid "disposition-transition-refuse"
 msgstr ""
 
+#. Default: "Document author changed"
+#: ./opengever/activity/__init__.py
+msgid "document-author-changed"
+msgstr ""
+
+#. Default: "Document modified"
+#: ./opengever/activity/notification_settings.py
+msgid "document-modified"
+msgstr ""
+
+#. Default: "Document title changed"
+#: ./opengever/activity/__init__.py
+msgid "document-title-changed"
+msgstr ""
+
+#. Default: "New document version created"
+#: ./opengever/activity/__init__.py
+msgid "document-version-created"
+msgstr ""
+
+#. Default: "Added as watcher to document"
+#: ./opengever/activity/__init__.py
+msgid "document-watcher-added"
+msgstr ""
+
 #. Default: "Overdue dossier"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
@@ -177,6 +202,11 @@ msgstr ""
 #. Default: "Dispositions"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
+msgstr ""
+
+#. Default: "Documents"
+#: ./opengever/activity/browser/settings.py
+msgid "label_documents"
 msgstr ""
 
 #. Default: "Dossiers"

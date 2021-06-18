@@ -4,9 +4,7 @@ from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.sources import PossibleWatchersSource
 from opengever.api.actors import serialize_actor_id_to_json_summary
-from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.ogds.base.actor import ActorLookup
-from opengever.task.task import ITask
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
@@ -16,7 +14,6 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
-from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
@@ -24,7 +21,6 @@ from zope.interface import implementer
 
 
 @implementer(IExpandableElement)
-@adapter(ITask, IOpengeverBaseLayer)
 class Watchers(object):
     def __init__(self, context, request):
         self.context = context
