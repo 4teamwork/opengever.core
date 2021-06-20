@@ -7,8 +7,7 @@ from opengever.base.date_time import as_utc
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import ITrashable
-from opengever.trash.trash import Trasher
+from opengever.trash.trash import ITrasher
 from plone.protect import createToken
 from zope.component import getMultiAdapter
 import json
@@ -110,7 +109,7 @@ class TestDisplayAgendaItems(IntegrationTestCase):
         excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
         self.assertEqual(len(excerpts), 2)
 
-        ITrashable(excerpt1).trash()
+        ITrasher(excerpt1).trash()
         excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
         self.assertEqual(len(excerpts), 1)
 
@@ -129,7 +128,7 @@ class TestDisplayAgendaItems(IntegrationTestCase):
         excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
         self.assertEqual(len(excerpts), 2)
 
-        ITrashable(excerpt1).trash()
+        ITrasher(excerpt1).trash()
         excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
         self.assertEqual(len(excerpts), 1)
 
@@ -329,7 +328,7 @@ class TestDeleteAgendaItems(IntegrationTestCase):
 
         agenda_item = self.schedule_ad_hoc(self.meeting, 'Gugus')
         doc = agenda_item.resolve_document()
-        Trasher(doc).trash()
+        ITrasher(doc).trash()
 
         browser.open(self.agenda_item_url(agenda_item, 'delete'))
         self.assertEquals([{u'message': u'Agenda Item Successfully deleted',

@@ -35,7 +35,6 @@
     <element value="opengever.workspace.behaviors.namefromtitle.IWorkspaceNameFromTitle" />
     <element value="opengever.mail.behaviors.ISendableDocsContainer" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
-    <element value="opengever.trash.trash.ITrashable" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>
 

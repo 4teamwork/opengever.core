@@ -3,7 +3,7 @@ from ftw.bumblebee import get_service_v3
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import Trasher
+from opengever.trash.trash import ITrasher
 from plone import api
 from urllib import urlencode
 import urlparse
@@ -47,7 +47,7 @@ class TestSearchEndpoint(IntegrationTestCase):
         self.assertEqual(catalog_results, api_results)
 
         # Trash self.document - should now disappear from regular results
-        Trasher(self.document).trash()
+        ITrasher(self.document).trash()
 
         catalog_results = self.search_catalog(
             self.dossier,
@@ -85,16 +85,16 @@ class TestSearchEndpoint(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         with freeze(datetime(2014, 5, 7, 12, 30)) as clock:
-            Trasher(self.subsubdocument).trash()
+            ITrasher(self.subsubdocument).trash()
             clock.forward(minutes=5)
 
-            Trasher(self.taskdocument).trash()
+            ITrasher(self.taskdocument).trash()
             clock.forward(minutes=5)
 
-            Trasher(self.document).trash()
+            ITrasher(self.document).trash()
             clock.forward(minutes=5)
 
-            Trasher(self.subdocument).trash()
+            ITrasher(self.subdocument).trash()
 
         expected_order = [
             self.subsubdocument.absolute_url(),

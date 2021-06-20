@@ -1,13 +1,12 @@
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.trash.trash import TrashError
 from plone.restapi.services import Service
 from zope.interface import alsoProvides
-
 import plone.protect.interfaces
 
 
-class Trash(Service):
-    """Trash a document"""
+class TrashPost(Service):
+    """Trash an object"""
 
     def reply(self):
 
@@ -15,7 +14,7 @@ class Trash(Service):
         alsoProvides(self.request,
                      plone.protect.interfaces.IDisableCSRFProtection)
 
-        trasher = ITrashable(self.context)
+        trasher = ITrasher(self.context)
         try:
             trasher.trash()
         except TrashError as exc:
@@ -35,12 +34,17 @@ class Trash(Service):
                     'type': 'Bad Request',
                     'message': 'Cannot trash a locked document',
                 }}
+            elif exc.message == 'Not trashable':
+                return {'error': {
+                    'type': 'Bad Request',
+                    'message': 'Object is not trashable',
+                }}
 
         self.request.response.setStatus(204)
-        return super(Trash, self).reply()
+        return super(TrashPost, self).reply()
 
 
-class Untrash(Service):
+class UntrashPost(Service):
     """Untrash a document"""
 
     def reply(self):
@@ -49,8 +53,8 @@ class Untrash(Service):
         alsoProvides(self.request,
                      plone.protect.interfaces.IDisableCSRFProtection)
 
-        trasher = ITrashable(self.context)
+        trasher = ITrasher(self.context)
         trasher.untrash()
 
         self.request.response.setStatus(204)
-        return super(Untrash, self).reply()
+        return super(UntrashPost, self).reply()

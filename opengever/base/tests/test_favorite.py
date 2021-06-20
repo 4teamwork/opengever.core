@@ -7,7 +7,7 @@ from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import Trasher
+from opengever.trash.trash import ITrasher
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from sqlalchemy.exc import IntegrityError
@@ -274,7 +274,7 @@ class TestHandlers(IntegrationTestCase):
 
         self.assertEquals(2, Favorite.query.count())
 
-        Trasher(self.document).trash()
+        ITrasher(self.document).trash()
 
         self.assertEquals(1, Favorite.query.count())
 

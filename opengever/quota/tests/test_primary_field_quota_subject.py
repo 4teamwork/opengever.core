@@ -2,7 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.quota.interfaces import IObjectSize
 from opengever.testing import FunctionalTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 
 
 class TestPrimaryFieldQuotaSubject(FunctionalTestCase):
@@ -13,7 +13,7 @@ class TestPrimaryFieldQuotaSubject(FunctionalTestCase):
                           .attach_file_containing('Hello World'))
         self.assertEquals(11, IObjectSize(document).get_size())
 
-        ITrashable(document).trash()
+        ITrasher(document).trash()
         self.assertEquals(0, IObjectSize(document).get_size())
 
     def test_get_size_on_mails(self):
@@ -22,5 +22,5 @@ class TestPrimaryFieldQuotaSubject(FunctionalTestCase):
                           .with_message('Not really an email'))
         self.assertEquals(19, IObjectSize(mail).get_size())
 
-        ITrashable(mail).trash()
+        ITrasher(mail).trash()
         self.assertEquals(0, IObjectSize(mail).get_size())

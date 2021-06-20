@@ -1,4 +1,6 @@
 from AccessControl.Permission import Permission
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
@@ -7,9 +9,12 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.trash.remover import Remover
 from opengever.trash.trash import ITrashed
+from opengever.trash.trash import ITrasher
+from opengever.trash.trash import TrashError
 from plone import api
-from plone.locking.interfaces import ILockable
 from plone.protect import createToken
+from zExceptions import Unauthorized
+from zope.interface import noLongerProvides
 
 
 class TestTrash(IntegrationTestCase):
@@ -20,7 +25,7 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertFalse(ITrashed.providedBy(self.document))
         self.assertFalse(obj2brain(self.document).trashed)
@@ -34,7 +39,7 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertEquals(
             [u'Object {} has been moved to the trash.'.format(self.subdocument.title)],
@@ -47,7 +52,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -59,7 +64,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -72,7 +77,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -84,7 +89,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -97,7 +102,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -109,7 +114,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -122,7 +127,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -134,7 +139,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -147,7 +152,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -159,7 +164,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -172,7 +177,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -184,7 +189,7 @@ class TestTrash(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -195,7 +200,7 @@ class TestTrash(IntegrationTestCase):
     @browsing
     def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier, view="trashed")
+        browser.open(self.dossier, view="trash_content")
 
         self.assertEquals(['You have not selected any items.'],
                           error_messages())
@@ -209,7 +214,7 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertEquals(
             [u'Object {} is already in the trash.'.format(
@@ -225,11 +230,24 @@ class TestTrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.dossier, view="trash_content", data=data)
 
         self.assertEquals(
             [u"Could not move document {} to the trash: it's currently checked out.".format(
                 self.subdocument.title)],
+            error_messages())
+        self.assertEquals(
+            '{}#documents'.format(self.dossier.absolute_url()), browser.url)
+
+    @browsing
+    def test_trashing_non_trashable_item_is_not_possible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        data = self.make_path_param(self.task)
+        data['_authenticator'] = createToken()
+        browser.open(self.dossier, view="trash_content", data=data)
+        self.assertEquals(
+            [u'The object {} is not trashable.'.format(self.task.title)],
             error_messages())
         self.assertEquals(
             '{}#documents'.format(self.dossier.absolute_url()), browser.url)
@@ -240,7 +258,7 @@ class TestUntrash(IntegrationTestCase):
     @browsing
     def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier, view="untrashed")
+        browser.open(self.dossier, view="untrash_content")
 
         self.assertEquals(['You have not selected any items.'],
                           error_messages())
@@ -255,7 +273,7 @@ class TestUntrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="untrashed", data=data)
+        browser.open(self.dossier, view="untrash_content", data=data)
 
         self.assertFalse(ITrashed.providedBy(self.subdocument))
         self.assertFalse(obj2brain(self.subdocument).trashed)
@@ -271,7 +289,7 @@ class TestUntrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="untrashed", data=data)
+        browser.open(self.dossier, view="untrash_content", data=data)
 
         self.assertEquals(
             '{}#documents'.format(self.dossier.absolute_url()), browser.url)
@@ -288,7 +306,7 @@ class TestUntrash(IntegrationTestCase):
 
         data = self.make_path_param(self.subdocument)
         data['_authenticator'] = createToken()
-        browser.open(self.dossier, view="untrashed", data=data)
+        browser.open(self.dossier, view="untrash_content", data=data)
 
         self.assertEquals(
             [u'Restoring object {} from trash is not allowed.'.format(self.subdocument.title)],
@@ -305,7 +323,7 @@ class TestUntrash(IntegrationTestCase):
         Remover([self.empty_document]).remove()
 
         # Removed document cannot be untrashed
-        browser.open(self.empty_dossier, view="untrashed", data=data)
+        browser.open(self.empty_dossier, view="untrash_content", data=data)
 
         self.assertTrue(ITrashed.providedBy(self.empty_document))
         self.assertEquals(
@@ -320,7 +338,7 @@ class TestUntrash(IntegrationTestCase):
         self.assertEqual(self.empty_document.active_state,
                          api.content.get_state(self.empty_document))
 
-        browser.open(self.empty_dossier, view="untrashed", data=data)
+        browser.open(self.empty_dossier, view="untrash_content", data=data)
         self.assertFalse(ITrashed.providedBy(self.empty_document))
 
 
@@ -333,7 +351,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -348,7 +366,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -366,7 +384,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.checkin_document(self.subdocument)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.subdocument),
             send_authenticator=True,
         )
@@ -386,7 +404,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -401,7 +419,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_eml),
             send_authenticator=True,
         )
@@ -416,7 +434,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -431,7 +449,7 @@ class TestTrashWithBumblebee(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier,
-            view='trashed',
+            view="trash_content",
             data=self.make_path_param(self.mail_msg),
             send_authenticator=True,
         )
@@ -440,3 +458,363 @@ class TestTrashWithBumblebee(IntegrationTestCase):
             ['This email was moved to the trash.'],
             browser.css('.portalMessage.warning dd').text,
         )
+
+
+class TestTrasher(IntegrationTestCase):
+
+    def test_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.document
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_mail_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.mail_eml
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_private_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_document
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_private_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_document
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_private_mail_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_mail
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_inbox_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_document
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_forwarding_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_forwarding_document
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_task_document_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.taskdocument
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_proposal_document_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.proposaldocument
+        trasher = ITrasher(obj)
+        with self.assertRaises(Unauthorized):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_document_template_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.docprops_template
+        trasher = ITrasher(obj)
+        with self.assertRaises(Unauthorized):
+            trasher.trash()
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_dossier_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.empty_dossier
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_task_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.info_task
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_repofolder_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.empty_repofolder
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_disposition_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.disposition
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_proposal_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.proposal
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_template_folder_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.templates
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_dossier_template_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.dossiertemplate
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_workspace_root_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace_root
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_workspace_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_todo_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.todo
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_todolist_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.todolist_general
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_workspace_meeting_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace_meeting
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_private_folder_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_folder
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_private_dossier_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.private_dossier
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_inbox_container_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_container
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_inbox_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+    def test_forwarding_cannot_be_trashed(self):
+        self.login(self.manager)
+        obj = self.inbox_forwarding
+        trasher = ITrasher(obj)
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Not trashable', str(exc.exception))
+        self.assertFalse(ITrashed.providedBy(obj))
+
+
+class TestWorkspaceFolderTrasher(IntegrationTestCase):
+
+    def test_workspace_folder_can_be_trashed(self):
+        self.login(self.manager)
+        obj = self.workspace_folder
+        trasher = ITrasher(obj)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(obj))
+
+    def test_trashing_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder))
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder_document))
+        self.assertFalse(ITrashed.providedBy(subfolder))
+        self.assertFalse(ITrashed.providedBy(subdocument))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+
+        self.assertTrue(ITrashed.providedBy(self.workspace_folder))
+        self.assertTrue(ITrashed.providedBy(self.workspace_folder_document))
+        self.assertTrue(ITrashed.providedBy(subfolder))
+        self.assertTrue(ITrashed.providedBy(subdocument))
+
+    def test_verify_may_trash_on_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        self.assertTrue(trasher.verify_may_trash())
+
+        self.checkout_document(subdocument)
+        with self.assertRaises(TrashError) as exc:
+            trasher.verify_may_trash()
+        self.assertEqual('Document checked out', str(exc.exception))
+
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Document checked out', str(exc.exception))
+
+    def test_verify_may_trash_on_workspace_folder_recursively_checks_permissions(self):
+        self.login(self.workspace_member)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        self.assertTrue(trasher.verify_may_trash())
+
+        subfolder.__ac_local_roles_block__ = True
+
+        self.login(self.workspace_admin)
+        with self.assertRaises(Unauthorized):
+            trasher.verify_may_trash()
+
+    def test_untrashing_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+        trasher.untrash()
+
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder))
+        self.assertFalse(ITrashed.providedBy(self.workspace_folder_document))
+        self.assertFalse(ITrashed.providedBy(subfolder))
+        self.assertFalse(ITrashed.providedBy(subdocument))
+
+    def test_verify_may_untrash_on_workspace_folder_is_recursive(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subfolder))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+        self.assertTrue(trasher.verify_may_untrash())
+
+        noLongerProvides(subdocument, ITrashed)
+
+        with self.assertRaises(Unauthorized):
+            trasher.verify_may_untrash()
+
+        with self.assertRaises(Unauthorized):
+            trasher.untrash()
+
+    def test_cannot_untrash_object_with_trashed_parent(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+        self.assertTrue(trasher.verify_may_untrash())
+
+        subfolder_trasher = ITrasher(subfolder)
+        with self.assertRaises(Unauthorized):
+            subfolder_trasher.verify_may_untrash()
+
+        document_trasher = ITrasher(self.workspace_folder_document)
+        with self.assertRaises(Unauthorized):
+            document_trasher.verify_may_untrash()
+
+        noLongerProvides(self.workspace_folder, ITrashed)
+        self.assertTrue(subfolder_trasher.verify_may_untrash())
+        self.assertTrue(document_trasher.verify_may_untrash())

@@ -21,7 +21,7 @@ from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
@@ -154,7 +154,7 @@ class DocumentBuilder(GeverDexterityBuilder):
             obj.reindexObject(idxs=['checked_out'])
 
         if self._trashed:
-            trasher = ITrashable(obj)
+            trasher = ITrasher(obj)
             trasher.trash()
 
         if self._is_shadow:
@@ -305,7 +305,7 @@ class MailBuilder(GeverDexterityBuilder):
 
     def after_create(self, obj):
         if self._trashed:
-            trasher = ITrashable(obj)
+            trasher = ITrasher(obj)
             trasher.trash()
 
         obj.update_filename()

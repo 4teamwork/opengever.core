@@ -1,6 +1,6 @@
 from AccessControl import Unauthorized
 from opengever.trash import _
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.trash.trash import TrashError
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -18,7 +18,7 @@ class TrashView(BrowserView):
             for item in paths:
                 obj = self.context.restrictedTraverse(item)
 
-                trasher = ITrashable(obj)
+                trasher = ITrasher(obj)
                 try:
                     trasher.trash()
                 except TrashError as exc:
@@ -40,6 +40,10 @@ class TrashView(BrowserView):
                     elif exc.message == 'The document is locked':
                         msg = _(
                             u'could not trash the object ${obj}, it is locked.',
+                            mapping={'obj': obj.Title().decode('utf-8')})
+                    elif exc.message == 'Not trashable':
+                        msg = _(
+                            u'${obj} is not trashable.',
                             mapping={'obj': obj.Title().decode('utf-8')})
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
@@ -76,7 +80,7 @@ class UntrashView(BrowserView):
         if paths:
             for item in paths:
                 obj = self.context.restrictedTraverse(item)
-                trasher = ITrashable(obj)
+                trasher = ITrasher(obj)
                 try:
                     trasher.untrash()
                 except Unauthorized:

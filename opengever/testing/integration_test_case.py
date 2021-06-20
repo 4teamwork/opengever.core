@@ -33,7 +33,7 @@ from opengever.task.task import ITask
 from opengever.testing import assets
 from opengever.testing.helpers import SolrTestMixin
 from opengever.testing.test_case import TestCase
-from opengever.trash.trash import Trasher
+from opengever.trash.trash import ITrasher
 from operator import methodcaller
 from plone import api
 from plone.api.validation import at_least_one_of
@@ -779,7 +779,7 @@ class IntegrationTestCase(TestCase):
 
     def trash_documents(self, *objects):
         for obj in objects:
-            Trasher(obj).trash()
+            ITrasher(obj).trash()
 
     def assert_provides(self, obj, interface=None):
         self.assertTrue(interface.providedBy(obj), '{} should provide {}'.format(obj, interface))

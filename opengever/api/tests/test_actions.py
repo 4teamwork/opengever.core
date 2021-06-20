@@ -4,7 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -119,8 +119,8 @@ class TestFileActionsGetForMails(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -149,8 +149,8 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -281,8 +281,8 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -305,8 +305,8 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -437,8 +437,8 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -455,8 +455,8 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'oneoffixx_retry',
              u'title': u'Oneoffixx retry',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -479,8 +479,8 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -508,8 +508,8 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -522,7 +522,7 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
     def test_untrashing_available_for_trashed_document(self, browser):
         self.login(self.regular_user, browser)
 
-        trasher = ITrashable(self.document)
+        trasher = ITrasher(self.document)
         trasher.trash()
 
         expected_file_actions = [
@@ -535,8 +535,8 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'untrash_document',
-             u'title': u'Untrash document',
+            {u'id': u'untrash_context',
+             u'title': u'Untrash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -657,8 +657,8 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             {u'id': u'new_task_from_document',
              u'title': u'New task from document',
@@ -683,8 +683,8 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -706,8 +706,8 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
-            {u'id': u'trash_document',
-             u'title': u'Trash document',
+            {u'id': u'trash_context',
+             u'title': u'Trash',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -917,8 +917,8 @@ class TestFolderButtons(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
+            {u'icon': u'', u'id': u'trash_content', u'title': u'Move to trash'},
+            {u'icon': u'', u'id': u'untrash_content', u'title': u'Restore from trash'},
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
 
@@ -1700,8 +1700,8 @@ class TestFolderButtonsGetForWorkspace(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
+            {u'icon': u'', u'id': u'trash_content', u'title': u'Move to trash'},
+            {u'icon': u'', u'id': u'untrash_content', u'title': u'Restore from trash'},
             {u'icon': u'', u'id': u'create_forwarding', u'title': u'Forward'},
             {u'icon': u'',
              u'id': u'pdf_dossierlisting',
@@ -1740,8 +1740,8 @@ class TestFolderButtonsGetForWorkspace(FolderActionsTestBase):
             {u'icon': u'', u'id': u'move_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'move_proposal_items', u'title': u'Move items'},
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
-            {u'icon': u'', u'id': u'trashed', u'title': u'Move to trash'},
-            {u'icon': u'', u'id': u'untrashed', u'title': u'Restore from trash'},
+            {u'icon': u'', u'id': u'trash_content', u'title': u'Move to trash'},
+            {u'icon': u'', u'id': u'untrash_content', u'title': u'Restore from trash'},
             {u'icon': u'',
              u'id': u'pdf_dossierlisting',
              u'title': u'Print selection (PDF)'},
@@ -1750,6 +1750,14 @@ class TestFolderButtonsGetForWorkspace(FolderActionsTestBase):
              u'title': u'Print selection (PDF)'}
         ]
 
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.workspace_folder),
+        )
+
+        ITrasher(self.workspace_folder).trash()
+        expected_folder_buttons.remove({u'icon': u'', u'id': u'trash_content', u'title': u'Move to trash'})
+        expected_folder_buttons.remove({u'icon': u'', u'id': u'untrash_content', u'title': u'Restore from trash'})
         self.assertListEqual(
             expected_folder_buttons,
             self.get_folder_buttons(browser, self.workspace_folder),

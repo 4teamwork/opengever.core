@@ -241,7 +241,7 @@ class RelatedDocuments(Documents):
             'checkin',
             'cancel',
             'create_task',
-            'trashed',
+            'trash_content',
             'send_documents',
             'copy_documents_to_remote_client',
             'move_items',

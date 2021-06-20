@@ -1,0 +1,36 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+
+  <!-- FOLDER BUTTONS -->
+  <object name="folder_buttons" meta_type="CMF Action Category">
+
+    <object name="trash_content" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">trash_content</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:./trash_content:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@folder_buttons_availability/is_trash_available</property>
+      <property name="permissions">
+        <element value="opengever.trash: Trash content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="untrash_content" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">untrash_content</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:./untrash_content:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@folder_buttons_availability/is_untrash_available</property>
+      <property name="permissions">
+        <element value="opengever.trash: Untrash content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="trashed" meta_type="CMF Action" remove="True"></object>
+    <object name="untrashed" meta_type="CMF Action" remove="True"></object>
+
+  </object>
+
+</object>

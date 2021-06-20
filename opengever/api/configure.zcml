@@ -35,6 +35,7 @@
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".inbox.SerializeInboxToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
+  <adapter factory=".workspace_folder.SerializeWorkspaceFolderToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
   <adapter factory=".mail.SerializeMailToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
@@ -154,16 +155,16 @@
   <plone:service
       method="POST"
       name="@trash"
-      for="opengever.document.behaviors.IBaseDocument"
-      factory=".trash.Trash"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      factory=".trash.TrashPost"
       permission="opengever.trash.TrashContent"
       />
 
   <plone:service
       method="POST"
       name="@untrash"
-      for="opengever.document.behaviors.IBaseDocument"
-      factory=".trash.Untrash"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      factory=".trash.UntrashPost"
       permission="opengever.trash.UntrashContent"
       />
 

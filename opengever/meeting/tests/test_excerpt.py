@@ -6,7 +6,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.model import Excerpt
 from opengever.testing import IntegrationTestCase
 from opengever.trash.remover import Remover
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.trash.trash import TrashError
 from z3c.relationfield.event import _relations
 from zope.component import getMultiAdapter
@@ -32,13 +32,13 @@ class TestTrashReturnedExcerpt(IntegrationTestCase):
         agenda_item.decide()
         excerpt1 = agenda_item.generate_excerpt('excerpt 1')
 
-        ITrashable(excerpt1).trash()
+        ITrasher(excerpt1).trash()
 
-        ITrashable(excerpt1).untrash()
+        ITrasher(excerpt1).untrash()
         agenda_item.return_excerpt(excerpt1)
 
         with self.assertRaises(TrashError):
-            ITrashable(excerpt1).trash()
+            ITrasher(excerpt1).trash()
 
 
 class TestRemoveTrashedExcerpt(IntegrationTestCase):
@@ -55,7 +55,7 @@ class TestRemoveTrashedExcerpt(IntegrationTestCase):
         excerpts = Excerpt.query.filter(Excerpt.agenda_item_id == agenda_item.agenda_item_id).all()
         self.assertEqual(2, len(excerpts))
 
-        ITrashable(excerpt1).trash()
+        ITrasher(excerpt1).trash()
         with elevated_privileges():
             Remover([excerpt1]).remove()
 
@@ -76,7 +76,7 @@ class TestRemoveTrashedExcerpt(IntegrationTestCase):
         self.assertEqual(2, len(agenda_item.get_excerpt_documents(include_trashed=True)))
         self.assertEqual(2, len(list(_relations(self.submitted_proposal))))
 
-        ITrashable(excerpt1).trash()
+        ITrasher(excerpt1).trash()
         with elevated_privileges():
             Remover([excerpt1]).remove()
 

@@ -11,7 +11,6 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from zope.component import adapter
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
 

@@ -16,7 +16,7 @@ from opengever.meeting.period import Period
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
-from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrasher
 from opengever.trash.trash import ITrashed
 from plone import api
 from sqlalchemy import Boolean
@@ -229,7 +229,7 @@ class AgendaItem(Base):
         # the agenda_item is ad hoc if it has a document but no proposal
         if self.has_document and not self.has_proposal:
             document = self.resolve_document()
-            trasher = ITrashable(document)
+            trasher = ITrasher(document)
             if not trasher.is_trashed():
                 trasher.trash()
 
