@@ -6,8 +6,9 @@ from opengever.workspace.interfaces import IWorkspaceFolder
 from plone.dexterity.interfaces import IDexterityContent
 from plone.locking.interfaces import ILockable
 from Products.CMFCore.utils import _checkPermission
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
-from zope.component import queryAdapter
+from zope.component import getAdapter
 from zope.component import queryMultiAdapter
 from zope.component.interfaces import IObjectEvent
 from zope.component.interfaces import ObjectEvent
@@ -166,8 +167,19 @@ class DefaultContentTrasher(object):
 
     def is_parent_trashed(self):
         container = aq_parent(aq_inner(self.context))
-        trasher = queryAdapter(container, ITrasher)
-        return trasher and trasher.is_trashed()
+        trasher = getAdapter(container, ITrasher)
+        return trasher.is_trashed()
+
+
+@implementer(ITrasher)
+@adapter(IPloneSiteRoot)
+class PloneSiteRootTrasher(DefaultContentTrasher):
+
+    def verify_may_trash(self):
+        return False
+
+    def verify_may_untrash(self):
+        return False
 
 
 @adapter(IBaseDocument)

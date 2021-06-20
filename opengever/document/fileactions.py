@@ -15,8 +15,8 @@ from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
 from plone.locking.interfaces import ILockable
 from zope.component import adapter
+from zope.component import getAdapter
 from zope.component import getMultiAdapter
-from zope.component import queryAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -282,9 +282,9 @@ class WorkspaceFolderFileActions(object):
         self.request = request
 
     def is_trash_context_action_available(self):
-        trasher = queryAdapter(self.context, ITrasher)
-        return trasher and trasher.verify_may_trash(raise_on_violations=False)
+        trasher = getAdapter(self.context, ITrasher)
+        return trasher.verify_may_trash(raise_on_violations=False)
 
     def is_untrash_context_action_available(self):
-        trasher = queryAdapter(self.context, ITrasher)
-        return trasher and trasher.verify_may_untrash(raise_on_violations=False)
+        trasher = getAdapter(self.context, ITrasher)
+        return trasher.verify_may_untrash(raise_on_violations=False)

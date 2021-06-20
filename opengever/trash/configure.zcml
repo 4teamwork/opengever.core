@@ -24,6 +24,7 @@
       />
 
   <adapter factory=".trash.DefaultContentTrasher" />
+  <adapter factory=".trash.PloneSiteRootTrasher" />
   <adapter factory=".trash.DocumentTrasher" />
   <adapter factory=".trash.WorkspaceFolderTrasher" />
 

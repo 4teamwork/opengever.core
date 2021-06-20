@@ -11,7 +11,7 @@ from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from Products.Five import BrowserView
-from zope.component import queryAdapter
+from zope.component import getAdapter
 
 
 class FolderButtonsAvailabilityView(BrowserView):
@@ -130,8 +130,8 @@ class FolderButtonsAvailabilityView(BrowserView):
         inactive or resolved dossier).
         The action also does not need to be available on trashed contents.
         """
-        trasher = queryAdapter(self.context, ITrasher)
-        if trasher and trasher.is_trashed():
+        trasher = getAdapter(self.context, ITrasher)
+        if trasher.is_trashed():
             return False
         return (not self._is_repository_folder()
                 and not self._is_repository_root()
@@ -143,8 +143,8 @@ class FolderButtonsAvailabilityView(BrowserView):
         inactive or resolved dossier).
         Also untrashing content in a trashed container is not allowed.
         """
-        trasher = queryAdapter(self.context, ITrasher)
-        if trasher and trasher.is_trashed():
+        trasher = getAdapter(self.context, ITrasher)
+        if trasher.is_trashed():
             return False
         return (not self._is_repository_folder()
                 and not self._is_repository_root()
