@@ -48,3 +48,10 @@ das übergeordnete Objekt sich nicht im Papierkorb befindet.
       HTTP/1.1 204 No Content
 
       null
+
+
+Objekte löschen
+---------------
+
+Im teamraum können Dokumente und Ordner die im Papierkorb sind, definitiv gelöscht werden.
+Dies wird mit einem DELETE request auf das Objekt gemacht, siehe :ref:`content-delete`

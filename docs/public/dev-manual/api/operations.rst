@@ -280,3 +280,40 @@ Um ein oder mehrere Attribute eines Objekts zu aktualisieren, wird ein
        **Code-Beispiel (Python)**
 
     .. literalinclude:: examples/example_patch.py
+
+
+.. _content-delete:
+
+Inhalte löschen (DELETE)
+------------------------
+
+Um ein Objekt zu löschen, wird ein ``DELETE`` Request verwendet. Dies ist grundsätzlich
+in GEVER verboten und in teamraum erlaubt.
+
+
+.. http:delete:: /(path)
+
+   Löscht das Objekt unter `path`.
+
+   **Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      DELETE /workspaces/workspace-1/document-24 HTTP/1.1
+      Accept: application/json
+
+   **Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+
+      null
+
+.. container:: collapsible
+
+    .. container:: header
+
+       **Code-Beispiel (Python)**
+
+    .. literalinclude:: examples/example_delete.py

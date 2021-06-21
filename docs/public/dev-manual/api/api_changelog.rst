@@ -16,7 +16,7 @@ Other Changes
 - Add support for the ``stats`` component to the ``@solrsearch`` endpoint.
 - ``@watchers``: The endpoint is now also available for documents. (see :ref:`docs <watchers>`)
 - `@trash` and `@untrash` endpoints now also work for WorkspaceFolders.
-
+- Trashed workspace documents and folders can be deleted. (see :ref:`docs <trash>`)
 
 2021.11.0 (2021-05-28)
 ----------------------
