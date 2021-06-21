@@ -179,10 +179,14 @@ class DefaultContentTrasher(object):
 @adapter(IPloneSiteRoot)
 class PloneSiteRootTrasher(DefaultContentTrasher):
 
-    def verify_may_trash(self):
+    def verify_may_trash(self, raise_on_violations=True):
+        if raise_on_violations:
+            raise Unauthorized()
         return False
 
-    def verify_may_untrash(self):
+    def verify_may_untrash(self, raise_on_violations=True):
+        if raise_on_violations:
+            raise Unauthorized()
         return False
 
 
