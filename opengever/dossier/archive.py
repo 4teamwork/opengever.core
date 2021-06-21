@@ -81,20 +81,9 @@ class ArchiveForm(Form, DossierResolutionStatusmessageMixin):
         except InvalidDates as exc:
             return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
 
-        if action == METHOD_RESOLVING_AND_FILING:
-            IDossierArchiver(self.context).archive(filing_prefix, filing_year)
-
-        if action == METHOD_RESOLVING_EXISTING_FILING:
-            # archive all with the existing filing number
-            filing_no = IFilingNumber(self.context).filing_no
-            filing_prefix = IDossier(self.context).filing_prefix
-            IDossierArchiver(self.context).archive(
-                filing_prefix, filing_year, number=filing_no)
-
-        if action == METHOD_RESOLVING:
-            # only update the prefixes
-            if filing_prefix:
-                IDossierArchiver(self.context).update_prefix(filing_prefix)
+        IDossierArchiver(self.context).run(
+            filing_action=action, filing_prefix=filing_prefix,
+            filing_year=filing_year)
 
         # If everything went well, resolve the main dossier
         resolver.resolve(end_date=end_date, **data)
