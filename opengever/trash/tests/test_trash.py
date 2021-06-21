@@ -483,13 +483,6 @@ class TestTrasher(IntegrationTestCase):
         trasher.trash()
         self.assertTrue(ITrashed.providedBy(obj))
 
-    def test_private_document_can_be_trashed(self):
-        self.login(self.manager)
-        obj = self.private_document
-        trasher = ITrasher(obj)
-        trasher.trash()
-        self.assertTrue(ITrashed.providedBy(obj))
-
     def test_private_mail_can_be_trashed(self):
         self.login(self.manager)
         obj = self.private_mail
