@@ -20,6 +20,7 @@ from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.interfaces import IFTPSTransportSettings
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
@@ -147,6 +148,7 @@ class GeverSettingsAdpaterV1(object):
         features['ech0147_export'] = api.portal.get_registry_record('ech0147_export_enabled', interface=IECH0147Settings)
         features['ech0147_import'] = api.portal.get_registry_record('ech0147_import_enabled', interface=IECH0147Settings)
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)
+        features['filing_number'] = self.is_filing_number_feature_installed()
         features['gever_ui_enabled'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
         features['hubspot'] = api.portal.get_registry_record('is_feature_enabled', interface=IHubSpotSettings)  # noqa
         features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
@@ -173,3 +175,6 @@ class GeverSettingsAdpaterV1(object):
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
         features['optional_task_permissions_revoking'] = api.portal.get_registry_record('optional_task_permissions_revoking_enabled', interface=ITaskSettings)  # noqa
         return features
+
+    def is_filing_number_feature_installed(self):
+        return IFilingNumberActivatedLayer.providedBy(getRequest())

@@ -74,6 +74,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('ech0147_export', False),
                 ('ech0147_import', False),
                 ('favorites', True),
+                ('filing_number', False),
                 ('gever_ui_enabled', False),
                 ('hubspot', False),
                 ('journal_pdf', False),

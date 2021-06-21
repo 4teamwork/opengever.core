@@ -69,6 +69,7 @@ class TestConfig(IntegrationTestCase):
                 u'ech0147_export': False,
                 u'ech0147_import': False,
                 u'favorites': True,
+                u'filing_number': False,
                 u'gever_ui_enabled': False,
                 u'hubspot': False,
                 u'journal_pdf': False,
@@ -324,3 +325,15 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'primary_repository'), root2.absolute_url())
+
+    @browsing
+    def test_feature_filing_number(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertFalse(browser.json['features']['filing_number'])
+
+        self.activate_feature('filing_number')
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertTrue(browser.json['features']['filing_number'])
