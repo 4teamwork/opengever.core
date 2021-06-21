@@ -20,7 +20,6 @@ from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.Transience.Transience import Increaser
 from z3c.form import button, field
-from z3c.form import validator
 from z3c.form.browser import radio
 from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
@@ -98,7 +97,7 @@ class ArchiveForm(Form, DossierResolutionStatusmessageMixin):
                 IDossierArchiver(self.context).update_prefix(filing_prefix)
 
         # If everything went well, resolve the main dossier
-        resolver.resolve(end_date=end_date)
+        resolver.resolve(end_date=end_date, **data)
 
         self.ptool.addPortalMessage(
             _("The Dossier has been resolved"), type="info")
@@ -109,13 +108,32 @@ class ArchiveForm(Form, DossierResolutionStatusmessageMixin):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
-
 @implementer(IDossierArchiver)
 @adapter(IDossierMarker)
 class Archiver(object):
 
     def __init__(self, context):
         self.context = context
+
+    def run(self, **kwargs):
+
+        action = kwargs['filing_action']
+        filing_year = kwargs['filing_year']
+        filing_prefix = kwargs['filing_prefix']
+
+        if action == METHOD_RESOLVING_AND_FILING:
+            self.archive(filing_prefix, filing_year)
+
+        if action == METHOD_RESOLVING_EXISTING_FILING:
+            # archive all with the existing filing number
+            filing_no = IFilingNumber(self.context).filing_no
+            filing_prefix = IDossier(self.context).filing_prefix
+            self.archive(filing_prefix, filing_year, number=filing_no)
+
+        if action == METHOD_RESOLVING:
+            # only update the prefixes
+            if filing_prefix:
+                self.update_prefix(filing_prefix)
 
     def update_prefix(self, prefix):
         """Update the filing prefix on the dossier and

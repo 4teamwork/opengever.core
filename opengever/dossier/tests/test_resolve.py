@@ -1370,16 +1370,16 @@ class TestResolvingDossiersWithFilingNumberSupportRESTAPI(ResolveTestHelperRESTA
     @browsing
     def test_archive_form_is_displayed_for_sites_with_filing_number_support(self, browser):
         """Resolving dossiers via REST API with the filing number feature
-        activated is currently not supported.
+        activated expect filing form data
         """
         self.login(self.secretariat_user, browser)
 
         self.resolve(self.resolvable_dossier, browser)
 
         self.assertEqual(400, browser.status_code)
-        self.assertEqual({
-            u'error': {
-                u'message': u"Can't resolve dossiers via REST API if filing number feature is activated",
+        self.assertEqual(
+            {u'error': {
+                u'message': u"[{'field': 'dossier_enddate', 'message': u'Required input is missing.', 'error': RequiredMissing('dossier_enddate')}, {'field': 'filing_action', 'message': u'Required input is missing.', 'error': RequiredMissing('filing_action')}, {'field': 'dossier_enddate', 'message': u'Required input is missing.', 'error': RequiredMissing('dossier_enddate')}, {'field': 'filing_action', 'message': u'Required input is missing.', 'error': RequiredMissing('filing_action')}]",
                 u'type': u'Bad Request'}},
             browser.json)
 

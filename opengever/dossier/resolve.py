@@ -12,6 +12,8 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.exceptions import PreconditionsViolated
+from opengever.dossier.filing.form import IFilingFormSchema
+from opengever.dossier.interfaces import IDossierArchiver
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve_lock import ResolveLock
@@ -89,6 +91,13 @@ class ResolveDossierTransitionExtender(TransitionExtender):
     """TransitionExtender that gets invoked when resolving dossiers.
     """
 
+    @property
+    def schemas(self):
+        if IFilingNumberMarker.providedBy(self.context):
+            return [IFilingFormSchema]
+
+        return []
+
     def after_transition_hook(self, transition, disable_sync, transition_params):
         AfterResolveJobs(self.context).execute()
 
@@ -107,7 +116,7 @@ class LockingResolveManager(object):
         self.context = context
         self.resolver = get_resolver(self.context)
 
-    def resolve(self):
+    def resolve(self, **transition_params):
         resolve_lock = ResolveLock(self.context)
 
         # Check whether a resolve is already in progress
@@ -119,7 +128,7 @@ class LockingResolveManager(object):
         # by acquring a lock, resolving, and then releasing the lock
         try:
             resolve_lock.acquire(commit=True)
-            result = self.execute_recursive_resolve()
+            result = self.execute_recursive_resolve(**transition_params)
 
             # We need to commit here so that a possible ConflictError already
             # manifests here, in our try..finally that will remove the lock.
@@ -152,9 +161,13 @@ class LockingResolveManager(object):
             # this 'finally' block.
             resolve_lock.release(commit=True)
 
-    def execute_recursive_resolve(self):
+    def execute_recursive_resolve(self, **transition_params):
         self.resolver.raise_on_failed_preconditions()
-        self.resolver.resolve()
+        if self.is_archive_form_needed():
+            IDossierArchiver(self.context).run(**transition_params)
+
+        self.resolver.resolve(
+            end_date=transition_params.get('dossier_enddate'), **transition_params)
 
     def is_archive_form_needed(self):
         return self.resolver.is_archive_form_needed()
@@ -275,7 +288,7 @@ class StrictDossierResolver(object):
         else:
             return True
 
-    def resolve(self, end_date=None):
+    def resolve(self, end_date=None, **kwargs):
         if not self.enddates_valid or not self.preconditions_fulfilled:
             raise TypeError
 
@@ -284,9 +297,9 @@ class StrictDossierResolver(object):
 
         end_date = end_date or self.context.earliest_possible_end_date()
         self._recursive_resolve(
-            self.context, end_date, triggering_dossier=True)
+            self.context, end_date, triggering_dossier=True, **kwargs)
 
-    def _recursive_resolve(self, dossier, end_date, triggering_dossier=False):
+    def _recursive_resolve(self, dossier, end_date, triggering_dossier=False, **kwargs):
         new_end_date = None
 
         if triggering_dossier:
@@ -316,7 +329,7 @@ class StrictDossierResolver(object):
             self._recursive_resolve(subdossier.getObject(), end_date)
 
         if dossier.is_open():
-            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
+            self.wft.doActionFor(dossier, 'dossier-transition-resolve', transition_params=kwargs)
 
 
 class AfterResolveJobs(object):
