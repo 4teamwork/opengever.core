@@ -20,4 +20,6 @@
 
   <permission id="opengever.workspace.DeleteWorkspaceMeetingAgendaItems" title="opengever.workspace: Delete Workspace Meeting Agenda Items" />
 
+  <permission id="opengever.workspace.DeleteWorkspaceFolders" title="opengever.workspace: Delete Workspace Folders" />
+
 </configure>

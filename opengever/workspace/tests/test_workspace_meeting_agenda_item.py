@@ -124,7 +124,7 @@ class TestWorkspaceMeetingAgendaItem(IntegrationTestCase):
     def test_guests_cannot_delete_workspace_meeting_agenda_item(self, browser):
         self.login(self.workspace_guest, browser)
         workspace_meeting_agenda_item_id = self.workspace_meeting_agenda_item.id
-        with browser.expect_http_error(401):
+        with browser.expect_http_error(403):
             browser.open(self.workspace_meeting_agenda_item, method='DELETE', headers=self.api_headers)
 
         self.assertIn(workspace_meeting_agenda_item_id, self.workspace_meeting.objectIds())

@@ -169,6 +169,12 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="delete_workspace_context" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="label_delete_context">Delete</property>
+      <property name="available_expr">object/@@file_actions_availability/is_delete_workspace_context_action_available</property>
+      <property name="visible">True</property>
+    </object>
+
     <object name="new_task_from_document" meta_type="CMF Action" i18n:domain="opengever.document">
       <property name="title" i18n:translate="label_new_task_from_document">New task from document</property>
       <property name="available_expr">object/@@file_actions_availability/is_new_task_from_document_available</property>
@@ -599,7 +605,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="delete_workspace_document" meta_type="CMF Action" i18n:domain="plone">
+    <object name="delete_workspace_content" meta_type="CMF Action" i18n:domain="plone">
       <property name="title" i18n:translate="">Delete</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr" />
@@ -608,6 +614,9 @@
       <property name="available_expr" />
       <property name="permissions">
         <element value="opengever.workspace: Delete Documents" />
+        <element value="opengever.workspace: Delete Workspace Folders" />
+        <element value="opengever.workspace: Delete Todos" />
+        <element value="opengever.workspace: Delete Workspace Meeting Agenda Items" />
       </property>
       <property name="visible">True</property>
     </object>
@@ -979,18 +988,6 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="delete_workspace_document" meta_type="CMF Action" i18n:domain="plone">
-      <property name="title" i18n:translate="">Delete</property>
-      <property name="description" i18n:translate="" />
-      <property name="url_expr" />
-      <property name="link_target" />
-      <property name="icon_expr" />
-      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.trash.trash.ITrashed')</property>
-      <property name="permissions">
-        <element value="opengever.workspace: Delete Documents" />
-      </property>
-      <property name="visible">True</property>
-    </object>
   </object>
 
 

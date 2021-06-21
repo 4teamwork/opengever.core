@@ -11,9 +11,11 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.wopi.lock import get_lock_token
+from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
 from plone.locking.interfaces import ILockable
+from zExceptions import Forbidden
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
@@ -128,6 +130,14 @@ class BaseDocumentFileActions(object):
             if can_unlock_obj(self.context, lock['type']):
                 return True
         return False
+
+    def is_delete_workspace_context_action_available(self):
+        deleter = IDeleter(self.context)
+        try:
+            deleter.verify_may_delete()
+            return True
+        except Forbidden:
+            return False
 
 
 @implementer(IFileActions)
@@ -288,3 +298,11 @@ class WorkspaceFolderFileActions(object):
     def is_untrash_context_action_available(self):
         trasher = getAdapter(self.context, ITrasher)
         return trasher.verify_may_untrash(raise_on_violations=False)
+
+    def is_delete_workspace_context_action_available(self):
+        deleter = IDeleter(self.context)
+        try:
+            deleter.verify_may_delete()
+            return True
+        except Forbidden:
+            return False

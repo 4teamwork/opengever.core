@@ -212,6 +212,9 @@ class IFileActions(Interface):
     def is_untrash_context_action_available():
         """Return whether the untrash_context action is available."""
 
+    def is_delete_workspace_context_action_available():
+        """Return whether the delete_workspace_context action is available."""
+
     def is_new_task_from_document_available():
         """Return whether the new_task_from_document action is available."""
 

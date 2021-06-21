@@ -94,30 +94,10 @@
 
   <plone:service
       method="DELETE"
-      for="opengever.workspace.interfaces.IWorkspaceMeetingAgendaItem"
-      factory=".workspace.DeleteWorkspaceContent"
-      permission="opengever.workspace.DeleteWorkspaceMeetingAgendaItems"
-      />
-
-  <plone:service
-      method="DELETE"
-      for="opengever.document.document.IDocumentSchema"
-      factory=".delete.DeleteDocument"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <plone:service
-      method="DELETE"
-      for="opengever.workspace.interfaces.IToDo"
-      factory=".workspace.DeleteWorkspaceContent"
-      permission="opengever.workspace.DeleteTodos"
-      />
-
-  <plone:service
-      method="DELETE"
-      for="opengever.workspace.interfaces.IToDoList"
-      factory=".workspace.DeleteWorkspaceContent"
-      permission="opengever.workspace.DeleteTodos"
+      for="Products.CMFCore.interfaces.IContentish"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      factory=".delete.GeverContentDelete"
+      permission="zope2.View"
       />
 
   <plone:service

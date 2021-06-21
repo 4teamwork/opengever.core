@@ -272,7 +272,7 @@ class TestAPISupportForTodo(IntegrationTestCase):
     @browsing
     def test_guests_cannot_delete_todos(self, browser):
         self.login(self.workspace_guest, browser)
-        with browser.expect_http_error(401):
+        with browser.expect_http_error(403):
             browser.open(self.todo, method='DELETE', headers=self.api_headers)
 
     @browsing
