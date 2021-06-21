@@ -34,6 +34,16 @@
        
 
 
+   .. py:attribute:: reference_number_addendum
+
+       :Feldname: :field-title:`Aktenzeichen Zusatz`
+       :Datentyp: ``TextLine``
+       
+       
+       :Beschreibung: Achtung: Änderung erfordert Neuindexierung von "reference" und "sortable_reference".
+       
+
+
    .. py:attribute:: title_de
 
        :Feldname: :field-title:`Titel (deutsch)`
