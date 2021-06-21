@@ -109,3 +109,115 @@ class TestWorkflowPost(IntegrationTestCase):
         self.assertEqual('Bad Request', browser.json['error']['type'])
         self.assertIn(u"Invalid transition 'invalid-transition'",
                       browser.json['error']['message'])
+
+
+class TestWorkflowSchemaEndpoint(IntegrationTestCase):
+
+    features = ('filing_number', )
+
+    @browsing
+    def test_raise_if_transition_is_not_given(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(code=400):
+            browser.open(self.empty_dossier, method="GET",
+                         headers=self.api_headers,
+                         view='@workflow-schema')
+
+        self.assertEqual(
+            {u'error': {
+                u'message': u'Missing transition',
+                u'type': u'BadRequest'}},
+            browser.json)
+
+    @browsing
+    def test_return_serialized_schema(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.empty_dossier, method="GET",
+                     headers=self.api_headers,
+                     view='@workflow-schema/dossier-transition-resolve')
+
+        self.assertEqual([u'required', u'properties', u'fieldsets'],
+                         browser.json.keys())
+
+        self.assertEqual(
+            [{u'fields': [u'filing_prefix', u'dossier_enddate',
+                          u'filing_year', u'filing_action'],
+              u'id': u'default',
+              u'behavior': u'plone',
+              u'title': u'Default'}],
+            browser.json['fieldsets'])
+
+        self.assertEqual(
+            {
+                u'dossier_enddate': {
+                    u'widget': u'date',
+                    u'description': u'',
+                    u'title': u'End date',
+                    u'default': u'2016-01-01',
+                    u'factory': u'Date',
+                    u'type': u'string'},
+                u'filing_action': {
+                    u'description': u'',
+                    u'vocabulary': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-7/@vocabularies/filing_action'},
+                    u'title': u'Action',
+                    u'enum': [u'resolve and set filing no',
+                              u'only resolve, set filing no later'],
+                    u'factory': u'Choice',
+                    u'choices': [
+                        [u'resolve and set filing no',
+                         u'Resolve and issue filing number'],
+                        [u'only resolve, set filing no later',
+                         u"Just resolve, don't issue a filing number yet"]],
+                    u'enumNames': [
+                        u'Resolve and issue filing number',
+                        u"Just resolve, don't issue a filing number yet"],
+                    u'type': u'string'},
+                u'filing_year': {
+                    u'default': u'2016',
+                    u'title': u'Filing year',
+                    u'type': u'string',
+                    u'description': u'',
+                    u'factory': u'Text line (String)'},
+                u'filing_prefix': {
+                    u'description': u'',
+                    u'vocabulary': {
+                        u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-7/@sources/filing_prefix'},
+                    u'title': u'Filing number prefix',
+                    u'enum': [
+                        u'administration',
+                        u'government',
+                        u'department',
+                        u'directorate',
+                        u'personal'],
+                    u'factory': u'Choice',
+                    u'choices': [
+                        [u'administration', u'Administration'],
+                        [u'government', u'Cantonal Government'],
+                        [u'department', u'Department'],
+                        [u'directorate', u'Directorate'],
+                        [u'personal', u'Human Resources']],
+                    u'enumNames': [
+                        u'Administration',
+                        u'Cantonal Government',
+                        u'Department',
+                        u'Directorate',
+                        u'Human Resources'],
+                    u'type': u'string'}
+            },
+            browser.json['properties'])
+
+        self.assertEqual([u'dossier_enddate', u'filing_action'],
+                         browser.json['required'])
+
+    @browsing
+    def test_returns_empty_configuration_when_no_schemas_are_registered(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.empty_dossier, method="GET",
+                     headers=self.api_headers,
+                     view='@workflow-schema/dossier-transition-deactivate')
+
+        self.assertEqual({"properties": {}, "required": [], "fieldsets": []},
+                         browser.json)

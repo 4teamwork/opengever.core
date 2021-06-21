@@ -372,3 +372,58 @@ class WorkspaceWorkflowTransition(GEVERWorkflowTransition):
                     message='Workspace contains checked out documents.'))
 
         return super(WorkspaceWorkflowTransition, self).reply()
+
+
+@implementer(IPublishTraverse)
+class WorkflowSchemaGET(Service):
+
+    def __init__(self, context, request):
+        super(WorkflowSchemaGET, self).__init__(context, request)
+        self.transition = None
+
+    def publishTraverse(self, request, name):
+        if self.transition is None:
+            self.transition = name
+        else:
+            raise NotFound(self, name, request)
+        return self
+
+    def reply(self):
+        if self.transition is None:
+            self.request.response.setStatus(400)
+            return dict(error=dict(type="BadRequest", message="Missing transition"))
+
+        transition_extender = queryMultiAdapter(
+            (self.context, self.request),
+            ITransitionExtender, name=self.transition)
+
+        if not transition_extender or not transition_extender.schemas:
+            return {
+                "properties": {},
+                "required": [],
+                "fieldsets": [],
+            }
+
+        schema = transition_extender.schemas[0]
+        additional_schemata = []
+        if len(transition_extender.schemas) > 1:
+            additional_schemata = transition_extender.schemas[1]
+
+        fieldsets = get_fieldsets(
+            self.context, self.request, schema,
+            additional_schemata=additional_schemata)
+        properties = get_jsonschema_properties(
+            self.context, self.request, fieldsets)
+
+        required = []
+        for field in iter_fields(fieldsets):
+            name = field.field.getName()
+            # Determine required fields
+            if field.field.required:
+                required.append(name)
+
+        return {
+            "properties": IJsonCompatible(properties),
+            "required": required,
+            "fieldsets": get_fieldset_infos(fieldsets),
+        }
