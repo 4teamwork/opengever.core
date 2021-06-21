@@ -83,6 +83,8 @@ class DefaultContentTrasher(object):
         self._trash()
 
     def _trash(self):
+        if ITrashed.providedBy(self.context):
+            return
         alsoProvides(self.context, ITrashed)
         self.reindex()
         notify(TrashedEvent(self.context))
@@ -97,6 +99,13 @@ class DefaultContentTrasher(object):
         notify(UntrashedEvent(self.context))
 
     def verify_may_trash(self, raise_on_violations=True):
+        if self.is_trashed():
+            if raise_on_violations:
+                raise TrashError('Already trashed')
+            return False
+        return self._verify_may_trash(raise_on_violations)
+
+    def _verify_may_trash(self, raise_on_violations=True):
         if not self.is_trashable():
             if raise_on_violations:
                 raise TrashError('Not trashable')
@@ -105,11 +114,6 @@ class DefaultContentTrasher(object):
         if not self.check_trash_permission():
             if raise_on_violations:
                 raise Unauthorized()
-            return False
-
-        if self.is_trashed():
-            if raise_on_violations:
-                raise TrashError('Already trashed')
             return False
 
         if self.is_locked():
@@ -175,10 +179,14 @@ class DefaultContentTrasher(object):
 @adapter(IPloneSiteRoot)
 class PloneSiteRootTrasher(DefaultContentTrasher):
 
-    def verify_may_trash(self):
+    def verify_may_trash(self, raise_on_violations=True):
+        if raise_on_violations:
+            raise Unauthorized()
         return False
 
-    def verify_may_untrash(self):
+    def verify_may_untrash(self, raise_on_violations=True):
+        if raise_on_violations:
+            raise Unauthorized()
         return False
 
 
@@ -187,8 +195,8 @@ class DocumentTrasher(DefaultContentTrasher):
     """An object which handles trashing/untrashing documents.
     """
 
-    def verify_may_trash(self, raise_on_violations=True):
-        if not super(DocumentTrasher, self).verify_may_trash(raise_on_violations):
+    def _verify_may_trash(self, raise_on_violations=True):
+        if not super(DocumentTrasher, self)._verify_may_trash(raise_on_violations):
             return False
 
         if self.is_checked_out():
@@ -230,11 +238,11 @@ class WorkspaceFolderTrasher(DefaultContentTrasher):
     """An object which handles trashing/untrashing workspace folders.
     """
 
-    def verify_may_trash(self, raise_on_violations=True):
-        if not super(WorkspaceFolderTrasher, self).verify_may_trash(raise_on_violations):
+    def _verify_may_trash(self, raise_on_violations=True):
+        if not super(WorkspaceFolderTrasher, self)._verify_may_trash(raise_on_violations):
             return False
         for obj in self.context.objectValues():
-            if not ITrasher(obj).verify_may_trash(raise_on_violations):
+            if not ITrasher(obj)._verify_may_trash(raise_on_violations):
                 return False
         return True
 
