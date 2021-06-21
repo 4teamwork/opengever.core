@@ -811,3 +811,25 @@ class TestWorkspaceFolderTrasher(IntegrationTestCase):
         noLongerProvides(self.workspace_folder, ITrashed)
         self.assertTrue(subfolder_trasher.verify_may_untrash())
         self.assertTrue(document_trasher.verify_may_untrash())
+
+    def test_cannot_trash_trashed_workspace_folder(self):
+        self.login(self.manager)
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+
+        with self.assertRaises(TrashError) as exc:
+            trasher.trash()
+        self.assertEqual('Already trashed', str(exc.exception))
+
+    def test_can_trash_workspace_folder_containing_trashed_objects(self):
+        self.login(self.manager)
+        subfolder = create(Builder('workspace folder')
+                           .titled(u'Subfolder')
+                           .within(self.workspace_folder))
+
+        ITrasher(self.workspace_document).trash()
+        ITrasher(subfolder).trash()
+
+        trasher = ITrasher(self.workspace_folder)
+        trasher.trash()
+        self.assertTrue(ITrashed.providedBy(self.workspace_folder))
