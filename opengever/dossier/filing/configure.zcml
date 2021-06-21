@@ -19,6 +19,8 @@
       layer="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer"
       />
 
+  <adapter factory=".form.EnddateValidator" />
+
   <adapter
       factory=".indexers.filing_no"
       name="filing_no"
