@@ -10,10 +10,10 @@ from opengever.dossier.filing.form import METHOD_RESOLVING
 from opengever.dossier.filing.form import METHOD_RESOLVING_AND_FILING
 from opengever.dossier.filing.form import METHOD_RESOLVING_EXISTING_FILING
 from opengever.dossier.interfaces import IDossierArchiver
-from opengever.dossier.resolve import DossierResolutionStatusmessageMixin
 from opengever.dossier.resolve import get_resolver
 from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import PreconditionsViolated
+from opengever.dossier.statusmessage_mixin import DossierResolutionStatusmessageMixin
 from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
 from Products.CMFCore.interfaces import ISiteRoot
