@@ -89,7 +89,7 @@ class WorkspaceFolderDeleter(BaseWorkspaceContenteDeleter):
         if not ITrasher(self.context).is_trashed():
             raise Forbidden
 
-        for obj in self.context.contentValues():
+        for obj in self.context.objectValues():
             deleter = queryAdapter(obj, IDeleter)
             if deleter is None:
                 raise Forbidden()
