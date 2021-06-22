@@ -17,6 +17,7 @@ Other Changes
 - ``@watchers``: The endpoint is now also available for documents. (see :ref:`docs <watchers>`)
 - `@trash` and `@untrash` endpoints now also work for WorkspaceFolders.
 - Trashed workspace documents and folders can be deleted. (see :ref:`docs <trash>`)
+- Prevent changing the ``is_private`` field of existing tasks.
 
 2021.11.0 (2021-05-28)
 ----------------------

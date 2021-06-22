@@ -24,6 +24,8 @@ from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
+from plone.restapi.services.content.update import ContentPatch
+from zExceptions import BadRequest
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.component import adapter
@@ -302,3 +304,17 @@ class TaskPost(FolderPost):
                 raise BadRequest("Could not parse `position` attribute")
 
             self.context.add_task_to_tasktemplate_order(position, self.obj)
+
+
+class TaskPatch(ContentPatch):
+    """Specific Patch service for tasks, to prevent changing the
+    is_private field."""
+
+    def reply(self):
+        current_is_private_value = self.context.is_private
+        data = super(TaskPatch, self).reply()
+
+        if self.context.is_private != current_is_private_value:
+            raise BadRequest("It's not allowed to change the is_private option"
+                             " of an existing task.")
+        return data
