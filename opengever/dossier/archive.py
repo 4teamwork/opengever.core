@@ -113,13 +113,13 @@ class Archiver(object):
         if action == METHOD_RESOLVING_AND_FILING:
             self.archive(filing_prefix, filing_year)
 
-        if action == METHOD_RESOLVING_EXISTING_FILING:
+        elif action == METHOD_RESOLVING_EXISTING_FILING:
             # archive all with the existing filing number
             filing_no = IFilingNumber(self.context).filing_no
             filing_prefix = IDossier(self.context).filing_prefix
             self.archive(filing_prefix, filing_year, number=filing_no)
 
-        if action == METHOD_RESOLVING:
+        elif action == METHOD_RESOLVING:
             # only update the prefixes
             if filing_prefix:
                 self.update_prefix(filing_prefix)
