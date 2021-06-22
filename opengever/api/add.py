@@ -3,6 +3,7 @@ from Acquisition import aq_base
 from Acquisition.interfaces import IAcquirer
 from opengever.meeting.browser.proposalforms import get_selected_template
 from opengever.meeting.browser.proposalforms import IAddProposalSupplementaryFields
+from opengever.quota.exceptions import ForbiddenByQuota
 from plone.restapi.deserializer import json_body
 from plone.restapi.exceptions import DeserializationError
 from plone.restapi.interfaces import IDeserializeFromJson
@@ -25,6 +26,7 @@ from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
 from zope.schema.interfaces import RequiredMissing
 import plone.protect.interfaces
+import transaction
 
 
 class FolderPost(Service):
@@ -114,6 +116,9 @@ class FolderPost(Service):
             self.request.response.setStatus(400)
             return dict(error=dict(type="DeserializationError", message=str(e)))
 
+        return self.add_object()
+
+    def add_object(self):
         self.add_object_to_context()
 
         self.request.response.setStatus(201)
@@ -193,6 +198,22 @@ class GeverFolderPost(FolderPost):
 
         if not getattr(deserializer, "notifies_create", False):
             notify(ObjectCreatedEvent(self.obj))
+
+    def add_object(self):
+        try:
+            self.add_object_to_context()
+        except ForbiddenByQuota as exc:
+            transaction.abort()
+            self.request.response.setStatus(507)
+            return dict(error=dict(type="ForbiddenByQuota", message=str(exc)))
+
+        self.request.response.setStatus(201)
+        self.request.response.setHeader("Location", self.obj.absolute_url())
+
+        self.before_serialization(self.obj)
+        serialized_obj = self.serialize_object()
+
+        return serialized_obj
 
 
 class SchemaValidationData(object):

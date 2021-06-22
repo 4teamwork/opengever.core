@@ -13,6 +13,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Return specific error messages when quota gets exceeded in the private repository.
 - Add support for the ``stats`` component to the ``@solrsearch`` endpoint.
 - ``@watchers``: The endpoint is now also available for documents. (see :ref:`docs <watchers>`)
 - `@trash` and `@untrash` endpoints now also work for WorkspaceFolders.
