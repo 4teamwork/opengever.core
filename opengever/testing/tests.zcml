@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.testing">
 
   <plone:behavior
@@ -32,6 +33,14 @@
       name="@test-write-on-read"
       for="*"
       factory=".services.WriteOnRead"
+      permission="zope.Public"
+      />
+
+  <plone:service
+      method="POST"
+      name="@install-filing-number-profile"
+      for="*"
+      factory=".services.InstallFilingNumberProfile"
       permission="zope.Public"
       />
 
