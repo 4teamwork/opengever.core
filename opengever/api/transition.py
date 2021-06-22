@@ -13,8 +13,14 @@ from opengever.dossier.resolve import PreconditionsViolated
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.serializer.converters import IJsonCompatible
 from plone.restapi.serializer.converters import json_compatible
+from plone.restapi.services import Service
 from plone.restapi.services.workflow.transition import WorkflowTransition
+from plone.restapi.types.utils import get_fieldset_infos
+from plone.restapi.types.utils import get_fieldsets
+from plone.restapi.types.utils import get_jsonschema_properties
+from plone.restapi.types.utils import iter_fields
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import WorkflowException
@@ -23,6 +29,9 @@ from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
+from zope.interface import implementer
+from zope.publisher.interfaces import IPublishTraverse
+from zope.publisher.interfaces import NotFound
 import plone.protect.interfaces
 
 
@@ -212,6 +221,16 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
         data = json_body(self.request)
         self.disable_csrf_protection()
 
+        # validate transition schemas
+        adapter = queryMultiAdapter(
+            (self.context, getRequest()), ITransitionExtender,
+            name=self.transition)
+
+        if adapter:
+            errors = adapter.validate_schema(deepcopy(data))
+            if errors:
+                raise BadRequest(errors)
+
         # TODO: Do we need to handle comments and publication dates
         # etc. for dossier transitions like the original implementation does?
         # For now we also extract these, but we don't do anything with them
@@ -219,11 +238,13 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
         comment = data.get('comment', '')
         include_children = data.get('include_children', False)
         publication_dates = self.parse_publication_dates(data)
+        args = [self.context], comment, publication_dates
 
-        args = [self.context], comment, publication_dates, include_children
+        if adapter and data:
+            data = adapter.deserialize(data)
 
         if self.transition == 'dossier-transition-resolve':
-            self.resolve_dossier(*args)
+            self.resolve_dossier(*args, **data)
         elif self.transition == 'dossier-transition-activate':
             self.activate_dossier(*args)
         elif self.transition == 'dossier-transition-deactivate':
@@ -243,7 +264,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
         activator.activate()
 
     def resolve_dossier(self, objs, comment, publication_dates,
-                        include_children=False):
+                        include_children=False, **kwargs):
         if self.is_already_resolved():
             # XXX: This should be prevented by the workflow tool.
             # For some reason it currently doesn't.
@@ -254,13 +275,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             raise BadRequest('Resolving dossier must always be recursive')
 
         resolve_manager = LockingResolveManager(self.context)
-
-        if resolve_manager.is_archive_form_needed():
-            raise BadRequest(
-                "Can't resolve dossiers via REST API if filing number "
-                "feature is activated")
-
-        resolve_manager.resolve()
+        resolve_manager.resolve(**kwargs)
 
     def deactivate_dossier(self, objs, comment, publication_dates,
                            include_children=False):
@@ -357,3 +372,58 @@ class WorkspaceWorkflowTransition(GEVERWorkflowTransition):
                     message='Workspace contains checked out documents.'))
 
         return super(WorkspaceWorkflowTransition, self).reply()
+
+
+@implementer(IPublishTraverse)
+class WorkflowSchemaGET(Service):
+
+    def __init__(self, context, request):
+        super(WorkflowSchemaGET, self).__init__(context, request)
+        self.transition = None
+
+    def publishTraverse(self, request, name):
+        if self.transition is None:
+            self.transition = name
+        else:
+            raise NotFound(self, name, request)
+        return self
+
+    def reply(self):
+        if self.transition is None:
+            self.request.response.setStatus(400)
+            return dict(error=dict(type="BadRequest", message="Missing transition"))
+
+        transition_extender = queryMultiAdapter(
+            (self.context, self.request),
+            ITransitionExtender, name=self.transition)
+
+        if not transition_extender or not transition_extender.schemas:
+            return {
+                "properties": {},
+                "required": [],
+                "fieldsets": [],
+            }
+
+        schema = transition_extender.schemas[0]
+        additional_schemata = []
+        if len(transition_extender.schemas) > 1:
+            additional_schemata = transition_extender.schemas[1]
+
+        fieldsets = get_fieldsets(
+            self.context, self.request, schema,
+            additional_schemata=additional_schemata)
+        properties = get_jsonschema_properties(
+            self.context, self.request, fieldsets)
+
+        required = []
+        for field in iter_fields(fieldsets):
+            name = field.field.getName()
+            # Determine required fields
+            if field.field.required:
+                required.append(name)
+
+        return {
+            "properties": IJsonCompatible(properties),
+            "required": required,
+            "fieldsets": get_fieldset_infos(fieldsets),
+        }

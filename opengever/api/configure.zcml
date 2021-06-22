@@ -596,6 +596,14 @@
       />
 
   <plone:service
+      method="GET"
+      name="@workflow-schema"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".transition.WorkflowSchemaGET"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       name="@journal"
       for="ftw.journal.interfaces.IJournalizable"

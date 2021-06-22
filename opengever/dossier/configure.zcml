@@ -29,7 +29,6 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <adapter factory=".archive.EnddateValidator" />
   <adapter factory=".move_items.DestinationValidator" />
 
   <adapter

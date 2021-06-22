@@ -12,9 +12,12 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.exceptions import PreconditionsViolated
+from opengever.dossier.filing.form import IFilingFormSchema
+from opengever.dossier.interfaces import IDossierArchiver
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve_lock import ResolveLock
+from opengever.dossier.statusmessage_mixin import DossierResolutionStatusmessageMixin
 from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.task.task import ITask
 from plone import api
@@ -88,6 +91,13 @@ class ResolveDossierTransitionExtender(TransitionExtender):
     """TransitionExtender that gets invoked when resolving dossiers.
     """
 
+    @property
+    def schemas(self):
+        if IFilingNumberMarker.providedBy(self.context):
+            return [IFilingFormSchema]
+
+        return []
+
     def after_transition_hook(self, transition, disable_sync, transition_params):
         AfterResolveJobs(self.context).execute()
 
@@ -106,7 +116,7 @@ class LockingResolveManager(object):
         self.context = context
         self.resolver = get_resolver(self.context)
 
-    def resolve(self):
+    def resolve(self, **transition_params):
         resolve_lock = ResolveLock(self.context)
 
         # Check whether a resolve is already in progress
@@ -118,7 +128,7 @@ class LockingResolveManager(object):
         # by acquring a lock, resolving, and then releasing the lock
         try:
             resolve_lock.acquire(commit=True)
-            result = self.execute_recursive_resolve()
+            result = self.execute_recursive_resolve(**transition_params)
 
             # We need to commit here so that a possible ConflictError already
             # manifests here, in our try..finally that will remove the lock.
@@ -151,74 +161,16 @@ class LockingResolveManager(object):
             # this 'finally' block.
             resolve_lock.release(commit=True)
 
-    def execute_recursive_resolve(self):
+    def execute_recursive_resolve(self, **transition_params):
         self.resolver.raise_on_failed_preconditions()
-        self.resolver.resolve()
+        if self.is_archive_form_needed():
+            IDossierArchiver(self.context).run(**transition_params)
+
+        self.resolver.resolve(
+            end_date=transition_params.get('dossier_enddate'), **transition_params)
 
     def is_archive_form_needed(self):
         return self.resolver.is_archive_form_needed()
-
-
-class DossierResolutionStatusmessageMixin(object):
-    """Mixin class to construct status messages and trigger redirects
-
-    for dossier resolution errors.
-
-    This class handles producing these status messages in a classic view
-    (as opposed to the REST API, where errors are serialized as JSON).
-
-    It takes care of:
-    - Constructing the translated message(s)
-    - Determining the context URL to redirect to
-    - Redirecting to that context
-
-    It is used by the DossierResolveView.
-    """
-
-    @property
-    def context_url(self):
-        return self.context.absolute_url()
-
-    def redirect(self, url):
-        return self.request.RESPONSE.redirect(url)
-
-    def show_already_resolved_msg(self):
-        api.portal.show_message(
-            message=_('Dossier has already been resolved.'),
-            request=self.request, type='info')
-        return self.redirect(self.context_url)
-
-    def show_being_resolved_msg(self):
-        api.portal.show_message(
-            message=MSG_ALREADY_BEING_RESOLVED,
-            request=self.request, type='info')
-        return self.redirect(self.context_url)
-
-    def show_errors(self, errors):
-        for msg in errors:
-            api.portal.show_message(
-                message=msg, request=self.request, type='error')
-        return self.redirect(self.context_url)
-
-    def show_invalid_end_dates(self, titles):
-        for title in titles:
-            msg = _("The dossier ${dossier} has a invalid end_date",
-                    mapping=dict(dossier=title,))
-            api.portal.show_message(
-                message=msg, request=self.request, type='error')
-        return self.redirect(self.context_url)
-
-    def show_subdossier_resolved_msg(self):
-        api.portal.show_message(
-            message=_('The subdossier has been succesfully resolved.'),
-            request=self.request, type='info')
-        return self.redirect(self.context_url)
-
-    def show_dossier_resolved_msg(self):
-        api.portal.show_message(
-            message=_('The dossier has been succesfully resolved.'),
-            request=self.request, type='info')
-        return self.redirect(self.context_url)
 
 
 class DossierResolveView(BrowserView, DossierResolutionStatusmessageMixin):
@@ -336,7 +288,7 @@ class StrictDossierResolver(object):
         else:
             return True
 
-    def resolve(self, end_date=None):
+    def resolve(self, end_date=None, **kwargs):
         if not self.enddates_valid or not self.preconditions_fulfilled:
             raise TypeError
 
@@ -345,9 +297,9 @@ class StrictDossierResolver(object):
 
         end_date = end_date or self.context.earliest_possible_end_date()
         self._recursive_resolve(
-            self.context, end_date, triggering_dossier=True)
+            self.context, end_date, triggering_dossier=True, **kwargs)
 
-    def _recursive_resolve(self, dossier, end_date, triggering_dossier=False):
+    def _recursive_resolve(self, dossier, end_date, triggering_dossier=False, **kwargs):
         new_end_date = None
 
         if triggering_dossier:
@@ -377,7 +329,7 @@ class StrictDossierResolver(object):
             self._recursive_resolve(subdossier.getObject(), end_date)
 
         if dossier.is_open():
-            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
+            self.wft.doActionFor(dossier, 'dossier-transition-resolve', transition_params=kwargs)
 
 
 class AfterResolveJobs(object):

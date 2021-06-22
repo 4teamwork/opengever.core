@@ -10,27 +10,29 @@ from opengever.base.behaviors.changed import IChanged
 from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.archive import Archiver
-from opengever.dossier.archive import EnddateValidator
-from opengever.dossier.archive import get_filing_actions
-from opengever.dossier.archive import METHOD_FILING
-from opengever.dossier.archive import METHOD_RESOLVING
-from opengever.dossier.archive import METHOD_RESOLVING_AND_FILING
-from opengever.dossier.archive import METHOD_RESOLVING_EXISTING_FILING
-from opengever.dossier.archive import MissingValue
-from opengever.dossier.archive import ONLY_NUMBER
-from opengever.dossier.archive import ONLY_RESOLVE
-from opengever.dossier.archive import RESOLVE_AND_NUMBER
-from opengever.dossier.archive import RESOLVE_WITH_EXISTING_NUMBER
-from opengever.dossier.archive import RESOLVE_WITH_NEW_NUMBER
-from opengever.dossier.archive import valid_filing_year
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.filing.form import EnddateValidator
+from opengever.dossier.filing.form import get_filing_actions
+from opengever.dossier.filing.form import METHOD_FILING
+from opengever.dossier.filing.form import METHOD_RESOLVING
+from opengever.dossier.filing.form import METHOD_RESOLVING_AND_FILING
+from opengever.dossier.filing.form import METHOD_RESOLVING_EXISTING_FILING
+from opengever.dossier.filing.form import MissingValue
+from opengever.dossier.filing.form import ONLY_NUMBER
+from opengever.dossier.filing.form import ONLY_RESOLVE
+from opengever.dossier.filing.form import RESOLVE_AND_NUMBER
+from opengever.dossier.filing.form import RESOLVE_WITH_EXISTING_NUMBER
+from opengever.dossier.filing.form import RESOLVE_WITH_NEW_NUMBER
+from opengever.dossier.filing.form import valid_filing_year
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.testing import IntegrationTestCase
+from zExceptions import BadRequest
 from zope.interface import Invalid
 from zope.interface.verify import verifyClass
+import json
 import pytz
 
 
@@ -440,3 +442,108 @@ class TestArchiveForm(IntegrationTestCase):
                          statusmessages.error_messages())
         self.assertEquals(None,
                           IFilingNumber(self.empty_dossier).filing_no)
+
+
+class TestArchivePerAPI(IntegrationTestCase):
+
+    features = ('filing_number', )
+
+    raise_http_errors = False
+
+    @browsing
+    def test_resolving_and_add_filing_number(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {
+            'filing_prefix': 'government',
+            'filing_year': '2017',
+            'filing_action': RESOLVE_AND_NUMBER,
+            'dossier_enddate': '2017-01-01',
+        }
+        browser.open(self.empty_dossier, method="POST", headers=self.api_headers,
+                     view='@workflow/dossier-transition-resolve',
+                     data=json.dumps(data))
+
+        self.assertEqual(200, browser.status_code)
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.empty_dossier)
+        self.assertEquals('Hauptmandant-Cantonal Government-2017-1',
+                          IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_resolving_use_existing_filing_number(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        former_filing_number = u'Hauptmandant-Administration-2013-1'
+        IFilingNumber(self.empty_dossier).filing_no = former_filing_number
+
+        data = {'filing_prefix': 'government',
+                'filing_year': u'2017',
+                'dossier_enddate': '2017-01-01',
+                'filing_action': METHOD_RESOLVING_EXISTING_FILING}
+
+        browser.open(self.empty_dossier, method="POST", headers=self.api_headers,
+                     view='@workflow/dossier-transition-resolve',
+                     data=json.dumps(data))
+
+        self.assert_workflow_state('dossier-state-resolved', self.empty_dossier)
+        self.assertEqual(200, browser.status_code)
+        self.assertEquals(former_filing_number,
+                          IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_resolving_and_set_new_filing_number(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        former_filing_number = u'Hauptmandant-Administration-2013-1'
+        IFilingNumber(self.empty_dossier).filing_no = former_filing_number
+
+        data = {'filing_prefix': 'government',
+                'filing_year': u'2017',
+                'dossier_enddate': '2017-01-01',
+                'filing_action': METHOD_RESOLVING_AND_FILING}
+
+        browser.open(self.empty_dossier, method="POST", headers=self.api_headers,
+                     view='@workflow/dossier-transition-resolve',
+                     data=json.dumps(data))
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.empty_dossier)
+        self.assertEqual(200, browser.status_code)
+        self.assertEquals('Hauptmandant-Cantonal Government-2017-1',
+                          IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_precondition_violation_raises_error_already_on_resolve_view(self, browser):
+        """Make sure the resolve view catches failing preconditions before
+        even redirecting to archive form.
+        """
+        self.login(self.secretariat_user, browser)
+
+        # Create open task to violate one of the preconditions for resolving
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-open'))
+
+        data = {'filing_prefix': 'government',
+                'filing_year': u'2017',
+                'dossier_enddate': '2017-01-01',
+                'filing_action': METHOD_RESOLVING_AND_FILING}
+
+        with browser.expect_http_error(code=400):
+            browser.open(self.empty_dossier, method="POST",
+                         headers=self.api_headers,
+                         view='@workflow/dossier-transition-resolve',
+                         data=json.dumps(data))
+
+        self.assertEqual(
+            {u'error': {
+                u'message': u'',
+                u'errors': [u'not all task are closed'],
+                u'type': u'PreconditionsViolated'}},
+            browser.json)

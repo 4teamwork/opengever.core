@@ -74,3 +74,9 @@ Endpoint verwendet:
 
    .. literalinclude:: examples/workflow_post.json
       :language: http
+
+
+Workflow-Schema
+~~~~~~~~~~~~~~~
+
+Gewisse Workflow Transitions, wie bspw. der Dossier-Abschluss, erwarten je nach Konfiguration weiter Angaben. Diese Schemas können mit einem Request auf den zusätzlichen API Endpoint ``@workflow-schema`` abgefragt werden. Mit dem Rückgabewert kann ein entsprechendes Formular generiert werden.
