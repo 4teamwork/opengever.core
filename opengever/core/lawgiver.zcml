@@ -59,6 +59,30 @@
                    "
       />
 
+  <lawgiver:map_permissions
+      action_group="add gever content"
+      permissions="
+                   opengever.contact: Add contact,
+                   opengever.contact: Add person,
+                   opengever.dossier: Add businesscasedossier,
+                   opengever.dossier: Add dossiertemplate,
+                   opengever.dossier: Add projectdossier,
+                   opengever.dossier: Add templatefolder,
+                   opengever.inbox: Add Forwarding,
+                   opengever.inbox: Add Year Folder,
+                   opengever.inbox: Scan In,
+                   opengever.meeting: Add Committee,
+                   opengever.meeting: Add Member,
+                   opengever.meeting: Add Period,
+                   opengever.meeting: Add Proposal Template,
+                   opengever.meeting: Add Proposal,
+                   opengever.meeting: Add Sablon Template,
+                   opengever.private: Add private dossier,
+                   opengever.task: Add task comment,
+                   opengever.task: Add task,
+                   "
+      workflow="opengever_workspace"
+      />
 
   <lawgiver:map_permissions
       action_group="edit"
