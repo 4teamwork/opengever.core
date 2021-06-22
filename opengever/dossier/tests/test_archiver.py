@@ -443,6 +443,21 @@ class TestArchiveForm(IntegrationTestCase):
         self.assertEquals(None,
                           IFilingNumber(self.empty_dossier).filing_no)
 
+    @browsing
+    def test_resolving_nested_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+        browser.open(self.resolvable_dossier, view='transition-archive')
+
+        browser.fill({'Filing number prefix': 'Cantonal Government',
+                      'Filing year': u'2018',
+                      'Action': 'resolve and set filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.resolvable_dossier)
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.resolvable_subdossier)
+
 
 class TestArchivePerAPI(IntegrationTestCase):
 
@@ -547,3 +562,25 @@ class TestArchivePerAPI(IntegrationTestCase):
                 u'errors': [u'not all task are closed'],
                 u'type': u'PreconditionsViolated'}},
             browser.json)
+
+    @browsing
+    def test_resolving_nested_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {
+            'filing_prefix': 'government',
+            'filing_year': '2017',
+            'filing_action': RESOLVE_AND_NUMBER,
+            'dossier_enddate': '2017-01-01',
+        }
+        browser.open(self.resolvable_dossier, method="POST", headers=self.api_headers,
+                     view='@workflow/dossier-transition-resolve',
+                     data=json.dumps(data))
+
+        self.assertEqual(200, browser.status_code)
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.resolvable_dossier)
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.resolvable_subdossier)
+
