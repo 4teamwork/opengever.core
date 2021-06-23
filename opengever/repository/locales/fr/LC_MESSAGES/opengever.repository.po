@@ -45,7 +45,7 @@ msgstr "Déterminez s'il est permis d'ajouter des dossiers commerciaux à ce niv
 #. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
 #: ./opengever/repository/repositoryroot.py
 msgid "description_reference_number_addendum"
-msgstr ""
+msgstr "Attention: La modification de ce champ requiert une réindexation de \"reference\" et \"sortable_reference\"."
 
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
