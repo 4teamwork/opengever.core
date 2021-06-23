@@ -326,7 +326,8 @@ class StrictDossierResolver(object):
 
         for subdossier in dossier.get_subdossiers(
                 depth=1, sort_on=None, sort_order=None):
-            self._recursive_resolve(subdossier.getObject(), end_date)
+            self._recursive_resolve(
+                subdossier.getObject(), end_date, triggering_dossier=False, **kwargs)
 
         if dossier.is_open():
             self.wft.doActionFor(dossier, 'dossier-transition-resolve', transition_params=kwargs)

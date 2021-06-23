@@ -1,3 +1,5 @@
+from opengever.core.testing import activate_filing_number
+from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.services import Service
 from zope.interface import alsoProvides
@@ -14,4 +16,10 @@ class WriteOnRead(Service):
         self.context.some_attribute = 'foo'
 
     def check_permission(self):
+        return
+
+
+class InstallFilingNumberProfile(Service):
+    def reply(self):
+        activate_filing_number(api.portal.get())
         return
