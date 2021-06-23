@@ -15,10 +15,13 @@ class GeverBumblebeeService(BumblebeeServiceV3):
 
         return super(GeverBumblebeeService, self).is_convertable(document)
 
-    def get_not_digitally_available_placeholder_image_url(self):
-        return "{}{}".format(
-            api.portal.get().absolute_url(),
-            "/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.svg")
+    def get_not_digitally_available_placeholder_image_url(self, format_name=None):
+        if format_name and format_name == 'pdf':
+            filename = "fallback_not_digitally_available.pdf"
+        else:
+            filename = "fallback_not_digitally_available.svg"
+        return "{}/++resource++opengever.bumblebee.resources/{}".format(
+            api.portal.get().absolute_url(), filename)
 
     def get_representation_url(self, obj, format_name, filename=''):
         """Returns the bumblebee representation url of object.
@@ -35,4 +38,4 @@ class GeverBumblebeeService(BumblebeeServiceV3):
         """
         url = super(GeverBumblebeeService, self).get_representation_url(
             obj, format_name, filename)
-        return url or self.get_not_digitally_available_placeholder_image_url()
+        return url or self.get_not_digitally_available_placeholder_image_url(format_name)

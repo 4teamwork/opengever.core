@@ -44,6 +44,13 @@ class TestGetRepresentationUrlByObject(FunctionalTestCase):
             'fallback_not_digitally_available.svg',
             bumblebee.get_service_v3().get_representation_url(document, 'thumbnail'))
 
+    def test_returns_not_digitally_available_placeholder_pdf_if_no_ckecksum_is_available(self):
+        document = create(Builder('document'))
+
+        self.assertIn(
+            'fallback_not_digitally_available.pdf',
+            bumblebee.get_service_v3().get_representation_url(document, 'pdf'))
+
 
 class TestGetRepresentationUrlByBrain(FunctionalTestCase):
 
