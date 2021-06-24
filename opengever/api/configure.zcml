@@ -776,6 +776,15 @@
       />
 
   <plone:service
+      method="PATCH"
+      name="@users"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".users.GeverUsersPatch"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       name="@responses"
       for="opengever.base.response.IResponseSupported"

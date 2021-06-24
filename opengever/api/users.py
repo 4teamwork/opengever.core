@@ -1,8 +1,10 @@
 from opengever.base.interfaces import IOpengeverBaseLayer
 from plone import api
+from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.user import BaseSerializer
 from plone.restapi.services.users.get import UsersGet
+from plone.restapi.services.users.update import UsersPatch
 from Products.CMFCore.interfaces._tools import IMemberData
 from zope.component import adapter
 from zope.interface import implementer
@@ -30,6 +32,33 @@ class GeverUsersGet(UsersGet):
 
     def has_permission_to_enumerate(self):
         return self._has_allowed_role()
+
+
+class GeverUsersPatch(UsersPatch):
+    """Extends the endpoint with the possibility to delete a profile image.
+    """
+
+    def reply(self):
+        self.maybe_delete_personal_portrait()
+        return super(GeverUsersPatch, self).reply()
+
+    def maybe_delete_personal_portrait(self):
+        """Deletes the personal portrait if the body contains a 'portrait' with
+        the value of 'None'.
+        """
+        data = json_body(self.request)
+        portrait = data.get('portrait')
+
+        # The super method will then take care of the error handling for
+        # unauthorized access
+        if not (self.can_manage_users or self._get_current_user == self._get_user_id):
+            return
+
+        if 'portrait' in data and portrait is None:
+            user = self._get_user(self._get_user_id)
+            portal_membership = api.portal.get_tool('portal_membership')
+            safe_id = portal_membership._getSafeMemberId(user.getId())
+            portal_membership.deletePersonalPortrait(str(safe_id))
 
 
 @implementer(ISerializeToJson)

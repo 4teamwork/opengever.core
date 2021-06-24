@@ -1,5 +1,9 @@
 from ftw.testbrowser import browsing
+from OFS.Image import Image
 from opengever.testing import IntegrationTestCase
+from plone import api
+from Products.CMFPlone.tests import dummy
+import json
 
 
 class TestUsersGet(IntegrationTestCase):
@@ -50,3 +54,22 @@ class TestUsersGet(IntegrationTestCase):
             url = '{}/@users/{}'.format(
                 self.portal.absolute_url(), self.dossier_responsible.id)
             browser.open(url, headers=self.api_headers)
+
+
+class TestUsersPatch(IntegrationTestCase):
+
+    @browsing
+    def test_delete_user_profile_image(self, browser):
+        self.login(self.regular_user, browser)
+        userid = self.regular_user.id
+        url = '{}/@users/{}'.format(self.portal.absolute_url(), userid)
+
+        m_tool = api.portal.get_tool('portal_memberdata')
+        m_tool._setPortrait(Image(id='avatar', file=dummy.File(), title=''), userid)
+
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(u'http://nohost/plone/portal_memberdata/portraits/kathi.barfuss', browser.json.get('portrait'))
+
+        browser.open(url, method='PATCH', headers=self.api_headers, data=json.dumps({ 'portrait': None }))
+        browser.open(url, headers=self.api_headers)
+        self.assertIsNone(browser.json.get('portrait'))
