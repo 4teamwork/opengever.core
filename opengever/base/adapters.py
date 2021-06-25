@@ -107,7 +107,7 @@ class ReferenceNumberPrefixAdpater(object):
                 pass
 
             # .. otherwise try to increment the last numeric part
-            xpr = re.compile('\d+')
+            xpr = re.compile(r'\d+')
             matches = tuple(xpr.finditer(lastnumber))
             if len(matches) > 0:
                 span = matches[-1].span()
