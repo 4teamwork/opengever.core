@@ -10,5 +10,9 @@ whitelisted_template_types = {
     'a2c9b700-86cd-4481-a17f-533fe9c504a2': {
         'content-type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         'extension': 'pptx',
+    },
+    '0a3ac64d-ec36-4bcd-b057-41379a502fed': {
+        'content-type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'extension': 'docx',
     }
 }
