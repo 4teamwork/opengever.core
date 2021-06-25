@@ -1,0 +1,1 @@
+Fix removing a profile-image with a PATCH request to the `@users/<userid>` endpiont. [elioschmutz]
