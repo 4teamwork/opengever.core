@@ -59,6 +59,30 @@
                    "
       />
 
+  <lawgiver:map_permissions
+      action_group="add gever content"
+      permissions="
+                   opengever.contact: Add contact,
+                   opengever.contact: Add person,
+                   opengever.dossier: Add businesscasedossier,
+                   opengever.dossier: Add dossiertemplate,
+                   opengever.dossier: Add projectdossier,
+                   opengever.dossier: Add templatefolder,
+                   opengever.inbox: Add Forwarding,
+                   opengever.inbox: Add Year Folder,
+                   opengever.inbox: Scan In,
+                   opengever.meeting: Add Committee,
+                   opengever.meeting: Add Member,
+                   opengever.meeting: Add Period,
+                   opengever.meeting: Add Proposal Template,
+                   opengever.meeting: Add Proposal,
+                   opengever.meeting: Add Sablon Template,
+                   opengever.private: Add private dossier,
+                   opengever.task: Add task comment,
+                   opengever.task: Add task,
+                   "
+      workflow="opengever_workspace"
+      />
 
   <lawgiver:map_permissions
       action_group="edit"
@@ -81,7 +105,6 @@
                    opengever.task: Edit task,
                    "
       />
-
 
   <lawgiver:map_permissions
       action_group="trash"
@@ -178,81 +201,12 @@
                    "
       />
 
-  <!-- Remove GEVER content is only managed globally in rolemap.xml. -->
   <lawgiver:ignore
       permissions="
-                   Remove GEVER content,
-                   "
-      />
-
-  <!-- Export repository is only managed globally in rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.repository: Export repository,
-                   "
-      />
-
-  <!-- Manage own WebActions is only managed globally in rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.webactions: Manage own WebActions,
-                   "
-      />
-
-  <!-- Use Workspace Client is only managed globally in rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.workspaceclient: Use Workspace Client,
-                   "
-      />
-
-  <!--  "ftw.usermigration: Migrate users" is never managed via workflows -->
-  <lawgiver:ignore
-      permissions="
-                   ftw.usermigration: Migrate users,
-                   "
-      />
-
-  <!-- "opengever.meeting: Add Proposal Comment" is not used in lawgiver managed workflows -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.meeting: Add Proposal Comment,
-                   "
-      />
-
-  <!-- "opengever.api: View AllowedRolesAndPrincipals" is not used in lawgiver managed workflows -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.api: View AllowedRolesAndPrincipals,
-                   "
-      />
-
-  <!-- Transfer Assignment is only managed globally in rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.api: Transfer Assignment,
-                   "
-      />
-
-  <!-- Manage Role Assignment Reports is only managed globally in rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.api: Manage Role Assignment Reports,
-                   "
-      />
-
-  <!-- Manage Groups is only managed globally in rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.api: Manage Groups,
-                   "
-      />
-
-  <!-- Ignore default Plone permissions. This means we are not managing in the
-       workflows. This does not mean that the permissions are disabled: disabling
-       can be done in the rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
+                   Add Folders,
+                   Add portal events,
+                   Add portal folders,
+                   Add portal topics,
                    ATContentTypes: Add Document,
                    ATContentTypes: Add Event,
                    ATContentTypes: Add File,
@@ -261,41 +215,32 @@
                    ATContentTypes: Add Large Plone Folder,
                    ATContentTypes: Add Link,
                    ATContentTypes: Add News Item,
-                   Add Folders,
-                   Add portal events,
-                   Add portal folders,
-                   Add portal topics,
-                   plone.app.collection: Add Collection,
+                   ftw.usermigration: Migrate users,
+                   opengever.api: Manage Groups,
+                   opengever.api: Manage Role Assignment Reports,
+                   opengever.api: Transfer Assignment,
+                   opengever.api: View AllowedRolesAndPrincipals,
+                   opengever.bumblebee: Revive Preview,
+                   opengever.contact: Add team,
+                   opengever.contact: Edit team,
                    opengever.meeting: Add Meeting Template,
                    opengever.meeting: Add Paragraph Template,
-                   plone.restapi: Access Plone user information,
-                   "
-      />
-
-  <!-- List Protected Objects is only managed globally in rolemap.xml. -->
-  <lawgiver:ignore
-      permissions="
+                   opengever.meeting: Add Proposal Comment,
+                   opengever.repository: Export repository,
                    opengever.sharing: List Protected Objects,
-                   "
-      />
-
-  <!-- Should be ignored, permission is only granted to manager on site root -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.workspace: Add WorkspaceRoot,
+                   opengever.webactions: Manage own WebActions,
                    opengever.workspace: Add WorkspaceFolder,
-                   "
-      />
-
-  <!-- Ignore only relevant in workspace workflow-->
-  <lawgiver:ignore
-      permissions="
-                   opengever.workspace: Update Content Order,
-                   opengever.workspace: Modify Workspace,
-                   opengever.workspace: Delete Todos,
+                   opengever.workspace: Add WorkspaceRoot,
                    opengever.workspace: Delete Documents,
+                   opengever.workspace: Delete Todos,
                    opengever.workspace: Delete Workspace Meeting Agenda Items,
                    opengever.workspace: Delete Workspace Folders,
+                   opengever.workspace: Modify Workspace,
+                   opengever.workspace: Update Content Order,
+                   opengever.workspaceclient: Use Workspace Client,
+                   plone.app.collection: Add Collection,
+                   plone.restapi: Access Plone user information,
+                   Remove GEVER content,
                    "
       />
 
@@ -311,7 +256,6 @@
                      "
         />
   </lawgiver:workflow>
-
 
   <lawgiver:workflow name="opengever_committee_workflow">
     <lawgiver:ignore
@@ -353,7 +297,6 @@
         permissions="opengever.workspace: Add Workspace"
         />
   </lawgiver:workflow>
-
 
   <lawgiver:workflow name="opengever_workspace">
     <lawgiver:ignore
@@ -534,20 +477,5 @@
         />
 
   </lawgiver:workflow>
-
-  <!-- Should be ignored, permission is only granted to manager and admin on site root -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.bumblebee: Revive Preview,
-                   "
-      />
-
-  <!-- Should be ignored, teams are site-global. -->
-  <lawgiver:ignore
-      permissions="
-                   opengever.contact: Add team,
-                   opengever.contact: Edit team,
-                   "
-      />
 
 </configure>

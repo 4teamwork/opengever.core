@@ -896,6 +896,10 @@ class TestFolderButtons(FolderActionsTestBase):
         u'id': u'create_task',
         u'title': u'Create task',
         u'icon': u''}
+    createForwardingAction = {
+        u'id': u'create_forwarding',
+        u'title': u'Forward',
+        u'icon': u''}
 
     @browsing
     def test_create_task_available_in_open_dossier(self, browser):
@@ -949,6 +953,18 @@ class TestFolderButtons(FolderActionsTestBase):
         self.login(self.secretariat_user, browser)
         self.assertNotIn({u'icon': u'', u'id': u'create_proposal', u'title': u'Create proposal'},
                          self.get_folder_buttons(browser, self.resolvable_dossier))
+
+    @browsing
+    def test_create_forwarding_not_available_for_workspace_document(self, browser):
+        self.login(self.workspace_member, browser)
+        self.assertNotIn(self.createForwardingAction,
+                         self.get_folder_buttons(browser, self.workspace_document))
+
+    @browsing
+    def test_create_forwarding_available_for_inbox_document(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.assertIn(self.createForwardingAction,
+                      self.get_folder_buttons(browser, self.inbox_document))
 
     @browsing
     def test_folder_buttons_for_dossier(self, browser):
@@ -1758,7 +1774,6 @@ class TestFolderButtonsGetForWorkspace(FolderActionsTestBase):
             {u'icon': u'', u'id': u'export_dossiers', u'title': u'Export selection'},
             {u'icon': u'', u'id': u'trash_content', u'title': u'Move to trash'},
             {u'icon': u'', u'id': u'untrash_content', u'title': u'Restore from trash'},
-            {u'icon': u'', u'id': u'create_forwarding', u'title': u'Forward'},
             {u'icon': u'',
              u'id': u'pdf_dossierlisting',
              u'title': u'Print selection (PDF)'},
