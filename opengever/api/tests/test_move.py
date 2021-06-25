@@ -79,3 +79,78 @@ class TestMove(IntegrationTestCase):
             {u'type': u'Forbidden', u'message':
              u'Documents within the repository cannot be moved to the private repository.'},
             browser.json)
+
+    @browsing
+    def test_document_inside_a_task_cannot_be_moved(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.dossier, view='/@move',
+                         data=json.dumps({"source": self.taskdocument.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual({u'type': u'Forbidden', u'message':
+                          u'Documents inside a task cannot be moved.'}, browser.json)
+
+    @browsing
+    def test_mail_inside_a_task_cannot_be_moved(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail').titled('Good news').within(self.task))
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.dossier, view='/@move',
+                         data=json.dumps({"source": mail.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual({u'type': u'Forbidden', u'message':
+                          u'Documents inside a task cannot be moved.'}, browser.json)
+
+    @browsing
+    def test_document_inside_a_proposal_cannot_be_moved(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.dossier, view='/@move',
+                         data=json.dumps({"source": self.proposaldocument.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual({u'type': u'Forbidden', u'message':
+                          u'Documents inside a proposal cannot be moved.'}, browser.json)
+
+    @browsing
+    def test_mail_inside_a_proposal_cannot_be_moved(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail').titled('Good news').within(self.proposal))
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.dossier, view='/@move',
+                         data=json.dumps({"source": mail.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual({u'type': u'Forbidden', u'message':
+                          u'Documents inside a proposal cannot be moved.'}, browser.json)
+
+    @browsing
+    def test_document_inside_a_closed_dossier_cannot_be_moved(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.dossier, view='/@move',
+                         data=json.dumps({"source": self.expired_document.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual({u'type': u'Forbidden', u'message':
+                          u'Documents inside a closed dossier cannot be moved.'}, browser.json)
+
+    @browsing
+    def test_mail_inside_a_closed_dossier_cannot_be_moved(self, browser):
+        self.login(self.regular_user, browser)
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.empty_dossier, view='/@move',
+                         data=json.dumps({"source": self.mail_eml.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual({u'type': u'Forbidden', u'message':
+                          u'Documents inside a closed dossier cannot be moved.'}, browser.json)

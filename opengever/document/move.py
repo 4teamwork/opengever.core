@@ -11,6 +11,13 @@ from zope.component import adapter
 class DocumentMovabiliyChecker(DefaultMovabilityChecker):
 
     def validate_movement(self, target):
+        if self.context.is_inside_a_task():
+            raise Forbidden(u'Documents inside a task cannot be moved.')
+        if self.context.is_inside_a_proposal():
+            raise Forbidden(u'Documents inside a proposal cannot be moved.')
+        if self.context.is_inside_a_closed_dossier():
+            raise Forbidden(u'Documents inside a closed dossier cannot be moved.')
+
         if is_within_repository(self.context):
             if is_within_templates(target):
                 raise Forbidden(

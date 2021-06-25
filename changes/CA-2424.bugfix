@@ -1,0 +1,1 @@
+Do not allow to move documents via API if they are inside a task, proposal or closed dossier. [tinagerber]
