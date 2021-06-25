@@ -2,11 +2,13 @@ from Acquisition import aq_base
 from opengever.base import _
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import split_string_by_numbers
+from opengever.base.interfaces import IMovabilityChecker
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.protect import unprotected_write
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
+from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces._content import IFolderish
 from zope.annotation.interfaces import IAnnotations
@@ -228,3 +230,14 @@ class ReferenceNumberPrefixAdpater(object):
 
         if prefix in self.get_child_mapping().keys():
             self.get_child_mapping().pop(prefix)
+
+
+@implementer(IMovabilityChecker)
+@adapter(IDexterityContent)
+class DefaultMovabilityChecker(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    def validate_movement(self, target):
+        return

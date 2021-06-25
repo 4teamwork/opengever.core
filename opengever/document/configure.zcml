@@ -252,6 +252,8 @@
       provides="zope.filerepresentation.interfaces.IRawWriteFile"
       />
 
+  <adapter factory=".move.DocumentMovabiliyChecker" />
+
   <adapter factory=".quick_upload.QuickUploadFileUpdater" />
 
   <adapter factory=".sequence.BaseDocumentSequenceNumberGenerator" />

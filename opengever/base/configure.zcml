@@ -175,6 +175,8 @@
 
   <adapter factory=".sequence.DefaultSequenceNumberGenerator" />
 
+  <adapter factory=".adapters.DefaultMovabilityChecker" />
+
   <adapter factory=".adapters.ReferenceNumberPrefixAdpater" />
 
   <adapter

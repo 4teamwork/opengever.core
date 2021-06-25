@@ -454,6 +454,13 @@ class IRoleAssignmentReportsStorage(Interface):
         """
 
 
+class IMovabilityChecker(Interface):
+
+    def validate_movement(target):
+        """Raises an error if object cannot be moved.
+        """
+
+
 class IPortalSettings(Interface):
 
     portal_url = schema.TextLine(
