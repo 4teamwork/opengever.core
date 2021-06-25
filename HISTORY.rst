@@ -8,6 +8,41 @@ Changelog
 
 .. towncrier release notes start
 
+2021.13.0 (2021-06-25)
+----------------------
+
+New features:
+
+
+- Support returning results for the solr stats component in the `@solrsearch` endpoint. [deiferni]
+- Add watcher functionalities for document changes. [tinagerber]
+- Add userid migration for UserSettings, NotificationSetting, Favorite, recently touched objects, task reminders, task templates, meetings and proposals. [deiferni]
+- Support dossier resolving, incl. assignment of the filing number via API. [phgross]
+- Allow trashing and untrashing WorkspaceFolders. [njohner]
+- Allow deleting WorkspaceFolders and Mails. [njohner]
+- Only allow deleting workspace folders, documents and mails when trashed. [njohner]
+
+
+Bug fixes:
+
+
+- Cleanup mail workflow_history for mails created before 2016. [phgross]
+- Fix persisting default values when creating objects over the API. [njohner]
+- Add language code parameter to office online edit link. [phgross]
+- Improve error handling when quota limit gets exceeded on API requests. [phgross]
+- Fix solr indexing of customproperties assigned to a specific dossier_type. [phgross]
+- Fix sending additional files to pdflatex service (e.g. header logos). [deiferni]
+- Allow to reassign tasks in all non final states. [tinagerber]
+- Prevent changing the is_private field of existing tasks via API. [phgross]
+
+
+Other changes:
+
+
+- Upgrade steps merged to shorten upgrade runtime. [phgross]
+- Disable mail unwrapping for inbound mails. [njohner]
+
+
 2021.12.1 (2021-06-15)
 ----------------------
 

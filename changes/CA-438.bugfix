@@ -1,1 +1,0 @@
-Prevent changing the is_private field of existing tasks via API. [phgross]
