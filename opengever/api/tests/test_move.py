@@ -50,6 +50,19 @@ class TestMove(IntegrationTestCase):
                          browser.json)
 
     @browsing
+    def test_document_within_inbox_cannot_be_moved_to_templates(self, browser):
+        self.login(self.administrator, browser)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.templates, view='/@move',
+                         data=json.dumps({"source": self.inbox_document.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual({u'type': u'Forbidden', u'message':
+                          u'Documents within the inbox cannot be moved to the templates.'},
+                         browser.json)
+
+    @browsing
     def test_move_document_within_private_folder_is_possible(self, browser):
         self.login(self.regular_user, browser)
         dossier = create(
@@ -78,6 +91,31 @@ class TestMove(IntegrationTestCase):
         self.assertEqual(
             {u'type': u'Forbidden', u'message':
              u'Documents within the repository cannot be moved to the private repository.'},
+            browser.json)
+
+    @browsing
+    def test_document_within_inbox_cannot_be_moved_to_private_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+        private_folder = create(
+            Builder('private_folder')
+            .having(id=self.secretariat_user.getId())
+            .within(self.private_root)
+        )
+
+        private_dossier = create(
+            Builder('private_dossier')
+            .having(title=u'Mein Dossier 1')
+            .within(private_folder)
+        )
+
+        with browser.expect_http_error(code=403):
+            browser.open(private_dossier, view='/@move',
+                         data=json.dumps({"source": self.inbox_document.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'Forbidden', u'message':
+             u'Documents within the inbox cannot be moved to the private repository.'},
             browser.json)
 
     @browsing

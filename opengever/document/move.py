@@ -1,6 +1,7 @@
 from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.templatefolder.utils import is_within_templates
+from opengever.inbox.utils import is_within_inbox
 from opengever.private.utils import is_within_private_root
 from opengever.repository.utils import is_within_repository
 from zExceptions import Forbidden
@@ -25,3 +26,12 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
             if is_within_private_root(target):
                 raise Forbidden(
                     u'Documents within the repository cannot be moved to the private repository.')
+            return
+
+        if is_within_inbox(self.context):
+            if is_within_templates(target):
+                raise Forbidden(
+                    u'Documents within the inbox cannot be moved to the templates.')
+            if is_within_private_root(target):
+                raise Forbidden(
+                    u'Documents within the inbox cannot be moved to the private repository.')
