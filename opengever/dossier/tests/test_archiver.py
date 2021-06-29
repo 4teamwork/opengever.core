@@ -584,3 +584,12 @@ class TestArchivePerAPI(IntegrationTestCase):
         self.assert_workflow_state(
             'dossier-state-resolved', self.resolvable_subdossier)
 
+    @browsing
+    def test_resolving_subdossier_does_not_require_filing_informations(self, browser):
+        self.login(self.secretariat_user, browser)
+        browser.open(self.subdossier, method="POST", headers=self.api_headers,
+                     view='@workflow/dossier-transition-resolve')
+
+        self.assertEqual(200, browser.status_code)
+
+        self.assert_workflow_state('dossier-state-resolved', self.subdossier)

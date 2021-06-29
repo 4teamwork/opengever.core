@@ -93,7 +93,9 @@ class ResolveDossierTransitionExtender(TransitionExtender):
 
     @property
     def schemas(self):
-        if IFilingNumberMarker.providedBy(self.context):
+        if IFilingNumberMarker.providedBy(self.context) and \
+           not self.context.is_subdossier():
+
             return [IFilingFormSchema]
 
         return []
