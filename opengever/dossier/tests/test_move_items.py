@@ -749,16 +749,14 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_move_items_within_templatefolder_is_possible(self, browser):
-        self.login(self.regular_user, browser)
-        # if the template folders are not in a valid root, this does not work
-        # No idea why it used to work in the functional test?
-        templatefolder = create(Builder('templatefolder').within(self.repository_root))
-        subtemplatefolder = create(
-            Builder('templatefolder').within(templatefolder))
-        document = create(Builder('document').within(templatefolder))
-        self.move_items(browser, src=templatefolder,
-                        obj=document, target=subtemplatefolder)
-        self.assertIn(document, subtemplatefolder.objectValues())
+        self.login(self.administrator, browser)
+        doc_intid = getUtility(IIntIds).getId(self.dossiertemplatedocument)
+
+        self.move_items(browser, src=self.dossiertemplate,
+                        obj=self.dossiertemplatedocument, target=self.templates)
+        doc = getUtility(IIntIds).getObject(doc_intid)
+
+        self.assertIn(doc, self.templates.objectValues())
 
     @browsing
     def test_paste_action_not_visible_for_closed_dossiers(self, browser):

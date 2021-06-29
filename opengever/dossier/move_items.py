@@ -2,16 +2,15 @@ from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from OFS.CopySupport import CopyError, ResourceLockedError
+from opengever.base.interfaces import IMovabilityChecker
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
-from opengever.document.behaviors import IBaseDocument
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
-from plone.locking.interfaces import ILockable
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -19,6 +18,7 @@ from z3c.form import form, field
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
+from zExceptions import Forbidden
 from zope import schema
 from zope.interface import Interface, Invalid
 import z3c.form
@@ -114,33 +114,36 @@ class MoveItemsForm(form.Form):
 
             for obj in objs:
                 parent = aq_parent(aq_inner(obj))
-
-                if IBaseDocument.providedBy(obj) and not obj.is_movable():
-                    if obj.is_inside_a_task():
+                try:
+                    IMovabilityChecker(obj).validate_movement(destination)
+                except Forbidden as exc:
+                    if exc.message == u'Documents inside a task cannot be moved.':
                         msg = _(
                             'label_not_movable_since_inside_task',
                             default=u'Document ${name} is inside a task and '
                                     u'therefore not movable. Move the task '
                                     u'instead',
                             mapping=dict(name=obj.title))
-                    elif obj.is_inside_a_proposal():
+                    elif exc.message == u'Documents inside a proposal cannot be moved.':
                         msg = _(
                             'label_not_movable_since_inside_proposal',
                             default=u'Document ${name} is inside a proposal '
                                     u'and therefore not movable. Move the '
                                     u'proposal instead',
                             mapping=dict(name=obj.title))
-                    elif ILockable(obj).locked():
-                        msg = _(
-                            'label_not_movable_since_locked',
-                            default=u'Document ${name} is locked and '
-                                    u'therefore not movable.',
-                            mapping=dict(name=obj.title))
                     else:
                         raise Exception(
-                            'Failed to determine the reason for unmovable document. '
-                            'Did IBaseDocument.is_moveable change?'
+                            'Failed to determine the reason for unmovable object. '
+                            'Did IMovabilityChecker change?'
                         )
+                    IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                    continue
+                except ResourceLockedError:
+                    msg = _(
+                        'label_not_movable_since_locked',
+                        default=u'Document ${name} is locked and '
+                                u'therefore not movable.',
+                        mapping=dict(name=obj.title))
                     IStatusMessage(self.request).addStatusMessage(msg, type='error')
                     continue
 
