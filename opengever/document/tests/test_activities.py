@@ -12,7 +12,7 @@ import json
 
 class TestDocumentChangedActivities(IntegrationTestCase):
 
-    features = ('activity', 'document-watchers')
+    features = ('activity',)
 
     @browsing
     def test_document_title_changed_activity(self, browser):
@@ -27,18 +27,6 @@ class TestDocumentChangedActivities(IntegrationTestCase):
         activity = Activity.query.first()
         self.assertEqual(u'document-title-changed', activity.kind)
         self.assertEquals(u'Title changed by B\xe4rfuss K\xe4thi (kathi.barfuss)', activity.summary)
-
-    @browsing
-    def test_document_title_changed_whitout_watchers_feature_enabled(self, browser):
-        self.deactivate_feature('document-watchers')
-        self.login(self.regular_user, browser)
-        self.assertEqual(0, Activity.query.count())
-
-        browser.open(self.document, method='PATCH',
-                     data=json.dumps({u'title': u'A new title'}),
-                     headers=self.api_headers)
-
-        self.assertEqual(0, Activity.query.count())
 
     @browsing
     def test_mail_title_changed_activity(self, browser):
@@ -127,7 +115,7 @@ class TestDocumentChangedActivities(IntegrationTestCase):
 
 class TestDocumentWatcherAddedActivity(IntegrationTestCase):
 
-    features = ('activity', 'document-watchers')
+    features = ('activity',)
 
     def setUp(self):
         super(TestDocumentWatcherAddedActivity, self).setUp()
@@ -155,10 +143,3 @@ class TestDocumentWatcherAddedActivity(IntegrationTestCase):
                                             WATCHER_ROLE)
         notifications = Notification.query.all()
         self.assertEquals(2, len(notifications))
-
-    def test_user_is_not_notified_when_document_watchers_feature_is_disabled(self):
-        self.deactivate_feature('document-watchers')
-        self.login(self.regular_user)
-        self.center.add_watcher_to_resource(self.document, self.meeting_user.getId(), WATCHER_ROLE)
-        notifications = Notification.query.all()
-        self.assertEqual(0, len(notifications))

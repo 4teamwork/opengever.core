@@ -65,7 +65,6 @@ GEVER-Mandanten abgefragt werden.
               "disposition_transport_filesystem": false,
               "disposition_transport_ftps": false,
               "doc_properties": true,
-              "document_watchers" false,
               "dossier_templates": true,
               "ech0147_export": true,
               "ech0147_import": true,
@@ -176,9 +175,6 @@ features
 
     doc_properties
         Hinzufügen von DocProperties bei aus Vorlagen erstellten Word-Dokumenten
-
-    document_watchers
-        Beobachter für Dokumente
 
     dossier_templates
         Dossier Vorlagen

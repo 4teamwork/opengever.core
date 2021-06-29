@@ -244,7 +244,8 @@ class TestNotificationSettingsGet(IntegrationTestCase):
 
         self.assertEqual([u'added-as-watcher', u'task-added-or-reassigned',
                           u'task-transition-modify-deadline', u'task-commented',
-                          u'task-status-modified', u'task-reminder', u'dossier-overdue'],
+                          u'task-status-modified', u'task-reminder', u'dossier-overdue',
+                          u'document-modified'],
                          [activity['kind'] for activity in browser.json['activities']['items']])
 
         self.assertEqual({
@@ -274,6 +275,7 @@ class TestNotificationSettingsGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='/@notification-settings',
                      method='GET', headers=self.api_headers)
+
         self.assertEqual({
             u'@id': u'http://nohost/plone/@notification-settings',
             u'activities': {
@@ -302,7 +304,16 @@ class TestNotificationSettingsGet(IntegrationTestCase):
                      u'mail': {u'todo_responsible_role': False,
                                u'workspace_member_role': False},
                      u'personal': False,
-                     u'title': u'ToDo modified'}]},
+                     u'title': u'ToDo modified'},
+                    {u'@id': u'http://nohost/plone/@notification-settings/activities/document-modified',
+                     u'badge': {u'regular_watcher': True},
+                             u'digest': {u'regular_watcher': False},
+                             u'group': u'document',
+                             u'id': u'document-modified',
+                             u'kind': u'document-modified',
+                             u'mail': {u'regular_watcher': False},
+                             u'personal': False,
+                             u'title': u'Document modified'}]},
             u'general': {
                 u'@id': u'http://nohost/plone/@notification-settings/general',
                 u'items': [{
@@ -319,24 +330,9 @@ class TestNotificationSettingsGet(IntegrationTestCase):
             u'translations': [{
                 u'id': u'todo_responsible_role',
                 u'title': u'ToDo responsible'},
+                {u'id': u'regular_watcher', u'title': u'Watcher'},
                 {u'id': u'workspace_member_role',
                  u'title': u'Workspace member'}]}, browser.json)
-
-    @browsing
-    def test_document_watcher_settings_only_available_if_watcher_feature_enabled(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='/@notification-settings',
-                     method='GET', headers=self.api_headers)
-
-        self.assertNotIn('document-modified',
-                         [activity['id'] for activity in browser.json['activities']['items']])
-
-        self.activate_feature('document-watchers')
-        browser.open(self.portal, view='/@notification-settings',
-                     method='GET', headers=self.api_headers)
-
-        self.assertIn('document-modified',
-                      [activity['id'] for activity in browser.json['activities']['items']])
 
 
 class TestNotificationSettingsPatch(IntegrationTestCase):

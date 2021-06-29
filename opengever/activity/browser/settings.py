@@ -14,7 +14,6 @@ from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.json_response import JSONResponse
-from opengever.document import is_watcher_feature_enabled
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
@@ -360,7 +359,7 @@ class NotificationSettingsForm(BrowserView):
         return api.user.has_permission('opengever.disposition: Add disposition')
 
     def show_documents_tab(self):
-        return is_watcher_feature_enabled()
+        return True
 
     def show_proposals_tab(self):
         return is_meeting_feature_enabled()

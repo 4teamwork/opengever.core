@@ -1,9 +1,6 @@
 from opengever.document.extra_mimetypes import register_additional_mimetypes
-from opengever.document.interfaces import IDocumentSettings
 from opengever.document.officeconnector import register_ee_filename_callback
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.permissions import ManagePortal
-from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
 
 
@@ -19,15 +16,6 @@ register_additional_mimetypes()
 # Register a callback function for ZEM generation in Products.ExternalEditor
 # to include a document's filename in the metadata.
 register_ee_filename_callback()
-
-
-def is_watcher_feature_enabled():
-    try:
-        registry = getUtility(IRegistry)
-        return registry.forInterface(IDocumentSettings).watcher_feature_enabled
-
-    except (KeyError, AttributeError):
-        return False
 
 
 def initialize(context):

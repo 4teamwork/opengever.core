@@ -2,7 +2,6 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.base.sentry import log_msg_to_sentry
-from opengever.document import is_watcher_feature_enabled
 from opengever.document.activities import DocumentAuthorChangedActivity
 from opengever.document.activities import DocumentTitleChangedActivity
 from opengever.document.activities import DocumenVersionCreatedActivity
@@ -114,14 +113,10 @@ def _update_favorites_icon_class(context):
 
 
 def document_version_created(context, event):
-    if not is_watcher_feature_enabled():
-        return
     DocumenVersionCreatedActivity(context, getRequest()).record()
 
 
 def author_or_title_changed(context, event):
-    if not is_watcher_feature_enabled():
-        return
     if IContainerModifiedEvent.providedBy(event):
         return
     if ILocalrolesModifiedEvent.providedBy(event):
