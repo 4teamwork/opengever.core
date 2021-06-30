@@ -9,6 +9,7 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- ``@move``: Restrict moving of documents via API according to the same rules as in the classic UI.
 
 Other Changes
 ^^^^^^^^^^^^^

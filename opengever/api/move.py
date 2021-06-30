@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_parent
-from Products.CMFCore.utils import getToolByName
+from opengever.base.interfaces import IMovabilityChecker
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Move
+from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zope.interface import alsoProvides
 from zope.security import checkPermission
@@ -57,6 +58,7 @@ class Move(Move):
                 #         self.request.response.setStatus(403)
                 #         return
                 parent = aq_parent(obj)
+                IMovabilityChecker(obj).validate_movement(self.context)
                 if parent in parents_ids:
                     parents_ids[parent].append(obj.getId())
                 else:

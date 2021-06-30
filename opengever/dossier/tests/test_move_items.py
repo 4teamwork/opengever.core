@@ -635,7 +635,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         if path:
             payload['paths:list'] = [path]
 
-        browser.login().open(src, payload, view='move_items')
+        browser.open(src, payload, view='move_items')
 
         if not browser.url.endswith('move_items'):
             # Might have been redirected because of an error
@@ -646,7 +646,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_redirects_to_context_and_show_statusmessage_when_obj_cant_be_found(self, browser):
-        self.login(self.regular_user)
+        self.login(self.regular_user, browser)
         self.move_items(
             browser, src=self.dossier,
             obj='/invalid/path', target=self.empty_dossier)
@@ -658,7 +658,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_document_inside_a_task_is_not_movable(self, browser):
-        self.login(self.regular_user)
+        self.login(self.regular_user, browser)
         self.move_items(
             browser, src=self.task,
             obj=self.taskdocument, target=self.empty_dossier)
@@ -671,7 +671,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_mail_inside_a_task_is_not_movable(self, browser):
-        self.login(self.regular_user)
+        self.login(self.regular_user, browser)
         mail = create(Builder('mail').titled('Good news').within(self.task))
         self.move_items(browser, src=self.task, obj=mail, target=self.empty_dossier)
 
@@ -682,7 +682,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_document_inside_closed_dossier_is_not_movable(self, browser):
-        self.login(self.dossier_manager)
+        self.login(self.dossier_manager, browser)
         self.move_items(
             browser, src=self.expired_dossier,
             obj=self.expired_document, target=self.empty_dossier)
@@ -697,7 +697,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_document_inside_inactive_dossier_is_not_movable(self, browser):
-        self.login(self.dossier_manager)
+        self.login(self.dossier_manager, browser)
         self.move_items(
             browser, src=self.inactive_dossier,
             obj=self.inactive_document, target=self.empty_dossier)
@@ -712,7 +712,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_task_inside_closed_dossier_is_not_movable(self, browser):
-        self.login(self.dossier_manager)
+        self.login(self.dossier_manager, browser)
         self.move_items(
             browser, src=self.expired_dossier,
             task=self.expired_task, target=self.empty_dossier)
@@ -725,7 +725,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_mail_inside_closed_dossier_is_not_movable(self, browser):
-        self.login(self.dossier_manager)
+        self.login(self.dossier_manager, browser)
         self.set_workflow_state('dossier-state-resolved', self.dossier)
         self.move_items(
             browser, src=self.dossier,
@@ -739,7 +739,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_task_are_handled_correctly(self, browser):
-        self.login(self.regular_user)
+        self.login(self.regular_user, browser)
         task_intid = getUtility(IIntIds).getId(self.subtask)
         self.move_items(
             browser, src=self.task,
@@ -749,16 +749,14 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
     @browsing
     def test_move_items_within_templatefolder_is_possible(self, browser):
-        self.login(self.regular_user, browser)
-        # if the template folders are not in a valid root, this does not work
-        # No idea why it used to work in the functional test?
-        templatefolder = create(Builder('templatefolder').within(self.repository_root))
-        subtemplatefolder = create(
-            Builder('templatefolder').within(templatefolder))
-        document = create(Builder('document').within(templatefolder))
-        self.move_items(browser, src=templatefolder,
-                        obj=document, target=subtemplatefolder)
-        self.assertIn(document, subtemplatefolder.objectValues())
+        self.login(self.administrator, browser)
+        doc_intid = getUtility(IIntIds).getId(self.dossiertemplatedocument)
+
+        self.move_items(browser, src=self.dossiertemplate,
+                        obj=self.dossiertemplatedocument, target=self.templates)
+        doc = getUtility(IIntIds).getObject(doc_intid)
+
+        self.assertIn(doc, self.templates.objectValues())
 
     @browsing
     def test_paste_action_not_visible_for_closed_dossiers(self, browser):
