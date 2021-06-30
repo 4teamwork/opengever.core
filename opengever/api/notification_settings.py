@@ -5,7 +5,6 @@ from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.notification_settings import NotificationSettings
 from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.api.validation import get_validation_errors
-from opengever.document import is_watcher_feature_enabled
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
@@ -67,7 +66,7 @@ class NotificationSettingsGet(Service):
             'task': not is_workspace_feature_enabled(),
             'watcher': not is_workspace_feature_enabled(),
             'workspace': is_workspace_feature_enabled() and is_todo_feature_enabled(),
-            'document': is_watcher_feature_enabled(),
+            'document': True,
         }
 
     def general_settings_visibility(self):

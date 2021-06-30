@@ -1,0 +1,3 @@
+<registry>
+  <record interface="opengever.document.interfaces.IDocumentSettings" field="watcher_feature_enabled" remove="True" />
+</registry>

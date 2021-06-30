@@ -1,6 +1,5 @@
 from opengever.activity import is_activity_feature_enabled
 from opengever.activity import notification_center
-from opengever.document import is_watcher_feature_enabled
 from opengever.document.activities import DocumentWatcherAddedActivity
 from opengever.inbox.activities import ForwardingWatcherAddedActivity
 from opengever.inbox.forwarding import IForwarding
@@ -33,7 +32,4 @@ def notify_watcher(obj, event):
 
 
 def notify_document_watcher(obj, event):
-    if not is_watcher_feature_enabled():
-        return
-
     DocumentWatcherAddedActivity(obj, getRequest(), event.watcherid).record()

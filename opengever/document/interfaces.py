@@ -76,12 +76,6 @@ class IDocumentSettings(Interface):
         default=PRESERVED_AS_PAPER_DEFAULT,
     )
 
-    watcher_feature_enabled = schema.Bool(
-        title=u'Enable watcher feature',
-        description=u'Whether watcher feature is enabled for documents',
-        default=False
-    )
-
 
 class ICheckinCheckoutManager(Interface):
     """Interface for the checkin / checkout manager.
