@@ -14,6 +14,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@trigger-task-template``: Support overriding the deadline for each task (see :ref:`trigger_task_template` for updated examples).
 
 2021.13.0 (2021-06-25)
 ----------------------

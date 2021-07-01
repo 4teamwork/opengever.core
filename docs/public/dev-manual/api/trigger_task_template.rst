@@ -72,16 +72,17 @@ werden. Es gibt dabei folgende Möglichkeiten:
         }
 
 
-Titel und Beschreibung setzen
------------------------------
+Titel, Beschreibung und Frist setzen
+------------------------------------
 
 Sowohl für die Hauptaufgabe wie auch für jede der ausgewählten Aufgabenvorlage
-kann Titel und Beschreibung der Aufgabe überschrieben werden. Dafür stehen
+kann Titel, Beschreibung und Frist der Aufgabe überschrieben werden. Dafür stehen
 folgende Felder zur Verfügung:
 
 - ``title``: Setzt den Titel der Aufgabe (Default: Titel der Vorlage)
 - ``text``:  Setzt die Beschreibung der Aufgabe (Default: Beschreibung
   der Vorlage, oder Leer für die Hauptaufgabe)
+- ``deadline``: Setzt die Frist der Aufgabe (Default: Frist der Vorlage)
 
 
 **Beispiel-Request**:
@@ -98,6 +99,7 @@ folgende Felder zur Verfügung:
             "tasktemplates": [
                 {
                     "@id": "http://localhost:8080/fd/vorlagen/tasktemplatefolder-1/tasktemplate-1",
+                    "deadline": "2025-12-10",
                     "responsible": "stv:david.erni",
                     "title": "Unteraufgabe",
                     "text": "Noch schneller erledigen!"

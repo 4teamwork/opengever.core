@@ -75,6 +75,7 @@ class TaskTemplateFolderTrigger(object):
     def create_main_task(self):
         title = self.main_task_overrides.get("title", self.context.title)
         text = self.main_task_overrides.get("text")
+        deadline = self.main_task_overrides.get("deadline", self.get_main_task_deadline())
         data = dict(
             title=title,
             text=text,
@@ -82,7 +83,7 @@ class TaskTemplateFolderTrigger(object):
             responsible=api.user.get_current().getId(),
             responsible_client=get_current_org_unit().id(),
             task_type='direct-execution',
-            deadline=self.get_main_task_deadline())
+            deadline=deadline)
 
         main_task = self.add_task(self.dossier, data)
 
@@ -118,6 +119,7 @@ class TaskTemplateFolderTrigger(object):
     def create_subtask(self, main_task, template, values):
         title = values.get("title", template.title)
         text = values.get("text", template.text)
+        deadline = values.get("deadline", date.today() + timedelta(template.deadline))
         data = dict(
             title=title,
             issuer=template.issuer,
@@ -126,7 +128,7 @@ class TaskTemplateFolderTrigger(object):
             task_type=template.task_type,
             text=text,
             relatedItems=self.related_documents,
-            deadline=date.today() + timedelta(template.deadline),
+            deadline=deadline,
         )
 
         data.update(values)

@@ -235,6 +235,8 @@ class TriggerTaskTemplatePost(Service):
             (ITask["title"], self.context, self.request), IFieldDeserializer)
         text_deserializer = queryMultiAdapter(
             (ITask["text"], self.context, self.request), IFieldDeserializer)
+        deadline_deserializer = queryMultiAdapter(
+            (ITask["deadline"], self.context, self.request), IFieldDeserializer)
 
         if "title" in data:
             raw_title = data["title"]
@@ -255,6 +257,16 @@ class TriggerTaskTemplatePost(Service):
                     u'Invalid text "{}"'.format(raw_text))
             else:
                 task_overrides["text"] = text
+
+        if "deadline" in data:
+            raw_deadline = data["deadline"]
+            try:
+                deadline = deadline_deserializer(raw_deadline)
+            except (RequiredMissing, ConstraintNotSatisfied):
+                errors.append(
+                    u'Invalid deadline "{}"'.format(raw_deadline))
+            else:
+                task_overrides["deadline"] = deadline
 
         return task_overrides, errors
 
