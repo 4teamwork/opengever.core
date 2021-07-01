@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+2021.13.1 (2021-07-01)
+----------------------
+
+Bug fixes:
+
+
+- Fix resolving a subdossier when filing_number feature is enabled. [phgross]
+
+
 2021.13.0 (2021-06-25)
 ----------------------
 
