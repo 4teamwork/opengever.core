@@ -48,6 +48,9 @@ class ReindexContainerModifiedDuringBundleImport(UpgradeStep):
         not_in_sync = [item[0] for item in catalog_modified - solr_modified]
 
         for plone_uid in not_in_sync:
+            # Do not duplicate this upgrade step as is. Querying the catalog
+            # for each object will trigger flushing of the indexing queue,
+            # i.e. the indexing queue gets processed for every object...
             brains = self.catalog_unrestricted_search({'UID': plone_uid})
             if len(brains) != 1:
                 LOG.error(

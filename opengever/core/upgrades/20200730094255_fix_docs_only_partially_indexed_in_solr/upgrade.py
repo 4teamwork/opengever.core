@@ -71,6 +71,9 @@ class FixDocsOnlyPartiallyIndexedInSolr(UpgradeStep):
         """Reindex all fields/indexes for a broken solr document.
         """
         plone_uid = doc[u'UID']
+        # Do not duplicate this upgrade step as is. Querying the catalog
+        # for each object will trigger flushing of the indexing queue,
+        # i.e. the indexing queue gets processed for every object...
         brains = self.catalog_unrestricted_search({u'UID': plone_uid})
         if len(brains) != 1:
             logger.error(
