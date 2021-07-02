@@ -280,7 +280,7 @@ class OGMail(Mail, BaseDocumentMixin):
         for i, part in enumerate(walk(self.msg)):
             if i == pos:
                 attachment = part
-                continue
+                break
 
         if not attachment:
             return None, '', ''
