@@ -4,11 +4,14 @@ from opengever.base.colorization import get_color
 from opengever.base.interfaces import IGeverSettings
 from opengever.inbox.utils import get_current_inbox
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.private import get_private_folder_url
 from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
+from zope.component import queryMultiAdapter
 from zope.publisher.interfaces import NotFound
 
 
@@ -18,6 +21,7 @@ class ConfigGet(Service):
     def reply(self):
         config = IGeverSettings(self.context).get_config()
         self.add_additional_infos(config)
+        self.add_current_unit_infos(config)
         return config
 
     def check_permission(self):
@@ -54,3 +58,8 @@ class ConfigGet(Service):
         except NotFound:
             # GEVER deployments without a repository-root raises NotFound
             config['primary_repository'] = None
+
+    def add_current_unit_infos(self, config):
+        admin_unit = get_current_admin_unit()
+        config['current_admin_unit'] = queryMultiAdapter(
+            (admin_unit, self.request), ISerializeToJsonSummary)()

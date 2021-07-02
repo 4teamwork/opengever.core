@@ -29,6 +29,8 @@
   <adapter factory=".serializer.SerializeUserModelToJsonSummary" />
   <adapter factory=".serializer.SerializeGroupModelToJsonSummary" />
   <adapter factory=".serializer.SerializeBrainToJsonSummary" />
+  <adapter factory=".serializer.SerializeAdminUnitModelToJsonSummary" />
+  <adapter factory=".serializer.SerializeOrgUnitModelToJsonSummary" />
 
   <adapter factory=".actors.SerializeActorToJson" />
   <adapter factory=".repositoryfolder.DeserializeRepositoryFolderFromJson" />
