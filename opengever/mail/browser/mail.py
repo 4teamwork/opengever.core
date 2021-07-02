@@ -1,5 +1,4 @@
 from Acquisition import aq_inner
-from ftw.mail import utils
 from ftw.mail.mail import View
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
@@ -46,7 +45,7 @@ class MailAttachmentsMixin(object):
     @instance.memoize
     def attachments(self):
         context = aq_inner(self.context)
-        attachments = utils.get_attachments(context.msg)
+        attachments = context.attachment_infos
         for attachment in attachments:
             lookup = self.lookup_mimetype_registry(attachment)
             if lookup:
