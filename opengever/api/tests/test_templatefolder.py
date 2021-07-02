@@ -346,7 +346,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                          api.content.get_state(subtask))
 
     @browsing
-    def test_overriding_main_task_title_and_text(self, browser):
+    def test_overriding_main_task_title_text_and_deadline(self, browser):
         self.login(self.regular_user, browser)
 
         folder_data = self._get_task_template_item(browser)
@@ -359,6 +359,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                     '@id': self.tasktemplate.absolute_url(),
                 }
             ],
+            'deadline': u'2021-12-12',
             'title': u'Neuanstellung Hugo B\xf6ss',
             'text': u'Bla bla',
             'start_immediately': True
@@ -375,9 +376,10 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         self.assertEqual(u'Neuanstellung Hugo B\xf6ss', main_task.title)
         self.assertEqual(u'Bla bla', main_task.text)
+        self.assertEqual(date(2021, 12, 12), main_task.deadline)
 
     @browsing
-    def test_overriding_sub_task_title_and_text(self, browser):
+    def test_overriding_sub_task_title_text_and_deadline(self, browser):
         self.login(self.regular_user, browser)
 
         folder_data = self._get_task_template_item(browser)
@@ -388,6 +390,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
             'tasktemplates': [
                 {
                     '@id': self.tasktemplate.absolute_url(),
+                    'deadline': u'2021-12-12',
                     'title': u'Arbeitsplatz Hugo B\xf6ss',
                     'text': None,
                 }
@@ -409,6 +412,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         self.assertEqual(u'Arbeitsplatz Hugo B\xf6ss', subtask.title)
         self.assertIsNone(subtask.text)
+        self.assertEqual(date(2021, 12, 12), subtask.deadline)
 
     @browsing
     def test_invalid_main_task_title_raises_bad_request(self, browser):
@@ -466,6 +470,34 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                          headers=self.api_headers)
         self.assertEqual(
             {u'message': u'Invalid title ""', u"type": u"BadRequest"},
+            browser.json)
+
+    @browsing
+    def test_invalid_task_deadline_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser)
+
+        folder_data = self._get_task_template_item(browser)
+
+        data = {
+            'tasktemplatefolder': folder_data,
+            'tasktemplates': [
+                {
+                    '@id': self.tasktemplate.absolute_url(),
+                }
+            ],
+            'title': 'A title',
+            'text': u'Bla bla',
+            'deadline': None,
+            'start_immediately': True
+        }
+
+        with browser.expect_http_error(400):
+            browser.open('{}/@trigger-task-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            {u'message': u'Invalid deadline "None"', u"type": u"BadRequest"},
             browser.json)
 
     @browsing
