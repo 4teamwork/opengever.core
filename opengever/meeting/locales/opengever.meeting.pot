@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-07-02 10:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -669,6 +669,11 @@ msgstr ""
 msgid "error_must_checkin_documents_for_transition"
 msgstr ""
 
+#. Default: "You have not selected any items."
+#: ./opengever/meeting/browser/report.py
+msgid "error_no_items"
+msgstr ""
+
 #. Default: "You have not selected any items"
 #: ./opengever/meeting/browser/move_proposal_items.py
 msgid "error_no_items_selected"
@@ -892,6 +897,11 @@ msgstr ""
 msgid "label_closed_meetings"
 msgstr ""
 
+#. Default: "Comittee"
+#: ./opengever/meeting/browser/report.py
+msgid "label_comittee"
+msgstr ""
+
 #. Default: "Comment"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 #: ./opengever/meeting/proposal_transition_comment.py
@@ -934,6 +944,11 @@ msgstr ""
 #. Default: "Create task"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_create_task_from_proposal"
+msgstr ""
+
+#. Default: "Created"
+#: ./opengever/meeting/browser/report.py
+msgid "label_created"
 msgstr ""
 
 #. Default: "Creator"
@@ -1000,6 +1015,7 @@ msgstr ""
 
 #. Default: "Description"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_description"
 msgstr ""
@@ -1010,6 +1026,7 @@ msgid "label_destination"
 msgstr ""
 
 #. Default: "Dossier"
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_dossier"
 msgstr ""
@@ -1161,6 +1178,7 @@ msgstr ""
 
 #. Default: "Issuer"
 #: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_issuer"
 msgstr ""
@@ -1322,6 +1340,11 @@ msgstr ""
 #. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
+msgstr ""
+
+#. Default: "Review state"
+#: ./opengever/meeting/browser/report.py
+msgid "label_review_state"
 msgstr ""
 
 #. Default: "Role"

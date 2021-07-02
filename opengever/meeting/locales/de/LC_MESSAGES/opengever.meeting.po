@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-07-02 10:48+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -670,6 +670,11 @@ msgstr "Es können nur Objekte aus aktiven Dossiers verschoben werden."
 msgid "error_must_checkin_documents_for_transition"
 msgstr "Der Status kann nicht geändert werden solange der Antrag ausgecheckte Dokumente enthält."
 
+#. Default: "You have not selected any items."
+#: ./opengever/meeting/browser/report.py
+msgid "error_no_items"
+msgstr "Sie haben keine Objekte ausgewählt."
+
 #. Default: "You have not selected any items"
 #: ./opengever/meeting/browser/move_proposal_items.py
 msgid "error_no_items_selected"
@@ -893,6 +898,11 @@ msgstr "Die Sitzung kann nicht abgeschlossen werden solange noch nicht alle Trak
 msgid "label_closed_meetings"
 msgstr "Vergangene Sitzungen"
 
+#. Default: "Comittee"
+#: ./opengever/meeting/browser/report.py
+msgid "label_comittee"
+msgstr "Gremium"
+
 #. Default: "Comment"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 #: ./opengever/meeting/proposal_transition_comment.py
@@ -936,6 +946,11 @@ msgstr "Protokollauszug generieren"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_create_task_from_proposal"
 msgstr "Aufgabe erstellen"
+
+#. Default: "Created"
+#: ./opengever/meeting/browser/report.py
+msgid "label_created"
+msgstr "Erstellt am"
 
 #. Default: "Creator"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1001,6 +1016,7 @@ msgstr "Wollen Sie dieses Element wirklich streichen?"
 
 #. Default: "Description"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_description"
 msgstr "Beschreibung"
@@ -1011,6 +1027,7 @@ msgid "label_destination"
 msgstr "Zieldossier"
 
 #. Default: "Dossier"
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_dossier"
 msgstr "Dossier"
@@ -1162,6 +1179,7 @@ msgstr "Gültigkeitsstatus"
 
 #. Default: "Issuer"
 #: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_issuer"
 msgstr "Antragssteller"
@@ -1324,6 +1342,11 @@ msgstr "Protokollauszug ablegen"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
 msgstr "In Dossier abgelegt."
+
+#. Default: "Review state"
+#: ./opengever/meeting/browser/report.py
+msgid "label_review_state"
+msgstr "Status"
 
 #. Default: "Role"
 #: ./opengever/meeting/browser/memberships.py
