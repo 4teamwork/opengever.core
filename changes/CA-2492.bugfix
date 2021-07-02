@@ -1,0 +1,1 @@
+ContactsSource falls back to `ogds_user` type if no type is explicitly given. [elioschmutz]
