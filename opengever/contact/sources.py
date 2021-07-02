@@ -3,6 +3,7 @@ from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
+from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.service import ogds_service
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.interface import implementer
@@ -51,13 +52,18 @@ class ContactsSource(object):
         try:
             term_type, term_id = token.split(':')
         except ValueError:
-            raise LookupError
+            # we asume, that the token is just a user if there is no prefix.
+            term_type = 'ogds_user'
+            term_id = token
 
         term_id = term_id
         clazz = self.by_type[term_type]
-        contact = clazz.query.get(term_id)
-        if not contact:
+
+        try:
+            contact = clazz.query.get(term_id)
+        except RecordNotFound:
             raise LookupError
+
         return self.getTerm(contact)
 
     def search(self, query_string):

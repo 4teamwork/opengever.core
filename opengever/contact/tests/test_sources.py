@@ -84,3 +84,15 @@ class TestContactsSource(FunctionalTestCase):
 
         self.assertTerms(
             [(self.meier_ag, u'Meier AG [2222]')], self.source.search('2222'))
+
+    def test_getTermByToken_falls_back_to_ogds_user_if_not_contact_type_is_given(self):
+
+        self.assertEqual(
+            'ogds_user:test_user_1_',
+            self.source.getTermByToken('ogds_user:test_user_1_').token
+        )
+
+        self.assertEqual(
+            'ogds_user:test_user_1_',
+            self.source.getTermByToken('test_user_1_').token
+        )
