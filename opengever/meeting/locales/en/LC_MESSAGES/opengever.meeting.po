@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-14 13:48+0000\n"
+"POT-Creation-Date: 2021-07-02 10:48+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -808,6 +808,11 @@ msgstr "Can only move objects from open dossiers"
 msgid "error_must_checkin_documents_for_transition"
 msgstr "Cannot change the state because the proposal contains checked out documents."
 
+#. Default: "You have not selected any items."
+#: ./opengever/meeting/browser/report.py
+msgid "error_no_items"
+msgstr "You have not selected any items."
+
 #. German translation: Sie haben kein Element ausgewählt
 #. Default: "You have not selected any items"
 #: ./opengever/meeting/browser/move_proposal_items.py
@@ -1076,6 +1081,11 @@ msgstr "The meeting cannot be closed because it has undecided agenda items."
 msgid "label_closed_meetings"
 msgstr "Closed meetings"
 
+#. Default: "Comittee"
+#: ./opengever/meeting/browser/report.py
+msgid "label_comittee"
+msgstr "Comittee"
+
 #. German translation: Kommentar
 #. Default: "Comment"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
@@ -1127,6 +1137,11 @@ msgstr "Create Excerpt"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_create_task_from_proposal"
 msgstr "Create task"
+
+#. Default: "Created"
+#: ./opengever/meeting/browser/report.py
+msgid "label_created"
+msgstr "Created"
 
 #. German translation: Ersteller
 #. Default: "Creator"
@@ -1204,6 +1219,7 @@ msgstr "Are you sure you want to delete this agenda item?"
 #. German translation: Beschreibung
 #. Default: "Description"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_description"
 msgstr "Description"
@@ -1216,6 +1232,7 @@ msgstr "Destination"
 
 #. German translation: Dossier
 #. Default: "Dossier"
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_dossier"
 msgstr "Dossier"
@@ -1397,6 +1414,7 @@ msgstr "Sablon template invalid"
 #. Default: "Issuer"
 #. MARKER: Might want to change this to "Proposer"
 #: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_issuer"
 msgstr "Issuer"
@@ -1590,6 +1608,11 @@ msgstr "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
 msgstr "Returned"
+
+#. Default: "Review state"
+#: ./opengever/meeting/browser/report.py
+msgid "label_review_state"
+msgstr "State"
 
 #. German translation: Rolle
 #. Default: "Role"

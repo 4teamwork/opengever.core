@@ -460,4 +460,11 @@
       permission="zope2.CopyOrMove"
       />
 
+  <browser:page
+      for="*"
+      name="proposal_report"
+      class=".report.ProposalReporter"
+      permission="zope2.View"
+      />
+
 </configure>
