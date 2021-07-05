@@ -135,9 +135,15 @@ class TestNonSensitiveVocabularies(IntegrationTestCase):
             'Please validate that the newly introduced vocabularies do not contain '
             'protectable entries and update the list of NON_SENSITIVE_VOCABUALRIES.')
 
-    def assert_permission_for_non_sensitive_vocabulaires(self, browser, role):
-        self.login(self.regular_user, browser)
-        api.user.grant_roles(user=api.user.get_current(), roles=[role])
+    def assert_permission_for_non_sensitive_vocabulaires(self, browser, role=None, user=None):
+        if not user:
+            user = self.regular_user
+
+        self.login(user, browser)
+
+        if role:
+            api.user.grant_roles(user=api.user.get_current(), roles=[role])
+
         browser.raise_http_errors = False
         not_accessable = []
 
@@ -162,6 +168,10 @@ class TestNonSensitiveVocabularies(IntegrationTestCase):
     @browsing
     def test_all_non_sensitive_vocabularies_are_accessable_by_a_member(self, browser):
         self.assert_permission_for_non_sensitive_vocabulaires(browser, 'Member')
+
+    @browsing
+    def test_all_non_sensitive_vocabularies_are_accessable_by_an_authenticated_user(self, browser):
+        self.assert_permission_for_non_sensitive_vocabulaires(browser, user=self.foreign_contributor)
 
     @browsing
     def test_all_non_sensitive_vocabularies_are_accessable_by_a_contributor(self, browser):
