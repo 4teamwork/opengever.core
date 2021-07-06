@@ -6,7 +6,6 @@ from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.behaviors.translated_title import get_inactive_languages
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.oguid import Oguid
-from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.sentry import log_msg_to_sentry
@@ -17,8 +16,10 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.repository.interfaces import IRepositoryFolder
@@ -503,3 +504,45 @@ class SerializeGroupModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
     @property
     def base_url(self):
         return api.portal.get().absolute_url()
+
+
+@implementer(ISerializeToJsonSummary)
+@adapter(AdminUnit, IOpengeverBaseLayer)
+class SerializeAdminUnitModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+
+    item_columns = (
+        'unit_id',
+        'title',
+        'public_url',
+        'abbreviation',
+        'enabled',
+        'hidden',
+    )
+
+    content_type = 'virtual.ogds.admin_unit'
+    id_attribute_name = 'unit_id'
+    endpoint_name = '@admin-units'
+
+    def add_additional_metadata(self, data):
+        """Add list of org_units summaries"""
+
+        data['org_units'] = [
+            queryMultiAdapter((org_unit, self.request), ISerializeToJson)()
+            for org_unit in self.context.org_units]
+
+
+@implementer(ISerializeToJson)
+@adapter(OrgUnit, IOpengeverBaseLayer)
+class SerializeOrgUnitModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
+    """OrgUnit model json serializer."""
+
+    item_columns = (
+        'unit_id',
+        'title',
+        'enabled',
+        'hidden',
+    )
+
+    content_type = 'virtual.ogds.org_unit'
+    id_attribute_name = 'unit_id'
+    endpoint_name = '@org-units'

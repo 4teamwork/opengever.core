@@ -337,3 +337,32 @@ class TestConfig(IntegrationTestCase):
 
         browser.open(self.config_url, headers=self.api_headers)
         self.assertTrue(browser.json['features']['filing_number'])
+
+    @browsing
+    def test_contains_the_current_admin_unit(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/@admin-units/plone',
+             u'@type': u'virtual.ogds.admin_unit',
+             u'abbreviation': u'Client1',
+             u'enabled': True,
+             u'hidden': False,
+             u'public_url': u'http://nohost/plone',
+             u'title': u'Hauptmandant',
+             u'unit_id': u'plone',
+             u'org_units': [{u'@id': u'http://nohost/plone/@org-units/fa',
+                             u'@type': u'virtual.ogds.org_unit',
+                             u'enabled': True,
+                             u'hidden': False,
+                             u'title': u'Finanz\xe4mt',
+                             u'unit_id': u'fa'},
+                            {u'@id': u'http://nohost/plone/@org-units/rk',
+                             u'@type': u'virtual.ogds.org_unit',
+                             u'enabled': True,
+                             u'hidden': False,
+                             u'title': u'Ratskanzl\xc3\xa4i',
+                             u'unit_id': u'rk'}]},
+            browser.json['current_admin_unit'])
