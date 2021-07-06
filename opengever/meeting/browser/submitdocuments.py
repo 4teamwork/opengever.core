@@ -35,6 +35,17 @@ from zope.schema import TextLine
 import json
 
 
+additional_documents_source = DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'object_provides':
+                        ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                         'opengever.document.document.IDocumentSchema',
+                         'opengever.task.task.ITask',
+                         'ftw.mail.mail.IMail', ],
+                    })
+
+
 class ISubmitAdditionalDocuments(model.Schema):
     """Meeting model schema interface."""
 
@@ -44,15 +55,7 @@ class ISubmitAdditionalDocuments(model.Schema):
         missing_value=[],
         value_type=RelationChoice(
             title=u"Related",
-            source=DossierPathSourceBinder(
-                portal_type=("opengever.document.document", "ftw.mail.mail"),
-                navigation_tree_query={
-                    'object_provides':
-                        ['opengever.dossier.behaviors.dossier.IDossierMarker',
-                         'opengever.document.document.IDocumentSchema',
-                         'opengever.task.task.ITask',
-                         'ftw.mail.mail.IMail', ],
-                    }),
+            source=additional_documents_source,
             ),
         required=True,
         )
