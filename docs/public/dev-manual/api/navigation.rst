@@ -111,7 +111,7 @@ so dass keinezusätzliche Abfrage nötig ist.
        GET /ordnungssystem?expand=navigation HTTP/1.1
        Accept: application/json
 
-Für einen personalisierten Navigationsbaum können die Parameter `root_interface` und `content_interfaces` verwendet werden.
+Für einen personalisierten Navigationsbaum können die Parameter ``root_interface`` und ``content_interfaces`` verwendet werden.
 
 Ein Navigationsbaum eines Arbeitsraumes kann wie folgt abgefragt werden:
 
@@ -149,13 +149,13 @@ Ein Navigationsbaum eines Arbeitsraumes kann wie folgt abgefragt werden:
           ]
       }
 
-Über den Parameter `include_root` kann das Root-Objekt im Navigationsbaum hinzugefügt werden.
+Über den Parameter ``include_root`` kann das Root-Objekt im Navigationsbaum hinzugefügt werden.
 
 **Beispiel-Request**:
 
    .. sourcecode:: http
 
-       GET /@navigation?include_root=true&root_provides=opengever.workspace.interfaces.IWorkspace&content_provides=opengever.workspace.interfaces.IWorkspaceFolder HTTP/1.1
+       GET /@navigation?include_root=true&root_interface=opengever.workspace.interfaces.IWorkspace&content_interfaces=opengever.workspace.interfaces.IWorkspaceFolder HTTP/1.1
        Accept: application/json
 
 **Beispiel-Response**:
@@ -193,6 +193,80 @@ Ein Navigationsbaum eines Arbeitsraumes kann wie folgt abgefragt werden:
                   "is_subdossier": null,
                   "uid": "f93938316a524fa5ac59f3b98506b47c",
                   "url": "http://localhost:8080/fd/workspaces/workspace-1"
+              }
+          ]
+      }
+
+Über den Parameter ``review_state`` kann nach Status gefiltert werden. Mit dem Parameter ``include_context`` kann sichergestellt werden, dass der aktuelle Kontext auch in der Navigation erscheint, wenn der Kontext nicht den ausgewählten Status hat.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /dossier-1/inactive-dossier/@navigation?include_root=true&root_interface=opengever.dossier.behaviors.dossier.IDossierMarker&content_interfaces=opengever.dossier.behaviors.dossier.IDossierMarker&review_state=dossier-state-active HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@navigation",
+          "tree": [
+              {
+                  "url": "fd/dossier-1"
+                  "review_state": "dossier-state-active",
+                  "nodes": [
+                      {
+                          "url": "fd/dossier-1/subdossier"
+                          "review_state": "dossier-state-active",
+                          "nodes": [],
+                          "...": "..."
+                      },
+                  ],
+                  "...": "..."
+              }
+          ]
+      }
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /dossier-1/inactive-dossier/@navigation?include_root=true&root_interface=opengever.dossier.behaviors.dossier.IDossierMarker&content_interfaces=opengever.dossier.behaviors.dossier.IDossierMarker&review_state=dossier-state-active&include_context=true HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@navigation",
+          "tree": [
+              {
+                  "url": "fd/dossier-1"
+                  "review_state": "dossier-state-active",
+                  "nodes": [
+                      {
+                          "url": "fd/dossier-1/subdossier"
+                          "review_state": "dossier-state-active",
+                          "nodes": [],
+                          "...": "..."
+                      },
+                      {
+                          "url": "fd/dossier-1/inactive-dossier"
+                          "review_state": "dossier-state-inactive",
+                          "nodes": [],
+                          "...": "..."
+                      },
+                  ],
+                  "...": "..."
               }
           ]
       }

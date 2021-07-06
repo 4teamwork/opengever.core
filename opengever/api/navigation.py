@@ -70,16 +70,35 @@ class Navigation(object):
                 raise BadRequest("No root found for interface: {}".format(
                     root_interface.__identifier__))
 
-        items = api.content.find(
-            object_provides=content_interfaces,
-            path='/'.join(root.getPhysicalPath()),
-            sort_on='sortable_title',
-        )
+        query = {'object_provides': content_interfaces,
+                 'path': '/'.join(root.getPhysicalPath()),
+                 'sort_on': 'sortable_title'}
+
+        if self.request.form.get('review_state'):
+            query['review_state'] = self.request.form.get('review_state')
+
+        items = api.content.find(**query)
+
+        if self.request.form.get('include_context'):
+            items = self.include_context_branch(items, root.UID(), content_interfaces)
 
         nodes = map(self.brain_to_node, items)
         result['navigation']['tree'] = make_tree_by_url(nodes)
 
         return result
+
+    def include_context_branch(self, items, root_uid, content_interfaces):
+        all_uids = {brain.UID for brain in items}
+        if self.context.UID() in all_uids:
+            return items
+        for item in self.context.aq_chain:
+            item_uid = item.UID()
+            if item_uid == root_uid:
+                break
+            all_uids.add(item_uid)
+        return api.content.find(
+            UID=list(all_uids),
+            sort_on='sortable_title')
 
     def _lookup_iface_by_identifier(self, identifier):
         return resolve(identifier) if identifier else None
