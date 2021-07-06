@@ -283,7 +283,7 @@ class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
         previously_submitted = model.resolve_submitted_documents()[0]
 
         data = json.dumps({
-            'documents': [self.subdocument.UID(), self.subsubdocument.UID()]
+            'documents': [self.subdocument.UID(), self.mail_eml.UID()]
         })
 
         with self.observe_children(self.submitted_proposal) as children:
@@ -295,13 +295,13 @@ class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
             [{u'action': u'copied',
               u'source': self.subdocument.absolute_url()},
              {u'action': u'copied',
-              u'source': self.subsubdocument.absolute_url()}],
+              u'source': self.mail_eml.absolute_url()}],
             browser.json)
 
         self.assertEqual(2, len(children["added"]))
         self.assertEqual(3, len(model.submitted_documents))
         self.assertItemsEqual(list(children['added']) + [previously_submitted],
-                             model.resolve_submitted_documents())
+                              model.resolve_submitted_documents())
 
     @browsing
     def test_submitting_additional_document_already_up_to_date(self, browser):
