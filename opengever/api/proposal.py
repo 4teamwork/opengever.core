@@ -1,15 +1,22 @@
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.oguid import Oguid
+from opengever.meeting.browser.submitdocuments import additional_documents_source
 from opengever.meeting.model import Meeting
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposalhistory import IProposalResponse
+from plone.app.uuid.utils import uuidToObject
+from plone.protect.interfaces import IDisableCSRFProtection
+from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
+from plone.restapi.services import Service
+from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -87,3 +94,32 @@ class SerializeProposalToJson(SerializeSubmittedProposalToJson):
         result['successor_proposals'] = successor_proposals
 
         return result
+
+
+class SubmitAdditionalDocuments(Service):
+
+    def reply(self, *args, **kwargs):
+        alsoProvides(self.request, IDisableCSRFProtection)
+        documents = self.extract_documents()
+        result = []
+        for document in documents:
+            command = self.context.submit_additional_document(document)
+            result.append(command.api_response())
+        return result
+
+    def extract_documents(self):
+        """Extract and validate the documents to be submitted.
+        """
+        json_data = json_body(self.request)
+        document_uids = json_data.get('documents')
+        if not document_uids:
+            raise BadRequest("Missing parameter: documents")
+
+        documents = []
+        source = additional_documents_source(self.context)
+        for uid in document_uids:
+            document = uuidToObject(uid)
+            if document not in source:
+                raise BadRequest("Only documents within main dossier are allowed")
+            documents.append(document)
+        return documents

@@ -460,6 +460,10 @@ class NullUpdateSubmittedDocumentCommand(object):
             portal.REQUEST,
             type='warning')
 
+    def api_response(self):
+        return {"source": self.document.absolute_url(),
+                "action": None}
+
 
 class UpdateSubmittedDocumentCommand(object):
 
@@ -503,6 +507,10 @@ class UpdateSubmittedDocumentCommand(object):
               mapping=dict(title=self.document.title)),
             portal.REQUEST)
 
+    def api_response(self):
+        return {"source": self.document.absolute_url(),
+                "action": "updated"}
+
 
 class CopyProposalDocumentCommand(object):
     """Copy documents attached to a proposal to the proposal's associated
@@ -538,6 +546,10 @@ class CopyProposalDocumentCommand(object):
             _(u'Additional document ${title} has been submitted successfully.',
               mapping=dict(title=self.document.title)),
             portal.REQUEST)
+
+    def api_response(self):
+        return {"source": self.document.absolute_url(),
+                "action": "copied"}
 
     def add_database_entry(self, reponse, target_admin_unit_id):
         session = create_session()

@@ -1,7 +1,10 @@
 from ftw.testbrowser import browsing
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from os.path import join as pjoin
+from plone.namedfile.file import NamedBlobFile
 from plone.restapi.serializer.converters import json_compatible
+import json
 
 
 class TestProposalSerialization(IntegrationTestCase):
@@ -186,3 +189,171 @@ class TestProposalSerialization(IntegrationTestCase):
              u'review_state': u'proposal-state-decided',
              u'title': proposal.title},
             browser.json['predecessor_proposal'])
+
+
+class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
+
+    features = (
+        'meeting',
+    )
+
+    @browsing
+    def test_documents_parameter_is_mandatory(self, browser):
+        self.login(self.meeting_user, browser=browser)
+        proposal = self.decided_proposal.load_model().resolve_proposal()
+
+        data = json.dumps({})
+
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(proposal, view="@submit-additional-documents",
+                         method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Missing parameter: documents',
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_documents_cannot_be_empty_list(self, browser):
+        self.login(self.meeting_user, browser=browser)
+        proposal = self.decided_proposal.load_model().resolve_proposal()
+
+        data = json.dumps({
+            'documents': []
+        })
+
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(proposal, view="@submit-additional-documents",
+                         method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Missing parameter: documents',
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_can_only_submit_document_from_main_dossier(self, browser):
+        self.login(self.meeting_user, browser=browser)
+        proposal = self.decided_proposal.load_model().resolve_proposal()
+
+        data = json.dumps({
+            'documents': [self.resolvable_document.UID()]
+        })
+
+        with browser.expect_http_error(reason='Bad Request'):
+            browser.open(proposal, view="@submit-additional-documents",
+                         method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Only documents within main dossier are allowed',
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_user_can_only_submit_documents_he_can_view(self, browser):
+        self.login(self.meeting_user, browser=browser)
+        proposal = self.decided_proposal.load_model().resolve_proposal()
+
+        data = json.dumps({
+            'documents': [self.subdocument.UID()]
+        })
+
+        self.subdossier.__ac_local_roles_block__ = True
+
+        with browser.expect_http_error(reason='Unauthorized'):
+            browser.open(proposal, view="@submit-additional-documents",
+                         method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(401, browser.status_code)
+        self.assertEqual(
+            {u'message': u"You are not allowed to access '{}' in this context"
+                         u"".format(self.subdocument.id),
+             u'type': u'Unauthorized'},
+            browser.json)
+
+    @browsing
+    def test_submitting_additional_documents(self, browser):
+        self.login(self.meeting_user, browser=browser)
+
+        model = self.proposal.load_model()
+        self.assertEqual(1, len(model.submitted_documents))
+        previously_submitted = model.resolve_submitted_documents()[0]
+
+        data = json.dumps({
+            'documents': [self.subdocument.UID(), self.subsubdocument.UID()]
+        })
+
+        with self.observe_children(self.submitted_proposal) as children:
+            browser.open(self.proposal, view="@submit-additional-documents",
+                         method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            [{u'action': u'copied',
+              u'source': self.subdocument.absolute_url()},
+             {u'action': u'copied',
+              u'source': self.subsubdocument.absolute_url()}],
+            browser.json)
+
+        self.assertEqual(2, len(children["added"]))
+        self.assertEqual(3, len(model.submitted_documents))
+        self.assertItemsEqual(list(children['added']) + [previously_submitted],
+                             model.resolve_submitted_documents())
+
+    @browsing
+    def test_submitting_additional_document_already_up_to_date(self, browser):
+        self.login(self.meeting_user, browser=browser)
+
+        data = json.dumps({
+            'documents': [self.document.UID()]
+        })
+
+        browser.open(self.proposal, view="@submit-additional-documents",
+                     method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            [{u'action': None,
+              u'source': self.document.absolute_url()}],
+            browser.json)
+
+    @browsing
+    def test_submitting_additional_document_new_version(self, browser):
+        self.login(self.meeting_user, browser=browser)
+
+        model = self.proposal.load_model()
+        self.assertEqual(1, len(model.submitted_documents))
+        self.assertEqual(model.resolve_submitted_documents()[0].file.data,
+                         self.document.file.data)
+
+        versioner = Versioner(self.document)
+        versioner.create_initial_version()
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
+        versioner.create_version("new version")
+
+        model = self.proposal.load_model()
+        self.assertEqual(1, len(model.submitted_documents))
+        self.assertNotEqual(model.resolve_submitted_documents()[0].file.data,
+                            self.document.file.data)
+
+        data = json.dumps({
+            'documents': [self.document.UID()]
+        })
+
+        browser.open(self.proposal, view="@submit-additional-documents",
+                     method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            [{u'action': u'updated',
+              u'source': self.document.absolute_url()}],
+            browser.json)
+
+        model = self.proposal.load_model()
+        self.assertEqual(1, len(model.submitted_documents))
+        self.assertEqual(model.resolve_submitted_documents()[0].file.data,
+                         self.document.file.data)
+        self.assertEqual("New", model.resolve_submitted_documents()[0].file.data)
