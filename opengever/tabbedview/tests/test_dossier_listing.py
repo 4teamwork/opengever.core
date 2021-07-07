@@ -313,3 +313,43 @@ class TestDossierListing(SolrIntegrationTestCase):
         self.open_repo_with_filter(
             browser, self.leaf_repofolder, 'filter_all', ['Alpha Beta'])
         self.assertEqual(1, len(browser.css('.listing tbody tr')))
+
+    @browsing
+    def test_dossier_listing_select_all(self, browser):
+        self.login(self.regular_user, browser)
+
+        # check amount of total items
+        browser.open(
+            self.branch_repofolder,
+            view='tabbed_view/listing?view_name=dossiers&pagesize=10000'
+        )
+        self.assertEqual(8, len(browser.css('table.listing tbody tr')))
+
+        # load page 2 with pagesize of 3
+        browser.open(
+            self.branch_repofolder,
+            view='tabbed_view/select_all?view_name=dossiers&pagesize=3&pagenumber=2&selected_count=3'
+        )
+        # 3 before + 3 already loaded + 2 after = 8 total
+        self.assertEqual(3, len(browser.css('#above_visibles input')))
+        self.assertEqual(2, len(browser.css('#beneath_visibles input')))
+
+    @browsing
+    def test_dossier_listing_select_all_with_search(self, browser):
+        self.login(self.regular_user, browser)
+
+        # check amount of total items with text "sitzung"
+        browser.open(
+            self.branch_repofolder,
+            view='tabbed_view/listing?view_name=dossiers&pagesize=10000&searchable_text=sitzung'
+        )
+        self.assertEqual(4, len(browser.css('table.listing tbody tr')))
+
+        # load page 2 with pagesize of 3 with text "sitzung"
+        browser.open(
+            self.branch_repofolder,
+            view='tabbed_view/select_all?view_name=dossiers&pagesize=2&pagenumber=2&selected_count=2&searchable_text=sitzung'
+        )
+        # 2 before + 2 already loaded + 0 after = 4 total
+        self.assertEqual(2, len(browser.css('#above_visibles input')))
+        self.assertEqual(0, len(browser.css('#beneath_visibles input')))
