@@ -14,6 +14,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@config`` endpoint extended with current admin_unit information.
 - ``@trigger-task-template``: Support overriding the deadline for each task (see :ref:`trigger_task_template` for updated examples).
 - ``@navigation``: Add ``review_state`` and ``include_context`` parameters (see :ref:`docs <navigation>`)
 
