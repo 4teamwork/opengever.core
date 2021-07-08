@@ -260,6 +260,69 @@ class TestNavigation(IntegrationTestCase):
             [item.get('uid') for item in items])
 
     @browsing
+    def test_navigation_is_filtered_by_review_state(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('content_interfaces', 'opengever.dossier.behaviors.dossier.IDossierMarker'),
+            ('review_state', 'dossier-state-active'),
+        ]
+
+        browser.open(
+            self.leaf_repofolder.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        items = flatten_tree(browser.json['tree'])
+        self.assertEqual(
+            ['dossier-state-active']*len(items),
+            [item['review_state'] for item in items])
+
+    @browsing
+    def test_navigation_is_filtered_by_multiple_review_states(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('root_interface', 'opengever.repository.interfaces.IRepositoryFolder'),
+            ('content_interfaces', 'opengever.dossier.behaviors.dossier.IDossierMarker'),
+            ('review_state', 'dossier-state-inactive'),
+            ('review_state', 'dossier-state-resolved'),
+        ]
+
+        browser.open(
+            self.leaf_repofolder.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        items = flatten_tree(browser.json['tree'])
+
+        self.assertEqual(
+            [self.expired_dossier.UID(), self.inactive_dossier.UID()],
+            [item['uid'] for item in items])
+
+    @browsing
+    def test_navigation_includes_context_branch(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('root_interface', 'opengever.repository.interfaces.IRepositoryFolder'),
+            ('content_interfaces', 'opengever.dossier.behaviors.dossier.IDossierMarker'),
+            ('review_state', 'dossier-state-inactive'),
+            ('include_context', True)
+        ]
+
+        browser.open(
+            self.subdossier2.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        items = flatten_tree(browser.json['tree'])
+
+        self.assertEqual(
+            [self.inactive_dossier.UID(), self.dossier.UID(), self.subdossier2.UID()],
+            [item['uid'] for item in items])
+
+    @browsing
     def test_businesscasedossier_has_undefined_leaf_node(self, browser):
         self.login(self.regular_user, browser)
         params = [
