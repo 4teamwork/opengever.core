@@ -1,4 +1,6 @@
 from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from mock import Mock
@@ -1146,16 +1148,57 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
     @browsing
     def test_task_templatefolders_listing(self, browser):
+        self.enable_languages()
         self.login(self.regular_user, browser=browser)
-        query_string = 'name=tasktemplate_folders'
+        tasktemplatefolder = create(Builder('tasktemplatefolder').titled(u'Sequenzieller Ablauf')
+                                    .having(sequence_type='sequential')
+                                    .within(self.templates))
+
+        self.commit_solr()
+
+        query_string = '&'.join((
+            'name=tasktemplate_folders',
+            'columns=title',
+            'columns=@type',
+            'columns=sequence_type',
+            'columns=review_state',
+            'sort_on=created',
+        ))
+
         view = '?'.join(('@listing', query_string))
-        browser.open(self.templates, view=view, headers=self.api_headers)
-        self.assertEqual([{u'@id': u'http://nohost/plone/vorlagen/verfahren-neuanstellung',
+        browser.open(self.templates, view=view,
+                     headers={'Accept': 'application/json', 'Accept-Language': 'de-ch'})
+
+        self.assertEqual([{u'@id': u'http://nohost/plone/vorlagen/sequenzieller-ablauf',
+                           u'@type': u'opengever.tasktemplates.tasktemplatefolder',
+                           u'UID': IUUID(tasktemplatefolder),
+                           u'review_state': u'tasktemplatefolder-state-inactiv',
+                           u'sequence_type': u'Sequenziell',
+                           u'title': u'Sequenzieller Ablauf'},
+                          {u'@id': u'http://nohost/plone/vorlagen/verfahren-neuanstellung',
                            u'@type': u'opengever.tasktemplates.tasktemplatefolder',
                            u'UID': u'createspecialtemplates0000000005',
-                           u'description': u'',
                            u'review_state': u'tasktemplatefolder-state-activ',
+                           u'sequence_type': u'Parallel',
                            u'title': u'Verfahren Neuanstellung'}], browser.json['items'])
+
+    @browsing
+    def test_sequence_type_facets_are_translated(self, browser):
+        self.enable_languages()
+        self.login(self.regular_user, browser=browser)
+        create(Builder('tasktemplatefolder').titled(u'Sequenzieller Ablauf')
+               .having(sequence_type='sequential')
+               .within(self.templates))
+        self.commit_solr()
+        browser.open(self.templates, view='@listing?name=tasktemplate_folders&facets:list=sequence_type',
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'de-ch'})
+
+        self.assertDictEqual(
+            {u'sequence_type': {
+                u'sequential': {u'count': 1, u'label': u'Sequenziell'},
+                u'parallel': {u'count': 1, u'label': u'Parallel'}}},
+            browser.json['facets'])
 
     @browsing
     def test_task_templates_listing(self, browser):

@@ -14,6 +14,7 @@ from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.propertysheets.definition import SolrDynamicField
 from opengever.task.helper import task_type_helper
+from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from plone import api
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
@@ -56,6 +57,12 @@ def translate_document_type(document_type):
         return document_type
     else:
         return term.title
+
+
+def translate_sequence_type(sequence_type):
+    return translate(sequence_type_vocabulary.getTerm(sequence_type).title,
+                     context=getRequest(),
+                     domain="opengever.tasktemplates")
 
 
 def translate_public_trial(public_trial):
@@ -111,6 +118,10 @@ def translated_public_trial(obj):
         return translate(obj.public_trial, context=getRequest(), domain="opengever.base")
     except AttributeError:
         return None
+
+
+def translated_sequence_type(obj):
+    return sequence_type_vocabulary.getTerm(obj.sequence_type).title
 
 
 def to_relative_path(value):
@@ -320,6 +331,8 @@ FIELDS_WITH_MAPPING = [
                  transform=lambda state: translate(
                     state, domain='plone', context=getRequest())),
     ListingField('review_state_label', 'review_state', 'translated_review_state'),
+    ListingField('sequence_type', 'sequence_type', accessor=translated_sequence_type,
+                 transform=translate_sequence_type),
     ListingField('task_type', 'task_type', accessor=translated_task_type, transform=translate_task_type),
     ListingField('thumbnail_url', None, 'preview_image_url', DEFAULT_SORT_INDEX,
                  additional_required_fields=['bumblebee_checksum', 'path']),
