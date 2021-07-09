@@ -157,3 +157,28 @@ class TestMailDownload(IntegrationTestCase):
              'content-type': 'application/pkcs7-mime',
              'content-disposition': 'attachment; filename="Hello.foo"'},
             browser.headers)
+
+    @browsing
+    def test_download_with_unspecified_fieldname_prefers_original_message(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # msg
+        browser.visit(self.mail_msg, view='download')
+
+        self.assertEquals(self.mail_msg.original_message.data,
+                          browser.contents)
+        self.assertDictContainsSubset(
+            {'content-length': str(len(browser.contents)),
+             'content-type': 'application/vnd.ms-outlook',
+             'content-disposition': 'attachment; filename="No Subject.msg"'},
+            browser.headers)
+
+        # eml only
+        browser.visit(self.mail_eml, view='download')
+
+        self.assertEquals(self.mail_eml.message.data, browser.contents)
+        self.assertDictContainsSubset(
+            {'content-length': str(len(browser.contents)),
+             'content-type': 'message/rfc822',
+             'content-disposition': 'attachment; filename="Die Buergschaft.eml"'},
+            browser.headers)
