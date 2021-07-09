@@ -14,7 +14,7 @@ MAIL_DATA_LF = resource_string('opengever.mail.tests', 'mail_lf.txt')
 MAIL_DATA_CRLF = resource_string('opengever.mail.tests', 'mail_crlf.txt')
 
 
-class TestMailDownloadCopy(IntegrationTestCase):
+class TestMailDownload(IntegrationTestCase):
     """Test downloading a mail works."""
 
     @browsing
