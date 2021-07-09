@@ -42,4 +42,9 @@
       name="period"
       />
 
+  <adapter
+      factory=".indexers.sequence_type"
+      name="sequence_type"
+      />
+
 </configure>
