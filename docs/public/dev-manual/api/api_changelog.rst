@@ -9,6 +9,8 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- ``@role-assignments``: Return a fixed list of roles at the key ``referenced_roles``.
+
 
 Other Changes
 ^^^^^^^^^^^^^
