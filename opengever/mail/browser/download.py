@@ -1,3 +1,4 @@
+from ftw.mail.mail import IMail
 from opengever.document.browser.download import DocumentishDownload
 from opengever.mail.interfaces import IMailDownloadSettings
 from opengever.mail.mail import IOGMail
@@ -31,6 +32,18 @@ class MailDownload(DocumentishDownload):
     for the download.
     """
 
+    def publishTraverse(self, request, name):
+        """Do not raise NotFound error if fieldname and filename is not
+        specified.
+        """
+
+        if self.fieldname is None:  # ../@@download/fieldname
+            self.fieldname = name
+        elif self.filename is None:  # ../@@download/fieldname/filename
+            self.filename = name
+
+        return self
+
     def convert_line_endings(self, filename):
         lines = []
         with open(filename, 'r') as _file:
@@ -41,6 +54,15 @@ class MailDownload(DocumentishDownload):
                 lines.append(line)
 
         return ''.join(lines)
+
+    def _getFile(self):
+        if not self.fieldname:
+            if self.context.original_message:
+                self.fieldname = IOGMail['original_message'].getName()
+            else:
+                self.fieldname = IMail['message'].getName()
+
+        return super(MailDownload, self)._getFile()
 
     def stream_data(self, named_file):
         if self.fieldname == IOGMail['original_message'].getName():
