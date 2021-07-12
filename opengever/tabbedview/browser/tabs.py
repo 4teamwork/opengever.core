@@ -100,7 +100,11 @@ class BaseTabProxy(BaseCatalogListingTab):
         # Fetch contents from the preferred_view (gallery or listing view)
         # to use the query of the really display tabbedview.
         view = self.context.restrictedTraverse(self.preferred_view_name)
+        if getattr(view.table_source, 'use_solr', False):
+            view.table_source.select_all = True
         view.update()
+        # update self with relevant attributes of delegate.
+        self.pagesize = view.pagesize
 
         above, beneath = self._select_all_remove_visibles(
             view.contents, pagenumber, selected_count)

@@ -25,6 +25,8 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
     """Default catalog tablesource extended with filter functionality.
     """
 
+    select_all = False
+
     @property
     def use_solr(self):
         registry = getUtility(IRegistry)
@@ -178,18 +180,31 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
 
-        fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
-              'bumblebee_checksum']
-        fl = fl + [c['column'] for c in self.config.columns if c['column']]
+        # Special handling when a user has used "select all" in a listing
+        # and we are just interested in returning result paths.
+        if self.select_all:
+            fl = ['path']
+        else:
+            fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
+                  'bumblebee_checksum']
+            fl = fl + [c['column'] for c in self.config.columns if c['column']]
         params = {
             'fl': fl,
             'q.op': 'AND',
         }
 
-        start = (self.config.batching_current_page - 1) * self.config.pagesize
+        # Special handling when a user has used "select all" in a listing
+        # and we don't want any batching.
+        if self.select_all:
+            start = 0
+            rows = 100000
+        else:
+            start = (self.config.batching_current_page - 1) * self.config.pagesize
+            rows = self.config.pagesize
+
         resp = solr.search(
             query=solr_query, filters=filters, start=start,
-            rows=self.config.pagesize, sort=sort, **params)
+            rows=rows, sort=sort, **params)
 
         # Avoid calling any custom sort method. This is highly inefficient and
         # would require us to load *all* results from Solr.
