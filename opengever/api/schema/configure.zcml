@@ -46,6 +46,15 @@
       method="GET"
       accept="application/json"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".globalsources.GlobalSourcesGet"
+      name="@globalsources"
+      permission="plone.restapi.vocabularies"
+      />
+
+  <plone:service
+      method="GET"
+      accept="application/json"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".vocabularies.GEVERVocabulariesGet"
       name="@vocabularies"
       permission="plone.restapi.vocabularies"

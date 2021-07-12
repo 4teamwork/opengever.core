@@ -52,6 +52,10 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
                 404, "Not Found",
                 "No such field: %r" % fieldname
             )
+
+        return self.query_and_serialize_results(field, fieldname)
+
+    def query_and_serialize_results(self, field, fieldname):
         bound_field = field.bind(self.context)
 
         # Look for a source directly on the field first
