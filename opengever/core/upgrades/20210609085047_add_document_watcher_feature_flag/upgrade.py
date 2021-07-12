@@ -6,4 +6,5 @@ class AddDocumentWatcherFeatureFlag(UpgradeStep):
     """
 
     def __call__(self):
-        self.install_upgrade_profile()
+        # self.install_upgrade_profile()
+        pass
