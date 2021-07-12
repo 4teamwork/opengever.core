@@ -1343,6 +1343,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <plone:service
+      method="POST"
+      name="@submit-additional-documents"
+      for="opengever.meeting.proposal.IProposal"
+      factory=".proposal.SubmitAdditionalDocuments"
+      permission="zope2.View"
+      />
 
   <adapter factory=".upload_structure.DefaultUploadStructureAnalyser" />
   <adapter factory=".upload_structure.DossierUploadStructureAnalyser" />

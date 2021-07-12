@@ -26,7 +26,6 @@ from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from plone.restapi.services.content.update import ContentPatch
 from zExceptions import BadRequest
-from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter

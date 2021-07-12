@@ -112,3 +112,42 @@ Der Verlauf eines Antrags ist in der GET Repräsentation eines Antrags unter dem
         "...": "...",
       }
 
+.. _submit-additional-documents:
+
+Zusätzliche Beilagen einreichen
+-------------------------------
+
+Nach dem einreichen eines Antrags können mit dem ``@submit-additional-documents`` zusätzliche Beilagen oder eine neue Version von einer existierender Beilage eingereicht werden. Als Body wird eine Liste von Dokumente (UID) im Attribut ``documents`` erwartet.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST dossier-1/proposal-1/@submit-additional-documents HTTP/1.1
+       Accept: application/json
+
+       {
+        "documents": ["00040acaba70487a98d15b832cc1f99a", "001dbd36feec4df1a106047d3fa884b4"]
+       }
+
+Die Response ist eine Liste die für jede Beilage die folgenden Informationen zurückliefert:
+``source``: URL der Beilage
+``action``: "copied" wenn es sich um eine neu Beilage die in den eingereichten Antrag kopiert wurde, "udapted" wenn eine neue Version der Beilage erstellt wurde oder "null" wenn diese Beilage bereits in dieser Version eingereicht wurde.
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      [
+          {
+              "action": "copied",
+              "source": "dossier-1/proposal-1/document-75"
+          },
+          {
+              "action": null,
+              "source": "dossier-1/proposal-1/document-76"
+          }
+      ]
