@@ -171,6 +171,14 @@ class GeverTabMixin(object):
 
         return filters
 
+    def select_all(self, pagenumber, selected_count):
+        if getattr(self.table_source, 'use_solr', False):
+            self.table_source.select_all = True
+
+        return super(GeverTabMixin, self).select_all(
+            pagenumber, selected_count
+        )
+
 
 class BaseListingTab(GeverTabMixin, ListingView):
     """Base listing tab."""
