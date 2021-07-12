@@ -10,6 +10,7 @@ Breaking Changes
 ^^^^^^^^^^^^^^^^
 
 - ``@move``: Restrict moving of documents via API according to the same rules as in the classic UI.
+- ``@listing``: Add ``sequence_type`` as allowed field (see :ref:`docs <listings>`).
 
 Other Changes
 ^^^^^^^^^^^^^

@@ -170,6 +170,7 @@
     <field name="retention_expiration" type="pdate" indexed="true" stored="false" />
     <field name="sequence_number" type="pint" indexed="true" stored="false" />
     <field name="sequence_number_string" type="string" indexed="true" stored="false" />
+    <field name="sequence_type" type="string" indexed="true" stored="false" />
     <field name="start" type="pdate" indexed="true" stored="false" />
     <field name="task_type" type="string" indexed="true" stored="false" />
     <field name="trashed" type="boolean" indexed="true" stored="false" />
