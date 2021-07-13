@@ -106,6 +106,9 @@ class RoleAssignmentReportsPost(RoleAssignmentReportsBase):
     def extract_data(self):
         data = json_body(self.request)
         self.principal_id = data.get("principal_id", None)
+        if isinstance(self.principal_id, dict):
+            self.principal_id = self.principal_id['token']
+
         if not self.principal_id:
             raise BadRequest("Property 'principal_id' is required")
 

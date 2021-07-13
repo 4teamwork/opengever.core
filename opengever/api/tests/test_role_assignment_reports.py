@@ -101,7 +101,8 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
             browser.open(self.portal.absolute_url() + '/@role-assignment-reports',
                          method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"principal_id": self.meeting_user.getId()}))
+                         data=json.dumps(
+                             {"principal_id": {'token': self.meeting_user.getId()}}))
 
         self.assertEqual(browser.status_code, 200)
         self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
@@ -122,7 +123,7 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
             browser.open(self.portal.absolute_url() + '/@role-assignment-reports',
                          method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"principal_id": 'projekt_a'}))
+                         data=json.dumps({"principal_id": {'token': 'projekt_a'}}))
 
         self.assertEqual(browser.status_code, 200)
         self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
