@@ -202,6 +202,7 @@ setup(name='opengever.core',
       target = plone
 
       [zopectl.command]
+      create_service_user = opengever.setup.serviceuser:create_service_user_zopectl_handler
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
       dump_schemas = opengever.base.schemadump:dump_schemas_zopectl_handler
       import = opengever.bundle.console:import_oggbundle
