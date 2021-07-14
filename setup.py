@@ -203,18 +203,18 @@ setup(name='opengever.core',
 
       [zopectl.command]
       create_service_user = opengever.setup.serviceuser:create_service_user_zopectl_handler
-      sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
       dump_schemas = opengever.base.schemadump:dump_schemas_zopectl_handler
-      import = opengever.bundle.console:import_oggbundle
-      send_digest = opengever.activity:send_digest_zopectl_handler
       generate_overdue_notifications = opengever.dossier.cronjobs:generate_overdue_notifications_zopectl_handler
       generate_remind_notifications = opengever.task.reminder.cronjobs:generate_remind_notifications_zopectl_handler
+      import = opengever.bundle.console:import_oggbundle
       run_nightly_jobs = opengever.nightlyjobs.cronjobs:run_nightly_jobs_handler
+      send_digest = opengever.activity:send_digest_zopectl_handler
+      sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
 
       [console_scripts]
+      create-bundle = opengever.bundle.factory:main
       create-policy = opengever.policytemplates.cli:main
       pyxbgen = opengever.disposition.ech0160.pyxbgen:main
-      create-bundle = opengever.bundle.factory:main
       toggle-readonly = opengever.readonly.cli:main
       """,
       )
