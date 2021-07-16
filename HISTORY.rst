@@ -8,6 +8,44 @@ Changelog
 
 .. towncrier release notes start
 
+2021.14.0 (2021-07-16)
+----------------------
+
+New features:
+
+
+- Add sequence_type solr index for tasktemplatefolders and add field to @listing endpoint. [tinagerber]
+- Add proposal excel export. [tinagerber]
+- Add @submit-additional-documents endpoint. [njohner]
+- Allow overriding task and subtask deadline in `@trigger-task-template` endpoint. [tinagerber]
+- Include information about the curren admin_unit in the config endpoint. [phgross]
+- Allow authenticated users to access vocabularies via API. [phgross]
+- Add review_state and include_context parameters to @navigation endpoint. [tinagerber]
+- Provide field unspecific mail download view. [phgross]
+
+
+Bug fixes:
+
+
+- Fix resolving a subdossier when filing_number feature is enabled. [phgross]
+- Return a placeholder pdf instead of an image if a pdf is not digitally available. [tinagerber]
+- Fix removing a profile-image with a PATCH request to the `@users/<userid>` endpiont. [elioschmutz]
+- Do not allow to move documents via API if they are inside a task, proposal or closed dossier. [tinagerber]
+- Clean up workspace workflow. [tinagerber]
+- Prevent documents from being moved from repository or inbox to the templates or private root via API. [tinagerber]
+- ContactsSource falls back to `ogds_user` type if no type is explicitly given. [elioschmutz]
+- Fix selecting all items for solr based listings in the classical UI. [deiferni]
+
+
+Other changes:
+
+
+- - Minor optimization of mail attachment code. [njohner]
+- Remove document watchers feature flag. [tinagerber]
+- Add OneOffixx "Funktionsvorlagen" to the whitelisted template types. [phgross]
+- Add script to create service users. [deiferni]
+
+
 2021.13.0 (2021-06-25)
 ----------------------
 
