@@ -1,5 +1,6 @@
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.ogds.base.actor import Actor
+from opengever.sharing.browser.sharing import ROLE_MAPPING
 from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
@@ -48,19 +49,17 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
         storage = IRoleAssignmentReportsStorage(self.context)
         # a single report
         if len(self.params) == 1:
-            referenced_roles = set()
             report_id = self.params[0]
             try:
                 result = storage.get(report_id)
             except KeyError:
                 raise BadRequest("Invalid report_id '{}'".format(report_id))
             for item in result['items']:
-                referenced_roles.update(item['roles'])
                 obj = uuidToObject(item['UID'])
                 item['title'] = obj.Title()
                 item['url'] = obj.absolute_url()
-            result['referenced_roles'] = [{'id': role, 'title': translate(
-                role, context=self.request, domain='plone')} for role in referenced_roles]
+
+            result['referenced_roles'] = self.get_referenced_roles()
             self.add_additional_data_to_report(result)
         # all reports
         elif len(self.params) == 0:
@@ -77,7 +76,18 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
         result['@id'] = batch.canonical_url
         if batch.links:
             result['batching'] = batch.links
+
         return result
+
+    def get_referenced_roles(self):
+        roles = []
+        for role in ROLE_MAPPING[0][1]:
+            roles.append(
+                {'id': role[0],
+                 'title': translate(role[0],
+                                    context=self.request, domain='plone')})
+
+        return roles
 
 
 class RoleAssignmentReportsPost(RoleAssignmentReportsBase):
@@ -96,6 +106,9 @@ class RoleAssignmentReportsPost(RoleAssignmentReportsBase):
     def extract_data(self):
         data = json_body(self.request)
         self.principal_id = data.get("principal_id", None)
+        if isinstance(self.principal_id, dict):
+            self.principal_id = self.principal_id['token']
+
         if not self.principal_id:
             raise BadRequest("Property 'principal_id' is required")
 

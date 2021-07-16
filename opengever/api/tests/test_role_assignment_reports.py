@@ -44,11 +44,12 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
              u'@type': u'virtual.report.roleassignmentreport',
-             u'referenced_roles': [{u'id': u'Contributor', u'title': u'Contributor'},
+             u'referenced_roles': [{u'id': u'Reader', u'title': u'Reader'},
+                                   {u'id': u'Contributor', u'title': u'Contributor'},
+                                   {u'id': u'Editor', u'title': u'Editor'},
                                    {u'id': u'Reviewer', u'title': u'Reviewer'},
                                    {u'id': u'Publisher', u'title': u'Reactivate'},
-                                   {u'id': u'Editor', u'title': u'Editor'},
-                                   {u'id': u'Reader', u'title': u'Reader'}],
+                                   {u'id': u'DossierManager', u'title': u'Manage dossiers'}],
              u'items': [{u'UID': u'createrepositorytree000000000001',
                          u'roles': [u'Contributor'],
                          u'title': u'Ordnungssystem',
@@ -57,7 +58,7 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
                          u'roles': [u'Reader', u'Editor', u'Reviewer'],
                          u'title': u'Subsubdossier',
                          u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
-                                 u'vereinbarungen/dossier-1/dossier-2/dossier-4'},
+                         u'vereinbarungen/dossier-1/dossier-2/dossier-4'},
                         {u'UID': u'createrepositorytree000000000004',
                          u'roles': [u'Contributor', u'Publisher'],
                          u'title': u'2. Rechnungspr\xfcfungskommission',
@@ -100,7 +101,8 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
             browser.open(self.portal.absolute_url() + '/@role-assignment-reports',
                          method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"principal_id": self.meeting_user.getId()}))
+                         data=json.dumps(
+                             {"principal_id": {'token': self.meeting_user.getId()}}))
 
         self.assertEqual(browser.status_code, 200)
         self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
@@ -121,7 +123,7 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
             browser.open(self.portal.absolute_url() + '/@role-assignment-reports',
                          method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"principal_id": 'projekt_a'}))
+                         data=json.dumps({"principal_id": {'token': 'projekt_a'}}))
 
         self.assertEqual(browser.status_code, 200)
         self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
