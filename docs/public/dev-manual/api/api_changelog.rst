@@ -15,6 +15,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add new endpoint ``@accept-remote-forwarding`` (see :ref:`docs <accept-remote-forwarding>`)
 
 2021.14.0 (2021-07-16)
 ----------------------

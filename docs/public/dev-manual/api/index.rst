@@ -62,6 +62,7 @@ Inhalt:
    trigger_task_template.rst
    remote_workflow.rst
    accept_remote_task.rst
+   accept_remote_forwarding.rst
    complete_successor_task.rst
    upload_structure.rst
    close_remote_task.rst
