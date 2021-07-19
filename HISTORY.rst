@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+2021.13.2 (2021-07-19)
+----------------------
+
+Bug fixes:
+
+
+- Fix selecting all items for solr based listings in the classical UI. [deiferni]
+
+
 2021.13.1 (2021-07-01)
 ----------------------
 
