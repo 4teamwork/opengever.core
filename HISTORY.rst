@@ -27,14 +27,12 @@ New features:
 Bug fixes:
 
 
-- Fix resolving a subdossier when filing_number feature is enabled. [phgross]
 - Return a placeholder pdf instead of an image if a pdf is not digitally available. [tinagerber]
 - Fix removing a profile-image with a PATCH request to the `@users/<userid>` endpiont. [elioschmutz]
 - Do not allow to move documents via API if they are inside a task, proposal or closed dossier. [tinagerber]
 - Clean up workspace workflow. [tinagerber]
 - Prevent documents from being moved from repository or inbox to the templates or private root via API. [tinagerber]
 - ContactsSource falls back to `ogds_user` type if no type is explicitly given. [elioschmutz]
-- Fix selecting all items for solr based listings in the classical UI. [deiferni]
 
 
 Other changes:
@@ -44,6 +42,24 @@ Other changes:
 - Remove document watchers feature flag. [tinagerber]
 - Add OneOffixx "Funktionsvorlagen" to the whitelisted template types. [phgross]
 - Add script to create service users. [deiferni]
+
+
+2021.13.2 (2021-07-19)
+----------------------
+
+Bug fixes:
+
+
+- Fix selecting all items for solr based listings in the classical UI. [deiferni]
+
+
+2021.13.1 (2021-07-01)
+----------------------
+
+Bug fixes:
+
+
+- Fix resolving a subdossier when filing_number feature is enabled. [phgross]
 
 
 2021.13.0 (2021-06-25)
