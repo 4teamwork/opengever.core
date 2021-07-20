@@ -1,9 +1,16 @@
+from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from mock import patch
+from mock import PropertyMock
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.inbox.yearfolder import _create_yearfolder
 from opengever.inbox.yearfolder import get_current_yearfolder
+from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.task.browser.accept.utils import FORWARDING_SUCCESSOR_TYPE
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
@@ -210,3 +217,66 @@ class TestAPITransitions(IntegrationTestCase):
         response = IResponseContainer(self.inbox_forwarding).list()[-1]
         self.assertEqual(u'Robert macht das.', response.text)
         self.assertEqual('forwarding-transition-reassign-refused', response.transition)
+
+    @browsing
+    def test_refuse_forwarding(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        # set rk as current org unit
+        driver = browser.get_driver()
+        driver.requests_session.cookies.set(CURRENT_ORG_UNIT_KEY, 'rk')
+
+        forwarding = create(Builder('forwarding')
+                            .within(self.inbox_rk)
+                            .titled(u'F\xf6rw\xe4rding')
+                            .having(responsible_client='fa',
+                                    responsible='inbox:fa',
+                                    issuer='inbox:rk'))
+
+        doc_in_forwarding = create(Builder('document').within(forwarding)
+                                   .titled(u'Dokument im Eingangsk\xf6rbliweiterleitung')
+                                   .with_asset_file('text.txt'))
+
+        local_url = '{}/@workflow/forwarding-transition-refuse'.format(
+            forwarding.absolute_url())
+
+        # patch is_assigned_to_current_admin_unit so that refuse transition is allowed
+        with patch('opengever.task.browser.transitioncontroller.TaskChecker.'
+                   'is_assigned_to_current_admin_unit',
+                   new_callable=PropertyMock) as mock_is_assigned_to_current_admin_unit:
+            mock_is_assigned_to_current_admin_unit.return_value = False
+
+            # patch get:yearfolder, since yearfolder depends on current admin unit
+            # which is set to rk
+            yearfolder = _create_yearfolder(self.inbox, str(datetime.now().year))
+            with patch('opengever.inbox.browser.refuse.StoreRefusedForwardingView.get_yearfolder'
+                       ) as mock_get_yearfolder:
+                mock_get_yearfolder.return_value = yearfolder
+
+                browser.open(local_url, method='POST',
+                             data=json.dumps({'text': "I don't want to do this"}),
+                             headers=self.api_headers)
+
+        url = browser.json['transition_response']['location']
+        path = url.split('nohost')[-1].encode('utf-8')
+        copied_forwarding = api.portal.get().restrictedTraverse(path)
+
+        self.assertEqual('inbox:rk', forwarding.issuer)
+        self.assertEqual('inbox:rk', copied_forwarding.issuer)
+
+        self.assertEqual('inbox:rk', forwarding.responsible)
+        self.assertEqual('inbox:fa', copied_forwarding.responsible)
+
+        self.assertEqual('forwarding-state-refused', api.content.get_state(forwarding))
+        self.assertEqual('forwarding-state-closed', api.content.get_state(copied_forwarding))
+
+        self.assertEqual('opengever.inbox.yearfolder', copied_forwarding.aq_parent.portal_type)
+
+        doc_in_copied_forwarding = copied_forwarding.objectValues()[0]
+        self.assertEqual(doc_in_forwarding.title, doc_in_copied_forwarding.title)
+
+        self.assertIn("I don't want to do this",
+                      [response.text for response in IResponseContainer(forwarding).list()])
+
+        self.assertIn("I don't want to do this",
+                      [response.text for response in IResponseContainer(copied_forwarding).list()])

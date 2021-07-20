@@ -79,6 +79,11 @@
       />
 
   <adapter
+      factory=".transition.ForwardingRefuseTransitionExtender"
+      name="forwarding-transition-refuse"
+      />
+
+  <adapter
       factory=".transition.ForwardingAssignToDossierTransitionExtender"
       name="forwarding-transition-assign-to-dossier"
       />
