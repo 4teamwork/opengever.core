@@ -16,6 +16,7 @@ Other Changes
 ^^^^^^^^^^^^^
 
 - Add new endpoint ``@accept-remote-forwarding`` (see :ref:`docs <accept-remote-forwarding>`)
+- ``@workflow``: Add ``transition_response`` if it exists.
 
 2021.14.0 (2021-07-16)
 ----------------------
