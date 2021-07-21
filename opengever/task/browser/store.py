@@ -5,6 +5,7 @@ from opengever.base.utils import ok_response
 from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.util import change_task_workflow_state
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from zExceptions import Unauthorized
 
@@ -24,7 +25,7 @@ class StoreForwardingInYearfolderView(BrowserView):
 
         successor_oguid = self.request.get('successor_oguid')
         transition = self.request.get('transition')
-        response_text = self.request.get('response_text')
+        response_text = safe_unicode(self.request.get('response_text'))
 
         if transition:
             change_task_workflow_state(self.context,

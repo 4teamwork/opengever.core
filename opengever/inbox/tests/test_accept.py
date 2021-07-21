@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.response import IResponseContainer
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
@@ -16,6 +17,10 @@ class TestForwardingAccepting(FunctionalTestCase):
                                     issuer='hugo.boss')
                             .within(inbox))
         task = accept_forwarding_with_successor(
-            self.portal, forwarding.oguid.id, 'OK, thx.', dossier=dossier)
+            self.portal, forwarding.oguid.id, u'OK, thx.', dossier=dossier)
 
         self.assertEquals('information', task.task_type)
+
+        responses = IResponseContainer(forwarding)
+        self.assertEqual(1, len(responses))
+        self.assertEqual(u'OK, thx.', responses.list()[0].text)
