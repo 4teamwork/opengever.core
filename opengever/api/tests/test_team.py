@@ -16,13 +16,13 @@ class TestTeamGet(IntegrationTestCase):
     def test_team_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@teams/{}'.format(self.team_id),
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
+            {u'@id': u'http://nohost/plone/@teams/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'group': {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
@@ -73,7 +73,7 @@ class TestTeamGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@teams',
                          headers=self.api_headers)
 
@@ -82,7 +82,7 @@ class TestTeamGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@teams/{}/foobar'.format(self.team_id),
                          headers=self.api_headers)
 
@@ -91,7 +91,7 @@ class TestTeamGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         team = Team.get_one(groupid='projekt_a')
 
-        url = self.contactfolder.absolute_url() + '/@teams/{}?b_size=2'.format(team.team_id)
+        url = self.portal.absolute_url() + '/@teams/{}?b_size=2'.format(team.team_id)
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertNotIn('batching', browser.json)

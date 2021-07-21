@@ -486,7 +486,7 @@
 
   <plone:service
       method="GET"
-      for="opengever.contact.interfaces.IContactFolder"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".teamlisting.TeamListingGet"
       name="@team-listing"
       permission="zope2.View"
@@ -494,7 +494,7 @@
 
   <plone:service
       method="GET"
-      for="opengever.contact.interfaces.IContactFolder"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".team.TeamGet"
       name="@teams"
       permission="zope2.View"

@@ -433,7 +433,7 @@ class SerializeContactModelToJsonSummaryBase(SerializeSQLModelToJsonSummaryBase)
 
 @implementer(ISerializeToJsonSummary)
 @adapter(Team, IOpengeverBaseLayer)
-class SerializeTeamModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
+class SerializeTeamModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     item_columns = (
         'active',
@@ -450,6 +450,13 @@ class SerializeTeamModelToJsonSummary(SerializeContactModelToJsonSummaryBase):
     def add_additional_metadata(self, data):
         data['org_unit_title'] = self.context.org_unit.title
 
+    @property
+    def get_url(self):
+        return '{}/{}/{}'.format(
+            api.portal.get().absolute_url(),
+            self.endpoint_name,
+            getattr(self.context, self.id_attribute_name)
+        )
 
 @implementer(ISerializeToJsonSummary)
 @adapter(User, IOpengeverBaseLayer)

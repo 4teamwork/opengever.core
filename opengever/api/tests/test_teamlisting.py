@@ -10,13 +10,13 @@ class TestTeamListingGet(IntegrationTestCase):
     def test_team_listing_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@team-listing',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
+            {u'@id': u'http://nohost/plone/@teams/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_a',
@@ -24,7 +24,7 @@ class TestTeamListingGet(IntegrationTestCase):
              u'org_unit_title': u'Finanz\xe4mt',
              u'team_id': 1,
              u'title': u'Projekt \xdcberbaung Dorfmatte'},
-            {u'@id': u'http://nohost/plone/kontakte/@teams/3',
+            {u'@id': u'http://nohost/plone/@teams/3',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_laeaer',
@@ -32,7 +32,7 @@ class TestTeamListingGet(IntegrationTestCase):
              u'org_unit_title': u'Finanz\xe4mt',
              u'team_id': 3,
              u'title': u'Sekretariat Abteilung Null'},
-            {u'@id': u'http://nohost/plone/kontakte/@teams/2',
+            {u'@id': u'http://nohost/plone/@teams/2',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_b',
@@ -47,7 +47,7 @@ class TestTeamListingGet(IntegrationTestCase):
     def test_batch_teamlisting_offset(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@team-listing?b_size=2&b_start=1',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -63,7 +63,7 @@ class TestTeamListingGet(IntegrationTestCase):
     def test_batch_large_offset_returns_empty_items(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@team-listing?b_start=999',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -76,7 +76,7 @@ class TestTeamListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@team-listing?b_size=-1',
                          headers=self.api_headers)
 
@@ -85,7 +85,7 @@ class TestTeamListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@team-listing?b_start=-1',
                          headers=self.api_headers)
 
@@ -94,7 +94,7 @@ class TestTeamListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         Team.get_one(groupid='projekt_a').active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@team-listing?filters.state:record:list=inactive',
                      headers=self.api_headers)
 
@@ -106,7 +106,7 @@ class TestTeamListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         Team.get_one(groupid='projekt_a').active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@team-listing?filters.state:record:list=active',
                      headers=self.api_headers)
 
@@ -118,7 +118,7 @@ class TestTeamListingGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         Team.get_one(groupid='projekt_a').active = False
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@team-listing'
                            '?filters.state:record:list=inactive'
                           '&filters.state:record:list=active',
@@ -130,13 +130,13 @@ class TestTeamListingGet(IntegrationTestCase):
     @browsing
     def test_search_title(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@team-listing?search=\xdcberbaung',
                      headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json['items']))
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
+            {u'@id': u'http://nohost/plone/@teams/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'groupid': u'projekt_a',
@@ -150,7 +150,7 @@ class TestTeamListingGet(IntegrationTestCase):
     @browsing
     def test_search_strips_asterisk(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@team-listing?search=XY*',
                      headers=self.api_headers)
 
@@ -160,7 +160,7 @@ class TestTeamListingGet(IntegrationTestCase):
     @browsing
     def test_sort_on_groupid(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@team-listing?sort_on=groupid',
                      headers=self.api_headers)
 
@@ -173,7 +173,7 @@ class TestTeamListingGet(IntegrationTestCase):
     @browsing
     def test_listing_always_has_a_secondary_sort_by_team_id(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@team-listing?sort_on=org_unit_id',
                      headers=self.api_headers)
 
@@ -190,7 +190,7 @@ class TestTeamListingGet(IntegrationTestCase):
     def test_secondary_sort_by_team_id_respects_sort_order(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
-            self.contactfolder,
+            self.portal,
             view=u'@team-listing?sort_on=org_unit_id&sort_order=descending',
             headers=self.api_headers)
 
@@ -207,7 +207,7 @@ class TestTeamListingGet(IntegrationTestCase):
     @browsing
     def test_sort_descending(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view=u'@team-listing?sort_order=descending',
                      headers=self.api_headers)
 
