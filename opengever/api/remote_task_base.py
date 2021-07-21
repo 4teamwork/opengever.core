@@ -16,6 +16,9 @@ class RemoteTaskBaseService(Service):
     required_params = ('transition', )
     optional_params = ('documents', 'text')
 
+    def is_remote(self, oguid):
+        return not oguid.is_on_current_admin_unit
+
     def extract_params(self):
         """Extract and validate required and optional parameters.
 

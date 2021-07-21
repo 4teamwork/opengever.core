@@ -3,6 +3,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.transition import ITransitionExtender
 from opengever.inbox import _
+from opengever.inbox.browser.refuse import store_copy_in_remote_yearfolder
 from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -12,6 +13,7 @@ from opengever.task.browser.accept.utils import _copy_documents_from_forwarding
 from opengever.task.browser.accept.utils import FORWARDING_SUCCESSOR_TYPE
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import IYearfolderStorer
+from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.transition import DefaultTransitionExtender
 from opengever.task.transition import IResponse
@@ -23,7 +25,9 @@ from plone.supermodel.model import Schema
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import adapter
+from zope.event import notify
 from zope.interface import implementer
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
@@ -49,6 +53,37 @@ class IChooseDossierSchema(Schema):
 @adapter(IForwarding, IBrowserRequest)
 class ForwardingDefaultTransitionExtender(DefaultTransitionExtender):
     """Default transition extender for all forwarding transitions."""
+
+
+@implementer(ITransitionExtender)
+@adapter(IForwarding, IBrowserRequest)
+class ForwardingRefuseTransitionExtender(ForwardingDefaultTransitionExtender):
+    """Transition Extender for forwardings close transition, stores forwarding
+    to yearfolder after state change.
+    """
+
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        add_simple_response(self.context, transition=transition,
+                            text=transition_params.get('text'), supress_events=True)
+
+        copy_url = store_copy_in_remote_yearfolder(self.context,
+                                                   self.context.get_responsible_admin_unit().id())
+
+        self.switch_responsible()
+        notify(ObjectModifiedEvent(self.context))
+        return {'location': copy_url}
+
+    def switch_responsible(self):
+        # Revoke local roles for current responsible, except if
+        # revoke_permissions is set to False.
+        # The roles for the new responsible will be assigned afterwards
+        # in set_roles_after_modifying on the ObjectModifiedEvent.
+        if self.context.revoke_permissions:
+            LocalRolesSetter(self.context).revoke_roles()
+
+        current_org_unit = get_current_org_unit()
+        self.context.responsible_client = current_org_unit.id()
+        self.context.responsible = current_org_unit.inbox().id()
 
 
 @implementer(ITransitionExtender)

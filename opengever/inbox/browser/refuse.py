@@ -4,12 +4,10 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.inbox import _
 from opengever.inbox.browser.schema import ISimpleResponseForm
-from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.task import _ as task_mf
 from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.transporter import IResponseTransporter
-from opengever.task.util import add_simple_response
 from opengever.task.util import get_documents_of_task
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
@@ -27,6 +25,36 @@ STATUS_SUCCESSFULL = 1
 STATUS_ALLREADY_DONE = 2
 
 
+def store_copy_in_remote_yearfolder(forwarding, refusing_unit_id):
+    transporter = Transporter()
+    jsondata = json.dumps(transporter.extract(forwarding))
+    request_data = {REQUEST_KEY: jsondata, }
+
+    response = dispatch_json_request(
+        refusing_unit_id, '@@store_refused_forwarding',
+        data=request_data)
+
+    if response.get('status') not in [
+            STATUS_SUCCESSFULL, STATUS_ALLREADY_DONE]:
+        raise Exception(
+            'Storing the forwarding on remote yearfolder failed')
+
+    remote_task = response.get('remote_task')
+    if response.get('status') != STATUS_ALLREADY_DONE:
+        # transport responses
+        response_transporter = IResponseTransporter(forwarding)
+        response_transporter.send_responses(
+            refusing_unit_id, remote_task)
+
+        # transport documents
+        for document in get_documents_of_task(forwarding):
+            transporter.transport_to(
+                document, refusing_unit_id, remote_task)
+
+    refusing_admin_unit = ogds_service().fetch_admin_unit(refusing_unit_id)
+    return '%s/%s' % (refusing_admin_unit.public_url, remote_task)
+
+
 class ForwardingRefuseForm(Form):
 
     fields = Fields(ISimpleResponseForm)
@@ -39,68 +67,18 @@ class ForwardingRefuseForm(Form):
 
         data, errors = self.extractData()
         if not errors:
-            refusing_client = self.context.get_responsible_admin_unit()
-            self.change_workflow_sate()
-            self.add_response(data.get('text'))
-            copy_url = self.store_copy_in_remote_yearfolder(
-                refusing_client.id())
-            self.reset_responsible()
-            notify(ObjectModifiedEvent(self.context))
+            response = self.change_workflow_state(data)
 
-        return self.request.RESPONSE.redirect(copy_url)
+        return self.request.RESPONSE.redirect(response['location'])
 
     @button.buttonAndHandler(task_mf(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
-    def reset_responsible(self):
-        """Set responsible back to the issuer respectively current inbox."""
-
-        self.context.responsible_client = get_current_org_unit().id()
-        self.context.responsible = u'inbox:%s' % (
-            self.context.responsible_client)
-
-    def add_response(self, response_text):
-        add_simple_response(
-            self.context,
-            text=response_text,
-            transition=u'forwarding-transition-refuse', supress_events=True)
-
-    def change_workflow_sate(self):
+    def change_workflow_state(self, data):
         wf_tool = getToolByName(self.context, 'portal_workflow')
-        wf_tool.doActionFor(self.context, 'forwarding-transition-refuse')
-
-    def store_copy_in_remote_yearfolder(self, refusing_unit_id):
-        transporter = Transporter()
-        jsondata = json.dumps(transporter.extract(self.context))
-        request_data = {REQUEST_KEY: jsondata, }
-
-        response = dispatch_json_request(
-            refusing_unit_id, '@@store_refused_forwarding',
-            data=request_data)
-
-        if response.get('status') not in [
-                STATUS_SUCCESSFULL, STATUS_ALLREADY_DONE]:
-            raise Exception(
-                'Storing the forwarding on remote yearfolder failed')
-
-        remote_task = response.get('remote_task')
-        if response.get('status') != STATUS_ALLREADY_DONE:
-            # transport responses
-            response_transporter = IResponseTransporter(self.context)
-            response_transporter.send_responses(
-                refusing_unit_id, remote_task)
-
-            # transport documents
-            for document in get_documents_of_task(self.context):
-                transporter.transport_to(
-                    document, refusing_unit_id, remote_task)
-
-        return self.get_remote_task_url(refusing_unit_id, remote_task)
-
-    def get_remote_task_url(self, refusing_client_id, remote_task):
-        refusing_admin_unit = ogds_service().fetch_admin_unit(refusing_client_id)
-        return '%s/%s' % (refusing_admin_unit.public_url, remote_task)
+        return wf_tool.doActionFor(self.context, 'forwarding-transition-refuse',
+                                   transition_params=data)
 
 
 class RefuseForwardingView(layout.FormWrapper):

@@ -87,7 +87,7 @@ class GEVERWorkflowTransition(WorkflowTransition):
             publication_dates["expires"] = data["expires"]
 
         try:
-            self.recurse_transition(
+            response = self.recurse_transition(
                 [self.context], comment, publication_dates, include_children
             )
 
@@ -112,6 +112,8 @@ class GEVERWorkflowTransition(WorkflowTransition):
                 action["review_state"], self.context.portal_type
             ).decode("utf8")
         )
+        if response and isinstance(response, dict):
+            action['transition_response'] = response
         return json_compatible(action)
 
     def recurse_transition(self, objs, comment, publication_dates,
@@ -132,12 +134,14 @@ class GEVERWorkflowTransition(WorkflowTransition):
                 if errors:
                     raise BadRequest(errors)
 
-            self.wftool.doActionFor(obj, self.transition,
-                                    comment=comment, transition_params=data)
+            response = self.wftool.doActionFor(obj, self.transition, comment=comment,
+                                               transition_params=data)
             if include_children and IFolderish.providedBy(obj):
                 self.recurse_transition(
                     obj.objectValues(), comment, publication_dates,
                     include_children)
+
+            return response
 
     def request_data(self):
         return json_body(self.request)

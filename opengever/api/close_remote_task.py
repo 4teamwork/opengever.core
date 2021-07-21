@@ -35,9 +35,6 @@ class CloseRemoteTaskPost(RemoteTaskBaseService):
     required_params = ('task_oguid', )
     optional_params = ('text', 'document_oguids', 'dossier_uid')
 
-    def is_remote(self, oguid):
-        return not oguid.is_on_current_admin_unit
-
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
