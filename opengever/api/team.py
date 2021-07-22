@@ -8,6 +8,7 @@ from plone.restapi.interfaces import IFieldDeserializer
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import NotFound
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -104,3 +105,43 @@ class TeamPost(Service):
         session.add(obj)
         session.flush()
         return obj
+
+
+class TeamPatch(TeamPost):
+
+    implements(IPublishTraverse)
+
+    def __init__(self, context, request):
+        super(TeamPatch, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after service name as parameters
+        self.params.append(name)
+        return self
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        team_id = self.read_params()
+
+        self.team = Team.query.get(team_id)
+        if not self.team:
+            raise NotFound()
+
+        data = self.extract_data(self.team)
+        team = self.update(data)
+        serializer = queryMultiAdapter((team, self.request), ISerializeToJson)
+        return serializer()
+
+    def update(self, data):
+        for key, value in data.items():
+            setattr(self.team, key, value)
+        return self.team
+
+    def read_params(self):
+        if len(self.params) != 1:
+            raise BadRequest("Must supply team ID as URL path parameter.")
+
+        return self.params[0]

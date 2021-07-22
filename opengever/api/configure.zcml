@@ -510,6 +510,14 @@
       />
 
   <plone:service
+      method="PATCH"
+      name="@teams"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".team.TeamPatch"
+      permission="opengever.contact.EditTeam"
+      />
+
+  <plone:service
       method="GET"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsgroups.OGDSGroupsGet"
