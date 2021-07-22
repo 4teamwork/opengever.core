@@ -97,6 +97,25 @@ def accept_forwarding_with_successor(
     intids_mapping = doc_transporter.copy_documents_from_remote_task(
         predecessor, successor_forwarding, comment=comment)
 
+    transaction.savepoint()
+    # Close the predessecor forwarding
+
+    response_text = response_text or ''
+    request_data = {'response_text': response_text.encode('utf-8'),
+                    'successor_oguid': successor_tc.get_oguid(),
+                    'transition': 'forwarding-transition-accept'}
+
+    response = dispatch_request(predecessor.admin_unit_id,
+                                '@@store_forwarding_in_yearfolder',
+                                path=predecessor.physical_path,
+                                data=request_data)
+
+    response_body = response.read()
+    if response_body.strip() != 'OK':
+        raise TaskRemoteRequestError(
+            'Adding the response and changing the workflow state on the '
+            'predecessor forwarding failed.')
+
     # copy the responses
     response_transporter = IResponseTransporter(successor_forwarding)
     response_transporter.get_responses(predecessor.admin_unit_id,
@@ -142,26 +161,6 @@ def accept_forwarding_with_successor(
         # successor
         successor_tc_task = ISuccessorTaskController(task)
 
-    transaction.savepoint()
-
-    # Close the predessecor forwarding
-    response_text = response_text or ''
-    request_data = {'response_text': response_text.encode('utf-8'),
-                    'successor_oguid': successor_tc.get_oguid(),
-                    'transition': 'forwarding-transition-accept'}
-
-    response = dispatch_request(predecessor.admin_unit_id,
-                                '@@store_forwarding_in_yearfolder',
-                                path=predecessor.physical_path,
-                                data=request_data)
-
-    response_body = response.read()
-    if response_body.strip() != 'OK':
-        raise TaskRemoteRequestError(
-            'Adding the response and changing the workflow state on the '
-            'predecessor forwarding failed.')
-
-    if dossier:
         # Update watchers for created successor forwarding and task
         center = notification_center()
         center.remove_task_responsible(successor_forwarding, task.responsible)

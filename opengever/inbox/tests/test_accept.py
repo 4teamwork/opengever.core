@@ -24,3 +24,7 @@ class TestForwardingAccepting(FunctionalTestCase):
         responses = IResponseContainer(forwarding)
         self.assertEqual(1, len(responses))
         self.assertEqual(u'OK, thx.', responses.list()[0].text)
+
+        responses = IResponseContainer(task)
+        self.assertEqual(1, len(responses))
+        self.assertEqual(u'OK, thx.', responses.list()[0].text)
