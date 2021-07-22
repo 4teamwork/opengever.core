@@ -10,6 +10,7 @@
   <include package="plone.rest" file="meta.zcml" />
   <include package="plone.restapi" file="permissions.zcml" />
   <include package="Products.CMFEditions" file="permissions.zcml" />
+  <include package="opengever.contact" file="permissions.zcml" />
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
   <include package="opengever.webactions" file="permissions.zcml" />
@@ -498,6 +499,14 @@
       factory=".team.TeamGet"
       name="@teams"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@teams"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".team.TeamPost"
+      permission="opengever.contact.AddTeam"
       />
 
   <plone:service

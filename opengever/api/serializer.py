@@ -218,6 +218,16 @@ class SerializeTeamModelToJson(SerializeSQLModelToJsonBase):
 
     content_type = 'virtual.ogds.team'
 
+
+    def __call__(self, *args, **kwargs):
+        data = super(SerializeTeamModelToJson, self).__call__(*args, **kwargs)
+
+        data['@id'] = '{}/@teams/{}'.format(
+            api.portal.get().absolute_url(),
+            self.context.team_id)
+
+        return data
+
     def get_item_query(self):
         # The teammembers are the items of the team
         users = User.query.join(groups_users).filter_by(

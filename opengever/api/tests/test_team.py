@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
+import json
 
 
 class TestTeamGet(IntegrationTestCase):
@@ -104,3 +105,56 @@ class TestTeamGet(IntegrationTestCase):
         self.assertIn('batching', browser.json)
         self.assertEquals(3, browser.json['items_total'])
         self.assertEquals(2, len(browser.json['items']))
+
+
+class TestTeamPost(IntegrationTestCase):
+
+    valid_data = {
+        'title': 'Team A',
+        'active': True,
+        'org_unit_id': {'token': 'fa', 'title': u'Finanz\xe4mt'},
+        'groupid': {'token': 'projekt_a', 'title': u'Projekt A'}}
+
+    @browsing
+    def test_adding_a_team(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+        browser.open(url, method='POST', headers=self.api_headers,
+                     data=json.dumps(self.valid_data))
+
+        self.assertEquals(201, browser.status_code)
+        self.assertEquals('http://nohost/plone/@teams/4', browser.headers.get('Location'))
+
+    @browsing
+    def test_validates_against_input(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.valid_data['groupid'] = {'token': 'not-existing'}
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', headers=self.api_headers,
+                         data=json.dumps(self.valid_data))
+
+        self.assertEquals(
+            {u'message': u"[{'field': 'groupid', 'message': u'Constraint not satisfied', 'error': ConstraintNotSatisfied(u'not-existing')}]",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_validates_required_fields(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.valid_data.pop('groupid')
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', headers=self.api_headers,
+                         data=json.dumps(self.valid_data))
+
+        self.assertEquals(
+            {u'message': u"[{'field': 'groupid', 'message': u'Required input is missing.', 'error': RequiredMissing('groupid')}]",
+             u'type': u'BadRequest'},
+            browser.json)
