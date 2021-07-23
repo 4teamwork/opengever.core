@@ -34,7 +34,17 @@ class TrashPost(Service):
                     'type': 'Bad Request',
                     'message': 'Cannot trash a locked document',
                 }}
+            elif exc.message == 'The document has been returned as excerpt':
+                return {'error': {
+                    'type': 'Bad Request',
+                    'message': 'Cannot trash a document that has been returned as excerpt',
+                }}
             elif exc.message == 'Not trashable':
+                return {'error': {
+                    'type': 'Bad Request',
+                    'message': 'Object is not trashable',
+                }}
+            else:
                 return {'error': {
                     'type': 'Bad Request',
                     'message': 'Object is not trashable',

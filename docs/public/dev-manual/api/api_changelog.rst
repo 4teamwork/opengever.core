@@ -10,6 +10,7 @@ Breaking Changes
 ^^^^^^^^^^^^^^^^
 
 - ``@role-assignments``: Return a fixed list of roles at the key ``referenced_roles``.
+- ``@trash``: Always return error message if content is not trashable.
 
 
 Other Changes
