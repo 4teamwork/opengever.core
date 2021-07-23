@@ -470,13 +470,13 @@ aber nur ein Subset der Parameter. Im Moment ist es nicht möglich die
 ``columns`` anzugeben, sondern es werden immer alle vom Modell
 untertstützten Attribute zurückgegeben.
 
-Dieser Endpoint steht nur für Kontaktordner zur Verfügung.
+Dieser Endpoint steht nur auf Stufe PloneSite zur Verfügung.
 
 Beispiel: Auflistung aller Teams:
 
   .. sourcecode:: http
 
-    GET /kontakte/@team-listing?b_size=1 HTTP/1.1
+    GET /@team-listing?b_size=1 HTTP/1.1
     Accept: application/json
 
   .. sourcecode:: http
@@ -487,14 +487,14 @@ Beispiel: Auflistung aller Teams:
     {
       "@id": "http://localhost:8080/fd/@ogds-user-listing",
       "batching": {
-        "@id": "http://localhost:8080/fd/kontakte/@team-listing?b_size=1",
-        "first": "http://localhost:8080/fd/kontakte/@team-listing?b_start=0&b_size=1",
-        "last": "http://localhost:8080/fd/kontakte/@team-listing?b_start=24&b_size=1",
-        "next": "http://localhost:8080/fd/kontakte/@team-listing?b_start=1&b_size=1"
+        "@id": "http://localhost:8080/fd/@team-listing?b_size=1",
+        "first": "http://localhost:8080/fd/@team-listing?b_start=0&b_size=1",
+        "last": "http://localhost:8080/fd/@team-listing?b_start=24&b_size=1",
+        "next": "http://localhost:8080/fd/@team-listing?b_start=1&b_size=1"
       },
       "items": [
         {
-          "@id": "http://localhost:8081/fd/kontakte/@teams/427",
+          "@id": "http://localhost:8081/fd/@teams/427",
           "@type": "virtual.ogds.team",
           "active": true,
           "groupid": "test-group",
@@ -523,7 +523,7 @@ Folgende Statusfilter stehen zur Verfügung:
 
   .. sourcecode:: http
 
-    GET /kontakte/@team-listing?filters.state:record:list=active HTTP/1.1
+    GET /@team-listing?filters.state:record:list=active HTTP/1.1
     Accept: application/json
 
 
@@ -531,7 +531,7 @@ Folgende Statusfilter stehen zur Verfügung:
 
   .. sourcecode:: http
 
-    GET /kontakte/@team-listing?filters.state:record:list=active&filters.state:record:list=inactive HTTP/1.1
+    GET /@team-listing?filters.state:record:list=active&filters.state:record:list=inactive HTTP/1.1
     Accept: application/json
 
 

@@ -17,7 +17,11 @@ class TestGlobalSourcesGet(IntegrationTestCase):
 
         self.assertEqual(
             [{u'@id': u'http://nohost/plone/@globalsources/all_users_and_groups',
-              u'title': u'all_users_and_groups'}],
+              u'title': u'all_users_and_groups'},
+             {u'@id': u'http://nohost/plone/@globalsources/filtered_groups',
+              u'title': u'filtered_groups'},
+             {u'@id': u'http://nohost/plone/@globalsources/current_admin_unit_org_units',
+              u'title': u'current_admin_unit_org_units'}],
             browser.json)
 
     @browsing

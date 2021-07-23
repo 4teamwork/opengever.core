@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
+import json
 
 
 class TestTeamGet(IntegrationTestCase):
@@ -16,13 +17,13 @@ class TestTeamGet(IntegrationTestCase):
     def test_team_default_response(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.contactfolder,
+        browser.open(self.portal,
                      view='@teams/{}'.format(self.team_id),
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/kontakte/@teams/1',
+            {u'@id': u'http://nohost/plone/@teams/1',
              u'@type': u'virtual.ogds.team',
              u'active': True,
              u'group': {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
@@ -73,7 +74,7 @@ class TestTeamGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@teams',
                          headers=self.api_headers)
 
@@ -82,7 +83,7 @@ class TestTeamGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True
         with self.assertRaises(BadRequest):
-            browser.open(self.contactfolder,
+            browser.open(self.portal,
                          view='@teams/{}/foobar'.format(self.team_id),
                          headers=self.api_headers)
 
@@ -91,7 +92,7 @@ class TestTeamGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         team = Team.get_one(groupid='projekt_a')
 
-        url = self.contactfolder.absolute_url() + '/@teams/{}?b_size=2'.format(team.team_id)
+        url = self.portal.absolute_url() + '/@teams/{}?b_size=2'.format(team.team_id)
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertNotIn('batching', browser.json)
@@ -104,3 +105,121 @@ class TestTeamGet(IntegrationTestCase):
         self.assertIn('batching', browser.json)
         self.assertEquals(3, browser.json['items_total'])
         self.assertEquals(2, len(browser.json['items']))
+
+
+class TestTeamPost(IntegrationTestCase):
+
+    valid_data = {
+        'title': 'Team A',
+        'active': True,
+        'org_unit_id': {'token': 'fa', 'title': u'Finanz\xe4mt'},
+        'groupid': {'token': 'projekt_a', 'title': u'Projekt A'}}
+
+    @browsing
+    def test_adding_a_team(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+        browser.open(url, method='POST', headers=self.api_headers,
+                     data=json.dumps(self.valid_data))
+
+        self.assertEquals(201, browser.status_code)
+        self.assertEquals('http://nohost/plone/@teams/4', browser.headers.get('Location'))
+
+    @browsing
+    def test_validates_against_input(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.valid_data['groupid'] = {'token': 'not-existing'}
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', headers=self.api_headers,
+                         data=json.dumps(self.valid_data))
+
+        self.assertEquals(
+            {u'message': u"[{'field': 'groupid', 'message': u'Constraint not satisfied', 'error': ConstraintNotSatisfied(u'not-existing')}]",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_validates_required_fields(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.valid_data.pop('groupid')
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', headers=self.api_headers,
+                         data=json.dumps(self.valid_data))
+
+        self.assertEquals(
+            {u'message': u"[{'field': 'groupid', 'message': u'Required input is missing.', 'error': RequiredMissing('groupid')}]",
+             u'type': u'BadRequest'},
+            browser.json)
+
+
+class TestTeamPatch(IntegrationTestCase):
+
+    @browsing
+    def test_update_a_team(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = '{}/@teams/1'.format(self.portal.absolute_url())
+        data = {'active': 'false',
+                'groupid': {'token': 'projekt_b', 'title': 'Projekt b'}}
+        browser.open(url, method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEquals(200, browser.status_code)
+
+        team = Team.get(1)
+        self.assertFalse(team.active)
+        self.assertEquals('projekt_b', team.groupid)
+
+    @browsing
+    def test_validates_against_input(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = '{}/@teams/1'.format(self.portal.absolute_url())
+        data = {'active': 'false',
+                'groupid': {'token': 'not-existing', 'title': 'Not existing'}}
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+        self.assertEquals(
+            {u'message': u"[{'field': 'groupid', 'message': u'Constraint not satisfied', 'error': ConstraintNotSatisfied(u'not-existing')}]",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_raises_not_found_for_not_existing_team(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = '{}/@teams/39449'.format(self.portal.absolute_url())
+        data = {'active': 'false',
+                'groupid': {'token': 'projekt_b', 'title': 'Projekt b'}}
+
+        with browser.expect_http_error(404):
+            browser.open(url, method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+    @browsing
+    def test_raises_bad_request_for_missing_team(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+        data = {'active': 'false',
+                'groupid': {'token': 'projekt_b', 'title': 'Projekt b'}}
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+        self.assertEquals(
+            {u'message': u'Must supply team ID as URL path parameter.',
+             u'type': u'BadRequest'},
+            browser.json)

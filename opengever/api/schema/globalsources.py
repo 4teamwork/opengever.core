@@ -1,5 +1,7 @@
 from opengever.api.schema.querysources import GEVERQuerySourcesGet
+from opengever.ogds.base.sources import AllFilteredGroupsSourceBinder
 from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
+from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSourceBinder
 from plone.supermodel import model
 from zope import schema
 from zope.schema import getFieldsInOrder
@@ -9,6 +11,14 @@ class IGlobalSourceSchema(model.Schema):
 
     all_users_and_groups = schema.Choice(
         source=AllUsersAndGroupsSourceBinder(),
+    )
+
+    filtered_groups = schema.Choice(
+        source=AllFilteredGroupsSourceBinder(),
+    )
+
+    current_admin_unit_org_units = schema.Choice(
+        source=CurrentAdminUnitOrgUnitsSourceBinder(),
     )
 
 

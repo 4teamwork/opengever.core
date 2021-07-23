@@ -43,7 +43,7 @@ Ein Benutzer wird lediglich durch einen Eintrag in der SQL Datenbank repräsenti
         "last_login": "2020-05-03",
         "teams": [
             {
-                "@id": "http://example.org/fd/kontakte/@teams/90",
+                "@id": "http://example.org/fd/@teams/90",
                 "@type": "virtual.ogds.team",
                 "active": true,
                 "groupid": "afi_benutzer",
@@ -64,9 +64,12 @@ Das Attribut `last_login` ist nur für Administratoren und Manager sichtbar.
 Teams
 =====
 
-Team-Daten werden mit dem ``@teams`` Endpoint abgefragt. Dieser Endpoint unterstützt nur das GET und erwartet als Pfad-Argument die ID des Teams und wird auf dem Kontaktordner abgefragt. Die URL setzt sich somit folgendermassen zusammen:
+GET
+---
 
-``http://example.org/fd/kontakte/@teams/90``
+Team-Daten werden mit dem ``@teams`` Endpoint abgefragt. Dieser Endpoint erwartet als Pfad-Argument die ID des Teams und wird auf Stufe PloneSite abgefragt. Die URL setzt sich somit folgendermassen zusammen:
+
+``http://example.org/fd/@teams/90``
 
 Ein Team wird lediglich durch einen Eintrag in der SQL Datenbank repräsentiert und ist kein Plone Inhaltstyp. Deshalb beinhaltet die Response weniger Information als für andere Inhaltstypen. Dieser Endpoint unterstützt Batching. Die Teammitglieder werden nach Nachnamen
 sortiert zurückgegeben.
@@ -87,12 +90,12 @@ sortiert zurückgegeben.
       Content-Type: application/json
 
       {
-        "@id": "http://localhost:8080/fd/kontakte/@teams/90",
+        "@id": "http://localhost:8080/fd/@teams/90",
         "@type": "virtual.ogds.team",
         "active": true,
         "groupid": "afi_benutzer",
         "group": {
-            "@id": "http://localhost:8080/fd/kontakte/@ogds-groups/admin-group",
+            "@id": "http://localhost:8080/fd/@ogds-groups/admin-group",
             "@type": "virtual.ogds.group",
             "active": true,
             "groupid": "admin-group",
@@ -114,6 +117,114 @@ sortiert zurückgegeben.
         "title": "afi_benutzer"
       }
 
+
+POST
+----
+
+Die Erstellung eines Teams erfolgt mit einem POST Request auf den ``@teams`` Endpoint.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /@teams HTTP/1.1
+      Accept: application/json
+
+      {
+        "active": true,
+        "groupid": {"token": "projekt_a", "title": "Projekt A"},
+        "org_unit_id": {"token": "fa", "title": "Finanzamt"},
+        "title": "Team A"
+      }
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 OK
+      Content-Type: application/json
+
+      {
+        "@id": "http://localhost:8080/fd/@teams/90",
+        "@type": "virtual.ogds.team",
+        "active": true,
+        "groupid": "projekt_a",
+        "group": {
+            "@id": "http://localhost:8080/fd/@ogds-groups/projekt_a",
+            "@type": "virtual.ogds.group",
+            "active": true,
+            "groupid": "projekt_a",
+            "title": null
+        },
+        "items": [
+            {
+                "@id": "http://localhost:8080/fd/kontakte/@ogds-users/peter.mueller",
+                "@type": "virtual.ogds.user",
+                "active": true,
+                "...": "..."
+            },
+            {"...": "..."}
+        ],
+        "items_total": 14,
+        "org_unit_id": "fa",
+        "org_unit_title": "Finanzamt",
+        "team_id": 90,
+        "title": "Projekt A"
+      }
+
+
+PATCH
+-----
+
+Auch die Bearbeitung eines Teams ist via API möglich. Hierfür muss ein PATCH Request auf den ``@teams`` Endpoint abgesetzt werden. Dabei wird, wie beim GET Endpoint, als Pfad-Argument die ID des Teams erwartet.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      PATCH /@teams/90 HTTP/1.1
+      Accept: application/json
+
+      {
+        "active": false
+      }
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 OK
+      Content-Type: application/json
+
+      {
+        "@id": "http://localhost:8080/fd/@teams/90",
+        "@type": "virtual.ogds.team",
+        "active": false,
+        "groupid": "projekt_a",
+        "group": {
+            "@id": "http://localhost:8080/fd/@ogds-groups/projekt_a",
+            "@type": "virtual.ogds.group",
+            "active": true,
+            "groupid": "projekt_a",
+            "title": null
+        },
+        "items": [
+            {
+                "@id": "http://localhost:8080/fd/kontakte/@ogds-users/peter.mueller",
+                "@type": "virtual.ogds.user",
+                "active": true,
+                "...": "..."
+            },
+            {"...": "..."}
+        ],
+        "items_total": 14,
+        "org_unit_id": "fa",
+        "org_unit_title": "Finanzamt",
+        "team_id": 90,
+        "title": "Projekt A"
+      }
 
 Gruppen
 =======
