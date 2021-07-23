@@ -210,13 +210,20 @@ def post_adminunit_title(configurator, question, answer):
 
 
 def post_adminunit_id(configurator, question, answer):
+    if configurator.variables['is_teamraum']:
+        admin_group = '{}_administrators'.format(answer)
+        inbox_group = '{}_administrators'.format(answer)
+    else:
+        admin_group = '{}_admins'.format(answer)
+        inbox_group = '{}_inbox'.format(answer)
+
     new_defaults = {
-        'deployment.rolemanager_group': '{}_admins'.format(answer),
-        'deployment.records_manager_group': '{}_admins'.format(answer),
-        'deployment.archivist_group': '{}_admins'.format(answer),
-        'deployment.administrator_group': '{}_admins'.format(answer),
+        'deployment.rolemanager_group': admin_group,
+        'deployment.records_manager_group': admin_group,
+        'deployment.archivist_group': admin_group,
+        'deployment.administrator_group': admin_group,
         'orgunit.users_group': '{}_users'.format(answer),
-        'orgunit.inbox_group': '{}_inbox'.format(answer),
+        'orgunit.inbox_group': inbox_group,
         'orgunit.id': answer.lower()
     }
     update_defaults(configurator, new_defaults)
