@@ -43,6 +43,20 @@ class TestTrashAPI(IntegrationTestCase):
             u'Cannot trash a checked-out document')
 
     @browsing
+    def test_trash_excerpt_gives_bad_request(self, browser):
+        self.activate_feature('meeting')
+        self.login(self.meeting_user, browser)
+
+        excerpt = self.decided_proposal.get_excerpt()
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(excerpt.absolute_url() + '/@trash',
+                         method='POST', headers={'Accept': 'application/json'})
+        self.assertEqual(
+            browser.json[u'error'][u'message'],
+            u'Cannot trash a document that has been returned as excerpt')
+
+    @browsing
     def test_trashing_non_trashable_object_raises_bad_request(self, browser):
         self.login(self.manager, browser=browser)
 

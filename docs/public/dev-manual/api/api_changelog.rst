@@ -12,6 +12,7 @@ Breaking Changes
 - ``@teams`` and ``@team-listing``: Moved to plone site root.
 - ``@teams``: Supports adding (POST) and updating (PATCH).
 - ``@role-assignments``: Return a fixed list of roles at the key ``referenced_roles``.
+- ``@trash``: Always return error message if content is not trashable.
 
 
 Other Changes
