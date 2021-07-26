@@ -353,6 +353,10 @@ class TestVirusScanValidator(IntegrationTestCase):
 
 class TestVirusScanDownloadValidator(IntegrationTestCase):
 
+    headers = {
+        'Accept': 'application/json',
+    }
+
     def setUp(self):
         super(TestVirusScanDownloadValidator, self).setUp()
         register_mock_av_scanner()
@@ -508,7 +512,7 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
 
         self.mail_eml.message.data = EICAR
         with browser.expect_http_error(code=400):
-            browser.open(self.mail_eml, view='download', headers=self.api_headers)
+            browser.open(self.mail_eml, view='download', headers=self.headers)
 
         self.assertEqual(
             u'file_infected',
@@ -533,15 +537,12 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
     def test_download_versioned_copy_over_api_scans_file_if_enabled(self, browser):
         self.login(self.regular_user, browser)
         Versioner(self.document).create_version('Initial version')
-        payload = {'version_id': '0'}
 
         with browser.expect_http_error(code=400):
-            browser.open(
-                "{}/download_file_version".format(self.document.absolute_url()),
-                data=json.dumps(payload),
-                method='POST',
-                headers=self.api_headers)
-
+            browser.open(self.document,
+                         view='download_file_version',
+                         data={'version_id': 0},
+                         headers=self.headers)
         self.assertEqual(
             u'file_infected',
             browser.json['message'])
@@ -550,13 +551,11 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
     def test_download_versioned_copy_over_api_with_virusscan_enabled(self, browser):
         self.login(self.regular_user, browser)
         Versioner(self.subdocument).create_version('Initial version')
-        payload = {'version_id': '0'}
 
-        browser.open(
-            "{}/download_file_version".format(self.subdocument.absolute_url()),
-            data=json.dumps(payload),
-            method='POST',
-            headers=self.api_headers)
+        browser.open(self.subdocument,
+                     view='download_file_version',
+                     data={'version_id': 0},
+                     headers=self.headers)
         self.assertEqual(
             'attachment; filename="Uebersicht der Vertraege von 2016.xlsx"',
             browser.headers.get('content-disposition'))

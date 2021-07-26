@@ -2,8 +2,10 @@ from opengever.base import _
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.document.versioner import Versioner
 from plone.dexterity.primary import PrimaryFieldInfo
+from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from zExceptions import BadRequest
 
 
 class DownloadFileVersion(BrowserView):
@@ -11,9 +13,25 @@ class DownloadFileVersion(BrowserView):
 
     def _init_version_file(self):
         version_id = self.request.get('version_id')
+        if version_id is None:
+            raise BadRequest(u'Missing parameter "version_id".')
+        try:
+            version_id = int(version_id)
+        except ValueError:
+            raise BadRequest(u'Invalid version id "{}".'.format(version_id))
 
-        old_obj = Versioner(self.context).retrieve(version_id)
-        primary_field_info = PrimaryFieldInfo(old_obj)
+        versioner = Versioner(self.context)
+        if not versioner.has_initial_version() and version_id == 0:
+            obj = self.context
+        else:
+            try:
+                obj = versioner.retrieve(version_id)
+            except ArchivistRetrieveError:
+                raise BadRequest(
+                    u'Version "{}" does not exist.'.format(version_id)
+                )
+
+        primary_field_info = PrimaryFieldInfo(obj)
         self.version_file = primary_field_info.value
 
     def render(self):
