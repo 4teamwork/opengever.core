@@ -20,6 +20,8 @@ Other Changes
 
 - Add new endpoint ``@accept-remote-forwarding`` (see :ref:`docs <accept-remote-forwarding>`)
 - ``@workflow``: Add ``transition_response`` if it exists.
+- Fix ``@versions`` for documents that do not have an initial version yet (lazy initial version).
+
 
 2021.14.0 (2021-07-16)
 ----------------------
@@ -38,12 +40,9 @@ Other Changes
 - ``@navigation``: Add ``review_state`` and ``include_context`` parameters (see :ref:`docs <navigation>`)
 - Added ``@submit-additional-documents`` endpoint. (see :ref:`docs <submit-additional-documents>`)
 
+
 2021.13.0 (2021-06-25)
 ----------------------
-
-Breaking Changes
-^^^^^^^^^^^^^^^^
-
 
 Other Changes
 ^^^^^^^^^^^^^
@@ -54,6 +53,7 @@ Other Changes
 - `@trash` and `@untrash` endpoints now also work for WorkspaceFolders.
 - Trashed workspace documents and folders can be deleted. (see :ref:`docs <trash>`)
 - Prevent changing the ``is_private`` field of existing tasks.
+
 
 2021.11.0 (2021-05-28)
 ----------------------
@@ -80,6 +80,7 @@ Other Changes
 - Added ``@listing-custom-fields`` endpoint and allow retrieving custom properties in ``@listing``. (see :ref:`docs <listing-property_sheets>`)
 - Added ``@upload-structure`` endpoint. (see :ref:`docs <upload-structure>`)
 
+
 2021.9.0 (2021-04-29)
 ---------------------
 
@@ -97,6 +98,7 @@ Breaking Changes
 ^^^^^^^^^^^^^^^^
 
 - Deserialization: Years before 1900 will now get rejected for date and datetime fields.
+
 
 2021.7.0 (2021-04-01)
 ---------------------

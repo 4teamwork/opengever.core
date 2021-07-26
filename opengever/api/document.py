@@ -6,6 +6,7 @@ from opengever.base.helpers import display_name
 from opengever.base.interfaces import IReferenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
@@ -62,6 +63,14 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
         result.update(additional_metadata)
         return result
+
+    def getVersion(self, version):
+        """Return context when no lazy initial version exists."""
+
+        if not Versioner(self.context).has_initial_version():
+            return self.context
+
+        return super(SerializeDocumentToJson, self).getVersion(version)
 
 
 class DocumentPatch(ContentPatch):
