@@ -285,6 +285,21 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
                          [each['version'] for each in browser.json['items']])
 
     @browsing
+    def test_returns_initial_version_details_for_lazy_initial_version(self, browser):
+        self.login(self.regular_user, browser)
+        versioner = Versioner(self.document)
+        self.assertFalse(versioner.has_initial_version())
+
+        browser.open(self.document,
+                     view='@versions/0',
+                     method='GET',
+                     headers=self.api_headers)
+
+        resp = browser.json
+        self.assertEqual(0, resp[u'current_version_id'])
+        self.assertEqual(u'0', resp[u"version"])
+
+    @browsing
     def test_returns_initial_version_even_when_it_does_not_exist_yet(self, browser):
         self.login(self.regular_user, browser)
         versioner = Versioner(self.document)
