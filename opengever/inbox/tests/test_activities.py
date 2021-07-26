@@ -127,7 +127,7 @@ class TestForwardingActivites(FunctionalTestCase):
 
         task = accept_forwarding_with_successor(
             self.portal, forwarding.oguid.id,
-            'OK. That is something for me.', dossier=dossier)
+            u'OK. That is something for me.', dossier=dossier)
 
         forwarding_resource = self.center.fetch_resource(forwarding)
         task_resource = self.center.fetch_resource(task)
