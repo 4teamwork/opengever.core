@@ -80,6 +80,55 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         self.assertEqual(self.document.file.data, browser.contents)
 
     @browsing
+    def test_download_lazy_initial_version(self, browser):
+        self.login(self.regular_user, browser)
+        versioner = Versioner(self.document)
+        self.assertFalse(versioner.has_initial_version())
+
+        browser.open(self.document, view='download_file_version', data={'version_id': 0})
+        self.assertEqual(self.document.file.data, browser.contents)
+
+    @browsing
+    def test_requires_version_id(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as cm:
+            browser.open(self.document, view='download_file_version')
+
+        self.assertEqual(
+            u'Missing parameter "version_id".', cm.exception.message
+        )
+
+    @browsing
+    def test_requires_valid_version_id(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as cm:
+            browser.open(
+                self.document,
+                view='download_file_version',
+                data={'version_id': 'foo'},
+            )
+
+        self.assertEqual(u'Invalid version id "foo".', cm.exception.message)
+
+    @browsing
+    def test_requires_existing_version_id(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as cm:
+            browser.open(
+                self.document,
+                view='download_file_version',
+                data={'version_id': '33'},
+            )
+
+        self.assertEqual('Version "33" does not exist.', cm.exception.message)
+
+    @browsing
     def test_download_confirmation_view_for_version_download(self, browser):
         self.login(self.regular_user, browser)
         versioner = Versioner(self.document)
