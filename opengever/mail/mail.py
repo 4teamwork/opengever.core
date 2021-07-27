@@ -5,8 +5,6 @@ from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
 from ftw.mail.mail import IMail
 from ftw.mail.mail import Mail
-from ftw.mail.utils import get_filename
-from ftw.mail.utils import walk
 from opengever.base import _ as base_mf
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
@@ -232,7 +230,7 @@ class OGMail(Mail, BaseDocumentMixin):
                 "Could not find a parent dossier, inbox, workspace or workspace folder for "
                 "{}".format(self.absolute_url()))
 
-        data, content_type, filename = self._get_attachment_data(position)
+        data, content_type, filename = utils.get_attachment_data(self.msg, position)
         title = os.path.splitext(filename)[0]
 
         # try to guess content-type based on mimetype registry first, then
@@ -270,39 +268,6 @@ class OGMail(Mail, BaseDocumentMixin):
             position, extracted=True, extracted_document_uid=IUUID(doc))
 
         return doc
-
-    def _get_attachment_data(self, pos):
-        """Return a tuple: file-data, content-type and filename extracted from
-        the attachment at position `pos`.
-        """
-        # get attachment at position pos
-        attachment = None
-        for i, part in enumerate(walk(self.msg)):
-            if i == pos:
-                attachment = part
-                break
-
-        if not attachment:
-            return None, '', ''
-
-        # decode when it's necessary
-        filename = get_filename(attachment)
-        if not isinstance(filename, unicode):
-            filename = filename.decode('utf-8')
-        # remove line breaks from the filename
-        filename = re.sub(r'\s{1,}', ' ', filename)
-
-        content_type = attachment.get_content_type()
-        if content_type == 'message/rfc822':
-            nested_messages = attachment.get_payload()
-            assert len(nested_messages) == 1, (
-                'we expect that attachments with messages only contain one '
-                'message per attachment.')
-            data = nested_messages[0].as_string()
-        else:
-            data = attachment.get_payload(decode=1)
-
-        return data, content_type, filename
 
     def related_items(self):
         """Mail does not support relatedItems"""
