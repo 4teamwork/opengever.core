@@ -123,10 +123,14 @@ class XLSReporter(object):
             for column, attr in enumerate(self.attributes, 1):
                 cell = sheet.cell(row=self.blank_header_rows + row, column=column)
 
-                if 'default' in attr:
-                    value = getattr(obj, attr.get('id'), attr.get('default'))
+                if isinstance(obj, dict):
+                    value = obj.get(attr.get('id'), attr.get('default'))
                 else:
-                    value = getattr(obj, attr.get('id'))
+                    if 'default' in attr:
+                        value = getattr(obj, attr.get('id'), attr.get('default'))
+                    else:
+                        value = getattr(obj, attr.get('id'))
+
                 if attr.get('callable'):
                     value = value()
                 if attr.get('transform'):
