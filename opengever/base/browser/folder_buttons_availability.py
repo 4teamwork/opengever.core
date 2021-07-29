@@ -116,6 +116,11 @@ class FolderButtonsAvailabilityView(BrowserView):
                 and self._can_use_workspace_client()
                 and self._can_modify_dossier())
 
+    def is_unlink_workspace_available(self):
+        return (self._is_main_dossier()
+                and self._can_modify_dossier()
+                and self._has_linked_workspaces())
+
     def is_move_items_available(self):
         if self._is_dossier() and not self._is_open_dossier():
             return False
@@ -155,3 +160,10 @@ class FolderButtonsAvailabilityView(BrowserView):
 
     def is_attach_documents_available(self):
         return not self._is_template_area()
+
+    def _has_linked_workspaces(self):
+        if not self._can_use_workspace_client():
+            return False
+
+        linked_workspaces_manager = ILinkedWorkspaces(self.context.get_main_dossier())
+        return linked_workspaces_manager.has_linked_workspaces()
