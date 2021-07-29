@@ -1010,6 +1010,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@unlink-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.UnlinkWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
       method="GET"
       name="@allowed-roles-and-principals"
       for="Products.CMFCore.interfaces.IContentish"

@@ -22,10 +22,10 @@ from plone.locking.interfaces import ILockable
 from plone.memoize import ram
 from plone.restapi.interfaces import ISerializeToJson
 from time import time
+from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component.interfaces import ComponentLookupError
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
@@ -169,6 +169,28 @@ class LinkedWorkspaces(object):
 
         journal_entry_factory(
             context=self.context, action='Linked to workspace',
+            title=title)
+
+    def unlink_workspace(self, workspace_uid):
+        if workspace_uid not in self.storage.list():
+            raise BadRequest(
+                'Workspace with UID {} is not connected'.format(workspace_uid))
+
+        workspace = self.client.unlink_workspace(workspace_uid)
+
+        self.storage.remove(workspace_uid)
+        if len(self.storage.list()) == 0:
+            noLongerProvides(self.context, ILinkedToWorkspace)
+            self.context.reindexObject(idxs=['object_provides'])
+
+        # Add journal entry to dossier
+        title = _(
+            u'label_workspace_unlinked',
+            default=u'Unlink workspace ${workspace_title}.',
+            mapping={'workspace_title': workspace.get('title')})
+
+        journal_entry_factory(
+            context=self.context, action='Unlinked workspace',
             title=title)
 
     def _get_linked_workspace_url(self, workspace_uid):

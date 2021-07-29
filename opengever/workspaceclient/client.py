@@ -98,6 +98,14 @@ class WorkspaceClient(object):
             workspace.get('@id'),
             json={'external_reference': new_dossier_oguid})
 
+    def unlink_workspace(self, workspace_uid):
+        """Removes external_reference on the workspace"""
+
+        workspace = self.get_by_uid(uid=workspace_uid)
+        self.request.patch(workspace.get('@id'),
+                           json={'external_reference': None})
+        return workspace
+
     def get_by_uid(self, uid, **kwargs):
         """Searches on the remote system for an object having the given UID
         and returns it (serialized).

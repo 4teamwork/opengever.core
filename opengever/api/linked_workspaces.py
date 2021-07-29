@@ -185,6 +185,27 @@ class LinkToWorkspacePost(LinkedWorkspacesService):
         return self.reply_no_content()
 
 
+class UnlinkWorkspacePost(LinkedWorkspacesService):
+    """API Endpoint to unlink a dossier from an existing workspace.
+    """
+
+    def render(self):
+        if not self.context.is_open():
+            raise Unauthorized
+        return super(UnlinkWorkspacePost, self).render()
+
+    @request_error_handler
+    def reply(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
+        data = json_body(self.request)
+        workspace_uid = data.get('workspace_uid')
+        if not workspace_uid:
+            raise BadRequest("Property 'workspace_uid' is required")
+
+        ILinkedWorkspaces(self.context).unlink_workspace(workspace_uid)
+        return self.reply_no_content()
+
+
 class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
     """API Endpoint to copy a document to a linked workspace.
     """
