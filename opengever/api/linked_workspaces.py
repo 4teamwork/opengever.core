@@ -321,3 +321,16 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
             raise BadRequest("Property 'document_uid' is required")
         as_new_version = bool(data.get('as_new_version', False))
         return workspace_uid, document_uid, as_new_version
+
+
+class ListLinkedDocumentUIDsFromWorkspace(Service):
+
+    def reply(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(path='/'.join(self.context.getPhysicalPath()),
+                         object_provides=IBaseDocument.__identifier__)
+
+        uids = [brain.gever_doc_uid for brain in brains
+                if brain.gever_doc_uid]
+
+        return {'gever_doc_uids': uids}

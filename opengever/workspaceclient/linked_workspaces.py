@@ -178,6 +178,11 @@ class LinkedWorkspaces(object):
 
         workspace = self.client.unlink_workspace(workspace_uid)
 
+        # cleanup document locks
+        docs = self.get_documents_linked_with_workspace(workspace['@id'])
+        for doc in docs:
+            ILockable(doc).unlock(COPIED_TO_WORKSPACE_LOCK)
+
         self.storage.remove(workspace_uid)
         if len(self.storage.list()) == 0:
             noLongerProvides(self.context, ILinkedToWorkspace)
@@ -408,6 +413,20 @@ class LinkedWorkspaces(object):
             portal_type=["opengever.document.document", "ftw.mail.mail"],
             metadata_fields=["UID", "filename", "checked_out"],
             **kwargs)
+
+    def get_documents_linked_with_workspace(self, workspace_url):
+        """Returns a list of gever documents wich are linked with
+        the given workspace.
+        """
+
+        result = self.client.request.get(
+            '{}/@list-linked-gever-documents-uids'.format(workspace_url))
+        uids = result.json().get('gever_doc_uids', [])
+
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(path='/'.join(self.context.getPhysicalPath()),
+                         UID=uids)
+        return [brain.getObject() for brain in brains]
 
     def has_linked_workspaces(self):
         """Returns true if the current context has linked workspaces

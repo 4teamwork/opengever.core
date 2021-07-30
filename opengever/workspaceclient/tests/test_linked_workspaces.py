@@ -954,3 +954,32 @@ class TestUnlinkWorkspace(FunctionalWorkspaceClientTestCase):
 
             self.assert_journal_entry(self.dossier, 'Unlinked workspace',
                                       u'Unlink workspace Ein Teamraum.')
+
+    def test_unlink_workspace_unlocks_linked_documents(self):
+        with self.workspace_client_env():
+            workspace_2 = create(Builder('workspace')
+                              .within(self.workspace_root))
+
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            manager.storage.add(workspace_2.UID())
+
+            document = create(Builder('document')
+                              .within(self.dossier)
+                              .attach_file_containing('DATA', u'test.txt'))
+            document_2 = create(Builder('document')
+                                .within(self.dossier)
+                                .attach_file_containing('DATA', u'test.txt'))
+
+            manager.copy_document_to_workspace(
+                document, self.workspace.UID(), lock=True)
+            manager.copy_document_to_workspace(
+                document_2, workspace_2.UID(), lock=True)
+
+            self.assertTrue(ILockable(document).locked())
+            self.assertTrue(ILockable(document_2).locked())
+
+            manager.unlink_workspace(self.workspace.UID())
+
+            self.assertTrue(ILockable(document_2).locked())
+            self.assertFalse(ILockable(document).locked())
