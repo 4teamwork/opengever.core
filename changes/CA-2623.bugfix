@@ -1,1 +1,0 @@
-Fix ``@versions`` for documents that do not have an initial version yet (lazy initial version). [deiferni]

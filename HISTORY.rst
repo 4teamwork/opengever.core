@@ -8,6 +8,36 @@ Changelog
 
 .. towncrier release notes start
 
+2021.15.0 (2021-07-30)
+----------------------
+
+New features:
+
+
+- Add @accept-remote-forwarding endpoint. [tinagerber]
+- Add transition extender for forwarding-transition-refuse transition. [tinagerber]
+- Support adding and updating teams via API. [phgross]
+- Add new API endpoint @globalsources. [phgross]
+- Add excel roleassignment-report download view. [phgross]
+
+
+Bug fixes:
+
+
+- Return a fixed and sorted list of referenced_roles in the @role-assignments endpoint. [phgross]
+- Always return error message in @trash endpoint if content is not trashable. [tinagerber]
+- Fix ``@versions`` for documents that do not have an initial version yet (lazy initial version). [deiferni]
+- Fix downloading lazy initial versions for documents. [deiferni]
+- Fix storing transition text when accepting forwarding. [deiferni]
+
+
+Other changes:
+
+
+- Remove ftw.tika dependency from the policytemplate.
+- Improve policy templates for Teamraum deployments. [njohner]
+
+
 2021.14.0 (2021-07-16)
 ----------------------
 
