@@ -117,6 +117,7 @@ class TestSolr(IntegrationTestCase):
             'title_de',
             'title_fr',
             'title_en',
+            'gever_doc_uid',
         ]
 
         for metadata in catalog.schema():

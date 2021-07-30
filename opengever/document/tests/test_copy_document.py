@@ -93,7 +93,8 @@ class TestCopyDocuments(IntegrationTestCase):
                              'containing_subdossier': '',
                              # title and filename
                              'Title': 'Copy of {}'.format(self.subdocument.Title()),
-                             'filename': u'Copy of {}'.format(self.subdocument.get_filename())}
+                             'filename': u'Copy of {}'.format(self.subdocument.get_filename()),
+                             'gever_doc_uid': None}
 
         unchanged_metadata = ['Description',
                               'Subject', 'Type',

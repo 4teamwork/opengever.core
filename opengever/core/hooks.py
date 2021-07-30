@@ -16,6 +16,7 @@ import opengever.repository.hooks
 import opengever.tabbedview.hooks
 import opengever.task.hooks
 import opengever.trash.hooks
+import opengever.workspaceclient.hooks
 import re
 
 
@@ -104,6 +105,7 @@ def trigger_subpackage_hooks(site):
     opengever.quota.hooks.policy_installed(site)
     # Added after the profile merge
     opengever.repository.hooks.installed(site)
+    opengever.workspaceclient.hooks.installed(site)
 
 
 def enable_secure_flag_for_cookies(context):
