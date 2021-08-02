@@ -3,8 +3,10 @@ from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from Missing import Value as MissingValue
 from opengever.api.batch import SQLHypermediaBatch
+from opengever.base.behaviors.sequence import ISequenceNumberBehavior
 from opengever.base.behaviors.translated_title import get_inactive_languages
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
@@ -79,6 +81,12 @@ def extend_with_responses(result, context, request):
             result['responses'].append(serializer(container=context))
 
 
+def extend_with_sequence_number(result, context, request):
+    if ISequenceNumberBehavior.providedBy(context):
+        result['sequence_number'] = getUtility(
+            ISequenceNumber).get_number(context)
+
+
 def extend_with_is_subdossier(result, context, request):
     if supports_is_subdossier(context):
         result['is_subdossier'] = context.is_subdossier()
@@ -131,6 +139,7 @@ class GeverSerializeToJson(SerializeToJson):
         extend_with_bumblebee_checksum(result, self.context)
         extend_with_relative_path(result, self.context)
         extend_with_responses(result, self.context, self.request)
+        extend_with_sequence_number(result, self.context, self.request)
 
         drop_inactive_language_fields(result)
         return result
@@ -146,6 +155,7 @@ class GeverSerializeFolderToJson(SerializeFolderToJson):
         extend_with_relative_path(result, self.context)
         extend_with_responses(result, self.context, self.request)
         extend_with_is_subdossier(result, self.context, self.request)
+        extend_with_sequence_number(result, self.context, self.request)
 
         drop_inactive_language_fields(result)
         return result

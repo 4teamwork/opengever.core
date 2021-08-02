@@ -18,6 +18,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Almost all content type serializers provide additional key ``sequence_number``.
 - Add new endpoint ``@accept-remote-forwarding`` (see :ref:`docs <accept-remote-forwarding>`)
 - ``@workflow``: Add ``transition_response`` if it exists.
 - Fix ``@versions`` for documents that do not have an initial version yet (lazy initial version).

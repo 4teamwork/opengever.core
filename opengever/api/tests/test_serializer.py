@@ -114,6 +114,13 @@ class TestDossierSerializer(IntegrationTestCase):
         self.assertEqual(u'Client1 1.1 / 1', browser.json.get(u'reference_number'))
 
     @browsing
+    def test_dossier_serialization_contains_sequence_number(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(1, browser.json.get(u'sequence_number'))
+
+    @browsing
     def test_dossier_serialization_contains_email(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, headers=self.api_headers)
@@ -186,6 +193,13 @@ class TestDocumentSerializer(IntegrationTestCase):
         browser.open(self.document, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertEqual(u'Client1 1.1 / 1 / 14', browser.json.get(u'reference_number'))
+
+    @browsing
+    def test_document_serialization_contains_sequence_number(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(14, browser.json.get(u'sequence_number'))
 
     @browsing
     def test_document_serialization_contains_bumblebee_checksum(self, browser):
