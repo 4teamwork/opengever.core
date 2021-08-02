@@ -46,6 +46,10 @@ class BaseDocumentMixin(object):
     def css_class(self):
         return get_css_class(self)
 
+    def get_parent_submitted_proposal(self):
+        if self.is_inside_a_submitted_proposal():
+            return aq_parent(aq_inner(self))
+
     def get_parent_dossier(self):
         """Return the document's parent dossier.
 
@@ -150,6 +154,10 @@ class BaseDocumentMixin(object):
     @property
     def is_trashed(self):
         return ITrashed.providedBy(self)
+
+    def is_inside_a_submitted_proposal(self):
+        parent = aq_parent(aq_inner(self))
+        return ISubmittedProposal.providedBy(parent)
 
     def is_inside_a_proposal(self):
         parent = aq_parent(aq_inner(self))

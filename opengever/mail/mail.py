@@ -162,8 +162,8 @@ class OGMail(Mail, BaseDocumentMixin):
 
     def get_extraction_parent(self):
         """Return the parent that accepts extracted attachments."""
-        return self.get_parent_dossier() or self.get_parent_inbox() or \
-            self.get_parent_workspace_container()
+        return self.get_parent_submitted_proposal() or self.get_parent_dossier() or \
+            self.get_parent_inbox() or self.get_parent_workspace_container()
 
     def get_attachments(self, unextracted_only=False):
         """Returns a list of dicts describing the attachements.

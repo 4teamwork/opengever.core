@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.mail.browser.extract_attachments import content_type_helper
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from pkg_resources import resource_string
 import transaction
@@ -112,6 +113,24 @@ class TestExtractAttachmentView(FunctionalTestCase):
         browser.css('.formControls input.standalone').first.click()
 
         self.assertEquals(self.mail.absolute_url(), browser.url)
+
+
+class TestExtractAttachments(IntegrationTestCase):
+
+    @browsing
+    def test_creates_document_in_parent_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        mail = create(Builder('mail')
+                      .within(self.submitted_proposal)
+                      .with_asset_message(
+                          'mail_with_one_docx_attachment.eml'))
+        with self.observe_children(self.submitted_proposal) as children:
+            browser.open(mail, view='extract_attachments')
+            browser.fill({'attachments:list': ['2']}).submit()
+
+        self.assertEqual(1, len(children["added"]))
+        doc = children["added"].pop()
+        self.assertEquals('word_document', doc.Title())
 
 
 class TestContentTypeHelper(FunctionalTestCase):
