@@ -18,6 +18,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add new endpoint ``@unlink-workspace`` (see :ref:`docs <linked-workspaces>`)
 - Almost all content type serializers provide additional key ``sequence_number``.
 - Add new endpoint ``@accept-remote-forwarding`` (see :ref:`docs <accept-remote-forwarding>`)
 - ``@workflow``: Add ``transition_response`` if it exists.
