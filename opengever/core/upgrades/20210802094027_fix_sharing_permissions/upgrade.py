@@ -10,5 +10,6 @@ class FixSharingPermissions(UpgradeStep):
         self.update_workflow_security(
             ['opengever_inbox_document_workflow',
              'opengever_private_document_workflow',
-             'opengever_tasktemplatefolder_workflow'],
+             'opengever_tasktemplatefolder_workflow',
+             'opengever_inbox_workflow'],
             reindex_security=False)
