@@ -54,11 +54,11 @@
     <permission-map
         name="Modify portal content"
         acquired="True">
-  </permission-map>
-    <permission-map
-        name="Review portal content"
-        acquired="True">
-  </permission-map>
+    </permission-map>
+      <permission-map
+          name="Review portal content"
+          acquired="True">
+    </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
         acquired="False">
