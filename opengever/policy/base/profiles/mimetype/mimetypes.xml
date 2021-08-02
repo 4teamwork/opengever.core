@@ -92,7 +92,8 @@
       extensions="one"
       globs="*.one"
       icon_path="icon_dokument_onenote.gif"
-      mimetypes="application/onenote"
+      mimetypes="application/onenote
+                 application/msonenote"
       />
 
   <!-- MS Excel -->
