@@ -12,5 +12,6 @@ class FixSharingPermissions(UpgradeStep):
              'opengever_private_document_workflow',
              'opengever_tasktemplatefolder_workflow',
              'opengever_inbox_workflow',
-             'opengever_disposition_workflow'],
+             'opengever_disposition_workflow',
+             'opengever_proposal_workflow'],
             reindex_security=False)
