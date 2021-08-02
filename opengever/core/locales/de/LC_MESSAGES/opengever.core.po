@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-06-17 08:50+0000\n"
+"POT-Creation-Date: 2021-08-02 06:06+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -147,6 +147,7 @@ msgid "Export as Zip"
 msgstr "Als Zip-Datei exportieren"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210702082528_add_export_proposals_action/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
@@ -344,6 +345,11 @@ msgid "Toggle orgunit selector"
 msgstr "Amtswechsler umschalten"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210728095648_add_unlink_workspace_action/actions.xml
+msgid "Unlink workspace"
+msgstr "Teamraum Verknüpfung entfernen"
+
+#: ./opengever/core/profiles/default/actions.xml
 msgid "Unlock unused repository prefixes."
 msgstr "Freigabe von ungebrauchten Aktenzeichen Prefixen."
 
@@ -414,6 +420,7 @@ msgid "trash_content"
 msgstr "In den Papierkorb verschieben"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210611160146_rename_trashed_view/actions.xml
 msgid "untrash_content"
 msgstr "Reaktivieren"
 
