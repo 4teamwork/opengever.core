@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -10,6 +9,7 @@ from opengever.base.behaviors.translated_title import get_inactive_languages
 from opengever.base.behaviors.translated_title import has_translation_behavior
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
+from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.brain import supports_translated_title
 from opengever.testing import IntegrationTestCase
@@ -55,6 +55,17 @@ class TestTranslatedTitleHasTranslationBehavior(IntegrationTestCase):
             ttool["opengever.repository.repositoryfolder"]))
         self.assertTrue(has_translation_behavior(
             ttool["opengever.contact.contactfolder"]))
+
+
+class TestTranslatedTitleBehavior(IntegrationTestCase):
+
+    def test_translated_title_portal_types_list_is_complete(self):
+        types_tool = api.portal.get_tool('portal_types')
+        types_with_behavior = [
+            portal_type for portal_type, fti in types_tool.items()
+            if has_translation_behavior(fti)]
+        self.assertItemsEqual(TRANSLATED_TITLE_PORTAL_TYPES,
+                              types_with_behavior)
 
 
 class TranslatedTitleTestMixin(object):
