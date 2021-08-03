@@ -6,6 +6,11 @@ from zExceptions import Forbidden
 from zope.container.interfaces import IContainerModifiedEvent
 
 
+def reindex_blocked_local_roles(repofolder, event):
+    """Reindex blocked_local_roles upon the acquisition blockedness changing."""
+    repofolder.reindexObject(idxs=['blocked_local_roles'])
+
+
 def is_reference_number_prefix_changed(descriptions):
     for desc in descriptions:
         for attr in desc.attributes:

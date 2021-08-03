@@ -53,13 +53,13 @@
   <subscriber
       for="opengever.repository.interfaces.IRepositoryFolder
            opengever.sharing.interfaces.ILocalRolesAcquisitionBlocked"
-      handler=".handlers.reindex_blocked_local_roles"
+      handler=".subscribers.reindex_blocked_local_roles"
       />
 
   <subscriber
       for="opengever.repository.interfaces.IRepositoryFolder
            opengever.sharing.interfaces.ILocalRolesAcquisitionActivated"
-      handler=".handlers.reindex_blocked_local_roles"
+      handler=".subscribers.reindex_blocked_local_roles"
       />
 
   <subscriber
