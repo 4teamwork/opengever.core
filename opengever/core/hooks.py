@@ -74,9 +74,9 @@ def avoid_profile_reinstallation(event):
 
 def should_prevent_duplicate_installation(profile):
     return (
-        profile.startswith('opengever.') or
-        profile.startswith('ftw.') or
-        profile.startswith('plonetheme.teamraum')
+        profile.startswith('opengever.')
+        or profile.startswith('ftw.')
+        or profile.startswith('plonetheme.teamraum')
     )
 
 
