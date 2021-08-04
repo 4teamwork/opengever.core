@@ -104,6 +104,14 @@
       />
 
   <plone:service
+      method="DELETE"
+      for="opengever.repository.repositoryfolder.IRepositoryFolderSchema"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      factory=".repositoryfolder.DeleteRepositoryFolder"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       name="@assign-to-dossier"
       for="opengever.inbox.forwarding.IForwarding"

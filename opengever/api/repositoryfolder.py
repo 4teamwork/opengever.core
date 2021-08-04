@@ -3,12 +3,16 @@ from Acquisition import aq_parent
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
+from opengever.repository.deleter import RepositoryDeleter
 from opengever.repository.interfaces import IRepositoryFolder
+from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -61,3 +65,19 @@ class SerializeRepositoryFolderToJson(GeverSerializeFolderToJson):
             getattr(self.context.aq_inner, '__ac_local_roles_block__', False))
 
         return result
+
+
+class DeleteRepositoryFolder(Service):
+
+    def reply(self):
+        if not api.user.has_permission('Delete objects', obj=self.context):
+            raise Forbidden()
+
+        deleter = RepositoryDeleter(self.context)
+
+        if not deleter.is_deletion_allowed():
+            raise Forbidden("Repository is not empty.")
+
+        deleter.delete()
+
+        return self.reply_no_content()

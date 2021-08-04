@@ -8,8 +8,6 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
-from opengever.globalindex.handlers.task import TaskSqlSyncer
-from opengever.meeting.handlers import ProposalSqlSyncer
 from opengever.task.task import ITask
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
