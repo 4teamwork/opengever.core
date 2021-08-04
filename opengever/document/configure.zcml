@@ -346,4 +346,6 @@
   <adapter factory=".fileactions.DocumentFileActions" />
   <adapter factory=".fileactions.WorkspaceFolderFileActions" />
 
+  <adapter factory=".approvals.ApprovalList" />
+
 </configure>
