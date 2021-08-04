@@ -85,6 +85,33 @@ class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
         obj.manage_permission("Delete objects", roles=["Records Manager"])
         self.assert_can_delete(obj, browser)
 
+    @browsing
+    def test_deleting_repository_root_is_not_allowed(self, browser):
+        self.login(self.manager, browser)
+        self.assert_cannot_delete(self.repository_root, browser, code=403)
+        self.assertEqual(
+            u'Deleting repository folders and roots is not allowed',
+            browser.json['message'])
+
+    @browsing
+    def test_deleting_repository_folder_requires_delete_objects_permission(self, browser):
+        self.login(self.records_manager, browser)
+        obj = self.empty_repofolder
+
+        self.assert_cannot_delete(obj, browser, code=403)
+
+        obj.manage_permission("Delete objects", roles=["Records Manager"])
+        self.assert_can_delete(obj, browser)
+
+    @browsing
+    def test_can_only_delete_empty_repository_folders(self, browser):
+        self.login(self.manager, browser)
+
+        self.assert_cannot_delete(self.leaf_repofolder, browser, code=403)
+        self.assertEqual(u'Repository is not empty.', browser.json['message'])
+
+        self.assert_can_delete(self.empty_repofolder, browser)
+
 
 class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
 
