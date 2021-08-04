@@ -1185,6 +1185,11 @@
       name="main-dossier"
       />
 
+  <adapter
+      factory=".document.Approvals"
+      name="approvals"
+      />
+
   <plone:service
       method="POST"
       name="@login"
