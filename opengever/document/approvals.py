@@ -40,6 +40,8 @@ class ApprovalStorage(object):
     def add(self, approved, approver, task_uid, version_id):
         """Add a new approval to the storage.
         """
+        self._initialize_storage(create_if_missing=True)
+
         data = PersistentMapping({
             'approved': approved,
             'approver': approver,
@@ -49,14 +51,17 @@ class ApprovalStorage(object):
         self._storage.append(data)
 
     def list(self):
+        if not self._storage:
+            return []
+
         return list(self._storage)
 
-    def _initialize_storage(self):
+    def _initialize_storage(self, create_if_missing=False):
         ann = IAnnotations(self.context)
-        if self.ANNOTATIONS_KEY not in ann:
+        if create_if_missing and self.ANNOTATIONS_KEY not in ann:
             ann[self.ANNOTATIONS_KEY] = PersistentList()
 
-        self._storage = ann[self.ANNOTATIONS_KEY]
+        self._storage = ann.get(self.ANNOTATIONS_KEY)
 
 
 @implementer(IApprovalList)
