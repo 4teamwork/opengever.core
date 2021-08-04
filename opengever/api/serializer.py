@@ -117,7 +117,7 @@ def extend_with_backreferences(result, context, request, reference_attribute_nam
         {'to_id': intids.getId(aq_inner(context)),
          'from_attribute': reference_attribute_name})
     summaries = [
-        getMultiAdapter((relation.from_object, request),ISerializeToJsonSummary)()
+        getMultiAdapter((relation.from_object, request), ISerializeToJsonSummary)()
         for relation in relations]
 
     attribute_name = 'back_references_{}'.format(reference_attribute_name)
@@ -243,7 +243,6 @@ class SerializeSQLModelToJsonBase(object):
 class SerializeTeamModelToJson(SerializeSQLModelToJsonBase):
 
     content_type = 'virtual.ogds.team'
-
 
     def __call__(self, *args, **kwargs):
         data = super(SerializeTeamModelToJson, self).__call__(*args, **kwargs)
@@ -493,6 +492,7 @@ class SerializeTeamModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
             self.endpoint_name,
             getattr(self.context, self.id_attribute_name)
         )
+
 
 @implementer(ISerializeToJsonSummary)
 @adapter(User, IOpengeverBaseLayer)
