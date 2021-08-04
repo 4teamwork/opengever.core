@@ -1,8 +1,10 @@
+from collections import defaultdict
 from datetime import datetime
 from opengever.document.behaviors import IBaseDocument
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone import api
+from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.uuid.interfaces import IUUID
 from zope.annotation import IAnnotations
 from zope.component import adapter
@@ -13,6 +15,18 @@ from zope.interface import Interface
 class IApprovalList(Interface):
     """Interface to manage document approvals
     """
+
+
+class Approval(object):
+
+    def __init__(self, approved, approver, task_uid, version_id):
+        self.approved = approved
+        self.approver = approver
+        self.task_uid = task_uid
+        self.version_id = version_id
+
+    def get_task_brain(self):
+        return uuidToCatalogBrain(self.task_uid)
 
 
 class ApprovalStorage(object):
@@ -63,15 +77,16 @@ class ApprovalList(object):
         self.storage.add(approved, approver, IUUID(task), version_id)
 
     def get(self):
-        return self.storage.list()
+        return list(self)
+
+    def __iter__(self):
+        for item in self.storage.list():
+            yield Approval(**item)
 
     def get_grouped_by_version_id(self):
-        data = {}
-        for approval in self.storage.list():
-            version_id = approval.get('version_id')
-            if approval.get('version_id') in data:
-                data[version_id].append(approval)
-            else:
-                data[version_id] = [approval, ]
+        data = defaultdict(list)
+        for approval in self:
+            version_id = approval.version_id
+            data[version_id].append(approval)
 
         return data

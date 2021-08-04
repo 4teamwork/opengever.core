@@ -14,6 +14,7 @@ from opengever.base.sentry import log_msg_to_sentry
 from opengever.base.utils import is_administrator
 from opengever.contact.utils import get_contactfolder_url
 from opengever.document import is_documentish_portal_type
+from opengever.document.approvals import Approval
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.dossier.utils import supports_is_subdossier
@@ -44,6 +45,7 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
@@ -176,6 +178,20 @@ def oguid_converter(value):
     """Returns the id for the Oguid object.
     """
     return value.id
+
+
+@adapter(Approval)
+@implementer(IJsonCompatible)
+def approval_converter(approval):
+    task = getMultiAdapter((approval.get_task_brain(), getRequest()),
+                           ISerializeToJsonSummary)()
+
+    return json_compatible({
+        'approved': approval.approved,
+        'approver': approval.approver,
+        'task': task,
+        'version_id': approval.version_id,
+    })
 
 
 class SerializeSQLModelToJsonBase(object):

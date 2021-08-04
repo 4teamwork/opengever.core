@@ -187,15 +187,28 @@ class TestDocumentSerializer(IntegrationTestCase):
             '{}?expand=approvals'.format(self.document.absolute_url()),
             method="GET", headers=self.api_headers,)
 
-        self.assertEqual([{u'approved': u'2021-07-02T00:00:00',
-                           u'approver': u'kathi.barfuss',
-                           u'task_uid': IUUID(self.subtask),
-                           u'version_id': 0},
-                          {u'approved': u'2021-08-02T00:00:00',
-                           u'approver': u'nicole.kohler',
-                           u'task_uid': IUUID(self.task),
-                           u'version_id': 1}],
-                         browser.json['@components']['approvals'])
+        self.assertEqual(
+            [{u'approved': u'2021-07-02T00:00:00',
+              u'approver': u'kathi.barfuss',
+              u'task': {
+                  u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
+                  u'@type': u'opengever.task.task',
+                  u'description': u'',
+                  u'is_leafnode': None,
+                  u'review_state': u'task-state-resolved',
+                  u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
+              u'version_id': 0},
+             {u'approved': u'2021-08-02T00:00:00',
+              u'approver': u'nicole.kohler',
+              u'task': {
+                  u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
+                  u'@type': u'opengever.task.task',
+                  u'description': u'',
+                  u'is_leafnode': None,
+                  u'review_state': u'task-state-in-progress',
+                  u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
+              u'version_id': 1}],
+            browser.json['@components']['approvals'])
 
 
 class TestDocumentPost(IntegrationTestCase):

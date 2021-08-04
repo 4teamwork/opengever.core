@@ -40,7 +40,7 @@ class TestApprovalList(IntegrationTestCase):
               'approver': self.administrator.id,
               'approved': datetime(2021, 8, 2),
               'version_id': 1}],
-            IApprovalList(self.document).get())
+            IApprovalList(self.document).storage.list())
 
     def test_current_user_is_default_approver(self):
         self.login(self.regular_user)
@@ -48,7 +48,7 @@ class TestApprovalList(IntegrationTestCase):
         approvals = IApprovalList(self.document)
         approvals.add(1, self.task)
 
-        self.assertEqual(self.regular_user.id, approvals.get()[0]['approver'])
+        self.assertEqual(self.regular_user.id, approvals.get()[0].approver)
 
     def test_current_datetime_is_default_approval_time(self):
         self.login(self.regular_user)
@@ -57,5 +57,4 @@ class TestApprovalList(IntegrationTestCase):
             approvals = IApprovalList(self.document)
             approvals.add(1, self.task)
 
-            self.assertEqual(datetime(2016, 8, 12),
-                             approvals.get()[0]['approved'])
+            self.assertEqual(datetime(2016, 8, 12), approvals.get()[0].approved)

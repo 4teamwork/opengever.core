@@ -56,6 +56,7 @@
   <adapter factory=".proposal.SerializeSubmittedProposalToJson" />
   <adapter factory=".serializer.long_converter" />
   <adapter factory=".serializer.oguid_converter" />
+  <adapter factory=".serializer.approval_converter" />
   <adapter factory=".field_deserializers.PersistentDefaultFieldDeserializer" />
   <adapter factory=".field_deserializers.PersistentDatetimeFieldDeserializer" />
   <adapter factory=".field_deserializers.DateFieldDeserializer" />
