@@ -53,12 +53,10 @@ class GeverHistoryGet(HistoryGet):
         history = super(GeverHistoryGet, self).reply()
         versions = [entry for entry in history if entry['type'] == 'versioning']
         if not versions:
-            self.extend_history_with_approvals(history)
             return history
 
         initial_version = versions[-1]
         if initial_version['actor']['id'] == self.context.Creator():
-            self.extend_history_with_approvals(history)
             return history
 
         site_url = getSite().absolute_url()
@@ -72,17 +70,7 @@ class GeverHistoryGet(HistoryGet):
                 "username": None,
             }
 
-        self.extend_history_with_approvals(history)
-
         return json_compatible(history)
-
-    def extend_history_with_approvals(self, history):
-        versions = IApprovalList(self.context).get_grouped_by_version_id()
-        for entry in history:
-            if entry['type'] != 'versioning':
-                continue
-
-            entry['approvals'] = versions.get(entry['version'], [])
 
 
 class VersionsGet(HistoryGet):
@@ -109,6 +97,7 @@ class VersionsGet(HistoryGet):
                 self.context, is_revert_allowed=manager.is_revert_allowed())
 
         batch = HypermediaBatch(self.request, history)
+        approvals = IApprovalList(self.context).get_grouped_by_version_id()
 
         versions = []
         for item in batch:
@@ -119,7 +108,8 @@ class VersionsGet(HistoryGet):
                 "actor": serialize_actor_id_to_json_summary(item.actor_id),
                 "may_revert": item.is_revert_allowed,
                 "comments": item.comment,
-                "time": dt.fromtimestamp(item.raw_timestamp).isoformat()
+                "time": dt.fromtimestamp(item.raw_timestamp).isoformat(),
+                "approvals": json_compatible(approvals.get(item.version, []))
             })
 
         result = {
