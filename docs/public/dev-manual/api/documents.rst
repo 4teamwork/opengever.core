@@ -341,3 +341,40 @@ Mit dem ``@save-document-as-pdf`` kann ein Dokument oder eine Version eines Doku
 
     HTTP/1.1 201 Created
     Location: /ordnungssystem/dossier-4/document-1
+
+Genehmigungen
+-------------
+
+Dokument Genehmigungen, welche via Aufgabe erteilt wurden, lassen sich als zusätzliche expansion ebenfalls mit einem GET Request auf ein Dokument abfragen.
+
+  .. sourcecode:: http
+
+    GET /ordnungssystem/dossier-23/document-21?expand=approvals HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+        "@id": "/ordnungssystem/dossier-23/document-21",
+        "@type": "opengever.document.document",
+        "UID": "edc93b13e4bf4d72bcdc49838697ebe6",
+        "@components": {
+            "approvals": [
+                {
+                    "approved": "2021-08-02T00:00:00",
+                    "approver": "peter.muster",
+                    "task": {
+                        "@id": "http://example.org/ordnungssystem/dossier-23/document-123",
+                        "@type": "opengever.task.task",
+                        "description": "",
+                        "is_leafnode": null,
+                        "review_state": "task-state-in-progress",
+                        "title": "Vertragsentwurf prüfen"},
+                    "version_id": 1
+                }
+            ]
+        }
+    }
