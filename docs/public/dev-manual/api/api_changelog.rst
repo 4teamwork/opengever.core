@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Allow deleting repository folders over the REST-API.
+
 
 2021.15.0 (2021-07-30)
 ----------------------
