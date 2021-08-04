@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
+from mock import patch
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -908,3 +909,77 @@ class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):
             'Document added',
             u'Document added: Testdokum\xe4nt',
             entry=-2)
+
+
+class TestUnlinkWorkspace(FunctionalWorkspaceClientTestCase):
+
+    def test_unlink_removes_workspace_uid_from_storage(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with auto_commit_after_request(manager.client):
+                manager.unlink_workspace(self.workspace.UID())
+
+            self.assertEqual([], manager.storage.list())
+
+    def test_removes_marker_interface_if_no_linked_workspaces_exists(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            workspace_2 = create(Builder('workspace')
+                                 .titled(u'A Workspace')
+                                 .within(self.workspace_root))
+
+            with patch('opengever.workspaceclient.client.WorkspaceClient.link_to_workspace') as link_to_workspace:
+                link_to_workspace.return_value = {'UID': self.workspace.UID()}
+                manager.link_to_workspace(self.workspace.UID())
+
+            with patch('opengever.workspaceclient.client.WorkspaceClient.link_to_workspace') as link_to_workspace:
+                link_to_workspace.return_value = {'UID': workspace_2.UID()}
+                manager.link_to_workspace(workspace_2.UID())
+
+            manager.unlink_workspace(self.workspace.UID())
+            self.assertTrue(ILinkedToWorkspace.providedBy(self.dossier))
+
+            manager.unlink_workspace(workspace_2.UID())
+            self.assertFalse(ILinkedToWorkspace.providedBy(self.dossier))
+
+    def test_unlink_is_journalized(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with auto_commit_after_request(manager.client):
+                manager.unlink_workspace(self.workspace.UID())
+
+            self.assert_journal_entry(self.dossier, 'Unlinked workspace',
+                                      u'Unlink workspace Ein Teamraum.')
+
+    def test_unlink_workspace_unlocks_linked_documents(self):
+        with self.workspace_client_env():
+            workspace_2 = create(Builder('workspace')
+                              .within(self.workspace_root))
+
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            manager.storage.add(workspace_2.UID())
+
+            document = create(Builder('document')
+                              .within(self.dossier)
+                              .attach_file_containing('DATA', u'test.txt'))
+            document_2 = create(Builder('document')
+                                .within(self.dossier)
+                                .attach_file_containing('DATA', u'test.txt'))
+
+            manager.copy_document_to_workspace(
+                document, self.workspace.UID(), lock=True)
+            manager.copy_document_to_workspace(
+                document_2, workspace_2.UID(), lock=True)
+
+            self.assertTrue(ILockable(document).locked())
+            self.assertTrue(ILockable(document_2).locked())
+
+            manager.unlink_workspace(self.workspace.UID())
+
+            self.assertTrue(ILockable(document_2).locked())
+            self.assertFalse(ILockable(document).locked())

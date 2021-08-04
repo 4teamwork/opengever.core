@@ -1,4 +1,5 @@
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.linked_documents import AlreadyLinkedError
 from opengever.workspaceclient.linked_documents import LinkedDocuments
@@ -76,3 +77,14 @@ class TestLinkedDocumentsAdapter(IntegrationTestCase):
 
         annotations = IAnnotations(self.document)
         self.assertNotIn(adapter.storage_key, annotations.keys())
+
+    def test_gever_doc_uid_is_indexed(self):
+        self.login(self.workspace_member)
+
+        adapter = ILinkedDocuments(self.workspace_document)
+        self.assertIsNone(obj2brain(self.workspace_document).gever_doc_uid)
+
+        adapter.link_gever_document(IUUID(self.document))
+
+        self.assertEqual(IUUID(self.document),
+                         obj2brain(self.workspace_document).gever_doc_uid)

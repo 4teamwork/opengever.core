@@ -1,3 +1,5 @@
+.. _linked-workspaces:
+
 Verknüpfte Arbeitsräume
 =======================
 
@@ -86,6 +88,30 @@ Ein Dosser kann über den Endpoint ``@link-to-workspace`` mit einem bestehenden 
   .. sourcecode:: http
 
     POST /ordnungssystem/dossier-23/@link-to-workspace HTTP/1.1
+    Accept: application/json
+    Content-Type: application/json
+
+    {
+      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a"
+    }
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+
+
+Teamraum Verknüpfung entfernen
+------------------------------
+
+Eine bestehende Verknüpfung eines Teamraums kann mit dem ``@unlink-workspace`` Endpoint entfernt werden. Dabei werden auch bestehende Locks auf verlinkten Dokumenten aufgehoben. Der Teamraum bleibt aber bestehen.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/@unlink-workspace HTTP/1.1
     Accept: application/json
     Content-Type: application/json
 

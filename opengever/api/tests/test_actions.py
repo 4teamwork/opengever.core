@@ -1240,10 +1240,16 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         u'title': u'Copy back documents from workspace',
         u'icon': u''}
 
+    unlink_workspace_action = {
+        u'id': u'unlink_workspace',
+        u'title': u'Unlink workspace',
+        u'icon': u''}
+
     workspace_actions = [list_workspaces_action,
                          link_to_workspace_action,
                          copy_documents_to_workspace_action,
-                         copy_documents_from_workspace_action]
+                         copy_documents_from_workspace_action,
+                         unlink_workspace_action]
 
     def get_actions(self, browser, context):
         browser.open(context.absolute_url() + '/@actions',
@@ -1367,6 +1373,21 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
 
             self.assert_workspace_actions(browser, self.dossier,
                                           [self.list_workspaces_action])
+
+    @browsing
+    def test_unlink_actions_available_in_dossier_with_linked_workspaces(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            actions = self.get_actions(browser, self.dossier)
+            self.assertIn(self.unlink_workspace_action, actions)
+
+    @browsing
+    def test_unlink_action_not_available_in_dossier_without_linked_workspaces(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            actions = self.get_actions(browser, self.dossier)
+            self.assertNotIn(self.unlink_workspace_action, actions)
 
 
 class TestObjectButtonsGetForDocuments(ObjectButtonsTestBase):

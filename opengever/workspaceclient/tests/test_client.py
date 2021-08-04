@@ -4,6 +4,7 @@ from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import Unauthorized
@@ -122,3 +123,14 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             self.assertEqual(
                 {'UID': 'UID-1234'},
                 ILinkedDocuments(document).linked_gever_document)
+
+    def test_unlink_workspace(self):
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        with self.workspace_client_env() as client:
+            client.link_to_workspace(self.workspace.UID(), dossier_oguid)
+            transaction.commit()
+            self.assertEqual(dossier_oguid, self.workspace.external_reference)
+
+            client.unlink_workspace(self.workspace.UID())
+            transaction.commit()
+            self.assertEqual(u'', self.workspace.external_reference)

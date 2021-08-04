@@ -10,6 +10,11 @@
   <adapter factory=".linked_workspaces.LinkedWorkspaces" />
   <adapter factory=".linked_documents.LinkedDocuments" />
 
+  <adapter
+      factory=".indexers.gever_doc_uid"
+      name="gever_doc_uid"
+      />
+
   <i18n:registerTranslations directory="locales" />
 
 </configure>

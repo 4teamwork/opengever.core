@@ -65,6 +65,7 @@ class LinkedDocuments(object):
 
         gever_doc = PersistentMapping({'UID': gever_doc_uid})
         link_storage['gever_document'] = gever_doc
+        self.document.reindexObject(idxs=['gever_doc_uid'])
 
     def serialize(self):
         data = {

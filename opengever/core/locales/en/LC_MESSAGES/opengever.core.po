@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-06-17 08:50+0000\n"
+"POT-Creation-Date: 2021-08-02 06:06+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -176,6 +176,7 @@ msgstr "Export as ZIP file"
 
 #. German translation: Auswahl exportieren
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210702082528_add_export_proposals_action/actions.xml
 msgid "Export selection"
 msgstr "Export selection"
 
@@ -416,6 +417,11 @@ msgstr "To-do list"
 msgid "Toggle orgunit selector"
 msgstr "Switch organization / department"
 
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210728095648_add_unlink_workspace_action/actions.xml
+msgid "Unlink workspace"
+msgstr "Unlink workspace"
+
 #. German translation: Freigabe von ungebrauchten Aktenzeichen Prefixen.
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Unlock unused repository prefixes."
@@ -501,6 +507,7 @@ msgstr "Move to trash"
 
 #. German translation: Reaktivieren
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20210611160146_rename_trashed_view/actions.xml
 msgid "untrash_content"
 msgstr "Restore from trash"
 

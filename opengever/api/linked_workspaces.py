@@ -185,6 +185,27 @@ class LinkToWorkspacePost(LinkedWorkspacesService):
         return self.reply_no_content()
 
 
+class UnlinkWorkspacePost(LinkedWorkspacesService):
+    """API Endpoint to unlink a dossier from an existing workspace.
+    """
+
+    def render(self):
+        if not self.context.is_open():
+            raise Unauthorized
+        return super(UnlinkWorkspacePost, self).render()
+
+    @request_error_handler
+    def reply(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
+        data = json_body(self.request)
+        workspace_uid = data.get('workspace_uid')
+        if not workspace_uid:
+            raise BadRequest("Property 'workspace_uid' is required")
+
+        ILinkedWorkspaces(self.context).unlink_workspace(workspace_uid)
+        return self.reply_no_content()
+
+
 class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
     """API Endpoint to copy a document to a linked workspace.
     """
@@ -300,3 +321,16 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
             raise BadRequest("Property 'document_uid' is required")
         as_new_version = bool(data.get('as_new_version', False))
         return workspace_uid, document_uid, as_new_version
+
+
+class ListLinkedDocumentUIDsFromWorkspace(Service):
+
+    def reply(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(path='/'.join(self.context.getPhysicalPath()),
+                         object_provides=IBaseDocument.__identifier__)
+
+        uids = [brain.gever_doc_uid for brain in brains
+                if brain.gever_doc_uid]
+
+        return {'gever_doc_uids': uids}

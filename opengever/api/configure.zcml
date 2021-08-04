@@ -1002,10 +1002,26 @@
       />
 
   <plone:service
+      method="GET"
+      name="@list-linked-gever-documents-uids"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".linked_workspaces.ListLinkedDocumentUIDsFromWorkspace"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
       method="POST"
       name="@copy-document-from-workspace"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.CopyDocumentFromWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
+      method="POST"
+      name="@unlink-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.UnlinkWorkspacePost"
       permission="opengever.workspaceclient.UseWorkspaceClient"
       />
 

@@ -58,4 +58,7 @@
   <!-- TRASH -->
   <column value="trashed" />
 
+  <!-- WORKSPACE -->
+  <column value="gever_doc_uid" />
+
 </object>
