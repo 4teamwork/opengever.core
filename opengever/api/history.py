@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.document.approvals import IApprovalList
 from opengever.document.browser.versions_tab import LazyHistoryMetadataProxy
 from opengever.document.browser.versions_tab import NoVersionHistoryMetadataProxy
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -52,10 +53,12 @@ class GeverHistoryGet(HistoryGet):
         history = super(GeverHistoryGet, self).reply()
         versions = [entry for entry in history if entry['type'] == 'versioning']
         if not versions:
+            self.extend_history_with_approvals(history)
             return history
 
         initial_version = versions[-1]
         if initial_version['actor']['id'] == self.context.Creator():
+            self.extend_history_with_approvals(history)
             return history
 
         site_url = getSite().absolute_url()
@@ -69,7 +72,17 @@ class GeverHistoryGet(HistoryGet):
                 "username": None,
             }
 
+        self.extend_history_with_approvals(history)
+
         return json_compatible(history)
+
+    def extend_history_with_approvals(self, history):
+        versions = IApprovalList(self.context).get_grouped_by_version_id()
+        for entry in history:
+            if entry['type'] != 'versioning':
+                continue
+
+            entry['approvals'] = versions.get(entry['version'], [])
 
 
 class VersionsGet(HistoryGet):

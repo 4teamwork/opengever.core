@@ -65,3 +65,14 @@ class ApprovalList(object):
 
     def get(self):
         return self.storage.list()
+
+    def get_grouped_by_version_id(self):
+        data = {}
+        for approval in self.storage.list():
+            version_id = approval.get('version_id')
+            if approval.get('version_id') in data:
+                data[version_id].append(approval)
+            else:
+                data[version_id] = [approval, ]
+
+        return data

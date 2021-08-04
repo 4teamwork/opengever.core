@@ -1,6 +1,9 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.document.approvals import IApprovalList
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
@@ -229,6 +232,48 @@ class TestHistoryGetEndpointForDocuments(IntegrationTestCase):
             headers=self.api_headers
         )
         self.assertEqual([], browser.json)
+
+    @browsing
+    def test_includes_approval_information(self, browser):
+        self.login(self.regular_user, browser)
+
+        create_document_version(self.document, 0)
+        create_document_version(self.document, 1)
+        create_document_version(self.document, 2)
+
+        approvals = IApprovalList(self.document)
+        approvals.add(
+            1, self.subtask, self.regular_user.id, datetime(2021, 7, 2))
+        approvals.add(
+            2, self.task, self.administrator.id, datetime(2021, 8, 2))
+        approvals.add(
+            2, self.subtask, self.secretariat_user.id, datetime(2021, 8, 13))
+
+        browser.open(self.document, view='@history',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [2, 1, 0, None],
+            [item.get('version') for item in browser.json])
+
+        expected = [
+            [{u'approved': u'2021-08-02T00:00:00',
+              u'approver': u'nicole.kohler',
+              u'task_oguid': Oguid.for_object(self.task).id,
+              u'version_id': 2},
+             {u'approved': u'2021-08-13T00:00:00',
+              u'approver': u'jurgen.konig',
+              u'task_oguid': Oguid.for_object(self.subtask).id,
+              u'version_id': 2}],
+            [{u'approved': u'2021-07-02T00:00:00',
+              u'approver': u'kathi.barfuss',
+              u'task_oguid': Oguid.for_object(self.subtask).id,
+              u'version_id': 1}],
+            [],
+            None]
+
+        self.assertEqual(expected,
+                         [item.get('approvals') for item in browser.json])
 
 
 class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
