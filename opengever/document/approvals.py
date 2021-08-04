@@ -1,9 +1,9 @@
 from datetime import datetime
-from opengever.base.oguid import Oguid
 from opengever.document.behaviors import IBaseDocument
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone import api
+from plone.uuid.interfaces import IUUID
 from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.interface import implementer
@@ -23,13 +23,13 @@ class ApprovalStorage(object):
         self.context = context
         self._initialize_storage()
 
-    def add(self, approved, approver, task_oguid, version_id):
+    def add(self, approved, approver, task_uid, version_id):
         """Add a new approval to the storage.
         """
         data = PersistentMapping({
             'approved': approved,
             'approver': approver,
-            'task_oguid': task_oguid,
+            'task_uid': task_uid,
             'version_id': version_id})
 
         self._storage.append(data)
@@ -60,8 +60,7 @@ class ApprovalList(object):
         if not approved:
             approved = datetime.now()
 
-        self.storage.add(approved, approver,
-                         Oguid.for_object(task), version_id)
+        self.storage.add(approved, approver, IUUID(task), version_id)
 
     def get(self):
         return self.storage.list()

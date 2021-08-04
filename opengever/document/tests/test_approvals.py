@@ -1,5 +1,5 @@
 from datetime import datetime
-from opengever.base.oguid import Oguid
+from plone.uuid.interfaces import IUUID
 from opengever.document.approvals import ApprovalStorage
 from opengever.document.approvals import IApprovalList
 from opengever.testing import IntegrationTestCase
@@ -32,11 +32,11 @@ class TestApprovalList(IntegrationTestCase):
             1, self.task, self.administrator.id, datetime(2021, 8, 2))
 
         self.assertEqual(
-            [{'task_oguid': Oguid.for_object(self.task),
+            [{'task_uid': IUUID(self.subtask),
               'approver': self.regular_user.id,
               'approved': datetime(2021, 7, 2),
               'version_id': 0},
-             {'task_oguid': Oguid.for_object(self.subtask),
+             {'task_uid': IUUID(self.task),
               'approver': self.administrator.id,
               'approved': datetime(2021, 8, 2),
               'version_id': 1}],

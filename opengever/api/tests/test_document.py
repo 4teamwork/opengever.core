@@ -1,6 +1,5 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
-from opengever.base.oguid import Oguid
 from opengever.document.approvals import IApprovalList
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
@@ -190,11 +189,11 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         self.assertEqual([{u'approved': u'2021-07-02T00:00:00',
                            u'approver': u'kathi.barfuss',
-                           u'task_oguid': Oguid.for_object(self.subtask).id,
+                           u'task_uid': IUUID(self.subtask),
                            u'version_id': 0},
                           {u'approved': u'2021-08-02T00:00:00',
                            u'approver': u'nicole.kohler',
-                           u'task_oguid': Oguid.for_object(self.task).id,
+                           u'task_uid': IUUID(self.task),
                            u'version_id': 1}],
                          browser.json['@components']['approvals'])
 

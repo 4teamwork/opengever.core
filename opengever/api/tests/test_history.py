@@ -1,6 +1,5 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
-from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.document.approvals import IApprovalList
@@ -8,6 +7,7 @@ from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
 from plone import api
+from plone.uuid.interfaces import IUUID
 import json
 
 
@@ -259,15 +259,15 @@ class TestHistoryGetEndpointForDocuments(IntegrationTestCase):
         expected = [
             [{u'approved': u'2021-08-02T00:00:00',
               u'approver': u'nicole.kohler',
-              u'task_oguid': Oguid.for_object(self.task).id,
+              u'task_uid': IUUID(self.task),
               u'version_id': 2},
              {u'approved': u'2021-08-13T00:00:00',
               u'approver': u'jurgen.konig',
-              u'task_oguid': Oguid.for_object(self.subtask).id,
+              u'task_uid': IUUID(self.subtask),
               u'version_id': 2}],
             [{u'approved': u'2021-07-02T00:00:00',
               u'approver': u'kathi.barfuss',
-              u'task_oguid': Oguid.for_object(self.subtask).id,
+              u'task_uid': IUUID(self.subtask),
               u'version_id': 1}],
             [],
             None]
