@@ -63,6 +63,30 @@ class ApprovalStorage(object):
 
         self._storage = ann.get(self.ANNOTATIONS_KEY)
 
+    def remove_all_except(self, except_version):
+        """Removes all approval from the document except the ones for
+        the given version."""
+
+        if not self._storage:
+            return
+
+        except_approvals = PersistentList([
+            approval for approval in self._storage
+            if approval.get('version_id') == except_version])
+
+        IAnnotations(self.context)[self.ANNOTATIONS_KEY] = except_approvals
+
+    def remove_all(self):
+        if self._storage:
+            IAnnotations(self.context).pop(self.ANNOTATIONS_KEY)
+
+    def reset_approvals_to_version(self, new_version_id):
+        if not self._storage:
+            return
+
+        for item in self._storage:
+            item['version_id'] = new_version_id
+
 
 @implementer(IApprovalList)
 @adapter(IBaseDocument)
@@ -95,3 +119,13 @@ class ApprovalList(object):
             data[version_id].append(approval)
 
         return data
+
+    def cleanup_copied_approvals(self, current_version):
+        """Remove approvals from previous versions and reset the version_id
+        for the current version.
+        """
+        if current_version is None:
+            return self.storage.remove_all()
+
+        self.storage.remove_all_except(current_version)
+        self.storage.reset_approvals_to_version(0)
