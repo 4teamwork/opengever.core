@@ -19,6 +19,7 @@ from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.uuid.interfaces import IUUID
+from zExceptions import BadRequest
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 import transaction
@@ -983,3 +984,37 @@ class TestUnlinkWorkspace(FunctionalWorkspaceClientTestCase):
 
             self.assertTrue(ILockable(document_2).locked())
             self.assertFalse(ILockable(document).locked())
+
+    def test_raises_bad_request_if_not_all_linked_documents_are_accessible(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            subdossier = create(Builder('dossier')
+                              .within(self.dossier))
+            document = create(Builder('document')
+                              .within(subdossier)
+                              .attach_file_containing('DATA', u'test.txt'))
+
+            ILinkedDocuments(document).link_workspace_document('WORKSPACE_DOC_UID')
+            ILockable(document).lock(COPIED_TO_WORKSPACE_LOCK)
+
+            # make document no longer accessible
+            document.manage_permission("View", roles=[])
+            document.reindexObject()
+            transaction.commit()
+
+            # Patch client request to avoid ConflictErrors
+            with patch('opengever.api.linked_workspaces.'
+                       'ListLinkedDocumentUIDsFromWorkspace.reply') as linked_docs_reply:
+
+                linked_docs_reply.return_value = {
+                    'gever_doc_uids': [document.UID()]}
+
+                with self.assertRaises(BadRequest) as cm:
+                    manager.unlink_workspace(self.workspace.UID())
+
+                self.assertEqual(
+                    'You are not allowed to access and unlock all linked '
+                    'documents, unlinking this workspace is not possible.',
+                    str(cm.exception))

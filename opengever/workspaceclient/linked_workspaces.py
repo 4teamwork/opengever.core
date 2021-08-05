@@ -1,3 +1,4 @@
+from AccessControl.unauthorized import Unauthorized
 from opengever.api.add import GeverFolderPost
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.base.oguid import Oguid
@@ -179,7 +180,13 @@ class LinkedWorkspaces(object):
         workspace = self.client.unlink_workspace(workspace_uid)
 
         # cleanup document locks
-        docs = self.get_documents_linked_with_workspace(workspace['@id'])
+        try:
+            docs = self.get_documents_linked_with_workspace(workspace['@id'])
+        except Unauthorized:
+            raise BadRequest(
+                'You are not allowed to access and unlock all linked '
+                'documents, unlinking this workspace is not possible.')
+
         for doc in docs:
             ILockable(doc).unlock(COPIED_TO_WORKSPACE_LOCK)
 
@@ -424,8 +431,10 @@ class LinkedWorkspaces(object):
         uids = result.json().get('gever_doc_uids', [])
 
         catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog(path='/'.join(self.context.getPhysicalPath()),
-                         UID=uids)
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(self.context.getPhysicalPath()),
+            UID=uids)
+
         return [brain.getObject() for brain in brains]
 
     def has_linked_workspaces(self):
