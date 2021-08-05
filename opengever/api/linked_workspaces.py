@@ -327,8 +327,9 @@ class ListLinkedDocumentUIDsFromWorkspace(Service):
 
     def reply(self):
         catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog(path='/'.join(self.context.getPhysicalPath()),
-                         object_provides=IBaseDocument.__identifier__)
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(self.context.getPhysicalPath()),
+            object_provides=IBaseDocument.__identifier__)
 
         uids = [brain.gever_doc_uid for brain in brains
                 if brain.gever_doc_uid]
