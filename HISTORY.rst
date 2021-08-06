@@ -1,6 +1,8 @@
 Changelog
 =========
 
+Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) includes changes from all previous MINOR releases. Changes in PATCH releases (PATCH version > 0) are backports and are not included in following MINOR and MAJOR releases. Such entries will therefore usually appear more than once in the changelog. Note that this convention is only held starting on 2021-08-06.
+
 .. You should *NOT* be adding new change log entries to this file.
    Create a file in the changes directory instead. Use the issue/ticket number
    as filename and add one of .feature, .bugfix, .other as extension to signify
