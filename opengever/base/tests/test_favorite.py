@@ -278,6 +278,41 @@ class TestHandlers(IntegrationTestCase):
 
         self.assertEquals(1, Favorite.query.count())
 
+    def test_favorite_positions_are_updated_when_deleting_object(self):
+        self.login(self.manager)
+
+        create(Builder('favorite')
+               .for_object(self.document)
+               .for_user(self.administrator))
+
+        create(Builder('favorite')
+               .for_object(self.subdocument)
+               .for_user(self.administrator))
+
+        create(Builder('favorite')
+               .for_object(self.empty_repofolder)
+               .for_user(self.administrator))
+
+        create(Builder('favorite')
+               .for_object(self.subdossier)
+               .for_user(self.administrator))
+
+        create(Builder('favorite')
+               .for_object(self.empty_dossier)
+               .for_user(self.administrator))
+
+        self.assertEquals(5, Favorite.query.count())
+        self.assertItemsEqual(
+            [(each.position, each.favorite_id) for each in Favorite.query.all()],
+            [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)])
+
+        api.content.delete(obj=self.subdossier)
+
+        self.assertEquals(3, Favorite.query.count())
+        self.assertItemsEqual(
+            [(each.position, each.favorite_id) for each in Favorite.query.all()],
+            [(0, 1), (1, 3), (2, 5)])
+
     @browsing
     def test_titles_of_favorites_get_updated(self, browser):
         self.login(self.regular_user, browser=browser)
