@@ -3,6 +3,7 @@ from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.favorite import FavoriteManager
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
@@ -122,13 +123,11 @@ def remove_favorites(context, event):
     if IPloneSiteRoot.providedBy(event.object):
         return
 
+    manager = FavoriteManager()
     oguid = Oguid.for_object(context)
-
-    stmt = Favorite.__table__.delete().where(Favorite.oguid == oguid)
-
-    session = create_session()
-    session.execute(stmt)
-    mark_changed(session)
+    to_delete = Favorite.query.filter_by(oguid=oguid)
+    for favorite in to_delete:
+        manager.delete(favorite.userid, favorite.favorite_id)
 
 
 def is_title_changed(descriptions):
