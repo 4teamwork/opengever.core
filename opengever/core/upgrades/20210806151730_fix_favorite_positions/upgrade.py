@@ -1,8 +1,8 @@
-from opengever.core.upgrade import SQLUpgradeStep
+from opengever.core.upgrade import SchemaMigration
 from opengever.base.model.favorite import Favorite
 
 
-class FixFavoritePositions(SQLUpgradeStep):
+class FixFavoritePositions(SchemaMigration):
     """Fix favorite positions.
     """
 
