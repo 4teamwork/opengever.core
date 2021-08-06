@@ -1014,7 +1014,7 @@
       name="@list-linked-gever-documents-uids"
       for="opengever.workspace.interfaces.IWorkspace"
       factory=".linked_workspaces.ListLinkedDocumentUIDsFromWorkspace"
-      permission="opengever.workspaceclient.UseWorkspaceClient"
+      permission="zope2.View"
       />
 
   <plone:service
