@@ -181,7 +181,10 @@ class TestDocumentSerializer(IntegrationTestCase):
         approvals.add(
             0, self.subtask, self.regular_user.id, datetime(2021, 7, 2))
         approvals.add(
-            1, self.task, self.administrator.id, datetime(2021, 8, 2))
+            1, self.task_in_protected_dossier, self.administrator.id,
+            datetime(2021, 8, 2))
+
+        self.login(self.secretariat_user, browser=browser)
 
         browser.open(
             '{}?expand=approvals'.format(self.document.absolute_url()),
@@ -200,13 +203,7 @@ class TestDocumentSerializer(IntegrationTestCase):
               u'version_id': 0},
              {u'approved': u'2021-08-02T00:00:00',
               u'approver': u'nicole.kohler',
-              u'task': {
-                  u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
-                  u'@type': u'opengever.task.task',
-                  u'description': u'',
-                  u'is_leafnode': None,
-                  u'review_state': u'task-state-in-progress',
-                  u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
+              u'task': None,
               u'version_id': 1}],
             browser.json['@components']['approvals'])
 

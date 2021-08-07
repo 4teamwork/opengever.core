@@ -183,8 +183,12 @@ def oguid_converter(value):
 @adapter(Approval)
 @implementer(IJsonCompatible)
 def approval_converter(approval):
-    task = getMultiAdapter((approval.get_task_brain(), getRequest()),
-                           ISerializeToJsonSummary)()
+    task = approval.get_task_brain()
+
+    # If the task is not accessible for the current user task is None
+    if task:
+        task = getMultiAdapter((approval.get_task_brain(), getRequest()),
+                               ISerializeToJsonSummary)()
 
     return json_compatible({
         'approved': approval.approved,
