@@ -8,6 +8,7 @@ from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.base.interfaces import IDataCollector
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import Reminder
 from opengever.task.reminder import ReminderOnDate
@@ -307,6 +308,9 @@ class TestTaskReminderResponseForm(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         self.assertIsNone(self.task.get_reminder())
+        reminders = ReminderSetting.query.filter_by(
+            task_id=self.task.get_sql_object().task_id).all()
+        self.assertEqual(0, len(reminders))
 
         self.set_workflow_state('task-state-open', self.task)
         browser.open(self.task)
@@ -315,6 +319,9 @@ class TestTaskReminderResponseForm(IntegrationTestCase):
         browser.css('#form-buttons-save').first.click()
 
         self.assertIsInstance(self.task.get_reminder(), ReminderSameDay)
+        reminders = ReminderSetting.query.filter_by(
+            task_id=self.task.get_sql_object().task_id).all()
+        self.assertEqual(1, len(reminders))
 
     @browsing
     def test_set_reminder_absolute_reminder_through_task_accepted_form(self, browser):
