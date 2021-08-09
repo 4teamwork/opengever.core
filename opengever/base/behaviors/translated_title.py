@@ -11,6 +11,16 @@ from zope.schema import TextLine
 
 
 TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr', 'title_en')
+TRANSLATED_TITLE_PORTAL_TYPES = (
+    'opengever.dossier.templatefolder',
+    'opengever.repository.repositoryfolder',
+    'opengever.repository.repositoryroot',
+    'opengever.inbox.inbox',
+    'opengever.inbox.container',
+    'opengever.contact.contactfolder',
+    'opengever.meeting.committeecontainer',
+    'opengever.private.root',
+    'opengever.workspace.root')
 
 
 def get_active_languages():
