@@ -1,0 +1,14 @@
+<object name="mimetypes_registry" meta_type="MimeTypes Registry">
+
+  <!-- MS OneNoe -->
+  <mimetype
+      name="Microsoft OneNote"
+      binary="True"
+      extensions="one"
+      globs="*.one"
+      icon_path="icon_dokument_onenote.gif"
+      mimetypes="application/onenote
+                 application/msonenote"
+      />
+
+</object>
