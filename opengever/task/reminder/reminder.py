@@ -72,3 +72,7 @@ class TaskReminderSupport(ReminderSupport):
             reminder = self.get_reminder(user_id=reminder_setting.actor_id)
             new_trigger_date = reminder.calculate_trigger_date(sql_task.deadline)
             reminder_setting.remind_day = new_trigger_date
+
+    def set_reminder(self, reminder, user_id=None):
+        super(TaskReminderSupport, self).set_reminder(reminder, user_id)
+        self.sync_reminders()

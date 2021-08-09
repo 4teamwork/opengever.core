@@ -696,6 +696,11 @@ class Task(Container, TaskReminderSupport):
         """
         return self.get_sql_object().sync_with(self)
 
+    def sync_reminders(self):
+        """Syncs the corresponding SQL task (globalindex).
+        """
+        return self.get_sql_object().sync_reminders(self)
+
     def set_to_planned_state(self):
         """Syncs the corresponding SQL task (globalindex).
         """
