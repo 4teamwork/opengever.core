@@ -186,6 +186,26 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
     maxDiff = None
 
     @browsing
+    def test_repository_folders_translatable_title(self, browser):
+        self.enable_languages()
+
+        self.login(self.regular_user, browser=browser)
+        view = '@listing?name=repository_folders&columns:list=title'
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'de-ch'})
+
+        self.assertEqual(browser.json[u'items_total'], 4)
+        self.assertEqual(u'1.1. Vertr\xe4ge und Vereinbarungen',
+                         browser.json['items'][0]['title'])
+
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'fr-ch'})
+        self.assertEqual(u'1.1. Contrats et accords',
+                         browser.json['items'][0]['title'])
+
+    @browsing
     def test_dossier_listing_works_for_responsible_fullname(self, browser):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((

@@ -5,6 +5,7 @@ from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
+from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
 from opengever.base.utils import get_preferred_language_code
@@ -102,9 +103,8 @@ def filename(obj):
 
 
 def translated_title(obj):
-    if ITranslatedTitleSupport.providedBy(obj):
-        attr = 'title_{}'.format(get_preferred_language_code())
-        return getattr(obj, attr, obj.Title())
+    if obj.portal_type in TRANSLATED_TITLE_PORTAL_TYPES:
+        return obj.getObject().Title(language=get_preferred_language_code())
     else:
         return obj.Title()
 
@@ -336,7 +336,8 @@ FIELDS_WITH_MAPPING = [
     ListingField('task_type', 'task_type', accessor=translated_task_type, transform=translate_task_type),
     ListingField('thumbnail_url', None, 'preview_image_url', DEFAULT_SORT_INDEX,
                  additional_required_fields=['bumblebee_checksum', 'path']),
-    ListingField('title', 'Title', translated_title, 'sortable_title'),
+    ListingField('title', 'Title', translated_title, 'sortable_title',
+                 additional_required_fields=['portal_type']),
     ListingField('type', 'portal_type', 'PortalType'),
     ListingField('@type', 'portal_type', 'PortalType'),
     ListingField('@id', "path", "getURL"),
