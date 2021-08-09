@@ -1,5 +1,6 @@
 from datetime import datetime as dt
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.document.approvals import IApprovalList
 from opengever.document.browser.versions_tab import LazyHistoryMetadataProxy
 from opengever.document.browser.versions_tab import NoVersionHistoryMetadataProxy
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -96,6 +97,7 @@ class VersionsGet(HistoryGet):
                 self.context, is_revert_allowed=manager.is_revert_allowed())
 
         batch = HypermediaBatch(self.request, history)
+        approvals = IApprovalList(self.context).get_grouped_by_version_id()
 
         versions = []
         for item in batch:
@@ -106,7 +108,8 @@ class VersionsGet(HistoryGet):
                 "actor": serialize_actor_id_to_json_summary(item.actor_id),
                 "may_revert": item.is_revert_allowed,
                 "comments": item.comment,
-                "time": dt.fromtimestamp(item.raw_timestamp).isoformat()
+                "time": dt.fromtimestamp(item.raw_timestamp).isoformat(),
+                "approvals": json_compatible(approvals.get(item.version, []))
             })
 
         result = {

@@ -14,6 +14,7 @@ from opengever.base.sentry import log_msg_to_sentry
 from opengever.base.utils import is_administrator
 from opengever.contact.utils import get_contactfolder_url
 from opengever.document import is_documentish_portal_type
+from opengever.document.approvals import Approval
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.dossier.utils import supports_is_subdossier
@@ -44,6 +45,7 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
@@ -115,7 +117,7 @@ def extend_with_backreferences(result, context, request, reference_attribute_nam
         {'to_id': intids.getId(aq_inner(context)),
          'from_attribute': reference_attribute_name})
     summaries = [
-        getMultiAdapter((relation.from_object, request),ISerializeToJsonSummary)()
+        getMultiAdapter((relation.from_object, request), ISerializeToJsonSummary)()
         for relation in relations]
 
     attribute_name = 'back_references_{}'.format(reference_attribute_name)
@@ -178,6 +180,24 @@ def oguid_converter(value):
     return value.id
 
 
+@adapter(Approval)
+@implementer(IJsonCompatible)
+def approval_converter(approval):
+    task = approval.get_task_brain()
+
+    # If the task is not accessible for the current user task is None
+    if task:
+        task = getMultiAdapter((approval.get_task_brain(), getRequest()),
+                               ISerializeToJsonSummary)()
+
+    return json_compatible({
+        'approved': approval.approved,
+        'approver': approval.approver,
+        'task': task,
+        'version_id': approval.version_id,
+    })
+
+
 class SerializeSQLModelToJsonBase(object):
 
     content_type = ''
@@ -227,7 +247,6 @@ class SerializeSQLModelToJsonBase(object):
 class SerializeTeamModelToJson(SerializeSQLModelToJsonBase):
 
     content_type = 'virtual.ogds.team'
-
 
     def __call__(self, *args, **kwargs):
         data = super(SerializeTeamModelToJson, self).__call__(*args, **kwargs)
@@ -477,6 +496,7 @@ class SerializeTeamModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
             self.endpoint_name,
             getattr(self.context, self.id_attribute_name)
         )
+
 
 @implementer(ISerializeToJsonSummary)
 @adapter(User, IOpengeverBaseLayer)

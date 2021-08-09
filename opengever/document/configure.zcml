@@ -224,6 +224,12 @@
 
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".subscribers.cleanup_document_approvals"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.author_or_title_changed"
       />
@@ -345,5 +351,7 @@
   <adapter factory=".fileactions.BaseDocumentFileActions" />
   <adapter factory=".fileactions.DocumentFileActions" />
   <adapter factory=".fileactions.WorkspaceFolderFileActions" />
+
+  <adapter factory=".approvals.ApprovalList" />
 
 </configure>

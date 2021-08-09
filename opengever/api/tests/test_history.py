@@ -1,10 +1,13 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.document.approvals import IApprovalList
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
 from plone import api
+from plone.uuid.interfaces import IUUID
 import json
 
 
@@ -321,7 +324,8 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
             u'comments': u'Initial version',
             u'may_revert': False,
             u'time': u'2016-08-31T16:07:33',
-            u'version': 0}
+            u'version': 0,
+            u'approvals': []}
 
         self.assertEqual(expected_data, resp["items"][0])
 
@@ -372,3 +376,59 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
         self.assertEqual(1, resp[u'items_total'])
         self.assertEqual(1, len(resp["items"]))
         self.assertFalse(resp['items'][0]['may_revert'])
+
+    @browsing
+    def test_includes_approval_information(self, browser):
+        self.login(self.regular_user, browser)
+
+        create_document_version(self.document, 0)
+        create_document_version(self.document, 1)
+        create_document_version(self.document, 2)
+
+        approvals = IApprovalList(self.document)
+        approvals.add(
+            1, self.subtask, self.regular_user.id, datetime(2021, 7, 2))
+        approvals.add(
+            2, self.task, self.administrator.id, datetime(2021, 8, 2))
+        approvals.add(
+            2, self.subtask, self.secretariat_user.id, datetime(2021, 8, 13))
+
+        browser.open(self.document, view='@versions',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [2, 1, 0],
+            [item.get('version') for item in browser.json['items']])
+
+        expected = [
+            [{u'approved': u'2021-08-02T00:00:00',
+              u'approver': u'nicole.kohler',
+              u'task': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
+                        u'@type': u'opengever.task.task',
+                        u'description': u'',
+                        u'is_leafnode': None,
+                        u'review_state': u'task-state-in-progress',
+                        u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
+              u'version_id': 2},
+             {u'approved': u'2021-08-13T00:00:00',
+              u'approver': u'jurgen.konig',
+              u'task': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
+                        u'@type': u'opengever.task.task',
+                        u'description': u'',
+                        u'is_leafnode': None,
+                        u'review_state': u'task-state-resolved',
+                        u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
+              u'version_id': 2}],
+            [{u'approved': u'2021-07-02T00:00:00',
+              u'approver': u'kathi.barfuss',
+              u'task': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
+                        u'@type': u'opengever.task.task',
+                        u'description': u'',
+                        u'is_leafnode': None,
+                        u'review_state': u'task-state-resolved',
+                        u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
+              u'version_id': 1}],
+            []]
+
+        self.assertEqual(expected,
+                         [item.get('approvals') for item in browser.json['items']])

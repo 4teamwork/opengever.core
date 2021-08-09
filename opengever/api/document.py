@@ -3,12 +3,16 @@ from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.serializer import extend_with_backreferences
 from opengever.api.serializer import GeverSerializeToJson
 from opengever.base.helpers import display_name
+from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.interfaces import IReferenceNumber
+from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import IExpandableElement
+from plone.restapi.interfaces import IJsonCompatible
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.content.update import ContentPatch
 from zope.component import adapter
@@ -90,3 +94,16 @@ class DocumentPatch(ContentPatch):
                     message='Document not checked-out by current user.'))
 
         return super(DocumentPatch, self).reply()
+
+
+@implementer(IExpandableElement)
+@adapter(IBaseDocument, IOpengeverBaseLayer)
+class Approvals(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, expand=True):
+        approvals = IApprovalList(self.context)
+        return {'approvals': IJsonCompatible(approvals.get())}

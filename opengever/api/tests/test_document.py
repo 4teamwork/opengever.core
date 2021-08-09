@@ -1,4 +1,6 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from opengever.document.approvals import IApprovalList
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.private.interfaces import IPrivateFolderQuotaSettings
@@ -170,6 +172,40 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         browser.open(self.mail_eml, method="GET", headers=self.api_headers)
         self.assertEqual([], browser.json['back_references_relatedItems'])
+
+    @browsing
+    def test_approvals_expansion(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        approvals = IApprovalList(self.document)
+        approvals.add(
+            0, self.subtask, self.regular_user.id, datetime(2021, 7, 2))
+        approvals.add(
+            1, self.task_in_protected_dossier, self.administrator.id,
+            datetime(2021, 8, 2))
+
+        self.login(self.secretariat_user, browser=browser)
+
+        browser.open(
+            '{}?expand=approvals'.format(self.document.absolute_url()),
+            method="GET", headers=self.api_headers,)
+
+        self.assertEqual(
+            [{u'approved': u'2021-07-02T00:00:00',
+              u'approver': u'kathi.barfuss',
+              u'task': {
+                  u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
+                  u'@type': u'opengever.task.task',
+                  u'description': u'',
+                  u'is_leafnode': None,
+                  u'review_state': u'task-state-resolved',
+                  u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
+              u'version_id': 0},
+             {u'approved': u'2021-08-02T00:00:00',
+              u'approver': u'nicole.kohler',
+              u'task': None,
+              u'version_id': 1}],
+            browser.json['@components']['approvals'])
 
 
 class TestDocumentPost(IntegrationTestCase):
