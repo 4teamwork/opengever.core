@@ -342,7 +342,7 @@ msgstr "commuter l'agent public"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20210728095648_add_unlink_workspace_action/actions.xml
 msgid "Unlink workspace"
-msgstr ""
+msgstr "Supprimer un lien avec un espace de travail"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Unlock unused repository prefixes."
