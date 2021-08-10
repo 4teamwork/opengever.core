@@ -32,7 +32,7 @@ msgstr "Ce message contient des documents au niveau le plus elevé de l'arboresc
 
 #: ./opengever/ech0147/browser/export.py
 msgid "help_action"
-msgstr ""
+msgstr "Instructions d'échange adressées au destinataire du message."
 
 #: ./opengever/ech0147/browser/export.py
 msgid "help_directive"
