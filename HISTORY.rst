@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+2021.14.1 (2021-08-10)
+----------------------
+
+Bug fixes:
+
+
+- Fix returning translated title in solrsearch and listing endpoints. [njohner]
+- Fix setting reminder over accept form. [njohner]
+
+
 2021.14.0 (2021-07-16)
 ----------------------
 
