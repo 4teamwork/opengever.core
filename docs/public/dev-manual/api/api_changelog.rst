@@ -13,6 +13,7 @@ Other Changes
 ^^^^^^^^^^^^^
 
 - Include ``committee`` in proposal serialization.
+- Include ``proposal``, ``meeting``, ``submitted_proposal`` and ``submitted_with`` in document serialization.
 
 
 2021.16.0 (2021-08-12)
