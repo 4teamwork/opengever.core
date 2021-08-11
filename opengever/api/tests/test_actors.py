@@ -109,7 +109,7 @@ class TestActorsGet(IntegrationTestCase):
              u'active': True,
              u'actor_type': u'user',
              u'identifier': actor_id,
-             u'portrait_url': u'http://nohost/plone/defaultUser.png',
+             u'portrait_url': None,
              u'label': u'K\xf6nig J\xfcrgen'},
             browser.json)
 
@@ -145,7 +145,7 @@ class TestActorsGet(IntegrationTestCase):
              u'active': True,
              u'actor_type': u'user',
              u'identifier': actor_id,
-             u'portrait_url': 'http://nohost/plone/defaultUser.png',
+             u'portrait_url': None,
              u'label': u'admin'},
             browser.json)
 

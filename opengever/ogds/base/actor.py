@@ -413,9 +413,13 @@ class PloneUserActor(Actor):
         return self.user
 
     def get_portrait_url(self):
-        portrait = self.user.getPersonalPortrait()
-        if portrait:
-            return portrait.absolute_url()
+        mtool = api.portal.get_tool('portal_membership')
+        portrait = mtool.getPersonalPortrait(self.user.id)
+        portrait_url = portrait.absolute_url()
+        if not portrait_url.endswith('/defaultUser.png'):
+            return portrait_url
+        else:
+            return None
 
 
 @implementer(IActor)
@@ -450,10 +454,12 @@ class OGDSUserActor(Actor):
 
     def get_portrait_url(self):
         mtool = api.portal.get_tool('portal_membership')
-        member = mtool.getMemberById(self.user.userid)
-        portrait = member.getPersonalPortrait()
-        if portrait:
-            return portrait.absolute_url()
+        portrait = mtool.getPersonalPortrait(self.user.userid)
+        portrait_url = portrait.absolute_url()
+        if not portrait_url.endswith('/defaultUser.png'):
+            return portrait_url
+        else:
+            return None
 
 
 @implementer(IActor)
