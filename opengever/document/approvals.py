@@ -1,6 +1,7 @@
 from collections import defaultdict
 from datetime import datetime
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.versioner import Versioner
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone import api
@@ -10,6 +11,10 @@ from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
+
+
+APPROVED_IN_CURRENT_VERSION = 'approved-in-current-version'
+APPROVED_IN_OLDER_VERSION = 'approved-in-older-version'
 
 
 class IApprovalList(Interface):
@@ -129,3 +134,27 @@ class ApprovalList(object):
 
         self.storage.remove_all_except(current_version)
         self.storage.reset_approvals_to_version(0)
+
+    def get_approval_state(self):
+        """Determine the approval stated based on existing approvals.
+
+        - 'approved-in-current-version' if most recent version has been
+          approved by at least one user.
+        - 'approved-in-older-version' if a past version has been approved by
+           at least one user (but the current one hasn't).
+        - `None` otherwise (no approvals at all)
+        """
+        current_version_id = Versioner(self.context).get_current_version_id(
+            missing_as_zero=True)
+        approvals = self.get_grouped_by_version_id()
+
+        current_version_approvals = approvals.get(current_version_id)
+        old_version_approvals = {vid: a for vid, a in approvals.items()
+                                 if vid < current_version_id}
+
+        if current_version_approvals:
+            return APPROVED_IN_CURRENT_VERSION
+        elif old_version_approvals:
+            return APPROVED_IN_OLDER_VERSION
+        else:
+            return None
