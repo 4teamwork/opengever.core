@@ -52,6 +52,10 @@ Auch Anträge können via REST API bedient werden. Die Erstellung eines Antrags 
           "title": "Kommission für Rechtsfragen",
           "token": "fd:1722088772"
         },
+        "committee": {
+          "@id": "http://example.org/sitzungen/committee-1",
+          "title": "Kommission für Rechtsfragen"
+        },
         "issuer": {
           "title": "Boss Hugo (hugo.boss)",
           "token": "hugo.boss"

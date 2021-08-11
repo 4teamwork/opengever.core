@@ -63,12 +63,16 @@ class SerializeSubmittedProposalToJson(GeverSerializeFolderToJson):
         else:
             result[u'excerpt'] = None
 
-        meeting = self.context.load_model().get_meeting()
+        proposal_model = self.context.load_model()
+        result['committee'] = {'title': proposal_model.committee.title,
+                               '@id': proposal_model.committee.get_url()}
+
+        meeting = proposal_model.get_meeting()
         if meeting:
             result[u'meeting'] = {
                 'title': meeting.title,
                 '@id': meeting.get_url(view=None)
-                }
+            }
         else:
             result[u'meeting'] = None
 

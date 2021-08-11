@@ -38,6 +38,13 @@ class TestProposalSerialization(IntegrationTestCase):
             responses[0])
 
     @browsing
+    def test_proposal_contains_committee(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.proposal, method="GET", headers=self.api_headers)
+        self.assertEqual({u'@id': self.committee.absolute_url(),
+                          u'title': self.committee.title}, browser.json['committee'])
+
+    @browsing
     def test_getting_specific_response_from_proposal(self, browser):
         self.login(self.regular_user, browser=browser)
 

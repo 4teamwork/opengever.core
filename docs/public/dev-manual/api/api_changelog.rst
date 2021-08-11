@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Include ``committee`` in proposal serialization.
+
 
 2021.16.0 (2021-08-12)
 ----------------------
