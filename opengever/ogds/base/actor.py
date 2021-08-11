@@ -138,6 +138,10 @@ class Actor(object):
 
         return link
 
+    @property
+    def is_active(self):
+        return True
+
     def corresponds_to(self, user):
         raise NotImplementedError()
 
@@ -174,6 +178,10 @@ class NullActor(object):
 
     def get_link(self, with_icon=False):
         return self.identifier or u''
+
+    @property
+    def is_active(self):
+        return False
 
     def represents(self):
         return None
@@ -247,6 +255,10 @@ class InboxActor(Actor):
         return translate(label, context=getRequest())
 
     @property
+    def is_active(self):
+        return self.org_unit.enabled
+
+    @property
     def permission_identifier(self):
         return self.org_unit.inbox_group.groupid
 
@@ -281,6 +293,10 @@ class TeamActor(Actor):
         return self.team.label()
 
     @property
+    def is_active(self):
+        return self.team.active
+
+    @property
     def permission_identifier(self):
         return self.team.group.groupid
 
@@ -312,6 +328,10 @@ class CommitteeActor(Actor):
 
     def get_label(self, with_principal=None):
         return self.committee.title
+
+    @property
+    def is_active(self):
+        return self.committee.is_active()
 
     def representatives(self):
         # Avoid circular imports
@@ -415,6 +435,10 @@ class OGDSUserActor(Actor):
         return UserDetails.url_for(self.user.userid)
 
     @property
+    def is_active(self):
+        return self.user.active
+
+    @property
     def permission_identifier(self):
         return self.identifier
 
@@ -449,6 +473,10 @@ class OGDSGroupActor(Actor):
 
     def get_profile_url(self):
         return groupmembers_url(self.group.groupid)
+
+    @property
+    def is_active(self):
+        return self.group.active
 
     @property
     def permission_identifier(self):

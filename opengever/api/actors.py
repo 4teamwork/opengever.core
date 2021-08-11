@@ -37,6 +37,7 @@ class SerializeActorToJson(object):
         result = {
             '@id': '{}/@actors/{}'.format(
                 api.portal.get().absolute_url(), self.context.identifier),
+            'active': self.context.is_active,
             'actor_type': self.context.actor_type,
             'identifier': self.context.identifier,
             'label': self.context.get_label(with_principal=False),

@@ -34,6 +34,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': url,
+             u'active': True,
              u'actor_type': u'team',
              u'identifier': actor_id,
              u'portrait_url': None,
@@ -51,6 +52,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': url,
+             u'active': True,
              u'actor_type': u'inbox',
              u'identifier': actor_id,
              u'portrait_url': None,
@@ -68,6 +70,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': url,
+             u'active': True,
              u'actor_type': u'contact',
              u'identifier': actor_id,
              u'portrait_url': None,
@@ -85,6 +88,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': url,
+             u'active': True,
              u'actor_type': u'committee',
              u'identifier': actor_id,
              u'portrait_url': None,
@@ -102,6 +106,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': url,
+             u'active': True,
              u'actor_type': u'user',
              u'identifier': actor_id,
              u'portrait_url': u'http://nohost/plone/defaultUser.png',
@@ -119,6 +124,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': url,
+             u'active': True,
              u'actor_type': u'group',
              u'identifier': actor_id,
              u'portrait_url': None,
@@ -136,6 +142,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': url,
+             u'active': True,
              u'actor_type': u'user',
              u'identifier': actor_id,
              u'portrait_url': 'http://nohost/plone/defaultUser.png',
@@ -173,6 +180,7 @@ class TestActorsGet(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'@id': self.actors_url + "/foo",
+             u'active': False,
              u'actor_type': u'null',
              u'identifier': u'foo',
              u'portrait_url': None,
@@ -199,11 +207,13 @@ class TestActorsGetListPOST(IntegrationTestCase):
             u'@id': self.actors_url,
             u'items': [
                 {u'@id': self.actors_url + "/team:1",
+                 u'active': True,
                  u'actor_type': u'team',
                  u'identifier': u'team:1',
                  u'portrait_url': None,
                  u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)'},
                 {u'@id': self.actors_url + '/inbox:fa',
+                 u'active': True,
                  u'actor_type': u'inbox',
                  u'identifier': u'inbox:fa',
                  u'portrait_url': None,
@@ -226,11 +236,13 @@ class TestActorsGetListPOST(IntegrationTestCase):
             u'@id': self.actors_url,
             u'items': [
                 {u'@id': self.actors_url + "/team:1",
+                 u'active': True,
                  u'actor_type': u'team',
                  u'identifier': u'team:1',
                  u'portrait_url': None,
                  u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)'},
                 {u'@id': self.actors_url + '/foo',
+                 u'active': False,
                  u'actor_type': u'null',
                  u'identifier': u'foo',
                  u'portrait_url': None,
