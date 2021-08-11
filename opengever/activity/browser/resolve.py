@@ -2,7 +2,6 @@ from opengever.activity import notification_center
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.ogds.models.service import ogds_service
-from opengever.readonly import is_in_readonly_mode
 from plone import api
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -21,23 +20,10 @@ class ResolveNotificationView(ResolveOGUIDView):
             raise NotFound('Invalid notification_id ({}) is given'.format(
                 self.request.get('notification')))
 
-        if not self.check_permission():
-            raise Unauthorized()
+        if self.notification.belongs_to(api.user.get_current()):
+            self.notification.mark_as_read()
 
-        self.mark_as_read()
         self.redirect()
-
-    def check_permission(self):
-        """Check if the current user is allowed to view the notification."""
-
-        current_user = api.user.get_current()
-        return self.notification.userid == current_user.getId()
-
-    def mark_as_read(self):
-        if is_in_readonly_mode():
-            return
-
-        self.notification.is_read = True
 
     def redirect(self):
         """Redirect to the affected resource. If the resource is stored
@@ -47,7 +33,10 @@ class ResolveNotificationView(ResolveOGUIDView):
 
         if oguid.is_on_current_admin_unit:
             try:
-                url = oguid.resolve_object().absolute_url()
+                resource = oguid.resolve_object()
+                if resource is None:
+                    raise Unauthorized()
+                url = resource.absolute_url()
             except InvalidOguidIntIdPart:
                 raise NotFound('Requested object has been deleted')
 

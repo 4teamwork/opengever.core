@@ -1,0 +1,1 @@
+Always redirect to notification resource in `@@resolve_oguid` if user has permission to view. [deiferni]

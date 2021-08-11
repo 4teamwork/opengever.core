@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import USER_ID_LENGTH
+from opengever.readonly import is_in_readonly_mode
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -32,6 +33,15 @@ class Notification(Base):
             self.notification_id,
             repr(self.userid),
             repr(self.activity.resource))
+
+    def belongs_to(self, user):
+        return self.userid == user.getId()
+
+    def mark_as_read(self):
+        if is_in_readonly_mode():
+            return
+
+        self.is_read = True
 
     def serialize(self, portal_url):
         data = self.activity.serialize()
