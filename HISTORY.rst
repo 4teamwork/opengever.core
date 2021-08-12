@@ -8,6 +8,35 @@ Changelog
 
 .. towncrier release notes start
 
+2021.16.0 (2021-08-12)
+----------------------
+
+New features:
+
+
+- Allow deleting repository folders over the REST-API. [njohner]
+- Add document approvals storage and API endpoints. [phgross]
+- Add sequence_number to all API object serializers. [phgross]
+
+
+Bug fixes:
+
+
+- Extract attachments from mail inside submitted proposal into parent. [njohner]
+- Update ftw.mail to fix issues with message/rfc822 attachments. [njohner]
+- Favorite positions get updated correctly when trashing / deleting an object. [njohner]
+- Fix returning translated title in solrsearch and listing endpoints. [njohner]
+- Update OneNote Mimetype. [njohner]
+- Fix setting reminder over accept form. [njohner]
+
+
+Other changes:
+
+
+- Update sharing permissions. [njohner]
+- Bump ftw.solr to version 2.9.4 to improve listing performance. [njohner]
+
+
 2021.15.0 (2021-07-30)
 ----------------------
 
