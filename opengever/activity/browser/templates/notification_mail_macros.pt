@@ -255,7 +255,7 @@
                           <a href="#"
                              class="button-a"
                              i18n:translate="label_notification_settings"
-                             tal:attributes="href string:${options/public_url}/@@personal-preferences"
+                             tal:attributes="href string:${options/public_url}/personal-preferences"
                              style="font-family: Arial, sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold; color: #418195;">
                             Notification settings
                           </a>
