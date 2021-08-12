@@ -5,14 +5,15 @@ from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
 from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Activity
+from opengever.activity.model import Resource
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.inbox.activities import ForwardingWatcherAddedActivity
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
-from plone.app.testing import TEST_USER_ID
 import json
 
 
@@ -33,6 +34,7 @@ class TestForwardingActivites(FunctionalTestCase):
 
         create(Builder('ogds_user')
                .id('peter.mueller')
+
                .assign_to_org_units([self.org_unit])
                .in_group(self.org_unit.inbox_group)
                .having(firstname=u'Peter', lastname=u'M\xfcller'))
@@ -88,55 +90,6 @@ class TestForwardingActivites(FunctionalTestCase):
         self.assertItemsEqual(
           ['hugo.boss', 'peter.mueller', 'watcher.user'],
           [notification.userid for notification in activity.notifications])
-
-    @browsing
-    def test_accepting_forwarding_with_successor_updated_responsibles(self, browser):
-        inbox = create(Builder('inbox'))
-        forwarding = create(Builder('forwarding')
-                            .having(responsible=TEST_USER_ID,
-                                    issuer='hugo.boss')
-                            .within(inbox))
-
-        successor = accept_forwarding_with_successor(
-            self.portal, forwarding.oguid.id,
-            'OK. That is something for me.', dossier=None)
-
-        forwarding_resource = self.center.fetch_resource(forwarding)
-        successor_resource = self.center.fetch_resource(successor)
-
-        self.assertItemsEqual(
-            [(u'hugo.boss', u'task_issuer')],
-            [(subscription.watcher.actorid, subscription.role)
-             for subscription in forwarding_resource.subscriptions])
-
-        self.assertItemsEqual(
-            [(u'test_user_1_', u'task_responsible'),
-             (u'inbox:org-unit-1', u'task_issuer')],
-            [(subscription.watcher.actorid, subscription.role) for subscription in successor_resource.subscriptions])
-
-    @browsing
-    def test_accepting_and_assign_forwarding_with_successor_and__updated_responsibles(self, browser):
-        inbox = create(Builder('inbox'))
-        dossier = create(Builder('dossier'))
-        forwarding = create(Builder('forwarding')
-                            .having(responsible=TEST_USER_ID,
-                                    issuer='hugo.boss')
-                            .within(inbox))
-        self.center.add_task_responsible(forwarding, TEST_USER_ID)
-        self.center.add_task_issuer(forwarding, 'hugo.boss')
-
-        task = accept_forwarding_with_successor(
-            self.portal, forwarding.oguid.id,
-            u'OK. That is something for me.', dossier=dossier)
-
-        forwarding_resource = self.center.fetch_resource(forwarding)
-        task_resource = self.center.fetch_resource(task)
-        self.assertItemsEqual(
-            ['hugo.boss'],
-            [watcher.actorid for watcher in forwarding_resource.watchers])
-        self.assertItemsEqual(
-            [TEST_USER_ID],
-            [watcher.actorid for watcher in task_resource.watchers])
 
 
 class TestForwardingReassignActivity(FunctionalTestCase):
@@ -224,6 +177,10 @@ class TestForwardingActivitesIntegration(IntegrationTestCase):
 
     features = ('activity', )
 
+    def setUp(self):
+        super(TestForwardingActivitesIntegration, self).setUp()
+        self.center = notification_center()
+
     @browsing
     def test_assign_to_dossier_open_successor_task(self, browser):
         self.login(self.secretariat_user, browser=browser)
@@ -244,6 +201,78 @@ class TestForwardingActivitesIntegration(IntegrationTestCase):
              (u'inbox:fa', u'task_issuer')],
             [(subscription.watcher.actorid, subscription.role)
              for subscription in resource.subscriptions])
+
+    @browsing
+    def test_accepting_forwarding_with_successor_updates_responsibles(self, browser):
+        self.add_additional_admin_and_org_unit()
+        self.login(self.secretariat_user, browser=browser)
+
+        forwarding = create(Builder('forwarding')
+                            .within(self.inbox_rk)
+                            .titled(u'F\xf6rw\xe4rding')
+                            .having(responsible_client='gdgs',
+                                    responsible='jurgen.konig',
+                                    issuer='nicole.kohler'))
+
+        successor = accept_forwarding_with_successor(
+            self.portal, Oguid.for_object(forwarding).id,
+            u'OK. That is something for me.', dossier=None)
+
+        forwarding_resources = Resource.query.filter_by(oguid=Oguid.for_object(forwarding)).all()
+        self.assertEqual(1, len(forwarding_resources))
+        successor_resources = Resource.query.filter_by(oguid=Oguid.for_object(successor)).all()
+        self.assertEqual(1, len(successor_resources))
+
+        forwarding_resource = forwarding_resources[0]
+        successor_resource = successor_resources[0]
+
+        self.assertItemsEqual(
+            [(u'nicole.kohler', u'task_issuer')],
+            [(subscription.watcher.actorid, subscription.role)
+             for subscription in forwarding_resource.subscriptions]
+        )
+        self.assertItemsEqual(
+            [(u'jurgen.konig', u'task_responsible'),
+             (u'inbox:fa', u'task_issuer')],
+            [(subscription.watcher.actorid, subscription.role)
+             for subscription in successor_resource.subscriptions]
+        )
+
+    @browsing
+    def test_accepting_and_assign_forwarding_with_successor_updates_responsibles(self, browser):
+        self.add_additional_admin_and_org_unit()
+        self.login(self.secretariat_user, browser=browser)
+
+        forwarding = create(Builder('forwarding')
+                            .within(self.inbox_rk)
+                            .titled(u'F\xf6rw\xe4rding')
+                            .having(responsible_client='gdgs',
+                                    responsible='jurgen.konig',
+                                    issuer='nicole.kohler'))
+
+        task = accept_forwarding_with_successor(
+            self.portal, Oguid.for_object(forwarding).id,
+            u'OK. That is something for me.', dossier=self.dossier)
+
+        forwarding_resources = Resource.query.filter_by(oguid=Oguid.for_object(forwarding)).all()
+        self.assertEqual(1, len(forwarding_resources))
+        task_resources = Resource.query.filter_by(oguid=Oguid.for_object(task)).all()
+        self.assertEqual(1, len(task_resources))
+
+        forwarding_resource = forwarding_resources[0]
+        task_resource = task_resources[0]
+
+        self.assertItemsEqual(
+            [(u'nicole.kohler', u'task_issuer')],
+            [(subscription.watcher.actorid, subscription.role)
+             for subscription in forwarding_resource.subscriptions]
+        )
+
+        self.assertItemsEqual(
+            [(u'jurgen.konig', u'task_responsible')],
+            [(subscription.watcher.actorid, subscription.role)
+             for subscription in task_resource.subscriptions]
+        )
 
 
 class TestWatcherAddedActivity(IntegrationTestCase):
