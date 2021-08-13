@@ -11,6 +11,7 @@ from opengever.trash.trash import ITrasher
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from sqlalchemy.exc import IntegrityError
+import json
 
 
 class TestFavoriteModel(IntegrationTestCase):
@@ -338,6 +339,29 @@ class TestHandlers(IntegrationTestCase):
         self.assertEquals('GEVER Weeklies',
                           Favorite.query.get(fav1.favorite_id).title)
         self.assertEquals(u'Anfragen 2018', Favorite.query.get(fav2.favorite_id).title)
+
+    @browsing
+    def test_titles_of_document_favorites_get_updated_on_api_patch(self, browser):
+        self.login(self.regular_user, browser=browser)
+        favorite = create(Builder('favorite')
+                          .for_object(self.document)
+                          .for_user(self.regular_user))
+        self.assertEqual(u'Vertr\xe4gsentwurf', favorite.title)
+
+        data={'title': u'\xc4nderig'}
+        browser.open(
+            self.document,
+            data=json.dumps(data),
+            method='PATCH',
+            headers=self.api_headers,
+        )
+
+        self.assertEqual(browser.status_code, 204)
+        self.assertEqual(self.document.title, u'\xc4nderig')
+        self.assertEqual(
+            u'\xc4nderig',
+            Favorite.query.get(favorite.favorite_id).title
+        )
 
     @browsing
     def test_titles_of_document_favorites_get_updated_when_title_synced_to_filename(self, browser):
