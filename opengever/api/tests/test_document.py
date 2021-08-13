@@ -84,6 +84,36 @@ class TestDocumentSerializer(IntegrationTestCase):
         }, browser.json['creator'])
 
     @browsing
+    def test_contains_meeting_metadata(self, browser):
+        self.activate_feature('meeting')
+        self.login(self.committee_responsible, browser)
+
+        document = self.decided_proposal.get_excerpt()
+        browser.open(document, headers=self.api_headers)
+        self.assertEqual({u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
+                                  u'vertrage-und-vereinbarungen/dossier-1/proposal-3',
+                          u'title': u'Initialvertrag f\xfcr Bearbeitung'}, browser.json['proposal'])
+
+        self.assertEqual({'@id': self.decided_proposal.absolute_url(),
+                          'title': self.decided_proposal.title}, browser.json['submitted_proposal'])
+        self.assertEqual({'@id': self.decided_meeting.model.get_url(),
+                          'title': self.decided_meeting.model.title}, browser.json['meeting'])
+
+        browser.open(self.document, headers=self.api_headers)
+        self.assertEqual([{'@id': self.proposal.absolute_url(), 'title': self.proposal.title}],
+                         browser.json['submitted_with'])
+
+    @browsing
+    def test_does_not_contain_meeting_metadata_when_meeting_feature_disabled(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, headers=self.api_headers)
+
+        self.assertIsNone(browser.json.get('proposal'))
+        self.assertIsNone(browser.json.get('meeting'))
+        self.assertIsNone(browser.json.get('submitted_proposal'))
+        self.assertIsNone(browser.json.get('submitted_with'))
+
+    @browsing
     def test_contains_collaborative_checkout_info(self, browser):
         self.login(self.regular_user, browser)
 
@@ -231,7 +261,6 @@ class TestDocumentPost(IntegrationTestCase):
 
         api.portal.set_registry_record(interface=IPrivateFolderQuotaSettings,
                                        name='size_hard_limit', value=1)
-
 
         with self.observe_children(self.private_dossier) as children:
             with browser.expect_http_error(code=507, reason='Insufficient Storage'):

@@ -9,6 +9,8 @@ from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting.model import SubmittedDocument
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IExpandableElement
@@ -49,6 +51,9 @@ class SerializeDocumentToJson(GeverSerializeToJson):
         checked_out_by = obj.checked_out_by()
         checked_out_by_fullname = display_name(checked_out_by) if checked_out_by else None
 
+        if is_meeting_feature_enabled():
+            self.extend_with_meeting_metadata(result)
+
         additional_metadata = {
             'checked_out': checked_out_by,
             'checked_out_fullname': checked_out_by_fullname,
@@ -75,6 +80,28 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             return self.context
 
         return super(SerializeDocumentToJson, self).getVersion(version)
+
+    def extend_with_meeting_metadata(self, result):
+        submitted_documents = SubmittedDocument.query.by_source(self.context).all()
+        result['submitted_with'] = [{'title': doc.proposal.title,
+                                     '@id': doc.proposal.get_url()} for doc in submitted_documents]
+
+        proposal = self.context.get_proposal()
+        if proposal:
+            result['proposal'] = {'title': proposal.Title(), '@id': proposal.absolute_url()}
+        else:
+            result['proposal'] = None
+
+        result['meeting'] = None
+        submitted_proposal = self.context.get_submitted_proposal()
+        if submitted_proposal:
+            result['submitted_proposal'] = {
+                'title': submitted_proposal.Title(), '@id': submitted_proposal.absolute_url()}
+            meeting = submitted_proposal.load_model().get_meeting()
+            if meeting:
+                result['meeting'] = {'title': meeting.title, '@id': meeting.get_url()}
+        else:
+            result['submitted_proposal'] = None
 
 
 class DocumentPatch(ContentPatch):
