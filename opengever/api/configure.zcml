@@ -1442,4 +1442,21 @@
       permission="opengever.repository.UnlockReferencePrefix"
       />
 
+  <plone:service
+      method="DELETE"
+      name="@reference-numbers"
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      factory=".reference_numbers.ReferenceNumbersDelete"
+      permission="opengever.repository.UnlockReferencePrefix"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@reference-numbers"
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      factory=".reference_numbers.ReferenceNumbersDelete"
+      permission="opengever.repository.UnlockReferencePrefix"
+      />
+
+
 </configure>
