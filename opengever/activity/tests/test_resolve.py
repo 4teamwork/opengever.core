@@ -76,8 +76,16 @@ class TestResolveNotificationView(IntegrationTestCase):
         self.assertTrue(self.notification.is_read)
 
     @browsing
-    def test_raises_unauthorized_when_notification_is_not_for_the_current_user(self, browser):
+    def test_just_redirects_to_object_when_notification_is_not_for_the_current_user(self, browser):
         self.login(self.dossier_responsible, browser)
+        view = 'resolve_notification?notification_id={}'.format(self.notification.notification_id)
+        browser.open(self.portal, view=view)
+        self.assertEquals(self.task.absolute_url(), browser.url)
+        self.assertFalse(self.notification.is_read)
+
+    @browsing
+    def test_raises_unauthorized_when_notification_object_cannot_be_accessed(self, browser):
+        self.login(self.foreign_contributor, browser)
         with browser.expect_unauthorized():
             view = 'resolve_notification?notification_id={}'.format(self.notification.notification_id)
             browser.open(self.portal, view=view)
