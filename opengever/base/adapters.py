@@ -2,6 +2,7 @@ from Acquisition import aq_base
 from opengever.base import _
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import split_string_by_numbers
+from opengever.base.exceptions import ReferenceNumberCannotBeFreed
 from opengever.base.interfaces import IMovabilityChecker
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -226,7 +227,7 @@ class ReferenceNumberPrefixAdpater(object):
             prefix = unicode(prefix)
 
         if self.is_prefix_used(prefix):
-            raise Exception("Prefix is in use.")
+            raise ReferenceNumberCannotBeFreed("Prefix is in use.")
 
         if prefix in self.get_child_mapping().keys():
             self.get_child_mapping().pop(prefix)
