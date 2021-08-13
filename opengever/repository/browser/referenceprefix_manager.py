@@ -1,9 +1,7 @@
 from opengever.base.adapters import ReferenceNumberPrefixAdpater
 from opengever.base.exceptions import ReferenceNumberCannotBeFreed
 from opengever.repository import _
-from opengever.repository.events import RepositoryPrefixUnlocked
 from plone import api
-from zope.event import notify
 from zope.publisher.browser import BrowserView
 
 
@@ -29,7 +27,6 @@ class ReferencePrefixManager(BrowserView):
                 type="error")
             return
 
-        notify(RepositoryPrefixUnlocked(self.context, prefix_num))
         api.portal.show_message(
             _("statmsg_prefix_unlocked",
               default=u"Reference prefix has been unlocked."),

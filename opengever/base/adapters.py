@@ -8,6 +8,7 @@ from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.protect import unprotected_write
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.repository.events import RepositoryPrefixUnlocked
 from persistent.dict import PersistentDict
 from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
@@ -16,6 +17,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import getUtility
+from zope.event import notify
 from zope.interface import implementer
 import re
 
@@ -231,6 +233,8 @@ class ReferenceNumberPrefixAdpater(object):
 
         if prefix in self.get_child_mapping().keys():
             self.get_child_mapping().pop(prefix)
+
+        notify(RepositoryPrefixUnlocked(self.context, prefix))
 
 
 @implementer(IMovabilityChecker)
