@@ -364,6 +364,32 @@ class TestHandlers(IntegrationTestCase):
         )
 
     @browsing
+    def test_titles_of_dossier_favorites_get_updated_on_api_patch(self, browser):
+        self.login(self.regular_user, browser=browser)
+        favorite = create(Builder('favorite')
+                          .for_object(self.dossier)
+                          .for_user(self.regular_user))
+        self.assertEqual(
+            u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            favorite.title
+        )
+
+        data={'title': u'\xc4nderig'}
+        browser.open(
+            self.dossier,
+            data=json.dumps(data),
+            method='PATCH',
+            headers=self.api_headers,
+        )
+
+        self.assertEqual(browser.status_code, 204)
+        self.assertEqual(self.dossier.title, u'\xc4nderig')
+        self.assertEqual(
+            u'\xc4nderig',
+            Favorite.query.get(favorite.favorite_id).title
+        )
+
+    @browsing
     def test_titles_of_document_favorites_get_updated_when_title_synced_to_filename(self, browser):
         self.login(self.regular_user, browser=browser)
 
