@@ -12,6 +12,7 @@
   <include package="Products.CMFEditions" file="permissions.zcml" />
   <include package="opengever.contact" file="permissions.zcml" />
   <include package="opengever.document" file="permissions.zcml" />
+  <include package="opengever.repository" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
   <include package="opengever.webactions" file="permissions.zcml" />
   <include package="opengever.workspace" file="permissions.zcml" />
@@ -1423,6 +1424,22 @@
       name="@upload-structure"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      name="@reference-numbers"
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      factory=".reference_numbers.ReferenceNumbersGet"
+      permission="opengever.repository.UnlockReferencePrefix"
+      />
+
+  <plone:service
+      method="GET"
+      name="@reference-numbers"
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      factory=".reference_numbers.ReferenceNumbersGet"
+      permission="opengever.repository.UnlockReferencePrefix"
       />
 
 </configure>
