@@ -133,7 +133,7 @@ def remove_favorites(context, event):
 def is_title_changed(descriptions):
     for desc in descriptions:
         for attr in desc.attributes:
-            if attr in ['IOpenGeverBase.title', 'title']:
+            if attr in ['IDocumentSchema.title', 'IOpenGeverBase.title', 'title']:
                 return True
     return False
 
@@ -181,6 +181,7 @@ def update_favorites_title(context, event):
     """Event handler which updates the titles of all existing favorites for the
     current context, unless the title is personalized.
     """
+
     if IContainerModifiedEvent.providedBy(event):
         return
 
