@@ -14,6 +14,7 @@ from ZPublisher.HTTPRequest import record
 
 # Fields with no mapping but allowed in the listing endpoint.
 OTHER_ALLOWED_FIELDS = set([
+    'approval_state',
     'blocked_local_roles',
     'changed',
     'checked_out',
@@ -33,11 +34,11 @@ OTHER_ALLOWED_FIELDS = set([
     'firstname',
     'getObjPositionInParent',
     'has_sametype_children',
+    'id',
     'is_subdossier',
     'is_subtask',
-    'id',
-    'lastname',
     'language',
+    'lastname',
     'location',
     'modified',
     'phone_office',

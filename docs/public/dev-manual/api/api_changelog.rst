@@ -12,6 +12,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@listing``: Add ``approval_state`` column
 - Include ``committee`` in proposal serialization.
 - Include ``proposal``, ``meeting``, ``submitted_proposal`` and ``submitted_with`` in document serialization.
 
