@@ -34,6 +34,9 @@ class SerializeActorToJson(object):
         self.request = request
 
     def __call__(self):
+        represents_url = self.context.represents_url()
+        represents = {'@id': represents_url} if represents_url else None
+
         result = {
             '@id': '{}/@actors/{}'.format(
                 api.portal.get().absolute_url(), self.context.identifier),
@@ -42,6 +45,7 @@ class SerializeActorToJson(object):
             'identifier': self.context.identifier,
             'label': self.context.get_label(with_principal=False),
             'portrait_url': self.context.get_portrait_url(),
+            'represents': represents,
         }
 
         return result

@@ -26,6 +26,7 @@ For known actor types use:
 
 from opengever.base.utils import escape_html
 from opengever.contact.utils import get_contactfolder_url
+from opengever.inbox.utils import get_inbox_for_org_unit
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.interfaces import IActor
@@ -152,6 +153,9 @@ class Actor(object):
     def represents(self):
         raise NotImplementedError()
 
+    def represents_url(self):
+        raise NotImplementedError()
+
     def representatives(self):
         raise NotImplementedError()
 
@@ -184,6 +188,9 @@ class NullActor(object):
         return False
 
     def represents(self):
+        return None
+
+    def represents_url(self):
         return None
 
     def representatives(self):
@@ -219,6 +226,9 @@ class SystemActor(object):
         return u''
 
     def represents(self):
+        return None
+
+    def represents_url(self):
         return None
 
     def representatives(self):
@@ -268,6 +278,13 @@ class InboxActor(Actor):
     def represents(self):
         return self.org_unit
 
+    def represents_url(self):
+        inbox = get_inbox_for_org_unit(self.org_unit.id())
+        if inbox is not None:
+            return inbox.absolute_url()
+        else:
+            return None
+
     def get_portrait_url(self):
         return None
 
@@ -306,6 +323,10 @@ class TeamActor(Actor):
     def represents(self):
         return self.team
 
+    def represents_url(self):
+        return '{}/@teams/{}'.format(
+            api.portal.getSite().absolute_url(), self.identifier)
+
     def get_portrait_url(self):
         return None
 
@@ -340,6 +361,9 @@ class CommitteeActor(Actor):
 
     def represents(self):
         return self.committee
+
+    def represents_url(self):
+        return self.represents().resolve_committee().absolute_url()
 
     def get_portrait_url(self):
         return None
@@ -379,6 +403,9 @@ class ContactActor(Actor):
     def represents(self):
         return self.contact
 
+    def represents_url(self):
+        return self.represents().getURL()
+
     def get_portrait_url(self):
         return None
 
@@ -411,6 +438,10 @@ class PloneUserActor(Actor):
 
     def represents(self):
         return self.user
+
+    def represents_url(self):
+        return '{}/@users/{}'.format(
+            api.portal.getSite().absolute_url(), self.identifier)
 
     def get_portrait_url(self):
         mtool = api.portal.get_tool('portal_membership')
@@ -451,6 +482,10 @@ class OGDSUserActor(Actor):
 
     def represents(self):
         return self.user
+
+    def represents_url(self):
+        return '{}/@ogds-users/{}'.format(
+            api.portal.get().absolute_url(), self.identifier)
 
     def get_portrait_url(self):
         mtool = api.portal.get_tool('portal_membership')
@@ -494,6 +529,10 @@ class OGDSGroupActor(Actor):
     def represents(self):
         return self.group
 
+    def represents_url(self):
+        return '{}/@ogds-groups/{}'.format(
+            api.portal.get().absolute_url(), self.group.groupid)
+
     def get_portrait_url(self):
         return None
 
@@ -524,6 +563,9 @@ class InteractiveActor(Actor):
         return u''
 
     def represents(self):
+        return None
+
+    def represents_url(self):
         return None
 
     def representatives(self):
