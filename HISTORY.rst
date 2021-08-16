@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+2021.16.1 (2021-08-16)
+----------------------
+
+Other changes:
+
+
+- Revert merge of upgrade reindexing reference and sortable_reference. [njohner]
+
+
 2021.16.0 (2021-08-12)
 ----------------------
 
