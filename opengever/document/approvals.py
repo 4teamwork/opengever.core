@@ -133,6 +133,10 @@ class ApprovalList(object):
         if current_version is None:
             return self.storage.remove_all()
 
+        # Explicit reindexing of approval_state is not needed here.
+        # The copied object will be indexed in its entirety on paste, during
+        # ObjectAddedEvent, which is fired later than the ObjectCopiedEvent
+        # this method is bound to.
         self.storage.remove_all_except(current_version)
         self.storage.reset_approvals_to_version(0)
 

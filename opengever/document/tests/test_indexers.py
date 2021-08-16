@@ -24,6 +24,7 @@ from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from plone import api
 from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
@@ -420,6 +421,43 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         # retain that approval, we'd need to copy the approval list when
         # reverting.
         self.assertEqual(APPROVED_IN_OLDER_VERSION, indexed_value)
+
+    def test_approval_state_approved_in_current_version_is_retained_when_document_copied(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+
+        copied_doc = api.content.copy(self.document, target=self.subdossier)
+        self.commit_solr()
+        indexed_value = solr_data_for(copied_doc, 'approval_state')
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
+
+    def test_approval_state_approved_in_older_version_is_lost_when_document_copied(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+        self.commit_solr()
+
+        versioner.create_version('Second version')
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_OLDER_VERSION, indexed_value)
+
+        copied_doc = api.content.copy(self.document, target=self.subdossier)
+        self.commit_solr()
+        indexed_value = solr_data_for(copied_doc, 'approval_state')
+        self.assertEqual(None, indexed_value)
 
 
 class TestDefaultDocumentIndexer(MockTestCase):
