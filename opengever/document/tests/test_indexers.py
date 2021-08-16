@@ -8,6 +8,7 @@ from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
+from opengever.document.approvals import APPROVED_IN_OLDER_VERSION
 from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -362,6 +363,26 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.commit_solr()
         indexed_value = solr_data_for(self.document, 'approval_state')
         self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
+
+    def test_approval_state_is_updated_when_new_version_created(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
+
+        versioner.create_version('Second version')
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_OLDER_VERSION, indexed_value)
 
 
 class TestDefaultDocumentIndexer(MockTestCase):

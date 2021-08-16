@@ -35,6 +35,7 @@ class Versioner(object):
         """Creates a new version in CMFEditions.
         """
         self.repository.save(obj=self.document, comment=comment)
+        self.document.reindexObject(idxs=['UID', 'approval_state'])
 
     def has_initial_version(self):
         return self.get_history_metadata() != []
