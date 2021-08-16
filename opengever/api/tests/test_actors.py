@@ -35,6 +35,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': url,
+                u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'team',
                 u'identifier': actor_id,
@@ -69,6 +70,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': url,
+                u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'inbox',
                 u'identifier': actor_id,
@@ -99,6 +101,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': url,
+                u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'contact',
                 u'identifier': actor_id,
@@ -124,6 +127,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': url,
+                u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'committee',
                 u'identifier': actor_id,
@@ -157,6 +161,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': url,
+                u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'user',
                 u'identifier': actor_id,
@@ -186,6 +191,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': url,
+                u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'group',
                 u'identifier': actor_id,
@@ -219,6 +225,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': url,
+                u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'user',
                 u'identifier': actor_id,
@@ -264,6 +271,7 @@ class TestActorsGet(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'@id': self.actors_url + "/foo",
+                u'@type': u'virtual.ogds.actor',
                 u'active': False,
                 u'actor_type': u'null',
                 u'identifier': u'foo',
@@ -296,6 +304,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
             u'items': [
                 {
                     u'@id': self.actors_url + "/team:1",
+                    u'@type': u'virtual.ogds.actor',
                     u'active': True,
                     u'actor_type': u'team',
                     u'identifier': u'team:1',
@@ -317,6 +326,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                 },
                 {
                     u'@id': self.actors_url + '/inbox:fa',
+                    u'@type': u'virtual.ogds.actor',
                     u'active': True,
                     u'actor_type': u'inbox',
                     u'identifier': u'inbox:fa',
@@ -351,6 +361,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
             u'items': [
                 {
                     u'@id': self.actors_url + "/team:1",
+                    u'@type': u'virtual.ogds.actor',
                     u'active': True,
                     u'actor_type': u'team',
                     u'identifier': u'team:1',
@@ -372,6 +383,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                 },
                 {
                     u'@id': self.actors_url + '/foo',
+                    u'@type': u'virtual.ogds.actor',
                     u'active': False,
                     u'actor_type': u'null',
                     u'identifier': u'foo',

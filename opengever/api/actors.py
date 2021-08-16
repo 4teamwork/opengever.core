@@ -40,6 +40,7 @@ class SerializeActorToJson(object):
         result = {
             '@id': '{}/@actors/{}'.format(
                 api.portal.get().absolute_url(), self.context.identifier),
+            '@type': 'virtual.ogds.actor',
             'active': self.context.is_active,
             'actor_type': self.context.actor_type,
             'identifier': self.context.identifier,
