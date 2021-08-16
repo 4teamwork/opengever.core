@@ -1,6 +1,8 @@
 from datetime import datetime
 from ftw.testing import freeze
 from opengever.document.approvals import ApprovalStorage
+from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
+from opengever.document.approvals import APPROVED_IN_OLDER_VERSION
 from opengever.document.approvals import IApprovalList
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
@@ -112,3 +114,40 @@ class TestApprovalList(IntegrationTestCase):
               'approved': datetime(2016, 8, 12),
               'version_id': 0}],
             IApprovalList(copy).storage.list())
+
+
+class TestApprovalState(IntegrationTestCase):
+
+    def test_not_approved(self):
+        self.login(self.regular_user)
+        approvals = IApprovalList(self.document)
+        self.assertEqual(None, approvals.get_approval_state())
+
+    def test_not_approved_if_approval_for_nonexistent_version(self):
+        self.login(self.regular_user)
+        approvals = IApprovalList(self.document)
+        approvals.add(
+            99, self.subtask, self.regular_user.id, datetime(2021, 7, 2))
+        self.assertEqual(None, approvals.get_approval_state())
+
+    def test_approved_in_current_version(self):
+        self.login(self.regular_user)
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime(2021, 7, 2))
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION,
+                         approvals.get_approval_state())
+
+    def test_approved_in_older_version(self):
+        self.login(self.regular_user)
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime(2021, 7, 2))
+        versioner.create_version('Second version')
+        self.assertEqual(APPROVED_IN_OLDER_VERSION,
+                         approvals.get_approval_state())

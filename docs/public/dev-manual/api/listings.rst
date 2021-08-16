@@ -67,6 +67,7 @@ Für jede Auflistung können verschiedene Felder (Parameter ``columns``) abgefra
 werden. Folgende Felder stehen zur Verfügung:
 
 - ``@type``: Inhaltstyp
+- ``approval_state``: Genehmigungs-Status
 - ``blocked_local_roles``: Ob Berechtigungen von übergeordneten Ordnern übernommen werden.
 - ``bumblebee_checksum``: SHA-256 Checksumme
 - ``changed``: Änderungsdatum

@@ -7,6 +7,7 @@ from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import ensure_str
+from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -249,3 +250,12 @@ def watchers(obj):
     center = notification_center()
     watchers = center.get_watchers(obj, role=WATCHER_ROLE)
     return [watcher.actorid for watcher in watchers]
+
+
+@indexer(IBaseDocument)
+def approval_state(obj):
+    """Indexer for approval_state Solr index.
+    """
+    approvals = IApprovalList(obj)
+    approval_state = approvals.get_approval_state()
+    return approval_state

@@ -7,24 +7,31 @@ from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.core.testing import COMPONENT_UNIT_TESTING
+from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
+from opengever.document.approvals import APPROVED_IN_OLDER_VERSION
+from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
 from opengever.document.indexers import filename as filename_indexer
 from opengever.document.indexers import metadata
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
+from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from plone import api
 from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.hooks import setSite
 import datetime
@@ -333,6 +340,124 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
 
         indexed_value = solr_data_for(self.mail_eml, 'watchers')
         self.assertEqual([self.regular_user.getId()], indexed_value)
+
+    def test_approval_state_is_none_if_missing_in_solr(self):
+        self.login(self.regular_user)
+
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(None, indexed_value)
+
+    def test_approval_state_is_updated_if_approval_added(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+
+        # Not approved
+        versioner.create_version('Initial version')
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(None, indexed_value)
+
+        # Approved in current version
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
+
+    def test_approval_state_is_updated_when_new_version_created(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
+
+        versioner.create_version('Second version')
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_OLDER_VERSION, indexed_value)
+
+    def test_approval_state_is_updated_on_revert_to_version(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(None, indexed_value)
+
+        versioner.create_version('Second version')
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
+
+        manager = getMultiAdapter((self.document, self.request),
+                                  ICheckinCheckoutManager)
+
+        manager.revert_to_version(0)
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+
+        # Currently we only ensure the approval_state is *updated* on revert.
+        # But we might possibly also make sure it's getting *fixed*:
+        # Reverting to a version that was previously approved will currently
+        # result in a new version that isn't approved yet. If we want to
+        # retain that approval, we'd need to copy the approval list when
+        # reverting.
+        self.assertEqual(APPROVED_IN_OLDER_VERSION, indexed_value)
+
+    def test_approval_state_approved_in_current_version_is_retained_when_document_copied(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+
+        copied_doc = api.content.copy(self.document, target=self.subdossier)
+        self.commit_solr()
+        indexed_value = solr_data_for(copied_doc, 'approval_state')
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
+
+    def test_approval_state_approved_in_older_version_is_lost_when_document_copied(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+        self.commit_solr()
+
+        versioner.create_version('Second version')
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_OLDER_VERSION, indexed_value)
+
+        copied_doc = api.content.copy(self.document, target=self.subdossier)
+        self.commit_solr()
+        indexed_value = solr_data_for(copied_doc, 'approval_state')
+        self.assertEqual(None, indexed_value)
 
 
 class TestDefaultDocumentIndexer(MockTestCase):

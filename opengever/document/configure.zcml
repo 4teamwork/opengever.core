@@ -346,6 +346,11 @@
       name="watchers"
       />
 
+  <adapter
+      factory=".indexers.approval_state"
+      name="approval_state"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
   <adapter factory=".fileactions.BaseDocumentFileActions" />

@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
@@ -12,9 +13,12 @@ from opengever.api.solr_query_service import filesize
 from opengever.api.solr_query_service import filter_escape
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
+from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
+from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.testing import IntegrationTestCase
@@ -363,6 +367,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=relative_path',
             'columns=UID',
             'columns=trashed',
+            'columns=approval_state',
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
@@ -377,6 +382,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'trashed': False,
              u'modified': u'2016-08-31T14:07:33+00:00',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+             u'approval_state': None,
              u'bumblebee_checksum': DOCX_CHECKSUM,
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14'},
             browser.json['items'][-1])
@@ -392,6 +398,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=containing_dossier',
             'columns=UID',
             'columns=trashed',
+            'columns=approval_state',
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
@@ -403,6 +410,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'UID': IUUID(self.private_mail),
              u'trashed': False,
              u'modified': u'2016-08-31T17:11:33+00:00',
+             u'approval_state': None,
              u'containing_dossier': u'Mein Dossier 1'},
             browser.json['items'][0])
 
@@ -438,6 +446,29 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             '/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/pdf',
             browser.json['items'][-1]['pdf_url'][:120],
         )
+
+    @browsing
+    def test_document_listing_approval_state(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime(2021, 7, 2))
+        self.commit_solr()
+
+        query_string = '&'.join((
+            'name=documents',
+            'columns:list=approval_state',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
+             u'UID': IUUID(self.document),
+             u'approval_state': APPROVED_IN_CURRENT_VERSION},
+            browser.json['items'][-1])
 
     @browsing
     def test_listing_custom_properties(self, browser):

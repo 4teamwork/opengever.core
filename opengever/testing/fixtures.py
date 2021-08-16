@@ -1683,6 +1683,9 @@ class OpengeverContentFixture(object):
                 start=date(2016, 1, 1),
             )
         ))
+        self.set_roles(
+            protected_dossier, self.dossier_responsible.getId(),
+            ['Reader', 'Contributor', 'Editor'])
         protected_dossier.__ac_local_roles_block__ = True
         protected_dossier.reindexObjectSecurity()
         protected_dossier.reindexObject(idxs=['blocked_local_roles'])
@@ -1710,6 +1713,9 @@ class OpengeverContentFixture(object):
                 start=date(2016, 1, 1),
             )
         ))
+        self.set_roles(
+            protected_dossier_with_task, self.dossier_responsible.getId(),
+            ['Reader', 'Contributor', 'Editor'])
         protected_dossier_with_task.__ac_local_roles_block__ = True
         protected_dossier_with_task.reindexObjectSecurity()
         protected_dossier_with_task.reindexObject(idxs=['blocked_local_roles'])
