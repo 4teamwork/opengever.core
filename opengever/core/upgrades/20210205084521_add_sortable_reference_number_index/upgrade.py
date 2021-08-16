@@ -17,8 +17,13 @@ class AddSortableReferenceNumberIndex(UpgradeStep):
 
     def index_sortable_reference_number(self):
         manager = getUtility(ISolrConnectionManager)
+        solr_connection = manager.connection
+
         query = {'object_provides': IDexterityContent.__identifier__}
-        for obj in self.objects(query, 'Index sortable_reference in Solr'):
+        for index, obj in enumerate(
+                self.objects(query, 'Index sortable_reference in Solr'), 1):
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
             handler.add(['sortable_reference'])
+            if index % 1000 == 0:
+                solr_connection.commit()
         manager.connection.commit(soft_commit=False, extract_after_commit=False)
