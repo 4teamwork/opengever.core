@@ -356,6 +356,7 @@ class CheckinCheckoutManager(object):
             msg = _(u'Reverted file to version ${version_id}.',
                     mapping=dict(version_id=version_id))
             comment = translate(msg, context=self.request)
+            # This will also update the approval_state index in Solr
             self.versioner.create_version(comment)
 
         # event
