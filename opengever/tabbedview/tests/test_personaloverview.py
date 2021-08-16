@@ -274,6 +274,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertEqual(expected_tasks, found_tasks)
@@ -287,6 +288,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertEqual(expected_tasks, found_tasks)

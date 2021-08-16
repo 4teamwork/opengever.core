@@ -13,4 +13,4 @@ class TestTaskPrincipals(IntegrationTestCase):
         self.login(self.regular_user)
 
         self.assertEqual(
-            [u'kathi.barfuss', u'fa_inbox_users'], self.task_in_protected_dossier.get_principals())
+            [u'kathi.barfuss', u'fa_inbox_users', u'robert.ziegler'], self.task_in_protected_dossier.get_principals())
