@@ -7,6 +7,8 @@ from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.core.testing import COMPONENT_UNIT_TESTING
+from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
+from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
@@ -14,6 +16,7 @@ from opengever.document.indexers import DefaultDocumentIndexer
 from opengever.document.indexers import filename as filename_indexer
 from opengever.document.indexers import metadata
 from opengever.document.interfaces import IDocumentIndexer
+from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
@@ -333,6 +336,32 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
 
         indexed_value = solr_data_for(self.mail_eml, 'watchers')
         self.assertEqual([self.regular_user.getId()], indexed_value)
+
+    def test_approval_state_is_none_if_missing_in_solr(self):
+        self.login(self.regular_user)
+
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(None, indexed_value)
+
+    def test_approval_state_is_updated_if_approval_added(self):
+        self.login(self.regular_user)
+
+        approvals = IApprovalList(self.document)
+        versioner = Versioner(self.document)
+
+        # Not approved
+        versioner.create_version('Initial version')
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(None, indexed_value)
+
+        # Approved in current version
+        approvals.add(
+            versioner.get_current_version_id(missing_as_zero=True),
+            self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'approval_state')
+        self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
 
 
 class TestDefaultDocumentIndexer(MockTestCase):

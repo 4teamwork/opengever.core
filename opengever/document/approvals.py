@@ -109,6 +109,7 @@ class ApprovalList(object):
             approved = datetime.now()
 
         self.storage.add(approved, approver, IUUID(task), version_id)
+        self.context.reindexObject(idxs=['UID', 'approval_state'])
 
     def get(self):
         return list(self)
