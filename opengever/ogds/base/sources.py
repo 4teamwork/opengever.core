@@ -15,6 +15,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration
+from opengever.workspace.utils import get_workspace_group_ids
 from opengever.workspace.utils import get_workspace_user_ids
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
@@ -897,6 +898,31 @@ class AllGroupsSource(BaseSQLModelSource):
     @property
     def search_query(self):
         return self.base_query
+
+
+class ActualWorkspaceGroupsSource(AllGroupsSource):
+
+    @property
+    def search_query(self):
+        query = super(ActualWorkspaceGroupsSource, self).search_query
+        return self._extend_query_with_workspace_filter(query)
+
+    def _extend_query_with_workspace_filter(self, query):
+        groupids = list(get_workspace_group_ids(self.context))
+        if groupids:
+            query = query.filter(Group.groupid.in_(groupids))
+        else:
+            # Avoid filter for an empty list.
+            query = query.filter(sql.false())
+        return query
+
+    def getTerm(self, value):
+        try:
+            group = self.search_query.filter(Group.groupid == value).one()
+        except orm.exc.NoResultFound:
+            raise LookupError(
+                'No row was found with groupid: {}'.format(value))
+        return SimpleTerm(value, value, group.title)
 
 
 class AllFilteredGroupsSourcePrefixed(FilterMixin, AllGroupsSource):

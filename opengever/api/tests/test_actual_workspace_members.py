@@ -61,6 +61,20 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
                       browser.json['items'])
 
     @browsing
+    def test_get_actual_workspace_members_includes_groups(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        data = json.dumps({'participant': 'committee_rpk_group', 'role': 'WorkspaceMember'})
+        browser.open(self.workspace, view='/@participations/committee_rpk_group', method='POST',
+                     headers=self.api_headers, data=data)
+
+        browser.open(self.workspace, view='@actual-workspace-members?include_groups=true',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual({u'token': u'committee_rpk_group', u'title': u'Test Group'},
+                         browser.json['items'][-1])
+
+    @browsing
     def test_get_actual_workspace_members_outside_a_workspace(self, browser):
         self.login(self.regular_user, browser=browser)
         url = self.document.absolute_url() + '/@actual-workspace-members'
