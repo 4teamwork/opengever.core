@@ -1,6 +1,10 @@
 from ftw.testbrowser import browsing
 from opengever.base.adapters import ReferenceNumberPrefixAdpater
+from opengever.repository.interfaces import IDuringRepositoryDeletion
 from opengever.testing import IntegrationTestCase
+from plone import api
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 
 
 class TestReferenceNumbersGet(IntegrationTestCase):
@@ -39,6 +43,26 @@ class TestReferenceNumbersGet(IntegrationTestCase):
              {u'active': True,
               u'prefix': u'3',
               u'title': u'Spinn\xe4nnetzregistrar'}],
+            browser.json)
+
+    @browsing
+    def test_handles_deleted_repository_folder(self, browser):
+        self.login(self.administrator, browser)
+
+        alsoProvides(self.request, IDuringRepositoryDeletion)
+        api.content.delete(obj=self.leaf_repofolder)
+        noLongerProvides(self.request, IDuringRepositoryDeletion)
+
+        browser.open(self.branch_repofolder,
+                     view="@reference-numbers",
+                     method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            [{u'active': False,
+              u'prefix': u'1',
+              u'title': None}],
             browser.json)
 
 

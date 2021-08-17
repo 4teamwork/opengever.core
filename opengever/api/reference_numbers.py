@@ -14,7 +14,8 @@ class ReferenceNumbersGet(Service):
     """
 
     def reply(self):
-        return ReferenceNumberPrefixAdpater(self.context).get_number_mapping()
+        return ReferenceNumberPrefixAdpater(self.context).get_number_mapping(
+            missing_title_as_none=True)
 
 
 class ReferenceNumbersDelete(Service):

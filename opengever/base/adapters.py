@@ -195,7 +195,7 @@ class ReferenceNumberPrefixAdpater(object):
 
         return prefix in self.get_reference_mapping()['reference_prefix'].values()
 
-    def get_number_mapping(self):
+    def get_number_mapping(self, missing_title_as_none=False):
         items = []
         intid_util = getUtility(IIntIds)
 
@@ -211,8 +211,11 @@ class ReferenceNumberPrefixAdpater(object):
                 # be in the list, because it should be available to remove
                 # via the reference prefix manager.
                 active = False
-                title = _('label_already_removed',
-                          '-- Already removed object --')
+                if missing_title_as_none:
+                    title = None
+                else:
+                    title = _('label_already_removed',
+                              '-- Already removed object --')
 
             items.append({'prefix': prefix, 'title': title, 'active': active})
 
