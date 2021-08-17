@@ -44,7 +44,7 @@ class TestInvitationsPost(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
                 u'@type': u'virtual.participations.invitation',
                 u'inviter_fullname': u'Hugentobler Fridolin (fridolin.hugentobler)',
-                u'recipient_email': u'kathi.barfuss@gever.local',
+                u'recipient_email': u'foo@example.com',
                 u'role': {
                     'token': 'WorkspaceGuest',
                     'title': 'Guest',

@@ -46,7 +46,7 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json['current_user'].get(u'id'), u'kathi.barfuss')
         self.assertEqual(browser.json['current_user'].get(u'fullname'), u'B\xe4rfuss K\xe4thi')
-        self.assertEqual(browser.json['current_user'].get(u'email'), u'kathi.barfuss@gever.local')
+        self.assertEqual(browser.json['current_user'].get(u'email'), u'foo@example.com')
 
     @browsing
     def test_config_contains_features(self, browser):
