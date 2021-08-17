@@ -48,6 +48,10 @@ def get_workspace_user_ids(context, disregard_block=False):
     return get_workspace_actor_ids(context, 'user', disregard_block)
 
 
+def get_workspace_group_ids(context):
+    return get_workspace_actor_ids(context, 'group')
+
+
 def get_workspace_actor_ids(context, actor_type, disregard_block=False, ):
     """ Walks up the Acquisition chain and collects all userids assigned
     to a role with the View permission.

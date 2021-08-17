@@ -19,6 +19,7 @@ from opengever.workspace.utils import get_workspace_user_ids
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import func
+from sqlalchemy import or_
 from sqlalchemy import orm
 from sqlalchemy import sql
 from sqlalchemy.sql.expression import asc
@@ -513,7 +514,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
             text_filters)
 
         if self.search_only_active_users:
-            query = query.filter_by(active=True)
+            query = query.filter(User.active == True)  # noqa
 
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
@@ -609,13 +610,18 @@ class ActualWorkspaceMembersSource(AssignedUsersSource):
 
     @property
     def search_query(self):
-        query = super(ActualWorkspaceMembersSource, self).search_query
+        admin_unit = get_current_admin_unit()
+        query = create_session().query(User).filter(OrgUnit.admin_unit_id == admin_unit.unit_id)
         return self._extend_query_with_workspace_filter(query)
 
     def _extend_query_with_workspace_filter(self, query):
+
         userids = list(get_workspace_user_ids(self.context))
-        if userids:
-            query = query.filter(User.userid.in_(userids))
+        groupids = list(get_workspace_group_ids(self.context))
+
+        if userids or groupids:
+            query = query.join(groups_users).filter(
+                or_(User.userid.in_(userids), groups_users.columns.groupid.in_(groupids)))
         else:
             # Avoid filter for an empty list.
             query = query.filter(sql.false())

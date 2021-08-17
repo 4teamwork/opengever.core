@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+import json
 
 
 class TestActualWorkspaceMembersGet(IntegrationTestCase):
@@ -35,6 +36,29 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
                         u'token': u'beatrice.schrodinger'}],
             u'items_total': 1}
         self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_get_actual_workspace_members_includes_group_users(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        browser.open(self.workspace, view='@actual-workspace-members', method='GET',
+                     headers=self.api_headers)
+        self.assertEqual(4, browser.json['items_total'])
+        self.assertNotIn({u'title': u'Kohler Nicole', u'token': u'nicole.kohler'},
+                         browser.json['items'])
+        self.assertNotIn({u'title': u'M\xfcller Fr\xe4nzi', u'token': u'franzi.muller'},
+                         browser.json['items'])
+
+        data = json.dumps({'participant': 'committee_rpk_group', 'role': 'WorkspaceMember'})
+        browser.open(self.workspace, view='/@participations/committee_rpk_group', method='POST',
+                     headers=self.api_headers, data=data)
+
+        browser.open(self.workspace, view='@actual-workspace-members', method='GET',
+                     headers=self.api_headers)
+        self.assertEqual(6, browser.json['items_total'])
+        self.assertIn({u'title': u'Kohler Nicole', u'token': u'nicole.kohler'},
+                      browser.json['items'])
+        self.assertIn({u'title': u'M\xfcller Fr\xe4nzi', u'token': u'franzi.muller'},
+                      browser.json['items'])
 
     @browsing
     def test_get_actual_workspace_members_outside_a_workspace(self, browser):

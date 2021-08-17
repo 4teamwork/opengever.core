@@ -101,36 +101,6 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
         # User from other admin_unit is also valid
         self.assertIn('peter.meier', source)
 
-    def test_only_users_of_current_admin_unit_are_found_by_search(self):
-        self.login(self.workspace_admin)
-        source = ActualWorkspaceMembersSource(self.workspace)
-
-        admin_unit2 = create(Builder('admin_unit')
-                             .id('additional')
-                             .having(title='additional'))
-
-        org_unit_3 = create(Builder('org_unit')
-                            .id('org-unit-3')
-                            .having(title=u"Org Unit 3", admin_unit=admin_unit2)
-                            .with_default_groups())
-
-        peter = create(Builder('ogds_user').id('peter.meier')
-                       .having(firstname='Peter', lastname='Meier')
-                       .assign_to_org_units([org_unit_3]))
-
-        RoleAssignmentManager(self.workspace).add_or_update(
-            self.regular_user.id, ['WorkspaceGuest'], ASSIGNMENT_VIA_INVITATION)
-        RoleAssignmentManager(self.workspace).add_or_update(
-            peter.userid, ['WorkspaceGuest'], ASSIGNMENT_VIA_INVITATION)
-
-        results = source.search(self.regular_user.id)
-        self.assertEqual(1, len(results))
-        self.assertEqual(self.regular_user.id, results[0].value)
-
-        # User from other admin_unit cannot be found
-        results = source.search('peter.meier')
-        self.assertEqual(0, len(results))
-
     def test_users_with_and_without_local_roles_are_valid(self):
         self.login(self.workspace_admin)
         source = ActualWorkspaceMembersSource(self.workspace)

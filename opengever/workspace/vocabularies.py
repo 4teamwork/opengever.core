@@ -69,7 +69,7 @@ class ActualWorkspaceMembersVocabulary(object):
     def __call__(self, context):
         terms = []
         query = ActualWorkspaceMembersSource(context).search_query
-        query = query.filter_by(active=True)
+        query = query.filter(User.active == True)  # noqa
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
