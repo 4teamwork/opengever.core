@@ -15,7 +15,7 @@ Other Changes
 - ``@listing``: Add ``approval_state`` column
 - Include ``committee`` in proposal serialization.
 - Include ``proposal``, ``meeting``, ``submitted_proposal`` and ``submitted_with`` in document serialization.
-
+- New ``@reference-numbers`` endpoint for administrators (see :ref:`docs <reference-numbers>`).
 
 2021.16.0 (2021-08-12)
 ----------------------
