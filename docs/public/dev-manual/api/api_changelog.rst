@@ -9,10 +9,14 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- ``@share-content``: Rename attributes ``users_to`` and ``users_cc`` to ``actors_to`` and ``actors_cc``.
+
 Other Changes
 ^^^^^^^^^^^^^
 
 - ``@workflow``: Transition ``task-transition-in-progress-resolved`` now accepts ``approved_documents`` transition parameter.
+- ``@share-content``: Support groups.
+- ``actual-workspace-members``: Include group users and add ``include_groups`` parameter to include groups.
 - ``@listing``: Add ``approval_state`` column
 - Include ``committee`` in proposal serialization.
 - Include ``proposal``, ``meeting``, ``submitted_proposal`` and ``submitted_with`` in document serialization.
