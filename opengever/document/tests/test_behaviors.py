@@ -1,8 +1,14 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.interfaces import ISequenceNumber
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+from plone import api
+from zc.relation.interfaces import ICatalog
+from zope import component
 from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 
 
 class TestDocumentNameFromTitle(FunctionalTestCase):
@@ -16,3 +22,41 @@ class TestDocumentNameFromTitle(FunctionalTestCase):
 
         self.assertEquals(2, getUtility(ISequenceNumber).get_number(doc2))
         self.assertEquals('document-2', doc2.id)
+
+
+class TestRelatedDocuments(IntegrationTestCase):
+
+    def test_relations_get_broken_when_to_object_is_deleted(self):
+        self.login(self.manager)
+        related_docs = IRelatedDocuments(self.subdocument).relatedItems
+        self.assertEqual(1, len(related_docs))
+        self.assertFalse(related_docs[0].isBroken())
+        self.assertEqual(self.document, related_docs[0].to_object)
+
+        api.content.delete(self.document)
+        related_docs = IRelatedDocuments(self.subdocument).relatedItems
+        self.assertEqual(1, len(related_docs))
+        self.assertTrue(related_docs[0].isBroken())
+        self.assertIsNone(related_docs[0].to_object)
+
+    def test_relations_get_removed_when_from_object_is_deleted(self):
+        self.login(self.manager)
+        catalog = component.queryUtility(ICatalog)
+        intids = component.queryUtility(IIntIds)
+        subsubdoc_id = intids.getId(self.subsubdocument)
+
+        relations = list(catalog.findRelations({'from_id': subsubdoc_id}))
+        self.assertEqual(2, len(relations))
+        self.assertItemsEqual(
+            [self.document, self.subdocument],
+            [relation.to_object for relation in relations])
+        self.assertItemsEqual(
+            [self.document, self.subsubdocument],
+            self.subdocument.related_items(bidirectional=True))
+
+        api.content.delete(self.subsubdocument)
+        relations = list(catalog.findRelations({'from_id': subsubdoc_id}))
+        self.assertEqual(0, len(relations))
+        self.assertItemsEqual(
+            [self.document],
+            self.subdocument.related_items(bidirectional=True))
