@@ -24,8 +24,8 @@ class ReindexMissingChangedDate(UpgradeStep):
 
         filters = ["-changed:[* TO *]"]
 
-        nrows = solr.unrestrictedSearch(filters=filters, fl=["UID"], rows=0).num_found
-        results = solr.unrestrictedSearch(filters=filters, fl=["UID"], rows=nrows)
+        nrows = solr.unrestricted_search(filters=filters, fl=["UID"], rows=0).num_found
+        results = solr.unrestricted_search(filters=filters, fl=["UID"], rows=nrows)
 
         for index, doc in enumerate(results.docs, 1):
 
