@@ -29,6 +29,7 @@ from z3c.form import validator
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zExceptions import BadRequest
 from zope import schema
 from zope.component import adapter
 from zope.component import getUtility
@@ -267,6 +268,11 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
         approved_documents = map(unrestrictedUuidToObject, approved_documents)
 
         if approved_documents:
+            if self.context.task_type != 'approval':
+                raise BadRequest(
+                    "Param 'approved_documents' is only supported for tasks "
+                    "of task_type 'approval'.")
+
             for doc in approved_documents:
                 approvals = IApprovalList(doc)
                 versioner = Versioner(doc)

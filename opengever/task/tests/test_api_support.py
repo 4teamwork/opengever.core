@@ -579,15 +579,17 @@ class TestApprovalViaTask(IntegrationTestCase):
                     task_type='approval'))
 
         if with_docs:
-            contained_doc = create(
-                Builder('document')
-                .within(task)
-                .titled(u'Vertr\xe4gsentwurf'))
+            # Also freeze time here so that task responses are ordered correctly
+            with freeze(datetime(2021, 8, 18, 12, 30)):
+                contained_doc = create(
+                    Builder('document')
+                    .within(task)
+                    .titled(u'Vertr\xe4gsentwurf'))
 
-            intids = getUtility(IIntIds)
-            related_doc = self.document
-            relation = RelationValue(intids.getId(related_doc))
-            ITask(task).relatedItems.append(relation)
+                intids = getUtility(IIntIds)
+                related_doc = self.document
+                relation = RelationValue(intids.getId(related_doc))
+                ITask(task).relatedItems.append(relation)
 
         self.set_workflow_state('task-state-in-progress', task)
         if with_docs:
@@ -649,3 +651,25 @@ class TestApprovalViaTask(IntegrationTestCase):
 
         self.assertEqual('task-state-in-progress', api.content.get_state(task))
         self.assertEqual([], IApprovalList(self.proposaldocument).storage.list())
+
+    @browsing
+    def test_can_only_approve_docs_for_tasks_of_type_approval(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+
+        url = '{}/@workflow/task-transition-in-progress-resolved'.format(
+            self.subtask.absolute_url())
+
+        data = {'text': 'Diese Aufgabe ist gar nicht zur Genehmigung',
+                'approved_documents': [IUUID(self.document)]}
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(url, method='POST', data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual({
+            u'error': {
+                u'message': u"Param 'approved_documents' is only supported "
+                            u"for tasks of task_type 'approval'.",
+                u'type': u'Bad Request'}},
+            browser.json)
